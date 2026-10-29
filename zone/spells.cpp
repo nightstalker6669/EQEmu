@@ -66,6 +66,7 @@
 */
 
 #include "mob.h"
+#include "../common/shroud/ability_cast.h"
 
 #include "common/bodytypes.h"
 #include "common/classes.h"
