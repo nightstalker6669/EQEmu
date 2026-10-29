@@ -1,0 +1,15 @@
+{
+  "branch": "rof2-shared-core",
+  "upstream_commit": "8175ae61874cbf20d7b05102821f6f8a4f4d1c39",
+  "features": [
+    "shared-core"
+  ],
+  "inputs": {
+    "source": "eqemu-rof2-housing 710ecb7, fellowship 9382453, spirit-shrouds e32ca15"
+  },
+  "compatibility": "Stable legacy table/type/custom-data names; source implementations extracted once into common/shared_core; feature-specific gameplay and recovery adapters excluded.",
+  "validation": {
+    "standalone_common": "PASS; Linux x86-64 Clang, Debug -O0 -g0, PCH off; no gameplay sources from feature branches required",
+    "native_runtime": "Not deployed or exercised; core itself does not activate game hooks"
+  }
+}

@@ -11,6 +11,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <new>
 #include <mysqld_error.h>
 #include <string.h>
 #include "strings.h"
@@ -35,7 +36,8 @@
 
 DBcore::DBcore()
 {
-	mysql      = mysql_init(nullptr);
+	mysql      = new (std::nothrow) MYSQL{};
+	if (mysql && !mysql_init(mysql)) { mysql_close(mysql); delete mysql; mysql = nullptr; }
 	mysqlOwner = true;
 	pHost      = nullptr;
 	pUser      = nullptr;
@@ -54,8 +56,9 @@ DBcore::~DBcore()
 	 * are re-using the default database connection pointer when we dont have an
 	 * external configuration setup ex: (content_database)
 	 */
-	if (mysqlOwner) {
+	if (mysqlOwner && mysql) {
 		mysql_close(mysql);
+		delete mysql;
 	}
 
 	safe_delete_array(pHost);
@@ -71,7 +74,7 @@ void DBcore::ping()
 		// well, if's it's locked, someone's using it. If someone's using it, it doesnt need a keepalive
 		return;
 	}
-	mysql_ping(mysql);
+	if (mysql) mysql_ping(mysql);
 	m_mutex->unlock();
 }
 
@@ -96,12 +99,18 @@ MySQLRequestResult DBcore::QueryDatabase(const char *query, uint32 querylen, boo
 	LockMutex lock(m_mutex);
 
 	// Reconnect if we are not connected before hand.
-	if (pStatus != Connected) {
-		Open();
+	if ((mysqlOwner && pStatus != Connected && !Open()) || !mysql ||
+		(!mysqlOwner && mysql_thread_id(mysql) == 0)) {
+		++m_query_failure_generation;
+		pStatus = Error;
+		auto errorBuffer = new char[MYSQL_ERRMSG_SIZE];
+		snprintf(errorBuffer, MYSQL_ERRMSG_SIZE, "Database connection could not be opened");
+		return MySQLRequestResult(nullptr, 0, 0, 0, 0, CR_SERVER_GONE_ERROR, errorBuffer);
 	}
 
 	// request query. != 0 indicates some kind of error.
 	if (mysql_real_query(mysql, query, querylen) != 0) {
+		++m_query_failure_generation;
 		unsigned int errorNumber = mysql_errno(mysql);
 
 		if (errorNumber == CR_SERVER_GONE_ERROR) {
@@ -144,8 +153,16 @@ MySQLRequestResult DBcore::QueryDatabase(const char *query, uint32 querylen, boo
 		return MySQLRequestResult(nullptr, 0, 0, 0, 0, mysql_errno(mysql), errorBuffer);
 	}
 
+	pStatus = Connected;
+
 	// successful query. get results.
 	MYSQL_RES *res     = mysql_store_result(mysql);
+	if (!res && mysql_field_count(mysql) != 0) {
+		++m_query_failure_generation;
+		auto errorBuffer = new char[MYSQL_ERRMSG_SIZE];
+		snprintf(errorBuffer, MYSQL_ERRMSG_SIZE, "Could not buffer database result");
+		return MySQLRequestResult(nullptr, 0, 0, 0, 0, mysql_errno(mysql), errorBuffer);
+	}
 	uint32    rowCount = 0;
 
 	if (res != nullptr) {
@@ -242,10 +259,29 @@ bool DBcore::Open(uint32 *errnum, char *errbuf)
 	if (GetStatus() == Connected) {
 		return true;
 	}
-	if (GetStatus() == Error) {
+	if (GetStatus() == Error && mysqlOwner && mysql) {
+		// This MYSQL storage belongs to DBcore, not the connector. Closing it
+		// releases connection resources but preserves addresses borrowed through
+		// SetMySQL (for example content_db). Reinitialize that stable storage.
 		mysql_close(mysql);
-		mysql_init(mysql);        // Initialize structure again
+		memset(mysql, 0, sizeof(*mysql));
+		if (!mysql_init(mysql)) {
+			if (errnum) *errnum = CR_SERVER_GONE_ERROR;
+			if (errbuf) snprintf(errbuf, MYSQL_ERRMSG_SIZE, "Unable to initialize database connection");
+			return false;
+		}
 	}
+	if (!mysql) {
+		mysql = new (std::nothrow) MYSQL{};
+		if (!mysql || !mysql_init(mysql)) {
+			if (mysql) { mysql_close(mysql); delete mysql; mysql = nullptr; }
+			pStatus = Error;
+			if (errnum) *errnum = CR_SERVER_GONE_ERROR;
+			if (errbuf) snprintf(errbuf, MYSQL_ERRMSG_SIZE, "Unable to initialize database connection");
+			return false;
+		}
+	}
+
 	if (!pHost) {
 		return false;
 	}

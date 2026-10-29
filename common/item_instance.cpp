@@ -26,6 +26,7 @@
 #include "shareddb.h"
 #include "strings.h"
 #include "evolving_items.h"
+#include "shared_core/legacy_scaling_state.h"
 
 //#include "../common/light_source.h"
 
@@ -814,26 +815,16 @@ const EQ::ItemData* EQ::ItemInstance::GetUnscaledItem() const
 }
 
 std::string EQ::ItemInstance::GetCustomDataString() const {
-	std::string ret_val;
-	auto iter = m_custom_data.begin();
-	while (iter != m_custom_data.end()) {
-		if (ret_val.length() > 0) {
-			ret_val += "^";
-		}
-		ret_val += iter->first;
-		ret_val += "^";
-		ret_val += iter->second;
-		++iter;
-
-		if (ret_val.length() > 0) {
-			ret_val += "^";
-		}
-	}
-	return ret_val;
+ return EQEmu::SharedCore::LegacyScaling::Write(*this,m_custom_data);
 }
 
 void EQ::ItemInstance::SetCustomDataString(const std::string& str)
 {
+    if (auto fields=EQEmu::SharedCore::LegacyScaling::Fields(str)) {
+        for (const auto& [key,value]:*fields) SetCustomData(key,value);
+        return;
+    }
+
 	auto components = Strings::Split(str, "^");
 	auto value_count = components.size() / 2;
 
