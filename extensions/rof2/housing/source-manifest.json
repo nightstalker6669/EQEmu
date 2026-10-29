@@ -2596,8 +2596,8 @@
     },
     {
       "path": "tools/install_housing.py",
-      "bytes": 45326,
-      "sha256": "56d0a9bbee3a0dfa132e1f15017fd92b675026ef8e4424c69010c574656cf74d"
+      "bytes": 45325,
+      "sha256": "8adf2aecafa6c951cc1c5e437c7465e354a9ae7c515876afbab04dc2de26b242"
     },
     {
       "path": "tools/install_original_geometry.py",
