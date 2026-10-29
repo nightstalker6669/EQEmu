@@ -1,6 +1,8 @@
 #ifndef ZONEDB_H_
 #define ZONEDB_H_
 
+#include "mercenary_transaction.h"
+
 #include <unordered_set>
 
 #include "../common/shareddb.h"
@@ -249,6 +251,7 @@ struct MercInfo {
 	uint32	SuspendedTime;
 	bool	IsSuspended;
 	uint32	MercTimerRemaining;
+	uint32 PassiveUpkeepElapsedMS;
 	uint8	Gender;
 	float	MercSize;
 	int32	State;
@@ -586,7 +589,8 @@ public:
 	bool LoadMercenaryInfo(Client* c);
 	bool LoadCurrentMercenary(Client* c);
 	bool SaveMercenary(Merc* m);
-	bool DeleteMercenary(uint32 mercenary_id);
+	Mercenary::SaveResult SaveMercenaryAtomic(Merc* m, const Mercenary::Payment* payment = nullptr);
+	Mercenary::SaveResult DeleteMercenaryAtomic(uint32 owner_id, uint32 mercenary_id, uint8 slot, const Mercenary::Payment* payment);
 
 	/* Petitions   */
 	void	DeletePetitionFromDB(Petition* wpet);

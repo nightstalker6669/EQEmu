@@ -28,6 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #include <string.h>
 #include <zlib.h>
 #include "bot.h"
+#include "client_mercenary_transfer.h"
 
 #ifdef _WINDOWS
 #define snprintf	_snprintf
@@ -355,6 +356,11 @@ void MapOpcodes()
 	ConnectedOpcodes[OP_ManaChange] = &Client::Handle_OP_ManaChange;
 	ConnectedOpcodes[OP_MemorizeSpell] = &Client::Handle_OP_MemorizeSpell;
 	ConnectedOpcodes[OP_Mend] = &Client::Handle_OP_Mend;
+	ConnectedOpcodes[OP_MercenaryAssist] = &Client::Handle_OP_MercenaryAssist;
+	ConnectedOpcodes[OP_MercenarySwitch] = &Client::Handle_OP_MercenarySwitch;
+	ConnectedOpcodes[OP_MercenaryTransferRequest] = &Client::Handle_OP_MercenaryTransferRequest;
+	ConnectedOpcodes[OP_MercenaryTransferResponse] = &Client::Handle_OP_MercenaryTransferResponse;
+	ConnectedOpcodes[OP_MercenaryAutoAssist] = &Client::Handle_OP_MercenaryAutoAssist;
 	ConnectedOpcodes[OP_MercenaryCommand] = &Client::Handle_OP_MercenaryCommand;
 	ConnectedOpcodes[OP_MercenaryDataRequest] = &Client::Handle_OP_MercenaryDataRequest;
 	ConnectedOpcodes[OP_MercenaryDataUpdateRequest] = &Client::Handle_OP_MercenaryDataUpdateRequest;
@@ -2737,6 +2743,7 @@ void Client::Handle_OP_AltCurrencyMerchantRequest(const EQApplicationPacket *app
 
 void Client::Handle_OP_AltCurrencyPurchase(const EQApplicationPacket *app)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return; }
 	VERIFY_PACKET_LENGTH(OP_AltCurrencyPurchase, app, AltCurrencyPurchaseItem_Struct);
 	AltCurrencyPurchaseItem_Struct *purchase = (AltCurrencyPurchaseItem_Struct*)app->pBuffer;
 	NPC* tar = entity_list.GetNPCByID(purchase->merchant_entity_id);
@@ -2849,6 +2856,7 @@ void Client::Handle_OP_AltCurrencyPurchase(const EQApplicationPacket *app)
 
 void Client::Handle_OP_AltCurrencyReclaim(const EQApplicationPacket *app)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return; }
 	VERIFY_PACKET_LENGTH(OP_AltCurrencyReclaim, app, AltCurrencyReclaim_Struct);
 	AltCurrencyReclaim_Struct *reclaim = (AltCurrencyReclaim_Struct*)app->pBuffer;
 	uint32 item_id = zone->GetCurrencyItemID(reclaim->currency_id);
@@ -2893,6 +2901,7 @@ void Client::Handle_OP_AltCurrencyReclaim(const EQApplicationPacket *app)
 
 void Client::Handle_OP_AltCurrencySell(const EQApplicationPacket *app)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return; }
 	VERIFY_PACKET_LENGTH(OP_AltCurrencySell, app, AltCurrencySellItem_Struct);
 	EQApplicationPacket *outapp = app->Copy();
 	AltCurrencySellItem_Struct *sell = (AltCurrencySellItem_Struct*)outapp->pBuffer;
@@ -10589,6 +10598,129 @@ void Client::Handle_OP_Mend(const EQApplicationPacket *app)
 	return;
 }
 
+void Client::Handle_OP_MercenaryTransferRequest(const EQApplicationPacket *app)
+{
+	MercenaryTransfer::Request(*this, *app);
+}
+
+void Client::Handle_OP_MercenaryTransferResponse(const EQApplicationPacket *app)
+{
+	MercenaryTransfer::Respond(*this, *app);
+}
+
+void Client::Handle_OP_MercenaryAssist(const EQApplicationPacket *app)
+{
+	if (app->size != 1 || app->pBuffer[0] != 0x30 || !RuleB(Mercs, AllowMercs)) {
+		return;
+	}
+	if (Merc* merc = GetMerc()) {
+		// The role-aware AI owns target/awareness checks. A healer's call
+		// temporarily permits puller healing and does not require an enemy target.
+		merc->CallAssist();
+	}
+}
+
+void Client::Handle_OP_MercenarySwitch(const EQApplicationPacket *app)
+{
+	if (app->size != sizeof(uint32) || !RuleB(Mercs, AllowMercs)) {
+		return;
+	}
+	uint32 requested = 0;
+	memcpy(&requested, app->pBuffer, sizeof(requested));
+	uint8 slot = MAXMERCS;
+	uint32 row = 0;
+	for (uint8 candidate = 0; candidate < MAXMERCS; ++candidate) {
+		const auto& info = GetMercInfo(candidate);
+		if (!info.mercid || !zone->GetMercTemplate(info.MercTemplateID)) {
+			continue;
+		}
+		if (row++ == requested) {
+			slot = candidate;
+			break;
+		}
+	}
+	auto reply = [this](uint32 result, uint32 delay = 0) {
+		auto outapp = new EQApplicationPacket(OP_MercenarySwitch, 12);
+		uint32 data[3] = {0, delay, result};
+		memcpy(outapp->pBuffer, data, sizeof(data));
+		FastQueuePacket(&outapp);
+	};
+	if (slot == MAXMERCS || slot >= GetMercenaryCapacity()) {
+		reply(3);
+		return;
+	}
+	if (slot == GetMercSlot()) {
+		reply(0);
+		SendMercPersonalInfo();
+		return;
+	}
+	if (dead || GetHP() <= 0) {
+		reply(4);
+		return;
+	}
+	if (GetAggroCount() || !CanFastRegen()) {
+		reply(1);
+		return;
+	}
+	// Contract deadlines survive a crash even if the character timer row
+	// was not saved. Switching must not bypass suspend/death recovery.
+	const auto now = time(nullptr);
+	if (GetMercInfo(slot).SuspendedTime > now ||
+		(GetMercInfo().IsSuspended && GetMercInfo().SuspendedTime > now)) {
+		reply(5);
+		return;
+	}
+	if (!GetPTimers().Expired(&database, pTimerMercSuspend, false)) {
+		reply(5);
+		return;
+	}
+	if (!CheckCanSpawnMerc(GetMercInfo(slot).MercTemplateID)) {
+		reply(2);
+		return;
+	}
+	const uint8 previous_slot = GetMercSlot();
+	if (Merc* current = GetMerc()) {
+		if (!current->Suspend()) {
+			reply(5);
+			return;
+		}
+	}
+	// The previous cooldown was checked before this operation. The cooldown
+	// created by suspending the old contract belongs to this same switch;
+	// it must not prevent activating the new selected contract.
+	SetMercSlot(slot);
+	Merc* merc = Merc::LoadMercenary(this, zone->GetMercTemplate(GetMercInfo().MercTemplateID), 0, true);
+	if (!merc || !SpawnMerc(merc, false)) {
+		if (merc) {
+			Merc::DiscardFailedSpawn(merc);
+		}
+		// Keep the failed target's owned record intact; only its zone entity
+		// is removed. The previously saved contract remains suspended.
+		SetMercID(0);
+		GetMercTimer()->Disable();
+		SetMercSlot(previous_slot);
+		if (m_mercenary_persistence_failed) {
+			return;
+		}
+		reply(2);
+		SendMercPersonalInfo();
+		SendMercTimer(nullptr);
+		return;
+	}
+	PersistMercenarySelection();
+	reply(0);
+	SendMercPersonalInfo();
+	SendMercTimer(merc);
+}
+
+void Client::Handle_OP_MercenaryAutoAssist(const EQApplicationPacket *app)
+{
+	if (app->size != 1 || app->pBuffer[0] > 1 || !RuleB(Mercs, AllowMercs)) {
+		return;
+	}
+	SetMercenaryAutoAssist(app->pBuffer[0] != 0);
+}
+
 void Client::Handle_OP_MercenaryCommand(const EQApplicationPacket *app)
 {
 	if (app->size != sizeof(MercenaryCommand_Struct))
@@ -10608,40 +10740,31 @@ void Client::Handle_OP_MercenaryCommand(const EQApplicationPacket *app)
 	if (!RuleB(Mercs, AllowMercs))
 		return;
 
-	// Handle the Command here...
-	// Will need a list of what every type of command is supposed to do
-	// Unsure if there is a server response to this packet
-	if (option >= 0)
+	if (merc_command == 1)
 	{
-		Merc* merc = GetMerc();
-		GetMercInfo().State = option;
-
-		if (merc)
-		{
-			uint8 numStances = 0;
-
-			//get number of available stances for the current merc
-			std::list<MercStanceInfo> mercStanceList = zone->merc_stance_list[merc->GetMercenaryTemplateID()];
-			auto iter = mercStanceList.begin();
-			while (iter != mercStanceList.end()) {
-				numStances++;
-				++iter;
-			}
-
-			MercTemplate* mercTemplate = zone->GetMercTemplate(GetMerc()->GetMercenaryTemplateID());
-			if (mercTemplate)
-			{
-				//check to see if selected option is a valid stance slot (option is the slot the stance is in, not the actual stance)
-				if (option >= 0 && option < numStances)
-				{
-					merc->SetStance(mercTemplate->Stances[option]);
-					GetMercInfo().Stance = mercTemplate->Stances[option];
-
-					Log(Logs::General, Logs::Mercenaries, "Set Stance: %u for %s (%s)", merc->GetStance(), merc->GetName(), GetName());
-				}
-			}
-		}
+		DismissMerc(GetMercInfo().mercid);
+		return;
 	}
+
+	// The option is the index in the stance list advertised by the server.
+	// It is not the mercenary lifecycle State (normal/suspended).
+	Merc* merc = GetMerc();
+	if (!merc || option < 0 || merc->IsSuspended() || merc->IsCharmed() || merc->IsFeared()) {
+		return;
+	}
+
+	const auto stances = zone->merc_stance_list.find(merc->GetMercenaryTemplateID());
+	if (stances == zone->merc_stance_list.end() ||
+		static_cast<size_t>(option) >= stances->second.size()) {
+		return;
+	}
+
+	auto stance = stances->second.begin();
+	std::advance(stance, option);
+	merc->SetStance(stance->StanceID);
+	GetMercInfo().Stance = stance->StanceID;
+	merc->Save();
+	Log(Logs::General, Logs::Mercenaries, "Set Stance: %u for %s (%s)", merc->GetStance(), merc->GetName(), GetName());
 }
 
 void Client::Handle_OP_MercenaryDataRequest(const EQApplicationPacket *app)
@@ -10662,19 +10785,11 @@ void Client::Handle_OP_MercenaryDataRequest(const EQApplicationPacket *app)
 
 	Log(Logs::General, Logs::Mercenaries, "Data Request for Merchant ID (%i) for %s.", merchant_id, GetName());
 
-	//client is requesting data about currently owned mercenary
+	// A selected slot may be empty just after dismissal while other owned
+	// contracts remain. The roster sender counts all owned slots itself.
 	if (merchant_id == 0) {
-
-		//send info about your current merc(s)
-		if (GetMercInfo().mercid)
-		{
-			Log(Logs::General, Logs::Mercenaries, "SendMercPersonalInfo Request for %s.", GetName());
-			SendMercPersonalInfo();
-		}
-		else
-		{
-			Log(Logs::General, Logs::Mercenaries, "SendMercPersonalInfo Not Sent - MercID (%i) for %s.", GetMercInfo().mercid, GetName());
-		}
+		SendMercPersonalInfo();
+		return;
 	}
 
 	if (!RuleB(Mercs, AllowMercs)) {
@@ -10694,23 +10809,18 @@ void Client::Handle_OP_MercenaryDataRequest(const EQApplicationPacket *app)
 			return;
 		}
 
-		mercTypeCount = tar->GetNumMercenaryTypes(static_cast<unsigned int>(ClientVersion()));
-		mercCount = tar->GetNumberOfMercenaries(static_cast<unsigned int>(ClientVersion()));
-
-		if (mercCount > MAX_MERC)
-			return;
-
 		std::list<MercType> mercTypeList = tar->GetMercenaryTypesList(static_cast<unsigned int>(ClientVersion()));
 		std::list<MercData> mercDataList = tar->GetMercenariesList(static_cast<unsigned int>(ClientVersion()));
+		mercTypeCount = mercTypeList.size();
+		mercCount = mercDataList.size();
+
+		if (mercCount > MAX_MERC || mercTypeCount > MAX_MERC_GRADES)
+			return;
 
 		int i = 0;
-		int StanceCount = 0;
-
-		for (auto mercListItr = mercDataList.begin(); mercListItr != mercDataList.end(); ++mercListItr) {
-			auto siter = zone->merc_stance_list[mercListItr->MercTemplateID].begin();
-			for (siter = zone->merc_stance_list[mercListItr->MercTemplateID].begin(); siter != zone->merc_stance_list[mercListItr->MercTemplateID].end(); ++siter)
-			{
-				StanceCount++;
+		for (const auto& entry : mercDataList) {
+			if (zone->merc_stance_list[entry.MercTemplateID].size() > MAX_MERC_STANCES) {
+				return;
 			}
 		}
 
@@ -10788,10 +10898,7 @@ void Client::Handle_OP_MercenaryDataUpdateRequest(const EQApplicationPacket *app
 
 	Log(Logs::General, Logs::Mercenaries, "Data Update Request Received for %s.", GetName());
 
-	if (GetMercenaryID())
-	{
-		SendMercPersonalInfo();
-	}
+	SendMercPersonalInfo();
 }
 
 void Client::Handle_OP_MercenaryDismiss(const EQApplicationPacket *app)
@@ -10851,11 +10958,46 @@ void Client::Handle_OP_MercenaryHire(const EQApplicationPacket *app)
 	if (merc_template)
 	{
 
+		uint8 initial_stance = Stance::Balanced;
+		if (ClientVersion() == EQ::versions::ClientVersion::RoF2) {
+			// Native merchant combo stores stance INDEX as row data and sends it
+			// at hire+4. It is not a payment selector or an unused constant.
+			const auto available = zone->merc_stance_list.find(merc_template_id);
+			if (available == zone->merc_stance_list.end() || merc_unk1 >= available->second.size()) return;
+			auto selected = available->second.begin();
+			std::advance(selected, merc_unk1);
+			initial_stance = selected->StanceID;
+		}
+
 		Mob* merchant = entity_list.GetNPCByID(merchant_id);
 		if (!CheckCanHireMerc(merchant, merc_template_id))
 		{
 			return;
 		}
+
+		const uint8 previous_slot = GetMercSlot();
+		uint8 empty_slot = MAXMERCS;
+		for (uint8 slot = 0; slot < MAXMERCS; ++slot) {
+			if (!GetMercInfo(slot).mercid) {
+				empty_slot = slot;
+				break;
+			}
+		}
+		if (empty_slot == MAXMERCS) {
+			SendMercResponsePackets(6);
+			return;
+		}
+		SetMercSlot(empty_slot);
+		auto restore_selection = [this, previous_slot]() {
+			// If cleanup failed, retain the new authoritative owner selection.
+			if (!GetMerc()) {
+				GetMercTimer()->Disable();
+				if (!GetMercInfo().mercid) {
+					SetMercSlot(previous_slot);
+				}
+			}
+			SendMercPersonalInfo();
+		};
 
 		// Set time remaining to max on Hire
 		GetMercInfo().MercTimerRemaining = RuleI(Mercs, UpkeepIntervalMS);
@@ -10863,25 +11005,57 @@ void Client::Handle_OP_MercenaryHire(const EQApplicationPacket *app)
 		// Get merc, assign it to client & spawn
 		Merc* merc = Merc::LoadMercenary(this, merc_template, merchant_id, false);
 
-		if (merc)
-		{
-			SpawnMerc(merc, true);
-			merc->Save();
-
-			if (RuleB(Mercs, ChargeMercPurchaseCost))
-			{
-				uint32 cost = Merc::CalcPurchaseCost(merc_template->MercTemplateID, GetLevel()) * 100; // Cost is in gold
-				TakeMoneyFromPP(cost, true);
+		if (!merc) {
+			restore_selection();
+			SendMercResponsePackets(3);
+			return;
+		}
+		merc->SetStance(initial_stance);
+		GetMercInfo().Stance = initial_stance;
+		const bool spawned = SpawnMerc(merc, true);
+		const uint64 cost = RuleB(Mercs, ChargeMercPurchaseCost) ?
+			uint64(Merc::CalcPurchaseCost(merc_template->MercTemplateID, GetLevel())) * 100 : 0;
+		if (!spawned || GetMerc() != merc || merc->IsSuspended() || !FinalizeMercenaryPayment(merc, cost)) {
+			// A failed or uncertain transaction never deletes a possibly committed
+			// paid contract. The rejected session reloads authoritative state.
+			Merc::DiscardFailedSpawn(merc);
+			SetMerc(nullptr);
+			GetMercTimer()->Disable();
+			if (m_mercenary_persistence_failed) {
+				return;
 			}
+			restore_selection();
+			SendMercResponsePackets(spawned ? 1 : 3);
+			return;
+		}
 
-			// approved hire request
-			SendMercMerchantResponsePacket(0);
+		// The provisional group join occurred before the contract had its
+		// durable ID. Publish the complete in-memory roster only after the
+		// guarded purchase/membership commit, then synchronize member health.
+		if (Group* group = merc->GetGroup()) {
+			for (int index = 0; index < MAX_GROUP_MEMBERS; ++index) {
+				Mob* member = group->members[index];
+				if (member && member->IsClient()) {
+					group->SendUpdate(groupActUpdate, member);
+					Client* recipient = member->CastToClient();
+					if (recipient->ClientVersion() >= EQ::versions::ClientVersion::SoD) {
+						group->NotifyMainTank(recipient, 1);
+						group->NotifyPuller(recipient, 1);
+					}
+					group->NotifyMainAssist(recipient, 1);
+					group->NotifyMarkNPC(recipient);
+					group->NotifyAssistTarget(recipient);
+					group->NotifyTankTarget(recipient);
+					group->NotifyPullerTarget(recipient);
+					group->SendMarkedNPCsToMember(recipient);
+					group->SendHPManaEndPacketsTo(member);
+				}
+			}
 		}
-		else
-		{
-			//merc failed to spawn
-			SendMercMerchantResponsePacket(3);
-		}
+		PersistMercenarySelection();
+		SendMercMerchantResponsePacket(0);
+		SendMercPersonalInfo();
+		SendMercTimer(merc);
 	}
 	else
 	{
@@ -10929,27 +11103,9 @@ void Client::Handle_OP_MercenaryTimerRequest(const EQApplicationPacket *app)
 		return;
 	}
 
-	// To Do: Load Mercenary Timer Data to properly populate this reply packet
-	// All hard set values for now
-	uint32 entityID = 0;
-	uint32 mercState = 5;
-	uint32 suspendedTime = 0;
-	if (GetMercenaryID()) {
-		Merc* merc = GetMerc();
-
-		if (merc) {
-			entityID = merc->GetID();
-
-			if (GetMercInfo().IsSuspended) {
-				mercState = 1;
-				suspendedTime = GetMercInfo().SuspendedTime;
-			}
-		}
-	}
-
-	if (entityID > 0) {
-		SendMercTimerPacket(entityID, mercState, suspendedTime, GetMercInfo().MercTimerRemaining, RuleI(Mercs, SuspendIntervalMS));
-	}
+	// The shared sender also handles owned, suspended mercenaries, whose
+	// zone entity no longer exists.
+	SendMercTimer(GetMerc());
 }
 
 void Client::Handle_OP_MoveCoin(const EQApplicationPacket *app)

@@ -1,9 +1,9 @@
-# Install `rof2-fellowship`
+# Install `rof2-mercenaries`
 
 This checkout already contains the native source integration. **Do not run `apply_overlay.py` or `git apply` again.** Keep backups of the database, quests, binaries and active opcode configuration together before installing. No running server was modified by publishing this branch.
 
 ```sh
-git -c core.autocrlf=false clone --branch rof2-fellowship --single-branch https://github.com/nightstalker6669/EQEmu.git
+git -c core.autocrlf=false clone --branch rof2-mercenaries --single-branch https://github.com/nightstalker6669/EQEmu.git
 cd EQEmu
 git submodule update --init --recursive
 ```
@@ -38,6 +38,7 @@ The housing driver uses the explicit [`installer-migrations.json`](../../extensi
 Run the following groups **in this order**. Use your normal protected MariaDB credentials and stop on the first SQL error. Back up and review existing custom schema/content before applying.
 
 - **Fellowship:** `utils/sql/fellowship/001_fellowships.sql`, `002_vitality.sql`, `003_xp_commits.sql`, `004_campsite_catalogue.sql`. Install the bundled `extensions/rof2/fellowship/quests/poknowledge/` quest override after reviewing conflicts. Follow [Database and content requirements](../../extensions/rof2/fellowship/docs/INSTALL.md#database), including matching camp spell/item templates.
+- **Mercenaries:** provision the normal mercenary catalogue first; do not replay the destructive upstream bootstrap over owned contracts. Apply `utils/sql/mercenary/001_owned_roster.sql`, `003_passive_upkeep.sql`, `004_zone_permissions.sql`, then review/apply `002_enable_rof2.sql` for the actual ruleset and database layout. The [content and activation guide](../../extensions/rof2/mercenaries/docs/INSTALL.md#content-schema-and-activation) explains catalogue prerequisites and price rules.
 
 ## 3. Start the matched installation
 
@@ -49,6 +50,7 @@ Only after all required schema/content/quest groups succeed, start the server th
 | --- | --- | --- |
 | housing | [`710ecb7`](https://github.com/nightstalker6669/eqemu-rof2-housing/tree/710ecb7530ff0a5ade837e887ad7bc2f84622d07) | [Guide](../../extensions/rof2/housing/docs/INSTALL.md) |
 | fellowship | [`9382453`](https://github.com/nightstalker6669/eqemu-rof2-fellowship/tree/9382453264f4f84ac7e83a9ee5c9c9a1391c6017) | [Guide](../../extensions/rof2/fellowship/docs/INSTALL.md) |
+| mercenaries | [`00b07c3`](https://github.com/nightstalker6669/eqemu-rof2-mercenaries/tree/00b07c381a738a21aff08867bf186e6c2bfaffb0) | [Guide](../../extensions/rof2/mercenaries/docs/INSTALL.md) |
 
 [Opcodes and structures](PROTOCOL.md) · [Integration manifest](integration.json) · [Original upstream README](UPSTREAM-README.md)
 

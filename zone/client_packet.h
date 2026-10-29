@@ -250,6 +250,11 @@
 	void Handle_OP_Medding(const EQApplicationPacket *app);
 	void Handle_OP_MemorizeSpell(const EQApplicationPacket *app);
 	void Handle_OP_Mend(const EQApplicationPacket *app);
+	void Handle_OP_MercenaryTransferRequest(const EQApplicationPacket *app);
+	void Handle_OP_MercenaryTransferResponse(const EQApplicationPacket *app);
+	void Handle_OP_MercenaryAssist(const EQApplicationPacket *app);
+	void Handle_OP_MercenarySwitch(const EQApplicationPacket *app);
+	void Handle_OP_MercenaryAutoAssist(const EQApplicationPacket *app);
 	void Handle_OP_MercenaryCommand(const EQApplicationPacket *app);
 	void Handle_OP_MercenaryDataRequest(const EQApplicationPacket *app);
 	void Handle_OP_MercenaryDataUpdateRequest(const EQApplicationPacket *app);

@@ -35,6 +35,8 @@ struct DynamicZoneLocation;
 enum WaterRegionType : int;
 enum class DynamicZoneMemberStatus;
 
+namespace Mercenary { struct Payment; }
+
 namespace Housing::InventoryBridge { class Bridge; }
 namespace Housing::NativePlacement { struct Session; }
 namespace Housing::AnchorTransport {struct Pending;}
@@ -526,7 +528,7 @@ public:
 	};
 
 	/* New PP Save Functions */
-	bool SaveCurrency(){ return database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
+	bool SaveCurrency(){ return !m_mercenary_persistence_failed && !m_inventory_session_rejected && database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
 	bool SaveAA();
 	void RemoveExpendedAA(int aa_id);
 
@@ -1839,6 +1841,16 @@ public:
 	void ProcessAggroMeter(); // builds packet and sends
 
 	void InitializeMercInfo();
+	bool FinalizeMercenaryPayment(Merc* merc, uint64 copper, bool upkeep = false);
+	bool PrepareMercenaryPayment(Mercenary::Payment& payment, uint64 copper);
+	void RejectMercenaryPersistence();
+	void SendMercenaryUpkeep(bool alternate);
+	void SendMercenaryCostUpdate();
+	bool HasMercenaryPersistenceFailure() const { return m_mercenary_persistence_failed; }
+	uint8 GetMercenaryCapacity() const;
+	void PersistMercenarySelection();
+	bool GetMercenaryAutoAssist();
+	void SetMercenaryAutoAssist(bool enabled);
 	bool CheckCanSpawnMerc(uint32 template_id);
 	bool CheckCanHireMerc(Mob* merchant, uint32 template_id);
 	bool CheckCanRetainMerc(uint32 upkeep);
@@ -1848,7 +1860,7 @@ public:
 	inline uint32 GetMercenaryID() const { return mercid; }
 	inline uint8 GetMercSlot() const { return mercSlot; }
 	void SetMercID( uint32 newmercid) { mercid = newmercid; }
-	void SetMercSlot( uint8 newmercslot) { mercSlot = newmercslot; }
+	void SetMercSlot( uint8 newmercslot) { if (newmercslot < MAXMERCS) { mercSlot = newmercslot; } }
 	Merc* GetMerc();
 	MercInfo& GetMercInfo(uint8 slot) { return m_mercinfo[slot]; }
 	MercInfo& GetMercInfo() { return m_mercinfo[mercSlot]; }
@@ -1866,7 +1878,7 @@ public:
 	void SendClearMercInfo();
 	void SuspendMercCommand();
 	void SpawnMercOnZone();
-	void SpawnMerc(Merc* merc, bool setMaxStats);
+	bool SpawnMerc(Merc* merc, bool setMaxStats);
 	void UpdateMercTimer();
 	void UpdateMercLevel();
 	void CheckMercSuspendTimer();
@@ -2228,6 +2240,9 @@ private:
 	Object* m_tradeskill_object;
 	PetInfo m_petinfo; // current pet data, used while loading from and saving to DB
 	PetInfo m_suspendedminion; // pet data for our suspended minion.
+	bool m_mercenary_persistence_failed = false;
+	bool m_mercenary_auto_assist = true;
+	bool m_mercenary_auto_assist_loaded = false;
 	MercInfo m_mercinfo[MAXMERCS]; // current mercenary
 	InspectMessage_Struct m_inspect_message;
 	bool temp_pvp;

@@ -1,3 +1,4 @@
+#include "../common/mercenary/rof2_timer.h"
 
 #include "merc.h"
 #include "client.h"
@@ -21,8 +22,48 @@ extern volatile bool is_zone_loaded;
 	#define MercAI_DEBUG_Spells	-1
 #endif
 
+namespace {
+bool EnforceMercenaryZonePolicy(Merc& merc) {
+	if (RuleB(Mercs, AllowMercs) && zone->AllowMercs()) return true;
+	const auto owner = merc.GetMercenaryOwner();
+	if (!merc.Suspend()) {
+		if (owner && !owner->HasMercenaryPersistenceFailure()) owner->RejectMercenaryPersistence();
+		merc.Depop();
+	}
+	return false;
+}
+
+int64 ClampSavedMercenaryResource(int64 value, int64 maximum) {
+	return std::clamp<int64>(value, 0, std::max<int64>(0, maximum));
+}
+
+void UpdateMercenaryOwnerFollow(Merc& merc) {
+	const auto owner = merc.GetMercenaryOwner();
+	if (!owner) return;
+	const auto group = merc.GetGroup();
+	if (!group || !group->HasRole(owner, RolePuller)) {
+		merc.SetFollowID(owner->GetID());
+		return;
+	}
+	Mob* follow = nullptr;
+	float nearest = 200.0f * 200.0f;
+	for (int slot = 0; slot < MAX_GROUP_MEMBERS; ++slot) {
+		const auto member = group->members[slot];
+		if (!member || member == owner || member == &merc || member->GetHP() <= 0 || member->IsCorpse()) continue;
+		const auto distance = DistanceSquared(merc.GetPosition(), member->GetPosition());
+		if (distance > 200.0f * 200.0f) continue;
+		// Retain a suitable existing camp anchor instead of oscillating between nearby players.
+		if (member->GetID() == merc.GetFollowID()) { follow = member; break; }
+		if (distance < nearest) { nearest = distance; follow = member; }
+	}
+	// A puller with no other nearby member leaves its mercenary at camp.
+	merc.SetFollowID(follow ? follow->GetID() : 0);
+	if (!follow && !merc.IsEngaged() && merc.IsMoving()) merc.StopNavigation();
+}
+}
+
 Merc::Merc(const NPCType* d, float x, float y, float z, float heading)
-: NPC(d, nullptr, glm::vec4(x, y, z, heading), GravityBehavior::Water, false), endupkeep_timer(1000), rest_timer(1), confidence_timer(6000), check_target_timer(2000)
+: NPC(d, nullptr, glm::vec4(x, y, z, heading), GravityBehavior::Water, false), endupkeep_timer(1000), rest_timer(1), confidence_timer(6000), check_target_timer(2000), confidence_scan_timer_(2000)
 {
 	base_hp = d->max_hp;
 	base_mana = d->Mana;
@@ -61,6 +102,7 @@ Merc::Merc(const NPCType* d, float x, float y, float z, float heading)
 	SetMercID(0);
 	SetStance(Stance::Balanced);
 	rest_timer.Disable();
+	confidence_timer.Disable();
 
 	if (GetClass() == Class::Rogue)
 		evade_timer.Start();
@@ -844,19 +886,18 @@ bool Merc::Process()
 		return false;
 	}
 
-	if(!GetMercenaryOwner()) {
-		//p_depop = true;               //this was causing a crash - removed merc from entity list, but not group
-		//return false;                 //merc can live after client dies, not sure how long
+	if (!GetMercenaryOwner()) {
+		Depop();
+		return false;
 	}
 
 	if(IsSuspended())
 	{
 		return false;
 	}
+	if (!EnforceMercenaryZonePolicy(*this)) return false;
 
-	if (HasGroup() && GetMercenaryOwner() && GetFollowID() == 0) {
-		SetFollowID(GetMercenaryOwner()->GetID());
-	}
+	UpdateMercenaryOwnerFollow(*this);
 
 	SpellProcess();
 
@@ -885,7 +926,8 @@ bool Merc::Process()
 			SetEndurance(GetEndurance() + CalcEnduranceRegen() + RestRegenEndurance);
 	}
 
-	if(confidence_timer.Check()) {
+	if(confidence_timer.Enabled() && confidence_timer.Check(false)) {
+		confidence_timer.Disable();
 		_check_confidence = true;
 	}
 
@@ -928,9 +970,93 @@ bool Merc::IsMercCasterCombatRange(Mob *target) {
 	return result;
 }
 
+uint32 Merc::GetPassiveUpkeepElapsed() {
+	return passive_upkeep_clock_.Sample(Timer::GetCurrentTime(), GetID() && !IsSuspended(),
+		GetStance() == Stance::Passive, std::max(1, RuleI(Mercs, UpkeepIntervalMS)));
+}
+
+void Merc::RestorePassiveUpkeepElapsed(uint32 elapsed) {
+	passive_upkeep_clock_.Restore(elapsed, Timer::GetCurrentTime(), std::max(1, RuleI(Mercs, UpkeepIntervalMS)));
+}
+
+bool Merc::IsPassiveUpkeepFree() {
+	return GetStance() == Stance::Passive && GetPassiveUpkeepElapsed() >= static_cast<uint32>(std::max(1, RuleI(Mercs, UpkeepIntervalMS)));
+}
+
+void Merc::SetStance(uint8 stance_id) {
+	GetPassiveUpkeepElapsed();
+	if (_currentStance != stance_id) passive_upkeep_clock_.Reset(Timer::GetCurrentTime());
+	_currentStance = stance_id;
+	if (stance_id == Stance::Passive) {
+		if (IsCasting()) InterruptSpell();
+		WipeHateList();
+		SetTarget(nullptr);
+	}
+}
+
+std::vector<NPC*> Merc::GroupEnemyTargets() {
+	std::vector<NPC*> result;
+	const auto group = GetGroup();
+	if (!group) return result;
+	const float range = std::max(0, RuleI(Mercs, AggroRadius));
+	std::list<NPC*> npcs;
+	entity_list.GetNPCList(npcs);
+	for (auto npc : npcs) {
+		if (!npc || npc == this || npc->GetHP() <= 0 || !IsAttackAllowed(npc) ||
+			DistanceSquaredNoZ(m_Position, npc->GetPosition()) > range * range) continue;
+		for (int slot = 0; slot < MAX_GROUP_MEMBERS; ++slot) {
+			const auto member = group->members[slot];
+			if (member && (npc->IsOnHatelist(member) ||
+				(member->HasPet() && npc->IsOnHatelist(member->GetPet())))) {
+				result.push_back(npc);
+				break;
+			}
+		}
+	}
+	return result;
+}
+
+bool Merc::CallAssist() {
+	if (IsSuspended() || IsDead() || GetStance() == Stance::Passive || !GetMercenaryOwner() || !HasGroup()) return false;
+	if (GetClass() == HEALER) {
+		const auto group = GetGroup();
+		const float awareness = std::max(0, RuleI(Mercs, AggroRadius));
+		for (int slot = 0; slot < MAX_GROUP_MEMBERS; ++slot) {
+			const auto member = group->members[slot];
+			if (member && group->HasRole(member, RolePuller) &&
+				DistanceSquaredNoZ(m_Position, member->GetPosition()) <= awareness * awareness) {
+				puller_heal_override_.Arm(Timer::GetCurrentTime());
+				AIautocastspell_timer->Trigger();
+				return true;
+			}
+		}
+		return false;
+	}
+	bool added = false;
+	for (auto enemy : GroupEnemyTargets()) {
+		if (!enemy->IsMezzed()) {
+			AddToHateList(enemy, 1);
+			added = true;
+		}
+	}
+	return added;
+}
+
+bool Merc::CanHealGroupMember(Mob* member) {
+	if (!member || !GetGroup()) return false;
+	const bool restricted = GetGroup()->HasRole(member, RolePuller) && !puller_heal_override_.Active(Timer::GetCurrentTime());
+	const float radius = std::max(0, restricted ? RuleI(Mercs, AggroRadiusPuller) : RuleI(Mercs, AggroRadius));
+	return DistanceSquaredNoZ(m_Position, member->GetPosition()) <= radius * radius;
+}
+
 void Merc::AI_Process() {
 	if(!IsAIControlled())
 		return;
+
+	if (GetStance() == Stance::Passive) {
+		WipeHateList();
+		SetTarget(nullptr);
+	}
 
 	if(IsCasting())
 		return;
@@ -951,30 +1077,10 @@ void Merc::AI_Process() {
 		return;
 	}
 
-	// The merc needs an owner
-	if(!MercOwner) {
-		//SetTarget(0);
-		//SetOwnerID(0);
-		// TODO: Need to wait and try casting rez if merc is a healer with a dead owner
-		return;
-	}
+	// A dead owner remains a Client; an absent owner has departed and cannot direct this AI.
+	if (!MercOwner) return;
 
-	/*
-	try {
-		if(MercOwner->CastToClient()->IsDead()) {
-			SetTarget(0);
-			SetOwnerID(0);
-			return;
-		}
-	}
-	catch(...) {
-		SetTarget(0);
-		SetOwnerID(0);
-		return;
-	}
-	*/
-
-	if(check_target_timer.Check()) {
+	if(GetStance() != Stance::Passive && check_target_timer.Check()) {
 		CheckHateList();
 	}
 
@@ -1000,49 +1106,34 @@ void Merc::AI_Process() {
 		if(DivineAura())
 			return;
 
-		int hateCount = entity_list.GetHatedCount(this, nullptr, false);
-		if(GetHatedCount() < hateCount) {
+		if (!confidence_encounter_seen_ || confidence_scan_timer_.Check()) {
+			confidence_encounter_seen_ = true;
+			confidence_scan_timer_.Start(2000);
+			const int hateCount = GroupEnemyTargets().size();
+			if (hateCount > GetHatedCount() && !confidence_timer.Enabled() && !_lost_confidence) {
+				// One ten-second stabilization window per newly enlarged encounter.
+				confidence_timer.Start(10000);
+			}
 			SetHatedCount(hateCount);
-
-			if(!CheckConfidence()) {
-				if(!confidence_timer.Enabled()) {
-					confidence_timer.Start(10000);
-				}
+		}
+		if (_check_confidence) {
+			_check_confidence = false;
+			const bool was_lost = _lost_confidence;
+			_lost_confidence = !CheckConfidence();
+			if (_lost_confidence) {
+				confidence_timer.Start(6000);
+				if (!was_lost) entity_list.RemoveFromHateLists(this, true);
+			} else if (was_lost) {
+				currently_fleeing = false;
+				StopNavigation();
 			}
 		}
-
-		//Check specific conditions for merc to lose confidence and flee (or regain confidence once fleeing)
-		if(_check_confidence) {
-			//not already running
-			if(!_lost_confidence) {
-				//and fail confidence check
-				if(!CheckConfidence()) {
-					_lost_confidence = true;
-
-					//move to bottom of hate lists?
-					//Iterate though hatelist
-					// SetHate(other, hate, damage)
-
-					if(RuleB(Combat, EnableFearPathing)) {
-						CalculateNewFearpoint();
-						if(currently_fleeing) {
-							return;
-						}
-					}
-					else {
-						Stun(12000 - (6000 - tic_timer.GetRemainingTime()));
-					}
-				}
+		if (_lost_confidence) {
+			if (!IsRooted() && RuleB(Combat, EnableFearPathing) && AI_movement_timer->Check()) {
+				if (!currently_fleeing || DistanceSquaredNoZ(m_Position, glm::vec4(m_FearWalkTarget, 0)) < 25) CalculateNewFearpoint();
+				if (currently_fleeing) RunTo(m_FearWalkTarget.x, m_FearWalkTarget.y, m_FearWalkTarget.z);
 			}
-			else { //are fleeing due to lost confidence
-				if(CheckConfidence()) { //passed test - regain confidence
-					_lost_confidence = false;
-				}
-			}
-
-			//they are in flee mode
-			if(_lost_confidence)
-				return;
+			return;
 		}
 
 		// Let's check if we have a los with our target.
@@ -1172,9 +1263,6 @@ void Merc::AI_Process() {
 				// Stop attacking if the target is enraged
 				if(IsEngaged() && !BehindMob(GetTarget(), GetX(), GetY()) && GetTarget()->IsEnraged())
 					return;
-				//TODO: Implement Stances.
-				/*if(GetBotStance() == BotStancePassive)
-				return;*/
 
 				// First, special attack per class (kick, backstab etc..)
 				DoClassAttacks(GetTarget());
@@ -1272,8 +1360,6 @@ void Merc::AI_Process() {
 		{
 			if(GetTarget()->IsFeared() && !spellend_timer.Enabled()) {
 				// This is a mob that is fleeing either because it has been feared or is low on hitpoints
-				//TODO: Implement Stances.
-				//if(GetStance() != MercStancePassive)
 				AI_PursueCastCheck();
 			}
 
@@ -1294,9 +1380,6 @@ void Merc::AI_Process() {
 
 		if(!IsMoving() && !spellend_timer.Enabled())
 		{
-			//TODO: Implement Stances.
-			//if(GetStance() == MercStancePassive)
-			//      return;
 
 			if(AI_EngagedCastCheck()) {
 				MercMeditate(false);
@@ -1310,6 +1393,7 @@ void Merc::AI_Process() {
 		// Not engaged in combat
 		SetTarget(0);
 		SetHatedCount(0);
+		confidence_encounter_seen_ = false;
 		confidence_timer.Disable();
 		_check_confidence = false;
 
@@ -1319,10 +1403,8 @@ void Merc::AI_Process() {
 		if(!check_target_timer.Enabled())
 			check_target_timer.Start(2000, false);
 
-		if(!IsMoving() && AI_think_timer->Check() && !spellend_timer.Enabled())
+		if(GetStance() != Stance::Passive && !IsMoving() && AI_think_timer->Check() && !spellend_timer.Enabled())
 		{
-			//TODO: Implement passive stances.
-			//if(GetStance() != MercStancePassive) {
 			if(!AI_IdleCastCheck() && !IsCasting()) {
 				if(GetArchetype() == Archetype::Caster) {
 					MercMeditate(true);
@@ -1366,7 +1448,7 @@ void Merc::AI_Process() {
 	}
 }
 
-void Merc::AI_Start(int32 iMoveDelay) {
+void Merc::AI_Start(uint32 iMoveDelay) {
 	if (!pAIControlled)
 		return;
 
@@ -1651,14 +1733,20 @@ bool Merc::AICastSpell(int8 iChance, uint32 iSpellTypes) {
 			switch (iSpellTypes) {
 							case SpellType_Heal: {
 								Mob* tar = nullptr;
-								int8 numToHeal = g->GetNumberNeedingHealedInGroup(IsEngaged() ? 75 : 95, true);
-								int8 checkHPR = IsEngaged() ? 95 : 99;
-								int8 checkPetHPR = IsEngaged() ? 95 : 99;
-
-								//todo: check stance to determine healing spell selection
+								int8 numToHeal = 0;
+								bool group_heal_allowed = true;
+								int8 checkHPR = GetStance() == Stance::Efficient ? (IsEngaged() ? 75 : 95) :
+									(GetStance() == Stance::Reactive ? 99 : (IsEngaged() ? 95 : 99));
+								int8 checkPetHPR = checkHPR;
+								// Efficient conserves mana; Reactive prioritizes fast heals earlier.
 
 								for(int i = 0; i < MAX_GROUP_MEMBERS; i++) {
 									if(g->members[i] && !g->members[i]->qglobal) {
+										if (!CanHealGroupMember(g->members[i])) {
+											if (g->HasRole(g->members[i], RolePuller)) group_heal_allowed = false;
+											continue;
+										}
+										if (g->members[i]->GetHPRatio() < (IsEngaged() ? 75 : 95)) ++numToHeal;
 										int8 hpr = (int8)g->members[i]->GetHPRatio();
 
 										if(g->members[i]->HasPet() && g->members[i]->GetPet()->GetHPRatio() < checkHPR) {
@@ -1692,11 +1780,16 @@ bool Merc::AICastSpell(int8 iChance, uint32 iSpellTypes) {
 									}
 								}
 
-								if(numToHeal > 2) {
+								if(group_heal_allowed && numToHeal > 2) {
 									selectedMercSpell = GetBestMercSpellForGroupHeal(this);
 								}
 
 								if(tar && selectedMercSpell.spellid == 0) {
+									if (GetStance() == Stance::Reactive && tar->GetHPRatio() < 90) {
+										selectedMercSpell = GetBestMercSpellForFastHeal(this);
+									}
+									if (!selectedMercSpell.spellid) {
+
 									if(tar->GetHPRatio() < 15) {
 										//check for very fast heals first (casting time < 1 s)
 										selectedMercSpell = GetBestMercSpellForVeryFastHeal(this);
@@ -1738,6 +1831,8 @@ bool Merc::AICastSpell(int8 iChance, uint32 iSpellTypes) {
 												selectedMercSpell = GetBestMercSpellForRegularSingleTargetHeal(this);
 											}
 										}
+									}
+
 									}
 								}
 
@@ -2052,6 +2147,10 @@ bool Merc::AICastSpell(int8 iChance, uint32 iSpellTypes) {
 }
 
 void Merc::CheckHateList() {
+	const auto owner = GetMercenaryOwner();
+	if (!owner || !owner->GetMercenaryAutoAssist() || GetStance() == Stance::Passive) {
+		return;
+	}
 	if(check_target_timer.Enabled())
 		check_target_timer.Disable();
 
@@ -2078,10 +2177,10 @@ void Merc::CheckHateList() {
 						radius *= radius;
 						if(dist <= radius) {
 
-							for(int counter = 0; counter < g->GroupCount(); counter++) {
+							for(int counter = 0; counter < MAX_GROUP_MEMBERS; counter++) {
 								Mob* groupMember = g->members[counter];
 								if(groupMember) {
-									if(npc->IsOnHatelist(groupMember)) {
+									if(npc->IsOnHatelist(groupMember) && IsAttackAllowed(npc)) {
 										if(!hate_list.IsEntOnHateList(npc)) {
 											float range = g->HasRole(groupMember, RolePuller) ? RuleI(Mercs, AggroRadiusPuller) : RuleI(Mercs, AggroRadius);
 											range *= range;
@@ -2750,35 +2849,22 @@ MercSpell Merc::GetBestMercSpellForPercentageHeal(Merc* caster) {
 }
 
 MercSpell Merc::GetBestMercSpellForRegularSingleTargetHeal(Merc* caster) {
-	MercSpell result;
-
-	result.spellid = 0;
-	result.stance = 0;
-	result.type = 0;
-	result.slot = 0;
-	result.proc_chance = 0;
-	result.time_cancast = 0;
-
-	if(caster) {
-		std::list<MercSpell> mercSpellList = GetMercSpellsForSpellEffect(caster, SpellEffect::CurrentHP);
-
-		for (auto mercSpellListItr = mercSpellList.begin(); mercSpellListItr != mercSpellList.end();
-		     ++mercSpellListItr) {
-			// Assuming all the spells have been loaded into this list by level and in descending order
-			if(IsRegularSingleTargetHealSpell(mercSpellListItr->spellid)
-				&& CheckSpellRecastTimers(caster, mercSpellListItr->spellid)) {
-					result.spellid = mercSpellListItr->spellid;
-					result.stance = mercSpellListItr->stance;
-					result.type = mercSpellListItr->type;
-					result.slot = mercSpellListItr->slot;
-					result.proc_chance = mercSpellListItr->proc_chance;
-					result.time_cancast = mercSpellListItr->time_cancast;
-
-					break;
-			}
+	MercSpell result{};
+	if (!caster) return result;
+	long double best_efficiency = -1;
+	for (const auto& candidate : GetMercSpellsForSpellEffect(caster, SpellEffect::CurrentHP)) {
+		if (!IsRegularSingleTargetHealSpell(candidate.spellid) || !CheckSpellRecastTimers(caster, candidate.spellid)) continue;
+		const auto mana = std::max(0, caster->GetActSpellCost(candidate.spellid, spells[candidate.spellid].mana));
+		if (mana > caster->GetMana()) continue;
+		if (caster->GetStance() != Stance::Efficient) { result = candidate; break; }
+		int64 healing = 0;
+		for (int effect = 0; effect < EFFECT_COUNT; ++effect) {
+			if (spells[candidate.spellid].effect_id[effect] == SpellEffect::CurrentHP)
+				healing += std::max<int64>(0, caster->CalcSpellEffectValue(candidate.spellid, effect, caster->GetLevel()));
 		}
+		const long double efficiency = static_cast<long double>(healing) / std::max(1, mana);
+		if (efficiency > best_efficiency) { best_efficiency = efficiency; result = candidate; }
 	}
-
 	return result;
 }
 
@@ -3666,6 +3752,7 @@ void Merc::SetSpellTimeCanCast(uint16 spellid, uint32 recast_delay) {
 }
 
 bool Merc::CheckTaunt() {
+	if (!GetGroup() || !GetGroup()->HasRole(this, RoleTank)) return false;
 	Mob* tar = GetTarget();
 	//Only taunt if we are not top on target's hate list
 	//This ensures we have taunt available to regain aggro if needed
@@ -3676,6 +3763,7 @@ bool Merc::CheckTaunt() {
 }
 
 bool Merc::CheckAETaunt() {
+	if (!GetGroup() || !GetGroup()->HasRole(this, RoleTank)) return false;
 	//need to check area for mobs needing taunted
 	MercSpell mercSpell = GetBestMercSpellForAETaunt(this);
 	uint8 result = 0;
@@ -3697,7 +3785,7 @@ bool Merc::CheckAETaunt() {
 						Group* g = GetGroup();
 
 						if(g) {
-							for(int i = 0; i < g->GroupCount(); i++) {
+							for(int i = 0; i < MAX_GROUP_MEMBERS; i++) {
 								//if(npc->IsOnHatelist(g->members[i]) && g->members[i]->GetTarget() != npc && g->members[i]->IsEngaged()) {
 								if(GetTarget() != npc && g->members[i] && g->members[i]->GetTarget() != npc && npc->IsOnHatelist(g->members[i])) {
 									result++;
@@ -3718,24 +3806,31 @@ bool Merc::CheckAETaunt() {
 }
 
 Corpse* Merc::GetGroupMemberCorpse() {
-	Corpse* corpse = nullptr;
-
-	if(HasGroup()) {
-		Group* g = GetGroup();
-
-		if(g) {
-			for(int i = 0; i < g->GroupCount(); i++) {
-				if(g->members[i] && g->members[i]->IsClient()) {
-					corpse = entity_list.GetCorpseByOwnerWithinRange(g->members[i]->CastToClient(), this, RuleI(Mercs, ResurrectRadius));
-
-					if(corpse && !corpse->IsRezzed()) {
-						return corpse;
-					}
-				}
-			}
+	const auto group = GetGroup();
+	const int radius = RuleI(Mercs, ResurrectRadius);
+	if (!group || radius <= 0) return nullptr;
+	const float radius_squared = static_cast<float>(radius) * radius;
+	float nearest_distance = radius_squared;
+	Corpse* nearest = nullptr;
+	// Names remain in the authenticated group roster when a dead member zones
+	// to bind. A live Client pointer is not required to identify their corpse.
+	for (const auto& [id, corpse] : entity_list.GetCorpseList()) {
+		if (!corpse || !corpse->IsPlayerCorpse() || !corpse->GetCharID() ||
+			corpse->IsRezzed() || !corpse->IsRezzable()) continue;
+		const float distance = DistanceSquaredNoZ(GetPosition(), corpse->GetPosition());
+		if (distance > nearest_distance) continue;
+		for (int slot = 0; slot < MAX_GROUP_MEMBERS; ++slot) {
+			if (!group->membername[slot][0] ||
+				strcasecmp(group->membername[slot], corpse->GetOwnerName())) continue;
+			const auto member = group->members[slot];
+			if (member && (!member->IsClient() ||
+				member->CastToClient()->CharacterID() != corpse->GetCharID())) continue;
+			nearest = corpse;
+			nearest_distance = distance;
+			break;
 		}
 	}
-	return 0;
+	return nearest;
 }
 
 bool Merc::TryHide() {
@@ -3765,13 +3860,10 @@ bool Merc::CheckConfidence() {
 	bool result = true;
 	int ConfidenceLossChance = 0;
 	float ConfidenceCheck = 0;
-	int ConfidenceRating = 2 * GetProficiencyID();
+	const auto group = GetGroup();
+	int ConfidenceRating = std::max(1, group ? int(group->GroupCount()) : 1) * std::max(1, int(GetProficiencyID()));
 
-	std::list<NPC*> npc_list;
-	entity_list.GetNPCList(npc_list);
-
-	for (auto itr = npc_list.begin(); itr != npc_list.end(); ++itr) {
-		NPC* mob = *itr;
+	for (auto mob : GroupEnemyTargets()) {
 		float ConRating = 1.0;
 		int CurrentCon = 0;
 
@@ -3781,7 +3873,6 @@ bool Merc::CheckConfidence() {
 
 		if(mob->IsFeared() || mob->IsMezzed() || mob->IsStunned() || mob->IsRooted() || mob->IsCharmed()) continue;
 
-		if(!mob->CheckAggro(this)) continue;
 
 		float AggroRange = mob->GetAggroRange();
 
@@ -3840,7 +3931,7 @@ bool Merc::CheckConfidence() {
 	}
 
 	if(ConfidenceRating < ConfidenceCheck) {
-		ConfidenceLossChance = 25 - ( 5 * (GetTierID() - 1));
+		ConfidenceLossChance = std::clamp(25 - 5 * (int(GetTierID()) - 1), 0, 100);
 	}
 
 	if(zone->random.Roll(ConfidenceLossChance)) {
@@ -4071,19 +4162,15 @@ Mob* Merc::GetOwnerOrSelf() {
 	return Result;
 }
 
-bool Merc::Death(Mob* killer_mob, int64 damage, uint16 spell, EQ::skills::SkillType attack_skill, uint8 killed_by, bool is_buff_tic)
+bool Merc::Death(Mob* killer_mob, int64 damage, uint16 spell, EQ::skills::SkillType attack_skill, KilledByTypes killed_by, bool is_buff_tic)
 {
-	if (!NPC::Death(killer_mob, damage, spell, attack_skill)) {
-		return false;
+	const auto owner = GetMercenaryOwner();
+	if (!NPC::Death(killer_mob, damage, spell, attack_skill, killed_by, is_buff_tic)) return false;
+	if (owner) {
+		SetOwnerID(owner->GetID());
+		SetMercCharacterID(owner->CharacterID());
 	}
-
-	Save();
-
-	// If client is in zone, suspend merc, else depop it.
-	if (!Suspend()) {
-		Depop();
-	}
-
+	if (!Suspend(std::max(1, RuleI(Mercs, ReviveIntervalS)))) Depop();
 	return true;
 }
 
@@ -4110,7 +4197,7 @@ Mob* Merc::GetOwner() {
 		SetOwnerID(0);
 	}
 
-	return Result->CastToMob();
+	return Result;
 }
 
 const char* Merc::GetRandomName(){
@@ -4210,8 +4297,22 @@ const char* Merc::GetRandomName(){
 }
 
 bool Merc::LoadMercenarySpells() {
-	// loads mercs spells into list
+	// Replace only innate procs installed by the previous mercenary spell list.
+	for (const auto& previous : merc_spells) {
+		if (!previous.proc_chance) {
+			continue;
+		}
+		for (auto& proc : PermaProcs) {
+			if (proc.spellID == previous.spellid) {
+				proc = {};
+				proc.spellID = SPELL_UNKNOWN;
+				proc.base_spellID = SPELL_UNKNOWN;
+				proc.level_override = -1;
+			}
+		}
+	}
 	merc_spells.clear();
+	HasAISpell = false;
 
 	std::list<MercSpellEntry> spellList = zone->merc_spells_list[GetClass()];
 
@@ -4220,12 +4321,24 @@ bool Merc::LoadMercenarySpells() {
 		return false;
 	}
 
-	uint8 proficiency_id = GetProficiencyID();
-	int16 attack_proc_spell = -1;
-	int8 proc_chance = 0;
+	const uint8 proficiency_id = GetProficiencyID();
+	uint16 spell_level = GetLevel();
+	uint16 content_ceiling = 0;
+	for (const auto& entry : spellList) {
+		if (entry.proficiencyid == proficiency_id && entry.minlevel <= entry.maxlevel &&
+			entry.maxlevel && IsValidSpell(entry.spellid)) {
+			content_ceiling = std::max<uint16>(content_ceiling, entry.maxlevel);
+		}
+	}
+	// Keep the last installed repertoire only above its entire proficiency's
+	// content ceiling. Never fill an interior gap or borrow another proficiency.
+	if (RuleB(Mercs, ScaleAboveContentLevel) && spell_level <= 100 && content_ceiling &&
+		spell_level > content_ceiling) {
+		spell_level = content_ceiling;
+	}
 
 	for (auto mercSpellEntryItr = spellList.begin(); mercSpellEntryItr != spellList.end(); ++mercSpellEntryItr) {
-		if (proficiency_id == mercSpellEntryItr->proficiencyid && GetLevel() >= mercSpellEntryItr->minlevel && GetLevel() <= mercSpellEntryItr->maxlevel && mercSpellEntryItr->spellid > 0) {
+		if (proficiency_id == mercSpellEntryItr->proficiencyid && spell_level >= mercSpellEntryItr->minlevel && spell_level <= mercSpellEntryItr->maxlevel && IsValidSpell(mercSpellEntryItr->spellid)) {
 			MercSpell mercSpell;
 
 			mercSpell.spellid = mercSpellEntryItr->spellid;
@@ -4257,11 +4370,14 @@ bool Merc::LoadMercenarySpells() {
 
 bool Merc::Save() {
 
-	if(database.SaveMercenary(this)){
-		return true;
+	if (auto owner = GetMercenaryOwner()) {
+		if (!IsSuspended() && owner->GetMercTimer()->Enabled()) {
+			owner->GetMercInfo().MercTimerRemaining = owner->GetMercTimer()->GetRemainingTime();
+		}
 	}
 
-	return false;
+	const auto owner = GetMercenaryOwner();
+	return owner && owner->FinalizeMercenaryPayment(this, 0);
 }
 
 Merc* Merc::LoadMercenary(Client *c, MercTemplate* merc_template, uint32 merchant_id, bool updateFromDB) {
@@ -4296,6 +4412,13 @@ Merc* Merc::LoadMercenary(Client *c, MercTemplate* merc_template, uint32 merchan
 				{
 					snprintf(c->GetMercInfo().merc_name, 64, "%s", GetRandomName()); //sanity check.
 				}
+				// Native group gauges bind the exact spawn name. Reserve a clean,
+				// unique contract name instead of NPC's generated numeric suffix.
+				unsigned attempts = 0;
+				while (entity_list.GetMob(c->GetMercInfo().merc_name) && attempts++ < 100) {
+					snprintf(c->GetMercInfo().merc_name, 64, "%s", GetRandomName());
+				}
+				if (entity_list.GetMob(c->GetMercInfo().merc_name)) { delete npc_type; return nullptr; }
 				snprintf(npc_type->name, 64, "%s", c->GetMercInfo().merc_name);
 			}
 
@@ -4349,16 +4472,21 @@ Merc* Merc::LoadMercenary(Client *c, MercTemplate* merc_template, uint32 merchan
 
 				if(updateFromDB)
 				{
-					database.LoadCurrentMercenary(c);
+					if (!database.LoadCurrentMercenary(c)) {
+						delete merc;
+						return nullptr;
+					}
 
 					merc->SetMercID(c->GetMercInfo().mercid);
+					merc->SetStance(c->GetMercInfo().Stance);
+					merc->RestorePassiveUpkeepElapsed(c->GetMercInfo().PassiveUpkeepElapsedMS);
 					snprintf(merc->name, 64, "%s", c->GetMercInfo().merc_name);
 					merc->SetSuspended(c->GetMercInfo().IsSuspended);
 					merc->gender = c->GetMercInfo().Gender;
 					merc->size = c->GetMercInfo().MercSize;
-					merc->SetHP(c->GetMercInfo().hp <= 0 ? merc->GetMaxHP() : c->GetMercInfo().hp);
-					merc->SetMana(c->GetMercInfo().hp <= 0 ? merc->GetMaxMana() : c->GetMercInfo().mana);
-					merc->SetEndurance(c->GetMercInfo().endurance);
+					merc->SetHP(ClampSavedMercenaryResource(c->GetMercInfo().hp, merc->GetMaxHP()));
+					merc->SetMana(ClampSavedMercenaryResource(c->GetMercInfo().mana, merc->GetMaxMana()));
+					merc->SetEndurance(ClampSavedMercenaryResource(c->GetMercInfo().endurance, merc->GetMaxEndurance()));
 					merc->luclinface = c->GetMercInfo().face;
 					merc->hairstyle = c->GetMercInfo().luclinHairStyle;
 					merc->haircolor = c->GetMercInfo().luclinHairColor;
@@ -4376,6 +4504,10 @@ Merc* Merc::LoadMercenary(Client *c, MercTemplate* merc_template, uint32 merchan
 					merc->RandomizeFeatures(false, true);
 				}
 
+				// NPC construction appends a number even for a new mercenary. Both
+				// fresh and restored contracts must publish the identical clean name.
+				snprintf(merc->name, sizeof(merc->name), "%s", c->GetMercInfo().merc_name);
+				merc->clean_name[0] = 0;
 				if(merc->GetMercenaryID()) {
 					database.LoadMercenaryBuffs(merc);
 				}
@@ -4395,9 +4527,11 @@ void Merc::UpdateMercInfo(Client *c) {
 	snprintf(c->GetMercInfo().merc_name, 64, "%s", name);
 	c->GetMercInfo().mercid = GetMercenaryID();
 	c->GetMercInfo().IsSuspended = IsSuspended();
+	c->GetMercInfo().Stance = GetStance();
+	c->GetMercInfo().PassiveUpkeepElapsedMS = GetPassiveUpkeepElapsed();
 	c->GetMercInfo().Gender = GetGender();
 	c->GetMercInfo().MercSize = GetSize();
-	c->GetMercInfo().hp = GetHP();
+	c->GetMercInfo().hp = std::clamp<int64>(GetHP(), 0, std::numeric_limits<int32>::max());
 	c->GetMercInfo().mana = GetMana();
 	c->GetMercInfo().endurance = GetEndurance();
 	c->GetMercInfo().face = luclinface;
@@ -4417,8 +4551,12 @@ void Merc::UpdateMercStats(Client *c, bool setmax)
 	if (c->GetMercInfo().MercTemplateID > 0) {
 		Log(Logs::General, Logs::Mercenaries, "Updating Mercenary Stats for %s (%s).", GetName(),
 			c->GetName());
+		const auto merc_template = zone->GetMercTemplate(c->GetMercInfo().MercTemplateID);
+		if (!merc_template) {
+			return;
+		}
 		const NPCType *npc_type = content_db.GetMercenaryType(
-		    zone->GetMercTemplate(c->GetMercInfo().MercTemplateID)->MercNPCID, GetRace(), c->GetLevel());
+		    merc_template->MercNPCID, GetRace(), c->GetLevel());
 		if (npc_type) {
 			max_hp = npc_type->max_hp;
 			base_hp = npc_type->max_hp;
@@ -4454,6 +4592,9 @@ void Merc::UpdateMercStats(Client *c, bool setmax)
 			ScaleStats(scalepercent, setmax);
 
 			level = npc_type->level;
+			for (int skill = 0; skill <= EQ::skills::HIGHEST_SKILL; ++skill) {
+				skills[skill] = SkillCaps::Instance()->GetSkillCap(GetClass(), static_cast<EQ::skills::SkillType>(skill), level).cap;
+			}
 			attack_count = npc_type->attack_count;
 			attack_delay = npc_type->attack_delay;
 			spellscale = npc_type->spellscale;
@@ -4819,32 +4960,30 @@ void Client::UpdateMercTimer()
 	{
 		if(GetMercTimer()->Check())
 		{
-			uint32 upkeep = merc->CalcUpkeepCost(merc->GetMercenaryTemplateID(), GetLevel());
+			uint32 upkeep = merc->IsPassiveUpkeepFree() ? 0 : merc->CalcUpkeepCost(merc->GetMercenaryTemplateID(), GetLevel());
 
-			if(CheckCanRetainMerc(upkeep))
-			{
-				if(RuleB(Mercs, ChargeMercUpkeepCost))
-				{
-					TakeMoneyFromPP((upkeep * 100), true);
-				}
+			if (!CheckCanRetainMerc(upkeep)) {
+				merc->Suspend();
+				return;
 			}
-			else
-			{
+			GetMercInfo().MercTimerRemaining = RuleI(Mercs, UpkeepIntervalMS);
+			const uint64 cost = RuleB(Mercs, ChargeMercUpkeepCost) ? static_cast<uint64>(upkeep) * 100 : 0;
+			if (!FinalizeMercenaryPayment(merc, cost, true)) {
 				merc->Suspend();
 				return;
 			}
 
-			// Reset the upkeep timer
-			GetMercInfo().MercTimerRemaining = RuleI(Mercs, UpkeepIntervalMS);
-			SendMercTimer(merc);
+			// A restored countdown is only the first partial period. Start the
+			// complete new period before status samples the live timer; otherwise
+			// SendMercTimer would overwrite the committed full period with the old
+			// restored duration and a later SetTimer would repeat that short bill.
 			GetMercTimer()->Start(RuleI(Mercs, UpkeepIntervalMS));
-			GetMercTimer()->SetTimer(GetMercInfo().MercTimerRemaining);
+			SendMercTimer(merc);
 
-			// Send upkeep charge message
-			SendMercResponsePackets(12);
+			// Paid upkeep notification is emitted once by the committed payment finalizer.
 
 			// Warn that mercenary is about to be suspended due to insufficient funds (on next upkeep)
-			if (RuleB(Mercs, ChargeMercUpkeepCost) && upkeep > 0 && !HasMoney(upkeep * 100))
+			if (RuleB(Mercs, ChargeMercUpkeepCost) && upkeep > 0 && !GetAlternateCurrencyValue(19) && !HasMoney(upkeep * 100))
 			{
 				SendMercResponsePackets(16);
 			}
@@ -4867,22 +5006,26 @@ bool Client::CheckCanHireMerc(Mob* merchant, uint32 template_id) {
 		return false;
 	}
 
-	MercTemplate* mercTemplate = zone->GetMercTemplate(template_id);
-
-	//check for suspended merc
-	if(GetMercInfo().mercid != 0 && GetMercInfo().IsSuspended) {
+	// Additional contracts may be hired only while every existing mercenary is suspended.
+	if (GetMerc()) {
 		SendMercResponsePackets(6);
 		return false;
 	}
+	for (uint8 slot = 0; slot < MAXMERCS; ++slot) {
+		if (GetMercInfo(slot).mercid && !GetMercInfo(slot).IsSuspended) {
+			SendMercResponsePackets(6);
+			return false;
+		}
+	}
 
 	// Check if max number of mercs is already reached
-	if(GetNumberOfMercenaries() >= MAXMERCS) {
+	if(GetNumberOfMercenaries() >= GetMercenaryCapacity()) {
 		SendMercResponsePackets(6);
 		return false;
 	}
 
 	//check for valid merchant
-	if(!merchant) {
+	if(!merchant || !merchant->IsNPC() || merchant->GetClass() != Class::MercenaryLiaison) {
 		SendMercResponsePackets(17);
 		return false;
 	}
@@ -4890,6 +5033,16 @@ bool Client::CheckCanHireMerc(Mob* merchant, uint32 template_id) {
 	//check for merchant too far away
 	if(DistanceSquared(m_Position, merchant->GetPosition()) > USE_NPC_RANGE2) {
 		SendMercResponsePackets(18);
+		return false;
+	}
+
+	// Only templates actually offered by this liaison may be hired.
+	const auto offered = merchant->CastToNPC()->GetMercenariesList(static_cast<uint32>(ClientVersion()));
+	const auto found = std::find_if(offered.begin(), offered.end(), [template_id](const MercData& entry) {
+		return entry.MercTemplateID == template_id;
+	});
+	if (found == offered.end()) {
+		SendMercResponsePackets(19);
 		return false;
 	}
 
@@ -4911,9 +5064,9 @@ bool Client::CheckCanRetainMerc(uint32 upkeep) {
 	Merc* merc = GetMerc();
 
 	//check for sufficient funds
-	if(RuleB(Mercs, ChargeMercPurchaseCost)) {
+	if(RuleB(Mercs, ChargeMercUpkeepCost)) {
 		if(merc) {
-			if(upkeep > 0 && !HasMoney(upkeep * 100)) {
+			if(upkeep > 0 && !GetAlternateCurrencyValue(19) && !HasMoney(upkeep * 100)) {
 				SendMercResponsePackets(14);
 				return false;
 			}
@@ -4935,6 +5088,10 @@ bool Client::CheckCanSpawnMerc(uint32 template_id) {
 	if(!zone->AllowMercs())
 	{
 		SendMercResponsePackets(3);
+		if (ClientVersion() == EQ::versions::ClientVersion::RoF2) {
+			EQApplicationPacket restricted(OP_MercenaryRestricted, 0);
+			QueuePacket(&restricted);
+		}
 		return false;
 	}
 
@@ -4962,7 +5119,8 @@ bool Client::CheckCanSpawnMerc(uint32 template_id) {
 	}
 
 	// Check group size
-	if(GetGroup() &&  GetGroup()->GroupCount() >= MAX_GROUP_MEMBERS)	// database.GroupCount(GetGroup()->GetID())
+	if(GetGroup() && GetGroup()->GroupCount() >= MAX_GROUP_MEMBERS &&
+		(!GetMerc() || GetMerc()->GetGroup() != GetGroup()))
 	{
 		SendMercResponsePackets(8);
 		return false;
@@ -4987,13 +5145,18 @@ bool Client::CheckCanUnsuspendMerc() {
 		return false;
 	}
 
-	MercTemplate* mercTemplate = zone->GetMercTemplate(GetMercInfo().MercTemplateID);
-
-	if(!GetPTimers().Expired(&database, pTimerMercSuspend, false))
+	// The mercenary snapshot commits before the character persistent timer. Its
+	// deadline remains authoritative after a crash or missing timer row.
+	const auto now = time(nullptr);
+	const auto deadline = static_cast<time_t>(GetMercInfo().SuspendedTime);
+	const bool timer_expired = GetPTimers().Expired(&database, pTimerMercSuspend, false);
+	if (deadline > now || !timer_expired)
 	{
+		const auto remaining = std::max<int64>(deadline > now ? deadline - now : 0,
+			GetPTimers().GetRemainingTime(pTimerMercSuspend));
 		SendMercResponsePackets(10);
-		//TODO: find this packet response and tell them properly.
-		Message(0, "You must wait %i seconds before unsuspending your mercenary.", GetPTimers().GetRemainingTime(pTimerMercSuspend));
+		SendMercTimer(nullptr);
+		Message(0, "You must wait %i seconds before unsuspending your mercenary.", static_cast<int>(remaining));
 		return false;
 	}
 
@@ -5006,12 +5169,23 @@ void Client::CheckMercSuspendTimer() {
 
 	if(GetMercInfo().SuspendedTime != 0)
 	{
-		//if(time(nullptr) >= GetMercInfo().SuspendedTime)
-		if (p_timers.Expired(&database, pTimerMercSuspend, false))
+		// Never erase a committed deadline merely because the character timer
+		// was not saved before a crash.
+		if (static_cast<time_t>(GetMercInfo().SuspendedTime) <= time(nullptr) &&
+			p_timers.Expired(&database, pTimerMercSuspend, false))
 		{
 			GetMercInfo().SuspendedTime = 0;
-			SendMercResponsePackets(0);
-			SendMercSuspendResponsePacket(GetMercInfo().SuspendedTime);
+			if (ClientVersion() == EQ::versions::ClientVersion::RoF2 && GetMercInfo().hp <= 0) {
+				// Keep native Dead/Revive state; SuspendResponse would change it to Unsuspend.
+				SendMercTimer(nullptr);
+			} else {
+				if (ClientVersion() == EQ::versions::ClientVersion::RoF2) {
+					EQApplicationPacket ready(OP_MercenaryRestoreReady, 0);
+					QueuePacket(&ready);
+				} else SendMercResponsePackets(0);
+				SendMercSuspendResponsePacket(GetMercInfo().SuspendedTime);
+				if (ClientVersion() == EQ::versions::ClientVersion::RoF2) SendMercTimer(nullptr);
+			}
 			Log(Logs::General, Logs::Mercenaries, "CheckMercSuspendTimer Ready for %s.", GetName());
 		}
 	}
@@ -5031,16 +5205,19 @@ void Client::SuspendMercCommand() {
 			}
 
 			// Get merc, assign it to client & spawn
-			Merc* merc = Merc::LoadMercenary(this, &zone->merc_templates[GetMercInfo().MercTemplateID], 0, true);
-			if(merc)
+			Merc* merc = Merc::LoadMercenary(this, zone->GetMercTemplate(GetMercInfo().MercTemplateID), 0, true);
+			if (merc && SpawnMerc(merc, false))
 			{
-				SpawnMerc(merc, false);
 				Log(Logs::General, Logs::Mercenaries, "SuspendMercCommand Successful Unsuspend for %s.", GetName());
 			}
 			else
 			{
-				//merc failed to spawn
+				Merc::DiscardFailedSpawn(merc);
+				SetMercID(0);
+				GetMercTimer()->Disable();
 				SendMercResponsePackets(3);
+				SendMercPersonalInfo();
+				SendMercTimer(nullptr);
 				Log(Logs::General, Logs::Mercenaries, "SuspendMercCommand Failed to Spawn Merc for %s.", GetName());
 			}
 		}
@@ -5107,10 +5284,20 @@ void Client::SpawnMercOnZone() {
 		{
 			GetMercInfo().SuspendedTime = 0;
 			// Get merc, assign it to client & spawn
-			Merc* merc = Merc::LoadMercenary(this, &zone->merc_templates[GetMercInfo().MercTemplateID], 0, true);
-			if(merc)
-			{
-				SpawnMerc(merc, false);
+			Merc* merc = Merc::LoadMercenary(this, zone->GetMercTemplate(GetMercInfo().MercTemplateID), 0, true);
+			if (merc && !SpawnMerc(merc, false)) {
+				if (!merc->GetID()) {
+					// A zone restriction can reject a persisted active contract before it
+					// becomes an entity. Persist suspension instead of losing the contract.
+					merc->SetOwnerID(GetID());
+					merc->SetMercCharacterID(CharacterID());
+					merc->Suspend();
+					delete merc;
+				} else {
+					merc->Depop();
+					SetMercID(0);
+					GetMercTimer()->Disable();
+				}
 			}
 			Log(Logs::General, Logs::Mercenaries, "SpawnMercOnZone Normal Merc for %s.", GetName());
 		}
@@ -5147,58 +5334,90 @@ void Client::SendMercTimer(Merc* merc) {
 		return;
 	}
 
+	const int suspended_state = ClientVersion() == EQ::versions::ClientVersion::RoF2 && GetMercInfo().IsSuspended && GetMercInfo().hp <= 0 ? 0 : MERC_STATE_SUSPENDED;
+
 	if (!merc)
 	{
-		SendMercTimerPacket(NO_MERC_ID, MERC_STATE_SUSPENDED, GetMercInfo().SuspendedTime, GetMercInfo().MercTimerRemaining, RuleI(Mercs, SuspendIntervalMS));
+		SendMercTimerPacket(NO_MERC_ID, suspended_state, GetMercInfo().SuspendedTime, GetMercInfo().MercTimerRemaining, RuleI(Mercs, SuspendIntervalMS));
 		Log(Logs::General, Logs::Mercenaries, "SendMercTimer No Merc for %s.", GetName());
 	}
 	else if (merc->IsSuspended())
 	{
-		SendMercTimerPacket(NO_MERC_ID, MERC_STATE_SUSPENDED, GetMercInfo().SuspendedTime, GetMercInfo().MercTimerRemaining, RuleI(Mercs, SuspendIntervalMS));
+		SendMercTimerPacket(NO_MERC_ID, suspended_state, GetMercInfo().SuspendedTime, GetMercInfo().MercTimerRemaining, RuleI(Mercs, SuspendIntervalMS));
 		Log(Logs::General, Logs::Mercenaries, "SendMercTimer Suspended Merc for %s.", GetName());
 	}
 	else
 	{
+		if (GetMercTimer()->Enabled()) {
+			GetMercInfo().MercTimerRemaining = GetMercTimer()->GetRemainingTime();
+		}
 		SendMercTimerPacket(merc->GetID(), MERC_STATE_NORMAL, NOT_SUSPENDED_TIME, GetMercInfo().MercTimerRemaining, RuleI(Mercs, SuspendIntervalMS));
 		Log(Logs::General, Logs::Mercenaries, "SendMercTimer Normal Merc for %s.", GetName());
 	}
 
-}
-
-void Client::SpawnMerc(Merc* merc, bool setMaxStats) {
-
-	if (!merc || !CheckCanSpawnMerc(merc->GetMercenaryTemplateID()))
-	{
-		if (merc)
-		{
-			merc->Suspend();
+	if (ClientVersion() == EQ::versions::ClientVersion::RoF2 && GetMercInfo().IsSuspended && GetMercInfo().hp <= 0) {
+		EQApplicationPacket dead(OP_MercenaryDead, 4);
+		dead.WriteUInt32(GetMercInfo().SuspendedTime);
+		QueuePacket(&dead);
+		if (GetMercInfo().SuspendedTime <= static_cast<uint32>(time(nullptr)) &&
+			GetPTimers().Expired(&database, pTimerMercSuspend, false)) {
+			EQApplicationPacket ready(OP_MercenaryRestoreReady, 0);
+			QueuePacket(&ready);
 		}
-		return;
 	}
 
-	merc->Spawn(this);
-	merc->SetSuspended(false);
-	SetMerc(merc);
-	merc->Unsuspend(setMaxStats);
-	merc->SetStance(GetMercInfo().Stance);
+	if (ClientVersion() == EQ::versions::ClientVersion::RoF2 && (!RuleB(Mercs, AllowMercs) || !zone->AllowMercs())) {
+		EQApplicationPacket restricted(OP_MercenaryRestricted, 0);
+		QueuePacket(&restricted);
+	}
 
-	Log(Logs::General, Logs::Mercenaries, "SpawnMerc Success for %s.", GetName());
 }
 
-bool Merc::Suspend() {
+void Merc::DiscardFailedSpawn(Merc* merc) {
+	if (!merc) return;
+	if (!merc->GetID()) delete merc;
+	else merc->Depop(); // A registered entity remains owned by mob_list until its process pass.
+}
+
+bool Client::SpawnMerc(Merc* merc, bool setMaxStats) {
+	if (!merc || !CheckCanSpawnMerc(merc->GetMercenaryTemplateID())) {
+		return false;
+	}
+	if (!merc->Spawn(this)) {
+		return false;
+	}
+	merc->SetStance(GetMercInfo().Stance ? GetMercInfo().Stance : Stance::Balanced);
+	SetMerc(merc);
+	if (!merc->Unsuspend(setMaxStats)) {
+		return false;
+	}
+	Log(Logs::General, Logs::Mercenaries, "SpawnMerc Success for %s.", GetName());
+	return true;
+}
+
+bool Merc::Suspend(uint32 cooldown_seconds) {
 
 	Client* mercOwner = GetMercenaryOwner();
 
 	if(!mercOwner)
 		return false;
 
+	const auto previous_info = mercOwner->GetMercInfo();
+	GetPassiveUpkeepElapsed();
 	SetSuspended(true);
 
 	mercOwner->GetMercInfo().IsSuspended = true;
-	mercOwner->GetMercInfo().SuspendedTime = time(nullptr) + RuleI(Mercs, SuspendIntervalS);
-	mercOwner->GetMercInfo().MercTimerRemaining = mercOwner->GetMercTimer()->GetRemainingTime();
+	const uint32 cooldown = cooldown_seconds ? cooldown_seconds : std::max(1, RuleI(Mercs, SuspendIntervalS));
+	mercOwner->GetMercInfo().SuspendedTime = time(nullptr) + cooldown;
+	if (mercOwner->GetMercTimer()->Enabled()) {
+		mercOwner->GetMercInfo().MercTimerRemaining = mercOwner->GetMercTimer()->GetRemainingTime();
+	}
 	mercOwner->GetMercInfo().Stance = GetStance();
-	Save();
+	if (!Save()) {
+		SetSuspended(false);
+		mercOwner->GetMercInfo() = previous_info;
+		return false;
+	}
 	mercOwner->GetMercTimer()->Disable();
 	mercOwner->SendMercSuspendResponsePacket(mercOwner->GetMercInfo().SuspendedTime);
 	mercOwner->SendMercTimer(this);
@@ -5206,7 +5425,7 @@ bool Merc::Suspend() {
 	Depop();
 
 	// Start the timer to send the packet that refreshes the Unsuspend Button
-	mercOwner->GetPTimers().Start(pTimerMercSuspend, RuleI(Mercs, SuspendIntervalS));
+	mercOwner->GetPTimers().Start(pTimerMercSuspend, cooldown);
 
 	Log(Logs::General, Logs::Mercenaries, "Suspend Complete for %s.", mercOwner->GetName());
 
@@ -5245,7 +5464,16 @@ bool Merc::Unsuspend(bool setMaxStats) {
 
 	if(GetID())
 	{
-		// Set time remaining to max on unsuspend - there is a charge for unsuspending as well
+		const bool resuming = IsSuspended();
+		const bool reviving = resuming && mercOwner->GetMercInfo().hp <= 0;
+		const uint64 activation_cost = resuming && RuleB(Mercs, ChargeMercUpkeepCost) ?
+			static_cast<uint64>(CalcUpkeepCost(GetMercenaryTemplateID(), GetLevel())) * 100 : 0;
+		if (activation_cost && !mercOwner->GetAlternateCurrencyValue(19) && !mercOwner->HasMoney(activation_cost)) {
+			mercOwner->SendMercResponsePackets(1);
+			return false;
+		}
+		const uint32 remaining = resuming ? RuleI(Mercs, UpkeepIntervalMS) :
+			mercOwner->GetMercInfo().MercTimerRemaining;
 		SetSuspended(false);
 
 		mercOwner->GetMercInfo().mercid = GetMercenaryID();
@@ -5255,8 +5483,8 @@ bool Merc::Unsuspend(bool setMaxStats) {
 		mercOwner->SendMercenaryUnknownPacket(1);
 		mercOwner->GetMercInfo().SuspendedTime = 0;
 		// Reset the upkeep timer
-		mercOwner->GetMercInfo().MercTimerRemaining = RuleI(Mercs, UpkeepIntervalMS);
-		mercOwner->GetMercTimer()->Start(RuleI(Mercs, UpkeepIntervalMS));
+		mercOwner->GetMercInfo().MercTimerRemaining = remaining;
+		mercOwner->GetMercTimer()->Start(remaining ? remaining : 1);
 		//mercOwner->GetMercTimer()->SetTimer(mercOwner->GetMercInfo().MercTimerRemaining);
 		mercOwner->SendMercTimer(this);
 		if(!mercOwner->GetPTimers().Expired(&database, pTimerMercSuspend, false))
@@ -5264,53 +5492,62 @@ bool Merc::Unsuspend(bool setMaxStats) {
 
 		if (MercJoinClientGroup())
 		{
-			if(setMaxStats)
+			if(setMaxStats || reviving)
 			{
 				RestoreHealth();
 				RestoreMana();
 				RestoreEndurance();
 			}
 
-			//check for sufficient funds and remove them last
-			if(RuleB(Mercs, ChargeMercUpkeepCost))
-			{
-				uint32 cost = CalcUpkeepCost(GetMercenaryTemplateID(), GetLevel()) * 100;    // Cost is in gold
-				if(cost > 0 && !mercOwner->HasMoney(cost))
-				{
-					mercOwner->SendMercResponsePackets(1);
-					Suspend();
-					return false;
-				}
+			// New contracts are committed by the hire handler together with their purchase fee.
+			if (!GetMercenaryID()) {
+				mercOwner->SendMercTimer(this);
+			return true;
 			}
-			Save();
+			if (!mercOwner->FinalizeMercenaryPayment(this, activation_cost, true)) {
+				if (!mercOwner->HasMercenaryPersistenceFailure()) {
+					if (reviving) SetHP(0);
+					Suspend();
+				}
+				return false;
+			}
+			mercOwner->SendMercTimer(this);
+			return true;
 		}
 	}
 
-	return true;
+	return false;
 }
 
 bool Client::DismissMerc(uint32 MercID) {
-
-	bool Dismissed = true;
-	if (!database.DeleteMercenary(MercID))
-	{
-		Log(Logs::General, Logs::Mercenaries, "Dismiss Failed Database Query for MercID: %i, Client: %s.", MercID, GetName());
-		Dismissed = false;
+	if (!MercID || MercID != GetMercInfo().mercid || HasMercenaryPersistenceFailure()) {
+		return false;
 	}
-	else
-	{
-		Log(Logs::General, Logs::Mercenaries, "Dismiss Successful for %s.", GetName());
+	Mercenary::Payment payment;
+	if (!PrepareMercenaryPayment(payment, 0)) {
+		return false;
 	}
-
-	if (GetMerc())
-	{
+	const auto result = database.DeleteMercenaryAtomic(CharacterID(), MercID, GetMercSlot(), &payment);
+	if (result != Mercenary::SaveResult::Saved) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	if (GetMerc()) {
 		GetMerc()->Depop();
 	}
-
-	SendClearMercInfo();
+	GetMercTimer()->Disable();
 	SetMerc(nullptr);
-
-	return Dismissed;
+	for (uint8 slot = 0; slot < MAXMERCS; ++slot) {
+		if (GetMercInfo(slot).mercid) {
+			SetMercSlot(slot);
+			break;
+		}
+	}
+	PersistMercenarySelection();
+	SendMercPersonalInfo();
+	SendMercTimer(nullptr);
+	Log(Logs::General, Logs::Mercenaries, "Dismiss Successful for %s.", GetName());
+	return true;
 }
 
 void Merc::Zone() {
@@ -5463,6 +5700,7 @@ bool Merc::MercJoinClientGroup() {
 				g->DisbandGroup();
 				Suspend();
 				Log(Logs::General, Logs::Mercenaries, "Mercenary disbanded new group: %s (%s).", GetName(), mercOwner->GetName());
+				return false;
 			}
 
 		}
@@ -5478,10 +5716,11 @@ bool Merc::MercJoinClientGroup() {
 		{
 			Suspend();
 			Log(Logs::General, Logs::Mercenaries, "Mercenary failed to join the group - Suspending %s for (%s).", GetName(), mercOwner->GetName());
+			return false;
 		}
 	}
 
-	return true;
+	return GetID() != 0 && !IsSuspended() && HasGroup();
 }
 
 bool Merc::AddMercToGroup(Merc* merc, Group* group) {
@@ -5566,6 +5805,9 @@ uint8 Client::GetNumberOfMercenaries()
 void Merc::SetMercData( uint32 template_id ) {
 
 	MercTemplate* merc_template = zone->GetMercTemplate(template_id);
+	if (!merc_template) {
+		return;
+	}
 	SetMercTemplateID( merc_template->MercTemplateID );
 	SetMercType( merc_template->MercType );
 	SetMercSubType( merc_template->MercSubType );
@@ -5577,7 +5819,8 @@ void Merc::SetMercData( uint32 template_id ) {
 }
 
 MercTemplate* Zone::GetMercTemplate( uint32 template_id ) {
-	return &merc_templates[template_id];
+	const auto entry = merc_templates.find(template_id);
+	return entry == merc_templates.end() ? nullptr : &entry->second;
 }
 
 void Client::SetMerc(Merc* newmerc) {
@@ -5591,14 +5834,8 @@ void Client::SetMerc(Merc* newmerc) {
 	if (!newmerc)
 	{
 		SetMercID(0);
-		GetMercInfo().mercid = 0;
-		GetMercInfo().MercTemplateID = 0;
-		GetMercInfo().myTemplate = nullptr;
-		GetMercInfo().IsSuspended = false;
-		GetMercInfo().SuspendedTime = 0;
-		GetMercInfo().Gender = Gender::Male;
-		GetMercInfo().State = 0;
-		memset(GetMercInfo().merc_name, 0, 64);
+		GetMercInfo() = MercInfo{};
+		GetMercInfo().slot = GetMercSlot();
 		Log(Logs::General, Logs::Mercenaries, "SetMerc No Merc for %s.", GetName());
 	}
 	else
@@ -5625,11 +5862,31 @@ void Client::UpdateMercLevel() {
 	if (merc)
 	{
 		merc->UpdateMercStats(this, false);
+		merc->LoadMercenarySpells();
+		merc->SetAttackTimer();
+		merc->Save();
+		SendMercenaryCostUpdate();
 		merc->SendAppearancePacket(AppearanceType::WhoLevel, GetLevel(), true, true);
 	}
 }
 
 void Client::SendMercMerchantResponsePacket(int32 response_type) {
+	const auto interval = static_cast<uint32>(RuleI(Mercs, UpkeepIntervalMS));
+	if (ClientVersion() == EQ::versions::ClientVersion::RoF2 &&
+		(response_type == 11 || response_type == 12 || response_type == 14)) {
+		// Refresh even for a now-safe rule: the native manager may still hold
+		// a mixed-unit interval from before a dynamic rule reload.
+		SendMercTimer(GetMerc());
+		if (!GetMercInfo().mercid || !Mercenary::RoF2::SafeNativeDuration(interval)) {
+			if (response_type == 14) {
+				Message(Chat::LightGray, "Mercenary upkeep waived. Next upkeep in %u seconds.", interval / 1000);
+			} else {
+				Message(Chat::LightGray, "Mercenary upkeep paid using %s. Next upkeep in %u seconds.",
+					response_type == 12 ? "Bayle Marks" : "coins", interval / 1000);
+			}
+			return;
+		}
+	}
 	// This response packet brings up the Mercenary Manager window
 	if (ClientVersion() >= EQ::versions::ClientVersion::SoD)
 	{
@@ -5674,12 +5931,20 @@ void Client::SendMercTimerPacket(int32 entity_id, int32 merc_state, int32 suspen
 	// Send Mercenary Status/Timer packet
 	auto outapp = new EQApplicationPacket(OP_MercenaryTimer, sizeof(MercenaryStatus_Struct));
 	MercenaryStatus_Struct* mss = (MercenaryStatus_Struct*)outapp->pBuffer;
-	mss->MercEntityID = entity_id; // Seen 0 (no merc spawned) or unknown value when merc is spawned
+	mss->MercEntityID = ClientVersion() == EQ::versions::ClientVersion::RoF2 ? (entity_id ? 1 : 0) : entity_id; // Seen 0 (no merc spawned) or unknown value when merc is spawned
 	mss->MercState = merc_state; // Seen 5 (normal) or 1 (suspended)
 	mss->SuspendedTime = suspended_time; // Seen 0 for not suspended or Unix Timestamp for suspended merc
-	mss->UpdateInterval = update_interval; // Seen 900000 - 15 minutes in ms
+	// RoF2 stores this as the complete billing period and formats it in paid
+	// upkeep messages. The separate timer update below carries the countdown.
+	mss->UpdateInterval = ClientVersion() == EQ::versions::ClientVersion::RoF2 ?
+		RuleI(Mercs, UpkeepIntervalMS) : update_interval;
 	mss->MercUnk01 = unk01; // Seen 180000 - 3 minutes in ms - Used for the unsuspend button refresh timer
 	FastQueuePacket(&outapp);
+	if (ClientVersion() == EQ::versions::ClientVersion::RoF2) {
+		EQApplicationPacket remaining(OP_MercenaryTimerUpdate, 4);
+		remaining.WriteUInt32(std::max(0, update_interval));
+		QueuePacket(&remaining);
+	}
 	Log(Logs::Detail, Logs::Mercenaries, "Sent SendMercTimerPacket EndID: %i, State: %i, SuspendTime: %i, Interval: %i, Unk1: %i, Client: %s.", entity_id, merc_state, suspended_time, update_interval, unk01, GetName());
 
 }
@@ -5864,8 +6129,8 @@ uint32 Merc::CalcPurchaseCost(uint32 templateID , uint8 level, uint8 currency_ty
 		}
 		else if(currency_type == 19)
 		{
-			// cost in Bayle Marks
-			cost = 1;
+			// Bayle Marks pay upkeep only; native hire quotes display N/A.
+			cost = 0;
 		}
 	}
 

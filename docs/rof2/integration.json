@@ -1,9 +1,10 @@
 {
-  "branch": "rof2-fellowship",
+  "branch": "rof2-mercenaries",
   "upstream_commit": "8175ae61874cbf20d7b05102821f6f8a4f4d1c39",
   "features": [
     "housing",
-    "fellowship"
+    "fellowship",
+    "mercenaries"
   ],
   "inputs": [
     {
@@ -23,6 +24,12 @@
       "repository": "nightstalker6669/eqemu-rof2-fellowship",
       "commit": "9382453264f4f84ac7e83a9ee5c9c9a1391c6017",
       "omitted_gallery_and_generated_files": []
+    },
+    {
+      "feature": "mercenaries",
+      "repository": "nightstalker6669/eqemu-rof2-mercenaries",
+      "commit": "00b07c381a738a21aff08867bf186e6c2bfaffb0",
+      "omitted_gallery_and_generated_files": []
     }
   ],
   "source_integration": "Published release patches applied to exact prerequisite preimages; latest housing delta merged retaining all lifecycle callbacks and forward declarations.",
@@ -38,10 +45,12 @@
   "branch_dependency_order": [
     "rof2-shared-core",
     "rof2-housing",
-    "rof2-fellowship"
+    "rof2-fellowship",
+    "rof2-mercenaries"
   ],
   "remaining_feature_dependencies": "Published feature/runtime dependencies are retained. Extracting shared infrastructure does not make all gameplay patches independent.",
   "reviewed_source_repairs": [
+    "Restore missing ZoneDatabase atomic mercenary save/delete declarations to match published implementations; same declarations already present in the published shroud integration.",
     "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included."
   ]
 }

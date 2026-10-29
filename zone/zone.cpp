@@ -1299,14 +1299,42 @@ void Zone::ReloadStaticData() {
 		);
 	} // if that fails, try the file name, then load defaults
 
+	// Refresh lifecycle UI after policy changes without activating a contract.
+	for (const auto& [id, client] : entity_list.GetClientList()) {
+		if (client && client->ClientVersion() == EQ::versions::ClientVersion::RoF2 &&
+			client->GetMercInfo().mercid) {
+			client->SendMercTimer(client->GetMerc());
+		}
+	}
+
 	WorldContentService::Instance()->SetExpansionContext()->ReloadContentFlags();
 
 
 	LogInfo("Zone Static Data Reloaded");
 }
 
+namespace {
+bool LoadMercenaryZonePermission(Database& db, uint32 resolved_row_id)
+{
+	if (!resolved_row_id || db.GetStatus() != DBcore::Connected) return false;
+	auto permission = db.QueryDatabase(fmt::format(
+		"SELECT `allow_mercs` FROM `zone` WHERE `id`={}", resolved_row_id), false);
+	if (!permission.Success() || permission.RowCount() != 1 || !permission.begin()[0]) {
+		LogError("Mercenary permission unavailable for resolved zone row [{}]; mercenaries disabled", resolved_row_id);
+		return false;
+	}
+	const std::string value = permission.begin()[0];
+	if (value != "0" && value != "1") {
+		LogError("Invalid mercenary permission for resolved zone row [{}]; mercenaries disabled", resolved_row_id);
+		return false;
+	}
+	return value == "1";
+}
+}
+
 bool Zone::LoadZoneCFG(const char* filename, uint16 instance_version)
 {
+	allow_mercs = false;
 	auto z = ZoneStore::Instance()->GetZoneWithFallback(ZoneID(filename), instance_version);
 
 	if (!z) {
@@ -1409,7 +1437,7 @@ bool Zone::LoadZoneCFG(const char* filename, uint16 instance_version)
 	is_hotzone            = z->hotzone != 0;
 	m_client_update_range = z->client_update_range;
 	default_ruleset       = z->ruleset;
-	allow_mercs           = true;
+	allow_mercs           = LoadMercenaryZonePermission(content_db, z->id);
 	m_graveyard_id        = z->graveyard_id;
 	m_max_clients         = z->maxclients;
 

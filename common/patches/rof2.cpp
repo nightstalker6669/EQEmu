@@ -1,3 +1,4 @@
+#include "../mercenary/rof2_wire.h"
 #include "../housing/plot_find_wire.h"
 #include "../housing/npc_item_metadata.h"
 /*	EQEMu: Everquest Server Emulator
@@ -2252,147 +2253,54 @@ namespace RoF2
 		FINISH_ENCODE();
 	}
 
+	namespace {
+	template<class T> bool MercenaryNativeRow(const T& source, Mercenary::RoF2::Row& row) {
+		if (source.StanceCount > MAX_MERC_STANCES) return false;
+		const auto* end=static_cast<const char*>(std::memchr(source.MercName,0,sizeof(source.MercName)));
+		if (!end) return false;
+		row.values={{source.MercID,source.MercType,source.MercSubType,source.PurchaseCost,source.UpkeepCost,
+			source.Status,source.AltCurrencyCost,source.AltCurrencyUpkeep,source.AltCurrencyType}};
+		row.unknown36=source.MercUnk01;row.time_left=source.TimeLeft;
+		row.command=source.MerchantSlot;row.selected_stance=source.MercUnk02;
+		row.unknown53=source.MercUnk03;row.unknown57=source.MercUnk04;
+		row.name.assign(source.MercName,end);
+		for(uint32_t i=0;i<source.StanceCount;++i)row.stances.push_back({source.Stances[i].StanceIndex,source.Stances[i].Stance});
+		return true;
+	}
+	void QueueMercenaryNative(EQApplicationPacket* input,const std::optional<Mercenary::RoF2::Bytes>& bytes,
+		EQStreamInterface* destination,bool acknowledgement) {
+		if(bytes){auto* output=new EQApplicationPacket(input->GetOpcode(),bytes->size());
+			std::memcpy(output->pBuffer,bytes->data(),bytes->size());destination->FastQueuePacket(&output,acknowledgement);}
+		delete input;
+	}
+	}
+
 	ENCODE(OP_MercenaryDataResponse)
 	{
-		//consume the packet
-		EQApplicationPacket *in = *p;
-		*p = nullptr;
-
-		//store away the emu struct
-		unsigned char *__emu_buffer = in->pBuffer;
-		MercenaryMerchantList_Struct *emu = (MercenaryMerchantList_Struct *)__emu_buffer;
-
-		char *Buffer = (char *)in->pBuffer;
-
-		int PacketSize = sizeof(structs::MercenaryMerchantList_Struct) - 4 + emu->MercTypeCount * 4;
-		PacketSize += (sizeof(structs::MercenaryListEntry_Struct) - sizeof(structs::MercenaryStance_Struct)) * emu->MercCount;
-
-		uint32 r;
-		uint32 k;
-		for (r = 0; r < emu->MercCount; r++)
-		{
-			PacketSize += sizeof(structs::MercenaryStance_Struct) * emu->Mercs[r].StanceCount;
-		}
-
-		auto outapp = new EQApplicationPacket(OP_MercenaryDataResponse, PacketSize);
-		Buffer = (char *)outapp->pBuffer;
-
-		VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercTypeCount);
-
-		for (r = 0; r < emu->MercTypeCount; r++)
-		{
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercGrades[r]);
-		}
-
-		VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercCount);
-
-		for (r = 0; r < emu->MercCount; r++)
-		{
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercID);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercType);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercSubType);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].PurchaseCost);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].UpkeepCost);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].Status);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].AltCurrencyCost);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].AltCurrencyUpkeep);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].AltCurrencyType);
-			VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->Mercs[r].MercUnk01);
-			VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->Mercs[r].TimeLeft);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MerchantSlot);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercUnk02);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].StanceCount);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercUnk03);
-			VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->Mercs[r].MercUnk04);
-			VARSTRUCT_ENCODE_TYPE(uint8, Buffer, 0);	// MercName
-			for (k = 0; k < emu->Mercs[r].StanceCount; k++)
-			{
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].Stances[k].StanceIndex);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].Stances[k].Stance);
-			}
-		}
-
-		dest->FastQueuePacket(&outapp, ack_req);
-		delete in;
+		auto* input=*p;*p=nullptr;
+		if(input->size<offsetof(MercenaryMerchantList_Struct,Mercs)){delete input;return;}
+		const auto* source=reinterpret_cast<const MercenaryMerchantList_Struct*>(input->pBuffer);
+		if(source->MercTypeCount>MAX_MERC_GRADES || source->MercCount>MAX_MERC ||
+			input->size<offsetof(MercenaryMerchantList_Struct,Mercs)+source->MercCount*sizeof(MercenaryListEntry_Struct)){delete input;return;}
+		std::vector<Mercenary::RoF2::Row> rows(source->MercCount);
+		for(uint32_t i=0;i<source->MercCount;++i)if(!MercenaryNativeRow(source->Mercs[i],rows[i])){delete input;return;}
+		std::vector<uint32_t> grades(source->MercGrades,source->MercGrades+source->MercTypeCount);
+		QueueMercenaryNative(input,Mercenary::RoF2::Offers(grades,rows),dest.get(),ack_req);
 	}
 
 	ENCODE(OP_MercenaryDataUpdate)
 	{
-		//consume the packet
-		EQApplicationPacket *in = *p;
-		*p = nullptr;
-
-		//store away the emu struct
-		unsigned char *__emu_buffer = in->pBuffer;
-		MercenaryDataUpdate_Struct *emu = (MercenaryDataUpdate_Struct *)__emu_buffer;
-
-		char *Buffer = (char *)in->pBuffer;
-
-		EQApplicationPacket *outapp;
-
-		uint32 PacketSize = 0;
-
-		// There are 2 different sized versions of this packet depending if a merc is hired or not
-		if (emu->MercStatus >= 0)
-		{
-			PacketSize += sizeof(structs::MercenaryDataUpdate_Struct) + (sizeof(structs::MercenaryData_Struct) - sizeof(structs::MercenaryStance_Struct)) * emu->MercCount;
-
-			uint32 r;
-			uint32 k;
-			for (r = 0; r < emu->MercCount; r++)
-			{
-				PacketSize += sizeof(structs::MercenaryStance_Struct) * emu->MercData[r].StanceCount;
-				PacketSize += strlen(emu->MercData[r].MercName);	// Null Terminator size already accounted for in the struct
-			}
-
-			outapp = new EQApplicationPacket(OP_MercenaryDataUpdate, PacketSize);
-			Buffer = (char *)outapp->pBuffer;
-
-			VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->MercStatus);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercCount);
-
-			for (r = 0; r < emu->MercCount; r++)
-			{
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MercID);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MercType);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MercSubType);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].PurchaseCost);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].UpkeepCost);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].Status);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].AltCurrencyCost);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].AltCurrencyUpkeep);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].AltCurrencyType);
-				VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->MercData[r].MercUnk01);
-				VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->MercData[r].TimeLeft);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MerchantSlot);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MercUnk02);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].StanceCount);
-				VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->MercData[r].MercUnk03);
-				VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->MercData[r].MercUnk04);
-				//VARSTRUCT_ENCODE_TYPE(uint8, Buffer, 0);	// MercName
-				VARSTRUCT_ENCODE_STRING(Buffer, emu->MercData[r].MercName);
-				for (k = 0; k < emu->MercData[r].StanceCount; k++)
-				{
-					VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].Stances[k].StanceIndex);
-					VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].Stances[k].Stance);
-				}
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 1);	// MercUnk05
-			}
-		}
-		else
-		{
-			PacketSize += sizeof(structs::NoMercenaryHired_Struct);
-
-			outapp = new EQApplicationPacket(OP_MercenaryDataUpdate, PacketSize);
-			Buffer = (char *)outapp->pBuffer;
-
-			VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->MercStatus);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercCount);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 1);
-		}
-
-		dest->FastQueuePacket(&outapp, ack_req);
-		delete in;
+		auto* input=*p;*p=nullptr;
+		if(input->size<8){delete input;return;}
+		const auto* source=reinterpret_cast<const MercenaryDataUpdate_Struct*>(input->pBuffer);
+		if(source->MercCount>MAX_MERC ||
+			input->size<offsetof(MercenaryDataUpdate_Struct,MercData)+source->MercCount*sizeof(MercenaryData_Struct)){delete input;return;}
+		std::vector<Mercenary::RoF2::Row> rows(source->MercCount);
+		for(uint32_t i=0;i<source->MercCount;++i)if(!MercenaryNativeRow(source->MercData[i],rows[i])){delete input;return;}
+		uint32_t capacity=1;
+		if(source->MercCount)capacity=source->MercData[0].MercUnk05;
+		else if(input->size>=sizeof(NoMercenaryHired_Struct))capacity=reinterpret_cast<const NoMercenaryHired_Struct*>(input->pBuffer)->MercID;
+		QueueMercenaryNative(input,Mercenary::RoF2::Roster(source->MercStatus,rows,capacity),dest.get(),ack_req);
 	}
 
 	ENCODE(OP_MoveItem)

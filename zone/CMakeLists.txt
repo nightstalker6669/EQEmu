@@ -20,6 +20,7 @@ SET(zone_sources
     fellowship_campfire.cpp
     fellowship_campsite_bonuses.cpp
     fellowship_campsite_materials.cpp
+    client_mercenary_transfer.cpp
     client_fellowship.cpp
     client_fellowship_vitality.cpp
     fellowship_chat.cpp
