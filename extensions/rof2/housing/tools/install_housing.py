@@ -21,7 +21,8 @@ import uuid
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = '8175ae61874cbf20d7b05102821f6f8a4f4d1c39'
+BASE = '8175ae61874cbf20d7b05102821f6f8a4f4d1c39'  # Historical standalone overlay preimage.
+FORK_BASE = 'd03e3292cdc30c531e307db5b2f049c0d2df0460'
 sys.path.insert(0,str(Path(__file__).resolve().parent))
 import housing_schema_contract as schema_contract
 from housing_platform import (WINDOWS, TARGETS, read_utf8, write_utf8, package_files,
@@ -378,7 +379,7 @@ def main():
     p.add_argument('--apply',action='store_true');p.add_argument('--stop-command',help='JSON argv array; executed only with --apply')
     p.add_argument('--start-command',help='JSON argv array; executed only after all verification passes')
     p.add_argument('--schema-only',action='store_true',help=argparse.SUPPRESS)
-    a=p.parse_args();a.source=a.source.resolve();a.server=a.server.resolve();a.client=a.client.resolve();a.build=a.build.resolve();a.backup=a.backup.resolve()
+    a=p.parse_args();require(a.integrated_source,'This current fork installer requires --integrated-source; standalone historical patch installation is not the current server build.');a.source=a.source.resolve();a.server=a.server.resolve();a.client=a.client.resolve();a.build=a.build.resolve();a.backup=a.backup.resolve()
     for command in (a.stop_command,a.start_command):
         if command is not None:
             argv=json.loads(command);require(isinstance(argv,list) and argv and all(isinstance(v,str) and v for v in argv),'Service command must be a nonempty JSON string array')
@@ -394,11 +395,11 @@ def main():
     require(shutil.which('git') and shutil.which('cmake'),'Git and CMake are required')
     subprocess.run(['git','-C',str(a.source),'cat-file','-e',BASE+'^{commit}'],check=True,capture_output=True)
     source_summary=inspect_source(a.source)
-    print('Original source HEAD '+source_summary['head']+'; pinned build base '+BASE+'; '+str(source_summary['status_entries'])+' reported local status entries. Original checkout is preserved.')
+    print('Original source HEAD '+source_summary['head']+'; current fork foundation '+FORK_BASE+'; '+str(source_summary['status_entries'])+' reported local status entries. Original checkout is preserved.')
     if a.integrated_source:
         require(source_summary['status_entries']==0,'Integrated source must be a clean committed checkout; put build/backups outside it.')
         integration=json.loads(read_utf8(a.source/'docs/rof2/integration.json'))
-        require(integration.get('upstream_commit')==BASE and 'housing' in integration.get('features',[]),'Source is not a supported housing-integrated feature branch.')
+        require(integration.get('upstream_commit')==FORK_BASE and 'housing' in integration.get('features',[]),'Source is not a supported housing-integrated feature branch.')
         print('Integrated branch build pinned to '+source_summary['head']+'; all committed feature code is retained.')
     elif source_summary['head']!=BASE or source_summary['status_entries']:
         print('This clean pinned build does not include original HEAD/local custom server code. Custom gameplay/other updates must be merged and rebuilt separately; this acknowledgment is not compatibility certification.')

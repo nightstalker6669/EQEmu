@@ -1,3 +1,5 @@
+> **Current integrated fork:** use [the current branch installation guide](../../../docs/rof2/INSTALL.md). This document preserves the original release’s source baseline and evidence. Its source patches are already integrated and must not be reapplied here.
+
 # EQEmu RoF2 Mercenaries
 
 Production mercenary support for EQEmu targeting the **May 10, 2013 Rain of Fear 2 client**. Published October 23, 2026. This is a source extension of a pinned EQEmu checkout, not a complete server distribution.
