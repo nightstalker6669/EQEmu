@@ -1,36 +1,33 @@
-/*	EQEMu: Everquest Server Emulator
-	Copyright (C) 2001-2003 EQEMu Development Team (http://eqemulator.net)
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; version 2 of the License.
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY except by those people which sell it, which
-	are required to give you total support for your newly bought product;
-	without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-	A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include "../common/global_define.h"
-#include "../common/eqemu_logsys.h"
-#include "../common/spdat.h"
-#include "../common/misc_functions.h"
-
-#include "client.h"
-#include "entity.h"
 #include "mob.h"
 
-#include "string_ids.h"
-#include "worldserver.h"
-#include "zonedb.h"
-#include "position.h"
+#include "common/eqemu_logsys.h"
+#include "common/misc_functions.h"
+#include "common/spdat.h"
+#include "zone/client.h"
+#include "zone/entity.h"
+#include "zone/position.h"
+#include "zone/string_ids.h"
+#include "zone/worldserver.h"
+#include "zone/zonedb.h"
 
-float Mob::GetActSpellRange(uint16 spell_id, float range)
+float Mob::GetActSpellRange(int32 spell_id, float range)
 {
 	float extrange = 100;
 
@@ -39,7 +36,7 @@ float Mob::GetActSpellRange(uint16 spell_id, float range)
 	return (range * extrange) / 100;
 }
 
-int64 Mob::GetActSpellDamage(uint16 spell_id, int64 value, Mob* target) {
+int64 Mob::GetActSpellDamage(int32 spell_id, int64 value, Mob* target) {
 	if (spells[spell_id].target_type == ST_Self) {
 		return value;
 	}
@@ -205,7 +202,7 @@ int64 Mob::GetActSpellDamage(uint16 spell_id, int64 value, Mob* target) {
 	return value;
 }
 
-int64 Mob::GetActReflectedSpellDamage(uint16 spell_id, int64 value, int effectiveness) {
+int64 Mob::GetActReflectedSpellDamage(int32 spell_id, int64 value, int effectiveness) {
 	/*
 		Reflected spells use the spells base damage before any modifiers or formulas applied.
 		That value can then be modifier by the reflect spells 'max' value, defined here as effectiveness
@@ -240,7 +237,7 @@ int64 Mob::GetActReflectedSpellDamage(uint16 spell_id, int64 value, int effectiv
 	return value;
 }
 
-int64 Mob::GetActDoTDamage(uint16 spell_id, int64 value, Mob* target, bool from_buff_tic) {
+int64 Mob::GetActDoTDamage(int32 spell_id, int64 value, Mob* target, bool from_buff_tic) {
 
 	if (target == nullptr)
 		return value;
@@ -365,7 +362,7 @@ int64 Mob::GetActDoTDamage(uint16 spell_id, int64 value, Mob* target, bool from_
 	return value;
 }
 
-int64 Mob::GetExtraSpellAmt(uint16 spell_id, int64 extra_spell_amt, int64 base_spell_dmg)
+int64 Mob::GetExtraSpellAmt(int32 spell_id, int64 extra_spell_amt, int64 base_spell_dmg)
 {
 
 	if (RuleB(Spells, FlatItemExtraSpellAmt)) {
@@ -404,7 +401,7 @@ int64 Mob::GetExtraSpellAmt(uint16 spell_id, int64 extra_spell_amt, int64 base_s
 	return extra_spell_amt;
 }
 
-int64 Mob::GetActSpellHealing(uint16 spell_id, int64 value, Mob* target, bool from_buff_tic) {
+int64 Mob::GetActSpellHealing(int32 spell_id, int64 value, Mob* target, bool from_buff_tic) {
 	if (target == nullptr && IsBot()) {
 		target = this;
 	}
@@ -560,7 +557,7 @@ int64 Mob::GetActSpellHealing(uint16 spell_id, int64 value, Mob* target, bool fr
 }
 
 
-int32 Mob::GetActSpellCost(uint16 spell_id, int32 cost)
+int32 Mob::GetActSpellCost(int32 spell_id, int32 cost)
 {
 	//FrenziedDevastation doubles mana cost of all DD spells
 	int16 FrenziedDevastation = itembonuses.FrenziedDevastation + spellbonuses.FrenziedDevastation + aabonuses.FrenziedDevastation;
@@ -609,7 +606,7 @@ int32 Mob::GetActSpellCost(uint16 spell_id, int32 cost)
 	return cost;
 }
 
-int32 Mob::GetActSpellDuration(uint16 spell_id, int32 duration)
+int32 Mob::GetActSpellDuration(int32 spell_id, int32 duration)
 {
 	// focuses don't affect discipline duration (Except War Cries)
 	if (
@@ -852,7 +849,7 @@ void Client::SendDisciplineUpdate() {
 	QueuePacket(&app);
 }
 
-bool Client::UseDiscipline(uint32 spell_id, uint32 target) {
+bool Client::UseDiscipline(int32 spell_id, uint32 target) {
 	// Dont let client waste a reuse timer if they can't use the disc
 	if ((IsStunned() && !IsCastNotStandingSpell(spell_id))||
 		IsFeared() ||
@@ -1004,7 +1001,7 @@ void Client::ResetAllDisciplineTimers() {
 	}
 }
 
-bool Client::HasDisciplineLearned(uint16 spell_id) {
+bool Client::HasDisciplineLearned(int32 spell_id) {
 	bool has_learned = false;
 	for (auto index = 0; index < MAX_PP_DISCIPLINES; ++index) {
 		if (GetPP().disciplines.values[index] == spell_id) {
@@ -1066,7 +1063,7 @@ void EntityList::AETaunt(Client* taunter, float range, int bonus_hate)
 void EntityList::AESpell(
 	Mob* caster_mob,
 	Mob* center_mob,
-	uint16 spell_id,
+	int32 spell_id,
 	bool affect_caster,
 	int16 resist_adjust,
 	int* max_targets,
@@ -1111,7 +1108,7 @@ void EntityList::AESpell(
 		max_targets_allowed = RuleI(Spells, TargetedAOEMaxTargets);
 	} else if (
 		IsPBAESpell(spell_id) &&
-		IsDetrimentalSpell &&
+		is_detrimental_spell &&
 		!is_npc
 	) {
 		max_targets_allowed = RuleI(Spells, PointBlankAOEMaxTargets);
@@ -1253,7 +1250,7 @@ void EntityList::AESpell(
 void EntityList::MassGroupBuff(
 	Mob* caster,
 	Mob* center,
-	uint16 spell_id,
+	int32 spell_id,
 	bool affect_caster
 )
 {

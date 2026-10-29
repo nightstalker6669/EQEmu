@@ -1,6 +1,6 @@
 {
   "branch": "rof2-shared-core",
-  "upstream_commit": "8175ae61874cbf20d7b05102821f6f8a4f4d1c39",
+  "upstream_commit": "d03e3292cdc30c531e307db5b2f049c0d2df0460",
   "features": [
     "shared-core"
   ],
@@ -9,7 +9,27 @@
   },
   "compatibility": "Stable legacy table/type/custom-data names; source implementations extracted once into common/shared_core; feature-specific gameplay and recovery adapters excluded.",
   "validation": {
-    "standalone_common": "PASS; Linux x86-64 Clang, Debug -O0 -g0, PCH off; no gameplay sources from feature branches required",
-    "native_runtime": "Not deployed or exercised; core itself does not activate game hooks"
-  }
+    "status": "Passed targeted compiler and package checks for this branch; source publication only.",
+    "compiler": "GCC 12, C++20, cached vcpkg SDK; targeted -fsyntax-only checks with precompiled headers disabled.",
+    "translation_units": [
+      "common/dbcore.cpp",
+      "common/shareddb.cpp",
+      "zone/client.cpp",
+      "zone/client_packet.cpp",
+      "zone/merc.cpp"
+    ],
+    "package_checks": [
+      "Tracked release manifest hashes and sizes",
+      "Python syntax and JSON parsing",
+      "Unique active migration versions, opcode names, RoF2 mapping keys and packet handlers",
+      "Current guide links and whitespace checks"
+    ],
+    "full_branch_link": "Not separately linked; the combined branch records its complete multi-target build separately.",
+    "native_acceptance": "Not run on this updated source; existing release evidence does not prove new combined gameplay.",
+    "deployment": "No active server, client or database changes."
+  },
+  "upstream_master": "4aceae18b94ffaafc08e2b17bc41cd72c77f795d",
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "integration_scope": "All five published features, including achievements, share the same current upstream foundation; achievements also retains its separate feature branch.",
+  "source_integration": "Current upstream master and protocol-development foundation merged into the existing published feature history; feature contracts and persistence guards retained."
 }

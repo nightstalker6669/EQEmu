@@ -1,13 +1,13 @@
-# EQEmu · RoF2 shared core
+# EQEmu · RoF2 Shared Core
 
-Reusable inventory/session and database infrastructure for the RoF2 feature branches, based on EQEmu 23.10.3. **No housing gameplay, fellowship, mercenaries, shrouds or achievements are enabled by this branch.**
+Current EQEmu source with **shared inventory, session and database infrastructure** integrated on the common upstream foundation.
 
-- [Core boundaries, API and migration requirements](common/shared_core/README.md)
-- [Provenance](docs/rof2/integration.json)
-- [EQEmu upstream project and build instructions](https://github.com/EQEmu/EQEmu/tree/8175ae61874cbf20d7b05102821f6f8a4f4d1c39)
+**[Install / upgrade](docs/rof2/INSTALL.md)** · **[Opcodes and packet structures](docs/rof2/PROTOCOL.md)** · **[Choose a feature branch](docs/rof2/BRANCHES.md)**
 
-Feature branches inherit this core and document their additional source/database dependencies. `master` stays at the original 23.10.3 commit. Achievements retains its separate newer upstream base.
+The common foundation incorporates current upstream stable fixes (`4aceae18`) and the current protocol-development base (`c9c8747a`). All feature branches now use that foundation. `master` follows stable upstream; it does not contain the custom feature stack.
 
-Build through the normal EQEmu CMake workflow. The core session migration is additive; it is not a PEQ database replacement or a full feature installer. Preserve database/binary backups and existing durable lease history. No test accounts, logs, private settings or client files are included. See [GPLv3](LICENSE).
+Native infrastructure is already merged into the normal EQEmu directories. This core branch contains the shared implementation and additive schema; feature branches add their own production SQL, quests, opcode and structure references, and installation guides. Follow each selected branch’s installation guide.
 
-[All feature branches and dependency order](docs/rof2/BRANCHES.md)
+The core itself does not enable feature gameplay or create properties/accounts. [Core API and persistence boundaries](common/shared_core/README.md) describe the legacy identifiers retained for compatibility.
+
+[Current source versions and validation](docs/rof2/integration.json) · [Upstream project documentation](docs/rof2/UPSTREAM-README.md) · [GPLv3](LICENSE.md)

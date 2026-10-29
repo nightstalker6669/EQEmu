@@ -1,3 +1,20 @@
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 /**
  * DO NOT MODIFY THIS FILE
  *
@@ -6,21 +23,21 @@
  * Any modifications to base repositories are to be made by the generator only
  *
  * @generator ./utils/scripts/generators/repository-generator.pl
- * @docs https://docs.eqemu.io/developer/repositories
+ * @docs https://docs.eqemu.dev/developer/repositories
  */
 
-#ifndef EQEMU_BASE_BOT_PETS_REPOSITORY_H
-#define EQEMU_BASE_BOT_PETS_REPOSITORY_H
+#pragma once
 
-#include "../../database.h"
-#include "../../strings.h"
+#include "common/database.h"
+#include "common/strings.h"
+
 #include <ctime>
 
 class BaseBotPetsRepository {
 public:
 	struct BotPets {
 		uint32_t    pets_index;
-		uint32_t    spell_id;
+		int32_t     spell_id;
 		uint32_t    bot_id;
 		std::string name;
 		int32_t     mana;
@@ -136,7 +153,7 @@ public:
 			BotPets e{};
 
 			e.pets_index = row[0] ? static_cast<uint32_t>(strtoul(row[0], nullptr, 10)) : 0;
-			e.spell_id   = row[1] ? static_cast<uint32_t>(strtoul(row[1], nullptr, 10)) : 0;
+			e.spell_id   = row[1] ? static_cast<int32_t>(atoi(row[1])) : 0;
 			e.bot_id     = row[2] ? static_cast<uint32_t>(strtoul(row[2], nullptr, 10)) : 0;
 			e.name       = row[3] ? row[3] : "";
 			e.mana       = row[4] ? static_cast<int32_t>(atoi(row[4])) : 0;
@@ -275,7 +292,7 @@ public:
 			BotPets e{};
 
 			e.pets_index = row[0] ? static_cast<uint32_t>(strtoul(row[0], nullptr, 10)) : 0;
-			e.spell_id   = row[1] ? static_cast<uint32_t>(strtoul(row[1], nullptr, 10)) : 0;
+			e.spell_id   = row[1] ? static_cast<int32_t>(atoi(row[1])) : 0;
 			e.bot_id     = row[2] ? static_cast<uint32_t>(strtoul(row[2], nullptr, 10)) : 0;
 			e.name       = row[3] ? row[3] : "";
 			e.mana       = row[4] ? static_cast<int32_t>(atoi(row[4])) : 0;
@@ -305,7 +322,7 @@ public:
 			BotPets e{};
 
 			e.pets_index = row[0] ? static_cast<uint32_t>(strtoul(row[0], nullptr, 10)) : 0;
-			e.spell_id   = row[1] ? static_cast<uint32_t>(strtoul(row[1], nullptr, 10)) : 0;
+			e.spell_id   = row[1] ? static_cast<int32_t>(atoi(row[1])) : 0;
 			e.bot_id     = row[2] ? static_cast<uint32_t>(strtoul(row[2], nullptr, 10)) : 0;
 			e.name       = row[3] ? row[3] : "";
 			e.mana       = row[4] ? static_cast<int32_t>(atoi(row[4])) : 0;
@@ -435,5 +452,3 @@ public:
 		return (results.Success() ? results.RowsAffected() : 0);
 	}
 };
-
-#endif //EQEMU_BASE_BOT_PETS_REPOSITORY_H

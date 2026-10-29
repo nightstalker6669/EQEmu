@@ -1,43 +1,41 @@
-/*	EQEMu: Everquest Server Emulator
-	Copyright (C) 2001-2016 EQEMu Development Team (http://eqemu.org)
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; version 2 of the License.
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY except by those people which sell it, which
-	are required to give you total support for your newly bought product;
-	without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-	A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "mob.h"
 
-#include "../common/data_verification.h"
-#include "../common/spdat.h"
-#include "../common/strings.h"
-#include "../common/misc_functions.h"
+#include "common/data_bucket.h"
+#include "common/data_verification.h"
+#include "common/misc_functions.h"
+#include "common/repositories/bot_data_repository.h"
+#include "common/repositories/character_data_repository.h"
+#include "common/spdat.h"
+#include "common/strings.h"
+#include "zone/bot.h"
+#include "zone/dialogue_window.h"
+#include "zone/mob_movement_manager.h"
+#include "zone/quest_parser_collection.h"
+#include "zone/string_ids.h"
+#include "zone/water_map.h"
+#include "zone/worldserver.h"
 
-#include "../common/repositories/bot_data_repository.h"
-#include "../common/repositories/character_data_repository.h"
-
-#include "../common/data_bucket.h"
-#include "quest_parser_collection.h"
-#include "string_ids.h"
-#include "worldserver.h"
-#include "mob_movement_manager.h"
-#include "water_map.h"
-#include "dialogue_window.h"
-
-#include <limits.h>
-#include <math.h>
-#include <sstream>
 #include <algorithm>
-
-#include "bot.h"
+#include <climits>
+#include <cmath>
+#include <sstream>
 
 extern EntityList entity_list;
 
@@ -641,7 +639,7 @@ void Mob::BreakCharmPetIfConditionsMet() {
 
 void Mob::CalcInvisibleLevel()
 {
-	bool was_invisible = invisible;
+	uint8 was_invisible = invisible;
 
 	invisible         = std::max({spellbonuses.invisibility, nobuff_invisible});
 	invisible_undead  = spellbonuses.invisibility_verse_undead;
@@ -1286,6 +1284,14 @@ void Mob::FillSpawnStruct(NewSpawn_Struct* ns, Mob* ForWho)
 	strcpy(ns->spawn.name, name);
 	if(IsClient()) {
 		strn0cpy(ns->spawn.lastName, lastname, sizeof(ns->spawn.lastName));
+		ns->spawn.CharacterGuid.Id = CastToClient()->CharacterID();
+		ns->spawn.CharacterGuid.WorldId = RuleI(World, Id);
+		ns->spawn.CharacterGuid.Reserved = 0;
+	}
+	else {
+		ns->spawn.CharacterGuid.Id = 0;
+		ns->spawn.CharacterGuid.WorldId = 0;
+		ns->spawn.CharacterGuid.Reserved = 0;
 	}
 
 	ns->spawn.heading     = FloatToEQ12(m_Position.w);
@@ -5256,7 +5262,7 @@ uint32 Mob::GetLevelHP(uint8 tlevel)
 	return multiplier;
 }
 
-int32 Mob::GetActSpellCasttime(uint16 spell_id, int32 casttime)
+int32 Mob::GetActSpellCasttime(int32 spell_id, int32 casttime)
 {
 	int32 cast_reducer = GetFocusEffect(focusSpellHaste, spell_id);
 	int32 cast_reducer_amt = GetFocusEffect(focusFcCastTimeAmt, spell_id);
@@ -5277,7 +5283,7 @@ int32 Mob::GetActSpellCasttime(uint16 spell_id, int32 casttime)
 
 }
 
-void Mob::ExecWeaponProc(const EQ::ItemInstance* inst, uint16 spell_id, Mob* on, int level_override)
+void Mob::ExecWeaponProc(const EQ::ItemInstance* inst, int32 spell_id, Mob* on, int level_override)
 {
 	// Changed proc targets to look up based on the spells goodEffect flag.
 	// This should work for the majority of weapons.
@@ -5822,7 +5828,7 @@ void Mob::SetNimbusEffect(uint32 nimbus_effect)
 	}
 }
 
-bool Mob::TrySpellTrigger(Mob *target, uint32 spell_id, int effect)
+bool Mob::TrySpellTrigger(Mob *target, int32 spell_id, int effect)
 {
 	if (!target || !IsValidSpell(spell_id))
 		return false;
@@ -5880,7 +5886,7 @@ bool Mob::TrySpellTrigger(Mob *target, uint32 spell_id, int effect)
 			return true;
 		}
 		else if (IsClient() && spells[spell_id].effect_id[effect_slot] == SpellEffect::Chance_Best_in_Spell_Grp) {
-			uint32 best_spell_id = CastToClient()->GetHighestScribedSpellinSpellGroup(spells[spell_id].limit_value[effect_slot]);
+			int32 best_spell_id = CastToClient()->GetHighestScribedSpellinSpellGroup(spells[spell_id].limit_value[effect_slot]);
 			if (IsValidSpell(best_spell_id)) {
 				SpellFinished(best_spell_id, target, EQ::spells::CastingSlot::Item, 0, -1, spells[best_spell_id].resist_difficulty);
 			}
@@ -5914,7 +5920,7 @@ void Mob::TryTriggerOnCastRequirement()
 }
 
 //Twincast Focus effects should stack across different types (Spell, AA - when implemented ect)
-void Mob::TryTwincast(Mob *caster, Mob *target, uint32 spell_id)
+void Mob::TryTwincast(Mob *caster, Mob *target, int32 spell_id)
 {
 	if (!IsValidSpell(spell_id)) {
 		return;
@@ -5958,7 +5964,7 @@ void Mob::TryTwincast(Mob *caster, Mob *target, uint32 spell_id)
 }
 
 //Used for effects that should occur after the completion of the spell
-void Mob::ApplyHealthTransferDamage(Mob *caster, Mob *target, uint16 spell_id)
+void Mob::ApplyHealthTransferDamage(Mob *caster, Mob *target, int32 spell_id)
 {
 	if (!IsValidSpell(spell_id))
 		return;
@@ -5986,7 +5992,7 @@ void Mob::ApplyHealthTransferDamage(Mob *caster, Mob *target, uint16 spell_id)
 	}
 }
 
-int32 Mob::GetVulnerability(Mob *caster, uint32 spell_id, uint32 ticsremaining, bool from_buff_tic)
+int32 Mob::GetVulnerability(Mob *caster, int32 spell_id, uint32 ticsremaining, bool from_buff_tic)
 {
 	/*
 	Modifies incoming spell damage by percent, to increase or decrease damage, can be limited to specific resists.
@@ -6178,7 +6184,7 @@ bool Mob::TryFadeEffect(int slot)
 			if (spells[buffs[slot].spellid].effect_id[i] == SpellEffect::CastOnFadeEffectAlways ||
 				spells[buffs[slot].spellid].effect_id[i] == SpellEffect::CastOnRuneFadeEffect)
 			{
-				uint16 spell_id = spells[buffs[slot].spellid].base_value[i];
+				int32 spell_id = spells[buffs[slot].spellid].base_value[i];
 				BuffFadeBySlot(slot);
 
 				if(spell_id)
@@ -6204,7 +6210,7 @@ bool Mob::TryFadeEffect(int slot)
 	return false;
 }
 
-void Mob::TrySympatheticProc(Mob* target, uint32 spell_id)
+void Mob::TrySympatheticProc(Mob* target, int32 spell_id)
 {
 	if (!target || !IsValidSpell(spell_id) || !IsOfClientBotMerc()) {
 		return;
@@ -6556,7 +6562,7 @@ void Mob::DoKnockback(Mob *caster, uint32 push_back, uint32 push_up)
 	}
 }
 
-void Mob::TrySpellOnKill(uint8 level, uint16 spell_id)
+void Mob::TrySpellOnKill(uint8 level, int32 spell_id)
 {
 	if (IsValidSpell(spell_id))
 	{
@@ -7104,7 +7110,7 @@ int16 Mob::GetModVulnerability(const uint8 resist)
 	return 0;
 }
 
-void Mob::CastOnCurer(uint32 spell_id)
+void Mob::CastOnCurer(int32 spell_id)
 {
 	for(int i = 0; i < EFFECT_COUNT; i++)
 	{
@@ -7118,7 +7124,7 @@ void Mob::CastOnCurer(uint32 spell_id)
 	}
 }
 
-void Mob::CastOnCure(uint32 spell_id)
+void Mob::CastOnCure(int32 spell_id)
 {
 	for(int i = 0; i < EFFECT_COUNT; i++)
 	{
@@ -7132,7 +7138,7 @@ void Mob::CastOnCure(uint32 spell_id)
 	}
 }
 
-void Mob::CastOnNumHitFade(uint32 spell_id)
+void Mob::CastOnNumHitFade(int32 spell_id)
 {
 	if(!IsValidSpell(spell_id))
 		return;
@@ -7244,7 +7250,7 @@ uint16 Mob::GetWeaponSpeedbyHand(uint16 hand) {
 	return weapon_speed;
 }
 
-int8 Mob::GetDecayEffectValue(uint16 spell_id, uint16 spelleffect) {
+int8 Mob::GetDecayEffectValue(int32 spell_id, uint16 spelleffect) {
 
 	if (!IsValidSpell(spell_id))
 		return false;
@@ -7668,7 +7674,7 @@ uint8 Mob::GetSeeInvisibleLevelFromNPCStat(uint16 in_see_invis)
 	return std::min((see_invis_level - 1), MAX_INVISIBILTY_LEVEL);
 }
 
-int32 Mob::GetSpellStat(uint32 spell_id, const char *identifier, uint8 slot)
+int32 Mob::GetSpellStat(int32 spell_id, const char *identifier, uint8 slot)
 {
 	return GetSpellStatValue(spell_id, identifier, slot);
 }
@@ -8161,7 +8167,7 @@ void Mob::DeleteBucket(std::string bucket_name)
 	DataBucketKey k = GetScopedBucketKeys();
 	k.key = bucket_name;
 
-	DataBucket::DeleteData(k);
+	DataBucket::DeleteData(&database, k);
 }
 
 std::string Mob::GetBucket(std::string bucket_name)
@@ -8169,7 +8175,7 @@ std::string Mob::GetBucket(std::string bucket_name)
 	DataBucketKey k = GetScopedBucketKeys();
 	k.key = bucket_name;
 
-	auto b = DataBucket::GetData(k);
+	auto b = DataBucket::GetData(&database, k);
 	if (!b.value.empty()) {
 		return b.value;
 	}
@@ -8181,7 +8187,7 @@ std::string Mob::GetBucketExpires(std::string bucket_name)
 	DataBucketKey k = GetScopedBucketKeys();
 	k.key = bucket_name;
 
-	std::string bucket_expiration = DataBucket::GetDataExpires(k);
+	std::string bucket_expiration = DataBucket::GetDataExpires(&database, k);
 	if (!bucket_expiration.empty()) {
 		return bucket_expiration;
 	}
@@ -8194,7 +8200,7 @@ std::string Mob::GetBucketRemaining(std::string bucket_name)
 	DataBucketKey k = GetScopedBucketKeys();
 	k.key = bucket_name;
 
-	std::string bucket_remaining = DataBucket::GetDataRemaining(k);
+	std::string bucket_remaining = DataBucket::GetDataRemaining(&database, k);
 	if (!bucket_remaining.empty() && Strings::ToInt(bucket_remaining) > 0) {
 		return bucket_remaining;
 	}
@@ -8212,7 +8218,7 @@ void Mob::SetBucket(std::string bucket_name, std::string bucket_value, std::stri
 	k.expires = expiration;
 	k.value   = bucket_value;
 
-	DataBucket::SetData(k);
+	DataBucket::SetData(&database, k);
 }
 
 std::string Mob::GetMobDescription()
@@ -8783,12 +8789,12 @@ bool Mob::LoadDataBucketsCache()
 	}
 
 	if (IsBot()) {
-		DataBucket::BulkLoadEntitiesToCache(DataBucketLoadType::Bot, {id});
+		DataBucket::BulkLoadEntitiesToCache(&database, DataBucketLoadType::Bot, {id});
 	}
 	else if (IsClient()) {
 		uint32 account_id = CastToClient()->AccountID();
-		DataBucket::BulkLoadEntitiesToCache(DataBucketLoadType::Account, {account_id});
-		DataBucket::BulkLoadEntitiesToCache(DataBucketLoadType::Client, {id});
+		DataBucket::BulkLoadEntitiesToCache(&database, DataBucketLoadType::Account, {account_id});
+		DataBucket::BulkLoadEntitiesToCache(&database, DataBucketLoadType::Client, {id});
 	}
 
 	return true;
