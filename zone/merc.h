@@ -1,8 +1,25 @@
-#ifndef MERC_H
-#define MERC_H
+/*	EQEmu: EQEmulator
 
-#include "npc.h"
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "mercenary_runtime.h"
+
+#pragma once
+
+#include "zone/npc.h"
 
 class Client;
 class Corpse;
@@ -32,7 +49,7 @@ namespace EQ
 const int MercAISpellRange = 100; // TODO: Write a method that calcs what the merc's spell range is based on spell, equipment, AA, whatever and replace this
 
 struct MercSpell {
-	uint16 spellid; // <= 0 = no spell
+	int32 spellid; // <= 0 = no spell
 	uint32 type; // 0 = never, must be one (and only one) of the defined values
 	int16 stance; // 0 = all, + = only this stance, - = all except this stance
 	int16 slot;
@@ -43,7 +60,7 @@ struct MercSpell {
 struct MercTimer {
 	uint16 timerid; // EndurTimerIndex
 	uint8 timertype; // 1 = spell, 2 = disc
-	uint16 spellid; // <= 0 = no spell
+	int32 spellid; // <= 0 = no spell
 	uint32 time_cancast; // when we can cast this spell next
 };
 
@@ -53,8 +70,8 @@ public:
 	virtual ~Merc();
 
 	//abstract virtual function implementations requird by base abstract class
-	virtual bool Death(Mob* killer_mob, int64 damage, uint16 spell_id, EQ::skills::SkillType attack_skill, KilledByTypes killed_by = KilledByTypes::Killed_NPC, bool is_buff_tic = false) override;
-	virtual void Damage(Mob* from, int64 damage, uint16 spell_id, EQ::skills::SkillType attack_skill, bool avoidable = true, int8 buffslot = -1, bool iBuffTic = false, eSpecialAttacks special = eSpecialAttacks::None) override;
+	virtual bool Death(Mob* killer_mob, int64 damage, int32 spell_id, EQ::skills::SkillType attack_skill, KilledByTypes killed_by = KilledByTypes::Killed_NPC, bool is_buff_tic = false) override;
+	virtual void Damage(Mob* from, int64 damage, int32 spell_id, EQ::skills::SkillType attack_skill, bool avoidable = true, int8 buffslot = -1, bool iBuffTic = false, eSpecialAttacks special = eSpecialAttacks::None) override;
 	virtual bool Attack(Mob* other, int Hand = EQ::invslot::slotPrimary, bool FromRiposte = false, bool IsStrikethrough = false,
 	bool IsFromSpell = false, ExtraAttackOptions *opts = nullptr);
 	virtual bool HasRaid() { return false; }
@@ -69,7 +86,7 @@ public:
 
 	//virtual bool AICastSpell(Mob* tar, int8 iChance, uint32 iSpellTypes);
 	virtual bool AICastSpell(int8 iChance, uint32 iSpellTypes);
-	virtual bool AIDoSpellCast(uint16 spellid, Mob* tar, int32 mana_cost, uint32* oDontDoAgainBefore = 0);
+	virtual bool AIDoSpellCast(int32 spellid, Mob* tar, int32 mana_cost, uint32* oDontDoAgainBefore = 0);
 	virtual bool AI_EngagedCastCheck();
 	//virtual bool AI_PursueCastCheck();
 	virtual bool AI_IdleCastCheck();
@@ -85,20 +102,20 @@ public:
 
 	// Merc Spell Casting Methods
 	int8 GetChanceToCastBySpellType(uint32 spellType);
-	void SetSpellRecastTimer(uint16 timer_id, uint16 spellid, uint32 recast_delay);
-	void SetDisciplineRecastTimer(uint16 timer_id, uint16 spellid, uint32 recast_delay);
-	void SetSpellTimeCanCast(uint16 spellid, uint32 recast_delay);
+	void SetSpellRecastTimer(uint16 timer_id, int32 spellid, uint32 recast_delay);
+	void SetDisciplineRecastTimer(uint16 timer_id, int32 spellid, uint32 recast_delay);
+	void SetSpellTimeCanCast(int32 spellid, uint32 recast_delay);
 	static int32 GetSpellRecastTimer(Merc *caster, uint16 timer_id);
-	static bool CheckSpellRecastTimers(Merc *caster, uint16 spellid);
+	static bool CheckSpellRecastTimers(Merc *caster, int32 spellid);
 	static int32 GetDisciplineRecastTimer(Merc *caster, uint16 timer_id);
-	static bool CheckDisciplineRecastTimers(Merc *caster, uint16 spell_id, uint16 timer_id);
+	static bool CheckDisciplineRecastTimers(Merc *caster, int32 spell_id, uint16 timer_id);
 	static int32 GetDisciplineRemainingTime(Merc *caster, uint16 timer_id);
 	static std::list<MercSpell> GetMercSpellsForSpellEffect(Merc* caster, int spellEffect);
 	static std::list<MercSpell> GetMercSpellsForSpellEffectAndTargetType(Merc* caster, int spellEffect, SpellTargetType targetType);
 	static std::list<MercSpell> GetMercSpellsBySpellType(Merc* caster, uint32 spellType);
 	static MercSpell GetFirstMercSpellBySpellType(Merc* caster, uint32 spellType);
 	static MercSpell GetFirstMercSpellForSingleTargetHeal(Merc* caster);
-	static MercSpell GetMercSpellBySpellID(Merc* caster, uint16 spellid);
+	static MercSpell GetMercSpellBySpellID(Merc* caster, int32 spellid);
 	static MercSpell GetBestMercSpellForVeryFastHeal(Merc* caster);
 	static MercSpell GetBestMercSpellForFastHeal(Merc* caster);
 	static MercSpell GetBestMercSpellForHealOverTime(Merc* caster);
@@ -118,7 +135,7 @@ public:
 	static MercSpell GetBestMercSpellForAERainNuke(Merc* caster, Mob* target);
 	static MercSpell GetBestMercSpellForNuke(Merc* caster);
 	static MercSpell GetBestMercSpellForNukeByTargetResists(Merc* caster, Mob* target);
-	static bool CheckAENuke(Merc* caster, Mob* tar, uint16 spell_id, uint8 &numTargets);
+	static bool CheckAENuke(Merc* caster, Mob* tar, int32 spell_id, uint8 &numTargets);
 	static bool GetNeedsCured(Mob *tar);
 	bool HasOrMayGetAggro();
 	bool UseDiscipline(int32 spell_id, int32 target);
@@ -283,7 +300,7 @@ protected:
 	Mercenary::PassiveUpkeepClock passive_upkeep_clock_;
 	Mercenary::PullerHealOverride puller_heal_override_;
 	bool confidence_encounter_seen_ = false;
-	int64 GetFocusEffect(focusType type, uint16 spell_id, bool from_buff_tic = false);
+	int64 GetFocusEffect(focusType type, int32 spell_id, bool from_buff_tic = false);
 
 	std::vector<MercSpell> merc_spells;
 	std::map<uint32,MercTimer> timers;
@@ -395,5 +412,3 @@ private:
 	Timer check_target_timer;
 	Timer confidence_scan_timer_;
 };
-
-#endif // MERC_H

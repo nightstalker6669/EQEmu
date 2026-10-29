@@ -1,3 +1,4 @@
+#include <cstring>
 #include "house_swap_service.h"
 #include "custody_codec.h"
 #include "interior_item_content_db.h"

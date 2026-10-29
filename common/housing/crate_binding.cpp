@@ -1,3 +1,4 @@
+#include <cstring>
 #include "runtime_activation_db.h"
 #include "crate_binding.h"
 #include "crate_creation_origin_db.h"

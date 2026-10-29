@@ -34,8 +34,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 7399,
-      "sha256": "35f0755322ac35f3d212ac44e0678de0e99bcb2d3a053e6a376bd9e1783c7ea2"
+      "bytes": 7660,
+      "sha256": "f2aa4608ddecbe05454166be0b6f757d5bc8bac87406ff68ce757439a1e142df"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -49,8 +49,8 @@
     },
     {
       "path": "docs/INSTALL.md",
-      "bytes": 6279,
-      "sha256": "c62cb2435aebc5425cf9976dfd9cfecb0f131cfbdd14fbc0d5c5b7a8cd743bf9"
+      "bytes": 6543,
+      "sha256": "18c3c888a14fd0aa2f6b253d63de71e0e871804c56b85c846236af89d165968d"
     },
     {
       "path": "docs/KNOWN-GAPS.md",

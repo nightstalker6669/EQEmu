@@ -1,3 +1,5 @@
+> **Current integrated fork:** use [the current branch installation guide](../../../../docs/rof2/INSTALL.md). This document preserves the original release’s source baseline and evidence. Its source patches are already integrated and must not be reapplied here.
+
 # Installation
 
 ## Reproduce the source baseline

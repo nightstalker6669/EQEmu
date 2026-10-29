@@ -1,3 +1,4 @@
+#include <cstring>
 #include "runtime_activation_db.h"
 #include "inventory_row_db.h"
 #include "catalog_service.h"

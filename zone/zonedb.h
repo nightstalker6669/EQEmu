@@ -1,22 +1,38 @@
-#ifndef ZONEDB_H_
-#define ZONEDB_H_
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#pragma once
+
+#include "common/eq_packet_structs.h"
+#include "common/eqemu_logsys.h"
+#include "common/faction.h"
+#include "common/races.h"
+#include "common/repositories/doors_repository.h"
+#include "common/repositories/npc_faction_entries_repository.h"
+#include "common/shareddb.h"
+#include "zone/aa_ability.h"
+#include "zone/bot_database.h"
+#include "zone/event_codes.h"
+#include "zone/position.h"
 
 #include "mercenary_transaction.h"
 
 #include <unordered_set>
-
-#include "../common/shareddb.h"
-#include "../common/eq_packet_structs.h"
-#include "position.h"
-#include "../common/faction.h"
-#include "../common/eqemu_logsys.h"
-#include "aa_ability.h"
-#include "event_codes.h"
-#include "../common/repositories/doors_repository.h"
-#include "../common/races.h"
-#include "../common/repositories/npc_faction_entries_repository.h"
-
-#include "bot_database.h"
 
 class Client;
 class Corpse;
@@ -54,7 +70,7 @@ struct wplist {
 
 #pragma pack(1)
 struct DBnpcspells_entries_Struct {
-	uint16	spellid;
+	int32   spellid;
 	uint8	minlevel;
 	uint8	maxlevel;
 	uint32	type;
@@ -109,7 +125,7 @@ struct DBnpcspellseffects_Struct {
 
 #pragma pack(1)
 struct DBbotspells_entries_Struct {
-	uint16		spellid;
+	int32       spellid;
 	uint8		minlevel;
 	uint8		maxlevel;
 	uint32		type;
@@ -190,19 +206,19 @@ struct AuraRecord {
 
 // Actual pet info for a client.
 struct PetInfo {
-	uint16	SpellID;
+	int32   SpellID;
 	int16	petpower;
 	uint32	HP;
 	uint32	Mana;
 	float	size;
-	SpellBuff_Struct	Buffs[PET_BUFF_COUNT];
+	Buffs_Struct	Buffs[PET_BUFF_COUNT];
 	uint32	Items[EQ::invslot::EQUIPMENT_COUNT];
 	char	Name[64];
 	bool	taunting;
 };
 
 struct ZoneSpellsBlocked {
-	uint32 spellid;
+	int32 spellid;
 	int8 type;
 	glm::vec3 m_Location;
 	glm::vec3 m_Difference;
@@ -273,7 +289,7 @@ struct MercInfo {
 
 struct MercSpellEntry {
 	uint8	proficiencyid;
-	uint16	spellid;		// <= 0 = no spell
+	int32   spellid;		// <= 0 = no spell
 	uint32	type;			// 0 = never, must be one (and only one) of the defined values
 	int16	stance;			// 0 = all, + = only this stance, - = all except this stance
 	uint8	minlevel;
@@ -457,10 +473,10 @@ public:
 	bool SaveCharacterLanguage(uint32 character_id, uint32 lang_id, uint32 value);
 	bool SaveCharacterLeadershipAbilities(uint32 character_id, PlayerProfile_Struct* pp);
 	bool SaveCharacterMaterialColor(uint32 character_id, uint8 slot_id, uint32 color);
-	bool SaveCharacterMemorizedSpell(uint32 character_id, uint32 spell_id, uint32 slot_id);
+	bool SaveCharacterMemorizedSpell(uint32 character_id, int32 spell_id, uint32 slot_id);
 	bool SaveCharacterPotionBelt(uint32 character_id, uint8 potion_id, uint32 item_id, uint32 icon);
 	bool SaveCharacterSkill(uint32 character_id, uint32 skill_id, uint32 value);
-	bool SaveCharacterSpell(uint32 character_id, uint32 spell_id, uint32 slot_id);
+	bool SaveCharacterSpell(uint32 character_id, int32 spell_id, uint32 slot_id);
 
 	void ZeroPlayerProfileCurrency(PlayerProfile_Struct* pp);
 
@@ -569,7 +585,7 @@ public:
 	bool		GetBasePetItems(int32 equipmentset, uint32 *items);
 	BeastlordPetData::PetStruct GetBeastlordPetData(uint16 race_id);
 	uint32		GetMaxNPCSpellsEffectsID();
-	bool GetAuraEntry(uint16 spell_id, AuraRecord &record);
+	bool GetAuraEntry(int32 spell_id, AuraRecord &record);
 	void LoadGlobalLoot();
 
 	DBnpcspells_Struct*				GetNPCSpells(uint32 npc_spells_id);
@@ -578,7 +594,7 @@ public:
 	const NPCType* LoadNPCTypesData(uint32 id, bool bulk_load = false);
 
 	/*Bots	*/
-	DBbotspells_Struct*	GetBotSpells(uint32 bot_spell_id);
+	DBbotspells_Struct*	GetBotSpells(int32 bot_spell_id);
 	void ClearBotSpells() { bot_spells_cache.clear(); bot_spells_loadtried.clear(); }
 
 	/* Mercs   */
@@ -678,6 +694,3 @@ protected:
 
 extern ZoneDatabase database;
 extern ZoneDatabase content_db;
-
-#endif /*ZONEDB_H_*/
-

@@ -1,3 +1,5 @@
+> **Current integrated fork:** use [the current branch installation guide](../../../../docs/rof2/INSTALL.md). This document preserves the original release’s source baseline and evidence. Its source patches are already integrated and must not be reapplied here.
+
 # Complete housing installation and upgrades
 
 `tools/install_housing.py` installs the production housing package as one ordered operation. Manual SQL filename sorting and separate feature activation are not required.
