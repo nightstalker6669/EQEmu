@@ -16,6 +16,7 @@ Copyright (C) 2001-2026 EQEmu Development Team
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cstring>
 #include "tob.h"
 #include "tob_structs.h"
 

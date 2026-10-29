@@ -26,9 +26,8 @@ target to center around.
 #include "zone/mob.h"
 
 extern EntityList entity_list;
-extern Zone* zone;
-
 class Zone;
+extern Zone* zone;
 
 // if lifetime is 0 this is a permanent beacon.. not sure if that'll be
 // useful for anything

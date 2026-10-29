@@ -1,3 +1,5 @@
+> **Current integrated fork:** use [the current branch installation guide](../../../docs/rof2/INSTALL.md). This document preserves the original release’s source baseline and evidence. Its source patches are already integrated and must not be reapplied here.
+
 # Achievement engine patch series
 
 Start with upstream [EQEmu](https://github.com/EQEmu/EQEmu) commit **`c9c8747ac949deddb140d196d241fa4e777500c7`**. Patch0001 is the production subset of [PR5119](https://github.com/EQEmu/EQEmu/pull/5119), by **fryguy503**, pinned at head **`c68d0074bbc35974b6413c208c4523dd7fd21954`**. Upstream attribution and source licensing remain applicable. This patch is not designed for arbitrary older forks or a housing-modified local checkout.

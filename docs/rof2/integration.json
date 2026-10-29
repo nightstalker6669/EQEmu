@@ -1,7 +1,8 @@
 {
   "branch": "rof2-achievements",
-  "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "upstream_commit": "d03e3292cdc30c531e307db5b2f049c0d2df0460",
   "features": [
+    "shared-core",
     "achievements"
   ],
   "inputs": [
@@ -12,7 +13,31 @@
       "omitted_gallery_and_generated_files": []
     }
   ],
-  "source_integration": "Published release patches applied to exact prerequisite preimages; latest housing delta merged retaining all lifecycle callbacks and forward declarations.",
-  "validation": "Sequential source application and conflict resolution checked. This combined branch has not undergone a fresh build or native acceptance. Original release validation remains described separately.",
-  "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included."
+  "source_integration": "Current upstream master and protocol-development foundation merged into the existing published feature history; feature contracts and persistence guards retained.",
+  "validation": {
+    "status": "Passed targeted compiler and package checks for this branch; source publication only.",
+    "compiler": "GCC 12, C++20, cached vcpkg SDK; targeted -fsyntax-only checks with precompiled headers disabled.",
+    "translation_units": [
+      "common/dbcore.cpp",
+      "common/shareddb.cpp",
+      "common/patches/rof2.cpp",
+      "zone/client.cpp",
+      "zone/client_packet.cpp",
+      "zone/client_achievements.cpp",
+      "zone/merc.cpp"
+    ],
+    "package_checks": [
+      "Tracked release manifest hashes and sizes",
+      "Python syntax and JSON parsing",
+      "Unique active migration versions, opcode names, RoF2 mapping keys and packet handlers",
+      "Current guide links and whitespace checks"
+    ],
+    "full_branch_link": "Not separately linked; the combined branch records its complete multi-target build separately.",
+    "native_acceptance": "Not run on this updated source; existing release evidence does not prove new combined gameplay.",
+    "deployment": "No active server, client or database changes."
+  },
+  "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
+  "upstream_master": "4aceae18b94ffaafc08e2b17bc41cd72c77f795d",
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "integration_scope": "All five published features, including achievements, share the same current upstream foundation; achievements also retains its separate feature branch."
 }

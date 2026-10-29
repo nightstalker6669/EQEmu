@@ -8,7 +8,13 @@ cd EQEmu
 git submodule update --init --recursive
 ```
 
-Use the normal EQEmu dependencies/build workflow for your platform. Keep builds and private backups outside the source checkout. [`master`](https://github.com/nightstalker6669/EQEmu/tree/master) stays at release 23.10.3. This branch starts at `c9c8747ac949deddb140d196d241fa4e777500c7`.
+## Current upstream foundation
+
+All feature branches now share the same merged upstream base. `master` follows the verified current stable upstream; the common feature foundation also includes the protocol-development changes needed by achievements. See [the branch map](BRANCHES.md) and [exact provenance](integration.json).
+
+Before applying feature migrations to an older database, build the matching current `world` binary through the normal upstream/vcpkg workflow and run its database updater from the configured server directory (`world database:updates`, or `world.exe database:updates` on Windows). Back up first and keep game services stopped. Review and complete the updater before the feature installation below. The housing migration ledger is not a replacement for upstream schema upgrades.
+
+Current upstream uses vcpkg, CMake 3.20+, and a C++20 compiler. Initialize submodules before configuring. For native Windows, use the current upstream Visual Studio/vcpkg toolchain; for Akk-stack, use a build container with those dependencies and the correct mounts. System libraries alone are not a substitute for the current dependency manifest.
 
 ## Engine, database and quests
 
@@ -16,10 +22,14 @@ The nine patches in the [engine guide](../../extensions/rof2/achievements/ENGINE
 
 Install **all reviewed content** in the order given in the [release installation section](../../extensions/rof2/achievements/README.md#install), running each package's guarded preflights and quest installer and importing every required SQL file. This includes Crescent, Shard’s Landing, all five Blightfire quest packages, Stone Hive, Blightfire parent rewards and Mesa. Keep unknown conflicting quest scripts for a deliberate merge. Do not import research catalogues as playable content.
 
-Build and deploy matching world/zone binaries and `utils/patches/patch_RoF2.conf` through your normal Linux, native Windows or Akk-stack workflow. The [Mesa guide](../../extensions/rof2/achievements/content/mesa/README.md) includes native Windows and Akk-stack examples. This branch preserves the newer published achievement base; it is not a compatible cherry-pick onto the 23.10.3 housing branches.
+Build and deploy matching world/zone binaries and `utils/patches/patch_RoF2.conf` through your normal Linux, native Windows or Akk-stack workflow. The [Mesa guide](../../extensions/rof2/achievements/content/mesa/README.md) includes native Windows and Akk-stack examples. Achievements now shares the same upstream foundation as the other feature branches and is also included in the combined branch.
 
 ## References
 
 [Achievement engine and provenance](../../extensions/rof2/achievements/ENGINE.md)
 
 [Opcodes and structures](PROTOCOL.md) · [Integration manifest](integration.json) · [Original upstream README](UPSTREAM-README.md)
+
+## Verification
+
+See [integration.json](integration.json) for validation of the current source. Original release evidence is retained separately. No live server or database was changed during publication.

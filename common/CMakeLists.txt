@@ -1,6 +1,8 @@
 set(common_sources
 	achievement_state_updates.cpp
 	achievements.cpp
+	shared_core/inventory_session_service.cpp
+	shared_core/inventory_snapshot.cpp
 	base_packet.cpp
 	bazaar.cpp
 	bodytypes.cpp
