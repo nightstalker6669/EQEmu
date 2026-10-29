@@ -1,3 +1,4 @@
+#include <cstring>
 #include "ownership_transfer_service.h"
 #include "exterior_exit_geometry.h"
 #include "inventory_session_service.h"

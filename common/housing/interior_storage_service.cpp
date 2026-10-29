@@ -1,3 +1,4 @@
+#include <cstring>
 #include "npc_native_frame_db.h"
 #include "occupied_parent_yard.h"
 #include "rent_state_db.h"

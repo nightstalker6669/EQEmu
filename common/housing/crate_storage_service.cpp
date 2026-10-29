@@ -1,3 +1,4 @@
+#include <cstring>
 #include "crate_storage_destination.h"
 #include "occupied_retirement_authority.h"
 #include "rent_state_db.h"

@@ -1,63 +1,79 @@
+/*	EQEmu: EQEmulator
 
-#include "../common/eqemu_logsys.h"
-#include "../common/extprofile.h"
-#include "../common/rulesys.h"
-#include "../common/strings.h"
+	Copyright (C) 2001-2026 EQEmu Development Team
 
-#include "client.h"
-#include "corpse.h"
-#include "groups.h"
-#include "merc.h"
-#include "zone.h"
-#include "zonedb.h"
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "../common/housing/admission_guard.h"
-#include "aura.h"
-#include "../common/repositories/blocked_spells_repository.h"
-#include "../common/repositories/character_tribute_repository.h"
-#include "../common/repositories/character_data_repository.h"
-#include "../common/repositories/character_disciplines_repository.h"
-#include "../common/repositories/npc_types_repository.h"
-#include "../common/repositories/character_bind_repository.h"
-#include "../common/repositories/character_pet_buffs_repository.h"
-#include "../common/repositories/character_pet_inventory_repository.h"
-#include "../common/repositories/character_pet_info_repository.h"
-#include "../common/repositories/character_buffs_repository.h"
-#include "../common/repositories/character_languages_repository.h"
-#include "../common/repositories/criteria/content_filter_criteria.h"
-#include "../common/repositories/spawn2_disabled_repository.h"
-#include "../common/repositories/character_leadership_abilities_repository.h"
-#include "../common/repositories/character_material_repository.h"
-#include "../common/repositories/character_memmed_spells_repository.h"
-#include "../common/repositories/character_spells_repository.h"
-#include "../common/repositories/character_skills_repository.h"
-#include "../common/repositories/character_potionbelt_repository.h"
-#include "../common/repositories/character_bandolier_repository.h"
-#include "../common/repositories/character_currency_repository.h"
-#include "../common/repositories/character_alternate_abilities_repository.h"
-#include "../common/repositories/character_auras_repository.h"
-#include "../common/repositories/character_alt_currency_repository.h"
-#include "../common/repositories/character_item_recast_repository.h"
-#include "../common/repositories/account_repository.h"
-#include "../common/repositories/respawn_times_repository.h"
-#include "../common/repositories/object_contents_repository.h"
-#include "../common/repositories/mercs_repository.h"
-#include "../common/repositories/merc_buffs_repository.h"
-#include "../common/repositories/merc_inventory_repository.h"
-#include "../common/repositories/merc_subtypes_repository.h"
-#include "../common/repositories/npc_types_tint_repository.h"
-#include "../common/repositories/merchantlist_temp_repository.h"
-#include "../common/repositories/character_exp_modifiers_repository.h"
-#include "../common/repositories/character_data_repository.h"
-#include "../common/repositories/character_corpses_repository.h"
-#include "../common/repositories/character_corpse_items_repository.h"
-#include "../common/repositories/zone_repository.h"
 
-#include "../common/repositories/trader_repository.h"
-#include "../common/repositories/character_evolving_items_repository.h"
+#include "zonedb.h"
 
+#include "common/eqemu_logsys.h"
+#include "common/extprofile.h"
+#include "common/repositories/account_repository.h"
+#include "common/repositories/blocked_spells_repository.h"
+#include "common/repositories/character_alt_currency_repository.h"
+#include "common/repositories/character_alternate_abilities_repository.h"
+#include "common/repositories/character_auras_repository.h"
+#include "common/repositories/character_bandolier_repository.h"
+#include "common/repositories/character_bind_repository.h"
+#include "common/repositories/character_buffs_repository.h"
+#include "common/repositories/character_corpse_items_repository.h"
+#include "common/repositories/character_corpses_repository.h"
+#include "common/repositories/character_currency_repository.h"
+#include "common/repositories/character_data_repository.h"
+#include "common/repositories/character_data_repository.h"
+#include "common/repositories/character_disciplines_repository.h"
+#include "common/repositories/character_evolving_items_repository.h"
+#include "common/repositories/character_exp_modifiers_repository.h"
+#include "common/repositories/character_item_recast_repository.h"
+#include "common/repositories/character_languages_repository.h"
+#include "common/repositories/character_leadership_abilities_repository.h"
+#include "common/repositories/character_material_repository.h"
+#include "common/repositories/character_memmed_spells_repository.h"
+#include "common/repositories/character_pet_buffs_repository.h"
+#include "common/repositories/character_pet_info_repository.h"
+#include "common/repositories/character_pet_inventory_repository.h"
+#include "common/repositories/character_potionbelt_repository.h"
+#include "common/repositories/character_skills_repository.h"
+#include "common/repositories/character_spells_repository.h"
+#include "common/repositories/character_tribute_repository.h"
+#include "common/repositories/criteria/content_filter_criteria.h"
+#include "common/repositories/merc_buffs_repository.h"
+#include "common/repositories/merc_inventory_repository.h"
+#include "common/repositories/merc_subtypes_repository.h"
+#include "common/repositories/merchantlist_temp_repository.h"
+#include "common/repositories/mercs_repository.h"
+#include "common/repositories/npc_types_repository.h"
+#include "common/repositories/npc_types_tint_repository.h"
+#include "common/repositories/object_contents_repository.h"
+#include "common/repositories/respawn_times_repository.h"
+#include "common/repositories/spawn2_disabled_repository.h"
+#include "common/repositories/trader_repository.h"
+#include "common/repositories/zone_repository.h"
+#include "common/rulesys.h"
+#include "common/strings.h"
+#include "zone/aura.h"
+#include "zone/client.h"
+#include "zone/corpse.h"
+#include "zone/groups.h"
+#include "zone/merc.h"
+#include "zone/zone.h"
+
+#include "fmt/format.h"
 #include <ctime>
 #include <iostream>
-#include <fmt/format.h>
 
 extern Zone* zone;
 
@@ -1207,7 +1223,7 @@ bool ZoneDatabase::SaveCharacterCurrency(uint32 character_id, PlayerProfile_Stru
 	);
 }
 
-bool ZoneDatabase::SaveCharacterMemorizedSpell(uint32 character_id, uint32 spell_id, uint32 slot_id){
+bool ZoneDatabase::SaveCharacterMemorizedSpell(uint32 character_id, int32 spell_id, uint32 slot_id){
 	if (!IsValidSpell(spell_id)) {
 		return false;
 	}
@@ -1217,12 +1233,12 @@ bool ZoneDatabase::SaveCharacterMemorizedSpell(uint32 character_id, uint32 spell
 		CharacterMemmedSpellsRepository::CharacterMemmedSpells{
 			.id = character_id,
 			.slot_id = static_cast<uint16_t>(slot_id),
-			.spell_id = static_cast<uint16_t>(spell_id)
+			.spell_id = spell_id
 		}
 	);
 }
 
-bool ZoneDatabase::SaveCharacterSpell(uint32 character_id, uint32 spell_id, uint32 slot_id)
+bool ZoneDatabase::SaveCharacterSpell(uint32 character_id, int32 spell_id, uint32 slot_id)
 {
 	if (!IsValidSpell(spell_id)) {
 		return false;
@@ -1233,7 +1249,7 @@ bool ZoneDatabase::SaveCharacterSpell(uint32 character_id, uint32 spell_id, uint
 		CharacterSpellsRepository::CharacterSpells{
 			.id = character_id,
 			.slot_id = static_cast<uint16_t>(slot_id),
-			.spell_id = static_cast<uint16_t>(spell_id)
+			.spell_id = spell_id
 		}
 	);
 }
@@ -2217,7 +2233,7 @@ bool ZoneDatabase::LoadCurrentMercenary(Client* c)
 {
 	const uint8 mercenary_slot = c->GetMercSlot();
 
-	if (mercenary_slot > MAXMERCS) {
+	if (mercenary_slot >= MAXMERCS) {
 		return false;
 	}
 
@@ -2269,7 +2285,7 @@ bool ZoneDatabase::SaveMercenary(Merc* m)
 		auto e = MercsRepository::NewEntity();
 
 		e.OwnerCharacterID = m->GetMercenaryCharacterID();
-		e.Slot             = (c->GetNumberOfMercenaries() - 1);
+		e.Slot             = c->GetMercSlot();
 		e.Name             = m->GetCleanName();
 		e.TemplateID       = m->GetMercenaryTemplateID();
 		e.SuspendedTime    = c->GetMercInfo().SuspendedTime;
@@ -2310,7 +2326,7 @@ bool ZoneDatabase::SaveMercenary(Merc* m)
 	auto e = MercsRepository::FindOne(*this, m->GetMercenaryID());
 
 	e.OwnerCharacterID = m->GetMercenaryCharacterID();
-	e.Slot             = (c->GetNumberOfMercenaries() - 1);
+	e.Slot             = c->GetMercSlot();
 	e.Name             = m->GetCleanName();
 	e.TemplateID       = m->GetMercenaryTemplateID();
 	e.SuspendedTime    = c->GetMercInfo().SuspendedTime;
@@ -2373,6 +2389,7 @@ void ZoneDatabase::SaveMercenaryBuffs(Merc* m)
 		e.CasterLevel        = buffs[slot_id].casterlevel;
 		e.DurationFormula    = spells[buffs[slot_id].spellid].buff_duration_formula;
 		e.TicsRemaining      = buffs[slot_id].ticsremaining;
+		e.InitialDuration    = buffs[slot_id].initialduration;
 		e.PoisonCounters     = CalculatePoisonCounters(buffs[slot_id].spellid) > 0 ? buffs[slot_id].counters : 0;
 		e.DiseaseCounters    = CalculateDiseaseCounters(buffs[slot_id].spellid) > 0 ? buffs[slot_id].counters : 0;
 		e.CurseCounters      = CalculateCurseCounters(buffs[slot_id].spellid) > 0 ? buffs[slot_id].counters : 0;
@@ -2384,8 +2401,9 @@ void ZoneDatabase::SaveMercenaryBuffs(Merc* m)
 		e.caston_x           = buffs[slot_id].caston_x;
 		e.caston_y           = buffs[slot_id].caston_y;
 		e.caston_z           = buffs[slot_id].caston_z;
-		e.Persistent         = buffs[slot_id].persistant_buff ? 1 : 0;
+		e.Persistent         = buffs[slot_id].persistent_buff ? 1 : 0;
 		e.ExtraDIChance      = buffs[slot_id].ExtraDIChance;
+		e.instrument_mod     = buffs[slot_id].instrument_mod;
 
 		v.emplace_back(e);
 	}
@@ -2422,6 +2440,7 @@ void ZoneDatabase::LoadMercenaryBuffs(Merc* m)
 		buffs[slot_id].spellid         = e.SpellId;
 		buffs[slot_id].casterlevel     = e.CasterLevel;
 		buffs[slot_id].ticsremaining   = e.TicsRemaining;
+		buffs[slot_id].initialduration = e.InitialDuration;
 		buffs[slot_id].hit_number      = e.HitCount;
 		buffs[slot_id].melee_rune      = e.MeleeRune;
 		buffs[slot_id].magic_rune      = e.MagicRune;
@@ -2431,7 +2450,8 @@ void ZoneDatabase::LoadMercenaryBuffs(Merc* m)
 		buffs[slot_id].caston_z        = e.caston_z;
 		buffs[slot_id].casterid        = 0;
 		buffs[slot_id].ExtraDIChance   = e.ExtraDIChance;
-		buffs[slot_id].persistant_buff = e.Persistent;
+		buffs[slot_id].persistent_buff = e.Persistent;
+		buffs[slot_id].instrument_mod  = e.instrument_mod;
 
 		if (CalculatePoisonCounters(buffs[slot_id].spellid) > 0) {
 			buffs[slot_id].counters = e.PoisonCounters;
@@ -2918,23 +2938,24 @@ void ZoneDatabase::SaveBuffs(Client *client)
 			continue;
 		}
 
-		e.character_id   = client->CharacterID();
-		e.slot_id        = slot_id;
-		e.spell_id       = buffs[slot_id].spellid;
-		e.caster_level   = buffs[slot_id].casterlevel;
-		e.caster_name    = buffs[slot_id].caster_name;
-		e.ticsremaining  = buffs[slot_id].ticsremaining;
-		e.counters       = buffs[slot_id].counters;
-		e.numhits        = buffs[slot_id].hit_number;
-		e.melee_rune     = buffs[slot_id].melee_rune;
-		e.magic_rune     = buffs[slot_id].magic_rune;
-		e.persistent     = buffs[slot_id].persistant_buff;
-		e.dot_rune       = buffs[slot_id].dot_rune;
-		e.caston_x       = buffs[slot_id].caston_x;
-		e.caston_y       = buffs[slot_id].caston_y;
-		e.caston_z       = buffs[slot_id].caston_z;
-		e.ExtraDIChance  = buffs[slot_id].ExtraDIChance;
-		e.instrument_mod = buffs[slot_id].instrument_mod;
+		e.character_id    = client->CharacterID();
+		e.slot_id         = slot_id;
+		e.spell_id        = buffs[slot_id].spellid;
+		e.caster_level    = buffs[slot_id].casterlevel;
+		e.caster_name     = buffs[slot_id].caster_name;
+		e.ticsremaining   = buffs[slot_id].ticsremaining;
+		e.initialduration = buffs[slot_id].initialduration;
+		e.counters        = buffs[slot_id].counters;
+		e.numhits         = buffs[slot_id].hit_number;
+		e.melee_rune      = buffs[slot_id].melee_rune;
+		e.magic_rune      = buffs[slot_id].magic_rune;
+		e.persistent      = buffs[slot_id].persistent_buff;
+		e.dot_rune        = buffs[slot_id].dot_rune;
+		e.caston_x        = buffs[slot_id].caston_x;
+		e.caston_y        = buffs[slot_id].caston_y;
+		e.caston_z        = buffs[slot_id].caston_z;
+		e.ExtraDIChance   = buffs[slot_id].ExtraDIChance;
+		e.instrument_mod  = buffs[slot_id].instrument_mod;
 
 		v.emplace_back(e);
 	}
@@ -2992,11 +3013,12 @@ void ZoneDatabase::LoadBuffs(Client *client)
 		}
 
 		buffs[e.slot_id].ticsremaining     = e.ticsremaining;
+		buffs[e.slot_id].initialduration   = e.initialduration;
 		buffs[e.slot_id].counters          = e.counters;
 		buffs[e.slot_id].hit_number        = e.numhits;
 		buffs[e.slot_id].melee_rune        = e.melee_rune;
 		buffs[e.slot_id].magic_rune        = e.magic_rune;
-		buffs[e.slot_id].persistant_buff   = e.persistent ? true : false;
+		buffs[e.slot_id].persistent_buff   = e.persistent ? true : false;
 		buffs[e.slot_id].dot_rune          = e.dot_rune;
 		buffs[e.slot_id].caston_x          = e.caston_x;
 		buffs[e.slot_id].caston_y          = e.caston_y;
@@ -3022,7 +3044,7 @@ void ZoneDatabase::LoadBuffs(Client *client)
 		}
 
 		if (IsEffectInSpell(buffs[slot_id].spellid, SpellEffect::Illusion)) {
-			if (buffs[slot_id].persistant_buff) {
+			if (buffs[slot_id].persistent_buff) {
 				break;
 			}
 
@@ -3131,14 +3153,25 @@ void ZoneDatabase::SavePetInfo(Client *client)
 				continue;
 			}
 
-			pet_buff.char_id        = client->CharacterID();
-			pet_buff.pet            = pet_info_type;
-			pet_buff.slot           = slot_id;
-			pet_buff.spell_id       = p->Buffs[slot_id].spellid;
-			pet_buff.caster_level   = p->Buffs[slot_id].level;
-			pet_buff.ticsremaining  = p->Buffs[slot_id].duration;
-			pet_buff.counters       = p->Buffs[slot_id].counters;
-			pet_buff.instrument_mod = p->Buffs[slot_id].bard_modifier;
+			pet_buff.character_id    = client->CharacterID();
+			pet_buff.pet             = pet_info_type;
+			pet_buff.slot_id         = slot_id;
+			pet_buff.spell_id        = p->Buffs[slot_id].spellid;
+			pet_buff.caster_level    = p->Buffs[slot_id].casterlevel;
+			pet_buff.caster_name     = p->Buffs[slot_id].caster_name;
+			pet_buff.ticsremaining   = p->Buffs[slot_id].ticsremaining;
+			pet_buff.initialduration = p->Buffs[slot_id].initialduration;
+			pet_buff.counters        = p->Buffs[slot_id].counters;
+			pet_buff.numhits         = p->Buffs[slot_id].hit_number;
+			pet_buff.melee_rune      = p->Buffs[slot_id].melee_rune;
+			pet_buff.magic_rune      = p->Buffs[slot_id].magic_rune;
+			pet_buff.persistent      = p->Buffs[slot_id].persistent_buff;
+			pet_buff.dot_rune        = p->Buffs[slot_id].dot_rune;
+			pet_buff.caston_x        = p->Buffs[slot_id].caston_x;
+			pet_buff.caston_y        = p->Buffs[slot_id].caston_y;
+			pet_buff.caston_z        = p->Buffs[slot_id].caston_z;
+			pet_buff.ExtraDIChance   = p->Buffs[slot_id].ExtraDIChance;
+			pet_buff.instrument_mod  = p->Buffs[slot_id].instrument_mod;
 
 			pet_buffs.push_back(pet_buff);
 		}
@@ -3192,7 +3225,7 @@ void ZoneDatabase::SavePetInfo(Client *client)
 	CharacterPetBuffsRepository::DeleteWhere(
 		database,
 		fmt::format(
-			"`char_id` = {}",
+			"`character_id` = {}",
 			client->CharacterID()
 		)
 	);
@@ -3291,7 +3324,7 @@ void ZoneDatabase::LoadPetInfo(Client *client)
 	const auto& buffs = CharacterPetBuffsRepository::GetWhere(
 		database,
 		fmt::format(
-			"`char_id` = {}",
+			"`character_id` = {}",
 			client->CharacterID()
 		)
 	);
@@ -3306,7 +3339,7 @@ void ZoneDatabase::LoadPetInfo(Client *client)
 				continue;
 			}
 
-			if (e.slot >= RuleI(Spells, MaxTotalSlotsPET)) {
+			if (e.slot_id >= RuleI(Spells, MaxTotalSlotsPET)) {
 				continue;
 			}
 
@@ -3314,13 +3347,39 @@ void ZoneDatabase::LoadPetInfo(Client *client)
 				continue;
 			}
 
-			p->Buffs[e.slot].spellid       = e.spell_id;
-			p->Buffs[e.slot].level         = e.caster_level;
-			p->Buffs[e.slot].player_id     = 0;
-			p->Buffs[e.slot].effect_type   = BuffEffectType::Buff;
-			p->Buffs[e.slot].duration      = e.ticsremaining;
-			p->Buffs[e.slot].counters      = e.counters;
-			p->Buffs[e.slot].bard_modifier = e.instrument_mod;
+			Client* c = entity_list.GetClientByName(e.caster_name.c_str());
+
+			p->Buffs[e.slot_id].spellid = e.spell_id;
+			p->Buffs[e.slot_id].casterlevel = e.caster_level;
+
+			if (c) {
+				p->Buffs[e.slot_id].casterid = c->GetID();
+				p->Buffs[e.slot_id].client   = true;
+
+				strncpy(p->Buffs[e.slot_id].caster_name, c->GetName(), 64);
+			} else {
+				p->Buffs[e.slot_id].casterid = 0;
+				p->Buffs[e.slot_id].client   = false;
+
+				strncpy(p->Buffs[e.slot_id].caster_name, "", 64);
+			}
+
+			p->Buffs[e.slot_id].ticsremaining     = e.ticsremaining;
+			p->Buffs[e.slot_id].initialduration   = e.initialduration;
+			p->Buffs[e.slot_id].counters          = e.counters;
+			p->Buffs[e.slot_id].hit_number        = e.numhits;
+			p->Buffs[e.slot_id].melee_rune        = e.melee_rune;
+			p->Buffs[e.slot_id].magic_rune        = e.magic_rune;
+			p->Buffs[e.slot_id].persistent_buff   = e.persistent ? true : false;
+			p->Buffs[e.slot_id].dot_rune          = e.dot_rune;
+			p->Buffs[e.slot_id].caston_x          = e.caston_x;
+			p->Buffs[e.slot_id].caston_y          = e.caston_y;
+			p->Buffs[e.slot_id].caston_z          = e.caston_z;
+			p->Buffs[e.slot_id].ExtraDIChance     = e.ExtraDIChance;
+			p->Buffs[e.slot_id].RootBreakChance   = 0;
+			p->Buffs[e.slot_id].virus_spread_time = 0;
+			p->Buffs[e.slot_id].UpdateClient      = false;
+			p->Buffs[e.slot_id].instrument_mod    = e.instrument_mod;
 		}
 	}
 

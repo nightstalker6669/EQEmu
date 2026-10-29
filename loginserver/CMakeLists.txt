@@ -1,6 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.12)
-
-SET(eqlogin_sources
+set(eqlogin_sources
 	account_management.cpp
 	client.cpp
 	client_manager.cpp
@@ -12,7 +10,7 @@ SET(eqlogin_sources
 	world_server.cpp
 )
 
-SET(eqlogin_headers
+set(eqlogin_headers
 	account_management.h
 	client.h
 	client_manager.h
@@ -26,10 +24,23 @@ SET(eqlogin_headers
 	world_server.h
 )
 
-ADD_EXECUTABLE(loginserver ${eqlogin_sources} ${eqlogin_headers})
+add_compile_definitions(EQEMU_USE_OPENSSL)
 
-INSTALL(TARGETS loginserver RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+add_executable(loginserver ${eqlogin_sources} ${eqlogin_headers})
 
-TARGET_LINK_LIBRARIES(loginserver ${SERVER_LIBS})
+install(TARGETS loginserver RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+target_link_libraries(loginserver common)
+
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+set_property(TARGET loginserver PROPERTY FOLDER executables/servers)
+
+# vcpkg doesn't copy legacy.dll automatically because it is loaded at runtime, not via the import table.
+if(WIN32 AND DEFINED VCPKG_INSTALLED_DIR AND DEFINED VCPKG_TARGET_TRIPLET)
+	add_custom_command(TARGET loginserver POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+			"$<IF:$<CONFIG:Debug>,${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin/legacy.dll,${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/legacy.dll>"
+			"$<TARGET_FILE_DIR:loginserver>/legacy.dll"
+		VERBATIM
+	)
+endif()
