@@ -69,7 +69,8 @@
   "remaining_feature_dependencies": "Published feature/runtime dependencies are retained. Extracting shared infrastructure does not make all gameplay patches independent.",
   "reviewed_source_repairs": [
     "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included.",
-    "Restore explicit shroud ability_cast.h include used by authenticated Monster AA buff minimum validation; audit all feature-specific includes against prior published sources."
+    "Restore explicit shroud ability_cast.h include used by authenticated Monster AA buff minimum validation; audit all feature-specific includes against prior published sources.",
+    "Use upstream-default precompiled headers in the integrated installer, matching the validated current source rather than the historical standalone overlay build."
   ],
   "upstream_master": "4aceae18b94ffaafc08e2b17bc41cd72c77f795d",
   "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
