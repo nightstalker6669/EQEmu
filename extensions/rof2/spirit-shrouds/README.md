@@ -1,3 +1,5 @@
+> **Current integrated fork:** use [the current branch installation guide](../../../docs/rof2/INSTALL.md). This document preserves the original release’s source baseline and evidence. Its source patches are already integrated and must not be reapplied here.
+
 # EQEmu RoF2 Spirit Shrouds
 
 Production source extension for the **May 10, 2013 Rain of Fear 2 client**, adapting observed modern Live content. Full Live parity is not claimed. This update includes migrations **013–015**, corpse-domain XP accounting, system interaction safeguards and an optional native transformation path. Completed native checks and remaining physical acceptance limits are described in [STATUS.md](docs/STATUS.md).

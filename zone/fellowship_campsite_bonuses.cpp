@@ -1,3 +1,4 @@
+#include "client_version.h"
 #include "fellowship_campsite_bonuses.h"
 #include "fellowship_campfire.h"
 #include "client.h"
@@ -95,7 +96,7 @@ void LeasedBuff(Client& client, NPC* source, std::optional<Fellowship::Campsites
   auto& b=client.GetBuffs()[i];
   if (IsFellowshipCampsiteAuraBuff(b.spellid,b.caster_name,sizeof(b.caster_name))) {
    if (!desired || b.spellid!=desired->spell_id || b.casterlevel!=desired->caster_level || !source) { client.BuffFadeBySlot(i);changed=true; }
-   else { b.ticsremaining=2;client.SendBuffDurationPacket(b,i);b.UpdateClient=false; }
+   else { b.ticsremaining=2;ClientPatch::SendSingleBuffChange(&client,b,i);b.UpdateClient=false; }
   }
  }
  if(desired && source && !client.FindBuff(desired->spell_id)) {
@@ -110,7 +111,7 @@ void LeasedBuff(Client& client, NPC* source, std::optional<Fellowship::Campsites
   if(safe && source->SpellOnTarget(desired->spell_id,&client,0,false,0,false,desired->caster_level,2,true)) {
    for(int i=0;i<client.GetMaxTotalSlots();++i) {
     auto& b=client.GetBuffs()[i];
-    if(b.spellid==desired->spell_id && b.casterid==source->GetID()) {std::strcpy(b.caster_name,AuraCaster);b.persistant_buff=false;client.SendBuffDurationPacket(b,i);b.UpdateClient=false;changed=true;}
+    if(b.spellid==desired->spell_id && b.casterid==source->GetID()) {std::strcpy(b.caster_name,AuraCaster);b.persistent_buff=false;ClientPatch::SendSingleBuffChange(&client,b,i);b.UpdateClient=false;changed=true;}
    }
   }
  }

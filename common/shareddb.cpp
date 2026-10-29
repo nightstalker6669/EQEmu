@@ -1,65 +1,56 @@
-#include "housing/evolving_item_custody_db.h"
-#include "housing/npc_item_metadata_db.h"
-/*	EQEMu: Everquest Server Emulator
-	Copyright (C) 2001-2016 EQEMu Development Team (http://eqemulator.org)
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; version 2 of the License.
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY except by those people which sell it, which
-	are required to give you total support for your newly bought product;
-	without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-	A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include <iostream>
 #include <cstring>
-#include <fmt/format.h>
-
-#if defined(_MSC_VER) && _MSC_VER >= 1800
-	#include <algorithm>
-#endif
-
-#include "classes.h"
-#include "eq_packet_structs.h"
-#include "faction.h"
-#include "features.h"
-#include "ipc_mutex.h"
-#include "inventory_profile.h"
-#include "memory_mapped_file.h"
-#include "mysql.h"
-#include "rulesys.h"
-#include "shareddb.h"
+#include "housing/evolving_item_custody_db.h"
+#include "housing/npc_item_metadata_db.h"
 #include "housing/legacy_scaling_state.h"
 #include "housing/trophy_benefits.h"
-#include "strings.h"
-#include "eqemu_config.h"
-#include "data_verification.h"
-#include "evolving_items.h"
-#include "repositories/criteria/content_filter_criteria.h"
-#include "repositories/account_repository.h"
-#include "repositories/faction_association_repository.h"
-#include "repositories/starting_items_repository.h"
-#include "path_manager.h"
-#include "../zone/client.h"
-#include "repositories/loottable_repository.h"
-#include "repositories/character_item_recast_repository.h"
-#include "repositories/character_corpses_repository.h"
-#include "repositories/skill_caps_repository.h"
-#include "repositories/inventory_repository.h"
-#include "repositories/books_repository.h"
-#include "repositories/sharedbank_repository.h"
-#include "repositories/character_inspect_messages_repository.h"
-#include "repositories/spells_new_repository.h"
-#include "repositories/damageshieldtypes_repository.h"
-#include "repositories/items_repository.h"
 #include "housing/house_binding_preload.h"
+
+#include "shareddb.h"
+
+#include "common/classes.h"
+#include "common/data_verification.h"
+#include "common/eq_packet_structs.h"
+#include "common/eqemu_config.h"
+#include "common/evolving_items.h"
+#include "common/faction.h"
+#include "common/inventory_profile.h"
+#include "common/ipc_mutex.h"
+#include "common/memory_mapped_file.h"
+#include "common/path_manager.h"
+#include "common/repositories/account_repository.h"
+#include "common/repositories/books_repository.h"
+#include "common/repositories/character_corpses_repository.h"
+#include "common/repositories/character_inspect_messages_repository.h"
+#include "common/repositories/character_item_recast_repository.h"
+#include "common/repositories/criteria/content_filter_criteria.h"
+#include "common/repositories/damageshieldtypes_repository.h"
+#include "common/repositories/inventory_repository.h"
+#include "common/repositories/items_repository.h"
+#include "common/repositories/sharedbank_repository.h"
+#include "common/repositories/starting_items_repository.h"
+#include "common/rulesys.h"
+#include "common/strings.h"
+#include "zone/client.h"
+
+#include "fmt/format.h"
+#include <algorithm>
 
 SharedDatabase::SharedDatabase()
 : Database()
@@ -174,16 +165,19 @@ bool SharedDatabase::SaveCursor(
     for (auto it=start;it!=end;++it)
         if (*it && !Housing::LegacyScaling::Persistable(**it)) return false;
 
-	const int deleted = InventoryRepository::DeleteWhere(
+	if (!InventoryRepository::TryDeleteWhere(
 		*this,
 		fmt::format(
-			"`character_id` = {} AND (`slot_id` = {} OR `slot_id` BETWEEN {} AND {})",
+			"`character_id` = {} AND "
+			"(`slot_id` = {} OR `slot_id` BETWEEN {} AND {})",
 			char_id,
 			EQ::invslot::slotCursor,
 			EQ::invbag::CURSOR_BAG_BEGIN,
 			EQ::invbag::CURSOR_BAG_END
 		)
-	);
+	)) {
+		return false;
+	}
 
 	int16 i = EQ::invbag::CURSOR_BAG_BEGIN;
 	for (auto& it = start; it != end; ++it, i++) {
@@ -199,7 +193,13 @@ bool SharedDatabase::SaveCursor(
 		}
 	}
 
-	return true;
+	// The cursor queue has only CURSOR_BAG_COUNT durable positions. Do not
+	// report success after silently omitting overflow entries.
+	const auto complete = start == end;
+	if (!complete) {
+		TransactionFailStrict();
+	}
+	return complete;
 }
 
 bool SharedDatabase::VerifyInventory(uint32 account_id, int16 slot_id, const EQ::ItemInstance* inst)
@@ -252,8 +252,11 @@ bool SharedDatabase::SaveInventory(uint32 char_id, const EQ::ItemInstance* inst,
 		} else {
 			// Needed to clear out bag slots that 'REPLACE' in UpdateSharedBankSlot does not overwrite..otherwise, duplication occurs
 			// (This requires that parent then child items be sent..which should be how they are currently passed)
-			if (EQ::InventoryProfile::SupportsContainers(slot_id)) {
-				DeleteSharedBankSlot(char_id, slot_id);
+			if (
+				EQ::InventoryProfile::SupportsContainers(slot_id) &&
+				!DeleteSharedBankSlot(char_id, slot_id)
+			) {
+				return false;
 			}
 
 			return UpdateSharedBankSlot(char_id, inst, slot_id);
@@ -264,8 +267,11 @@ bool SharedDatabase::SaveInventory(uint32 char_id, const EQ::ItemInstance* inst,
 
 	// Needed to clear out bag slots that 'REPLACE' in UpdateInventorySlot does not overwrite..otherwise, duplication occurs
 	// (This requires that parent then child items be sent..which should be how they are currently passed)
-	if (EQ::InventoryProfile::SupportsContainers(slot_id)) {
-		DeleteInventorySlot(char_id, slot_id);
+	if (
+		EQ::InventoryProfile::SupportsContainers(slot_id) &&
+		!DeleteInventorySlot(char_id, slot_id)
+	) {
+		return false;
 	}
 
 	return UpdateInventorySlot(char_id, inst, slot_id);
@@ -321,7 +327,16 @@ bool SharedDatabase::UpdateInventorySlot(uint32 char_id, const EQ::ItemInstance*
 			i++
 		) {
 			const EQ::ItemInstance* bag_inst = inst->GetItem(i);
-			SaveInventory(char_id, bag_inst, EQ::InventoryProfile::CalcSlotId(slot_id, i));
+			if (
+				bag_inst &&
+				!SaveInventory(
+					char_id,
+					bag_inst,
+					EQ::InventoryProfile::CalcSlotId(slot_id, i)
+				)
+			) {
+				return false;
+			}
 		}
 	}
 
@@ -373,7 +388,16 @@ bool SharedDatabase::UpdateSharedBankSlot(uint32 char_id, const EQ::ItemInstance
 			i++
 		) {
 			const EQ::ItemInstance* bag_inst = inst->GetItem(i);
-			SaveInventory(char_id, bag_inst, EQ::InventoryProfile::CalcSlotId(slot_id, i));
+			if (
+				bag_inst &&
+				!SaveInventory(
+					char_id,
+					bag_inst,
+					EQ::InventoryProfile::CalcSlotId(slot_id, i)
+				)
+			) {
+				return false;
+			}
 		}
 	}
 
@@ -382,31 +406,25 @@ bool SharedDatabase::UpdateSharedBankSlot(uint32 char_id, const EQ::ItemInstance
 
 bool SharedDatabase::DeleteInventorySlot(uint32 char_id, int16 slot_id)
 {
-	const int deleted = InventoryRepository::DeleteWhere(
-		*this,
-		fmt::format(
-			"`character_id` = {} AND `slot_id` = {}",
-			char_id,
-			slot_id
-		)
-	);
-
-	if (!deleted) {
-		return false;
-	}
-
-	// Delete bag slots, if need be
 	if (!EQ::InventoryProfile::SupportsContainers(slot_id)) {
-		return true;
+		return InventoryRepository::TryDeleteWhere(
+			*this,
+			fmt::format(
+				"`character_id` = {} AND `slot_id` = {}",
+				char_id,
+				slot_id
+			)
+		);
 	}
 
 	const int16 base_slot_id = EQ::InventoryProfile::CalcSlotId(slot_id, EQ::invbag::SLOT_BEGIN);
-
-	return InventoryRepository::DeleteWhere(
+	return InventoryRepository::TryDeleteWhere(
 		*this,
 		fmt::format(
-			"`character_id` = {} AND `slot_id` BETWEEN {} AND {}",
+			"`character_id` = {} AND "
+			"(`slot_id` = {} OR `slot_id` BETWEEN {} AND {})",
 			char_id,
+			slot_id,
 			base_slot_id,
 			base_slot_id + (EQ::invbag::SLOT_COUNT - 1)
 		)
@@ -417,30 +435,25 @@ bool SharedDatabase::DeleteSharedBankSlot(uint32 char_id, int16 slot_id)
 {
 	const uint32 account_id = GetAccountIDByChar(char_id);
 
-	const int deleted = SharedbankRepository::DeleteWhere(
-		*this,
-		fmt::format(
-			"`account_id` = {} AND `slot_id` = {}",
-			account_id,
-			slot_id
-		)
-	);
-
-	if (!deleted) {
-		return false;
-	}
-
 	if (!EQ::InventoryProfile::SupportsContainers(slot_id)) {
-		return true;
+		return SharedbankRepository::TryDeleteWhere(
+			*this,
+			fmt::format(
+				"`account_id` = {} AND `slot_id` = {}",
+				account_id,
+				slot_id
+			)
+		);
 	}
 
 	const int16 base_slot_id = EQ::InventoryProfile::CalcSlotId(slot_id, EQ::invbag::SLOT_BEGIN);
-
-	return SharedbankRepository::DeleteWhere(
+	return SharedbankRepository::TryDeleteWhere(
 		*this,
 		fmt::format(
-			"`account_id` = {} AND `slot_id` BETWEEN {} AND {}",
+			"`account_id` = {} AND "
+			"(`slot_id` = {} OR `slot_id` BETWEEN {} AND {})",
 			account_id,
+			slot_id,
 			base_slot_id,
 			base_slot_id + (EQ::invbag::SLOT_COUNT - 1)
 		)

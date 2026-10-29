@@ -1,8 +1,27 @@
-#ifndef EQEMU_TASKS_H
-#define EQEMU_TASKS_H
+/*	EQEmu: EQEmulator
 
-#include "../common/strings.h"
-#include "serialize_buffer.h"
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+#pragma once
+
+#include "common/emu_versions.h"
+#include "common/eqemu_logsys.h"
+#include "common/serialize_buffer.h"
+#include "common/strings.h"
+
 #include <algorithm>
 #include <array>
 
@@ -19,10 +38,11 @@
 #define RELOADTASKS 0
 #define RELOADTASKSETS 2
 
-typedef enum {
+enum TaskMethodType {
 	METHODSINGLEID = 0,
-	METHODQUEST    = 2
-} TaskMethodType;
+	METHODQUEST    = 2,
+	METHODSELECT   = 3
+};
 
 enum class TaskActivityType : int32_t // task element/objective
 {
@@ -203,6 +223,7 @@ struct TaskInformation {
 	int                 faction_reward{};   // npc_faction_id if amount == 0, otherwise primary faction ID
 	int                 faction_amount{};   // faction hit value
 	TaskMethodType      reward_method;
+	bool                has_reward_selection{};
 	int                 reward_points;
 	int32_t             reward_point_type;
 	int                 activity_count{};
@@ -232,7 +253,15 @@ struct TaskInformation {
 		out.WriteString(description); // max 4000 with null
 
 		if (client_version != EQ::versions::ClientVersion::Titanium) {
-			out.WriteUInt8(0); // 0: no rewards 1: enables "Reward Preview" button
+			// Existing task methods retain their zero byte. The task manager
+			// enables this only for RoF2 after validating a METHODSELECT set.
+			out.WriteUInt8(
+				client_version == EQ::versions::ClientVersion::RoF2 &&
+				reward_method == METHODSELECT &&
+				has_reward_selection
+					? 1
+					: 0
+			);
 		}
 
 		// live only sends the initial active elements to the select window
@@ -564,5 +593,3 @@ namespace TaskStr {
 		return "Unknown EQStr";
 	}
 }
-
-#endif //EQEMU_TASKS_H

@@ -1,3 +1,4 @@
+#include "client_version.h"
 #include "client.h"
 #include "entity.h"
 #include "merc.h"
@@ -86,7 +87,7 @@ void CaptureSpiritShroudShortBuffs(ZoneDatabase& db, Client& client)
   e.caster_name=std::string(b.caster_name,strnlen(b.caster_name,sizeof(b.caster_name)));
   if(e.caster_name.size()>=sizeof(b.caster_name))throw std::runtime_error("shroud short buff caster");
   e.ticsremaining=b.ticsremaining;e.counters=b.counters;e.numhits=b.hit_number;
-  e.melee_rune=b.melee_rune;e.magic_rune=b.magic_rune;e.persistent=b.persistant_buff;
+  e.melee_rune=b.melee_rune;e.magic_rune=b.magic_rune;e.persistent=b.persistent_buff;
   e.dot_rune=b.dot_rune;e.caston_x=b.caston_x;e.caston_y=b.caston_y;e.caston_z=b.caston_z;
   e.ExtraDIChance=b.ExtraDIChance;e.instrument_mod=b.instrument_mod;
   rows.push_back(std::move(e));
@@ -413,7 +414,7 @@ bool Client::LoadSpiritShroudRestoredShortBuffs()
     b.casterid=caster->GetID();b.client=true;strn0cpy(b.caster_name,caster->GetName(),sizeof(b.caster_name));
    }
    b.ticsremaining=e.ticsremaining;b.counters=e.counters;b.hit_number=e.numhits;
-   b.melee_rune=e.melee_rune;b.magic_rune=e.magic_rune;b.persistant_buff=e.persistent!=0;
+   b.melee_rune=e.melee_rune;b.magic_rune=e.magic_rune;b.persistent_buff=e.persistent!=0;
    b.dot_rune=e.dot_rune;b.caston_x=e.caston_x;b.caston_y=e.caston_y;b.caston_z=e.caston_z;
    b.ExtraDIChance=e.ExtraDIChance;b.instrument_mod=e.instrument_mod;
    m_spirit_shroud_restored_short_buffs_pending=true;
@@ -696,7 +697,7 @@ void Client::ChangeSpiritShroud(uint32_t id) {
    // cast coordinates. Counter/rune bookkeeping uses the reload fallback.
    for(int slot=0;slot<GetMaxTotalSlots();++slot)
     if(IsValidSpell(buffs[slot].spellid))SendBuffDurationPacket(buffs[slot],slot,true);
-   auto* icons=MakeBuffsPacket(false);FastQueuePacket(&icons);
+   ClientPatch::SendFullBuffRefresh(this);
    EQApplicationPacket targets(OP_XTargetResponse,8);
    targets.WriteUInt32(GetMaxXTargets());targets.WriteUInt32(0);QueuePacket(&targets);
    SendXTargetUpdates();
@@ -1208,3 +1209,43 @@ bool Client::SettleSpiritShroudResurrection(uint32_t corpse_id,uint32_t spell_id
   Message(Chat::Red,"Your resurrection could not be settled. The corpse claim has not been acknowledged.");return false;
  }
 }
+
+void Client::SendBuffDurationPacket(Buffs_Struct &buff, int slot, bool recreate)
+{
+	if (!recreate || ClientVersion() != EQ::versions::ClientVersion::RoF2) {
+		ClientPatch::SendSingleBuffChange(this,buff,slot);
+		return;
+	}
+	EQApplicationPacket* outapp = nullptr;
+	outapp = new EQApplicationPacket(OP_BuffDefinition, sizeof(SpellBuffPacket_Struct));
+	SpellBuffPacket_Struct* sbf = (SpellBuffPacket_Struct*) outapp->pBuffer;
+
+	sbf->entityid = GetID();
+
+	sbf->buff.effect_type = 2;
+
+	sbf->buff.level = buff.casterlevel > 0 ? buff.casterlevel : GetLevel();
+	sbf->buff.bard_modifier = buff.instrument_mod;
+	sbf->buff.spellid = buff.spellid;
+	sbf->buff.duration = buff.ticsremaining;
+	if (buff.dot_rune)
+		sbf->buff.counters = buff.dot_rune;
+	else if (buff.magic_rune)
+		sbf->buff.counters = buff.magic_rune;
+	else if (buff.melee_rune)
+		sbf->buff.counters = buff.melee_rune;
+	else if (buff.counters)
+		sbf->buff.counters = buff.counters;
+	sbf->buff.player_id = buff.casterid;
+	sbf->buff.num_hits = buff.hit_number;
+	sbf->buff.y = buff.caston_y;
+	sbf->buff.x = buff.caston_x;
+	sbf->buff.z = buff.caston_z;
+
+	sbf->slotid = slot;
+	// Native alternate profiles begin with empty affects. RoF2 operation3
+	// installs the slot; the ordinary duration update cannot create it.
+	sbf->bufffade = recreate && ClientVersion() == EQ::versions::ClientVersion::RoF2 ? 3 : 0;
+	FastQueuePacket(&outapp);
+}
+

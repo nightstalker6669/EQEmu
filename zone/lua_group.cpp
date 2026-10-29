@@ -1,16 +1,64 @@
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 #ifdef LUA_EQEMU
 
-#include "../common/data_verification.h"
-
-#include <luabind/luabind.hpp>
-#include <luabind/object.hpp>
-
-#include "groups.h"
-#include "masterentity.h"
 #include "lua_group.h"
-#include "lua_mob.h"
-#include "lua_client.h"
-#include "lua_npc.h"
+
+#include "common/data_verification.h"
+
+#include "zone/achievement_state_updates.h"
+#include "zone/groups.h"
+#include "zone/lua_client.h"
+#include "zone/lua_mob.h"
+#include "zone/lua_npc.h"
+#include "zone/masterentity.h"
+
+#include "luabind/luabind.hpp"
+#include "luabind/object.hpp"
+
+bool Lua_Group::AdvanceAchievementProgress(
+	uint32 achievement_id,
+	uint32 component_type,
+	uint32 component_id,
+	uint32 value
+) {
+	Lua_Safe_Call_Bool();
+	if (component_type > 2) {
+		return false;
+	}
+
+	return AchievementStateUpdates::QueueGroupAdvance(
+		self->GetID(),
+		achievement_id,
+		static_cast<AchievementStateUpdates::ComponentType>(component_type),
+		component_id,
+		value
+	);
+}
+
+bool Lua_Group::CompleteAchievement(uint32 achievement_id)
+{
+	Lua_Safe_Call_Bool();
+	return AchievementStateUpdates::QueueGroupCompletion(
+		self->GetID(),
+		achievement_id
+	);
+}
 
 void Lua_Group::DisbandGroup() {
 	Lua_Safe_Call_Void();
@@ -154,7 +202,9 @@ luabind::scope lua_register_group() {
 	.def(luabind::constructor<>())
 	.property("null", &Lua_Group::Null)
 	.property("valid", &Lua_Group::Valid)
+	.def("AdvanceAchievementProgress", &Lua_Group::AdvanceAchievementProgress)
 	.def("CastGroupSpell", (void(Lua_Group::*)(Lua_Mob,int))&Lua_Group::CastGroupSpell)
+	.def("CompleteAchievement", &Lua_Group::CompleteAchievement)
 	.def("DisbandGroup", (void(Lua_Group::*)(void))&Lua_Group::DisbandGroup)
 	.def("DoesAnyMemberHaveExpeditionLockout", (bool(Lua_Group::*)(std::string, std::string))&Lua_Group::DoesAnyMemberHaveExpeditionLockout)
 	.def("DoesAnyMemberHaveExpeditionLockout", (bool(Lua_Group::*)(std::string, std::string, int))&Lua_Group::DoesAnyMemberHaveExpeditionLockout)
@@ -182,4 +232,4 @@ luabind::scope lua_register_group() {
 	.def("TeleportGroup", (void(Lua_Group::*)(Lua_Mob,uint32,uint32,float,float,float,float))&Lua_Group::TeleportGroup);
 }
 
-#endif
+#endif // LUA_EQEMU

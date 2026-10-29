@@ -1,57 +1,45 @@
-/*	EQEMu: Everquest Server Emulator
-	Copyright (C) 2001-2003 EQEMu Development Team (http://eqemulator.net)
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; version 2 of the License.
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY except by those people which sell it, which
-	are required to give you total support for your newly bought product;
-	without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-	A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "../common/data_verification.h"
-#include "../common/global_define.h"
-#include <stdio.h>
-#include <stdarg.h>
-#include <string.h>
-#include <iostream>
-
-#ifdef _WINDOWS
-#else
-#include <pthread.h>
-#include "../common/unix.h"
-#endif
-
-#include "../common/features.h"
-#include "../common/guilds.h"
-
-#include "entity.h"
 #include "inventory_session_owner.h"
 #include "housing_service_npcs.h"
-#include "dynamic_zone.h"
-#include "guild_mgr.h"
-#include "petitions.h"
-#include "quest_parser_collection.h"
-#include "raids.h"
-#include "string_ids.h"
-#include "worldserver.h"
-#include "water_map.h"
-#include "npc_scale_manager.h"
-#include "dialogue_window.h"
 
-#ifdef _WINDOWS
-	#define snprintf	_snprintf
-	#define strncasecmp	_strnicmp
-	#define strcasecmp	_stricmp
-#endif
+#include "entity.h"
 
-#include "bot.h"
+#include "common/data_verification.h"
+#include "common/features.h"
+#include "common/guilds.h"
+#include "zone/achievement_manager.h"
+#include "zone/bot.h"
+#include "zone/dialogue_window.h"
+#include "zone/dynamic_zone.h"
+#include "zone/guild_mgr.h"
+#include "zone/npc_scale_manager.h"
+#include "zone/petitions.h"
+#include "zone/quest_parser_collection.h"
+#include "zone/raids.h"
+#include "zone/string_ids.h"
+#include "zone/water_map.h"
+#include "zone/worldserver.h"
+
+#include <cstdarg>
+#include <cstdio>
+#include <cstring>
+#include <iostream>
 
 extern Zone *zone;
 extern volatile bool is_zone_loaded;
@@ -4216,6 +4204,51 @@ void EntityList::ReloadAllClientsTaskState(int task_id)
 	}
 }
 
+bool EntityList::ReloadAchievements(uint32 &failed_client_count)
+{
+	failed_client_count = 0;
+	if (!AchievementManager::Instance().Reload()) {
+		return false;
+	}
+
+	size_t attempted = 0;
+	size_t reloaded = 0;
+	for (const auto &[entity_id, client] : client_list) {
+		(void) entity_id;
+		if (!client || !client->ClientDataLoaded()) {
+			continue;
+		}
+
+		++attempted;
+		if (client->ReloadAchievements()) {
+			++reloaded;
+			continue;
+		}
+
+		++failed_client_count;
+		LogError(
+			"Failed to rebuild achievement state for character [{}] [{}] after "
+			"the achievement content reload; achievement state was disabled for "
+			"this client",
+			client->CharacterID(),
+			client->GetName()
+		);
+	}
+
+	LogInfo(
+		"Rebuilt achievement state for [{}] of [{}] loaded clients after content "
+		"reload; [{}] client rebuilds failed",
+		reloaded,
+		attempted,
+		failed_client_count
+	);
+
+	// The manager swap has already succeeded. An individual client load failure
+	// cannot roll it back and is reported above without making the transport
+	// claim that the previous content snapshot remains active.
+	return true;
+}
+
 bool EntityList::IsMobInZone(Mob *who)
 {
 	//We don't use mob_list.find(who) because this code needs to be able to handle dangling pointers for the quest code.
@@ -4460,7 +4493,7 @@ void EntityList::QuestJournalledSayClose(
 		buf.WriteString(message);
 	}
 
-	auto outapp = new EQApplicationPacket(OP_SpecialMesg, buf);
+	auto outapp = new EQApplicationPacket(OP_SpecialMesg, std::move(buf));
 
 	// client only bothers logging if target spawn ID matches, safe to send to everyone
 	QueueCloseClients(sender, outapp, false, dist);

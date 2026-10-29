@@ -1,13 +1,29 @@
-#ifndef GUILD_MGR_H_
-#define GUILD_MGR_H_
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+#pragma once
+
+#include "common/guild_base.h"
+#include "common/repositories/guild_bank_repository.h"
+#include "common/types.h"
+#include "zone/petitions.h"
 
 #include <list>
 #include <map>
-#include "../common/guild_base.h"
-#include "../common/types.h"
-
-#include "../common/repositories/guild_bank_repository.h"
-#include "../zone/petitions.h"
 
 //extern GuildRanks_Struct guilds[512];
 //extern ZoneDatabase database;
@@ -83,6 +99,12 @@ public:
 	void  SendToWorldSendGuildList();
 	void  SendToWorldMemberRankUpdate(uint32 guild_id, uint32 rank, uint32 banker, uint32 alt, bool no_update, const char *player_name);
 	void  SendToWorldSendGuildMembersList(uint32 guild_id);
+	void  SendAchievementAnnouncement(
+		uint32 guild_id,
+		uint32 achievement_id,
+		const char *player_name,
+		const std::string &achievement_link_data
+	);
 	bool  RemoveMember(uint32 guild_id, uint32 char_id, std::string player_name);
 	void  MemberAdd(uint32 guild_id, uint32 char_id, uint32 level, uint32 _class, uint32 rank, uint32 zone_id, std::string player_name);
 	bool  MemberRankUpdate(uint32 guild_id, uint32 rank, uint32 banker, uint32 alt, bool no_update, const char *player_name);
@@ -141,6 +163,3 @@ private:
 
 extern ZoneGuildManager guild_mgr;
 extern GuildBankManager *GuildBanks;
-
-#endif /*GUILD_MGR_H_*/
-

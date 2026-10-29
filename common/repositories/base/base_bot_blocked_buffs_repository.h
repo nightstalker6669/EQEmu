@@ -1,3 +1,20 @@
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 /**
  * DO NOT MODIFY THIS FILE
  *
@@ -6,21 +23,21 @@
  * Any modifications to base repositories are to be made by the generator only
  *
  * @generator ./utils/scripts/generators/repository-generator.pl
- * @docs https://docs.eqemu.io/developer/repositories
+ * @docs https://docs.eqemu.dev/developer/repositories
  */
 
-#ifndef EQEMU_BASE_BOT_BLOCKED_BUFFS_REPOSITORY_H
-#define EQEMU_BASE_BOT_BLOCKED_BUFFS_REPOSITORY_H
+#pragma once
 
-#include "../../database.h"
-#include "../../strings.h"
+#include "common/database.h"
+#include "common/strings.h"
+
 #include <ctime>
 
 class BaseBotBlockedBuffsRepository {
 public:
 	struct BotBlockedBuffs {
 		uint32_t bot_id;
-		uint32_t spell_id;
+		int32_t  spell_id;
 		uint8_t  blocked;
 		uint8_t  blocked_pet;
 	};
@@ -127,10 +144,10 @@ public:
 		if (results.RowCount() == 1) {
 			BotBlockedBuffs e{};
 
-			e.bot_id      = row[0] ? static_cast<uint32_t>(atoi(row[0])) : 0;
-			e.spell_id    = row[1] ? static_cast<uint32_t>(atoi(row[1])) : 0;
-			e.blocked     = row[2] ? static_cast<uint8_t>(atoi(row[2])) : 0;
-			e.blocked_pet = row[3] ? static_cast<uint8_t>(atoi(row[3])) : 0;
+			e.bot_id      = row[0] ? static_cast<uint32_t>(strtoul(row[0], nullptr, 10)) : 0;
+			e.spell_id    = row[1] ? static_cast<int32_t>(atoi(row[1])) : 0;
+			e.blocked     = row[2] ? static_cast<uint8_t>(strtoul(row[2], nullptr, 10)) : 0;
+			e.blocked_pet = row[3] ? static_cast<uint8_t>(strtoul(row[3], nullptr, 10)) : 0;
 
 			return e;
 		}
@@ -259,10 +276,10 @@ public:
 		for (auto row = results.begin(); row != results.end(); ++row) {
 			BotBlockedBuffs e{};
 
-			e.bot_id      = row[0] ? static_cast<uint32_t>(atoi(row[0])) : 0;
-			e.spell_id    = row[1] ? static_cast<uint32_t>(atoi(row[1])) : 0;
-			e.blocked     = row[2] ? static_cast<uint8_t>(atoi(row[2])) : 0;
-			e.blocked_pet = row[3] ? static_cast<uint8_t>(atoi(row[3])) : 0;
+			e.bot_id      = row[0] ? static_cast<uint32_t>(strtoul(row[0], nullptr, 10)) : 0;
+			e.spell_id    = row[1] ? static_cast<int32_t>(atoi(row[1])) : 0;
+			e.blocked     = row[2] ? static_cast<uint8_t>(strtoul(row[2], nullptr, 10)) : 0;
+			e.blocked_pet = row[3] ? static_cast<uint8_t>(strtoul(row[3], nullptr, 10)) : 0;
 
 			all_entries.push_back(e);
 		}
@@ -287,10 +304,10 @@ public:
 		for (auto row = results.begin(); row != results.end(); ++row) {
 			BotBlockedBuffs e{};
 
-			e.bot_id      = row[0] ? static_cast<uint32_t>(atoi(row[0])) : 0;
-			e.spell_id    = row[1] ? static_cast<uint32_t>(atoi(row[1])) : 0;
-			e.blocked     = row[2] ? static_cast<uint8_t>(atoi(row[2])) : 0;
-			e.blocked_pet = row[3] ? static_cast<uint8_t>(atoi(row[3])) : 0;
+			e.bot_id      = row[0] ? static_cast<uint32_t>(strtoul(row[0], nullptr, 10)) : 0;
+			e.spell_id    = row[1] ? static_cast<int32_t>(atoi(row[1])) : 0;
+			e.blocked     = row[2] ? static_cast<uint8_t>(strtoul(row[2], nullptr, 10)) : 0;
+			e.blocked_pet = row[3] ? static_cast<uint8_t>(strtoul(row[3], nullptr, 10)) : 0;
 
 			all_entries.push_back(e);
 		}
@@ -412,5 +429,3 @@ public:
 		return (results.Success() ? results.RowsAffected() : 0);
 	}
 };
-
-#endif //EQEMU_BASE_BOT_BLOCKED_BUFFS_REPOSITORY_H

@@ -1,15 +1,15 @@
-# EQEmu · RoF2 integrated feature stack
+# EQEmu · RoF2 Integration
 
-Complete source for the published **housing, fellowship, mercenary and spirit shroud** releases, built on the extracted shared core and EQEmu 23.10.3.
+Current EQEmu source with **all five published features: housing, fellowship, mercenaries, Spirit Shrouds and achievements** integrated on the common upstream foundation.
 
-**[Install the complete stack](docs/rof2/INSTALL.md)** · **[Opcodes and packet structures](docs/rof2/PROTOCOL.md)** · **[All branches and dependencies](docs/rof2/BRANCHES.md)**
+**[Install / upgrade](docs/rof2/INSTALL.md)** · **[Opcodes and packet structures](docs/rof2/PROTOCOL.md)** · **[Choose a feature branch](docs/rof2/BRANCHES.md)**
 
-The source is already integrated. Required SQL, quest/content tools, opcode/structure references, original release provenance and platform-specific prerequisites are included in `extensions/rof2/`. Use the integration-aware housing installer and then the documented companion migration order; do not reapply source overlays or start game processes midway through the upgrade. An existing PEQ/MariaDB database is sufficient; no PEQ fork is required.
+Achievements is included here alongside housing, fellowship, mercenaries and shrouds. It also remains available on its own [rof2-achievements branch](https://github.com/nightstalker6669/EQEmu/tree/rof2-achievements).
 
-The shared core library and all eight server/housing executable targets passed Linux builds. Critical lifecycle files also passed syntax checks in the smaller feature branches. Native deployment/gameplay acceptance and native Windows execution were not performed for this integration.
+The common foundation incorporates current upstream stable fixes (`4aceae18`) and the current protocol-development base (`c9c8747a`). All feature branches now use that foundation. `master` follows stable upstream; it does not contain the custom feature stack.
 
-**Achievements is deliberately separate:** [rof2-achievements](https://github.com/nightstalker6669/EQEmu/tree/rof2-achievements) includes its published nine-patch engine, reviewed quests, rewards, opcodes and structs on newer upstream `c9c8747`. It is not merged into this older-base stack. See the branch map before combining code across those bases.
+Native source is already merged into the normal EQEmu directories. Required SQL, quest/content tooling, opcode and structure references, attribution and evidence limits are retained in `extensions/rof2/`. Follow this branch’s installation guide; its historical release patches must not be reapplied. Feature dependencies and reconstructed/default policies remain documented.
 
-`master` remains the exact original 23.10.3 commit. No running server, client or database was changed by this publication. Feature limitations and labelled reconstructed/default values remain documented in each release; this integration does not claim complete Live parity.
+Use an existing PEQ/MariaDB database with the required upstream and feature migrations; a separate PEQ fork is unnecessary. No unfinished quest research, private runtime records, client assets or custom test suites are shipped. Publication does not deploy the running server or establish native gameplay acceptance of this new combination.
 
-[Integration provenance and validation](docs/rof2/integration.json) · [Upstream project/build documentation](docs/rof2/UPSTREAM-README.md) · [GPLv3](LICENSE)
+[Current source versions and validation](docs/rof2/integration.json) · [Upstream project documentation](docs/rof2/UPSTREAM-README.md) · [GPLv3](LICENSE.md)

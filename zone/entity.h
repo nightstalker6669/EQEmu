@@ -1,36 +1,34 @@
-/*	EQEMu: Everquest Server Emulator
-	Copyright (C) 2001-2016 EQEMu Development Team (http://eqemulator.net)
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; version 2 of the License.
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY except by those people which sell it, which
-	are required to give you total support for your newly bought product;
-	without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-	A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef ENTITY_H
-#define ENTITY_H
+#pragma once
 
-#include <unordered_map>
+#include "common/bodytypes.h"
+#include "common/emu_constants.h"
+#include "common/eq_constants.h"
+#include "common/linked_list.h"
+#include "common/servertalk.h"
+#include "common/types.h"
+#include "zone/common.h"
+#include "zone/position.h"
+#include "zone/zonedump.h"
+
 #include <queue>
-
-#include "../common/types.h"
-#include "../common/linked_list.h"
-#include "../common/servertalk.h"
-#include "../common/bodytypes.h"
-#include "../common/eq_constants.h"
-#include "../common/emu_constants.h"
-
-#include "position.h"
-#include "zonedump.h"
-#include "common.h"
+#include <unordered_map>
 
 class Encounter;
 class Beacon;
@@ -447,13 +445,13 @@ public:
 	void AESpell(
 		Mob* caster,
 		Mob* center,
-		uint16 spell_id,
+		int32 spell_id,
 		bool affect_caster = true,
 		int16 resist_adjust = 0,
 		int* max_targets = nullptr,
 		bool is_scripted = false
 	);
-	void MassGroupBuff(Mob* caster, Mob* center, uint16 spell_id, bool affect_caster = true);
+	void MassGroupBuff(Mob* caster, Mob* center, int32 spell_id, bool affect_caster = true);
 
 	//trap stuff
 	Mob*	GetTrapTrigger(Trap* trap);
@@ -517,6 +515,7 @@ public:
 
 	void	SaveAllClientsTaskState();
 	void	ReloadAllClientsTaskState(int task_id=0);
+	bool	ReloadAchievements(uint32 &failed_client_count);
 	uint16	CreateGroundObject(uint32 itemid, const glm::vec4& position, uint32 decay_time = 300000);
 	uint16	CreateGroundObjectFromModel(const char *model, const glm::vec4& position, uint8 type = 0x00, uint32 decay_time = 0);
 	uint16	CreateDoor(const char *model, const glm::vec4& position, uint8 type = 0, uint16 size = 100);
@@ -653,6 +652,3 @@ private:
 	NewSpawn_Struct* data;
 	Client* pSendTo;
 };
-
-#endif
-

@@ -1,32 +1,32 @@
-#ifdef _WINDOWS
-#include <winsock2.h>
-#endif
+/*	EQEmu: EQEmulator
 
-#include "misc_functions.h"
-#include "eqemu_logsys.h"
-#include "timer.h"
+	Copyright (C) 2001-2026 EQEmu Development Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+#include <cstring>
 #include "dbcore.h"
-#include "mysql_stmt.h"
 
-#include <fstream>
-#include <iostream>
+#include "common/eqemu_logsys.h"
+#include "common/misc_functions.h"
+#include "common/mysql_stmt.h"
+#include "common/strings.h"
+#include "common/timer.h"
+#include "common/types.h"
+
+#include "mysqld_error.h"
 #include <new>
-#include <mysqld_error.h>
-#include <string.h>
-#include "strings.h"
-
-#ifdef _WINDOWS
-#define snprintf	_snprintf
-#define strncasecmp	_strnicmp
-#define strcasecmp	_stricmp
-#include <process.h>
-#else
-
-#include "unix.h"
-#include <pthread.h>
-
-#endif
 
 #ifdef _EQDEBUG
 #define DEBUG_MYSQL_QUERIES 0
@@ -35,18 +35,10 @@
 #endif
 
 DBcore::DBcore()
+	: mysql(new (std::nothrow) MYSQL{})
+	, m_mutex(std::make_shared<Mutex>())
 {
-	mysql      = new (std::nothrow) MYSQL{};
 	if (mysql && !mysql_init(mysql)) { mysql_close(mysql); delete mysql; mysql = nullptr; }
-	mysqlOwner = true;
-	pHost      = nullptr;
-	pUser      = nullptr;
-	pPassword  = nullptr;
-	pDatabase  = nullptr;
-	pCompress  = false;
-	pSSL       = false;
-	pStatus    = Closed;
-	m_mutex    = new Mutex;
 }
 
 DBcore::~DBcore()
@@ -60,17 +52,13 @@ DBcore::~DBcore()
 		mysql_close(mysql);
 		delete mysql;
 	}
-
-	safe_delete_array(pHost);
-	safe_delete_array(pUser);
-	safe_delete_array(pPassword);
-	safe_delete_array(pDatabase);
 }
 
 // Sends the MySQL server a keepalive
 void DBcore::ping()
 {
-	if (!m_mutex->trylock()) {
+	if (!m_mutex->try_lock())
+	{
 		// well, if's it's locked, someone's using it. If someone's using it, it doesnt need a keepalive
 		return;
 	}
@@ -96,9 +84,19 @@ MySQLRequestResult DBcore::QueryDatabase(const char *query, uint32 querylen, boo
 	BenchTimer timer;
 	timer.reset();
 
-	LockMutex lock(m_mutex);
+	std::scoped_lock lock(*m_mutex);
+
+	if (m_strict_transaction_active && m_strict_transaction_failed) {
+		return {};
+	}
 
 	// Reconnect if we are not connected before hand.
+	if (m_strict_transaction_active && (pStatus != Connected || !mysql ||
+		(!mysqlOwner && mysql_thread_id(mysql) == 0))) {
+		++m_query_failure_generation;
+		m_strict_transaction_failed = true;
+		return {};
+	}
 	if ((mysqlOwner && pStatus != Connected && !Open()) || !mysql ||
 		(!mysqlOwner && mysql_thread_id(mysql) == 0)) {
 		++m_query_failure_generation;
@@ -112,6 +110,10 @@ MySQLRequestResult DBcore::QueryDatabase(const char *query, uint32 querylen, boo
 	if (mysql_real_query(mysql, query, querylen) != 0) {
 		++m_query_failure_generation;
 		unsigned int errorNumber = mysql_errno(mysql);
+		if (m_strict_transaction_active) {
+			m_strict_transaction_failed = true;
+			retryOnFailureOnce = false;
+		}
 
 		if (errorNumber == CR_SERVER_GONE_ERROR) {
 			pStatus = Error;
@@ -158,6 +160,7 @@ MySQLRequestResult DBcore::QueryDatabase(const char *query, uint32 querylen, boo
 	// successful query. get results.
 	MYSQL_RES *res     = mysql_store_result(mysql);
 	if (!res && mysql_field_count(mysql) != 0) {
+		if (m_strict_transaction_active) m_strict_transaction_failed = true;
 		++m_query_failure_generation;
 		auto errorBuffer = new char[MYSQL_ERRMSG_SIZE];
 		snprintf(errorBuffer, MYSQL_ERRMSG_SIZE, "Could not buffer database result");
@@ -203,17 +206,85 @@ MySQLRequestResult DBcore::QueryDatabase(const char *query, uint32 querylen, boo
 
 void DBcore::TransactionBegin()
 {
+	if (m_strict_transaction_active) {
+		m_strict_transaction_failed = true;
+		return;
+	}
 	QueryDatabase("START TRANSACTION");
 }
 
 MySQLRequestResult DBcore::TransactionCommit()
 {
+	if (m_strict_transaction_active) {
+		m_strict_transaction_failed = true;
+		return {};
+	}
 	return QueryDatabase("COMMIT");
 }
 
 void DBcore::TransactionRollback()
 {
+	if (m_strict_transaction_active) {
+		TransactionRollbackStrict();
+		return;
+	}
 	QueryDatabase("ROLLBACK");
+}
+
+MySQLRequestResult DBcore::TransactionBeginStrict()
+{
+	if (m_strict_transaction_active) {
+		return {};
+	}
+
+	auto result = QueryDatabase("START TRANSACTION", 17, false);
+	if (result.Success()) {
+		m_strict_transaction_active = true;
+		m_strict_transaction_failed = false;
+	}
+	return result;
+}
+
+MySQLRequestResult DBcore::TransactionCommitStrict()
+{
+	if (!m_strict_transaction_active) {
+		return {};
+	}
+	if (m_strict_transaction_failed) {
+		TransactionRollbackStrict();
+		return {};
+	}
+
+	auto result = QueryDatabase("COMMIT", 6, false);
+	m_strict_transaction_active = false;
+	m_strict_transaction_failed = false;
+	return result;
+}
+
+void DBcore::TransactionRollbackStrict()
+{
+	if (!m_strict_transaction_active) {
+		return;
+	}
+
+	// A failed strict statement suppresses all later statements. Temporarily
+	// clear that latch so a still-live session can receive ROLLBACK.
+	m_strict_transaction_failed = false;
+	QueryDatabase("ROLLBACK", 8, false);
+	m_strict_transaction_active = false;
+	m_strict_transaction_failed = false;
+}
+
+void DBcore::TransactionFailStrict()
+{
+	if (m_strict_transaction_active) {
+		m_strict_transaction_failed = true;
+	}
+}
+
+bool DBcore::TransactionStrictFailed() const
+{
+	return m_strict_transaction_active && m_strict_transaction_failed;
 }
 
 uint32 DBcore::DoEscapeString(char *tobuf, const char *frombuf, uint32 fromlen)
@@ -235,15 +306,12 @@ bool DBcore::Open(
 	bool iSSL
 )
 {
-	LockMutex lock(m_mutex);
-	safe_delete_array(pHost);
-	safe_delete_array(pUser);
-	safe_delete_array(pPassword);
-	safe_delete_array(pDatabase);
-	pHost     = strcpy(new char[strlen(iHost) + 1], iHost);
-	pUser     = strcpy(new char[strlen(iUser) + 1], iUser);
-	pPassword = strcpy(new char[strlen(iPassword) + 1], iPassword);
-	pDatabase = strcpy(new char[strlen(iDatabase) + 1], iDatabase);
+	std::scoped_lock lock(*m_mutex);
+
+	m_host = iHost;
+	m_user = iUser;
+	m_password = iPassword;
+	m_database = iDatabase;
 	pCompress = iCompress;
 	pPort     = iPort;
 	pSSL      = iSSL;
@@ -252,10 +320,12 @@ bool DBcore::Open(
 
 bool DBcore::Open(uint32 *errnum, char *errbuf)
 {
+	// Expects m_mutex to already be locked.
+
 	if (errbuf) {
 		errbuf[0] = 0;
 	}
-	LockMutex lock(m_mutex);
+
 	if (GetStatus() == Connected) {
 		return true;
 	}
@@ -282,7 +352,7 @@ bool DBcore::Open(uint32 *errnum, char *errbuf)
 		}
 	}
 
-	if (!pHost) {
+	if (m_host.empty()) {
 		return false;
 	}
 	/*
@@ -294,14 +364,21 @@ bool DBcore::Open(uint32 *errnum, char *errbuf)
 	if (pCompress) {
 		flags |= CLIENT_COMPRESS;
 	}
+
+	//todo: we need to revisit this ssl handling later
+	//the whole connect code is ancient and tls is starting to come as a default requirement for many db setups
 	if (pSSL) {
 		flags |= CLIENT_SSL;
 	}
-	if (mysql_real_connect(mysql, pHost, pUser, pPassword, pDatabase, pPort, 0, flags)) {
+	else {
+		int off = 0;
+		mysql_options(mysql, MYSQL_OPT_SSL_ENFORCE, &off);
+		mysql_options(mysql, MYSQL_OPT_SSL_VERIFY_SERVER_CERT, &off);
+	}
+	if (mysql_real_connect(mysql, m_host.c_str(), m_user.c_str(), m_password.c_str(), m_database.c_str(), pPort, nullptr, flags)) {
 		pStatus = Connected;
 
-		std::string connected_origin_host = pHost;
-		SetOriginHost(connected_origin_host);
+		SetOriginHost(m_host);
 
 		return true;
 	}
@@ -322,9 +399,9 @@ const std::string &DBcore::GetOriginHost() const
 	return origin_host;
 }
 
-void DBcore::SetOriginHost(const std::string &origin_host)
+void DBcore::SetOriginHost(const std::string& originHost)
 {
-	DBcore::origin_host = origin_host;
+	DBcore::origin_host = originHost;
 }
 
 std::string DBcore::Escape(const std::string& s)
@@ -336,12 +413,8 @@ std::string DBcore::Escape(const std::string& s)
 	return temp.data();
 }
 
-void DBcore::SetMutex(Mutex *mutex)
+void DBcore::SetMutex(const std::shared_ptr<Mutex>& mutex)
 {
-	if (m_mutex && m_mutex != mutex) {
-		safe_delete(m_mutex);
-	}
-
 	DBcore::m_mutex = mutex;
 }
 
@@ -355,7 +428,7 @@ MySQLRequestResult DBcore::QueryDatabaseMulti(const std::string &query)
 	BenchTimer timer;
 	timer.reset();
 
-	LockMutex lock(m_mutex);
+	std::scoped_lock lock(*m_mutex);
 
 	// Reconnect if we are not connected before hand.
 	if (pStatus != Connected) {
@@ -365,50 +438,36 @@ MySQLRequestResult DBcore::QueryDatabaseMulti(const std::string &query)
 
 	int status = mysql_real_query(mysql, query.c_str(), query.length());
 
-	// process single result
+	// A failed multi-statement query has no usable result set to drain.
 	if (status != 0) {
-		unsigned int error_number = mysql_errno(mysql);
+		const auto error_number = mysql_errno(mysql);
+		const std::string error_message = mysql_error(mysql);
 
 		if (error_number == CR_SERVER_GONE_ERROR) {
 			pStatus = Error;
 		}
 
 		// error logging
-		if (mysql_errno(mysql) > 0 && query.length() > 0 && mysql_errno(mysql) != 1065) {
-			std::string error_raw   = fmt::format("{}", mysql_error(mysql));
+		if (error_number > 0 && !query.empty() && error_number != 1065) {
+			std::string error_raw   = fmt::format("{}", error_message);
 			std::string mysql_err   = Strings::Trim(error_raw);
 			std::string clean_query = Strings::Replace(query, "\n", "");
-			LogMySQLError("[{}] ({}) query [{}]", mysql_err, mysql_errno(mysql), clean_query);
-
-			MYSQL_RES *res = mysql_store_result(mysql);
-
-			uint32 row_count = 0;
-			if (res) {
-				row_count = (uint32) mysql_num_rows(res);
-			}
-
-			r = MySQLRequestResult(
-				res,
-				(uint32) mysql_affected_rows(mysql),
-				row_count,
-				(uint32) mysql_field_count(mysql),
-				(uint32) mysql_insert_id(mysql)
-			);
-
-			std::string error_message = mysql_error(mysql);
-			r.SetErrorMessage(error_message);
-			r.SetErrorNumber(mysql_errno(mysql));
-
-			if (res) {
-				mysql_free_result(res);
-			}
-
-			SetMultiStatementsOff();
-
-			return r;
+			LogMySQLError("[{}] ({}) query [{}]", mysql_err, error_number, clean_query);
 		}
-	}
 
+		r = MySQLRequestResult(
+			nullptr,
+			(uint32) mysql_affected_rows(mysql),
+			0,
+			(uint32) mysql_field_count(mysql),
+			(uint32) mysql_insert_id(mysql)
+		);
+		r.SetErrorMessage(error_message);
+		r.SetErrorNumber(error_number);
+
+		SetMultiStatementsOff();
+		return r;
+	}
 
 	int index = 0;
 
@@ -419,18 +478,21 @@ MySQLRequestResult DBcore::QueryDatabaseMulti(const std::string &query)
 
 	// process each statement result
 	do {
-		uint32    row_count = 0;
-		MYSQL_RES *res      = mysql_store_result(mysql);
+		MYSQL_RES *res = mysql_store_result(mysql);
+		const uint32 row_count = res ? (uint32) mysql_num_rows(res) : 0;
 
+		// QueryDatabaseMulti callers consume status and metadata only. Keep the
+		// wrapper non-owning so the current result can be freed exactly once
+		// before mysql_next_result advances the multi-statement protocol.
 		r = MySQLRequestResult(
-			res,
+			nullptr,
 			(uint32) mysql_affected_rows(mysql),
 			row_count,
 			(uint32) mysql_field_count(mysql),
 			(uint32) mysql_insert_id(mysql)
 		);
 
-		if (pieces.size() >= index) {
+		if (index < pieces.size()) {
 			auto piece = pieces[index];
 			LogMySQLQuery(
 				"{} -- ({} row{} affected) ({}s)",
@@ -442,30 +504,26 @@ MySQLRequestResult DBcore::QueryDatabaseMulti(const std::string &query)
 		}
 
 		if (res) {
-			row_count = (uint32) mysql_num_rows(res);
+			mysql_free_result(res);
+			res = nullptr;
 		}
 
 		// more results? -1 = no, >0 = error, 0 = yes (keep looping)
 		if ((status = mysql_next_result(mysql)) > 0) {
-			if (mysql_errno(mysql) > 0) {
-				LogMySQLError("[{}] [{}]", mysql_errno(mysql), mysql_error(mysql));
+			const auto error_number = mysql_errno(mysql);
+			const std::string error_message = mysql_error(mysql);
+			if (error_number > 0) {
+				LogMySQLError("[{}] [{}]", error_number, error_message);
 			}
 
-			mysql_free_result(res);
-
 			// error logging
-			std::string error_message = mysql_error(mysql);
 			r.SetErrorMessage(error_message);
-			r.SetErrorNumber(mysql_errno(mysql));
+			r.SetErrorNumber(error_number);
 
 			SetMultiStatementsOff();
 
 			// we handle errors elsewhere
 			return r;
-		}
-
-		if (res) {
-			mysql_free_result(res);
 		}
 
 		index++;
@@ -478,5 +536,5 @@ MySQLRequestResult DBcore::QueryDatabaseMulti(const std::string &query)
 
 mysql::PreparedStmt DBcore::Prepare(std::string query)
 {
-	return mysql::PreparedStmt(*mysql, std::move(query), m_mutex);
+	return mysql::PreparedStmt(*mysql, std::move(query), *m_mutex);
 }

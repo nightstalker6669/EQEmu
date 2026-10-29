@@ -1,11 +1,13 @@
 {
   "branch": "rof2-integration",
-  "upstream_commit": "8175ae61874cbf20d7b05102821f6f8a4f4d1c39",
+  "upstream_commit": "d03e3292cdc30c531e307db5b2f049c0d2df0460",
   "features": [
+    "shared-core",
     "housing",
     "fellowship",
     "mercenaries",
-    "spirit-shrouds"
+    "spirit-shrouds",
+    "achievements"
   ],
   "inputs": [
     {
@@ -37,28 +39,50 @@
       "repository": "nightstalker6669/eqemu-rof2-spirit-shrouds",
       "commit": "e32ca155a67b6f4d12eef36de131c5810998517a",
       "omitted_gallery_and_generated_files": []
+    },
+    {
+      "feature": "achievements",
+      "repository": "nightstalker6669/eqemu-rof2-achievements",
+      "commit": "334a0e2c28079af07c9a4d07a0654f74ba9e4991",
+      "omitted_gallery_and_generated_files": []
     }
   ],
-  "source_integration": "Published release patches applied to exact prerequisite preimages; latest housing delta merged retaining all lifecycle callbacks and forward declarations.",
+  "source_integration": "Current master and protocol-development foundation merged with all five published feature branches. Permanent-profile achievement saves, shroud transitions, inventory/session fences and mercenary persistence guards retained.",
   "validation": {
-    "core": "Standalone common library build PASS without feature gameplay sources.",
-    "combined_stack": "world, zone, ucs, shared_memory, housing_install, housing_capacity, housing_recovery, housing_profile_upgrade build PASS; Linux x86-64 Clang, Debug -O0 -g0, PCH off.",
-    "branch_specific": "Six critical lifecycle/inventory TUs passed Clang syntax checks for housing, fellowship and mercenary branches; full combined stack built from shroud source. Separate full links for each smaller branch were not performed.",
-    "release_packages": "Production manifest hashes, Python syntax, JSON parsing, new guide links and core dependency boundary checked.",
-    "runtime": "No deployment, database migration, client launch or native acceptance performed during this source integration."
+    "status": "Passed full combined multi-target compilation/link and release audits.",
+    "platform": "Linux x86_64; GCC 12, C++20, eqemulator/eqemu-server:v16 build image and cached vcpkg SDK.",
+    "configuration": "RelWithDebInfo with -O0 -g0, upstream-default precompiled headers enabled; login and dedicated test targets disabled.",
+    "built_targets": [
+      "world",
+      "zone",
+      "ucs",
+      "shared_memory",
+      "housing_install",
+      "housing_capacity",
+      "housing_recovery",
+      "housing_profile_upgrade"
+    ],
+    "standalone_source_checks": "27 targeted translation units across six standalone branches passed without PCH; four additional shroud units passed without PCH, with pet compilation checked separately using the normal source preamble.",
+    "package_checks": [
+      "Manifest hashes and sizes, Python syntax, JSON parsing and current guide links",
+      "Unique active migration IDs, enum opcode names, RoF2 mapping keys and packet handlers",
+      "Production package parity with each feature branch",
+      "No custom test suites, logs, private runtime data, client binaries or raw captures added"
+    ],
+    "native_acceptance": "Not run on the updated combined source; original release evidence remains separate.",
+    "other_platforms": "No native Windows build or new Akk-stack deployment acceptance performed in this source update.",
+    "deployment": "No running server, client or database changed."
   },
   "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
   "shared_core": "Inherited from rof2-shared-core; one canonical implementation in common/shared_core; legacy feature headers forward to it.",
-  "branch_dependency_order": [
-    "rof2-shared-core",
-    "rof2-housing",
-    "rof2-fellowship",
-    "rof2-mercenaries",
-    "rof2-spirit-shrouds"
-  ],
   "remaining_feature_dependencies": "Published feature/runtime dependencies are retained. Extracting shared infrastructure does not make all gameplay patches independent.",
   "reviewed_source_repairs": [
-    "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included."
+    "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included.",
+    "Resolve current upstream signatures, component buff APIs, strict database transaction safeguards and permanent-profile-only AA/save achievement updates.",
+    "Deduplicate mercenary switch opcode/handler while retaining the bounded RoF2 roster path and upstream legacy dispatch for other clients.",
+    "Retain operation-3 native shroud buff reconstruction through current OP_BuffDefinition; restore its explicit ability-cast helper include."
   ],
-  "integration_scope": "Shared core, housing, fellowship, mercenaries and spirit shrouds on 23.10.3; achievements remains separate on c9c8747 by explicit base choice."
+  "integration_scope": "All five published features, including achievements, share the same current upstream foundation; achievements also retains its separate feature branch.",
+  "upstream_master": "4aceae18b94ffaafc08e2b17bc41cd72c77f795d",
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7"
 }

@@ -1,12 +1,59 @@
-#include "../common/features.h"
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+#include "common/features.h"
 
 #ifdef EMBPERL_XS_CLASSES
 
-#include "../common/data_verification.h"
-#include "../common/global_define.h"
-#include "embperl.h"
-#include "raids.h"
-#include "client.h"
+#include "common/data_verification.h"
+
+#include "zone/achievement_state_updates.h"
+#include "zone/client.h"
+#include "zone/embperl.h"
+#include "zone/raids.h"
+
+bool Perl_Raid_AdvanceAchievementProgress(
+	Raid* self,
+	uint32 achievement_id,
+	uint32 component_type,
+	uint32 component_id,
+	uint32 value
+) // @categories Achievements, Raid
+{
+	if (component_type > 2) {
+		return false;
+	}
+
+	return AchievementStateUpdates::QueueRaidAdvance(
+		static_cast<int32_t>(self->GetID()),
+		achievement_id,
+		static_cast<AchievementStateUpdates::ComponentType>(component_type),
+		component_id,
+		value
+	);
+}
+
+bool Perl_Raid_CompleteAchievement(Raid* self, uint32 achievement_id) // @categories Achievements, Raid
+{
+	return AchievementStateUpdates::QueueRaidCompletion(
+		static_cast<int32_t>(self->GetID()),
+		achievement_id
+	);
+}
 
 bool Perl_Raid_IsRaidMember(Raid* self, const char* name) // @categories Raid
 {
@@ -18,7 +65,7 @@ bool Perl_Raid_IsRaidMember(Raid* self, Client* c) // @categories Raid
 	return self->IsRaidMember(c);
 }
 
-void Perl_Raid_CastGroupSpell(Raid* self, Mob* caster, uint16 spell_id, uint32 group_id) // @categories Group, Raid
+void Perl_Raid_CastGroupSpell(Raid* self, Mob* caster, int32 spell_id, uint32 group_id) // @categories Group, Raid
 {
 	self->CastGroupSpell(caster, spell_id, group_id);
 }
@@ -163,8 +210,10 @@ void perl_register_raid()
 	perl::interpreter perl(PERL_GET_THX);
 
 	auto package = perl.new_class<Raid>("Raid");
+	package.add("AdvanceAchievementProgress", &Perl_Raid_AdvanceAchievementProgress);
 	package.add("BalanceHP", &Perl_Raid_BalanceHP);
 	package.add("CastGroupSpell", &Perl_Raid_CastGroupSpell);
+	package.add("CompleteAchievement", &Perl_Raid_CompleteAchievement);
 	package.add("DoesAnyMemberHaveExpeditionLockout", (bool(*)(Raid*, std::string, std::string))&Perl_Raid_DoesAnyMemberHaveExpeditionLockout);
 	package.add("DoesAnyMemberHaveExpeditionLockout", (bool(*)(Raid*, std::string, std::string, int))&Perl_Raid_DoesAnyMemberHaveExpeditionLockout);
 	package.add("GetClientByIndex", &Perl_Raid_GetClientByIndex);

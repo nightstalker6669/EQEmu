@@ -1,35 +1,34 @@
-/*	EQEMu: Everquest Server Emulator
-	Copyright (C) 2001-2016 EQEMu Development Team (http://eqemulator.net)
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; version 2 of the License.
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY except by those people which sell it, which
-	are required to give you total support for your newly bought product;
-	without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-	A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#pragma once
 
-#ifndef EQ_PACKET_STRUCTS_H
-#define EQ_PACKET_STRUCTS_H
+#include "common/emu_constants.h"
+#include "common/textures.h"
+#include "common/types.h"
+#include "common/version.h"
 
+#include "cereal/archives/binary.hpp"
+#include "cereal/types/string.hpp"
+#include "cereal/types/vector.hpp"
 #include <list>
-#include <string.h>
+#include <cstring>
 #include <string>
-#include <time.h>
-#include "../cereal/include/cereal/archives/binary.hpp"
-#include "../cereal/include/cereal/types/string.hpp"
-#include "../cereal/include/cereal/types/vector.hpp"
-#include "../common/version.h"
-#include "emu_constants.h"
-#include "textures.h"
-#include "types.h"
+#include <ctime>
 
 static const uint32 BUFF_COUNT = 42;
 static const uint32 PET_BUFF_COUNT = 30;
@@ -45,7 +44,15 @@ static const uint32 ADVANCED_LORE_LENGTH = 8192;
 ** Compiler override to ensure
 ** byte aligned structures
 */
+#pragma pack(push)
 #pragma pack(1)
+
+struct EqGuid
+{
+	uint32_t Id;
+	uint16_t WorldId;
+	uint16_t Reserved;
+};
 
 struct LoginInfo {
 /*000*/	char	login_info[64];
@@ -121,7 +128,7 @@ struct LDoNTrapTemplate
 {
 	uint32 id;
 	LDoNChestTypes type;
-	uint32 spell_id;
+	int32 spell_id;
 	uint16 skill;
 	uint8 locked;
 };
@@ -331,6 +338,7 @@ union
 	char housing_item_guid[17];
 	uint32 housing_estate_id;
 	uint32 housing_item_id;
+	EqGuid CharacterGuid;
 };
 
 struct PlayerState_Struct {
@@ -419,7 +427,7 @@ struct NewZone_Struct {
 */
 struct MemorizeSpell_Struct {
 uint32 slot;		// Spot in the spell book/memorized slot
-uint32 spell_id;	// Spell id (200 or c8 is minor healing, etc)
+int32  spell_id;	// Spell id (200 or c8 is minor healing, etc)
 uint32 scribing;	// 1 if memorizing a spell, set to 0 if scribing to book, 2 if un-memming
 uint32 reduction;	// lower reuse
 };
@@ -468,7 +476,7 @@ struct ManaChange_Struct
 {
 /*00*/	uint32	new_mana;		// New Mana AMount
 /*04*/	uint32	stamina;
-/*08*/	uint32	spell_id;
+/*08*/	int32   spell_id;
 /*12*/	uint8	keepcasting;	// won't stop the cast. Change mana while casting?
 /*13*/	uint8	padding[3];		// client doesn't read it, garbage data seems like
 /*16*/	int32	slot;			// -1 normal, otherwise clear ETA and GCD
@@ -486,14 +494,14 @@ struct BeginCast_Struct
 {
 	// len = 8
 /*000*/	uint16	caster_id;
-/*002*/	uint16	spell_id;
+/*002*/	int16 spell_id;
 /*004*/	uint32	cast_time;		// in miliseconds
 };
 
 struct CastSpell_Struct
 {
 	uint32	slot;
-	uint32	spell_id;
+	int32   spell_id;
 	uint32	inventoryslot; // slot for clicky item, 0xFFFF = normal cast
 	uint32	target_id;
 	uint32  cs_unknown1;
@@ -541,7 +549,7 @@ struct SpellBuff_Struct
 /*001*/	uint8	level;
 /*002*/	uint8	bard_modifier;
 /*003*/	uint8	unknown003;		// MQ2 used to call this "damage shield" -- don't see client referencing it, so maybe server side DS type tracking? -- OSX client calls this "activated"
-/*004*/	uint32	spellid;
+/*004*/	int32   spellid;
 /*008*/	int32	duration;
 /*012*/	uint32	counters;	// single book keeping value (counters, rune/vie)
 /*016*/	uint32	player_id;	// caster ID, pretty sure just zone ID
@@ -571,7 +579,7 @@ struct BuffRemoveRequest_Struct
 
 struct PetBuff_Struct {
 /*000*/ uint32 petid;
-/*004*/ uint32 spellid[PET_BUFF_COUNT];
+/*004*/ int32 spellid[PET_BUFF_COUNT];
 /*124*/ int32 ticsremaining[PET_BUFF_COUNT];
 /*244*/ uint32 buffcount;
 };
@@ -627,8 +635,8 @@ struct GMTrainEnd_Struct
 struct GMSkillChange_Struct {
 /*000*/	uint16		npcid;
 /*002*/ uint8		unknown1[2];	// something like PC_ID, but not really. stays the same thru the session though
-/*002*/ uint16		skillbank;		// 0 if normal skills, 1 if languages
-/*002*/ uint8		unknown2[2];
+/*004*/ uint16		skillbank;		// 0 if normal skills, 1 if languages
+/*006*/ uint8		unknown2[2];
 /*008*/ uint16		skill_id;
 /*010*/ uint8		unknown3[2];
 };
@@ -872,7 +880,7 @@ struct BindStruct {
 
 struct SuspendedMinion_Struct
 {
-	/*000*/	uint16 SpellID;
+	/*000*/	int16 SpellID;
 	/*002*/	uint32 HP;
 	/*006*/	uint32 Mana;
 	/*010*/	SpellBuff_Struct Buffs[BUFF_COUNT];
@@ -1007,7 +1015,7 @@ struct PlayerProfile_Struct
 /*2505*/	uint8				unknown2541[47];	// ?
 /*2552*/	uint8				languages[MAX_PP_LANGUAGE];
 /*2580*/	uint8				unknown2616[4];
-/*2584*/	uint32				spell_book[EQ::spells::SPELLBOOK_SIZE];
+/*2584*/	int32				spell_book[EQ::spells::SPELLBOOK_SIZE];
 /*4504*/	uint8				unknown4540[128];	// Was [428] all 0xff
 /*4632*/	uint32				mem_spells[EQ::spells::SPELL_GEM_COUNT];
 /*4668*/	uint8				unknown4704[32];	//
@@ -1346,7 +1354,7 @@ struct CombatDamage_Struct
 /* 00 */	uint16	target;
 /* 02 */	uint16	source;
 /* 04 */	uint8	type; //slashing, etc. 231 (0xE7) for spells, skill
-/* 05 */	uint16	spellid;
+/* 05 */	int16   spellid;
 /* 07 */	uint32	damage;
 /* 11 */	float force;
 /* 15 */	float hit_heading;	// see above notes in Action_Struct
@@ -1379,7 +1387,7 @@ struct Death_Struct
 /*004*/	uint32	killer_id;
 /*008*/	uint32	corpseid;	// was corpseid
 /*012*/	uint32	bindzoneid;
-/*016*/	uint32	spell_id;
+/*016*/	int32   spell_id;
 /*020*/	uint32	attack_skill;
 /*024*/	uint32	damage;
 /*028*/	uint32	unknown028;
@@ -1918,6 +1926,7 @@ enum GuildInformationActions
 {
     GuildUpdateURL          = 0,
     GuildUpdateChannel      = 1,
+    GuildUpdateAchievement  = 3,
     GuildUpdateRanks        = 4,
     GuildUpdatePermissions  = 5
 };
@@ -2985,7 +2994,7 @@ struct Resurrect_Struct	{
 /*024*/	char	your_name[64];
 /*088*/	uint32	unknown088;
 /*092*/	char	rezzer_name[64];
-/*156*/	uint32	spellid;
+/*156*/	int32   spellid;
 /*160*/	char	corpse_name[64];
 /*224*/	uint32	action;
 /* 228 */
@@ -2993,7 +3002,7 @@ struct Resurrect_Struct	{
 
 struct Translocate_Struct {
 /*000*/	uint32	ZoneID;
-/*004*/	uint32	SpellID;
+/*004*/	int32   SpellID;
 /*008*/	uint32	unknown008; //Heading ?
 /*012*/	char	Caster[64];
 /*076*/	float	y;
@@ -3010,7 +3019,7 @@ struct PendingTranslocate_Struct
 	float x;
 	float y;
 	float z;
-	uint32 spell_id;
+	int32 spell_id;
 };
 
 struct Sacrifice_Struct {
@@ -4879,7 +4888,7 @@ struct MarkNPC_Struct
 };
 
 struct InspectBuffs_Struct {
-/*000*/ uint32 spell_id[BUFF_COUNT];
+/*000*/ int32 spell_id[BUFF_COUNT];
 /*100*/ int32 tics_remaining[BUFF_COUNT];
 };
 
@@ -5148,7 +5157,7 @@ struct SendAA_Struct {
 /*0040*/	uint32 prereq_skill;		//is < 0, abs() is category #
 /*0044*/	uint32 prereq_minpoints; //min points in the prereq
 /*0048*/	uint32 type;
-/*0052*/	uint32 spellid;
+/*0052*/	int32  spellid;
 /*0056*/	uint32 spell_type;
 /*0060*/	uint32 spell_refresh;
 /*0064*/	uint16 classes;
@@ -5338,7 +5347,7 @@ typedef struct {
 struct ControlBoat_Struct {
 /*000*/	uint32	boatId;			// entitylist id of the boat
 /*004*/	bool	TakeControl;	// 01 if taking control, 00 if releasing it
-/*007*/	char	unknown[3];		// no idea what these last three bytes represent
+/*005*/	char	unknown[3];		// no idea what these last three bytes represent
 };
 
 struct AugmentInfo_Struct
@@ -5649,7 +5658,7 @@ struct HideCorpse_Struct
 struct BuffIconEntry_Struct
 {
 	uint32 buff_slot;
-	uint32 spell_id;
+	int32 spell_id;
 	int32 tics_remaining;
 	uint32 num_hits;
 	char caster[64];
@@ -5660,7 +5669,7 @@ struct BuffIcon_Struct
 	uint32 entity_id;
 	uint8  all_buffs;
 	uint16 count;
-	uint8 type; // 0 = self buff window, 1 = self target window, 4 = group, 5 = PC, 7 = NPC
+	uint8 type; // 0 = self buff window, 1 = self target window, 2 = pet buff or target window, 4 = group, 5 = PC, 7 = NPC
 	int32 tic_timer;
 	int32 name_lengths; // so ahh we kind of do these packets hacky, this is the total length of all the names to make creating the real packets in the translators easier
 	BuffIconEntry_Struct entries[0];
@@ -6248,6 +6257,12 @@ struct SuspendMercenary_Struct {
 /*0001*/
 };
 
+// [OPCode: 0x1b37 (RoF2)] [Client->Server] [Size: 4]
+struct SwitchMercenary_Struct {
+/*0000*/	uint32	MercIndex;	// 0-based UI index into owned merc list
+/*0004*/
+};
+
 // [OPCode: 0x2528] On Live as of April 2 2012 [Server->Client] [Size: 4]
 // Response to suspend merc with timestamp
 struct SuspendMercenaryResponse_Struct {
@@ -6605,8 +6620,21 @@ struct EvolveGetNextItem {
 	uint32 max_transfer_level;
 };
 
+// Character Create Data
+struct RaceClassAllocation {
+	unsigned int Index;
+	unsigned int BaseStats[7];
+	unsigned int DefaultPointAllocation[7];
+};
+
+struct RaceClassCombos {
+	unsigned int ExpansionRequired;
+	unsigned int Race;
+	unsigned int Class;
+	unsigned int Deity;
+	unsigned int AllocationIndex;
+	unsigned int Zone;
+};
+
 // Restore structure packing to default
-#pragma pack()
-
-#endif
-
+#pragma pack(pop)

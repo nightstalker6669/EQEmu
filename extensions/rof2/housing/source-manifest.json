@@ -31,8 +31,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 7083,
-      "sha256": "3bcbc8882e7f8f8003c011a5190a7804a2f03b31cf4e7bdb294123692bdb78ee"
+      "bytes": 7344,
+      "sha256": "308c7d02c4bb1d92224f661b3c5b13fa4072fdb186aa1aff8023e202d4d5b0e2"
     },
     {
       "path": "deploy/akk-stack.housing.yml",
@@ -61,8 +61,8 @@
     },
     {
       "path": "docs/INSTALL.md",
-      "bytes": 11409,
-      "sha256": "b7222f9b552da9e1a40ed7b6c54fc3ae5d9a33ae743a5abb2b8099c8b394d459"
+      "bytes": 11673,
+      "sha256": "4bb8e4f45ae28734a39b89761e7f9627c17a88365e2fc9404e3e5479a8cd0a88"
     },
     {
       "path": "docs/ITEM-SUPPORT.md",
@@ -2596,8 +2596,8 @@
     },
     {
       "path": "tools/install_housing.py",
-      "bytes": 45049,
-      "sha256": "a1aeea6023a568f47ce58eaa2b95c261716b8b928704908593f8c75e092a2a1f"
+      "bytes": 45326,
+      "sha256": "56d0a9bbee3a0dfa132e1f15017fd92b675026ef8e4424c69010c574656cf74d"
     },
     {
       "path": "tools/install_original_geometry.py",

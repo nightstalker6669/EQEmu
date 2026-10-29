@@ -182,9 +182,9 @@ std::unique_ptr<SpiritShroudDestination> Client::PrepareSpiritShroudDestination(
    auto& b=out->buffs[e.slot_id];b.spellid=e.spell_id;b.casterlevel=e.caster_level;
    if(auto* caster=entity_list.GetClientByName(e.caster_name.c_str())){b.casterid=caster->GetID();b.client=true;strn0cpy(b.caster_name,caster->GetName(),sizeof(b.caster_name));}
    b.ticsremaining=e.ticsremaining;b.counters=e.counters;b.hit_number=e.numhits;b.melee_rune=e.melee_rune;b.magic_rune=e.magic_rune;b.dot_rune=e.dot_rune;
-   b.persistant_buff=e.persistent!=0;b.caston_x=e.caston_x;b.caston_y=e.caston_y;b.caston_z=e.caston_z;b.ExtraDIChance=e.ExtraDIChance;b.instrument_mod=e.instrument_mod;
+   b.persistent_buff=e.persistent!=0;b.caston_x=e.caston_x;b.caston_y=e.caston_y;b.caston_z=e.caston_z;b.ExtraDIChance=e.ExtraDIChance;b.instrument_mod=e.instrument_mod;
   }
-  for(auto& b:pp.buffs){b={};b.spellid=SPELLBOOK_UNKNOWN;b.bard_modifier=10;}
+  for(auto& b:pp.buffs){b={};b.spellid=SPELL_UNKNOWN;b.bard_modifier=10;}
   int melee_procs=0,defensive_procs=0,ranged_procs=0;
   for(const auto& buff:out->buffs)if(IsValidSpell(buff.spellid)){
    for(int i=0;i<EFFECT_COUNT;++i){

@@ -1,89 +1,74 @@
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "fellowship_campfire.h"
+
 #include "housing_guild_portal.h"
 #include "housing_service_npcs.h"
 #include "housing_service_authority.h"
 #include "housing_pets.h"
-/*	EQEMu: Everquest Server Emulator
-	Copyright (C) 2001-2003 EQEMu Development Team (http://eqemulator.net)
 
-	This program is free software; you can redistribute it and/or modify
-	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; version 2 of the License.
-
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY except by those people which sell it, which
-	are required to give you total support for your newly bought product;
-	without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-	A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
-*/
-
-#include <float.h>
-#include <iostream>
-#include <stdlib.h>
-#include <string.h>
-
-#ifdef _WINDOWS
-#define	snprintf	_snprintf
-#define	vsnprintf	_vsnprintf
-#else
-#include <pthread.h>
-#include "../common/unix.h"
-#endif
-
-#include "../common/global_define.h"
-#include "../common/features.h"
-#include "../common/rulesys.h"
-#include "../common/seperator.h"
-#include "../common/strings.h"
-#include "../common/eqemu_logsys.h"
-
-#include "dynamic_zone.h"
-#include "guild_mgr.h"
-#include "map.h"
-#include "npc.h"
-#include "object.h"
-#include "pathfinder_null.h"
-#include "petitions.h"
-#include "quest_parser_collection.h"
-#include "spawn2.h"
-#include "spawngroup.h"
-#include "water_map.h"
-#include "worldserver.h"
 #include "zone.h"
-#include "zone_config.h"
-#include "mob_movement_manager.h"
-#include "npc_scale_manager.h"
-#include "../common/data_verification.h"
-#include "zone_reload.h"
-#include "../common/repositories/criteria/content_filter_criteria.h"
-#include "../common/repositories/character_exp_modifiers_repository.h"
-#include "../common/repositories/merchantlist_repository.h"
-#include "../common/repositories/object_repository.h"
-#include "../common/repositories/rule_sets_repository.h"
-#include "../common/repositories/level_exp_mods_repository.h"
-#include "../common/repositories/ldon_trap_entries_repository.h"
-#include "../common/repositories/ldon_trap_templates_repository.h"
-#include "../common/repositories/respawn_times_repository.h"
-#include "../common/repositories/npc_emotes_repository.h"
-#include "../common/repositories/zone_state_spawns_repository.h"
-#include "../common/serverinfo.h"
-#include "../common/repositories/merc_stance_entries_repository.h"
-#include "../common/repositories/alternate_currency_repository.h"
-#include "../common/repositories/graveyard_repository.h"
-#include "../common/repositories/trader_repository.h"
-#include "../common/repositories/buyer_repository.h"
 
-#include <time.h>
+#include "common/data_verification.h"
+#include "common/eqemu_logsys.h"
+#include "common/features.h"
+#include "common/repositories/alternate_currency_repository.h"
+#include "common/repositories/buyer_repository.h"
+#include "common/repositories/character_exp_modifiers_repository.h"
+#include "common/repositories/criteria/content_filter_criteria.h"
+#include "common/repositories/graveyard_repository.h"
+#include "common/repositories/ldon_trap_entries_repository.h"
+#include "common/repositories/ldon_trap_templates_repository.h"
+#include "common/repositories/level_exp_mods_repository.h"
+#include "common/repositories/merc_stance_entries_repository.h"
+#include "common/repositories/merchantlist_repository.h"
+#include "common/repositories/npc_emotes_repository.h"
+#include "common/repositories/object_repository.h"
+#include "common/repositories/respawn_times_repository.h"
+#include "common/repositories/rule_sets_repository.h"
+#include "common/repositories/trader_repository.h"
+#include "common/repositories/zone_state_spawns_repository.h"
+#include "common/rulesys.h"
+#include "common/seperator.h"
+#include "common/serverinfo.h"
+#include "common/strings.h"
+#include "zone/dynamic_zone.h"
+#include "zone/guild_mgr.h"
+#include "zone/map.h"
+#include "zone/mob_movement_manager.h"
+#include "zone/npc_scale_manager.h"
+#include "zone/npc.h"
+#include "zone/object.h"
+#include "zone/pathfinder_null.h"
+#include "zone/petitions.h"
+#include "zone/quest_parser_collection.h"
+#include "zone/spawn2.h"
+#include "zone/spawngroup.h"
+#include "zone/water_map.h"
+#include "zone/worldserver.h"
+#include "zone/zone_config.h"
+#include "zone/zone_reload.h"
 
-#ifdef _WINDOWS
-#define snprintf	_snprintf
-#define strncasecmp	_strnicmp
-#define strcasecmp	_stricmp
-#endif
+#include <cfloat>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
+#include <iostream>
 
 extern bool staticzone;
 extern QuestParserCollection* parse;
@@ -175,7 +160,7 @@ bool Zone::Bootup(uint32 iZoneID, uint32 iInstanceID, bool is_static) {
 	zone->RequestUCSServerStatus();
 	zone->StartShutdownTimer();
 
-	DataBucket::LoadZoneCache(iZoneID, iInstanceID);
+	DataBucket::LoadZoneCache(&database, iZoneID, iInstanceID);
 
 	/*
 	 * Set Logging
@@ -375,6 +360,14 @@ bool Zone::LoadGroundSpawns() {
 			const uint32 max_allowed = g.spawn[slot_id].max_allowed;
 
 			if (inst) {
+				// Fresh ground-spawn clickies must have their defined charges.
+				// CreateItem defaults to zero; that otherwise produces unusable
+				// quest scrolls such as Touch of the Six. Dropped items retain
+				// their existing charges through the separate Object path.
+				if (inst->GetItem()->MaxCharges > 0) {
+					inst->SetCharges(inst->GetItem()->MaxCharges);
+				}
+
 				for (uint32 i = 0; i < max_allowed; i++) {
 					auto object = new Object(
 						inst,
@@ -2332,7 +2325,7 @@ void Zone::ClearBlockedSpells()
 	zone_total_blocked_spells = 0;
 }
 
-bool Zone::IsSpellBlocked(uint32 spell_id, const glm::vec3 &location)
+bool Zone::IsSpellBlocked(int32 spell_id, const glm::vec3 &location)
 {
 	if (blocked_spells) {
 		bool exception = false;
@@ -2385,7 +2378,7 @@ bool Zone::IsSpellBlocked(uint32 spell_id, const glm::vec3 &location)
 	return false;
 }
 
-const char *Zone::GetSpellBlockedMessage(uint32 spell_id, const glm::vec3 &location)
+const char *Zone::GetSpellBlockedMessage(int32 spell_id, const glm::vec3 &location)
 {
 	if (blocked_spells) {
 		for (int x = 0; x < GetZoneTotalBlockedSpells(); x++) {
@@ -2434,7 +2427,7 @@ void Zone::LoadLDoNTraps()
 
 		t->id       = e.id;
 		t->type     = static_cast<LDoNChestTypes>(e.type);
-		t->spell_id = static_cast<uint32>(e.spell_id);
+		t->spell_id = e.spell_id;
 		t->skill    = e.skill;
 		t->locked   = e.locked;
 
@@ -3224,7 +3217,7 @@ std::string Zone::GetBucket(const std::string& bucket_name)
 	k.instance_id = instanceid;
 	k.key         = bucket_name;
 
-	return DataBucket::GetData(k).value;
+	return DataBucket::GetData(&database, k).value;
 }
 
 void Zone::SetBucket(const std::string& bucket_name, const std::string& bucket_value, const std::string& expiration)
@@ -3236,7 +3229,7 @@ void Zone::SetBucket(const std::string& bucket_name, const std::string& bucket_v
 	k.expires     = expiration;
 	k.value       = bucket_value;
 
-	DataBucket::SetData(k);
+	DataBucket::SetData(&database, k);
 }
 
 void Zone::DeleteBucket(const std::string& bucket_name)
@@ -3246,7 +3239,7 @@ void Zone::DeleteBucket(const std::string& bucket_name)
 	k.instance_id = instanceid;
 	k.key         = bucket_name;
 
-	DataBucket::DeleteData(k);
+	DataBucket::DeleteData(&database, k);
 }
 
 std::string Zone::GetBucketExpires(const std::string& bucket_name)
@@ -3256,7 +3249,7 @@ std::string Zone::GetBucketExpires(const std::string& bucket_name)
 	k.instance_id = instanceid;
 	k.key         = bucket_name;
 
-	return DataBucket::GetDataExpires(k);
+	return DataBucket::GetDataExpires(&database, k);
 }
 
 std::string Zone::GetBucketRemaining(const std::string& bucket_name)
@@ -3266,7 +3259,7 @@ std::string Zone::GetBucketRemaining(const std::string& bucket_name)
 	k.instance_id = instanceid;
 	k.key         = bucket_name;
 
-	return DataBucket::GetDataRemaining(k);
+	return DataBucket::GetDataRemaining(&database, k);
 }
 
 void Zone::DisableRespawnTimers()
@@ -3622,5 +3615,3 @@ std::vector<std::string> Zone::GetTimers()
 
 	return v;
 }
-
-#include "zone_loot.cpp"

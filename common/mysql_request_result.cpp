@@ -1,3 +1,20 @@
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
+
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
 #include "mysql_request_result.h"
 
 
@@ -50,7 +67,9 @@ void MySQLRequestResult::ZeroOut()
 	m_Fields = nullptr;
 	m_RowCount = 0;
 	m_RowsAffected = 0;
+	m_ColumnCount = 0;
 	m_LastInsertedID = 0;
+	m_ErrorNumber = 0;
 	m_error_message = "";
 }
 
@@ -104,6 +123,8 @@ MySQLRequestResult::MySQLRequestResult(MySQLRequestResult&& moveItem)
 	m_ColumnLengths = moveItem.m_ColumnLengths;
 	m_ColumnCount = moveItem.m_ColumnCount;
 	m_Fields = moveItem.m_Fields;
+	m_ErrorNumber = moveItem.m_ErrorNumber;
+	m_error_message = std::move(moveItem.m_error_message);
 
 	// Keeps deconstructor from double freeing
 	// pre move instance.
@@ -132,6 +153,8 @@ MySQLRequestResult& MySQLRequestResult::operator=(MySQLRequestResult&& other)
 	m_ColumnLengths = other.m_ColumnLengths;
 	m_ColumnCount = other.m_ColumnCount;
 	m_Fields = other.m_Fields;
+	m_ErrorNumber = other.m_ErrorNumber;
+	m_error_message = std::move(other.m_error_message);
 
 	// Keeps deconstructor from double freeing
 	// pre move instance.
@@ -147,6 +170,9 @@ uint32 MySQLRequestResult::GetErrorNumber() const
 void MySQLRequestResult::SetErrorNumber(uint32 m_error_number)
 {
 	m_ErrorNumber = m_error_number;
+	if (m_error_number) {
+		m_Success = false;
+	}
 }
 
 const std::string &MySQLRequestResult::GetErrorMessage() const
@@ -157,4 +183,7 @@ const std::string &MySQLRequestResult::GetErrorMessage() const
 void MySQLRequestResult::SetErrorMessage(const std::string &m_error_message)
 {
 	MySQLRequestResult::m_error_message = m_error_message;
+	if (!m_error_message.empty()) {
+		m_Success = false;
+	}
 }

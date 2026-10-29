@@ -1,43 +1,37 @@
-/*	EQEMu: Everquest Server Emulator
-	Copyright (C) 2001-2004 EQEMu Development Team (http://eqemulator.net)
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; version 2 of the License.
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY except by those people which sell it, which
-	are required to give you total support for your newly bought product;
-	without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-	A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "client.h"
 
-#include "../common/global_define.h"
-#include "../common/events/player_event_logs.h"
+#include "common/events/player_event_logs.h"
+#include "common/repositories/char_recipe_list_repository.h"
+#include "common/repositories/criteria/content_filter_criteria.h"
+#include "common/repositories/tradeskill_recipe_entries_repository.h"
+#include "common/repositories/tradeskill_recipe_repository.h"
+#include "common/rulesys.h"
+#include "zone/queryserv.h"
+#include "zone/quest_parser_collection.h"
+#include "zone/string_ids.h"
+#include "zone/titles.h"
+#include "zone/worldserver.h"
+#include "zone/zonedb.h"
 
 #include <algorithm>
 #include <list>
-
-#ifndef WIN32
-#include <netinet/in.h>	//for htonl
-#endif
-
-#include "../common/rulesys.h"
-
-#include "queryserv.h"
-#include "quest_parser_collection.h"
-#include "string_ids.h"
-#include "titles.h"
-#include "zonedb.h"
-#include "worldserver.h"
-#include "../common/repositories/char_recipe_list_repository.h"
-#include "../common/repositories/criteria/content_filter_criteria.h"
-#include "../common/repositories/tradeskill_recipe_repository.h"
-#include "../common/repositories/tradeskill_recipe_entries_repository.h"
 
 extern QueryServ* QServ;
 extern WorldServer worldserver;
@@ -627,7 +621,7 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 	}
 
 	if (spec.tradeskill == EQ::skills::SkillAlchemy) {
-		if (!user->GetClass() == Class::Shaman) {
+		if (user->GetClass() != Class::Shaman) {
 			user->Message(Chat::Red, "This tradeskill can only be performed by a shaman.");
 			auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
 			user->QueuePacket(outapp);
@@ -652,7 +646,7 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 		}
 	}
 	else if (spec.tradeskill == EQ::skills::SkillMakePoison) {
-		if (!user->GetClass() == Class::Rogue) {
+		if (user->GetClass() != Class::Rogue) {
 			user->Message(Chat::Red, "Only rogues can mix poisons.");
 			auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
 			user->QueuePacket(outapp);
@@ -979,6 +973,22 @@ void Client::SendTradeskillDetails(uint32 recipe_id) {
 
 	uint32 total = sizeof(uint32) + dist + datalen;
 
+	// The TOB client reads 4 bytes of trivial after the 10 component slots.
+	// Fetch the trivial from the recipe table and append it so the client doesn't read garbage.
+	uint32 trivial = 0;
+	std::string trivial_query = StringFormat(
+		"SELECT trivial FROM tradeskill_recipe WHERE id = %u LIMIT 1", recipe_id);
+	auto trivial_results = content_db.QueryDatabase(trivial_query);
+	if (trivial_results.Success() && trivial_results.RowCount() > 0) {
+		auto trow = trivial_results.begin();
+		if (trow[0]) {
+			trivial = (uint32)Strings::ToInt(trow[0]);
+		}
+	}
+	uint32 trivial_net = htonl(trivial);
+	memcpy(buf + total, &trivial_net, sizeof(uint32));
+	total += sizeof(uint32);
+
 	auto outapp = new EQApplicationPacket(OP_RecipeDetails);
 	outapp->size = total;
 	outapp->pBuffer = (uchar*) buf;
@@ -1180,6 +1190,7 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 
 			++itr;
 		}
+		UpdateAchievementForTradeskill(spec->recipe_id);
 		return(true);
 	}
 	/* Tradeskill Fail */

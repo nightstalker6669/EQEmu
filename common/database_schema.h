@@ -1,26 +1,24 @@
-/**
- * EQEmulator: Everquest Server Emulator
- * Copyright (C) 2001-2019 EQEmulator Development Team (https://github.com/EQEmu/Server)
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; version 2 of the License.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY except by those people which sell it, which
- * are required to give you total support for your newly bought product;
- * without even the implied warranty of MERCHANTABILITY or FITNESS FOR
- * A PARTICULAR PURPOSE. See the GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
- *
- */
+/*	EQEmu: EQEmulator
 
-#ifndef EQEMU_DATABASE_SCHEMA_H
-#define EQEMU_DATABASE_SCHEMA_H
+	Copyright (C) 2001-2026 EQEmu Development Team
 
+	This program is free software; you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
+
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+#pragma once
+
+
+#include <string>
 #include <vector>
 #include <map>
 
@@ -37,6 +35,11 @@ namespace DatabaseSchema {
 		return {
 			{"adventure_stats",                "player_id"},
 			{"char_recipe_list",               "char_id"},
+			{"character_achievement_pending_updates", "character_id"},
+			{"character_achievement_progress", "character_id"},
+			{"character_achievement_reward_selections", "character_id"},
+			{"character_achievement_rewards",  "character_id"},
+			{"character_achievements",         "character_id"},
 			{"character_activities",           "charid"},
 			{"character_alt_currency",         "char_id"},
 			{"character_alternate_abilities",  "id"},
@@ -70,6 +73,9 @@ namespace DatabaseSchema {
 			{"character_skills",               "id"},
 			{"character_spells",               "id"},
 			{"character_stats_record",         "character_id"},
+			{"character_task_reward_instances", "character_id"},
+			{"character_task_reward_selections", "character_id"},
+			{"character_task_rewards",         "character_id"},
 			{"character_task_timers",          "character_id"},
 			{"character_tasks",                "charid"},
 			{"character_tribute",              "character_id"},
@@ -111,6 +117,11 @@ namespace DatabaseSchema {
 			"buyer_buy_lines",
 			"buyer_trade_items",
 			"char_recipe_list",
+			"character_achievement_pending_updates",
+			"character_achievement_progress",
+			"character_achievement_reward_selections",
+			"character_achievement_rewards",
+			"character_achievements",
 			"character_activities",
 			"character_alt_currency",
 			"character_alternate_abilities",
@@ -145,6 +156,9 @@ namespace DatabaseSchema {
 			"character_skills",
 			"character_spells",
 			"character_stats_record",
+			"character_task_reward_instances",
+			"character_task_reward_selections",
+			"character_task_rewards",
 			"character_task_timers",
 			"character_tasks",
 			"character_tribute",
@@ -193,6 +207,13 @@ namespace DatabaseSchema {
 			"adventure_template",
 			"adventure_template_entry",
 			"adventure_template_entry_flavor",
+			"achievement_associations",
+			"achievement_cast_requirements",
+			"achievement_categories",
+			"achievement_category_associations",
+			"achievement_components",
+			"achievement_criteria",
+			"achievements",
 			"alternate_currency",
 			"auras",
 			"base_data",
@@ -239,6 +260,12 @@ namespace DatabaseSchema {
 			"pets_beastlord_data",
 			"pets_equipmentset",
 			"pets_equipmentset_entries",
+			"reward_option_entries",
+			"reward_options",
+			"reward_sets",
+			"reward_source_entries",
+			"reward_sources",
+			"rewards",
 			"skill_caps",
 			"spawn2",
 			"spawn_conditions",
@@ -438,5 +465,3 @@ namespace DatabaseSchema {
 	}
 
 }
-
-#endif //EQEMU_DATABASE_SCHEMA_H

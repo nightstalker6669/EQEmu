@@ -1,0 +1,145 @@
+--- a/zone/spells.cpp
++++ b/zone/spells.cpp
+@@ -65,6 +65,7 @@
+ 	and not SpellFinished().
+ */
+ 
++#include "quest_item_target_permissions.h"
+ #include "mob.h"
+ 
+ #include "common/bodytypes.h"
+--- a/zone/spells.cpp
++++ b/zone/spells.cpp
+@@ -4237,8 +4238,52 @@
+ 
+ 				}
+ 
++                // These two NPC-only dummy item spells implement quest interactions,
++                // not general buffs. Keep all native cast/target checks and exempt only
++                // this beneficial-to-NPC permission decision for the exact quest context.
++                const bool shards_quest_item_target_allowed = [&]() {
++                    if ((spell_id != 33562 && spell_id != 33564) ||
++                        isproc || casting_spell_id != spell_id ||
++                        (casting_spell_slot != CastingSlot::Item && casting_spell_slot != CastingSlot::PotionBelt)) {
++                        return false;
++                    }
++                    const auto *item = CastToClient()->GetInv().GetItem(casting_spell_inventory_slot);
++                    if (!item || !item->IsClassCommon() || !item->GetItem()) {
++                        return false;
++                    }
++                    ShardsQuestItemTargetPermissions::Context context;
++                    context.spell_id = spell_id;
++                    context.zone_id = zone->GetZoneID();
++                    context.item_id = item->GetID();
++                    context.item_click_spell_id = item->GetItem()->Click.Effect;
++                    context.authentic_item_cast = true;
++                    context.expected_spell_shape =
++                        spells[spell_id].good_effect == BENEFICIAL_EFFECT &&
++                        spells[spell_id].target_type == ST_Target &&
++                        spells[spell_id].pcnpc_only_flag == PCNPCOnlyFlagType::NPC &&
++                        spells[spell_id].effect_id[0] == SpellEffect::CHA &&
++                        spells[spell_id].base_value[0] == 1;
++                    for (int effect = 1; effect < EFFECT_COUNT; ++effect) {
++                        if (spells[spell_id].effect_id[effect] != SpellEffect::Blank) {
++                            context.expected_spell_shape = false;
++                        }
++                    }
++                    context.correct_task_activity_active = CastToClient()->IsTaskActivityActive(
++                        910023, spell_id == 33562 ? 5 : 14
++                    );
++                    context.target_is_npc = spelltar->IsNPC();
++                    if (context.target_is_npc) {
++                        context.target_npc_type_id = spelltar->GetNPCTypeID();
++                        context.target_race = spelltar->GetRace();
++                        context.target_is_owned = spelltar->GetOwnerID() != 0 || spelltar->CastToNPC()->GetSwarmOwner() != 0;
++                        context.target_hp_ratio = spelltar->GetHPRatio();
++                        context.target_attackable = spell_id == 33564 && IsAttackAllowed(spelltar, true);
++                    }
++                    return ShardsQuestItemTargetPermissions::Allows(context);
++                }();
++
+ 				if (
+-					(!IsAllianceSpell(spell_id) && !IsBeneficialAllowed(spelltar)) ||
++					(!IsAllianceSpell(spell_id) && !IsBeneficialAllowed(spelltar) && !shards_quest_item_target_allowed) ||
+ 					(IsGroupOnlySpell(spell_id) &&
+ 						!(
+ 							(
+--- /dev/null
++++ b/zone/quest_item_target_permissions.h
+@@ -0,0 +1,43 @@
++#ifndef EQEMU_QUEST_ITEM_TARGET_PERMISSIONS_H
++#define EQEMU_QUEST_ITEM_TARGET_PERMISSIONS_H
++#include <algorithm>
++#include <array>
++#include <cstdint>
++
++namespace ShardsQuestItemTargetPermissions {
++struct Context {
++    uint32_t spell_id = 0;
++    uint32_t zone_id = 0;
++    uint32_t item_id = 0;
++    uint32_t item_click_spell_id = 0;
++    uint32_t target_npc_type_id = 0;
++    uint32_t target_race = 0;
++    bool authentic_item_cast = false;
++    bool expected_spell_shape = false;
++    bool correct_task_activity_active = false;
++    bool target_is_npc = false;
++    bool target_is_owned = false;
++    bool target_attackable = false;
++    float target_hp_ratio = 0;
++};
++// Generated from the same reviewed May2013 Shards quest roster as the Lua module.
++inline constexpr std::array<uint32_t, 64> SoulTargets = { 752066, 752067, 752068, 752069, 752070, 752072, 752075, 752078, 752079, 752095, 752103, 752108, 752111, 752112, 752115, 752121, 752122, 752123, 752125, 752128, 752132, 752135, 752139, 752141, 752147, 752148, 752149, 752153, 752155, 752157, 752159, 752161, 752162, 752163, 752166, 752169, 752170, 752172, 752173, 752174, 752175, 752177, 752179, 752181, 752182, 752184, 752186, 752188, 752189, 752193, 752194, 752195, 752198, 752203, 752204, 752206, 752207, 752208, 752209, 752211, 752213, 752217, 752218, 752228 };
++inline bool Allows(const Context &c) {
++    if (!c.authentic_item_cast || !c.expected_spell_shape ||
++        !c.correct_task_activity_active || c.zone_id != 752 ||
++        !c.target_is_npc || c.target_is_owned ||
++        c.item_click_spell_id != c.spell_id) {
++        return false;
++    }
++    if (c.spell_id == 33562) {
++        return c.item_id == 86076 && c.target_npc_type_id == 752049;
++    }
++    if (c.spell_id == 33564) {
++        return c.item_id == 86086 && c.target_race == 695 &&
++            c.target_attackable && c.target_hp_ratio > 0 && c.target_hp_ratio <= 25 &&
++            std::find(SoulTargets.begin(), SoulTargets.end(), c.target_npc_type_id) != SoulTargets.end();
++    }
++    return false;
++}
++} // namespace ShardsQuestItemTargetPermissions
++#endif
+--- a/zone/lua_client.h
++++ b/zone/lua_client.h
+@@ -390,6 +390,7 @@
+ 		uint32 value
+ 	);
+ 	bool CompleteSharedTaskAchievement(uint32 achievement_id);
++	std::string GetSharedTaskIdentity();
+ 	void LockSharedTask(bool lock);
+ 	void EndSharedTask();
+ 	void EndSharedTask(bool send_fail);
+--- a/zone/lua_client.cpp
++++ b/zone/lua_client.cpp
+@@ -1531,6 +1531,12 @@
+ 		shared_task_id,
+ 		achievement_id
+ 	);
++}
++
++std::string Lua_Client::GetSharedTaskIdentity() {
++    Lua_Safe_Call_String();
++    const auto identity = self->GetSharedTaskId();
++    return identity > 0 ? std::to_string(identity) : std::string{};
+ }
+ 
+ void Lua_Client::LockSharedTask(bool lock) {
+@@ -4088,6 +4094,7 @@
+ 	.def("LeaveGroup", (void(Lua_Client::*)(void))&Lua_Client::LeaveGroup)
+ 	.def("LoadPEQZoneFlags", (void(Lua_Client::*)(void))&Lua_Client::LoadPEQZoneFlags)
+ 	.def("LoadZoneFlags", (void(Lua_Client::*)(void))&Lua_Client::LoadZoneFlags)
++	.def("GetSharedTaskIdentity", &Lua_Client::GetSharedTaskIdentity)
+ 	.def("LockSharedTask", &Lua_Client::LockSharedTask)
+ 	.def("MarkSingleCompassLoc", (void(Lua_Client::*)(float,float,float))&Lua_Client::MarkSingleCompassLoc)
+ 	.def("MarkSingleCompassLoc", (void(Lua_Client::*)(float,float,float,int))&Lua_Client::MarkSingleCompassLoc)
