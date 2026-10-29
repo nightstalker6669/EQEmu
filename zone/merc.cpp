@@ -1,4 +1,6 @@
 #include "../common/mercenary/rof2_timer.h"
+#include "mercenary_transaction.h"
+#include "inventory_session_owner.h"
 
 #include "merc.h"
 #include "client.h"
@@ -5001,6 +5003,11 @@ void Client::UpdateMercTimer()
 
 bool Client::CheckCanHireMerc(Mob* merchant, uint32 template_id) {
 
+	if(IsSpiritShrouded() && !m_spirit_shroud_session_id){
+		Message(Chat::Yellow,"Remove and select your shroud again before hiring a mercenary.");
+		return false;
+	}
+
 	if (!CheckCanSpawnMerc(template_id))
 	{
 		return false;
@@ -5451,6 +5458,49 @@ bool Client::MercOnlyOrNoGroup() {
 	return false;
 }
 
+// A shroud hire is repriced once at the original level. Payment is a separate
+// durable liability: a failed group join after paying cannot charge it twice.
+// Restoration itself never depends on the ability to afford this fee.
+bool Client::SettleSpiritShroudMercenaryFee(Merc* merc) {
+ if(!merc || merc->GetMercenaryOwner()!=this)return false;
+ if(!merc->GetMercenaryID())return true;
+ auto schema=database.QueryDatabase(std::string("SELECT engine FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='spirit_shroud_mercenary_fees'"),false);
+ if(!schema.Success())return false;
+ if(!schema.RowCount())return true; // Server without the optional shroud storage.
+ if(schema.RowCount()!=1 || !schema.begin()[0] || std::string(schema.begin()[0])!="InnoDB")return false;
+ auto due=database.QueryDatabase(fmt::format("SELECT session_id,fee_copper FROM spirit_shroud_mercenary_fees WHERE merc_id={} AND character_id={} AND template_id={} AND paid_at IS NULL",merc->GetMercenaryID(),CharacterID(),merc->GetMercenaryTemplateID()),false);
+ if(!due.Success())return false;
+ if(!due.RowCount())return true;
+ if(due.RowCount()!=1 || !due.begin()[0] || !due.begin()[1])return false;
+ const uint64 session=std::stoull(due.begin()[0]),fee=std::stoull(due.begin()[1]);
+ if(IsSpiritShrouded()){
+  if(session==m_spirit_shroud_session_id)return true;
+  Message(Chat::Yellow,"Remove your shroud and settle your mercenary's earlier hire fee before using it again.");return false;
+ }
+ Mercenary::Payment payment;
+ if(!PrepareMercenaryPayment(payment,fee)){
+  Message(Chat::Yellow,"Your mercenary remains suspended until you can pay its original-level hire fee (%llu copper).",static_cast<unsigned long long>(fee));
+  return false;
+ }
+ const auto guard=payment.guard;
+ payment.guard=[this,merc,session,fee,guard](Database& db,uint64 connection){
+  if(IsSpiritShrouded() || !guard(db,connection))return false;
+  auto row=db.QueryDatabase(fmt::format("SELECT session_id,fee_copper FROM spirit_shroud_mercenary_fees WHERE merc_id={} AND character_id={} AND template_id={} AND paid_at IS NULL FOR UPDATE",merc->GetMercenaryID(),CharacterID(),merc->GetMercenaryTemplateID()),false);
+  if(!row.Success() || row.RowCount()!=1 || !row.begin()[0] || !row.begin()[1] || std::stoull(row.begin()[0])!=session || std::stoull(row.begin()[1])!=fee)return false;
+  auto paid=db.QueryDatabase(fmt::format("UPDATE spirit_shroud_mercenary_fees SET paid_at={} WHERE merc_id={} AND character_id={} AND paid_at IS NULL",uint64(time(nullptr)),merc->GetMercenaryID(),CharacterID()),false);
+  return paid.Success() && paid.RowsAffected()==1;
+ };
+ const auto ticket=InventorySessionReleaseTicket();
+ if(database.SaveMercenaryAtomic(merc,&payment)!=Mercenary::SaveResult::Saved){RejectMercenaryPersistence();return false;}
+ if(!ticket || ticket!=InventorySessionReleaseTicket() || !ticket->HeldFor(*this) ||
+    payment.before!=std::array<uint32,4>{uint32(m_pp.copper),uint32(m_pp.silver),uint32(m_pp.gold),uint32(m_pp.platinum)}){
+  RejectMercenaryPersistence();return false;
+ }
+ m_pp.copper=payment.after[0];m_pp.silver=payment.after[1];m_pp.gold=payment.after[2];m_pp.platinum=payment.after[3];
+ if(fee){SendMoneyUpdate();RecalcWeight();}
+ return true;
+}
+
 bool Merc::Unsuspend(bool setMaxStats) {
 
 	Client* mercOwner = nullptr;
@@ -5465,6 +5515,7 @@ bool Merc::Unsuspend(bool setMaxStats) {
 	if(GetID())
 	{
 		const bool resuming = IsSuspended();
+		if (resuming && !mercOwner->SettleSpiritShroudMercenaryFee(this)) return false;
 		const bool reviving = resuming && mercOwner->GetMercInfo().hp <= 0;
 		const uint64 activation_cost = resuming && RuleB(Mercs, ChargeMercUpkeepCost) ?
 			static_cast<uint64>(CalcUpkeepCost(GetMercenaryTemplateID(), GetLevel())) * 100 : 0;

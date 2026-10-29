@@ -1,9 +1,9 @@
-# Install `rof2-mercenaries`
+# Install `rof2-spirit-shrouds`
 
 This checkout already contains the native source integration. **Do not run `apply_overlay.py` or `git apply` again.** Keep backups of the database, quests, binaries and active opcode configuration together before installing. No running server was modified by publishing this branch.
 
 ```sh
-git -c core.autocrlf=false clone --branch rof2-mercenaries --single-branch https://github.com/nightstalker6669/EQEmu.git
+git -c core.autocrlf=false clone --branch rof2-spirit-shrouds --single-branch https://github.com/nightstalker6669/EQEmu.git
 cd EQEmu
 git submodule update --init --recursive
 ```
@@ -39,6 +39,7 @@ Run the following groups **in this order**. Use your normal protected MariaDB cr
 
 - **Fellowship:** `utils/sql/fellowship/001_fellowships.sql`, `002_vitality.sql`, `003_xp_commits.sql`, `004_campsite_catalogue.sql`. Install the bundled `extensions/rof2/fellowship/quests/poknowledge/` quest override after reviewing conflicts. Follow [Database and content requirements](../../extensions/rof2/fellowship/docs/INSTALL.md#database), including matching camp spell/item templates.
 - **Mercenaries:** provision the normal mercenary catalogue first; do not replay the destructive upstream bootstrap over owned contracts. Apply `utils/sql/mercenary/001_owned_roster.sql`, `003_passive_upkeep.sql`, `004_zone_permissions.sql`, then review/apply `002_enable_rof2.sql` for the actual ruleset and database layout. The [content and activation guide](../../extensions/rof2/mercenaries/docs/INSTALL.md#content-schema-and-activation) explains catalogue prerequisites and price rules.
+- **Spirit Shrouds:** apply exactly `001_storage.sql`, `003_parity_storage.sql`, `004_live_imp_wizard.sql`, `005_experience_settlement.sql`, `006_starter_inventory.sql`, `007_rof2_enumerable_aa.sql`, `008_starter_identity.sql`, `009_live_captured_catalog.sql`, `011_live_lower_level_forms.sql`, `012_live_paid_monster_rank_chains.sql`, `013_remaining_monster_aa.sql`, `014_death_resurrection_accounting.sql`, `015_system_interactions.sql` from `utils/sql/shroud/`. Omitted numbers are intentionally not migration inputs. Follow [activation and recovery requirements](../../extensions/rof2/spirit-shrouds/docs/INSTALL.md#offline-migration-and-deployment); keep native transitions at their default false for first acceptance. Preserve escrow/snapshots and drain existing sessions normally.
 
 ## 3. Start the matched installation
 
@@ -51,6 +52,7 @@ Only after all required schema/content/quest groups succeed, start the server th
 | housing | [`710ecb7`](https://github.com/nightstalker6669/eqemu-rof2-housing/tree/710ecb7530ff0a5ade837e887ad7bc2f84622d07) | [Guide](../../extensions/rof2/housing/docs/INSTALL.md) |
 | fellowship | [`9382453`](https://github.com/nightstalker6669/eqemu-rof2-fellowship/tree/9382453264f4f84ac7e83a9ee5c9c9a1391c6017) | [Guide](../../extensions/rof2/fellowship/docs/INSTALL.md) |
 | mercenaries | [`00b07c3`](https://github.com/nightstalker6669/eqemu-rof2-mercenaries/tree/00b07c381a738a21aff08867bf186e6c2bfaffb0) | [Guide](../../extensions/rof2/mercenaries/docs/INSTALL.md) |
+| spirit-shrouds | [`e32ca15`](https://github.com/nightstalker6669/eqemu-rof2-spirit-shrouds/tree/e32ca155a67b6f4d12eef36de131c5810998517a) | [Guide](../../extensions/rof2/spirit-shrouds/docs/INSTALL.md) |
 
 [Opcodes and structures](PROTOCOL.md) · [Integration manifest](integration.json) · [Original upstream README](UPSTREAM-README.md)
 

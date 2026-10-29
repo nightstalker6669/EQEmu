@@ -1169,7 +1169,10 @@ Mob *EntityList::GetMob(uint16 get_id)
 	if (get_id == 0)
 		return nullptr;
 
-	if ((ent = entity_list.GetEntityMob(get_id)))
+	// A hovering client's map key still names its former spawn, but its
+ // current ID is zero (or a new spawn after respawn). That stale entry
+ // must not hide the corpse which legitimately retained the requested ID.
+ if ((ent = entity_list.GetEntityMob(get_id)) && ent->GetID() == get_id)
 		return ent->CastToMob();
 	else if ((ent = entity_list.GetEntityCorpse(get_id)))
 		return ent->CastToMob();

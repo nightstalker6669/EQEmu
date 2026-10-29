@@ -515,6 +515,39 @@ void Raid::UpdateLevel(const char *name, int newLevel)
 	VerifyRaid();
 }
 
+bool Raid::RefreshMemberProfile(Client *client, uint8 class_id, uint8 level)
+{
+	if (!client || class_id < 1 || class_id > 16 || level < 1 || level > 126 || !zone) {
+		return false;
+	}
+	RaidMember *subject = nullptr;
+	for (auto &member : members) {
+		if (member.member == client && !member.is_bot && !strcmp(member.member_name, client->GetName())) {
+			if (subject) return false;
+			subject = &member;
+		}
+	}
+	if (!subject) return false;
+	// The transaction updated only these columns. Keep every other cached
+	// member/role field intact instead of clearing and reloading the array.
+	subject->_class = class_id;
+	subject->level = level;
+	// Existing group-move refresh rebuilds the subject's native raid window
+	// and replaces its row for observers without changing server membership.
+	SendRaidMoveAll(client->GetName());
+	ServerPacket update(ServerOP_RaidChangeGroup, sizeof(ServerRaidGeneralAction_Struct));
+	auto *action = reinterpret_cast<ServerRaidGeneralAction_Struct *>(update.pBuffer);
+	*action = {};
+	action->rid = GetID();
+	action->gid = subject->group_number;
+	action->zoneid = zone->GetZoneID();
+	action->instance_id = zone->GetInstanceID();
+	strn0cpy(action->playername, client->GetName(), sizeof(action->playername));
+	// Other zones already handle this message by reloading the committed raid
+	// rows and replacing the same native UI row. The origin zone is ignored.
+	return worldserver.SendPacket(&update);
+}
+
 uint32 Raid::GetFreeGroup()
 {
 	//check each group return the first one with 0 members assigned...

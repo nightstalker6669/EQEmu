@@ -16,6 +16,8 @@ SET(zone_sources
     botspellsai.cpp
     cheat_manager.cpp
     client.cpp
+    client_spirit_shroud.cpp
+    client_spirit_shroud_native.cpp
     client_evolving_items.cpp
     fellowship_campfire.cpp
     fellowship_campsite_bonuses.cpp

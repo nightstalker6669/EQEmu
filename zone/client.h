@@ -1,4 +1,5 @@
 #include <chrono>
+#include <optional>
 /* EQEMu: Everquest Server Emulator
 	Copyright (C) 2001-2003 EQEMu Development Team (http://eqemulator.org)
 
@@ -19,6 +20,9 @@
 #ifndef CLIENT_H
 #define CLIENT_H
 
+namespace SpiritShroud { struct Template; }
+class ZoneDatabase;
+struct SpiritShroudDestination;
 namespace Housing::Pets { struct Binding; }
 class Client;
 class EQApplicationPacket;
@@ -297,6 +301,46 @@ public:
 	bool HasInventorySessionReservation() const;
 	std::shared_ptr<Housing::InventorySessions::ZoneReservation> InventorySessionReleaseTicket() const;
 
+
+ const SpiritShroud::Template* SpiritShroudDefinition() const { return m_spirit_shroud_definition.get(); }
+ bool LoadSpiritShroudState();
+ bool LoadSpiritShroudRestoredShortBuffs();
+ std::unique_ptr<SpiritShroudDestination> PrepareSpiritShroudDestination(ZoneDatabase& transaction_db);
+ bool InstallSpiritShroudDestination(SpiritShroudDestination& destination);
+ void Handle_OP_SpiritShroudComplete(const EQApplicationPacket* packet);
+ bool ProcessSpiritShroudNativeTransition();
+ void BeginSpiritShroudNativeAcknowledgement(uint64_t revision);
+ bool RecordSpiritShroudDeath(uint32_t corpse_id, uint64_t requested_loss, uint64_t& applied_loss);
+ bool SettleSpiritShroudResurrection(uint32_t corpse_id, uint32_t spell_id, uint64_t offered_loss, bool& handled);
+ bool CanAcceptSpiritShroudResurrection(uint32_t corpse_id);
+ bool SpiritShroudTransitionPending() const { return m_spirit_shroud_transition; }
+ bool SaveSpiritShroudCheckpoint();
+ bool HasSpiritShroudRank(uint32_t rank) const;
+ void SendSpiritShroudProgress();
+ bool TrySpiritShroudAbility(uint32_t action,uint32_t ability);
+ bool CompleteSpiritShroudReturn(uint32_t rank_id);
+ bool IsSpiritShroudStarterItem(const EQ::ItemInstance* item) const;
+ void PurchaseSpiritShroudRank(uint32_t rank_id, bool saved_set);
+ float SpiritShroudModelSize() const;
+ std::optional<uint32_t> SpiritShroudAbilityMinimumLevel(uint16_t spell_id, uint32_t rank_id) const;
+ bool SpiritShroudHasPersonalBank() const { return IsSpiritShrouded() && m_spirit_shroud_personal_bank; }
+ bool SettleSpiritShroudMercenaryFee(Merc* merc);
+ bool CanTransferSpiritShroudItemTree(const EQ::ItemInstance* item) const;
+ bool IsSpiritShrouded() const { return m_spirit_shroud_template != 0; }
+ bool TrySpiritShroudChat(const char*);
+ void OpenSpiritShrouds();
+ void ChangeSpiritShroud(uint32_t template_id);
+ void OpenSpiritShroudBank();
+ void AwardSpiritShroudExperience(ExpSource source, uint64_t amount, uint8 conlevel = 0xFF,
+   bool already_calculated = false, uint64_t aa_amount = 0);
+ void CalculateSpiritShroudExperience(uint64_t amount, uint8 conlevel, uint32_t percent_to_aa,
+   uint64_t earned_aa, uint64_t& normal, uint64_t& aa, uint64_t& progression);
+ void Handle_OP_SpiritShroudRequest(const EQApplicationPacket*);
+ void Handle_OP_SpiritShroudSelect(const EQApplicationPacket*);
+ void Handle_OP_SpiritShroudCancel(const EQApplicationPacket*);
+ void Handle_OP_SpiritShroudPreview(const EQApplicationPacket*);
+ void Handle_OP_SpiritShroudBank(const EQApplicationPacket*);
+
 	~Client();
 
 	void ReconnectUCS();
@@ -524,11 +568,12 @@ public:
 	virtual bool Save() { return Save(0); }
 	bool Save(uint8 iCommitNow); // 0 = delayed, 1=async now, 2=sync now
 	inline void SaveCharacterData() {
+ if(m_spirit_shroud_transition)return;
 		database.SaveCharacterData(this, &m_pp, &m_epp);
 	};
 
 	/* New PP Save Functions */
-	bool SaveCurrency(){ return !m_mercenary_persistence_failed && !m_inventory_session_rejected && database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
+	bool SaveCurrency(){ return !m_spirit_shroud_transition && !m_mercenary_persistence_failed && !m_inventory_session_rejected && database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
 	bool SaveAA();
 	void RemoveExpendedAA(int aa_id);
 
@@ -803,10 +848,11 @@ public:
 	uint64 GetExperienceForKill(Mob *against);
 	void AddEXP(ExpSource exp_source, uint64 in_add_exp, uint8 conlevel = 0xFF, bool resexp = false, NPC* npc = nullptr);
 	uint64 CalcEXP(uint8 conlevel = 0xFF, bool ignore_mods = false);
-	void CalculateNormalizedAAExp(uint64 &add_aaxp, uint8 conlevel, bool resexp);
+	void CalculateNormalizedAAExp(uint64 &add_aaxp, uint8 conlevel, bool resexp, int aa_percent = -1);
 	void CalculateStandardAAExp(uint64 &add_aaxp, uint8 conlevel, bool resexp);
 	void CalculateLeadershipExp(uint64 &add_exp, uint8 conlevel);
-	void CalculateExp(uint64 in_add_exp, uint64 &add_exp, uint64 &add_aaxp, uint8 conlevel, bool resexp);
+	void CalculateExp(uint64 in_add_exp, uint64 &add_exp, uint64 &add_aaxp, uint8 conlevel, bool resexp,
+		int aa_percent = -1, bool leadership = true);
 	void SetEXP(ExpSource exp_source, uint64 set_exp, uint64 set_aaxp, bool resexp = false, NPC* npc = nullptr);
 	void AddLevelBasedExp(ExpSource exp_source, uint8 exp_percentage, uint8 max_level = 0, bool ignore_mods = false);
 	void SetLeadershipEXP(uint64 group_exp, uint64 raid_exp);
@@ -1097,7 +1143,7 @@ public:
 	inline PTimerList &GetPTimers() { return(p_timers); }
 
 	//New AA Methods
-	void SendAlternateAdvancementRank(int aa_id, int level);
+	void SendAlternateAdvancementRank(int aa_id, int level, const SpiritShroud::Template* shroud_preview = nullptr);
 	void SendAlternateAdvancementTable();
 	void SendAlternateAdvancementStats();
 	void PurchaseAlternateAdvancementRank(int rank_id);
@@ -1322,7 +1368,7 @@ public:
 
 	//This is used to later set the buff duration of the spell, in slot to duration.
 	//Doesn't appear to work directly after the client recieves an action packet.
-	void SendBuffDurationPacket(Buffs_Struct &buff, int slot);
+	void SendBuffDurationPacket(Buffs_Struct &buff, int slot, bool recreate = false);
 	void SendBuffNumHitPacket(Buffs_Struct &buff, int slot);
 
 	void ProcessInspectRequest(Client* requestee, Client* requester);
@@ -2078,7 +2124,7 @@ private:
 	eqFilterMode ClientFilters[_FilterCount];
 	int32 HandlePacket(const EQApplicationPacket *app);
 	void OPTGB(const EQApplicationPacket *app);
-	void OPRezzAnswer(uint32 Action, uint32 SpellID, uint16 ZoneID, uint16 InstanceID, float x, float y, float z);
+	bool OPRezzAnswer(uint32 Action, uint32 SpellID, uint16 ZoneID, uint16 InstanceID, float x, float y, float z);
 	void OPMemorizeSpell(const EQApplicationPacket *app);
 	void OPMoveCoin(const EQApplicationPacket* app);
 	void MoveItemCharges(EQ::ItemInstance &from, int16 to_slot, uint8 type);
@@ -2127,6 +2173,17 @@ private:
 	uint8 playeraction;
 
 	bool m_inventory_session_rejected = false;
+ bool m_spirit_shroud_transition = false;
+ bool m_spirit_shroud_native_pending = false;
+ bool m_spirit_shroud_restored_short_buffs_pending = false;
+ uint64_t m_spirit_shroud_native_revision = 0, m_spirit_shroud_native_deadline = 0;
+ uint32_t m_spirit_shroud_template = 0, m_spirit_shroud_keeper = 0;
+ uint64_t m_spirit_shroud_menu_until = 0, m_spirit_shroud_progress_sent = 0;
+ std::set<uint32_t> m_spirit_shroud_aa_ranks;
+ uint64_t m_spirit_shroud_session_id = 0, m_spirit_shroud_revision = 0;
+ bool m_spirit_shroud_personal_bank = false;
+ std::shared_ptr<const SpiritShroud::Template> m_spirit_shroud_definition;
+ uint8_t m_spirit_shroud_resource_refreshes = 0;
 	std::shared_ptr<Housing::InventorySessions::ZoneReservation> m_inventory_session_reservation;
 	std::unique_ptr<Housing::InventoryBridge::Bridge> m_housing_inventory_bridge;
 	std::shared_ptr<Housing::NativePlacement::Session> m_housing_placement_session;

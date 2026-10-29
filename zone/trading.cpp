@@ -110,6 +110,11 @@ void Trade::AddEntity(uint16 trade_slot_id, uint32 stack_size) {
 		return;
 	}
 
+	if(!client->CanTransferSpiritShroudItemTree(inst)){
+		client->Message(Chat::Yellow,"Your shroud's temporary supplies cannot be traded.");
+		return;
+	}
+
 	EQ::ItemInstance* inst2 = client->GetInv().GetItem(trade_slot_id);
 
 	// it looks like the original code attempted to allow stacking...
@@ -323,6 +328,13 @@ void Client::ResetTrade() {
 void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, std::list<void*>* event_details) {
 	if (!tradingWith) {
 		return;
+	}
+
+	if(IsSpiritShrouded())for(int16 slot=EQ::invslot::TRADE_BEGIN;slot<=EQ::invslot::TRADE_END;++slot){
+		if(!CanTransferSpiritShroudItemTree(m_inv[slot])){
+			Message(Chat::Yellow,"Your shroud's temporary supplies cannot be transferred.");
+			ResetTrade();return;
+		}
 	}
 
 	if (tradingWith->IsClient()) {
@@ -749,7 +761,7 @@ bool Client::CheckTradeNonDroppable()
 		if (!inst)
 			continue;
 
-		if (!inst->IsDroppable())
+		if (!CanTransferSpiritShroudItemTree(inst) || !inst->IsDroppable())
 			return true;
 	}
 

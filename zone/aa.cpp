@@ -17,6 +17,7 @@ Copyright (C) 2001-2016 EQEMu Development Team (http://eqemulator.net)
 */
 
 #include "../common/classes.h"
+#include "../common/shroud/aa_preview.h"
 #include "../common/global_define.h"
 #include "../common/eqemu_logsys.h"
 #include "../common/eq_packet_structs.h"
@@ -518,6 +519,8 @@ void Mob::WakeTheDead(uint16 spell_id, Corpse *corpse_to_use, Mob *tar, uint32 d
 
 void Client::ResetAA()
 {
+	if (IsSpiritShrouded()) return;
+
 	SendClearPlayerAA();
 	RefundAA();
 
@@ -839,6 +842,8 @@ void Client::InspectBuffs(Client* Inspector, int Rank)
 }
 
 void Client::RefundAA() {
+	if (IsSpiritShrouded()) return;
+
 	int refunded = 0;
 
 	auto rank_value = aa_ranks.begin();
@@ -898,7 +903,54 @@ Mob *SwarmPet::GetOwner()
 
 //New AA
 void Client::SendAlternateAdvancementTable() {
+ if(!zone)return;
+ if(ClientVersion()==EQ::versions::ClientVersion::RoF2){
+  const auto* form=IsSpiritShrouded()?SpiritShroudDefinition():nullptr;
+  for(const auto& entry:zone->aa_ranks){
+   const auto* rank=entry.second.get();
+   if(!SpiritShroud::HideCachedRank(form,rank))continue;
+   const auto* ability=rank->base_ability;
+   // Matching-client eligibility always tests the class mask. A regular
+   // same-ID definition supersedes its cached predecessor; omission does not.
+   // Hide only Monster definitions, leaving every ordinary AA untouched.
+   EQApplicationPacket hidden(OP_SendAATable,sizeof(AARankInfo_Struct));
+   auto* definition=reinterpret_cast<AARankInfo_Struct*>(hidden.pBuffer);
+   *definition={};
+   definition->id=rank->id;
+   definition->upper_hotkey_sid=rank->upper_hotkey_sid;
+   definition->lower_hotkey_sid=rank->lower_hotkey_sid;
+   definition->title_sid=rank->title_sid;
+   definition->desc_sid=rank->desc_sid;
+   definition->level_req=rank->level_req;
+   definition->cost=rank->cost;
+   definition->seq=ability->id;
+   definition->current_level=rank->current_value;
+   definition->max_level=rank->current_value;
+   definition->type=ability->type;
+   definition->spell=rank->spell;
+   definition->spell_type=rank->spell_type;
+   definition->spell_refresh=rank->recast_time;
+   definition->classes=0;
+   definition->prev_id=-1;
+   definition->next_id=-1;
+   definition->total_cost=rank->total_cost;
+   definition->expansion=rank->expansion;
+   definition->category=ability->category;
+   definition->charges=ability->charges;
+   definition->grant_only=ability->grant_only;
+   QueuePacket(&hidden);
+  }
+ }
 	for(auto &aa : zone->aa_abilities) {
+		if (IsSpiritShrouded()) {
+			// Saved Monster AA sets contain the highest owned rank ID. A fresh
+			// client must know that rank before Load can request its missing
+			// chain, even when no rank in the chain is currently owned.
+			for (auto* rank = aa.second->first; rank && HasSpiritShroudRank(rank->id); rank = rank->next) {
+				SendAlternateAdvancementRank(aa.first, rank->current_value);
+			}
+			continue;
+		}
 		uint32 charges = 0;
 		auto ranks = GetAA(aa.second->first_rank_id, &charges);
 		if(ranks) {
@@ -914,7 +966,7 @@ void Client::SendAlternateAdvancementTable() {
 	}
 }
 
-void Client::SendAlternateAdvancementRank(int aa_id, int level) {
+void Client::SendAlternateAdvancementRank(int aa_id, int level, const SpiritShroud::Template* shroud_preview) {
 	if(!zone)
 		return;
 
@@ -922,15 +974,23 @@ void Client::SendAlternateAdvancementRank(int aa_id, int level) {
 	auto ability = ability_rank.first;
 	auto rank = ability_rank.second;
 
-	if(!ability) {
+	if(!ability || !rank) {
 		return;
 	}
 
-	if(!(ability->classes & (1 << GetClass()))) {
+ // Both the selection preview and an active form advertise the same bounded
+ // rank chain. A normal character retains the ordinary AA serialization path.
+ const auto* shroud_form = shroud_preview ? shroud_preview :
+  (IsSpiritShrouded() ? SpiritShroudDefinition() : nullptr);
+ auto preview_range = shroud_form ? SpiritShroud::PreviewRange(*shroud_form, rank) : SpiritShroud::PreviewRankRange{};
+ if(shroud_form && (!preview_range.valid || !SpiritShroud::EnumerableRank(rank->id))) return;
+
+	if(!shroud_preview && !(ability->classes & (1 << GetClass()))) {
 		return;
 	}
 
-	if(!CanUseAlternateAdvancementRank(rank)) {
+	if((!shroud_preview && !CanUseAlternateAdvancementRank(rank)) ||
+ (shroud_preview && ability->category!=AACategory::ShroudPassive && ability->category!=AACategory::ShroudActive)) {
 		return;
 	}
 
@@ -952,15 +1012,21 @@ void Client::SendAlternateAdvancementRank(int aa_id, int level) {
 	aai->classes = ability->classes;
 	aai->level_req = rank->level_req;
 	aai->current_level = level;
-	aai->max_level = ability->GetMaxLevel(this);
-	aai->prev_id = rank->prev_id;
+ const auto* captured = shroud_form ? SpiritShroud::CapturedPresentation(*shroud_form,rank) : nullptr;
+	aai->max_level = shroud_form ? preview_range.maximum : ability->GetMaxLevel(this);
+	aai->prev_id = shroud_form ? preview_range.previous : rank->prev_id;
+ if(captured){aai->current_level=captured->current;aai->max_level=captured->maximum;}
 
-	if((rank->next && !CanUseAlternateAdvancementRank(rank->next)) || ability->charges > 0) {
+	if(ability->charges > 0) {
+		aai->next_id = -1;
+ } else if(shroud_form) {
+  aai->next_id = preview_range.next;
+ } else if(rank->next && !CanUseAlternateAdvancementRank(rank->next)) {
 		aai->next_id = -1;
 	} else {
 		aai->next_id = rank->next_id;
 	}
-	aai->total_cost = rank->total_cost;
+	aai->total_cost = captured ? captured->total_cost : rank->total_cost;
 	aai->expansion = rank->expansion;
 	aai->category = ability->category;
 	aai->charges = ability->charges;
@@ -1008,6 +1074,9 @@ void Client::SendAlternateAdvancementPoints() {
 			if(rank) {
 				aa2->aa_list[i].AA = rank->id;
 				aa2->aa_list[i].value = rank->total_cost;
+    const auto* form=IsSpiritShrouded()?SpiritShroudDefinition():nullptr;
+    const auto* captured=form?SpiritShroud::CapturedPresentation(*form,rank):nullptr;
+    if(captured)aa2->aa_list[i].value=captured->total_cost;
 				aa2->aa_list[i].charges = charges;
 				i++;
 			}
@@ -1054,6 +1123,18 @@ void Client::SendAlternateAdvancementTimers() {
 }
 
 void Client::ResetAlternateAdvancementTimer(int ability) {
+	if (IsSpiritShrouded()) {
+		auto *rank = zone->GetAlternateAdvancementRank(ability);
+		if (!rank || !rank->base_ability || rank->base_ability->category != AACategory::ShroudActive ||
+			!HasSpiritShroudRank(rank->id) || GetAA(rank->id) < uint32_t(rank->current_value) ||
+			rank->spell_type < 0 || rank->spell_type > pTimerAAEnd - pTimerAAStart) return;
+		// A failed shorter cast must not erase an earlier shared start which
+		// still controls another ability with a longer queried reuse time.
+		auto *prior = p_timers.Get(rank->spell_type + pTimerAAStart);
+		SendAlternateAdvancementTimer(rank->spell_type,
+			prior && prior->Enabled() ? prior->GetStartTime() : 0, time(nullptr));
+		return;
+	}
 	AA::Rank *rank = zone->GetAlternateAdvancementRank(casting_spell_aa_id);
 	if(rank) {
 		SendAlternateAdvancementTimer(rank->spell_type, 0, time(0));
@@ -1107,6 +1188,11 @@ void Client::ResetOnDeathAlternateAdvancement() {
 }
 
 void Client::PurchaseAlternateAdvancementRank(int rank_id) {
+	if (IsSpiritShrouded()) {
+		PurchaseSpiritShroudRank(rank_id, false);
+		return;
+	}
+
 	AA::Rank *rank = zone->GetAlternateAdvancementRank(rank_id);
 	if(!rank) {
 		return;
@@ -1124,6 +1210,8 @@ void Client::PurchaseAlternateAdvancementRank(int rank_id) {
 }
 
 bool Client::GrantAlternateAdvancementAbility(int aa_id, int points, bool ignore_cost) {
+	if (IsSpiritShrouded()) return false;
+
 	bool ret = false;
 	for(int i = 1; i <= points; ++i) {
 		auto ability_rank = zone->GetAlternateAdvancementAbilityAndRank(aa_id, i);
@@ -1150,6 +1238,8 @@ bool Client::GrantAlternateAdvancementAbility(int aa_id, int points, bool ignore
 }
 
 void Client::FinishAlternateAdvancementPurchase(AA::Rank *rank, bool ignore_cost, bool send_message_and_save) {
+	if (IsSpiritShrouded()) return;
+
 	auto rank_id = rank->base_ability->first_rank_id;
 
 	if (rank->base_ability->charges) {
@@ -1281,13 +1371,40 @@ void Client::ActivateAlternateAdvancementAbility(int rank_id, int target_id) {
 	// We don't have the AA
 	if (!GetAA(rank_id, &charges))
 		return;
+ // GetAA resolves any rank ID to the owned ability. It does not establish
+ // ownership of the requested rank, so reject forged higher Monster ranks.
+ if (IsSpiritShrouded() &&
+     (SpiritShroudTransitionPending() || IsDead() ||
+      ability->category != AACategory::ShroudActive ||
+      GetAA(rank_id) < uint32_t(rank->current_value) ||
+      rank->spell_type < 0 || rank->spell_type > pTimerAAEnd - pTimerAAStart)) {
+  return;
+ }
 	//if expendable make sure we have charges
 	if (ability->charges > 0 && charges < 1)
 		return;
 
-	//check cooldown
-	if (!p_timers.Expired(&database, rank->spell_type + pTimerAAStart, false)) {
-		uint32 aaremain = p_timers.GetRemainingTime(rank->spell_type + pTimerAAStart);
+	int timer_duration = 0;
+	uint32 aaremain = 0;
+	bool cooldown_blocked = false;
+	if (IsSpiritShrouded()) {
+		timer_duration = std::max(0, rank->recast_time - GetAlternateAdvancementCooldownReduction(rank));
+		// RoF2 shares the start, then adds the queried AA's own reduced reuse.
+		// Do not call Expired: it can delete a still-relevant shared start.
+		auto *prior = p_timers.Get(rank->spell_type + pTimerAAStart);
+		if (timer_duration && prior && prior->Enabled()) {
+			const uint64 deadline = uint64(prior->GetStartTime()) + uint64(timer_duration);
+			const uint64 now = uint64(time(nullptr));
+			if (now < deadline) {
+				cooldown_blocked = true;
+				aaremain = uint32(std::min<uint64>(deadline - now, UINT32_MAX));
+			}
+		}
+	} else if (!p_timers.Expired(&database, rank->spell_type + pTimerAAStart, false)) {
+		cooldown_blocked = true;
+		aaremain = p_timers.GetRemainingTime(rank->spell_type + pTimerAAStart);
+	}
+	if (cooldown_blocked) {
 		uint32 aaremain_hr = aaremain / (60 * 60);
 		uint32 aaremain_min = (aaremain / 60) % 60;
 		uint32 aaremain_sec = aaremain % 60;
@@ -1304,9 +1421,24 @@ void Client::ActivateAlternateAdvancementAbility(int rank_id, int target_id) {
 		return;
 	}
 
-	int timer_duration = rank->recast_time - GetAlternateAdvancementCooldownReduction(rank);
-	if (timer_duration < 0) {
-		timer_duration = 0;
+	if (!IsSpiritShrouded()) {
+		timer_duration = rank->recast_time - GetAlternateAdvancementCooldownReduction(rank);
+		if (timer_duration < 0) {
+			timer_duration = 0;
+		}
+	} else {
+		// The stored duration only retains the start through every offered
+		// query, including later purchases and reconnects. It is not the
+		// cooldown of the ability being activated; eligibility above is.
+		for (auto rank_id : m_spirit_shroud_aa_ranks) {
+			auto *peer = zone->GetAlternateAdvancementRank(rank_id);
+			if (!peer || !peer->base_ability || peer->base_ability->category != AACategory::ShroudActive ||
+				peer->spell_type != rank->spell_type || !IsValidSpell(peer->spell) ||
+				!CanUseAlternateAdvancementRank(peer)) continue;
+			const int64 effective = int64(peer->recast_time) - GetAlternateAdvancementCooldownReduction(peer);
+			const int64 retain = std::max<int64>(peer->recast_time, effective);
+			timer_duration = int(std::max<int64>(timer_duration, std::min<int64>(retain, INT32_MAX)));
+		}
 	}
 
 	if (!IsCastWhileInvisibleSpell(rank->spell))
@@ -1573,17 +1705,14 @@ bool Mob::CanUseAlternateAdvancementRank(AA::Rank *rank)
 		return false;
 	}
 
-	if (!(a->classes & (1 << GetClass()))) {
-		return false;
-	}
 
-	// Passive and Active Shroud AAs, skip for now
-	if (
-		a->category == AACategory::ShroudPassive ||
-		a->category == AACategory::ShroudActive
-	) {
-		return false;
-	}
+ if(a->category==AACategory::ShroudPassive || a->category==AACategory::ShroudActive) {
+  if(!IsClient() || !CastToClient()->IsSpiritShrouded())return false;
+  const auto* form=CastToClient()->SpiritShroudDefinition();
+  return form && SpiritShroud::PreviewRange(*form,rank).valid;
+ }
+ if(IsClient() && CastToClient()->IsSpiritShrouded())return false;
+ if(!(a->classes & (1 << GetClass())))return false;
 
 	//the one titanium hack i will allow
 	//just to make sure we dont crash the client with newer aas
@@ -2039,6 +2168,8 @@ bool Client::IsEffectinAlternateAdvancementRankEffects(const AA::Rank &rank, int
 }
 
 void Client::ResetAlternateAdvancementRank(uint32 aa_id) {
+	if (IsSpiritShrouded()) return;
+
 
 	/*
 		Resets your AA to baseline
@@ -2059,6 +2190,8 @@ void Client::ResetAlternateAdvancementRank(uint32 aa_id) {
 }
 
 void Client::TogglePurchaseAlternativeAdvancementRank(int rank_id){
+	if (IsSpiritShrouded()) return;
+
 
 	/*
 		Stripped down version of purchasing AA. Will give no messages.
@@ -2092,6 +2225,8 @@ void Client::TogglePurchaseAlternativeAdvancementRank(int rank_id){
 }
 
 void Client::AutoGrantAAPoints() {
+	if (IsSpiritShrouded()) return;
+
 	int auto_grant_expansion = RuleI(Expansion, AutoGrantAAExpansion);
 
 	if (auto_grant_expansion == -1) {
@@ -2161,6 +2296,8 @@ void Client::AutoGrantAAPoints() {
 
 void Client::GrantAllAAPoints(uint8 unlock_level, bool skip_grant_only)
 {
+	if (IsSpiritShrouded()) return;
+
 	//iterate through every AA
 	for (auto& aa : zone->aa_abilities) {
 		AA::Ability* ability = aa.second.get();

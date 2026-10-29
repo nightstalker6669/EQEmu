@@ -39,6 +39,9 @@
 
 
 RULE_CATEGORY(Character)
+RULE_BOOL(Character, NativeSpiritShroudTransitions, false, "Use checked native in-place RoF2 shroud transitions; unsupported destination states retain the reload fallback")
+RULE_BOOL(Character, EnableSpiritShrouds, false, "Enable transactional RoF2 Spirit Shrouds after applying shroud migrations")
+RULE_BOOL(Character, AllowTestSpiritShrouds, true, "Allow the separately marked starter Spirit Shroud catalog while Live content research is incomplete")
 RULE_INT(Character, MaxLevel, 65, "Sets the highest level for players that can be reached through experience")
 RULE_BOOL(Character, PerCharacterQglobalMaxLevel, false, "Check for qglobal 'CharMaxLevel' character qglobal (Type 5, \"\"), if player tries to level beyond that point, it will not go beyond that level")
 RULE_BOOL(Character, PerCharacterBucketMaxLevel, false, "Check for data bucket 'CharMaxLevel', if player tries to level beyond that point, it will not go beyond that level")

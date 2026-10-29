@@ -1129,6 +1129,11 @@ struct PlayerProfile_Struct
 /*19564*/	uint32				RestTimer;
 /*19568*/	uint32				char_id;			// Found as part of bazaar revamp (5/15/2024)
 
+	// Server-only alternate profile metadata; patch encoders select its wire fields.
+	bool shroud_native_stats_valid{};
+	bool shroud_native_resources_valid{};
+	uint32 shroud_native_stats[18]{};
+
 	// All player profile packets are translated and this overhead is ignored in out-bound packets
 	PlayerProfile_Struct() : m_player_profile_version(EQ::versions::MobVersion::Unknown) { }
 

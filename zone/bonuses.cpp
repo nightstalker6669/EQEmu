@@ -276,7 +276,7 @@ void Mob::AddItemBonuses(const EQ::ItemInstance* inst, StatBonuses* b, bool is_a
 		return;
 	}
 
-	if (IsClient() && !is_tribute && !inst->IsEquipable(GetBaseRace(), GetClass())) {
+	if (IsClient() && !is_tribute && !inst->IsEquipable(GetBaseRace(), GetClass()) && !CastToClient()->IsSpiritShroudStarterItem(inst)) {
 		if (item->ItemType != EQ::item::ItemTypeFood && item->ItemType != EQ::item::ItemTypeDrink) {
 			return;
 		}
@@ -660,6 +660,15 @@ void Mob::ApplyAABonuses(const AA::Rank &rank, StatBonuses *newbon)
 		}
 
 		switch (effect) {
+		case SpellEffect::AttackSpeed:
+			// Captured Monster AA Attack Speed owns one cumulative raw factor.
+			// Keep this adapter out of every ordinary-character AA calculation.
+			if (IsClient() && CastToClient()->IsSpiritShrouded() &&
+				rank.base_ability && rank.base_ability->id == 49005 &&
+				limit_value == 0 && base_value >= 105 && base_value <= 140) {
+				newbon->haste += base_value;
+			}
+			break;
 		case SpellEffect::ACv2:
 		case SpellEffect::ArmorClass:
 			newbon->AC += base_value;

@@ -1,3 +1,4 @@
+#include "../common/shroud/ability_cast.h"
 /*	EQEMu: Everquest Server Emulator
 Copyright (C) 2001-2002 EQEMu Development Team (http://eqemu.org)
 
@@ -193,7 +194,7 @@ bool Mob::CastSpell(uint16 spell_id, uint16 target_id, CastingSlot slot,
 				if ((IsBeneficialSpell(spell_id) && (!(spell_target->IsOfClientBot() || (spell_target->HasOwner() && spell_target->GetOwner()->IsOfClientBot()))))
 					|| (IsDetrimentalSpell(spell_id) && (spell_target->IsOfClientBot() || (spell_target->HasOwner() && spell_target->GetOwner()->IsOfClientBot())))) {
 					//Check if the target's target is a valid target; we can use DoCastingChecksOnTarget() here because we can let it handle the failure as vanilla would
-					if (DoCastingChecksOnTarget(true, spell_id, targets_target)) {
+					if (DoCastingChecksOnTarget(true, spell_id, targets_target, slot == CastingSlot::AltAbility ? aa_id : 0)) {
 						target_id = targets_target->GetID();
 					}
 					else {
@@ -208,7 +209,7 @@ bool Mob::CastSpell(uint16 spell_id, uint16 target_id, CastingSlot slot,
 
 	if (!DoCastingChecksOnCaster(spell_id, slot) ||
 		!DoCastingChecksZoneRestrictions(true, spell_id) ||
-		!DoCastingChecksOnTarget(true, spell_id, entity_list.GetMobID(target_id))) {
+		!DoCastingChecksOnTarget(true, spell_id, entity_list.GetMobID(target_id), slot == CastingSlot::AltAbility ? aa_id : 0)) {
 		StopCastSpell(spell_id, send_spellbar_enable);
 		return false;
 	}
@@ -751,7 +752,7 @@ bool Mob::DoCastingChecksZoneRestrictions(bool check_on_casting, int32 spell_id)
 }
 
 
-bool Mob::DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob *spell_target) {
+bool Mob::DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob *spell_target, uint32 aa_context) {
 
 	/*
 		These are casting requirements or TARGETS that will cancel a spell before spell finishes casting or prevent spell from casting.
@@ -832,7 +833,7 @@ bool Mob::DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob *sp
 		Prevent buffs from being cast on targets who don't meet level restriction
 	*/
 
-	if (!spell_target->CheckSpellLevelRestriction(this, spell_id)) {
+	if (!spell_target->CheckSpellLevelRestriction(this, spell_id, aa_context)) {
 		return false;
 	}
 	/*
@@ -2468,7 +2469,8 @@ bool Mob::SpellFinished(uint16 spell_id, Mob *spell_target, CastingSlot slot, in
 			LogSpells("Spell [{}]: Zone restriction failure.", spell_id);
 			return false;
 		}
-		if (!DoCastingChecksOnTarget(true, spell_id, spell_target)) {
+		if (!DoCastingChecksOnTarget(true, spell_id, spell_target,
+   slot == CastingSlot::AltAbility && !isproc ? aa_id : 0)) {
 			LogSpells("Spell [{}]: Casting checks on Target failure.", spell_id);
 			return false;
 		}
@@ -3436,7 +3438,7 @@ int Mob::CheckStackConflict(uint16 spellid1, int caster_level1, uint16 spellid2,
 // spells 1-50: no restrictons
 // 51-65: SpellLevel/2+15
 // 66+ Group Spells 62, Single Target 61
-bool Mob::CheckSpellLevelRestriction(Mob *caster, uint16 spell_id)
+bool Mob::CheckSpellLevelRestriction(Mob *caster, uint16 spell_id, uint32 aa_context)
 {
 	if (spells[spell_id].target_type == ST_Self) {
 		LogSpells("[CheckSpellLevelRestriction] Self Only spell - no restrictions");
@@ -3476,6 +3478,11 @@ bool Mob::CheckSpellLevelRestriction(Mob *caster, uint16 spell_id)
 
 	if (check_for_restrictions) {
 		int spell_level = GetSpellMinimumLevel(spell_id);
+  // Only unlearnable Monster spell placeholders use the authenticated AA minimum.
+  if(spell_level == 255 && aa_context && caster->IsClient()) {
+   if(auto minimum=caster->CastToClient()->SpiritShroudAbilityMinimumLevel(spell_id,aa_context))
+    spell_level=int(SpiritShroud::BuffMinimumLevel(uint32_t(spell_level),minimum));
+  }
 
 		// Only check for beneficial buffs
 		if (IsBuffSpell(spell_id) && IsBeneficialSpell(spell_id)) {
@@ -4048,7 +4055,9 @@ bool Mob::SpellOnTarget(
 		0, &args
 	);
 
-	if (!DoCastingChecksOnTarget(false, spell_id, spelltar)) {
+	const uint32 aa_context = !isproc && casting_spell_slot == CastingSlot::AltAbility &&
+  casting_spell_id == spell_id ? casting_spell_aa_id : 0;
+ if (!DoCastingChecksOnTarget(false, spell_id, spelltar, aa_context)) {
 		safe_delete(action_packet);
 		return false;
 	}
@@ -4599,7 +4608,7 @@ bool Mob::SpellOnTarget(
 	}
 
 	// make sure spelltar is high enough level for the buff
-	if (!spelltar->CheckSpellLevelRestriction(this, spell_id)) {
+	if (!spelltar->CheckSpellLevelRestriction(this, spell_id, aa_context)) {
 		safe_delete(action_packet);
 		return false;
 	}
@@ -6552,7 +6561,7 @@ int Mob::GetCasterLevel(uint16 spell_id) {
 //Thus I use this in the buff process to update the correct duration once after casting
 //this allows AAs and focus effects that increase buff duration to work correctly, but could probably
 //be used for other things as well
-void Client::SendBuffDurationPacket(Buffs_Struct &buff, int slot)
+void Client::SendBuffDurationPacket(Buffs_Struct &buff, int slot, bool recreate)
 {
 	EQApplicationPacket* outapp = nullptr;
 	outapp = new EQApplicationPacket(OP_Buff, sizeof(SpellBuffPacket_Struct));
@@ -6581,7 +6590,9 @@ void Client::SendBuffDurationPacket(Buffs_Struct &buff, int slot)
 	sbf->buff.z = buff.caston_z;
 
 	sbf->slotid = slot;
-	sbf->bufffade = 0;
+	// Native alternate profiles begin with empty affects. RoF2 operation3
+	// installs the slot; the ordinary duration update cannot create it.
+	sbf->bufffade = recreate && ClientVersion() == EQ::versions::ClientVersion::RoF2 ? 3 : 0;
 	FastQueuePacket(&outapp);
 }
 

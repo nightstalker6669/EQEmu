@@ -5,6 +5,7 @@
 #include "client.h"
 #include "zonedb.h"
 #include "../common/eqemu_config.h"
+#include "../common/rulesys.h"
 #include <mutex>
 namespace Housing::HousePreload {
 namespace {
@@ -30,7 +31,11 @@ bool ConfigureZonePoliciesAtSafeStartup(ZonePolicies selected){
 }
 ZonePolicies CurrentZonePolicies(){std::lock_guard<std::mutex> guard(policy_mutex);return policies;}
 bool LoadInventoryWithHouseBindings(Client& client,ZoneDatabase& loader,bool enabled){
- auto held=[&client]{return client.HasInventorySessionReservation();};
+ std::function<bool()> held;
+ if(client.InventorySessionReleaseTicket() ||
+    (client.ClientVersion()==EQ::versions::ClientVersion::RoF2 &&
+     (RuleB(Housing,EnablePlayerHousing)||RuleB(Mercs,AllowMercs))))
+  held=[&client]{return client.HasInventorySessionReservation();};
  if(!enabled||client.ClientVersion()!=EQ::versions::ClientVersion::RoF2)return loader.GetInventory(&client,held);
  try{
   if(client.ClientDataLoaded())return false;

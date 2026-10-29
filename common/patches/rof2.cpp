@@ -1,3 +1,4 @@
+#include "../shroud/native_stats.h"
 #include "../mercenary/rof2_wire.h"
 #include "../housing/plot_find_wire.h"
 #include "../housing/npc_item_metadata.h"
@@ -47,6 +48,7 @@
 #include <sstream>
 #include <numeric>
 #include <cassert>
+#include <set>
 #include <cinttypes>
 
 
@@ -70,6 +72,82 @@ namespace RoF2
 			return true;
 		}
 	}
+
+ namespace {
+ class ShroudEncodingSink final : public EQStreamInterface {
+ public:
+  std::vector<std::vector<uint8_t>> packets;
+  void QueuePacket(const EQApplicationPacket* p,bool=true) override {if(p)packets.emplace_back(p->pBuffer,p->pBuffer+p->size);}
+  void FastQueuePacket(EQApplicationPacket** p,bool ack=true) override {if(p&&*p){QueuePacket(*p,ack);delete *p;*p=nullptr;}}
+  EQApplicationPacket* PopPacket() override {return nullptr;}
+  void Close() override {} void ReleaseFromUse() override {} void RemoveData() override {}
+  std::string GetRemoteAddr() const override {return {};}
+  uint32 GetRemoteIP() const override {return 0;} uint16 GetRemotePort() const override {return 0;}
+  bool CheckState(EQStreamState) override {return false;} std::string Describe() const override {return "RoF2 prepared encoding";}
+  EQStreamState GetState() override {return CLOSED;}
+  void SetOpcodeManager(OpcodeManager**) override {} OpcodeManager* GetOpcodeManager() const override {return nullptr;}
+  Stats GetStats() const override {return {};}
+  void ResetStats() override {} EQStreamManagerInterface* GetManager() const override {return nullptr;}
+ };
+ std::optional<std::vector<uint8_t>> ShroudEncode(EmuOpcode opcode,const void* data,size_t size) {
+  if(!data||!size||size>16*1024*1024)return std::nullopt;
+  auto sink=std::make_shared<ShroudEncodingSink>();auto* packet=new EQApplicationPacket(opcode,size);
+  std::memcpy(packet->pBuffer,data,size);struct_strategy.Encode(&packet,sink,false);delete packet;
+  if(sink->packets.size()!=1||sink->packets.front().empty())return std::nullopt;
+  return std::move(sink->packets.front());
+ }
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudSpawn(const Spawn_Struct& spawn) {
+  return ShroudEncode(OP_ZoneSpawns,&spawn,sizeof(spawn));
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudNormalProfile(const PlayerProfile_Struct& profile) {
+  return ShroudEncode(OP_PlayerProfile,&profile,sizeof(profile));
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudInventory(const std::vector<std::pair<int16_t,const EQ::ItemInstance*>>& roots) {
+  if(roots.size()>4096)return std::nullopt;EQ::OutBuffer out;
+  uint32_t count=roots.size();out.write(reinterpret_cast<const char*>(&count),sizeof(count));
+  size_t nodes=0;std::set<int16_t> slots;
+  const auto valid_tree=[&](const auto& self,const EQ::ItemInstance& item,size_t depth)->bool {
+   if(depth>8 || ++nodes>4096 || !item.GetUnscaledItem() || item.GetMerchantSlot())return false;
+   for(uint8_t slot=EQ::invbag::SLOT_BEGIN;slot<=EQ::invbag::SLOT_END;++slot)
+    if(const auto* child=item.GetItem(slot);child && !self(self,*child,depth+1))return false;
+   return true;
+  };
+  for(const auto& root:roots){
+   if(!root.second||!slots.insert(root.first).second||!valid_tree(valid_tree,*root.second,0))return std::nullopt;
+   const auto previous=out.tellp();SerializeItem(out,root.second,root.first,0,ItemPacketCharInventory);
+   if(out.tellp()<=previous||out.size()>16*1024*1024)return std::nullopt;
+  }
+  const auto size=out.size();auto* bytes=out.detach();std::vector<uint8_t> result(bytes,bytes+size);delete[] bytes;return result;
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudBankItem(const EQ::ItemInstance& item,int16_t slot) {
+  if(slot<EQ::invslot::GENERAL_BEGIN || slot>EQ::invslot::GENERAL_END)return std::nullopt;
+  size_t nodes=0;
+  const auto valid=[&](const auto& self,const EQ::ItemInstance& value,size_t depth)->bool {
+   if(depth>8 || ++nodes>4096 || !value.GetUnscaledItem() || value.GetMerchantSlot())return false;
+   for(uint8_t i=EQ::invbag::SLOT_BEGIN;i<=EQ::invbag::SLOT_END;++i)
+    if(const auto* child=value.GetItem(i);child && !self(self,*child,depth+1))return false;
+   return true;
+  };
+  if(!valid(valid,item,0))return std::nullopt;
+  const auto serialized=item.Serialize(slot);std::vector<uint8_t> input(4+serialized.size());
+  const uint32_t type=ItemPacketTrade;std::memcpy(input.data(),&type,4);
+  std::memcpy(input.data()+4,serialized.data(),serialized.size());
+  auto bytes=ShroudEncode(OP_ItemPacket,input.data(),input.size());
+  if(!bytes || bytes->size()<=4 || bytes->size()>16*1024*1024)return std::nullopt;
+  return bytes;
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudPreviewItem(const EQ::ItemInstance &instance)
+ {
+  if(!instance.GetUnscaledItem() || instance.GetMerchantSlot())return std::nullopt;
+  std::unique_ptr<EQ::ItemInstance> root(instance.Clone());
+  if(!root)return std::nullopt;
+  if(root->IsClassBag())root->Clear();
+  EQ::OutBuffer buffer;
+  SerializeItem(buffer,root.get(),EQ::invslot::slotCursor,0,ItemPacketViewLink);
+  if(!buffer.good() || !buffer.size() || buffer.size()>65535)return std::nullopt;
+  const auto bytes=buffer.str();return std::vector<uint8_t>(bytes.begin(),bytes.end());
+ }
 
 	std::optional<std::vector<uint8_t>> SerializeHousingItem(
 		const EQ::ItemInstance &instance, int16_t server_slot)
@@ -737,7 +815,9 @@ namespace RoF2
 		OUT(buff.z);
 		eq->slotid = ServerToRoF2BuffSlot(emu->slotid);
 		// TODO: implement slot_data stuff
-		if (emu->bufffade == 1)
+		if (emu->bufffade == 3)
+			eq->bufffade = 3; // Explicit native alternate-profile slot reconstruction.
+		else if (emu->bufffade == 1)
 			eq->bufffade = 1;
 		else
 			eq->bufffade = 2;
@@ -1996,6 +2076,25 @@ namespace RoF2
 		FINISH_ENCODE();
 	}
 
+	// RoF2 uses the same spawn/current/maximum layout for all three resources.
+	ENCODE(OP_ManaUpdate)
+	{
+		SETUP_DIRECT_ENCODE(ManaUpdate_Struct, structs::SpawnHPUpdate_Struct);
+		eq->spawn_id = emu->spawn_id;
+		eq->cur_hp = emu->cur_mana;
+		eq->max_hp = emu->max_mana;
+		FINISH_ENCODE();
+	}
+
+	ENCODE(OP_EnduranceUpdate)
+	{
+		SETUP_DIRECT_ENCODE(EnduranceUpdate_Struct, structs::SpawnHPUpdate_Struct);
+		eq->spawn_id = emu->spawn_id;
+		eq->cur_hp = emu->cur_end;
+		eq->max_hp = emu->max_end;
+		FINISH_ENCODE();
+	}
+
 	ENCODE(OP_Illusion)
 	{
 		ENCODE_LENGTH_EXACT(Illusion_Struct);
@@ -2473,8 +2572,8 @@ namespace RoF2
 		outapp->WriteUInt32(0);		// Checksum, we will update this later
 		outapp->WriteUInt32(0);		// Checksum size, we will update this later
 
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
+		outapp->WriteUInt32(emu->unknown0112 ? 1 : 0); // Main=0, Alt shroud=1
+		outapp->WriteUInt32(emu->unknown0112); // Spirit Shroud template ID
 
 
 		outapp->WriteUInt8(emu->gender);	// Gender
@@ -2847,30 +2946,36 @@ namespace RoF2
 		}
 
 		outapp->WriteSInt32(-1);	// Unknown;
-		outapp->WriteSInt32(123);	// HP Total ?
-		outapp->WriteSInt32(234);	// Endurance Total ?
-		outapp->WriteSInt32(345);	// Mana Total ?
+		if (emu->unknown0112 && emu->shroud_native_resources_valid) {
+			for (auto value : SpiritShroud::NativeStatTail(emu->shroud_native_stats)) {
+				outapp->WriteUInt32(value);
+			}
+		} else {
+			outapp->WriteSInt32(123);	// HP Total ?
+			outapp->WriteSInt32(234);	// Endurance Total ?
+			outapp->WriteSInt32(345);	// Mana Total ?
 
-		// these are needed to fix display bugs
-		outapp->WriteUInt32(0x19);		// base CR
-		outapp->WriteUInt32(0x19);		// base FR
-		outapp->WriteUInt32(0x19);		// base MR
-		outapp->WriteUInt32(0xf);		// base DR
-		outapp->WriteUInt32(0xf);		// base PR
-		outapp->WriteUInt32(0xf);		// base PhR?
-		outapp->WriteUInt32(0xf);		// base Corrup
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
+			// these are needed to fix display bugs
+			outapp->WriteUInt32(0x19);		// base CR
+			outapp->WriteUInt32(0x19);		// base FR
+			outapp->WriteUInt32(0x19);		// base MR
+			outapp->WriteUInt32(0xf);		// base DR
+			outapp->WriteUInt32(0xf);		// base PR
+			outapp->WriteUInt32(0xf);		// base PhR?
+			outapp->WriteUInt32(0xf);		// base Corrup
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
 
-		outapp->WriteUInt32(20);	// Unknown - Expansion count ?
+			outapp->WriteUInt32(20);	// Unknown - Expansion count ?
 
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+		}
 		outapp->WriteUInt32(emu->endurance);
 		outapp->WriteUInt32(0);		// Unknown - Observed 0x7cde - This is also seen in guild packets sent to this character.
 		outapp->WriteUInt32(0);		// Unknown - Observed 0x64
@@ -3467,7 +3572,7 @@ namespace RoF2
 		outapp->WriteUInt32(emu->charges);
 		outapp->WriteSInt32(emu->expansion);
 		outapp->WriteSInt32(emu->category);
-		outapp->WriteUInt8(0); // shroud
+		outapp->WriteUInt8(emu->category == 3 || emu->category == 4); // native shroud ability flag
 		outapp->WriteUInt8(0); // unknown109
 		outapp->WriteUInt8(0); // loh
 		outapp->WriteUInt8(0); // unknown111

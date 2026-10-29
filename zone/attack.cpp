@@ -1,3 +1,4 @@
+#include "../common/shroud/native_stats.h"
 /*	EQEMu: Everquest Server Emulator
 Copyright (C) 2001-2002 EQEMu Development Team (http://eqemulator.net)
 
@@ -904,7 +905,8 @@ int Mob::GetClassRaceACBonus()
 //SYNC WITH: tune.cpp, mob.h TuneACSum
 int Mob::ACSum(bool skip_caps)
 {
-	int ac = 0; // this should be base AC whenever shrouds come around
+	int ac = IsClient() && CastToClient()->GetPP().shroud_native_stats_valid ?
+		CastToClient()->GetPP().shroud_native_stats[SpiritShroud::AC] : 0;
 	ac += itembonuses.AC; // items + food + tribute
 	int shield_ac = 0;
 	if (HasShieldEquipped() && IsOfClientBot()) {
@@ -1257,6 +1259,8 @@ int64 Mob::GetWeaponDamage(Mob *against, const EQ::ItemInstance *weapon_item, in
 
 		if (
 			!weapon_item->IsRaceEquipable(GetBaseRace()) &&
+			!(IsClient() && CastToClient()->IsSpiritShrouded() &&
+				CastToClient()->IsSpiritShroudStarterItem(weapon_item)) &&
 			(
 				!IsBot() ||
 				(IsBot() && !RuleB(Bots, AllowBotEquipAnyRaceGear))
@@ -2004,7 +2008,7 @@ bool Client::Death(Mob* killer_mob, int64 damage, uint16 spell, EQ::skills::Skil
 		exploss *= zone->level_exp_mod[GetLevel()].ExpMod;
 	}
 
-	if (exploss > 0 && RuleB(Character, DeathKeepLevel)) {
+	if (exploss > 0 && RuleB(Character, DeathKeepLevel) && !IsSpiritShrouded()) {
 		int32 total_exp = GetEXP();
 		uint32 level_min_exp = GetEXPForLevel(killed_level);
 		int32 level_exp = total_exp - level_min_exp;
@@ -2040,7 +2044,9 @@ bool Client::Death(Mob* killer_mob, int64 damage, uint16 spell, EQ::skills::Skil
 	// now we apply the exp loss, unmem their spells, and make a corpse
 	// unless they're a GM (or less than lvl 10
 	if (!GetGM()) {
-		if (exploss > 0) {
+		// Shrouded loss is applied to the original pending ledger only after
+		// a durable corpse identity exists; the temporary XP profile is fixed.
+		if (exploss > 0 && !IsSpiritShrouded()) {
 			int32 newexp = GetEXP();
 			if (exploss > newexp) {
 				//lost more than we have... wtf..
@@ -2069,7 +2075,7 @@ bool Client::Death(Mob* killer_mob, int64 damage, uint16 spell, EQ::skills::Skil
 
 		if (
 			(RuleB(Character, LeaveCorpses) && GetLevel() >= RuleI(Character, DeathItemLossLevel)) ||
-			RuleB(Character, LeaveNakedCorpses)
+			RuleB(Character, LeaveNakedCorpses) || IsSpiritShrouded()
 		) {
 			// creating the corpse takes the cash/items off the player too
 			new_corpse = new Corpse(this, exploss, killed_by);
@@ -3496,6 +3502,12 @@ uint8 Mob::GetWeaponDamageBonus(const EQ::ItemData *weapon, bool offhand)
 
 int Mob::GetHandToHandDamage(void)
 {
+	if (IsClient()) {
+		const auto& profile = CastToClient()->GetPP();
+		if (profile.shroud_native_stats_valid && profile.shroud_native_stats[SpiritShroud::UnarmedDamage]) {
+			return profile.shroud_native_stats[SpiritShroud::UnarmedDamage];
+		}
+	}
 	if (RuleB(Combat, UseRevampHandToHand)) {
 		// everyone uses this in the revamp!
 		int skill = GetSkill(EQ::skills::SkillHandtoHand);
@@ -6690,8 +6702,10 @@ void Client::SetAttackTimer()
 		int delay = 3500;
 
 		//if we have no weapon..
-		if (ItemToUse == nullptr)
-			delay = 100 * GetHandToHandDelay();
+		if (ItemToUse == nullptr) {
+			delay = m_pp.shroud_native_stats_valid && m_pp.shroud_native_stats[SpiritShroud::UnarmedDelay] ?
+				m_pp.shroud_native_stats[SpiritShroud::UnarmedDelay] : 100 * GetHandToHandDelay();
+		}
 		else
 			//we have a weapon, use its delay
 			delay = 100 * ItemToUse->Delay;

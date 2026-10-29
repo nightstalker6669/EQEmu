@@ -67,6 +67,13 @@ bool Mob::SpellEffect(Mob* caster, uint16 spell_id, float partial, int level_ove
 		return CastToClient()->TryFellowshipCalling();
 	}
 
+ // The shroud return AA uses the real cast lifecycle, but its destination is
+ // the keeper stored at transformation rather than the character's bind point.
+ if (spell_id == 7790 && IsClient() && CastToClient()->IsSpiritShrouded()) {
+  if (caster != this || casting_spell_slot != EQ::spells::CastingSlot::AltAbility) return false;
+  return CastToClient()->CompleteSpiritShroudReturn(casting_spell_aa_id);
+ }
+
 	const SPDat_Spell_Struct &spell = spells[spell_id];
 
 	if (spell.disallow_sit && IsBuffSpell(spell_id) && IsClient() && (CastToClient()->IsSitting() || CastToClient()->GetHorseId() != 0))

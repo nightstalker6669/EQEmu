@@ -23,6 +23,9 @@
 #include "../common/spdat.h"
 
 #include "client.h"
+#include "../common/shroud/native_stats.h"
+#include "../common/shroud/resource_baseline.h"
+#include "../common/shroud/haste.h"
 #include "mob.h"
 
 #include "bot.h"
@@ -239,7 +242,7 @@ int64 Client::CalcHPRegen(bool bCombat)
 	int64 base = 0;
 	auto base_data = zone->GetBaseData(GetLevel(), GetClass());
 	if (base_data.level == GetLevel()) {
-		base = static_cast<int>(base_data.hp_regen);
+		base = m_pp.shroud_native_stats_valid ? m_pp.shroud_native_stats[SpiritShroud::HPRegen] : static_cast<int>(base_data.hp_regen);
 	}
 
 	auto level = GetLevel();
@@ -327,6 +330,8 @@ int64 Client::CalcMaxHP()
 	max_hp = (float)max_hp * (float)nd / (float)10000; //this is to fix the HP-above-495k issue
 	max_hp += spellbonuses.FlatMaxHPChange + aabonuses.FlatMaxHPChange + itembonuses.FlatMaxHPChange;
 
+	// RoF2 applies the player +5 after alternate-profile percentage/flat modifiers.
+	if (m_pp.shroud_native_resources_valid) max_hp += 5;
 	max_hp += GroupLeadershipAAHealthEnhancement();
 	if (current_hp > max_hp) {
 		current_hp = max_hp;
@@ -481,7 +486,7 @@ uint32 Mob::GetClassLevelFactor()
 
 int64 Client::CalcBaseHP()
 {
-	if (ClientVersion() >= EQ::versions::ClientVersion::SoF && RuleB(Character, SoDClientUseSoDHPManaEnd)) {
+	if (m_pp.shroud_native_resources_valid || (ClientVersion() >= EQ::versions::ClientVersion::SoF && RuleB(Character, SoDClientUseSoDHPManaEnd))) {
 		int stats = GetSTA();
 		if (stats > 255) {
 			stats = (stats - 255) / 2;
@@ -490,7 +495,13 @@ int64 Client::CalcBaseHP()
 		base_hp = 5;
 		auto base_data = zone->GetBaseData(GetLevel(), GetClass());
 		if (base_data.level == GetLevel()) {
-			base_hp += base_data.hp + (base_data.hp_fac * stats);
+			// The matching RoF2 client replaces BaseData.hp with the alternate
+			// contribution, while retaining its class/level stamina factor.
+			if (m_pp.shroud_native_resources_valid) {
+				base_hp = m_pp.shroud_native_stats[SpiritShroud::HP] + SpiritShroud::HPStaminaContribution(stats, base_data.hp_fac);
+			} else {
+				base_hp += base_data.hp + (base_data.hp_fac * stats);
+			}
 			base_hp += itembonuses.heroic_max_hp;
 		}
 	}
@@ -568,7 +579,7 @@ int64 Client::CalcBaseMana()
 	if (IsIntelligenceCasterClass()) {
 		WisInt = GetINT();
 
-		if (ClientVersion() >= EQ::versions::ClientVersion::SoF && RuleB(Character, SoDClientUseSoDHPManaEnd)) {
+		if (m_pp.shroud_native_resources_valid || (ClientVersion() >= EQ::versions::ClientVersion::SoF && RuleB(Character, SoDClientUseSoDHPManaEnd))) {
 			ConvertedWisInt = WisInt;
 
 			int over200 = WisInt;
@@ -581,7 +592,7 @@ int64 Client::CalcBaseMana()
 
 			auto base_data = zone->GetBaseData(GetLevel(), GetClass());
 			if (base_data.level == GetLevel()) {
-				max_m = base_data.mana + (ConvertedWisInt * base_data.mana_fac) + itembonuses.heroic_max_mana;
+				max_m = (m_pp.shroud_native_resources_valid ? m_pp.shroud_native_stats[SpiritShroud::Mana] : base_data.mana) + (ConvertedWisInt * base_data.mana_fac) + itembonuses.heroic_max_mana;
 			}
 		} else {
 			if (((WisInt - 199) / 2) > 0) {
@@ -601,7 +612,7 @@ int64 Client::CalcBaseMana()
 	} else if (IsWisdomCasterClass()) {
 		WisInt = GetWIS();
 
-		if (ClientVersion() >= EQ::versions::ClientVersion::SoF && RuleB(Character, SoDClientUseSoDHPManaEnd)) {
+		if (m_pp.shroud_native_resources_valid || (ClientVersion() >= EQ::versions::ClientVersion::SoF && RuleB(Character, SoDClientUseSoDHPManaEnd))) {
 			ConvertedWisInt = WisInt;
 
 			int over200 = WisInt;
@@ -614,7 +625,7 @@ int64 Client::CalcBaseMana()
 
 			auto base_data = zone->GetBaseData(GetLevel(), GetClass());
 			if (base_data.level == GetLevel()) {
-				max_m = base_data.mana + (ConvertedWisInt * base_data.mana_fac) + itembonuses.heroic_max_mana;
+				max_m = (m_pp.shroud_native_resources_valid ? m_pp.shroud_native_stats[SpiritShroud::Mana] : base_data.mana) + (ConvertedWisInt * base_data.mana_fac) + itembonuses.heroic_max_mana;
 			}
 		} else {
 			if (((WisInt - 199) / 2) > 0) {
@@ -665,7 +676,10 @@ int64 Client::CalcManaRegen(bool bCombat)
 	// will get at least 1 for standing and 2 for sitting.
 	bool old = RuleB(Character, OldMinMana);
 	if (!IsStarved()) {
-		// client does some base regen for shrouds here
+		// Alternate profile base regeneration precedes meditation bonuses.
+		if (m_pp.shroud_native_stats_valid) {
+			regen = m_pp.shroud_native_stats[(IsSitting() || CanMedOnHorse()) ? SpiritShroud::ManaRegenSitting : SpiritShroud::ManaRegenStanding];
+		}
 		if (IsSitting() || CanMedOnHorse()) {
 			// kind of weird to do it here w/e
 			// client does some base medding regen for shrouds here
@@ -930,6 +944,14 @@ int32 Client::CalcCHA()
 
 int Client::CalcHaste()
 {
+	// These captured shrouds have no item haste. Keep ordinary characters and
+	// any future unsupported item-haste loadout on the unchanged path below.
+	if (IsSpiritShrouded() && m_pp.shroud_native_resources_valid && aabonuses.haste > 0 && itembonuses.haste == 0) {
+		Haste = SpiritShroud::HasteFactorWithoutItems(GetLevel(), aabonuses.haste,
+			spellbonuses.haste, spellbonuses.hastetype2, spellbonuses.hastetype3,
+			spellbonuses.inhibitmelee, extra_haste);
+		return Haste;
+	}
 	/*  Tests: (based on results in newer char window)
 	    68 v1 + 46 item + 25 over + 35 inhib = 204%
 	    46 item + 5 v2 + 25 over + 35 inhib = 65%
@@ -1068,6 +1090,9 @@ int32	Client::CalcMR()
 		default:
 			MR = 20;
 	}
+	if (m_pp.shroud_native_stats_valid) {
+		MR = m_pp.shroud_native_stats[SpiritShroud::Magic];
+	}
 	MR += itembonuses.MR + spellbonuses.MR + aabonuses.MR;
 	if (GetClass() == Class::Warrior || GetClass() == Class::Berserker) {
 		MR += GetLevel() / 2;
@@ -1141,6 +1166,9 @@ int32	Client::CalcFR()
 		}
 		default:
 			FR = 20;
+	}
+	if (m_pp.shroud_native_stats_valid) {
+		FR = m_pp.shroud_native_stats[SpiritShroud::Fire];
 	}
 	int c = GetClass();
 	if (c == Class::Ranger) {
@@ -1227,6 +1255,9 @@ int32	Client::CalcDR()
 		}
 		default:
 			DR = 15;
+	}
+	if (m_pp.shroud_native_stats_valid) {
+		DR = m_pp.shroud_native_stats[SpiritShroud::Disease];
 	}
 	int c = GetClass();
 	// the monk one is part of base resist
@@ -1320,6 +1351,9 @@ int32	Client::CalcPR()
 		default:
 			PR = 15;
 	}
+	if (m_pp.shroud_native_stats_valid) {
+		PR = m_pp.shroud_native_stats[SpiritShroud::Poison];
+	}
 	int c = GetClass();
 	// this monk bonus is part of the base
 	if (c == Class::Monk) {
@@ -1412,6 +1446,9 @@ int32	Client::CalcCR()
 		default:
 			CR = 25;
 	}
+	if (m_pp.shroud_native_stats_valid) {
+		CR = m_pp.shroud_native_stats[SpiritShroud::Cold];
+	}
 	int c = GetClass();
 	if (c == Class::Ranger || c == Class::Beastlord) {
 		CR += 4;
@@ -1432,7 +1469,7 @@ int32	Client::CalcCR()
 
 int32	Client::CalcCorrup()
 {
-	Corrup = GetBaseCorrup() + itembonuses.Corrup + spellbonuses.Corrup + aabonuses.Corrup;
+	Corrup = (m_pp.shroud_native_stats_valid ? m_pp.shroud_native_stats[SpiritShroud::Corruption] : GetBaseCorrup()) + itembonuses.Corrup + spellbonuses.Corrup + aabonuses.Corrup;
 	if (Corrup > GetMaxCorrup()) {
 		Corrup = GetMaxCorrup();
 	}
@@ -1441,7 +1478,7 @@ int32	Client::CalcCorrup()
 
 int32 Client::CalcATK()
 {
-	ATK = itembonuses.ATK + spellbonuses.ATK + aabonuses.ATK + GroupLeadershipAAOffenseEnhancement();
+	ATK = (m_pp.shroud_native_stats_valid ? m_pp.shroud_native_stats[SpiritShroud::Attack] : 0) + itembonuses.ATK + spellbonuses.ATK + aabonuses.ATK + GroupLeadershipAAOffenseEnhancement();
 	return (ATK);
 }
 
@@ -1622,18 +1659,23 @@ void Client::CalcMaxEndurance()
 int64 Client::CalcBaseEndurance()
 {
 	int64 base_end = 0;
-	if (ClientVersion() >= EQ::versions::ClientVersion::SoF && RuleB(Character, SoDClientUseSoDHPManaEnd)) {
-		double stats = (GetSTR() + GetSTA() + GetDEX() + GetAGI()) / 4.0f;
-
-		if (stats > 201.0f) {
-			stats = 1.25f * (stats - 201.0f) + 352.5f;
+	if (m_pp.shroud_native_resources_valid || (ClientVersion() >= EQ::versions::ClientVersion::SoF && RuleB(Character, SoDClientUseSoDHPManaEnd))) {
+		double stats;
+		if (m_pp.shroud_native_resources_valid) {
+			stats = SpiritShroud::EndurancePhysicalStat(GetSTR(), GetSTA(), GetDEX(), GetAGI());
 		}
-		else if (stats > 100.0f) {
-			stats = 2.5f * (stats - 100.0f) + 100.0f;
+		else {
+			stats = (GetSTR() + GetSTA() + GetDEX() + GetAGI()) / 4.0f;
+			if (stats > 201.0f) {
+				stats = 1.25f * (stats - 201.0f) + 352.5f;
+			}
+			else if (stats > 100.0f) {
+				stats = 2.5f * (stats - 100.0f) + 100.0f;
+			}
 		}
 		auto base_data = zone->GetBaseData(GetLevel(), GetClass());
 		if (base_data.level == GetLevel()) {
-			base_end = base_data.end + itembonuses.heroic_max_end + (base_data.end_fac * static_cast<int>(stats));
+			base_end = (m_pp.shroud_native_resources_valid ? m_pp.shroud_native_stats[SpiritShroud::Endurance] : base_data.end) + itembonuses.heroic_max_end + (base_data.end_fac * static_cast<int>(stats));
 		}
 	}
 	else {
@@ -1670,7 +1712,7 @@ int64 Client::CalcEnduranceRegen(bool bCombat)
 	if (!IsStarved()) {
 		auto base_data = zone->GetBaseData(GetLevel(), GetClass());
 		if (base_data.level == GetLevel()) {
-			base = static_cast<int>(base_data.end_regen);
+			base = m_pp.shroud_native_stats_valid ? m_pp.shroud_native_stats[SpiritShroud::EnduranceRegen] : static_cast<int>(base_data.end_regen);
 			if (!auto_attack && base > 0)
 				base += base / 2;
 		}

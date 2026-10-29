@@ -657,7 +657,17 @@ bool SharedDatabase::GetInventory(Client *c, const std::function<bool()>& sessio
 	uint32                char_id = c->CharacterID();
 	EQ::InventoryProfile &inv     = c->GetInv();
 	struct ClearLoadGuids { ~ClearLoadGuids() { EQ::ItemInstance::ClearGUIDMap(); } } clear_load_guids;
-	const bool checked_load = RuleB(Housing, EnablePlayerHousing);
+	// Inventory ownership is also shared by mercenary payments when housing is
+	// disabled. Retain checked loading for an existing lease after a rule change.
+	const bool housing_load = RuleB(Housing, EnablePlayerHousing);
+	const bool checked_load = housing_load || bool(session_fence);
+	const auto load_query_failures = QueryFailureGeneration();
+	auto load_shared_bank = [&]() {
+		if (checked_load && (!session_fence || !session_fence() ||
+			QueryFailureGeneration() != load_query_failures)) return false;
+		const bool loaded = GetSharedBank(char_id, &inv, true);
+		return loaded && (!checked_load || (QueryFailureGeneration() == load_query_failures && session_fence()));
+	};
 	if (loaded_witnesses && !checked_load) return false;
 	InventoryRepository::LoadSnapshot load_snapshot;
 	std::vector<Housing::HousePreload::Loaded> prepared_witnesses;
@@ -677,9 +687,10 @@ bool SharedDatabase::GetInventory(Client *c, const std::function<bool()>& sessio
 	auto e_results = CharacterEvolvingItemsRepository::GetWhere(
 		*this, fmt::format("`character_id` = '{}' AND `deleted_at` IS NULL", char_id)
 	);
+	if (checked_load && QueryFailureGeneration() != load_query_failures) return false;
 
 	if (results.empty()) {
-		if (checked_load) return session_fence() && GetSharedBank(char_id, &inv, true);
+		if (checked_load) return load_shared_bank();
 		LogError("Error loading inventory for char_id {} from the database.", char_id);
 		return false;
 	}
@@ -767,7 +778,7 @@ bool SharedDatabase::GetInventory(Client *c, const std::function<bool()>& sessio
 
 		inst->SetOrnamentIcon(ornament_icon);
 		inst->SetOrnamentationIDFile(ornament_idfile);
-		inst->SetOrnamentHeroModel(checked_load && item->HousingDefinitionID ? ornament_hero_model : item->HerosForgeModel);
+		inst->SetOrnamentHeroModel(housing_load && item->HousingDefinitionID ? ornament_hero_model : item->HerosForgeModel);
 
 		if (
 			instnodrop ||
@@ -906,7 +917,7 @@ bool SharedDatabase::GetInventory(Client *c, const std::function<bool()>& sessio
 	EQ::ItemInstance::ClearGUIDMap();
 
 	// Retrieve shared inventory
-	const bool shared_bank_loaded = GetSharedBank(char_id, &inv, true);
+	const bool shared_bank_loaded = load_shared_bank();
 	if (shared_bank_loaded && loaded_witnesses) loaded_witnesses->swap(prepared_witnesses);
 	return shared_bank_loaded;
 }
