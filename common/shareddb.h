@@ -34,6 +34,10 @@
 #include <list>
 #include <map>
 #include <memory>
+#include <functional>
+#include <vector>
+
+namespace Housing::HousePreload { struct Loaded; }
 
 class EvolveInfo;
 struct InspectMessage_Struct;
@@ -104,7 +108,11 @@ public:
 	bool GetSharedBank(uint32 id, EQ::InventoryProfile *inv, bool is_charid);
 	int32 GetSharedPlatinum(uint32 account_id);
 	bool AddSharedPlatinum(uint32 account_id, int amount);
-	bool GetInventory(Client* c);
+	// Housing-enabled admission supplies a server-owned zone reservation check.
+	// Optional witnesses are cleared on entry and exported only after successful
+	// checked GUID commit and complete inventory load; shared bank is excluded.
+	bool GetInventory(Client* c, const std::function<bool()>& session_fence = {},
+		std::vector<Housing::HousePreload::Loaded>* loaded_witnesses = nullptr);
 	bool GetInventory(uint32 account_id, char *name, EQ::InventoryProfile *inv); // deprecated
 	std::map<uint32, uint32> GetItemRecastTimestamps(uint32 char_id);
 	uint32 GetItemRecastTimestamp(uint32 char_id, uint32 recast_type);

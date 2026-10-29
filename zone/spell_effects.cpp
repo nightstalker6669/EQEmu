@@ -499,6 +499,16 @@ bool Mob::SpellEffect(Mob* caster, uint16 spell_id, float partial, int level_ove
 				break;
 			}
 
+            case SpellEffect::TeleporttoAnchor:
+            case SpellEffect::TranslocatetoAnchor:
+            {
+                // Target/group selection is already performed by the normal
+                // spell engine. SPA437 uses caster anchors; SPA438 uses each
+                // recipient's own anchor (pinned original spell descriptions).
+                if(IsClient()&&caster&&caster->IsClient()&&spell.base_value[i]>0)
+                    CastToClient()->ApplyHousingAnchorSpell(caster->CastToClient(),uint32_t(spell.base_value[i]),effect==SpellEffect::TranslocatetoAnchor);
+                break;
+            }
 			case SpellEffect::Translocate:
 			{
 #ifdef SPELL_EFFECT_SPAM

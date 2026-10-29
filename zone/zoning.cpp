@@ -383,6 +383,29 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 	}
 }
 
+void Client::RestoreRejectedZonePosition() {
+	// DoZoneSuccess saves the destination before world accepts the transfer.
+	// On rejection both the live position and durable profile must return to
+	// this zone; resetting only zone/instance leaves destination coordinates.
+	m_Position = m_zone_transfer_origin_valid ? m_zone_transfer_origin :
+		glm::vec4(m_RewindLocation.x, m_RewindLocation.y, m_RewindLocation.z, m_Position.w);
+	m_zone_transfer_origin_valid = false;
+	SetZone(zone->GetZoneID(), zone->GetInstanceID());
+	m_pp.zone_id = zone->GetZoneID();
+	m_pp.zoneInstance = zone->GetInstanceID();
+	m_pp.x = m_Position.x;
+	m_pp.y = m_Position.y;
+	m_pp.z = m_Position.z;
+	m_pp.heading = m_Position.w;
+	bZoning = false;
+	m_lock_save_position = false;
+	zone_mode = ZoneUnsolicited;
+	m_ZoneSummonLocation = glm::vec4();
+	zonesummon_id = 0;
+	zonesummon_ignorerestrictions = 0;
+	SaveCharacterData();
+}
+
 void Client::SendZoneCancel(ZoneChange_Struct *zc) {
 	//effectively zone them right back to where they were
 	//unless we find a better way to stop the zoning process.
@@ -410,15 +433,9 @@ void Client::SendZoneCancel(ZoneChange_Struct *zc) {
 	zc2->success = 1;
 	zc2->instanceID = zone->GetInstanceID();
 
-	// this fixes an issue where when we do a zone cancel what often ends up happening is we are sending
-	// the client the wrong coordinates to zone back to. Often times it is the x,y,z of the destination zone
-	// because we saved the destination x,y,z on the client profile before we rejected the zone request.
-	// we're using rewind location because it should be where the client relatively was before we rejected the zone request.
-	// it also prevents the client from getting caught up in a zone loop because if we sent them exactly back to where they
-	// originated the request we could end up in a situation where the client is caught in a zone loop.
-	m_Position.x = m_RewindLocation.x;
-	m_Position.y = m_RewindLocation.y;
-	m_Position.z = m_RewindLocation.z;
+	// Unsolicited zone lines still use rewind to avoid a zone-line loop;
+	// solicited transfers use their captured source position.
+	RestoreRejectedZonePosition();
 	zc2->x       = m_Position.x;
 	zc2->y       = m_Position.y;
 	zc2->z       = m_Position.z;
@@ -450,6 +467,7 @@ void Client::SendZoneCancel(ZoneChange_Struct *zc) {
 
 void Client::SendZoneError(ZoneChange_Struct *zc, int8 err)
 {
+	RestoreRejectedZonePosition();
 	LogError("Zone [{}] is not available because target wasn't found or character insufficent level", zc->zoneID);
 	cheat_manager.SetExemptStatus(Port, true);
 	EQApplicationPacket *outapp = nullptr;
@@ -487,6 +505,10 @@ void Client::DoZoneSuccess(ZoneChange_Struct *zc, uint16 zone_id, uint32 instanc
 	//this is called once the client is fully allowed to zone here
 	//it takes care of all the activities which occur when a client zones out
 
+	if (!m_zone_transfer_origin_valid) {
+		m_zone_transfer_origin = m_Position;
+		m_zone_transfer_origin_valid = true;
+	}
 	SendLogoutPackets();
 
 	/* Dont clear aggro until the zone is successful */
@@ -538,6 +560,7 @@ void Client::DoZoneSuccess(ZoneChange_Struct *zc, uint16 zone_id, uint32 instanc
 	m_lock_save_position = true;
 
 	if (zone_id == zone->GetZoneID() && instance_id == zone->GetInstanceID()) {
+		m_zone_transfer_origin_valid = false;
 		// No need to ask worldserver if we're zoning to ourselves (most
 		// likely to a bind point), also fixes a bug since the default response was failure
 		auto outapp = new EQApplicationPacket(OP_ZoneChange, sizeof(ZoneChange_Struct));
@@ -867,6 +890,9 @@ void Client::ZonePC(uint32 zoneID, uint32 instance_id, float x, float y, float z
 		return;
 	}
 	iZoneNameLength = strlen(pZoneName);
+	// GM/bind modes below also overwrite m_Position before OP_ZoneChange.
+	m_zone_transfer_origin = m_Position;
+	m_zone_transfer_origin_valid = true;
 	glm::vec4 zone_safe_point;
 	switch(zm) {
 		case EvacToSafeCoords:
@@ -1064,6 +1090,7 @@ void Client::ZonePC(uint32 zoneID, uint32 instance_id, float x, float y, float z
 		{
 			if(zm != EvacToSafeCoords && zm != ZoneToSafeCoords && zm != ZoneToBindPoint)
 			{
+				m_zone_transfer_origin_valid = false;
 				m_ZoneSummonLocation = glm::vec4();
 				zonesummon_id = 0;
 				zonesummon_ignorerestrictions = 0;

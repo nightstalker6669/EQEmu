@@ -1,3 +1,7 @@
+#include "housing_guild_portal.h"
+#include "housing_service_npcs.h"
+#include "housing_service_authority.h"
+#include "housing_pets.h"
 /*	EQEMu: Everquest Server Emulator
 	Copyright (C) 2001-2003 EQEMu Development Team (http://eqemulator.net)
 
@@ -1107,6 +1111,8 @@ Zone::Zone(uint32 in_zoneid, uint32 in_instanceid, const char* in_short_name)
 }
 
 Zone::~Zone() {
+ Housing::Pets::Clear();
+ Housing::ServiceAuthority::Clear();
 	LogInfo("Zone destructor called for zone [{}]", short_name);
 
 	spawn2_list.Clear();
@@ -1536,6 +1542,7 @@ uint32 Zone::CountAuth() {
 }
 
 bool Zone::Process() {
+    Housing::Pets::Process();
 	spawn_conditions.Process();
 
 	if (spawn2_timer.Check()) {

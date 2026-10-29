@@ -1,3 +1,4 @@
+#include "housing_guild_portal.h"
 /*	EQEMu: Everquest Server Emulator
 	Copyright (C) 2001-2016 EQEMu Development Team (http://eqemulator.org)
 
@@ -16,6 +17,7 @@
 	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 */
 #include "../common/global_define.h"
+#include "housing_actor_publication.h"
 #include <iostream>
 #include <string.h>
 #include <stdlib.h>
@@ -51,6 +53,12 @@ extern volatile bool RunLoops;
 #include "bot_command.h"
 #include "string_ids.h"
 #include "dialogue_window.h"
+#include "housing_inventory_bridge.h"
+#include "housing_house_runtime.h"
+#include "inventory_session_owner.h"
+#include "../common/eqemu_config.h"
+#include <chrono>
+#include <thread>
 
 #include "guild_mgr.h"
 #include "quest_parser_collection.h"
@@ -707,15 +715,74 @@ Client::Client(EQStreamInterface *ieqs) : Mob(
 	AI_Init();
 }
 
+bool Client::ClaimInventorySessionReservation() {
+	if (m_inventory_session_reservation) return m_inventory_session_reservation->HeldFor(*this);
+	try { m_inventory_session_reservation = Housing::InventorySessions::ZoneReservation::ClaimForAuthenticatedClient(*this); }
+	catch (...) { m_inventory_session_rejected = true; return false; }
+	if (!m_inventory_session_reservation) m_inventory_session_rejected = true;
+	return bool(m_inventory_session_reservation);
+}
+bool Client::HasInventorySessionReservation() const {
+	return m_inventory_session_reservation && m_inventory_session_reservation->HeldFor(*this);
+}
+std::shared_ptr<Housing::InventorySessions::ZoneReservation> Client::InventorySessionReleaseTicket() const {
+	return m_inventory_session_reservation;
+}
+
+Housing::InventoryBridge::Bridge* Client::GetHousingInventoryBridge() {
+	if (!RuleB(Housing, EnablePlayerHousing) || ClientVersion() != EQ::versions::ClientVersion::RoF2 ||
+		!Housing::InventoryBridge::Bridge::CanCreateForClient(*this)) return nullptr;
+	if (!m_housing_inventory_bridge) {
+		try {
+			// Authoritative server config, exclusive fresh connection; no callbacks,
+			// event-loop pumping, shared MySQL handle or client-supplied credentials.
+			m_housing_inventory_bridge = std::make_unique<Housing::InventoryBridge::Bridge>(*this, [](Housing::HouseBinding::CustodyContext* houses, Housing::CrateBinding::CustodyContext* crates) {
+				const auto* config = EQEmuConfig::get();
+				if (!config) return std::unique_ptr<Housing::LiveItems::Service>{};
+				auto db = std::make_unique<Database>();
+				if (!db->Connect(config->DatabaseHost, config->DatabaseUsername, config->DatabasePassword,
+					config->DatabaseDB, config->DatabasePort, "housing-inventory-exclusive")) {
+					return std::unique_ptr<Housing::LiveItems::Service>{};
+				}
+				return std::make_unique<Housing::LiveItems::Service>(std::move(db), true, houses, crates);
+			}, Housing::HouseRuntime::MakeForClient);
+		} catch (const std::exception&) {
+			return nullptr;
+		}
+	}
+	return m_housing_inventory_bridge.get();
+}
+
 Client::~Client() {
+ Housing::GuildPortalRuntime::Forget(*this);
+	struct PublicationCleanup {Client& client;~PublicationCleanup(){Housing::ActorPublication::Forget(client);}} publication_cleanup{*this};
+	// First lifecycle action: no quests, save, stream release or inventory
+	// teardown can precede durable housing reconciliation/lease closure.
+	if (m_housing_inventory_bridge) {
+		for (;;) {
+			try {
+				if (m_housing_inventory_bridge->CloseSession()) break;
+			} catch (...) {
+				// An unresolved lease must never fall through to a stale save.
+			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(250));
+		}
+		m_housing_inventory_bridge.reset();
+	}
+
 	entity_list.RemoveMobFromCloseLists(this);
 	m_close_mobs.clear();
 
+	// A rejected/unloaded ingress has authenticated IDs but does not own the
+	// existing actor's profile. Skip writer/callback lifecycle for that shell.
+	const bool owns_loaded_profile = !m_inventory_session_rejected &&
+		(!RuleB(Housing, EnablePlayerHousing) || (ClientDataLoaded() && HasInventorySessionReservation()));
+	mMovementManager->RemoveClient(this);
+	if (!owns_loaded_profile && trade) trade->Reset(); // shell owns no real trade partner
+	if (owns_loaded_profile) {
 	if (ClientVersion() == EQ::versions::ClientVersion::RoF2 && RuleB (Parcel, EnableParcelMerchants)) {
 		DoParcelCancel();
 	}
-
-	mMovementManager->RemoveClient(this);
 
 	DataBucket::DeleteCachedBuckets(DataBucketLoadType::Account, AccountID());
 	DataBucket::DeleteCachedBuckets(DataBucketLoadType::Client, CharacterID());
@@ -793,6 +860,7 @@ Client::~Client() {
 	// we save right now, because the client might be zoning and the world
 	// will need this data right away
 	Save(2); // This fails when database destructor is called first on shutdown
+	} // owned loaded-profile lifecycle
 
 	safe_delete(task_state);
 	safe_delete(KarmaUpdateTimer);
@@ -889,6 +957,8 @@ void Client::SendZoneInPackets()
 	if (RuleB(Guild, EnableLFGuild)) {
 		SendLFGuildStatus();
 	}
+
+	SendHousingZoneCatalog();
 
 	//No idea why live sends this if even were not in a guild
 	SendGuildMOTD();
@@ -992,6 +1062,9 @@ void Client::RemoveExpendedAA(int aa_id)
 }
 
 bool Client::Save(uint8 iCommitNow) {
+	if (m_inventory_session_rejected ||
+		(RuleB(Housing, EnablePlayerHousing) && !HasInventorySessionReservation())) return false;
+
 	if(!ClientDataLoaded())
 		return false;
 
@@ -1163,8 +1236,10 @@ bool Client::SendAllPackets() {
 	CLIENTPACKET* cp = nullptr;
 	while (!clientpackets.empty()) {
 		cp = clientpackets.front().get();
-		if(eqs)
+		if(eqs) {
+			Housing::ActorPublication::Observe(*this,cp->app);
 			eqs->FastQueuePacket((EQApplicationPacket **)&cp->app, cp->ack_req);
+		}
 		clientpackets.pop_front();
 	}
 	return true;
@@ -1190,6 +1265,7 @@ void Client::QueuePacket(const EQApplicationPacket* app, bool ack_req, CLIENT_CO
 		AddPacket(app, ack_req);
 	}
 	else if (eqs) {
+		Housing::ActorPublication::Observe(*this,app);
 		eqs->QueuePacket(app, ack_req);
 	}
 }
@@ -1202,8 +1278,10 @@ void Client::FastQueuePacket(EQApplicationPacket** app, bool ack_req, CLIENT_CON
 		return;
 	}
 	else {
-		if(eqs)
+		if(eqs) {
+			Housing::ActorPublication::Observe(*this,app?*app:nullptr);
 			eqs->FastQueuePacket((EQApplicationPacket **)app, ack_req);
+		}
 		else if (app && (*app))
 			delete *app;
 		*app = nullptr;

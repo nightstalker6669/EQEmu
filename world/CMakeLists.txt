@@ -25,6 +25,7 @@ SET(world_sources
     web_interface.cpp
     web_interface_eqw.cpp
     wguild_mgr.cpp
+    wguild_trophies.cpp
     world_event_scheduler.cpp
     world_config.cpp
     world_console_connection.cpp

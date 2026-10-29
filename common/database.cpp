@@ -25,6 +25,7 @@
 #include <map>
 #include <algorithm>
 #include <mysqld_error.h>
+#include "housing/admission_guard.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -370,6 +371,12 @@ bool Database::DeleteCharacter(const std::string& name)
 	auto& e = l.front();
 
 	if (!e.id) {
+		return false;
+	}
+
+	if (Housing::CheckHousingCharacterDeletion(*this, e.id, RuleB(Housing, EnablePlayerHousing)) !=
+		Housing::InventoryAdmission::Allowed) {
+		LogError("Character [{}] deletion withheld: housing requires an atomic maintenance/archive adapter", e.id);
 		return false;
 	}
 

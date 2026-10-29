@@ -274,6 +274,8 @@
 
 // player events
 #define ServerOP_QSSendQuery 0x5000
+#define ServerOP_HousingUpkeepRefresh 0x5124 // new internal world/zone invalidation; zero payload
+#define ServerOP_HousingTrophyRefresh 0x5120 // new internal world/zone invalidation; zero payload
 #define ServerOP_PlayerEvent 0x5100
 #define ServerOP_SendPlayerEventSettings 0x5101
 
@@ -1781,5 +1783,12 @@ struct BazaarPurchaseMessaging_Struct {
 
 
 #pragma pack()
+
+// Internal server messages, not claimed original client opcodes.
+#define ServerOP_HousingGuildTrophyRequest 0x5121
+#define ServerOP_HousingGuildTrophyRefresh 0x5122
+struct HousingGuildTrophyRequest {uint32 character_id;uint32 action;uint32 target_id;};
+
+#define ServerOP_HousingGuildTrophyMember 0x5123
 
 #endif

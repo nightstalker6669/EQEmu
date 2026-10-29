@@ -1,3 +1,5 @@
+#include "housing/evolving_item_custody_db.h"
+#include "housing/npc_item_metadata_db.h"
 /*	EQEMu: Everquest Server Emulator
 	Copyright (C) 2001-2016 EQEMu Development Team (http://eqemulator.org)
 
@@ -34,6 +36,8 @@
 #include "mysql.h"
 #include "rulesys.h"
 #include "shareddb.h"
+#include "housing/legacy_scaling_state.h"
+#include "housing/trophy_benefits.h"
 #include "strings.h"
 #include "eqemu_config.h"
 #include "data_verification.h"
@@ -55,6 +59,7 @@
 #include "repositories/spells_new_repository.h"
 #include "repositories/damageshieldtypes_repository.h"
 #include "repositories/items_repository.h"
+#include "housing/house_binding_preload.h"
 
 SharedDatabase::SharedDatabase()
 : Database()
@@ -165,6 +170,10 @@ bool SharedDatabase::SaveCursor(
 	std::list<EQ::ItemInstance*>::const_iterator& end
 )
 {
+    // Validate the complete queue before its old SQL rows are removed.
+    for (auto it=start;it!=end;++it)
+        if (*it && !Housing::LegacyScaling::Persistable(**it)) return false;
+
 	const int deleted = InventoryRepository::DeleteWhere(
 		*this,
 		fmt::format(
@@ -221,6 +230,11 @@ bool SharedDatabase::VerifyInventory(uint32 account_id, int16 slot_id, const EQ:
 
 bool SharedDatabase::SaveInventory(uint32 char_id, const EQ::ItemInstance* inst, int16 slot_id)
 {
+    if (inst && !Housing::LegacyScaling::Persistable(*inst)) return false;
+	// Reject stale held identities before container clearing can delete any rows.
+	try { if (inst && !Housing::EvolvingItemCustody::InventorySaveAllowed(*this, char_id, *inst)) return false; }
+	catch (...) { return false; }
+
 	// Don't save any Tribute slots
 	if (
 		EQ::ValueWithin(slot_id, EQ::invslot::GUILD_TRIBUTE_BEGIN, EQ::invslot::GUILD_TRIBUTE_END) ||
@@ -263,6 +277,8 @@ bool SharedDatabase::UpdateInventorySlot(uint32 char_id, const EQ::ItemInstance*
 		return false;
 	}
 
+    if (!Housing::LegacyScaling::Persistable(*inst)) return false;
+
 	std::vector<uint32> augment_ids = inst->GetAugmentIDs();
 
 	uint16 charges = inst->GetCharges() >= 0 ? inst->GetCharges() : std::numeric_limits<int16>::max();
@@ -287,7 +303,13 @@ bool SharedDatabase::UpdateInventorySlot(uint32 char_id, const EQ::ItemInstance*
 	e.ornament_hero_model = inst->GetOrnamentHeroModel();
 	e.guid                = inst->GetSerialNumber();
 
+	try { if (!Housing::EvolvingItemCustody::InventorySaveAllowed(*this, char_id, *inst)) return false; }
+	catch (...) { return false; }
 	const int replaced = InventoryRepository::ReplaceOne(*this, e);
+	if (replaced && Housing::EvolvingItemCustody::Has(*inst)) {
+		try { Housing::EvolvingItemCustody::BindInventory(*this, char_id, slot_id, *inst); }
+		catch (...) { return false; }
+	}
 
 	// Save bag contents, if slot supports bag contents
 	if (inst->IsClassBag() && EQ::InventoryProfile::SupportsContainers(slot_id)) {
@@ -311,6 +333,8 @@ bool SharedDatabase::UpdateSharedBankSlot(uint32 char_id, const EQ::ItemInstance
 	if (!inst || !inst->GetItem()) {
 		return false;
 	}
+
+    if (!Housing::LegacyScaling::Persistable(*inst)) return false;
 
 	std::vector<uint32> augment_ids = inst->GetAugmentIDs();
 
@@ -596,6 +620,8 @@ bool SharedDatabase::GetSharedBank(uint32 id, EQ::InventoryProfile *inv, bool is
 			inst->SetCustomDataString(e.custom_data);
 		}
 
+        if (!Housing::LegacyScaling::Restore(*inst,e.custom_data)) { safe_delete(inst); return false; }
+
 		const int16 put_slot_id = inv->PutItem(e.slot_id, *inst);
 		safe_delete(inst);
 
@@ -620,22 +646,40 @@ bool SharedDatabase::GetSharedBank(uint32 id, EQ::InventoryProfile *inv, bool is
 }
 // Overloaded: Retrieve character inventory based on character id (zone entry)
 //bool SharedDatabase::GetInventory(uint32 char_id, EQ::InventoryProfile *inv)
-bool SharedDatabase::GetInventory(Client *c)
+bool SharedDatabase::GetInventory(Client *c, const std::function<bool()>& session_fence,
+	std::vector<Housing::HousePreload::Loaded>* loaded_witnesses)
 {
+	if (loaded_witnesses) loaded_witnesses->clear();
 	if (!c) {
 		return false;
 	}
 
 	uint32                char_id = c->CharacterID();
 	EQ::InventoryProfile &inv     = c->GetInv();
+	struct ClearLoadGuids { ~ClearLoadGuids() { EQ::ItemInstance::ClearGUIDMap(); } } clear_load_guids;
+	const bool checked_load = RuleB(Housing, EnablePlayerHousing);
+	if (loaded_witnesses && !checked_load) return false;
+	InventoryRepository::LoadSnapshot load_snapshot;
+	std::vector<Housing::HousePreload::Loaded> prepared_witnesses;
 
 	// Retrieve character inventory
-	auto results   = InventoryRepository::GetWhere(*this, fmt::format("`character_id` = '{}' ORDER BY `slot_id`", char_id));
+	std::vector<InventoryRepository::Inventory> results;
+	if (checked_load) {
+		if (!session_fence || !session_fence()) return false;
+		try {
+			load_snapshot = InventoryRepository::GetLoadSnapshot(*this, char_id);
+			if (!load_snapshot.success) return false;
+			for (const auto& row : load_snapshot.rows) results.push_back(row.values);
+		} catch (...) { return false; }
+	} else {
+		results = InventoryRepository::GetWhere(*this, fmt::format("`character_id` = '{}' ORDER BY `slot_id`", char_id));
+	}
 	auto e_results = CharacterEvolvingItemsRepository::GetWhere(
 		*this, fmt::format("`character_id` = '{}' AND `deleted_at` IS NULL", char_id)
 	);
 
 	if (results.empty()) {
+		if (checked_load) return session_fence() && GetSharedBank(char_id, &inv, true);
 		LogError("Error loading inventory for char_id {} from the database.", char_id);
 		return false;
 	}
@@ -707,11 +751,13 @@ bool SharedDatabase::GetInventory(Client *c)
 				item_id,
 				slot_id
 			);
+			if (checked_load) return false;
 			continue;
 		}
 
 		auto* inst = CreateBaseItem(item, charges);
 		if (!inst) {
+			if (checked_load) return false;
 			continue;
 		}
 
@@ -721,7 +767,7 @@ bool SharedDatabase::GetInventory(Client *c)
 
 		inst->SetOrnamentIcon(ornament_icon);
 		inst->SetOrnamentationIDFile(ornament_idfile);
-		inst->SetOrnamentHeroModel(item->HerosForgeModel);
+		inst->SetOrnamentHeroModel(checked_load && item->HousingDefinitionID ? ornament_hero_model : item->HerosForgeModel);
 
 		if (
 			instnodrop ||
@@ -764,51 +810,39 @@ bool SharedDatabase::GetInventory(Client *c)
 			}
 		}
 
-		if (item->EvolvingItem) {
-			if (slot_id >= EQ::invslot::EQUIPMENT_BEGIN && slot_id <= EQ::invslot::EQUIPMENT_END) {
-				inst->SetEvolveEquipped(true);
-			}
+        if (!Housing::LegacyScaling::Restore(*inst,row.custom_data)) { safe_delete(inst); return false; }
 
-			auto t = std::ranges::find_if(
-				e_results.cbegin(),
-				e_results.cend(),
-				[&](const CharacterEvolvingItemsRepository::CharacterEvolvingItems &x) {
-					return x.item_id == item_id;
+		try {
+			for (uint8 component = 0; component <= 6; ++component) {
+				auto* evolving = Housing::EvolvingItemCustody::Component(*inst, component);
+				if (!evolving || !evolving->IsEvolving()) continue;
+				const auto id = Housing::EvolvingItemCustody::InventoryIdentity(*this, char_id, slot_id, component, evolving->GetID(), row.guid);
+				auto candidate = e_results.end();
+				if (id) candidate = std::find_if(e_results.begin(), e_results.end(), [&](const auto& e) { return e.id == id; });
+				else {
+					size_t physical = 0, identities = 0;
+					for (const auto& source : results) {
+						for (auto template_id : {source.item_id, source.augment_one, source.augment_two, source.augment_three, source.augment_four, source.augment_five, source.augment_six})
+							if (template_id == evolving->GetID()) ++physical;
+					}
+					for (auto e = e_results.begin(); e != e_results.end(); ++e) if (e->item_id == evolving->GetID()) { ++identities; candidate = e; }
+					if (physical != 1 || identities > 1) throw std::invalid_argument("Ambiguous unbound evolving inventory identity");
+					if (!identities) {
+						auto e = CharacterEvolvingItemsRepository::NewEntity();
+						e.character_id = char_id; e.item_id = evolving->GetID();
+						e.equipped = component == 0 && slot_id >= EQ::invslot::EQUIPMENT_BEGIN && slot_id <= EQ::invslot::EQUIPMENT_END;
+						e.final_item_id = EvolvingItemsManager::Instance()->GetFinalItemID(*evolving);
+						e = CharacterEvolvingItemsRepository::InsertOne(*this, e);
+						if (!e.id) throw std::invalid_argument("Cannot allocate evolving inventory identity");
+						e_results.push_back(e); candidate = std::prev(e_results.end());
+					}
 				}
-			);
-
-			if (t == std::end(e_results)) {
-				auto e = CharacterEvolvingItemsRepository::NewEntity();
-
-				e.character_id  = char_id;
-				e.item_id       = item_id;
-				e.equipped      = inst->GetEvolveEquipped();
-				e.final_item_id = EvolvingItemsManager::Instance()->GetFinalItemID(*inst);
-
-				auto r = CharacterEvolvingItemsRepository::InsertOne(*this, e);
-				e.id = r.id;
-				e_results.push_back(e);
-
-				inst->SetEvolveUniqueID(e.id);
-				inst->SetEvolveCharID(e.character_id);
-				inst->SetEvolveItemID(e.item_id);
-				inst->SetEvolveActivated(e.activated);
-				inst->SetEvolveEquipped(e.equipped);
-				inst->SetEvolveCurrentAmount(e.current_amount);
-				inst->CalculateEvolveProgression();
-				inst->SetEvolveFinalItemID(e.final_item_id);
+				if (candidate == e_results.end() || candidate->character_id != char_id || candidate->item_id != evolving->GetID() || Housing::EvolvingItemCustody::Held(*this, candidate->id))
+					throw std::invalid_argument("Tracked evolving inventory identity missing");
+				evolving->GetEvolvingDetails() = *candidate;
+				evolving->CalculateEvolveProgression();
 			}
-			else {
-				inst->SetEvolveUniqueID(t->id);
-				inst->SetEvolveCharID(t->character_id);
-				inst->SetEvolveItemID(t->item_id);
-				inst->SetEvolveActivated(t->activated);
-				inst->SetEvolveEquipped(t->equipped);
-				inst->SetEvolveCurrentAmount(t->current_amount);
-				inst->CalculateEvolveProgression();
-				inst->SetEvolveFinalItemID(t->final_item_id);
-			}
-		}
+		} catch (...) { safe_delete(inst); return false; }
 
 		int16 put_slot_id;
 		// this had  || slot_id == EQ::invslot::slotCursor ??s
@@ -831,6 +865,7 @@ bool SharedDatabase::GetInventory(Client *c)
 				item_id,
 				slot_id
 			);
+			if (checked_load) return false;
 		}
 	}
 
@@ -845,14 +880,35 @@ bool SharedDatabase::GetInventory(Client *c)
 		);
 	}
 
+	if (checked_load && (cv_conflict || !session_fence())) return false;
 	if (!queue.empty()) {
-		InventoryRepository::ReplaceMany(*this, queue);
+		if (checked_load) {
+			try {
+				if (loaded_witnesses) {
+					prepared_witnesses.reserve(queue.size());
+					for (const auto& loaded : queue) {
+						const auto source = std::find_if(load_snapshot.rows.begin(), load_snapshot.rows.end(),
+							[&](const auto& row) { return row.values.slot_id == loaded.slot_id; });
+						if (source == load_snapshot.rows.end() || loaded.guid > INT32_MAX) return false;
+						auto witness = Housing::HousePreload::ProjectGuidUpdate(*source, int32_t(loaded.guid));
+						if (!witness || witness.value.persisted.values.item_id != loaded.item_id) return false;
+						prepared_witnesses.push_back(std::move(witness.value));
+					}
+				}
+				if (InventoryRepository::UpdateLoadGuids(*this, char_id, load_snapshot, queue) !=
+					InventoryRepository::GuidLoadResult::Applied) return false;
+			} catch (...) { return false; }
+		} else {
+			InventoryRepository::ReplaceMany(*this, queue);
+		}
 	}
 
 	EQ::ItemInstance::ClearGUIDMap();
 
 	// Retrieve shared inventory
-	return GetSharedBank(char_id, &inv, true);
+	const bool shared_bank_loaded = GetSharedBank(char_id, &inv, true);
+	if (shared_bank_loaded && loaded_witnesses) loaded_witnesses->swap(prepared_witnesses);
+	return shared_bank_loaded;
 }
 
 std::map<uint32, uint32> SharedDatabase::GetItemRecastTimestamps(uint32 char_id)
@@ -972,6 +1028,15 @@ void SharedDatabase::LoadItems(void *data, uint32 size, int32 items, uint32 max_
 		}
 	}
 
+	// Optional housing schema. Both personal and guild sources need the native
+	// benefit ID. Domain permissions remain in their separate gameplay services.
+	// An ambiguous cross-domain ID or missing/unreviewed source advertises none.
+	std::map<uint32_t,uint32_t> trophy_sources;
+	auto trophy_rows=QueryDatabase(std::string("SELECT s.placed_item_id,s.benefit_id,s.source_sha256,s.source_description FROM housing_trophy_benefit_sources s JOIN tributes t ON t.id=s.benefit_id WHERE t.isguild IN (0,1) AND NOT EXISTS (SELECT 1 FROM tributes other WHERE other.id=t.id AND other.isguild<>t.isguild)"),false);
+	if(trophy_rows.Success())for(auto row=trophy_rows.begin();row.operator!=(trophy_rows.end());++row){
+		if(row[0]&&row[1]&&row[2]&&row[3]&&row[3][0]&&Housing::TrophyBenefits::SourceDigest(row[2]))trophy_sources[Strings::ToUnsignedInt(row[0])]=Strings::ToUnsignedInt(row[1]);
+	}
+	const auto housing_npc_sources = Housing::NpcItemMetadata::LoadAll(*this);
 	EQ::ItemData item;
 
 	const auto& l = ItemsRepository::All(*this);
@@ -1004,6 +1069,26 @@ void SharedDatabase::LoadItems(void *data, uint32 size, int32 items, uint32 max_
 		item.NoPet           = !disable_no_pet && e.nopet;
 		item.NoRent          = disable_no_rent ? std::numeric_limits<uint8>::max() : e.norent;
 		item.NoTransfer      = !disable_no_transfer && e.notransfer;
+		Housing::NpcItemMetadata::Clear(item);
+		if (auto source = housing_npc_sources.find(uint32_t(e.id)); source != housing_npc_sources.end())
+			Housing::NpcItemMetadata::Apply(item, source->second);
+		item.Placeable       = static_cast<uint32>(e.UNK224);
+		item.HousingIgnoreCollisions = static_cast<uint8>(e.UNK225);
+		item.HousingPlacementType = static_cast<uint32>(e.UNK226);
+		// These named columns are populated only from reviewed native metadata.
+		// Do not reinterpret packed historical UNK232..238 as these bytes.
+		item.HousingPlacementFlagsKnown =
+			(e.housing_disable_rotation == 0 || e.housing_disable_rotation == 1) &&
+			(e.housing_disable_free_placement == 0 || e.housing_disable_free_placement == 1);
+		item.HousingDisableRotation = item.HousingPlacementFlagsKnown ? uint8(e.housing_disable_rotation) : 0;
+		item.HousingDisableFreePlacement = item.HousingPlacementFlagsKnown ? uint8(e.housing_disable_free_placement) : 0;
+		item.HousingDefinitionID = static_cast<uint32>(e.UNK227);
+		// Collector columns retain IEEE-754 bits, not numeric float values.
+		std::memcpy(&item.HousingMinimumScale, &e.UNK228, sizeof(float));
+		std::memcpy(&item.HousingMaximumScale, &e.UNK229, sizeof(float));
+		item.HousingTrophyBenefitID = trophy_sources.count(e.id)?trophy_sources.at(e.id):0xffffffff;
+		item.HousingUpkeepID = static_cast<uint32>(e.UNK230);
+		item.HousingMaxPerEstate = e.UNK231;
 		item.PendingLoreFlag = e.pendingloreflag;
 		item.QuestItemFlag   = e.questitemflag;
 		item.Stackable       = e.stackable;
@@ -1360,6 +1445,7 @@ EQ::ItemInstance* SharedDatabase::CreateItem(
 		inst->PutAugment(this, 5, aug6);
 		inst->SetAttuned(attuned);
 		inst->SetCustomDataString(custom_data);
+        if (!Housing::LegacyScaling::Restore(*inst,custom_data)) { safe_delete(inst); return nullptr; }
 		inst->SetOrnamentIcon(ornamenticon);
 		inst->SetOrnamentationIDFile(ornamentidfile);
 		inst->SetOrnamentHeroModel(ornament_hero_model);
@@ -1403,6 +1489,7 @@ EQ::ItemInstance* SharedDatabase::CreateItem(
 		inst->PutAugment(this, 5, aug6);
 		inst->SetAttuned(attuned);
 		inst->SetCustomDataString(custom_data);
+        if (!Housing::LegacyScaling::Restore(*inst,custom_data)) { safe_delete(inst); return nullptr; }
 		inst->SetOrnamentIcon(ornamenticon);
 		inst->SetOrnamentationIDFile(ornamentidfile);
 		inst->SetOrnamentHeroModel(ornament_hero_model);

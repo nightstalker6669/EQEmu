@@ -1,3 +1,4 @@
+#include "../common/housing/guild_trophy_member_flag.h"
 /*	EQEMu: Everquest Server Emulator
 	Copyright (C) 2001-2016 EQEMu Development Team (http://eqemulator.org)
 
@@ -37,6 +38,8 @@
 #include "../common/opcodemgr.h"
 #include "../common/data_verification.h"
 #include "../common/data_bucket.h"
+#include "../common/housing/admission_guard.h"
+#include "../common/housing/inventory_handoff_auth.h"
 
 #include "client.h"
 #include "worlddb.h"
@@ -781,6 +784,13 @@ bool Client::HandleCharacterCreatePacket(const EQApplicationPacket *app) {
 }
 
 bool Client::HandleEnterWorldPacket(const EQApplicationPacket *app) {
+	// The first authenticated request remains immutable while teardown finishes.
+	if (inventory_wait_character) {
+		return true;
+	}
+	if (app->size != sizeof(EnterWorld_Struct)) {
+		return false;
+	}
 	auto account_id = GetAccountID();
 	if (!account_id) {
 		LogInfo("Enter world with no logged in account.");
@@ -841,6 +851,19 @@ bool Client::HandleEnterWorldPacket(const EQApplicationPacket *app) {
 			e.account_id
 		);
 		eqs->Close();
+		return true;
+	}
+
+	// Persisted active/pending custody leases survive CLE expiry/world restart.
+	// This quarantines unresolved sessions; it is not global admission fencing.
+	const auto inventory_admission = Housing::CheckInventoryAdmission(database, e.id, RuleB(Housing, EnablePlayerHousing));
+	if (inventory_admission == Housing::InventoryAdmission::ActiveLease) {
+		WaitForInventoryRelease(e.id, app, true);
+		return true;
+	}
+	if (inventory_admission != Housing::InventoryAdmission::Allowed) {
+		LogWarning("Character [{}] admission blocked by unresolved/unavailable housing custody state", e.id);
+		TellClientZoneUnavailable();
 		return true;
 	}
 
@@ -1072,7 +1095,9 @@ bool Client::HandleDeleteCharacterPacket(const EQApplicationPacket *app) {
 	uint32 char_acct_id = database.GetAccountIDByChar((char*)app->pBuffer);
 	if(char_acct_id == GetAccountID()) {
 		LogInfo("Delete character: [{}]", (const char*)app->pBuffer);
-		database.DeleteCharacter((char *)app->pBuffer);
+		if (!database.DeleteCharacter((char *)app->pBuffer)) {
+			LogWarning("Character deletion was refused; retained character list will be sent");
+		}
 		SendCharInfo();
 	}
 
@@ -1253,8 +1278,81 @@ bool Client::Process() {
 		LogInfo("Client disconnected (not active in process)");
 		return false;
 	}
+	if (ret) {
+		PollInventoryRelease();
+	}
 
 	return ret;
+}
+
+void Client::WaitForInventoryRelease(uint32 character, const EQApplicationPacket* packet, bool try_bootup)
+{
+	if (inventory_wait_character) {
+		return;
+	}
+	if (!GetLSID()) {
+		// DropClient addresses the login identity; zero cannot safely identify an
+		// old actor. Keep its durable reservation untouched and reject admission.
+		TellClientZoneUnavailable();
+		return;
+	}
+	// Called only after account/character authentication. Include the destination
+	// zone: an existing client there must also finish its final save/destruction.
+	inventory_wait_packet.reset(packet ? packet->Copy() : nullptr);
+	inventory_wait_character = character;
+	inventory_wait_account = GetAccountID();
+	inventory_wait_route = !packet;
+	inventory_wait_try_bootup = try_bootup;
+	inventory_wait_poll_ms = 250;
+	inventory_wait_next_poll = std::chrono::steady_clock::now() + std::chrono::milliseconds(inventory_wait_poll_ms);
+	autobootup_timeout.Disable();
+	ZSList::Instance()->DropClient(GetLSID(), nullptr);
+	LogInfo("Character [{}] waiting for durable inventory writer teardown", character);
+}
+
+void Client::PollInventoryRelease()
+{
+	if (!inventory_wait_character || std::chrono::steady_clock::now() < inventory_wait_next_poll) {
+		return;
+	}
+	inventory_wait_poll_ms = inventory_wait_poll_ms < 2000 ? inventory_wait_poll_ms * 2 : 2000;
+	inventory_wait_next_poll = std::chrono::steady_clock::now() + std::chrono::milliseconds(inventory_wait_poll_ms);
+	// CLE replacement, account revocation and character ownership changes cannot
+	// turn a queued admission into another actor's request.
+	const auto actor = Housing::CheckHandoffActor(database, inventory_wait_character, inventory_wait_account);
+	if (actor.state == Housing::HandoffActorState::Unavailable) {
+		return; // Query failure is not proof of teardown or actor revocation.
+	}
+	if (!RuleB(Housing, EnablePlayerHousing)) {
+		inventory_wait_packet.reset();
+		inventory_wait_character = 0;
+		TellClientZoneUnavailable(); // Never bypass a queued writer by toggling rules.
+		return;
+	}
+	if (!GetAccountID() || GetAccountID() != inventory_wait_account || GetAdmin() < 0 || actor.state != Housing::HandoffActorState::Authenticated) {
+		inventory_wait_packet.reset();
+		inventory_wait_character = 0;
+		eqs->Close();
+		return;
+	}
+	const auto admission = Housing::CheckInventoryAdmission(database, inventory_wait_character,
+		RuleB(Housing, EnablePlayerHousing));
+	if (admission != Housing::InventoryAdmission::Allowed) {
+		// A DB outage or orphan stays quarantined. Polling never releases a lease.
+		return;
+	}
+	auto packet = std::move(inventory_wait_packet);
+	const bool route = inventory_wait_route;
+	const bool try_bootup = inventory_wait_try_bootup;
+	inventory_wait_character = 0;
+	inventory_wait_account = 0;
+	inventory_wait_route = false;
+	if (route) {
+		strn0cpy(char_name, actor.name.c_str(), sizeof(char_name));
+		EnterWorld(try_bootup);
+	} else if (packet && !HandleEnterWorldPacket(packet.get())) {
+		eqs->Close();
+	}
 }
 
 bool Client::HandleChecksumPacket(const EQApplicationPacket *app)
@@ -1398,6 +1496,21 @@ bool Client::ChecksumVerificationCRCBaseData(uint64 checksum)
 }
 
 void Client::EnterWorld(bool TryBootup) {
+	if (inventory_wait_character) {
+		return;
+	}
+	// Recheck delayed/autoboot routing immediately before any IncomingClient.
+	const auto inventory_admission = Housing::CheckInventoryAdmission(database, GetCharID(), RuleB(Housing, EnablePlayerHousing));
+	if (inventory_admission == Housing::InventoryAdmission::ActiveLease) {
+		WaitForInventoryRelease(GetCharID(), nullptr, TryBootup);
+		return;
+	}
+	if (inventory_admission != Housing::InventoryAdmission::Allowed) {
+		LogWarning("Character [{}] zone routing blocked by unresolved/unavailable housing custody state", GetCharID());
+		TellClientZoneUnavailable();
+		return;
+	}
+
 	if (zone_id == 0)
 		return;
 
@@ -2465,7 +2578,7 @@ void Client::SendGuildTributeFavorAndTimer(uint32 favor, uint32 time_remaining)
 		gtsa->guild_id      = GetCLE()->GuildID();
 		gtsa->guild_favor   = guild->tribute.favor;
 		gtsa->tribute_timer = guild->tribute.time_remaining;
-		gtsa->trophy_timer  = 0; //not yet implemented
+		gtsa->trophy_timer  = guild_mgr.GuildTrophyRemaining(GetCLE()->GuildID());
 
 		QueuePacket(outapp);
 		safe_delete(outapp);
@@ -2480,7 +2593,7 @@ void Client::SendGuildTributeOptInToggle(const GuildTributeMemberToggle *in)
 	data->guild_id              = in->guild_id;
 	data->no_donations          = in->no_donations;
 	data->tribute_toggle        = in->tribute_toggle;
-	data->tribute_trophy_toggle = 0; //not yet implemented
+	data->tribute_trophy_toggle = Housing::GuildTrophyMemberFlag(database, in->guild_id, in->char_id);
 	data->time                  = time(nullptr);
 	data->command               = in->command;
 	strn0cpy(data->player_name, in->player_name, sizeof(data->player_name));

@@ -1,3 +1,4 @@
+#include "../common/housing/guild_trophy_member_flag.h"
 /*	EQEMu: Everquest Server Emulator
 	Copyright (C) 2001-2003 EQEMu Development Team (http://eqemulator.net)
 
@@ -544,7 +545,7 @@ void Client::SendGuildFavorAndTimer(uint32 guild_id)
 
 		gtsa->guild_favor   = guild->tribute.favor;
 		gtsa->tribute_timer = guild->tribute.time_remaining;
-		gtsa->trophy_timer  = 0; //not yet implemented
+		gtsa->trophy_timer  = HousingGuildTrophyRemaining();
 
 		QueuePacket(outapp);
 		safe_delete(outapp);
@@ -560,7 +561,7 @@ void Client::SendGuildTributeOptInToggle(const GuildTributeMemberToggle* in)
 	data->guild_id              = in->guild_id;
 	data->no_donations          = in->no_donations;
 	data->tribute_toggle        = in->tribute_toggle;
-	data->tribute_trophy_toggle = 0; //not yet implemented
+	data->tribute_trophy_toggle = Housing::GuildTrophyMemberFlag(database, in->guild_id, in->char_id);
 	data->time                  = time(nullptr);
 	data->command               = in->command;
 

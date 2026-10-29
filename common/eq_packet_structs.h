@@ -326,6 +326,11 @@ union
 	bool buyer;
 	bool untargetable;
 	uint32 npc_tint_id;
+	// Canonical server-only extension. RoF2 serializes these in its existing
+	// variable spawn tail; other client encoders retain their normal layouts.
+	char housing_item_guid[17];
+	uint32 housing_estate_id;
+	uint32 housing_item_id;
 };
 
 struct PlayerState_Struct {
@@ -3858,6 +3863,7 @@ struct Internal_GuildMemberEntry_Struct {
 	uint32	rank;						//network byte order
 	uint32	time_last_on;				//network byte order
 	uint32	tribute_enable;				//network byte order
+	uint32 trophy_enable; // Internal persisted housing trophy opt-in.
 	uint32	total_tribute;				//total guild tribute donated, network byte order
 	uint32	last_tribute;				//unix timestamp
 //	char	public_note[1];				//variable length.
@@ -3868,6 +3874,7 @@ struct Internal_GuildMemberEntry_Struct {
 
 struct Internal_GuildMembers_Struct {	//just for display purposes, this is not actually used in the message encoding.
 	char	player_name[64];		//variable length.
+	uint32 guild_id; // Internal authoritative roster identity; not a wire layout.
 	uint32	count;				//network byte order
 	uint32	name_length;	//total length of all of the char names, excluding terminators
 	uint32	note_length;	//total length of all the public notes, excluding terminators

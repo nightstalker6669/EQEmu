@@ -32,6 +32,8 @@
 #include "../common/guilds.h"
 
 #include "entity.h"
+#include "inventory_session_owner.h"
+#include "housing_service_npcs.h"
 #include "dynamic_zone.h"
 #include "guild_mgr.h"
 #include "petitions.h"
@@ -2654,7 +2656,9 @@ void EntityList::RemoveAllMobs()
 			++it;
 			continue;
 		}
+		auto inventory_ticket = it->second->IsClient() ? it->second->CastToClient()->InventorySessionReleaseTicket() : nullptr;
 		safe_delete(it->second);
+		if (inventory_ticket) inventory_ticket->ReleaseAfterCompleteDelete();
 		free_ids.push(it->first);
 		it = mob_list.erase(it);
 	}
@@ -2800,7 +2804,9 @@ bool EntityList::RemoveMob(uint16 delete_id)
 		else if (client_list.count(delete_id)) {
 			entity_list.RemoveClient(delete_id);
 		}
+		auto inventory_ticket = it->second->IsClient() ? it->second->CastToClient()->InventorySessionReleaseTicket() : nullptr;
 		safe_delete(it->second);
+		if (inventory_ticket) inventory_ticket->ReleaseAfterCompleteDelete();
 		if (!corpse_list.count(delete_id)) {
 			free_ids.push(it->first);
 		}
@@ -5493,7 +5499,7 @@ NPC *EntityList::GetClosestBanker(Mob *sender, uint32 &distance)
 
 	auto it = npc_list.begin();
 	while (it != npc_list.end()) {
-		if (it->second->GetClass() == Class::Banker) {
+		if (it->second->GetClass() == Class::Banker && (!Housing::ServiceNpcs::Managed(it->second) || (sender->IsClient() && Housing::ServiceNpcs::Allows(*sender->CastToClient(),it->second,Housing::ServiceNpcs::Service::Banker)))) {
 			uint32 nd = ((it->second->GetY() - sender->GetY()) * (it->second->GetY() - sender->GetY())) +
 				((it->second->GetX() - sender->GetX()) * (it->second->GetX() - sender->GetX()));
 			if (nd < distance){

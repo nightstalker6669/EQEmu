@@ -47,6 +47,10 @@
 #include "worlddb.h"
 #include "wguild_mgr.h"
 #include "../common/evolving_items.h"
+#include "../common/housing/persistence_service.h"
+#include "../common/housing/upkeep_cycle_db.h"
+#include "../common/housing/offline_return_batch_db.h"
+#include <ctime>
 
 #ifdef _WINDOWS
 #include <process.h>
@@ -158,7 +162,38 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
+	std::unique_ptr<Housing::PersistenceService> housing;
+	std::unique_ptr<Database> housing_upkeep_database;
+	if (RuleB(Housing, EnablePlayerHousing)) {
+		auto housing_database = std::make_unique<Database>();
+		if (!housing_database->Connect(Config->DatabaseHost, Config->DatabaseUsername,
+			Config->DatabasePassword, Config->DatabaseDB, Config->DatabasePort, "housing-world")) {
+			LogError("Housing database connection failed");
+			return 1;
+		}
+		Housing::Options options;
+		options.enabled = true;
+		options.reserved_instance_ids = RuleI(Instances, ReservedInstances);
+		housing = std::make_unique<Housing::PersistenceService>(std::move(housing_database), options);
+		auto neighborhoods = housing->ListNeighborhoods();
+		if (!neighborhoods) {
+			LogError("Housing schema unavailable; apply the optional housing migration before enabling it");
+			return 1;
+		}
+		LogInfo("Housing loaded [{}] persistent neighborhoods", neighborhoods.value.size());
+        housing_upkeep_database=std::make_unique<Database>();
+        if(!housing_upkeep_database->Connect(Config->DatabaseHost,Config->DatabaseUsername,
+            Config->DatabasePassword,Config->DatabaseDB,Config->DatabasePort,"housing-upkeep-world")){
+            LogError("Housing upkeep database connection failed");return 1;
+        }
+	}
+
 	// timers
+	Housing::UpkeepClock::Cursor housing_upkeep_cursor;
+    uint32_t housing_inactivity_cursor=0;
+    uint32_t housing_guild_inactivity_cursor=0;
+	Timer housing_upkeep_timer(60000);
+	housing_upkeep_timer.Start(60000);
 	Timer PurgeInstanceTimer(450000);
 	PurgeInstanceTimer.Start(450000);
 	Timer EQTimeTimer(600000);
@@ -371,6 +406,28 @@ int main(int argc, char **argv)
 
 	auto loop_fn = [&](EQ::Timer* t) {
 		Timer::SetCurrentTime();
+        if(housing_upkeep_database&&housing_upkeep_timer.Check()){
+            try{
+                auto current=std::time(nullptr);
+                if(current>0&&uint64_t(current)<=UINT32_MAX){
+                    auto batch=Housing::UpkeepCycle::ProcessDue(*housing_upkeep_database,uint32_t(current),housing_upkeep_cursor);
+                    try{
+                        auto inactivity=Housing::InactivityRetirement::ProcessDue(*housing_upkeep_database,uint32_t(current),housing_inactivity_cursor,&Housing::OfflineReturnBatch::Retire);
+                        batch.refresh=batch.refresh||inactivity.refresh;
+                        if(inactivity.retired)LogInfo("Housing inactivity retired [{}] reviewed personal properties",inactivity.retired);
+                        if(inactivity.deferred)LogInfo("Housing inactivity deferred [{}] properties requiring return, refund or pending resolution",inactivity.deferred);
+                    }catch(...){LogError("Housing inactivity assessment failed; upkeep refresh retained");}
+                    try{
+                        auto guild=Housing::OfflinePropertyDelivery::ProcessGuildDue(*housing_upkeep_database,uint32_t(current),housing_guild_inactivity_cursor,&Housing::OfflineReturnBatch::RetireGuild);
+                        batch.refresh=batch.refresh||guild.refresh;
+                        if(guild.retired)LogInfo("Housing guild inactivity retired [{}] reviewed properties",guild.retired);
+                        if(guild.deferred)LogInfo("Housing guild inactivity deferred [{}] properties requiring safe return",guild.deferred);
+                    }catch(...){LogError("Housing guild inactivity assessment failed; no disposition inferred");}
+                    if(batch.refresh){ServerPacket refresh(ServerOP_HousingUpkeepRefresh,1);refresh.pBuffer[0]=0;ZSList::Instance()->SendPacket(&refresh);LogInfo("Housing upkeep invalidation broadcast after [{}] applied assessments",batch.applied);}
+                    if(batch.unsupported)LogInfo("Housing upkeep deferred [{}] unsupported or pending contracts",batch.unsupported);
+                }
+            }catch(...){LogError("Housing upkeep tick failed; no success inferred");}
+        }
 
 		if (!RunLoops) {
 			EQ::EventLoop::Get().Shutdown();

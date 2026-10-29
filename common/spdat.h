@@ -1493,13 +1493,13 @@ namespace SpellEffect {
 	constexpr int SkillProcSuccess                = 429; // implemented - chance to proc when tje skill in use successfully fires.
 	constexpr int PostEffect                      = 430; // *not implemented - Fear of the Dark(27641) - Alters vision
 	constexpr int PostEffectData                  = 431; // *not implemented - Fear of the Dark(27641) - Alters vision
-	constexpr int ExpandMaxActiveTrophyBen        = 432; // not used
+	constexpr int ExpandMaxActiveTrophyBen        = 432; // personal trophy slot capacity
 	constexpr int CriticalDotDecay                = 433; // implemented - increase critical dot chance, effect decays based on level of spell it effects. (12266)
 	constexpr int CriticalHealDecay               = 434; // implemented - increase critical heal chance, effect decays based on level of spell it effects.
 	constexpr int CriticalRegenDecay              = 435; // implemented - increase critical heal over time chance, effect decays based on level of spell it effects.
 	constexpr int BeneficialCountDownHold         = 436; // not used ( 23491 | ABTest Buff Hold)
-	constexpr int TeleporttoAnchor                = 437; // *not implemented - Teleport Guild Hall Anchor(33099)
-	constexpr int TranslocatetoAnchor             = 438; // *not implemented - Translocate Primary Anchor (27750)
+	constexpr int TeleporttoAnchor                = 437; // Housing: RoF2 reviewed yard/room anchor routing
+	constexpr int TranslocatetoAnchor             = 438; // Housing: RoF2 recipient-anchor pending confirmation
 	constexpr int Assassinate                     = 439; // implemented[AA] - Assassinate damage
 	constexpr int FinishingBlowLvl                = 440; // implemented[AA] - Sets the level Finishing blow can be triggered on an NPC
 	constexpr int DistanceRemoval                 = 441; // implemented - Buff is removed from target when target moves X amount of distance away from where initially hit.

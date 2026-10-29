@@ -20,6 +20,32 @@ SET(zone_sources
     client_bot.cpp
     client_mods.cpp
     client_packet.cpp
+    client_housing_anchor.cpp
+	client_housing_trophies.cpp
+    client_housing_guild_trophies.cpp
+    client_housing.cpp
+    client_housing_metadata.cpp
+    client_housing_interaction.cpp
+    client_housing_escrow.cpp
+    client_housing_purchase.cpp
+    client_housing_transfer.cpp
+    housing_inventory_bridge.cpp
+    housing_service_npcs.cpp
+    housing_pets.cpp
+    housing_service_tribute.cpp
+    housing_service_bank.cpp
+    housing_service_authority.cpp
+    housing_guild_portal.cpp
+    housing_actor_publication.cpp
+    housing_height_scene.cpp
+    housing_house_preload_fence.cpp
+    housing_house_reload.cpp
+    housing_house_runtime.cpp
+    housing_house_surface.cpp
+    housing_crate_runtime.cpp
+    housing_house_inventory_swap.cpp
+	housing_item_reconstruction.cpp
+	inventory_session_owner.cpp
     client_process.cpp
     combat_record.cpp
     corpse.cpp
@@ -476,6 +502,10 @@ set_target_properties(gm_commands_zone PROPERTIES UNITY_BUILD ON UNITY_BUILD_BAT
 
 # zone combine sources and headers
 ADD_EXECUTABLE(zone ${zone_sources} ${zone_headers})
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    set_property(SOURCE housing_height_scene.cpp housing_inventory_bridge.cpp
+        APPEND PROPERTY COMPILE_OPTIONS -fno-fast-math -frounding-math -ffp-contract=off)
+endif()
 
 # binary output directory
 INSTALL(TARGETS zone RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
@@ -505,4 +535,3 @@ endif()
 target_link_libraries(zone PRIVATE lua_zone perl_zone gm_commands_zone ${ZONE_LIBS})
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-

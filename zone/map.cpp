@@ -1,9 +1,11 @@
+#include "../common/housing/curved_mount_support.h"
 #include "../common/global_define.h"
 #include "../common/misc_functions.h"
 #include "../common/compression.h"
 
 #include "client.h"
 #include "map.h"
+#include "../common/housing/oriented_mount_volume.h"
 #include "raycast_mesh.h"
 #include "zone.h"
 #include "../common/file.h"
@@ -262,6 +264,43 @@ bool Map::CheckLoS(glm::vec3 myloc, glm::vec3 oloc) const {
 }
 
 // returns true if a collision happens
+bool Map::IntersectsBox(const glm::vec3& minimum,const glm::vec3& maximum) const {
+ if(!imp||!imp->rm)return true;
+ return imp->rm->overlapsBox(&minimum.x,&maximum.x);
+}
+
+bool Map::IntersectsBoxExceptTriangles(const glm::vec3& minimum,const glm::vec3& maximum,uint32_t source_a,uint32_t source_b) const {
+ if(!imp||!imp->rm)return true;
+ return imp->rm->overlapsBoxExceptTriangles(&minimum.x,&maximum.x,source_a,source_b);
+}
+
+std::vector<uint32_t> Map::SourceMountPatch(const glm::vec3& minimum,const glm::vec3& maximum,uint32_t axis,uint32_t a,uint32_t b,const std::vector<uint32_t>& candidates) const {
+ if(!imp||!imp->rm)return {};return imp->rm->sourceMountPatch(&minimum.x,&maximum.x,axis,a,b,candidates);
+}
+bool Map::IntersectsBoxExceptTriangleList(const glm::vec3& minimum,const glm::vec3& maximum,const std::vector<uint32_t>& sources) const {
+ if(!imp||!imp->rm)return true;return imp->rm->overlapsBoxExceptTriangleList(&minimum.x,&maximum.x,sources);
+}
+
+std::vector<uint32_t> Map::SourceMountPatch(const Housing::OrientedMount::Volume&volume,uint32_t axis,uint32_t a,uint32_t b,const std::vector<uint32_t>&candidates) const {
+ if(!imp||!imp->rm)return {};return imp->rm->sourceMountPatch(volume,axis,a,b,candidates);
+}
+bool Map::IntersectsVolumeExceptTriangleList(const Housing::OrientedMount::Volume&volume,const std::vector<uint32_t>&sources) const {
+ if(!imp||!imp->rm)return true;return imp->rm->overlapsVolumeExceptTriangleList(volume,sources);
+}
+
+std::optional<Housing::PlanarMount::Trace> Map::TracePlanarMount(const glm::vec3&start,const glm::vec3&end) const {
+ if(!imp||!imp->rm)return {};glm::vec3 normal,point;float distance;Housing::PlanarMount::SurfaceSeed seed;
+ if(!imp->rm->raycastSurface(&start.x,&end.x,&point.x,&normal.x,&distance,seed))return {};
+ auto contact=Housing::PlacementContact::FromMapRay({start.x,start.y,start.z},{end.x,end.y,end.z},{normal.x,normal.y,normal.z},distance);if(!contact||(seed.side!=1&&seed.side!=-1))return {};return Housing::PlanarMount::Trace{*contact,seed};
+}
+Housing::CurvedMount::Proof Map::SourceCurvedMountPatch(const Housing::OrientedMount::Volume&v,const Housing::PlanarMount::SurfaceSeed&s,const std::vector<Housing::CurvedMount::Entry>&entries,Housing::CurvedMount::Limits limits) const {
+ if(!imp||!imp->rm)return {};return imp->rm->sourceCurvedMountPatch(v,s,entries,limits);
+}
+std::vector<uint32_t> Map::SourcePlanarMountPatch(const Housing::OrientedMount::Volume&volume,const Housing::PlanarMount::SurfaceSeed&seed,const std::vector<uint32_t>&candidates) const {
+ if(!imp||!imp->rm)return {};return imp->rm->sourcePlanarMountPatch(volume,seed,candidates);
+}
+uint32_t Map::SourceTriangleCount() const {return imp&&imp->rm?imp->rm->sourceTriangleCount():0;}
+
 bool Map::DoCollisionCheck(glm::vec3 myloc, glm::vec3 oloc, glm::vec3 &outnorm, float &distance) const {
 	if(!imp)
 		return false;

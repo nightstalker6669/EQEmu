@@ -28,6 +28,7 @@
 #include "../common/evolving_items.h"
 #include "../common/repositories/character_corpse_items_repository.h"
 #include "queryserv.h"
+#include "housing_house_inventory_swap.h"
 
 extern WorldServer worldserver;
 extern QueryServ  *QServ;
@@ -1600,6 +1601,15 @@ bool Client::IsBankSlot(uint32 slot)
 // Moves items around both internally and in the database
 // In the future, this can be optimized by pushing all changes through one database REPLACE call
 bool Client::SwapItem(MoveItem_Struct* move_in) {
+	if (!move_in) return false;
+	const auto house_swap = Housing::HouseInventory::TryZoneSwap(*this, move_in->from_slot, move_in->to_slot, move_in->number_in_stack);
+	if (house_swap == Housing::HouseInventory::SwapDisposition::Rejected) return false;
+	if (house_swap == Housing::HouseInventory::SwapDisposition::Moved) {
+		if (move_in->from_slot == EQ::invslot::slotCursor) SendCursorBuffer();
+		CalcBonuses();
+		ApplyWeaponsStance();
+		return true;
+	}
 
 	uint32 src_slot_check = move_in->from_slot;
 	uint32 dst_slot_check = move_in->to_slot;
@@ -2018,6 +2028,7 @@ bool Client::SwapItem(MoveItem_Struct* move_in) {
 	}
 
 	bool all_to_stack = false;
+	bool fresh_partial_split = false;
 	// Step 5: Swap (or stack) items
 	if (move_in->number_in_stack > 0) {
 		// Determine if charged items can stack
@@ -2071,6 +2082,7 @@ bool Client::SwapItem(MoveItem_Struct* move_in) {
 				LogInventory("Split stack of [{}] ([{}]) from slot [{}] to [{}] with stack size [{}]. Src keeps [{}]", src_inst->GetItem()->Name, src_inst->GetItem()->ID, src_slot_id, dst_slot_id, move_in->number_in_stack, src_inst->GetCharges());
 				EQ::ItemInstance* inst = database.CreateItem(src_inst->GetItem(), move_in->number_in_stack);
 				m_inv.PutItem(dst_slot_id, *inst);
+				fresh_partial_split = true;
 				safe_delete(inst);
 			}
 		}
@@ -2228,6 +2240,17 @@ bool Client::SwapItem(MoveItem_Struct* move_in) {
 	}
 	else {
 		database.SaveInventory(character_id, m_inv.GetItem(dst_slot_id), dst_slot_id);
+	}
+
+	// The RoF2 client predicts a split locally, but cannot predict the new
+	// server serial used by housing source GUIDs. Refresh the saved destination
+	// in place; Limbo would publish a new cursor acquisition instead.
+	if (fresh_partial_split && ClientVersion() == EQ::versions::ClientVersion::RoF2) {
+		auto* split = m_inv.GetItem(dst_slot_id);
+		const auto* data = split ? split->GetUnscaledItem() : nullptr;
+		if (data && data->Placeable) {
+			SendItemPacket(dst_slot_id, split, ItemPacketTrade);
+		}
 	}
 
 	// Step 8: Re-calc stats

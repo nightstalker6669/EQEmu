@@ -493,6 +493,24 @@ namespace EQ
 		bool	PotionBelt {};
 		bool	Stackable {};
 		bool	NoTransfer {};
+		uint32	Placeable {}; // Native estate-type mask; items.UNK224 in the current schema.
+		char	HousingHousepetFilename[32] {};
+		uint8	HousingInteractiveObject {};
+		uint32	HousingNpcRespawnInterval {};
+		bool	HousingNpcMetadataKnown {};
+		float HousingNpcActorHeight = 0; // Explicit reviewed actor input; zero leaves runtime unsupported.
+		char HousingNpcSourceSha256[65] = {}; // Exact reviewed source; absent source retains legacy empty/zero bytes.
+		uint8	HousingIgnoreCollisions {};
+		uint32	HousingPlacementType {};
+		uint8	HousingDisableRotation {};
+		uint8	HousingDisableFreePlacement {};
+		bool	HousingPlacementFlagsKnown {}; // Both named DB bytes reviewed; unknown is not a Free-mode grant.
+		uint32	HousingDefinitionID {};
+		float	HousingMinimumScale {};
+		float	HousingMaximumScale {};
+		uint32	HousingTrophyBenefitID {0xffffffff}; // explicit reviewed source binding, never raw UNK233
+		uint32	HousingUpkeepID {};
+		int32	HousingMaxPerEstate {};
 		bool	QuestItemFlag {};
 		int16	StackSize {};
 		uint8	PotionBeltSlots {};

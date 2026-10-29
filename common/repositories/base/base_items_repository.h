@@ -304,6 +304,8 @@ public:
 		int32_t     UNK240;
 		int32_t     UNK241;
 		int32_t     epicitem;
+		int32_t     housing_disable_rotation; // -1: unreviewed/NULL
+		int32_t     housing_disable_free_placement;
 	};
 
 	static std::string PrimaryKey()
@@ -599,6 +601,8 @@ public:
 			"UNK240",
 			"UNK241",
 			"epicitem",
+			"housing_disable_rotation",
+			"housing_disable_free_placement",
 		};
 	}
 
@@ -890,6 +894,8 @@ public:
 			"UNK240",
 			"UNK241",
 			"epicitem",
+			"housing_disable_rotation",
+			"housing_disable_free_placement",
 		};
 	}
 
@@ -1215,6 +1221,8 @@ public:
 		e.UNK240              = 0;
 		e.UNK241              = 0;
 		e.epicitem            = 0;
+		e.housing_disable_rotation = -1;
+		e.housing_disable_free_placement = -1;
 
 		return e;
 	}
@@ -1536,6 +1544,8 @@ public:
 			e.UNK240              = row[282] ? static_cast<int32_t>(atoi(row[282])) : 0;
 			e.UNK241              = row[283] ? static_cast<int32_t>(atoi(row[283])) : 0;
 			e.epicitem            = row[284] ? static_cast<int32_t>(atoi(row[284])) : 0;
+			e.housing_disable_rotation = row[285] ? static_cast<int32_t>(atoi(row[285])) : -1;
+			e.housing_disable_free_placement = row[286] ? static_cast<int32_t>(atoi(row[286])) : -1;
 
 			return e;
 		}
@@ -1854,6 +1864,8 @@ public:
 		v.push_back(columns[282] + " = " + std::to_string(e.UNK240));
 		v.push_back(columns[283] + " = " + std::to_string(e.UNK241));
 		v.push_back(columns[284] + " = " + std::to_string(e.epicitem));
+		v.push_back(columns[285] + " = " + (e.housing_disable_rotation < 0 ? std::string("NULL") : std::to_string(e.housing_disable_rotation)));
+		v.push_back(columns[286] + " = " + (e.housing_disable_free_placement < 0 ? std::string("NULL") : std::to_string(e.housing_disable_free_placement)));
 
 		auto results = db.QueryDatabase(
 			fmt::format(
@@ -2160,6 +2172,8 @@ public:
 		v.push_back(std::to_string(e.UNK240));
 		v.push_back(std::to_string(e.UNK241));
 		v.push_back(std::to_string(e.epicitem));
+		v.push_back(e.housing_disable_rotation < 0 ? std::string("NULL") : std::to_string(e.housing_disable_rotation));
+		v.push_back(e.housing_disable_free_placement < 0 ? std::string("NULL") : std::to_string(e.housing_disable_free_placement));
 
 		auto results = db.QueryDatabase(
 			fmt::format(
@@ -2474,6 +2488,8 @@ public:
 			v.push_back(std::to_string(e.UNK240));
 			v.push_back(std::to_string(e.UNK241));
 			v.push_back(std::to_string(e.epicitem));
+			v.push_back(e.housing_disable_rotation < 0 ? std::string("NULL") : std::to_string(e.housing_disable_rotation));
+			v.push_back(e.housing_disable_free_placement < 0 ? std::string("NULL") : std::to_string(e.housing_disable_free_placement));
 
 			insert_chunks.push_back("(" + Strings::Implode(",", v) + ")");
 		}
@@ -2792,6 +2808,8 @@ public:
 			e.UNK240              = row[282] ? static_cast<int32_t>(atoi(row[282])) : 0;
 			e.UNK241              = row[283] ? static_cast<int32_t>(atoi(row[283])) : 0;
 			e.epicitem            = row[284] ? static_cast<int32_t>(atoi(row[284])) : 0;
+			e.housing_disable_rotation = row[285] ? static_cast<int32_t>(atoi(row[285])) : -1;
+			e.housing_disable_free_placement = row[286] ? static_cast<int32_t>(atoi(row[286])) : -1;
 
 			all_entries.push_back(e);
 		}
@@ -3101,6 +3119,8 @@ public:
 			e.UNK240              = row[282] ? static_cast<int32_t>(atoi(row[282])) : 0;
 			e.UNK241              = row[283] ? static_cast<int32_t>(atoi(row[283])) : 0;
 			e.epicitem            = row[284] ? static_cast<int32_t>(atoi(row[284])) : 0;
+			e.housing_disable_rotation = row[285] ? static_cast<int32_t>(atoi(row[285])) : -1;
+			e.housing_disable_free_placement = row[286] ? static_cast<int32_t>(atoi(row[286])) : -1;
 
 			all_entries.push_back(e);
 		}
@@ -3460,6 +3480,8 @@ public:
 		v.push_back(std::to_string(e.UNK240));
 		v.push_back(std::to_string(e.UNK241));
 		v.push_back(std::to_string(e.epicitem));
+		v.push_back(e.housing_disable_rotation < 0 ? std::string("NULL") : std::to_string(e.housing_disable_rotation));
+		v.push_back(e.housing_disable_free_placement < 0 ? std::string("NULL") : std::to_string(e.housing_disable_free_placement));
 
 		auto results = db.QueryDatabase(
 			fmt::format(
@@ -3767,6 +3789,8 @@ public:
 			v.push_back(std::to_string(e.UNK240));
 			v.push_back(std::to_string(e.UNK241));
 			v.push_back(std::to_string(e.epicitem));
+			v.push_back(e.housing_disable_rotation < 0 ? std::string("NULL") : std::to_string(e.housing_disable_rotation));
+			v.push_back(e.housing_disable_free_placement < 0 ? std::string("NULL") : std::to_string(e.housing_disable_free_placement));
 
 			insert_chunks.push_back("(" + Strings::Implode(",", v) + ")");
 		}

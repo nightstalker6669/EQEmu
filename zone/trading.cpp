@@ -30,6 +30,7 @@
 #include "client.h"
 #include "entity.h"
 #include "mob.h"
+#include "housing_guild_portal.h"
 
 #include "quest_parser_collection.h"
 #include "string_ids.h"
@@ -510,6 +511,7 @@ void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, st
 		}
 	}
 	else if(tradingWith->IsNPC()) {
+		if (Housing::GuildPortalRuntime::HandIn(*this, tradingWith)) return;
 
 		bool quest_npc = false;
 		if (parse->HasQuestSub(tradingWith->GetNPCTypeID(), EVENT_TRADE)) {

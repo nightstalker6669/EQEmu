@@ -18,6 +18,32 @@ SET(common_sources
     database/database_dump_service.cpp
     database.cpp
     database_instances.cpp
+    housing/persistence_service.cpp
+    housing/escrow_service.cpp
+    housing/item_service.cpp
+    housing/live_item_service.cpp
+    housing/layout_batch_journal.cpp
+    housing/layout_inventory_units.cpp
+    housing/catalog_service.cpp
+    housing/inventory_process_recovery.cpp
+    housing/scene_service.cpp
+    housing/interior_storage_service.cpp
+    housing/house_swap_service.cpp
+    housing/native_access_service.cpp
+    housing/native_plot_purchase.cpp
+    housing/ownership_transfer_service.cpp
+    housing/live_escrow_service.cpp
+    housing/guild_purchase_authority.cpp
+    housing/current_estate_access.cpp
+    housing/house_binding_service.cpp
+    housing/crate_storage_service.cpp
+    housing/crate_binding.cpp
+    housing/house_interior_allocator.cpp
+    housing/house_binding_preload.cpp
+    housing/house_operation_authority.cpp
+    housing/house_custody_authority.cpp
+    housing/house_inventory_transition.cpp
+    housing/house_inventory_profile_fence.cpp
     database/database_update_manifest.cpp
     database/database_update_manifest_custom.cpp
     database/database_update_manifest_bots.cpp

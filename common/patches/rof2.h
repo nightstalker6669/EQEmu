@@ -21,6 +21,13 @@
 #define COMMON_ROF2_H
 
 #include "../struct_strategy.h"
+#include "rof2_limits.h"
+#include <cstddef>
+#include <cstdint>
+#include <optional>
+#include <vector>
+
+namespace EQ { class ItemInstance; }
 
 class EQStreamIdentifier;
 
@@ -30,6 +37,20 @@ namespace RoF2
 	//these are the only public member of this namespace.
 	extern void Register(EQStreamIdentifier &into);
 	extern void Reload();
+	// Native embedded ItemPtr, without the OP_ItemPacket type DWORD. Uses the
+	// ordinary item encoder and preserves instance identity, charges and children.
+	// Housing must be enabled. Full inventory trees and compact estate list
+	// ItemPtrs have distinct bounds; the latter retain their existing16-bit frame.
+	inline constexpr size_t HousingItemMaximumBytes = 65535;
+	inline constexpr size_t HousingItemMaximumNodes = (1 + invbag::SLOT_COUNT) * 7;
+	inline constexpr size_t HousingItemMaximumDepth = 8;
+	inline constexpr size_t HousingItemMaximumInventoryBytes = 16 * 1024 * 1024;
+	std::optional<std::vector<uint8_t>> SerializeHousingItem(
+		const EQ::ItemInstance &instance, int16_t server_slot);
+	// Bag contents remain exclusively in the canonical custody tree and ordinary
+	// inventory delivery. The stored-list bag root keeps its identity/definition.
+	std::optional<std::vector<uint8_t>> SerializeHousingItemListEntry(
+		const EQ::ItemInstance &instance, int16_t server_slot);
 
 
 

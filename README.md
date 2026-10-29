@@ -1,13 +1,15 @@
-# EQEmu · RoF2 shared core
+# EQEmu · RoF2 Housing
 
-Reusable inventory/session and database infrastructure for the RoF2 feature branches, based on EQEmu 23.10.3. **No housing gameplay, fellowship, mercenaries, shrouds or achievements are enabled by this branch.**
+Ready-to-build EQEmu source with **housing** integrated from the published production releases. All required companion source, SQL, content tooling and protocol references are included.
 
-- [Core boundaries, API and migration requirements](common/shared_core/README.md)
-- [Provenance](docs/rof2/integration.json)
-- [EQEmu upstream project and build instructions](https://github.com/EQEmu/EQEmu/tree/8175ae61874cbf20d7b05102821f6f8a4f4d1c39)
+**[Installation and database order](docs/rof2/INSTALL.md)** · **[Opcodes and packet structures](docs/rof2/PROTOCOL.md)** · [Source versions](docs/rof2/integration.json)
 
-Feature branches inherit this core and document their additional source/database dependencies. `master` stays at the original 23.10.3 commit. Achievements retains its separate newer upstream base.
+This is the `rof2-housing` branch. Shared inventory/session implementations are inherited from **[rof2-shared-core](https://github.com/nightstalker6669/EQEmu/tree/rof2-shared-core)**. Each feature has its own branch; the published dependency stack means fellowship includes housing, mercenaries includes both, and shrouds includes all three. Achievements keeps its separate newer upstream base. `master` remains the original 23.10.3 release. These are documented implementation dependencies rather than a claim that the features are independent patches.
 
-Build through the normal EQEmu CMake workflow. The core session migration is additive; it is not a PEQ database replacement or a full feature installer. Preserve database/binary backups and existing durable lease history. No test accounts, logs, private settings or client files are included. See [GPLv3](LICENSE).
+Native source is in the normal EQEmu directories. `extensions/rof2/` holds the corresponding curated release packages: ordered migrations, installers, quest scripts, opcodes, structures, evidence limits and attribution. Their old source patch commands are for reproducing original releases; **do not reapply them to this already-integrated source**.
+
+An existing PEQ/MariaDB database plus the included migrations is sufficient; no PEQ fork or private database dump is required. Read the setup guide before installing. The shared core and complete 23.10.3 stack passed Linux builds; critical lifecycle files in the smaller branches passed syntax checks. Native deployment acceptance remains pending. No running server was changed.
+
+[Upstream build/project documentation](docs/rof2/UPSTREAM-README.md) · [GPLv3 license](LICENSE)
 
 [All feature branches and dependency order](docs/rof2/BRANCHES.md)

@@ -10,6 +10,7 @@
 #include "merc.h"
 #include "zone.h"
 #include "zonedb.h"
+#include "../common/housing/admission_guard.h"
 #include "aura.h"
 #include "../common/repositories/blocked_spells_repository.h"
 #include "../common/repositories/character_tribute_repository.h"
@@ -1579,6 +1580,12 @@ void ZoneDatabase::DivergeCharacterInventoryFromInvSnapshot(uint32 character_id,
 }
 
 bool ZoneDatabase::RestoreCharacterInvSnapshot(uint32 character_id, uint32 timestamp) {
+	if (Housing::CheckInventoryMaintenance(RuleB(Housing, EnablePlayerHousing)) !=
+		Housing::InventoryAdmission::Allowed) {
+		LogError("Inventory restore for character [{}] refused before deletion: housing requires an atomic offline maintenance adapter", character_id);
+		return false;
+	}
+
 	// we should know what we're doing by the time we call this function..but,
 	// this is to prevent inventory deletions where no timestamp entries exists
 	if (!ValidateCharacterInvSnapshotTimestamp(character_id, timestamp)) {

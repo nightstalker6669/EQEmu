@@ -1,15 +1,39 @@
 {
-  "branch": "rof2-shared-core",
+  "branch": "rof2-housing",
   "upstream_commit": "8175ae61874cbf20d7b05102821f6f8a4f4d1c39",
   "features": [
-    "shared-core"
+    "housing"
   ],
-  "inputs": {
-    "source": "eqemu-rof2-housing 710ecb7, fellowship 9382453, spirit-shrouds e32ca15"
-  },
-  "compatibility": "Stable legacy table/type/custom-data names; source implementations extracted once into common/shared_core; feature-specific gameplay and recovery adapters excluded.",
+  "inputs": [
+    {
+      "feature": "housing",
+      "repository": "nightstalker6669/eqemu-rof2-housing",
+      "commit": "710ecb7530ff0a5ade837e887ad7bc2f84622d07",
+      "omitted_gallery_and_generated_files": [
+        "docs/images/README.md",
+        "docs/images/evantil-abode.png",
+        "docs/images/guild-interior-services.png",
+        "docs/images/hermits-hideaway.png",
+        "docs/images/palatial-festival.png"
+      ]
+    }
+  ],
+  "source_integration": "Published release patches applied to exact prerequisite preimages; latest housing delta merged retaining all lifecycle callbacks and forward declarations.",
   "validation": {
-    "standalone_common": "PASS; Linux x86-64 Clang, Debug -O0 -g0, PCH off; no gameplay sources from feature branches required",
-    "native_runtime": "Not deployed or exercised; core itself does not activate game hooks"
-  }
+    "core": "Standalone common library build PASS without feature gameplay sources.",
+    "combined_stack": "world, zone, ucs, shared_memory, housing_install, housing_capacity, housing_recovery, housing_profile_upgrade build PASS; Linux x86-64 Clang, Debug -O0 -g0, PCH off.",
+    "branch_specific": "Six critical lifecycle/inventory TUs passed Clang syntax checks for housing, fellowship and mercenary branches; full combined stack built from shroud source. Separate full links for each smaller branch were not performed.",
+    "release_packages": "Production manifest hashes, Python syntax, JSON parsing, new guide links and core dependency boundary checked.",
+    "runtime": "No deployment, database migration, client launch or native acceptance performed during this source integration."
+  },
+  "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
+  "shared_core": "Inherited from rof2-shared-core; one canonical implementation in common/shared_core; legacy feature headers forward to it.",
+  "branch_dependency_order": [
+    "rof2-shared-core",
+    "rof2-housing"
+  ],
+  "remaining_feature_dependencies": "Published feature/runtime dependencies are retained. Extracting shared infrastructure does not make all gameplay patches independent.",
+  "reviewed_source_repairs": [
+    "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included."
+  ]
 }

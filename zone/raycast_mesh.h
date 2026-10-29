@@ -30,12 +30,18 @@
 //
 // 
 
+#include "../common/housing/curved_mount_contact.h"
+#include <vector>
+namespace Housing::OrientedMount { struct Volume; }
+namespace Housing::PlanarMount { struct SurfaceSeed; }
+
 typedef float RmReal;
 typedef unsigned int RmUint32;
 
 class RaycastMesh
 {
 public:
+	virtual bool overlapsBox(const RmReal *minimum,const RmReal *maximum) const = 0;
 	virtual bool raycast(const RmReal *from,const RmReal *to,RmReal *hitLocation,RmReal *hitNormal,RmReal *hitDistance) = 0;
 	virtual bool bruteForceRaycast(const RmReal *from,const RmReal *to,RmReal *hitLocation,RmReal *hitNormal,RmReal *hitDistance) = 0;
 
@@ -44,6 +50,23 @@ public:
 	virtual void release(void) = 0;
 protected:
 	virtual ~RaycastMesh(void) { };
+	public:
+	// Appended virtual: existing slots unchanged; derived legacy implementations
+	// conservatively retain every triangle. Trusted caller supplies reviewed IDs.
+	virtual bool overlapsBoxExceptTriangles(const RmReal *minimum,const RmReal *maximum,RmUint32 source_a,RmUint32 source_b) const {return overlapsBox(minimum,maximum);}
+ virtual std::vector<RmUint32> sourceMountPatch(const RmReal*,const RmReal*,RmUint32,RmUint32,RmUint32,const std::vector<RmUint32>&) const {return {};}
+ virtual bool overlapsBoxExceptTriangleList(const RmReal *minimum,const RmReal *maximum,const std::vector<RmUint32>&) const {return overlapsBox(minimum,maximum);}
+ virtual std::vector<RmUint32> sourceMountPatch(const Housing::OrientedMount::Volume&,RmUint32,RmUint32,RmUint32,const std::vector<RmUint32>&) const {return {};}
+ virtual bool overlapsVolumeExceptTriangleList(const Housing::OrientedMount::Volume&,const std::vector<RmUint32>&) const {return true;}
+ // V5 APIs append slots; old point/rectangular/oriented queries keep semantics.
+ virtual bool raycastSurface(const RmReal*,const RmReal*,RmReal*,RmReal*,RmReal*,Housing::PlanarMount::SurfaceSeed&) {return false;}
+ virtual Housing::CurvedMount::Proof sourceCurvedMountPatch(const Housing::OrientedMount::Volume&,const Housing::PlanarMount::SurfaceSeed&,const std::vector<Housing::CurvedMount::Entry>&,Housing::CurvedMount::Limits) const {return {};}
+ virtual std::vector<RmUint32> sourcePlanarMountPatch(const Housing::OrientedMount::Volume&,const Housing::PlanarMount::SurfaceSeed&,const std::vector<RmUint32>&) const {return {};}
+ virtual RmUint32 sourceTriangleCount() const {return 0;}
+
+
+
+
 };
 
 

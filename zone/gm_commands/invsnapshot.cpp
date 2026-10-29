@@ -1,4 +1,5 @@
 #include "../client.h"
+#include "../../common/housing/admission_guard.h"
 
 void command_invsnapshot(Client *c, const Seperator *sep)
 {
@@ -225,6 +226,12 @@ void command_invsnapshot(Client *c, const Seperator *sep)
 	if (strcmp(sep->arg[1], "parse") == 0) {
 		if (!sep->IsNumber(2)) {
 			c->Message(Chat::White, "A timestamp is required to use this option.");
+			return;
+		}
+
+		if (Housing::CheckInventoryMaintenance(RuleB(Housing, EnablePlayerHousing)) !=
+			Housing::InventoryAdmission::Allowed) {
+			c->Message(Chat::Red, "Inventory restore is unavailable while housing is enabled: a transaction-safe offline maintenance adapter is required. No items were changed.");
 			return;
 		}
 

@@ -2004,3 +2004,5 @@ void ClientList::AddToZoneServerCaches(ClientListEntry* cle)
 		m_guild_zone_server_ids[cle->GuildID()].insert(server_id);
 	}
 }
+
+std::map<uint32,std::pair<uint32,uint32>> ClientList::GetInZoneGuildLevels(uint32 guild){std::map<uint32,std::pair<uint32,uint32>> out;LinkedListIterator<ClientListEntry*> it(clientlist);it.Reset();while(it.MoreElements()){auto* c=it.GetData();if(c&&c->GuildID()==guild&&c->Online()==CLE_Status::InZone&&c->Server()&&c->CharID()&&c->AccountID()&&c->level()&&c->GetClientVersion()==uint8(EQ::versions::ClientVersion::RoF2))out.emplace(c->CharID(),std::make_pair(c->AccountID(),uint32(c->level())));it.Advance();}return out;}
