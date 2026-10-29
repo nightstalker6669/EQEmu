@@ -80,7 +80,8 @@
     "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included.",
     "Resolve current upstream signatures, component buff APIs, strict database transaction safeguards and permanent-profile-only AA/save achievement updates.",
     "Deduplicate mercenary switch opcode/handler while retaining the bounded RoF2 roster path and upstream legacy dispatch for other clients.",
-    "Retain operation-3 native shroud buff reconstruction through current OP_BuffDefinition; restore its explicit ability-cast helper include."
+    "Retain operation-3 native shroud buff reconstruction through current OP_BuffDefinition; restore its explicit ability-cast helper include.",
+    "Use upstream-default precompiled headers in the integrated installer, matching the validated current source rather than the historical standalone overlay build."
   ],
   "integration_scope": "All five published features, including achievements, share the same current upstream foundation; achievements also retains its separate feature branch.",
   "upstream_master": "4aceae18b94ffaafc08e2b17bc41cd72c77f795d",
