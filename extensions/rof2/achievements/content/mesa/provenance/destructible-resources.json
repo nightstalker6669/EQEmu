@@ -1,0 +1,27 @@
+{
+  "source": "Shipped RoF2 mesa_assets.txt loads DEST_TNT_G.eqg and DEST_CGW.eqg; private read-only format-aware inspection",
+  "tent": {
+    "archive_sha256": "ac65f257c0858da50d5d0725199c03f0e6a9e6316de371a7188202fd974c410c",
+    "model_group": "DEST_TNT_G",
+    "stages": [
+      "DEST_TNT_G_M00",
+      "DEST_TNT_G_M01",
+      "DEST_TNT_G_M02",
+      "DEST_TNT_G_M03",
+      "DEST_TNT_G_M04"
+    ],
+    "transitions": [
+      "DEST_TNT_G_A01",
+      "DEST_TNT_G_A02",
+      "DEST_TNT_G_A03",
+      "DEST_TNT_G_A04"
+    ],
+    "native": "Correct group survived damage/destruction and credited the original tent quest; static OBJ_FG_TENTGOOD previously crashed on damage",
+    "original_eight_spawn_points_retained": true
+  },
+  "cage": {
+    "group": "DEST_CGW",
+    "status": "Group and meshes recovered offline; not an enabled capture scene"
+  },
+  "distribution": "Evidence facts and digests only; no original resource bytes or client assets distributed"
+}

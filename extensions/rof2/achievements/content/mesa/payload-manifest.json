@@ -1,0 +1,166 @@
+[
+  {
+    "path": "PROTOCOL.md",
+    "sha256": "44d97ed40a1e48ef0825457e596f55d91d27e7d7833f9facf0178db7cc1631dc"
+  },
+  {
+    "path": "README.md",
+    "sha256": "e4bc97ee90654a3582f27e455089c44752022031417a0b768208425aaec3ad90"
+  },
+  {
+    "path": "apply_quests.py",
+    "sha256": "5cf9e04b5db55ba83bd18837653613c8b19f394445598f45582d3ec29daa59d1"
+  },
+  {
+    "path": "hooks/global-npc-mesa.fragment.lua",
+    "sha256": "c3547a0811ac2df9afa06bbd13087b1cded78845cc0c746967302b3249b6c8a9"
+  },
+  {
+    "path": "hooks/global-player-mesa.fragment.lua",
+    "sha256": "8ee8908af69530056fde05423989fb75b40e2231db5920e4544707e2c49c1399"
+  },
+  {
+    "path": "preflight.py",
+    "sha256": "53a68d8dc73c49371a415e13e8aed342205a1e6b455faf3b9c5e0fbba5d96d1f"
+  },
+  {
+    "path": "provenance/baseline-identities.json",
+    "sha256": "0dcb05d92dda97f3ee45cccb99b2a972ae714385695988ec6238e412770b156d"
+  },
+  {
+    "path": "provenance/destructible-resources.json",
+    "sha256": "59edf15a2b2510d58318c88201052b8f6ade7c8d18c10db53ee811371ecdb45f"
+  },
+  {
+    "path": "provenance/native-status.json",
+    "sha256": "04b401ef44b894edf49af7f5b60054bb68debcec3d4bb0636a7e0da91e945aab"
+  },
+  {
+    "path": "provenance/parent-rewards.json",
+    "sha256": "13567027d951eb0f9188fafd7a6f6f8eb97693ec0ab997f5fb2ab04136c4fb84"
+  },
+  {
+    "path": "provenance/quest-specification.json",
+    "sha256": "2fe61d4d81f656a67b792d9a5402a3bc026d7d7796abf013f9d0dd59f05ba9e8"
+  },
+  {
+    "path": "provenance/research-decisions.json",
+    "sha256": "d14063274dd2cedaa11469922ac43a95400b652bcd14908539b63baa1936fed1"
+  },
+  {
+    "path": "provenance/scene-data.json",
+    "sha256": "e6de3387aa2b063324090d6490a49b6c2e7cba33ad4eb3926991e6b706db6f1a"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "d7dbbba53e03448a3970d9121a8bdf21f1108b9055b0e8cdcc6cc2cd99744519"
+  },
+  {
+    "path": "quests/crescent/394164.lua",
+    "sha256": "2de5e84f7cf6488f7b4043f6d284ccc8bba1323b78220093863041ad2efab2a4"
+  },
+  {
+    "path": "quests/crescent/394227.pl",
+    "sha256": "848bd9fea6b1c343f7219ac69ed2d3c0ba601439fa144fdddedb1fe8eab5d2c3"
+  },
+  {
+    "path": "quests/crescent/394228.lua",
+    "sha256": "6e9bb746542613b6f0dbbaee3ba8b60a4e0e0ebcbe9cd42e1721ccc6942145d8"
+  },
+  {
+    "path": "quests/global/spells/9146.lua",
+    "sha256": "d5beff096590b5dd95ec659380109b6c7a5f235c8087f173d581263e878de380"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_blightfire.lua",
+    "sha256": "65f261bdc67b154432cbab23fd0a86445748dabf960635e4dbd4a9948fd5a600"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_blightfire_data.lua",
+    "sha256": "b2078085c51d1a988acfb50317e3e655c1526e5d5d794c63918c0e56f69e9038"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa.lua",
+    "sha256": "c272750758946cd247def81aebb088d66cde84e1fc962971d332d24fa8793c40"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_data.lua",
+    "sha256": "22b5059fb1a1d55aecb7d9c463649388381fdf2a32d694a3db39165fc298f54d"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_inventory.lua",
+    "sha256": "d8ecbbe270845e7e6a09a7ab731ed6b2d10ca0dc0698810e94c6ef7c97df58c0"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_resources.lua",
+    "sha256": "cb360cb74f2aeb5c778f99e2e19b9523057acc240684811857959c8de3cc008d"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_scenes.lua",
+    "sha256": "9d70a625f7b57c193180aa1b08d091a16cec31e604d0491bddd0232b80dceead"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_wand.lua",
+    "sha256": "fb52465567286cbfaa02b0bfae6291c011aad4c954c4eee956cfa518afb78d94"
+  },
+  {
+    "path": "quests/mesa/397007.lua",
+    "sha256": "d03add4f805a736847b445470038186d89a80d3143d692722395143b5db32e36"
+  },
+  {
+    "path": "quests/mesa/397013.lua",
+    "sha256": "d03add4f805a736847b445470038186d89a80d3143d692722395143b5db32e36"
+  },
+  {
+    "path": "quests/mesa/397014.lua",
+    "sha256": "d03add4f805a736847b445470038186d89a80d3143d692722395143b5db32e36"
+  },
+  {
+    "path": "quests/mesa/397083.lua",
+    "sha256": "d03add4f805a736847b445470038186d89a80d3143d692722395143b5db32e36"
+  },
+  {
+    "path": "quests/mesa/397095.lua",
+    "sha256": "d03add4f805a736847b445470038186d89a80d3143d692722395143b5db32e36"
+  },
+  {
+    "path": "quests/mesa/397119.lua",
+    "sha256": "d03add4f805a736847b445470038186d89a80d3143d692722395143b5db32e36"
+  },
+  {
+    "path": "quests/mesa/397243.lua",
+    "sha256": "f7ab6ede75d7d943841a9f3382593a581477ba7dae1d530bcf5b6c3da0f903e3"
+  },
+  {
+    "path": "quests/mesa/397251.lua",
+    "sha256": "f7ab6ede75d7d943841a9f3382593a581477ba7dae1d530bcf5b6c3da0f903e3"
+  },
+  {
+    "path": "quests/mesa/397255.lua",
+    "sha256": "f7ab6ede75d7d943841a9f3382593a581477ba7dae1d530bcf5b6c3da0f903e3"
+  },
+  {
+    "path": "quests/mesa/397259.lua",
+    "sha256": "f7ab6ede75d7d943841a9f3382593a581477ba7dae1d530bcf5b6c3da0f903e3"
+  },
+  {
+    "path": "quests/moors/395210.lua",
+    "sha256": "932ef4eb0aa97e55963b0c4f0700f31cf49c252a5c8b49263d9a368fd685c93f"
+  },
+  {
+    "path": "sql/010-catalogue.sql",
+    "sha256": "10826a83728b1aae12c058ba4473adceb5c12f43a35c277ad7a173e5b1cb8d81"
+  },
+  {
+    "path": "sql/020-quests.sql",
+    "sha256": "829b08c12fcbe37322b8bffc8824d892949836c22059bf4c9f5c307a314206c0"
+  },
+  {
+    "path": "sql/030-scenes.sql",
+    "sha256": "b1f46aa918828eb9da4e283e13936063a0f164eeea68b0cea7fc363522c7a67b"
+  },
+  {
+    "path": "sql/040-parent-rewards.sql",
+    "sha256": "9c3d60b40bd7ec74c78992996329238003f368d5fe9165071977bc7f35f723cc"
+  }
+]

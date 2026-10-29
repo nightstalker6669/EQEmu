@@ -1,0 +1,18 @@
+{
+  "branch": "rof2-achievements",
+  "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "features": [
+    "achievements"
+  ],
+  "inputs": [
+    {
+      "feature": "achievements",
+      "repository": "nightstalker6669/eqemu-rof2-achievements",
+      "commit": "334a0e2c28079af07c9a4d07a0654f74ba9e4991",
+      "omitted_gallery_and_generated_files": []
+    }
+  ],
+  "source_integration": "Published release patches applied to exact prerequisite preimages; latest housing delta merged retaining all lifecycle callbacks and forward declarations.",
+  "validation": "Sequential source application and conflict resolution checked. This combined branch has not undergone a fresh build or native acceptance. Original release validation remains described separately.",
+  "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included."
+}

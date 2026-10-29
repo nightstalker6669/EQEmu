@@ -1,0 +1,559 @@
+{
+  "status": "Pranks configured for15classes; Welcome head variants and Berserker Pranks remain unconfigured",
+  "cutoff": "2013-05-31",
+  "configured_set": {
+    "achievement_id": 500040300,
+    "reward_set_id": 3050403,
+    "title": "Pranks and Research (46-50)",
+    "options": [
+      {
+        "label": "Flawed Consigned Scale Shield",
+        "common": true,
+        "mask": 16861,
+        "items": [
+          {
+            "id": 108583,
+            "name": "Flawed Consigned Scale Shield",
+            "class_mask": 16861,
+            "classes": [
+              "WAR",
+              "PAL",
+              "RNG",
+              "SHD",
+              "MNK",
+              "BRD",
+              "ROG",
+              "BST"
+            ],
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "label": "Flawed Consigned caster carapace and mace",
+        "common": true,
+        "mask": 15906,
+        "items": [
+          {
+            "id": 108584,
+            "name": "Flawed Consigned Carapace",
+            "class_mask": 15906,
+            "classes": [
+              "CLR",
+              "DRU",
+              "SHM",
+              "NEC",
+              "WIZ",
+              "MAG",
+              "ENC"
+            ],
+            "quantity": 1
+          },
+          {
+            "id": 108573,
+            "name": "Flawed Consigned Mace",
+            "class_mask": 15906,
+            "classes": [
+              "CLR",
+              "DRU",
+              "SHM",
+              "NEC",
+              "WIZ",
+              "MAG",
+              "ENC"
+            ],
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "label": "Flawed Consigned Brawl Stick",
+        "common": false,
+        "mask": 16861,
+        "items": [
+          {
+            "id": 108572,
+            "name": "Flawed Consigned Brawl Stick",
+            "class_mask": 16861,
+            "classes": [
+              "WAR",
+              "PAL",
+              "RNG",
+              "SHD",
+              "MNK",
+              "BRD",
+              "ROG",
+              "BST"
+            ],
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "label": "Flawed Consigned Glass Shard",
+        "common": false,
+        "mask": 16793,
+        "items": [
+          {
+            "id": 108576,
+            "name": "Flawed Consigned Glass Shard",
+            "class_mask": 16793,
+            "classes": [
+              "WAR",
+              "RNG",
+              "SHD",
+              "BRD",
+              "ROG",
+              "BST"
+            ],
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "label": "Flawed Consigned Longbow",
+        "common": false,
+        "mask": 285,
+        "items": [
+          {
+            "id": 108582,
+            "name": "Flawed Consigned Longbow",
+            "class_mask": 285,
+            "classes": [
+              "WAR",
+              "PAL",
+              "RNG",
+              "SHD",
+              "ROG"
+            ],
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "label": "Flawed Consigned Longsword",
+        "common": false,
+        "mask": 413,
+        "items": [
+          {
+            "id": 108574,
+            "name": "Flawed Consigned Longsword",
+            "class_mask": 413,
+            "classes": [
+              "WAR",
+              "PAL",
+              "RNG",
+              "SHD",
+              "BRD",
+              "ROG"
+            ],
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "label": "Flawed Consigned Shortsword",
+        "common": false,
+        "mask": 413,
+        "items": [
+          {
+            "id": 108575,
+            "name": "Flawed Consigned Shortsword",
+            "class_mask": 413,
+            "classes": [
+              "WAR",
+              "PAL",
+              "RNG",
+              "SHD",
+              "BRD",
+              "ROG"
+            ],
+            "quantity": 1
+          }
+        ]
+      }
+    ]
+  },
+  "class_matrix": [
+    {
+      "class": 1,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108583
+      ],
+      "choices": [
+        108572,
+        108576,
+        108582,
+        108574,
+        108575
+      ]
+    },
+    {
+      "class": 2,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108584,
+        108573
+      ],
+      "choices": []
+    },
+    {
+      "class": 3,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108583
+      ],
+      "choices": [
+        108572,
+        108582,
+        108574,
+        108575
+      ]
+    },
+    {
+      "class": 4,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108583
+      ],
+      "choices": [
+        108572,
+        108576,
+        108582,
+        108574,
+        108575
+      ]
+    },
+    {
+      "class": 5,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108583
+      ],
+      "choices": [
+        108572,
+        108576,
+        108582,
+        108574,
+        108575
+      ]
+    },
+    {
+      "class": 6,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108584,
+        108573
+      ],
+      "choices": []
+    },
+    {
+      "class": 7,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108583
+      ],
+      "choices": [
+        108572
+      ]
+    },
+    {
+      "class": 8,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108583
+      ],
+      "choices": [
+        108572,
+        108576,
+        108574,
+        108575
+      ]
+    },
+    {
+      "class": 9,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108583
+      ],
+      "choices": [
+        108572,
+        108576,
+        108582,
+        108574,
+        108575
+      ]
+    },
+    {
+      "class": 10,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108584,
+        108573
+      ],
+      "choices": []
+    },
+    {
+      "class": 11,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108584,
+        108573
+      ],
+      "choices": []
+    },
+    {
+      "class": 12,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108584,
+        108573
+      ],
+      "choices": []
+    },
+    {
+      "class": 13,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108584,
+        108573
+      ],
+      "choices": []
+    },
+    {
+      "class": 14,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108584,
+        108573
+      ],
+      "choices": []
+    },
+    {
+      "class": 15,
+      "status": "Period-backed items with native equipment eligibility",
+      "common_items": [
+        108583
+      ],
+      "choices": [
+        108572,
+        108576
+      ]
+    },
+    {
+      "class": 16,
+      "status": "Unresolved; no eligible period-backed reward; no invented substitution",
+      "common_items": [],
+      "choices": []
+    }
+  ],
+  "period_sources": [
+    {
+      "quest_id": 5565,
+      "capture_timestamp_utc": "20121019075848",
+      "archive_url": "https://web.archive.org/web/20121019075848id_/http://everquest.allakhazam.com/db/quest.html?quest=5565",
+      "original_url": "http://everquest.allakhazam.com/db/quest.html?quest=5565",
+      "wayback_digest": "FLM6S5USWKJAN2DIRJ6L5HAT5MVXEUXM",
+      "saved_html_sha256": "014405e5721d67cf9bb4036a029766aaffb7438f30da2016e2b18e270fa34222",
+      "evidence_status": "captured before cutoff",
+      "facts": [
+        "Fixed Scale Shield plus one of Brawl Stick, Glass Shard, Longbow, Longsword, Shortsword.",
+        "Caster fixed Carapace and Mace.",
+        "Dagger not listed.",
+        "Quarterstaff, Lance, Emeraldblade not listed."
+      ]
+    },
+    {
+      "quest_id": 5565,
+      "capture_timestamp_utc": "20130315122944",
+      "archive_url": "https://web.archive.org/web/20130315122944id_/http://everquest.allakhazam.com/db/quest.html?quest=5565",
+      "original_url": "http://everquest.allakhazam.com/db/quest.html?quest=5565",
+      "wayback_digest": "FUN26E7NQU4K4FPE7LOE52IUTMTXLJRE",
+      "saved_html_sha256": "6da7038184f9eb738670869e5074f1e37670353041b8713ec9e5a192c9d4723d",
+      "evidence_status": "captured before cutoff",
+      "facts": [
+        "Fixed Scale Shield plus one of Brawl Stick, Glass Shard, Longbow, Longsword, Shortsword.",
+        "Caster fixed Carapace and Mace.",
+        "Dagger not listed.",
+        "Quarterstaff, Lance, Emeraldblade not listed."
+      ]
+    }
+  ],
+  "withheld_welcome_candidates": {
+    "achievement_id": 500040200,
+    "title": "Welcome to the Mesa (41-45)",
+    "status": "head-slot family period-confirmed; four native identities inferred from family/class and current Bonzz Plate Helm corroboration",
+    "source": "https://web.archive.org/web/20130315232511id_/http://everquest.allakhazam.com/db/quest.html?quest=5564",
+    "semantics": "One class-appropriate head item; no native item literally named Flawed Consigned Cap. Four identities are candidate inference, not explicitly linked by period source.",
+    "options": [
+      {
+        "label": "Flawed Consigned Plate Helm",
+        "common_to_eligible_class": false,
+        "evidence_status": "native identity inference",
+        "items": [
+          {
+            "id": 108120,
+            "name": "Flawed Consigned Plate Helm",
+            "class_mask": 151,
+            "classes": [
+              "WAR",
+              "CLR",
+              "PAL",
+              "SHD",
+              "BRD"
+            ],
+            "quantity": 1
+          }
+        ],
+        "class_mask": 151
+      },
+      {
+        "label": "Flawed Consigned Chain Coif",
+        "common_to_eligible_class": false,
+        "evidence_status": "native identity inference",
+        "items": [
+          {
+            "id": 108127,
+            "name": "Flawed Consigned Chain Coif",
+            "class_mask": 33544,
+            "classes": [
+              "RNG",
+              "ROG",
+              "SHM",
+              "BER"
+            ],
+            "quantity": 1
+          }
+        ],
+        "class_mask": 33544
+      },
+      {
+        "label": "Flawed Consigned Leather Cap",
+        "common_to_eligible_class": false,
+        "evidence_status": "native identity inference",
+        "items": [
+          {
+            "id": 108134,
+            "name": "Flawed Consigned Leather Cap",
+            "class_mask": 16480,
+            "classes": [
+              "DRU",
+              "MNK",
+              "BST"
+            ],
+            "quantity": 1
+          }
+        ],
+        "class_mask": 16480
+      },
+      {
+        "label": "Flawed Consigned Silk Cap",
+        "common_to_eligible_class": false,
+        "evidence_status": "native identity inference",
+        "items": [
+          {
+            "id": 108141,
+            "name": "Flawed Consigned Silk Cap",
+            "class_mask": 15360,
+            "classes": [
+              "NEC",
+              "WIZ",
+              "MAG",
+              "ENC"
+            ],
+            "quantity": 1
+          }
+        ],
+        "class_mask": 15360
+      }
+    ]
+  },
+  "quarantined": [
+    {
+      "item": {
+        "id": 108579,
+        "name": "Flawed Consigned Quarterstaff",
+        "class_mask": 49245,
+        "classes": [
+          "WAR",
+          "PAL",
+          "RNG",
+          "SHD",
+          "MNK",
+          "BST",
+          "BER"
+        ],
+        "quantity": 1
+      },
+      "reason": "Current Bonzz explicitly associates with achievement, but no pre-cutoff corroboration; not in 2012/2013 Allakhazam captures"
+    },
+    {
+      "item": {
+        "id": 108580,
+        "name": "Flawed Consigned Lance",
+        "class_mask": 32797,
+        "classes": [
+          "WAR",
+          "PAL",
+          "RNG",
+          "SHD",
+          "BER"
+        ],
+        "quantity": 1
+      },
+      "reason": "Current Bonzz explicitly associates with achievement, but no pre-cutoff corroboration; not in 2012/2013 Allakhazam captures"
+    },
+    {
+      "item": {
+        "id": 108581,
+        "name": "Flawed Consigned Emeraldblade",
+        "class_mask": 32797,
+        "classes": [
+          "WAR",
+          "PAL",
+          "RNG",
+          "SHD",
+          "BER"
+        ],
+        "quantity": 1
+      },
+      "reason": "Current Bonzz explicitly associates with achievement, but no pre-cutoff corroboration; not in 2012/2013 Allakhazam captures"
+    },
+    {
+      "item": {
+        "id": 108577,
+        "name": "Flawed Consigned Dagger",
+        "class_mask": 15872,
+        "classes": [
+          "SHM",
+          "NEC",
+          "WIZ",
+          "MAG",
+          "ENC"
+        ],
+        "quantity": 1
+      },
+      "reason": "First explicit captured achievement association is Apr23,2020 firsthand comment; absent period captures. Not historical baseline."
+    },
+    {
+      "item": {
+        "id": 108578,
+        "name": "Flawed Consigned Orb",
+        "class_mask": 16448,
+        "classes": [
+          "MNK",
+          "BST"
+        ],
+        "quantity": 1
+      },
+      "reason": "Native tier similarity only; no achievement association found."
+    }
+  ],
+  "limits": [
+    "Item masks establish native equipment eligibility, not an independently captured 2013 claim class list",
+    "No parent XP/AA/cash/faction inferred",
+    "Berserker is explicitly unresolved and cannot be counted as complete"
+  ],
+  "native_gameplay": "NOT RUN"
+}
