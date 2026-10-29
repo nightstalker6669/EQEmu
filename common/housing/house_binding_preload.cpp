@@ -1,3 +1,4 @@
+#include <cstring>
 #include "runtime_activation_db.h"
 #include "house_binding_preload.h"
 #include "crate_placement_model.h"

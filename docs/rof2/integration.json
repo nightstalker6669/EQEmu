@@ -1,7 +1,8 @@
 {
   "branch": "rof2-fellowship",
-  "upstream_commit": "8175ae61874cbf20d7b05102821f6f8a4f4d1c39",
+  "upstream_commit": "d03e3292cdc30c531e307db5b2f049c0d2df0460",
   "features": [
+    "shared-core",
     "housing",
     "fellowship"
   ],
@@ -25,23 +26,33 @@
       "omitted_gallery_and_generated_files": []
     }
   ],
-  "source_integration": "Published release patches applied to exact prerequisite preimages; latest housing delta merged retaining all lifecycle callbacks and forward declarations.",
+  "source_integration": "Current upstream master and protocol-development foundation merged into the existing published feature history; feature contracts and persistence guards retained.",
   "validation": {
-    "core": "Standalone common library build PASS without feature gameplay sources.",
-    "combined_stack": "world, zone, ucs, shared_memory, housing_install, housing_capacity, housing_recovery, housing_profile_upgrade build PASS; Linux x86-64 Clang, Debug -O0 -g0, PCH off.",
-    "branch_specific": "Six critical lifecycle/inventory TUs passed Clang syntax checks for housing, fellowship and mercenary branches; full combined stack built from shroud source. Separate full links for each smaller branch were not performed.",
-    "release_packages": "Production manifest hashes, Python syntax, JSON parsing, new guide links and core dependency boundary checked.",
-    "runtime": "No deployment, database migration, client launch or native acceptance performed during this source integration."
+    "status": "Passed targeted compiler and package checks for this branch; source publication only.",
+    "compiler": "GCC 12, C++20, cached vcpkg SDK; targeted -fsyntax-only checks with precompiled headers disabled.",
+    "translation_units": [
+      "zone/client.cpp",
+      "zone/client_packet.cpp",
+      "zone/merc.cpp",
+      "zone/fellowship_campsite_bonuses.cpp"
+    ],
+    "package_checks": [
+      "Tracked release manifest hashes and sizes",
+      "Python syntax and JSON parsing",
+      "Unique active migration versions, opcode names, RoF2 mapping keys and packet handlers",
+      "Current guide links and whitespace checks"
+    ],
+    "full_branch_link": "Not separately linked; the combined branch records its complete multi-target build separately.",
+    "native_acceptance": "Not run on this updated source; existing release evidence does not prove new combined gameplay.",
+    "deployment": "No active server, client or database changes."
   },
   "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
   "shared_core": "Inherited from rof2-shared-core; one canonical implementation in common/shared_core; legacy feature headers forward to it.",
-  "branch_dependency_order": [
-    "rof2-shared-core",
-    "rof2-housing",
-    "rof2-fellowship"
-  ],
   "remaining_feature_dependencies": "Published feature/runtime dependencies are retained. Extracting shared infrastructure does not make all gameplay patches independent.",
   "reviewed_source_repairs": [
     "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included."
-  ]
+  ],
+  "upstream_master": "4aceae18b94ffaafc08e2b17bc41cd72c77f795d",
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "integration_scope": "All five published features, including achievements, share the same current upstream foundation; achievements also retains its separate feature branch."
 }

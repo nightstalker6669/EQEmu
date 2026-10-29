@@ -1,58 +1,53 @@
-#include "housing_guild_portal.h"
-/*	EQEMu: Everquest Server Emulator
-	Copyright (C) 2001-2003 EQEMu Development Team (http://eqemulator.net)
+/*	EQEmu: EQEmulator
+
+	Copyright (C) 2001-2026 EQEmu Development Team
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
-	the Free Software Foundation; version 2 of the License.
+	the Free Software Foundation; either version 3 of the License, or
+	(at your option) any later version.
 
 	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY except by those people which sell it, which
-	are required to give you total support for your newly bought product;
-	without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-	A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+	along with this program. If not, see <http://www.gnu.org/licenses/>.
+*/
+#include "housing_guild_portal.h"
 
+
+/*
 	client_process.cpp:
 	Handles client login sequence and packets sent from client to zone
 */
 
-#include "../common/eqemu_logsys.h"
-#include "../common/global_define.h"
+#include "client.h"
+
+#include "common/data_verification.h"
+#include "common/eqemu_logsys.h"
+#include "common/events/player_event_logs.h"
+#include "common/rulesys.h"
+#include "common/skills.h"
+#include "common/spdat.h"
+#include "common/strings.h"
+#include "zone/dynamic_zone.h"
+#include "zone/event_codes.h"
+#include "zone/guild_mgr.h"
+#include "zone/map.h"
+#include "zone/petitions.h"
+#include "zone/queryserv.h"
+#include "zone/quest_parser_collection.h"
+#include "zone/string_ids.h"
+#include "zone/water_map.h"
+#include "zone/worldserver.h"
+#include "zone/zone.h"
+#include "zone/zonedb.h"
+
 #include <iostream>
 
-#ifdef _WINDOWS
-	#define snprintf	_snprintf
-	#define strncasecmp	_strnicmp
-	#define strcasecmp	_stricmp
-#else
-	#include <pthread.h>
-	#include <sys/socket.h>
-	#include <netinet/in.h>
-	#include <unistd.h>
-#endif
-
-#include "../common/data_verification.h"
-#include "../common/rulesys.h"
-#include "../common/skills.h"
-#include "../common/spdat.h"
-#include "../common/strings.h"
-#include "dynamic_zone.h"
-#include "event_codes.h"
-#include "guild_mgr.h"
-#include "map.h"
-#include "petitions.h"
-#include "queryserv.h"
-#include "quest_parser_collection.h"
-#include "string_ids.h"
-#include "worldserver.h"
-#include "zone.h"
-#include "zonedb.h"
-#include "../common/events/player_event_logs.h"
-#include "water_map.h"
+#include "client_version.h"
 
 extern QueryServ* QServ;
 extern Zone* zone;
@@ -238,11 +233,11 @@ bool Client::Process() {
 			}
 
 			if (song_target == nullptr) {
-				InterruptSpell(SONG_ENDS_ABRUPTLY, 0x121, bardsong);
+				InterruptSpell(SONG_ENDS_ABRUPTLY, Chat::SpellFailure, bardsong);
 			}
 			else {
 				if (!ApplyBardPulse(bardsong, song_target, bardsong_slot)) {
-					InterruptSpell(SONG_ENDS_ABRUPTLY, 0x121, bardsong);
+					InterruptSpell(SONG_ENDS_ABRUPTLY, Chat::SpellFailure, bardsong);
 				}
 			}
 		}
@@ -888,7 +883,7 @@ void Client::BulkSendMerchantInventory(int merchant_id, int npcid) {
 			DataBucketKey k = GetScopedBucketKeys();
 			k.key = bucket_name;
 
-			auto b = DataBucket::GetData(k);
+			auto b = DataBucket::GetData(&database, k);
 			if (b.value.empty()) {
 				continue;
 			}
@@ -1053,7 +1048,7 @@ uint8 Client::WithCustomer(uint16 NewCustomer){
 	return 0;
 }
 
-void Client::OPRezzAnswer(uint32 Action, uint32 SpellID, uint16 ZoneID, uint16 InstanceID, float x, float y, float z)
+void Client::OPRezzAnswer(uint32 Action, int32 SpellID, uint16 ZoneID, uint16 InstanceID, float x, float y, float z)
 {
 	if(PendingRezzXP < 0) {
 		// pendingrezexp is set to -1 if we are not expecting an OP_RezzAnswer
@@ -1068,7 +1063,7 @@ void Client::OPRezzAnswer(uint32 Action, uint32 SpellID, uint16 ZoneID, uint16 I
 		// corpse is in has shutdown since the rez spell was cast.
 		database.MarkCorpseAsResurrected(PendingRezzDBID);
 		LogSpells("Player [{}] got a [{}] Rezz spellid [{}] in zone[{}] instance id [{}]",
-				name, (uint16)spells[SpellID].base_value[0],
+				name, spells[SpellID].base_value[0],
 				SpellID, ZoneID, InstanceID);
 
 		const bool use_old_resurrection = (
@@ -1081,7 +1076,7 @@ void Client::OPRezzAnswer(uint32 Action, uint32 SpellID, uint16 ZoneID, uint16 I
 			)
 		);
 
-		const uint16 resurrection_sickness_spell_id = (
+		const int32 resurrection_sickness_spell_id = (
 			use_old_resurrection ?
 			RuleI(Character, OldResurrectionSicknessSpellID) :
 			RuleI(Character, ResurrectionSicknessSpellID)
@@ -2329,11 +2324,7 @@ void Client::ClearHover()
 	entity_list.QueueClients(this, outapp, false);
 	safe_delete(outapp);
 
-	if (IsClient() && CastToClient()->ClientVersionBit() & EQ::versions::maskUFAndLater)
-	{
-		EQApplicationPacket *outapp = MakeBuffsPacket(false);
-		CastToClient()->FastQueuePacket(&outapp);
-	}
+	ClientPatch::SendFullBuffRefresh(this);
 
 	dead = false;
 }

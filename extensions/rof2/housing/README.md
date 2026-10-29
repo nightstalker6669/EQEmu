@@ -1,3 +1,5 @@
+> **Current integrated fork:** use [the current branch installation guide](../../../docs/rof2/INSTALL.md). This document preserves the original release’s source baseline and evidence. Its source patches are already integrated and must not be reapplied here.
+
 # EverQuest RoF2 Housing for EQEmu
 
 Build a home, decorate a yard, and give your guild a place of its own. This project brings personal and guild housing to EQEmu using the **original May 10, 2013 Rain of Fear 2 client**.
