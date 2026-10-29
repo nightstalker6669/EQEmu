@@ -1,9 +1,9 @@
-# Install `rof2-spirit-shrouds`
+# Install `rof2-integration`
 
 This checkout already contains the native source integration. **Do not run `apply_overlay.py` or `git apply` again.** Keep backups of the database, quests, binaries and active opcode configuration together before installing. No running server was modified by publishing this branch.
 
 ```sh
-git -c core.autocrlf=false clone --branch rof2-spirit-shrouds --single-branch https://github.com/nightstalker6669/EQEmu.git
+git -c core.autocrlf=false clone --branch rof2-integration --single-branch https://github.com/nightstalker6669/EQEmu.git
 cd EQEmu
 git submodule update --init --recursive
 ```
