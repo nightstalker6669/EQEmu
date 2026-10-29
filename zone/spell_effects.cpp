@@ -1358,6 +1358,10 @@ bool Mob::SpellEffect(Mob* caster, int32 spell_id, float partial, int level_over
 						}
 					}
 				}
+				else if (IsBot()) {
+					currently_fleeing = true;
+					CastToBot()->BotProcessBlind();
+				}
 				else if (!IsClient()) {
 					CalculateNewFearpoint();
 				}
