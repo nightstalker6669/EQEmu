@@ -472,7 +472,7 @@ def main():
             dirty=subprocess.run(['git','-C',str(managed),'status','--porcelain','--untracked-files=all'],check=True,capture_output=True,text=True).stdout.splitlines()
             require(all(row=='?? .housing-source-receipt.json' for row in dirty),'Managed integrated checkout changed; preserve and review it before reinstalling.')
         a.source=managed;a.build=build_dir
-        configure=['cmake','-S',a.source,'-B',a.build,'-DEQEMU_BUILD_SERVER=ON','-DEQEMU_BUILD_TESTS=OFF','-DEQEMU_BUILD_LOGIN=OFF','-DEQEMU_BUILD_PCH=OFF']
+        configure=['cmake','-S',a.source,'-B',a.build,'-DEQEMU_BUILD_SERVER=ON','-DEQEMU_BUILD_TESTS=OFF','-DEQEMU_BUILD_LOGIN=OFF','-DEQEMU_BUILD_PCH=ON']
         if a.generator:configure+=['-G',a.generator]
         if a.architecture:configure+=['-A',a.architecture]
         if a.toolchain:configure+=['-DCMAKE_TOOLCHAIN_FILE='+a.toolchain.resolve().as_posix()]
