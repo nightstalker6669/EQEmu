@@ -18,6 +18,11 @@ SET(common_sources
     database/database_dump_service.cpp
     database.cpp
     database_instances.cpp
+    fellowship/campsite_catalogue.cpp
+    fellowship/campsite_materials.cpp
+    fellowship/service.cpp
+    fellowship/vitality.cpp
+    fellowship/journal.cpp
     housing/persistence_service.cpp
     housing/escrow_service.cpp
     housing/item_service.cpp

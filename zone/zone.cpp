@@ -1,3 +1,4 @@
+#include "fellowship_campfire.h"
 #include "housing_guild_portal.h"
 #include "housing_service_npcs.h"
 #include "housing_service_authority.h"
@@ -1111,6 +1112,7 @@ Zone::Zone(uint32 in_zoneid, uint32 in_instanceid, const char* in_short_name)
 }
 
 Zone::~Zone() {
+	ClearFellowshipCampfires();
  Housing::Pets::Clear();
  Housing::ServiceAuthority::Clear();
 	LogInfo("Zone destructor called for zone [{}]", short_name);
@@ -1542,6 +1544,7 @@ uint32 Zone::CountAuth() {
 }
 
 bool Zone::Process() {
+	ProcessFellowshipCampfires();
     Housing::Pets::Process();
 	spawn_conditions.Process();
 

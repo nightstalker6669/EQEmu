@@ -1,3 +1,4 @@
+#include "fellowship_campsite_bonuses.h"
 
 #include "../common/eqemu_logsys.h"
 #include "../common/extprofile.h"
@@ -1056,6 +1057,8 @@ bool ZoneDatabase::SaveCharacterData(
 	if (c->AccountID() <= 0) {
 		return false;
 	}
+
+	if (c->m_fellowship_xp_persistence_failed || c->m_fellowship_xp_transaction_active) return false;
 
 	clock_t t = std::clock(); /* Function timer start */
 
@@ -2904,6 +2907,9 @@ void ZoneDatabase::SaveBuffs(Client *client)
 	uint32 character_buff_count = 0;
 
 	for (int slot_id = 0; slot_id < max_buff_slots; slot_id++) {
+		// Campsite support buffs are renewable location leases, not saved buffs.
+		// Ordinary Faerune/DMF from another caster retain normal persistence.
+		if (IsFellowshipCampsiteAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
 		if (!IsValidSpell(buffs[slot_id].spellid)) {
 			continue;
 		}
@@ -2914,6 +2920,7 @@ void ZoneDatabase::SaveBuffs(Client *client)
 	v.reserve(character_buff_count);
 
 	for (int slot_id = 0; slot_id < max_buff_slots; slot_id++) {
+		if (IsFellowshipCampsiteAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
 		if (!IsValidSpell(buffs[slot_id].spellid)) {
 			continue;
 		}
@@ -2966,6 +2973,8 @@ void ZoneDatabase::LoadBuffs(Client *client)
 	}
 
 	for (const auto& e : l) {
+		// Discard a legacy saved campsite lease before caster-name normalization.
+		if (IsFellowshipCampsiteAuraBuff(e.spell_id, e.caster_name.data(), e.caster_name.size())) continue;
 		if (e.slot_id >= max_buff_slots) {
 			continue;
 		}

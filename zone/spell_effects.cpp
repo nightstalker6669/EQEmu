@@ -1,3 +1,4 @@
+#include "fellowship_campsite_bonuses.h"
 /*	EQEMu: Everquest Server Emulator
 	Copyright (C) 2001-2004 EQEMu Development Team (http://eqemu.org)
 
@@ -58,6 +59,13 @@ bool Mob::SpellEffect(Mob* caster, uint16 spell_id, float partial, int level_ove
 
 	if(!IsValidSpell(spell_id))
 		return false;
+	// The RoF2 registration insignia uses a placeholder stat effect in PEQ.
+	// Its authenticated item cast is completed by the fellowship destination
+	// service instead of applying that placeholder to the player.
+	if (spell_id == 7618 && IsClient()) {
+		if (caster != this) return false;
+		return CastToClient()->TryFellowshipCalling();
+	}
 
 	const SPDat_Spell_Struct &spell = spells[spell_id];
 
@@ -6894,6 +6902,10 @@ int64 Mob::GetFocusEffect(focusType type, uint16 spell_id, Mob *caster, bool fro
 	else if (RuleB(Spells, UseAdditiveFocusFromWornSlot)) {
 		worneffect_bonus = itembonuses.FocusEffectsWorn[type];
 	}
+
+	// Campsite focus competes with the existing spell-focus contribution. It
+	// never applies twice or adds another independent item/AA focus source.
+	if (IsClient()) realTotal2 = MergeFellowshipCampsiteFocus(realTotal2, GetFellowshipCampsiteFocus(*CastToClient(), type, spell_id));
 
 	return realTotal + realTotal2 + realTotal3 + worneffect_bonus;
 }

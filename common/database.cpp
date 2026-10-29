@@ -26,6 +26,8 @@
 #include <algorithm>
 #include <mysqld_error.h>
 #include "housing/admission_guard.h"
+#include "fellowship/service.h"
+#include "fellowship/vitality.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -379,6 +381,20 @@ bool Database::DeleteCharacter(const std::string& name)
 		LogError("Character [{}] deletion withheld: housing requires an atomic maintenance/archive adapter", e.id);
 		return false;
 	}
+
+    // Fellowship membership must not retain a deleted leader or consume a slot.
+    // The service promotes a surviving member or removes an empty fellowship.
+    Fellowship::Service fellowships(*this);
+    if (!fellowships.CharacterDeleted(e.id, static_cast<uint64_t>(std::time(nullptr)))) {
+        LogError("Character [{}] deletion withheld: fellowship cleanup failed", e.id);
+        return false;
+    }
+
+    Fellowship::VitalityService vitality(*this);
+    if (!vitality.Clear(e.id)) {
+        LogError("Character [{}] deletion withheld: fellowship vitality cleanup failed", e.id);
+        return false;
+    }
 
 	std::string delete_type = "hard-deleted";
 	if (RuleB(Character, SoftDeletes)) {

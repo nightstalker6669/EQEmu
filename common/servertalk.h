@@ -274,6 +274,9 @@
 
 // player events
 #define ServerOP_QSSendQuery 0x5000
+#define ServerOP_FellowshipChat 0x5126
+#define ServerOP_FellowshipChatDeliver 0x5127
+#define ServerOP_FellowshipRefresh 0x5125 // authenticated world/zone invalidation; zero payload
 #define ServerOP_HousingUpkeepRefresh 0x5124 // new internal world/zone invalidation; zero payload
 #define ServerOP_HousingTrophyRefresh 0x5120 // new internal world/zone invalidation; zero payload
 #define ServerOP_PlayerEvent 0x5100
@@ -1790,5 +1793,21 @@ struct BazaarPurchaseMessaging_Struct {
 struct HousingGuildTrophyRequest {uint32 character_id;uint32 action;uint32 target_id;};
 
 #define ServerOP_HousingGuildTrophyMember 0x5123
+
+// Fellowship messages carry only authenticated server identities. Client input
+// supplies text; the originating zone supplies actor_id, world supplies all
+// recipient/group/name fields after reloading current membership.
+struct FellowshipChatRequest {
+    uint32 actor_id;
+    char message[1024];
+};
+struct FellowshipChatDelivery {
+    uint32 actor_id;
+    uint32 recipient_id;
+    uint32 fellowship_id;
+    char sender[64];
+    char message[1024];
+};
+
 
 #endif

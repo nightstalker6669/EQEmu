@@ -17,6 +17,12 @@ SET(zone_sources
     cheat_manager.cpp
     client.cpp
     client_evolving_items.cpp
+    fellowship_campfire.cpp
+    fellowship_campsite_bonuses.cpp
+    fellowship_campsite_materials.cpp
+    client_fellowship.cpp
+    client_fellowship_vitality.cpp
+    fellowship_chat.cpp
     client_bot.cpp
     client_mods.cpp
     client_packet.cpp

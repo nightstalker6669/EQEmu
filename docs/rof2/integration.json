@@ -1,8 +1,9 @@
 {
-  "branch": "rof2-housing",
+  "branch": "rof2-fellowship",
   "upstream_commit": "8175ae61874cbf20d7b05102821f6f8a4f4d1c39",
   "features": [
-    "housing"
+    "housing",
+    "fellowship"
   ],
   "inputs": [
     {
@@ -16,6 +17,12 @@
         "docs/images/hermits-hideaway.png",
         "docs/images/palatial-festival.png"
       ]
+    },
+    {
+      "feature": "fellowship",
+      "repository": "nightstalker6669/eqemu-rof2-fellowship",
+      "commit": "9382453264f4f84ac7e83a9ee5c9c9a1391c6017",
+      "omitted_gallery_and_generated_files": []
     }
   ],
   "source_integration": "Published release patches applied to exact prerequisite preimages; latest housing delta merged retaining all lifecycle callbacks and forward declarations.",
@@ -30,7 +37,8 @@
   "shared_core": "Inherited from rof2-shared-core; one canonical implementation in common/shared_core; legacy feature headers forward to it.",
   "branch_dependency_order": [
     "rof2-shared-core",
-    "rof2-housing"
+    "rof2-housing",
+    "rof2-fellowship"
   ],
   "remaining_feature_dependencies": "Published feature/runtime dependencies are retained. Extracting shared infrastructure does not make all gameplay patches independent.",
   "reviewed_source_repairs": [

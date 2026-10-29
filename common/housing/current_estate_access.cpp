@@ -1,3 +1,4 @@
+#include "fellowship_membership.h"
 #include "current_estate_access.h"
 #include "rent_state_db.h"
 #include "../database.h"
@@ -36,6 +37,7 @@ static Result<CurrentEstateAccess> LoadEstateAccessCoreUnderTransaction(Database
   if(membership.RowCount()){trusted.guild_id=Number(membership.begin()[0]);auto rank=AccessPolicy::NativeGuildRankFromServer(Number(membership.begin()[1]));if(!rank||!AccessPolicy::PositiveIdentity(trusted.guild_id))throw Failure{Error::Unauthorized};trusted.guild_rank=*rank;auto guild=Query(db,"SELECT leader FROM guilds WHERE id="+std::to_string(trusted.guild_id)+" FOR UPDATE");if(guild.RowCount()!=1||(trusted.guild_rank==1&&Number(guild.begin()[0])!=actor.character_id))throw Failure{Error::Unauthorized};}
   AccessPolicy::ResolvedPlot resolved;resolved.estate_id=native;resolved.type=kind==1?AccessPolicy::PlotType::Personal:AccessPolicy::PlotType::Guild;
   if(kind==1){resolved.owner_character_id=owner;Character(db,owner);}else{resolved.guild_id=owner;auto guild=Query(db,"SELECT id FROM guilds WHERE id="+std::to_string(owner)+" FOR UPDATE");if(guild.RowCount()!=1)throw Failure{Error::Unauthorized};}
+  auto fellowship_error=FellowshipMembership::PopulateUnderTransaction(db,trusted,resolved);if(fellowship_error!=Error::None)throw Failure{fellowship_error};
   CurrentEstateAccess out;out.owner_kind=OwnerKind(kind);out.owner_id=owner;out.plot_id=plot;auto acl=Acl(db,estate,out.acl_revision);auto access=AccessPolicy::Resolve(resolved,trusted,&acl);if(!access)throw Failure{Error::Unauthorized};out.effective=*access;RentState::Restrict(db,estate,native,out.effective);return {out,Error::None};
  }catch(const Failure& f){return {{},f.error};}catch(...){return {{},Error::DatabaseFailure};}
 }

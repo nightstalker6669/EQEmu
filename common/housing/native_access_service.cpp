@@ -1,3 +1,4 @@
+#include "fellowship_membership.h"
 #include "runtime_activation_db.h"
 #include "native_access_service.h"
 #include "catalog_service.h"
@@ -305,6 +306,8 @@ namespace Housing::NativeAccess {
                 auto current_guild=Query(db,"SELECT leader FROM guilds WHERE id="+std::to_string(out.actor.guild_id)+" FOR UPDATE");
                 if(current_guild.RowCount()!=1||(out.actor.guild_rank==1&&Number(current_guild.begin()[0])!=lease.actor.character_id))throw Failure{Error::Unauthorized};
             }
+            const auto fellowship_error=FellowshipMembership::PopulateUnderTransaction(db,out.actor,out.plot);
+            if(fellowship_error!=Housing::Error::None)throw Failure{fellowship_error==Housing::Error::DatabaseFailure?Error::DatabaseFailure:Error::Unauthorized};
             return out;
         }
         using SubjectKey=std::pair<uint8_t,uint32_t>;
