@@ -39,3 +39,7 @@ The [protocol guide](protocol/README.md) provides mappings and packet layouts, i
 
 
 
+
+## Roost bound-destructible integration
+
+The Roost milestone integrates twelve production source files directly, adding trusted collider ownership and actor serialization plus the reviewed lootless-destructible ruins lifecycle. No additional opcode/schema patch is required. Rebuild all Map/BVH-header consumers; follow the [Roost content guide](content/roost/README.md). Archived patch commands are not additional installation steps for this checkout. Exact original Live server lifecycle remains unproved.

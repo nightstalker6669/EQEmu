@@ -51,6 +51,19 @@
       "protocol_changes": "None; existing achievement/task/reward protocol retained",
       "native_evidence": "Eight distinct tasks completed; all eight component bits, original20equipment slots, unrelated active tasks and earring scaling persisted through fresh process login. Dorina Lament saved reward offer survived login and native selection delivered an actual item. Escort uses explicitly labelled route-only administrative prerequisite checkpoint after separately observed genuine material acquisition.",
       "historical_limits": "May31,2013 cutoff; unrecovered encounter balance/probabilities/path remain explicit user-approved configurable reconstructions; see package provenance."
+    },
+    {
+      "name": "Blackfeather Roost quests/acquisition/nests",
+      "package": "extensions/rof2/achievements/content/roost",
+      "historical_cutoff": "2013-05-31",
+      "quests": 15,
+      "activities": 54,
+      "catalogue_definitions": 5,
+      "engine_source_files": 12,
+      "reward_limits": "Ascending wrist and Raider glove/bundle choices unresolved; neither parent reward set configured.",
+      "native_status": "Six distinct quests completed with component credit; all seven nest types, retained ruins/late entry/native deadline, feather pickups/handins/item+XP reward and class-filtered paired earrings with fresh-login persistence passed on the corresponding develop combined build. Explicit remaining limits retained; client-local combat toggle unchanged.",
+      "validation": "Nine affected public translation units, linked Map/BVH tests and assertion-enabled lifecycle contracts passed. The corresponding combined develop server passed a full compile/link and scoped native gameplay. Full standalone public link/native rerun not repeated.",
+      "private_data_included": false
     }
   ]
 }

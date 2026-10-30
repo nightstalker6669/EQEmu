@@ -1,3 +1,4 @@
+#include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -158,7 +159,7 @@ bool Spawn2::Process() {
 
 	//grab our spawn group
 	SpawnGroup *spawn_group = zone->spawn_group_list.GetSpawnGroup(spawngroup_id_);
-	if (NPCPointerValid() && (spawn_group && spawn_group->despawn == 0 || condition_id != 0)) {
+	if (NPCPointerValid() && !BoundDestructibles::IsRuins(npcthis) && (spawn_group && spawn_group->despawn == 0 || condition_id != 0)) {
 		return true;
 	}
 
@@ -245,7 +246,7 @@ bool Spawn2::Process() {
 		}
 
 		bool ignore_despawn = false;
-		if (npcthis) {
+		if (npcthis && !BoundDestructibles::IsRuins(npcthis)) {
 			ignore_despawn = npcthis->IgnoreDespawn();
 		}
 
@@ -253,7 +254,7 @@ bool Spawn2::Process() {
 			return true;
 		}
 
-		if (spawn_group->despawn != 0 && condition_id == 0 && !ignore_despawn) {
+		if (spawn_group->despawn != 0 && condition_id == 0 && !ignore_despawn && !BoundDestructibles::IsRuins(npcthis)) {
 			zone->Despawn(spawn2_id);
 		}
 
@@ -280,6 +281,15 @@ bool Spawn2::Process() {
 		if (m_stored_location != glm::vec4(0, 0, -1000, 0)) {
 			loc = m_stored_location;
 			m_stored_location = glm::vec4(0, 0, -1000, 0);
+		}
+
+		// Only release the old binding once a replacement NPC is ready to spawn.
+		// Preserve it across disabled conditions, failed selections and retries.
+		if (BoundDestructibles::IsRuins(npcthis)) {
+			npcthis->SendHPUpdate(); // Clear any late target/cache before deletion.
+			const auto old_id = npcthis->GetID();
+			npcthis = nullptr;
+			entity_list.RemoveEntity(old_id);
 		}
 
 		NPC *npc = new NPC(tmp, this, loc, GravityBehavior::Water);
@@ -379,13 +389,20 @@ void Spawn2::LoadGrid(int start_wp) {
 	associated with this spawn point is no longer relavent.
 */
 void Spawn2::Reset() {
+	BoundDestructibles::CancelTransition(npcthis);
 	timer.Start(resetTimer());
-	npcthis = nullptr;
-	currentnpcid = 0;
+	if (!BoundDestructibles::IsRuins(npcthis)) {
+		npcthis = nullptr;
+		currentnpcid = 0;
+	}
 	LogSpawns("Spawn2 [{}]: Spawn reset, repop in [{}] ms", spawn2_id, timer.GetRemainingTime());
 }
 
 void Spawn2::Depop() {
+	BoundDestructibles::CancelTransition(npcthis);
+	if (BoundDestructibles::IsRuins(npcthis) && !npcthis->GetDepop()) {
+		npcthis->Depop(false);
+	}
 	timer.Disable();
 	LogSpawns("Spawn2 [{}]: Spawn reset, repop disabled", spawn2_id);
 	npcthis = nullptr;
@@ -393,6 +410,10 @@ void Spawn2::Depop() {
 }
 
 void Spawn2::Repop(uint32 delay) {
+	BoundDestructibles::CancelTransition(npcthis);
+	if (BoundDestructibles::IsRuins(npcthis) && !npcthis->GetDepop()) {
+		npcthis->Depop(false);
+	}
 	if (delay == 0) {
 		timer.Trigger();
 		LogSpawns("Spawn2 [{}]: Spawn reset, repop immediately", spawn2_id);
@@ -457,9 +478,12 @@ void Spawn2::DeathReset(bool realdeath)
 	//set our timer to our reset local
 	timer.Start(cur);
 
-	//zero out our NPC since he is now gone
-	npcthis = nullptr;
-	currentnpcid = 0;
+	// A reserved opt-in death keeps its owner discoverable until callbacks
+	// finish; the scoped reservation releases it on failure, never on veto.
+	if (!BoundDestructibles::IsTransitioning(npcthis)) {
+		npcthis = nullptr;
+		currentnpcid = 0;
+	}
 
 	if(realdeath) { killcount++; }
 
