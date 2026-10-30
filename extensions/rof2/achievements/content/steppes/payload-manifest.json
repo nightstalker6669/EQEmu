@@ -5,7 +5,7 @@
   },
   {
     "path": "README.md",
-    "sha256": "dc87d487e0eaf059cdbc12c0b1a1ae7f437007dbfb057668096fbaea7e1f4d2c"
+    "sha256": "93a495e9951cccae158365d5f0914c432177233f37aa37ee1974d1611d2cdab5"
   },
   {
     "path": "apply_quests.py",
@@ -57,7 +57,7 @@
   },
   {
     "path": "provenance/native-status.json",
-    "sha256": "214d1fab751f66bdac9ae576a17d057a7fdaf55cb21fd1be00ffddccf1963ece"
+    "sha256": "b98d2c6a4688a6ee3238f561e52e6b17be41391cabc31828cefafb4f2a061c6d"
   },
   {
     "path": "provenance/page-distribution.json",

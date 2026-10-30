@@ -34,7 +34,7 @@ The release includes the engine/protocol and Crescent Reach, Blightfire Moors, S
 
 - [Blackfeather Roost quests, acquisition and nests](content/roost/README.md):15 quests,54 activities,five historical definitions,three confirmed parent jewellery sets and bound nest combat/lifecycle. Two armour reward choice sets remain unresolved.
 
-- [Steppes quests and shared-task persistence](content/steppes/README.md):13quest routes,59activities,three historical definitions and four reward sets. Ten quests and the complete seven-component Conquering reward path passed native checks; remaining quest/multiplayer/pickup limits are explicit.
+- [Steppes quests and shared-task persistence](content/steppes/README.md):13quest routes,59activities,three historical definitions and four reward sets. Twelve quests and the complete seven-component Conquering reward path passed native checks; the three-player crypt, multiplayer and recurring pickup limits remain explicit.
 
 **Reward coverage:** Install the complete [Blightfire parent gear upgrade](content/blightfire-parent-rewards/README.md) after the five Blightfire quest packages. It adds the eight quest-family parent reward sets, including class-appropriate armor/accessories and shield/weapon bundles. The separate Conqueror of Blightfire meta-achievement bundle remains unconfigured while its original selection rules are researched. Stone Hive’s four parent reward sets are included in its package. Historical and class-coverage limits are documented in each guide.
 
