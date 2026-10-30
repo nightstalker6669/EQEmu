@@ -6230,7 +6230,7 @@ struct MercenaryAssign_Struct {
 struct MercenaryStatus_Struct {
 /*0000*/	uint32	MercEntityID;	// Seen 0 (no merc spawned) or 615843841 and 22779137
 /*0004*/	uint32	UpdateInterval;	// Seen 900000 - Matches from 0x6537 packet (15 minutes in ms?)
-/*0008*/	uint32	MercUnk01;		// Seen 180000 - 3 minutes in milleseconds? Maybe next update interval?
+/*0008*/	uint32	MercUnk01;		// RoF2 initial stance index in the advertised list80000 - 3 minutes in milleseconds? Maybe next update interval?
 /*0012*/	uint32	MercState;		// Seen 5 (normal) or 1 (suspended)
 /*0016*/	uint32	SuspendedTime;	// Seen 0 (not suspended) or c9 c2 64 4f (suspended on Sat Mar 17 11:58:49 2012) - Unix Timestamp
 /*0020*/
@@ -6268,7 +6268,7 @@ struct SuspendMercenaryResponse_Struct {
 // Sent by client when requesting to view Mercenary info or Hire a Mercenary
 struct MercenaryMerchantRequest_Struct {
 /*0000*/	uint32	MercID;			// Seen 399 and 400 for merc ID
-/*0004*/	uint32	MercUnk01;		// Seen 1
+/*0004*/	uint32	MercUnk01;		// RoF2 initial stance index in the advertised list
 /*0008*/	uint32	MercMerchantID;	// Entity ID for Mercenary Merchant
 /*0012*/	uint32	MercUnk02;		// Seen 65302016 (00 6e e4 03) - (probably actually individual uint8 fields), but seen as DWORD in Seeds client.
 /*0016*/
@@ -6297,6 +6297,38 @@ mercenary info. NOT from the packet.
 15 - You are too far away from the liason! <-- Liason exists as type in the zone, but client is too far away. (position update happened)
 16 - You do not meet the requirements for that mercenary! <-- For example, if a mercenary is 'unlocked' in some way, send this if they do not have the mercenary unlock.
 */
+// Matching May 10 2013 RoF2 server notifications. Application payloads only.
+struct MercenaryDead_Struct {
+/*0000*/ uint32 RestoreDeadline; // Native consumer sets lifecycle state0 (Revive).
+};
+// Restricted and RestoreReady consumers read no payload. Never serialize a C++
+// empty struct (sizeof would be1); construct an application packet of size0.
+constexpr uint32 MercenaryRestrictedPayloadBytes = 0;
+constexpr uint32 MercenaryRestoreReadyPayloadBytes = 0;
+struct MercenaryUpkeep_Struct {
+/*0000*/ uint8 PaidWithAlternateCurrency; //0: charged gold; nonzero: charged alternate.
+};
+struct MercenaryCostUpdate_Struct {
+/*0000*/ uint32 PurchaseGold;
+/*0004*/ uint32 PurchaseAlternate;
+/*0008*/ uint32 UpkeepGold;
+/*0012*/ uint32 UpkeepAlternate;
+};
+struct MercenaryCurrencyMessage_Struct {
+/*0000*/ uint8 Plural;
+/*0001*/ uint8 Unknown001[3]; //Not consumed by the matching handler; emit zero.
+/*0004*/ uint32 CurrencyID; //0 falls back to the current mercenary currency ID.
+/*0008*/ char Prefix[1]; //Variable NUL-terminated prefix; client appends currency name.
+};
+struct MercenaryTimerUpdate_Struct {
+/*0000*/ uint32 RemainingMilliseconds;
+};
+static_assert(sizeof(MercenaryDead_Struct) == 4);
+static_assert(sizeof(MercenaryUpkeep_Struct) == 1);
+static_assert(sizeof(MercenaryCostUpdate_Struct) == 16);
+static_assert(sizeof(MercenaryCurrencyMessage_Struct) == 9);
+static_assert(sizeof(MercenaryTimerUpdate_Struct) == 4);
+
 // Sent by Server in response to requesting to view Mercenary info or Hire a Mercenary
 struct MercenaryMerchantResponse_Struct {
 /*0000*/	uint32	ResponseType;

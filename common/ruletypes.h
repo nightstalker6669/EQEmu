@@ -241,9 +241,12 @@ RULE_INT(Character, SecondsBeforeAFKNonCombatZone, 600, "Seconds before a player
 RULE_CATEGORY_END()
 
 RULE_CATEGORY(Mercs)
+RULE_INT(Mercs, MaxMercenaries, 1, "Available owned mercenary slots, clamped to compiled roster capacity; one active at a time. Server policy, not a marketplace entitlement.")
+RULE_BOOL(Mercs, ScaleAboveContentLevel, true, "Scale the highest lower-level mercenary stats when exact owner-level content is missing. Explicit emulator policy, not recovered Live values.")
 RULE_INT(Mercs, SuspendIntervalMS, 10000, "Time interval for merc suspend (milliseconds)")
 RULE_INT(Mercs, UpkeepIntervalMS, 180000, "Time interval for merc upkeep (milliseconds)")
 RULE_INT(Mercs, SuspendIntervalS, 10, "Time interval for merc suspend command (seconds)")
+RULE_INT(Mercs, ReviveIntervalS, 300, "Mercenary death restoration delay (seconds)")
 RULE_BOOL(Mercs, AllowMercs, false, "Allow the use of mercs")
 RULE_BOOL(Mercs, ChargeMercPurchaseCost, false, "Turns Mercenary purchase costs on or off")
 RULE_BOOL(Mercs, ChargeMercUpkeepCost, false, "Turns Mercenary upkeep costs on or off")

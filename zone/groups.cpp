@@ -2605,6 +2605,9 @@ void Group::RemoveFromGroup(Mob* m)
 		character_id = m->CastToClient()->CharacterID();
 	} else if (m->IsMerc()) {
 		merc_id = m->CastToMerc()->GetMercenaryID();
+		// A fresh contract has no durable group row until its ownership and
+		// payment commit. Never delete the all-zero identity across groups.
+		if (!merc_id) return;
 	}
 
 	GroupIdRepository::DeleteWhere(
@@ -2642,6 +2645,9 @@ void Group::AddToGroup(AddToGroupRequest r)
 			character_id = r.mob->CastToClient()->CharacterID();
 		} else if (r.mob->IsMerc()) {
 			merc_id = r.mob->CastToMerc()->GetMercenaryID();
+			// The first guarded mercenary save inserts membership with the
+			// generated contract ID in the same transaction as its purchase.
+			if (!merc_id) return;
 		}
 
 		name = r.mob->GetCleanName();

@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "mercenary_runtime.h"
+
 #pragma once
 
 #include "zone/npc.h"
@@ -33,7 +35,7 @@ namespace EQ
 	struct ItemData;
 }
 
-constexpr int MAXMERCS = 11;
+#define MAXMERCS 3
 #define TANK 1
 #define HEALER 2
 #define MELEEDPS 9
@@ -69,7 +71,7 @@ public:
 
 	//abstract virtual function implementations requird by base abstract class
 	virtual bool Death(Mob* killer_mob, int64 damage, int32 spell_id, EQ::skills::SkillType attack_skill, KilledByTypes killed_by = KilledByTypes::Killed_NPC, bool is_buff_tic = false) override;
-	virtual void Damage(Mob* from, int64 damage, int32 spell_id, EQ::skills::SkillType attack_skill, bool avoidable = true, int8 buffslot = -1, bool iBuffTic = false, eSpecialAttacks special = eSpecialAttacks::None);
+	virtual void Damage(Mob* from, int64 damage, int32 spell_id, EQ::skills::SkillType attack_skill, bool avoidable = true, int8 buffslot = -1, bool iBuffTic = false, eSpecialAttacks special = eSpecialAttacks::None) override;
 	virtual bool Attack(Mob* other, int Hand = EQ::invslot::slotPrimary, bool FromRiposte = false, bool IsStrikethrough = false,
 	bool IsFromSpell = false, ExtraAttackOptions *opts = nullptr);
 	virtual bool HasRaid() { return false; }
@@ -78,7 +80,7 @@ public:
 	virtual Group* GetGroup() { return entity_list.GetGroupByMob(this); }
 
 	// Mob AI Virtual Override Methods
-	virtual void AI_Start(int32 iMoveDelay = 0);
+	void AI_Start(uint32 iMoveDelay = 0) override;
 	virtual void AI_Stop();
 	virtual void AI_Process();
 
@@ -150,15 +152,17 @@ public:
 	void AddItem(uint8 slot, uint32 item_id);
 	static const char *GetRandomName();
 	bool Spawn(Client *owner);
-	bool Suspend();
+	bool Suspend(uint32 cooldown_seconds = 0);
 	bool Unsuspend(bool setMaxStats);
 	bool MercJoinClientGroup();
 	void Zone();
 	virtual void Depop();
 	virtual bool Save();
+	bool LoadMercenarySpells();
+	static void DiscardFailedSpawn(Merc* merc);
 	bool GetDepop() { return p_depop; }
 
-	bool IsDead() { return GetHP() < 0;};
+	bool IsDead() { return GetHP() <= 0;};
 	bool IsMedding() { return _medding; };
 	bool IsSuspended() { return _suspended; };
 
@@ -271,7 +275,13 @@ public:
 	void SetMercNameType( uint8 nametype ) { _NameType = nametype; }
 	void SetClientVersion(uint8 clientVersion) { _OwnerClientVersion = clientVersion; }
 	void SetSuspended(bool suspended) { _suspended = suspended; }
-	void SetStance(uint8 stance_id) { _currentStance = stance_id; }
+	void SetStance(uint8 stance_id);
+	uint32 GetPassiveUpkeepElapsed();
+	void RestorePassiveUpkeepElapsed(uint32 elapsed);
+	bool IsPassiveUpkeepFree();
+	bool CallAssist();
+	bool CanHealGroupMember(Mob* member);
+	std::vector<NPC*> GroupEnemyTargets();
 	void SetHatedCount( int count ) { _hatedCount = count; }
 
 	void Sit();
@@ -287,6 +297,9 @@ public:
 	bool FindTarget();
 
 protected:
+	Mercenary::PassiveUpkeepClock passive_upkeep_clock_;
+	Mercenary::PullerHealOverride puller_heal_override_;
+	bool confidence_encounter_seen_ = false;
 	int64 GetFocusEffect(focusType type, int32 spell_id, bool from_buff_tic = false);
 
 	std::vector<MercSpell> merc_spells;
@@ -294,7 +307,6 @@ protected:
 
 	Timer evade_timer; // can be moved to pTimers at some point
 
-	uint16 skills[EQ::skills::HIGHEST_SKILL + 1];
 	uint32 equipment[EQ::invslot::EQUIPMENT_COUNT]; //this is an array of item IDs
 	uint32 d_melee_texture1; //this is an item Material value
 	uint32 d_melee_texture2; //this is an item Material value (offhand)
@@ -346,7 +358,6 @@ private:
 
 	float GetDefaultSize();
 
-	bool LoadMercenarySpells();
 	bool CheckStance(int16 stance);
 	std::vector<MercSpell> GetMercSpells() { return merc_spells; }
 
@@ -383,7 +394,7 @@ private:
 	uint8 _CostFormula;
 	uint8 _NameType;
 	uint8 _OwnerClientVersion;
-	uint8 _currentStance;
+	uint8 _currentStance = 0;
 
 	EQ::InventoryProfile m_inv;
 	int64 max_end;
@@ -399,4 +410,5 @@ private:
 	Timer rest_timer;
 	Timer confidence_timer;
 	Timer check_target_timer;
+	Timer confidence_scan_timer_;
 };

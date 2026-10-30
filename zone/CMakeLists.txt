@@ -1,4 +1,5 @@
 set(zone_sources
+	client_mercenary_transfer.cpp
 	fellowship_campfire.cpp
 	fellowship_campsite_bonuses.cpp
 	fellowship_campsite_materials.cpp

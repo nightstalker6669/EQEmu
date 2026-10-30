@@ -1,10 +1,11 @@
 {
-  "branch": "rof2-fellowship",
+  "branch": "rof2-mercenaries",
   "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "features": [
     "shared-core",
     "housing",
-    "fellowship"
+    "fellowship",
+    "mercenaries"
   ],
   "inputs": [
     {
@@ -23,6 +24,12 @@
       "feature": "fellowship",
       "repository": "nightstalker6669/eqemu-rof2-fellowship",
       "commit": "9382453264f4f84ac7e83a9ee5c9c9a1391c6017",
+      "omitted_gallery_and_generated_files": []
+    },
+    {
+      "feature": "mercenaries",
+      "repository": "nightstalker6669/eqemu-rof2-mercenaries",
+      "commit": "00b07c381a738a21aff08867bf186e6c2bfaffb0",
       "omitted_gallery_and_generated_files": []
     }
   ],
@@ -48,13 +55,14 @@
   "shared_core": "Inherited from rof2-shared-core; one canonical implementation in common/shared_core; legacy feature headers forward to it.",
   "remaining_feature_dependencies": "Published feature/runtime dependencies are retained. Extracting shared infrastructure does not make all gameplay patches independent.",
   "reviewed_source_repairs": [
+    "Restore missing ZoneDatabase atomic mercenary save/delete declarations to match published implementations; same declarations already present in the published shroud integration.",
     "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included.",
     "Use upstream-default precompiled headers in the integrated installer, matching the validated current source rather than the historical standalone overlay build."
   ],
   "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
   "upstream_branch": "develop",
-  "previous_published_commit": "76f919754ed92304d9daa412311c35ed937d866f",
-  "backup_branch": "archive/20261029-before-develop/rof2-fellowship",
+  "previous_published_commit": "67e752f0c7850cb829dfdccd9f2aa6e022bc1d59",
+  "backup_branch": "archive/20261029-before-develop/rof2-mercenaries",
   "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base."
 }

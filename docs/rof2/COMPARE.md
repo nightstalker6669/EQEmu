@@ -1,6 +1,6 @@
-# Review the fellowship changes
+# Review the mercenaries changes
 
-Base: upstream **develop `c9c8747ac949deddb140d196d241fa4e777500c7`**. [Open the full GitHub comparison](https://github.com/nightstalker6669/EQEmu/compare/c9c8747ac949deddb140d196d241fa4e777500c7...rof2-fellowship). This comparison contains feature work and its production package/documentation; it does not include the previous master/develop merge history.
+Base: upstream **develop `c9c8747ac949deddb140d196d241fa4e777500c7`**. [Open the full GitHub comparison](https://github.com/nightstalker6669/EQEmu/compare/c9c8747ac949deddb140d196d241fa4e777500c7...rof2-mercenaries). This comparison contains feature work and its production package/documentation; it does not include the previous master/develop merge history.
 
 ## Review by scope
 
@@ -8,10 +8,10 @@ Fetch the fork and inspect native code and opcode mappings separately from relea
 
 ```sh
 git fetch origin
-git diff --stat c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-fellowship
-git diff c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-fellowship -- common zone world utils/patches
-git diff c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-fellowship -- utils/sql
-git diff c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-fellowship -- docs/rof2 extensions/rof2
+git diff --stat c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-mercenaries
+git diff c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-mercenaries -- common zone world utils/patches
+git diff c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-mercenaries -- utils/sql
+git diff c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-mercenaries -- docs/rof2 extensions/rof2
 ```
 
 The last group includes production SQL, quests, installation tools, protocol evidence and historical standalone patch files. Some release packages retain copies of native source/patch preimages for provenance; those are not additional compile units. Current native code in `common/`, `zone/`, `world/` and active mappings is authoritative.
@@ -19,15 +19,15 @@ The last group includes production SQL, quests, installation tools, protocol evi
 Confirm the history when comparing:
 
 ```sh
-git merge-base c9c8747ac949deddb140d196d241fa4e777500c7 origin/rof2-fellowship
-git log --oneline c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-fellowship
-git rev-list --count --merges c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-fellowship
+git merge-base c9c8747ac949deddb140d196d241fa4e777500c7 origin/rof2-mercenaries
+git log --oneline c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-mercenaries
+git rev-list --count --merges c9c8747ac949deddb140d196d241fa4e777500c7..origin/rof2-mercenaries
 ```
 
 The merge base is `c9c8747ac949deddb140d196d241fa4e777500c7` and the merge count is **0**. Feature layers are linear review commits. For a layer-only diff, compare its branch with the prerequisite listed in [BRANCHES.md](BRANCHES.md).
 
 ## Update an existing clone
 
-The published feature history was rewritten for this requested rebase. **Do not pull/merge the old branch into the new one.** Preserve local commits and uncommitted changes first. A fresh clone of `rof2-fellowship` is the simplest option. In an existing clean clone, make a local backup branch, fetch, then create a new local branch from `origin/rof2-fellowship`. Deliberately cherry-pick only your own later custom work after reviewing it.
+The published feature history was rewritten for this requested rebase. **Do not pull/merge the old branch into the new one.** Preserve local commits and uncommitted changes first. A fresh clone of `rof2-mercenaries` is the simplest option. In an existing clean clone, make a local backup branch, fetch, then create a new local branch from `origin/rof2-mercenaries`. Deliberately cherry-pick only your own later custom work after reviewing it.
 
-The prior published head is [`76f919754ed92304d9daa412311c35ed937d866f`](https://github.com/nightstalker6669/EQEmu/commit/76f919754ed92304d9daa412311c35ed937d866f) and is preserved by `archive/20261029-before-develop/rof2-fellowship`. No running server, clients or database are updated by this source rebase.
+The prior published head is [`67e752f0c7850cb829dfdccd9f2aa6e022bc1d59`](https://github.com/nightstalker6669/EQEmu/commit/67e752f0c7850cb829dfdccd9f2aa6e022bc1d59) and is preserved by `archive/20261029-before-develop/rof2-mercenaries`. No running server, clients or database are updated by this source rebase.
