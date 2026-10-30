@@ -773,7 +773,8 @@ Client::~Client() {
 	// A rejected/unloaded ingress has authenticated IDs but does not own the
 	// existing actor's profile. Skip writer/callback lifecycle for that shell.
 	const bool owns_loaded_profile = !m_inventory_session_rejected &&
-		(!RuleB(Housing, EnablePlayerHousing) || (ClientDataLoaded() && HasInventorySessionReservation()));
+		(!(RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || m_inventory_session_reservation) ||
+		 (ClientDataLoaded() && HasInventorySessionReservation()));
 	mMovementManager->RemoveClient(this);
 	if (!owns_loaded_profile && trade) trade->Reset(); // shell owns no real trade partner
 	if (owns_loaded_profile) {
@@ -1008,6 +1009,7 @@ void Client::ReportConnectingState() {
 
 bool Client::SaveAA()
 {
+ if(m_spirit_shroud_transition)return false;
 	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
 	std::vector<CharacterAlternateAbilitiesRepository::CharacterAlternateAbilities> v;
 
@@ -1038,7 +1040,11 @@ bool Client::SaveAA()
 		}
 	}
 
-	m_pp.aapoints_spent = aa_points_spent + m_epp.expended_aa;
+	// Free Monster AA grants do not debit this session's purchased-point pool.
+	// Its spent amount is maintained by the transactional allocation ledger.
+	if (!IsSpiritShrouded()) {
+		m_pp.aapoints_spent = aa_points_spent + m_epp.expended_aa;
+	}
 
 	if (v.empty()) {
 		return true;
@@ -1060,10 +1066,12 @@ void Client::RemoveExpendedAA(int aa_id)
 }
 
 bool Client::Save(uint8 iCommitNow) {
+ if(m_spirit_shroud_transition)return false;
 	if (m_mercenary_persistence_failed) return false;
 	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
 	if (m_inventory_session_rejected ||
-		(RuleB(Housing, EnablePlayerHousing) && !HasInventorySessionReservation())) return false;
+		((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || m_inventory_session_reservation) &&
+		 !HasInventorySessionReservation())) return false;
 
 	if(!ClientDataLoaded())
 		return false;
@@ -1293,6 +1301,7 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 	strn0cpy(message, orig_message, sizeof(message));
 
 	LogDebug("Client::ChannelMessageReceived() Channel:[{}] message:[{}]", chan_num, message);
+ if(chan_num==8 && TrySpiritShroudChat(message))return;
 
 	if (RuleB(Chat, AlwaysCaptureCommandText)) {
 		if (message[0] == COMMAND_CHAR || message[0] == COMMAND_CHAR_NON_HASH) {
@@ -5912,6 +5921,12 @@ int	Client::LDoNChest_SkillCheck(NPC *target, int skill)
 
 void Client::SummonAndRezzAllCorpses()
 {
+	// This path also marks corpses resurrected before SetEXP. The ordinary
+	// resurrection-answer guard must apply to summon-all/quest invocations too.
+	if (IsSpiritShrouded()) {
+		Message(Chat::Yellow, "Remove your shroud before resurrecting your corpses.");
+		return;
+	}
 	PendingRezzXP = -1;
 
 	auto Pack = new ServerPacket(ServerOP_DepopAllPlayersCorpses, sizeof(ServerDepopAllPlayersCorpses_Struct));

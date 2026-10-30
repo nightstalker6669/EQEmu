@@ -29,7 +29,19 @@ class EQStreamIdentifier;
 
 namespace EQ { class ItemInstance; }
 
+struct Spawn_Struct;
+struct PlayerProfile_Struct;
+
 namespace RoF2 {
+ std::optional<std::vector<uint8_t>> SerializeShroudSpawn(const Spawn_Struct&);
+ std::optional<std::vector<uint8_t>> SerializeShroudNormalProfile(const PlayerProfile_Struct&);
+ std::optional<std::vector<uint8_t>> SerializeShroudInventory(const std::vector<std::pair<int16_t,const EQ::ItemInstance*>>&);
+ // Shroud inspection cache entry: native ItemPtr without an ItemPacket type
+ // or inventory count. This service has no housing rule dependency.
+ std::optional<std::vector<uint8_t>> SerializeShroudPreviewItem(const EQ::ItemInstance &instance);
+ // Fully encoded normal ItemPacketTrade for a prepared recovery-bank tree.
+ std::optional<std::vector<uint8_t>> SerializeShroudBankItem(const EQ::ItemInstance&,int16_t server_slot);
+
 	// Native embedded ItemPtr, without the OP_ItemPacket type DWORD. Uses the
 	// ordinary item encoder and preserves instance identity, charges and children.
 	// Housing must be enabled. Full inventory trees and compact estate list

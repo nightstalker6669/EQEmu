@@ -483,7 +483,7 @@ void ZoneDatabase::UpdateBuyLine(uint32 CharID, uint32 BuySlot, uint32 Quantity)
 #define StructDist(in, f1, f2) (uint32(&in->f2)-uint32(&in->f1))
 
 bool ZoneDatabase::LoadCharacterData(uint32 character_id, PlayerProfile_Struct* pp, ExtendedProfile_Struct* m_epp){
-	const auto& e = CharacterDataRepository::FindOne(database, character_id);
+	const auto& e = CharacterDataRepository::FindOne(*this, character_id);
 	if (!e.id) {
 		return false;
 	}
@@ -597,7 +597,7 @@ bool ZoneDatabase::LoadCharacterFactionValues(uint32 character_id, faction_map &
 bool ZoneDatabase::LoadCharacterMemmedSpells(uint32 character_id, PlayerProfile_Struct* pp)
 {
 	const auto& l = CharacterMemmedSpellsRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} ORDER BY `slot_id`",
 			character_id
@@ -620,7 +620,7 @@ bool ZoneDatabase::LoadCharacterMemmedSpells(uint32 character_id, PlayerProfile_
 bool ZoneDatabase::LoadCharacterSpellBook(uint32 character_id, PlayerProfile_Struct* pp)
 {
 	const auto& l = CharacterSpellsRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} ORDER BY `slot_id`",
 			character_id
@@ -778,7 +778,7 @@ bool ZoneDatabase::LoadCharacterCurrency(uint32 character_id, PlayerProfile_Stru
 bool ZoneDatabase::LoadCharacterMaterialColor(uint32 character_id, PlayerProfile_Struct* pp)
 {
 	const auto& l = CharacterMaterialRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} LIMIT 9",
 			character_id
@@ -798,7 +798,7 @@ bool ZoneDatabase::LoadCharacterMaterialColor(uint32 character_id, PlayerProfile
 bool ZoneDatabase::LoadCharacterBandolier(uint32 character_id, PlayerProfile_Struct* pp)
 {
 	const auto& l = CharacterBandolierRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} LIMIT {}",
 			character_id,
@@ -863,7 +863,7 @@ void ZoneDatabase::LoadCharacterTribute(Client* c){
 bool ZoneDatabase::LoadCharacterPotionBelt(uint32 character_id, PlayerProfile_Struct *pp)
 {
 	const auto& l = CharacterPotionbeltRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} LIMIT {}",
 			character_id,
@@ -895,7 +895,7 @@ bool ZoneDatabase::LoadCharacterPotionBelt(uint32 character_id, PlayerProfile_St
 bool ZoneDatabase::LoadCharacterBindPoint(uint32 character_id, PlayerProfile_Struct *pp)
 {
 	const auto& l = CharacterBindRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} LIMIT 5",
 			character_id
@@ -1078,6 +1078,7 @@ bool ZoneDatabase::SaveCharacterData(
 	}
 
 	if (c->m_fellowship_xp_persistence_failed || c->m_fellowship_xp_transaction_active) return false;
+	if (c->SpiritShroudTransitionPending()) return false;
 
 	clock_t t = std::clock(); /* Function timer start */
 
@@ -2430,11 +2431,12 @@ Mercenary::SaveResult ZoneDatabase::SaveMercenaryAtomic(Merc* m, const Mercenary
 	std::string table_list = "'mercs','merc_buffs','character_currency'";
 	if (payment->alternate) table_list += ",'character_alt_currency'";
 	if (initial_hire) table_list += ",'group_id'";
+	if (initial_hire && c->IsSpiritShrouded()) table_list += ",'spirit_shroud_mercenary_fees'";
 	auto engines = QueryDatabase(fmt::format(
 		"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() "
 		"AND table_name IN ({}) AND engine='InnoDB'", table_list), false);
 	if (!engines.Success() || engines.RowCount() != 1 || !engines.begin()[0] ||
-		std::stoul(engines.begin()[0]) != (3 + (payment->alternate ? 1 : 0) + (initial_hire ? 1 : 0))) {
+		std::stoul(engines.begin()[0]) != (3 + (payment->alternate ? 1 : 0) + (initial_hire ? 1 : 0) + (initial_hire && c->IsSpiritShrouded() ? 1 : 0))) {
 		return Result::Failed;
 	}
 	auto e = MercsRepository::NewEntity();
@@ -2581,6 +2583,24 @@ Mercenary::SaveResult ZoneDatabase::SaveMercenaryAtomic(Merc* m, const Mercenary
 		auto saved = QueryDatabase(sql, false);
 		if (!saved.Success()) { rollback(); return Result::Failed; }
 		if (!id) id = saved.LastInsertedID();
+		if (initial_hire && id && c->IsSpiritShrouded()) {
+			// Commit the later full original-level hire fee with the new contract.
+			// Existing contracts and ordinary hires never acquire this liability.
+			auto shroud = QueryDatabase(fmt::format(
+				"SELECT s.active_session_id,b.level FROM spirit_shroud_state s "
+				"JOIN spirit_shroud_sessions x ON x.id=s.active_session_id AND x.character_id=s.character_id AND x.phase='active' "
+				"JOIN shroud_original_character_data b ON b.id=s.character_id "
+				"WHERE s.character_id={} AND s.template_id<>0 FOR UPDATE", c->CharacterID()), false);
+			if (!shroud.Success() || shroud.RowCount()!=1 || !shroud.begin()[0] || !shroud.begin()[1]) { rollback(); return Result::Failed; }
+			const auto original_level = Strings::ToUnsignedInt(shroud.begin()[1]);
+			if (!original_level || original_level>255) { rollback(); return Result::Failed; }
+			const uint64 fee = RuleB(Mercs, ChargeMercPurchaseCost) ?
+				uint64(Merc::CalcPurchaseCost(m->GetMercenaryTemplateID(), original_level))*100 : 0;
+			auto recorded = QueryDatabase(fmt::format(
+				"INSERT INTO spirit_shroud_mercenary_fees(merc_id,character_id,session_id,template_id,original_level,fee_copper) "
+				"VALUES ({},{},{},{},{},{})", id,c->CharacterID(),shroud.begin()[0],m->GetMercenaryTemplateID(),original_level,fee), false);
+			if (!recorded.Success() || recorded.RowsAffected()!=1) { rollback(); return Result::Failed; }
+		}
 		if (initial_hire && id) {
 			auto joined = QueryDatabase(fmt::format(
 				"INSERT INTO group_id (group_id,name,character_id,bot_id,merc_id) VALUES ({},'{}',0,0,{})",

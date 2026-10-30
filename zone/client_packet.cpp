@@ -91,6 +91,13 @@ void MapOpcodes()
 	ConnectingOpcodes.clear();
 	memset(ConnectedOpcodes, 0, sizeof(ConnectedOpcodes));
 
+ ConnectedOpcodes[OP_SpiritShroudComplete]=&Client::Handle_OP_SpiritShroudComplete;
+ ConnectedOpcodes[OP_SpiritShroudRequest]=&Client::Handle_OP_SpiritShroudRequest;
+ ConnectedOpcodes[OP_SpiritShroudSelect]=&Client::Handle_OP_SpiritShroudSelect;
+ ConnectedOpcodes[OP_SpiritShroudCancel]=&Client::Handle_OP_SpiritShroudCancel;
+ ConnectedOpcodes[OP_SpiritShroudAbilityRequest]=&Client::Handle_OP_SpiritShroudPreview;
+ ConnectedOpcodes[OP_SpiritShroudEquipmentRequest]=&Client::Handle_OP_SpiritShroudPreview;
+ ConnectedOpcodes[OP_SpiritShroudBank]=&Client::Handle_OP_SpiritShroudBank;
 	// Now put all the opcodes into their home...
 	// connecting opcode handler assignments:
 	ConnectingOpcodes[OP_ApproveZone] = &Client::Handle_Connect_OP_ApproveZone;
@@ -502,7 +509,53 @@ int Client::HandlePacket(const EQApplicationPacket *app)
 		(EQEmuLogSys::Instance()->IsLogEnabled(Logs::Detail, Logs::PacketClientServer) ? DumpPacketToString(app) : "")
 	);
 
-	EmuOpcode opcode = app->GetOpcode();
+ EmuOpcode opcode = app->GetOpcode();
+ // A committed profile exchange leaves this old Client read-only until the
+ // same-zone transfer deletes it; only that transfer handshake may proceed.
+ if(m_spirit_shroud_transition && !(opcode==OP_SpiritShroudComplete && m_spirit_shroud_native_pending) && opcode!=OP_ZoneChange && opcode!=OP_AckPacket && opcode!=OP_DeleteSpawn) return true;
+ if(IsSpiritShrouded() && (opcode==OP_Trader || opcode==OP_BazaarSearch || opcode==OP_AltCurrencyMerchantRequest)) return true;
+ if(IsSpiritShrouded() && opcode==OP_BankerChange && !SpiritShroudHasPersonalBank())return true;
+ if(IsSpiritShrouded() && opcode==OP_MoveCoin){
+  if(!SpiritShroudHasPersonalBank() || app->size!=sizeof(MoveCoin_Struct))return true;
+  auto* coin=reinterpret_cast<const MoveCoin_Struct*>(app->pBuffer);
+  // Only live carried/cursor/personal-bank/trade wallets are available.
+  // Shared-bank coin remains inaccessible even when a packet is forged.
+  if(coin->from_slot<0 || coin->from_slot>3 || coin->to_slot<0 || coin->to_slot>3)return true;
+ }
+ // Temporary equipment must remain in this profile until restoration. Broader
+ // trading and crafting support will require explicit transfer provenance.
+ if(IsSpiritShrouded() && (opcode==OP_GroundSpawn ||
+    opcode==OP_GuildBank || opcode==OP_TradeSkillCombine || opcode==OP_RecipeAutoCombine ||
+    opcode==OP_AugmentItem || opcode==OP_TributeItem || opcode==OP_GuildTributeDonateItem ||
+    opcode==OP_ShopSendParcel || opcode==OP_AltCurrencySell || opcode==OP_AltCurrencyReclaim))return true;
+
+ if(IsSpiritShrouded() && opcode==OP_MoveMultipleItems){
+  if(app->size<sizeof(MultiMoveItem_Struct))return true;
+  auto* moves=reinterpret_cast<const MultiMoveItem_Struct*>(app->pBuffer);
+  if(!moves->count || moves->count>100 || app->size!=sizeof(MultiMoveItem_Struct)+sizeof(MultiMoveItemSub_Struct)*moves->count)return true;
+  for(uint32 i=0;i<moves->count;++i){
+   // Bank transfers use the guarded single-item operation. The native bulk
+   // rearrangement implementation has direct writes outside SwapItem.
+   if(moves->moves[i].from_slot.Type!=EQ::invtype::typePossessions ||
+      moves->moves[i].to_slot.Type!=EQ::invtype::typePossessions)return true;
+   if(moves->moves[i].from_slot.Slot<EQ::invslot::GENERAL_BEGIN || moves->moves[i].from_slot.Slot>EQ::invslot::slotCursor ||
+      moves->moves[i].to_slot.Slot<EQ::invslot::GENERAL_BEGIN || moves->moves[i].to_slot.Slot>EQ::invslot::slotCursor)return true;
+  }
+ }
+ if(IsSpiritShrouded() && (opcode==OP_MoveItem || opcode==OP_DeleteItem || opcode==OP_DeleteCharge) && app->size==sizeof(MoveItem_Struct)) {
+  auto* move=reinterpret_cast<const MoveItem_Struct*>(app->pBuffer);
+  const auto held_bank=[this](uint32_t slot){return
+   (slot>=EQ::invslot::SHARED_BANK_BEGIN && slot<=EQ::invslot::SHARED_BANK_END) ||
+   (slot>=EQ::invbag::SHARED_BANK_BAGS_BEGIN && slot<=EQ::invbag::SHARED_BANK_BAGS_END) ||
+   (!SpiritShroudHasPersonalBank() && ((slot>=EQ::invslot::BANK_BEGIN && slot<=EQ::invslot::BANK_END) ||
+    (slot>=EQ::invbag::BANK_BAGS_BEGIN && slot<=EQ::invbag::BANK_BAGS_END)));};
+  if(held_bank(move->from_slot)||held_bank(move->to_slot))return true;
+  const auto external=[](uint32_t slot){return
+   (slot>=EQ::invslot::WORLD_BEGIN && slot<=EQ::invslot::WORLD_END);};
+  if(external(move->from_slot)||external(move->to_slot))return true;
+ }
+
+
 	if (opcode == OP_AckPacket) {
 		return true;
 	}
@@ -576,6 +629,14 @@ void Client::CompleteConnect()
 	SetDueling(false);
 
 	EnteringMessages(this);
+ // RoF2's alternate profile path does not request the normal AA definition
+ // table. Rebuild it on every shrouded zone entry, including a fresh login.
+ if(IsSpiritShrouded()) {
+  SendAlternateAdvancementTable();
+  SendAlternateAdvancementPoints();
+  SendAlternateAdvancementTimers();
+ }
+ SendSpiritShroudProgress();
 	LoadPEQZoneFlags();
 	LoadZoneFlags();
 	LoadAccountFlags();
@@ -991,6 +1052,20 @@ void Client::CompleteConnect()
 		delete pack;
 	}
 
+	// Ordinary profiles contain only long affects. Recreate only Song slots
+	// installed by the scoped restoration loader, once the login profile exists.
+	if (m_spirit_shroud_restored_short_buffs_pending) {
+		m_spirit_shroud_restored_short_buffs_pending = false;
+		if (ClientVersion() == EQ::versions::ClientVersion::RoF2 && !IsSpiritShrouded()) {
+			const int end = GetMaxBuffSlots() + GetMaxSongSlots();
+			for (int slot = GetMaxBuffSlots(); slot < end; ++slot) {
+				if (IsValidSpell(buffs[slot].spellid) && spells[buffs[slot].spellid].short_buff_box) {
+					SendBuffDurationPacket(buffs[slot], slot, true);
+				}
+			}
+		}
+	}
+
 	ClientPatch::SendFullBuffRefresh(this);
 
 	// TODO: load these states
@@ -1117,7 +1192,14 @@ void Client::Handle_Connect_OP_ClientReady(const EQApplicationPacket *app)
 	if (!Spawned())
 		SendZoneInPackets();
 	CompleteConnect();
-	SendHPUpdate();
+	// RoF2 can clamp the alternate profile during initialization after sending
+	// ClientReady. Republish on a bounded number of ordinary HP timer ticks.
+	m_spirit_shroud_resource_refreshes = IsSpiritShrouded() ? 3 : 0;
+	SendHPUpdate(IsSpiritShrouded());
+	if (IsSpiritShrouded()) {
+		SendManaUpdate();
+		SendEnduranceUpdate();
+	}
 }
 
 void Client::Handle_Connect_OP_ClientUpdate(const EQApplicationPacket *app)
@@ -1321,7 +1403,7 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 	Client* client = entity_list.GetClientByName(cze->char_name);
 	if (!zone->GetAuth(ip, cze->char_name, &WID, &account_id, &character_id, &admin, lskey, &tellsoff)) {
 		LogClientLogin("[{}] failed zone auth check", cze->char_name);
-		if (RuleB(Housing, EnablePlayerHousing)) {
+		if (RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs)) {
 			RejectInventorySessionAdmission();
 			Disconnect();
 			return; // unclaimed ingress must not save/kick a real reservation owner
@@ -1336,7 +1418,8 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 
 	// Trusted zone auth has resolved character/account. Reject before antighost
 	// saves or inventory load can touch a character with unresolved custody.
-	if (Housing::CheckInventoryAdmission(database, CharacterID(), RuleB(Housing, EnablePlayerHousing)) !=
+	if (Housing::CheckInventoryAdmission(database, CharacterID(),
+		RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs)) !=
 		Housing::InventoryAdmission::Allowed) {
 		LogWarning("Character [{}] zone admission blocked by unresolved/unavailable housing custody state", CharacterID());
 		RejectInventorySessionAdmission();
@@ -1344,9 +1427,9 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 		return;
 	}
 
-	// Every enabled client version must win durable per-character ownership
-	// before antighost callbacks or any profile/inventory loading can occur.
-	if (RuleB(Housing, EnablePlayerHousing) && !ClaimInventorySessionReservation()) {
+	// Mercenary coin payments share this ownership fence even when housing
+	// gameplay is disabled. Claim before antighost callbacks or profile loading.
+	if ((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs)) && !ClaimInventorySessionReservation()) {
 		LogWarning("Character [{}] inventory-session admission unavailable or already owned", CharacterID());
 		RejectInventorySessionAdmission();
 		Disconnect();
@@ -1436,19 +1519,20 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 	m_inv.SetGMInventory(true);
 	// Recheck already-issued ingress authorization just before GetInventory,
 	// which rewrites runtime GUID metadata. No timeout lease takeover.
-	if (Housing::CheckCustodyAdmission(database, CharacterID(), RuleB(Housing, EnablePlayerHousing)) !=
+	if (Housing::CheckCustodyAdmission(database, CharacterID(),
+		RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || bool(InventorySessionReleaseTicket())) !=
 		Housing::InventoryAdmission::Allowed) {
 		RejectInventorySessionAdmission();
 		Disconnect();
 		return;
 	}
-	if (RuleB(Housing, EnablePlayerHousing) && !HasInventorySessionReservation()) {
+	if ((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || InventorySessionReleaseTicket()) && !HasInventorySessionReservation()) {
 		RejectInventorySessionAdmission();
 		Disconnect();
 		return;
 	}
 	loaditems = Housing::HousePreload::LoadInventoryWithHouseBindings(*this,database,RuleB(Housing,EnablePlayerHousing));
-	if (RuleB(Housing, EnablePlayerHousing) && !loaditems) {
+	if ((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || InventorySessionReleaseTicket()) && !loaditems) {
 		RejectInventorySessionAdmission();
 		Disconnect();
 		return;
@@ -1459,6 +1543,7 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 	database.LoadCharacterPotionBelt(cid, &m_pp); /* Load Character Potion Belt */
 	database.LoadCharacterCurrency(cid, &m_pp); /* Load Character Currency into PP */
 	database.LoadCharacterData(cid, &m_pp, &m_epp); /* Load Character Data from DB into PP as well as E_PP */
+ if(!LoadSpiritShroudState())return;
 	database.LoadCharacterSkills(cid, &m_pp); /* Load Character Skills */
 	database.LoadCharacterInspectMessage(cid, &m_inspect_message); /* Load Character Inspect Message */
 	database.LoadCharacterSpellBook(cid, &m_pp); /* Load Character Spell Book */
@@ -1621,6 +1706,9 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 		size = 0;
 	}
 
+ // Preserve the captured shroud model scale instead of the player-race default.
+ if(IsSpiritShrouded() && SpiritShroudModelSize()>0)base_size=size=SpiritShroudModelSize();
+
 	/* Check for Invalid points */
 	if (m_pp.ldon_points_guk < 0 || m_pp.ldon_points_guk > 2000000000) { m_pp.ldon_points_guk = 0; }
 	if (m_pp.ldon_points_mir < 0 || m_pp.ldon_points_mir > 2000000000) { m_pp.ldon_points_mir = 0; }
@@ -1647,6 +1735,7 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 		}
 
 		database.LoadBuffs(this);
+		if (!LoadSpiritShroudRestoredShortBuffs()) return;
 		uint32 max_slots = GetMaxBuffSlots();
 		for (int i = 0; i < BUFF_COUNT; i++) {
 			if (IsValidSpell(buffs[i].spellid)) {
@@ -1809,6 +1898,23 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 	/* The entityid field in the Player Profile is used by the Client in relation to Group Leadership AA */
 	m_pp.entityid = GetID();
 	memcpy(outapp->pBuffer, &m_pp, outapp->size);
+	if (IsSpiritShrouded()) {
+		// Native alternate profiles use the same ownership triples as RespondAA:
+		// highest owned rank ID, cumulative cost, charges. Persisted AA counts
+		// and the server's profile remain in their ordinary storage format.
+		auto* profile = reinterpret_cast<PlayerProfile_Struct*>(outapp->pBuffer);
+		for (auto& owned : profile->aa_array) {
+			if (!owned.AA) continue;
+			auto* ability = zone->GetAlternateAdvancementAbilityByRank(owned.AA);
+			auto* rank = ability ? ability->GetRankByPointsSpent(owned.value) : nullptr;
+			if (rank) {
+				owned.AA = rank->id;
+				owned.value = rank->total_cost;
+			} else {
+				owned = {};
+			}
+		}
+	}
 	outapp->priority = 6;
 	FastQueuePacket(&outapp);
 
@@ -1986,6 +2092,7 @@ void Client::Handle_OP_AAAction(const EQApplicationPacket *app)
 		return;
 	}
 	AA_Action* action = (AA_Action*)app->pBuffer;
+ if(TrySpiritShroudAbility(action->action,action->ability))return;
 
 	if (action->action == aaActionActivate) {//AA Hotkey
 		LogAA("Activating AA [{}]", action->ability);
@@ -13978,8 +14085,11 @@ void Client::Handle_OP_Rewind(const EQApplicationPacket *app)
 void Client::Handle_OP_RezzAnswer(const EQApplicationPacket *app)
 {
 	VERIFY_PACKET_LENGTH(OP_RezzAnswer, app, Resurrect_Struct);
-
-	const auto* r = (const Resurrect_Struct*) app->pBuffer;
+ const auto* r = reinterpret_cast<const Resurrect_Struct*>(app->pBuffer);
+ if (r->action == ResurrectionActions::Accept && !CanAcceptSpiritShroudResurrection(PendingRezzDBID)) {
+  Message(Chat::Yellow, "Remove your shroud before accepting this original-character resurrection.");
+  return;
+ }
 
 	LogSpells(
 		"[Client::Handle_OP_RezzAnswer] Received OP_RezzAnswer from client. Pendingrezzexp is [{}] action is [{}]",
@@ -13988,7 +14098,7 @@ void Client::Handle_OP_RezzAnswer(const EQApplicationPacket *app)
 	);
 
 
-	OPRezzAnswer(r->action, r->spellid, r->zone_id, r->instance_id, r->x, r->y, r->z);
+	if (!OPRezzAnswer(r->action, r->spellid, r->zone_id, r->instance_id, r->x, r->y, r->z)) return;
 
 	if (r->action == ResurrectionActions::Accept) {
 		if (PlayerEventLogs::Instance()->IsEventEnabled(PlayerEvent::REZ_ACCEPTED)) {
@@ -14685,6 +14795,9 @@ void Client::Handle_OP_ShopPlayerSell(const EQApplicationPacket *app)
 	if (!item || !inst) {
 		Message(Chat::Red, "You seem to have misplaced that item..");
 		return;
+	}
+	if(!CanTransferSpiritShroudItemTree(inst)){
+		Message(Chat::Yellow,"Your shroud's temporary supplies cannot be sold.");return;
 	}
 
 	if (!item->NoDrop) {

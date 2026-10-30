@@ -8,11 +8,12 @@ using InventoryProjection::Shape;
 using InventoryProjection::Custom;
 using InventoryProjection::Charges;
 bool MatchesProjection(const LiveItems::InventoryRow& row,EQ::ItemInstance& item){return InventoryProjection::Matches(row,item);}
-LiveItems::Result<ReconstructedItem> Reconstruct(SharedDatabase& db,const LiveItems::InventoryRow& row){
+namespace {
+LiveItems::Result<ReconstructedItem> ReconstructInScope(SharedDatabase& db,const LiveItems::InventoryRow& row,InventoryProjection::ReconstructionScope scope){
  try{
   if(!Shape(row))return {{},LiveItems::Error::UnsupportedItem};auto fields=Custom(row.values.custom_data);if(!fields)return {{},LiveItems::Error::UnsupportedItem};
   const auto* data=db.GetItem(row.values.item_id);
-  if(!data||((data->ItemClass!=0||data->BagSlots)&&!InventoryProjection::VaultCandidate(*data)))return {{},LiveItems::Error::UnsupportedItem};
+  if(!data||data->ItemClass>2||(scope==InventoryProjection::ReconstructionScope::HousingTransfer && (data->ItemClass!=0||data->BagSlots)&&!InventoryProjection::VaultCandidate(*data)))return {{},LiveItems::Error::UnsupportedItem};
   // Reserve legacy GUID before allocating a fresh native serial; GUID may be
   // NULL,0 or wider than signed32 and remains verbatim in the original row.
   if(!(row.null_fields&LiveItems::NullGuid)&&row.values.guid)EQ::ItemInstance::AddGUIDToMap(row.values.guid);
@@ -24,10 +25,17 @@ LiveItems::Result<ReconstructedItem> Reconstruct(SharedDatabase& db,const LiveIt
   for(const auto& [key,value]:*fields)item->SetCustomData(key,value);
   if(!LegacyScaling::Restore(*item,row.values.custom_data))return {{},LiveItems::Error::UnsupportedItem};
   if(!EvolvingItemCustody::Restore(row.evolving_payload,*item,row.values.character_id))return {{},LiveItems::Error::UnsupportedItem};
-  for(const auto& child:row.children){auto rebuilt=Reconstruct(db,child);if(!rebuilt)return {{},rebuilt.error};item->PutItem(uint8_t(child.values.slot_id),*rebuilt.value.item);}
-  if(!MatchesProjection(row,*item))return {{},LiveItems::Error::UnsupportedItem};
+  for(const auto& child:row.children){auto rebuilt=ReconstructInScope(db,child,scope);if(!rebuilt)return {{},rebuilt.error};item->PutItem(uint8_t(child.values.slot_id),*rebuilt.value.item);}
+  if(!InventoryProjection::Matches(row,*item,scope))return {{},LiveItems::Error::UnsupportedItem};
   ReconstructedItem output;output.original=row;output.runtime_serial=item->GetSerialNumber();output.item=std::move(item);
   LiveItems::Result<ReconstructedItem> result;result.value=std::move(output);return result;
  }catch(...){return {{},LiveItems::Error::UnsupportedItem};}
+}
+ } // namespace
+LiveItems::Result<ReconstructedItem> Reconstruct(SharedDatabase& db,const LiveItems::InventoryRow& row){
+ return ReconstructInScope(db,row,InventoryProjection::ReconstructionScope::HousingTransfer);
+}
+LiveItems::Result<ReconstructedItem> ReconstructCharacterProfile(SharedDatabase& db,const LiveItems::InventoryRow& row){
+ return ReconstructInScope(db,row,InventoryProjection::ReconstructionScope::CharacterProfile);
 }
 }

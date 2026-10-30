@@ -15,5 +15,8 @@ struct ReconstructedItem {
 // current runtime serial are checked independently by LiveItems/fence callbacks.
 bool MatchesProjection(const LiveItems::InventoryRow&,EQ::ItemInstance&);
 LiveItems::Result<ReconstructedItem> Reconstruct(SharedDatabase&,const LiveItems::InventoryRow&);
+// Reload owned character inventory, including bound bags. This bypasses only
+// housing transfer admission; all instance/tree fidelity checks still apply.
+LiveItems::Result<ReconstructedItem> ReconstructCharacterProfile(SharedDatabase&,const LiveItems::InventoryRow&);
 }
 #endif

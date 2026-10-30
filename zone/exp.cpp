@@ -240,7 +240,7 @@ float static GetConLevelModifierPercent(uint8 conlevel)
 	}
 }
 
-void Client::CalculateNormalizedAAExp(uint64 &add_aaxp, uint8 conlevel, bool resexp)
+void Client::CalculateNormalizedAAExp(uint64 &add_aaxp, uint8 conlevel, bool resexp, int aa_percent)
 {
 	// Functionally this is the same as having the case in the switch, but this is
 	// cleaner to read.
@@ -258,7 +258,7 @@ void Client::CalculateNormalizedAAExp(uint64 &add_aaxp, uint8 conlevel, bool res
 	uint32 xpPerAA = RuleI(AA, ExpPerPoint);
 
 	float colorModifier = GetConLevelModifierPercent(conlevel);
-	float percentToAAXp = (float)m_epp.perAA / 100;
+	float percentToAAXp = (float)(aa_percent<0 ? m_epp.perAA : aa_percent) / 100;
 
 	// Normalize the amount of AA XP we earned for this kill.
 	add_aaxp = percentToAAXp * (xpPerAA / (whiteConKillsPerAA / colorModifier));
@@ -399,7 +399,8 @@ void Client::CalculateLeadershipExp(uint64 &add_exp, uint8 conlevel)
 	}
 }
 
-void Client::CalculateExp(uint64 in_add_exp, uint64 &add_exp, uint64 &add_aaxp, uint8 conlevel, bool resexp)
+void Client::CalculateExp(uint64 in_add_exp, uint64 &add_exp, uint64 &add_aaxp, uint8 conlevel, bool resexp,
+ int aa_percent, bool leadership)
 {
 	add_exp = in_add_exp;
 
@@ -414,7 +415,7 @@ void Client::CalculateExp(uint64 in_add_exp, uint64 &add_exp, uint64 &add_aaxp, 
 	if (!resexp)
 	{
 		//figure out how much of this goes to AAs
-		add_aaxp = add_exp * m_epp.perAA / 100;
+		add_aaxp = add_exp * (aa_percent<0 ? m_epp.perAA : aa_percent) / 100;
 
 		//take that amount away from regular exp
 		add_exp -= add_aaxp;
@@ -461,7 +462,7 @@ void Client::CalculateExp(uint64 in_add_exp, uint64 &add_exp, uint64 &add_aaxp, 
 		}
 
 		// Calculate any changes to leadership experience.
-		CalculateLeadershipExp(add_exp, conlevel);
+		if (leadership) CalculateLeadershipExp(add_exp, conlevel);
 	}	//end !resexp
 
 	if (RuleB(Zone, LevelBasedEXPMods)) {
@@ -492,10 +493,33 @@ void Client::CalculateExp(uint64 in_add_exp, uint64 &add_exp, uint64 &add_aaxp, 
 	add_exp = GetEXP() + add_exp;
 }
 
+void Client::CalculateSpiritShroudExperience(uint64_t amount, uint8 conlevel, uint32_t percent_to_aa,
+ uint64_t earned_aa, uint64_t& normal, uint64_t& aa, uint64_t& progression)
+{
+ // Encounter eligibility/group splitting has already occurred before AddEXP.
+ // Use the active form for con/rate/zone modifiers, and the escrowed original
+ // allocation for its pending reward. Leadership diversion is deliberately
+ // excluded: its balances are not a temporary-form progression system.
+ uint64 full=0,unused=0,adjusted=0,aa_award=0;
+ CalculateExp(amount,full,unused,conlevel,false,0,false);
+ CalculateExp(amount,adjusted,aa_award,conlevel,false,std::min<uint32_t>(100,percent_to_aa),false);
+ progression=full>GetEXP()?full-GetEXP():0;
+ normal=adjusted>GetEXP()?adjusted-GetEXP():0;
+ if (RuleB(AA,NormalizedAAEnabled))
+  CalculateNormalizedAAExp(aa_award,conlevel,false,std::min<uint32_t>(100,percent_to_aa));
+ else CalculateStandardAAExp(aa_award,conlevel,false);
+ if (RuleB(AA,ModernAAScalingEnabled) && aa_award)
+  aa_award=ScaleAAXPBasedOnCurrentAATotal(static_cast<int>(std::min<uint64_t>(INT32_MAX,earned_aa)),aa_award);
+ if (RuleI(AA,MaxAAEXPPerKill)>=0)
+  aa_award=std::min<uint64>(aa_award,RuleI(AA,MaxAAEXPPerKill));
+ aa=aa_award;
+}
+
 void Client::AddEXP(ExpSource exp_source, uint64 in_add_exp, uint8 conlevel, bool resexp, NPC* npc) {
 	if (!IsEXPEnabled()) {
 		return;
 	}
+ if(IsSpiritShrouded()){if(!resexp)AwardSpiritShroudExperience(exp_source,in_add_exp,conlevel);return;}
 
 	uint64 exp = 0;
 	uint64 aaexp = 0;
@@ -570,6 +594,12 @@ void Client::AddEXP(ExpSource exp_source, uint64 in_add_exp, uint8 conlevel, boo
 }
 
 void Client::SetEXP(ExpSource exp_source, uint64 set_exp, uint64 set_aaxp, bool isrezzexp, NPC* npc) {
+ if(IsSpiritShrouded()){
+  if(!isrezzexp && IsEXPEnabled() && (set_exp>m_pp.exp || set_aaxp>m_pp.expAA))
+   AwardSpiritShroudExperience(exp_source,set_exp>m_pp.exp?set_exp-m_pp.exp:0,0xFF,true,
+    set_aaxp>m_pp.expAA?set_aaxp-m_pp.expAA:0);
+  return;
+ }
 	uint64 current_exp = GetEXP();
 	uint64 current_aa_exp = GetAAXP();
 	uint64 total_current_exp = current_exp + current_aa_exp;

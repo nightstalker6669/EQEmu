@@ -676,6 +676,8 @@ bool Client::SummonItem(uint32 item_id, int16 charges, uint32 aug1, uint32 aug2,
 // Drop item from inventory to ground (generally only dropped from SLOT_CURSOR)
 void Client::DropItem(int16 slot_id, bool recurse)
 {
+ if(IsSpiritShrouded())return; // retain temporary profile custody
+
 	LogInventory(
 		"[{}] (char_id: [{}]) Attempting to drop item from slot [{}] on the ground",
 		GetCleanName(),
@@ -1600,8 +1602,50 @@ bool Client::IsBankSlot(uint32 slot)
 
 // Moves items around both internally and in the database
 // In the future, this can be optimized by pushing all changes through one database REPLACE call
+// A container is one custody tree: a starter nested anywhere in it must never
+// leave the temporary profile through a trade, merchant, or bank transfer.
+bool Client::CanTransferSpiritShroudItemTree(const EQ::ItemInstance* item) const {
+ if(!IsSpiritShrouded())return true;
+ unsigned remaining=256;
+ const auto inspect=[&](const auto& self,const EQ::ItemInstance* node,unsigned depth)->bool {
+  if(!node)return true;
+  if(!remaining-- || depth>10)return false;
+  const auto metadata=node->GetCustomDataString();
+  if(metadata.find("spirit_shroud_starter_session")!=std::string::npos ||
+     metadata.find("spirit_shroud_starter_token")!=std::string::npos)return false;
+  if(node->IsClassBag())for(unsigned i=0;i<EQ::invbag::SLOT_COUNT;++i)if(!self(self,node->GetItem(i),depth+1))return false;
+  for(unsigned i=0;i<6;++i)if(!self(self,node->GetAugment(i),depth+1))return false;
+  return true;
+ };
+ return inspect(inspect,item,0);
+}
+
 bool Client::SwapItem(MoveItem_Struct* move_in) {
 	if (!move_in) return false;
+	// Apply custody checks at the inventory operation as well as packet dispatch:
+	// multi-move and quest callers must not bypass the shroud's escrow domain.
+	if (IsSpiritShrouded()) {
+		const auto bank=[](uint32 slot){return
+			(slot>=EQ::invslot::BANK_BEGIN && slot<=EQ::invslot::BANK_END) ||
+			(slot>=EQ::invbag::BANK_BAGS_BEGIN && slot<=EQ::invbag::BANK_BAGS_END);};
+		const auto forbidden=[&](uint32 slot){return
+			(slot>=EQ::invslot::SHARED_BANK_BEGIN && slot<=EQ::invslot::SHARED_BANK_END) ||
+			(slot>=EQ::invbag::SHARED_BANK_BAGS_BEGIN && slot<=EQ::invbag::SHARED_BANK_BAGS_END) ||
+			(!SpiritShroudHasPersonalBank() && bank(slot));};
+		if (forbidden(move_in->from_slot) || forbidden(move_in->to_slot)) return false;
+		const auto* source=m_inv.GetItem(move_in->from_slot);
+		const auto* destination=m_inv.GetItem(move_in->to_slot);
+		const auto starter=[this](const EQ::ItemInstance* item){return !CanTransferSpiritShroudItemTree(item);};
+		// Issued supplies must be reclaimed at restoration, not left in the bank.
+		if ((bank(move_in->to_slot) && starter(source)) || (bank(move_in->from_slot) && starter(destination))) return false;
+		const auto external=[](uint32 slot){return slot>=EQ::invslot::TRADE_BEGIN && slot<=EQ::invslot::TRADE_END;};
+		if((external(move_in->to_slot) && starter(source)) || (external(move_in->from_slot) && starter(destination))) return false;
+		// Earned gear may be carried but must never become an active weapon or
+		// worn effect through a monster race wildcard in ordinary equipability.
+		const auto equipment=[](uint32 slot){return slot>=EQ::invslot::EQUIPMENT_BEGIN && slot<=EQ::invslot::EQUIPMENT_END;};
+		if ((source && equipment(move_in->to_slot) && !IsSpiritShroudStarterItem(source)) ||
+			(destination && equipment(move_in->from_slot) && !IsSpiritShroudStarterItem(destination))) return false;
+	}
 	const auto house_swap = Housing::HouseInventory::TryZoneSwap(*this, move_in->from_slot, move_in->to_slot, move_in->number_in_stack);
 	if (house_swap == Housing::HouseInventory::SwapDisposition::Rejected) return false;
 	if (house_swap == Housing::HouseInventory::SwapDisposition::Moved) {
@@ -2106,7 +2150,13 @@ bool Client::SwapItem(MoveItem_Struct* move_in) {
 		}
 
 		EQ::InventoryProfile::SwapItemFailState fail_state = EQ::InventoryProfile::swapInvalid;
-		if (!m_inv.SwapItem(src_slot_id, dst_slot_id, fail_state, GetBaseRace(), GetBaseClass(), GetDeity(), GetLevel())) {
+  // The shroud-specific staff has the monster race bit, which the ordinary
+  // player-race helper cannot represent. Only an issued, session-marked item
+  // entering equipment may bypass that race check; slot/level/deity still apply.
+  const bool starter_equip=IsSpiritShroudStarterItem(src_inst) &&
+   dst_slot_id>=EQ::invslot::EQUIPMENT_BEGIN && dst_slot_id<=EQ::invslot::EQUIPMENT_END &&
+   !(src_slot_id>=EQ::invslot::EQUIPMENT_BEGIN && src_slot_id<=EQ::invslot::EQUIPMENT_END && dst_inst);
+		if (!m_inv.SwapItem(src_slot_id, dst_slot_id, fail_state, starter_equip?0:GetBaseRace(), GetBaseClass(), GetDeity(), GetLevel())) {
 			const char* fail_message = "The selected slot was invalid.";
 			if (fail_state == EQ::InventoryProfile::swapRaceClass || fail_state == EQ::InventoryProfile::swapDeity)
 				fail_message = "Your class, deity and/or race may not equip that item.";

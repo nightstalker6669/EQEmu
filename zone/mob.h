@@ -403,9 +403,9 @@ public:
 		CastAction_type &CastAction, EQ::spells::CastingSlot slot, bool isproc = false);
 	bool DoCastingChecksOnCaster(int32 spell_id, EQ::spells::CastingSlot slot);
 	bool DoCastingChecksZoneRestrictions(bool check_on_casting, int32 spell_id);
-	bool DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob* spell_target);
+	bool DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob* spell_target, uint32 aa_context = 0);
 	virtual bool CheckFizzle(int32 spell_id);
-	virtual bool CheckSpellLevelRestriction(Mob *caster, int32 spell_id);
+	virtual bool CheckSpellLevelRestriction(Mob *caster, int32 spell_id, uint32 aa_context = 0);
 	virtual bool IsImmuneToSpell(int32 spell_id, Mob *caster);
 
 	virtual float GetAOERange(int32 spell_id);

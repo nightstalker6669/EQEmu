@@ -1,4 +1,6 @@
 set(zone_sources
+	client_spirit_shroud.cpp
+	client_spirit_shroud_native.cpp
 	client_mercenary_transfer.cpp
 	fellowship_campfire.cpp
 	fellowship_campsite_bonuses.cpp

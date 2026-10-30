@@ -1,6 +1,6 @@
-# EQEmu · RoF2 Mercenaries
+# EQEmu · RoF2 Spirit Shrouds
 
-Current EQEmu source with **housing, fellowship, mercenaries** integrated on the common upstream foundation.
+Current EQEmu source with **housing, fellowship, mercenaries, spirit-shrouds** integrated on the common upstream foundation.
 
 **[Install / upgrade](docs/rof2/INSTALL.md)** · **[Opcodes and packet structures](docs/rof2/PROTOCOL.md)** · **[Choose a feature branch](docs/rof2/BRANCHES.md)**
 

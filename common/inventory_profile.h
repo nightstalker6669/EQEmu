@@ -47,6 +47,7 @@ class ItemInstQueue
 {
 public:
 	~ItemInstQueue();
+	void Swap(ItemInstQueue& other) noexcept { m_list.swap(other.m_list); }
 	/////////////////////////
 	// Public Methods
 	/////////////////////////
@@ -92,6 +93,13 @@ namespace EQ
 			m_lookup = inventory::StaticLookup(versions::MobVersion::Unknown);
 		}
 		~InventoryProfile();
+		// Exchange only character-profile ownership. Shared-bank/account and
+		// trade buckets, lookup/version and GM policy remain with this Client.
+		void SwapProfileInventory(InventoryProfile& other) noexcept {
+			m_worn.swap(other.m_worn);m_inv.swap(other.m_inv);
+			m_bank.swap(other.m_bank);m_cursor.Swap(other.m_cursor);
+		}
+
 
 		void SetInventoryVersion(versions::MobVersion inventory_version);
 		void SetInventoryVersion(versions::ClientVersion client_version) { SetInventoryVersion(versions::ConvertClientVersionToMobVersion(client_version)); }
