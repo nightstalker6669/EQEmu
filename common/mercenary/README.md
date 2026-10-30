@@ -22,16 +22,19 @@ The pinned optional content bootstrap is `utils/sql/merc_tables_bootstrap.sql`, 
 
 The bootstrap contains destructive `DROP TABLE` statements, including owned-character tables. Back up existing mercenary rows and buffs first, and import only missing schema/content when upgrading an established server. The normal upstream enable command is `world mercs:enable`; review its download source before using it for a pinned installation. The current checkout's local SQL provides a reproducible content source.
 
-After the standard catalogue and shared infrastructure exist, apply owned-contract migrations 001/003 to the character database and zone-policy migration 004 to the content database when those are configured separately:
+After the standard catalogue and shared infrastructure exist, apply owned-contract migrations 001/003 to the character database and zone-policy migration 004 to the content database when those are configured separately. Migration 005 belongs in the database containing the mercenary catalogue tables:
 
 1. Apply `utils/sql/mercenary/001_owned_roster.sql`. It adds a unique `(OwnerCharacterID, Slot)` index. Existing duplicate slots cause the migration to fail rather than discard contracts; review and migrate duplicates explicitly.
 2. Apply `utils/sql/mercenary/003_passive_upkeep.sql`. It adds the bounded `PassiveUpkeepElapsedMS` accumulator without removing owned rows. It accumulates only while active in Passive, freezes across suspension/zoning/logoff, and resets on a stance change.
 3. Apply `utils/sql/mercenary/004_zone_permissions.sql`. The resolved `zone` row (including version fallback) now controls `allow_mercs`; 1 allows and 0 forbids mercenaries. Missing policy schema/read failures disable mercenaries for that zone. The default preserves existing allowed content. Operators must explicitly choose restricted rows; this migration does not infer Live raid restrictions. Reload static zone data or restart zones after a policy change.
-4. Review `utils/sql/mercenary/002_enable_rof2.sql` and set its ruleset variable to the ruleset actually used by the server. For split databases, run its `SET` and `rule_values` insert in the character database, and its `npc_types`/`merc_merchant_entries` update in the content database; do not execute the entire file against either database alone. This activation explicitly enables mercenaries, opts into three owned contracts, enables the high-level fallback, and makes appropriately titled, catalogue-linked NPCs class 71.
-5. Rebuild and restart the affected world and zone processes so opcode mappings, rules, mercenary templates, stances, and spells are loaded together. A rule reload alone does not populate an already-running zone's missing catalogue maps.
-6. Check that a liaison's NPC **type ID** joins to `merc_merchant_entries` and its templates. Native shop requests subsequently identify the liaison's **runtime entity ID**. An arbitrary class 71 NPC without a catalogue relationship will not provide offers.
+4. Apply `utils/sql/mercenary/005_complete_journeyman_ranks.sql` to the mercenary content database to restore Journeyman III–V. Read [RANKS.md](RANKS.md) for the documented 110/120/130% emulator tuning, safeguards and custom-content behavior.
+5. Review `utils/sql/mercenary/002_enable_rof2.sql` and set its ruleset variable to the ruleset actually used by the server. For split databases, run its `SET` and `rule_values` insert in the character database, and its `npc_types`/`merc_merchant_entries` update in the content database; do not execute the entire file against either database alone. This activation explicitly enables mercenaries, opts into three owned contracts, enables the high-level fallback, and makes appropriately titled, catalogue-linked NPCs class 71.
+6. Rebuild and restart the affected world and zone processes so opcode mappings, rules, mercenary templates, stances, and spells are loaded together. A rule reload alone does not populate an already-running zone's missing catalogue maps.
+7. Check that a liaison's NPC **type ID** joins to `merc_merchant_entries` and its templates. Native shop requests subsequently identify the liaison's **runtime entity ID**. An arbitrary class 71 NPC without a catalogue relationship will not provide offers.
 
-The standard content snapshot contains 553 templates, 2,380 stat rows across 28 NPC types at levels 1–85, and 437 spell-list entries. It is content supplied by the optional bootstrap, not a reconstruction of every historical Live mercenary.
+The standard content snapshot contains 553 templates, 2,380 stat rows across 28 NPC types at levels 1–85, and 437 spell-list entries. Migration 005 adds 237 templates and 1,020 stat rows, yielding 790 templates and 3,400 stat rows across 40 NPC types. Apprentice I–V are supplied already; Journeyman III–V use the explicit tuning in [RANKS.md](RANKS.md). These are emulator content, not a reconstruction of every historical Live mercenary.
+
+The restored Journeyman III–V content passed local original-client hire, spawn, HP/mana and dismissal checks for all four roles at level 85 on 2026-10-30. See [rank acceptance and its limits](RANKS.md#evidence-boundaries).
 
 ## Rules and policies
 
@@ -94,7 +97,7 @@ This formula is explicit emulator policy. It is not historical Live balance data
 | Mercenary gameplay | `zone/merc.cpp`, `zone/merc.h`, `zone/mercenary_runtime.h`: lifecycle, timers, AI/Passive/assist behavior, group scans, stat/skill/spell refresh, and template content lookups. |
 | Persistence | Mercenary sections of `zone/zonedb.cpp/.h` and `zone/mercenary_transaction.h`: owned rows, bounded nondestructive buff restoration, atomic saves/dismissal/payment outcomes. |
 | High-level fallback | `zone/mercenary_scaling.h`: explicit, bounded level 86–100 scaling policy. |
-| Configuration and schema | `common/ruletypes.h`, `utils/sql/mercenary/001_owned_roster.sql`, `002_enable_rof2.sql`, `003_passive_upkeep.sql`, `004_zone_permissions.sql`, `zone/zone.cpp`, and zone CMake integration. Standard content remains in the existing optional bootstrap. |
+| Configuration and schema | `common/ruletypes.h`, `utils/sql/mercenary/001_owned_roster.sql`, `002_enable_rof2.sql`, `003_passive_upkeep.sql`, `004_zone_permissions.sql`, `005_complete_journeyman_ranks.sql`, `zone/zone.cpp`, and zone CMake integration. Standard content remains in the existing optional bootstrap. |
 
 ## Feature boundary and validation
 
