@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/housing/admission_guard.h"
+
 #include "zonedb.h"
 
 #include "common/eqemu_logsys.h"
@@ -1594,6 +1596,12 @@ void ZoneDatabase::DivergeCharacterInventoryFromInvSnapshot(uint32 character_id,
 }
 
 bool ZoneDatabase::RestoreCharacterInvSnapshot(uint32 character_id, uint32 timestamp) {
+	if (Housing::CheckInventoryMaintenance(RuleB(Housing, EnablePlayerHousing)) !=
+		Housing::InventoryAdmission::Allowed) {
+		LogError("Inventory restore for character [{}] refused before deletion: housing requires an atomic offline maintenance adapter", character_id);
+		return false;
+	}
+
 	// we should know what we're doing by the time we call this function..but,
 	// this is to prevent inventory deletions where no timestamp entries exists
 	if (!ValidateCharacterInvSnapshotTimestamp(character_id, timestamp)) {

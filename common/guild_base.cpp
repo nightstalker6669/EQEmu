@@ -15,6 +15,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "housing/guild_favor.h"
+#include "housing/guild_dissolution_db.h"
+
 #include "guild_base.h"
 
 #include "common/database.h"
@@ -544,63 +547,24 @@ uint32 BaseGuildManager::UpdateDbCreateGuild(std::string name, uint32 leader)
 
 bool BaseGuildManager::UpdateDbDeleteGuild(uint32 guild_id, bool local_delete, bool db_delete)
 {
-	auto const where_filter = fmt::format("guild_id = {}", guild_id);
-	auto const bank_items   = GuildBankRepository::GetWhere(*m_db, where_filter);
-
-	if (local_delete) {
-		if (!bank_items.empty()) {
-			LogError(
-				"Attempt to delete guild id [{}] that still has [{}] items in the bank. Please remove them and try "
-				"again.",
-				guild_id,
-				bank_items.size()
-			);
-			LogGuilds(
-				"Attempt to delete guild id [{}] that still has [{}] items in the bank. Please remove them and try "
-				"again.",
-				guild_id,
-				bank_items.size()
-			);
-
-			return false;
-		}
-
-		auto res = m_guilds.find(guild_id);
-		if (res != m_guilds.end()) {
-			safe_delete(res->second);
-			m_guilds.erase(res);
-			LogGuilds("Deleted guild [{}] from memory", guild_id);
-			// Does this need to be sent to world?
-		}
-	}
-
-	if (db_delete) {
-		if (!bank_items.empty()) {
-			LogError(
-				"Attempt to delete guild id [{}] that still has [{}] items in the bank. Please remove them and try "
-				"again.",
-				guild_id,
-				bank_items.size()
-			);
-			LogGuilds(
-				"Attempt to delete guild id [{}] that still has [{}] items in the bank. Please remove them and try "
-				"again.",
-				guild_id,
-				bank_items.size()
-			);
-
-			return false;
-		}
-
-		GuildTributesRepository::DeleteOne(*m_db, guild_id);
-		GuildsRepository::DeleteOne(*m_db, guild_id);
-		GuildRanksRepository::DeleteWhere(*m_db, where_filter);
-		GuildPermissionsRepository::DeleteWhere(*m_db, where_filter);
-		GuildMembersRepository::DeleteWhere(*m_db, where_filter);
-		LogGuilds("Deleted guild [{}] from the database", guild_id);
-	}
-
-	return true;
+ if (db_delete) {
+  const auto result = Housing::GuildDissolution::Delete(*m_db, guild_id);
+  if (result != Housing::GuildDissolution::Status::Committed) {
+   LogError("Guild [{}] deletion deferred: housing/bank assets, unavailable schema, SQL failure or uncertain commit (status [{}]); guild cache retained", guild_id, static_cast<int>(result));
+   return false;
+  }
+ } else {
+  // Preserve the cache-only API, while treating a failed bank query as failure.
+  auto bank = m_db->QueryDatabase("SELECT guild_id FROM guild_bank WHERE guild_id=" + std::to_string(guild_id) + " LIMIT 1", false);
+  if (!bank.Success() || bank.RowCount()) { return false; }
+ }
+ // Publish local authority removal only after a successful database COMMIT.
+ if (local_delete) {
+  auto res = m_guilds.find(guild_id);
+  if (res != m_guilds.end()) { safe_delete(res->second); m_guilds.erase(res); }
+ }
+ LogGuilds("Deleted guild [{}] (database [{}], local [{}])", guild_id, db_delete, local_delete);
+ return true;
 }
 
 bool BaseGuildManager::UpdateDbRenameGuild(uint32 guild_id, std::string new_name)
@@ -1293,6 +1257,9 @@ bool BaseGuildManager::StoreGuildDB(uint32 guild_id)
 {
 	return _StoreGuildDB(guild_id);
 }
+
+std::optional<uint32> BaseGuildManager::ReadDbGuildFavor(uint32 guild_id){return m_db?Housing::GuildFavor::Read(*m_db,guild_id):std::nullopt;}
+std::optional<uint32> BaseGuildManager::AdjustDbGuildFavor(uint32 guild_id,int64 delta){auto result=m_db?Housing::GuildFavor::Adjust(*m_db,guild_id,delta):std::nullopt;if(result)if(auto* guild=GetGuildByGuildID(guild_id))guild->tribute.favor=*result;return result;}
 
 uint32 BaseGuildManager::UpdateDbGuildFavor(uint32 guild_id, uint32 favor)
 {

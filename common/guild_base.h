@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include <optional>
+
 #pragma once
 
 #include "common/guilds.h"
@@ -131,6 +133,8 @@ class BaseGuildManager
 		bool	SetTributeFlag(uint32 charid, bool enabled);
 		bool	SetPublicNote(uint32 charid, std::string public_note);
 		uint32  UpdateDbGuildFavor(uint32 guild_id, uint32 enabled);
+		std::optional<uint32> AdjustDbGuildFavor(uint32 guild_id, int64 delta);
+		std::optional<uint32> ReadDbGuildFavor(uint32 guild_id);
 		bool    UpdateDbGuildTributeEnabled(uint32 guild_id, uint32 enabled);
 		bool    UpdateDbMemberTributeEnabled(uint32 guild_id, uint32 char_id, uint32 enabled);
 		bool    UpdateDbTributeTimeRemaining(uint32 guild_id, uint32 enabled);

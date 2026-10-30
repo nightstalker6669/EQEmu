@@ -16,6 +16,8 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cstring>
+#include "housing/admission_guard.h"
+
 #include "common/data_verification.h"
 #include "common/database_schema.h"
 #include "common/database.h"
@@ -347,6 +349,12 @@ bool Database::DeleteCharacter(const std::string& name)
 	auto& e = l.front();
 
 	if (!e.id) {
+		return false;
+	}
+
+	if (Housing::CheckHousingCharacterDeletion(*this, e.id, RuleB(Housing, EnablePlayerHousing)) !=
+		Housing::InventoryAdmission::Allowed) {
+		LogError("Character [{}] deletion withheld: housing requires an atomic maintenance/archive adapter", e.id);
 		return false;
 	}
 

@@ -98,6 +98,7 @@ void WorldGuildManager::ProcessZonePacket(ServerPacket *pack) {
 		LogGuilds("Received and broadcasting guild member refresh for char [{}] to all zones with members of guild [{}]", s->char_id, s->guild_id);
 
 		RefreshGuild(s->guild_id);
+		InvalidateGuildTrophies();
 		//preform the local update
 		ClientList::Instance()->UpdateClientGuild(s->char_id, s->guild_id);
 
@@ -256,6 +257,7 @@ void WorldGuildManager::ProcessZonePacket(ServerPacket *pack) {
 
 void WorldGuildManager::Process()
 {
+ ProcessGuildTrophies();
 	for (auto &g: m_guilds) {
 		if (!g.second->tribute.enabled) {
 			continue;
@@ -269,10 +271,11 @@ void WorldGuildManager::Process()
 			);
 		}
 		else if (g.second->tribute.enabled && g.second->tribute.timer.Check()) {
-			g.second->tribute.favor         -= GetGuildTributeCost(g.first);
+			auto spent=AdjustDbGuildFavor(g.first,-int64(GetGuildTributeCost(g.first)));
+			if(!spent){g.second->tribute.enabled=false;g.second->tribute.timer.Disable();UpdateDbGuildTributeEnabled(g.first,0);SendGuildTributeFavorAndTimer(g.first);continue;}
+			g.second->tribute.favor=*spent;
 			g.second->tribute.time_remaining = RuleI(Guild, TributeTime);
 			g.second->tribute.timer.Start(RuleI(Guild, TributeTime));
-			guild_mgr.UpdateDbGuildFavor(g.first, g.second->tribute.favor);
 			guild_mgr.UpdateDbTributeTimeRemaining(g.first, RuleI(Guild, TributeTime));
 			SendGuildTributeFavorAndTimer(g.first, g.second->tribute.favor, g.second->tribute.timer.GetRemainingTime());
 		}
@@ -443,14 +446,22 @@ bool WorldGuildManager::RefreshGuild(uint32 guild_id)
 	return true;
 }
 
+void WorldGuildManager::SendGuildTributeFavorAndTimer(uint32 guild_id)
+{
+	const auto* guild = GetGuildByGuildID(guild_id);
+	if (!guild) { return; }
+	SendGuildTributeFavorAndTimer(guild_id, guild->tribute.favor, GetGuildTributeTimeRemaining(guild_id));
+}
+
 void WorldGuildManager::SendGuildTributeFavorAndTimer(uint32 guild_id, uint32 favor, uint32 time)
 {
+ auto current=ReadDbGuildFavor(guild_id);if(!current)return;favor=*current;if(auto* guild=GetGuildByGuildID(guild_id))guild->tribute.favor=favor;
 	auto sp   = new ServerPacket(ServerOP_GuildTributeFavAndTimer, sizeof(GuildTributeFavorTimer_Struct));
 	auto data = (GuildTributeFavorTimer_Struct *)sp->pBuffer;
 	data->guild_id      = guild_id;
 	data->guild_favor   = favor;
 	data->tribute_timer = time;
-	data->trophy_timer  = 0;
+	data->trophy_timer  = GuildTrophyRemaining(guild_id);
 
 	ZSList::Instance()->SendPacketToZonesWithGuild(guild_id, sp);
 	safe_delete(sp)

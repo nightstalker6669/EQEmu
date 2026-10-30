@@ -1179,6 +1179,14 @@ RULE_INT(EvolvingItems, DelayUponEquipping, 30000, "Delay in ms before an evolvi
 RULE_BOOL(EvolvingItems, DestroyAugmentsOnEvolve, false, "If this is enabled, any augments in an item will be destroyed when the item evolves. Otherwise, send augments to the player via the parcel system (requires that the Parcel System be enabled).")
 RULE_CATEGORY_END()
 
+RULE_CATEGORY(Housing)
+RULE_BOOL(Housing, EnablePlayerHousing, false, "Enable experimental native RoF2 housing; requires the optional housing schema and verified content.")
+RULE_BOOL(Housing, EnableNativeHouseSwap, false, "Enable reviewed native house storage and same-plot house swaps; requires the house-storage and swap journal schemas. Old house enters plot storage.")
+RULE_BOOL(Housing, EnableNativeFurniturePlacement, false, "Enable native RoF2 furniture mutation handlers after inventory-session and placement validation; requires player housing and optional placement schema.")
+RULE_BOOL(Housing, EnableNativeEscrowTransfers, false, "Enable native RoF2 cursor coin deposit and withdrawal after live currency-session validation; requires player housing and optional escrow schema.")
+RULE_INT(Housing, ReviewedPersonalTransferLimit, 0, "Explicit reviewed personal plot ownership transfer limit (1 to 3); zero disables transfer until policy is reviewed. Not a recovered historical limit.")
+RULE_CATEGORY_END()
+
 #undef RULE_CATEGORY
 #undef RULE_INT
 #undef RULE_REAL

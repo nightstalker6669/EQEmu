@@ -15,6 +15,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "housing_inventory_bridge.h"
+#include "housing_house_runtime.h"
+
 #include "common/crash.h"
 #include "common/database/database_update.h"
 #include "common/eq_packet_structs.h"
@@ -92,6 +95,7 @@ double frame_time = 0.0;
 void Shutdown();
 void UpdateWindowTitle(char *iNewTitle);
 void CatchSignal(int sig_num);
+namespace { volatile sig_atomic_t housing_shutdown_requested = 0; }
 
 extern void MapOpcodes();
 
@@ -510,7 +514,23 @@ int main(int argc, char **argv)
 	std::chrono::time_point<std::chrono::system_clock> frame_prev = std::chrono::system_clock::now();
 	std::unique_ptr<EQ::Net::WebsocketServer>          ws_server;
 
+	// Inventory reconciliation relies on this serial simulation thread. Signals
+	// request shutdown; they must never run lifecycle saves inside a transaction.
+	Housing::InventoryBridge::RegisterZoneThreadAtSafeStartup();
+	if (!Housing::HouseRuntime::LoadPersonalTestAtSafeStartup()) {
+		LogError("Invalid isolated personal-house test manifest or resource witness");
+		return 1;
+	}
+	// Original RoF2 LEFT click verified 2026-10-16 in lobby344/v0/i0:
+	// Door40 at +48.4/624.75; legacy same-position2 is not this native door.
+	// The dedicated runtime hook rechecks actual source, range and fresh guild
+	// authority. Other doors/versions keep their existing quest behavior.
+	if (!Housing::HouseRuntime::ConfigureVerifiedGuildLobbyDoorAtSafeStartup({344, 0, 0}, 40)) {
+		LogError("Unable to register the verified RoF2 Guild Lobby left door");
+		return 1;
+	}
 	auto loop_fn = [&](EQ::Timer *t) {
+		if (housing_shutdown_requested) { Shutdown(); return; }
 		//Advance the timer to our current point in time
 		Timer::SetCurrentTime();
 
@@ -668,18 +688,17 @@ int main(int argc, char **argv)
 
 void Shutdown()
 {
-	zone->Shutdown(true);
+	if (zone) zone->Shutdown(true);
 	LogInfo("Shutting down...");
 	EQEmuLogSys::Instance()->CloseFileLogs();
 	EQ::EventLoop::Get().Shutdown();
 }
 
-void CatchSignal(int sig_num)
+void CatchSignal(int)
 {
-#ifdef _WINDOWS
-	LogInfo("Recieved signal: [{}]", sig_num);
-#endif
-	Shutdown();
+	// Only an async-signal-safe flag write. Normal loop performs shutdown after
+	// any synchronous inventory transaction/recovery barrier has returned.
+	housing_shutdown_requested = 1;
 }
 
 /* Update Window Title with relevant information */

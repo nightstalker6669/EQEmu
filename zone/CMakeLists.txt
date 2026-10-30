@@ -1,4 +1,30 @@
 set(zone_sources
+	client_housing_anchor.cpp
+	client_housing_trophies.cpp
+	client_housing_guild_trophies.cpp
+	client_housing.cpp
+	client_housing_metadata.cpp
+	client_housing_interaction.cpp
+	client_housing_escrow.cpp
+	client_housing_purchase.cpp
+	client_housing_transfer.cpp
+	housing_inventory_bridge.cpp
+	housing_service_npcs.cpp
+	housing_pets.cpp
+	housing_service_tribute.cpp
+	housing_service_bank.cpp
+	housing_service_authority.cpp
+	housing_guild_portal.cpp
+	housing_actor_publication.cpp
+	housing_height_scene.cpp
+	housing_house_preload_fence.cpp
+	housing_house_reload.cpp
+	housing_house_runtime.cpp
+	housing_house_surface.cpp
+	housing_crate_runtime.cpp
+	housing_house_inventory_swap.cpp
+	housing_item_reconstruction.cpp
+	inventory_session_owner.cpp
 	aa.cpp
 	aa_ability.cpp
 	aggro.cpp
@@ -710,3 +736,7 @@ endif()
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set_property(TARGET zone PROPERTY FOLDER executables/servers)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+ set_property(SOURCE housing_height_scene.cpp housing_inventory_bridge.cpp APPEND PROPERTY COMPILE_OPTIONS -fno-fast-math -frounding-math -ffp-contract=off)
+endif()

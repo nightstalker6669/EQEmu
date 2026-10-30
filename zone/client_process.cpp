@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "housing_guild_portal.h"
+
 
 /*
 	client_process.cpp:
@@ -509,6 +511,9 @@ bool Client::Process() {
 			ShieldAbilityFinish();
 		}
 
+		ProcessHousingTrophyBenefits();
+        ProcessHousingGuildTrophyBenefits();
+        Housing::GuildPortalRuntime::Process(*this);
 		SpellProcess();
 		if (endupkeep_timer.Check() && !dead) {
 			DoEnduranceUpkeep();
@@ -572,7 +577,8 @@ bool Client::Process() {
 	if (client_state == DISCONNECTED) {
 		OnDisconnect(true);
 		std::cout << "Client disconnected (cs=d): " << GetName() << std::endl;
-		RecordPlayerEventLog(PlayerEvent::POSSIBLE_HACK, PlayerEvent::PossibleHackEvent{.message = "/MQInstantCamp: Possible instant camp disconnect"});
+		if (!m_inventory_session_rejected && (!RuleB(Housing, EnablePlayerHousing) || ClientDataLoaded()))
+			RecordPlayerEventLog(PlayerEvent::POSSIBLE_HACK, PlayerEvent::PossibleHackEvent{.message = "/MQInstantCamp: Possible instant camp disconnect"});
 		return false;
 	}
 
@@ -693,6 +699,14 @@ bool Client::Process() {
 
 /* Just a set of actions preformed all over in Client::Process */
 void Client::OnDisconnect(bool hard_disconnect) {
+	if (m_inventory_session_rejected ||
+		(RuleB(Housing, EnablePlayerHousing) && (!ClientDataLoaded() || !HasInventorySessionReservation()))) {
+		// No empty-profile saves, real-actor trade resets, quest callbacks or
+		// ingame/presence writes from a losing/unloaded ingress object.
+		Disconnect();
+		return;
+	}
+
 	if (hard_disconnect) {
 		LeaveGroup();
 

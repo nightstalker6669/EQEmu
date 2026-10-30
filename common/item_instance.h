@@ -224,8 +224,49 @@ namespace EQ
 		std::string Serialize(int16 slot_id) const { InternalSerializedItem_Struct s; s.slot_id = slot_id; s.inst = (const void*)this; std::string ser; ser.assign((char*)&s, sizeof(InternalSerializedItem_Struct)); return ser; }
 		void Serialize(OutBuffer& ob, int16 slot_id) const { InternalSerializedItem_Struct isi; isi.slot_id = slot_id; isi.inst = (const void*)this; ob.write((const char*)&isi, sizeof(isi)); }
 
+		// Explicit split-instance copy. Ordinary Clone retains its historic serial.
+		ItemInstance* CloneWithNewSerial() const;
 		inline int32 GetSerialNumber() const { return m_SerialNumber; }
 		inline void SetSerialNumber(int32 id) { m_SerialNumber = id; }
+
+		// Independent server ledger identity, including houses with no interior
+		// allocated yet. This is never a client wire field or a generated GUID.
+		// Only checked ledger reconstruction/acquisition may assign it. Copying
+		// preserves identity for relocation, not permission to mint another row.
+		uint64 GetHousingHouseID() const { return m_housing_house_id; }
+		bool SetHousingHouseID(uint64 id) {
+			if (!id) { m_housing_house_id = 0; return true; }
+			const auto* item = GetItem();
+			if (m_housing_crate_id || !item || !item->HousingDefinitionID || item->HousingDefinitionID == UINT32_MAX)
+				return false;
+			m_housing_house_id = id;
+			return true;
+		}
+		// Independent crate ledger identity. Only checked custody/reload adapters
+		// may assign it; this is not a GUID, HouseID or native wire field.
+		uint64 GetHousingCrateID() const { return m_housing_crate_id; }
+		bool SetHousingCrateID(uint64 id) {
+			if (!id) { m_housing_crate_id = 0; return true; }
+			const auto* item = GetItem();
+			if (m_housing_house_id || !item || !item->HousingDefinitionID || item->HousingDefinitionID == UINT32_MAX)
+				return false;
+			m_housing_crate_id = id;
+			return true;
+		}
+
+		// Server-resolved per-instance child estate, not the item template's
+		// HousingDefinitionID or a transient placed-object/serial identity.
+		// Durable housing admission/reconstruction must assign this explicitly;
+		// never populate it from client fields or unvalidated custom data.
+		uint32 GetHousingEstateID() const { return m_housing_estate_id; }
+		bool SetHousingEstateID(uint32 id) {
+			if (id == UINT32_MAX) { m_housing_estate_id = id; return true; }
+			const auto* item = GetItem();
+			if (!id || !item || !item->HousingDefinitionID || item->HousingDefinitionID == UINT32_MAX)
+				return false;
+			m_housing_estate_id = id;
+			return true;
+		}
 
 		std::map<std::string, ::Timer>& GetTimers() const { return m_timers; }
 		void SetTimer(std::string name, uint32 time);
@@ -363,6 +404,9 @@ namespace EQ
 		uint32           m_new_id_file{0};
 		uint32           m_ornament_hero_model{0};
 		uint32           m_recast_timestamp{0};
+		uint32           m_housing_estate_id{UINT32_MAX};
+		uint64           m_housing_house_id{0};
+		uint64           m_housing_crate_id{0};
 		int              m_task_delivered_count{0};
 		mutable CharacterEvolvingItemsRepository::CharacterEvolvingItems  m_evolving_details{};
 

@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "housing_service_npcs.h"
+
 #include "zone_save_state.h"
 
 #include "common/repositories/criteria/content_filter_criteria.h"
@@ -620,6 +622,17 @@ bool Zone::LoadZoneState(
 			continue;
 		}
 
+		// Managed housing actors are reconstructed only from current committed
+		// item custody. Generic suspension retains neither the runtime ledger
+		// nor the native item binding and would create an unauthorized duplicate.
+		// Read persisted markers independently of StateSaveEntityVariables so
+		// old snapshots cannot restore a bare service template when it is off.
+		const auto variables = GetVariablesDeserialized(s.entity_variables);
+		const auto housing_service = variables.find("housing_service_owned");
+		if (housing_service != variables.end() && housing_service->second == "1") {
+			continue;
+		}
+
 		auto npc_type = content_db.LoadNPCTypesData(s.npc_id);
 		if (!npc_type) {
 			LogZoneState("Failed to load NPC type data for npc_id [{}]", s.npc_id);
@@ -756,6 +769,7 @@ void Zone::SaveZoneState()
 	for (auto &n: entity_list.GetNPCList()) {
 		// everything below here is dynamically spawned
 		bool ignore_npcs =
+				 Housing::ServiceNpcs::Managed(n.second) ||
 				 n.second->GetSpawnGroupId() > 0 ||
 				 n.second->GetNPCTypeID() < 100 ||
 				 n.second->GetNPCTypeID() == 500 || // Trap::CreateHiddenTrigger

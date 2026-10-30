@@ -15,6 +15,11 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "housing_guild_portal.h"
+#include "housing_service_npcs.h"
+#include "housing_service_authority.h"
+#include "housing_pets.h"
+
 #include "zone.h"
 
 #include "common/data_verification.h"
@@ -1090,6 +1095,8 @@ Zone::Zone(uint32 in_zoneid, uint32 in_instanceid, const char* in_short_name)
 }
 
 Zone::~Zone() {
+ Housing::Pets::Clear();
+ Housing::ServiceAuthority::Clear();
 	LogInfo("Zone destructor called for zone [{}]", short_name);
 
 	spawn2_list.Clear();
@@ -1519,6 +1526,7 @@ uint32 Zone::CountAuth() {
 }
 
 bool Zone::Process() {
+    Housing::Pets::Process();
 	spawn_conditions.Process();
 
 	if (spawn2_timer.Check()) {

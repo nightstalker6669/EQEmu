@@ -15,6 +15,16 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/housing/admission_guard.h"
+#include "housing_house_reload.h"
+#include "housing_house_runtime.h"
+#include "housing_service_npcs.h"
+#include "housing_service_tribute.h"
+#include "housing_service_bank.h"
+#include "housing_guild_portal.h"
+#include "../common/housing/guild_portal_db.h"
+#include "housing_plot_marker.h"
+
 #include "client.h"
 
 #include "common/data_bucket.h"
@@ -114,6 +124,37 @@ void MapOpcodes()
 	ConnectedOpcodes[OP_AdventureMerchantRequest] = &Client::Handle_OP_AdventureMerchantRequest;
 	ConnectedOpcodes[OP_AdventureMerchantSell] = &Client::Handle_OP_AdventureMerchantSell;
 	ConnectedOpcodes[OP_AdventureRequest] = &Client::Handle_OP_AdventureRequest;
+	ConnectedOpcodes[OP_RealEstateNeighborhood] = &Client::Handle_OP_RealEstateNeighborhood;
+	ConnectedOpcodes[OP_GuildTrophyToggle]=&Client::Handle_OP_GuildTrophyToggle;
+    ConnectedOpcodes[OP_GuildTrophySave]=&Client::Handle_OP_GuildTrophySave;
+    ConnectedOpcodes[OP_GuildTrophyModify]=&Client::Handle_OP_GuildTrophyModify;
+    ConnectedOpcodes[OP_GuildTrophyOptIn]=&Client::Handle_OP_GuildTrophyOptIn;
+    ConnectedOpcodes[OP_RealEstateTrophyOpen] = &Client::Handle_OP_RealEstateTrophyOpen;
+    ConnectedOpcodes[OP_RealEstateTrophy] = &Client::Handle_OP_RealEstateTrophy;
+	ConnectedOpcodes[OP_RealEstateTrophyToggle] = &Client::Handle_OP_RealEstateTrophyToggle;
+	ConnectedOpcodes[OP_RealEstateAnchorConfirm] = &Client::Handle_OP_RealEstateAnchorConfirm;
+	ConnectedOpcodes[OP_RealEstateGo] = &Client::Handle_OP_RealEstateGo;
+	ConnectedOpcodes[OP_RealEstateExit] = &Client::Handle_OP_RealEstateGo; // Same checked routing dispatcher; distinct native frame.
+	ConnectedOpcodes[OP_RealEstatePurchase] = &Client::Handle_OP_RealEstatePurchase;
+	ConnectedOpcodes[OP_RealEstateInspect] = &Client::Handle_OP_RealEstateInspect;
+	ConnectedOpcodes[OP_RealEstatePlacementBegin] = &Client::Handle_OP_RealEstatePlacementBegin;
+	ConnectedOpcodes[OP_RealEstatePlacementCommit] = &Client::Handle_OP_RealEstatePlacementCommit;
+	ConnectedOpcodes[OP_RealEstatePickup] = &Client::Handle_OP_RealEstatePickup;
+	ConnectedOpcodes[OP_RealEstateStoreAll] = &Client::Handle_OP_RealEstateStoreAll;
+	ConnectedOpcodes[OP_RealEstateLoadLayout] = &Client::Handle_OP_RealEstateLoadLayout;
+	ConnectedOpcodes[OP_RealEstatePack] = &Client::Handle_OP_RealEstatePack;
+	ConnectedOpcodes[OP_RealEstateItemOperation] = &Client::Handle_OP_RealEstateItemOperation;
+	ConnectedOpcodes[OP_RealEstateAccessEdit] = &Client::Handle_OP_RealEstateMetadata;
+	ConnectedOpcodes[OP_RealEstateItemMenu] = &Client::Handle_OP_RealEstateInteraction;
+    ConnectedOpcodes[OP_RealEstateCustomInteraction] = &Client::Handle_OP_RealEstateCustomInteraction;
+	ConnectedOpcodes[OP_RealEstateItemQuery] = &Client::Handle_OP_RealEstateInteraction;
+	ConnectedOpcodes[OP_RealEstateItemInspect] = &Client::Handle_OP_RealEstateItemInspect;
+	ConnectedOpcodes[OP_RealEstateHouseSwap] = &Client::Handle_OP_RealEstateHouseSwap;
+	ConnectedOpcodes[OP_RealEstateVotingOptOut] = &Client::Handle_OP_RealEstateVotingOptOut;
+	ConnectedOpcodes[OP_RealEstateEscrow] = &Client::Handle_OP_RealEstateEscrow;
+	ConnectedOpcodes[OP_RealEstateTransfer] = &Client::Handle_OP_RealEstateTransfer;
+ ConnectedOpcodes[OP_RealEstateTransferConsent] = &Client::Handle_OP_RealEstateTransferConsent;
+	ConnectedOpcodes[OP_RealEstateSale] = &Client::Handle_OP_RealEstateSale;
 	ConnectedOpcodes[OP_AdventureStatsRequest] = &Client::Handle_OP_AdventureStatsRequest;
 	ConnectedOpcodes[OP_AggroMeterLockTarget] = &Client::Handle_OP_AggroMeterLockTarget;
 	ConnectedOpcodes[OP_AltCurrencyMerchantRequest] = &Client::Handle_OP_AltCurrencyMerchantRequest;
@@ -520,6 +561,7 @@ void Client::CompleteConnect()
 	UpdateWho();
 	client_state = CLIENT_CONNECTED;
 	SendAllPackets();
+	// Catalog packets queued during zone-in precede the durable placed-item scene.
 	hpupdate_timer.Start();
 	autosave_timer.Start();
 	SetDuelTarget(0);
@@ -874,9 +916,16 @@ void Client::CompleteConnect()
 
 	CalcItemScale();
 	DoItemEnterZone();
+	// Interior context requires the genuine loaded/connected inventory fence,
+	// so publish it here before the scene. Exterior catalog was queued earlier.
+	if (zone->GetZoneID() != 712) SendHousingZoneCatalog();
+	// Inventory admission and profile load must both be complete before a
+	// custody lease can publish persistent furniture to this connected client.
+	SendHousingPlacedScene();
 
 	if (zone->GetZoneID() == Zones::GUILDHALL && GuildBanks)
-		GuildBanks->SendGuildBank(this);
+		Housing::ServiceBank::Publish(*this);
+	else Housing::ServiceNpcs::PublishGuildBank(*this);
 
 	if (ClientVersion() >= EQ::versions::ClientVersion::SoD)
 		entity_list.SendFindableNPCList(this);
@@ -1242,6 +1291,7 @@ void Client::Handle_Connect_OP_ZoneComplete(const EQApplicationPacket *app)
 
 void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 {
+	if (m_inventory_session_rejected) { Disconnect(); return; }
 	if (app->size != sizeof(ClientZoneEntry_Struct))
 		return;
 	ClientZoneEntry_Struct *cze = (ClientZoneEntry_Struct *)app->pBuffer;
@@ -1263,10 +1313,35 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 	Client* client = entity_list.GetClientByName(cze->char_name);
 	if (!zone->GetAuth(ip, cze->char_name, &WID, &account_id, &character_id, &admin, lskey, &tellsoff)) {
 		LogClientLogin("[{}] failed zone auth check", cze->char_name);
+		if (RuleB(Housing, EnablePlayerHousing)) {
+			RejectInventorySessionAdmission();
+			Disconnect();
+			return; // unclaimed ingress must not save/kick a real reservation owner
+		}
+
 		if (nullptr != client) {
 			client->Save();
 			client->Kick("Failed auth check");
 		}
+		return;
+	}
+
+	// Trusted zone auth has resolved character/account. Reject before antighost
+	// saves or inventory load can touch a character with unresolved custody.
+	if (Housing::CheckInventoryAdmission(database, CharacterID(), RuleB(Housing, EnablePlayerHousing)) !=
+		Housing::InventoryAdmission::Allowed) {
+		LogWarning("Character [{}] zone admission blocked by unresolved/unavailable housing custody state", CharacterID());
+		RejectInventorySessionAdmission();
+		Disconnect();
+		return;
+	}
+
+	// Every enabled client version must win durable per-character ownership
+	// before antighost callbacks or any profile/inventory loading can occur.
+	if (RuleB(Housing, EnablePlayerHousing) && !ClaimInventorySessionReservation()) {
+		LogWarning("Character [{}] inventory-session admission unavailable or already owned", CharacterID());
+		RejectInventorySessionAdmission();
+		Disconnect();
 		return;
 	}
 
@@ -1351,7 +1426,25 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 	// set to full support in case they're a gm with items in disabled expansion slots...but, have their gm flag off...
 	// item loss will occur when they use the 'empty' slots, if this is not done
 	m_inv.SetGMInventory(true);
-	loaditems = database.GetInventory(this); /* Load Character Inventory */
+	// Recheck already-issued ingress authorization just before GetInventory,
+	// which rewrites runtime GUID metadata. No timeout lease takeover.
+	if (Housing::CheckCustodyAdmission(database, CharacterID(), RuleB(Housing, EnablePlayerHousing)) !=
+		Housing::InventoryAdmission::Allowed) {
+		RejectInventorySessionAdmission();
+		Disconnect();
+		return;
+	}
+	if (RuleB(Housing, EnablePlayerHousing) && !HasInventorySessionReservation()) {
+		RejectInventorySessionAdmission();
+		Disconnect();
+		return;
+	}
+	loaditems = Housing::HousePreload::LoadInventoryWithHouseBindings(*this,database,RuleB(Housing,EnablePlayerHousing));
+	if (RuleB(Housing, EnablePlayerHousing) && !loaditems) {
+		RejectInventorySessionAdmission();
+		Disconnect();
+		return;
+	}
 	database.LoadCharacterBandolier(cid, &m_pp); /* Load Character Bandolier */
 	database.LoadCharacterBindPoint(cid, &m_pp); /* Load Character Bind */
 	database.LoadCharacterMaterialColor(cid, &m_pp); /* Load Character Material */
@@ -1485,7 +1578,9 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 		if (guild_mgr.GetCharInfo(CharacterID(), cgi)) {
 			m_pp.guildrank = cgi.rank;
 		}
-		if (zone->GetZoneID() == Zones::GUILDHALL) {
+		bool housing_guild_context=false;
+		try { auto scope=Housing::GuildPortal::Current(database,zone->GetZoneID(),zone->GetInstanceID(),false);housing_guild_context=scope&&scope->guild==GuildID(); } catch (...) {}
+		if (zone->GetZoneID() == Zones::GUILDHALL || housing_guild_context) {
 			GuildBanker = (guild_mgr.IsGuildLeader(GuildID(), CharacterID()) ||
 				guild_mgr.GetBankerFlag(CharacterID()) ||
 				ClientVersion() >= EQ::versions::ClientVersion::RoF ? true : false
@@ -4683,7 +4778,34 @@ void Client::Handle_OP_ClickDoor(const EQApplicationPacket *app)
 		);
 	}
 
+	if (Housing::HouseRuntime::HandleVerifiedGuildLobbyDoor(*this,currentdoor->GetDoorID(),within_distance)) return;
+	if (HandleHousingInteriorDoor(currentdoor->GetDoorID(),within_distance)) return;
+
+	// Original type160 markers identify one plot. Inspect that plot directly;
+	// the normal inspection handler publishes its authoritative purchase offer.
+	if (RuleB(Housing, EnablePlayerHousing) && zone && zone->GetZoneID() == 712 &&
+		!zone->GetInstanceVersion() && zone->GetInstanceID() &&
+		ClientVersion() == EQ::versions::ClientVersion::RoF2 && currentdoor->GetOpenType() == 160) {
+		const auto estate = Housing::PlotMarker::InspectionEstate(this,currentdoor->GetDoorID(),RuleI(Range, MaxDistanceToClickDoors),within_distance);
+		if (estate && SendHousingZoneCatalogChecked()) {
+			EQApplicationPacket inspect(OP_RealEstateInspect,4);
+			for (size_t i=0;i<4;++i) inspect.pBuffer[i]=uint8_t(*estate>>(8*i));
+			Handle_OP_RealEstateInspect(&inspect);
+			LogInfo("Native housing plot marker inspected actor [{}] door [{}] estate [{}]",CharacterID(),currentdoor->GetDoorID(),*estate);
+		}
+		return;
+	}
+
+
 	// don't spam scripts with client controlled doors if not within distance
+	if (RuleB(Housing, EnablePlayerHousing) && zone->GetZoneID() == 344 &&
+		currentdoor->GetDoorID() == 77 && within_distance &&
+		ClientVersion() == EQ::versions::ClientVersion::RoF2) {
+		m_housing_gate_open = true;
+		SendHousingNeighborhoods();
+		return;
+	}
+
 	if (within_distance) {
 		int quest_return = 0;
 		if (parse->PlayerHasQuestSub(EVENT_CLICK_DOOR)) {
@@ -6448,8 +6570,11 @@ void Client::Handle_OP_FeignDeath(const EQApplicationPacket *app)
 	return;
 }
 
+bool HandleHousingPlotFind(Client*,const EQApplicationPacket*);
+
 void Client::Handle_OP_FindPersonRequest(const EQApplicationPacket *app)
 {
+	if (HandleHousingPlotFind(this,app)) return;
 	if (app->size != sizeof(FindPersonRequest_Struct))
 		printf("Error in FindPersonRequest_Struct. Expected size of: %zu, but got: %i\n", sizeof(FindPersonRequest_Struct), app->size);
 	else {
@@ -7649,12 +7774,11 @@ void Client::Handle_OP_GroupUpdate(const EQApplicationPacket *app)
 
 void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 {
-	if (!GuildBanks) {
-		GuildBankAck();
-		return;
-	}
+	const bool housing_banker=Housing::ServiceNpcs::HasNearby(*this,Housing::ServiceNpcs::Service::GuildBank);
+	if (!GuildBanks && housing_banker) GuildBanks=new GuildBankManager;
+	if (!GuildBanks) { GuildBankAck(); return; }
 
-	if (zone->GetZoneID() != Zones::GUILDHALL) {
+	if (zone->GetZoneID() != Zones::GUILDHALL && !housing_banker) {
 		Message(Chat::Red, "The Guild Bank is not available in this zone.");
 		GuildBankAck();
 		return;
@@ -7683,7 +7807,37 @@ void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 		return;
 	}
 
-	if (!IsGuildBanker())
+	// Validate each native action before reading its typed fields.
+	size_t required=0;
+	switch(Action){
+	 case GuildBankPromote:required=sizeof(GuildBankPromote_Struct);break;
+	 case GuildBankViewItem:required=sizeof(GuildBankViewItem_Struct);break;
+	 case GuildBankPermissions:required=sizeof(GuildBankPermissions_Struct);break;
+	 case GuildBankWithdraw:case GuildBankSplitStacks:case GuildBankMergeStacks:required=sizeof(GuildBankWithdrawItem_Struct);break;
+	 case GuildBankDeposit:required=sizeof(uint32);break;
+	 default:GuildBankAck();return;
+	}
+	if(app->size<required){GuildBankAck();return;}
+	if(Action==GuildBankPromote&&reinterpret_cast<const GuildBankPromote_Struct*>(app->pBuffer)->Slot>=40){GuildBankAck();return;}
+	if(Action==GuildBankPermissions){auto*r=reinterpret_cast<const GuildBankPermissions_Struct*>(app->pBuffer);if(r->SlotID>=200||r->Permissions>3||!std::memchr(r->MemberName,0,sizeof(r->MemberName))){GuildBankAck();return;}}
+	if(Action==GuildBankViewItem){auto*r=reinterpret_cast<const GuildBankViewItem_Struct*>(app->pBuffer);if(r->Area>1||r->SlotID>=(r->Area?200:40)){GuildBankAck();return;}}
+	if(Action==GuildBankWithdraw||Action==GuildBankSplitStacks||Action==GuildBankMergeStacks){auto*r=reinterpret_cast<const GuildBankWithdrawItem_Struct*>(app->pBuffer);if(r->Area>1||r->SlotID>=(r->Area?200:40)||(Action!=GuildBankMergeStacks&&(!r->Quantity||r->Quantity>INT16_MAX))){GuildBankAck();return;}}
+	Housing::ServiceBank::Request request(*this);
+	if(!request.Ready()){
+		if(Action==GuildBankDeposit){
+			GuildBankDepositAck(true,sentAction);
+			// RoF optimistically clears the cursor on deposit. A refused stale
+			// request keeps its authoritative item; republish it without copying,
+			// moving or saving inventory outside the bank transaction.
+			if(ClientVersion()>=EQ::versions::ClientVersion::RoF)
+				if(auto* item=GetInv().GetItem(EQ::invslot::slotCursor))SendItemPacket(EQ::invslot::slotCursor,item,ItemPacketTrade);
+		}else GuildBankAck();
+		return;
+	}
+	if(housing_banker)SetGuildBanker(guild_mgr.IsGuildLeader(GuildID(),CharacterID())||guild_mgr.GetBankerFlag(CharacterID())||ClientVersion()>=EQ::versions::ClientVersion::RoF);
+
+	const bool actual_banker=guild_mgr.IsGuildLeader(GuildID(),CharacterID())||guild_mgr.GetBankerFlag(CharacterID());
+	if (!actual_banker)
 	{
 		if (Action != GuildBankDeposit && Action != GuildBankViewItem && Action != GuildBankWithdraw)
 		{
@@ -7758,7 +7912,7 @@ void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 			const auto cursor_item_inst = GetInv().GetItem(EQ::invslot::slotCursor);
 			bool       allowed          = true;
 
-			if (!cursor_item_inst) {
+			if (!cursor_item_inst || std::distance(GetInv().cursor_cbegin(),GetInv().cursor_cend())!=1) {
 				Message(Chat::Red, "No Item on the cursor.");
 				GuildBankDepositAck(true, sentAction);
 				return;
@@ -7778,6 +7932,7 @@ void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 
 			if (!cursor_item->NoDrop ||
 				cursor_item_inst->IsAttuned() ||
+				cursor_item_inst->GetHousingHouseID() || cursor_item_inst->GetHousingCrateID() || cursor_item_inst->GetEvolveUniqueID() || cursor_item_inst->IsScaling() || !cursor_item_inst->GetCustomDataString().empty() ||
 				cursor_item_inst->IsNoneEmptyContainer() ||
 				cursor_item->NoRent == 0 ||
 				(cursor_item->LoreFlag && GuildBanks->HasItem(GuildID(), cursor_item->ID))
@@ -7893,9 +8048,9 @@ void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 				gbwis->Quantity = inst->GetCharges();
 			}
 
-			PushItemOnCursor(*inst.get());
+			if(!GuildBanks->DeleteItem(GuildID(),gbwis->Area,gbwis->SlotID,gbwis->Quantity,this)){GuildBankAck();break;}
+			if(!PushItemOnCursor(*inst.get())){Housing::ServiceBank::AbortCurrent();GuildBankAck();break;}
 			SendItemPacket(EQ::invslot::slotCursor, inst.get(), ItemPacketLimbo);
-			GuildBanks->DeleteItem(GuildID(), gbwis->Area, gbwis->SlotID, gbwis->Quantity, this);
 
 			if (PlayerEventLogs::Instance()->IsEventEnabled(PlayerEvent::GUILD_BANK_WITHDRAWAL)) {
 				PlayerEvent::GuildBankTransaction log{};
@@ -11082,7 +11237,8 @@ void Client::Handle_OP_OpenGuildTributeMaster(const EQApplicationPacket *app)
 		StartTribute_Struct* st = (StartTribute_Struct*)app->pBuffer;
 		Mob* tribmast = entity_list.GetMob(st->tribute_master_id);
 		if (tribmast && tribmast->IsNPC() && tribmast->GetClass() == Class::GuildTributeMaster
-			&& DistanceSquared(m_Position, tribmast->GetPosition()) <= USE_NPC_RANGE2) {
+			&& DistanceSquared(m_Position, tribmast->GetPosition()) <= USE_NPC_RANGE2
+			&& Housing::ServiceNpcs::Allows(*this,tribmast,Housing::ServiceNpcs::Service::GuildTribute)) {
 			st->response = 1;
 			QueuePacket(app);
 			tribute_master_id = st->tribute_master_id;
@@ -11112,7 +11268,8 @@ void Client::Handle_OP_OpenTributeMaster(const EQApplicationPacket *app)
 		StartTribute_Struct* st = (StartTribute_Struct*)app->pBuffer;
 		Mob* tribmast = entity_list.GetMob(st->tribute_master_id);
 		if (tribmast && tribmast->IsNPC() && tribmast->GetClass() == Class::TributeMaster
-			&& DistanceSquared(m_Position, tribmast->GetPosition()) <= USE_NPC_RANGE2) {
+			&& DistanceSquared(m_Position, tribmast->GetPosition()) <= USE_NPC_RANGE2
+			&& Housing::ServiceNpcs::Allows(*this,tribmast,Housing::ServiceNpcs::Service::PersonalTribute)) {
 			st->response = 1;
 			QueuePacket(app);
 			tribute_master_id = st->tribute_master_id;
@@ -12055,6 +12212,7 @@ void Client::Handle_OP_PickZone(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PopupResponse(const EQApplicationPacket *app)
 {
+	if (Housing::GuildPortalRuntime::HandlePopup(*this, app)) return;
 
 	if (app->size != sizeof(PopupResponse_Struct)) {
 		LogDebug("Size mismatch in OP_PopupResponse expected [{}] got [{}]", sizeof(PopupResponse_Struct), app->size);
@@ -14128,6 +14286,7 @@ void Client::Handle_OP_ShopPlayerBuy(const EQApplicationPacket *app)
 		tmp == 0 ||
 		!tmp->IsNPC() ||
 		tmp->GetClass() != Class::Merchant ||
+		!Housing::ServiceNpcs::AllowsMerchant(*this,tmp) ||
 		mp->quantity < 1 ||
 		DistanceSquared(m_Position, tmp->GetPosition()) > USE_NPC_RANGE2
 	) {
@@ -14365,7 +14524,7 @@ void Client::Handle_OP_ShopPlayerSell(const EQApplicationPacket *app)
 	Merchant_Purchase_Struct* mp = (Merchant_Purchase_Struct*)app->pBuffer;
 	Mob* vendor = entity_list.GetMob(mp->npcid);
 
-	if (vendor == 0 || !vendor->IsNPC() || vendor->GetClass() != Class::Merchant)
+	if (vendor == 0 || !vendor->IsNPC() || vendor->GetClass() != Class::Merchant || !Housing::ServiceNpcs::AllowsMerchant(*this,vendor))
 		return;
 
 	//you have to be somewhat close to them to be properly using them
@@ -14585,7 +14744,7 @@ void Client::Handle_OP_ShopRequest(const EQApplicationPacket *app)
 	int tabs_to_display = None;
 	Mob *tmp            = entity_list.GetMob(mc->npc_id);
 
-	if (tmp == 0 || !tmp->IsNPC() || tmp->GetClass() != Class::Merchant) {
+	if (tmp == 0 || !tmp->IsNPC() || tmp->GetClass() != Class::Merchant || !Housing::ServiceNpcs::AllowsMerchant(*this,tmp)) {
 		return;
 	}
 
@@ -15922,7 +16081,7 @@ void Client::Handle_OP_TributeItem(const EQApplicationPacket *app)
 		tribute_master_id = t->tribute_master_id;
 		//make sure they are dealing with a valid tribute master
 		Mob* tribmast = entity_list.GetMob(t->tribute_master_id);
-		if (!tribmast || !tribmast->IsNPC() || tribmast->GetClass() != Class::TributeMaster)
+		if (!tribmast || !tribmast->IsNPC() || tribmast->GetClass() != Class::TributeMaster || !Housing::ServiceNpcs::Allows(*this,tribmast,Housing::ServiceNpcs::Service::PersonalTribute))
 			return;
 		if (DistanceSquared(m_Position, tribmast->GetPosition()) > USE_NPC_RANGE2)
 			return;
@@ -15949,7 +16108,7 @@ void Client::Handle_OP_TributeMoney(const EQApplicationPacket *app)
 		tribute_master_id = t->tribute_master_id;
 		//make sure they are dealing with a valid tribute master
 		Mob* tribmast = entity_list.GetMob(t->tribute_master_id);
-		if (!tribmast || !tribmast->IsNPC() || tribmast->GetClass() != Class::TributeMaster)
+		if (!tribmast || !tribmast->IsNPC() || tribmast->GetClass() != Class::TributeMaster || !Housing::ServiceNpcs::Allows(*this,tribmast,Housing::ServiceNpcs::Service::PersonalTribute))
 			return;
 		if (DistanceSquared(m_Position, tribmast->GetPosition()) > USE_NPC_RANGE2)
 			return;
@@ -17139,24 +17298,18 @@ void Client::Handle_OP_GuildTributeDonateItem(const EQApplicationPacket *app)
 
 	auto in = (GuildTributeDonateItemRequest_Struct *) app->pBuffer;
 
-	const auto *inst = GetInv().GetItem(in->slot);
-	auto favor = inst->GetItemGuildFavor() * in->quantity;
-
-	auto guild = guild_mgr.GetGuildByGuildID(guild_id);
+	auto* master=entity_list.GetMob(in->tribute_master_id);
+	if(!IsInAGuild() || in->guild_id!=GuildID() || !master || !master->IsNPC() || master->GetClass()!=Class::GuildTributeMaster || DistanceSquared(m_Position,master->GetPosition())>USE_NPC_RANGE2 || !Housing::ServiceNpcs::Allows(*this,master,Housing::ServiceNpcs::Service::GuildTribute)) return;
+	const auto* source=GetInv().GetItem(in->slot);
+	if(!source) return;
+	auto inst=std::unique_ptr<EQ::ItemInstance>(source->Clone());
+	auto guild=guild_mgr.GetGuildByGuildID(GuildID());
 	if (guild) {
-		guild->tribute.favor += favor;
-		guild_mgr.UpdateDbGuildFavor(GuildID(), guild->tribute.favor);
-		auto member_favor = guild_mgr.UpdateDbMemberFavor(GuildID(), CharacterID(), favor);
-
-		if (inst->IsStackable()) {
-			if (inst->GetCharges() < (int32) in->quantity) {
-				favor = 0;
-			}
-			DeleteItemInInventory(in->slot, in->quantity, false, true);
-		}
-		else {
-			DeleteItemInInventory(in->slot, 0, false, true);
-		}
+		auto receipt=Housing::ServiceTribute::DonateItem(*this,in->slot,in->quantity);
+		if(!receipt) return;
+		auto favor=receipt->favor;
+		auto member_favor=receipt->member_favor;
+		guild->tribute.favor=receipt->guild_favor;
 
 		SendGuildTributeDonateItemReply(in, favor);
 
@@ -17197,16 +17350,19 @@ void Client::Handle_OP_GuildTributeDonatePlat(const EQApplicationPacket *app)
 
 	auto in = (GuildTributeDonatePlatRequest_Struct *) app->pBuffer;
 
-	auto quantity = in->quantity;
-
-	auto favor = quantity * RuleI(Guild, TributePlatConversionRate);
-	auto guild = guild_mgr.GetGuildByGuildID(guild_id);
+	auto* master=entity_list.GetMob(in->tribute_master_id);
+	if(!IsInAGuild() || in->guild_id!=GuildID() || !master || !master->IsNPC() || master->GetClass()!=Class::GuildTributeMaster || DistanceSquared(m_Position,master->GetPosition())>USE_NPC_RANGE2 || !Housing::ServiceNpcs::Allows(*this,master,Housing::ServiceNpcs::Service::GuildTribute)) return;
+	const auto quantity=in->quantity;
+	const auto conversion=RuleI(Guild, TributePlatConversionRate);
+	if(conversion<=0) return;
+	auto guild = guild_mgr.GetGuildByGuildID(GuildID());
 	if (guild) {
-		guild->tribute.favor += favor;
-		guild_mgr.UpdateDbGuildFavor(GuildID(), guild->tribute.favor);
-		auto member_favor = guild_mgr.UpdateDbMemberFavor(GuildID(), CharacterID(), favor);
+		auto receipt=Housing::ServiceTribute::DonatePlatinum(*this,quantity,uint32_t(conversion));
+		if(!receipt) return;
+		auto favor=receipt->favor;
+		auto member_favor=receipt->member_favor;
+		guild->tribute.favor=receipt->guild_favor;
 
-		TakePlatinum(quantity, false);
 		SendGuildTributeDonatePlatReply(in, favor);
 
 		if(PlayerEventLogs::Instance()->IsEventEnabled(PlayerEvent::GUILD_TRIBUTE_DONATE_PLAT)) {

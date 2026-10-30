@@ -240,6 +240,7 @@ void Client::SendGuildMembers() {
 
 void Client::RefreshGuildInfo()
 {
+ InvalidateHousingGuildTrophyBenefits(true);
 	uint32 OldGuildID = guild_id;
 
 	guildrank = GUILD_RANK_NONE;
@@ -437,6 +438,7 @@ void EntityList::GuildSetPreRoFBankerFlag(uint32 guild_id, uint32 guild_rank, bo
 
 void Client::SetGuildRank(uint32 rank)
 {
+ InvalidateHousingGuildTrophyBenefits(true);
 	guildrank = rank;
 }
 
@@ -447,6 +449,7 @@ void Client::SetGuildTributeOptIn(bool state)
 
 void Client::SetGuildID(uint32 g_id)
 {
+ InvalidateHousingGuildTrophyBenefits(true);
 	guild_id = g_id;
 }
 

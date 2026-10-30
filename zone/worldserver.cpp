@@ -15,6 +15,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/housing/guild_trophy_member_flag.h"
+#include "../common/housing/upkeep_refresh_wire.h"
+
 #include "worldserver.h"
 
 #include "common/eq_packet_structs.h"
@@ -203,7 +206,17 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 	ServerPacket *pack = &tpack;
 
 	switch (opcode) {
-	case 0:
+	case ServerOP_HousingGuildTrophyRefresh: {if(pack->size!=sizeof(uint32))break;uint32 guild=0;std::memcpy(&guild,pack->pBuffer,sizeof guild);for(const auto& entry:entity_list.GetClientList()){auto* client=entry.second;if(client->GuildID()==guild||client->m_housing_guild_trophy_guild==guild)client->InvalidateHousingGuildTrophyBenefits();}break;}
+    case ServerOP_HousingGuildTrophyMember: {if(pack->size!=sizeof(GuildTributeOptInOutReply_Struct))break;const auto* member=reinterpret_cast<const GuildTributeOptInOutReply_Struct*>(pack->pBuffer);for(const auto& entry:entity_list.GetClientList()){auto* client=entry.second;if(client->GuildID()==member->guild_id&&client->ClientVersion()==EQ::versions::ClientVersion::RoF2){EQApplicationPacket packet(OP_GuildOptInOut,pack->size);std::memcpy(packet.pBuffer,pack->pBuffer,pack->size);client->QueuePacket(&packet);}}break;}
+	case ServerOP_HousingUpkeepRefresh: {
+        if(Housing::UpkeepRefreshWire::Valid(pack->pBuffer,pack->size)){LogInfo("Housing upkeep invalidation received; refreshing current estate snapshots");Client::HousingUpkeepChanged();}
+        break;
+    }
+    case ServerOP_HousingTrophyRefresh: {
+        if(pack->size==0)for(const auto& entry:entity_list.GetClientList())entry.second->InvalidateHousingTrophyBenefits();
+        break;
+    }
+    case 0:
 	case ServerOP_KeepAlive: {
 		break;
 	}
@@ -395,9 +408,13 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 
 			if (ztz->response <= 0) {
 				zc2->success = ZoningMessage::ZoneNotReady;
-				entity->CastToMob()->SetZone(ztz->current_zone_id, ztz->current_instance_id);
-				entity->CastToClient()->SetZoning(false);
-				entity->CastToClient()->SetLockSavePosition(false);
+				entity->CastToClient()->RestoreRejectedZonePosition();
+				strn0cpy(zc2->char_name, entity->CastToMob()->GetName(), 64);
+				zc2->zoneID = ztz->current_zone_id;
+				zc2->instanceID = ztz->current_instance_id;
+				zc2->x = entity->CastToMob()->GetX();
+				zc2->y = entity->CastToMob()->GetY();
+				zc2->z = entity->CastToMob()->GetZ();
 
 				LogZoning("ZoneToZone (ZoneNotReady) client [{}] guild_id [{}] requested_zone [{}] requested_zone_id [{}] requested_instance_id [{}] current_zone [{}] current_zone_id [{}] current_instance_id [{}] response [{}] admin [{}] ignorerestrictions [{}] ",
 					ztz->name,
@@ -3502,7 +3519,7 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 		data->guild_id              = in->guild_id;
 		data->no_donations          = in->member_favor;
 		data->tribute_toggle        = in->member_enabled ? true : false;
-		data->tribute_trophy_toggle = 0; // not yet implemented
+		data->tribute_trophy_toggle = Housing::GuildTrophyMemberFlag(database, in->guild_id, 0, in->player_name);
 		data->time                  = in->member_time;
 		data->command               = 1;
 		strn0cpy(data->player_name, in->player_name, sizeof(data->player_name));
@@ -3544,7 +3561,7 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 		strn0cpy(data->player_name, in->player_name, sizeof(data->player_name));
 		data->no_donations = in->no_donations;
 		data->tribute_toggle = in->tribute_toggle ? true : false;
-		data->tribute_trophy_toggle = 0; //not yet implemented
+		data->tribute_trophy_toggle = Housing::GuildTrophyMemberFlag(database, in->guild_id, in->char_id);
 		data->time = in->member_last_donated;
 		data->command = in->command;
 

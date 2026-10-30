@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/housing/upkeep_refresh_wire.h"
+
 #include "zoneserver.h"
 
 #include "common/content/world_content_service.h"
@@ -181,8 +183,23 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 	auto pack = &tpack;
 
 	switch (opcode) {
-		case 0:
-		case ServerOP_KeepAlive:
+		case ServerOP_HousingGuildTrophyRequest: {
+        if(pack->size!=sizeof(HousingGuildTrophyRequest))break;auto* request=reinterpret_cast<const HousingGuildTrophyRequest*>(pack->pBuffer);auto* actor=ClientList::Instance()->FindCLEByCharacterID(request->character_id);if(!actor||actor->Server()!=this||actor->Online()!=CLE_Status::InZone||request->action>2)break;guild_mgr.GuildTrophyRequest(actor->CharID(),actor->AccountID(),request->action,request->target_id);break;
+    }
+    case ServerOP_HousingUpkeepRefresh: {
+        // Authenticated zone connection supplies only an invalidation hint.
+        // Ownership/ACL/content are independently reloaded by every receiver.
+        if(Housing::UpkeepRefreshWire::Valid(pack->pBuffer,pack->size)){guild_mgr.InvalidateGuildTrophies();ServerPacket refresh(ServerOP_HousingUpkeepRefresh,1);refresh.pBuffer[0]=0;ZSList::Instance()->SendPacket(&refresh);}
+        break;
+    }
+    case ServerOP_HousingTrophyRefresh: {
+            // Received only on the authenticated zone connection. This is an
+            // internal invalidation hint, never a client benefit/owner claim.
+            if(pack->size==0){guild_mgr.InvalidateGuildTrophies();ZSList::Instance()->SendPacket(pack);}
+            break;
+        }
+        case 0:
+	case ServerOP_KeepAlive:
 		case ServerOP_ZAAuth: {
 			break;
 		}
@@ -1525,7 +1542,9 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 				if (guild->tribute.enabled) {
 					data->enabled           = 1;
 					if (guild->tribute.time_remaining == RuleI(Guild, TributeTime)) {
-						data->favor = (guild->tribute.favor -= guild_mgr.GetGuildTributeCost(data->guild_id));
+						auto spent=guild_mgr.AdjustDbGuildFavor(data->guild_id,-int64(guild_mgr.GetGuildTributeCost(data->guild_id)));
+						if(!spent){guild->tribute.enabled=0;data->enabled=0;guild->tribute.timer.Disable();guild_mgr.UpdateDbGuildTributeEnabled(data->guild_id,0);break;}
+						data->favor=guild->tribute.favor=*spent;
 					}
 					data->time_remaining    = guild->tribute.time_remaining;
 					data->tribute_id_1      = guild->tribute.id_1;
@@ -1551,7 +1570,6 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 					guild->tribute.timer.Disable();
 				}
 				guild_mgr.UpdateDbGuildTributeEnabled(data->guild_id, data->enabled);
-				guild_mgr.UpdateDbGuildFavor(data->guild_id, data->favor);
 				guild_mgr.UpdateDbTributeTimeRemaining(data->guild_id, data->time_remaining);
 
 				ZSList::Instance()->SendPacketToZonesWithGuild(data->guild_id, pack);
@@ -1643,7 +1661,7 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 			auto guild = guild_mgr.GetGuildByGuildID(in->guild_id);
 
 			if (guild) {
-				guild->tribute.favor = in->favor;
+				if(auto current=guild_mgr.ReadDbGuildFavor(in->guild_id))guild->tribute.favor=*current;else break;
 				guild_mgr.SendGuildTributeFavorAndTimer(in->guild_id, guild->tribute.favor, guild_mgr.GetGuildTributeTimeRemaining(in->guild_id)/*guild->tribute.timer.GetRemainingTime()*/);
 
 				auto sp  = new ServerPacket(ServerOP_GuildTributeUpdateDonations, sizeof(GuildTributeUpdate));

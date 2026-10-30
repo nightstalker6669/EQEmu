@@ -1,4 +1,5 @@
 set(world_sources
+	wguild_trophies.cpp
 	adventure.cpp
 	adventure_manager.cpp
 	cli/cli_bots_disable.cpp

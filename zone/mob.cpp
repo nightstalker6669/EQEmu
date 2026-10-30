@@ -1277,6 +1277,25 @@ void Mob::CreateSpawnPacket(EQApplicationPacket* app, NewSpawn_Struct* ns) {
 	}
 }
 
+bool Mob::SetHousingItemBinding(const std::string& guid, uint32 estate_id, uint32 item_id)
+{
+	if (guid.size() != 16 || guid.find_first_not_of("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+-") != std::string::npos ||
+		!estate_id || estate_id == 0xffffffff || !item_id || item_id == 0xffffffff) {
+		return false;
+	}
+	m_housing_item_guid = guid;
+	m_housing_estate_id = estate_id;
+	m_housing_item_id = item_id;
+	return true;
+}
+
+void Mob::ClearHousingItemBinding()
+{
+	m_housing_item_guid.clear();
+	m_housing_estate_id = 0xffffffff;
+	m_housing_item_id = 0xffffffff;
+}
+
 void Mob::FillSpawnStruct(NewSpawn_Struct* ns, Mob* ForWho)
 {
 	int i;
@@ -1321,6 +1340,10 @@ void Mob::FillSpawnStruct(NewSpawn_Struct* ns, Mob* ForWho)
 	ns->spawn.invis		= (invisible || hidden) ? 1 : 0;	// TODO: load this before spawning players
 	ns->spawn.NPC		= IsClient() ? 0 : 1;
 	ns->spawn.IsMercenary = IsMerc() ? 1 : 0;
+	strn0cpy(ns->spawn.housing_item_guid, m_housing_item_guid.empty() ? "0000000000000000" : m_housing_item_guid.c_str(), sizeof(ns->spawn.housing_item_guid));
+	ns->spawn.housing_estate_id = m_housing_estate_id;
+	ns->spawn.housing_item_id = m_housing_item_id;
+
 	ns->spawn.targetable_with_hotkey = no_target_hotkey ? 0 : 1; // opposite logic!
 	ns->spawn.untargetable = IsTargetable();
 

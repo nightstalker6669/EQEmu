@@ -15,8 +15,11 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include <chrono>
+
 #pragma once
 
+namespace Housing::Pets { struct Binding; }
 class Client;
 class EQApplicationPacket;
 class DynamicZone;
@@ -31,6 +34,13 @@ class ServerPacket;
 struct DynamicZoneLocation;
 enum WaterRegionType : int;
 enum class DynamicZoneMemberStatus;
+
+namespace Housing::InventoryBridge { class Bridge; }
+namespace Housing::NativePlacement { struct Session; }
+namespace Housing::AnchorTransport {struct Pending;}
+namespace Housing::TransferConsent {struct Pending;}
+#include "../common/shared_core/inventory_session_service.h"
+namespace EQEmu::SharedCore::InventorySessions { class ZoneReservation; }
 
 namespace EQ
 {
@@ -250,6 +260,13 @@ public:
 
 	Client(EQStreamInterface * ieqs);
 	Client(); // mocking / testing
+	bool m_housing_gate_open = false;
+	Housing::InventoryBridge::Bridge* GetHousingInventoryBridge();
+	bool ClaimInventorySessionReservation();
+	void RejectInventorySessionAdmission() { m_inventory_session_rejected = true; }
+	bool HasInventorySessionReservation() const;
+	std::shared_ptr<Housing::InventorySessions::ZoneReservation> InventorySessionReleaseTicket() const;
+
 	~Client();
 
 	void ReconnectUCS();
@@ -374,6 +391,11 @@ public:
 		std::list<void *> *event_details = nullptr
 	);
 	void SendZonePoints();
+	void SendHousingZoneCatalog();
+	bool SendHousingZoneCatalogChecked();
+	void RememberHousingAclRevision(uint32_t native_id,uint64_t revision) { m_housing_acl_revisions[native_id]=revision; }
+	std::optional<uint64_t> HousingAclRevision(uint32_t native_id) const { auto i=m_housing_acl_revisions.find(native_id);return i==m_housing_acl_revisions.end()?std::nullopt:std::optional<uint64_t>(i->second); }
+	void ClearHousingAclRevisions() { m_housing_acl_revisions.clear(); }
 	void SendBulkParcels();
 	void DoParcelCancel();
 	void DoParcelSend(const Parcel_Struct *parcel_in);
@@ -1288,6 +1310,36 @@ public:
 	uint16 sacrifice_caster_id;
 	PendingTranslocate_Struct PendingTranslocateData;
 	void SendOPTranslocateConfirm(Mob *Caster, int32 SpellID);
+	void ProcessHousingTrophyBenefits();
+ void ProcessHousingGuildTrophyBenefits();
+ void InvalidateHousingGuildTrophyBenefits(bool request_world=false);
+ void RefreshHousingGuildTrophyBenefits(bool request_world=false);
+ void SendHousingGuildTrophyRequest(uint32 action=0,uint32 target=0);
+ uint32 HousingGuildTrophyRemaining()const;
+ const std::vector<uint32>& HousingGuildTrophyStatItems()const{return m_housing_guild_trophy_stat_items;}
+ void Handle_OP_GuildTrophyToggle(const EQApplicationPacket*);
+ void Handle_OP_GuildTrophySave(const EQApplicationPacket*);
+ void Handle_OP_GuildTrophyModify(const EQApplicationPacket*);
+ void Handle_OP_GuildTrophyOptIn(const EQApplicationPacket*);
+ std::vector<uint32> m_housing_guild_trophy_stat_items;
+ bool m_housing_guild_trophy_dirty=true,m_housing_guild_trophy_ready=false,m_housing_guild_trophy_world_request=false;
+ uint32 m_housing_guild_trophy_guild=0,m_housing_guild_trophy_level=0;
+ std::chrono::steady_clock::time_point m_housing_guild_trophy_deadline{};
+
+	void InvalidateHousingTrophyBenefits();
+	static void HousingTrophySourcesChanged() noexcept;
+	static void HousingUpkeepChanged() noexcept;
+	bool m_housing_trophy_dirty=true;
+	bool m_housing_trophy_ready=false;
+	uint32_t m_housing_trophy_capacity=0xffffffff;
+	void RefreshHousingTrophyBenefits(bool notify=true,bool recalculate=true,bool renew=false,bool force_publish=false);
+	std::chrono::steady_clock::time_point m_housing_trophy_deadline{};
+	const std::vector<uint32_t>& HousingTrophyStatItems()const{return m_housing_trophy_stat_items;}
+	std::vector<uint32_t> m_housing_trophy_stat_items;
+	bool m_housing_trophy_sent=false;
+	std::chrono::steady_clock::time_point m_housing_trophy_open_last{};
+	uint32_t HousingTrophyCapacity()const;
+	void ApplyHousingAnchorSpell(Client* caster,uint32_t item_id,bool confirmation);
 
 	// Help Window
 	std::string SendBotCommandHelpWindow(const BotCommandHelpParams& params);
@@ -2031,6 +2083,13 @@ private:
 
 	uint8 playeraction;
 
+	bool m_inventory_session_rejected = false;
+	std::shared_ptr<Housing::InventorySessions::ZoneReservation> m_inventory_session_reservation;
+	std::unique_ptr<Housing::InventoryBridge::Bridge> m_housing_inventory_bridge;
+	std::shared_ptr<Housing::NativePlacement::Session> m_housing_placement_session;
+	std::map<uint32_t,uint64_t> m_housing_acl_revisions;
+	std::shared_ptr<Housing::AnchorTransport::Pending> m_housing_anchor_pending;
+ std::shared_ptr<Housing::TransferConsent::Pending> m_housing_transfer_incoming,m_housing_transfer_outgoing;
 	EQStreamInterface* eqs;
 
 	uint32 ip;
@@ -2126,7 +2185,11 @@ private:
 public:
 	bool IsLockSavePosition() const;
 	void SetLockSavePosition(bool lock_save_position);
+	void RestoreRejectedZonePosition();
 private:
+	// Source position captured before a solicited transfer can overwrite it.
+	glm::vec4 m_zone_transfer_origin{};
+	bool m_zone_transfer_origin_valid = false;
 
 	PlayerProfile_Struct m_pp;
 	ExtendedProfile_Struct m_epp;

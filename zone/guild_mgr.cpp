@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "housing_service_bank.h"
+
 #include "guild_mgr.h"
 
 #include "common/emu_versions.h"
@@ -691,30 +693,19 @@ GuildBankManager::~GuildBankManager()
 
 void GuildBankManager::Load(uint32 guild_id)
 {
-	auto results = GuildBankRepository::GetWhere(
-		database,
-		fmt::format("`guild_id` = '{}' ORDER BY `area`, `slot`", guild_id)
-	);
-
-	auto bank          = std::make_shared<GuildBank>();
-	bank->guild_id     = guild_id;
-	int32 deposit_slot = 0;
-	int32 main_slot    = 0;
-
-	for (auto &it: results) {
-		if (it.area == GuildBankMainArea) {
-			it.slot = deposit_slot;
-			bank->items.main_area.emplace(deposit_slot, it);
-			deposit_slot++;
-		}
-		else {
-			it.slot = main_slot;
-			bank->items.deposit_area.emplace(main_slot, it);
-			main_slot++;
-		}
-	}
-
-    banks.push_back(bank);
+ auto result=database.QueryDatabase(GuildBankRepository::BaseSelect()+" WHERE guild_id="+std::to_string(guild_id)+" ORDER BY area,slot,id",false);
+ if(!result.Success()||result.RowCount()>240)return;
+ auto bank=std::make_shared<GuildBank>();bank->guild_id=guild_id;
+ try{for(auto row=result.begin();row!=result.end();++row){
+  auto it=GuildBankRepository::NewEntity();
+  it.id=std::stoul(row[0]);it.guild_id=std::stoul(row[1]);it.area=std::stoul(row[2]);it.slot=std::stoul(row[3]);it.item_id=std::stoul(row[4]);
+  it.augment_one_id=(row[5]?std::stoul(row[5]):0);it.augment_two_id=(row[6]?std::stoul(row[6]):0);it.augment_three_id=(row[7]?std::stoul(row[7]):0);it.augment_four_id=(row[8]?std::stoul(row[8]):0);it.augment_five_id=(row[9]?std::stoul(row[9]):0);it.augment_six_id=(row[10]?std::stoul(row[10]):0);
+  it.quantity=std::stol(row[11]);it.donator=row[12]?row[12]:"";it.permissions=std::stoul(row[13]);it.who_for=row[14]?row[14]:"";
+  if(!it.id||it.guild_id!=guild_id||it.area>1||it.slot>=(it.area?200u:40u)||!it.item_id||it.permissions>3)return;
+  auto& area=it.area==GuildBankMainArea?bank->items.main_area:bank->items.deposit_area;
+  if(!area.emplace(it.slot,it).second)return;
+ }}catch(...){return;}
+ banks.push_back(bank);
 }
 
 bool GuildBankManager::IsLoaded(uint32 guild_id)
@@ -937,56 +928,14 @@ bool GuildBankManager::IsAreaFull(uint32 guild_id, uint16 area)
 	return NextFreeBankSlot(guild_id, area) == -1;
 }
 
-bool GuildBankManager::AddItem(GuildBankRepository::GuildBank &guild_bank_item, Client* c)
+bool GuildBankManager::AddItem(GuildBankRepository::GuildBank &item, Client* c)
 {
-	auto guild_bank = GetGuildBank(guild_bank_item.guild_id);
-	if (!guild_bank) {
-		LogError("Unable to find guild bank for guild ID [{}]", guild_bank_item.guild_id);
-		return false;
-	}
-
-	switch (guild_bank_item.area) {
-		case GuildBankMainArea: {
-			for (auto &[key, item]: guild_bank->items.main_area) {
-				if (item.item_id == 0) {
-					item.slot            = NextFreeBankSlot(guild_bank_item.guild_id, GuildBankMainArea);
-					guild_bank_item.slot = item.slot;
-					auto e               = GuildBankRepository::InsertOne(database, guild_bank_item);
-					if (!e.id) {
-						return false;
-					}
-
-					guild_bank_item.id = e.id;
-					item               = guild_bank_item;
-					break;
-				}
-			}
-			break;
-		}
-		case GuildBankDepositArea: {
-			for (auto &[key, item]: guild_bank->items.deposit_area) {
-				if (item.item_id == 0) {
-					item.slot            = NextFreeBankSlot(guild_bank_item.guild_id, GuildBankDepositArea);
-					guild_bank_item.slot = item.slot;
-					auto e               = GuildBankRepository::InsertOne(database, guild_bank_item);
-					if (!e.id) {
-						return false;
-					}
-					guild_bank_item.id = e.id;
-					item               = guild_bank_item;
-					break;
-				}
-			}
-			break;
-		}
-		default: {
-			return false;
-		}
-	}
-
-	SendGuildBankItemUpdate(guild_bank_item.guild_id, guild_bank_item.slot, guild_bank_item.area, true, c);
-
-	return true;
+ auto bank=GetGuildBank(item.guild_id);if(!bank||item.area>1||!item.item_id)return false;
+ const int slot=NextFreeBankSlot(item.guild_id,item.area);if(slot<0)return false;
+ item.slot=slot;auto saved=GuildBankRepository::InsertOne(database,item);
+ if(!saved.id){Housing::ServiceBank::AbortCurrent();return false;}
+ item.id=saved.id;auto& area=item.area==GuildBankMainArea?bank->items.main_area:bank->items.deposit_area;area[slot]=item;
+ SendGuildBankItemUpdate(item.guild_id,item.slot,item.area,true,c);return true;
 }
 
 int GuildBankManager::Promote(uint32 guild_id, int slot_id, Client* c)
@@ -1001,7 +950,7 @@ int GuildBankManager::Promote(uint32 guild_id, int slot_id, Client* c)
 	}
 
 	auto it_deposit = guild_bank->items.deposit_area.find(slot_id);
-	if (it_deposit == std::end(guild_bank->items.deposit_area)) {
+	if (it_deposit == std::end(guild_bank->items.deposit_area) || !it_deposit->second.item_id) {
 		return -1;
 	}
 
@@ -1022,7 +971,7 @@ int GuildBankManager::Promote(uint32 guild_id, int slot_id, Client* c)
 	new_item.who_for          = it_deposit->second.who_for;
 	new_item.permissions      = it_deposit->second.permissions;
 
-	GuildBankRepository::UpdateOne(database, new_item);
+	if(new_item.slot>=200 || GuildBankRepository::UpdateOne(database,new_item)!=1){Housing::ServiceBank::AbortCurrent();return -1;}
 
 	SendGuildBankItemUpdate(it_deposit->second.guild_id, it_deposit->second.slot, it_deposit->second.area, false, c);
 	it_deposit->second                         = std::move(GuildBankRepository::NewEntity());
@@ -1032,100 +981,23 @@ int GuildBankManager::Promote(uint32 guild_id, int slot_id, Client* c)
 	return new_item.slot;
 }
 
-void GuildBankManager::SetPermissions(uint32 guild_id, uint16 slot_id, uint32 permissions, const char *member_name, Client* c)
+void GuildBankManager::SetPermissions(uint32 guild_id,uint16 slot_id,uint32 permissions,const char* member_name,Client*c)
 {
-	auto guild_bank = GetGuildBank(guild_id);
-	if (!guild_bank) {
-		return;
-	}
-
-	auto item         = &guild_bank->items.main_area[slot_id];
-	item->permissions = permissions;
-	item->who_for.clear();
-
-	if (permissions == GuildBankSingleMember) {
-		item->who_for = member_name;
-	}
-
-	GuildBankRepository::UpdateOne(database, *item);
-	SendGuildBankItemUpdate(item->guild_id, item->slot, item->area, true, c);
+ auto bank=GetGuildBank(guild_id);if(!bank||slot_id>=200||permissions>3)return;
+ auto found=bank->items.main_area.find(slot_id);if(found==bank->items.main_area.end()||!found->second.item_id)return;
+ auto item=found->second;item.permissions=permissions;item.who_for=permissions==GuildBankSingleMember?(member_name?member_name:""):"";
+ if(item.permissions==found->second.permissions&&item.who_for==found->second.who_for)return;
+ if(GuildBankRepository::UpdateOne(database,item)!=1){Housing::ServiceBank::AbortCurrent();return;}
+ found->second=item;SendGuildBankItemUpdate(item.guild_id,item.slot,item.area,true,c);
 }
 
-std::unique_ptr<EQ::ItemInstance> GuildBankManager::GetItem(uint32 guild_id, uint16 area, uint16 slot_id, uint32 quantity)
+std::unique_ptr<EQ::ItemInstance> GuildBankManager::GetItem(uint32 guild_id,uint16 area,uint16 slot_id,uint32 quantity)
 {
-	auto guild_bank = GetGuildBank(guild_id);
-	if (!guild_bank) {
-		return nullptr;
-	}
-
-	std::unique_ptr<EQ::ItemInstance> inst;
-
-	if (area == GuildBankDepositArea) {
-		if (slot_id > guild_bank->items.deposit_area.size()) {
-			return nullptr;
-		}
-
-		inst.reset(database.CreateItem(
-			guild_bank->items.deposit_area[slot_id].item_id,
-			guild_bank->items.deposit_area[slot_id].quantity,
-			guild_bank->items.deposit_area[slot_id].augment_one_id,
-			guild_bank->items.deposit_area[slot_id].augment_two_id,
-			guild_bank->items.deposit_area[slot_id].augment_three_id,
-			guild_bank->items.deposit_area[slot_id].augment_four_id,
-			guild_bank->items.deposit_area[slot_id].augment_five_id,
-			guild_bank->items.deposit_area[slot_id].augment_six_id)
-		);
-
-		if (!inst) {
-			return nullptr;
-		}
-
-		if (!inst->IsStackable()) {
-			inst->SetCharges(guild_bank->items.deposit_area[slot_id].quantity);
-		}
-		else {
-			if (quantity <= guild_bank->items.deposit_area[slot_id].quantity) {
-				inst->SetCharges(quantity);
-			}
-			else {
-				inst->SetCharges(guild_bank->items.deposit_area[slot_id].quantity);
-			}
-		}
-	}
-	else {
-		if (slot_id > guild_bank->items.main_area.size()) {
-			return nullptr;
-		}
-
-		inst.reset(database.CreateItem(
-			guild_bank->items.main_area[slot_id].item_id,
-			guild_bank->items.main_area[slot_id].quantity,
-			guild_bank->items.main_area[slot_id].augment_one_id,
-			guild_bank->items.main_area[slot_id].augment_two_id,
-			guild_bank->items.main_area[slot_id].augment_three_id,
-			guild_bank->items.main_area[slot_id].augment_four_id,
-			guild_bank->items.main_area[slot_id].augment_five_id,
-			guild_bank->items.main_area[slot_id].augment_six_id)
-		);
-
-		if (!inst) {
-			return nullptr;
-		}
-
-		if (!inst->IsStackable()) {
-			inst->SetCharges(guild_bank->items.main_area[slot_id].quantity);
-		}
-		else {
-			if (quantity <= guild_bank->items.main_area[slot_id].quantity) {
-				inst->SetCharges(quantity);
-			}
-			else {
-				inst->SetCharges(guild_bank->items.main_area[slot_id].quantity);
-			}
-		}
-	}
-
-	return inst;
+ auto bank=GetGuildBank(guild_id);if(!bank||area>1||slot_id>=(area?200u:40u)||!quantity)return nullptr;
+ auto& items=area==GuildBankMainArea?bank->items.main_area:bank->items.deposit_area;auto found=items.find(slot_id);
+ if(found==items.end()||!found->second.item_id)return nullptr;const auto& item=found->second;
+ auto result=std::unique_ptr<EQ::ItemInstance>(database.CreateItem(item.item_id,item.quantity,item.augment_one_id,item.augment_two_id,item.augment_three_id,item.augment_four_id,item.augment_five_id,item.augment_six_id));
+ if(!result)return nullptr;if(result->IsStackable()){if(item.quantity<=0)return nullptr;result->SetCharges(std::min<uint32_t>(quantity,uint32_t(item.quantity)));}return result;
 }
 
 bool GuildBankManager::HasItem(uint32 guild_id, uint32 item_id)
@@ -1165,157 +1037,49 @@ std::shared_ptr<GuildBank> GuildBankManager::GetGuildBank(const uint32 guild_id)
 	return nullptr;
 }
 
-bool GuildBankManager::DeleteItem(uint32 guild_id, uint16 area, uint16 slot_id, uint32 quantity, Client* c)
+bool GuildBankManager::DeleteItem(uint32 guild_id,uint16 area,uint16 slot_id,uint32 quantity,Client*c)
 {
-	auto guild_bank = GetGuildBank(guild_id);
-	if (!guild_bank) {
-		return false;
-	}
-
-	auto item = &guild_bank->items.deposit_area[slot_id];
-
-	if (area == GuildBankMainArea) {
-		item = &guild_bank->items.main_area[slot_id];
-	}
-
-	if (item->item_id == 0) {
-		return false;
-	}
-
-	// delete the item
-	if (item->quantity == quantity) {
-		SendGuildBankItemUpdate(item->guild_id, item->slot, item->area, false, c);
-		GuildBankRepository::DeleteOne(database, item->id);
-
-		item->item_id     = 0;
-		item->id          = 0;
-		item->guild_id    = 0;
-		item->slot        = 0;
-		item->quantity    = 0;
-		item->permissions = 0;
-		item->donator.clear();
-		item->who_for.clear();
-
-		return true;
-	}
-
-	//otherwise update the quantity
-	item->quantity -= quantity;
-	GuildBankRepository::UpdateOne(database, *item);
-	SendGuildBankItemUpdate(item->guild_id, item->slot, item->area, true, c);
-
-	return true;
+ auto bank=GetGuildBank(guild_id);if(!bank||area>1||slot_id>=(area?200u:40u)||!quantity)return false;
+ auto& items=area==GuildBankMainArea?bank->items.main_area:bank->items.deposit_area;auto found=items.find(slot_id);
+ if(found==items.end()||!found->second.item_id||!found->second.id)return false;const auto before=found->second;
+ const auto* definition=database.GetItem(before.item_id);if(!definition)return false;
+ const bool full=!definition->Stackable||(before.quantity>0&&quantity==uint32_t(before.quantity));
+ if(definition->Stackable&&(before.quantity<1||quantity>uint32_t(before.quantity)))return false;
+ const std::string where=" WHERE id="+std::to_string(before.id)+" AND guild_id="+std::to_string(guild_id)+" AND area="+std::to_string(area)+" AND slot="+std::to_string(slot_id)+" AND item_id="+std::to_string(before.item_id)+" AND quantity="+std::to_string(before.quantity);
+ auto saved=database.QueryDatabase(full?"DELETE FROM guild_bank"+where:"UPDATE guild_bank SET quantity=quantity-"+std::to_string(quantity)+where,false);
+ if(!saved.Success()||saved.RowsAffected()!=1){Housing::ServiceBank::AbortCurrent();return false;}
+ if(full){SendGuildBankItemUpdate(guild_id,slot_id,area,false,c);found->second=GuildBankRepository::NewEntity();}
+ else{found->second.quantity-=quantity;SendGuildBankItemUpdate(guild_id,slot_id,area,true,c);}return true;
 }
 
-bool GuildBankManager::MergeStacks(uint32 guild_id, uint16 slot_id, Client* c)
+bool GuildBankManager::MergeStacks(uint32 guild_id,uint16 slot_id,Client*c)
 {
-	auto guild_bank = GetGuildBank(guild_id);
-	if (!guild_bank) {
-		return false;
-	}
-
-	auto       merge_bank_item = &guild_bank->items.main_area[slot_id];
-	const auto merge_item      = database.GetItem(merge_bank_item->item_id);
-
-	if (merge_bank_item->item_id == 0 || !merge_item) {
-		return false;
-	}
-
-	const int16                                   stack_size = merge_item->StackSize;
-	std::vector<GuildBankRepository::GuildBank *> queue{};
-	std::vector<std::string>                      queue_delete{};
-	std::vector<GuildBankRepository::GuildBank>   queue_updates{};
-
-	for (auto &[key, item]: guild_bank->items.main_area) {
-		if (item.item_id == merge_bank_item->item_id && item.slot != slot_id) {
-			queue.push_back(&item);
-		}
-	}
-
-	if (queue.empty()) {
-		return false;
-	}
-
-	std::ranges::sort(queue.begin(), queue.end(), [](auto &a, auto &b) { return a->quantity < b->quantity; });
-
-	for (auto const &i: queue) {
-		const int16 remaining_stack_size = stack_size - static_cast<int16>(merge_bank_item->quantity);
-		merge_bank_item->quantity += i->quantity;
-
-		if (merge_bank_item->quantity <= stack_size) {
-			i->item_id = 0;
-			queue_delete.push_back(std::to_string(i->id));
-			queue_updates.push_back(*i);
-			continue;
-		}
-
-		if (merge_bank_item->quantity > stack_size) {
-			merge_bank_item->quantity = stack_size;
-			i->quantity              -= remaining_stack_size;
-			queue_updates.push_back(*i);
-			queue_updates.push_back(*merge_bank_item);
-			break;
-		}
-	}
-
-	if (merge_bank_item->quantity < stack_size) {
-		queue_updates.push_back(*merge_bank_item);
-		queue.push_back(merge_bank_item);
-	}
-
-	GuildBankRepository::ReplaceMany(database, queue_updates);
-	if (!queue_delete.empty()) {
-		GuildBankRepository::DeleteWhere(
-			database, fmt::format("`id` IN({})", Strings::Implode(",", queue_delete)).c_str()
-		);
-	}
-
-	for (auto const &i: queue_updates) {
-		if (i.item_id == 0) {
-			SendGuildBankItemUpdate(i.guild_id, i.slot, GuildBankMainArea, false, c);
-			continue;
-		}
-
-		SendGuildBankItemUpdate(i.guild_id, i.slot, GuildBankMainArea, true, c);
-	}
-
-	return true;
+ auto bank=GetGuildBank(guild_id);if(!bank||slot_id>=200)return false;
+ auto found=bank->items.main_area.find(slot_id);if(found==bank->items.main_area.end())return false;const auto before=found->second;
+ const auto* definition=database.GetItem(before.item_id);if(!definition||!definition->Stackable||definition->StackSize<1||before.quantity<1||before.quantity>=definition->StackSize)return false;
+ auto target=before;std::vector<GuildBankRepository::GuildBank> changed;
+ for(const auto&[slot,item]:bank->items.main_area){if(slot==slot_id||item.item_id!=before.item_id||item.quantity<1||item.permissions!=before.permissions||item.who_for!=before.who_for||item.augment_one_id!=before.augment_one_id||item.augment_two_id!=before.augment_two_id||item.augment_three_id!=before.augment_three_id||item.augment_four_id!=before.augment_four_id||item.augment_five_id!=before.augment_five_id||item.augment_six_id!=before.augment_six_id)continue;
+  auto source=item;const int moved=std::min<int>(definition->StackSize-target.quantity,source.quantity);target.quantity+=moved;source.quantity-=moved;changed.push_back(source);if(target.quantity==definition->StackSize)break;
+ }
+ if(changed.empty())return false;
+ if(GuildBankRepository::UpdateOne(database,target)!=1){Housing::ServiceBank::AbortCurrent();return false;}
+ for(const auto&item:changed){const int result=item.quantity?GuildBankRepository::UpdateOne(database,item):GuildBankRepository::DeleteOne(database,item.id);if(result!=1){Housing::ServiceBank::AbortCurrent();return false;}}
+ found->second=target;SendGuildBankItemUpdate(guild_id,slot_id,GuildBankMainArea,true,c);
+ for(const auto&item:changed){if(!item.quantity){SendGuildBankItemUpdate(guild_id,item.slot,GuildBankMainArea,false,c);bank->items.main_area[item.slot]=GuildBankRepository::NewEntity();}else{bank->items.main_area[item.slot]=item;SendGuildBankItemUpdate(guild_id,item.slot,GuildBankMainArea,true,c);}}
+ return true;
 }
 
-bool GuildBankManager::SplitStack(uint32 guild_id, uint16 slot_id, uint32 quantity, Client* c)
+bool GuildBankManager::SplitStack(uint32 guild_id,uint16 slot_id,uint32 quantity,Client*c)
 {
-	auto guild_bank = GetGuildBank(guild_id);
-	if (!guild_bank) {
-		return false;
-	}
-
-	if (IsAreaFull(guild_id, GuildBankMainArea)) {
-		return false;
-	}
-
-	auto       split_bank_item = &guild_bank->items.main_area[slot_id];
-	const auto split_item      = database.GetItem(split_bank_item->item_id);
-
-	if (split_bank_item->item_id == 0 || !split_item) {
-		return false;
-	}
-
-	auto new_item     = GuildBankRepository::NewEntity();
-	new_item          = *split_bank_item;
-	new_item.id       = 0;
-	new_item.slot     = NextFreeBankSlot(guild_id, GuildBankMainArea);
-	new_item.quantity = quantity;
-	split_bank_item->quantity -= quantity;
-
-	GuildBankRepository::UpdateOne(database, *split_bank_item);
-	auto e                                     = GuildBankRepository::InsertOne(database, new_item);
-	new_item.id                                = e.id;
-	guild_bank->items.main_area[new_item.slot] = new_item;
-
-	SendGuildBankItemUpdate(split_bank_item->guild_id, split_bank_item->slot, split_bank_item->area, true, c);
-	SendGuildBankItemUpdate(new_item.guild_id, new_item.slot, new_item.area, true, c);
-
-	return true;
+ auto bank=GetGuildBank(guild_id);if(!bank||slot_id>=200||!quantity)return false;
+ auto found=bank->items.main_area.find(slot_id);if(found==bank->items.main_area.end())return false;const auto before=found->second;
+ const auto* definition=database.GetItem(before.item_id);if(!definition||!definition->Stackable||before.quantity<1||quantity>=uint32_t(before.quantity))return false;
+ int free=NextFreeBankSlot(guild_id,GuildBankMainArea);if(free<0)return false;
+ auto source=before;source.quantity-=quantity;auto target=before;target.id=0;target.slot=free;target.quantity=quantity;
+ if(GuildBankRepository::UpdateOne(database,source)!=1){Housing::ServiceBank::AbortCurrent();return false;}
+ auto saved=GuildBankRepository::InsertOne(database,target);if(!saved.id){Housing::ServiceBank::AbortCurrent();return false;}target.id=saved.id;
+ found->second=source;bank->items.main_area[free]=target;
+ SendGuildBankItemUpdate(guild_id,slot_id,GuildBankMainArea,true,c);SendGuildBankItemUpdate(guild_id,free,GuildBankMainArea,true,c);return true;
 }
 
 int32 GuildBankManager::NextFreeBankSlot(uint32 guild_id, uint32 area)
@@ -1427,6 +1191,14 @@ BaseGuildManager::GuildInfo* ZoneGuildManager::GetGuildByGuildID(uint32 guild_id
 }
 
 uint8* ZoneGuildManager::MakeGuildMembers(uint32 guild_id, const char* prefix_name, uint32& length) {
+	// Optional housing migration; servers without it retain a false trophy flag.
+	std::map<uint32, uint32> trophy_members;
+	if (m_db && RuleB(Housing,EnablePlayerHousing)) {
+		auto flags = m_db->QueryDatabase("SELECT char_id,trophy_enable FROM guild_members WHERE guild_id=" + std::to_string(guild_id), false);
+		if (flags.Success()) for (auto row = flags.begin(); row != flags.end(); ++row)
+			if (row[0] && row[1]) trophy_members[Strings::ToUnsignedInt(row[0])] = Strings::ToUnsignedInt(row[1]) == 1 ? 1 : 0;
+	}
+
 	uint8* retbuffer;
 
 	std::vector<CharGuildInfo*> members;
@@ -1454,6 +1226,7 @@ uint8* ZoneGuildManager::MakeGuildMembers(uint32 guild_id, const char* prefix_na
 	retbuffer = new uint8[length];
 
 	auto gms = (Internal_GuildMembers_Struct*)retbuffer;
+	gms->guild_id = guild_id;
 
 	//fill in the global header
 	strcpy(gms->player_name, prefix_name);
@@ -1514,6 +1287,7 @@ uint8* ZoneGuildManager::MakeGuildMembers(uint32 guild_id, const char* prefix_na
 		PutField(rank);
 		PutField(time_last_on);
 		PutField(tribute_enable);
+		e->trophy_enable = trophy_members.count(ci->char_id) ? trophy_members.at(ci->char_id) : 0;
 		PutField(total_tribute);
 		PutField(last_tribute);
 		SlideStructString(note_buf, ci->public_note);

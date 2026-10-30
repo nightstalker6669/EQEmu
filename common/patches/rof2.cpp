@@ -16,6 +16,12 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cstring>
+#include "../housing/plot_find_wire.h"
+#include "../housing/npc_item_metadata.h"
+#include "../housing/trophy_stat_item.h"
+#include "../housing/item_wire.h"
+#include <cmath>
+
 #include "rof2.h"
 #include "rof2_structs.h"
 
@@ -48,6 +54,53 @@ namespace RoF2
 	static Strategy struct_strategy;
 
 	void SerializeItem(EQ::OutBuffer& ob, const EQ::ItemInstance *inst, int16 slot_id, uint8 depth, ItemPacketType packet_type);
+
+	namespace {
+		bool HousingItemTreeValid(const EQ::ItemInstance &instance, size_t depth, size_t &nodes)
+		{
+			if (depth > HousingItemMaximumDepth || ++nodes > HousingItemMaximumNodes ||
+				!instance.GetUnscaledItem() || instance.GetMerchantSlot()) return false;
+			for (uint8_t index = EQ::invbag::SLOT_BEGIN; index <= EQ::invbag::SLOT_END; ++index) {
+				const auto *child = instance.GetItem(index);
+				if (child && !HousingItemTreeValid(*child, depth + 1, nodes)) return false;
+			}
+			return true;
+		}
+	}
+
+	std::optional<std::vector<uint8_t>> SerializeHousingItem(
+		const EQ::ItemInstance &instance, int16_t server_slot)
+	{
+		if (!RuleB(Housing, EnablePlayerHousing) || server_slot == EQ::invslot::SLOT_INVALID)
+			return std::nullopt;
+		size_t nodes = 0;
+		if (!HousingItemTreeValid(instance, 0, nodes)) return std::nullopt;
+		EQ::OutBuffer buffer;
+		SerializeItem(buffer, &instance, server_slot, 0, ItemPacketTrade);
+		if (!buffer.good() || buffer.size() == 0 || buffer.size() > HousingItemMaximumInventoryBytes)
+			return std::nullopt;
+		const auto bytes = buffer.str();
+		return std::vector<uint8_t>(bytes.begin(), bytes.end());
+	}
+
+
+	std::optional<std::vector<uint8_t>> SerializeHousingItemListEntry(
+		const EQ::ItemInstance &instance, int16_t server_slot)
+	{
+		size_t nodes = 0;
+		if (!HousingItemTreeValid(instance, 0, nodes)) return std::nullopt;
+		std::unique_ptr<EQ::ItemInstance> root;
+		const auto* view = &instance;
+		if (instance.IsClassBag()) {
+			root.reset(instance.Clone());
+			if (!root) return std::nullopt;
+			root->Clear();
+			view = root.get();
+		}
+		auto bytes = SerializeHousingItem(*view, server_slot);
+		if (!bytes || bytes->size() > HousingItemMaximumBytes) return std::nullopt;
+		return bytes;
+	}
 
 	// server to client inventory location converters
 	static inline structs::InventorySlot_Struct ServerToRoF2Slot(uint32 server_slot);
@@ -1744,8 +1797,8 @@ namespace RoF2
 		*buffer = '\0';
 		buffer++;
 
-		// Guild ID
-		//*((uint32*)buffer) = htonl(2);
+		// Native guild identity drives trophy eligibility and guild permissions.
+		*((uint32*)buffer) = htonl(emu->guild_id);
 		buffer += sizeof(uint32);
 
 		//add member count.
@@ -1787,7 +1840,7 @@ namespace RoF2
 				PutFieldN(rank);
 				PutFieldN(time_last_on);
 				PutFieldN(tribute_enable);
-				e->unknown01 = 0;
+				e->unknown01 = htonl(emu_e->trophy_enable); // Native persisted trophy opt-in.
 				PutFieldN(total_tribute);
 				PutFieldN(last_tribute);
 				e->unknown_one = htonl(1);
@@ -2031,7 +2084,8 @@ namespace RoF2
                 EQ::OutBuffer           ob;
                 EQ::OutBuffer::pos_type last_pos = ob.tellp();
 
-                ob.write((const char *)__emu_buffer, 4);
+                const uint32 wire_type=(old_item_pkt->PacketType==Housing::TrophyStatItem::PersonalPacket||old_item_pkt->PacketType==Housing::TrophyStatItem::GuildPacket)?uint32(ItemPacketTributeItem):uint32(old_item_pkt->PacketType);
+                ob.write((const char *)&wire_type, 4);
 
                 SerializeItem(ob, (const EQ::ItemInstance *)int_struct->inst, int_struct->slot_id, 0,
                               old_item_pkt->PacketType);
@@ -4839,9 +4893,16 @@ namespace RoF2
 			// SplineID -- no idea
 			Buffer += 8;
 			VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->IsMercenary);
-			VARSTRUCT_ENCODE_STRING(Buffer, "0000000000000000"); // RealEstateItemGuid
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 0xffffffff); // RealEstateID
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 0xffffffff); // RealEstateItemID
+			// The original spawn tail binds ordinary interactive NPCs to housing
+			// custody. Keep the canonical 16-character GUID width used in PacketSize.
+			const bool housing_bound = emu->housing_item_guid[16] == '\0' &&
+				std::strlen(emu->housing_item_guid) == 16 &&
+				std::strspn(emu->housing_item_guid, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+-") == 16 &&
+				emu->housing_estate_id && emu->housing_estate_id != 0xffffffff &&
+				emu->housing_item_id && emu->housing_item_id != 0xffffffff;
+			VARSTRUCT_ENCODE_STRING(Buffer, housing_bound ? emu->housing_item_guid : "0000000000000000"); // RealEstateItemGuid
+			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, housing_bound ? emu->housing_estate_id : 0xffffffff); // RealEstateID
+			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, housing_bound ? emu->housing_item_id : 0xffffffff); // RealEstateItemID
 			// 29 zero bytes follow
 			// PhysicsEffects follow here ... unsure what they are but it's a count followed by a struct like {spellid, casterid, effectid, baseeffect}
 			Buffer += 29;
@@ -5518,6 +5579,10 @@ namespace RoF2
 
 	DECODE(OP_FindPersonRequest)
 	{
+		// Native housing Find mode4 carries an estate at8, not an NPC at4.
+		// Preserve this exact existing wire body for the RoF2-only zone adapter;
+		// every other Find mode retains the existing NPC translation below.
+		if (Housing::PlotFindWire::IsPlot(__packet->pBuffer,__packet->size)) return;
 		DECODE_LENGTH_EXACT(structs::FindPersonRequest_Struct);
 		SETUP_DIRECT_DECODE(FindPersonRequest_Struct, structs::FindPersonRequest_Struct);
 
@@ -6383,6 +6448,12 @@ namespace RoF2
 
 		structs::InventorySlot_Struct slot_id{};
 		switch (packet_type) {
+        case Housing::TrophyStatItem::PersonalPacket:
+        case Housing::TrophyStatItem::GuildPacket:
+            if(slot_id_in<0||slot_id_in>=(packet_type==Housing::TrophyStatItem::PersonalPacket?10:4))return;
+            slot_id.Type=packet_type==Housing::TrophyStatItem::PersonalPacket?invtype::typeTrophyTribute:invtype::typeGuildTrophyTribute;
+            slot_id.Slot=slot_id_in;slot_id.SubIndex=0xffff;slot_id.AugIndex=0xffff;
+            break;
 		case ItemPacketLoot:
 			slot_id = ServerToRoF2CorpseSlot(slot_id_in);
 			break;
@@ -6463,7 +6534,9 @@ namespace RoF2
 		hdrf.ornamentHeroModel = hero_model;
 		hdrf.unknown063 = 0;
 		hdrf.Copied = 0;
-		hdrf.unknowna4 = 0xffffffff;
+		// Original reader 0x555703 stores this in ItemInstance+0x7c.
+		// House template/placed-item IDs cannot substitute for this identity.
+		hdrf.unknowna4 = RuleB(Housing, EnablePlayerHousing) ? inst->GetHousingEstateID() : 0xffffffff;
 		hdrf.unknowna5 = 0;
 		hdrf.ItemClass = item->ItemClass;
 
@@ -6799,7 +6872,7 @@ namespace RoF2
 		//evolve_string; // Some String, but being evolution related is just a guess
 
 		iqbs.Heirloom = 0;
-		iqbs.Placeable = 0;
+		iqbs.Placeable = 0; // Legacy path; native housing metadata is serialized below.
 		iqbs.unknown28 = -1;
 		iqbs.unknown29 = packet_type == ItemPacketInvalid ? 0xFF : 0;
 		iqbs.unknown30 = -1;
@@ -6809,7 +6882,29 @@ namespace RoF2
 		iqbs.unknown38 = 0;
 		iqbs.unknown39 = packet_type == ItemPacketInvalid ? 0 : 1;;
 
-		ob.write((const char*)&iqbs, sizeof(RoF2::structs::ItemQuaternaryBodyStruct));
+		if (RuleB(Housing, EnablePlayerHousing)) {
+			static_assert(offsetof(RoF2::structs::ItemQuaternaryBodyStruct, Placeable) == 96,
+				"Native quaternary metadata begins at byte 96");
+			Housing::ItemWire::Metadata metadata;
+			metadata.placeable = item->Placeable;
+			metadata.ignore_collisions = item->HousingIgnoreCollisions != 0;
+			metadata.placement_type = item->HousingPlacementType;
+			metadata.disable_rotation = item->HousingDisableRotation != 0;
+			metadata.disable_free_placement = item->HousingDisableFreePlacement != 0;
+			metadata.definition_id = item->HousingDefinitionID;
+			metadata.scale_min = std::isfinite(item->HousingMinimumScale) ? item->HousingMinimumScale : 0;
+			metadata.scale_max = std::isfinite(item->HousingMaximumScale) ? item->HousingMaximumScale : 0;
+			metadata.upkeep_id = item->HousingUpkeepID;
+			metadata.max_per_estate = item->HousingMaxPerEstate;
+			Housing::NpcItemMetadata::ToWire(metadata, *item);
+			metadata.trophy_benefit_id = item->HousingTrophyBenefitID;
+			metadata.instance_placeable = packet_type != ItemPacketInvalid;
+			auto tail = Housing::ItemWire::EncodeTail(metadata);
+			ob.write(reinterpret_cast<const char*>(&iqbs), 96);
+			ob.write(reinterpret_cast<const char*>(tail.data()), tail.size());
+		} else {
+			ob.write((const char*)&iqbs, sizeof(RoF2::structs::ItemQuaternaryBodyStruct));
+		}
 
 		EQ::OutBuffer::pos_type count_pos = ob.tellp();
 		uint32 subitem_count = 0;
