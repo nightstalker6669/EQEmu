@@ -256,6 +256,12 @@ MySQLRequestResult DBcore::TransactionCommitStrict()
 	}
 
 	auto result = QueryDatabase("COMMIT", 6, false);
+	if (!result.Success()) {
+		// Keep the strict scope alive until rollback is attempted. Clearing it
+		// first would make caller cleanup a no-op on a still-live session.
+		TransactionRollbackStrict();
+		return result;
+	}
 	m_strict_transaction_active = false;
 	m_strict_transaction_failed = false;
 	return result;

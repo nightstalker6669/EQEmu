@@ -1,0 +1,17 @@
+{
+  "npc_types": {
+    "394153": "Selana",
+    "394191": "Daer`Lagar",
+    "394200": "Warden_Jakar",
+    "399032": "Yavia",
+    "399070": "#Moldren_the_Wise",
+    "399073": "#Wilped_the_Withered",
+    "399100": "#Toegnasher",
+    "399139": "Bordan_the_Cursed"
+  },
+  "external_modules": [
+    "achievement_quest_mesa_inventory",
+    "achievement_quest_blightfire",
+    "json"
+  ]
+}

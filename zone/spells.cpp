@@ -1729,6 +1729,13 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 	{
 		DeleteChargeFromSlot = GetItemSlotToConsumeCharge(spell_id, inventory_slot);
 	}
+	// Expose completed native item-click custody without retaining an item pointer.
+	const uint32 completed_cast_item_id =
+		IsClient() && IsFromItem && item && item->GetItem()->Click.Effect == spell_id
+			? item->GetID() : 0;
+	const int32 completed_cast_item_slot = completed_cast_item_id
+		? static_cast<int32>(inventory_slot) : -1;
+
 	// we're done casting, now try to apply the spell
 	if(!SpellFinished(spell_id, spell_target, slot, mana_used, inventory_slot, resist_adjust, false,-1, 0xFFFFFFFF, 0, true))
 	{
@@ -1747,8 +1754,15 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 
 	TryTriggerOnCastFocusEffect(focusTriggerOnCast, spell_id);
 
+	bool completed_cast_charge_consumed = false;
 	if (IsClient() && DeleteChargeFromSlot >= 0) {
+		const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+		const uint32 before_id = before ? before->GetID() : 0;
+		const int16 before_charges = before ? before->GetCharges() : 0;
 		CastToClient()->DeleteItemInInventory(DeleteChargeFromSlot, 1, true);
+		const auto after = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+		completed_cast_charge_consumed = completed_cast_item_id == before_id && before_charges > 0 &&
+			(!after || after->GetID() != before_id || after->GetCharges() == before_charges - 1);
 	}
 	else if (IsBot() && DeleteChargeFromSlot >= 0) {
 		EQ::ItemInstance* inst = CastToBot()->GetBotItem(DeleteChargeFromSlot);
@@ -1769,11 +1783,14 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 
 	parse->EventMob(EVENT_CAST, this, nullptr, [&]() {
 		return fmt::format(
-			"{} {} {} {}",
+			"{} {} {} {} {} {} {}",
 			spell_id,
 			GetID(),
 			GetCasterLevel(spell_id),
-			target_id
+			target_id,
+			completed_cast_item_id,
+			completed_cast_item_slot,
+			completed_cast_charge_consumed ? 1 : 0
 		);
 	}, 0, &args);
 
@@ -7110,9 +7127,19 @@ void Mob::DoBardCastingFromItemClick(bool is_casting_bard_song, uint32 cast_time
 	//Instant cast items do not stop bard songs or interrupt casting.
 	else if (CheckItemRaceClassDietyRestrictionsOnCast(item_slot) && DoCastingChecksOnCaster(spell_id, CastingSlot::Item)) {
 		int16 DeleteChargeFromSlot = GetItemSlotToConsumeCharge(spell_id, item_slot);
+		const auto completed_item = IsClient() ? CastToClient()->GetInv().GetItem(item_slot) : nullptr;
+		const uint32 completed_item_id = completed_item && completed_item->GetItem()->Click.Effect == spell_id
+			? completed_item->GetID() : 0;
+		bool completed_charge_consumed = false;
 		if (SpellFinished(spell_id, entity_list.GetMob(target_id), CastingSlot::Item, 0, item_slot)) {
 			if (IsClient() && DeleteChargeFromSlot >= 0) {
+				const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+				const uint32 before_id = before ? before->GetID() : 0;
+				const int16 before_charges = before ? before->GetCharges() : 0;
 				CastToClient()->DeleteItemInInventory(DeleteChargeFromSlot, 1, true);
+				const auto after = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+				completed_charge_consumed = completed_item_id == before_id && before_charges > 0 &&
+					(!after || after->GetID() != before_id || after->GetCharges() == before_charges - 1);
 			}
 			else if (IsBot() && DeleteChargeFromSlot >= 0) {
 				EQ::ItemInstance* inst = CastToBot()->GetBotItem(DeleteChargeFromSlot);
@@ -7127,6 +7154,15 @@ void Mob::DoBardCastingFromItemClick(bool is_casting_bard_song, uint32 cast_time
 					GetOwner()->Message(Chat::Red, "%s says, 'Failed to update item charges.", GetCleanName());
 					LogError("Failed to update item charges for {}.", GetCleanName());
 				}
+			}
+			if (IsClient() && completed_item_id &&
+				(spell_id == 7230 || spell_id == 9483 || spell_id == 9484 || spell_id == 9485)) {
+				std::vector<std::any> args = { entity_list.GetMob(target_id) };
+				parse->EventMob(EVENT_CAST, this, nullptr, [&]() {
+					return fmt::format("{} {} {} {} {} {} {}", spell_id, GetID(),
+						GetCasterLevel(spell_id), target_id, completed_item_id, item_slot,
+						completed_charge_consumed ? 1 : 0);
+				}, 0, &args);
 			}
 		}
 		else {

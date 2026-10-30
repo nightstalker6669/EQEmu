@@ -950,6 +950,20 @@ std::string lua_get_rule(std::string rule_name) {
 	return rule_value;
 }
 
+int lua_shared_task_member_count(std::string identity) {
+	if (identity.empty() || identity.size() > 20 ||
+		identity.find_first_not_of("0123456789") != std::string::npos) {
+		return -1;
+	}
+	auto results = database.QueryDatabase(fmt::format(
+		"SELECT COUNT(*) FROM shared_task_members WHERE shared_task_id = {}", identity));
+	if (!results.Success() || results.RowCount() != 1) {
+		return -1;
+	}
+	auto row = results.begin();
+	return Strings::ToInt(row[0]);
+}
+
 std::string lua_get_data(std::string bucket_key) {
 	return DataBucket::GetData(&database, bucket_key);
 }
@@ -6090,6 +6104,7 @@ luabind::scope lua_register_general() {
 		luabind::def("say_link", (std::string(*)(std::string,bool,std::string))&lua_say_link),
 		luabind::def("set_rule", (void(*)(std::string, std::string))&lua_set_rule),
 		luabind::def("get_rule", (std::string(*)(std::string))&lua_get_rule),
+		luabind::def("shared_task_member_count", &lua_shared_task_member_count),
 		luabind::def("get_data", (std::string(*)(std::string))&lua_get_data),
 		luabind::def("get_data_expires", (std::string(*)(std::string))&lua_get_data_expires),
 		luabind::def("set_data", (void(*)(std::string, std::string))&lua_set_data),

@@ -234,6 +234,7 @@ protected:
 	float  m_min_x;
 	float  m_min_y;
 	bool   m_ground_spawn;
+	bool   m_random_ground_z = false; // Recurring spawn uses the map-height sentinel.
 	char   m_display_name[64];
 	bool   m_fix_z;
 protected:

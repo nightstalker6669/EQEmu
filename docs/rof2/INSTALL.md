@@ -33,3 +33,5 @@ Build and deploy matching world/zone binaries and `utils/patches/patch_RoF2.conf
 ## Verification
 
 See [integration.json](integration.json) for validation of the current source. Original release evidence is retained separately. No live server or database was changed during publication.
+
+Steppes adds two required schema migrations and a complete guarded content installer. Follow the [Steppes engine section](../../extensions/rof2/achievements/ENGINE.md#steppes-shared-task-and-scene-integration) and [content guide](../../extensions/rof2/achievements/content/steppes/README.md). Back up and stop writers; deploy the matching rebuilt engine before players reconnect.

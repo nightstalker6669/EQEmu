@@ -16,6 +16,8 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "task_client_state.h"
+#include "task_shared_reward_identity.h"
+#include "common/shared_task_admission.h"
 
 #include "common/events/player_event_logs.h"
 #include "common/misc_functions.h"
@@ -145,7 +147,7 @@ std::optional<uint64_t> EnsureTaskRewardInstance(
 			// Shared-task world coordination can normalize the acceptance time
 			// after the reservation is created. Keep the occurrence identity
 			// stable and update only its diagnostic timestamp.
-			database.QueryDatabase(fmt::format(
+			auto normalized = database.QueryDatabase(fmt::format(
 				"UPDATE character_task_reward_instances "
 				"SET accepted_time = {} WHERE occurrence_id = {} "
 				"AND character_id = {}",
@@ -153,6 +155,9 @@ std::optional<uint64_t> EnsureTaskRewardInstance(
 				occurrence_id,
 				character_id
 			));
+			if (!normalized.Success()) {
+				return std::nullopt;
+			}
 		}
 		return occurrence_id
 			? std::optional<uint64_t>(occurrence_id)
@@ -1286,11 +1291,16 @@ bool ClientTaskState::RewardTask(
 
 		const auto accepted_time =
 			static_cast<uint32_t>(std::max(client_task.accepted_time, 0));
-		const auto source_instance_id = EnsureTaskRewardInstance(
-			c->CharacterID(),
-			task_id,
-			accepted_time
-		);
+		const auto shared_identity_matches = ti->type == TaskType::Shared
+			? TaskSharedRewardIdentity::LocalMatches(database, c->CharacterID(), task_id, accepted_time)
+			: std::optional<bool>(true);
+		if (!shared_identity_matches || !*shared_identity_matches) {
+			LogError("Shared selectable task [{}] has stale or unverifiable local identity for character [{}]", task_id, c->CharacterID());
+			return false;
+		}
+		const auto source_instance_id = ti->type == TaskType::Shared
+			? TaskSharedRewardIdentity::Ensure(database, c->CharacterID(), task_id, accepted_time)
+			: EnsureTaskRewardInstance(c->CharacterID(), task_id, accepted_time);
 		if (!source_instance_id) {
 			LogError(
 				"Failed to reserve or recover a selectable reward occurrence "
@@ -3082,33 +3092,8 @@ void ClientTaskState::AcceptNewTask(
 		return;
 	}
 
-	if (
-		task->reward_method == METHODSELECT &&
-		task->type == TaskType::Shared &&
-		!client->m_requesting_shared_task &&
-		m_active_shared_task.task_id == TASKSLOTEMPTY
-	) {
-		const auto reward_accepted_time = static_cast<uint32_t>(
-			std::max(static_cast<int>(accept_time), 0)
-		);
-		if (!ReserveTaskRewardInstance(
-			client->CharacterID(),
-			task_id,
-			reward_accepted_time
-		)) {
-			LogError(
-				"Failed to reserve selectable reward identity before shared "
-				"task [{}] coordination for character [{}]",
-				task_id,
-				client->CharacterID()
-			);
-			client->Message(
-				Chat::Red,
-				"This task's selectable reward could not be prepared. Please try again."
-			);
-			return;
-		}
-	}
+	// Shared occurrences are reserved only after world confirms actual
+	// membership; failed requests must not mutate a previous run's identity.
 
 	// shared task
 	// intercept and pass to world first before processing normally
@@ -3134,6 +3119,29 @@ void ClientTaskState::AcceptNewTask(
 		safe_delete(pack);
 
 		return;
+	}
+
+	const bool world_shared_confirmation = task->type == TaskType::Shared && client->m_requesting_shared_task;
+	if (world_shared_confirmation) {
+		const auto policy = SharedTaskAdmission::ReadPolicy(content_db, task_id, task->min_level, task->max_level);
+		if (!policy.valid) {
+			LogError("Unable to verify shared admission policy for task [{}]", task_id);
+			return;
+		}
+		// The exception is for a world-admitted late member, never a caller's
+		// enforce_level_requirement=false. Ordinary level checks stay unchanged.
+		if (client->GetLevel() < task->min_level && policy.late_join_min_level < task->min_level) {
+			const auto run = TaskSharedRewardIdentity::ReadRun(database, client->CharacterID(), task_id);
+			if (!run || run->accepted_time != accept_time) {
+				LogError("Unable to verify canonical shared admission for character [{}] task [{}]", client->CharacterID(), task_id);
+				return;
+			}
+		}
+		if ((policy.late_join_min_level && client->GetLevel() < policy.late_join_min_level) ||
+			(task->max_level && client->GetLevel() > task->max_level)) {
+			client->MessageString(Chat::Yellow, TASK_NOT_RIGHT_LEVEL);
+			return;
+		}
 	}
 
 	bool max_tasks = false;
@@ -3174,7 +3182,7 @@ void ClientTaskState::AcceptNewTask(
 		}
 	}
 
-	if (enforce_level_requirement && !TaskManager::Instance()->ValidateLevel(task_id, client->GetLevel())) {
+	if (!world_shared_confirmation && enforce_level_requirement && !TaskManager::Instance()->ValidateLevel(task_id, client->GetLevel())) {
 		client->MessageString(Chat::Yellow, TASK_NOT_RIGHT_LEVEL);
 		return;
 	}
@@ -3267,13 +3275,12 @@ void ClientTaskState::AcceptNewTask(
 			std::max(static_cast<int>(accept_time), 0)
 		);
 		const auto occurrence_id =
-			task->type == TaskType::Shared &&
-				client->m_requesting_shared_task
-				? EnsureTaskRewardInstance(
+			task->type == TaskType::Shared
+				? TaskSharedRewardIdentity::Ensure(
+					database,
 					client->CharacterID(),
 					task_id,
-					reward_accepted_time,
-					true
+					reward_accepted_time
 				)
 				: ReserveTaskRewardInstance(
 					client->CharacterID(),

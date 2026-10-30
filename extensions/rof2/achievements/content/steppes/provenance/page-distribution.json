@@ -1,0 +1,20 @@
+{
+  "item_id": 88137,
+  "ground_id": 399903,
+  "kind": "native recurring random ground spawn",
+  "bounds": {
+    "min_x": 963.19,
+    "max_x": 1209,
+    "min_y": -544.45,
+    "max_y": 209
+  },
+  "max_z": -99999,
+  "fix_z": 1,
+  "max_allowed": 1,
+  "respawn_timer_seconds": 300,
+  "historical_fact": "Random locations in grove; bounds include five pre-May2013 reported positions",
+  "defaults": "Uniform rectangular XY, cap1,300second timing are labelled configurable reconstruction",
+  "required_engine": "Object remembers invalid seed Z and recomputes map height after every random XY respawn",
+  "source": "https://web.archive.org/web/20130315173244id_/http://everquest.allakhazam.com/db/quest.html?quest=3630",
+  "native_acceptance": "PENDING"
+}

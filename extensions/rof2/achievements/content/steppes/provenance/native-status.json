@@ -1,0 +1,41 @@
+{
+  "status": "Steppes milestone with explicit remaining acceptance limits",
+  "confirmed_native_quests": [
+    "Clay for Selana",
+    "Wood for Carving",
+    "The Talking Plant",
+    "The Library",
+    "Sweeping the Steppes: Gnolls",
+    "Web of Curiosity",
+    "Cull the Gnolls",
+    "Cull the Goblins",
+    "Sweeping the Steppes: Goblins",
+    "Sowing Dissent"
+  ],
+  "partial_native": [
+    "Book for Toegnasher first-page native pickup/handin and recurring random terrainZ"
+  ],
+  "pending": [
+    "Treasure of the Dead, Book for Toegnasher remainder, The Destroyed Portal",
+    "Remaining parent selections and multiplayer latejoin/rejoin/independent claims",
+    "Recurring Yavia supply client actor/target failure after repeated pickups"
+  ],
+  "no_new_wire_opcode": true,
+  "historical_scope": "By May31 2013; approved missing-value defaults labelled in companion provenance",
+  "limitations": [
+    "Web of Curiosity required zone refreshes after two pickup failures; all supplies, waves, handins and rewards were native. Cause remains unresolved."
+  ],
+  "confirmed_native_parent_rewards": [
+    {
+      "achievement_id": 500060200,
+      "components": 7,
+      "selected_option": 1,
+      "items": [
+        108599,
+        108598
+      ],
+      "durable_grants": "Both saved once, attempt_count1"
+    }
+  ],
+  "sowing_acceptance": "Real ground trap, native item cast7230, three owner-aggro goblin crossings/deaths, final hail, reward and achievement credit. Normal navigation preserved hate; native Taunt failures were retried."
+}

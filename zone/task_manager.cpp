@@ -16,6 +16,8 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "task_manager.h"
+#include "task_shared_reward_identity.h"
+#include "common/shared_task_admission.h"
 
 #include "common/misc_functions.h"
 #include "common/repositories/character_activities_repository.h"
@@ -85,7 +87,6 @@ bool TaskManager::LoadTaskRewardSets()
 		for (auto &[task_id, task] : m_task_data) {
 			task.has_reward_selection =
 				task.reward_method == METHODSELECT &&
-				task.type != TaskType::Shared &&
 				m_task_reward_sets.contains(task_id);
 		}
 	};
@@ -93,8 +94,7 @@ bool TaskManager::LoadTaskRewardSets()
 	std::unordered_set<uint64_t> active_reward_source_ids;
 	for (const auto &[task_id, task] : m_task_data) {
 		if (
-			task.reward_method == METHODSELECT &&
-			task.type != TaskType::Shared
+			task.reward_method == METHODSELECT
 		) {
 			active_reward_source_ids.insert(task_id);
 		}
@@ -147,15 +147,6 @@ bool TaskManager::LoadTaskRewardSets()
 			);
 			continue;
 		}
-		if (task->type == TaskType::Shared) {
-			LogError(
-				"Selectable reward set [{}] references shared task [{}], "
-				"which is not supported",
-				reward_set.reward_set_id,
-				task_id
-			);
-			continue;
-		}
 		if (reward_set.title.empty()) {
 			reward_set.title = task->title;
 		}
@@ -164,8 +155,7 @@ bool TaskManager::LoadTaskRewardSets()
 
 	for (auto &[task_id, task] : m_task_data) {
 		if (
-			task.reward_method != METHODSELECT ||
-			task.type == TaskType::Shared
+			task.reward_method != METHODSELECT
 		) {
 			task.has_reward_selection = false;
 			continue;
@@ -934,7 +924,9 @@ void TaskManager::SharedTaskSelector(Client* client, Mob* mob, const std::vector
 
 bool TaskManager::CanOfferSharedTask(int task_id, const SharedTaskRequest& request)
 {
-	// todo: are there non repeatable shared tasks? (would need to check all group/raid members)
+	if (!request.leader_id || request.members.empty()) {
+		return false;
+	}
 	const auto task = GetTaskData(task_id);
 	if (!task)
 	{
@@ -962,6 +954,12 @@ bool TaskManager::CanOfferSharedTask(int task_id, const SharedTaskRequest& reque
 		return false;
 	}
 
+	if (!task->repeatable) {
+		const auto completed = SharedTaskAdmission::CompletedMember(database, task_id, request.character_ids);
+		if (!completed || *completed) {
+			return false;
+		}
+	}
 	return true;
 }
 
@@ -1502,7 +1500,9 @@ bool TaskManager::LoadClientState(Client *client, ClientTaskState *cts)
 
 	// in a case where a client somehow lost local state with what state exists in world - we need
 	// to perform an inverse sync where we inject the task
-	SyncClientSharedTaskStateToLocal(client);
+	if (!SyncClientSharedTaskStateToLocal(client)) {
+		return false;
+	}
 
 	auto character_tasks = CharacterTasksRepository::GetWhere(
 		database,
@@ -1969,7 +1969,7 @@ void TaskManager::SyncClientSharedTaskRemoveLocalIfNotExists(Client *c, ClientTa
 
 // in a case where a client somehow lost local state with what state exists in world - we need
 // to perform an inverse sync where we inject the task
-void TaskManager::SyncClientSharedTaskStateToLocal(
+bool TaskManager::SyncClientSharedTaskStateToLocal(
 	Client *c
 )
 {
@@ -1977,6 +1977,42 @@ void TaskManager::SyncClientSharedTaskStateToLocal(
 		database,
 		fmt::format("charid = {} ORDER BY acceptedtime", c->CharacterID())
 	);
+
+	// A member may have been removed/reassigned while offline. For selectable
+	// tasks, compare the immutable world run and reward occurrence before
+	// trusting prior done counts or was_rewarded (even same-second repeats).
+	std::unordered_set<uint32_t> stale_selectable_tasks;
+	for (const auto &local : character_tasks) {
+		const auto task = GetTaskData(local.taskid);
+		if (local.type != TASK_TYPE_SHARED || !task ||
+			task->reward_method != METHODSELECT) {
+			continue;
+		}
+		const auto matches = TaskSharedRewardIdentity::LocalMatches(
+			database, c->CharacterID(), local.taskid, local.acceptedtime);
+		if (!matches) {
+			LogError("Unable to verify shared reward identity for character [{}]", c->CharacterID());
+			return false;
+		}
+		if (!*matches) {
+			stale_selectable_tasks.insert(local.taskid);
+		}
+	}
+	for (const auto task_id : stale_selectable_tasks) {
+		for (const auto &statement : {
+			fmt::format("DELETE FROM character_activities WHERE charid = {} AND taskid = {}", c->CharacterID(), task_id),
+			fmt::format("DELETE FROM character_tasks WHERE charid = {} AND taskid = {} AND type = {}", c->CharacterID(), task_id, TASK_TYPE_SHARED),
+			fmt::format("DELETE FROM character_task_reward_instances WHERE character_id = {} AND task_id = {}", c->CharacterID(), task_id)
+		}) {
+			if (!database.QueryDatabase(statement).Success()) {
+				LogError("Unable to reset stale shared reward state for character [{}]", c->CharacterID());
+				return false;
+			}
+		}
+	}
+	std::erase_if(character_tasks, [&stale_selectable_tasks](const auto &local) {
+		return local.type == TASK_TYPE_SHARED && stale_selectable_tasks.contains(local.taskid);
+	});
 
 	bool has_character_shared_task = false;
 
@@ -2000,10 +2036,16 @@ void TaskManager::SyncClientSharedTaskStateToLocal(
 			LogTasksDetail("We have membership in database");
 			auto s = SharedTasksRepository::FindOne(
 				database,
-				(int) stm.front().shared_task_id
+				stm.front().shared_task_id
 			);
 
 			if (s.id > 0) {
+				const auto task = GetTaskData(s.task_id);
+				if (task && task->reward_method == METHODSELECT &&
+					!TaskSharedRewardIdentity::Ensure(database, c->CharacterID(), s.task_id, s.accepted_time)) {
+					LogError("Unable to recover shared reward occurrence for character [{}]", c->CharacterID());
+					return false;
+				}
 				LogTasksDetail("Creating entity");
 
 				// create task locally
@@ -2021,7 +2063,7 @@ void TaskManager::SyncClientSharedTaskStateToLocal(
 					database,
 					fmt::format(
 						"shared_task_id = {}",
-						(int) stm.front().shared_task_id
+						stm.front().shared_task_id
 					)
 				);
 
@@ -2040,6 +2082,7 @@ void TaskManager::SyncClientSharedTaskStateToLocal(
 			}
 		}
 	}
+	return true;
 }
 
 void TaskManager::HandleUpdateTasksOnKill(Client* client, NPC* npc)
