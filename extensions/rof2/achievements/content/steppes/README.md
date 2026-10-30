@@ -2,7 +2,7 @@
 
 This package contains the 13 original Steppes quest routes, their three Hero's Journey achievement definitions, NPC/ground-item content, encounter scripts and rewards. Historical scope ends May 31, 2013. Sources and approved emulator defaults are separated in `provenance/`.
 
-**Release candidate:** remaining native encounters and multiplayer acceptance are still pending. See `provenance/native-status.json` for verified coverage and known limitations. A successful import is not gameplay verification.
+**Release candidate:** twelve of thirteen quest routes passed native completion and reward checks. Treasure of the Dead and multiplayer acceptance are still pending. See `provenance/native-status.json` for verified coverage and known limitations. A successful import is not gameplay verification.
 
 ## What installs
 
