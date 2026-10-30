@@ -125,6 +125,8 @@ void MapOpcodes()
 	ConnectedOpcodes[OP_AdventureMerchantSell] = &Client::Handle_OP_AdventureMerchantSell;
 	ConnectedOpcodes[OP_AdventureRequest] = &Client::Handle_OP_AdventureRequest;
 	ConnectedOpcodes[OP_RealEstateNeighborhood] = &Client::Handle_OP_RealEstateNeighborhood;
+	ConnectedOpcodes[OP_FellowshipAction] = &Client::Handle_OP_FellowshipAction;
+	ConnectedOpcodes[OP_FellowshipCampRequest] = &Client::Handle_OP_FellowshipCampRequest;
 	ConnectedOpcodes[OP_GuildTrophyToggle]=&Client::Handle_OP_GuildTrophyToggle;
     ConnectedOpcodes[OP_GuildTrophySave]=&Client::Handle_OP_GuildTrophySave;
     ConnectedOpcodes[OP_GuildTrophyModify]=&Client::Handle_OP_GuildTrophyModify;

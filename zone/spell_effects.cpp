@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "fellowship_campsite_bonuses.h"
+
 #include "mob.h"
 
 #include "common/bodytypes.h"
@@ -54,6 +56,13 @@ bool Mob::SpellEffect(Mob* caster, int32 spell_id, float partial, int level_over
 
 	if(!IsValidSpell(spell_id))
 		return false;
+	// The RoF2 registration insignia uses a placeholder stat effect in PEQ.
+	// Its authenticated item cast is completed by the fellowship destination
+	// service instead of applying that placeholder to the player.
+	if (spell_id == 7618 && IsClient()) {
+		if (caster != this) return false;
+		return CastToClient()->TryFellowshipCalling();
+	}
 
 	const SPDat_Spell_Struct &spell = spells[spell_id];
 
@@ -6852,6 +6861,10 @@ int64 Mob::GetFocusEffect(focusType type, int32 spell_id, Mob *caster, bool from
 	else if (RuleB(Spells, UseAdditiveFocusFromWornSlot)) {
 		worneffect_bonus = itembonuses.FocusEffectsWorn[type];
 	}
+
+	// Campsite focus competes with the existing spell-focus contribution. It
+	// never applies twice or adds another independent item/AA focus source.
+	if (IsClient()) realTotal2 = MergeFellowshipCampsiteFocus(realTotal2, GetFellowshipCampsiteFocus(*CastToClient(), type, spell_id));
 
 	return realTotal + realTotal2 + realTotal3 + worneffect_bonus;
 }

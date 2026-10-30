@@ -15,6 +15,10 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/fellowship/service.h"
+#include <cstring>
+#include <ctime>
+
 #include "../common/housing/upkeep_refresh_wire.h"
 
 #include "zoneserver.h"
@@ -183,6 +187,61 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 	auto pack = &tpack;
 
 	switch (opcode) {
+        case ServerOP_FellowshipChat: {
+            if (pack->size != sizeof(FellowshipChatRequest)) {
+                break;
+            }
+            const auto* request = reinterpret_cast<const FellowshipChatRequest*>(pack->pBuffer);
+            if (!request->message[0] || !std::memchr(request->message, 0, sizeof(request->message))) {
+                break;
+            }
+            auto* actor = ClientList::Instance()->FindCLEByCharacterID(request->actor_id);
+            if (!actor || actor->Server() != this || actor->Online() != CLE_Status::InZone) {
+                break;
+            }
+            Fellowship::Service fellowships(database);
+            const auto group = fellowships.GetByCharacter(actor->CharID(), static_cast<uint64_t>(std::time(nullptr)));
+            if (!group || !group.value.id) {
+                break;
+            }
+            const Fellowship::Member* sender = nullptr;
+            for (const auto& member : group.value.members) {
+                if (member.character_id == actor->CharID()) {
+                    sender = &member;
+                    break;
+                }
+            }
+            if (!sender) {
+                break;
+            }
+            for (const auto& member : group.value.members) {
+                // RoF2 already echoes the sender's own /fsay locally.
+                if (member.character_id == actor->CharID()) {
+                    continue;
+                }
+                auto* recipient = ClientList::Instance()->FindCLEByCharacterID(member.character_id);
+                if (!recipient || recipient->Online() != CLE_Status::InZone) {
+                    continue;
+                }
+                ServerPacket delivery(ServerOP_FellowshipChatDeliver, sizeof(FellowshipChatDelivery));
+                auto* payload = reinterpret_cast<FellowshipChatDelivery*>(delivery.pBuffer);
+                payload->actor_id = actor->CharID();
+                payload->recipient_id = member.character_id;
+                payload->fellowship_id = group.value.id;
+                strn0cpy(payload->sender, sender->name.c_str(), sizeof(payload->sender));
+                strn0cpy(payload->message, request->message, sizeof(payload->message));
+                ClientList::Instance()->SendPacket(member.name.c_str(), &delivery);
+            }
+            break;
+        }
+        case ServerOP_FellowshipRefresh: {
+            // This handler is reached through the authenticated zone connection.
+            // Never forward packet-declared membership or client wire bytes.
+            if (pack->size == 0) {
+                ZSList::Instance()->SendPacket(pack);
+            }
+            break;
+        }
 		case ServerOP_HousingGuildTrophyRequest: {
         if(pack->size!=sizeof(HousingGuildTrophyRequest))break;auto* request=reinterpret_cast<const HousingGuildTrophyRequest*>(pack->pBuffer);auto* actor=ClientList::Instance()->FindCLEByCharacterID(request->character_id);if(!actor||actor->Server()!=this||actor->Online()!=CLE_Status::InZone||request->action>2)break;guild_mgr.GuildTrophyRequest(actor->CharID(),actor->AccountID(),request->action,request->target_id);break;
     }

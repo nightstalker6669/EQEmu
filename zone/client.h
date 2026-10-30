@@ -260,6 +260,22 @@ public:
 
 	Client(EQStreamInterface * ieqs);
 	Client(); // mocking / testing
+	void RefreshFellowship();
+	void ProcessFellowship();
+	void SendFellowshipChat(const char* message);
+	void RefreshFellowshipVitality();
+	bool ProcessFellowshipCombatExperience(ExpSource source, uint64 experience_total, uint64 aa_total, NPC* npc);
+	bool m_fellowship_xp_persistence_failed = false;
+	bool m_fellowship_xp_transaction_active = false;
+	std::vector<uint8> m_fellowship_vitality_snapshot;
+	bool TryFellowshipCalling();
+	uint32 FellowshipID() const { return m_fellowship_id; }
+	uint32 m_fellowship_id = 0;
+	uint64 m_fellowship_refresh_at = 0;
+	uint64 m_fellowship_action_at = 0;
+	uint64 m_fellowship_invite_expires = 0;
+	uint32 m_fellowship_inviter = 0;
+	std::vector<uint8> m_fellowship_snapshot;
 	bool m_housing_gate_open = false;
 	Housing::InventoryBridge::Bridge* GetHousingInventoryBridge();
 	bool ClaimInventorySessionReservation();

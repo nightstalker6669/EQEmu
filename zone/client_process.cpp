@@ -512,6 +512,7 @@ bool Client::Process() {
 		}
 
 		ProcessHousingTrophyBenefits();
+		ProcessFellowship();
         ProcessHousingGuildTrophyBenefits();
         Housing::GuildPortalRuntime::Process(*this);
 		SpellProcess();

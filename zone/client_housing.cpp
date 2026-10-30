@@ -154,6 +154,12 @@ std::optional<HousingView> LoadHousingView(Client* c) {
  if(!QueryView(*db,"SET TRANSACTION ISOLATION LEVEL REPEATABLE READ").Success() ||
     !QueryView(*db,"START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY").Success())return std::nullopt;
  auto rollback=[&](){QueryView(*db,"ROLLBACK");};
+ // Native estate metadata is display-only and uses this consistent read-only
+ // snapshot. Authorization independently rereads membership under its guard.
+ auto fellowship_tables=QueryView(*db,"SELECT table_name,engine FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('fellowships','fellowship_members')");
+ if(!fellowship_tables.Success()||(fellowship_tables.RowCount()!=0&&fellowship_tables.RowCount()!=2)){rollback();return std::nullopt;}
+ const bool fellowship_display=fellowship_tables.RowCount()==2;
+ for(auto row=fellowship_tables.begin();row.operator!=(fellowship_tables.end());++row)if(!row[1]||std::string(row[1])!="InnoDB"){rollback();return std::nullopt;}
  auto revision=QueryView(*db,"SELECT revision FROM housing_catalogs WHERE catalog_key='"+Strings::Escape(key)+"'");
  if(!revision.Success()||revision.RowCount()!=1||std::stoull(revision.begin()[0])!=view.data.catalog.revision){rollback();return std::nullopt;}
  for(const auto& n:view.data.catalog.nodes){
@@ -177,7 +183,14 @@ std::optional<HousingView> LoadHousingView(Client* c) {
    auto owner=QueryView(*db,"SELECT e.owner_kind,e.owner_id,c.name,g.name FROM housing_current_estates e LEFT JOIN character_data c ON e.owner_kind=1 AND c.id=e.owner_id LEFT JOIN guilds g ON e.owner_kind=3 AND g.id=e.owner_id WHERE e.id="+std::to_string(n.ownership_estate_id));
    if(!owner.Success()||owner.RowCount()!=1){rollback();return std::nullopt;}
    auto o=owner.begin();auto kind=Strings::ToUnsignedInt(o[0]);auto id=Strings::ToUnsignedInt(o[1]);
-   if(kind==1&&o[2])state.owner_name=state.owner_handle=o[2];
+   if(kind==1&&o[2]){
+    state.owner_name=state.owner_handle=o[2];
+    if(fellowship_display){
+     auto fellowship=QueryView(*db,"SELECT m.fellowship_id FROM fellowship_members m JOIN fellowships f ON f.id=m.fellowship_id JOIN fellowship_members leader ON leader.character_id=f.leader_id AND leader.fellowship_id=f.id JOIN character_data c ON c.id=m.character_id AND c.deleted_at IS NULL JOIN account a ON a.id=c.account_id WHERE m.character_id="+std::to_string(id));
+     if(!fellowship.Success()||fellowship.RowCount()>1){rollback();return std::nullopt;}
+     if(fellowship.RowCount()){if(!fellowship.begin()[0]){rollback();return std::nullopt;}state.fellowship_id=Strings::ToUnsignedInt(fellowship.begin()[0]);if(!state.fellowship_id||state.fellowship_id==UINT32_MAX){rollback();return std::nullopt;}}
+    }
+   }
    else if(kind==3&&o[3]){state.guild_id=id;state.owner_name=state.owner_handle=o[3];}
    else {rollback();return std::nullopt;}
    auto preference=QueryView(*db,"SELECT voting_opted_out FROM housing_estate_preferences WHERE estate_id="+std::to_string(n.ownership_estate_id));
@@ -231,7 +244,7 @@ std::optional<HousingView> LoadHousingView(Client* c) {
   auto state=view.states.find(native),owner=view.states.find(parent);auto permissions=view.permissions.find(parent);
   auto current=QueryView(*db,"SELECT h.revision,h.pending_request_key,l.location_kind,l.custody_id FROM housing_house_instances h JOIN housing_house_locations l ON l.house_id=h.house_id WHERE h.house_id="+std::to_string(house.house_id));
   if(state==view.states.end()||owner==view.states.end()||permissions==view.permissions.end()||state->second.parent_id!=parent||state->second.definition_id!=house.interior->definition_id||!current.Success()||current.RowCount()!=1||std::stoull(current.begin()[0])!=house.revision||current.begin()[1]||Strings::ToUnsignedInt(current.begin()[2])!=2||std::stoull(current.begin()[3])!=house.location.custody_id){rollback();return {};}
-  state->second.owner_name=owner->second.owner_name;state->second.owner_handle=owner->second.owner_handle;state->second.guild_id=owner->second.guild_id;
+  state->second.owner_name=owner->second.owner_name;state->second.owner_handle=owner->second.owner_handle;state->second.guild_id=owner->second.guild_id;state->second.fellowship_id=owner->second.fellowship_id;
   auto inherited=permissions->second;inherited.estate_id=native;view.permissions.emplace(native,std::move(inherited));view.acl_revisions[native]=view.acl_revisions.at(parent);
   if(std::find(view.owned.begin(),view.owned.end(),parent)!=view.owned.end()&&std::find(view.owned.begin(),view.owned.end(),native)==view.owned.end())view.owned.push_back(native);
   view.root=native;
@@ -240,7 +253,7 @@ std::optional<HousingView> LoadHousingView(Client* c) {
  if(interior){if(interior->room_profile&&!Housing::InteriorNativeView::Apply(view.data,*interior->room_profile,view.root,&interior->contents))return {};
   for(const auto& child:view.data.catalog.nodes)if(child.parent_key=="house:"+std::to_string(interior->house->house_id)){
    auto parent=view.states.find(view.root);auto acl=view.permissions.find(view.root);if(parent==view.states.end()||acl==view.permissions.end())return {};
-   if(!view.states.count(child.native_id.value)){Housing::EstateWire::EstateSnapshot state;state.estate_id=child.native_id.value;state.parent_id=view.root;state.definition_id=child.definition_id;state.owner_name=parent->second.owner_name;state.owner_handle=parent->second.owner_handle;state.guild_id=parent->second.guild_id;view.states.emplace(state.estate_id,std::move(state));}
+   if(!view.states.count(child.native_id.value)){Housing::EstateWire::EstateSnapshot state;state.estate_id=child.native_id.value;state.parent_id=view.root;state.definition_id=child.definition_id;state.owner_name=parent->second.owner_name;state.owner_handle=parent->second.owner_handle;state.guild_id=parent->second.guild_id;state.fellowship_id=parent->second.fellowship_id;view.states.emplace(state.estate_id,std::move(state));}
    if(std::find(parent->second.children.begin(),parent->second.children.end(),child.native_id.value)==parent->second.children.end())parent->second.children.push_back(child.native_id.value);
    auto inherited=acl->second;inherited.estate_id=child.native_id.value;view.permissions[child.native_id.value]=std::move(inherited);view.acl_revisions[child.native_id.value]=view.acl_revisions.at(view.root);view.ids[child.key]=child.native_id.value;
   }
@@ -1282,7 +1295,7 @@ void Client::SendHousingPlacedScene(){
     auto parent_state=room_state->second;std::vector<std::pair<EmuOpcode,Bytes>> room_packets;
     room_packets.emplace_back(OP_RealEstateDefinitions,projected.definition_payload);
     for(const auto& child:projected.catalog.nodes)if(child.parent_key=="house:"+std::to_string(attached.value.house->house_id)){
-     Housing::EstateWire::EstateSnapshot state;state.estate_id=child.native_id.value;state.parent_id=parent_state.estate_id;state.definition_id=child.definition_id;state.owner_name=parent_state.owner_name;state.owner_handle=parent_state.owner_handle;state.guild_id=parent_state.guild_id;
+     Housing::EstateWire::EstateSnapshot state;state.estate_id=child.native_id.value;state.parent_id=parent_state.estate_id;state.definition_id=child.definition_id;state.owner_name=parent_state.owner_name;state.owner_handle=parent_state.owner_handle;state.guild_id=parent_state.guild_id;state.fellowship_id=parent_state.fellowship_id;
      if(std::find(parent_state.children.begin(),parent_state.children.end(),state.estate_id)==parent_state.children.end())parent_state.children.push_back(state.estate_id);
      room_packets.emplace_back(OP_RealEstateSnapshot,Housing::EstateWire::EncodeEstateSnapshot(state));
      auto acl=owner_acl->second;acl.estate_id=state.estate_id;room_packets.emplace_back(OP_RealEstateAccess,Housing::PermissionWire::EncodeSnapshot(acl));

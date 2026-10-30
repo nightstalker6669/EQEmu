@@ -576,6 +576,7 @@ void Client::SetEXP(ExpSource exp_source, uint64 set_exp, uint64 set_aaxp, bool 
 	uint64 total_add_exp = set_exp + set_aaxp;
 
 #ifdef LUA_EQEMU
+	if (!m_fellowship_xp_transaction_active) {
 	uint64 lua_ret = 0;
 	bool ignore_default = false;
 	lua_ret = LuaParser::Instance()->SetEXP(this, exp_source, current_exp, set_exp, isrezzexp, ignore_default);
@@ -590,6 +591,7 @@ void Client::SetEXP(ExpSource exp_source, uint64 set_exp, uint64 set_aaxp, bool 
 		set_aaxp = lua_ret;
 	}
 	total_add_exp = set_exp + set_aaxp;
+	}
 #endif
 
 	LogDebug("Attempting to Set Exp for [{}] (XP: [{}], AAXP: [{}], Rez: [{}])", GetCleanName(), set_exp, set_aaxp, isrezzexp ? "true" : "false");
@@ -599,6 +601,9 @@ void Client::SetEXP(ExpSource exp_source, uint64 set_exp, uint64 set_aaxp, bool 
 		Message(Chat::Red, "Error in Client::SetEXP. EXP not set.");
 		return; // Must be invalid class/race
 	}
+
+	if (!isrezzexp && exp_source == ExpSource::Kill && npc &&
+		ProcessFellowshipCombatExperience(exp_source, set_exp, set_aaxp, npc)) return;
 
 	uint32 i = 0;
 	uint32 membercount = 0;

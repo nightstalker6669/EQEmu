@@ -1,9 +1,10 @@
 {
-  "branch": "rof2-housing",
+  "branch": "rof2-fellowship",
   "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "features": [
     "shared-core",
-    "housing"
+    "housing",
+    "fellowship"
   ],
   "inputs": [
     {
@@ -17,6 +18,12 @@
         "docs/images/hermits-hideaway.png",
         "docs/images/palatial-festival.png"
       ]
+    },
+    {
+      "feature": "fellowship",
+      "repository": "nightstalker6669/eqemu-rof2-fellowship",
+      "commit": "9382453264f4f84ac7e83a9ee5c9c9a1391c6017",
+      "omitted_gallery_and_generated_files": []
     }
   ],
   "source_integration": "Feature-only changes replayed directly onto upstream develop; linear review commits without master merges or old mixed-history parents.",
@@ -47,7 +54,7 @@
   "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
   "upstream_branch": "develop",
-  "previous_published_commit": "47050977edbcd2869e1a10140f1ac22648a2b3d1",
-  "backup_branch": "archive/20261029-before-develop/rof2-housing",
+  "previous_published_commit": "76f919754ed92304d9daa412311c35ed937d866f",
+  "backup_branch": "archive/20261029-before-develop/rof2-fellowship",
   "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base."
 }

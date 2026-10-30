@@ -1,4 +1,10 @@
 set(zone_sources
+	fellowship_campfire.cpp
+	fellowship_campsite_bonuses.cpp
+	fellowship_campsite_materials.cpp
+	client_fellowship.cpp
+	client_fellowship_vitality.cpp
+	fellowship_chat.cpp
 	client_housing_anchor.cpp
 	client_housing_trophies.cpp
 	client_housing_guild_trophies.cpp

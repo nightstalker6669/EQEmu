@@ -1000,6 +1000,7 @@ void Client::ReportConnectingState() {
 
 bool Client::SaveAA()
 {
+	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
 	std::vector<CharacterAlternateAbilitiesRepository::CharacterAlternateAbilities> v;
 
 	uint32 aa_points_spent = 0;
@@ -1051,6 +1052,7 @@ void Client::RemoveExpendedAA(int aa_id)
 }
 
 bool Client::Save(uint8 iCommitNow) {
+	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
 	if (m_inventory_session_rejected ||
 		(RuleB(Housing, EnablePlayerHousing) && !HasInventorySessionReservation())) return false;
 
@@ -1436,6 +1438,10 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 		}
 		break;
 	}
+    case 21: { // RoF2 /fsay, confirmed in matching client at 0x5243e7.
+        SendFellowshipChat(message);
+        break;
+    }
 	case ChatChannel_Group: { /* Group Chat */
 		Raid* raid = entity_list.GetRaidByClient(this);
 		if(raid) {

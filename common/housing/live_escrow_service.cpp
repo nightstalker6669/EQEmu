@@ -351,33 +351,13 @@ namespace Housing::LiveEscrow {
             if(request.wire.action==uint32_t(EscrowWire::Action::Deposit)||request.wire.action==3||request.wire.action==4)throw Failure{
                 Error::Unauthorized
             };
-            auto state=Query(db,"SELECT revision FROM housing_acl_state WHERE estate_id="+std::to_string(request.estate_id)+" FOR UPDATE");
-            std::array<uint32_t,7> masks=AccessPolicy::NativeDefaults;
-            if(state.RowCount()>1||(state.RowCount()&&!std::stoull(state.begin()[0])))throw Failure{
-                Error::DatabaseFailure
-            };
-            auto groups=Query(db,"SELECT group_id,capabilities FROM housing_acl_groups WHERE estate_id="+std::to_string(request.estate_id)+" ORDER BY group_id FOR UPDATE");
-            if(groups.RowCount()!=(state.RowCount()?7:0))throw Failure{
-                Error::DatabaseFailure
-            };
-            uint32_t expected=0;
-            for(auto row=groups.begin();row.operator!=(groups.end());++row){
-                const auto group=Number(row[0]),mask=Number(row[1]);
-                if(group!=expected++||group>6||(mask&~AccessPolicy::KnownCapabilities)||(group==6&&mask))throw Failure{
-                    Error::DatabaseFailure
-                };
-                masks[group]=mask;
-            }
-            auto named=Query(db,"SELECT group_id FROM housing_acl_members WHERE estate_id="+std::to_string(request.estate_id)+" AND character_id="+std::to_string(request.lease.actor.character_id)+" FOR UPDATE");
-            if(named.RowCount()>1)throw Failure{
-                Error::DatabaseFailure
-            };
-            const auto group=named.RowCount()?Number(named.begin()[0]):0;
-            if(group>5||!(masks[group]&(uint32_t(1)<<uint8_t(AccessPolicy::Capability::WithdrawUpkeep))))throw Failure{
-                Error::Unauthorized
-            };
-            // Personal guild/fellowship association remains unresolved, so no special grant
-            // can elevate this narrowly supported personal cursor withdrawal.
+            // The same current typed ACL resolver authorizes ordinary item and
+            // scene operations. Keep personal deposit/refund restrictions above;
+            // only the WithdrawUpkeep capability may elevate this withdrawal.
+            auto access=LoadCurrentEstateAccessUnderTransaction(db,request.estate_id,request.wire.estate_id,request.lease.actor);
+            if(!access)throw Failure{access.error==Housing::Error::DatabaseFailure?Error::DatabaseFailure:Error::Unauthorized};
+            if(access.value.owner_kind!=OwnerKind::Character||access.value.owner_id!=owner||
+               !access.value.effective.Allows(AccessPolicy::Capability::WithdrawUpkeep))throw Failure{Error::Unauthorized};
         }
         Bytes Binding(const Request& request){
             Bytes out;
