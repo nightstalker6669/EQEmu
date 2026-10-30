@@ -30,6 +30,8 @@ set(common_sources
 	housing/house_custody_authority.cpp
 	housing/house_inventory_transition.cpp
 	housing/house_inventory_profile_fence.cpp
+	achievement_state_updates.cpp
+	achievements.cpp
 	shared_core/inventory_session_service.cpp
 	shared_core/inventory_snapshot.cpp
 	base_packet.cpp
@@ -190,6 +192,13 @@ set(repositories
 	repositories/base/base_adventure_template_entry_flavor_repository.h
 	repositories/base/base_adventure_template_entry_repository.h
 	repositories/base/base_adventure_template_repository.h
+	repositories/base/base_achievement_associations_repository.h
+	repositories/base/base_achievement_cast_requirements_repository.h
+	repositories/base/base_achievement_categories_repository.h
+	repositories/base/base_achievement_category_associations_repository.h
+	repositories/base/base_achievement_components_repository.h
+	repositories/base/base_achievement_criteria_repository.h
+	repositories/base/base_achievements_repository.h
 	repositories/base/base_alternate_currency_repository.h
 	repositories/base/base_auras_repository.h
 	repositories/base/base_base_data_repository.h
@@ -202,6 +211,11 @@ set(repositories
 	repositories/base/base_char_create_combinations_repository.h
 	repositories/base/base_char_create_point_allocations_repository.h
 	repositories/base/base_char_recipe_list_repository.h
+	repositories/base/base_character_achievement_pending_updates_repository.h
+	repositories/base/base_character_achievement_progress_repository.h
+	repositories/base/base_character_achievement_reward_selections_repository.h
+	repositories/base/base_character_achievement_rewards_repository.h
+	repositories/base/base_character_achievements_repository.h
 	repositories/base/base_character_activities_repository.h
 	repositories/base/base_character_alt_currency_repository.h
 	repositories/base/base_character_alternate_abilities_repository.h
@@ -233,6 +247,9 @@ set(repositories
 	repositories/base/base_character_potionbelt_repository.h
 	repositories/base/base_character_skills_repository.h
 	repositories/base/base_character_spells_repository.h
+	repositories/base/base_character_task_reward_instances_repository.h
+	repositories/base/base_character_task_reward_selections_repository.h
+	repositories/base/base_character_task_rewards_repository.h
 	repositories/base/base_character_task_timers_repository.h
 	repositories/base/base_character_tasks_repository.h
 	repositories/base/base_chatchannel_reserved_names_repository.h
@@ -338,6 +355,12 @@ set(repositories
 	repositories/base/base_raid_members_repository.h
 	repositories/base/base_reports_repository.h
 	repositories/base/base_respawn_times_repository.h
+	repositories/base/base_reward_option_entries_repository.h
+	repositories/base/base_reward_options_repository.h
+	repositories/base/base_reward_sets_repository.h
+	repositories/base/base_reward_source_entries_repository.h
+	repositories/base/base_reward_sources_repository.h
+	repositories/base/base_rewards_repository.h
 	repositories/base/base_rule_sets_repository.h
 	repositories/base/base_rule_values_repository.h
 	repositories/base/base_saylink_repository.h
@@ -388,6 +411,13 @@ set(repositories
 	repositories/adventure_template_entry_flavor_repository.h
 	repositories/adventure_template_entry_repository.h
 	repositories/adventure_template_repository.h
+	repositories/achievement_associations_repository.h
+	repositories/achievement_cast_requirements_repository.h
+	repositories/achievement_categories_repository.h
+	repositories/achievement_category_associations_repository.h
+	repositories/achievement_components_repository.h
+	repositories/achievement_criteria_repository.h
+	repositories/achievements_repository.h
 	repositories/alternate_currency_repository.h
 	repositories/auras_repository.h
 	repositories/base_data_repository.h
@@ -400,6 +430,11 @@ set(repositories
 	repositories/char_create_combinations_repository.h
 	repositories/char_create_point_allocations_repository.h
 	repositories/char_recipe_list_repository.h
+	repositories/character_achievement_pending_updates_repository.h
+	repositories/character_achievement_progress_repository.h
+	repositories/character_achievement_reward_selections_repository.h
+	repositories/character_achievement_rewards_repository.h
+	repositories/character_achievements_repository.h
 	repositories/character_activities_repository.h
 	repositories/character_alt_currency_repository.h
 	repositories/character_alternate_abilities_repository.h
@@ -431,6 +466,9 @@ set(repositories
 	repositories/character_potionbelt_repository.h
 	repositories/character_skills_repository.h
 	repositories/character_spells_repository.h
+	repositories/character_task_reward_instances_repository.h
+	repositories/character_task_reward_selections_repository.h
+	repositories/character_task_rewards_repository.h
 	repositories/character_task_timers_repository.h
 	repositories/character_tasks_repository.h
 	repositories/chatchannel_reserved_names_repository.h
@@ -534,6 +572,12 @@ set(repositories
 	repositories/raid_members_repository.h
 	repositories/reports_repository.h
 	repositories/respawn_times_repository.h
+	repositories/reward_option_entries_repository.h
+	repositories/reward_options_repository.h
+	repositories/reward_sets_repository.h
+	repositories/reward_source_entries_repository.h
+	repositories/reward_sources_repository.h
+	repositories/rewards_repository.h
 	repositories/rule_sets_repository.h
 	repositories/rule_values_repository.h
 	repositories/saylink_repository.h
@@ -572,6 +616,8 @@ set(repositories
 
 set(common_headers
 	additive_lagged_fibonacci_engine.h
+	achievement_state_updates.h
+	achievements.h
 	base_packet.h
 	bazaar.h
 	bodytypes.h
@@ -741,6 +787,7 @@ set(common_headers
 	raid.h
 	random.h
 	rdtsc.h
+	reward_selection.h
 	rulesys.h
 	ruletypes.h
 	say_link.h

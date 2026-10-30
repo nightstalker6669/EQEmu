@@ -1,9 +1,9 @@
-# Install `rof2-spirit-shrouds`
+# Install `rof2-integration`
 
 This checkout already contains the native source integration. **Do not run `apply_overlay.py` or `git apply` again.** Keep backups of the database, quests, binaries and active opcode configuration together before installing. No running server was modified by publishing this branch.
 
 ```sh
-git -c core.autocrlf=false clone --branch rof2-spirit-shrouds --single-branch https://github.com/nightstalker6669/EQEmu.git
+git -c core.autocrlf=false clone --branch rof2-integration --single-branch https://github.com/nightstalker6669/EQEmu.git
 cd EQEmu
 git submodule update --init --recursive
 ```
@@ -47,6 +47,14 @@ Run the following groups **in this order**. Use your normal protected MariaDB cr
 - **Mercenaries:** provision the normal mercenary catalogue first; do not replay the destructive upstream bootstrap over owned contracts. Apply `utils/sql/mercenary/001_owned_roster.sql`, `003_passive_upkeep.sql`, `004_zone_permissions.sql`, then review/apply `002_enable_rof2.sql` for the actual ruleset and database layout. The [content and activation guide](../../extensions/rof2/mercenaries/docs/INSTALL.md#content-schema-and-activation) explains catalogue prerequisites and price rules.
 - **Spirit Shrouds:** apply exactly `001_storage.sql`, `003_parity_storage.sql`, `004_live_imp_wizard.sql`, `005_experience_settlement.sql`, `006_starter_inventory.sql`, `007_rof2_enumerable_aa.sql`, `008_starter_identity.sql`, `009_live_captured_catalog.sql`, `011_live_lower_level_forms.sql`, `012_live_paid_monster_rank_chains.sql`, `013_remaining_monster_aa.sql`, `014_death_resurrection_accounting.sql`, `015_system_interactions.sql` from `utils/sql/shroud/`. Omitted numbers are intentionally not migration inputs. Follow [activation and recovery requirements](../../extensions/rof2/spirit-shrouds/docs/INSTALL.md#offline-migration-and-deployment); keep native transitions at their default false for first acceptance. Preserve escrow/snapshots and drain existing sessions normally.
 
+## Install achievements and all reviewed quest content
+
+The nine published achievement engine patches are already integrated. **Do not run their source patch commands.** The current updater registers `utils/sql/git/2026_07_28_achievement_content.sql` and `2026_07_28_achievement_state.sql`; inspect updater history rather than blindly replaying them. Apply the required follow-up `utils/sql/git/2026_10_27_achievement_reward_classes.sql` before starting the new binaries.
+
+Then install every reviewed content package from the [achievement release installation guide](../../extensions/rof2/achievements/README.md#install), using its guarded preflights, complete required SQL sets and quest installers. The dependency order is Crescent Reach; the Blightfire Moors foundation and all five Blightfire quest-family packages; Stone Hive; the required Blightfire parent-reward upgrade; and Mesa after its Crescent/Bixie/Stone Hive prerequisites. Shard’s Landing is also included and uses the same engine/schema foundation. The individual guides specify exact file order and conflict handling. Preserve existing custom quest scripts for a deliberate merge.
+
+The released content does not claim every achievement through Rain of Fear is playable. Its disabled/unverified definitions stay disabled; this upstream update does not invent missing objectives or rewards. All five feature packages and their known limits are included in the combined branch.
+
 ## 3. Start the matched installation
 
 Only after all required schema/content/quest groups succeed, start the server through its normal service manager. All world and zone processes must use the newly built cohort, cache and mapping. Check startup and perform representative native acceptance for each enabled feature. Preserve the installation receipt and matched rollback backup; source publication/checks do not prove deployment or native gameplay on this combined branch. The original release validation remains documented in its status guide.
@@ -58,6 +66,7 @@ Only after all required schema/content/quest groups succeed, start the server th
 | housing | [`710ecb7`](https://github.com/nightstalker6669/eqemu-rof2-housing/tree/710ecb7530ff0a5ade837e887ad7bc2f84622d07) | [Guide](../../extensions/rof2/housing/docs/INSTALL.md) |
 | fellowship | [`9382453`](https://github.com/nightstalker6669/eqemu-rof2-fellowship/tree/9382453264f4f84ac7e83a9ee5c9c9a1391c6017) | [Guide](../../extensions/rof2/fellowship/docs/INSTALL.md) |
 | mercenaries | [`00b07c3`](https://github.com/nightstalker6669/eqemu-rof2-mercenaries/tree/00b07c381a738a21aff08867bf186e6c2bfaffb0) | [Guide](../../extensions/rof2/mercenaries/docs/INSTALL.md) |
+| achievements | [`334a0e2`](https://github.com/nightstalker6669/eqemu-rof2-achievements/tree/334a0e2c28079af07c9a4d07a0654f74ba9e4991) | [Guide](../../extensions/rof2/achievements/README.md#install) |
 | spirit-shrouds | [`e32ca15`](https://github.com/nightstalker6669/eqemu-rof2-spirit-shrouds/tree/e32ca155a67b6f4d12eef36de131c5810998517a) | [Guide](../../extensions/rof2/spirit-shrouds/docs/INSTALL.md) |
 
 [Opcodes and structures](PROTOCOL.md) · [Integration manifest](integration.json) · [Original upstream README](UPSTREAM-README.md)

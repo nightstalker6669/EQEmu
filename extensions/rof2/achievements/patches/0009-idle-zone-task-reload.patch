@@ -1,0 +1,10 @@
+--- a/world/zonelist.cpp
++++ b/world/zonelist.cpp
+@@ -961,6 +961,7 @@
+ 		ServerReload::Type::Quests,
+ 		ServerReload::Type::QuestsTimerReset,
+ 		ServerReload::Type::Achievements,
++		ServerReload::Type::Tasks, // TaskManager also caches definitions in idle zone processes.
+ 		ServerReload::Type::WorldRepop,
+ 		ServerReload::Type::WorldWithRespawn
+ 	};

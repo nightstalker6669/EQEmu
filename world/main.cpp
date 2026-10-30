@@ -41,6 +41,7 @@
 #include "common/skill_caps.h"
 #include "common/timer.h"
 #include "common/version.h"
+#include "world/achievement_state_update_manager.h"
 #include "world/adventure_manager.h"
 #include "world/client.h"
 #include "world/clientlist.h"
@@ -74,6 +75,7 @@ LauncherList        launcher_list;
 volatile bool       RunLoops   = true;
 uint32              numclients = 0;
 uint32              numzones   = 0;
+AchievementStateUpdateManager achievement_state_update_manager;
 const WorldConfig   *Config;
 
 void CatchSignal(int sig_num);
@@ -492,6 +494,7 @@ int main(int argc, char **argv)
 		AdventureManager::Instance()->Process();
 		SharedTaskManager::Instance()->Process();
 		dynamic_zone_manager.Process();
+		achievement_state_update_manager.Process();
 
 		if (!RuleB(Logging, PlayerEventsQSProcess)) {
 			if (player_event_log_process.Check()) {

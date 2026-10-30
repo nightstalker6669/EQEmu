@@ -1,0 +1,409 @@
+{
+  "scope": "20Mesaquests; researchedhistoricalcontent, nativeimplementationpending",
+  "cutoff": "2013-05-31",
+  "source_warning": "Currentpagecopiesinclude2023..2026edits; datedcommentsdistinguished; no modernmaxlevelclaimimported",
+  "quests": [
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4291",
+      "title": "Minohten Mushrooms",
+      "giver": "Costica",
+      "selected_minlevel": 40,
+      "selected_repeatable": true,
+      "objectives": [
+        "Explore Minohten camp at locY-1027.90,X1156.54,Z91.30",
+        "Steal4mushrooms by clicking gold/orange-topped sacks",
+        "HailCostica"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2012-10-24 firsthand confirms gold/orange sacks",
+        "Currentpage faction list +5Tuffein/+5Leadership/-5Minohten/-5Windwillow corroborated2020; not independently dated to2013"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4292",
+      "title": "No Place Like Home",
+      "giver": "Costica",
+      "selected_minlevel": 40,
+      "selected_repeatable": true,
+      "objectives": [
+        "Explore sameMinohtenCamp",
+        "Destroy2MinohtenTents",
+        "HailCostica"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "Currentpage two tent locations; group kill credit only later2019 corroboration"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4293",
+      "title": "Reduce the Scouts",
+      "giver": "Costica",
+      "selected_minlevel": 40,
+      "selected_repeatable": true,
+      "objectives": [
+        "Kill4MinohtenScouts",
+        "HailCostica"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2012-08-10 scouts south of camp; completion faction5 separate from native kill faction1"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3808",
+      "title": "Tuffein Mushrooms",
+      "giver": "Sorin",
+      "selected_minlevel": 40,
+      "selected_repeatable": false,
+      "objectives": [
+        "ExploreTuffeinCamp",
+        "Steal3food",
+        "Deliver3foodToSorin"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2006-11-02 confirms3/3 and greybarrel clicks",
+        "2008-10-11 walking nearcontainers suppliesitems; click and proximity evidence both retained",
+        "CurrentrepeatableNo uncorroborated; chosenbestavailable label"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3809",
+      "title": "To Dull the Edge",
+      "giver": "Sorin",
+      "selected_minlevel": 40,
+      "selected_repeatable": true,
+      "objectives": [
+        "ExploreTuffeinCamp",
+        "Destroy5weapons viaRackOfWeapons kills granting1..3",
+        "HailSorin"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2006-11-17 confirms1..3weapons perrack",
+        "2008-10-11 explicitlyrepeatable despitecurrentheaderNo; periodselected",
+        "2008-11-28 campentrylocY-1579,X-897; rackslocY-1112,X-1138"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3810",
+      "title": "These Biscuits are Awfully Hard",
+      "giver": "Sorin",
+      "selected_minlevel": 40,
+      "selected_repeatable": true,
+      "objectives": [
+        "ExploreMoorsGnollMine",
+        "Collect3PileOfRocks byproximity",
+        "ExploreTuffeinCamp locY-1591,X-866,Z23",
+        "Replace3foodbarrels withrocks; consumeactualitems",
+        "HailSorin"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2006-11-12 original5steps andreplacementappearance",
+        "2012-05-01 rocksinsidemines;2009barrelsmayappearbyanytent"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3760",
+      "title": "We Need Supplies",
+      "giver": "Devan",
+      "selected_minlevel": 35,
+      "selected_repeatable": true,
+      "objectives": [
+        "Steal1MinohtenFruit",
+        "Steal1MinohtenVegetables",
+        "Steal1MinohtenShortBeer",
+        "Deliver1eachin3objectives",
+        "HailDevan"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2012-03-25 reducedfrom4fruit/4vegetablesto1each selected",
+        "2007bagsinvis/suspicionrejection; bagsnotopenable;beerbarrelclickallowedwithoutquest",
+        "2012-07-14 vegetablebaginsideTudortent; goldfruit/silverveg distinction"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4284",
+      "title": "Protect the Tuffein",
+      "giver": "Devan",
+      "selected_minlevel": 40,
+      "selected_repeatable": true,
+      "objectives": [
+        "Kill4MesaSnakes",
+        "Kill2ProtectorsOfWindwillow",
+        "Kill4MesaRecluse orLargeMesaRecluse",
+        "HailDevan"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "RequiresWeNeedSupplies",
+        "2007-09-27 normalreclusealsoqualifies"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4285",
+      "title": "More Supplies for Devan",
+      "giver": "Devan",
+      "selected_minlevel": 40,
+      "selected_repeatable": true,
+      "objectives": [
+        "Freshloot4SnakeSkin",
+        "Freshloot4SpiderSilk",
+        "Freshloot2MediumQualityWolfSkin",
+        "Freshloot2MediumQualityBearSkin",
+        "Deliverthose4types",
+        "HailDevan"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "RequiresProtectTuffein",
+        "2013-04-27 explicitlyMesaonly; no preloot/trade/drop-pickupcredit"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4286",
+      "title": "Nymphs are a menace!",
+      "giver": "Devan",
+      "selected_minlevel": 40,
+      "selected_repeatable": true,
+      "objectives": [
+        "Kill3Napaea",
+        "Kill4Potamide",
+        "Kill3Oread",
+        "HailDevan"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "RequiresMoreSupplies",
+        "2013-05-11 administrator firsthand3/4/3 overridesolder4/4/4"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4287",
+      "title": "Minohten are a menace!",
+      "giver": "Devan",
+      "selected_minlevel": 40,
+      "selected_repeatable": true,
+      "objectives": [
+        "Kill4MinohtenScouts",
+        "HailDevan betrays/portsplayerintocage/blinds",
+        "WaitforMinohtenScoutrescue;gate/deathnotcredit",
+        "FleeWestFromCamp",
+        "ReachScoutMadu",
+        "HailScoutMadu"
+      ],
+      "confirmed_choice_items": [
+        "Crystalwing Plate Vambraces",
+        "Crystalwing Chain Bracelet",
+        "Crystalwing Leather Vambraces",
+        "Crystalwing Silk Bracelet"
+      ],
+      "provenance_and_conflicts": [
+        "RequiresNymphs",
+        "2013-03-20 blindness15s followedscoutdismisscage;2012-08-15 scout~30s",
+        "Negative2000Tuffein/Leadership currentpage+2015corroboration;positivefactionmagnitudesunknown",
+        "CompleteCosticaquestsfirst; factionblocksafterbetrayal; notremoveoriginalconsequence"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3908",
+      "title": "Smoke Them Out",
+      "giver": "Iulia",
+      "selected_minlevel": 45,
+      "selected_repeatable": false,
+      "objectives": [
+        "ObtainBurningStick bycentaurfireproximity",
+        "Equipstickprimary andclick4bigbushes",
+        "HailIulia"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2010-05-29 walkingfire/equippedstick/clicks",
+        "2012-08-10 exact3objectives;2012-04-29 bushsouthwestnearNedelcu",
+        "Newer2022mapcoordinatesnotperiodsource; originalcollecteddoorlocationpreferred"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4657",
+      "title": "Pluck Their Wings",
+      "giver": "Iulia",
+      "selected_minlevel": 45,
+      "selected_repeatable": true,
+      "objectives": [
+        "Freshloot4NapaeaWing",
+        "Deliver4toIulia"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "RequiresSmokeThemOut",
+        "2012-04-02 exact2objectives/selector",
+        "2012-12-08 cannotacceptat46 conflictsheader45; levelgateunresolved, labelchosenvalue"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4640",
+      "title": "Make Gravel",
+      "giver": "Nedelcu",
+      "selected_minlevel": 45,
+      "selected_repeatable": true,
+      "objectives": [
+        "AcquirePolishedLakeStonefromlake; notextraobjective",
+        "Equipprimary/click4smallrocks onOreadisland",
+        "HailNedelcu"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2012-03-08 confirms45+ andoneactoratatime",
+        "2012-06-13 groundstone locY-327.76,X-705.25,Z-18.90",
+        "2008-10-14 repeatable,retainsstone; laterNoDropchangesnotassumed"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/4639",
+      "title": "Pull Their Hair",
+      "giver": "Nedelcu",
+      "selected_minlevel": 45,
+      "selected_repeatable": true,
+      "objectives": [
+        "Freshloot4OreadHair",
+        "Deliver4toNedelcu"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2008-10-13 requiresMakeGravel",
+        "Header75 conflictsachievement46..50 andrelatedchain45; selected45 contextualinference,notexactverifiedlevel"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3599",
+      "title": "Research the Dromrek",
+      "giver": "Scout Madu",
+      "selected_minlevel": 45,
+      "selected_repeatable": true,
+      "objectives": [
+        "ForklocY290,X760",
+        "CaveEntranceToWest",
+        "InnerCave locY122,X1666",
+        "NorthExtent locY1266,X1146,Z147",
+        "HailScoutMadu"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "2011-02-15 and2007-02-11 confirmsmin45",
+        "2011-12-30 northloc;2008-07-20 nearby1316/1158/149",
+        "CorrectMadu locY-1950,X537 per2008; existingserverplacementretained"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3736",
+      "title": "Parlay with the Dromrek",
+      "giver": "Scout Madu",
+      "selected_minlevel": 45,
+      "selected_repeatable": true,
+      "objectives": [
+        "KillDromrekCook",
+        "KillDromrekProvisioner",
+        "KillFoodpicker",
+        "KillBashermaker",
+        "HailScoutMadu"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "RequiresResearch",
+        "Sequentialkills, notsuccessfuldiplomacy;2006-12-26 killconfirmed;2007-11-28 hailthenfight",
+        "2009-05-23 accepted45with43helpercontradictsheader50; min45selected"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3742",
+      "title": "Soothe the Savage Beast?",
+      "giver": "Scout Madu",
+      "selected_minlevel": 45,
+      "selected_repeatable": true,
+      "objectives": [
+        "HailReganCrescent",
+        "HailLibrarianHemfarCrescent",
+        "HailNaeemaCrescent",
+        "HailScoutEthanielMoors",
+        "Freshloot1RefinedJumjumPollenStoneHive",
+        "Deliver1toNaeemaCrescent",
+        "HailMaduMesa"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "RequiresParlay",
+        "2006/2007 droppedfrombotanicalresearcher,alchemyassistant,apprenticealchemist,poisonbrewer",
+        "Noactualwandgrantuntilnexttask; source sayswanddeliverytoMadu"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3743",
+      "title": "Parlay with the Dromrek, Again",
+      "giver": "Scout Madu",
+      "selected_minlevel": 45,
+      "selected_repeatable": true,
+      "objectives": [
+        "HailDromrekCook",
+        "HailDromrekProvisioner",
+        "HailFoodpicker",
+        "HailBashermaker",
+        "HailBigone",
+        "HailScoutMadu"
+      ],
+      "confirmed_choice_items": [],
+      "provenance_and_conflicts": [
+        "RequiresSoothe; supply10chargeBixieDustWand onaccept",
+        "2007-01-31 equippedprimaryinstacastplacateallowsnoncombat hails",
+        "2008-11-27 onecastsothershail,notcasterexclusive",
+        "2006-12-18 distanttargethailspossible but normaldistanceguardshouldbeverified;noartificialrequirewandbuffifordinaryhailworks"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3744",
+      "title": "Reduce the Dromrek Threat",
+      "giver": "Scout Madu",
+      "selected_minlevel": 45,
+      "selected_repeatable": true,
+      "objectives": [
+        "KillBigone",
+        "HailScoutMadu"
+      ],
+      "confirmed_choice_items": [
+        "Crystalwing Goru`kar Scout Health Stone",
+        "Crystalwing Goru`kar Scout Power Stone",
+        "Crystalwing Goru`kar Scout Shielding Stone",
+        "Crystalwing Goru`kar Scout Striker Stone"
+      ],
+      "provenance_and_conflicts": [
+        "RequiresParlayAgain",
+        "2006-10-27 and11-24 mustrepeatall5tasksforeachreward",
+        "2007-10-10 completed43contradictsfirstquestmin45; retaincoherent45best-supportedlabel",
+        "KeeporiginalBigoneweightedspawn/power; do notforcequestspawn"
+      ],
+      "xp": "1000 approved configurable PEQ-style default; exact original amount unknown"
+    }
+  ]
+}

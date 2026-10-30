@@ -1,12 +1,13 @@
 {
-  "branch": "rof2-spirit-shrouds",
+  "branch": "rof2-integration",
   "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "features": [
     "shared-core",
     "housing",
     "fellowship",
     "mercenaries",
-    "spirit-shrouds"
+    "spirit-shrouds",
+    "achievements"
   ],
   "inputs": [
     {
@@ -38,38 +39,53 @@
       "repository": "nightstalker6669/eqemu-rof2-spirit-shrouds",
       "commit": "e32ca155a67b6f4d12eef36de131c5810998517a",
       "omitted_gallery_and_generated_files": []
+    },
+    {
+      "feature": "achievements",
+      "repository": "nightstalker6669/eqemu-rof2-achievements",
+      "commit": "334a0e2c28079af07c9a4d07a0654f74ba9e4991",
+      "omitted_gallery_and_generated_files": []
     }
   ],
   "source_integration": "Feature-only changes replayed directly onto upstream develop; linear review commits without master merges or old mixed-history parents.",
   "validation": {
-    "status": "Passed targeted source and package checks on pure upstream develop; source publication only.",
-    "compiler": "GCC12/C++20 with cached vcpkg SDK; targeted syntax compilation, normal source preamble for zone translation units.",
-    "translation_units": [
-      "zone/attack.cpp",
-      "zone/bot.cpp",
-      "zone/spell_effects.cpp"
+    "status": "Passed full rebased combined compilation/link, targeted branch compilation and package/content-preservation audits.",
+    "platform": "Linux x86_64, GCC12/C++20, cached vcpkg SDK in eqemulator/eqemu-server:v16.",
+    "configuration": "RelWithDebInfo with -O0 -g0, upstream-default PCH enabled; login and dedicated test targets disabled.",
+    "built_targets": [
+      "world",
+      "zone",
+      "ucs",
+      "shared_memory",
+      "housing_install",
+      "housing_capacity",
+      "housing_recovery",
+      "housing_profile_upgrade"
     ],
-    "content_preservation": "Exact added/removed source lines versus previous snapshot equal only the upstream mixed-base-to-develop delta in 11 paths. Opcode mappings/structures and other production packages retained byte-for-byte, except installer pin/checksum and current guides.",
+    "standalone_source_checks": "20 targeted translation units across six feature branches passed, using each branch own normal zone preamble.",
+    "content_preservation": "Every changed source line relative to the former published snapshots equals precisely the upstream mixed-base-to-develop delta in 11 paths. Opcode mappings, structures, reviewed quests and other production packages retained byte-for-byte except installer base pin/checksum and current guides.",
     "package_checks": [
-      "Manifest hashes/sizes, Python syntax, JSON, guide links",
-      "Unique migration IDs, opcode names, mapping keys and handlers"
+      "Manifest hashes/sizes, Python syntax, JSON and guide links",
+      "Unique active migration IDs, opcode names, RoF2 mapping keys and handlers"
     ],
-    "history": "New linear review history; old heads preserved in archive branches.",
-    "full_branch_link": "Not independently linked; full combined build recorded by the integration branch.",
-    "native_acceptance": "No new native gameplay or active server/database deployment during this rebase."
+    "history": "Linear feature layers from exact upstream develop; zero merge commits ahead of the base. Old heads archived separately.",
+    "deployment": "Source rebase only; no running server, client or database deployment.",
+    "native_acceptance": "No new native gameplay, native Windows build or Akk-stack deployment acceptance claimed."
   },
   "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
   "shared_core": "Inherited from rof2-shared-core; one canonical implementation in common/shared_core; legacy feature headers forward to it.",
   "remaining_feature_dependencies": "Published feature/runtime dependencies are retained. Extracting shared infrastructure does not make all gameplay patches independent.",
   "reviewed_source_repairs": [
     "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included.",
-    "Restore explicit shroud ability_cast.h include used by authenticated Monster AA buff minimum validation; audit all feature-specific includes against prior published sources.",
+    "Resolve current upstream signatures, component buff APIs, strict database transaction safeguards and permanent-profile-only AA/save achievement updates.",
+    "Deduplicate mercenary switch opcode/handler while retaining the bounded RoF2 roster path and upstream legacy dispatch for other clients.",
+    "Retain operation-3 native shroud buff reconstruction through current OP_BuffDefinition; restore its explicit ability-cast helper include.",
     "Use upstream-default precompiled headers in the integrated installer, matching the validated current source rather than the historical standalone overlay build."
   ],
-  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "upstream_branch": "develop",
-  "previous_published_commit": "73065eb61e54fc34851046e3ce1e6d0ede948560",
-  "backup_branch": "archive/20261029-before-develop/rof2-spirit-shrouds",
+  "previous_published_commit": "474dd3603444ed2d02f3fa616db6f7104b734d1a",
+  "backup_branch": "archive/20261029-before-develop/rof2-integration",
   "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base."
 }
