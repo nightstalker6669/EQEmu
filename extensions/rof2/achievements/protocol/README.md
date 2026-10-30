@@ -60,3 +60,9 @@ The claimable6411 lane rejects TaskView; preview6471 rejects Claim and Achieveme
 The patch series includes the canonical implementation in `common/achievements.{h,cpp}`, `common/reward_selection.h`, `zone/client_packet.cpp`, `zone/client_achievements.cpp`, `zone/reward_selection.cpp`, and `common/patches/rof2.cpp`. `serializer-extract.cpp.txt` is a convenient source excerpt, not a separate build unit.
 
 Private native checks on the running port demonstrated achievement state/progress, earned notifications, class-filtered task reward selection, common-only achievement rewards and persistent grants. The clean upstream publication port has separately passed patch application checks. A full build/native run of the clean publication port has **not** been performed as part of the offline packaging audit. No client binaries, raw client catalogues, private character records, captures or test files are included.
+
+## Item-triggered task offers
+
+Item and loot scripts can use `Client::TaskSelector` to issue an offer whose task giver is the requesting client. This uses the existing task-selection and acceptance layouts; it introduces no opcode or struct fields. Acceptance first matches the server’s last offered task and giver ID, then resolves that giver as a `Mob`. A valid source is an NPC or that same requesting client. Missing entities, other clients and other entity types are rejected. NPC distance checks remain in place.
+
+The current integrated engine avoids downcasting a self-client offer to `NPC` and safely handles a disappeared giver. Linux zone compilation/linking and native RoF2 self-sourced and NPC-sourced acceptance were verified. Native Windows execution of this change has not been verified.

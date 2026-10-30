@@ -3680,18 +3680,21 @@ bool ClientTaskState::CanAcceptNewTask(Client* client, int task_id, int npc_enti
 		return false;
 	}
 
-	NPC* npc = entity_list.GetID(it->npc_entity_id)->CastToNPC();
-	if (!npc) // client window disappears in this case
+	// Client::TaskSelector legitimately issues self-sourced item/loot offers.
+	// Resolve the entity before inspecting its type: a despawned NPC must not
+	// be dereferenced, and a Client must never be downcast to NPC.
+	Mob* giver = entity_list.GetMob(it->npc_entity_id);
+	if (!giver || (!giver->IsNPC() && giver != client))
 	{
-		LogTasks("Client [{}] accepted task [{}] from missing npc", client->GetName(), task_id);
+		LogTasks("Client [{}] accepted task [{}] from missing or invalid giver", client->GetName(), task_id);
 		return false;
 	}
 
-	auto dist = npc->CalculateDistance(client->GetX(), client->GetY(), client->GetZ());
+	auto dist = giver->CalculateDistance(client->GetX(), client->GetY(), client->GetZ());
 	if (dist > MAX_TASK_SELECT_DISTANCE)
 	{
 		LogTasks("Client [{}] accepted task [{}] from npc [{}] out of range [{}]",
-			client->GetName(), task_id, npc->GetCleanName(), dist);
+			client->GetName(), task_id, giver->GetCleanName(), dist);
 		return false;
 	}
 
