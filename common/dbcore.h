@@ -50,6 +50,11 @@ public:
 	void TransactionBegin();
 	MySQLRequestResult TransactionCommit();
 	void TransactionRollback();
+	MySQLRequestResult TransactionBeginStrict();
+	MySQLRequestResult TransactionCommitStrict();
+	void TransactionRollbackStrict();
+	void TransactionFailStrict();
+	bool TransactionStrictFailed() const;
 	std::string Escape(const std::string& s);
 	uint32 DoEscapeString(char *tobuf, const char *frombuf, uint32 fromlen);
 	void ping();
@@ -93,6 +98,8 @@ private:
 	MYSQL*  mysql = nullptr;
 	bool    mysqlOwner = true;
 	eStatus pStatus = Closed;
+	bool    m_strict_transaction_active = false;
+	bool    m_strict_transaction_failed = false;
 
 	std::mutex m_query_lock{};
 	std::atomic<uint64_t> m_query_failure_generation{0};

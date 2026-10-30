@@ -1,13 +1,19 @@
 {
-  "branch": "rof2-shared-core",
+  "branch": "rof2-achievements",
   "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "features": [
-    "shared-core"
+    "shared-core",
+    "achievements"
   ],
-  "inputs": {
-    "source": "eqemu-rof2-housing 710ecb7, fellowship 9382453, spirit-shrouds e32ca15"
-  },
-  "compatibility": "Stable legacy table/type/custom-data names; source implementations extracted once into common/shared_core; feature-specific gameplay and recovery adapters excluded.",
+  "inputs": [
+    {
+      "feature": "achievements",
+      "repository": "nightstalker6669/eqemu-rof2-achievements",
+      "commit": "334a0e2c28079af07c9a4d07a0654f74ba9e4991",
+      "omitted_gallery_and_generated_files": []
+    }
+  ],
+  "source_integration": "Feature-only changes replayed directly onto upstream develop; linear review commits without master merges or old mixed-history parents.",
   "validation": {
     "status": "Passed targeted source and package checks on pure upstream develop; source publication only.",
     "compiler": "GCC12/C++20 with cached vcpkg SDK; targeted syntax compilation, normal source preamble for zone translation units.",
@@ -26,11 +32,11 @@
     "full_branch_link": "Not independently linked; full combined build recorded by the integration branch.",
     "native_acceptance": "No new native gameplay or active server/database deployment during this rebase."
   },
+  "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
   "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
-  "source_integration": "Feature-only changes replayed directly onto upstream develop; linear review commits without master merges or old mixed-history parents.",
   "upstream_branch": "develop",
-  "previous_published_commit": "f84de86f885d6e0240ccb1559629a2cfc994708b",
-  "backup_branch": "archive/20261029-before-develop/rof2-shared-core",
+  "previous_published_commit": "85644205995c3093b4de9db4d3ce8e92d6a0cf63",
+  "backup_branch": "archive/20261029-before-develop/rof2-achievements",
   "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base."
 }
