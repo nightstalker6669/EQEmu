@@ -2724,12 +2724,27 @@ struct PetitionUpdate_Struct {
 	uint32 petnumber;    // Petition Number
 	uint32 color;		// 0x00 = green, 0x01 = yellow, 0x02 = red
 	uint32 status;
-	time_t senttime;    // 4 has to be 0x1F
+	uint32 senttime;    // ROF2 uses a 32-bit wire timestamp, independent of host time_t.
 	char accountid[32];
 	char gmsenttoo[64];
 	int32 quetotal;
 	char charname[64];
+	uint32 sorttime;    // Client defaults this to senttime when zero.
 };
+
+static_assert(sizeof(PetitionUpdate_Struct) == 0xb8, "ROF2 petition queue row size");
+static_assert(offsetof(PetitionUpdate_Struct, senttime) == 0x0c, "ROF2 queue timestamp offset");
+static_assert(offsetof(PetitionUpdate_Struct, accountid) == 0x10, "ROF2 queue account offset");
+static_assert(offsetof(PetitionUpdate_Struct, gmsenttoo) == 0x30, "ROF2 queue recipient offset");
+static_assert(offsetof(PetitionUpdate_Struct, quetotal) == 0x70, "ROF2 queue total offset");
+static_assert(offsetof(PetitionUpdate_Struct, charname) == 0x74, "ROF2 queue character offset");
+static_assert(offsetof(PetitionUpdate_Struct, sorttime) == 0xb4, "ROF2 queue sort timestamp offset");
+
+struct PetitionDelete_Struct {
+	uint32 petnumber;
+};
+
+static_assert(sizeof(PetitionDelete_Struct) == 4, "ROF2 delete and resolve request size");
 
 struct Petition_Struct {
 	uint32 petnumber;
@@ -2747,11 +2762,16 @@ struct Petition_Struct {
 	uint32 checkouts;
 	uint32 unavail;
 	//uint8 unknown5[4];
-	time_t senttime;
+	uint32 senttime;
 	uint32 unknown2;
 	char petitiontext[1024];
 	char gmtext[1024];
 };
+
+static_assert(offsetof(Petition_Struct, senttime) == 0xa4, "ROF2 petition timestamp offset");
+static_assert(offsetof(Petition_Struct, petitiontext) == 0xac, "ROF2 petition text offset");
+static_assert(offsetof(Petition_Struct, gmtext) == 0x4ac, "ROF2 GM text offset");
+static_assert(sizeof(Petition_Struct) == 0x8ac, "ROF2 fixed checkout detail size");
 
 
 struct Who_All_Struct { // 156 length total

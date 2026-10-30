@@ -352,6 +352,49 @@ namespace RoF2
 	// RoF2 Specific Encodes End
 
 
+	ENCODE(OP_PetitionUpdate)
+	{
+		ENCODE_LENGTH_EXACT(PetitionUpdate_Struct);
+		SETUP_DIRECT_ENCODE(PetitionUpdate_Struct, structs::PetitionUpdate_Struct);
+
+		OUT(petnumber);
+		OUT(color);
+		OUT(status);
+		eq->senttime = static_cast<uint32>(emu->senttime);
+		strn0cpy(eq->accountid, emu->accountid, sizeof(eq->accountid));
+		strn0cpy(eq->gmsenttoo, emu->gmsenttoo, sizeof(eq->gmsenttoo));
+		OUT(quetotal);
+		strn0cpy(eq->charname, emu->charname, sizeof(eq->charname));
+		eq->sorttime = eq->senttime;
+
+		FINISH_ENCODE();
+	}
+
+	ENCODE(OP_PetitionCheckout)
+	{
+		ENCODE_LENGTH_EXACT(Petition_Struct);
+		SETUP_DIRECT_ENCODE(Petition_Struct, structs::Petition_Struct);
+
+		OUT(petnumber);
+		OUT(urgency);
+		strn0cpy(eq->accountid, emu->accountid, sizeof(eq->accountid));
+		strn0cpy(eq->lastgm, emu->lastgm, sizeof(eq->lastgm));
+		OUT(zone);
+		strn0cpy(eq->charname, emu->charname, sizeof(eq->charname));
+		OUT(charlevel);
+		OUT(charclass);
+		OUT(charrace);
+		OUT(unknown);
+		OUT(checkouts);
+		OUT(unavail);
+		eq->senttime = static_cast<uint32>(emu->senttime);
+		OUT(unknown2);
+		strn0cpy(eq->petitiontext, emu->petitiontext, sizeof(eq->petitiontext));
+		strn0cpy(eq->gmtext, emu->gmtext, sizeof(eq->gmtext));
+
+		FINISH_ENCODE();
+	}
+
 	ENCODE(OP_Action)
 	{
 		ENCODE_LENGTH_EXACT(Action_Struct);
@@ -5042,6 +5085,57 @@ namespace RoF2
 	}
 
 // DECODE methods
+
+	DECODE(OP_PetitionDelete)
+	{
+		DECODE_LENGTH_EXACT(structs::PetitionDelete_Struct);
+		// Legacy zone handlers accept a full canonical queue row, but ROF2 sends only an id.
+		SETUP_DIRECT_DECODE(PetitionUpdate_Struct, structs::PetitionDelete_Struct);
+		IN(petnumber);
+		FINISH_DIRECT_DECODE();
+	}
+
+	DECODE(OP_PetitionResolve) { DECODE_FORWARD(OP_PetitionDelete); }
+
+	DECODE(OP_PetitionCheckIn)
+	{
+		constexpr size_t gm_offset = offsetof(structs::Petition_Struct, gmtext);
+		// The native sender copies the fixed prefix and GM text, followed by three bytes.
+		// Accept bounded optional padding without requiring a full fixed wire structure.
+		if (__packet->size < gm_offset + 1 || __packet->size > sizeof(structs::Petition_Struct) + 3) {
+			__packet->SetOpcode(OP_Unknown);
+			return;
+		}
+		const auto *gm_text = reinterpret_cast<const char *>(__packet->pBuffer + gm_offset);
+		const size_t available = __packet->size - gm_offset;
+		const size_t text_bound = std::min(available, sizeof(structs::Petition_Struct::gmtext));
+		const auto *terminator = static_cast<const char *>(std::memchr(gm_text, '\0', text_bound));
+		if (!terminator) {
+			__packet->SetOpcode(OP_Unknown);
+			return;
+		}
+		const size_t text_length = terminator - gm_text;
+		SETUP_DIRECT_DECODE(Petition_Struct, structs::Petition_Struct);
+
+		IN(petnumber);
+		IN(urgency);
+		strn0cpy(emu->accountid, eq->accountid, sizeof(emu->accountid));
+		strn0cpy(emu->lastgm, eq->lastgm, sizeof(emu->lastgm));
+		IN(zone);
+		strn0cpy(emu->charname, eq->charname, sizeof(emu->charname));
+		IN(charlevel);
+		IN(charclass);
+		IN(charrace);
+		IN(unknown);
+		IN(checkouts);
+		IN(unavail);
+		emu->senttime = static_cast<time_t>(eq->senttime);
+		IN(unknown2);
+		strn0cpy(emu->petitiontext, eq->petitiontext, sizeof(emu->petitiontext));
+		std::memcpy(emu->gmtext, gm_text, text_length);
+		// SETUP_DIRECT_DECODE zero-initializes the canonical destination, including its terminator.
+		FINISH_DIRECT_DECODE();
+	}
 
 	DECODE(OP_AdventureMerchantSell)
 	{

@@ -701,7 +701,8 @@ public:
 							RmUint32 *raycastTriangles,
 							RmUint32 raycastFrame,
 							const TriVector &leafTriangles,
-							RmUint32 &nearestTriIndex)
+							RmUint32 &nearestTriIndex,
+							RmUint32 ignoreBegin = 0, RmUint32 ignoreEnd = 0)
 		{
 			RmReal sect[3];
 			RmReal nd = nearestDistance;
@@ -716,6 +717,9 @@ public:
 				for (RmUint32 i=0; i<count; i++)
 				{
 					RmUint32 tri = *scan++;
+					if (tri >= ignoreBegin && tri < ignoreEnd) {
+						continue;
+					}
 					if ( raycastTriangles[tri] != raycastFrame )
 					{
 						raycastTriangles[tri] = raycastFrame;
@@ -763,11 +767,11 @@ public:
 			{
 				if ( mLeft )
 				{
-					mLeft->raycast(hit,from,to,dir,hitLocation,hitNormal,hitDistance,vertices,indices,nearestDistance,callback,raycastTriangles,raycastFrame,leafTriangles,nearestTriIndex);
+					mLeft->raycast(hit,from,to,dir,hitLocation,hitNormal,hitDistance,vertices,indices,nearestDistance,callback,raycastTriangles,raycastFrame,leafTriangles,nearestTriIndex, ignoreBegin, ignoreEnd);
 				}
 				if ( mRight )
 				{
-					mRight->raycast(hit,from,to,dir,hitLocation,hitNormal,hitDistance,vertices,indices,nearestDistance,callback,raycastTriangles,raycastFrame,leafTriangles,nearestTriIndex);
+					mRight->raycast(hit,from,to,dir,hitLocation,hitNormal,hitDistance,vertices,indices,nearestDistance,callback,raycastTriangles,raycastFrame,leafTriangles,nearestTriIndex, ignoreBegin, ignoreEnd);
 				}
 			}
 		}
@@ -937,6 +941,36 @@ public:
 		if (mFaceNormals) { free(mFaceNormals); }
 	}
 
+
+	bool raycastExceptSourceRange(const RmReal *from, const RmReal *to, RmUint32 begin, RmUint32 end) override
+	{
+		if (!mRoot || begin >= end || end > mTcount) {
+			return raycast(from, to, nullptr, nullptr, nullptr);
+		}
+		RmReal dir[3];
+		for (unsigned k = 0; k < 3; ++k) {
+			if (!std::isfinite(from[k]) || !std::isfinite(to[k])) {
+				return true;
+			}
+			dir[k] = to[k] - from[k];
+		}
+		RmReal distance = sqrtf(dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2]);
+		if (!std::isfinite(distance)) {
+			return true;
+		}
+		if (distance < .0000000001f) {
+			return false;
+		}
+		const RmReal inverse = 1.0f / distance;
+		for (auto &v : dir) {
+			v *= inverse;
+		}
+		++mRaycastFrame;
+		RmUint32 nearest = TRI_EOF;
+		bool hit = false;
+		mRoot->raycast(hit, from, to, dir, nullptr, nullptr, nullptr, mVertices, mIndices, distance, this, mRaycastTriangles, mRaycastFrame, mLeafTriangles, nearest, begin, end);
+		return hit;
+	}
 	virtual bool raycast(const RmReal *from,const RmReal *to,RmReal *hitLocation,RmReal *hitNormal,RmReal *hitDistance)
 	{
 		bool ret = false;

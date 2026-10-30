@@ -77,7 +77,13 @@ protected:
  virtual bool raycastSurface(const RmReal*,const RmReal*,RmReal*,RmReal*,RmReal*,Housing::PlanarMount::SurfaceSeed&) {return false;}
  virtual Housing::CurvedMount::Proof sourceCurvedMountPatch(const Housing::OrientedMount::Volume&,const Housing::PlanarMount::SurfaceSeed&,const std::vector<Housing::CurvedMount::Entry>&,Housing::CurvedMount::Limits) const {return {};}
  virtual std::vector<RmUint32> sourcePlanarMountPatch(const Housing::OrientedMount::Volume&,const Housing::PlanarMount::SurfaceSeed&,const std::vector<RmUint32>&) const {return {};}
+
  virtual RmUint32 sourceTriangleCount() const {return 0;}
+	// Appended virtual: skip one trusted loader-owned source triangle interval.
+	// Legacy implementations conservatively perform the original raycast.
+	virtual bool raycastExceptSourceRange(const RmReal *from, const RmReal *to, RmUint32 begin, RmUint32 end) {
+		return raycast(from, to, nullptr, nullptr, nullptr);
+	}
 
 
 

@@ -1457,6 +1457,13 @@ bool ClientAchievementState::ProcessEvent(
 	if (!m_loaded) {
 		return false;
 	}
+	// Monster-form level, class skills, AA grants and temporary inventory are
+	// not durable facts about the original player. Reconcile them after return.
+	if (m_client.IsSpiritShrouded() && (
+		event_type == EventType::Level || event_type == EventType::SkillValue ||
+		event_type == EventType::SkillCap || event_type == EventType::AlternateAdvancement ||
+		event_type == EventType::OwnItem)) return true;
+
 	send_packets = send_packets && m_initial_sent;
 
 	auto &manager = AchievementManager::Instance();

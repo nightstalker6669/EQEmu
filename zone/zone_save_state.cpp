@@ -1,3 +1,4 @@
+#include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -537,18 +538,45 @@ bool Zone::LoadZoneState(
 			(EmuAppearance) s.anim
 		);
 
-		new_spawn->SetStoredLocation(glm::vec4(s.x, s.y, s.z, s.heading));
+		const auto saved_variables = GetVariablesDeserialized(s.entity_variables);
+		const bool saved_ruins = s.hp == 0 && !s.is_corpse && BoundDestructibles::SavedRuins(saved_variables);
+		if (!saved_ruins) {
+			new_spawn->SetStoredLocation(glm::vec4(s.x, s.y, s.z, s.heading));
+		}
 
-		if (spawn_time_left == 0 && s.npc_id > 0) {
+		if (spawn_time_left == 0 && s.npc_id > 0 && !saved_ruins) {
 			new_spawn->SetResumedNPCID(s.npc_id);
 			new_spawn->SetResumedFromZoneSuspend(true);
 			new_spawn->SetEntityVariables(GetVariablesDeserialized(s.entity_variables));
 		}
 
 		spawn2_list.Insert(new_spawn);
+		if (saved_ruins && spawn_time_left > 0 && spawn2.id > 0) {
+			const auto npc_type = content_db.LoadNPCTypesData(s.npc_id);
+			if (npc_type) {
+				auto ruins = new NPC(npc_type, new_spawn,
+					glm::vec4(spawn2.x, spawn2.y, spawn2.z, spawn2.heading), GravityBehavior::Water);
+				// Binding/lifecycle identity is required even if general quest
+				// entity-variable restoration is disabled. Restore no other keys.
+				for (const auto key : {"destructible_zone_actor", "destructible_map_model", "destructible_retain_ruins"}) {
+					ruins->SetEntityVariable(key, saved_variables.at(key));
+				}
+				if (BoundDestructibles::CanRetain(ruins)) {
+					ruins->SetSpawnGroupId(s.spawngroup_id);
+					BoundDestructibles::EnterRuins(ruins);
+					new_spawn->SetNPCPointer(ruins);
+					new_spawn->SetCurrentNPCID(s.npc_id);
+					entity_list.AddNPC(ruins, true, true);
+					ruins->SetTargetable(false);
+					ruins->SendHPUpdate();
+					continue;
+				}
+				delete ruins;
+			}
+		}
 		new_spawn->Process();
 		auto n = new_spawn->GetNPC();
-		if (n) {
+		if (n && !saved_ruins) {
 			LoadNPCState(zone, n, s);
 		}
 	}
@@ -669,6 +697,9 @@ inline void SaveNPCState(NPC *n, ZoneStateSpawnsRepository::ZoneStateSpawns &s)
 	std::map<std::string, std::string> variables;
 
 	for (const auto &k: n->GetEntityVariables()) {
+		if (k == "destructible_death_transition" || k == "destructible_death_cancelled") {
+			continue;
+		}
 		variables[k] = n->GetEntityVariable(k);
 	}
 

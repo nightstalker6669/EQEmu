@@ -1,3 +1,4 @@
+#include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -583,6 +584,12 @@ bool NPC::Process()
 		return false;
 	}
 
+	// Keep the binding for current/entering clients, with no AI, ticks, spells,
+	// regeneration or second death processing while the original timer runs.
+	if (BoundDestructibles::IsBlocked(this)) {
+		return true;
+	}
+
 	if (IsStunned() && stunned_timer.Check()) {
 		Mob::UnStun();
 		spun_timer.Disable();
@@ -840,6 +847,7 @@ void NPC::UpdateEquipmentLight()
 }
 
 void NPC::Depop(bool start_spawn_timer) {
+	BoundDestructibles::CancelTransition(this);
 	if (emoteid) {
 		DoNPCEmote(EQ::constants::EmoteEventTypes::OnDespawn, emoteid);
 	}

@@ -1,0 +1,31 @@
+{
+  "policy": "User-approved labelled configurable emulator defaults; not recovered exact May2013 probabilities",
+  "sql_session_overrides": {
+    "spawn_percent": {
+      "variable": "@mesa_fantoma_spawn_percent",
+      "default": 2,
+      "min": 1,
+      "max": 50
+    },
+    "pelt_percent": {
+      "variable": "@mesa_fantoma_pelt_percent",
+      "default": 100,
+      "min": 1,
+      "max": 100
+    },
+    "boots_weight": {
+      "variable": "@mesa_fantoma_boots_weight",
+      "default": 50,
+      "min": 0,
+      "max": 100
+    },
+    "club_weight": {
+      "variable": "@mesa_fantoma_club_weight",
+      "default": 50,
+      "min": 0,
+      "max": 100
+    }
+  },
+  "mechanics": "Ordinary and alpha wolf placeholders share original21 native spawn points;2percent per respawn by default. Pelt100percent and one50/50boots/club gear roll are reconstructed defaults. All original timers/coordinates/paths retained. No acceptance-triggered named spawning.",
+  "repeat_policy": "Same settings import idempotently; different existing pool weights/managed rows fail closed until explicit reviewed migration."
+}

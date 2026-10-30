@@ -46,6 +46,9 @@ public:
 	bool LineIntersectsZone(glm::vec3 start, glm::vec3 end, float step, glm::vec3 *result) const;
 	bool LineIntersectsZoneNoZLeaps(glm::vec3 start, glm::vec3 end, float step_mag, glm::vec3 *result) const;
 	bool CheckLoS(glm::vec3 myloc, glm::vec3 oloc) const;
+	// Caller explicitly enrolls the exact static model of a bound destructible.
+	// Unknown/ambiguous/far placements use ordinary LOS, never an exemption.
+	bool CheckLoSToBoundModel(const glm::vec3& from, const glm::vec3& to, const glm::vec3& anchor, const std::string& model) const;
 	bool IntersectsBox(const glm::vec3& minimum,const glm::vec3& maximum) const;
 	// Housing-only trusted source contact; all other triangles remain blockers.
 	bool IntersectsBoxExceptTriangles(const glm::vec3& minimum,const glm::vec3& maximum,uint32_t source_a,uint32_t source_b) const;
@@ -82,6 +85,13 @@ private:
 	bool SaveMMF(const std::string& map_file_name, bool force_mmf_overwrite);
 #endif /*USE_MAP_MMFS*/
 
+	struct BoundModelSource {
+		std::string model;
+		glm::vec3 anchor;
+		uint32_t begin;
+		uint32_t end;
+	};
+	std::vector<BoundModelSource> bound_model_sources_;
 	struct impl;
 	impl *imp;
 };

@@ -12607,6 +12607,9 @@ void Client::Handle_OP_PetitionBug(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionCheckIn(const EQApplicationPacket *app)
 {
+	if (Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
 	if (app->size != sizeof(Petition_Struct)) {
 		LogError("Wrong size: OP_PetitionCheckIn, size=[{}], expected [{}]", app->size, sizeof(Petition_Struct));
 		return;
@@ -12614,6 +12617,9 @@ void Client::Handle_OP_PetitionCheckIn(const EQApplicationPacket *app)
 	Petition_Struct* inpet = (Petition_Struct*)app->pBuffer;
 
 	Petition* pet = PetitionList::Instance()->GetPetitionByID(inpet->petnumber);
+	if (!pet) {
+		return;
+	}
 	//if (inpet->urgency != pet->GetUrgency())
 	pet->SetUrgency(inpet->urgency);
 	pet->SetLastGM(GetName());
@@ -12628,6 +12634,9 @@ void Client::Handle_OP_PetitionCheckIn(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionCheckout(const EQApplicationPacket *app)
 {
+	if (Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
 	if (app->size != sizeof(uint32)) {
 		std::cout << "Wrong size: OP_PetitionCheckout, size=" << app->size << ", expected " << sizeof(uint32) << std::endl;
 		return;
@@ -12651,13 +12660,17 @@ void Client::Handle_OP_PetitionCheckout(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionDelete(const EQApplicationPacket *app)
 {
+	if (Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
 	if (app->size != sizeof(PetitionUpdate_Struct)) {
 		LogError("Wrong size: OP_PetitionDelete, size=[{}], expected [{}]", app->size, sizeof(PetitionUpdate_Struct));
 		return;
 	}
+	const uint32 petition_id = *((uint32*)app->pBuffer);
 	auto outapp = new EQApplicationPacket(OP_PetitionUpdate, sizeof(PetitionUpdate_Struct));
 	PetitionUpdate_Struct* pet = (PetitionUpdate_Struct*)outapp->pBuffer;
-	pet->petnumber = *((int*)app->pBuffer);
+	pet->petnumber = petition_id;
 	pet->color = 0x00;
 	pet->status = 0xFFFFFFFF;
 	pet->senttime = 0;
@@ -12667,8 +12680,8 @@ void Client::Handle_OP_PetitionDelete(const EQApplicationPacket *app)
 	strcpy(pet->charname, "");
 	FastQueuePacket(&outapp);
 
-	if (PetitionList::Instance()->DeletePetition(pet->petnumber) == -1)
-		std::cout << "Something is borked with: " << pet->petnumber << std::endl;
+	if (PetitionList::Instance()->DeletePetition(petition_id) == -1)
+		std::cout << "Something is borked with: " << petition_id << std::endl;
 	PetitionList::Instance()->ClearPetitions();
 	PetitionList::Instance()->UpdateGMQueue();
 	PetitionList::Instance()->ReadDatabase();
@@ -12678,9 +12691,10 @@ void Client::Handle_OP_PetitionDelete(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionQue(const EQApplicationPacket *app)
 {
-#ifdef _EQDEBUG
-	printf("%s looking at petitions..\n", GetName());
-#endif
+	if (app->size != 0 || Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
+	PetitionList::Instance()->UpdateGMQueue();
 	return;
 }
 
@@ -12699,6 +12713,9 @@ void Client::Handle_OP_PetitionResolve(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionUnCheckout(const EQApplicationPacket *app)
 {
+	if (Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
 	if (app->size != sizeof(uint32)) {
 		std::cout << "Wrong size: OP_PetitionUnCheckout, size=" << app->size << ", expected " << sizeof(uint32) << std::endl;
 		return;

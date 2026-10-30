@@ -279,6 +279,30 @@ bool Map::CheckLoS(glm::vec3 myloc, glm::vec3 oloc) const {
 	return !imp->rm->raycast((const RmReal*)&myloc, (const RmReal*)&oloc, nullptr, nullptr, nullptr);
 }
 
+bool Map::CheckLoSToBoundModel(const glm::vec3& from, const glm::vec3& to, const glm::vec3& anchor, const std::string& model) const
+{
+	const BoundModelSource *match = nullptr;
+	for (const auto &source : bound_model_sources_) {
+		if (source.model != model) {
+			continue;
+		}
+		const auto delta = source.anchor - anchor;
+		const float distance_squared = glm::dot(delta, delta);
+		if (!std::isfinite(distance_squared) || distance_squared > .25f * .25f) {
+			continue;
+		}
+		if (match) {
+			// Never choose an arbitrary nearest instance from ambiguous ownership.
+			return CheckLoS(from, to);
+		}
+		match = &source;
+	}
+	if (!match || match->begin >= match->end || !imp || !imp->rm) {
+		return CheckLoS(from, to);
+	}
+	return !imp->rm->raycastExceptSourceRange(&from.x, &to.x, match->begin, match->end);
+}
+
 // returns true if a collision happens
 bool Map::IntersectsBox(const glm::vec3& minimum,const glm::vec3& maximum) const {
  if(!imp||!imp->rm)return true;
@@ -410,6 +434,7 @@ bool Map::Load(const std::string &filename)
 }
 
 bool Map::LoadV1(FILE *f) {
+	bound_model_sources_.clear();
 	uint32 face_count;
 	uint16 node_count;
 	uint32 facelist_count;
@@ -490,6 +515,8 @@ struct ModelEntry
 };
 
 bool Map::LoadV2(FILE *f) {
+	bound_model_sources_.clear();
+	std::vector<BoundModelSource> model_sources;
 	uint32 data_size;
 	if (fread(&data_size, sizeof(data_size), 1, f) != 1) {
 		return false;
@@ -664,6 +691,7 @@ bool Map::LoadV2(FILE *f) {
 		auto &model = models[name];
 		auto &mod_polys = model->polys;
 		auto &mod_verts = model->verts;
+		const auto source_begin = static_cast<uint32_t>(indices.size() / 3);
 		for (uint32 j = 0; j < mod_polys.size(); ++j) {
 			auto &current_poly = mod_polys[j];
 			if (current_poly.vis == 0)
@@ -691,6 +719,10 @@ bool Map::LoadV2(FILE *f) {
 			indices.emplace_back((uint32)verts.size() - 3);
 			indices.emplace_back((uint32)verts.size() - 2);
 			indices.emplace_back((uint32)verts.size() - 1);
+		}
+		const auto source_end = static_cast<uint32_t>(indices.size() / 3);
+		if (source_end > source_begin) {
+			model_sources.push_back({name, glm::vec3(y, x, z), source_begin, source_end});
 		}
 	}
 
@@ -1006,6 +1038,7 @@ bool Map::LoadV2(FILE *f) {
 		return false;
 	}
 
+	bound_model_sources_ = std::move(model_sources);
 	return true;
 }
 
@@ -1062,6 +1095,8 @@ inline bool add_mmf_extension(std::string& mmf_file_name)
 
 bool Map::LoadMMF(const std::string& map_file_name, bool force_mmf_overwrite)
 {
+	// Legacy MMFs do not contain placement ownership. Keep ordinary LOS.
+	bound_model_sources_.clear();
 	if (force_mmf_overwrite)
 		return false;
 

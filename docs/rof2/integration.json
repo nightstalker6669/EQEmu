@@ -70,7 +70,8 @@
     ],
     "history": "Linear feature layers from exact upstream develop; zero merge commits ahead of the base. Old heads archived separately.",
     "deployment": "Source rebase only; no running server, client or database deployment.",
-    "native_acceptance": "No new native gameplay, native Windows build or Akk-stack deployment acceptance claimed."
+    "native_acceptance": "No new native gameplay, native Windows build or Akk-stack deployment acceptance claimed.",
+    "scope": "Original 2026-10-29 source rebase validation; retained unchanged below. Later runtime migration evidence is recorded separately."
   },
   "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
   "shared_core": "Inherited from rof2-shared-core; one canonical implementation in common/shared_core; legacy feature headers forward to it.",
@@ -87,5 +88,56 @@
   "upstream_branch": "develop",
   "previous_published_commit": "474dd3603444ed2d02f3fa616db6f7104b734d1a",
   "backup_branch": "archive/20261029-before-develop/rof2-integration",
-  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base."
+  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base.",
+  "achievement_content_milestones": [
+    {
+      "name": "Mesa armor, gifts and encounters",
+      "package": "extensions/rof2/achievements/content/mesa-remaining",
+      "tasks": 36,
+      "activities": 277,
+      "recipes": 27,
+      "historical_achievement_definitions": 4,
+      "parent_reward_sets": 4,
+      "protocol_changes": "None; existing achievement/task/reward protocol retained",
+      "native_evidence": "Eight distinct tasks completed; all eight component bits, original20equipment slots, unrelated active tasks and earring scaling persisted through fresh process login. Dorina Lament saved reward offer survived login and native selection delivered an actual item. Escort uses explicitly labelled route-only administrative prerequisite checkpoint after separately observed genuine material acquisition.",
+      "historical_limits": "May31,2013 cutoff; unrecovered encounter balance/probabilities/path remain explicit user-approved configurable reconstructions; see package provenance.",
+      "published_commit": "a21ffd63d1fe527b4a2d689b081228e5a8221cf4",
+      "repository": "nightstalker6669/eqemu-rof2-achievements"
+    },
+    {
+      "name": "Blackfeather Roost quests/acquisition/nests",
+      "package": "extensions/rof2/achievements/content/roost",
+      "historical_cutoff": "2013-05-31",
+      "quests": 15,
+      "activities": 54,
+      "catalogue_definitions": 5,
+      "engine_source_files": 12,
+      "reward_limits": "Ascending wrist and Raider glove/bundle choices unresolved; neither parent reward set configured.",
+      "native_status": "Six distinct quests completed with component credit; all seven nest types, retained ruins/late entry/native deadline, feather pickups/handins/item+XP reward and class-filtered paired earrings with fresh-login persistence passed on the corresponding develop combined build. Explicit remaining limits retained; client-local combat toggle unchanged.",
+      "validation": "Nine affected public translation units, linked Map/BVH tests and assertion-enabled lifecycle contracts passed. The corresponding combined develop server passed a full compile/link and scoped native gameplay. Full standalone public link/native rerun not repeated.",
+      "private_data_included": false,
+      "published_commit": "2b7d69447aa8a2f998eb1a18fbbb60394074e7e6",
+      "repository": "nightstalker6669/eqemu-rof2-achievements"
+    }
+  ],
+  "runtime_migration_2026_10_30": {
+    "source_identity": "676a1afb38acf45c66661341567d66d009dc68d5",
+    "base_integration_commit": "c24337e2903e82c00f7a1ed6998ac60f505ec494",
+    "scope": "Controlled migration from the prior 23.10.3-based overlays to the develop-based combined server; this is separate from source publication.",
+    "build": "Full Linux combined compile/link and matched server deployment passed, including world, zone, shared_memory and housing tools.",
+    "preservation": "All 437 database tables retained; 430 checksums unchanged and seven expected schema/version changes. Original values in 14 affected tables matched the pre-migration shadow. Housing and player data retained.",
+    "native": "RoF2 login, geared inventory and prior achievements persisted. Six distinct Roost quests completed; all seven nest types passed real melee/kill credit, retained ruins and late entry. Feather acquisition, handins and item/XP rewards passed. Adrian's Calling delivered both class-filtered Soldier earrings in one attempt; fresh login retained the pair and original weapons.",
+    "limits": [
+      "Representative native checks do not establish complete cross-feature gameplay acceptance.",
+      "No native Windows build or Windows deployment acceptance claimed.",
+      "Client-local attack toggle remains enabled until explicit attack off; killer target selection clears.",
+      "Roost Ascending wrist and Raider glove/bundle choices remain unresolved and unconfigured.",
+      "Standalone achievement-only full link/native rerun was not repeated; public translation-unit and linked Map/BVH/lifecycle checks are documented in that milestone."
+    ],
+    "combined_only_repairs": [
+      "Preserve housing-aware map, raycast and Mob implementations while integrating bound-nest LOS/lifecycle.",
+      "Preserve the achievement ProcessEvent permanent-profile guard using IsSpiritShrouded; the standalone achievement branch does not expose that combined API.",
+      "Retain reviewed RoF2 petition codecs, mappings and dispatch safeguards."
+    ]
+  }
 }

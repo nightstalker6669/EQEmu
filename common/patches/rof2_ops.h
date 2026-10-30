@@ -214,5 +214,12 @@ D(OP_ZoneChange)
 D(OP_ZoneEntry)
 // End RoF Encodes/Decodes
 
+// Reviewed native RoF2 petition queue/detail codecs.
+E(OP_PetitionUpdate)
+E(OP_PetitionCheckout)
+D(OP_PetitionDelete)
+D(OP_PetitionResolve)
+D(OP_PetitionCheckIn)
+
 #undef E
 #undef D

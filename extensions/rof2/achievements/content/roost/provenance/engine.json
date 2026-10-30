@@ -1,0 +1,15 @@
+{
+  "base_commit": "a21ffd63d1fe527b4a2d689b081228e5a8221cf4",
+  "source_files": 12,
+  "new_opcodes": false,
+  "new_existing_class_layout_fields": false,
+  "scope": "Explicitly enrolled bound lootless destructibles: collider ownership, static actor serialization, safe ruins lifecycle using native Spawn2 timers.",
+  "client_static_evidence": "May2013 shipped client supports original zone-actor binding and stage4 hidden-original retention; entity deletion restores original actor.",
+  "lifecycle_classification": "Emulator lifecycle correction; exact original Live server behavior unproved.",
+  "activation_enrollment": 82,
+  "safe_destroyed_appearance": 4,
+  "housing_dependencies_imported": false,
+  "offline_validation": "Nine public translation units syntax-compile; linked synthetic Map/BVH rays; isolated assertion-enabled lifecycle body/order contracts; exact twelve-file patch reapplication.",
+  "native_gameplay": "Real destruction/retained ruins, late entry, fresh replacement observed after original deadline, fresh normal-family objective credit passed; three completed quests persisted across server restart/reconnect. Exact respawn visual tick not measured; remaining feather handins/rewards/persistence pending. Client-local combat toggle unchanged; no new opcode.",
+  "loader_limits": "V1 maps, legacy MMFs and placement groups have no guessed ownership exemptions; missing/ambiguous/moved/unbound identities use ordinary LOS."
+}

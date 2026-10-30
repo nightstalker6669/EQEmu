@@ -1,0 +1,234 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "a0864f3df7a60c0910a680f169da98f7bd659df72127fde87ddc3d062faa4c41"
+  },
+  {
+    "path": "apply_quests.py",
+    "sha256": "640862417910b411b883f5cadfab2f440d78edd9df21671ee9cc9deff35e487e"
+  },
+  {
+    "path": "hooks/global-player-mesa-remaining.fragment.lua",
+    "sha256": "2fbaf614f132ed22638fe64220f27a178287596f650340f9af8c7474b44df335"
+  },
+  {
+    "path": "install.py",
+    "sha256": "250c946731fc63b78beb0e64040a201f8d4047b5a76f5cf8f79c7d82b919bc9a"
+  },
+  {
+    "path": "preflight.py",
+    "sha256": "5bacf535b7f3f0b9ce9e96002936ede63055071548fe25907c29c97e955ddc41"
+  },
+  {
+    "path": "provenance/baseline-identities.json",
+    "sha256": "05cb83e344f43a74f64ddec5174bfa7235fe8d35a77307d025868b1137f82035"
+  },
+  {
+    "path": "provenance/catalogue.json",
+    "sha256": "e3b8181a35f61535fab2b79b6bd5a21357ba31b37778268135045556902b35e2"
+  },
+  {
+    "path": "provenance/fantoma-settings.json",
+    "sha256": "3067e45475832f8aa4efffe65235f11a91906522ef1f142f8966af1787e4b350"
+  },
+  {
+    "path": "provenance/love-quest-specification.json",
+    "sha256": "6fc9e93d53ef4165edc55bccd8c48b4b3cc01ddc631789efd25d23c356de7e40"
+  },
+  {
+    "path": "provenance/native-status.json",
+    "sha256": "8126bbff3adca171f99f8bb3f1c5c5492b090bc05ee44cab5816321fc67782c5"
+  },
+  {
+    "path": "provenance/parent-rewards.json",
+    "sha256": "ebe9f4ff56ed26e0214fc5dc06427f6720650b8080a3e00ca5e865baa4484f53"
+  },
+  {
+    "path": "provenance/remaining-quest-specification.json",
+    "sha256": "99fd8061ed0335ea54d3b6430684e012b3c9a534e158d4ad6b66af7005a521aa"
+  },
+  {
+    "path": "provenance/scene-settings.json",
+    "sha256": "03a6cde22c2b09472bc85a8dc14899e5d42be888481dd5f580a406e1ab492889"
+  },
+  {
+    "path": "provenance/scene-template-provenance.json",
+    "sha256": "6a226eedfa3ad19dcaf93edcf976412f47f7863496b6fdbdc35d1b31d35589e0"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "5bb854e2762afc49b6b8e591b433ca0504a715df86091be8dc4470d84aa81b4f"
+  },
+  {
+    "path": "quests/crescent/394060.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "quests/crescent/394066.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "quests/crescent/394083.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "quests/crescent/394115.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "quests/crescent/394146.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "quests/crescent/394155.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "quests/crescent/394168.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "quests/crescent/394228.lua",
+    "sha256": "ba19f32b95f3fc4e2f3aa342ffda344d7967b80e4e749c12b08d3fe18c4a5c73"
+  },
+  {
+    "path": "quests/global/items/CHRMGGSEofDragoste.lua",
+    "sha256": "d303b3500aca418b6da0902a0d962b6ea866d70e0ac59eec52e7ef1f9148a67d"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_crafting.lua",
+    "sha256": "75a78e5dcf6258f73d3ec3bcb662bad4750a0d8fec5c8ac93dcc6b7a4a797548"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_crafting_data.lua",
+    "sha256": "adb2bddece4f730f2bb7f963d7707e8a67b04e505205d01cbcdbabf9afaafe0f"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_defense.lua",
+    "sha256": "72844742e0042ffde47c69e7f33057bcb45f208f4581a00e248e832987100f76"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_defense_data.lua",
+    "sha256": "f51deff3d98a04bb6ee103916b83b0f4e084f657714c66949b1262548d92f47a"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_escort.lua",
+    "sha256": "70d7a3b7d3ebd7ff20110ae66551b5a35d3702bca562c5da21262be1f155c0c4"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_escort_data.lua",
+    "sha256": "3b1abc7989ef4830d3885cf2b42273a9f348b273afd532180947783a72531cd2"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_love.lua",
+    "sha256": "eb5bf23ac9b75854bd366212e9a1e01f91a4221b8a69b4c0a98f712b25047f69"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_love_data.lua",
+    "sha256": "142600720efc8157cd9de2a704ef7ed2a1dfd3cd43884fe508e4abed7e946424"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_observations.lua",
+    "sha256": "b6f1ea060480cd2edbf8a4864b7ea3e9b10926c1b318bb71c9786c04638e650c"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_observations_data.lua",
+    "sha256": "3379104645610dd8f4bd74f2d8641a62f4a33c4daed064b6181f09de75cf04cb"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_remaining.lua",
+    "sha256": "ec01989bfff6837d7306ec6a70264293376d0c3a0781684fc991995ef78fe4c1"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_remaining_data.lua",
+    "sha256": "c2e2876b79e77f7b1af53d9c12cf203587ea6cf2ed304205d14786379101f412"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_tudor.lua",
+    "sha256": "27315ef47416f7bb9b5dfc2d4bff7f0edad26a0c2cc33641292a43c3b2c62939"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_mesa_tudor_data.lua",
+    "sha256": "b36068b18dfd5cf09768e9bea054e31d740de4c88ef3f8de72335d95eab495d0"
+  },
+  {
+    "path": "quests/mesa/397007.lua",
+    "sha256": "e1ee4403102166186aa58e48c6b8a338d1853d1dffa0d8a9dd0b4e327ab08bf2"
+  },
+  {
+    "path": "quests/mesa/397043.lua",
+    "sha256": "6a284fb7cc814ed21e2ec0b4abe7f8ac4eb8d82671279c0bd5b592989edd2360"
+  },
+  {
+    "path": "quests/mesa/397086.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "quests/mesa/397093.lua",
+    "sha256": "0a2f46b444136b3e9350504a76c1595bb511551dea2e2b640bd8c70e5dd1d74c"
+  },
+  {
+    "path": "quests/mesa/397096.lua",
+    "sha256": "6a284fb7cc814ed21e2ec0b4abe7f8ac4eb8d82671279c0bd5b592989edd2360"
+  },
+  {
+    "path": "quests/mesa/397097.lua",
+    "sha256": "6a284fb7cc814ed21e2ec0b4abe7f8ac4eb8d82671279c0bd5b592989edd2360"
+  },
+  {
+    "path": "quests/mesa/397100.lua",
+    "sha256": "0d63d83a54747d96f2048f3d9fe8670d7b7c5f3d2092de3d8421b34d933dcee0"
+  },
+  {
+    "path": "quests/mesa/397118.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "quests/mesa/397120.lua",
+    "sha256": "c3709ba98991a8b908e8765f4f86229944091b09bb6c2c2ec850d2d6ad6c90e8"
+  },
+  {
+    "path": "quests/mesa/397901.lua",
+    "sha256": "a4385c9a785d6138f28fa114680801037cbeb5d013961b02d1a421eecba4ec77"
+  },
+  {
+    "path": "quests/mesa/397902.lua",
+    "sha256": "a4385c9a785d6138f28fa114680801037cbeb5d013961b02d1a421eecba4ec77"
+  },
+  {
+    "path": "quests/mesa/397903.lua",
+    "sha256": "7b1c4324706169e7f742a209144988d88f313af4700517abefcf137f811e66b5"
+  },
+  {
+    "path": "sql/000-reviewed-settings.sql",
+    "sha256": "a23cab3b22afc6e802a366218084b415ddd18a38b41a4d0b69b44f81e16e3ebb"
+  },
+  {
+    "path": "sql/005-catalogue.sql",
+    "sha256": "d23276896aa1293df28d3200046d8603a207965f61c908c6af2e55506f991431"
+  },
+  {
+    "path": "sql/010-scene-templates.sql",
+    "sha256": "d813c164102a4bbcacf260b9d549a107d515d7eaa55e86a17c6769899ac69cbb"
+  },
+  {
+    "path": "sql/020-fantoma-acquisition.sql",
+    "sha256": "77b2369972bd3c97a2f15950df7373aed5625e77946177a7eb6e3f24ca5029d6"
+  },
+  {
+    "path": "sql/030-recipes.sql",
+    "sha256": "8761964b31db595d1c80098c0b5610db44fa05088f100c0dd13864ecc0a086d3"
+  },
+  {
+    "path": "sql/040-tasks.sql",
+    "sha256": "08f8d9c5f4f3c37e3f83b493d67b07147c430280f78b988e782cd3410057ec07"
+  },
+  {
+    "path": "sql/050-parent-rewards.sql",
+    "sha256": "1239f7337e3c58ae7048b03302234820d04bbc94b9bc0591ead504987f9863ed"
+  },
+  {
+    "path": "sql/060-enable-content.sql",
+    "sha256": "72b23c5d6757f14628f72f19d78a042e2e257162c6bb1d43919ef3acf7dea89a"
+  }
+]
