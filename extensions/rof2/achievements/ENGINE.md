@@ -43,3 +43,9 @@ The [protocol guide](protocol/README.md) provides mappings and packet layouts, i
 ## Roost bound-destructible integration
 
 The Roost milestone integrates twelve production source files directly, adding trusted collider ownership and actor serialization plus the reviewed lootless-destructible ruins lifecycle. No additional opcode/schema patch is required. Rebuild all Map/BVH-header consumers; follow the [Roost content guide](content/roost/README.md). Archived patch commands are not additional installation steps for this checkout. Exact original Live server lifecycle remains unproved.
+
+## Steppes shared-task and scene integration
+
+The integrated source includes full-width shared reward occurrence identity, guarded whole-party admission and durable completion archives with retry-before-removal, item-cast custody fields for Lua scenes, Lua door/member APIs and recurring random-ground height correction. Rebuild/deploy the matching world and zone consumers; the corresponding combined Linux13target build passed. Achievement-only full linking/native rerun is not claimed.
+
+Before starting patched services, apply `utils/sql/git/2026_10_30_shared_task_reward_identity.sql` and `utils/sql/git/2026_10_30_shared_task_admission_policies.sql` to the server database. The complete [Steppes installer](content/steppes/README.md) also includes guarded schema prerequisites, all content/activation and the researched Gnoll late-join policy. These are direct source changes on this branch; no extra archived patch applies. Existing opcode mappings and packet structures are retained; see [Steppes protocol scope](content/steppes/PROTOCOL.md).

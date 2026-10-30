@@ -77,3 +77,5 @@ The guarded personal housing marker orientation correction is available at `util
 ## Verification
 
 See [integration.json](integration.json) for original rebase validation and the separate completed runtime migration. The latter preserved all 437 tables and checked original values in affected tables; it is not a blanket native acceptance claim. No live server or database change is performed by source publication.
+
+Steppes adds two required schema migrations and a complete guarded content installer. Follow the [Steppes engine section](../../extensions/rof2/achievements/ENGINE.md#steppes-shared-task-and-scene-integration) and [content guide](../../extensions/rof2/achievements/content/steppes/README.md). Back up and stop writers; deploy the matching rebuilt engine before players reconnect.

@@ -139,5 +139,20 @@
       "Preserve the achievement ProcessEvent permanent-profile guard using IsSpiritShrouded; the standalone achievement branch does not expose that combined API.",
       "Retain reviewed RoF2 petition codecs, mappings and dispatch safeguards."
     ]
-  }
+  },
+  "milestones": [
+    {
+      "name": "Steppes quests and shared-task persistence",
+      "package": "extensions/rof2/achievements/content/steppes",
+      "historical_cutoff": "2013-05-31",
+      "quests": 13,
+      "activities": 59,
+      "native_completed_quests": 10,
+      "native_parent": "Conquering the Steppes:7components and two-item class-appropriate bundle, each grant once",
+      "engine_source_files": 20,
+      "new_wire_opcodes": false,
+      "remaining": "Three quests, remaining parent/multiplayer coverage and recurring Yavia pickup issue; see native-status.json",
+      "private_data_included": false
+    }
+  ]
 }

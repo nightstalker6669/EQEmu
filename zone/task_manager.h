@@ -120,5 +120,5 @@ private:
 	void SyncClientSharedTaskWithPersistedState(Client *c, ClientTaskState *cts);
 	void SyncClientSharedTaskRemoveLocalIfNotExists(Client *c, ClientTaskState *cts);
 	void SendSharedTaskSelector(Client* client, Mob* mob, const std::vector<int>& tasks);
-	void SyncClientSharedTaskStateToLocal(Client *c);
+	bool SyncClientSharedTaskStateToLocal(Client *c);
 };

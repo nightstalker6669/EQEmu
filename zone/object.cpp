@@ -116,6 +116,7 @@ decay_timer(300000)
 	m_icon         = 0;
 	m_fix_z        = fix_z;
 	m_ground_spawn = true;
+	m_random_ground_z = z == BEST_Z_INVALID;
 
 	decay_timer.Disable();
 	// Set as much struct data as we can
@@ -553,6 +554,13 @@ void Object::RandomSpawn(bool send_packet) {
 	m_data.x = zone->random.Real(m_min_x, m_max_x);
 	m_data.y = zone->random.Real(m_min_y, m_max_y);
 
+	// Random XY changes on every respawn. Reusing the previous location's
+	// resolved height leaves pages floating or underground on sloping terrain.
+	// Preserve authored explicit-Z spawns and resolve only sentinel-based ones.
+	if (m_random_ground_z) {
+		m_data.z = BEST_Z_INVALID;
+	}
+
 	if (m_data.z == BEST_Z_INVALID && zone->HasMap()) {
 		glm::vec3 me;
 
@@ -679,13 +687,21 @@ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 			}
 
 			// Transfer item to client
-			sender->PutItemInInventory(EQ::invslot::slotCursor, *m_inst, false);
+			const uint32 pickup_item_id = m_inst->GetID();
+			const int pickup_count = m_inst->IsStackable() ? std::max<int>(1, m_inst->GetCharges()) : 1;
+			const bool pickup_placed = sender->PutItemInInventory(EQ::invslot::slotCursor, *m_inst, false);
 			sender->SendItemPacket(EQ::invslot::slotCursor, m_inst, ItemPacketTrade);
 
 			sender->CheckItemDiscoverability(m_inst->GetID());
 
 			if (cursor_delete) {    // delete the item if it's a duplicate lore. We have to do this because the client expects the item packet
 				sender->DeleteItemInInventory(EQ::invslot::slotCursor, 1, true);
+			}
+
+			// Pickup callbacks above may veto; duplicate lore is removed before this point.
+			// Recurring native ground spawns are fresh acquisitions, unlike player drops.
+			if (m_ground_spawn && pickup_placed && !cursor_delete && RuleB(TaskSystem, EnableTaskSystem)) {
+				sender->UpdateTasksForItem(TaskActivityType::Loot, pickup_item_id, pickup_count);
 			}
 
 			if (!m_ground_spawn) {
