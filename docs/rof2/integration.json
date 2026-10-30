@@ -1,0 +1,36 @@
+{
+  "branch": "rof2-shared-core",
+  "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "features": [
+    "shared-core"
+  ],
+  "inputs": {
+    "source": "eqemu-rof2-housing 710ecb7, fellowship 9382453, spirit-shrouds e32ca15"
+  },
+  "compatibility": "Stable legacy table/type/custom-data names; source implementations extracted once into common/shared_core; feature-specific gameplay and recovery adapters excluded.",
+  "validation": {
+    "status": "Passed targeted source and package checks on pure upstream develop; source publication only.",
+    "compiler": "GCC12/C++20 with cached vcpkg SDK; targeted syntax compilation, normal source preamble for zone translation units.",
+    "translation_units": [
+      "zone/attack.cpp",
+      "zone/bot.cpp",
+      "zone/spell_effects.cpp",
+      "common/dbcore.cpp"
+    ],
+    "content_preservation": "Exact added/removed source lines versus previous snapshot equal only the upstream mixed-base-to-develop delta in 11 paths. Opcode mappings/structures and other production packages retained byte-for-byte, except installer pin/checksum and current guides.",
+    "package_checks": [
+      "Manifest hashes/sizes, Python syntax, JSON, guide links",
+      "Unique migration IDs, opcode names, mapping keys and handlers"
+    ],
+    "history": "New linear review history; old heads preserved in archive branches.",
+    "full_branch_link": "Not independently linked; full combined build recorded by the integration branch.",
+    "native_acceptance": "No new native gameplay or active server/database deployment during this rebase."
+  },
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
+  "source_integration": "Feature-only changes replayed directly onto upstream develop; linear review commits without master merges or old mixed-history parents.",
+  "upstream_branch": "develop",
+  "previous_published_commit": "f84de86f885d6e0240ccb1559629a2cfc994708b",
+  "backup_branch": "archive/20261029-before-develop/rof2-shared-core",
+  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base."
+}

@@ -18,6 +18,7 @@
 typedef const char Const_char;
 
 #ifdef EMBPERL
+#include <cstring>
 #include "common/eqdb.h"
 #include "common/useperl.h"
 

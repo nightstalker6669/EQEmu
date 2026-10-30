@@ -1,4 +1,6 @@
 set(common_sources
+	shared_core/inventory_session_service.cpp
+	shared_core/inventory_snapshot.cpp
 	base_packet.cpp
 	bazaar.cpp
 	bodytypes.cpp

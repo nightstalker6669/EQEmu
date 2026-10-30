@@ -18,6 +18,7 @@
 
 #include "common/event/event_loop.h"
 #include "uv.h"
+#include <cstring>
 
 namespace EQ {
 
