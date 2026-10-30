@@ -4,7 +4,7 @@ Current EQEmu source with **achievements** integrated on the common upstream fou
 
 **[Install / upgrade](docs/rof2/INSTALL.md)** · **[Opcodes and packet structures](docs/rof2/PROTOCOL.md)** · **[Choose a feature branch](docs/rof2/BRANCHES.md)**
 
-This is the separate achievement feature branch. The same engine, reviewed quests, rewards, opcodes and structures are also included in [rof2-integration](https://github.com/nightstalker6669/EQEmu/tree/rof2-integration).
+This is the separate achievement feature branch. The earlier engine/content release is also included in [rof2-integration](https://github.com/nightstalker6669/EQEmu/tree/rof2-integration). New achievement milestones are committed to this branch; check the combined branch manifest before assuming it contains later content.
 
 All feature branches now start directly from **upstream develop `c9c8747a`**, without the earlier master/develop merge history. [Review a clean diff or update an existing clone](docs/rof2/COMPARE.md). `master` remains separate.
 

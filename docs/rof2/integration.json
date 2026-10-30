@@ -34,9 +34,23 @@
   },
   "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
   "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
-  "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
+  "integration_scope": "The original five published features share pure upstream develop. Later achievement content milestones are committed to this branch separately; consult integration branch provenance before combining.",
   "upstream_branch": "develop",
   "previous_published_commit": "85644205995c3093b4de9db4d3ce8e92d6a0cf63",
   "backup_branch": "archive/20261029-before-develop/rof2-achievements",
-  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base."
+  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base.",
+  "achievement_content_milestones": [
+    {
+      "name": "Mesa armor, gifts and encounters",
+      "package": "extensions/rof2/achievements/content/mesa-remaining",
+      "tasks": 36,
+      "activities": 277,
+      "recipes": 27,
+      "historical_achievement_definitions": 4,
+      "parent_reward_sets": 4,
+      "protocol_changes": "None; existing achievement/task/reward protocol retained",
+      "native_evidence": "Eight distinct tasks completed; all eight component bits, original20equipment slots, unrelated active tasks and earring scaling persisted through fresh process login. Dorina Lament saved reward offer survived login and native selection delivered an actual item. Escort uses explicitly labelled route-only administrative prerequisite checkpoint after separately observed genuine material acquisition.",
+      "historical_limits": "May31,2013 cutoff; unrecovered encounter balance/probabilities/path remain explicit user-approved configurable reconstructions; see package provenance."
+    }
+  ]
 }
