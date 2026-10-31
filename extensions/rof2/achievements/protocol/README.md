@@ -66,3 +66,7 @@ Private native checks on the running port demonstrated achievement state/progres
 Item and loot scripts can use `Client::TaskSelector` to issue an offer whose task giver is the requesting client. This uses the existing task-selection and acceptance layouts; it introduces no opcode or struct fields. Acceptance first matches the server’s last offered task and giver ID, then resolves that giver as a `Mob`. A valid source is an NPC or that same requesting client. Missing entities, other clients and other entity types are rejected. NPC distance checks remain in place.
 
 The current integrated engine avoids downcasting a self-client offer to `NPC` and safely handles a disappeared giver. Linux zone compilation/linking and native RoF2 self-sourced and NPC-sourced acceptance were verified. Native Windows execution of this change has not been verified.
+
+## Quest-created ground pickups
+
+Quest-generated one-shot items use the existing `OP_ClickObject` and item-transfer paths. Native loot-objective credit occurs only after pickup callbacks permit the transfer, inventory placement succeeds and duplicate-lore removal is excluded. A server-side Object origin flag admits quest-created items without allowing player drop/pickup loops to earn credit. No client packet, opcode mapping or packet-structure field changes. The adjacent mappings and packet-structure reference remain applicable.

@@ -699,8 +699,10 @@ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 			}
 
 			// Pickup callbacks above may veto; duplicate lore is removed before this point.
-			// Recurring native ground spawns are fresh acquisitions, unlike player drops.
-			if (m_ground_spawn && pickup_placed && !cursor_delete && RuleB(TaskSystem, EnableTaskSystem)) {
+			// Both recurring and quest-created spawns are fresh acquisitions. The
+			// quest flag does not change one-shot decay/respawn behavior. Player
+			// drops retain neither flag, so repeated drop/pickup cannot earn credit.
+			if ((m_ground_spawn || m_quest_ground_spawn) && pickup_placed && !cursor_delete && RuleB(TaskSystem, EnableTaskSystem)) {
 				sender->UpdateTasksForItem(TaskActivityType::Loot, pickup_item_id, pickup_count);
 			}
 

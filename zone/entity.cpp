@@ -4716,6 +4716,7 @@ uint16 EntityList::CreateGroundObject(uint32 item_id, const glm::vec4& position,
 	}
 
 	auto object = new Object(inst, position.x, position.y, position.z, position.w, decay_time);
+	object->SetQuestGroundSpawn();
 
 	entity_list.AddObject(object, true);
 
