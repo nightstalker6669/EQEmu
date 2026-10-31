@@ -1,0 +1,1241 @@
+{
+  "cutoff": "2013-05-31",
+  "scope": "15 required Sunderock quest components; not the full historical achievement catalogue",
+  "xp_policy": "Approved PEQ-style1000XP only where original XP is established and amount is unknown; missing Caravan and Crusade lead-in0.",
+  "quests": [
+    {
+      "id": 3040701,
+      "quest_id": 5708,
+      "title": "The Crusade Begins!",
+      "achievement_id": 500070200,
+      "component_id": 50203,
+      "min_level": 60,
+      "repeatable": false,
+      "prerequisites": [],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 0,
+      "source_url": "https://everquest.allakhazam.com/db/quest/5708",
+      "historical_capture": "https://web.archive.org/web/20120407102248id_/http://everquest.allakhazam.com/db/quest.html?quest=5708",
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "speak",
+          "goalcount": 1,
+          "label": "Report to Captain Zheren",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403093
+          ],
+          "item_ids": []
+        }
+      ]
+    },
+    {
+      "id": 3040702,
+      "quest_id": 3646,
+      "title": "Scouting Sunderock",
+      "achievement_id": 500070200,
+      "component_id": 50204,
+      "min_level": 60,
+      "repeatable": true,
+      "prerequisites": [],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3646",
+      "historical_capture": "https://web.archive.org/web/20121103192608id_/http://everquest.allakhazam.com/db/quest.html?quest=3646",
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "The Sulfur Bog",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 1,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "The Pass to Direwind",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 2,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "The Vergalid Slave Quarry",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 3,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "Fiddleback's Hunting Grounds",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 4,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "Starshine Springs",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 5,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "Sunderock Geyser",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 6,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "The Chimera Caves",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 7,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "Basilisk Valley",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 8,
+          "kind": "speak",
+          "goalcount": 1,
+          "label": "Return to Captain Zheren",
+          "step": 1,
+          "zone": 403,
+          "npc_ids": [
+            403093
+          ],
+          "item_ids": []
+        }
+      ],
+      "repeat_review": "2012 final-chain narrative explicitly permits repeating Scouting after Direwind Front. Before final completion it remains one-time through server eligibility.",
+      "conditional_repeat_after": 3040706
+    },
+    {
+      "id": 3040703,
+      "quest_id": 3692,
+      "title": "Dyn`leth's Artillery",
+      "achievement_id": 500070200,
+      "component_id": 50205,
+      "min_level": 60,
+      "repeatable": true,
+      "prerequisites": [
+        3040702
+      ],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3692",
+      "historical_capture": "https://web.archive.org/web/20121103192437id_/http://everquest.allakhazam.com/db/quest.html?quest=3692",
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "kill",
+          "goalcount": 14,
+          "label": "Kill catapult engineers",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403103,
+            403116
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 1,
+          "kind": "kill",
+          "goalcount": 7,
+          "label": "Destroy catapults",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403107
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 2,
+          "kind": "speak",
+          "goalcount": 1,
+          "label": "Return to Captain Zheren",
+          "step": 1,
+          "zone": 403,
+          "npc_ids": [
+            403093
+          ],
+          "item_ids": []
+        }
+      ]
+    },
+    {
+      "id": 3040704,
+      "quest_id": 3693,
+      "title": "The Ashengate Orders",
+      "achievement_id": 500070200,
+      "component_id": 50206,
+      "min_level": 70,
+      "repeatable": true,
+      "prerequisites": [
+        3040703
+      ],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3693",
+      "historical_capture": "https://web.archive.org/web/20121103192816id_/http://everquest.allakhazam.com/db/quest.html?quest=3693",
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "kill",
+          "goalcount": 1,
+          "label": "Stop the courier before it reaches the mines",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403199
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 1,
+          "kind": "kill",
+          "goalcount": 4,
+          "label": "Finish the courier guards",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403091,
+            403198
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 2,
+          "kind": "loot",
+          "goalcount": 1,
+          "label": "Return with the orders",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": [
+            85698
+          ]
+        },
+        {
+          "activityid": 3,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Deliver the Ashengate Orders",
+          "step": 1,
+          "zone": 403,
+          "npc_ids": [
+            403093
+          ],
+          "item_ids": [
+            85698
+          ]
+        }
+      ],
+      "courier_period_evidence": {
+        "quest_id": 3693,
+        "source": "https://web.archive.org/web/20121103192816id_/http://everquest.allakhazam.com/db/quest.html?quest=3693",
+        "period_evidence": [
+          "April17,2009 comment states return objective updates on looting; courier drops2or3 copies.",
+          "July26,2008 comment confirms root/snare immunity and no summon on courier/guards.",
+          "June6,2009 comment confirms task must be obtained before courier kill/hand-in."
+        ],
+        "implementation": {
+          "return_activity": {
+            "activityid": 2,
+            "kind": "loot",
+            "item": 85698,
+            "step": 0
+          },
+          "orders_per_original_kill": 2,
+          "drop_policy": "Guaranteed researched minimum2. Exact2versus3distribution not recovered; no guessed third-copy probability.",
+          "movement_immunity": "SpecialAbility::SnareImmunity16 applies to both Root and MovementSpeed in native spells.cpp; preserve no-summon behavior."
+        },
+        "rejected_prior_candidate": "Return activity was incorrectly SpeakWith; originalPEQ dropchance83.532% ofone copy was incompatible with period minimum.",
+        "native_initial_attempt": "Original courier killed; test controller teleported fromX-5.125 toX1.875 atY3068.25 and crossed the Direwind zone line. Exact zone log at2026-10-30 16:57:03 records ZoneUnsolicited to405. Corpse lookup then failed in the destination zone. This is not evidence of a missing drop."
+      }
+    },
+    {
+      "id": 3040705,
+      "quest_id": 3697,
+      "title": "Dyn`Leth's Mine",
+      "achievement_id": 500070200,
+      "component_id": 50207,
+      "min_level": 70,
+      "repeatable": true,
+      "prerequisites": [
+        3040704
+      ],
+      "rewards": [
+        53642,
+        53643,
+        53644,
+        53645
+      ],
+      "reward_mode": "select-one",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3697",
+      "historical_capture": "https://web.archive.org/web/20121103165131id_/http://everquest.allakhazam.com/db/quest.html?quest=3697",
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "kill",
+          "goalcount": 10,
+          "label": "Kill Green Legion slavedrivers or overseers in Sunderock",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403060,
+            403061,
+            403062
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 1,
+          "kind": "kill",
+          "goalcount": 1,
+          "label": "Kill Overseer Vorsirus",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403104
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 2,
+          "kind": "kill",
+          "goalcount": 10,
+          "label": "Kill Skullcrush slaves in Vergalid",
+          "step": 0,
+          "zone": 404,
+          "npc_ids": [
+            404002,
+            404003,
+            404007,
+            404010,
+            404011,
+            404016,
+            404017,
+            404020,
+            404021,
+            404025,
+            404035,
+            404036,
+            404042,
+            404052,
+            404054,
+            404061,
+            404068,
+            404158,
+            404159,
+            404166,
+            404167,
+            404169
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 3,
+          "kind": "kill",
+          "goalcount": 10,
+          "label": "Kill Kickpick slaves in Vergalid",
+          "step": 0,
+          "zone": 404,
+          "npc_ids": [
+            404001,
+            404004,
+            404005,
+            404006,
+            404009,
+            404012,
+            404013,
+            404018,
+            404019,
+            404022,
+            404024,
+            404043,
+            404050,
+            404053,
+            404157,
+            404163,
+            404173,
+            404174
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 4,
+          "kind": "kill",
+          "goalcount": 3,
+          "label": "Kill Green Legion overseers in Vergalid",
+          "step": 0,
+          "zone": 404,
+          "npc_ids": [
+            404008,
+            404015,
+            404049,
+            404060
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 5,
+          "kind": "speak",
+          "goalcount": 1,
+          "label": "Report back to Captain Zheren",
+          "step": 1,
+          "zone": 403,
+          "npc_ids": [
+            403093
+          ],
+          "item_ids": []
+        }
+      ],
+      "prerequisite_review": "Page prose mistakenly says Artillery while prior quest/narrative explicitly use Ashengate Orders; require Orders as complete chain."
+    },
+    {
+      "id": 3040706,
+      "quest_id": 3708,
+      "title": "The Direwind Front",
+      "achievement_id": 500070200,
+      "component_id": 50208,
+      "min_level": 70,
+      "repeatable": false,
+      "prerequisites": [
+        3040705
+      ],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3708",
+      "historical_capture": "https://web.archive.org/web/20121103101931id_/http://everquest.allakhazam.com/db/quest.html?quest=3708",
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "speak",
+          "goalcount": 1,
+          "label": "Speak with Scout Zryan",
+          "step": 0,
+          "zone": 405,
+          "npc_ids": [
+            405009
+          ],
+          "item_ids": []
+        }
+      ],
+      "repeat_review": "Period header says nonrepeatable; final-chain narrative says Scouting can repeat. Conditional replay policy needs review."
+    },
+    {
+      "id": 3040707,
+      "quest_id": 3589,
+      "title": "The Sunderock Geyser",
+      "achievement_id": 500070300,
+      "component_id": 50209,
+      "min_level": 65,
+      "repeatable": true,
+      "prerequisites": [],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3589",
+      "historical_capture": "https://web.archive.org/web/20121103192554id_/http://everquest.allakhazam.com/db/quest.html?quest=3589",
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "kill",
+          "goalcount": 20,
+          "label": "Kill seething steam drakes",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403109,
+            403110,
+            403111,
+            403113,
+            403114,
+            403164
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 1,
+          "kind": "kill",
+          "goalcount": 10,
+          "label": "Kill seething mist drakes",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403112,
+            403115,
+            403184,
+            403185
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 2,
+          "kind": "speak",
+          "goalcount": 1,
+          "label": "Return to Anaglass",
+          "step": 1,
+          "zone": 403,
+          "npc_ids": [
+            403036
+          ],
+          "item_ids": []
+        }
+      ],
+      "cycle_stage": 1
+    },
+    {
+      "id": 3040708,
+      "quest_id": 3649,
+      "title": "The Sulfur Springs",
+      "achievement_id": 500070300,
+      "component_id": 50210,
+      "min_level": 70,
+      "repeatable": true,
+      "prerequisites": [
+        3040707
+      ],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3649",
+      "historical_capture": "https://web.archive.org/web/20121103192616id_/http://everquest.allakhazam.com/db/quest.html?quest=3649",
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "kill",
+          "goalcount": 30,
+          "label": "Destroy black, yellow or sulfurious oozes",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403179,
+            403181,
+            403182,
+            403187,
+            403188,
+            403190,
+            403191,
+            403193,
+            403194
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 1,
+          "kind": "kill",
+          "goalcount": 30,
+          "label": "Destroy oozebuds released from budding pods",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403900
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 2,
+          "kind": "kill",
+          "goalcount": 1,
+          "label": "Destroy Balloondabloop",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403197
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 3,
+          "kind": "loot",
+          "goalcount": 1,
+          "label": "Loot Balloondabloop's Bile",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": [
+            85676
+          ]
+        },
+        {
+          "activityid": 4,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Deliver Balloondabloop's Bile",
+          "step": 1,
+          "zone": 403,
+          "npc_ids": [
+            403036
+          ],
+          "item_ids": [
+            85676
+          ]
+        }
+      ],
+      "cycle_stage": 2
+    },
+    {
+      "id": 3040709,
+      "quest_id": 3923,
+      "title": "The Golgarun Springs",
+      "achievement_id": 500070300,
+      "component_id": 50211,
+      "min_level": 70,
+      "repeatable": true,
+      "prerequisites": [
+        3040708
+      ],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3923",
+      "historical_capture": null,
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "kill",
+          "goalcount": 30,
+          "label": "Kill hotsprings scaldlings",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403152,
+            403155,
+            403162,
+            403163,
+            403192
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 1,
+          "kind": "kill",
+          "goalcount": 3,
+          "label": "Kill steam elementals",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403157,
+            403165,
+            403170,
+            403173,
+            403176,
+            403186
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 2,
+          "kind": "kill",
+          "goalcount": 1,
+          "label": "Kill Steam Lord Roil",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403183
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 3,
+          "kind": "loot",
+          "goalcount": 1,
+          "label": "Loot Roil's Seething Ember",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": [
+            85677
+          ]
+        },
+        {
+          "activityid": 4,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Deliver Roil's Seething Ember",
+          "step": 1,
+          "zone": 403,
+          "npc_ids": [
+            403036
+          ],
+          "item_ids": [
+            85677
+          ]
+        }
+      ],
+      "cycle_stage": 3
+    },
+    {
+      "id": 3040710,
+      "quest_id": 3987,
+      "title": "Beyond the Springs",
+      "achievement_id": 500070300,
+      "component_id": 50212,
+      "min_level": 70,
+      "repeatable": true,
+      "prerequisites": [
+        3040709
+      ],
+      "rewards": [
+        53639,
+        53640,
+        53641
+      ],
+      "reward_mode": "select-one",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3987",
+      "historical_capture": null,
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "speak",
+          "goalcount": 1,
+          "label": "Speak with Anderak",
+          "step": 0,
+          "zone": 405,
+          "npc_ids": [
+            405025
+          ],
+          "item_ids": []
+        }
+      ],
+      "cycle_stage": 4
+    },
+    {
+      "id": 3040711,
+      "quest_id": 3734,
+      "title": "Rites of Passage I",
+      "achievement_id": 500070400,
+      "component_id": 50213,
+      "min_level": 60,
+      "repeatable": false,
+      "prerequisites": [],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3734",
+      "historical_capture": null,
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "Enter Blackfeather Roost",
+          "step": 0,
+          "zone": 398,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 1,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "Find the griffon nesting location",
+          "step": 1,
+          "zone": 398,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 2,
+          "kind": "kill",
+          "goalcount": 3,
+          "label": "Kill griffon nest guardians",
+          "step": 2,
+          "zone": 398,
+          "npc_ids": [
+            398050
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 3,
+          "kind": "kill",
+          "goalcount": 1,
+          "label": "Kill the blackfeather egg tender",
+          "step": 2,
+          "zone": 398,
+          "npc_ids": [
+            398054
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 4,
+          "kind": "loot",
+          "goalcount": 1,
+          "label": "Grab the unattended rare griffin egg",
+          "step": 3,
+          "zone": 398,
+          "npc_ids": [],
+          "item_ids": [
+            36154
+          ]
+        },
+        {
+          "activityid": 5,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Deliver the rare griffin egg",
+          "step": 4,
+          "zone": 397,
+          "npc_ids": [
+            397148
+          ],
+          "item_ids": [
+            36154
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3040712,
+      "quest_id": 3918,
+      "title": "Rites of Passage II",
+      "achievement_id": 500070400,
+      "component_id": 50214,
+      "min_level": 65,
+      "repeatable": true,
+      "prerequisites": [
+        3040711
+      ],
+      "rewards": [
+        53667,
+        53666
+      ],
+      "reward_mode": "select-one",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3918",
+      "historical_capture": null,
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "Enter Sunderock Springs from Mesa",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 1,
+          "kind": "manual",
+          "goalcount": 1,
+          "label": "Find the hotsprings mesa",
+          "step": 1,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": []
+        },
+        {
+          "activityid": 2,
+          "kind": "kill",
+          "goalcount": 1,
+          "label": "Kill the hotsprings hedgehog",
+          "step": 2,
+          "zone": 403,
+          "npc_ids": [
+            403202
+          ],
+          "item_ids": []
+        },
+        {
+          "activityid": 3,
+          "kind": "loot",
+          "goalcount": 1,
+          "label": "Take the hedgehog head",
+          "step": 3,
+          "zone": 403,
+          "npc_ids": [],
+          "item_ids": [
+            36155
+          ]
+        },
+        {
+          "activityid": 4,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Return the head to Undaru",
+          "step": 4,
+          "zone": 397,
+          "npc_ids": [
+            397148
+          ],
+          "item_ids": [
+            36155
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3040713,
+      "quest_id": 5770,
+      "title": "The Missing Caravan",
+      "achievement_id": 500070500,
+      "component_id": 50215,
+      "min_level": 65,
+      "repeatable": true,
+      "prerequisites": [],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 0,
+      "source_url": "https://everquest.allakhazam.com/db/quest/5770",
+      "historical_capture": null,
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Deliver the note to Captain Zheren",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403093
+          ],
+          "item_ids": [
+            36149
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3040714,
+      "quest_id": 3645,
+      "title": "Beasts of Sunderock",
+      "achievement_id": 500070500,
+      "component_id": 50216,
+      "min_level": 65,
+      "repeatable": true,
+      "prerequisites": [],
+      "rewards": [
+        53637
+      ],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3645",
+      "historical_capture": null,
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Return Trideath's Mane",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403035
+          ],
+          "item_ids": [
+            85710
+          ]
+        },
+        {
+          "activityid": 1,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Return Skyrake's Horn",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403035
+          ],
+          "item_ids": [
+            85711
+          ]
+        },
+        {
+          "activityid": 2,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Return Komodokin's Claw",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403035
+          ],
+          "item_ids": [
+            85712
+          ]
+        },
+        {
+          "activityid": 3,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Return Tortugone's Shell Spike",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403035
+          ],
+          "item_ids": [
+            85713
+          ]
+        },
+        {
+          "activityid": 4,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Return Sandstorm's Fin",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403035
+          ],
+          "item_ids": [
+            85725
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3040715,
+      "quest_id": 3652,
+      "title": "Elite's Insignia",
+      "achievement_id": 500070500,
+      "component_id": 50217,
+      "min_level": 65,
+      "repeatable": true,
+      "prerequisites": [],
+      "rewards": [],
+      "reward_mode": "fixed",
+      "configured_xp": 1000,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3652",
+      "historical_capture": null,
+      "activities": [
+        {
+          "activityid": 0,
+          "kind": "deliver",
+          "goalcount": 1,
+          "label": "Give an Elite's Insignia to Arkin",
+          "step": 0,
+          "zone": 403,
+          "npc_ids": [
+            403078
+          ],
+          "item_ids": [
+            85699
+          ]
+        }
+      ],
+      "faction_review": "Period evidence verifies faction directions and hand-in completion, but not exact amounts. Numeric grants and no-task faction hand-in remain unimplemented pending supported amounts."
+    }
+  ],
+  "parent_rewards": [
+    {
+      "achievement_id": 500070200,
+      "quest_id": 5569,
+      "title": "Crusader of Scale",
+      "source": "https://web.archive.org/web/20130315233936id_/http://everquest.allakhazam.com/db/quest.html?quest=5569",
+      "evidence": "Chrome rendered March2013 snapshot; exact names and melee/caster bundles confirmed",
+      "options": [
+        {
+          "option": 1,
+          "class_mask": 151,
+          "items": [
+            108185
+          ],
+          "label": "Elaborate Consigned Plate Vambraces"
+        },
+        {
+          "option": 2,
+          "class_mask": 33544,
+          "items": [
+            108193
+          ],
+          "label": "Elaborate Consigned Chain Sleeves"
+        },
+        {
+          "option": 3,
+          "class_mask": 16480,
+          "items": [
+            108201
+          ],
+          "label": "Elaborate Consigned Leather Sleeves"
+        },
+        {
+          "option": 4,
+          "class_mask": 15360,
+          "items": [
+            108210
+          ],
+          "label": "Elaborate Consigned Silk Sleeves"
+        }
+      ],
+      "class_mask_provenance": "Period melee/caster family wording; armor-specific item class masks cover all16 classes. Exact original UI filtering not recovered; this is server eligibility policy."
+    },
+    {
+      "achievement_id": 500070300,
+      "quest_id": 5612,
+      "title": "Cleansing the Springs",
+      "source": "https://web.archive.org/web/20130315233340id_/http://everquest.allakhazam.com/db/quest.html?quest=5612",
+      "evidence": "Chrome rendered March2013 snapshot; exact names and melee/caster bundles confirmed",
+      "options": [
+        {
+          "option": 1,
+          "class_mask": 49629,
+          "items": [
+            108428
+          ],
+          "label": "Elaborate Soldier's Crystal"
+        },
+        {
+          "option": 2,
+          "class_mask": 15906,
+          "items": [
+            108438
+          ],
+          "label": "Elaborate Scryer's Crystal"
+        }
+      ],
+      "class_mask_provenance": "Period melee/caster family wording; armor-specific item class masks cover all16 classes. Exact original UI filtering not recovered; this is server eligibility policy."
+    },
+    {
+      "achievement_id": 500070400,
+      "quest_id": 5613,
+      "title": "Rites of Passage",
+      "source": "https://web.archive.org/web/20130315234523id_/http://everquest.allakhazam.com/db/quest.html?quest=5613",
+      "evidence": "Chrome rendered March2013 snapshot; exact names and melee/caster bundles confirmed",
+      "options": [
+        {
+          "option": 1,
+          "class_mask": 49629,
+          "items": [
+            108429,
+            108430
+          ],
+          "label": "Elaborate Soldier's Ring + Elaborate Soldier's Band"
+        },
+        {
+          "option": 2,
+          "class_mask": 15906,
+          "items": [
+            108439,
+            108440
+          ],
+          "label": "Elaborate Scryer's Ring + Elaborate Scryer's Band"
+        }
+      ],
+      "class_mask_provenance": "Period melee/caster family wording; armor-specific item class masks cover all16 classes. Exact original UI filtering not recovered; this is server eligibility policy."
+    },
+    {
+      "achievement_id": 500070500,
+      "quest_id": 5614,
+      "title": "Assisting the Crusaders",
+      "source": "https://web.archive.org/web/20130315235318id_/http://everquest.allakhazam.com/db/quest.html?quest=5614",
+      "evidence": "Chrome rendered March2013 snapshot; exact names and melee/caster bundles confirmed",
+      "options": [
+        {
+          "option": 1,
+          "class_mask": 49629,
+          "items": [
+            108431
+          ],
+          "label": "Elaborate Soldier's Belt"
+        },
+        {
+          "option": 2,
+          "class_mask": 15906,
+          "items": [
+            108441
+          ],
+          "label": "Elaborate Scryer's Belt"
+        }
+      ],
+      "class_mask_provenance": "Period melee/caster family wording; armor-specific item class masks cover all16 classes. Exact original UI filtering not recovered; this is server eligibility policy."
+    }
+  ],
+  "world_provenance": {
+    "oozebud": "Original PEQ yellow ooze403188 combat/model reused; size3 is a configurable reconstruction, not recovered historical size. No inherited loot or merchant.",
+    "bile": "2012 archive of quest3649 preserves2006 firsthand three-Bile report. Ordinary loot groups retained, except removal of randomized Bile entry and addition of guaranteed three.",
+    "courier": "Read-only native Detour path between original northern courier and original southern guard camp, excludes zone boundaries; reconstructed route/formation, not original waypoint recovery; guaranteed researched minimum two Orders per kill; root/snare immunity16, no summon. Exact third-copy probability remains unknown.",
+    "egg": "Native one-shot ground egg from original tender. Pre-transfer stage veto verified. Native task-loot custody marks collection; zone-state resume restores an uncollected object without recreating a collected egg during the same original tender lifetime. Model IT63 reachability verified by real pickup; exact historical model remains source item default."
+  },
+  "faction_limit": {
+    "quest_id": 3652,
+    "source": "https://web.archive.org/web/20121103192800id_/http://everquest.allakhazam.com/db/quest.html?quest=3652",
+    "timestamp": "20121103192800",
+    "cdx_digest": "D7C5FTZCOAU2PELV2CBKKOI5CAIT7ETF",
+    "verification": "Chrome rendered page, including2006 timestamped firsthand hand-in log and2007 task/no-task XP report. No local HTML capture claimed.",
+    "period_facts": {
+      "minimum_level": 65,
+      "repeatable": true,
+      "prelooting": true,
+      "task_required_for_xp": true,
+      "completion_trigger": "hand-in; period log places task update and XP at the same second",
+      "factions_raised": [
+        "Crusade of the Scale",
+        "Circle of the Crystalwing"
+      ],
+      "factions_lowered": [
+        "Forces of Dyn'leth"
+      ]
+    },
+    "exclusions": [
+      "Do not add a mandatory final hail from later guide text.",
+      "Exact+20/+30 split and-20/-30 amounts are not stated in this2012 capture. Modern page revised2023 and2016 numerical comment cannot independently establish original amounts."
+    ],
+    "remaining": [
+      "Exact historical faction amounts and no-task faction hand-in behavior need a guarded implementation with supported provenance."
+    ]
+  },
+  "board_correction": {
+    "task": 3040701,
+    "door": 47,
+    "npc": 395002,
+    "source": "https://web.archive.org/web/20120407102248id_/http://everquest.allakhazam.com/db/quest.html?quest=5708",
+    "reason": "Original reported /locY-580,X3220 matches original crossroads sign coordinates, not the entrance board."
+  },
+  "progression_limit": {
+    "task": 3040705,
+    "historical_flag_confirmed": true,
+    "sources": [
+      "https://web.archive.org/web/20121103165131id_/http://everquest.allakhazam.com/db/quest.html?quest=3697",
+      "https://www.mysticallightfighters.com/forum/viewtopic.php?t=12992"
+    ],
+    "period_evidence": "First four Captain tasks confer a character flag; the Mine completion transcript explicitly reports it.",
+    "implemented": false,
+    "downstream": "Sergeant Kazzar raid request scripts/tasks are absent locally. No raid access is claimed by a task-completion record alone."
+  }
+}

@@ -59,3 +59,7 @@ NPC state serialization uses the engine's `IsValidSpell` predicate. Empty slots 
 Item objects created through `eq.create_ground_object` can now satisfy native loot objectives after successful pickup. A server-only origin flag distinguishes these one-shot quest objects from player drops; it does not enable recurring respawn behavior. Existing pickup vetoes, duplicate-lore handling and inventory-placement checks remain authoritative. Player-dropped items stay ineligible for loot credit.
 
 Rebuild the Object-header consumers through the normal full server build. All configured Linux targets passed, followed by native RoF2 quest-ground pickup, hand-in and persistent achievement/reward verification. The Sunderock content package remains a separate milestone. No new opcode, wire structure or database migration is introduced; native Windows execution remains unverified.
+
+## Sunderock quest dependency
+
+The [Sunderock installer](content/sunderock/README.md) requires the integrated task self-selector validation and quest-created one-shot ground-loot credit already present on this branch, plus earlier Blightfire modules. Install the whole package with writers stopped and a full backup. It adds no new opcode or packet structure; [protocol scope](content/sunderock/PROTOCOL.md) links the existing mappings and structs. All 15 routes and four parent item rewards passed native checks; faction grants and downstream raid access remain explicit gaps.

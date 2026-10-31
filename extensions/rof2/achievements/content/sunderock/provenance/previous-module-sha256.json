@@ -1,0 +1,12 @@
+{
+  "lua_modules/achievement_quest_sunderock.lua": [
+    "985500e6d9c679bbdf0863f1ee448a0b04d1cc309b5a8dafd3d4572eee418d7b"
+  ],
+  "lua_modules/achievement_quest_sunderock_data.lua": [
+    "de1887fac5c697d43c2c5673584a022ca09cd52980d0cce493e9592dd07e4b47"
+  ],
+  "lua_modules/sunderock_acquisition.lua": [
+    "18f9dce1981ded5132ccf5aa65a3b7ca4a40cb500e314ad6484676fef2d0ae50",
+    "84042b97feca6b0ab26d68949460e75d7c600ccf14a17920abc518ac0292b620"
+  ]
+}
