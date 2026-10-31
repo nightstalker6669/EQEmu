@@ -38,6 +38,8 @@ The release includes the engine/protocol and Crescent Reach, Blightfire Moors, S
 
 - [Sunderock quest and item-reward milestone](content/sunderock/README.md): 15 native-completed routes, 56 objectives and four parent item reward paths. Includes the full guarded content installer, provenance and protocol references. Numeric faction rewards and Mine raid access remain unfinished.
 
+- [Short Sharp Sting](content/short-sharp-sting/README.md): four native-completed Stone Hive quests, 18 objectives, journal container/recipe support, faction and copy encounters, quest rewards and class-filtered parent gloves. Includes a complete guarded installer for Linux, native Windows and Akk-stack; historical defaults and QA limits are explicit. Native Windows execution remains unverified.
+
 **Reward coverage:** Install the complete [Blightfire parent gear upgrade](content/blightfire-parent-rewards/README.md) after the five Blightfire quest packages. It adds the eight quest-family parent reward sets, including class-appropriate armor/accessories and shield/weapon bundles. The separate Conqueror of Blightfire meta-achievement bundle remains unconfigured while its original selection rules are researched. Stone Hive’s four parent reward sets are included in its package. Historical and class-coverage limits are documented in each guide.
 
 No tests, captures, client assets or private runtime records are included.

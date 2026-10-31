@@ -79,3 +79,7 @@ The guarded personal housing marker orientation correction is available at `util
 See [integration.json](integration.json) for original rebase validation and the separate completed runtime migration. The latter preserved all 437 tables and checked original values in affected tables; it is not a blanket native acceptance claim. No live server or database change is performed by source publication.
 
 Steppes adds two required schema migrations and a complete guarded content installer. Follow the [Steppes engine section](../../extensions/rof2/achievements/ENGINE.md#steppes-shared-task-and-scene-integration) and [content guide](../../extensions/rof2/achievements/content/steppes/README.md). Back up and stop writers; deploy the matching rebuilt engine before players reconnect.
+
+## Short Sharp Sting content upgrade
+
+After the existing Stone Hive foundation, install the complete [Short Sharp Sting package](../../extensions/rof2/achievements/content/short-sharp-sting/README.md). Use its guarded installer for all five SQL phases and all quest callbacks together. Rebuild and deploy this branch’s matching engine first; the journal requires the recovered RoF2 container decoder. The package includes Linux, native Windows and Akk-stack directions and targeted backups. Windows execution remains unverified.
