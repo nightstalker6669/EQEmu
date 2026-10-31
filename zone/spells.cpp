@@ -7156,7 +7156,8 @@ void Mob::DoBardCastingFromItemClick(bool is_casting_bard_song, uint32 cast_time
 				}
 			}
 			if (IsClient() && completed_item_id &&
-				(spell_id == 7230 || spell_id == 9483 || spell_id == 9484 || spell_id == 9485)) {
+				(spell_id == 7230 || spell_id == 9483 || spell_id == 9484 || spell_id == 9485 ||
+				 (spell_id == 9486 && completed_item_id == 87222 && zone && zone->GetZoneID() == 404))) {
 				std::vector<std::any> args = { entity_list.GetMob(target_id) };
 				parse->EventMob(EVENT_CAST, this, nullptr, [&]() {
 					return fmt::format("{} {} {} {} {} {} {}", spell_id, GetID(),
