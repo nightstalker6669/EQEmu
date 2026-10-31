@@ -63,3 +63,9 @@ Rebuild the Object-header consumers through the normal full server build. All co
 ## Sunderock quest dependency
 
 The [Sunderock installer](content/sunderock/README.md) requires the integrated task self-selector validation and quest-created one-shot ground-loot credit already present on this branch, plus earlier Blightfire modules. Install the whole package with writers stopped and a full backup. It adds no new opcode or packet structure; [protocol scope](content/sunderock/PROTOCOL.md) links the existing mappings and structs. All 15 routes and four parent item rewards passed native checks; faction grants and downstream raid access remain explicit gaps.
+
+## Inner Vergalid instant-item cast callback
+
+A successful instant cast of Lesser Lifestream Infusion (spell9486) from the original Arid Indicolite Shard (item87222), in Vergalid Mines (zone404), now reaches the existing Lua `EVENT_CAST` contract. Native item validation, successful spell completion and charge handling precede the callback; it includes the existing source-item, slot and charge-consumption fields. GM spell commands and unrelated items/zones do not qualify for this added route. No new opcode, packet struct or schema migration is introduced.
+
+All configured Linux integration build targets passed. This engine hook is a prerequisite for the staged Vergalid content; it does not itself grant a key or enable a quest. The17-route content package and shard/statue script are not yet released or deployed. Native shard activation and access have not been verified, and native Windows execution remains unverified.
