@@ -35,3 +35,7 @@ Build and deploy matching world/zone binaries and `utils/patches/patch_RoF2.conf
 See [integration.json](integration.json) for validation of the current source. Original release evidence is retained separately. No live server or database was changed during publication.
 
 Steppes adds two required schema migrations and a complete guarded content installer. Follow the [Steppes engine section](../../extensions/rof2/achievements/ENGINE.md#steppes-shared-task-and-scene-integration) and [content guide](../../extensions/rof2/achievements/content/steppes/README.md). Back up and stop writers; deploy the matching rebuilt engine before players reconnect.
+
+## Short Sharp Sting content upgrade
+
+After the existing Stone Hive foundation, install the complete [Short Sharp Sting package](../../extensions/rof2/achievements/content/short-sharp-sting/README.md). Use its guarded installer for all five SQL phases and all quest callbacks together. Rebuild and deploy this branch’s matching engine first; the journal requires the recovered RoF2 container decoder. The package includes Linux, native Windows and Akk-stack directions and targeted backups. Windows execution remains unverified.

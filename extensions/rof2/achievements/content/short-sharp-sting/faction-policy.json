@@ -1,0 +1,12 @@
+{
+  "provenance": "User-approved configurable emulator policy. Exact May 2013 threshold and kill amounts are unverified. Current faction pages show -1/-1/+1 for several supported mobs.",
+  "gate_faction_id": 1124,
+  "maximum_raw_faction": -1500,
+  "kill_hits": {
+    "1123": -1,
+    "1124": -1,
+    "1129": 1
+  },
+  "baseline_from_zero_kills": 1500,
+  "note": "Gate uses earned raw Legion faction, not display con or race/class/deity modifiers. This is a labelled server default, not a recovered Live threshold. NPC combat stats and existing aggro are preserved."
+}
