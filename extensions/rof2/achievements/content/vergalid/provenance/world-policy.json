@@ -1,0 +1,11 @@
+{
+  "format": 1,
+  "npc_profiles_reviewed": true,
+  "quest_drop_minimums_reviewed": true,
+  "named_chances": {
+    "skullrend": 20,
+    "vuryn": 20
+  },
+  "actor_sql_sha256": "5f463a99f86a389a675d84d93f6f468468d94ac0e71bc7e62079095e15113e76",
+  "historical_status": "User explicitly approved labelled configurable PEQ-style defaults on2026-10-31. Original named rates, numerical combat stats and minimum-one quest drop multiplicities remain unrecovered. Guardian level74/cleric-warrior roles are period-source-supported; replacement60seconds, positions and spell list are emulator choices."
+}

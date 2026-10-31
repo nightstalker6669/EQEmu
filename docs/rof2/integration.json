@@ -71,7 +71,8 @@
     "history": "Linear feature layers from exact upstream develop; zero merge commits ahead of the base. Old heads archived separately.",
     "deployment": "Source rebase only; no running server, client or database deployment.",
     "native_acceptance": "No new native gameplay, native Windows build or Akk-stack deployment acceptance claimed.",
-    "scope": "Original 2026-10-29 source rebase validation; retained unchanged below. Later runtime migration evidence is recorded separately."
+    "scope": "Original 2026-10-29 source rebase validation; retained unchanged below. Later runtime migration evidence is recorded separately.",
+    "vergalid_content_milestone": "All17quests/fourparent reward paths and charged shard/key passage verified natively, with fresh-login persistence. Real-module death/guardian ownership fixtures and guarded complete SQL install/repeat/rollback passed. No new engine binary build required; source integration unchanged."
   },
   "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
   "shared_core": "Inherited from rof2-shared-core; one canonical implementation in common/shared_core; legacy feature headers forward to it.",
@@ -118,6 +119,23 @@
       "private_data_included": false,
       "published_commit": "2b7d69447aa8a2f998eb1a18fbbb60394074e7e6",
       "repository": "nightstalker6669/eqemu-rof2-achievements"
+    },
+    {
+      "name": "Vergalid Mines quests and rewards",
+      "package": "extensions/rof2/achievements/content/vergalid",
+      "historical_cutoff": "2013-05-31",
+      "quests": 17,
+      "activities": 56,
+      "achievement_groups": 4,
+      "new_actor_types": 7,
+      "native_completed_quests": 17,
+      "native_parent_reward_paths": 4,
+      "native_parent_reward_item_entries": 5,
+      "fresh_login_persistence": true,
+      "new_wire_opcodes": false,
+      "native_shared_members_checked": 1,
+      "historical_and_platform_limits": "Labelled numerical/geometry/class-policy defaults; head-variant family inference; full multiplayer orb and native Windows remain unverified. See package provenance.",
+      "private_data_included": false
     }
   ],
   "runtime_migration_2026_10_30": {

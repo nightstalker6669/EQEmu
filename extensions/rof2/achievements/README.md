@@ -2,9 +2,9 @@
 
 # EQEmu RoF2 achievements
 
-A source release of the **RoF2 achievement engine, opcode mappings, packet layouts, reward selection support and reviewed Crescent Reach, Blightfire Moors, Stone Hive and Shard’s Landing quest content**. It targets the May10,2013 RoF2 client and a pinned EQEmu source baseline.
+A source release of the **RoF2 achievement engine, opcode mappings, packet layouts, reward selection support and reviewed Hero’s Journey and Shard’s Landing quest content**. It targets the May10,2013 RoF2 client and a pinned EQEmu source baseline.
 
-The release includes the engine/protocol and Crescent Reach, Blightfire Moors, Stone Hive and Shard’s Landing content milestones. It does **not** claim that every achievement or quest through Rain of Fear is playable. The content packages contain twenty-six reviewed achievement definitions. The wider historical research catalogue admits 254 identities; unfinished content remains outside this release.
+The release includes the engine/protocol and Crescent Reach, Blightfire Moors, Stone Hive and Shard’s Landing content milestones. It does **not** claim that every achievement or quest through Rain of Fear is playable. The packages below document their reviewed playable scope. The wider historical research catalogue admits 254 identities; unfinished content remains outside this release.
 
 ## What is included
 
@@ -39,6 +39,8 @@ The release includes the engine/protocol and Crescent Reach, Blightfire Moors, S
 - [Sunderock quest and item-reward milestone](content/sunderock/README.md): 15 native-completed routes, 56 objectives and four parent item reward paths. Includes the full guarded content installer, provenance and protocol references. Numeric faction rewards and Mine raid access remain unfinished.
 
 - [Short Sharp Sting](content/short-sharp-sting/README.md): four native-completed Stone Hive quests, 18 objectives, journal container/recipe support, faction and copy encounters, quest rewards and class-filtered parent gloves. Includes a complete guarded installer for Linux, native Windows and Akk-stack; historical defaults and QA limits are explicit. Native Windows execution remains unverified.
+
+- [Vergalid Mines quests and rewards](content/vergalid/README.md): 17 native-completed quests, 56 objectives, four parent reward paths and seven restored actor types. Includes the chest, bait scenes, charged-shard/statue passage, shared orb encounter, native death-state corrections and a complete guarded installer. Quest/reward/key persistence passed fresh login. Historical defaults, head-variant inference and remaining multiplayer/Windows limits are explicit.
 
 **Reward coverage:** Install the complete [Blightfire parent gear upgrade](content/blightfire-parent-rewards/README.md) after the five Blightfire quest packages. It adds the eight quest-family parent reward sets, including class-appropriate armor/accessories and shield/weapon bundles. The separate Conqueror of Blightfire meta-achievement bundle remains unconfigured while its original selection rules are researched. Stone Hive’s four parent reward sets are included in its package. Historical and class-coverage limits are documented in each guide.
 

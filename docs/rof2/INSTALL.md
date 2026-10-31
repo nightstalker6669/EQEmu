@@ -83,3 +83,7 @@ Steppes adds two required schema migrations and a complete guarded content insta
 ## Short Sharp Sting content upgrade
 
 After the existing Stone Hive foundation, install the complete [Short Sharp Sting package](../../extensions/rof2/achievements/content/short-sharp-sting/README.md). Use its guarded installer for all five SQL phases and all quest callbacks together. Rebuild and deploy this branch’s matching engine first; the journal requires the recovered RoF2 container decoder. The package includes Linux, native Windows and Akk-stack directions and targeted backups. Windows execution remains unverified.
+
+## Vergalid Mines content upgrade
+
+Install the complete [Vergalid package](../../extensions/rof2/achievements/content/vergalid/README.md), including all four SQL phases, actor/acquisition dependencies and preserving quest callbacks. Its one installer supports Linux, native Windows and Akk-stack workflows with private database command configuration and full backups. Native Windows execution remains unverified. Use this branch's matching engine, including the restricted original shard item-cast event support; no additional wire opcode is introduced. All 17 routes and four parent reward paths passed native checks and fresh-login persistence on the matching combined runtime. Consult the package coverage report for reconstruction and multiplayer limits.
