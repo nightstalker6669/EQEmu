@@ -709,7 +709,7 @@ inline void SaveNPCState(NPC *n, ZoneStateSpawnsRepository::ZoneStateSpawns &s)
 	if (buffs) {
 		std::vector<Buffs_Struct> valid_buffs;
 		for (int                  index = 0; index < n->GetMaxBuffSlots(); index++) {
-			if (buffs[index].spellid != 0 && buffs[index].spellid != 65535) {
+			if (IsValidSpell(buffs[index].spellid)) {
 				valid_buffs.push_back(buffs[index]);
 			}
 		}
