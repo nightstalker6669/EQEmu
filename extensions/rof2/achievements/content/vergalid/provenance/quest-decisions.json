@@ -1,0 +1,740 @@
+{
+  "historical_cutoff": "2013-05-31",
+  "status": "Disabled candidate; labelled reconstruction decisions are not recovered historical facts",
+  "quests": [
+    {
+      "id": 3040801,
+      "quest_id": 3988,
+      "component_id": 50218,
+      "achievement_id": 500080200,
+      "title": "Earthy Extermination I",
+      "url": "https://everquest.allakhazam.com/db/quest/3988",
+      "giver": 403100,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 0,
+        "policy": "No XP configured without affirmative source evidence"
+      },
+      "source": {
+        "timestamp": "20121103165303",
+        "url": "https://web.archive.org/web/20121103165303id_/http://everquest.allakhazam.com/db/quest.html?quest=3988",
+        "sha256": "ebf4d77a56e8cf0fe084155abf11d74110fe7cf5e4787959596d45e78d0d5d3e"
+      }
+    },
+    {
+      "id": 3040802,
+      "quest_id": 4624,
+      "component_id": 50219,
+      "achievement_id": 500080200,
+      "title": "Earthy Extermination II",
+      "url": "https://everquest.allakhazam.com/db/quest/4624",
+      "giver": 403100,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [
+        3040801
+      ],
+      "duration": 0,
+      "reward_items": [],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 0,
+        "policy": "No XP configured without affirmative source evidence"
+      },
+      "source": {
+        "timestamp": "20121103165254",
+        "url": "https://web.archive.org/web/20121103165254id_/http://everquest.allakhazam.com/db/quest.html?quest=4624",
+        "sha256": "f2f49538479ffb523bd29df9756f0cd1b7b76ae0e5f1645c68fdd988d65afb79"
+      }
+    },
+    {
+      "id": 3040803,
+      "quest_id": 4625,
+      "component_id": 50220,
+      "achievement_id": 500080200,
+      "title": "Earthy Extermination III",
+      "url": "https://everquest.allakhazam.com/db/quest/4625",
+      "giver": 403100,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [
+        3040802
+      ],
+      "duration": 0,
+      "reward_items": [
+        53649,
+        53650
+      ],
+      "reward_mode": "select-one",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 0,
+        "policy": "No XP configured without affirmative source evidence"
+      },
+      "source": {
+        "timestamp": "20120825154820",
+        "url": "https://web.archive.org/web/20120825154820id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4625",
+        "sha256": "6d94ab29fad91f93a009473e312244bfb9e7b4df39e3767b31e573f647a0865d"
+      }
+    },
+    {
+      "id": 3040804,
+      "quest_id": 3735,
+      "component_id": 50221,
+      "achievement_id": 500080200,
+      "title": "Drakkin Blood",
+      "url": "https://everquest.allakhazam.com/db/quest/3735",
+      "giver": 403027,
+      "min_level": 65,
+      "repeatable": false,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [
+        53653
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "timestamp": "20121103165140",
+        "url": "https://web.archive.org/web/20121103165140id_/http://everquest.allakhazam.com/db/quest.html?quest=3735",
+        "sha256": "4e3252caf41ca819a294853792b9f1892346e3db432419830ffd534e6d588d8a"
+      }
+    },
+    {
+      "id": 3040805,
+      "quest_id": 3761,
+      "component_id": 50222,
+      "achievement_id": 500080200,
+      "title": "Kill the Miners",
+      "url": "https://everquest.allakhazam.com/db/quest/3761",
+      "giver": 403086,
+      "min_level": 60,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 21600,
+      "reward_items": [
+        53663
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 0,
+        "policy": "No XP configured without affirmative source evidence"
+      },
+      "source": {
+        "timestamp": "20120507224606",
+        "url": "https://web.archive.org/web/20120507224606id_/http://everquest.allakhazam.com/db/quest.html?quest=3761",
+        "sha256": "f273f1f3c964309c61006e7d129aea3416395a91508e36382d4d7a9933ab6f9a"
+      }
+    },
+    {
+      "id": 3040806,
+      "quest_id": 3826,
+      "component_id": 50223,
+      "achievement_id": 500080200,
+      "title": "Gygun's Last Request",
+      "url": "https://everquest.allakhazam.com/db/quest/3826",
+      "giver": 403029,
+      "min_level": 65,
+      "repeatable": false,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "timestamp": "20121103192826",
+        "url": "https://web.archive.org/web/20121103192826id_/http://everquest.allakhazam.com/db/quest.html?quest=3826",
+        "sha256": "8937e8406be9561622dfe31da0cc543c9f5a4453777cb976a0bf15a453f61272"
+      },
+      "acquisition_review": "Two-stage hail/acceptance; issue original Tattered Note and native dying-actor scene only after actual acceptance. No death or item grant on mere selector open."
+    },
+    {
+      "id": 3040807,
+      "quest_id": 3762,
+      "component_id": 50224,
+      "achievement_id": 500080200,
+      "title": "Gygun's Treasure",
+      "url": "https://everquest.allakhazam.com/db/quest/3762",
+      "giver": 405150,
+      "min_level": 65,
+      "repeatable": false,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [
+        3040806
+      ],
+      "duration": 0,
+      "reward_items": [
+        53665
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "timestamp": "20121009020256",
+        "url": "https://web.archive.org/web/20121009020256id_/http://everquest.allakhazam.com:80/db/quest.html?quest=3762",
+        "sha256": "6a13df484f4a0d41edff1ad3c3e82521166362bc1bfc100bf278d775a9f0d6f2"
+      },
+      "acquisition_review": "2012 source explicitly requires actual chest open/loot and delivery; later inspect-only guide is not used as a replacement."
+    },
+    {
+      "id": 3040808,
+      "quest_id": 3671,
+      "component_id": 50225,
+      "achievement_id": 500080300,
+      "title": "Lost Souls I",
+      "url": "https://everquest.allakhazam.com/db/quest/3671",
+      "giver": 399135,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "url": "https://everquest.allakhazam.com/db/quest/3671",
+        "observed_via": "Chrome rendered page and historical comments",
+        "limitation": "Archive retrieval unavailable; reconcile historical objectives/header values before activation"
+      },
+      "repeatability_review": "Current header says repeatable; pre-cutoff archive known but retrieval failed. Best-supported value provisional until historical corroboration."
+    },
+    {
+      "id": 3040809,
+      "quest_id": 4152,
+      "component_id": 50226,
+      "achievement_id": 500080300,
+      "title": "Lost Souls II",
+      "url": "https://everquest.allakhazam.com/db/quest/4152",
+      "giver": 399135,
+      "min_level": 70,
+      "repeatable": false,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [
+        3040808
+      ],
+      "duration": 0,
+      "reward_items": [
+        53655
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "timestamp": "20121103151808",
+        "url": "https://web.archive.org/web/20121103151808id_/http://everquest.allakhazam.com/db/quest.html?quest=4152",
+        "sha256": "2d39438d84ec144df4d90e1a2151388c7dee2371a98b2a4f89c5ed2ac498fe69"
+      }
+    },
+    {
+      "id": 3040810,
+      "quest_id": 3670,
+      "component_id": 50227,
+      "achievement_id": 500080300,
+      "title": "Duskmold",
+      "url": "https://everquest.allakhazam.com/db/quest/3670",
+      "giver": 399146,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [
+        53651
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "timestamp": "20121103151626",
+        "url": "https://web.archive.org/web/20121103151626id_/http://everquest.allakhazam.com/db/quest.html?quest=3670",
+        "sha256": "adfc960bb7b19d6dd9644600a5d6d08d6de6deb610d7607d070a116e5787380a"
+      }
+    },
+    {
+      "id": 3040811,
+      "quest_id": 3628,
+      "component_id": 50228,
+      "achievement_id": 500080300,
+      "title": "Serric Lives",
+      "url": "https://everquest.allakhazam.com/db/quest/3628",
+      "giver": 399123,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [
+        53652
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "url": "https://everquest.allakhazam.com/db/quest/3628",
+        "observed_via": "Chrome rendered page and historical comments",
+        "limitation": "Archive retrieval unavailable; reconcile historical objectives/header values before activation"
+      },
+      "acquisition_review": {
+        "date": "2007-05-27",
+        "url": "https://everquest.allakhazam.com/db/quest/3628#msg118029374768764111",
+        "evidence": "Reply explicitly says the tabbard must be looted after accepting; an earlier pre-loot question is not affirmative evidence.",
+        "implementation": "Retain actual native loot objective before delivery; possession or hand-in never manufactures missing loot credit."
+      }
+    },
+    {
+      "id": 3040812,
+      "quest_id": 4610,
+      "component_id": 50229,
+      "achievement_id": 500080400,
+      "title": "Bile From Below",
+      "url": "https://everquest.allakhazam.com/db/quest/4610",
+      "giver": 397176,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [
+        3040813
+      ],
+      "duration": 0,
+      "reward_items": [],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "xp_review": {
+        "url": "https://everquest.allakhazam.com/db/quest/4610#msg12309752909323483",
+        "comment_date": "2009-01-03",
+        "evidence": "Dated completion log explicitly records XP after delivering the saliva-covered alloy; exact amount absent. The earlier Handle With Care XP in the same comment is a separate completion.",
+        "amount_policy": "User-approved configurable PEQ-style default1000, not a recovered historical amount."
+      },
+      "source": {
+        "url": "https://everquest.allakhazam.com/db/quest/4610",
+        "observed_via": "Chrome rendered page and historical comments",
+        "limitation": "Archive retrieval unavailable; reconcile historical objectives/header values before activation"
+      },
+      "level_review": "Configured65 under the approved best-supported historical minimum policy. Chrome recovered a2013-11-01 archive whose page was last modified2012-08-29 and explicitly headed level65. This earlier metadata takes precedence over the conflicting2017 level66 refusal; the capture is after the cutoff and no exact May2013 level65 acceptance is claimed. Source https://web.archive.org/web/20131101090348/http://everquest.allakhazam.com/db/quest.html?quest=4610"
+    },
+    {
+      "id": 3040813,
+      "quest_id": 4609,
+      "component_id": 50230,
+      "achievement_id": 500080400,
+      "title": "Handle With Care",
+      "url": "https://everquest.allakhazam.com/db/quest/4609",
+      "giver": 397176,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [
+        53654
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 10,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "url": "https://everquest.allakhazam.com/db/quest/4609",
+        "observed_via": "Chrome rendered page and historical comments",
+        "limitation": "Archive retrieval unavailable; reconcile historical objectives/header values before activation"
+      }
+    },
+    {
+      "id": 3040814,
+      "quest_id": 3710,
+      "component_id": 50231,
+      "achievement_id": 500080500,
+      "title": "Unearthed Power",
+      "url": "https://everquest.allakhazam.com/db/quest/3710",
+      "giver": 403065,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": true,
+      "shared_review": {
+        "url": "https://everquest.allakhazam.com/db/quest/5616#msg134533284835972955",
+        "comment_date": "2012-08-18",
+        "evidence": "Explicit original shared-task annotation with minimum1player. Current solo-labelled header conflicts; period annotation is selected.",
+        "capacity_policy": "Native normal group capacity6; exact original upper-bound field not recovered.",
+        "duration_review": "Current six-hour header lacks independent pre-cutoff corroboration; no newly invented original duration."
+      },
+      "min_players": 1,
+      "max_players": 6,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [
+        53656
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 0,
+        "policy": "No XP configured without affirmative source evidence"
+      },
+      "source": {
+        "url": "https://everquest.allakhazam.com/db/quest/3710",
+        "observed_via": "Chrome rendered page and historical comments",
+        "limitation": "Archive retrieval unavailable; reconcile historical objectives/header values before activation"
+      }
+    },
+    {
+      "id": 3040815,
+      "quest_id": 3709,
+      "component_id": 50232,
+      "achievement_id": 500080500,
+      "title": "Into the Void",
+      "url": "https://everquest.allakhazam.com/db/quest/3709",
+      "giver": 403070,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 21600,
+      "reward_items": [
+        53657
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 0,
+        "policy": "No XP configured without affirmative source evidence"
+      },
+      "source": {
+        "url": "https://everquest.allakhazam.com/db/quest/3709",
+        "observed_via": "Chrome rendered page and historical comments",
+        "limitation": "Archive retrieval unavailable; reconcile historical objectives/header values before activation"
+      },
+      "acquisition_review": {
+        "date": "2007-01-13",
+        "url": "https://everquest.allakhazam.com/db/quest/3709#msg1168672853269683144",
+        "evidence": "Firsthand report says pre-looted ore handed in without a loot-stage update is ineffective.",
+        "implementation": "Retain actual native loot objective before delivery; possession or hand-in never manufactures missing loot credit."
+      }
+    },
+    {
+      "id": 3040816,
+      "quest_id": 3651,
+      "component_id": 50233,
+      "achievement_id": 500080500,
+      "title": "Nhemen's Secret",
+      "url": "https://everquest.allakhazam.com/db/quest/3651",
+      "giver": 403089,
+      "min_level": 70,
+      "repeatable": false,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [
+        53658
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "url": "https://everquest.allakhazam.com/db/quest/3651",
+        "observed_via": "Chrome rendered page and historical comments",
+        "limitation": "Archive retrieval unavailable; reconcile historical objectives/header values before activation"
+      },
+      "level_review": "Minimum70 corroborated by Chinese Sunderock guide last edited2013-01-07; current Rasper65 conflicts and is not selected. Source https://forum.gamer.com.tw/Co.php?bsn=5179&sn=9001"
+    },
+    {
+      "id": 3040817,
+      "quest_id": 5768,
+      "component_id": 50234,
+      "achievement_id": 500080500,
+      "title": "The Ancient Tablet",
+      "url": "https://everquest.allakhazam.com/db/quest/5768",
+      "giver": 399120,
+      "min_level": 65,
+      "repeatable": true,
+      "shared": false,
+      "min_players": 1,
+      "max_players": 1,
+      "prerequisites": [],
+      "duration": 0,
+      "reward_items": [
+        53664
+      ],
+      "reward_mode": "fixed",
+      "reward_quantity": 1,
+      "xp": {
+        "amount": 1000,
+        "policy": "Approved configurable PEQ-style XP default; exact historical amount unknown"
+      },
+      "source": {
+        "url": "https://everquest.allakhazam.com/db/quest/5768",
+        "observed_via": "Chrome rendered page and historical comments",
+        "limitation": "Archive retrieval unavailable; reconcile historical objectives/header values before activation"
+      },
+      "acquisition_review": {
+        "date": "2012-08-09",
+        "url": "https://everquest.allakhazam.com/db/quest/5768#msg134451415636481733",
+        "evidence": "Firsthand comment explicitly rejects pre-looting; item must be looted after the quest is active.",
+        "implementation": "Retain actual native loot objective before delivery; possession or hand-in never manufactures missing loot credit."
+      }
+    }
+  ],
+  "parent_reward_review": [
+    {
+      "achievement_id": 500080200,
+      "quest_id": 5570,
+      "title": "Disrupting the Mines",
+      "source": "https://everquest.allakhazam.com/db/quest/5570",
+      "observed": "Chrome rendered current original achievement page, enteredMarch2012 and modifiedDecember2023",
+      "options": [
+        {
+          "option": 1,
+          "items": [
+            108187
+          ],
+          "label": "Elaborate Consigned Breastplate",
+          "class_mask": 151
+        },
+        {
+          "option": 2,
+          "items": [
+            108195
+          ],
+          "label": "Elaborate Consigned Chain Tunic",
+          "class_mask": 33544
+        },
+        {
+          "option": 3,
+          "items": [
+            108203
+          ],
+          "label": "Elaborate Consigned Leather Tunic",
+          "class_mask": 16480
+        },
+        {
+          "option": 4,
+          "items": [
+            108212
+          ],
+          "label": "Elaborate Consigned Silk Robe",
+          "class_mask": 15360
+        }
+      ],
+      "status": "Pre-cutoff reward association corroborated by2012-06-10 firsthand reward-link comment; exact original reward-window filtering remains unverified.",
+      "eligibility": "Existing item masks for armor; melee/caster masks consistent with prior server family policy, not independently recovered original filtering",
+      "historical_evidence": {
+        "url": "https://everquest.allakhazam.com/db/quest/5570#msg13393742228201811",
+        "date": "2012-06-10",
+        "observed_via": "Chrome rendered comment with four original named item links",
+        "zam_item_ids": [
+          83588,
+          83596,
+          83604,
+          83612
+        ],
+        "local_item_ids": [
+          108187,
+          108195,
+          108203,
+          108212
+        ],
+        "scope": "All four plate/chain/leather/silk chest associations, not proof of original UI eligibility filtering."
+      }
+    },
+    {
+      "achievement_id": 500080300,
+      "quest_id": 5571,
+      "title": "Exploring Vergalid",
+      "source": "https://everquest.allakhazam.com/db/quest/5571",
+      "observed": "Chrome rendered current original achievement page, enteredMarch2012 and modifiedDecember2023",
+      "options": [
+        {
+          "option": 1,
+          "items": [
+            108184
+          ],
+          "label": "Elaborate Consigned Plate Helm",
+          "class_mask": 151
+        },
+        {
+          "option": 2,
+          "items": [
+            108192
+          ],
+          "label": "Elaborate Consigned Chain Coif",
+          "class_mask": 33544
+        },
+        {
+          "option": 3,
+          "items": [
+            108200
+          ],
+          "label": "Elaborate Consigned Leather Cap",
+          "class_mask": 16480
+        },
+        {
+          "option": 4,
+          "items": [
+            108209
+          ],
+          "label": "Elaborate Consigned Silk Cap",
+          "class_mask": 15360
+        }
+      ],
+      "status": "Original cap reward family confirmed; full variant relationships require further pre-cutoff evidence.",
+      "eligibility": "Existing item masks for armor; melee/caster masks consistent with prior server family policy, not independently recovered original filtering",
+      "historical_evidence": {
+        "url": "https://web.archive.org/web/20130315233404/http://everquest.allakhazam.com/db/quest.html?quest=5571",
+        "capture_date": "2013-03-15",
+        "observed_via": "Chrome rendered archive with original capture timestamp and2012 page modification date",
+        "scope": "Original Elaborate Consigned Cap family confirmed; exact four named variants remain current corroboration."
+      },
+      "implementation_decision": "Implement four current named Consigned head variants as a clearly labelled best-supported family inference.2013 archive confirms original Consigned Cap family; no original four-option packet/list recovered. Do not describe exact variant associations or UI class filtering as directly captured."
+    },
+    {
+      "achievement_id": 500080400,
+      "quest_id": 5615,
+      "title": "Togswell's Experiments",
+      "source": "https://everquest.allakhazam.com/db/quest/5615",
+      "observed": "Chrome rendered current original achievement page, enteredMarch2012 and modifiedDecember2023",
+      "options": [
+        {
+          "option": 1,
+          "items": [
+            108424
+          ],
+          "label": "Elaborate Soldier's Facemask",
+          "class_mask": 49629
+        },
+        {
+          "option": 2,
+          "items": [
+            108434
+          ],
+          "label": "Elaborate Scryer's Facemask",
+          "class_mask": 15906
+        }
+      ],
+      "status": "Original reward associations confirmed by2013-03-15 archive; class-mask implementation remains labelled server policy.",
+      "eligibility": "Existing item masks for armor; melee/caster masks consistent with prior server family policy, not independently recovered original filtering",
+      "historical_evidence": {
+        "url": "https://web.archive.org/web/20130315233233/http://everquest.allakhazam.com/db/quest.html?quest=5615",
+        "capture_date": "2013-03-15",
+        "observed_via": "Chrome rendered archive with original capture timestamp and2012 page modification date",
+        "scope": "Original named item choices and melee/caster descriptions confirmed before cutoff. Exact class mask and reward-window packet filtering remain unproven."
+      }
+    },
+    {
+      "achievement_id": 500080500,
+      "quest_id": 5616,
+      "title": "The Depths of Vergalid",
+      "source": "https://everquest.allakhazam.com/db/quest/5616",
+      "observed": "Chrome rendered current original achievement page, enteredMarch2012 and modifiedDecember2023",
+      "options": [
+        {
+          "option": 1,
+          "items": [
+            108423,
+            108422
+          ],
+          "label": "Elaborate Soldier's Earring + Elaborate Soldier's Ear Stud",
+          "class_mask": 49629
+        },
+        {
+          "option": 2,
+          "items": [
+            108433,
+            108432
+          ],
+          "label": "Elaborate Scryer's Earring + Elaborate Scryer's Ear Stud",
+          "class_mask": 15906
+        }
+      ],
+      "status": "Original reward associations confirmed by2013-03-15 archive; class-mask implementation remains labelled server policy.",
+      "eligibility": "Existing item masks for armor; melee/caster masks consistent with prior server family policy, not independently recovered original filtering",
+      "historical_evidence": {
+        "url": "https://web.archive.org/web/20130315234548/http://everquest.allakhazam.com/db/quest.html?quest=5616",
+        "capture_date": "2013-03-15",
+        "observed_via": "Chrome rendered archive with original capture timestamp and2012 page modification date",
+        "scope": "Original named item choices and melee/caster descriptions confirmed before cutoff. Exact class mask and reward-window packet filtering remain unproven."
+      }
+    }
+  ],
+  "period_corroboration": {
+    "url": "https://forum.gamer.com.tw/Co.php?bsn=5179&sn=9001",
+    "last_edited": "2013-01-07",
+    "scope": "Nhemen minimum70, Miner minimum60 and six-hour duration; observed VuRyn78/Vergalak71"
+  },
+  "native_quest_verified": false
+}

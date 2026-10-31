@@ -1,0 +1,22 @@
+{
+  "format": 1,
+  "feature": "Vergalid achievement quest batch",
+  "historical_cutoff": "2013-05-31",
+  "expected_counts": {
+    "quests": 17,
+    "activities": 56,
+    "parent_groups": 4,
+    "new_actor_types": 7
+  },
+  "sql_files": [
+    "sql/020-journal-rewards.disabled.sql",
+    "sql/030-world-chest.review-required.sql",
+    "sql/040-world-actors.review-required.sql",
+    "sql/090-enable-whole-batch.sql"
+  ],
+  "readiness_file": "provenance/installation-readiness.json",
+  "content_data": "quests/lua_modules/achievement_quest_vergalid_data.lua",
+  "expected_enabled_entities": 22,
+  "world_policy": "provenance/world-policy.json",
+  "orb_guardian_config": "provenance/orb-guardian-settings.json"
+}

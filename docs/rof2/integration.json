@@ -30,7 +30,8 @@
     ],
     "history": "New linear review history; old heads preserved in archive branches.",
     "full_branch_link": "Not independently linked; full combined build recorded by the integration branch.",
-    "native_acceptance": "No new native gameplay or active server/database deployment during this rebase."
+    "native_acceptance": "No new native gameplay or active server/database deployment during this rebase.",
+    "vergalid_content_milestone": "All17quests/fourparent reward paths and charged shard/key passage verified natively, with fresh-login persistence. Real-module death/guardian ownership fixtures and guarded complete SQL install/repeat/rollback passed. No new engine binary build required; source integration unchanged."
   },
   "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
   "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
@@ -63,6 +64,23 @@
       "reward_limits": "Ascending wrist and Raider glove/bundle choices unresolved; neither parent reward set configured.",
       "native_status": "Six distinct quests completed with component credit; all seven nest types, retained ruins/late entry/native deadline, feather pickups/handins/item+XP reward and class-filtered paired earrings with fresh-login persistence passed on the corresponding develop combined build. Explicit remaining limits retained; client-local combat toggle unchanged.",
       "validation": "Nine affected public translation units, linked Map/BVH tests and assertion-enabled lifecycle contracts passed. The corresponding combined develop server passed a full compile/link and scoped native gameplay. Full standalone public link/native rerun not repeated.",
+      "private_data_included": false
+    },
+    {
+      "name": "Vergalid Mines quests and rewards",
+      "package": "extensions/rof2/achievements/content/vergalid",
+      "historical_cutoff": "2013-05-31",
+      "quests": 17,
+      "activities": 56,
+      "achievement_groups": 4,
+      "new_actor_types": 7,
+      "native_completed_quests": 17,
+      "native_parent_reward_paths": 4,
+      "native_parent_reward_item_entries": 5,
+      "fresh_login_persistence": true,
+      "new_wire_opcodes": false,
+      "native_shared_members_checked": 1,
+      "historical_and_platform_limits": "Labelled numerical/geometry/class-policy defaults; head-variant family inference; full multiplayer orb and native Windows remain unverified. See package provenance.",
       "private_data_included": false
     }
   ],

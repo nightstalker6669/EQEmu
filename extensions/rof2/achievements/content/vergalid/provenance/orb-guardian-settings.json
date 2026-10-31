@@ -1,0 +1,28 @@
+{
+  "reviewed": true,
+  "replacement_seconds": 60,
+  "slots": [
+    {
+      "role": "warrior",
+      "npc": 404905,
+      "point": {
+        "x": -1775,
+        "y": 565,
+        "z": -539.774475,
+        "heading": 128
+      }
+    },
+    {
+      "role": "cleric",
+      "npc": 404906,
+      "point": {
+        "x": -1755,
+        "y": 565,
+        "z": -539.774475,
+        "heading": 384
+      }
+    }
+  ],
+  "source": "2006-10-26 original cleric/warrior pair, both74;2012-11-09 recurring guards. Replacement60seconds and two positions10units from reviewed orb floor are configurable emulator defaults; exact original timing/positions unknown. Native geometry/combat acceptance pending. Unattended root-orb reset600seconds is a labelled emulator default; surviving guards remain, matching the original stacking report.",
+  "idle_reset_seconds": 600
+}
