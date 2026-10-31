@@ -11805,21 +11805,38 @@ void Client::Handle_OP_MoveMultipleItems(const EQApplicationPacket *app)
 
 void Client::Handle_OP_OpenContainer(const EQApplicationPacket *app)
 {
-	// Does not exist in Ti client
-	// SoF, SoD and UF clients send a 4-byte packet indicating the 'parent' slot
-	// SoF, SoD and UF slots are defined by a uint32 value and currently untranslated
-	// RoF client sends a 12-byte packet based on the RoF::Structs::ItemSlotStruct
+	if (app->size != sizeof(OpenContainer_Struct)) {
+		return;
+	}
 
-	// RoF structure types are defined as signed uint16 and currently untranslated
-	// RoF::struct.SlotType = {0 - Equipment, 1 - Bank, 2 - Shared Bank} // not tested beyond listed types
-	// RoF::struct.Unknown2 = 0
-	// RoF::struct.MainSlot = { <parent slot range designated by slottype..zero-based> }
-	// RoF::struct.SubSlot = -1 (non-child)
-	// RoF::struct.AugSlot = -1 (non-child)
-	// RoF::struct.Unknown1 = 141 (unsure why, but always appears to be this value..combine containers not tested)
+	const auto slot = reinterpret_cast<const OpenContainer_Struct *>(app->pBuffer)->slot;
+	// Only an actual top-level personal bag can invoke an item script. Bank,
+	// shared-bank, cursor, nested, equipment and invented slots grant nothing.
+	if (slot < EQ::invslot::GENERAL_BEGIN || slot > EQ::invslot::GENERAL_END) {
+		return;
+	}
+	auto *inst = m_inv.GetItem(slot);
+	if (!inst || !inst->IsClassBag()) {
+		return;
+	}
 
-	// SideNote: Watching the slot translations, Unknown1 is showing '141' as well on certain item swaps.
-	// Manually looting a corpse results in a from '34' to '68' value for equipment items, '0' to '0' for inventory.
+	const auto opened_item_id = inst->GetID();
+	const auto opened_serial = inst->GetSerialNumber();
+
+	// Opening a bag is already client-side. The notification supplies the
+	// existing right-click quest event, without casting or consuming anything.
+	if (parse->ItemHasQuestSub(inst, EVENT_ITEM_CLICK)) {
+		parse->EventItem(EVENT_ITEM_CLICK, this, inst, nullptr, "", slot);
+	}
+	// An item callback may move or remove the original instance. Re-read its
+	// current custody before exposing it to the existing player callback.
+	inst = m_inv.GetItem(slot);
+	if (inst && inst->IsClassBag() && inst->GetID() == opened_item_id &&
+		inst->GetSerialNumber() == opened_serial && parse->PlayerHasQuestSub(EVENT_ITEM_CLICK_CLIENT)) {
+		std::vector<std::any> args;
+		args.emplace_back(inst);
+		parse->EventPlayer(EVENT_ITEM_CLICK_CLIENT, this, std::to_string(slot), 0, &args);
+	}
 }
 
 void Client::Handle_OP_OpenGuildTributeMaster(const EQApplicationPacket *app)

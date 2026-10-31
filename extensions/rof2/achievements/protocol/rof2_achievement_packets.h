@@ -9,6 +9,11 @@ enum class RewardAction : std::uint32_t {
     List=0, Inspect=1, Claim=3, TaskView=4, AchievementView=5, Pending=6, Bulk=7
 };
 #pragma pack(push, 1)
+// General inventory notification used by container-triggered achievement quests.
+// OP_OpenContainer=0x06c8; unknown words deliberately have no required constant.
+struct OpenContainerRequest {
+    std::int16_t type, unknown02, slot, sub_index, aug_index, unknown01;
+};
 struct DefinitionsPrefix { std::uint32_t inflated_bytes; /* zlib stream follows */ };
 struct PrimaryUpdatePrefix {
     std::uint32_t serial; std::uint8_t dense; std::uint32_t record_count;
@@ -34,6 +39,7 @@ struct RewardClaimReply {
     std::uint8_t success, zero[3];
 };
 #pragma pack(pop)
+static_assert(sizeof(OpenContainerRequest) == 12, "RoF2 container-open wire size");
 // Variable State: i16 status; ceil(n1/16) u16 words, then type2, then type0;
 // u32 completion timestamp only when completed. Comparison additionally appends
 // u32 counts for every component in the same 1,2,0 order. No type3 state array.

@@ -6100,6 +6100,21 @@ namespace RoF2
 		FINISH_DIRECT_DECODE();
 	}
 
+	DECODE(OP_OpenContainer)
+	{
+		// Original May 2013 sender 0x65cae0: opcode 0x06c8 followed by the
+		// three DWORDs of the global item index (12 bytes, no item ID).
+		DECODE_LENGTH_EXACT(structs::InventorySlot_Struct);
+		SETUP_DIRECT_DECODE(OpenContainer_Struct, structs::InventorySlot_Struct);
+
+		emu->slot = EQ::invslot::SLOT_INVALID;
+		if (eq->SubIndex == invbag::SLOT_INVALID && eq->AugIndex == invaug::SOCKET_INVALID) {
+			emu->slot = RoF2ToServerSlot(*eq);
+		}
+
+		FINISH_DIRECT_DECODE();
+	}
+
 	DECODE(OP_ItemVerifyRequest)
 	{
 		DECODE_LENGTH_EXACT(structs::ItemVerifyRequest_Struct);
