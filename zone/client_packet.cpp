@@ -11805,7 +11805,9 @@ void Client::Handle_OP_MoveMultipleItems(const EQApplicationPacket *app)
 
 void Client::Handle_OP_OpenContainer(const EQApplicationPacket *app)
 {
-	if (app->size != sizeof(OpenContainer_Struct)) {
+	// Other clients still send untranslated or unverified native slot layouts.
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2 ||
+		app->size != sizeof(OpenContainer_Struct)) {
 		return;
 	}
 
