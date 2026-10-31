@@ -70,3 +70,15 @@ The current integrated engine avoids downcasting a self-client offer to `NPC` an
 ## Quest-created ground pickups
 
 Quest-generated one-shot items use the existing `OP_ClickObject` and item-transfer paths. Native loot-objective credit occurs only after pickup callbacks permit the transfer, inventory placement succeeds and duplicate-lore removal is excluded. A server-side Object origin flag admits quest-created items without allowing player drop/pickup loops to earn credit. No client packet, opcode mapping or packet-structure field changes. The adjacent mappings and packet-structure reference remain applicable.
+
+## Container-open quest notifications
+
+`OP_OpenContainer` is client→server **`0x06c8`** for the original May 10, 2013 RoF2 executable (SHA-256 `2a8702ad9f722704f01355c0750be7d6f164a8b9c9128ba0cf286ea32b405b0e`). This supports item-triggered quests such as [The Bixie Evolution](https://everquest.allakhazam.com/db/quest/3757#msg1169129537211137028), whose journal is a container. It is a general inventory notification, separate from achievement state packets.
+
+The payload is **12 bytes**: six little-endian signed 16-bit fields, matching `RoF2::structs::InventorySlot_Struct`. Offsets are `0 Type`, `2 Unknown02`, `4 Slot`, `6 SubIndex`, `8 AugIndex`, `10 Unknown01`. The unknown words retain unknown semantics; no constant value is required. There is no item ID in this message. The documentary layout is in `rof2_achievement_packets.h`.
+
+Static recovery located the original `CContainerMgr::OpenContainer` at `0x65cae0`, the opcode literal at `0x65ccff`, unchanged-opcode helper `0x7d03c0`, three-DWORD copy at `0x65ccec`–`0x65ccf2`, and send at `0x65cd30`. The sender's length is 14 bytes including the two-byte opcode. These addresses apply only to the executable hash above. Live opcode numbers must not be substituted.
+
+The RoF2 decoder translates the native global item index to the existing canonical server inventory slot. The handler accepts only an actual top-level personal bag; it rejects malformed sizes, nested/augmentation slots, bank/shared-bank/cursor/equipment slots and absent items. It dispatches existing `EVENT_ITEM_CLICK` and `EVENT_ITEM_CLICK_CLIENT` callbacks, rechecking the original item instance after the first callback. The packet handler itself neither grants a task nor consumes an item. Quest scripts remain responsible for item identity, level, active task and completion rules.
+
+**Validation boundary:** the sender and layout are recovered from the original client, and the complete configured Linux server build passed. A native packet capture and an end-to-end journal task run are still pending. This change alone does not install the journal recipe or restore the Short Sharp Sting quest family. Native Windows execution has not been verified.
