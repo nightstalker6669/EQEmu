@@ -53,3 +53,9 @@ Before starting patched services, apply `utils/sql/git/2026_10_30_shared_task_re
 ## NPC buff state saves
 
 NPC state serialization uses the engine's `IsValidSpell` predicate. Empty slots in this build use `SPELL_UNKNOWN` (`-1`); filtering only `0` and `65535` incorrectly serialized their inactive fields and could produce invalid text in the state table. The change does not alter the saved buff layout or require a schema migration. A native empty-buff Roost shutdown saved 300 state rows without the earlier serialization error. Active-buff restoration was not exercised in that sample.
+
+## Quest-created ground-item loot
+
+Item objects created through `eq.create_ground_object` can now satisfy native loot objectives after successful pickup. A server-only origin flag distinguishes these one-shot quest objects from player drops; it does not enable recurring respawn behavior. Existing pickup vetoes, duplicate-lore handling and inventory-placement checks remain authoritative. Player-dropped items stay ineligible for loot credit.
+
+Rebuild the Object-header consumers through the normal full server build. All configured Linux targets passed, followed by native RoF2 quest-ground pickup, hand-in and persistent achievement/reward verification. The Sunderock content package remains a separate milestone. No new opcode, wire structure or database migration is introduced; native Windows execution remains unverified.
