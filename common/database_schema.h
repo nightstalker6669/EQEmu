@@ -17,6 +17,8 @@
 */
 #pragma once
 
+
+#include <string>
 #include <vector>
 #include <map>
 
@@ -66,6 +68,10 @@ namespace DatabaseSchema {
 			{"character_skills",               "id"},
 			{"character_spells",               "id"},
 			{"character_stats_record",         "character_id"},
+			{"character_shared_task_reward_instances", "character_id"},
+			{"character_task_reward_instances", "character_id"},
+			{"character_task_reward_selections", "character_id"},
+			{"character_task_rewards",         "character_id"},
 			{"character_task_timers",          "character_id"},
 			{"character_tasks",                "charid"},
 			{"character_tribute",              "character_id"},
@@ -141,6 +147,10 @@ namespace DatabaseSchema {
 			"character_skills",
 			"character_spells",
 			"character_stats_record",
+			"character_shared_task_reward_instances",
+			"character_task_reward_instances",
+			"character_task_reward_selections",
+			"character_task_rewards",
 			"character_task_timers",
 			"character_tasks",
 			"character_tribute",
@@ -235,6 +245,14 @@ namespace DatabaseSchema {
 			"pets_beastlord_data",
 			"pets_equipmentset",
 			"pets_equipmentset_entries",
+			"reward_option_entries",
+			"reward_options",
+			"reward_sets",
+			"reward_source_entries",
+			"reward_sources",
+			"task_reward_progression_members",
+			"task_reward_option_gates",
+			"rewards",
 			"skill_caps",
 			"spawn2",
 			"spawn_conditions",
@@ -243,6 +261,7 @@ namespace DatabaseSchema {
 			"spells_new",
 			"start_zones",
 			"starting_items",
+			"shared_task_admission_policies",
 			"task_activities",
 			"tasks",
 			"tasksets",

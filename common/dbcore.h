@@ -23,6 +23,7 @@
 #include "mysql.h"
 #include <memory>
 #include <mutex>
+#include <atomic>
 
 #define CR_SERVER_GONE_ERROR    2006
 #define CR_SERVER_LOST          2013
@@ -41,12 +42,19 @@ public:
 	DBcore();
 	~DBcore();
 	eStatus GetStatus() { return pStatus; }
+	// Includes transient query failures even when the normal retry succeeds.
+	uint64_t QueryFailureGeneration() const { return m_query_failure_generation.load(); }
 	MySQLRequestResult QueryDatabase(const char *query, uint32 querylen, bool retryOnFailureOnce = true);
 	MySQLRequestResult QueryDatabase(const std::string& query, bool retryOnFailureOnce = true);
 	MySQLRequestResult QueryDatabaseMulti(const std::string &query);
 	void TransactionBegin();
 	MySQLRequestResult TransactionCommit();
 	void TransactionRollback();
+	MySQLRequestResult TransactionBeginStrict();
+	MySQLRequestResult TransactionCommitStrict();
+	void TransactionRollbackStrict();
+	void TransactionFailStrict();
+	bool TransactionStrictFailed() const;
 	std::string Escape(const std::string& s);
 	uint32 DoEscapeString(char *tobuf, const char *frombuf, uint32 fromlen);
 	void ping();
@@ -58,8 +66,11 @@ public:
 
 	void SetMySQL(const DBcore& o)
 	{
+		if (this == &o) return;
+		if (mysqlOwner && mysql) { mysql_close(mysql); delete mysql; }
 		mysql      = o.mysql;
 		mysqlOwner = false;
+		pStatus    = o.pStatus;
 	}
 	void SetMutex(const std::shared_ptr<Mutex>& mutex);
 
@@ -87,7 +98,11 @@ private:
 	MYSQL*  mysql = nullptr;
 	bool    mysqlOwner = true;
 	eStatus pStatus = Closed;
+	bool    m_strict_transaction_active = false;
+	bool    m_strict_transaction_failed = false;
 
+	std::mutex m_query_lock{};
+	std::atomic<uint64_t> m_query_failure_generation{0};
 	std::shared_ptr<Mutex> m_mutex;
 
 	std::string origin_host;

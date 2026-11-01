@@ -58,6 +58,7 @@
 #include "zone/position.h"
 #include "zone/queryserv.h"
 #include "zone/quest_parser_collection.h"
+#include "zone/reward_selection.h"
 #include "zone/string_ids.h"
 #include "zone/water_map.h"
 #include "zone/worldserver.h"
@@ -6098,6 +6099,14 @@ void Client::SendRewards()
 	FastQueuePacket(&vetapp);
 }
 
+ClientRewardSelection &Client::GetRewardSelection()
+{
+	if (!m_reward_selection) {
+		m_reward_selection = std::make_unique<ClientRewardSelection>(*this);
+	}
+	return *m_reward_selection;
+}
+
 bool Client::TryReward(uint32 claim_id)
 {
 	// Make sure we have an open spot
@@ -7267,10 +7276,10 @@ void Client::SendAltCurrencies() {
 	}
 }
 
-void Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
+bool Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
 {
 	if (!zone->DoesAlternateCurrencyExist(currency_id)) {
-		return;
+		return false;
 	}
 
 	const uint32 current_amount = alternate_currency[currency_id];
@@ -7280,11 +7289,11 @@ void Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
 	const uint32 change_amount = is_gain ? (new_amount - current_amount) : (current_amount - new_amount);
 
 	if (!change_amount) {
-		return;
+		return true;
 	}
 
 	alternate_currency[currency_id] = new_amount;
-	database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_amount);
+	const auto persistence_succeeded = database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_amount);
 	SendAlternateCurrencyValue(currency_id);
 
 	QuestEventID event_id = is_gain ? EVENT_ALT_CURRENCY_GAIN : EVENT_ALT_CURRENCY_LOSS;
@@ -7298,6 +7307,8 @@ void Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
 
 		parse->EventPlayer(event_id, this, export_string, 0);
 	}
+
+	return persistence_succeeded;
 }
 
 bool Client::RemoveAlternateCurrencyValue(uint32 currency_id, uint32 amount)
@@ -7333,6 +7344,19 @@ bool Client::RemoveAlternateCurrencyValue(uint32 currency_id, uint32 amount)
 
 int Client::AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_scripted)
 {
+	return AddAlternateCurrencyValue(currency_id, amount, is_scripted, nullptr);
+}
+
+int Client::AddAlternateCurrencyValue(
+	uint32 currency_id,
+	int amount,
+	bool is_scripted,
+	bool *persistence_succeeded
+)
+{
+	if (persistence_succeeded) {
+		*persistence_succeeded = false;
+	}
 	if (!zone->DoesAlternateCurrencyExist(currency_id)) {
 		return 0;
 	}
@@ -7342,7 +7366,11 @@ int Client::AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_sc
 	}
 
 	if (!alternate_currency_loaded) {
-		alternate_currency_queued_operations.push(std::make_pair(currency_id, amount));
+		// A durable reward caller must retry explicitly after loading; do not
+		// enqueue an unacknowledged grant that could run after that retry.
+		if (!persistence_succeeded) {
+			alternate_currency_queued_operations.push(std::make_pair(currency_id, amount));
+		}
 		return 0;
 	}
 
@@ -7357,10 +7385,16 @@ int Client::AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_sc
 	if (new_value < 0) {
 		new_value = 0;
 		alternate_currency[currency_id] = 0;
-		database.UpdateAltCurrencyValue(CharacterID(), currency_id, 0);
+		const auto persisted = database.UpdateAltCurrencyValue(CharacterID(), currency_id, 0);
+		if (persistence_succeeded) {
+			*persistence_succeeded = persisted;
+		}
 	} else {
 		alternate_currency[currency_id] = new_value;
-		database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_value);
+		const auto persisted = database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_value);
+		if (persistence_succeeded) {
+			*persistence_succeeded = persisted;
+		}
 	}
 
 	SendAlternateCurrencyValue(currency_id);

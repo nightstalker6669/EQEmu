@@ -19,6 +19,8 @@
 
 #include "common/repositories/character_tasks_repository.h"
 #include "common/types.h"
+#include "common/task_reward_progression.h"
+#include "zone/reward_selection.h"
 #include "zone/task_client_state.h"
 #include "zone/tasks.h"
 
@@ -37,6 +39,7 @@ public:
 	int GetActivityCount(int task_id);
 	bool LoadTasks(int single_task = 0);
 	bool LoadTaskSets();
+	bool LoadTaskRewardSets();
 	bool LoadClientState(Client *client, ClientTaskState *cts);
 	bool SaveClientState(Client *client, ClientTaskState *cts);
 	void SendTaskSelector(Client* client, Mob* mob, const std::vector<int>& tasks);
@@ -86,6 +89,16 @@ public:
 		auto it = m_task_data.find(task_id);
 		return it != m_task_data.end() ? &it->second : nullptr;
 	}
+	const RewardSelectionSet* GetTaskRewardSet(uint32_t task_id) const
+	{
+		auto it = m_task_reward_sets.find(task_id);
+		return it != m_task_reward_sets.end() ? &it->second : nullptr;
+	}
+	const Tasks::RewardProgressionPolicy *GetTaskRewardProgression(uint32_t task_id) const
+	{
+		const auto it = m_task_reward_progression.find(task_id);
+		return it == m_task_reward_progression.end() ? nullptr : &it->second;
+	}
 
 	static TaskManager* Instance()
 	{
@@ -96,6 +109,11 @@ public:
 private:
 	std::vector<int>                              m_task_sets[MAXTASKSETS];
 	std::unordered_map<uint32_t, TaskInformation> m_task_data;
+	std::unordered_map<uint32_t, RewardSelectionSet> m_task_reward_sets;
+	std::unordered_map<uint32_t, Tasks::RewardProgressionPolicy> m_task_reward_progression;
+	bool LoadTaskRewardProgression(
+		const std::unordered_map<uint32_t, RewardSelectionSet> &sets,
+		std::unordered_map<uint32_t, Tasks::RewardProgressionPolicy> &policies);
 	void SendActiveTaskDescription(
 		Client *client,
 		int task_id,
@@ -112,5 +130,5 @@ private:
 	void SyncClientSharedTaskWithPersistedState(Client *c, ClientTaskState *cts);
 	void SyncClientSharedTaskRemoveLocalIfNotExists(Client *c, ClientTaskState *cts);
 	void SendSharedTaskSelector(Client* client, Mob* mob, const std::vector<int>& tasks);
-	void SyncClientSharedTaskStateToLocal(Client *c);
+	bool SyncClientSharedTaskStateToLocal(Client *c);
 };

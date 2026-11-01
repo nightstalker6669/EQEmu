@@ -15,6 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include <cstring>
 #include "eqtime.h"
 
 #include "common/eq_packet_structs.h"

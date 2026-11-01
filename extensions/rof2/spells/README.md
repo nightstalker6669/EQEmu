@@ -2,7 +2,7 @@
 
 Database and quest content repairs for class spells through Rain of Fear, targeting the May 10, 2013 RoF2 client. This branch contains the spell work completed so far. It does **not** establish exact Live implementation of every spell.
 
-The branch starts from upstream `develop` commit `c9c8747ac949deddb140d196d241fa4e777500c7`. It adds no C++ spell engine changes, client assets, private character data, credentials, logs, test fixtures or server binaries.
+The branch inherits `rof2-shared-core` commit `fc88a0ba79a05e437e7b61af4e38ead32131de0f` on upstream `develop` commit `c9c8747ac949deddb140d196d241fa4e777500c7`. The spell layer adds no C++ spell engine changes, client assets, private character data, credentials, logs, test fixtures or server binaries.
 
 ## Included content
 
@@ -19,11 +19,11 @@ Kerkaz uses the original acquisition route: say `dreadmote` or `terrormote`, acc
 
 ## Engine ownership and dependency
 
-The generic task reward catalogue, native selection window, permanent-class filtering and persisted delivery ledger are shared infrastructure. They belong in `rof2-shared-core`; achievement progress, criteria and achievement-specific providers belong in `rof2-achievements`.
+The generic task reward catalogue, native selection window, permanent-class filtering and persisted delivery ledger are now inherited from [`rof2-shared-core` commit `fc88a0ba79a05e437e7b61af4e38ead32131de0f`](https://github.com/nightstalker6669/EQEmu/tree/fc88a0ba79a05e437e7b61af4e38ead32131de0f). Achievement progress, criteria, providers and quest content are not required or enabled by this branch.
 
-**That extraction has not been performed by this content snapshot.** The currently published implementation of the required task reward engine is pinned at [`rof2-achievements` commit `1cfaaee4a2c02e2fb7c9992d971749790bfb83e7`](https://github.com/nightstalker6669/EQEmu/tree/1cfaaee4a2c02e2fb7c9992d971749790bfb83e7). Kerkaz does not require achievement completion, achievement flags or installation of the achievement quest content. It requires that revision's shared task reward functionality, including its stable schema migrations through 9334.
+The shared engine is already integrated into the normal source directories. Build this branch; do not merge an achievement branch or reapply historical source overlays. Run its matching updater through schema version 9334 and review the three original supplemental class/shared-task SQL files in [shared reward installation](../../../docs/rof2/SHARED-REWARDS.md). Migration IDs 9331–9334 and their original SQL are preserved. The compatibility migrations retain empty achievement schema scaffolding so a later achievement installation remains compatible; those empty tables do not activate achievements. No duplicate or renamed migration registrations are added by spells.
 
-Do not run stage 004 against a stock `develop` binary merely because its content tables can be created. The content installer cannot attest which binary is running. Until a reviewed shared-core extraction is published, build the pinned reward-capable branch and merge this content branch into it, or use a matching integration build already containing that engine. Do not replay historical source overlays over integrated code. This branch does not copy, rename or register a second set of reward-engine migrations.
+Stage 004 still requires the matching reward-capable binary; the content installer cannot attest which executable is running. A table-only installation on a stock `develop` binary is insufficient.
 
 See [installation and rollback](docs/INSTALL.md), [research and limitations](docs/RESEARCH.md), and [verification scope](docs/VERIFICATION.md).
 

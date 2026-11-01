@@ -1,8 +1,8 @@
 {
   "format": 1,
   "source_base": "c9c8747ac949deddb140d196d241fa4e777500c7",
-  "reward_engine_branch": "rof2-achievements",
-  "reward_engine_commit": "1cfaaee4a2c02e2fb7c9992d971749790bfb83e7",
+  "reward_engine_branch": "rof2-shared-core",
+  "reward_engine_commit": "fc88a0ba79a05e437e7b61af4e38ead32131de0f",
   "stages": [
     {
       "name": "001-exigent-items",
@@ -81,5 +81,6 @@
       "option_id",
       "reward_id"
     ]
-  }
+  },
+  "shared_core_base": "fc88a0ba79a05e437e7b61af4e38ead32131de0f"
 }

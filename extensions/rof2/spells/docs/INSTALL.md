@@ -2,7 +2,13 @@
 
 Use a supported current PEQ/MariaDB schema with the original spell/item/NPC content corresponding to this overlay. This is a targeted content repair, not a complete PEQ database or a replacement `spells_new` import. IDs are deliberately fixed and collision checks refuse customized rows rather than silently remapping them.
 
-For Kerkaz, first satisfy the [pinned native task reward engine dependency](../README.md#engine-ownership-and-dependency), including its migrations through 9334. Preserve the identities of those migrations; do not create renamed duplicates. No achievement quest content or achievement completion is required.
+The [pinned shared-core reward engine](../README.md#engine-ownership-and-dependency) is already integrated into this branch. Build this branch's matching world/zone binaries; no achievement branch, manager or quest content is required. Run the matching database updater through 9334 and review/apply the three original supplemental SQL files described below before installing spell content. Preserve their identities; do not create renamed duplicates.
+
+- `utils/sql/git/2026_10_27_achievement_reward_classes.sql`: generic option class masks; its historical filename is retained.
+- `utils/sql/git/2026_10_30_shared_task_reward_identity.sql`: durable shared occurrence ownership in the player database.
+- `utils/sql/git/2026_10_30_shared_task_admission_policies.sql`: optional admission policy in the content database.
+
+Follow the [shared reward schema compatibility guide](../../../../docs/rof2/SHARED-REWARDS.md), preserving state/content routing and reviewing existing deployments for matching schema before applying additive SQL. Updater 9331/9332 retains empty achievement table scaffolding as a compatibility envelope, not achievement gameplay. Apply no second copy of those migrations.
 
 Back up the database and quests, stop world and all zone writers through the normal service manager, and coordinate any shared test/runtime work. This installer never stops, starts, reloads or rebuilds services, replaces shared memory, or touches accounts/characters/inventories. It is intended for offline content installation.
 

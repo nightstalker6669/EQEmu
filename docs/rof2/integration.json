@@ -1,0 +1,64 @@
+{
+  "branch": "rof2-shared-core",
+  "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "features": [
+    "shared-core"
+  ],
+  "inputs": {
+    "source": "eqemu-rof2-housing 710ecb7, fellowship 9382453, spirit-shrouds e32ca15",
+    "task_rewards": "rof2-achievements 1cfaaee4a2c02e2fb7c9992d971749790bfb83e7"
+  },
+  "compatibility": "Stable legacy table/type/custom-data names; source implementations extracted once into common/shared_core; feature-specific gameplay and recovery adapters excluded.",
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
+  "source_integration": "Feature-only changes replayed directly onto upstream develop; linear review commits without master merges or old mixed-history parents.",
+  "upstream_branch": "develop",
+  "previous_published_commit": "f84de86f885d6e0240ccb1559629a2cfc994708b",
+  "backup_branch": "archive/20261029-before-develop/rof2-shared-core",
+  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base.",
+  "shared_task_rewards": {
+    "binary_database_version": 9334,
+    "wire_api": "EQ::RewardSelection in common/reward_display.h",
+    "historical_schema_envelopes": [
+      9331,
+      9332
+    ],
+    "supplemental_sql_identity": "Original class, shared occurrence and admission files retained; see SHARED-REWARDS.md",
+    "scope": "Generic reward catalogue, task selection/delivery/occurrence ownership, custody and idempotency, carried Collect and distinct task-completion gates; achievement runtime and content excluded.",
+    "validation": "See private extraction receipt; no runtime/database deployment or native acceptance claimed."
+  },
+  "prior_rebase_validation": {
+    "status": "Passed targeted source and package checks on pure upstream develop; source publication only.",
+    "compiler": "GCC12/C++20 with cached vcpkg SDK; targeted syntax compilation, normal source preamble for zone translation units.",
+    "translation_units": [
+      "zone/attack.cpp",
+      "zone/bot.cpp",
+      "zone/spell_effects.cpp",
+      "common/dbcore.cpp"
+    ],
+    "content_preservation": "Exact added/removed source lines versus previous snapshot equal only the upstream mixed-base-to-develop delta in 11 paths. Opcode mappings/structures and other production packages retained byte-for-byte, except installer pin/checksum and current guides.",
+    "package_checks": [
+      "Manifest hashes/sizes, Python syntax, JSON, guide links",
+      "Unique migration IDs, opcode names, mapping keys and handlers"
+    ],
+    "history": "New linear review history; old heads preserved in archive branches.",
+    "full_branch_link": "Not independently linked; full combined build recorded by the integration branch.",
+    "native_acceptance": "No new native gameplay or active server/database deployment during this rebase."
+  },
+  "validation": {
+    "status": "Shared reward extraction independently built and checked offline.",
+    "compiler": "GCC12/C++20, original cached vcpkg SDK, separate build tree/container.",
+    "full_branch_link": "world and zone linked successfully with normal CMake/PCH configuration.",
+    "wire_compatibility": "386 serialized buffers byte-identical to published achievements1cfaaee4a across all seven reward wire entry types.",
+    "task_contracts": "Carried Collect high-water, distinct completion and frozen gate behavior, common-only identity, explicit wire fixtures and duplicate-subset refusal passed in private harness.",
+    "consumer_compatibility": "Seven contextual translation units checked for each of achievements1cfaaee4a and integrationf59defce0 consumer trees.",
+    "migration_compatibility": "Registered manifest and supplemental SQL bytes identical to immutable published source; one9331-9334 registration each.",
+    "native_acceptance": "No server, client, database, binary installation, service or active session actions."
+  },
+  "currency_acknowledgement_followup": {
+    "scope": "Return actual alternate-currency persistence success to durable reward callers in ordinary and clamped paths; while currency is unloaded, durable callers retry explicitly without enqueuing a hidden grant. Ordinary three-argument callers retain their queue behavior.",
+    "origin": "Parent-reviewed contextual correction after immutable source extraction.",
+    "validation": "Incremental core zone linked; actual-method behavior fixtures and contextual consumer client compilation recorded in private review evidence.",
+    "schema_changes": "None"
+  }
+}

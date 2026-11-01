@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cstring>
 #include "dns.h"
 
 #include "common/eqemu_logsys.h"

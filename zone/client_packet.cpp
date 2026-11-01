@@ -106,6 +106,8 @@ void MapOpcodes()
 	ConnectingOpcodes[OP_ZoneEntry] = &Client::Handle_Connect_OP_ZoneEntry;
 
 	// connected opcode handler assignments:
+	ConnectedOpcodes[OP_AchievementReward] = &Client::Handle_OP_AchievementReward;
+	ConnectedOpcodes[OP_RewardSelection] = &Client::Handle_OP_RewardSelection;
 	ConnectedOpcodes[OP_AAAction] = &Client::Handle_OP_AAAction;
 	ConnectedOpcodes[OP_AcceptNewTask] = &Client::Handle_OP_AcceptNewTask;
 	ConnectedOpcodes[OP_AdventureInfoRequest] = &Client::Handle_OP_AdventureInfoRequest;
@@ -871,6 +873,10 @@ void Client::CompleteConnect()
 
 	/* This needs to be set, this determines whether or not data was loaded properly before a save */
 	client_data_loaded = true;
+	// Retry pending common-only rewards with a fully loaded save target.
+	if (task_state) {
+		task_state->RestorePendingRewardSelection(this);
+	}
 
 	CalcItemScale();
 	DoItemEnterZone();
@@ -1912,6 +1918,92 @@ void Client::Handle_OP_AAAction(const EQApplicationPacket *app)
 	}
 	else {
 		LogAA("Unknown AA action : [{}] [{}] [{}] [{}]", action->action, action->ability, action->target_id, action->exp_value);
+	}
+}
+
+void Client::Handle_OP_AchievementReward(const EQApplicationPacket *app)
+{
+	HandleRewardSelectionPacket(
+		app,
+		RewardSelectionChannel::Claimable
+	);
+}
+
+void Client::Handle_OP_RewardSelection(const EQApplicationPacket *app)
+{
+	HandleRewardSelectionPacket(app, RewardSelectionChannel::Preview);
+}
+
+void Client::HandleRewardSelectionPacket(
+	const EQApplicationPacket *app,
+	RewardSelectionChannel channel
+)
+{
+	if (!app) {
+		return;
+	}
+
+	auto &selection = GetRewardSelection();
+	auto result = selection.HandlePacket(*app, channel);
+	switch (result.type) {
+	case RewardSelectionPacketResultType::ViewRequested:
+		if (
+			result.requested_source == RewardSelectionSource::Task &&
+			task_state
+		) {
+			task_state->SendRewardSelection(this, result.requested_id);
+		}
+		return;
+	case RewardSelectionPacketResultType::PendingRequested:
+		if (const auto active = selection.ActiveSession(
+				RewardSelectionChannel::Claimable
+			)) {
+			const auto session = *active;
+			selection.Open(session);
+		}
+		if (task_state) {
+			task_state->RestorePendingRewardSelection(this);
+		}
+		if (
+			!selection.HasActiveSession(RewardSelectionChannel::Claimable)
+		) {
+			selection.Clear(RewardSelectionChannel::Claimable);
+		}
+		return;
+	case RewardSelectionPacketResultType::ClaimRequested:
+		break;
+	default:
+		return;
+	}
+
+	if (!result.claim) {
+		return;
+	}
+
+	auto delivery_result = RewardSelectionDeliveryResult::RetryableFailure;
+	switch (result.claim->session.source.source) {
+	case RewardSelectionSource::Task:
+		if (task_state) {
+			delivery_result = task_state->ClaimRewardSelection(
+				this,
+				*result.claim
+			);
+		}
+		break;
+	default:
+		break;
+	}
+
+	selection.CompleteClaim(*result.claim, delivery_result);
+	if (delivery_result == RewardSelectionDeliveryResult::Ambiguous) {
+		return;
+	}
+
+	if (task_state) {
+		task_state->RestorePendingRewardSelection(this);
+	}
+	if (!selection.HasActiveSession(RewardSelectionChannel::Claimable)) {
+		selection.Clear(RewardSelectionChannel::Claimable);
 	}
 }
 
