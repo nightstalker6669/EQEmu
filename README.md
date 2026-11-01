@@ -1,6 +1,6 @@
 # EQEmu · RoF2 Shared Core
 
-Current EQEmu source with **shared inventory, session and database infrastructure** integrated on the common upstream foundation.
+Current EQEmu source with **shared inventory, session, task reward and database infrastructure** integrated on the common upstream foundation.
 
 **[Install / upgrade](docs/rof2/INSTALL.md)** · **[Opcodes and packet structures](docs/rof2/PROTOCOL.md)** · **[Choose a feature branch](docs/rof2/BRANCHES.md)**
 

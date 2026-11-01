@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "shared_task_manager.h"
+#include "common/shared_task_admission.h"
 
 #include "common/repositories/character_data_repository.h"
 #include "common/repositories/character_task_timers_repository.h"
@@ -26,6 +27,7 @@
 #include "common/repositories/shared_task_dynamic_zones_repository.h"
 #include "common/repositories/shared_task_members_repository.h"
 #include "common/rulesys.h"
+#include "common/shared_task_completion.h"
 #include "world/cliententry.h"
 #include "world/clientlist.h"
 #include "world/dynamic_zone_manager.h"
@@ -83,6 +85,14 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 	// new shared task instance
 	auto new_shared_task = SharedTask{};
 	auto activities      = TaskActivitiesRepository::GetWhere(*m_content_database, fmt::format("taskid = {}", task.id));
+	if (activities.empty()) {
+		LogError("Unable to load shared task [{}] activities for admission", task.id);
+		return;
+	}
+	if (!m_database->TransactionBeginStrict().Success()) {
+		LogError("Unable to begin shared task admission transaction");
+		return;
+	}
 
 	// new shared task db object
 	auto shared_task_entity = SharedTasksRepository::NewEntity();
@@ -91,6 +101,10 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 	shared_task_entity.expire_time   = task.duration > 0 ? (std::time(nullptr) + task.duration) : 0;
 
 	auto created_db_shared_task = SharedTasksRepository::InsertOne(*m_database, shared_task_entity);
+	if (created_db_shared_task.id <= 0) {
+		m_database->TransactionRollbackStrict();
+		return;
+	}
 
 	// active record
 	new_shared_task.SetDbSharedTask(created_db_shared_task);
@@ -125,10 +139,16 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 		}
 	}
 
-	SharedTaskMembersRepository::InsertMany(*m_database, shared_task_db_members);
+	if (SharedTaskMembersRepository::InsertMany(*m_database, shared_task_db_members) != shared_task_db_members.size()) {
+		m_database->TransactionRollbackStrict();
+		return;
+	}
 
 	if (!task_timers.empty()) {
-		CharacterTaskTimersRepository::InsertMany(*m_database, task_timers);
+		if (CharacterTaskTimersRepository::InsertMany(*m_database, task_timers) != task_timers.size()) {
+			m_database->TransactionRollbackStrict();
+			return;
+		}
 	}
 
 	// activity state (memory)
@@ -163,7 +183,15 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 		shared_task_db_activities.emplace_back(e);
 	}
 
-	SharedTaskActivityStateRepository::InsertMany(*m_database, shared_task_db_activities);
+	if (SharedTaskActivityStateRepository::InsertMany(*m_database, shared_task_db_activities) != shared_task_db_activities.size()) {
+		m_database->TransactionRollbackStrict();
+		return;
+	}
+	if (!m_database->TransactionCommitStrict().Success()) {
+		m_database->TransactionRollbackStrict();
+		LogError("Unable to commit shared task admission; no member acceptance sent");
+		return;
+	}
 
 	// state
 	new_shared_task.SetSharedTaskActivityState(shared_task_activity_state);
@@ -206,6 +234,10 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 
 void SharedTaskManager::RemoveMember(SharedTask* s, const SharedTaskMember& member, bool remove_from_db)
 {
+	if (!EnsureCompletionArchived(s)) {
+		return;
+	}
+
 	LogTasksDetail("shared_task_id [{}] member [{}]", s->GetDbSharedTask().id, member.character_name);
 
 	RemovePlayerFromSharedTask(s, member.character_id);
@@ -230,6 +262,10 @@ void SharedTaskManager::RemoveMember(SharedTask* s, const SharedTaskMember& memb
 
 void SharedTaskManager::RemoveEveryoneFromSharedTask(SharedTask *t, uint32 requested_character_id)
 {
+	if (!EnsureCompletionArchived(t)) {
+		return;
+	}
+
 	// caller validates leader
 	LogTasksDetail("Leader [{}]", requested_character_id);
 
@@ -258,6 +294,10 @@ void SharedTaskManager::RemoveEveryoneFromSharedTask(SharedTask *t, uint32 reque
 
 void SharedTaskManager::Terminate(SharedTask& s, bool send_fail, bool erase)
 {
+	if (!EnsureCompletionArchived(&s)) {
+		return;
+	}
+
 	LogTasksDetail("shared task [{}]", s.GetDbSharedTask().id);
 	for (const auto& member : s.GetMembers())
 	{
@@ -279,28 +319,30 @@ void SharedTaskManager::Terminate(SharedTask& s, bool send_fail, bool erase)
 
 void SharedTaskManager::DeleteSharedTask(int64 shared_task_id)
 {
-	LogTasksDetail(
-		"shared_task_id [{}]",
-		shared_task_id
-	);
-
-	// remove internally
-	m_shared_tasks.erase(
-		std::remove_if(
-			m_shared_tasks.begin(),
-			m_shared_tasks.end(),
-			[&](SharedTask const &s) {
-				return s.GetDbSharedTask().id == shared_task_id;
-			}
-		),
-		m_shared_tasks.end()
-	);
-
-	// database
-	SharedTasksRepository::DeleteWhere(*m_database, fmt::format("id = {}", shared_task_id));
-	SharedTaskMembersRepository::DeleteWhere(*m_database, fmt::format("shared_task_id = {}", shared_task_id));
-	SharedTaskActivityStateRepository::DeleteWhere(*m_database, fmt::format("shared_task_id = {}", shared_task_id));
-	SharedTaskDynamicZonesRepository::DeleteWhere(*m_database, fmt::format("shared_task_id = {}", shared_task_id));
+	auto task = FindSharedTaskById(shared_task_id);
+	if (!task || !EnsureCompletionArchived(task)) {
+		return;
+	}
+	if (!m_database->TransactionBeginStrict().Success()) {
+		return;
+	}
+	for (const auto *table : {"shared_task_members", "shared_task_activity_state", "shared_task_dynamic_zones"}) {
+		if (!m_database->QueryDatabase(fmt::format(
+			"DELETE FROM {} WHERE shared_task_id = {}", table, shared_task_id)).Success()) {
+			m_database->TransactionRollbackStrict();
+			return;
+		}
+	}
+	if (!m_database->QueryDatabase(fmt::format("DELETE FROM shared_tasks WHERE id = {}", shared_task_id)).Success() ||
+		!m_database->TransactionCommitStrict().Success()) {
+		m_database->TransactionRollbackStrict();
+		return;
+	}
+	// Cache is removed only after durable active-row cleanup. Archive and reward
+	// mapping/selection/grant tables are deliberately not touched.
+	m_shared_tasks.erase(std::remove_if(m_shared_tasks.begin(), m_shared_tasks.end(),
+		[&](const SharedTask &s) { return s.GetDbSharedTask().id == shared_task_id; }), m_shared_tasks.end());
+	m_archived_shared_tasks.erase(shared_task_id);
 }
 
 void SharedTaskManager::LoadSharedTaskState()
@@ -565,11 +607,17 @@ void SharedTaskManager::SharedTaskActivityUpdate(
 						a.activity_state = ActivityState::ActivityCompleted;
 					}
 
-					// sync state as each update comes in (for now)
-					SaveSharedTaskActivityState(
-						shared_task->GetDbSharedTask().id,
-						shared_task->m_shared_task_activity_state
-					);
+					if (HandleCompletedActivities(shared_task)) {
+						if (!HandleCompletedTask(shared_task)) {
+							// Keep the completed snapshot for Process to retry. Zones
+							// optimistically sync counts before sending this request.
+							return;
+						}
+					}
+					else {
+						SaveSharedTaskActivityState(shared_task->GetDbSharedTask().id,
+							shared_task->m_shared_task_activity_state);
+					}
 
 					shared_task->SetSharedTaskActivityState(shared_task->m_shared_task_activity_state);
 
@@ -578,28 +626,7 @@ void SharedTaskManager::SharedTaskActivityUpdate(
 						a.done_count
 					);
 
-					// loop through members - send update
-					for (auto &m: shared_task->GetMembers()) {
-
-						// confirm task update to client(s)
-						auto p = std::make_unique<ServerPacket>(
-							ServerOP_SharedTaskUpdate,
-							sizeof(ServerSharedTaskActivityUpdate_Struct)
-						);
-
-						auto d = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(p->pBuffer);
-						d->source_character_id = m.character_id;
-						d->task_id             = task_id;
-						d->activity_id         = activity_id;
-						d->done_count          = done_count;
-						d->ignore_quest_update = ignore_quest_update;
-
-						// get requested character zone server
-						ClientListEntry *c = ClientList::Instance()->FindCLEByCharacterID(m.character_id);
-						if (c && c->Server()) {
-							c->Server()->SendPacket(p.get());
-						}
-					}
+					SendActivityUpdate(shared_task, activity_id, done_count, ignore_quest_update);
 
 					break;
 				}
@@ -790,6 +817,10 @@ void SharedTaskManager::SendSharedTaskMemberChange(
 
 void SharedTaskManager::RemovePlayerFromSharedTask(SharedTask *s, uint32 character_id)
 {
+	if (!EnsureCompletionArchived(s)) {
+		return;
+	}
+
 	SharedTaskMembersRepository::DeleteWhere(
 		*m_database,
 		fmt::format(
@@ -1037,6 +1068,20 @@ void SharedTaskManager::AddPlayerByCharacterIdAndName(
 	if (!does_member_exist && CanAddPlayer(s, character_id, character_name, true)) {
 		members.push_back(new_member);
 
+		// Commit only the new membership, never delete/reinsert existing members.
+		// This admission ordering applies to all shared reward methods.
+		if (!m_database->TransactionBeginStrict().Success()) {
+			return;
+		}
+		auto persisted = m_database->QueryDatabase(fmt::format(
+			"INSERT INTO shared_task_members (shared_task_id, character_id, is_leader) "
+			"VALUES ({}, {}, 0)", s->GetDbSharedTask().id, character_id));
+		if (!persisted.Success() || persisted.RowsAffected() != 1) {
+			m_database->TransactionRollbackStrict();
+			LogError("Unable to persist shared task member [{}] for run [{}]", character_id, s->GetDbSharedTask().id);
+			return;
+		}
+
 		// add request timer (validation will prevent non-expired duplicates)
 		if (s->GetTaskData().request_timer_seconds > 0) {
 			auto expire_time = s->GetDbSharedTask().accepted_time + s->GetTaskData().request_timer_seconds;
@@ -1049,17 +1094,21 @@ void SharedTaskManager::AddPlayerByCharacterIdAndName(
 				timer.timer_group  = s->GetTaskData().request_timer_group;
 				timer.expire_time  = expire_time;
 
-				CharacterTaskTimersRepository::InsertOne(*m_database, timer);
+				if (!CharacterTaskTimersRepository::InsertOne(*m_database, timer).id) {
+					m_database->TransactionRollbackStrict();
+					return;
+				}
 			}
 		}
 
-		// inform client
-		SendAcceptNewSharedTaskPacket(character_id, s->GetTaskData().id, 0, s->GetDbSharedTask().accepted_time);
-
-		// add to shared task
+		if (!m_database->TransactionCommitStrict().Success()) {
+			m_database->TransactionRollbackStrict();
+			LogError("Unable to commit shared task member admission; no acceptance sent");
+			return;
+		}
 		SendSharedTaskMemberAddedToAllMembers(s, character_name);
 		s->SetMembers(members);
-		SaveMembers(s, members);
+		SendAcceptNewSharedTaskPacket(character_id, s->GetTaskData().id, 0, s->GetDbSharedTask().accepted_time);
 		SendSharedTaskMemberList(character_id, s->GetMembers()); // new member gets full member list
 		s->AddCharacterToMemberHistory(character_id);
 
@@ -1296,18 +1345,19 @@ void SharedTaskManager::SendMembersMessageID(
 	}
 }
 
-std::vector<CharacterTaskTimersRepository::CharacterTaskTimers> SharedTaskManager::GetCharacterTimers(
+std::optional<std::vector<CharacterTaskTimersRepository::CharacterTaskTimers>> SharedTaskManager::GetCharacterTimers(
 	const std::vector<uint32_t>& character_ids, const TasksRepository::Tasks& task)
 {
 	// todo: consider caching character timers in world and zone to avoid queries
-	auto task_timers = CharacterTaskTimersRepository::GetWhere(*m_database, fmt::format(
+	auto result = m_database->QueryDatabase(fmt::format(
 		SQL(
-			character_id IN ({})
+			SELECT {} FROM character_task_timers WHERE character_id IN ({})
 			AND (task_id = {}
 				OR (timer_group > 0 AND timer_type = {} AND timer_group = {})
 				OR (timer_group > 0 AND timer_type = {} AND timer_group = {}))
 			AND expire_time > NOW() ORDER BY timer_type ASC LIMIT 1
 		),
+		CharacterTaskTimersRepository::SelectColumnsRaw(),
 		Strings::Join(character_ids, ","),
 		task.id,
 		static_cast<int>(TaskTimerType::Replay),
@@ -1316,20 +1366,68 @@ std::vector<CharacterTaskTimersRepository::CharacterTaskTimers> SharedTaskManage
 		task.request_timer_group
 	));
 
-	return task_timers;
+	if (!result.Success() || result.RowCount() > 1) {
+		return std::nullopt;
+	}
+	std::vector<CharacterTaskTimersRepository::CharacterTaskTimers> timers;
+	for (auto row : result) {
+		if (!row[0] || !row[1] || !row[2] || !row[3] || !row[4] || !row[5]) {
+			return std::nullopt;
+		}
+		auto timer = CharacterTaskTimersRepository::NewEntity();
+		timer.id = std::strtoul(row[0], nullptr, 10);
+		timer.character_id = std::strtoul(row[1], nullptr, 10);
+		timer.task_id = std::strtoul(row[2], nullptr, 10);
+		timer.timer_type = std::atoi(row[3]);
+		timer.timer_group = std::atoi(row[4]);
+		timer.expire_time = std::strtoll(row[5], nullptr, 10);
+		timers.emplace_back(timer);
+	}
+	return timers;
 }
 
 bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskRequest& request)
 {
 	auto task = GetSharedTaskDataByTaskId(task_id);
-	if (task.id == 0) {
+	if (task.id == 0 || task.type != TASK_TYPE_SHARED || !request.leader_id ||
+		request.members.empty() || request.character_ids.size() != request.members.size()) {
 		return false;
+	}
+
+	const auto policy = SharedTaskAdmission::ReadPolicy(*m_content_database, task.id, task.min_level, task.max_level);
+	if (!policy.valid) {
+		ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
+			"Unable to verify shared task admission policy. Please try again later.");
+		return false;
+	}
+	if (!task.repeatable) {
+		const auto completed = SharedTaskAdmission::CompletedMember(*m_database, task.id, request.character_ids);
+		if (!completed || *completed) {
+			ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
+				completed ? "A party member has already completed this nonrepeatable task." :
+				"Unable to verify shared task eligibility. Please try again later.");
+			return false;
+		}
 	}
 
 	// this attempts to follow live validation order
 
-	// check if any party members are already in a shared task
+	// Check persistence as well as cache before creating a new run. A lost
+	// commit reply must not let a later request replace an existing membership.
+	auto persisted_members = m_database->QueryDatabase(fmt::format(
+		"SELECT character_id FROM shared_task_members WHERE character_id IN ({}) LIMIT 1",
+		Strings::Join(request.character_ids, ",")));
+	if (!persisted_members.Success()) {
+		ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
+			"Unable to verify shared task membership. Please try again later.");
+		return false;
+	}
 	auto shared_task_members = FindCharactersInSharedTasks(request.character_ids);
+	if (persisted_members.RowCount() && shared_task_members.empty()) {
+		ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
+			"A party member is already assigned to a shared task.");
+		return false;
+	}
 	if (!shared_task_members.empty()) {
 		// messages for every character already in a shared task
 		for (const auto& it : shared_task_members) {
@@ -1387,7 +1485,13 @@ bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskR
 	}
 
 	// check if any party members have a replay or request timer for the task (limit 1, replay checked first)
-	auto character_task_timers = GetCharacterTimers(request.character_ids, task);
+	const auto timer_result = GetCharacterTimers(request.character_ids, task);
+	if (!timer_result) {
+		ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
+			"Unable to verify shared task timers. Please try again later.");
+		return false;
+	}
+	const auto &character_task_timers = *timer_result;
 
 	if (!character_task_timers.empty()) {
 		auto timer_type = static_cast<TaskTimerType>(character_task_timers.front().timer_type);
@@ -1429,12 +1533,36 @@ bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskR
 
 bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::string player_name, bool accepted)
 {
+	if (!EnsureCompletionArchived(s)) {
+		return false;
+	}
+
+	if (!s || !character_id) {
+		return false;
+	}
+	const auto policy = SharedTaskAdmission::ReadPolicy(*m_content_database,
+		s->GetTaskData().id, s->GetTaskData().min_level, s->GetTaskData().max_level);
+	if (!policy.valid) {
+		SendLeaderMessage(s, Chat::Red, "Unable to verify shared task admission policy. Please try again later.");
+		return false;
+	}
+	if (!s->GetTaskData().repeatable) {
+		const auto completed = SharedTaskAdmission::CompletedMember(*m_database,
+			s->GetTaskData().id, {character_id});
+		if (!completed || *completed) {
+			SendLeaderMessage(s, Chat::Red, completed ?
+				"That player has already completed this nonrepeatable task." :
+				"Unable to verify shared task eligibility. Please try again later.");
+			return false;
+		}
+	}
+
 	// this attempts to follow live validation order
 
 	bool allow_invite = true;
 
 	// check if task is locked
-	if (s->GetDbSharedTask().is_locked) {
+	if (s->GetDbSharedTask().is_locked || s->GetDbSharedTask().completion_time > 0) {
 		SendLeaderMessageID(s, Chat::Red, TaskStr::NOT_ALLOWING_PLAYERS);
 		allow_invite = false;
 	}
@@ -1451,14 +1579,18 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 
 	// check if player is already in a shared task
 	// todo: do a memory search instead of query here
-	auto shared_task_members = SharedTaskMembersRepository::GetWhere(
-		*m_database,
-		fmt::format("character_id = {} LIMIT 1", character_id)
-	);
-
-	if (!shared_task_members.empty()) {
-		auto shared_task_id = shared_task_members.front().shared_task_id;
-		if (shared_task_id == s->GetDbSharedTask().id) {
+	auto membership = m_database->QueryDatabase(fmt::format(
+		"SELECT shared_task_id FROM shared_task_members WHERE character_id = {} LIMIT 2", character_id));
+	if (!membership.Success() || membership.RowCount() > 1) {
+		SendLeaderMessage(s, Chat::Red, "Unable to verify shared task membership. Please try again later.");
+		return false;
+	}
+	if (membership.RowCount()) {
+		const auto shared_task_id = SharedTaskAdmission::Number(membership.begin()[0]);
+		if (!shared_task_id || !*shared_task_id) {
+			return false;
+		}
+		if (*shared_task_id == static_cast<uint64_t>(s->GetDbSharedTask().id)) {
 			SendLeaderMessageID(s, Chat::Red, TaskStr::PLAYER_ALREADY_MEMBER, {player_name});
 		}
 		else {
@@ -1483,7 +1615,12 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 
 	// check if player has a replay or request timer lockout
 	// todo: live allows characters with a request timer to be re-invited if they quit, but only until they zone? (investigate/edge case)
-	auto task_timers = GetCharacterTimers({ character_id }, s->GetTaskData());
+	const auto timer_result = GetCharacterTimers({character_id}, s->GetTaskData());
+	if (!timer_result) {
+		SendLeaderMessage(s, Chat::Red, "Unable to verify shared task timers. Please try again later.");
+		return false;
+	}
+	const auto &task_timers = *timer_result;
 
 	if (!task_timers.empty()) {
 		auto timer_type = static_cast<TaskTimerType>(task_timers.front().timer_type);
@@ -1513,22 +1650,23 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 	// check if task would exceed max level spread
 	// todo: cache low/high levels on SharedTask to avoid query for offline members (also usable by RemoveMember)
 	if (s->GetTaskData().level_spread > 0) {
-		auto characters = CharacterDataRepository::GetWhere(
-			*m_database,
-			fmt::format(
-				"id IN (select character_id from shared_task_members where shared_task_id = {})",
-				s->GetDbSharedTask().id
-			)
-		);
-
-		auto lowest_level  = static_cast<uint32_t>(cle->level());
-		auto highest_level = lowest_level;
-
-		for (const auto &character : characters) {
-			lowest_level  = std::min(lowest_level, character.level);
-			highest_level = std::max(highest_level, character.level);
+		auto characters = m_database->QueryDatabase(fmt::format(
+			"SELECT c.level FROM character_data c JOIN shared_task_members m ON m.character_id = c.id "
+			"WHERE m.shared_task_id = {}", s->GetDbSharedTask().id));
+		if (!characters.Success() || characters.RowCount() != s->GetMembers().size()) {
+			SendLeaderMessage(s, Chat::Red, "Unable to verify shared task level spread. Please try again later.");
+			return false;
 		}
-
+		auto lowest_level = static_cast<uint32_t>(cle->level());
+		auto highest_level = lowest_level;
+		for (auto row : characters) {
+			const auto level = SharedTaskAdmission::Number(row[0]);
+			if (!level || !*level || *level > 255) {
+				return false;
+			}
+			lowest_level = std::min(lowest_level, static_cast<uint32_t>(*level));
+			highest_level = std::max(highest_level, static_cast<uint32_t>(*level));
+		}
 		if ((highest_level - lowest_level) > s->GetTaskData().level_spread) {
 			auto max_spread = fmt::format_int(s->GetTaskData().level_spread).str();
 			SendLeaderMessageID(s, Chat::Red, TaskStr::CANT_ADD_LVL_SPREAD, {max_spread});
@@ -1537,7 +1675,7 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 	}
 
 	// check if player is below minimum level of task (pre-2014 this was average level)
-	if (s->GetTaskData().min_level > 0 && cle->level() < s->GetTaskData().min_level) {
+	if (policy.late_join_min_level > 0 && cle->level() < policy.late_join_min_level) {
 		SendLeaderMessage(s, Chat::Red, TaskStr::Get(TaskStr::CANT_ADD_MIN_LEVEL));
 		allow_invite = false;
 	}
@@ -1560,53 +1698,37 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 	return allow_invite;
 }
 
-void SharedTaskManager::RecordSharedTaskCompletion(SharedTask *s)
+std::optional<int64_t> SharedTaskManager::RecordSharedTaskCompletion(SharedTask *s, int64_t completion_time)
 {
-	// shared task
-	auto& t  = s->GetDbSharedTask();
-	auto ct = CompletedSharedTasksRepository::NewEntity();
-
-	ct.id              = t.id;
-	ct.task_id         = t.task_id;
-	ct.accepted_time   = t.accepted_time;
-	ct.expire_time     = t.expire_time;
-	ct.completion_time = t.completion_time;
-	ct.is_locked       = t.is_locked;
-
-	CompletedSharedTasksRepository::InsertOne(*m_database, ct);
-
-	// completed members
-	std::vector<CompletedSharedTaskMembersRepository::CompletedSharedTaskMembers> completed_members = {};
-
-	for (auto &m: s->GetMembers()) {
-		auto cm = CompletedSharedTaskMembersRepository::NewEntity();
-
-		cm.shared_task_id = t.id;
-		cm.character_id   = m.character_id;
-		cm.is_leader      = m.is_leader;
-
-		completed_members.emplace_back(cm);
+	const auto &t = s->GetDbSharedTask();
+	SharedTaskCompletion::Header header{static_cast<uint64_t>(t.id), static_cast<uint32_t>(t.task_id),
+		t.accepted_time, t.expire_time, completion_time};
+	std::vector<SharedTaskCompletion::Member> members;
+	for (const auto &m : s->GetMembers()) {
+		members.push_back({m.character_id, m.is_leader});
 	}
-
-	CompletedSharedTaskMembersRepository::InsertMany(*m_database, completed_members);
-
-	// activities
-	std::vector<CompletedSharedTaskActivityStateRepository::CompletedSharedTaskActivityState> completed_states = {};
-
-	for (auto &a: s->GetActivityState()) {
-		auto cs = CompletedSharedTaskActivityStateRepository::NewEntity();
-
-		cs.shared_task_id = t.id;
-		cs.activity_id    = (int) a.activity_id;
-		cs.done_count     = (int) a.done_count;
-		cs.updated_time   = a.updated_time;
-		cs.completed_time = a.completed_time;
-
-		completed_states.emplace_back(cs);
+	std::vector<SharedTaskCompletion::Activity> activities;
+	for (const auto &a : s->GetActivityState()) {
+		activities.push_back({a.activity_id, a.done_count, a.updated_time, a.completed_time});
 	}
+	return SharedTaskCompletion::Archive(*m_database, header, members, activities);
+}
 
-	CompletedSharedTaskActivityStateRepository::InsertMany(*m_database, completed_states);
-
+void SharedTaskManager::SendActivityUpdate(SharedTask *s, uint32_t activity_id, uint32_t done_count, bool ignore_quest_update)
+{
+	for (const auto &m : s->GetMembers()) {
+		auto p = std::make_unique<ServerPacket>(ServerOP_SharedTaskUpdate, sizeof(ServerSharedTaskActivityUpdate_Struct));
+		auto d = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(p->pBuffer);
+		d->source_character_id = m.character_id;
+		d->task_id = s->GetTaskData().id;
+		d->activity_id = activity_id;
+		d->done_count = done_count;
+		d->ignore_quest_update = ignore_quest_update;
+		auto c = ClientList::Instance()->FindCLEByCharacterID(m.character_id);
+		if (c && c->Server()) {
+			c->Server()->SendPacket(p.get());
+		}
+	}
 }
 
 void SharedTaskManager::AddReplayTimers(SharedTask *s)
@@ -1729,6 +1851,7 @@ const std::vector<SharedTask> &SharedTaskManager::GetSharedTasks() const
 
 void SharedTaskManager::SetSharedTasks(const std::vector<SharedTask> &shared_tasks)
 {
+	m_archived_shared_tasks.clear();
 	SharedTaskManager::m_shared_tasks = shared_tasks;
 }
 
@@ -1786,24 +1909,32 @@ bool SharedTaskManager::HandleCompletedActivities(SharedTask* s)
 	return res.is_task_complete;
 }
 
-void SharedTaskManager::HandleCompletedTask(SharedTask* s)
+bool SharedTaskManager::HandleCompletedTask(SharedTask *s)
 {
 	auto db_task = s->GetDbSharedTask();
-	if (db_task.completion_time > 0)
-	{
-		LogTasksDetail("shared task [{}] already completed", db_task.id);
-		return;
+	if (m_archived_shared_tasks.count(db_task.id)) {
+		return true;
 	}
-
-	LogTasksDetail("Marking shared task [{}] completed", db_task.id);
-	db_task.completion_time = std::time(nullptr);
+	const bool first_completion = db_task.completion_time <= 0;
+	const auto completed = RecordSharedTaskCompletion(s,
+		first_completion ? std::time(nullptr) : db_task.completion_time);
+	if (!completed) {
+		LogError("Unable to archive shared task [{}]; retaining run and members for retry", db_task.id);
+		return false;
+	}
+	db_task.completion_time = *completed;
 	db_task.is_locked = true;
-	SharedTasksRepository::UpdateOne(*m_database, db_task);
 	s->SetDbSharedTask(db_task);
+	m_archived_shared_tasks.insert(db_task.id);
+	if (first_completion) {
+		AddReplayTimers(s);
+	}
+	return true;
+}
 
-	RecordSharedTaskCompletion(s);
-
-	AddReplayTimers(s);
+bool SharedTaskManager::EnsureCompletionArchived(SharedTask *s)
+{
+	return s && ((s->GetDbSharedTask().completion_time <= 0 && !HandleCompletedActivities(s)) || HandleCompletedTask(s));
 }
 
 void SharedTaskManager::StartTerminateTimer(SharedTask* s)
@@ -1822,6 +1953,20 @@ void SharedTaskManager::Process()
 	std::vector<int64_t> delete_tasks;
 	for (auto& shared_task : m_shared_tasks)
 	{
+		const bool needs_archive = !m_archived_shared_tasks.count(shared_task.GetDbSharedTask().id) &&
+			(shared_task.GetDbSharedTask().completion_time > 0 || HandleCompletedActivities(&shared_task));
+		if (needs_archive) {
+			if (!HandleCompletedTask(&shared_task)) {
+				continue;
+			}
+			// Native retry only; suppress custom EVENT_TASK_UPDATE replay. Native
+			// activity/task completion and reward occurrence guards still run.
+			for (const auto &a : shared_task.GetActivityState()) {
+				if (a.completed_time > 0) {
+					SendActivityUpdate(&shared_task, a.activity_id, a.done_count, true);
+				}
+			}
+		}
 		if (shared_task.GetMembers().empty() || shared_task.terminate_timer.Check() || shared_task.IsExpired())
 		{
 			Terminate(shared_task, false, false);

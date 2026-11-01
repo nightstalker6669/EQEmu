@@ -11,3 +11,5 @@ Current upstream uses vcpkg, CMake 3.20+, and a C++20 compiler. Initialize submo
 Build through the normal upstream workflow. The core alone does not activate the feature session hooks. Its additive `utils/sql/shared_core/001_inventory_sessions.sql` preserves the original durable table names; follow the [core boundaries](../../common/shared_core/README.md) before provisioning it. Feature branches already inherit this code and apply their required schema through their documented migration path.
 
 [Branch map](BRANCHES.md) · [Provenance](integration.json)
+
+The shared core now also provides native task selectable rewards, shared occurrence ownership, carried Collect high-water tracking and distinct task-completion reward gates. Review [shared reward installation and migration compatibility](SHARED-REWARDS.md), including the original supplemental class/identity/admission SQL, before using those capabilities. Binary schema version is 9334.
