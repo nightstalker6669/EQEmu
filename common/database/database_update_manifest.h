@@ -7534,6 +7534,42 @@ CREATE TABLE IF NOT EXISTS `character_achievement_pending_updates` (
 )SQL",
 		.content_schema_update = false
 	},
+	ManifestEntry{
+		.version = 9333,
+		.description = "2026_10_31_task_reward_progression_state.sql",
+		.check = "SHOW COLUMNS FROM character_task_reward_selections LIKE 'progression_count'",
+		.condition = "empty",
+		.match = "",
+		.sql = R"SQL(
+-- Freeze distinct quest completion count with the durable reward occurrence.
+-- NULL identifies a legacy/static reward; zero is a valid progression snapshot.
+ALTER TABLE character_task_reward_selections
+ ADD COLUMN IF NOT EXISTS progression_count INT UNSIGNED NULL DEFAULT NULL;
+)SQL",
+		.content_schema_update = false
+	},
+	ManifestEntry{
+		.version = 9334,
+		.description = "2026_10_31_task_reward_progression_content.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Optional per-task membership and option gates. Empty tables preserve static rewards.
+CREATE TABLE IF NOT EXISTS task_reward_progression_members (
+ task_id INT UNSIGNED NOT NULL,
+ qualifying_task_id INT UNSIGNED NOT NULL,
+ PRIMARY KEY (task_id, qualifying_task_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS task_reward_option_gates (
+ task_id INT UNSIGNED NOT NULL,
+ option_id INT UNSIGNED NOT NULL,
+ minimum_completions INT UNSIGNED NOT NULL,
+ PRIMARY KEY (task_id, option_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+)SQL",
+		.content_schema_update = true
+	},
 // -- template; copy/paste this when you need to create a new entry
 //	ManifestEntry{
 //		.version = 9228,

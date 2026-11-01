@@ -87,3 +87,8 @@ After the existing Stone Hive foundation, install the complete [Short Sharp Stin
 ## Vergalid Mines content upgrade
 
 Install the complete [Vergalid package](../../extensions/rof2/achievements/content/vergalid/README.md), including all four SQL phases, actor/acquisition dependencies and preserving quest callbacks. Its one installer supports Linux, native Windows and Akk-stack workflows with private database command configuration and full backups. Native Windows execution remains unverified. Use this branch's matching engine, including the restricted original shard item-cast event support; no additional wire opcode is introduced. All 17 routes and four parent reward paths passed native checks and fresh-login persistence on the matching combined runtime. Consult the package coverage report for reconstruction and multiplayer limits.
+
+
+## Carried collection and progression-dependent task rewards
+
+The integrated engine supports native carried-inventory Collect objectives and per-occurrence task reward choices gated by distinct quest completions. Rebuild this branch and apply updater migrations **9333 (state)** and **9334 (content)** before starting game services. Keep state/content database routing intact. Existing static rewards retain their existing policy. See [the progression guide](../../extensions/rof2/achievements/protocol/task-reward-progression.md) for definitions, delivery safeguards and validation scope. The extension reuses the documented RoF2 reward opcodes and structures; it adds no mapping or wire layout. This engine release does not activate the staged Buried Sea quest package.

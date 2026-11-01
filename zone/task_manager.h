@@ -19,6 +19,7 @@
 
 #include "common/repositories/character_tasks_repository.h"
 #include "common/types.h"
+#include "common/task_reward_progression.h"
 #include "zone/reward_selection.h"
 #include "zone/task_client_state.h"
 #include "zone/tasks.h"
@@ -93,6 +94,11 @@ public:
 		auto it = m_task_reward_sets.find(task_id);
 		return it != m_task_reward_sets.end() ? &it->second : nullptr;
 	}
+	const Tasks::RewardProgressionPolicy *GetTaskRewardProgression(uint32_t task_id) const
+	{
+		const auto it = m_task_reward_progression.find(task_id);
+		return it == m_task_reward_progression.end() ? nullptr : &it->second;
+	}
 
 	static TaskManager* Instance()
 	{
@@ -104,6 +110,10 @@ private:
 	std::vector<int>                              m_task_sets[MAXTASKSETS];
 	std::unordered_map<uint32_t, TaskInformation> m_task_data;
 	std::unordered_map<uint32_t, RewardSelectionSet> m_task_reward_sets;
+	std::unordered_map<uint32_t, Tasks::RewardProgressionPolicy> m_task_reward_progression;
+	bool LoadTaskRewardProgression(
+		const std::unordered_map<uint32_t, RewardSelectionSet> &sets,
+		std::unordered_map<uint32_t, Tasks::RewardProgressionPolicy> &policies);
 	void SendActiveTaskDescription(
 		Client *client,
 		int task_id,

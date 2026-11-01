@@ -18,6 +18,7 @@
 #include "task_client_state.h"
 #include "task_shared_reward_identity.h"
 #include "common/shared_task_admission.h"
+#include "common/task_collect.h"
 
 #include "common/events/player_event_logs.h"
 #include "common/misc_functions.h"
@@ -62,6 +63,7 @@ struct PersistedTaskRewardSelection {
 	uint32_t                  reward_set_id = 0;
 	uint32_t                  selected_option_id = 0;
 	TaskRewardSelectionStatus status = TaskRewardSelectionStatus::Pending;
+	std::optional<uint32_t> progression_count;
 };
 
 uint64_t ParseTaskRewardUInt64(const char *value)
@@ -91,6 +93,9 @@ PersistedTaskRewardSelection ParseTaskRewardSelection(
 	selection.status = static_cast<TaskRewardSelectionStatus>(
 		ParseTaskRewardUInt32(row[6])
 	);
+	if (row[7]) {
+		selection.progression_count = ParseTaskRewardUInt32(row[7]);
+	}
 	return selection;
 }
 
@@ -269,6 +274,18 @@ std::optional<RewardSelectionSession> BuildTaskRewardSelectionSession(
 		return std::nullopt;
 	}
 	return session;
+}
+
+ResolvedRewardSelectionClaim CommonTaskRewardClaim(
+	const RewardSelectionSession &session, uint16_t character_class)
+{
+	ResolvedRewardSelectionClaim claim;
+	claim.session = session;
+	claim.selected_option_id = EQ::RewardSelection::CommonOnlySelection;
+	claim.selected_wire_option_id = EQ::RewardSelection::CommonOnlySelection;
+	claim.rewards = ResolveTaskRewards(session.reward_set,
+		claim.selected_option_id, character_class);
+	return claim;
 }
 
 } // namespace
@@ -1289,6 +1306,16 @@ bool ClientTaskState::RewardTask(
 			return false;
 		}
 
+		std::optional<uint32_t> progression_count;
+		if (const auto policy = TaskManager::Instance()->GetTaskRewardProgression(task_id)) {
+			if (!RuleB(TaskSystem, RecordCompletedTasks)) {
+				LogError("Task [{}] progression requires completed task history", task_id);
+				return false;
+			}
+			progression_count = Tasks::DistinctRewardCompletions(*policy,
+				[&](uint32_t id) { return id == task_id || IsTaskCompleted(id); });
+		}
+
 		const auto accepted_time =
 			static_cast<uint32_t>(std::max(client_task.accepted_time, 0));
 		const auto shared_identity_matches = ti->type == TaskType::Shared
@@ -1314,13 +1341,14 @@ bool ClientTaskState::RewardTask(
 		auto pending = database.QueryDatabase(fmt::format(
 			"INSERT IGNORE INTO character_task_reward_selections "
 			"(character_id, task_id, accepted_time, source_instance_id, "
-			"reward_set_id, status) "
-			"VALUES ({}, {}, {}, {}, {}, 0)",
+			"reward_set_id, status, progression_count) "
+			"VALUES ({}, {}, {}, {}, {}, 0, {})",
 			c->CharacterID(),
 			task_id,
 			accepted_time,
 			*source_instance_id,
-			reward_set->reward_set_id
+			reward_set->reward_set_id,
+			progression_count ? std::to_string(*progression_count) : "NULL"
 		));
 		if (!pending.Success()) {
 			LogError(
@@ -1353,11 +1381,12 @@ bool ClientTaskState::RewardTask(
 			persisted.accepted_time = accepted_time;
 			persisted.source_instance_id = *source_instance_id;
 			persisted.reward_set_id = reward_set->reward_set_id;
+			persisted.progression_count = progression_count;
 		}
 		else {
 			auto existing = database.QueryDatabase(fmt::format(
 				"SELECT pending_reward_id, task_id, accepted_time, "
-				"source_instance_id, reward_set_id, selected_option_id, status "
+				"source_instance_id, reward_set_id, selected_option_id, status, progression_count "
 				"FROM character_task_reward_selections "
 				"WHERE character_id = {} AND source_instance_id = {} "
 				"LIMIT 1",
@@ -1390,13 +1419,21 @@ bool ClientTaskState::RewardTask(
 			return false;
 		}
 
+		const auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
+			TaskManager::Instance()->GetTaskRewardProgression(task_id),
+			persisted.progression_count);
+		if (!eligible_set) {
+			LogError("Task reward [{}] has no valid progression snapshot",
+				persisted.pending_reward_id);
+			return false;
+		}
 		const bool can_present =
 			(persisted.status == TaskRewardSelectionStatus::Pending &&
 				!persisted.selected_option_id) ||
 			persisted.status == TaskRewardSelectionStatus::Retryable;
 		if (can_present) {
 			task_reward_session = BuildTaskRewardSelectionSession(
-				*reward_set,
+				*eligible_set,
 				persisted.task_id,
 				persisted.source_instance_id,
 				persisted.pending_reward_id,
@@ -1415,6 +1452,21 @@ bool ClientTaskState::RewardTask(
 		}
 	}
 
+	// RoF2 has no task-choice page when no selectable rows remain (for example
+	// the first two wins on an island). Deliver through the same owned,
+	// per-entry ledger instead of leaving an invisible pending reward.
+	if (task_reward_session &&
+		EQ::RewardSelection::IsCommonOnly(task_reward_session->reward_set)) {
+		if (!c->ClientDataLoaded()) {
+			return false;
+		}
+		const auto result = ClaimRewardSelection(c,
+			CommonTaskRewardClaim(*task_reward_session, c->GetBaseClass()));
+		if (result != RewardSelectionDeliveryResult::Delivered) {
+			return false; // Keep the completed task for the existing retry path.
+		}
+		task_reward_session.reset();
+	}
 	client_task.was_rewarded = true;
 	client_task.updated = true;
 
@@ -1695,7 +1747,7 @@ void ClientTaskState::SendRewardSelection(Client *client, uint32_t task_id)
 	if (active_source_instance_id) {
 		auto existing = database.QueryDatabase(fmt::format(
 			"SELECT pending_reward_id, task_id, accepted_time, "
-			"source_instance_id, reward_set_id, selected_option_id, status "
+			"source_instance_id, reward_set_id, selected_option_id, status, progression_count "
 			"FROM character_task_reward_selections WHERE character_id = {} "
 			"AND task_id = {} AND source_instance_id = {} "
 			"ORDER BY pending_reward_id DESC LIMIT 1",
@@ -1723,8 +1775,22 @@ void ClientTaskState::SendRewardSelection(Client *client, uint32_t task_id)
 		persisted.status == TaskRewardSelectionStatus::Ambiguous
 			? persisted.selected_option_id
 			: 0;
+	const auto policy = TaskManager::Instance()->GetTaskRewardProgression(task_id);
+	auto progression_count = persisted.progression_count;
+	if (!persisted.pending_reward_id && policy && RuleB(TaskSystem, RecordCompletedTasks)) {
+		// Preview the next completion; an owned pending occurrence always uses
+		// its frozen count instead of current character progression.
+		progression_count = Tasks::DistinctRewardCompletions(*policy,
+			[&](uint32_t id) { return id == task_id || IsTaskCompleted(id); });
+	}
+	const auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
+		policy, progression_count);
+	if (!eligible_set) {
+		client->GetRewardSelection().Clear(RewardSelectionChannel::Preview);
+		return;
+	}
 	const auto session = BuildTaskRewardSelectionSession(
-		*reward_set,
+		*eligible_set,
 		task_id,
 		source_instance_id,
 		pending_reward_id,
@@ -1797,7 +1863,7 @@ void ClientTaskState::RestorePendingRewardSelection(Client *client)
 
 	auto pending = database.QueryDatabase(fmt::format(
 		"SELECT pending_reward_id, task_id, accepted_time, source_instance_id, "
-		"reward_set_id, selected_option_id, status "
+		"reward_set_id, selected_option_id, status, progression_count "
 		"FROM character_task_reward_selections "
 		"WHERE character_id = {} AND "
 		"((status = 0 AND selected_option_id = 0) OR status = 2) "
@@ -1830,8 +1896,16 @@ void ClientTaskState::RestorePendingRewardSelection(Client *client)
 				continue;
 			}
 
+			const auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
+				TaskManager::Instance()->GetTaskRewardProgression(persisted.task_id),
+				persisted.progression_count);
+			if (!eligible_set) {
+				LogError("Pending task reward [{}] has no valid progression snapshot",
+					persisted.pending_reward_id);
+				continue;
+			}
 			const auto session = BuildTaskRewardSelectionSession(
-				*reward_set,
+				*eligible_set,
 				persisted.task_id,
 				persisted.source_instance_id,
 				persisted.pending_reward_id,
@@ -1840,6 +1914,18 @@ void ClientTaskState::RestorePendingRewardSelection(Client *client)
 				persisted.selected_option_id
 			);
 			if (session) {
+				if (EQ::RewardSelection::IsCommonOnly(session->reward_set)) {
+					if (!client->ClientDataLoaded()) {
+						continue;
+					}
+					const auto result = ClaimRewardSelection(client,
+						CommonTaskRewardClaim(*session, client->GetBaseClass()));
+					if (result != RewardSelectionDeliveryResult::Delivered) {
+						LogError("Common-only pending task reward [{}] could not be delivered",
+							persisted.pending_reward_id);
+					}
+					continue;
+				}
 				sessions.push_back(std::move(*session));
 				continue;
 			}
@@ -1877,6 +1963,7 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 	if (
 		!client ||
 		!TaskManager::Instance() ||
+		!client->ClientDataLoaded() ||
 		client->ClientVersion() != EQ::versions::ClientVersion::RoF2 ||
 		claim.session.source.source != RewardSelectionSource::Task ||
 		!claim.session.pending_reward_id ||
@@ -1889,7 +1976,7 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 
 	auto selection_result = database.QueryDatabase(fmt::format(
 		"SELECT pending_reward_id, task_id, accepted_time, source_instance_id, "
-		"reward_set_id, selected_option_id, status "
+		"reward_set_id, selected_option_id, status, progression_count "
 		"FROM character_task_reward_selections "
 		"WHERE pending_reward_id = {} AND character_id = {} LIMIT 1",
 		claim.session.pending_reward_id,
@@ -1923,8 +2010,14 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 		return RewardSelectionDeliveryResult::RetryableFailure;
 	}
 
+	const auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
+		TaskManager::Instance()->GetTaskRewardProgression(persisted.task_id),
+		persisted.progression_count);
+	if (!eligible_set) {
+		return RewardSelectionDeliveryResult::RetryableFailure;
+	}
 	const auto expected_rewards = ResolveTaskRewards(
-		*reward_set,
+		*eligible_set,
 		claim.selected_option_id,
 		client->GetBaseClass()
 	);
@@ -1966,6 +2059,22 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 		return RewardSelectionDeliveryResult::RetryableFailure;
 	}
 
+	// Reject an owned lore reward before locking the choice or delivering any
+	// common XP. A player can then choose another unlocked bone/cash option.
+	// Locked retries use their per-entry delivery ledger instead: an item may
+	// already have been granted successfully before another entry failed.
+	if (!persisted.selected_option_id) {
+		for (const auto &reward : expected_rewards) {
+			if (reward.type != RewardSelectionRewardType::Item) {
+				continue;
+			}
+			const auto item = database.GetItem(reward.data_id);
+			if (!item || client->CheckLoreConflict(item)) {
+				client->Message(Chat::Red, "You cannot claim an item you already own in its lore group. Please choose another reward.");
+				return RewardSelectionDeliveryResult::RetryableFailure;
+			}
+		}
+	}
 	const auto now = static_cast<uint32_t>(std::time(nullptr));
 	auto lock = database.QueryDatabase(fmt::format(
 		"UPDATE character_task_reward_selections "
@@ -2696,6 +2805,103 @@ bool ClientTaskState::TaskOutOfTime(TaskType task_type, int index)
 	return (task_data->duration && (info->accepted_time + task_data->duration <= time_now));
 }
 
+void ClientTaskState::UpdateTasksOnCollect(Client *client)
+{
+	struct PendingCollect {
+		int task_id;
+		int activity_id;
+		time_t accepted_time;
+	};
+	std::vector<PendingCollect> pending;
+	TaskUpdateFilter filter{};
+	filter.type = TaskActivityType::Collect;
+
+	// Snapshot identities before invoking quest callbacks or completing tasks.
+	// Shared tasks need an explicitly defined group-custody policy and are not
+	// implicitly satisfied from one member's inventory.
+	for (const auto &info : m_active_tasks) {
+		const auto task = GetTaskData(info);
+		if (!task || task->type == TaskType::Shared) {
+			continue;
+		}
+		for (int id = 0; id < task->activity_count; ++id) {
+			const auto &activity = task->activity_information[id];
+			if (!activity.item_id_list.empty() &&
+				CanUpdate(client, filter, info.task_id, activity, info.activity[id])) {
+				pending.push_back({info.task_id, id, info.accepted_time});
+			}
+		}
+	}
+
+	for (const auto &entry : pending) {
+		const auto current = [&]() -> ClientTaskInformation * {
+			for (auto &info : m_active_tasks) {
+				if (info.task_id == entry.task_id &&
+					info.accepted_time == entry.accepted_time) {
+					return &info;
+				}
+			}
+			return nullptr;
+		};
+		const auto increment = [&](ClientTaskInformation *info,
+			const TaskInformation *task) {
+			if (!info || !task || task->type == TaskType::Shared ||
+				entry.activity_id >= task->activity_count) {
+				return 0;
+			}
+			const auto &activity = task->activity_information[entry.activity_id];
+			if (activity.item_id_list.empty() ||
+				!CanUpdate(client, filter, entry.task_id, activity,
+					info->activity[entry.activity_id])) {
+				return 0;
+			}
+			uint64_t carried = 0;
+			for (const auto slot : client->GetInventorySlots()) {
+				const bool possession =
+					(slot >= EQ::invslot::POSSESSIONS_BEGIN &&
+					 slot <= EQ::invslot::POSSESSIONS_END) ||
+					(slot >= EQ::invbag::GENERAL_BAGS_BEGIN &&
+					 slot <= EQ::invbag::GENERAL_BAGS_END) ||
+					(slot >= EQ::invbag::CURSOR_BAG_BEGIN &&
+					 slot <= EQ::invbag::CURSOR_BAG_END);
+				if (!possession) {
+					continue; // bank and shared-bank items are not carried
+				}
+				const auto item = client->GetInv().GetItem(slot);
+				if (item && Tasks::IsInMatchList(activity.item_id_list,
+					std::to_string(item->GetID()))) {
+					carried += item->IsStackable()
+						? std::max<int>(0, item->GetCharges()) : 1;
+				}
+			}
+			return Tasks::CollectInventoryIncrement(
+				info->activity[entry.activity_id].done_count,
+				activity.goal_count, carried
+			);
+		};
+		auto info = current();
+		auto task = info ? GetTaskData(*info) : nullptr;
+		const auto count = increment(info, task);
+		if (count <= 0) {
+			continue;
+		}
+		if (parse->PlayerHasQuestSub(EVENT_TASK_BEFORE_UPDATE) &&
+			parse->EventPlayer(EVENT_TASK_BEFORE_UPDATE, client,
+				fmt::format("{} {} {}", count, entry.activity_id, entry.task_id), 0) != 0) {
+			continue;
+		}
+		// A callback can cancel/reassign the task, move the character, reload
+		// content or change inventory. Revalidate before granting native credit.
+		info = current();
+		task = info ? GetTaskData(*info) : nullptr;
+		const auto confirmed = increment(info, task);
+		if (confirmed > 0) {
+			IncrementDoneCount(client, task, info->slot, entry.activity_id,
+				std::min(count, confirmed));
+		}
+	}
+}
+
 void ClientTaskState::TaskPeriodicChecks(Client *client)
 {
 	RetryCompletedSelectableRewards(client);
@@ -2717,6 +2923,7 @@ void ClientTaskState::TaskPeriodicChecks(Client *client)
 	}
 
 	if (m_active_task_count == 0) {
+		UpdateTasksOnCollect(client);
 		return;
 	}
 
@@ -2738,6 +2945,7 @@ void ClientTaskState::TaskPeriodicChecks(Client *client)
 			break;
 		}
 	}
+	UpdateTasksOnCollect(client);
 }
 
 bool ClientTaskState::IsTaskActivityCompleted(TaskType task_type, int index, int activity_id)

@@ -208,4 +208,5 @@ private:
 		uint32 done_count
 	);
 	bool HasActiveTasks();
+	void UpdateTasksOnCollect(Client *client);
 };
