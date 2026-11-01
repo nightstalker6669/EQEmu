@@ -81,6 +81,86 @@ bool TaskManager::LoadTaskSets()
 	return true;
 }
 
+bool TaskManager::LoadTaskRewardProgression(
+	const std::unordered_map<uint32_t, RewardSelectionSet> &sets,
+	std::unordered_map<uint32_t, Tasks::RewardProgressionPolicy> &policies)
+{
+	policies.clear();
+	auto tables = content_db.QueryDatabase(
+		"SELECT TABLE_NAME FROM information_schema.TABLES "
+		"WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN "
+		"('task_reward_progression_members','task_reward_option_gates')"
+	);
+	if (!tables.Success()) {
+		return false;
+	}
+	if (tables.RowCount() == 0) {
+		return true; // Existing servers without progression content are unchanged.
+	}
+	if (tables.RowCount() != 2) {
+		LogError("Task reward progression schema is incomplete");
+		return false;
+	}
+	auto members = content_db.QueryDatabase(
+		"SELECT task_id, qualifying_task_id FROM task_reward_progression_members "
+		"ORDER BY task_id, qualifying_task_id"
+	);
+	auto gates = content_db.QueryDatabase(
+		"SELECT task_id, option_id, minimum_completions FROM task_reward_option_gates "
+		"ORDER BY task_id, option_id"
+	);
+	if (!members.Success() || !gates.Success()) {
+		return false;
+	}
+	for (auto row : members) {
+		const auto task_id = Strings::ToUnsignedInt(row[0]);
+		const auto member_id = Strings::ToUnsignedInt(row[1]);
+		if (!sets.contains(task_id)) {
+			continue; // Content may be staged while its source task is disabled.
+		}
+		const auto source = GetTaskData(task_id);
+		const auto member = GetTaskData(member_id);
+		if (!source || !member || source->type == TaskType::Shared ||
+			member->type == TaskType::Shared) {
+			LogError("Invalid progression membership [{}/{}]", task_id, member_id);
+			return false;
+		}
+		auto &ids = policies[task_id].qualifying_tasks;
+		if (std::find(ids.begin(), ids.end(), member_id) != ids.end()) {
+			return false;
+		}
+		ids.push_back(member_id);
+	}
+	for (auto row : gates) {
+		const auto task_id = Strings::ToUnsignedInt(row[0]);
+		const auto option_id = Strings::ToUnsignedInt(row[1]);
+		const auto minimum = Strings::ToUnsignedInt(row[2]);
+		const auto set = sets.find(task_id);
+		if (set == sets.end()) {
+			continue;
+		}
+		const auto policy = policies.find(task_id);
+		if (policy == policies.end() || minimum == 0 ||
+			minimum > policy->second.qualifying_tasks.size()) {
+			return false;
+		}
+		const auto &options = set->second.options;
+		if (std::none_of(options.begin(), options.end(), [&](const auto &option) {
+			return option.option_id == option_id && !option.common_to_all;
+		}) || !policy->second.option_minimum_completions.emplace(option_id, minimum).second) {
+			return false;
+		}
+	}
+	for (const auto &[task_id, policy] : policies) {
+		if (policy.option_minimum_completions.empty() ||
+			std::find(policy.qualifying_tasks.begin(), policy.qualifying_tasks.end(),
+				task_id) == policy.qualifying_tasks.end()) {
+			return false;
+		}
+	}
+	return true;
+}
+
 bool TaskManager::LoadTaskRewardSets()
 {
 	const auto restore_existing_flags = [this]() {
@@ -153,6 +233,12 @@ bool TaskManager::LoadTaskRewardSets()
 		staged_reward_sets.emplace(task_id, std::move(reward_set));
 	}
 
+	std::unordered_map<uint32_t, Tasks::RewardProgressionPolicy> staged_progression;
+	if (!LoadTaskRewardProgression(staged_reward_sets, staged_progression)) {
+		LogError("Invalid task reward progression; preserving previous reward catalog");
+		restore_existing_flags();
+		return false;
+	}
 	for (auto &[task_id, task] : m_task_data) {
 		if (
 			task.reward_method != METHODSELECT
@@ -169,6 +255,7 @@ bool TaskManager::LoadTaskRewardSets()
 		}
 	}
 	m_task_reward_sets = std::move(staged_reward_sets);
+	m_task_reward_progression = std::move(staged_progression);
 
 	LogInfo(
 		"Loaded [{}] selectable task reward set(s)",

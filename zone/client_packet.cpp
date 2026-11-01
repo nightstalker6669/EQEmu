@@ -878,6 +878,11 @@ void Client::CompleteConnect()
 
 	/* This needs to be set, this determines whether or not data was loaded properly before a save */
 	client_data_loaded = true;
+	// Pending common-only task rewards could not safely deliver during the
+	// earlier task-state load. Revisit them with a fully loaded save target.
+	if (task_state) {
+		task_state->RestorePendingRewardSelection(this);
+	}
 
 	SendAchievementPackets();
 

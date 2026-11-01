@@ -440,7 +440,8 @@ bool LoadRewardSelectionCatalog(
 			}
 		);
 		if (staged.set.options.empty() ||
-			(!has_selectable_option && source != RewardSelectionSource::Achievement)) {
+			(!has_selectable_option && source != RewardSelectionSource::Achievement &&
+			 source != RewardSelectionSource::Task)) {
 			LogError("Enabled reward set [{}] has no selectable option", reward_set_id);
 			if (!recover_invalid_task_sets) {
 				return false;

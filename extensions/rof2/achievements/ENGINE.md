@@ -69,3 +69,8 @@ The [Sunderock installer](content/sunderock/README.md) requires the integrated t
 A successful instant cast of Lesser Lifestream Infusion (spell9486) from the original Arid Indicolite Shard (item87222), in Vergalid Mines (zone404), now reaches the existing Lua `EVENT_CAST` contract. Native item validation, successful spell completion and charge handling precede the callback; it includes the existing source-item, slot and charge-consumption fields. GM spell commands and unrelated items/zones do not qualify for this added route. No new opcode, packet struct or schema migration is introduced.
 
 All configured Linux integration build targets passed. This engine hook is a prerequisite for the staged Vergalid content; it does not itself grant a key or enable a quest. The17-route content package and shard/statue script are not yet released or deployed. Native shard activation and access have not been verified, and native Windows execution remains unverified.
+
+
+## Carried collection and progression-dependent task rewards
+
+The integrated engine supports native carried-inventory Collect objectives and per-occurrence task reward choices gated by distinct quest completions. Rebuild this branch and apply updater migrations **9333 (state)** and **9334 (content)** before starting game services. Keep state/content database routing intact. Existing static rewards retain their existing policy. See [the progression guide](protocol/task-reward-progression.md) for definitions, delivery safeguards and validation scope. The extension reuses the documented RoF2 reward opcodes and structures; it adds no mapping or wire layout. This engine release does not activate the staged Buried Sea quest package.

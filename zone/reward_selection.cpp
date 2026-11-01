@@ -110,7 +110,7 @@ static EQ::Achievements::RewardDisplaySet BuildDisplaySet(
 {
 	EQ::Achievements::RewardDisplaySet display;
 	display.pending_reward_id = session.pending_reward_id;
-	display.reward_set_id = session.reward_set.reward_set_id;
+	display.reward_set_id = session.wire_reward_set_id;
 	display.title = session.reward_set.title;
 	display.subsets.reserve(session.reward_set.options.size());
 
@@ -288,29 +288,46 @@ bool ClientRewardSelection::Open(
 		return false;
 	}
 
+	// RoF2 caches option catalogues by the displayed set ID. Different pending
+	// occurrences may share a canonical catalogue but have different frozen gates.
+	// Give each session its own wire identity without changing provider/DB keys.
+	auto updated = state.sessions;
 	if (channel == RewardSelectionChannel::Preview) {
 		if (sessions.size() != 1) {
 			return false;
 		}
-		state.sessions = sessions;
+		updated.clear();
 	}
-	else {
-		for (const auto &session : sessions) {
-			const auto found = std::find_if(
-				state.sessions.begin(),
-				state.sessions.end(),
-				[&session](const RewardSelectionSession &existing) {
-					return SameSession(existing, session);
-				}
-			);
-			if (found == state.sessions.end()) {
-				state.sessions.push_back(session);
+	for (auto session : sessions) {
+		const auto previous = std::find_if(
+			state.sessions.begin(), state.sessions.end(),
+			[&session](const RewardSelectionSession &existing) {
+				return SameSession(existing, session);
 			}
-			else {
-				*found = session;
+		);
+		if (previous != state.sessions.end()) {
+			session.wire_reward_set_id = previous->wire_reward_set_id;
+		}
+		else {
+			if (m_next_wire_reward_set_id > std::numeric_limits<uint32_t>::max()) {
+				return false;
 			}
+			session.wire_reward_set_id = static_cast<uint32_t>(m_next_wire_reward_set_id++);
+		}
+		const auto found = std::find_if(
+			updated.begin(), updated.end(),
+			[&session](const RewardSelectionSession &existing) {
+				return SameSession(existing, session);
+			}
+		);
+		if (found == updated.end()) {
+			updated.push_back(std::move(session));
+		}
+		else {
+			*found = std::move(session);
 		}
 	}
+	state.sessions = std::move(updated);
 	if (!AssignWireOptionIds(state)) {
 		return false;
 	}
@@ -639,7 +656,7 @@ bool ClientRewardSelection::SendItemInspect(
 
 	const RewardSelectionReward *matched_reward = nullptr;
 	for (const auto &session : state.sessions) {
-		if (session.reward_set.reward_set_id != reward_set_id) {
+		if (session.wire_reward_set_id != reward_set_id) {
 			continue;
 		}
 		for (const auto &option : session.reward_set.options) {
@@ -730,7 +747,7 @@ ClientRewardSelection::ResolveClaim(
 			return
 				candidate.channel == RewardSelectionChannel::Claimable &&
 				candidate.pending_reward_id == pending_reward_id &&
-				candidate.reward_set.reward_set_id == reward_set_id &&
+				candidate.wire_reward_set_id == reward_set_id &&
 				EQ::RewardSelection::ResolveWireSelection(
 					candidate.reward_set, selected_wire_option_id
 				) != 0;
@@ -804,7 +821,7 @@ void ClientRewardSelection::CompleteClaim(
 	SendClaimReply(
 		channel,
 		claim.session.pending_reward_id,
-		claim.session.reward_set.reward_set_id,
+		claim.session.wire_reward_set_id,
 		claim.selected_wire_option_id,
 		delivered
 	);
@@ -875,6 +892,11 @@ RewardSelectionDeliveryResult ClientRewardSelection::GrantReward(
 	const RewardSelectionDeliveryPolicy &policy
 )
 {
+	// Login loads pending reward definitions before the character profile is
+	// ready to save. Refuse before mutating XP, currency or item custody.
+	if (!client.ClientDataLoaded()) {
+		return RewardSelectionDeliveryResult::RetryableFailure;
+	}
 	const auto amount = reward.amount;
 	switch (reward.type) {
 	case RewardSelectionRewardType::Item:

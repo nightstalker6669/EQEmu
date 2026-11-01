@@ -36,6 +36,8 @@ struct RewardSelectionSession {
 	RewardSelectionChannel   channel = RewardSelectionChannel::Preview;
 	uint32_t                 pending_reward_id = 0;
 	RewardSelectionSet       reward_set;
+	// Client catalogue identity; providers and durable ledgers use reward_set_id.
+	uint32_t                 wire_reward_set_id = 0;
 };
 
 enum class RewardSelectionDeliveryResult : uint8_t {
@@ -178,6 +180,8 @@ private:
 		bool success
 	);
 
+	// Shared across both channels; never reuse a client cache identity.
+	uint64_t      m_next_wire_reward_set_id = 1;
 	Client       &m_client;
 	ChannelState  m_claimable_channel;
 	ChannelState  m_preview_channel;

@@ -267,6 +267,8 @@ namespace DatabaseSchema {
 			"reward_sets",
 			"reward_source_entries",
 			"reward_sources",
+			"task_reward_progression_members",
+			"task_reward_option_gates",
 			"rewards",
 			"skill_caps",
 			"spawn2",
