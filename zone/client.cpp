@@ -7366,7 +7366,11 @@ int Client::AddAlternateCurrencyValue(
 	}
 
 	if (!alternate_currency_loaded) {
-		alternate_currency_queued_operations.push(std::make_pair(currency_id, amount));
+		// A durable reward caller must retry explicitly after loading; do not
+		// enqueue an unacknowledged grant that could run after that retry.
+		if (!persistence_succeeded) {
+			alternate_currency_queued_operations.push(std::make_pair(currency_id, amount));
+		}
 		return 0;
 	}
 
@@ -7381,10 +7385,16 @@ int Client::AddAlternateCurrencyValue(
 	if (new_value < 0) {
 		new_value = 0;
 		alternate_currency[currency_id] = 0;
-		database.UpdateAltCurrencyValue(CharacterID(), currency_id, 0);
+		const auto persisted = database.UpdateAltCurrencyValue(CharacterID(), currency_id, 0);
+		if (persistence_succeeded) {
+			*persistence_succeeded = persisted;
+		}
 	} else {
 		alternate_currency[currency_id] = new_value;
-		database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_value);
+		const auto persisted = database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_value);
+		if (persistence_succeeded) {
+			*persistence_succeeded = persisted;
+		}
 	}
 
 	SendAlternateCurrencyValue(currency_id);
