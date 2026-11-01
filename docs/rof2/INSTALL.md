@@ -12,4 +12,6 @@ Build through the normal upstream workflow. The core alone does not activate the
 
 [Branch map](BRANCHES.md) · [Provenance](integration.json)
 
-The shared core now also provides native task selectable rewards, shared occurrence ownership, carried Collect high-water tracking and distinct task-completion reward gates. Review [shared reward installation and migration compatibility](SHARED-REWARDS.md), including the original supplemental class/identity/admission SQL, before using those capabilities. Binary schema version is 9334.
+The shared core now also provides native task selectable rewards, shared occurrence ownership, carried Collect high-water tracking and distinct task-completion reward gates. Review [shared reward installation and migration compatibility](SHARED-REWARDS.md), including the original supplemental class/identity/admission SQL, before using those capabilities. Binary schema version is 9335.
+
+Schema 9335 adds only the empty `shared_task_average_level_policies` content table and its schema guard. No mission/policy/content rows are activated by the core. Keep the exact 9335 registration when combining this core with later feature migrations. [Transport and shared-task APIs](transport-passenger-state.md) describe the generic Lua accessors and optional average-level admission.

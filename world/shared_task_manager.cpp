@@ -17,6 +17,7 @@
 */
 #include "shared_task_manager.h"
 #include "common/shared_task_admission.h"
+#include "common/shared_task_average.h"
 
 #include "common/repositories/character_data_repository.h"
 #include "common/repositories/character_task_timers_repository.h"
@@ -1445,6 +1446,25 @@ bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskR
 		return false;
 	}
 
+
+	const auto average = SharedTaskAdmission::ReadAveragePolicy(
+		*m_content_database, task.id, task.min_level);
+	if (!average.valid) {
+		ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
+			"Unable to verify shared task average-level policy. Please try again later.");
+		return false;
+	}
+	if (average.minimum > 0) {
+		const auto eligible = SharedTaskAdmission::CheckAverage(
+			*m_database, average.minimum, request.character_ids);
+		if (!eligible || !*eligible) {
+			ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
+				eligible ? "Your party's average level is too low for this task." :
+				"Unable to verify your party's levels. Please try again later.");
+			return false;
+		}
+	}
+
 	// check if any party member's minimum level is too low (pre-2014 this was average level)
 	if (task.min_level > 0 && request.lowest_level < task.min_level) {
 		ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red, TaskStr::Get(TaskStr::LVL_TOO_LOW));
@@ -1671,6 +1691,29 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 			auto max_spread = fmt::format_int(s->GetTaskData().level_spread).str();
 			SendLeaderMessageID(s, Chat::Red, TaskStr::CANT_ADD_LVL_SPREAD, {max_spread});
 			allow_invite = false;
+		}
+	}
+
+
+	const auto average = SharedTaskAdmission::ReadAveragePolicy(
+		*m_content_database, s->GetTaskData().id, s->GetTaskData().min_level);
+	if (!average.valid) {
+		SendLeaderMessage(s, Chat::Red, "Unable to verify shared task average-level policy.");
+		return false;
+	}
+	if (average.minimum > 0) {
+		std::vector<uint32_t> member_ids;
+		for (const auto &member : s->GetMembers()) {
+			member_ids.push_back(member.character_id);
+		}
+		member_ids.push_back(character_id);
+		const auto eligible = SharedTaskAdmission::CheckAverage(
+			*m_database, average.minimum, member_ids);
+		if (!eligible || !*eligible) {
+			SendLeaderMessage(s, Chat::Red, eligible ?
+				"That player would lower the party's average level below this task's requirement." :
+				"Unable to verify the party's levels. Please try again later.");
+			return false;
 		}
 	}
 

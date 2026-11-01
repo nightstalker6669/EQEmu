@@ -4205,6 +4205,13 @@ void Client::Handle_OP_BlockedBuffs(const EQApplicationPacket *app)
 	}
 }
 
+uint16 Client::GetPassengerBoatID() const
+{
+	const auto id = m_boat_passenger.Get();
+	const auto boat = id ? entity_list.GetMob(id) : nullptr;
+	return boat && (boat->IsBoat() || boat->IsControllableBoat()) ? id : 0;
+}
+
 void Client::Handle_OP_BoardBoat(const EQApplicationPacket *app)
 {
 	// this sends unclean mob name, so capped at 64
@@ -4985,12 +4992,19 @@ void Client::Handle_OP_ClientUpdate(const EQApplicationPacket *app) {
 	float	cz = ppu->z_pos;
 	float 	new_heading = EQ12toFloat(ppu->heading);
 
+	// A normal on-foot update clears passenger state. Only a packet naming
+	// an existing boat can refresh it; proximity to a ship never boards it.
+	m_boat_passenger.Observe(0, false);
+
 	if (on_boat) {
 		Mob *boat = entity_list.GetMob(ppu->vehicle_id);
 		if (boat == 0) {
 			LogError("Can't find boat for client position offset.");
 		}
 		else {
+			m_boat_passenger.Observe(
+				ppu->vehicle_id, boat->IsBoat() || boat->IsControllableBoat()
+			);
 			if (boat->turning) return;
 
 			// Calculate angle from boat heading to EQ heading
