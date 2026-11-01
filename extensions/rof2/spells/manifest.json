@@ -1,0 +1,85 @@
+{
+  "format": 1,
+  "source_base": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "reward_engine_branch": "rof2-achievements",
+  "reward_engine_commit": "1cfaaee4a2c02e2fb7c9992d971749790bfb83e7",
+  "stages": [
+    {
+      "name": "001-exigent-items",
+      "path": "data/001-exigent-items.json",
+      "contains_estimates": false,
+      "sha256": "0d23ee1c09e08513b48a14a5b528df4dca555aaa379f4179fba58e96ecfa1641"
+    },
+    {
+      "name": "002-rank1-vendors",
+      "path": "data/002-rank1-vendors.json",
+      "contains_estimates": false,
+      "sha256": "e0d504f20f99201a1baa3ad055f3c16d6255507dfb3952468a40513620821568"
+    },
+    {
+      "name": "003-pets-and-auras",
+      "path": "data/003-pets-and-auras.json",
+      "contains_estimates": true,
+      "sha256": "3df6035895af0ba9121d0f7ce5b0d8543176216d86b09560b6f51a05365296d7"
+    },
+    {
+      "name": "004-kerk-motes",
+      "path": "data/004-kerk-motes.json",
+      "contains_estimates": false,
+      "sha256": "ad47744c023a594b4776d4ecc00892084eac0bc6b6fe27e1ceadc6af9c6f4850"
+    }
+  ],
+  "primary_keys": {
+    "items": [
+      "id"
+    ],
+    "npc_faction": [
+      "id"
+    ],
+    "merchantlist": [
+      "merchantid",
+      "slot"
+    ],
+    "npc_spells": [
+      "id"
+    ],
+    "npc_spells_entries": [
+      "id"
+    ],
+    "npc_types": [
+      "id"
+    ],
+    "pets": [
+      "id"
+    ],
+    "auras": [
+      "type"
+    ],
+    "tasks": [
+      "id"
+    ],
+    "task_activities": [
+      "taskid",
+      "activityid"
+    ],
+    "reward_sets": [
+      "reward_set_id"
+    ],
+    "reward_sources": [
+      "source_type",
+      "source_id"
+    ],
+    "reward_options": [
+      "reward_set_id",
+      "option_id"
+    ],
+    "rewards": [
+      "reward_id"
+    ],
+    "reward_option_entries": [
+      "reward_set_id",
+      "option_id",
+      "reward_id"
+    ]
+  }
+}

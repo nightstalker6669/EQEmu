@@ -1,3 +1,9 @@
+# RoF2 spells branch
+
+Spell database repairs, Kerkaz mote quests, labelled pet/aura reconstructions, installation and rollback documentation are in [extensions/rof2/spells](extensions/rof2/spells/README.md). Read its engine dependency and validation limits before installation.
+
+---
+
 <h1 align="center">EQEmulator Server Platform</h1>
 
 <p align="center">

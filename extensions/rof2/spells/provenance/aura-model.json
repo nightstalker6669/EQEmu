@@ -1,0 +1,4130 @@
+[
+  {
+    "spell_id": 11756,
+    "spell_name": "Consecrate Ground",
+    "effect_spell_id": 11759,
+    "effect_spell_name": "Consecrate Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=11756",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 11757,
+    "spell_name": "Consecrate Ground Rk. II",
+    "effect_spell_id": 11760,
+    "effect_spell_name": "Consecrate Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=11757",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 11758,
+    "spell_name": "Consecrate Ground Rk. III",
+    "effect_spell_id": 11761,
+    "effect_spell_name": "Consecrate Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=11758",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 11798,
+    "spell_name": "Bonestitch Fetish",
+    "effect_spell_id": 11801,
+    "effect_spell_name": "Bonestitch Fetish Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=11798",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 11799,
+    "spell_name": "Bonestitch Fetish Rk. II",
+    "effect_spell_id": 11802,
+    "effect_spell_name": "Bonestitch Fetish Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=11799",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 11800,
+    "spell_name": "Bonestitch Fetish Rk. III",
+    "effect_spell_id": 11803,
+    "effect_spell_name": "Bonestitch Fetish Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=11800",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 11891,
+    "spell_name": "Entrancer's Aura",
+    "effect_spell_id": 11894,
+    "effect_spell_name": "Entrancer's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=11891",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 11892,
+    "spell_name": "Entrancer's Aura Rk. II",
+    "effect_spell_id": 11895,
+    "effect_spell_name": "Entrancer's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=11892",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 11893,
+    "spell_name": "Entrancer's Aura Rk. III",
+    "effect_spell_id": 11896,
+    "effect_spell_name": "Entrancer's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=11893",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14087,
+    "spell_name": "Aura of the Artist",
+    "effect_spell_id": 14090,
+    "effect_spell_name": "Aura of the Artist Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14087",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14088,
+    "spell_name": "Aura of the Artist Rk. II",
+    "effect_spell_id": 14091,
+    "effect_spell_name": "Aura of the Artist Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14088",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14089,
+    "spell_name": "Aura of the Artist Rk. III",
+    "effect_spell_id": 14092,
+    "effect_spell_name": "Aura of the Artist Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14089",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14318,
+    "spell_name": "Hallowed Ground",
+    "effect_spell_id": 14321,
+    "effect_spell_name": "Hallowed Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14318",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14319,
+    "spell_name": "Hallowed Ground Rk. II",
+    "effect_spell_id": 14322,
+    "effect_spell_name": "Hallowed Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14319",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14320,
+    "spell_name": "Hallowed Ground Rk. III",
+    "effect_spell_id": 14323,
+    "effect_spell_name": "Hallowed Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14320",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14325,
+    "spell_name": "Circle of Divinity",
+    "effect_spell_id": 14328,
+    "effect_spell_name": "Divinity Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14325",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14326,
+    "spell_name": "Circle of Divinity Rk. II",
+    "effect_spell_id": 14329,
+    "effect_spell_name": "Divinity Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14326",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14327,
+    "spell_name": "Circle of Divinity Rk. III",
+    "effect_spell_id": 14330,
+    "effect_spell_name": "Divinity Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14327",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14587,
+    "spell_name": "Mystifier's Aura",
+    "effect_spell_id": 14590,
+    "effect_spell_name": "Mystifier's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14587",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14588,
+    "spell_name": "Mystifier's Aura Rk. II",
+    "effect_spell_id": 14591,
+    "effect_spell_name": "Mystifier's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14588",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14589,
+    "spell_name": "Mystifier's Aura Rk. III",
+    "effect_spell_id": 14592,
+    "effect_spell_name": "Mystifier's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14589",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14620,
+    "spell_name": "Mana Resurgence Aura",
+    "effect_spell_id": 14623,
+    "effect_spell_name": "Mana Resurgence",
+    "effect_source": "https://www.raidloot.com/spells?name=14620",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14621,
+    "spell_name": "Mana Resurgence Aura Rk. II",
+    "effect_spell_id": 14624,
+    "effect_spell_name": "Mana Resurgence Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=14621",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14622,
+    "spell_name": "Mana Resurgence Aura Rk. III",
+    "effect_spell_id": 14625,
+    "effect_spell_name": "Mana Resurgence Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=14622",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14626,
+    "spell_name": "Learner's Aura",
+    "effect_spell_id": 14629,
+    "effect_spell_name": "Learner's Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14626",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14627,
+    "spell_name": "Learner's Aura Rk. II",
+    "effect_spell_id": 14630,
+    "effect_spell_name": "Learner's Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=14627",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14628,
+    "spell_name": "Learner's Aura Rk. III",
+    "effect_spell_id": 14631,
+    "effect_spell_name": "Learner's Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=14628",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14632,
+    "spell_name": "Aura of Endless Glamour",
+    "effect_spell_id": 14635,
+    "effect_spell_name": "Aura of Endless Glamour Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14632",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14633,
+    "spell_name": "Aura of Endless Glamour Rk. II",
+    "effect_spell_id": 14636,
+    "effect_spell_name": "Aura of Endless Glamour Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=14633",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14634,
+    "spell_name": "Aura of Endless Glamour Rk. III",
+    "effect_spell_id": 14637,
+    "effect_spell_name": "Aura of Endless Glamour Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=14634",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14638,
+    "spell_name": "Aura of Horror",
+    "effect_spell_id": 14641,
+    "effect_spell_name": "Aura of Horror Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14638",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14639,
+    "spell_name": "Aura of Horror Rk. II",
+    "effect_spell_id": 14642,
+    "effect_spell_name": "Aura of Horror Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=14639",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14640,
+    "spell_name": "Aura of Horror Rk. III",
+    "effect_spell_id": 14643,
+    "effect_spell_name": "Aura of Horror Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=14640",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14644,
+    "spell_name": "Wake of Atrophy Aura",
+    "effect_spell_id": 14647,
+    "effect_spell_name": "Wake of Atrophy Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14644",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14645,
+    "spell_name": "Wake of Atrophy Aura Rk. II",
+    "effect_spell_id": 14648,
+    "effect_spell_name": "Wake of Atrophy Aura Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=14645",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14646,
+    "spell_name": "Wake of Atrophy Aura Rk. III",
+    "effect_spell_id": 14649,
+    "effect_spell_name": "Wake of Atrophy Aura Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=14646",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14650,
+    "spell_name": "Runic Swirl Aura",
+    "effect_spell_id": 14653,
+    "effect_spell_name": "Runic Swirl Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14650",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14651,
+    "spell_name": "Runic Swirl Aura Rk. II",
+    "effect_spell_id": 14654,
+    "effect_spell_name": "Runic Swirl Aura Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=14651",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14652,
+    "spell_name": "Runic Swirl Aura Rk. III",
+    "effect_spell_id": 14655,
+    "effect_spell_name": "Runic Swirl Aura Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=14652",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14915,
+    "spell_name": "Bonestitch Charm",
+    "effect_spell_id": 14918,
+    "effect_spell_name": "Bonestitch Charm Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14915",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14916,
+    "spell_name": "Bonestitch Charm Rk. II",
+    "effect_spell_id": 14919,
+    "effect_spell_name": "Bonestitch Charm Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14916",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 14917,
+    "spell_name": "Bonestitch Charm Rk. III",
+    "effect_spell_id": 14920,
+    "effect_spell_name": "Bonestitch Charm Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=14917",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 15127,
+    "spell_name": "Fadelure",
+    "effect_spell_id": 15130,
+    "effect_spell_name": "Fadelure Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=15127",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 15128,
+    "spell_name": "Fadelure Rk. II",
+    "effect_spell_id": 15131,
+    "effect_spell_name": "Fadelure Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=15128",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 15129,
+    "spell_name": "Fadelure Rk. III",
+    "effect_spell_id": 15132,
+    "effect_spell_name": "Fadelure Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=15129",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18072,
+    "spell_name": "Aura of the Poet",
+    "effect_spell_id": 18075,
+    "effect_spell_name": "Aura of the Poet Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18072",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18073,
+    "spell_name": "Aura of the Poet Rk.II",
+    "effect_spell_id": 18076,
+    "effect_spell_name": "Aura of the Poet Effect Rk.II",
+    "effect_source": "https://www.raidloot.com/spells?name=18073",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18074,
+    "spell_name": "Aura of the Poet Rk.III",
+    "effect_spell_id": 18077,
+    "effect_spell_name": "Aura of the Poet Effect Rk.III",
+    "effect_source": "https://www.raidloot.com/spells?name=18074",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18096,
+    "spell_name": "Aura of Rodcet",
+    "effect_spell_id": 19714,
+    "effect_spell_name": "Aura of Rodcet Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18096",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18097,
+    "spell_name": "Aura of Rodcet Rk. II",
+    "effect_spell_id": 19718,
+    "effect_spell_name": "Wave of Slumber Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=18097",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18098,
+    "spell_name": "Aura of Rodcet Rk. III",
+    "effect_spell_id": 19723,
+    "effect_spell_name": "Venimor's Insult",
+    "effect_source": "https://www.raidloot.com/spells?name=18098",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18339,
+    "spell_name": "Holy Ground",
+    "effect_spell_id": 18342,
+    "effect_spell_name": "Holy Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18339",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18340,
+    "spell_name": "Holy Ground Rk. II",
+    "effect_spell_id": 18343,
+    "effect_spell_name": "Holy Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18340",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18341,
+    "spell_name": "Holy Ground Rk. III",
+    "effect_spell_id": 18344,
+    "effect_spell_name": "Holy Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18341",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18645,
+    "spell_name": "Befuddler's Aura",
+    "effect_spell_id": 18648,
+    "effect_spell_name": "Befuddler's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18645",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18646,
+    "spell_name": "Befuddler's Aura Rk. II",
+    "effect_spell_id": 18649,
+    "effect_spell_name": "Befuddler's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18646",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18647,
+    "spell_name": "Befuddler's Aura Rk. III",
+    "effect_spell_id": 18650,
+    "effect_spell_name": "Befuddler's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18647",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18678,
+    "spell_name": "Mana Reiterate Aura",
+    "effect_spell_id": 18681,
+    "effect_spell_name": "Mana Reiterate",
+    "effect_source": "https://www.raidloot.com/spells?name=18678",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18679,
+    "spell_name": "Mana Reiterate Aura Rk. II",
+    "effect_spell_id": 18682,
+    "effect_spell_name": "Mana Reiterate Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=18679",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18680,
+    "spell_name": "Mana Reiterate Aura Rk. III",
+    "effect_spell_id": 18683,
+    "effect_spell_name": "Mana Reiterate Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=18680",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18684,
+    "spell_name": "Aura of Abstract Acumen",
+    "effect_spell_id": 18687,
+    "effect_spell_name": "Abstract Acumen Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18684",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18685,
+    "spell_name": "Aura of Abstract Acumen Rk. II",
+    "effect_spell_id": 18688,
+    "effect_spell_name": "Abstract Acumen Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=18685",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18686,
+    "spell_name": "Aura of Abstract Acumen Rk. III",
+    "effect_spell_id": 18689,
+    "effect_spell_name": "Abstract Acumen Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=18686",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18696,
+    "spell_name": "Twincast Aura",
+    "effect_spell_id": 18699,
+    "effect_spell_name": "Twincast Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18696",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18697,
+    "spell_name": "Twincast Aura Rk. II",
+    "effect_spell_id": 18700,
+    "effect_spell_name": "Twincast Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18697",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18698,
+    "spell_name": "Twincast Aura Rk. III",
+    "effect_spell_id": 18701,
+    "effect_spell_name": "Twincast Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18698",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18708,
+    "spell_name": "Runic Shimmer Aura",
+    "effect_spell_id": 18711,
+    "effect_spell_name": "Runic Shimmer Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18708",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18709,
+    "spell_name": "Runic Shimmer Aura Rk. II",
+    "effect_spell_id": 18712,
+    "effect_spell_name": "Runic Shimmer Aura Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=18709",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18710,
+    "spell_name": "Runic Shimmer Aura Rk. III",
+    "effect_spell_id": 18713,
+    "effect_spell_name": "Runic Shimmer Aura Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=18710",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18720,
+    "spell_name": "Dominating Aura",
+    "effect_spell_id": 18723,
+    "effect_spell_name": "Dominating Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=18720",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18721,
+    "spell_name": "Dominating Aura Rk. II",
+    "effect_spell_id": 18724,
+    "effect_spell_name": "Dominating Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=18721",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 18722,
+    "spell_name": "Dominating Aura Rk. III",
+    "effect_spell_id": 18725,
+    "effect_spell_name": "Dominating Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=18722",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19020,
+    "spell_name": "Bonestitch Effigy",
+    "effect_spell_id": 19023,
+    "effect_spell_name": "Bonestitch Effigy Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=19020",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19021,
+    "spell_name": "Bonestitch Effigy Rk. II",
+    "effect_spell_id": 19024,
+    "effect_spell_name": "Bonestitch Effigy Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=19021",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19022,
+    "spell_name": "Bonestitch Effigy Rk. III",
+    "effect_spell_id": 19025,
+    "effect_spell_name": "Bonestitch Effigy Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=19022",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19047,
+    "spell_name": "Withering Decay",
+    "effect_spell_id": 19050,
+    "effect_spell_name": "Withering Decay Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=19047",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19048,
+    "spell_name": "Withering Decay Rk. II",
+    "effect_spell_id": 19051,
+    "effect_spell_name": "Withering Decay Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=19048",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19049,
+    "spell_name": "Withering Decay Rk. III",
+    "effect_spell_id": 19052,
+    "effect_spell_name": "Withering Decay Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=19049",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19274,
+    "spell_name": "Smokescreen",
+    "effect_spell_id": 19277,
+    "effect_spell_name": "Smokescreen Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=19274",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19275,
+    "spell_name": "Smokescreen Rk. II",
+    "effect_spell_id": 19278,
+    "effect_spell_name": "Smokescreen Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=19275",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19276,
+    "spell_name": "Smokescreen Rk. III",
+    "effect_spell_id": 19279,
+    "effect_spell_name": "Smokescreen Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=19276",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19805,
+    "spell_name": "Arcane Disjunction Aura",
+    "effect_spell_id": 19808,
+    "effect_spell_name": "Arcane Disjunction Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=19805",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19806,
+    "spell_name": "Arcane Disjunction Aura Rk. II",
+    "effect_spell_id": 19809,
+    "effect_spell_name": "Arcane Disjunction Aura Effect Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=19806",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 19807,
+    "spell_name": "Arcane Disjunction Aura Rk. III",
+    "effect_spell_id": 19810,
+    "effect_spell_name": "Arcane Disjunction Aura Effect Rk. III",
+    "effect_source": "https://www.raidloot.com/spells?name=19807",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 22652,
+    "spell_name": "Arcane Distillect",
+    "effect_spell_id": 22655,
+    "effect_spell_name": "Arcane Distillect Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=22652",
+    "effect_link_verified": true,
+    "kind": "group_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000008
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 22653,
+    "spell_name": "Arcane Distillect Rk II",
+    "effect_spell_id": 22655,
+    "effect_spell_name": "Arcane Distillect Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=22653",
+    "effect_link_verified": true,
+    "kind": "group_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000008
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 22654,
+    "spell_name": "Arcane Distillect Rk III",
+    "effect_spell_id": 22655,
+    "effect_spell_name": "Arcane Distillect Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=22654",
+    "effect_link_verified": true,
+    "kind": "group_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000008
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25146,
+    "spell_name": "Sanctified Ground",
+    "effect_spell_id": 25149,
+    "effect_spell_name": "Sanctified Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=25146",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25147,
+    "spell_name": "Sanctified Ground Rk. II",
+    "effect_spell_id": 25150,
+    "effect_spell_name": "Sanctified Ground Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=25147",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25148,
+    "spell_name": "Sanctified Ground Rk. III",
+    "effect_spell_id": 25151,
+    "effect_spell_name": "Sanctified Ground Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=25148",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25771,
+    "spell_name": "Wildfire Aura",
+    "effect_spell_id": 25774,
+    "effect_spell_name": "Wildfire Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=25771",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25772,
+    "spell_name": "Wildfire Aura Rk. II",
+    "effect_spell_id": 25775,
+    "effect_spell_name": "Wildfire Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=25772",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25773,
+    "spell_name": "Wildfire Aura Rk. III",
+    "effect_spell_id": 25776,
+    "effect_spell_name": "Wildfire Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=25773",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25792,
+    "spell_name": "Frostfell Aura",
+    "effect_spell_id": 25795,
+    "effect_spell_name": "Frostfell Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=25792",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25793,
+    "spell_name": "Frostfell Aura Rk. II",
+    "effect_spell_id": 25796,
+    "effect_spell_name": "Frostfell Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=25793",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25794,
+    "spell_name": "Frostfell Aura Rk. III",
+    "effect_spell_id": 25797,
+    "effect_spell_name": "Frostfell Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=25794",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25983,
+    "spell_name": "Aura of Renewal",
+    "effect_spell_id": 25986,
+    "effect_spell_name": "Aura of Renewal Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=25983",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25984,
+    "spell_name": "Aura of Renewal Rk. II",
+    "effect_spell_id": 25987,
+    "effect_spell_name": "Aura of Renewal Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=25984",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25985,
+    "spell_name": "Aura of Renewal Rk. III",
+    "effect_spell_id": 25988,
+    "effect_spell_name": "Aura of Renewal Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=25985",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25992,
+    "spell_name": "Echo of Renewal",
+    "effect_spell_id": 25995,
+    "effect_spell_name": "Echo of Renewal Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=25992",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25993,
+    "spell_name": "Echo of Renewal Rk. II",
+    "effect_spell_id": 25996,
+    "effect_spell_name": "Echo of Renewal Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=25993",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 25994,
+    "spell_name": "Echo of Renewal Rk. III",
+    "effect_spell_id": 25997,
+    "effect_spell_name": "Echo of Renewal Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=25994",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26052,
+    "spell_name": "Aura of the Composer",
+    "effect_spell_id": 26055,
+    "effect_spell_name": "Aura of the Composer Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=26052",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26053,
+    "spell_name": "Aura of the Composer Rk. II",
+    "effect_spell_id": 26056,
+    "effect_spell_name": "Aura of the Composer Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=26053",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26054,
+    "spell_name": "Aura of the Composer Rk. III",
+    "effect_spell_id": 26057,
+    "effect_spell_name": "Aura of the Composer Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=26054",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26061,
+    "spell_name": "Echo of the Composer",
+    "effect_spell_id": 26064,
+    "effect_spell_name": "Echo of the Composer Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=26061",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26062,
+    "spell_name": "Echo of the Composer Rk. II",
+    "effect_spell_id": 26065,
+    "effect_spell_name": "Echo of the Composer Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=26062",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26063,
+    "spell_name": "Echo of the Composer Rk. III",
+    "effect_spell_id": 26066,
+    "effect_spell_name": "Echo of the Composer Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=26063",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26158,
+    "spell_name": "Smokeshroud",
+    "effect_spell_id": 26161,
+    "effect_spell_name": "Smokeshroud Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=26158",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26159,
+    "spell_name": "Smokeshroud Rk. II",
+    "effect_spell_id": 26162,
+    "effect_spell_name": "Smokeshroud Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=26159",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26160,
+    "spell_name": "Smokeshroud Rk. III",
+    "effect_spell_id": 26163,
+    "effect_spell_name": "Smokeshroud Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=26160",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26360,
+    "spell_name": "Bonestitch Manikin",
+    "effect_spell_id": 26363,
+    "effect_spell_name": "Bonestitch Manikin Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=26360",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26361,
+    "spell_name": "Bonestitch Manikin Rk. II",
+    "effect_spell_id": 26364,
+    "effect_spell_name": "Bonestitch Manikin Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=26361",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26362,
+    "spell_name": "Bonestitch Manikin Rk. III",
+    "effect_spell_id": 26365,
+    "effect_spell_name": "Bonestitch Manikin Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=26362",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26420,
+    "spell_name": "Sphere of Blight",
+    "effect_spell_id": 26423,
+    "effect_spell_name": "Blight Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=26420",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26421,
+    "spell_name": "Sphere of Blight Rk. II",
+    "effect_spell_id": 26424,
+    "effect_spell_name": "Blight Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=26421",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26422,
+    "spell_name": "Sphere of Blight Rk. III",
+    "effect_spell_id": 26425,
+    "effect_spell_name": "Blight Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=26422",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26914,
+    "spell_name": "Baffler's Aura",
+    "effect_spell_id": 26917,
+    "effect_spell_name": "Baffler's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=26914",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26915,
+    "spell_name": "Baffler's Aura Rk. II",
+    "effect_spell_id": 26918,
+    "effect_spell_name": "Baffler's Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=26915",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26916,
+    "spell_name": "Baffler's Aura Rk. III",
+    "effect_spell_id": 26919,
+    "effect_spell_name": "Baffler's Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=26916",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26932,
+    "spell_name": "Subjugating Aura",
+    "effect_spell_id": 26935,
+    "effect_spell_name": "Subjugating Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=26932",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26933,
+    "spell_name": "Subjugating Aura Rk. II",
+    "effect_spell_id": 26936,
+    "effect_spell_name": "Subjugating Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=26933",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26934,
+    "spell_name": "Subjugating Aura Rk. III",
+    "effect_spell_id": 26937,
+    "effect_spell_name": "Subjugating Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=26934",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26938,
+    "spell_name": "Runic Gleam Aura",
+    "effect_spell_id": 26941,
+    "effect_spell_name": "Runic Gleam Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=26938",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26939,
+    "spell_name": "Runic Gleam Aura Rk. II",
+    "effect_spell_id": 26942,
+    "effect_spell_name": "Runic Gleam Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=26939",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26940,
+    "spell_name": "Runic Gleam Aura Rk. III",
+    "effect_spell_id": 26943,
+    "effect_spell_name": "Runic Gleam Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=26940",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26947,
+    "spell_name": "Bucolic Aura",
+    "effect_spell_id": 26950,
+    "effect_spell_name": "Bucolic Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=26947",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26948,
+    "spell_name": "Bucolic Aura Rk. II",
+    "effect_spell_id": 26951,
+    "effect_spell_name": "Bucolic Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=26948",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 26949,
+    "spell_name": "Bucolic Aura Rk. III",
+    "effect_spell_id": 26952,
+    "effect_spell_name": "Bucolic Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=26949",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 27006,
+    "spell_name": "Echo of Subjugation",
+    "effect_spell_id": 27009,
+    "effect_spell_name": "Echo of Subjugation Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=27006",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 27007,
+    "spell_name": "Echo of Subjugation Rk. II",
+    "effect_spell_id": 27010,
+    "effect_spell_name": "Echo of Subjugation Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=27007",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 27008,
+    "spell_name": "Echo of Subjugation Rk. III",
+    "effect_spell_id": 27011,
+    "effect_spell_name": "Echo of Subjugation Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=27008",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 27034,
+    "spell_name": "Mana Reiteration Aura",
+    "effect_spell_id": 27037,
+    "effect_spell_name": "Mana Reiteration",
+    "effect_source": "https://www.raidloot.com/spells?name=27034",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 27035,
+    "spell_name": "Mana Reiteration Aura Rk. II",
+    "effect_spell_id": 27038,
+    "effect_spell_name": "Mana Reiteration II",
+    "effect_source": "https://www.raidloot.com/spells?name=27035",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 27036,
+    "spell_name": "Mana Reiteration Aura Rk. III",
+    "effect_spell_id": 27039,
+    "effect_spell_name": "Mana Reiteration III",
+    "effect_source": "https://www.raidloot.com/spells?name=27036",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 28172,
+    "spell_name": "Anointed Ground",
+    "effect_spell_id": 28175,
+    "effect_spell_name": "Anointed Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=28172",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 28173,
+    "spell_name": "Anointed Ground Rk. II",
+    "effect_spell_id": 28176,
+    "effect_spell_name": "Anointed Ground Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=28173",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 28174,
+    "spell_name": "Anointed Ground Rk. III",
+    "effect_spell_id": 28177,
+    "effect_spell_name": "Anointed Ground Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=28174",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 28870,
+    "spell_name": "Wildblaze Aura",
+    "effect_spell_id": 28873,
+    "effect_spell_name": "Wildblaze Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=28870",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 28871,
+    "spell_name": "Wildblaze Aura Rk. II",
+    "effect_spell_id": 28874,
+    "effect_spell_name": "Wildblaze Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=28871",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 28872,
+    "spell_name": "Wildblaze Aura Rk. III",
+    "effect_spell_id": 28875,
+    "effect_spell_name": "Wildblaze Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=28872",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 28888,
+    "spell_name": "Frostcloak Aura",
+    "effect_spell_id": 28891,
+    "effect_spell_name": "Frostcloak Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=28888",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 28889,
+    "spell_name": "Frostcloak Aura Rk. II",
+    "effect_spell_id": 28892,
+    "effect_spell_name": "Frostcloak Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=28889",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 28890,
+    "spell_name": "Frostcloak Aura Rk. III",
+    "effect_spell_id": 28893,
+    "effect_spell_name": "Frostcloak Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=28890",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29081,
+    "spell_name": "Aura of Lunanyn",
+    "effect_spell_id": 29084,
+    "effect_spell_name": "Aura of Lunanyn Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29081",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29082,
+    "spell_name": "Aura of Lunanyn Rk. II",
+    "effect_spell_id": 29085,
+    "effect_spell_name": "Aura of Lunanyn Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=29082",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29083,
+    "spell_name": "Aura of Lunanyn Rk. III",
+    "effect_spell_id": 29086,
+    "effect_spell_name": "Aura of Lunanyn Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=29083",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29087,
+    "spell_name": "Echo of Lunanyn",
+    "effect_spell_id": 29090,
+    "effect_spell_name": "Echo of Lunanyn Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29087",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29088,
+    "spell_name": "Echo of Lunanyn Rk. II",
+    "effect_spell_id": 29091,
+    "effect_spell_name": "Echo of Lunanyn Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=29088",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29089,
+    "spell_name": "Echo of Lunanyn Rk. III",
+    "effect_spell_id": 29092,
+    "effect_spell_name": "Echo of Lunanyn Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=29089",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29153,
+    "spell_name": "Aura of the Orator",
+    "effect_spell_id": 29156,
+    "effect_spell_name": "Aura of the Orator Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29153",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29154,
+    "spell_name": "Aura of the Orator Rk. II",
+    "effect_spell_id": 29157,
+    "effect_spell_name": "Aura of the Orator Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=29154",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29155,
+    "spell_name": "Aura of the Orator Rk. III",
+    "effect_spell_id": 29158,
+    "effect_spell_name": "Aura of the Orator Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=29155",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29159,
+    "spell_name": "Echo of the Orator",
+    "effect_spell_id": 29162,
+    "effect_spell_name": "Echo of the Orator Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29159",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29160,
+    "spell_name": "Echo of the Orator Rk. II",
+    "effect_spell_id": 29163,
+    "effect_spell_name": "Echo of the Orator Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=29160",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29161,
+    "spell_name": "Echo of the Orator Rk. III",
+    "effect_spell_id": 29164,
+    "effect_spell_name": "Echo of the Orator Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=29161",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29207,
+    "spell_name": "Distraction",
+    "effect_spell_id": 26112,
+    "effect_spell_name": "Distraction Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29207",
+    "effect_link_verified": true,
+    "kind": "distraction_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29208,
+    "spell_name": "Distraction Rk. II",
+    "effect_spell_id": 26116,
+    "effect_spell_name": "Jugular Sever Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=29208",
+    "effect_link_verified": true,
+    "kind": "distraction_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29209,
+    "spell_name": "Distraction Rk. III",
+    "effect_spell_id": 26121,
+    "effect_spell_name": "Instruction in Toxicity Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29209",
+    "effect_link_verified": true,
+    "kind": "distraction_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29261,
+    "spell_name": "Smokeblind",
+    "effect_spell_id": 29264,
+    "effect_spell_name": "Smokeblind Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29261",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29262,
+    "spell_name": "Smokeblind Rk. II",
+    "effect_spell_id": 29265,
+    "effect_spell_name": "Smokeblind Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=29262",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29263,
+    "spell_name": "Smokeblind Rk. III",
+    "effect_spell_id": 29266,
+    "effect_spell_name": "Smokeblind Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=29263",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29418,
+    "spell_name": "Issuance of Malos",
+    "effect_spell_id": 29421,
+    "effect_spell_name": "Issuance of Malos Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29418",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29419,
+    "spell_name": "Issuance of Malos Rk. II",
+    "effect_spell_id": 29422,
+    "effect_spell_name": "Issuance of Malos Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=29419",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29420,
+    "spell_name": "Issuance of Malos Rk. III",
+    "effect_spell_id": 29423,
+    "effect_spell_name": "Issuance of Malos Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=29420",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29478,
+    "spell_name": "Bonemeld Fetish",
+    "effect_spell_id": 29481,
+    "effect_spell_name": "Bonemeld Fetish Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29478",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29479,
+    "spell_name": "Bonemeld Fetish Rk. II",
+    "effect_spell_id": 29482,
+    "effect_spell_name": "Bonemeld Fetish Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=29479",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29480,
+    "spell_name": "Bonemeld Fetish Rk. III",
+    "effect_spell_id": 29483,
+    "effect_spell_name": "Bonemeld Fetish Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=29480",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29547,
+    "spell_name": "Sphere of Withering",
+    "effect_spell_id": 29550,
+    "effect_spell_name": "Withering Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=29547",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29548,
+    "spell_name": "Sphere of Withering Rk. II",
+    "effect_spell_id": 29551,
+    "effect_spell_name": "Withering Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=29548",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 29549,
+    "spell_name": "Sphere of Withering Rk. III",
+    "effect_spell_id": 29552,
+    "effect_spell_name": "Withering Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=29549",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30042,
+    "spell_name": "Arctender's Aura",
+    "effect_spell_id": 30045,
+    "effect_spell_name": "Arctender's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=30042",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30043,
+    "spell_name": "Arctender's Aura Rk. II",
+    "effect_spell_id": 30046,
+    "effect_spell_name": "Arctender's Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=30043",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30044,
+    "spell_name": "Arctender's Aura Rk. III",
+    "effect_spell_id": 30047,
+    "effect_spell_name": "Arctender's Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=30044",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30048,
+    "spell_name": "Arctender's Echo",
+    "effect_spell_id": 30051,
+    "effect_spell_name": "Arctender's Echo Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=30048",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30049,
+    "spell_name": "Arctender's Echo Rk. II",
+    "effect_spell_id": 30052,
+    "effect_spell_name": "Arctender's Echo Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=30049",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30050,
+    "spell_name": "Arctender's Echo Rk. III",
+    "effect_spell_id": 30053,
+    "effect_spell_name": "Arctender's Echo Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=30050",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30069,
+    "spell_name": "Governing Aura",
+    "effect_spell_id": 30072,
+    "effect_spell_name": "Governing Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=30069",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30070,
+    "spell_name": "Governing Aura Rk. II",
+    "effect_spell_id": 30073,
+    "effect_spell_name": "Governing Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=30070",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30071,
+    "spell_name": "Governing Aura Rk. III",
+    "effect_spell_id": 30074,
+    "effect_spell_name": "Governing Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=30071",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30075,
+    "spell_name": "Runic Glow Aura",
+    "effect_spell_id": 30078,
+    "effect_spell_name": "Runic Glow Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=30075",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30076,
+    "spell_name": "Runic Glow Aura Rk. II",
+    "effect_spell_id": 30079,
+    "effect_spell_name": "Runic Glow Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=30076",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30077,
+    "spell_name": "Runic Glow Aura Rk. III",
+    "effect_spell_id": 30080,
+    "effect_spell_name": "Runic Glow Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=30077",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30084,
+    "spell_name": "Placid Issuance",
+    "effect_spell_id": 30087,
+    "effect_spell_name": "Placid Issuance Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=30084",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30085,
+    "spell_name": "Placid Issuance Rk. II",
+    "effect_spell_id": 30088,
+    "effect_spell_name": "Placid Issuance Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=30085",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30086,
+    "spell_name": "Placid Issuance Rk. III",
+    "effect_spell_id": 30089,
+    "effect_spell_name": "Placid Issuance Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=30086",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30149,
+    "spell_name": "Echo of Coercion",
+    "effect_spell_id": 30152,
+    "effect_spell_name": "Echo of Coercion Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=30149",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30150,
+    "spell_name": "Echo of Coercion Rk. II",
+    "effect_spell_id": 30153,
+    "effect_spell_name": "Echo of Coercion Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=30150",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30151,
+    "spell_name": "Echo of Coercion Rk. III",
+    "effect_spell_id": 30154,
+    "effect_spell_name": "Echo of Coercion Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=30151",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30177,
+    "spell_name": "Mana Repercussion Aura",
+    "effect_spell_id": 30180,
+    "effect_spell_name": "Mana Repercussion",
+    "effect_source": "https://www.raidloot.com/spells?name=30177",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30178,
+    "spell_name": "Mana Repercussion Aura Rk. II",
+    "effect_spell_id": 30181,
+    "effect_spell_name": "Mana Repercussion II",
+    "effect_source": "https://www.raidloot.com/spells?name=30178",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30179,
+    "spell_name": "Mana Repercussion Aura Rk. III",
+    "effect_spell_id": 30182,
+    "effect_spell_name": "Mana Repercussion III",
+    "effect_source": "https://www.raidloot.com/spells?name=30179",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30226,
+    "spell_name": "Issuance of Mana Repercussion",
+    "effect_spell_id": 30180,
+    "effect_spell_name": "Mana Repercussion",
+    "effect_source": "https://www.raidloot.com/spells?name=30226",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30227,
+    "spell_name": "Issuance of Mana Repercussion Rk. II",
+    "effect_spell_id": 30184,
+    "effect_spell_name": "Mind Spiral Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=30227",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 30228,
+    "spell_name": "Issuance of Mana Repercussion Rk. III",
+    "effect_spell_id": 30189,
+    "effect_spell_name": "Mindscythe",
+    "effect_source": "https://www.raidloot.com/spells?name=30228",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34280,
+    "spell_name": "Glorified Ground",
+    "effect_spell_id": 34283,
+    "effect_spell_name": "Glorified Ground Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=34280",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34281,
+    "spell_name": "Glorified Ground Rk. II",
+    "effect_spell_id": 34284,
+    "effect_spell_name": "Glorified Ground Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=34281",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34282,
+    "spell_name": "Glorified Ground Rk. III",
+    "effect_spell_id": 34285,
+    "effect_spell_name": "Glorified Ground Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=34282",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34299,
+    "spell_name": "Aura of the Reverent",
+    "effect_spell_id": 34302,
+    "effect_spell_name": "Aura of the Reverent Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=34299",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34300,
+    "spell_name": "Aura of the Reverent Rk. II",
+    "effect_spell_id": 34303,
+    "effect_spell_name": "Aura of the Reverent Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=34300",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34301,
+    "spell_name": "Aura of the Reverent Rk. III",
+    "effect_spell_id": 34304,
+    "effect_spell_name": "Aura of the Reverent Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=34301",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000015
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34902,
+    "spell_name": "Wildspark Aura",
+    "effect_spell_id": 34905,
+    "effect_spell_name": "Wildspark Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=34902",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34903,
+    "spell_name": "Wildspark Aura Rk. II",
+    "effect_spell_id": 34906,
+    "effect_spell_name": "Wildspark Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=34903",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34904,
+    "spell_name": "Wildspark Aura Rk. III",
+    "effect_spell_id": 34907,
+    "effect_spell_name": "Wildspark Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=34904",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34917,
+    "spell_name": "Frostone Aura",
+    "effect_spell_id": 34920,
+    "effect_spell_name": "Frostone Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=34917",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34918,
+    "spell_name": "Frostone Aura Rk. II",
+    "effect_spell_id": 34921,
+    "effect_spell_name": "Frostone Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=34918",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 34919,
+    "spell_name": "Frostone Aura Rk. III",
+    "effect_spell_id": 34922,
+    "effect_spell_name": "Frostone Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=34919",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000012
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35134,
+    "spell_name": "Aura of Salarra",
+    "effect_spell_id": 35137,
+    "effect_spell_name": "Aura of Salarra Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=35134",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35135,
+    "spell_name": "Aura of Salarra Rk. II",
+    "effect_spell_id": 35138,
+    "effect_spell_name": "Aura of Salarra Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=35135",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35136,
+    "spell_name": "Aura of Salarra Rk. III",
+    "effect_spell_id": 35139,
+    "effect_spell_name": "Aura of Salarra Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=35136",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35140,
+    "spell_name": "Echo of Salarra",
+    "effect_spell_id": 35143,
+    "effect_spell_name": "Echo of Salarra Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=35140",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35141,
+    "spell_name": "Echo of Salarra Rk. II",
+    "effect_spell_id": 35144,
+    "effect_spell_name": "Echo of Salarra Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=35141",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35142,
+    "spell_name": "Echo of Salarra Rk. III",
+    "effect_spell_id": 35145,
+    "effect_spell_name": "Echo of Salarra Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=35142",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35200,
+    "spell_name": "Aura of Va'Ker",
+    "effect_spell_id": 35203,
+    "effect_spell_name": "Aura of Va'Ker Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=35200",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35201,
+    "spell_name": "Aura of Va'Ker Rk. II",
+    "effect_spell_id": 35204,
+    "effect_spell_name": "Aura of Va'Ker Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=35201",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35202,
+    "spell_name": "Aura of Va'Ker Rk. III",
+    "effect_spell_id": 35205,
+    "effect_spell_name": "Aura of Va'Ker Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=35202",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35206,
+    "spell_name": "Echo of Va'Ker",
+    "effect_spell_id": 35209,
+    "effect_spell_name": "Echo of Va'Ker Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=35206",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35207,
+    "spell_name": "Echo of Va'Ker Rk. II",
+    "effect_spell_id": 35210,
+    "effect_spell_name": "Echo of Va'Ker Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=35207",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35208,
+    "spell_name": "Echo of Va'Ker Rk. III",
+    "effect_spell_id": 35211,
+    "effect_spell_name": "Echo of Va'Ker Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=35208",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000001
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35312,
+    "spell_name": "Smokecloud",
+    "effect_spell_id": 35315,
+    "effect_spell_name": "Smokecloud Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=35312",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35313,
+    "spell_name": "Smokecloud Rk. II",
+    "effect_spell_id": 35316,
+    "effect_spell_name": "Smokecloud Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=35313",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35314,
+    "spell_name": "Smokecloud Rk. III",
+    "effect_spell_id": 35317,
+    "effect_spell_name": "Smokecloud Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=35314",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35318,
+    "spell_name": "Venomous Spike Trap",
+    "effect_spell_id": 35321,
+    "effect_spell_name": "Venomous Spike Trap Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=35318",
+    "effect_link_verified": true,
+    "kind": "exit_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35319,
+    "spell_name": "Venomous Spike Trap Rk. II",
+    "effect_spell_id": 35322,
+    "effect_spell_name": "Venomous Spike Trap Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=35319",
+    "effect_link_verified": true,
+    "kind": "exit_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35320,
+    "spell_name": "Venomous Spike Trap Rk. III",
+    "effect_spell_id": 35323,
+    "effect_spell_name": "Venomous Spike Trap Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=35320",
+    "effect_link_verified": true,
+    "kind": "exit_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000025
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35538,
+    "spell_name": "Bonefuse Fetish",
+    "effect_spell_id": 35541,
+    "effect_spell_name": "Bonefuse Fetish Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=35538",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35539,
+    "spell_name": "Bonefuse Fetish Rk. II",
+    "effect_spell_id": 35542,
+    "effect_spell_name": "Bonefuse Fetish Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=35539",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35540,
+    "spell_name": "Bonefuse Fetish Rk. III",
+    "effect_spell_id": 35543,
+    "effect_spell_name": "Bonefuse Fetish Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=35540",
+    "effect_link_verified": true,
+    "kind": "enter_trap",
+    "estimates": {
+      "distance": 25,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35592,
+    "spell_name": "Sphere of Dissolution",
+    "effect_spell_id": 35595,
+    "effect_spell_name": "Dissolution Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=35592",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35593,
+    "spell_name": "Sphere of Dissolution Rk. II",
+    "effect_spell_id": 35596,
+    "effect_spell_name": "Dissolution Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=35593",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 35594,
+    "spell_name": "Sphere of Dissolution Rk. III",
+    "effect_spell_id": 35597,
+    "effect_spell_name": "Dissolution Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=35594",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000020
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36104,
+    "spell_name": "Mastermind's Aura",
+    "effect_spell_id": 36107,
+    "effect_spell_name": "Mastermind's Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=36104",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36105,
+    "spell_name": "Mastermind's Aura Rk. II",
+    "effect_spell_id": 36108,
+    "effect_spell_name": "Mastermind's Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=36105",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36106,
+    "spell_name": "Mastermind's Aura Rk. III",
+    "effect_spell_id": 36109,
+    "effect_spell_name": "Mastermind's Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=36106",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36110,
+    "spell_name": "Mastermind's Echo",
+    "effect_spell_id": 36113,
+    "effect_spell_name": "Mastermind's Echo Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=36110",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36111,
+    "spell_name": "Mastermind's Echo Rk. II",
+    "effect_spell_id": 36114,
+    "effect_spell_name": "Mastermind's Echo Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=36111",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36112,
+    "spell_name": "Mastermind's Echo Rk. III",
+    "effect_spell_id": 36115,
+    "effect_spell_name": "Mastermind's Echo Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=36112",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36131,
+    "spell_name": "Tempting Aura",
+    "effect_spell_id": 36134,
+    "effect_spell_name": "Tempting Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=36131",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36132,
+    "spell_name": "Tempting Aura Rk. II",
+    "effect_spell_id": 36135,
+    "effect_spell_name": "Tempting Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=36132",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36133,
+    "spell_name": "Tempting Aura Rk. III",
+    "effect_spell_id": 36136,
+    "effect_spell_name": "Tempting Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=36133",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36140,
+    "spell_name": "Quiescent Issuance",
+    "effect_spell_id": 36143,
+    "effect_spell_name": "Quiescent Issuance Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=36140",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36141,
+    "spell_name": "Quiescent Issuance Rk. II",
+    "effect_spell_id": 36144,
+    "effect_spell_name": "Quiescent Issuance Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=36141",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36142,
+    "spell_name": "Quiescent Issuance Rk. III",
+    "effect_spell_id": 36145,
+    "effect_spell_name": "Quiescent Issuance Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=36142",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36203,
+    "spell_name": "Echo of Temptation",
+    "effect_spell_id": 36206,
+    "effect_spell_name": "Echo of Temptation Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=36203",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36204,
+    "spell_name": "Echo of Temptation Rk. II",
+    "effect_spell_id": 36207,
+    "effect_spell_name": "Echo of Temptation Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=36204",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36205,
+    "spell_name": "Echo of Temptation Rk. III",
+    "effect_spell_id": 36208,
+    "effect_spell_name": "Echo of Temptation Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=36205",
+    "effect_link_verified": true,
+    "kind": "charmed_pet_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36225,
+    "spell_name": "Mana Reverberation Aura",
+    "effect_spell_id": 36228,
+    "effect_spell_name": "Mana Reverberation",
+    "effect_source": "https://www.raidloot.com/spells?name=36225",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36226,
+    "spell_name": "Mana Reverberation Aura Rk. II",
+    "effect_spell_id": 36229,
+    "effect_spell_name": "Mana Reverberation II",
+    "effect_source": "https://www.raidloot.com/spells?name=36226",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36227,
+    "spell_name": "Mana Reverberation Aura Rk. III",
+    "effect_spell_id": 36230,
+    "effect_spell_name": "Mana Reverberation III",
+    "effect_source": "https://www.raidloot.com/spells?name=36227",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36274,
+    "spell_name": "Issuance of Mana Reverberation",
+    "effect_spell_id": 36228,
+    "effect_spell_name": "Mana Reverberation",
+    "effect_source": "https://www.raidloot.com/spells?name=36274",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36275,
+    "spell_name": "Issuance of Mana Reverberation Rk. II",
+    "effect_spell_id": 36232,
+    "effect_spell_name": "Mind Squall Rk. II",
+    "effect_source": "https://www.raidloot.com/spells?name=36275",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36276,
+    "spell_name": "Issuance of Mana Reverberation Rk. III",
+    "effect_spell_id": 36237,
+    "effect_spell_name": "Mindcleave",
+    "effect_source": "https://www.raidloot.com/spells?name=36276",
+    "effect_link_verified": true,
+    "kind": "hostile_field",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 120,
+      "cast_interval_seconds": 6,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36283,
+    "spell_name": "Runic Radiance Aura",
+    "effect_spell_id": 36286,
+    "effect_spell_name": "Runic Radiance Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=36283",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36284,
+    "spell_name": "Runic Radiance Aura Rk. II",
+    "effect_spell_id": 36287,
+    "effect_spell_name": "Runic Radiance Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=36284",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36285,
+    "spell_name": "Runic Radiance Aura Rk. III",
+    "effect_spell_id": 36288,
+    "effect_spell_name": "Runic Radiance Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=36285",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": 12,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36289,
+    "spell_name": "Amplifying Aura",
+    "effect_spell_id": 36292,
+    "effect_spell_name": "Amplifying Aura Effect",
+    "effect_source": "https://www.raidloot.com/spells?name=36289",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36290,
+    "spell_name": "Amplifying Aura Rk. II",
+    "effect_spell_id": 36293,
+    "effect_spell_name": "Amplifying Aura Effect II",
+    "effect_source": "https://www.raidloot.com/spells?name=36290",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  },
+  {
+    "spell_id": 36291,
+    "spell_name": "Amplifying Aura Rk. III",
+    "effect_spell_id": 36294,
+    "effect_spell_name": "Amplifying Aura Effect III",
+    "effect_source": "https://www.raidloot.com/spells?name=36291",
+    "effect_link_verified": true,
+    "kind": "group_buff",
+    "estimates": {
+      "distance": 60,
+      "duration_seconds": 5400,
+      "cast_interval_seconds": -1,
+      "visual_npc": 2000010
+    },
+    "notes": "Native aura engine modes; estimated timing/range/visual from related PEQ definitions. Charm support uses group pets because NPC charmed pets carry the effect. Ground-target placement fidelity is limited by existing native MakeAura behavior."
+  }
+]
