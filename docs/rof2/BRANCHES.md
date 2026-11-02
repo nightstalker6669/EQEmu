@@ -7,7 +7,7 @@ Every RoF2 branch starts from **upstream `develop` commit `c9c8747ac949deddb140d
 | `master` | Current upstream stable master; separate from the feature foundation |
 | `develop` | Unmodified upstream develop at the verified base |
 | `rof2-upstream-base` | Alias of that exact upstream develop commit; no custom merge |
-| `rof2-shared-core` | Shared inventory/session/database infrastructure |
+| `rof2-shared-core` | Shared inventory/session/database, task rewards, transport and shared-task admission infrastructure |
 | `rof2-housing` | Shared core + published housing implementation and content |
 | `rof2-fellowship` | Housing stack + fellowship and its housing access adapter |
 | `rof2-mercenaries` | Fellowship stack + mercenaries |
@@ -15,7 +15,7 @@ Every RoF2 branch starts from **upstream `develop` commit `c9c8747ac949deddb140d
 | `rof2-achievements` | Shared core + achievement engine and reviewed quest content |
 | `rof2-integration` | All five published features, including achievements |
 
-Each feature layer is a single review commit over its prerequisite. The combined branch is linear: the shroud stack followed by achievement integration. The separate achievement branch remains available; its production content is also included in the combined source. Gameplay dependencies are unchanged; these names do not imply independent cherry-picks.
+The achievement and combined integration source layers are linear consumers of published shared-core commit `17d63f7d512711e911787e630f4533ee14a1e785` (schema 9335). The combined layer includes housing, fellowship, mercenaries, Spirit Shrouds and achievements in its source tree. Generic task rewards, carried Collect, completion gates, transport and shared-task ownership require this core; they do not require the achievement engine. Achievement progress, criteria, providers and achievement-specific rewards remain on their feature layer. Other feature branches must adopt their documented core dependency before combining newer migrations.
 
 The previous mixed master/develop heads are preserved under `archive/20261029-before-develop/`. They are backups, not ancestors of the rebased feature commits. Do not merge them into the new branches; that would reintroduce the old history. Use the [comparison and existing-clone instructions](COMPARE.md).
 

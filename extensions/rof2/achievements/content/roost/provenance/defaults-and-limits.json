@@ -1,0 +1,68 @@
+{
+  "quest_xp": {
+    "value": 1000,
+    "basis": "Existing user-approved configurable quest XP default where historical amount unknown."
+  },
+  "unknown_cash_aa_faction": "No invented award",
+  "handin_xy": 50,
+  "handin_vertical": 40,
+  "handin_basis": "Configurable emulator tolerance, not recovered historical constants",
+  "original_nests": {
+    "npc_types": 7,
+    "spawn_bindings": 82,
+    "size": 10,
+    "scale": "Original bound static placement transform/scale adopted by client; no guessed multiplier."
+  },
+  "recipes": "Two configured no-fail quest-container combines, quest flag0 for native recipe selection",
+  "snapshot_limit": "Crash before a saved snapshot, or disabled zone state saving, is not newly solved by this lifecycle patch.",
+  "armour_choices": "Ascending wrists and Raider hands absent until exact item/choice rules are established.",
+  "feather_respawn_seconds": 300,
+  "feather_ground_z_offset": 0.5,
+  "feather_geometry": "Researched approximate XY resolved against collision geometry; respawn/offset are configurable emulator values, not exact historical constants.",
+  "exploration_volumes": {
+    "xy_radius": 30,
+    "below_z": 15,
+    "above_z": 25,
+    "zone_line_xy_radius": 60,
+    "zone_line_z_tolerance": 30,
+    "basis": "Configurable emulator trigger volumes; not recovered historical constants."
+  },
+  "recipe_settings": {
+    "tradeskill": 75,
+    "trivial": 0,
+    "nofail": true,
+    "replace_container": true,
+    "quest": 0,
+    "basis": "Configured quest-container implementation; exact historical failure/trivial/container consumption behavior is not recovered. Native recipe quest flag0 is required for engine-owned success output."
+  },
+  "recipe_identities": [
+    {
+      "name": "Griffon Treat for Fenith\u2019s Griffon",
+      "output": 28674,
+      "container_item": 13624,
+      "ingredients": [
+        13404,
+        13412,
+        92816,
+        97251
+      ],
+      "output_count": 1,
+      "each_ingredient_quantity": 1,
+      "source_quest_id": 3606
+    },
+    {
+      "name": "Griffon Treat for first ledge Griffon",
+      "output": 28675,
+      "container_item": 13624,
+      "ingredients": [
+        13404,
+        13412,
+        97250,
+        97249
+      ],
+      "output_count": 1,
+      "each_ingredient_quantity": 1,
+      "source_quest_id": 3632
+    }
+  ]
+}

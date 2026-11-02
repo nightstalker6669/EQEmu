@@ -1,0 +1,37 @@
+{
+  "bounds": {
+    "min_x": 963.19,
+    "max_x": 1209.0,
+    "min_y": -544.45,
+    "max_y": 209.0
+  },
+  "counts": {
+    "grid": 46872,
+    "random": 5000,
+    "anchors": 5,
+    "total": 51877,
+    "collision_holes": 0,
+    "multiple_vertical_hits": 0,
+    "no_nav_within_search": 0,
+    "nav_xy_over5": 0,
+    "nav_z_delta_over5": 0,
+    "negative": 0
+  },
+  "min_collision_z": 89.12117,
+  "max_collision_z": 98.14546,
+  "max_nav_xy_distance": 0.0,
+  "max_nav_z_delta": 3.13002,
+  "grid_step": 2,
+  "random_seed": 20261030,
+  "collision_triangles_in_scope": 7752,
+  "normal_nav_triangles_in_scope": 1801,
+  "native_nav_tiles": 127,
+  "elapsed_seconds": 7.242,
+  "nav_method": "Source-format supported Detour v7 walkable polygon DETAIL triangles/edge proximity, not a call to findPath/findNearestPoly. Normal flag1, disabled2048 excluded, offmesh polygons excluded. Detail submesh index/vertex ranges validated; height interpolated on shipped detail triangles, not the coarse polygon plane.",
+  "hashes": {
+    "map": "ae36bbcdac82fbcf8fc50c8165a92975f2457b8752ad69f21d91bebfd7d8c9d1",
+    "nav": "34644c06006cb20061bd3b2da72282bd487cf163ee3a158aba5dd258d022b672",
+    "sampler": "994fce86866ceed684d53e403792ff194b913b4fb038466dedb6ab33577ad093"
+  },
+  "limits": "Finite two-unit grid plus seeded random samples; sub-grid obstructions, foliage/item visibility and native clickable pickup/custody unproved."
+}

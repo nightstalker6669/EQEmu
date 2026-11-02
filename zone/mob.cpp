@@ -1,3 +1,4 @@
+#include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -1277,6 +1278,25 @@ void Mob::CreateSpawnPacket(EQApplicationPacket* app, NewSpawn_Struct* ns) {
 	}
 }
 
+bool Mob::SetHousingItemBinding(const std::string& guid, uint32 estate_id, uint32 item_id)
+{
+	if (guid.size() != 16 || guid.find_first_not_of("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+-") != std::string::npos ||
+		!estate_id || estate_id == 0xffffffff || !item_id || item_id == 0xffffffff) {
+		return false;
+	}
+	m_housing_item_guid = guid;
+	m_housing_estate_id = estate_id;
+	m_housing_item_id = item_id;
+	return true;
+}
+
+void Mob::ClearHousingItemBinding()
+{
+	m_housing_item_guid.clear();
+	m_housing_estate_id = 0xffffffff;
+	m_housing_item_id = 0xffffffff;
+}
+
 void Mob::FillSpawnStruct(NewSpawn_Struct* ns, Mob* ForWho)
 {
 	int i;
@@ -1299,7 +1319,7 @@ void Mob::FillSpawnStruct(NewSpawn_Struct* ns, Mob* ForWho)
 	ns->spawn.y           = FloatToEQ19(m_Position.y); //((int32)y_pos)<<3;
 	ns->spawn.z           = FloatToEQ19(m_Position.z); //((int32)z_pos)<<3;
 	ns->spawn.spawnId     = GetID();
-	ns->spawn.curHp       = static_cast<uint8>(GetHPRatio());
+	ns->spawn.curHp       = (IsNPC() && BoundDestructibles::IsRuins(CastToNPC())) ? 0 : static_cast<uint8>(GetHPRatio());
 	ns->spawn.max_hp      = 100; // this field needs a better name
 	ns->spawn.race        = (use_model) ? use_model : race;
 	ns->spawn.runspeed    = runspeed;
@@ -1321,8 +1341,12 @@ void Mob::FillSpawnStruct(NewSpawn_Struct* ns, Mob* ForWho)
 	ns->spawn.invis		= (invisible || hidden) ? 1 : 0;	// TODO: load this before spawning players
 	ns->spawn.NPC		= IsClient() ? 0 : 1;
 	ns->spawn.IsMercenary = IsMerc() ? 1 : 0;
+	strn0cpy(ns->spawn.housing_item_guid, m_housing_item_guid.empty() ? "0000000000000000" : m_housing_item_guid.c_str(), sizeof(ns->spawn.housing_item_guid));
+	ns->spawn.housing_estate_id = m_housing_estate_id;
+	ns->spawn.housing_item_id = m_housing_item_id;
+
 	ns->spawn.targetable_with_hotkey = no_target_hotkey ? 0 : 1; // opposite logic!
-	ns->spawn.untargetable = IsTargetable();
+	ns->spawn.untargetable = (IsNPC() && BoundDestructibles::IsRuins(CastToNPC())) ? false : IsTargetable();
 
 	ns->spawn.petOwnerId	= ownerid;
 
@@ -1423,11 +1447,14 @@ void Mob::FillSpawnStruct(NewSpawn_Struct* ns, Mob* ForWho)
 			sprintf(ns->spawn.DestructibleModel, "%s", lastname);
 		// Changing the second string made no visible difference
 		sprintf(ns->spawn.DestructibleName2, "%s", ns->spawn.name);
-		// Putting a string in the final one that was previously empty had no visible effect.
-		ns->spawn.DestructibleString[0] = '\0';
+		// RoF2 resolves this name against the zone's original static actors.
+		// Quest-controlled metadata is assigned before the first spawn packet;
+		// an absent value retains the legacy empty-string behavior.
+		const auto zone_actor = GetEntityVariable("destructible_zone_actor");
+		strn0cpy(ns->spawn.DestructibleString, zone_actor.c_str(), sizeof(ns->spawn.DestructibleString));
 
 		// Sets damage appearance level of the object.
-		ns->spawn.DestructibleAppearance = luclinface; // Was 0x00000000
+		ns->spawn.DestructibleAppearance = BoundDestructibles::IsRuins(CastToNPC()) ? 4 : luclinface; // Safe0..4 for late entrants.
 		//ns->spawn.DestructibleAppearance = static_cast<EmuAppearance>(_appearance);
 		// #appearance 44 1 makes it jump but no visible damage
 		// #appearance 44 2 makes it look completely broken but still visible
@@ -1529,6 +1556,30 @@ void Mob::CreateHPPacket(EQApplicationPacket* app)
 
 void Mob::SendHPUpdate(bool force_update_all)
 {
+	if (IsNPC() && BoundDestructibles::IsRuins(CastToNPC())) {
+		SetHP(0);
+		// OP_Death normally ends this client-side relationship. A retained
+		// stage4NPC needs explicit cleanup without deleting its visual owner.
+		for (const auto &entry : entity_list.GetClientList()) {
+			auto client = entry.second;
+			if (client->GetTarget() == this) {
+				client->auto_attack = false;
+				client->auto_fire = false;
+				client->attack_timer.Disable();
+				client->ranged_timer.Disable();
+				client->attack_dw_timer.Disable();
+				client->SetTarget(nullptr);
+				client->SendTargetCommand(0); // Existing native target-clear API.
+			}
+			if (client->aa_los_them_mob == this) {
+				client->aa_los_them_mob = nullptr;
+				client->m_AutoAttackPosition = glm::vec4();
+				client->m_AutoAttackTargetLocation = glm::vec3();
+				client->los_status = false;
+				client->los_status_facing = false;
+			}
+		}
+	}
 
 	// If our HP is different from last HP update call - let's update selves
 	if (IsClient()) {

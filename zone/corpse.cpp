@@ -273,7 +273,12 @@ Corpse::Corpse(Client *c, int32 rez_exp, KilledByTypes in_killed_by) : Mob(
 	m_consented_guild_id = c->AutoConsentGuildEnabled() ? c->GuildID() : 0;
 
 	m_is_corpse_changed         = true;
-	m_rezzed_experience         = rez_exp;
+	// Temporary forms retain their possessions on death under the explicit
+	// escrow-safe inventory policy. A corpse must not later return starter
+	// equipment into the restored original profile or strand earned bag children.
+	const bool keep_shroud_possessions = c->IsSpiritShrouded();
+	if (keep_shroud_possessions) m_EntityVariables["spirit_shroud_corpse"] = "1";
+	m_rezzed_experience         = keep_shroud_possessions ? 0 : rez_exp;
 	m_is_player_corpse          = true;
 	m_is_locked                 = false;
 	m_being_looted_by_entity_id = 0xFFFFFFFF;
@@ -312,6 +317,7 @@ Corpse::Corpse(Client *c, int32 rez_exp, KilledByTypes in_killed_by) : Mob(
 
 	/* Check Rule to see if we can leave corpses */
 	if (
+		!keep_shroud_possessions &&
 		(!RuleB(Character, LeaveNakedCorpses) || RuleB(Character, LeaveCorpses)) &&
 		GetLevel() >= RuleI(Character, DeathItemLossLevel)
 		) {
@@ -394,12 +400,21 @@ Corpse::Corpse(Client *c, int32 rez_exp, KilledByTypes in_killed_by) : Mob(
 		database.SaveCursor(c->CharacterID(), start, finish);
 
 		c->CalcBonuses();
-		c->Save();
+		const auto character_saved = c->Save(0, false);
 
 		IsRezzed(false);
 		Save();
 
-		database.TransactionCommit();
+		const bool inventory_committed = database.TransactionCommit().Success();
+		// Reconcile from durable rows after the complete death relocation.
+		// Queue this before level/AA facts so a mixed achievement cannot use
+		// pre-death ownership while evaluating its other criteria.
+		c->UpdateAchievementForOwnItem(0);
+		if (inventory_committed) {
+			if (character_saved) {
+				c->UpdateAchievementForLevel(c->GetLevel());
+			}
+		}
 
 		UpdateEquipmentLight();
 		UpdateActiveLight();
@@ -414,6 +429,16 @@ Corpse::Corpse(Client *c, int32 rez_exp, KilledByTypes in_killed_by) : Mob(
 
 	IsRezzed(false);
 	Save();
+	if (keep_shroud_possessions) {
+		uint64_t applied_loss = 0;
+		if (!m_corpse_db_id || !c->RecordSpiritShroudDeath(m_corpse_db_id, rez_exp, applied_loss)) {
+			// The zero-XP corpse was saved before the debit. If accounting or
+			// commit status is uncertain, reconnect reconstructs committed state.
+			c->Disconnect();
+			return;
+		}
+		m_rezzed_experience = static_cast<uint32_t>(applied_loss);
+	}
 }
 
 void Corpse::MoveItemToCorpse(Client *client, EQ::ItemInstance *inst, int16 equipSlot, std::list<uint32> &removedList)
@@ -649,6 +674,31 @@ bool Corpse::Save()
 	if (!m_is_corpse_changed) {
 		return true;
 	}
+
+ // A single joined UPDATE makes the persisted claim authoritative even if a
+ // different zone accepts resurrection concurrently with this stale instance.
+ if (m_corpse_db_id && m_EntityVariables.count("spirit_shroud_corpse")) {
+  if (!m_item_list.empty() || m_copper || m_silver || m_gold || m_platinum) return false;
+  const auto id = std::to_string(m_corpse_db_id), owner = std::to_string(m_character_id);
+  const auto update = database.QueryDatabase(fmt::format(
+   "UPDATE character_corpses c JOIN spirit_shroud_corpse_state p ON p.corpse_id=c.id AND p.character_id=c.charid "
+   "SET c.zone_id={0},c.instance_id={1},c.x={2},c.y={3},c.z={4},c.heading={5},c.guild_consent_id={6},c.is_locked={7},"
+   "c.exp=IF(p.rez_claimed_at IS NULL AND c.rezzable=1 AND c.is_rezzed=0 AND {8}=1 AND {9}=0,p.applied_loss,0),"
+   "c.is_rezzed=IF(p.rez_claimed_at IS NOT NULL OR c.rezzable=0 OR {8}=0 OR {9}=1,1,c.is_rezzed),"
+   "c.rez_time=IF(c.rezzable=0 OR {8}=0,0,LEAST(c.rez_time,{10})),c.rezzable=LEAST(c.rezzable,{8}) "
+   "WHERE c.id={11} AND c.charid={12} AND p.provenance_version=1 AND p.applied_loss<=2147483647",
+   zone->GetZoneID(),zone->GetInstanceID(),GetX(),GetY(),GetZ(),GetHeading(),m_consented_guild_id,m_is_locked?1:0,
+   m_is_rezzable?1:0,IsRezzed()?1:0,m_remaining_rez_time,m_corpse_db_id,m_character_id));
+  if (!update.Success()) return false;
+  auto state = database.QueryDatabase("SELECT c.exp,c.is_rezzed,c.rezzable,c.rez_time FROM spirit_shroud_corpse_state p JOIN character_corpses c ON c.id=p.corpse_id AND c.charid=p.character_id WHERE p.corpse_id="+id+" AND p.character_id="+owner+" AND p.provenance_version=1 AND p.applied_loss<=2147483647");
+  if (!state.Success() || state.RowCount()!=1) return false;
+  m_rezzed_experience=Strings::ToUnsignedInt(state.begin()[0]);
+  if (Strings::ToUnsignedInt(state.begin()[1])) IsRezzed(true);
+  m_is_rezzable=Strings::ToUnsignedInt(state.begin()[2])!=0;
+  m_remaining_rez_time=Strings::ToUnsignedInt(state.begin()[3]);
+  if (!m_is_rezzable) m_corpse_rezzable_timer.Disable();
+  return true;
+ }
 
 	CharacterCorpseEntry ce;
 
@@ -1700,6 +1750,9 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 		/* Update any tasks that have an activity to loot this item */
 		if (RuleB(TaskSystem, EnableTaskSystem) && IsNPCCorpse()) {
 			c->UpdateTasksOnLoot(this, item->ID, count);
+		}
+		if (IsNPCCorpse()) {
+			c->UpdateAchievementForLoot(item->ID, count);
 		}
 
 		/* Remove it from Corpse */

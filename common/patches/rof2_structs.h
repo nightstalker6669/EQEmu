@@ -2724,12 +2724,27 @@ struct PetitionUpdate_Struct {
 	uint32 petnumber;    // Petition Number
 	uint32 color;		// 0x00 = green, 0x01 = yellow, 0x02 = red
 	uint32 status;
-	time_t senttime;    // 4 has to be 0x1F
+	uint32 senttime;    // ROF2 uses a 32-bit wire timestamp, independent of host time_t.
 	char accountid[32];
 	char gmsenttoo[64];
 	int32 quetotal;
 	char charname[64];
+	uint32 sorttime;    // Client defaults this to senttime when zero.
 };
+
+static_assert(sizeof(PetitionUpdate_Struct) == 0xb8, "ROF2 petition queue row size");
+static_assert(offsetof(PetitionUpdate_Struct, senttime) == 0x0c, "ROF2 queue timestamp offset");
+static_assert(offsetof(PetitionUpdate_Struct, accountid) == 0x10, "ROF2 queue account offset");
+static_assert(offsetof(PetitionUpdate_Struct, gmsenttoo) == 0x30, "ROF2 queue recipient offset");
+static_assert(offsetof(PetitionUpdate_Struct, quetotal) == 0x70, "ROF2 queue total offset");
+static_assert(offsetof(PetitionUpdate_Struct, charname) == 0x74, "ROF2 queue character offset");
+static_assert(offsetof(PetitionUpdate_Struct, sorttime) == 0xb4, "ROF2 queue sort timestamp offset");
+
+struct PetitionDelete_Struct {
+	uint32 petnumber;
+};
+
+static_assert(sizeof(PetitionDelete_Struct) == 4, "ROF2 delete and resolve request size");
 
 struct Petition_Struct {
 	uint32 petnumber;
@@ -2747,11 +2762,16 @@ struct Petition_Struct {
 	uint32 checkouts;
 	uint32 unavail;
 	//uint8 unknown5[4];
-	time_t senttime;
+	uint32 senttime;
 	uint32 unknown2;
 	char petitiontext[1024];
 	char gmtext[1024];
 };
+
+static_assert(offsetof(Petition_Struct, senttime) == 0xa4, "ROF2 petition timestamp offset");
+static_assert(offsetof(Petition_Struct, petitiontext) == 0xac, "ROF2 petition text offset");
+static_assert(offsetof(Petition_Struct, gmtext) == 0x4ac, "ROF2 GM text offset");
+static_assert(sizeof(Petition_Struct) == 0x8ac, "ROF2 fixed checkout detail size");
 
 
 struct Who_All_Struct { // 156 length total
@@ -4249,6 +4269,7 @@ struct TaskDescriptionData2_Struct {
 struct TaskDescriptionTrailer_Struct {
 	//uint16  unknown1; // 0x0012
 	uint32	Points;
+	uint8	has_reward_selection;
 };
 
 struct TaskActivityHeader_Struct {
@@ -4769,7 +4790,7 @@ struct ItemSerializationHeaderFinish
 	uint32 ornamentHeroModel;
 	int32 unknown063;	// 0
 	uint8 Copied;		// Copied Flag - Possibly for items copied during server transfer?
-	int32 unknowna4;	// 0xffffffff
+	uint32 unknowna4;	// Per-instance RealEstateID; 0xffffffff when unbound (reader 0x555703).
 	int32 unknowna5;	// 0
 	uint8 ItemClass; //0, 1, or 2
 };
@@ -5249,6 +5270,21 @@ struct MaxCharacters_Struct
 /*008*/ uint32 unknown008;	// Seen 0
 };
 
+// Matching May10 2013 management messages; explicit little-endian packed wire.
+// Legacy field names below are retained for source compatibility; proven roles
+// are documented here rather than inferred from historical captures.
+struct MercenaryAutoAssist_Struct { uint8 Enabled; }; // OP0b72, bool0/1
+struct MercenaryAssist_Struct { uint8 Marker; }; // OP7e6f, constant0x30
+struct MercenarySwitchRequest_Struct { uint32 RosterIndex; }; // OP1b37 C->S
+struct MercenarySwitchResponse_Struct { uint32 Unknown0; uint32 Delay; uint32 Result; }; // OP1b37 S->C
+struct MercenaryTransfer_Struct {
+ uint32 SenderEntityID, RecipientEntityID, GoldCost, AlternateCost, AlternateType, AlternateMode, Result;
+}; // OP5df8 request/invitation; OP4333 response/result; 28bytes
+struct MercenaryUnshroud_Struct {
+ uint32 GoldCost, AlternateCost, PreviousLevel, NewLevel, Choice;
+ char Message[100];
+}; // OP69ca prompt, OP6e9f response;120bytes. Choice0upgrade/1dismiss, server-boundofferrequired.
+
 // Used by MercenaryListEntry_Struct
 struct MercenaryStance_Struct {
 /*0000*/ uint32 StanceIndex; // Index of this stance (sometimes reverse reverse order - 3, 2, 1, 0 for 4 stances etc)
@@ -5267,8 +5303,8 @@ struct MercenaryListEntry_Struct {
 /*0032*/ uint32 AltCurrencyType; // Alternate Currency Type? - 19^17^Bayle Mark^0 - Seen 19
 /*0036*/ uint8 MercUnk01; // Unknown (always see 0)
 /*0037*/ int32 TimeLeft; // Unknown (always see -1 at merchant) - Seen 900000 (15 minutes in ms for newly hired merc)
-/*0041*/ uint32 MerchantSlot; // Merchant Slot? Increments, but not always by 1 - May be for Merc Window Options (Seen 5, 36, 1 for active mercs)?
-/*0045*/ uint32 MercUnk02; // Unknown (normally see 1, but sometimes 2 or 0)
+/*0041*/ uint32 MerchantSlot; // Native command/state, echoed as MercenaryCommand.MercCommand; NOT a roster slot.
+/*0045*/ uint32 MercUnk02; // Native selected stance INDEX, echoed as command Option.
 /*0049*/ uint32 StanceCount; // Iterations of MercenaryStance_Struct - Normally 2 to 4 seen
 /*0053*/ int32 MercUnk03; // Unknown (always 0 at merchant) - Seen on active merc: 93 a4 03 77, b8 ed 2f 26, 88 d5 8b c3, and 93 a4 ad 77
 /*0057*/ uint8 MercUnk04; // Seen 1
@@ -5304,22 +5340,22 @@ struct MercenaryData_Struct {
 /*0032*/ uint32 AltCurrencyType; // Alternate Currency Type? - 19^17^Bayle Mark^0 - Seen 19
 /*0036*/ uint8 MercUnk01; // Unknown (always see 0)
 /*0037*/ int32 TimeLeft; // Unknown (always see -1 at merchant) - Seen 900000 (15 minutes in ms for newly hired merc)
-/*0041*/ uint32 MerchantSlot; // Merchant Slot? Increments, but not always by 1 - May be for Merc Window Options (Seen 5, 36, 1 for active mercs)?
-/*0045*/ uint32 MercUnk02; // Unknown (normally see 1, but sometimes 2 or 0)
+/*0041*/ uint32 MerchantSlot; // Native command/state, echoed as MercenaryCommand.MercCommand; NOT a roster slot.
+/*0045*/ uint32 MercUnk02; // Native selected stance INDEX, echoed as command Option.
 /*0049*/ uint32 StanceCount; // Iterations of MercenaryStance_Struct - Normally 2 to 4 seen
 /*0053*/ int32 MercUnk03; // Unknown (always 0 at merchant) - Seen on active merc: 93 a4 03 77, b8 ed 2f 26, 88 d5 8b c3, and 93 a4 ad 77
 /*0057*/ uint8 MercUnk04; // Seen 1
 /*0058*/ char MercName[1]; // Null Terminated Mercenary Name (00 at merchants)
 /*0000*/ MercenaryStance_Struct Stances[1]; // Count Varies, but hard set to 2 for now - From dbstr_us.txt - 1^24^Passive^0, 2^24^Balanced^0, etc (1 to 9 as of April 2012)
-/*0000*/ uint32 MercUnk05; // Seen 1 - Extra Merc Data field that differs from MercenaryListEntry_Struct
-// MercUnk05 may be a field that is at the end of the packet only, even if multiple mercs are listed (haven't seen examples of multiple mercs owned at once)
+/*0000*/ uint32 MercUnk05; // Canonical carrier for total available slots: ONE trailing word after ALL native rows.
+// The matching native parser5684a0 proves this word is at the end of the entire packet.
 };
 
 // Should be named OP_MercenaryDataResponse, but the current opcode using that name should be renamed first
 // Size varies if mercenary is hired or if browsing Mercenary Merchant
 // This may also be the response for Client->Server 0x0327 (size 0) packet On Live as of April 2 2012
 struct MercenaryDataUpdate_Struct {
-/*0000*/ int32 MercStatus; // Seen 0 with merc and -1 with no merc hired
+/*0000*/ int32 MercStatus; // Selected zero-based parsed roster index; -1 means no selected row.
 /*0004*/ uint32 MercCount; // Seen 1 with 1 merc hired and 0 with no merc hired
 /*0008*/ MercenaryData_Struct MercData[0]; // Data for individual mercenaries in the Merchant List
 };
@@ -5336,7 +5372,7 @@ struct NoMercenaryHired_Struct {
 // OP_MercenaryAssign (Same packet as NoMercenaryHired_Struct?)
 // Not actually Merc related - This is actually a weapon equp packet
 struct MercenaryAssign_Struct {
-/*0000*/ uint32 MercEntityID; // Seen 0 (no merc spawned) or 615843841 and 22779137
+/*0000*/ uint32 MercEntityID; // Timer consumer567ca0 reads ONLY low byte as presence; RoF2 server emits0/1.
 /*0004*/ uint32 MercUnk01; //
 /*0008*/ uint32 MercUnk02; //
 /*0012*/
@@ -5345,7 +5381,7 @@ struct MercenaryAssign_Struct {
 // OP_MercenaryTimer
 // Sent on Zone-In, or after Dismissing, Suspending, or Unsuspending Mercs
 struct MercenaryStatus_Struct {
-/*0000*/ uint32 MercEntityID; // Seen 0 (no merc spawned) or 615843841 and 22779137
+/*0000*/ uint32 MercEntityID; // Timer consumer567ca0 reads ONLY low byte as presence; RoF2 server emits0/1.
 /*0004*/ uint32 UpdateInterval; // Seen 900000 - Matches from 0x6537 packet (15 minutes in ms?)
 /*0008*/ uint32 MercUnk01; // Seen 180000 - 3 minutes in milleseconds? Maybe next update interval?
 /*0012*/ uint32 MercState; // Seen 5 (normal) or 1 (suspended)
@@ -5375,11 +5411,43 @@ struct SuspendMercenaryResponse_Struct {
 // Sent by client when requesting to view Mercenary info or Hire a Mercenary
 struct MercenaryMerchantRequest_Struct {
 /*0000*/ uint32 MercID; // Seen 399 and 400 for merc ID
-/*0004*/ uint32 MercUnk01; // Seen 1
+/*0004*/ uint32 MercUnk01; // RoF2 initial stance index in the advertised list
 /*0008*/ uint32 MercMerchantID; // Entity ID for Mercenary Merchant
 /*0012*/ uint32 MercUnk02; // Seen 65302016 (00 6e e4 03) - (probably actually individual uint8 fields), but seen as DWORD in Seeds client.
 /*0016*/
 };
+
+// Matching May 10 2013 RoF2 server notifications. Application payloads only.
+struct MercenaryDead_Struct {
+/*0000*/ uint32 RestoreDeadline; // Native consumer sets lifecycle state0 (Revive).
+};
+// Restricted and RestoreReady consumers read no payload. Never serialize a C++
+// empty struct (sizeof would be1); construct an application packet of size0.
+constexpr uint32 MercenaryRestrictedPayloadBytes = 0;
+constexpr uint32 MercenaryRestoreReadyPayloadBytes = 0;
+struct MercenaryUpkeep_Struct {
+/*0000*/ uint8 PaidWithAlternateCurrency; //0: charged gold; nonzero: charged alternate.
+};
+struct MercenaryCostUpdate_Struct {
+/*0000*/ uint32 PurchaseGold;
+/*0004*/ uint32 PurchaseAlternate;
+/*0008*/ uint32 UpkeepGold;
+/*0012*/ uint32 UpkeepAlternate;
+};
+struct MercenaryCurrencyMessage_Struct {
+/*0000*/ uint8 Plural;
+/*0001*/ uint8 Unknown001[3]; //Not consumed by the matching handler; emit zero.
+/*0004*/ uint32 CurrencyID; //0 falls back to the current mercenary currency ID.
+/*0008*/ char Prefix[1]; //Variable NUL-terminated prefix; client appends currency name.
+};
+struct MercenaryTimerUpdate_Struct {
+/*0000*/ uint32 RemainingMilliseconds;
+};
+static_assert(sizeof(MercenaryDead_Struct) == 4);
+static_assert(sizeof(MercenaryUpkeep_Struct) == 1);
+static_assert(sizeof(MercenaryCostUpdate_Struct) == 16);
+static_assert(sizeof(MercenaryCurrencyMessage_Struct) == 9);
+static_assert(sizeof(MercenaryTimerUpdate_Struct) == 4);
 
 // Sent by Server in response to requesting to view Mercenary info or Hire a Mercenary
 struct MercenaryMerchantResponse_Struct {

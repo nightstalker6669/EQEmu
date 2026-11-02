@@ -1,74 +1,223 @@
 {
-  "branch": "rof2-shared-core",
+  "branch": "rof2-integration",
   "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "features": [
-    "shared-core"
+    "shared-core",
+    "housing",
+    "fellowship",
+    "mercenaries",
+    "spirit-shrouds",
+    "achievements"
   ],
-  "inputs": {
-    "source": "eqemu-rof2-housing 710ecb7, fellowship 9382453, spirit-shrouds e32ca15",
-    "task_rewards": "rof2-achievements 1cfaaee4a2c02e2fb7c9992d971749790bfb83e7"
-  },
-  "compatibility": "Stable legacy table/type/custom-data names; source implementations extracted once into common/shared_core; feature-specific gameplay and recovery adapters excluded.",
-  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
-  "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
+  "inputs": [
+    {
+      "feature": "housing",
+      "repository": "nightstalker6669/eqemu-rof2-housing",
+      "commit": "710ecb7530ff0a5ade837e887ad7bc2f84622d07",
+      "omitted_gallery_and_generated_files": [
+        "docs/images/README.md",
+        "docs/images/evantil-abode.png",
+        "docs/images/guild-interior-services.png",
+        "docs/images/hermits-hideaway.png",
+        "docs/images/palatial-festival.png"
+      ]
+    },
+    {
+      "feature": "fellowship",
+      "repository": "nightstalker6669/eqemu-rof2-fellowship",
+      "commit": "9382453264f4f84ac7e83a9ee5c9c9a1391c6017",
+      "omitted_gallery_and_generated_files": []
+    },
+    {
+      "feature": "mercenaries",
+      "repository": "nightstalker6669/eqemu-rof2-mercenaries",
+      "commit": "00b07c381a738a21aff08867bf186e6c2bfaffb0",
+      "omitted_gallery_and_generated_files": []
+    },
+    {
+      "feature": "spirit-shrouds",
+      "repository": "nightstalker6669/eqemu-rof2-spirit-shrouds",
+      "commit": "e32ca155a67b6f4d12eef36de131c5810998517a",
+      "omitted_gallery_and_generated_files": []
+    },
+    {
+      "feature": "achievements",
+      "repository": "nightstalker6669/eqemu-rof2-achievements",
+      "commit": "334a0e2c28079af07c9a4d07a0654f74ba9e4991",
+      "omitted_gallery_and_generated_files": []
+    }
+  ],
   "source_integration": "Feature-only changes replayed directly onto upstream develop; linear review commits without master merges or old mixed-history parents.",
-  "upstream_branch": "develop",
-  "previous_published_commit": "f84de86f885d6e0240ccb1559629a2cfc994708b",
-  "backup_branch": "archive/20261029-before-develop/rof2-shared-core",
-  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base.",
-  "shared_task_rewards": {
-    "binary_database_version": 9335,
-    "wire_api": "EQ::RewardSelection in common/reward_display.h",
-    "historical_schema_envelopes": [
-      9331,
-      9332
-    ],
-    "supplemental_sql_identity": "Original class, shared occurrence and admission files retained; see SHARED-REWARDS.md",
-    "scope": "Generic reward catalogue, task selection/delivery/occurrence ownership, custody and idempotency, carried Collect and distinct task-completion gates; achievement runtime and content excluded.",
-    "validation": "See private extraction receipt; no runtime/database deployment or native acceptance claimed."
-  },
-  "prior_rebase_validation": {
-    "status": "Passed targeted source and package checks on pure upstream develop; source publication only.",
-    "compiler": "GCC12/C++20 with cached vcpkg SDK; targeted syntax compilation, normal source preamble for zone translation units.",
-    "translation_units": [
-      "zone/attack.cpp",
-      "zone/bot.cpp",
-      "zone/spell_effects.cpp",
-      "common/dbcore.cpp"
-    ],
-    "content_preservation": "Exact added/removed source lines versus previous snapshot equal only the upstream mixed-base-to-develop delta in 11 paths. Opcode mappings/structures and other production packages retained byte-for-byte, except installer pin/checksum and current guides.",
-    "package_checks": [
-      "Manifest hashes/sizes, Python syntax, JSON, guide links",
-      "Unique migration IDs, opcode names, mapping keys and handlers"
-    ],
-    "history": "New linear review history; old heads preserved in archive branches.",
-    "full_branch_link": "Not independently linked; full combined build recorded by the integration branch.",
-    "native_acceptance": "No new native gameplay or active server/database deployment during this rebase."
-  },
   "validation": {
-    "status": "Shared reward extraction independently built and checked offline.",
-    "compiler": "GCC12/C++20, original cached vcpkg SDK, separate build tree/container.",
-    "full_branch_link": "world and zone linked successfully with normal CMake/PCH configuration.",
-    "wire_compatibility": "386 serialized buffers byte-identical to published achievements1cfaaee4a across all seven reward wire entry types.",
-    "task_contracts": "Carried Collect high-water, distinct completion and frozen gate behavior, common-only identity, explicit wire fixtures and duplicate-subset refusal passed in private harness.",
-    "consumer_compatibility": "Seven contextual translation units checked for each of achievements1cfaaee4a and integrationf59defce0 consumer trees.",
-    "migration_compatibility": "Registered manifest and supplemental SQL bytes identical to immutable published source; one9331-9334 registration each.",
-    "native_acceptance": "No server, client, database, binary installation, service or active session actions."
+    "status": "Both consumers independently passed clean Linux world and zone compilation and linking on the published shared core.",
+    "compiler": "GCC12/C++20 with cached vcpkg SDK; normal CMake precompiled headers, RelWithDebInfo -O0 -g0.",
+    "full_branch_link": "Clean world and zone links passed independently for BOTH rof2-achievements and rof2-integration; original serial build session completed successfully.",
+    "built_targets": [
+      "world",
+      "zone"
+    ],
+    "clean_consumer_builds": {
+      "rof2-integration": {
+        "targets": [
+          "world",
+          "zone"
+        ],
+        "result": "passed",
+        "clean_build": true,
+        "binary_sha256": {
+          "world": "f9e2941c967b037cba3f2821082d6ee688409748379d2a4b42be14fe03d6875b",
+          "zone": "3cf8da27059a32e90b238371b7036b942d0a83de77d91d534556022670d9d93f"
+        }
+      },
+      "rof2-achievements": {
+        "targets": [
+          "world",
+          "zone"
+        ],
+        "result": "passed",
+        "clean_build": true,
+        "binary_sha256": {
+          "world": "6aef5e1349202ad9f24e7c32ddb6409b7d283e77f03bece6e85912fcc4123a33",
+          "zone": "2a61fc1483f8cf1a480f1eaa4ad886b29ec214d01db3a8ab007f1e8cd15be094"
+        }
+      }
+    },
+    "resource_limits": "Each clean build used one CPU and 4GiB memory, sequentially.",
+    "validated_dependency": "rof2-shared-core 17d63f7d512711e911787e630f4533ee14a1e785, binary database schema9335.",
+    "scope": "Shared-core consumer adoption and wire codec boundary validation; metadata-only provenance correction after completed builds does not alter compiled source/schema/content.",
+    "deployment": "Source publication only; no runtime, client, database or new Buried Sea content actions.",
+    "native_acceptance": "No new native quest acceptance is claimed by this consumer adoption."
   },
-  "currency_acknowledgement_followup": {
-    "scope": "Return actual alternate-currency persistence success to durable reward callers in ordinary and clamped paths; while currency is unloaded, durable callers retry explicitly without enqueuing a hidden grant. Ordinary three-argument callers retain their queue behavior.",
-    "origin": "Parent-reviewed contextual correction after immutable source extraction.",
-    "validation": "Incremental core zone linked; actual-method behavior fixtures and contextual consumer client compilation recorded in private review evidence.",
-    "schema_changes": "None"
+  "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
+  "shared_core": "Inherited from rof2-shared-core; one canonical implementation in common/shared_core; legacy feature headers forward to it.",
+  "remaining_feature_dependencies": "Published feature/runtime dependencies are retained. Extracting shared infrastructure does not make all gameplay patches independent.",
+  "reviewed_source_repairs": [
+    "Replace missing excluded crate_test_content.h with production-only crate_content_types.h; retain bounded read-only legacy manifest decoding and original digest/ownership checks. No fixtures or test data included.",
+    "Resolve current upstream signatures, component buff APIs, strict database transaction safeguards and permanent-profile-only AA/save achievement updates.",
+    "Deduplicate mercenary switch opcode/handler while retaining the bounded RoF2 roster path and upstream legacy dispatch for other clients.",
+    "Retain operation-3 native shroud buff reconstruction through current OP_BuffDefinition; restore its explicit ability-cast helper include.",
+    "Use upstream-default precompiled headers in the integrated installer, matching the validated current source rather than the historical standalone overlay build."
+  ],
+  "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "upstream_branch": "develop",
+  "previous_published_commit": "474dd3603444ed2d02f3fa616db6f7104b734d1a",
+  "backup_branch": "archive/20261029-before-develop/rof2-integration",
+  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base.",
+  "achievement_content_milestones": [
+    {
+      "name": "Mesa armor, gifts and encounters",
+      "package": "extensions/rof2/achievements/content/mesa-remaining",
+      "tasks": 36,
+      "activities": 277,
+      "recipes": 27,
+      "historical_achievement_definitions": 4,
+      "parent_reward_sets": 4,
+      "protocol_changes": "None; existing achievement/task/reward protocol retained",
+      "native_evidence": "Eight distinct tasks completed; all eight component bits, original20equipment slots, unrelated active tasks and earring scaling persisted through fresh process login. Dorina Lament saved reward offer survived login and native selection delivered an actual item. Escort uses explicitly labelled route-only administrative prerequisite checkpoint after separately observed genuine material acquisition.",
+      "historical_limits": "May31,2013 cutoff; unrecovered encounter balance/probabilities/path remain explicit user-approved configurable reconstructions; see package provenance.",
+      "published_commit": "a21ffd63d1fe527b4a2d689b081228e5a8221cf4",
+      "repository": "nightstalker6669/eqemu-rof2-achievements"
+    },
+    {
+      "name": "Blackfeather Roost quests/acquisition/nests",
+      "package": "extensions/rof2/achievements/content/roost",
+      "historical_cutoff": "2013-05-31",
+      "quests": 15,
+      "activities": 54,
+      "catalogue_definitions": 5,
+      "engine_source_files": 12,
+      "reward_limits": "Ascending wrist and Raider glove/bundle choices unresolved; neither parent reward set configured.",
+      "native_status": "Six distinct quests completed with component credit; all seven nest types, retained ruins/late entry/native deadline, feather pickups/handins/item+XP reward and class-filtered paired earrings with fresh-login persistence passed on the corresponding develop combined build. Explicit remaining limits retained; client-local combat toggle unchanged.",
+      "validation": "Nine affected public translation units, linked Map/BVH tests and assertion-enabled lifecycle contracts passed. The corresponding combined develop server passed a full compile/link and scoped native gameplay. Full standalone public link/native rerun not repeated.",
+      "private_data_included": false,
+      "published_commit": "2b7d69447aa8a2f998eb1a18fbbb60394074e7e6",
+      "repository": "nightstalker6669/eqemu-rof2-achievements"
+    },
+    {
+      "name": "Vergalid Mines quests and rewards",
+      "package": "extensions/rof2/achievements/content/vergalid",
+      "historical_cutoff": "2013-05-31",
+      "quests": 17,
+      "activities": 56,
+      "achievement_groups": 4,
+      "new_actor_types": 7,
+      "native_completed_quests": 17,
+      "native_parent_reward_paths": 4,
+      "native_parent_reward_item_entries": 5,
+      "fresh_login_persistence": true,
+      "new_wire_opcodes": false,
+      "native_shared_members_checked": 1,
+      "historical_and_platform_limits": "Labelled numerical/geometry/class-policy defaults; head-variant family inference; full multiplayer orb and native Windows remain unverified. See package provenance.",
+      "private_data_included": false
+    }
+  ],
+  "runtime_migration_2026_10_30": {
+    "source_identity": "676a1afb38acf45c66661341567d66d009dc68d5",
+    "base_integration_commit": "c24337e2903e82c00f7a1ed6998ac60f505ec494",
+    "scope": "Controlled migration from the prior 23.10.3-based overlays to the develop-based combined server; this is separate from source publication.",
+    "build": "Full Linux combined compile/link and matched server deployment passed, including world, zone, shared_memory and housing tools.",
+    "preservation": "All 437 database tables retained; 430 checksums unchanged and seven expected schema/version changes. Original values in 14 affected tables matched the pre-migration shadow. Housing and player data retained.",
+    "native": "RoF2 login, geared inventory and prior achievements persisted. Six distinct Roost quests completed; all seven nest types passed real melee/kill credit, retained ruins and late entry. Feather acquisition, handins and item/XP rewards passed. Adrian's Calling delivered both class-filtered Soldier earrings in one attempt; fresh login retained the pair and original weapons.",
+    "limits": [
+      "Representative native checks do not establish complete cross-feature gameplay acceptance.",
+      "No native Windows build or Windows deployment acceptance claimed.",
+      "Client-local attack toggle remains enabled until explicit attack off; killer target selection clears.",
+      "Roost Ascending wrist and Raider glove/bundle choices remain unresolved and unconfigured.",
+      "Standalone achievement-only full link/native rerun was not repeated; public translation-unit and linked Map/BVH/lifecycle checks are documented in that milestone."
+    ],
+    "combined_only_repairs": [
+      "Preserve housing-aware map, raycast and Mob implementations while integrating bound-nest LOS/lifecycle.",
+      "Preserve the achievement ProcessEvent permanent-profile guard using IsSpiritShrouded; the standalone achievement branch does not expose that combined API.",
+      "Retain reviewed RoF2 petition codecs, mappings and dispatch safeguards."
+    ]
   },
-  "shared_task_transport": {
-    "source": "Parent-reviewed generic schema9335 candidate; contextual port over published fc88a0ba79a05e437e7b61af4e38ead32131de0f",
-    "schema": 9335,
-    "migration": "2026_11_01_shared_task_average_levels.sql",
-    "scope": "Recent boat passenger observations, owned shared-task mission instance lookup, optional persisted-member average-level admission",
-    "achievement_dependency": "None; Lua lookup uses stock shared-task and dynamic-zone APIs",
-    "content_activation": "None; policy table is empty and no mission or quest content is imported",
-    "protocol_document": "docs/rof2/transport-passenger-state.md",
-    "validation": "Offline core world/zone link and contextual consumer checks are recorded in private review evidence; no runtime, database or native gameplay acceptance claimed."
+  "milestones": [
+    {
+      "name": "Steppes quests and shared-task persistence",
+      "package": "extensions/rof2/achievements/content/steppes",
+      "historical_cutoff": "2013-05-31",
+      "quests": 13,
+      "activities": 59,
+      "native_completed_quests": 10,
+      "native_parent": "Conquering the Steppes:7components and two-item class-appropriate bundle, each grant once",
+      "engine_source_files": 20,
+      "new_wire_opcodes": false,
+      "remaining": "Three quests, remaining parent/multiplayer coverage and recurring Yavia pickup issue; see native-status.json",
+      "private_data_included": false
+    }
+  ],
+  "shared_core_dependency": {
+    "commit": "17d63f7d512711e911787e630f4533ee14a1e785",
+    "branch": "rof2-shared-core",
+    "source_compatibility": "EQ::Achievements reward wire aliases resolve to EQ::RewardSelection; one shared codec linked",
+    "schema": "Binary schema9335; registered9331-9335 migration identities/bytes and original supplemental SQL identities preserved.",
+    "previous_published_consumer": "f59defce0b63732328a86b67c8d26dcd002c65a7"
+  },
+  "historical_source_rebase_validation": {
+    "status": "Passed full rebased combined compilation/link, targeted branch compilation and package/content-preservation audits.",
+    "platform": "Linux x86_64, GCC12/C++20, cached vcpkg SDK in eqemulator/eqemu-server:v16.",
+    "configuration": "RelWithDebInfo with -O0 -g0, upstream-default PCH enabled; login and dedicated test targets disabled.",
+    "built_targets": [
+      "world",
+      "zone",
+      "ucs",
+      "shared_memory",
+      "housing_install",
+      "housing_capacity",
+      "housing_recovery",
+      "housing_profile_upgrade"
+    ],
+    "standalone_source_checks": "20 targeted translation units across six feature branches passed, using each branch own normal zone preamble.",
+    "content_preservation": "Every changed source line relative to the former published snapshots equals precisely the upstream mixed-base-to-develop delta in 11 paths. Opcode mappings, structures, reviewed quests and other production packages retained byte-for-byte except installer base pin/checksum and current guides.",
+    "package_checks": [
+      "Manifest hashes/sizes, Python syntax, JSON and guide links",
+      "Unique active migration IDs, opcode names, RoF2 mapping keys and handlers"
+    ],
+    "history": "Linear feature layers from exact upstream develop; zero merge commits ahead of the base. Old heads archived separately.",
+    "deployment": "Source rebase only; no running server, client or database deployment.",
+    "native_acceptance": "No new native gameplay, native Windows build or Akk-stack deployment acceptance claimed.",
+    "scope": "Original 2026-10-29 source rebase validation; retained unchanged below. Later runtime migration evidence is recorded separately.",
+    "vergalid_content_milestone": "All17quests/fourparent reward paths and charged shard/key passage verified natively, with fresh-login persistence. Real-module death/guardian ownership fixtures and guarded complete SQL install/repeat/rollback passed. No new engine binary build required; source integration unchanged."
   }
 }

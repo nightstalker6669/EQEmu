@@ -15,6 +15,12 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/fellowship/service.h"
+#include <cstring>
+#include <ctime>
+
+#include "../common/housing/upkeep_refresh_wire.h"
+
 #include "zoneserver.h"
 
 #include "common/content/world_content_service.h"
@@ -34,6 +40,7 @@
 #include "common/strings.h"
 #include "common/zone_store.h"
 #include "world/adventure_manager.h"
+#include "world/achievement_state_update_manager.h"
 #include "world/client.h"
 #include "world/cliententry.h"
 #include "world/clientlist.h"
@@ -54,6 +61,8 @@
 extern GroupLFPList LFPGroupList;
 extern volatile bool RunLoops;
 extern volatile bool UCSServerAvailable_;
+extern AdventureManager adventure_manager;
+extern AchievementStateUpdateManager achievement_state_update_manager;
 
 void CatchSignal(int sig_num);
 
@@ -181,8 +190,78 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 	auto pack = &tpack;
 
 	switch (opcode) {
-		case 0:
-		case ServerOP_KeepAlive:
+        case ServerOP_FellowshipChat: {
+            if (pack->size != sizeof(FellowshipChatRequest)) {
+                break;
+            }
+            const auto* request = reinterpret_cast<const FellowshipChatRequest*>(pack->pBuffer);
+            if (!request->message[0] || !std::memchr(request->message, 0, sizeof(request->message))) {
+                break;
+            }
+            auto* actor = ClientList::Instance()->FindCLEByCharacterID(request->actor_id);
+            if (!actor || actor->Server() != this || actor->Online() != CLE_Status::InZone) {
+                break;
+            }
+            Fellowship::Service fellowships(database);
+            const auto group = fellowships.GetByCharacter(actor->CharID(), static_cast<uint64_t>(std::time(nullptr)));
+            if (!group || !group.value.id) {
+                break;
+            }
+            const Fellowship::Member* sender = nullptr;
+            for (const auto& member : group.value.members) {
+                if (member.character_id == actor->CharID()) {
+                    sender = &member;
+                    break;
+                }
+            }
+            if (!sender) {
+                break;
+            }
+            for (const auto& member : group.value.members) {
+                // RoF2 already echoes the sender's own /fsay locally.
+                if (member.character_id == actor->CharID()) {
+                    continue;
+                }
+                auto* recipient = ClientList::Instance()->FindCLEByCharacterID(member.character_id);
+                if (!recipient || recipient->Online() != CLE_Status::InZone) {
+                    continue;
+                }
+                ServerPacket delivery(ServerOP_FellowshipChatDeliver, sizeof(FellowshipChatDelivery));
+                auto* payload = reinterpret_cast<FellowshipChatDelivery*>(delivery.pBuffer);
+                payload->actor_id = actor->CharID();
+                payload->recipient_id = member.character_id;
+                payload->fellowship_id = group.value.id;
+                strn0cpy(payload->sender, sender->name.c_str(), sizeof(payload->sender));
+                strn0cpy(payload->message, request->message, sizeof(payload->message));
+                ClientList::Instance()->SendPacket(member.name.c_str(), &delivery);
+            }
+            break;
+        }
+        case ServerOP_FellowshipRefresh: {
+            // This handler is reached through the authenticated zone connection.
+            // Never forward packet-declared membership or client wire bytes.
+            if (pack->size == 0) {
+                ZSList::Instance()->SendPacket(pack);
+            }
+            break;
+        }
+		case ServerOP_HousingGuildTrophyRequest: {
+        if(pack->size!=sizeof(HousingGuildTrophyRequest))break;auto* request=reinterpret_cast<const HousingGuildTrophyRequest*>(pack->pBuffer);auto* actor=ClientList::Instance()->FindCLEByCharacterID(request->character_id);if(!actor||actor->Server()!=this||actor->Online()!=CLE_Status::InZone||request->action>2)break;guild_mgr.GuildTrophyRequest(actor->CharID(),actor->AccountID(),request->action,request->target_id);break;
+    }
+    case ServerOP_HousingUpkeepRefresh: {
+        // Authenticated zone connection supplies only an invalidation hint.
+        // Ownership/ACL/content are independently reloaded by every receiver.
+        if(Housing::UpkeepRefreshWire::Valid(pack->pBuffer,pack->size)){guild_mgr.InvalidateGuildTrophies();ServerPacket refresh(ServerOP_HousingUpkeepRefresh,1);refresh.pBuffer[0]=0;ZSList::Instance()->SendPacket(&refresh);}
+        break;
+    }
+    case ServerOP_HousingTrophyRefresh: {
+            // Received only on the authenticated zone connection. This is an
+            // internal invalidation hint, never a client benefit/owner claim.
+            if(pack->size==0){guild_mgr.InvalidateGuildTrophies();ZSList::Instance()->SendPacket(pack);}
+            break;
+        }
+        case 0:
+	case ServerOP_KeepAlive:
 		case ServerOP_ZAAuth: {
 			break;
 		}
@@ -993,6 +1072,7 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 		case ServerOP_GuildMemberAdd:
 		case ServerOP_GuildSendGuildList:
 		case ServerOP_GuildMembersList:
+		case ServerOP_GuildAchievement:
 		{
 			guild_mgr.ProcessZonePacket(pack);
 			break;
@@ -1354,6 +1434,15 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 			safe_delete(outapp);
 			break;
 		}
+		case ServerOP_CZAchievementStateUpdateRequest: {
+			AchievementStateUpdates::Request request;
+			if (!AchievementStateUpdates::DeserializeRequest(p, request)) {
+				LogError("Received an invalid achievement state update packet");
+				break;
+			}
+			achievement_state_update_manager.Queue(request);
+			break;
+		}
 		case ServerOP_QueryServGeneric: {
 			QueryServConnection::Instance()->SendPacket(pack);
 			break;
@@ -1525,7 +1614,9 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 				if (guild->tribute.enabled) {
 					data->enabled           = 1;
 					if (guild->tribute.time_remaining == RuleI(Guild, TributeTime)) {
-						data->favor = (guild->tribute.favor -= guild_mgr.GetGuildTributeCost(data->guild_id));
+						auto spent=guild_mgr.AdjustDbGuildFavor(data->guild_id,-int64(guild_mgr.GetGuildTributeCost(data->guild_id)));
+						if(!spent){guild->tribute.enabled=0;data->enabled=0;guild->tribute.timer.Disable();guild_mgr.UpdateDbGuildTributeEnabled(data->guild_id,0);break;}
+						data->favor=guild->tribute.favor=*spent;
 					}
 					data->time_remaining    = guild->tribute.time_remaining;
 					data->tribute_id_1      = guild->tribute.id_1;
@@ -1551,7 +1642,6 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 					guild->tribute.timer.Disable();
 				}
 				guild_mgr.UpdateDbGuildTributeEnabled(data->guild_id, data->enabled);
-				guild_mgr.UpdateDbGuildFavor(data->guild_id, data->favor);
 				guild_mgr.UpdateDbTributeTimeRemaining(data->guild_id, data->time_remaining);
 
 				ZSList::Instance()->SendPacketToZonesWithGuild(data->guild_id, pack);
@@ -1643,7 +1733,7 @@ void ZoneServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p) {
 			auto guild = guild_mgr.GetGuildByGuildID(in->guild_id);
 
 			if (guild) {
-				guild->tribute.favor = in->favor;
+				if(auto current=guild_mgr.ReadDbGuildFavor(in->guild_id))guild->tribute.favor=*current;else break;
 				guild_mgr.SendGuildTributeFavorAndTimer(in->guild_id, guild->tribute.favor, guild_mgr.GetGuildTributeTimeRemaining(in->guild_id)/*guild->tribute.timer.GetRemainingTime()*/);
 
 				auto sp  = new ServerPacket(ServerOP_GuildTributeUpdateDonations, sizeof(GuildTributeUpdate));

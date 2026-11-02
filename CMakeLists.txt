@@ -190,3 +190,7 @@ endif()
 if(EQEMU_BUILD_CLIENT_FILES)
 	add_subdirectory(client_files)
 endif()
+
+if(EQEMU_BUILD_SERVER)
+ add_subdirectory(common/housing/install)
+endif()

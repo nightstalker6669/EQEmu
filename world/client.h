@@ -25,6 +25,8 @@
 #include "world/cliententry.h"
 
 #include <string>
+#include <memory>
+#include <chrono>
 
 class EQApplicationPacket;
 class EQStreamInterface;
@@ -86,6 +88,16 @@ private:
 	Timer	autobootup_timeout;
 	uint32	zone_waiting_for_bootup;
 	bool	enter_world_triggered;
+	// A durable release, never elapsed time, permits this queued admission.
+	std::unique_ptr<EQApplicationPacket> inventory_wait_packet;
+	uint32 inventory_wait_character = 0;
+	uint32 inventory_wait_account = 0;
+	bool inventory_wait_route = false;
+	bool inventory_wait_try_bootup = true;
+	uint32 inventory_wait_poll_ms = 250;
+	std::chrono::steady_clock::time_point inventory_wait_next_poll{};
+	void WaitForInventoryRelease(uint32 character, const EQApplicationPacket* packet, bool try_bootup);
+	void PollInventoryRelease();
 
 	bool StartInTutorial;
 	EQ::versions::ClientVersion m_ClientVersion;

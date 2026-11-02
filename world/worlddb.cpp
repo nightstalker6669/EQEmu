@@ -133,6 +133,15 @@ void WorldDatabase::GetCharSelectInfo(uint32 account_id, EQApplicationPacket **o
 		cse->Level       = e.level;
 		cse->ShroudClass = cse->Class;
 		cse->ShroudRace  = cse->Race;
+        // Character-select identity remains the original playable race/class;
+        // native RoF2 carries the temporary monster appearance separately.
+        if (client_version==EQ::versions::ClientVersion::RoF2 && DoesTableExist("spirit_shroud_state")) {
+            auto original=QueryDatabase("SELECT o.race,o.class,o.level FROM spirit_shroud_state s JOIN shroud_original_character_data o ON o.id=s.character_id WHERE s.template_id<>0 AND s.character_id="+std::to_string(character_id),false);
+            if(original.Success() && original.RowCount()==1) {
+                auto row=original.begin();cse->Race=uint32_t(std::stoul(row[0]));cse->Class=uint8_t(std::stoul(row[1]));cse->Level=uint8_t(std::stoul(row[2]));
+            }
+        }
+
 		cse->Zone        = e.zone_id;
 		cse->Instance    = 0;
 		cse->Gender      = e.gender;

@@ -1,0 +1,77 @@
+{
+  "quest_id": 3757,
+  "task_id": 3040320,
+  "component_id": 50094,
+  "source": "https://everquest.allakhazam.com/db/quest/3757",
+  "period_evidence": [
+    {
+      "anchor": "msg1162799854193828460",
+      "date": "2006-11-06",
+      "fact": "Opening the journal starts the task."
+    },
+    {
+      "anchor": "msg1169129537211137028",
+      "date": "2007-01-18",
+      "fact": "Container opening automatically assigns task."
+    },
+    {
+      "anchor": "msg1161792363231314815",
+      "date": "2006-10-25",
+      "fact": "Pre-task page possession did not earn loot objectives; combining before loot credit did not grant Tome."
+    },
+    {
+      "anchor": "msg13388399682310926",
+      "date": "2012-06-04",
+      "fact": "All seven pages reported from Moors farm humanoid gardeners/laborers."
+    },
+    {
+      "anchor": "msg133434673587903558",
+      "date": "2012-04-13",
+      "fact": "Pages reported from either Moors or Stone Hive, not restricted by original displayed objective zone."
+    }
+  ],
+  "current_source_facts": [
+    "Seven pages combine in original journal to create The Bixie Evolution; Tome is reward.",
+    "Minimum level 30 and repeatable yes; contemporary entry is not a preserved May 2013 snapshot."
+  ],
+  "historical_choices": {
+    "min_level": {
+      "value": 30,
+      "basis": "Best-supported current entry, consistent with original level31 report; exact period minimum unproven."
+    },
+    "repeatable": {
+      "value": true,
+      "basis": "Current entry; original repeatability unproven."
+    },
+    "xp": {
+      "value": 1000,
+      "basis": "Approved labelled PEQ-style default; source confirms XP, exact original amount unknown."
+    }
+  },
+  "server_implementation_choices": [
+    "Engine recipe quest=0 is required for native book output and TradeSkill task credit; quest=1 suppresses both and expects a separate scripted output handler.",
+    "Quest assembly is no-fail and replaces journal with completed book, using existing quest recipe conventions. Original internal recipe ID and success formula are not recovered.",
+    "Current original item definitions and weighted loot routes retained; no guaranteed or modern group-drop replacements."
+  ],
+  "safety": {
+    "active_deployment": true,
+    "task_enabled": true,
+    "recipe_enabled": true,
+    "criterion_enabled": true,
+    "native_verified": true,
+    "item_housing_character_tables_modified": false
+  },
+  "pending": [
+    "Original journal consumption/no-fail behavior corroboration."
+  ],
+  "native_opcode_confirmation": {
+    "opcode": "0x06c8",
+    "payload_bytes": 12,
+    "ordinary_slot_examples": [
+      23,
+      24
+    ],
+    "decoded_handler_verified": true
+  },
+  "native_recipe_fix": "Native combine verified quest=0: creates completed book, grants TradeSkill credit and preserves the Tome reward across relog. Exact known earlier quest=1 recipe accepted for guarded upgrade."
+}

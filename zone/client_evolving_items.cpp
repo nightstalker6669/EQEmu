@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/housing/evolving_item_custody_db.h"
+
 #include "client.h"
 
 #include "common/events/player_event_logs.h"
@@ -28,27 +30,34 @@ const std::string  SUB_TYPE_DELIMITER = ".";
 
 void Client::DoEvolveItemToggle(const EQApplicationPacket *app)
 {
-	const auto in   = reinterpret_cast<EvolveItemToggle *>(app->pBuffer);
-	auto       item = CharacterEvolvingItemsRepository::FindOne(database, in->unique_id);
-
-	LogEvolveItemDetail(
-		"Character ID <green>[{}] requested to set evolve item with unique id <yellow>[{}] to status <yellow>[{}]",
-		CharacterID(),
-		in->unique_id,
-		in->activated
-	);
-
-	if (!item.id) {
-		LogEvolveItemDetail(
-			"Character ID <green>[{}] toggle evolve item unique id <yellow>[{}] failed", CharacterID(), in->unique_id);
-		return;
-	}
-
-	item.activated  = in->activated;
-	const auto inst = GetInv().GetItem(GetInv().HasItem(item.item_id));
-	inst->SetEvolveActivated(item.activated ? true : false);
-
-	CharacterEvolvingItemsRepository::ReplaceOne(database, item);
+	if (!app || app->size != sizeof(EvolveItemToggle)) return;
+	const auto in = reinterpret_cast<const EvolveItemToggle*>(app->pBuffer);
+	if (in->activated > 1 || !in->unique_id) return;
+	auto item = CharacterEvolvingItemsRepository::FindOne(database, in->unique_id);
+	if (!item.id || item.character_id != CharacterID() || item.deleted_at > 0) return;
+	EQ::ItemInstance* inst = nullptr;
+	try {
+		if (Housing::EvolvingItemCustody::Held(database, item.id)) return;
+		auto rows = database.QueryDatabase("SELECT slot_id FROM inventory WHERE character_id=" + std::to_string(CharacterID()));
+		if (!rows.Success()) return;
+		for (auto row : rows) {
+			auto* root = GetInv().GetItem(std::stoi(row[0]));
+			if (!root) continue;
+			for (uint8 component = 0; component <= 6; ++component) {
+				auto* node = Housing::EvolvingItemCustody::Component(*root, component);
+				if (!node || !node->IsEvolving() || node->GetEvolveUniqueID() != item.id) continue;
+				if (inst || node->GetEvolveCharID() != CharacterID() || node->GetID() != item.item_id) return;
+				inst = node;
+			}
+		}
+		if (!inst) return;
+		if (item.activated != in->activated) {
+			item.activated = in->activated;
+			if (!CharacterEvolvingItemsRepository::UpdateOne(database, item)) return;
+		}
+	} catch (...) { return; }
+	item.activated = in->activated;
+	inst->SetEvolveActivated(item.activated != 0);
 
 	SendEvolvingPacket(EvolvingItems::Actions::UPDATE_ITEMS, item);
 }

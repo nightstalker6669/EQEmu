@@ -15,6 +15,13 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/fellowship/service.h"
+#include "fellowship_campfire.h"
+#include <ctime>
+
+#include "../common/housing/guild_trophy_member_flag.h"
+#include "../common/housing/upkeep_refresh_wire.h"
+
 #include "worldserver.h"
 
 #include "common/eq_packet_structs.h"
@@ -203,7 +210,79 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 	ServerPacket *pack = &tpack;
 
 	switch (opcode) {
-	case 0:
+    case ServerOP_FellowshipChatDeliver: {
+        if (pack->size != sizeof(FellowshipChatDelivery)) {
+            break;
+        }
+        const auto* message = reinterpret_cast<const FellowshipChatDelivery*>(pack->pBuffer);
+        if (!message->message[0] || !std::memchr(message->message, 0, sizeof(message->message)) ||
+            !std::memchr(message->sender, 0, sizeof(message->sender))) {
+            break;
+        }
+        Client* recipient = nullptr;
+        for (const auto& entry : entity_list.GetClientList()) {
+            if (entry.second->CharacterID() == message->recipient_id) {
+                recipient = entry.second;
+                break;
+            }
+        }
+        if (!recipient) {
+            break;
+        }
+        Fellowship::Service fellowships(database);
+        const auto group = fellowships.GetByCharacter(recipient->CharacterID(), static_cast<uint64_t>(std::time(nullptr)));
+        if (!group || !group.value.id || group.value.id != message->fellowship_id) {
+            break;
+        }
+        bool sender_is_member = false;
+        for (const auto& member : group.value.members) {
+            if (member.character_id == message->actor_id && member.name == message->sender) {
+                sender_is_member = true;
+                break;
+            }
+        }
+        if (!sender_is_member) {
+            break;
+        }
+        if (recipient->ClientVersion() == EQ::versions::ClientVersion::RoF2) {
+            recipient->ChannelMessageSend(message->sender, nullptr, 21, Language::CommonTongue,
+                Language::MaxValue, "%s", message->message);
+        } else {
+            recipient->Message(Chat::Group, "%s tells the fellowship, '%s'", message->sender, message->message);
+        }
+        break;
+    }
+    case ServerOP_FellowshipRefresh: {
+        if (pack->size != 0) {
+            break;
+        }
+        InvalidateFellowshipCampsites();
+        ProcessFellowshipCampfires();
+        for (const auto& entry : entity_list.GetClientList()) {
+            // Reload authoritative membership and pending invitation state.
+            auto* client = entry.second;
+            client->RefreshFellowship();
+            if (client->Connected() && client->ClientDataLoaded()) {
+                // A remote owner/member change can invalidate this viewer's
+                // estate fellowship projection and current scene admission.
+                // Both methods retain their own housing eligibility checks.
+                client->SendHousingZoneCatalog();
+                client->SendHousingPlacedScene();
+            }
+        }
+        break;
+    }
+	case ServerOP_HousingGuildTrophyRefresh: {if(pack->size!=sizeof(uint32))break;uint32 guild=0;std::memcpy(&guild,pack->pBuffer,sizeof guild);for(const auto& entry:entity_list.GetClientList()){auto* client=entry.second;if(client->GuildID()==guild||client->m_housing_guild_trophy_guild==guild)client->InvalidateHousingGuildTrophyBenefits();}break;}
+    case ServerOP_HousingGuildTrophyMember: {if(pack->size!=sizeof(GuildTributeOptInOutReply_Struct))break;const auto* member=reinterpret_cast<const GuildTributeOptInOutReply_Struct*>(pack->pBuffer);for(const auto& entry:entity_list.GetClientList()){auto* client=entry.second;if(client->GuildID()==member->guild_id&&client->ClientVersion()==EQ::versions::ClientVersion::RoF2){EQApplicationPacket packet(OP_GuildOptInOut,pack->size);std::memcpy(packet.pBuffer,pack->pBuffer,pack->size);client->QueuePacket(&packet);}}break;}
+	case ServerOP_HousingUpkeepRefresh: {
+        if(Housing::UpkeepRefreshWire::Valid(pack->pBuffer,pack->size)){LogInfo("Housing upkeep invalidation received; refreshing current estate snapshots");Client::HousingUpkeepChanged();}
+        break;
+    }
+    case ServerOP_HousingTrophyRefresh: {
+        if(pack->size==0)for(const auto& entry:entity_list.GetClientList())entry.second->InvalidateHousingTrophyBenefits();
+        break;
+    }
+    case 0:
 	case ServerOP_KeepAlive: {
 		break;
 	}
@@ -395,9 +474,13 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 
 			if (ztz->response <= 0) {
 				zc2->success = ZoningMessage::ZoneNotReady;
-				entity->CastToMob()->SetZone(ztz->current_zone_id, ztz->current_instance_id);
-				entity->CastToClient()->SetZoning(false);
-				entity->CastToClient()->SetLockSavePosition(false);
+				entity->CastToClient()->RestoreRejectedZonePosition();
+				strn0cpy(zc2->char_name, entity->CastToMob()->GetName(), 64);
+				zc2->zoneID = ztz->current_zone_id;
+				zc2->instanceID = ztz->current_instance_id;
+				zc2->x = entity->CastToMob()->GetX();
+				zc2->y = entity->CastToMob()->GetY();
+				zc2->z = entity->CastToMob()->GetZ();
 
 				LogZoning("ZoneToZone (ZoneNotReady) client [{}] guild_id [{}] requested_zone [{}] requested_zone_id [{}] requested_instance_id [{}] current_zone [{}] current_zone_id [{}] current_instance_id [{}] response [{}] admin [{}] ignorerestrictions [{}] ",
 					ztz->name,
@@ -808,6 +891,7 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 	case ServerOP_GuildMemberAdd:
 	case ServerOP_GuildSendGuildList:
 	case ServerOP_GuildMembersList:
+	case ServerOP_GuildAchievement:
 	{
 		guild_mgr.ProcessWorldPacket(pack);
 		break;
@@ -2086,6 +2170,23 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 			}
 		}
 
+		break;
+	}
+	case ServerOP_CZAchievementStateUpdateWake:
+	{
+		if (pack->size != sizeof(ServerCharacterID_Struct)) {
+			LogError(
+				"Received achievement state update wake packet with invalid size [{}]",
+				pack->size
+			);
+			break;
+		}
+
+		ServerCharacterID_Struct wake;
+		std::memcpy(&wake, pack->pBuffer, sizeof(wake));
+		if (auto client = entity_list.GetClientByCharID(wake.char_id)) {
+			client->NotifyAchievementStateUpdatePending();
+		}
 		break;
 	}
 	case ServerOP_CZLDoNUpdate:
@@ -3502,7 +3603,7 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 		data->guild_id              = in->guild_id;
 		data->no_donations          = in->member_favor;
 		data->tribute_toggle        = in->member_enabled ? true : false;
-		data->tribute_trophy_toggle = 0; // not yet implemented
+		data->tribute_trophy_toggle = Housing::GuildTrophyMemberFlag(database, in->guild_id, 0, in->player_name);
 		data->time                  = in->member_time;
 		data->command               = 1;
 		strn0cpy(data->player_name, in->player_name, sizeof(data->player_name));
@@ -3544,7 +3645,7 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 		strn0cpy(data->player_name, in->player_name, sizeof(data->player_name));
 		data->no_donations = in->no_donations;
 		data->tribute_toggle = in->tribute_toggle ? true : false;
-		data->tribute_trophy_toggle = 0; //not yet implemented
+		data->tribute_trophy_toggle = Housing::GuildTrophyMemberFlag(database, in->guild_id, in->char_id);
 		data->time = in->member_last_donated;
 		data->command = in->command;
 
@@ -4530,9 +4631,23 @@ void WorldServer::ProcessReload(const ServerReload::Request& request)
 		}
 	}
 
-	zone->SendReloadMessage(ServerReload::GetName(request.type));
+	const bool is_achievement_reload = request.type == ServerReload::Type::Achievements;
+	const bool can_announce_reload = zone && zone->IsLoaded();
+	bool reload_succeeded = true;
+	uint32 achievement_client_failures = 0;
+
+	// Achievement reloads can fail validation without replacing the live data.
+	// Wait for the transactional reload result before announcing success.
+	if (!is_achievement_reload && can_announce_reload) {
+		zone->SendReloadMessage(ServerReload::GetName(request.type));
+	}
 
 	switch (request.type) {
+		case ServerReload::Type::Achievements:
+			reload_succeeded =
+				entity_list.ReloadAchievements(achievement_client_failures);
+			break;
+
 		case ServerReload::Type::AAData:
 			zone->LoadAlternateAdvancement();
 			entity_list.SendAlternateAdvancementStats();
@@ -4695,5 +4810,48 @@ void WorldServer::ProcessReload(const ServerReload::Request& request)
 			break;
 	}
 
-	LogInfo("Reloaded [{}] ({})", ServerReload::GetName(request.type), request.type);
+	if (reload_succeeded) {
+		if (is_achievement_reload && can_announce_reload) {
+			zone->SendReloadMessage(ServerReload::GetName(request.type));
+			if (achievement_client_failures) {
+				const auto warning = fmt::format(
+					"Achievements reloaded for {}, but {} loaded client(s) could not "
+					"rebuild state; those clients must zone, reconnect, or run the "
+					"reload again.",
+					zone->GetZoneDescription(),
+					achievement_client_failures
+				);
+				SendEmoteMessage(
+					0,
+					0,
+					AccountStatus::GMAdmin,
+					Chat::Yellow,
+					"%s",
+					warning.c_str()
+				);
+			}
+		}
+
+		LogInfo("Reloaded [{}] ({})", ServerReload::GetName(request.type), request.type);
+	} else {
+		if (is_achievement_reload && can_announce_reload) {
+			const auto failure = fmt::format(
+				"Achievement reload failed for {}; existing content remains active.",
+				zone->GetZoneDescription()
+			);
+			SendEmoteMessage(
+				0,
+				0,
+				AccountStatus::GMAdmin,
+				Chat::Red,
+				"%s",
+				failure.c_str()
+			);
+		}
+		LogError(
+			"Failed to reload [{}] ({}); existing data remains active",
+			ServerReload::GetName(request.type),
+			request.type
+		);
+	}
 }

@@ -403,9 +403,9 @@ public:
 		CastAction_type &CastAction, EQ::spells::CastingSlot slot, bool isproc = false);
 	bool DoCastingChecksOnCaster(int32 spell_id, EQ::spells::CastingSlot slot);
 	bool DoCastingChecksZoneRestrictions(bool check_on_casting, int32 spell_id);
-	bool DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob* spell_target);
+	bool DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob* spell_target, uint32 aa_context = 0);
 	virtual bool CheckFizzle(int32 spell_id);
-	virtual bool CheckSpellLevelRestriction(Mob *caster, int32 spell_id);
+	virtual bool CheckSpellLevelRestriction(Mob *caster, int32 spell_id, uint32 aa_context = 0);
 	virtual bool IsImmuneToSpell(int32 spell_id, Mob *caster);
 
 	virtual float GetAOERange(int32 spell_id);
@@ -1066,6 +1066,14 @@ public:
 	inline uint8 GetActiveLightType() { return m_Light.Type[EQ::lightsource::LightActive]; }
 	bool UpdateActiveLight(); // returns true if change, false if no change
 	uint32 GetNpcTintId() { return m_npc_tint_id; }
+	// Bind an actual service spawn to its durable housing item. Call before
+	// announcing the spawn; item authorization remains with the housing service.
+	bool SetHousingItemBinding(const std::string& guid, uint32 estate_id, uint32 item_id);
+	void ClearHousingItemBinding();
+	const std::string& GetHousingItemGuid() const { return m_housing_item_guid; }
+	uint32 GetHousingEstateId() const { return m_housing_estate_id; }
+	uint32 GetHousingItemId() const { return m_housing_item_id; }
+
 
 	EQ::LightSourceProfile* GetLightProfile() { return &m_Light; }
 
@@ -1599,6 +1607,10 @@ protected:
 	int32 heroic_strikethrough;
 	bool keeps_sold_items;
 	uint32 m_npc_tint_id;
+	std::string m_housing_item_guid;
+	uint32 m_housing_estate_id = 0xffffffff;
+	uint32 m_housing_item_id = 0xffffffff;
+
 
 	uint32 m_PlayerState;
 	uint32 GetPlayerState() { return m_PlayerState; }

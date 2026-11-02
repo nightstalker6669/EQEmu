@@ -15,6 +15,13 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "fellowship_campfire.h"
+
+#include "housing_guild_portal.h"
+#include "housing_service_npcs.h"
+#include "housing_service_authority.h"
+#include "housing_pets.h"
+
 #include "zone.h"
 
 #include "common/data_verification.h"
@@ -353,6 +360,14 @@ bool Zone::LoadGroundSpawns() {
 			const uint32 max_allowed = g.spawn[slot_id].max_allowed;
 
 			if (inst) {
+				// Fresh ground-spawn clickies must have their defined charges.
+				// CreateItem defaults to zero; that otherwise produces unusable
+				// quest scrolls such as Touch of the Six. Dropped items retain
+				// their existing charges through the separate Object path.
+				if (inst->GetItem()->MaxCharges > 0) {
+					inst->SetCharges(inst->GetItem()->MaxCharges);
+				}
+
 				for (uint32 i = 0; i < max_allowed; i++) {
 					auto object = new Object(
 						inst,
@@ -1090,6 +1105,9 @@ Zone::Zone(uint32 in_zoneid, uint32 in_instanceid, const char* in_short_name)
 }
 
 Zone::~Zone() {
+	ClearFellowshipCampfires();
+ Housing::Pets::Clear();
+ Housing::ServiceAuthority::Clear();
 	LogInfo("Zone destructor called for zone [{}]", short_name);
 
 	spawn2_list.Clear();
@@ -1274,14 +1292,42 @@ void Zone::ReloadStaticData() {
 		);
 	} // if that fails, try the file name, then load defaults
 
+	// Refresh lifecycle UI after policy changes without activating a contract.
+	for (const auto& [id, client] : entity_list.GetClientList()) {
+		if (client && client->ClientVersion() == EQ::versions::ClientVersion::RoF2 &&
+			client->GetMercInfo().mercid) {
+			client->SendMercTimer(client->GetMerc());
+		}
+	}
+
 	WorldContentService::Instance()->SetExpansionContext()->ReloadContentFlags();
 
 
 	LogInfo("Zone Static Data Reloaded");
 }
 
+namespace {
+bool LoadMercenaryZonePermission(Database& db, uint32 resolved_row_id)
+{
+	if (!resolved_row_id || db.GetStatus() != DBcore::Connected) return false;
+	auto permission = db.QueryDatabase(fmt::format(
+		"SELECT `allow_mercs` FROM `zone` WHERE `id`={}", resolved_row_id), false);
+	if (!permission.Success() || permission.RowCount() != 1 || !permission.begin()[0]) {
+		LogError("Mercenary permission unavailable for resolved zone row [{}]; mercenaries disabled", resolved_row_id);
+		return false;
+	}
+	const std::string value = permission.begin()[0];
+	if (value != "0" && value != "1") {
+		LogError("Invalid mercenary permission for resolved zone row [{}]; mercenaries disabled", resolved_row_id);
+		return false;
+	}
+	return value == "1";
+}
+}
+
 bool Zone::LoadZoneCFG(const char* filename, uint16 instance_version)
 {
+	allow_mercs = false;
 	auto z = ZoneStore::Instance()->GetZoneWithFallback(ZoneID(filename), instance_version);
 
 	if (!z) {
@@ -1384,7 +1430,7 @@ bool Zone::LoadZoneCFG(const char* filename, uint16 instance_version)
 	is_hotzone            = z->hotzone != 0;
 	m_client_update_range = z->client_update_range;
 	default_ruleset       = z->ruleset;
-	allow_mercs           = true;
+	allow_mercs           = LoadMercenaryZonePermission(content_db, z->id);
 	m_graveyard_id        = z->graveyard_id;
 	m_max_clients         = z->maxclients;
 
@@ -1519,6 +1565,8 @@ uint32 Zone::CountAuth() {
 }
 
 bool Zone::Process() {
+	ProcessFellowshipCampfires();
+    Housing::Pets::Process();
 	spawn_conditions.Process();
 
 	if (spawn2_timer.Check()) {

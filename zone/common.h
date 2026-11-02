@@ -288,6 +288,8 @@ struct Buffs_Struct {
 };
 
 struct StatBonuses {
+	int32 ExpandMaxActiveTrophyBenefits; // SPA432, original base4 capped10
+
 	int32	AC;
 	int64	HP;
 	int64	HPRegen;

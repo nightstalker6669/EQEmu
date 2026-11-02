@@ -15,16 +15,25 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include <optional>
+
+#include <chrono>
+
 #pragma once
 
 #include "../common/boat_passenger.h"
 
+namespace SpiritShroud { struct Template; }
+class ZoneDatabase;
+struct SpiritShroudDestination;
+namespace Housing::Pets { struct Binding; }
 class Client;
 class EQApplicationPacket;
 class DynamicZone;
 class DzLockout;
 class ExpeditionRequest;
 class Group;
+class ClientAchievementState;
 class NPC;
 class Object;
 class Raid;
@@ -33,6 +42,15 @@ class ServerPacket;
 struct DynamicZoneLocation;
 enum WaterRegionType : int;
 enum class DynamicZoneMemberStatus;
+
+namespace Mercenary { struct Payment; }
+
+namespace Housing::InventoryBridge { class Bridge; }
+namespace Housing::NativePlacement { struct Session; }
+namespace Housing::AnchorTransport {struct Pending;}
+namespace Housing::TransferConsent {struct Pending;}
+#include "../common/shared_core/inventory_session_service.h"
+namespace EQEmu::SharedCore::InventorySessions { class ZoneReservation; }
 
 namespace EQ
 {
@@ -253,6 +271,69 @@ public:
 
 	Client(EQStreamInterface * ieqs);
 	Client(); // mocking / testing
+	void RefreshFellowship();
+	void ProcessFellowship();
+	void SendFellowshipChat(const char* message);
+	void RefreshFellowshipVitality();
+	bool ProcessFellowshipCombatExperience(ExpSource source, uint64 experience_total, uint64 aa_total, NPC* npc);
+	bool m_fellowship_xp_persistence_failed = false;
+	bool m_fellowship_xp_transaction_active = false;
+	std::vector<uint8> m_fellowship_vitality_snapshot;
+	bool TryFellowshipCalling();
+	uint32 FellowshipID() const { return m_fellowship_id; }
+	uint32 m_fellowship_id = 0;
+	uint64 m_fellowship_refresh_at = 0;
+	uint64 m_fellowship_action_at = 0;
+	uint64 m_fellowship_invite_expires = 0;
+	uint32 m_fellowship_inviter = 0;
+	std::vector<uint8> m_fellowship_snapshot;
+	bool m_housing_gate_open = false;
+	Housing::InventoryBridge::Bridge* GetHousingInventoryBridge();
+	bool ClaimInventorySessionReservation();
+	void RejectInventorySessionAdmission() { m_inventory_session_rejected = true; }
+	bool HasInventorySessionReservation() const;
+	std::shared_ptr<Housing::InventorySessions::ZoneReservation> InventorySessionReleaseTicket() const;
+
+
+ const SpiritShroud::Template* SpiritShroudDefinition() const { return m_spirit_shroud_definition.get(); }
+ bool LoadSpiritShroudState();
+ bool LoadSpiritShroudRestoredShortBuffs();
+ std::unique_ptr<SpiritShroudDestination> PrepareSpiritShroudDestination(ZoneDatabase& transaction_db);
+ bool InstallSpiritShroudDestination(SpiritShroudDestination& destination);
+ void Handle_OP_SpiritShroudComplete(const EQApplicationPacket* packet);
+ bool ProcessSpiritShroudNativeTransition();
+ void BeginSpiritShroudNativeAcknowledgement(uint64_t revision);
+ bool RecordSpiritShroudDeath(uint32_t corpse_id, uint64_t requested_loss, uint64_t& applied_loss);
+ bool SettleSpiritShroudResurrection(uint32_t corpse_id, uint32_t spell_id, uint64_t offered_loss, bool& handled);
+ bool CanAcceptSpiritShroudResurrection(uint32_t corpse_id);
+ bool SpiritShroudTransitionPending() const { return m_spirit_shroud_transition; }
+ bool SaveSpiritShroudCheckpoint();
+ bool HasSpiritShroudRank(uint32_t rank) const;
+ void SendSpiritShroudProgress();
+ bool TrySpiritShroudAbility(uint32_t action,uint32_t ability);
+ bool CompleteSpiritShroudReturn(uint32_t rank_id);
+ bool IsSpiritShroudStarterItem(const EQ::ItemInstance* item) const;
+ void PurchaseSpiritShroudRank(uint32_t rank_id, bool saved_set);
+ float SpiritShroudModelSize() const;
+ std::optional<uint32_t> SpiritShroudAbilityMinimumLevel(uint16_t spell_id, uint32_t rank_id) const;
+ bool SpiritShroudHasPersonalBank() const { return IsSpiritShrouded() && m_spirit_shroud_personal_bank; }
+ bool SettleSpiritShroudMercenaryFee(Merc* merc);
+ bool CanTransferSpiritShroudItemTree(const EQ::ItemInstance* item) const;
+ bool IsSpiritShrouded() const { return m_spirit_shroud_template != 0; }
+ bool TrySpiritShroudChat(const char*);
+ void OpenSpiritShrouds();
+ void ChangeSpiritShroud(uint32_t template_id);
+ void OpenSpiritShroudBank();
+ void AwardSpiritShroudExperience(ExpSource source, uint64_t amount, uint8 conlevel = 0xFF,
+   bool already_calculated = false, uint64_t aa_amount = 0);
+ void CalculateSpiritShroudExperience(uint64_t amount, uint8 conlevel, uint32_t percent_to_aa,
+   uint64_t earned_aa, uint64_t& normal, uint64_t& aa, uint64_t& progression);
+ void Handle_OP_SpiritShroudRequest(const EQApplicationPacket*);
+ void Handle_OP_SpiritShroudSelect(const EQApplicationPacket*);
+ void Handle_OP_SpiritShroudCancel(const EQApplicationPacket*);
+ void Handle_OP_SpiritShroudPreview(const EQApplicationPacket*);
+ void Handle_OP_SpiritShroudBank(const EQApplicationPacket*);
+
 	~Client();
 
 	void ReconnectUCS();
@@ -377,6 +458,11 @@ public:
 		std::list<void *> *event_details = nullptr
 	);
 	void SendZonePoints();
+	void SendHousingZoneCatalog();
+	bool SendHousingZoneCatalogChecked();
+	void RememberHousingAclRevision(uint32_t native_id,uint64_t revision) { m_housing_acl_revisions[native_id]=revision; }
+	std::optional<uint64_t> HousingAclRevision(uint32_t native_id) const { auto i=m_housing_acl_revisions.find(native_id);return i==m_housing_acl_revisions.end()?std::nullopt:std::optional<uint64_t>(i->second); }
+	void ClearHousingAclRevisions() { m_housing_acl_revisions.clear(); }
 	void SendBulkParcels();
 	void DoParcelCancel();
 	void DoParcelSend(const Parcel_Struct *parcel_in);
@@ -474,12 +560,14 @@ public:
 
 	virtual bool Save() { return Save(0); }
 	bool Save(uint8 iCommitNow); // 0 = delayed, 1=async now, 2=sync now
+	bool Save(uint8 iCommitNow, bool update_achievements);
 	inline void SaveCharacterData() {
+ if(m_spirit_shroud_transition)return;
 		database.SaveCharacterData(this, &m_pp, &m_epp);
 	};
 
 	/* New PP Save Functions */
-	bool SaveCurrency(){ return database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
+	bool SaveCurrency(){ return !m_spirit_shroud_transition && !m_mercenary_persistence_failed && !m_inventory_session_rejected && database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
 	bool SaveAA();
 	void RemoveExpendedAA(int aa_id);
 
@@ -754,10 +842,11 @@ public:
 	uint64 GetExperienceForKill(Mob *against);
 	void AddEXP(ExpSource exp_source, uint64 in_add_exp, uint8 conlevel = 0xFF, bool resexp = false, NPC* npc = nullptr);
 	uint64 CalcEXP(uint8 conlevel = 0xFF, bool ignore_mods = false);
-	void CalculateNormalizedAAExp(uint64 &add_aaxp, uint8 conlevel, bool resexp);
+	void CalculateNormalizedAAExp(uint64 &add_aaxp, uint8 conlevel, bool resexp, int aa_percent = -1);
 	void CalculateStandardAAExp(uint64 &add_aaxp, uint8 conlevel, bool resexp);
 	void CalculateLeadershipExp(uint64 &add_exp, uint8 conlevel);
-	void CalculateExp(uint64 in_add_exp, uint64 &add_exp, uint64 &add_aaxp, uint8 conlevel, bool resexp);
+	void CalculateExp(uint64 in_add_exp, uint64 &add_exp, uint64 &add_aaxp, uint8 conlevel, bool resexp,
+		int aa_percent = -1, bool leadership = true);
 	void SetEXP(ExpSource exp_source, uint64 set_exp, uint64 set_aaxp, bool resexp = false, NPC* npc = nullptr);
 	void AddLevelBasedExp(ExpSource exp_source, uint8 exp_percentage, uint8 max_level = 0, bool ignore_mods = false);
 	void SetLeadershipEXP(uint64 group_exp, uint64 raid_exp);
@@ -1048,7 +1137,7 @@ public:
 	inline PTimerList &GetPTimers() { return(p_timers); }
 
 	//New AA Methods
-	void SendAlternateAdvancementRank(int aa_id, int level);
+	void SendAlternateAdvancementRank(int aa_id, int level, const SpiritShroud::Template* shroud_preview = nullptr);
 	void SendAlternateAdvancementTable();
 	void SendAlternateAdvancementStats();
 	void PurchaseAlternateAdvancementRank(int rank_id);
@@ -1272,6 +1361,10 @@ public:
 	const std::string GetAutoLoginCharacterName();
 	bool SetAutoLoginCharacterName(const std::string& character_name);
 
+	//This is used to later set the buff duration of the spell, in slot to duration.
+	//Doesn't appear to work directly after the client recieves an action packet.
+	void SendBuffDurationPacket(Buffs_Struct &buff, int slot, bool recreate = false);
+
 	void ProcessInspectRequest(Client* requestee, Client* requester);
 	bool ClientFinishedLoading() { return (conn_state == ClientConnectFinished); }
 	int FindSpellBookSlotBySpellID(int32 spellid);
@@ -1292,6 +1385,36 @@ public:
 	uint16 sacrifice_caster_id;
 	PendingTranslocate_Struct PendingTranslocateData;
 	void SendOPTranslocateConfirm(Mob *Caster, int32 SpellID);
+	void ProcessHousingTrophyBenefits();
+ void ProcessHousingGuildTrophyBenefits();
+ void InvalidateHousingGuildTrophyBenefits(bool request_world=false);
+ void RefreshHousingGuildTrophyBenefits(bool request_world=false);
+ void SendHousingGuildTrophyRequest(uint32 action=0,uint32 target=0);
+ uint32 HousingGuildTrophyRemaining()const;
+ const std::vector<uint32>& HousingGuildTrophyStatItems()const{return m_housing_guild_trophy_stat_items;}
+ void Handle_OP_GuildTrophyToggle(const EQApplicationPacket*);
+ void Handle_OP_GuildTrophySave(const EQApplicationPacket*);
+ void Handle_OP_GuildTrophyModify(const EQApplicationPacket*);
+ void Handle_OP_GuildTrophyOptIn(const EQApplicationPacket*);
+ std::vector<uint32> m_housing_guild_trophy_stat_items;
+ bool m_housing_guild_trophy_dirty=true,m_housing_guild_trophy_ready=false,m_housing_guild_trophy_world_request=false;
+ uint32 m_housing_guild_trophy_guild=0,m_housing_guild_trophy_level=0;
+ std::chrono::steady_clock::time_point m_housing_guild_trophy_deadline{};
+
+	void InvalidateHousingTrophyBenefits();
+	static void HousingTrophySourcesChanged() noexcept;
+	static void HousingUpkeepChanged() noexcept;
+	bool m_housing_trophy_dirty=true;
+	bool m_housing_trophy_ready=false;
+	uint32_t m_housing_trophy_capacity=0xffffffff;
+	void RefreshHousingTrophyBenefits(bool notify=true,bool recalculate=true,bool renew=false,bool force_publish=false);
+	std::chrono::steady_clock::time_point m_housing_trophy_deadline{};
+	const std::vector<uint32_t>& HousingTrophyStatItems()const{return m_housing_trophy_stat_items;}
+	std::vector<uint32_t> m_housing_trophy_stat_items;
+	bool m_housing_trophy_sent=false;
+	std::chrono::steady_clock::time_point m_housing_trophy_open_last{};
+	uint32_t HousingTrophyCapacity()const;
+	void ApplyHousingAnchorSpell(Client* caster,uint32_t item_id,bool confirmation);
 
 	// Help Window
 	std::string SendBotCommandHelpWindow(const BotCommandHelpParams& params);
@@ -1676,6 +1799,55 @@ public:
 	void SendRewards();
 	bool TryReward(uint32 claim_id);
 	ClientRewardSelection &GetRewardSelection();
+	bool LoadAchievements();
+	bool ReloadAchievements();
+	void SendAchievementPackets();
+	void ProcessAchievementRewards();
+	void NotifyAchievementStateUpdatePending();
+	bool HasCompletedAchievement(uint32 achievement_id) const;
+	int GetAchievementStatus(uint32 achievement_id) const;
+	int64 GetAchievementProgress(
+		uint32 achievement_id,
+		uint8 component_type,
+		uint32 component_id
+	) const;
+	bool PassAchievementCastRestriction(uint32 restriction_id) const;
+	void SendAchievementComparison(uint32 definition_index);
+	void SendAchievementComparisonTo(Client &recipient, uint32 achievement_id);
+	void SendAchievementCompareSnapshotTo(Client &recipient) const;
+	void SendAchievementRewardDisplay(uint32 definition_index);
+	bool RestorePendingAchievementRewardSelection();
+	RewardSelectionDeliveryResult ClaimAchievementReward(
+		uint32 pending_reward_id,
+		uint32 reward_set_id,
+		uint32 selected_option_id
+	);
+	void UpdateAchievementForKill(
+		uint32 npc_type_id,
+		uint32 race_id,
+		uint32 npc_name_identity,
+		uint32 zone_id
+	);
+	void UpdateAchievementForLevel(uint32 level);
+	void UpdateAchievementForTask(uint32 task_id);
+	void UpdateAchievementForZone(uint32 zone_id);
+	void UpdateAchievementForLoot(uint32 item_id, uint32 quantity = 1);
+	void UpdateAchievementForOwnItem(uint32 item_id);
+	void BeginAchievementInventoryTransaction();
+	void EndAchievementInventoryTransaction(bool committed);
+	void UpdateAchievementForTradeskill(uint32 recipe_id);
+	void UpdateAchievementForSkill(uint32 skill_id, uint32 value);
+	void UpdateAchievementForAA(uint32 spent_points);
+	uint32 GetAchievementAAPointsSpent();
+	bool SetAchievementProgress(
+		uint32 achievement_id,
+		uint8 component_type,
+		uint32 component_id,
+		uint32 value,
+		bool additive = false
+	);
+	bool CompleteAchievement(uint32 achievement_id);
+	bool ResetAchievement(uint32 achievement_id, bool reset_rewards = false);
 	QGlobalCache *GetQGlobals() { return qGlobals; }
 	QGlobalCache *CreateQGlobals() { qGlobals = new QGlobalCache(); return qGlobals; }
 	void GuildBankAck();
@@ -1763,6 +1935,16 @@ public:
 	void ProcessAggroMeter(); // builds packet and sends
 
 	void InitializeMercInfo();
+	bool FinalizeMercenaryPayment(Merc* merc, uint64 copper, bool upkeep = false);
+	bool PrepareMercenaryPayment(Mercenary::Payment& payment, uint64 copper);
+	void RejectMercenaryPersistence();
+	void SendMercenaryUpkeep(bool alternate);
+	void SendMercenaryCostUpdate();
+	bool HasMercenaryPersistenceFailure() const { return m_mercenary_persistence_failed; }
+	uint8 GetMercenaryCapacity() const;
+	void PersistMercenarySelection();
+	bool GetMercenaryAutoAssist();
+	void SetMercenaryAutoAssist(bool enabled);
 	bool CheckCanSpawnMerc(uint32 template_id);
 	bool CheckCanHireMerc(Mob* merchant, uint32 template_id);
 	bool CheckCanRetainMerc(uint32 upkeep);
@@ -1772,7 +1954,7 @@ public:
 	inline uint32 GetMercenaryID() const { return mercid; }
 	inline uint8 GetMercSlot() const { return mercSlot; }
 	void SetMercID( uint32 newmercid) { mercid = newmercid; }
-	void SetMercSlot( uint8 newmercslot) { mercSlot = newmercslot; }
+	void SetMercSlot( uint8 newmercslot) { if (newmercslot < MAXMERCS) { mercSlot = newmercslot; } }
 	Merc* GetMerc();
 	MercInfo& GetMercInfo(uint8 slot) { return m_mercinfo[slot]; }
 	MercInfo& GetMercInfo() { return m_mercinfo[mercSlot]; }
@@ -1791,7 +1973,7 @@ public:
 	void SendClearMercInfo();
 	void SuspendMercCommand();
 	void SpawnMercOnZone();
-	void SpawnMerc(Merc* merc, bool setMaxStats);
+	bool SpawnMerc(Merc* merc, bool setMaxStats);
 	void UpdateMercTimer();
 	void UpdateMercLevel();
 	void CheckMercSuspendTimer();
@@ -1991,7 +2173,7 @@ private:
 	eqFilterMode ClientFilters[_FilterCount];
 	int32 HandlePacket(const EQApplicationPacket *app);
 	void OPTGB(const EQApplicationPacket *app);
-	void OPRezzAnswer(uint32 Action, int32 SpellID, uint16 ZoneID, uint16 InstanceID, float x, float y, float z);
+	bool OPRezzAnswer(uint32 Action, int32 SpellID, uint16 ZoneID, uint16 InstanceID, float x, float y, float z);
 	void OPMemorizeSpell(const EQApplicationPacket *app);
 	void OPMoveCoin(const EQApplicationPacket* app);
 	void MoveItemCharges(EQ::ItemInstance &from, int16 to_slot, uint8 type);
@@ -2039,6 +2221,24 @@ private:
 
 	uint8 playeraction;
 
+	bool m_inventory_session_rejected = false;
+ bool m_spirit_shroud_transition = false;
+ bool m_spirit_shroud_native_pending = false;
+ bool m_spirit_shroud_restored_short_buffs_pending = false;
+ uint64_t m_spirit_shroud_native_revision = 0, m_spirit_shroud_native_deadline = 0;
+ uint32_t m_spirit_shroud_template = 0, m_spirit_shroud_keeper = 0;
+ uint64_t m_spirit_shroud_menu_until = 0, m_spirit_shroud_progress_sent = 0;
+ std::set<uint32_t> m_spirit_shroud_aa_ranks;
+ uint64_t m_spirit_shroud_session_id = 0, m_spirit_shroud_revision = 0;
+ bool m_spirit_shroud_personal_bank = false;
+ std::shared_ptr<const SpiritShroud::Template> m_spirit_shroud_definition;
+ uint8_t m_spirit_shroud_resource_refreshes = 0;
+	std::shared_ptr<Housing::InventorySessions::ZoneReservation> m_inventory_session_reservation;
+	std::unique_ptr<Housing::InventoryBridge::Bridge> m_housing_inventory_bridge;
+	std::shared_ptr<Housing::NativePlacement::Session> m_housing_placement_session;
+	std::map<uint32_t,uint64_t> m_housing_acl_revisions;
+	std::shared_ptr<Housing::AnchorTransport::Pending> m_housing_anchor_pending;
+ std::shared_ptr<Housing::TransferConsent::Pending> m_housing_transfer_incoming,m_housing_transfer_outgoing;
 	EQStreamInterface* eqs;
 
 	uint32 ip;
@@ -2135,7 +2335,11 @@ private:
 public:
 	bool IsLockSavePosition() const;
 	void SetLockSavePosition(bool lock_save_position);
+	void RestoreRejectedZonePosition();
 private:
+	// Source position captured before a solicited transfer can overwrite it.
+	glm::vec4 m_zone_transfer_origin{};
+	bool m_zone_transfer_origin_valid = false;
 
 	PlayerProfile_Struct m_pp;
 	ExtendedProfile_Struct m_epp;
@@ -2143,6 +2347,9 @@ private:
 	Object* m_tradeskill_object;
 	PetInfo m_petinfo; // current pet data, used while loading from and saving to DB
 	PetInfo m_suspendedminion; // pet data for our suspended minion.
+	bool m_mercenary_persistence_failed = false;
+	bool m_mercenary_auto_assist = true;
+	bool m_mercenary_auto_assist_loaded = false;
 	MercInfo m_mercinfo[MAXMERCS]; // current mercenary
 	InspectMessage_Struct m_inspect_message;
 	bool temp_pvp;
@@ -2348,6 +2555,48 @@ private:
 
 	std::vector<uint32_t> m_completed_shared_tasks;
 	std::unique_ptr<ClientRewardSelection> m_reward_selection;
+	std::unique_ptr<ClientAchievementState> m_achievement_state;
+	enum class DeferredAchievementStateUpdateType : uint8 {
+		Kill,
+		Level,
+		Task,
+		Zone,
+		Loot,
+		Tradeskill,
+		Skill,
+		AlternateAdvancement,
+		SetProgress,
+		Complete
+	};
+	struct DeferredAchievementStateUpdate {
+		DeferredAchievementStateUpdateType type;
+		uint32 value1 = 0;
+		uint32 value2 = 0;
+		uint32 value3 = 0;
+		uint32 value4 = 0;
+		bool flag = false;
+	};
+	bool ShouldDeferAchievementStateUpdate() const;
+	void QueueAchievementStateUpdate(const DeferredAchievementStateUpdate &update);
+	bool ReplaceAchievementState(bool send_initial, bool allow_disabled);
+	void ConfigureAchievementOwnershipReconciliation();
+	bool FlushAchievementInventoryUpdate();
+	void ReplayDeferredAchievementStateUpdates();
+	void ProcessPendingAchievementStateUpdates();
+	std::vector<DeferredAchievementStateUpdate> m_deferred_achievement_state_updates;
+	Timer m_achievement_state_load_retry_timer;
+	Timer m_achievement_ownership_reconcile_timer;
+	Timer m_achievement_window_request_rate_limit;
+	Timer m_achievement_compare_request_rate_limit;
+	Timer m_achievement_link_request_rate_limit;
+	uint32 m_achievement_inventory_transaction_depth = 0;
+	size_t m_achievement_inventory_transaction_update_checkpoint = 0;
+	bool m_achievement_inventory_update_pending = false;
+	bool m_achievement_inventory_transaction_failed = false;
+	bool m_achievement_pending_state_updates = false;
+	bool m_achievement_state_load_pending = false;
+	bool m_achievement_state_load_send_initial = false;
+	bool m_achievement_state_load_allow_disabled = false;
 
 public:
 	enum BotOwnerOption : size_t {

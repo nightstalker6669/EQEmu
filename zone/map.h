@@ -20,6 +20,13 @@
 #include "zone/position.h"
 #include "zone/zone_config.h"
 
+#include "../common/housing/curved_mount_contact.h"
+#include "position.h"
+#include "../common/housing/planar_mount_contact.h"
+namespace Housing::OrientedMount { struct Volume; }
+#include <stdio.h>
+
+#include "zone_config.h"
 #include <cstdio>
 
 #define BEST_Z_INVALID -99999
@@ -39,6 +46,24 @@ public:
 	bool LineIntersectsZone(glm::vec3 start, glm::vec3 end, float step, glm::vec3 *result) const;
 	bool LineIntersectsZoneNoZLeaps(glm::vec3 start, glm::vec3 end, float step_mag, glm::vec3 *result) const;
 	bool CheckLoS(glm::vec3 myloc, glm::vec3 oloc) const;
+	// Caller explicitly enrolls the exact static model of a bound destructible.
+	// Unknown/ambiguous/far placements use ordinary LOS, never an exemption.
+	bool CheckLoSToBoundModel(const glm::vec3& from, const glm::vec3& to, const glm::vec3& anchor, const std::string& model) const;
+	bool IntersectsBox(const glm::vec3& minimum,const glm::vec3& maximum) const;
+	// Housing-only trusted source contact; all other triangles remain blockers.
+	bool IntersectsBoxExceptTriangles(const glm::vec3& minimum,const glm::vec3& maximum,uint32_t source_a,uint32_t source_b) const;
+ std::vector<uint32_t> SourceMountPatch(const glm::vec3& minimum,const glm::vec3& maximum,uint32_t axis,uint32_t source_a,uint32_t source_b,const std::vector<uint32_t>& candidates) const;
+ bool IntersectsBoxExceptTriangleList(const glm::vec3& minimum,const glm::vec3& maximum,const std::vector<uint32_t>& sources) const;
+ std::vector<uint32_t> SourceMountPatch(const Housing::OrientedMount::Volume&,uint32_t axis,uint32_t source_a,uint32_t source_b,const std::vector<uint32_t>& candidates) const;
+ bool IntersectsVolumeExceptTriangleList(const Housing::OrientedMount::Volume&,const std::vector<uint32_t>& sources) const;
+
+ std::optional<Housing::PlanarMount::Trace> TracePlanarMount(const glm::vec3& start,const glm::vec3& end) const;
+ Housing::CurvedMount::Proof SourceCurvedMountPatch(const Housing::OrientedMount::Volume&,const Housing::PlanarMount::SurfaceSeed&,const std::vector<Housing::CurvedMount::Entry>&,Housing::CurvedMount::Limits={}) const;
+ std::vector<uint32_t> SourcePlanarMountPatch(const Housing::OrientedMount::Volume&,const Housing::PlanarMount::SurfaceSeed&,const std::vector<uint32_t>& reviewed_candidates) const;
+ // Inventory metadata only. Callers must explicitly enroll exact hash-bound IDs;
+ // count alone grants no surface, mode, region or collision exemption authority.
+ uint32_t SourceTriangleCount() const;
+
 	bool DoCollisionCheck(glm::vec3 myloc, glm::vec3 oloc, glm::vec3 &outnorm, float &distance) const;
 
 #ifdef USE_MAP_MMFS
@@ -60,6 +85,13 @@ private:
 	bool SaveMMF(const std::string& map_file_name, bool force_mmf_overwrite);
 #endif /*USE_MAP_MMFS*/
 
+	struct BoundModelSource {
+		std::string model;
+		glm::vec3 anchor;
+		uint32_t begin;
+		uint32_t end;
+	};
+	std::vector<BoundModelSource> bound_model_sources_;
 	struct impl;
 	impl *imp;
 };

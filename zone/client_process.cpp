@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "housing_guild_portal.h"
+
 
 /*
 	client_process.cpp:
@@ -54,6 +56,7 @@ extern WorldServer worldserver;
 extern EntityList entity_list;
 
 bool Client::Process() {
+ if (!ProcessSpiritShroudNativeTransition()) return false;
 	bool ret = true;
 
 	if (Connected() || IsLD()) {
@@ -61,6 +64,8 @@ bool Client::Process() {
 		if (!IsLD() && zoneinpacket_timer.Check()) {
 			SendAllPackets();
 		}
+
+		ProcessAchievementRewards();
 
 		if (adventure_request_timer) {
 			if (adventure_request_timer->Check()) {
@@ -110,7 +115,13 @@ bool Client::Process() {
 		// SendHPUpdate calls hpupdate_timer.Start so it can delay this timer, so lets not reset with the check
 		// since the function will anyways
 		if (hpupdate_timer.Check(false)) {
-			SendHPUpdate();
+			const bool refresh_shroud_resources = IsSpiritShrouded() && m_spirit_shroud_resource_refreshes;
+			SendHPUpdate(refresh_shroud_resources);
+			if (refresh_shroud_resources) {
+				--m_spirit_shroud_resource_refreshes;
+				SendManaUpdate();
+				SendEnduranceUpdate();
+			}
 		}
 
 		/* I haven't naturally updated my position in 10 seconds, updating manually */
@@ -509,6 +520,10 @@ bool Client::Process() {
 			ShieldAbilityFinish();
 		}
 
+		ProcessHousingTrophyBenefits();
+		ProcessFellowship();
+        ProcessHousingGuildTrophyBenefits();
+        Housing::GuildPortalRuntime::Process(*this);
 		SpellProcess();
 		if (endupkeep_timer.Check() && !dead) {
 			DoEnduranceUpkeep();
@@ -572,7 +587,8 @@ bool Client::Process() {
 	if (client_state == DISCONNECTED) {
 		OnDisconnect(true);
 		std::cout << "Client disconnected (cs=d): " << GetName() << std::endl;
-		RecordPlayerEventLog(PlayerEvent::POSSIBLE_HACK, PlayerEvent::PossibleHackEvent{.message = "/MQInstantCamp: Possible instant camp disconnect"});
+		if (!m_inventory_session_rejected && (!RuleB(Housing, EnablePlayerHousing) || ClientDataLoaded()))
+			RecordPlayerEventLog(PlayerEvent::POSSIBLE_HACK, PlayerEvent::PossibleHackEvent{.message = "/MQInstantCamp: Possible instant camp disconnect"});
 		return false;
 	}
 
@@ -693,6 +709,14 @@ bool Client::Process() {
 
 /* Just a set of actions preformed all over in Client::Process */
 void Client::OnDisconnect(bool hard_disconnect) {
+	if (m_inventory_session_rejected ||
+		(RuleB(Housing, EnablePlayerHousing) && (!ClientDataLoaded() || !HasInventorySessionReservation()))) {
+		// No empty-profile saves, real-actor trade resets, quest callbacks or
+		// ingame/presence writes from a losing/unloaded ingress object.
+		Disconnect();
+		return;
+	}
+
 	if (hard_disconnect) {
 		LeaveGroup();
 
@@ -743,6 +767,10 @@ void Client::OnDisconnect(bool hard_disconnect) {
 	}
 
 	RecordStats();
+	// Finish any ownership-gated achievement state updates while the client state
+	// still exists. Completions are durable; reward delivery remains recoverable
+	// from the ledger on the next login.
+	FlushAchievementInventoryUpdate();
 
 	Disconnect();
 }
@@ -1033,20 +1061,23 @@ uint8 Client::WithCustomer(uint16 NewCustomer){
 	return 0;
 }
 
-void Client::OPRezzAnswer(uint32 Action, int32 SpellID, uint16 ZoneID, uint16 InstanceID, float x, float y, float z)
+bool Client::OPRezzAnswer(uint32 Action, int32 SpellID, uint16 ZoneID, uint16 InstanceID, float x, float y, float z)
 {
+
 	if(PendingRezzXP < 0) {
 		// pendingrezexp is set to -1 if we are not expecting an OP_RezzAnswer
 		LogSpells("Unexpected OP_RezzAnswer. Ignoring it");
 		Message(Chat::Red, "You have already been resurrected.\n");
-		return;
+		return false;
 	}
 
 	if (Action == 1)
 	{
+		bool managed = false;
+		if (!IsValidSpell(SpellID) || !SettleSpiritShroudResurrection(PendingRezzDBID, SpellID, PendingRezzXP, managed)) return false;
 		// Mark the corpse as rezzed in the database, just in case the corpse has buried, or the zone the
 		// corpse is in has shutdown since the rez spell was cast.
-		database.MarkCorpseAsResurrected(PendingRezzDBID);
+		if (!managed) database.MarkCorpseAsResurrected(PendingRezzDBID);
 		LogSpells("Player [{}] got a [{}] Rezz spellid [{}] in zone[{}] instance id [{}]",
 				name, spells[SpellID].base_value[0],
 				SpellID, ZoneID, InstanceID);
@@ -1112,9 +1143,9 @@ void Client::OPRezzAnswer(uint32 Action, int32 SpellID, uint16 ZoneID, uint16 In
 			SetEndurance(GetMaxEndurance() / 20);
 		}
 
-		if(spells[SpellID].base_value[0] < 100 && spells[SpellID].base_value[0] > 0 && PendingRezzXP > 0) {
+		if(!managed && spells[SpellID].base_value[0] < 100 && spells[SpellID].base_value[0] > 0 && PendingRezzXP > 0) {
 			SetEXP(ExpSource::Resurrection, ((int)(GetEXP()+((float)((PendingRezzXP / 100) * spells[SpellID].base_value[0])))), GetAAXP(), true);
-		} else if (spells[SpellID].base_value[0] == 100 && PendingRezzXP > 0) {
+		} else if (!managed && spells[SpellID].base_value[0] == 100 && PendingRezzXP > 0) {
 			SetEXP(ExpSource::Resurrection, (GetEXP() + PendingRezzXP), GetAAXP(), true);
 		}
 
@@ -1125,6 +1156,7 @@ void Client::OPRezzAnswer(uint32 Action, int32 SpellID, uint16 ZoneID, uint16 In
 	}
 	PendingRezzXP = -1;
 	PendingRezzSpellID = 0;
+	return true;
 }
 
 void Client::OPTGB(const EQApplicationPacket *app)
@@ -2127,6 +2159,23 @@ void Client::DoTracking()
 
 void Client::HandleRespawnFromHover(uint32 Option)
 {
+ // Validate and settle before changing HP, position, hover state or corpse.
+ // An invalid cross-profile offer must leave the bind choice available.
+ if (respawn_options.size() > 1 && Option != 0 && Option == respawn_options.size()-1) {
+  bool managed = false;
+  if (PendingRezzXP < 0 || !IsValidSpell(PendingRezzSpellID) ||
+      !SettleSpiritShroudResurrection(PendingRezzDBID, PendingRezzSpellID, PendingRezzXP, managed)) {
+   Message(Chat::Yellow, "This resurrection cannot be accepted in your current form. You may still respawn at your bind.");
+   auto saved = respawn_options;
+   const auto selection = initial_respawn_selection;
+   respawn_options.pop_back(); // SendRespawnBinds adds its own trailing rez row.
+   initial_respawn_selection = 0;
+   SendRespawnBinds();
+   respawn_options.swap(saved);
+   initial_respawn_selection = selection;
+   return;
+  }
+ }
 	RespawnFromHoverTimer.Disable();
 
 	RespawnOption* chosen = nullptr;
@@ -2211,7 +2260,7 @@ void Client::HandleRespawnFromHover(uint32 Option)
 
 			ClearHover();
 			SendHPUpdate();
-			OPRezzAnswer(1, PendingRezzSpellID, zone->GetZoneID(), zone->GetInstanceID(), GetX(), GetY(), GetZ());
+			if (!OPRezzAnswer(1, PendingRezzSpellID, zone->GetZoneID(), zone->GetInstanceID(), GetX(), GetY(), GetZ())) return;
 
 			if (corpse && corpse->IsCorpse())
 			{

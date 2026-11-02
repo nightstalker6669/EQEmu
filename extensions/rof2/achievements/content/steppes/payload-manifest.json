@@ -1,0 +1,174 @@
+[
+  {
+    "path": "PROTOCOL.md",
+    "sha256": "aed30a41553f57d16593bc9bd1765bed8fc948d7a31581bd7817bd126732e042"
+  },
+  {
+    "path": "README.md",
+    "sha256": "dfe76e470113dbf5b066c0baa7cd56dc896839ce1594ed0f3d7afed43790e7e8"
+  },
+  {
+    "path": "apply_quests.py",
+    "sha256": "7856f9e36212bd48fe55f70db938f9c0911078f0b61f1ef95d228254d1e7ef82"
+  },
+  {
+    "path": "hooks/global_npc.lua.append",
+    "sha256": "1ce8d490531d1e9f302fe5fc9f980e698c93a6a360060b7dd9ee62dca70b9134"
+  },
+  {
+    "path": "hooks/global_player.lua.append",
+    "sha256": "d164dff160cb08bae2ce16c4c7e3cb81a4ba4687b2e9326e66911eecabfc36cf"
+  },
+  {
+    "path": "install.py",
+    "sha256": "e83036ba6282430d11eac2a520991d5669a2eeffdcec8847e7d8bb2ceb0f9d39"
+  },
+  {
+    "path": "preflight.py",
+    "sha256": "14fb2e944eba28053a6d8aa0307488246f4c90f3a7dd2629ff93a810e4d5c779"
+  },
+  {
+    "path": "provenance/baseline-identities.json",
+    "sha256": "a2fa8233f599b79031ad28445b1e56ab3079e5fcddf4b976332be10c483c332f"
+  },
+  {
+    "path": "provenance/catalogue.json",
+    "sha256": "56c49d800607e074b9289ec9f824753c166323e2eb85b00c368b9c42034b4728"
+  },
+  {
+    "path": "provenance/defaults-sources.json",
+    "sha256": "2e16c4b4b2e1b3eccd1f2f5e169870689f462e1fe488473f0c743e556db90710"
+  },
+  {
+    "path": "provenance/defaults.json",
+    "sha256": "de915e7ef18dce21216f87b1d69d00dee58b9322b3d63a3454810914b375d602"
+  },
+  {
+    "path": "provenance/effective-scene-settings.json",
+    "sha256": "74efa6da7ea09552872bce232d58bd8d7b5b3838cd903a6cddb6890f1cf8ece3"
+  },
+  {
+    "path": "provenance/grove-geometry.json",
+    "sha256": "911f6be0e30b47bc7bbf9c5971cf9a7480c0446ba11e09cdf0468251c47c70f9"
+  },
+  {
+    "path": "provenance/historical-levels-xp.json",
+    "sha256": "5ceeb48481575ac573b9e61a00fc4f94c482ec84f0dd333d0d030122161b193d"
+  },
+  {
+    "path": "provenance/native-status.json",
+    "sha256": "5b0e9df8be7940be1048dee607a192b43075e7ea0804b37c5631100d3f76654f"
+  },
+  {
+    "path": "provenance/page-distribution.json",
+    "sha256": "e091dfa07e631e2fab99ca3debdb59a14fee3ec891f4df86f54313cc3f33ad55"
+  },
+  {
+    "path": "provenance/parent-rewards.json",
+    "sha256": "c9cc2053c03b37375b1c6947c2a56562fa4c06112fe518b7fbd8eb056d51780b"
+  },
+  {
+    "path": "provenance/quests.json",
+    "sha256": "ef319f5aa28c63bfa8d5967c10b2eb05083906d768b12cea1a9ed2e1a7c74690"
+  },
+  {
+    "path": "provenance/rune-stone.json",
+    "sha256": "d8e303d2a24a05ce4f1c9e73c04f48891b705e22845a7f7d2195f121b62fc6c8"
+  },
+  {
+    "path": "provenance/validation.json",
+    "sha256": "f1f66cda9a2937e5effd32d5c3da74a89e4bb0facb61cc2dfede8877edf613d4"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "ff0eaf3f5ec02e3e22d06bea2e67e542a36674449bf56d2be1b85dc9e06f58e5"
+  },
+  {
+    "path": "quests/crescent/394153.lua",
+    "sha256": "c233148bc5c191fd7a92004a9b4213770d4dc5b6b125ac20c79be2c2bd63319d"
+  },
+  {
+    "path": "quests/crescent/394191.lua",
+    "sha256": "c233148bc5c191fd7a92004a9b4213770d4dc5b6b125ac20c79be2c2bd63319d"
+  },
+  {
+    "path": "quests/crescent/394200.lua",
+    "sha256": "c233148bc5c191fd7a92004a9b4213770d4dc5b6b125ac20c79be2c2bd63319d"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_steppes.lua",
+    "sha256": "387dd4e9c1425029205173997bde403e765e419c5bc47eb6068c56ed11ecd7ef"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_steppes_data.lua",
+    "sha256": "928407be2a238b85382752cd5f690c19b8d8e4987162bf14af7a8e6ab5bc278f"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_steppes_encounters.lua",
+    "sha256": "5f93bd4f82ae11e53969af8599acc660bf17fd0835fd0da1cc32d912dc7cb275"
+  },
+  {
+    "path": "quests/lua_modules/steppes_encounter_config.lua",
+    "sha256": "5c2cfbfb73d1a0dead01bbec5dbde213546e3d3ba83cfc6f67d21adeda6b5c3f"
+  },
+  {
+    "path": "quests/lua_modules/steppes_encounter_native.lua",
+    "sha256": "c05427e5a370b6adc74627eddef63b647d57f4f40ca477c31ae752bdb275ea88"
+  },
+  {
+    "path": "quests/lua_modules/steppes_encounter_state.lua",
+    "sha256": "fbc7cb4391de68e9a41e26f6944773b446317f0e6b302885bb3667d24bb064c3"
+  },
+  {
+    "path": "quests/lua_modules/steppes_portal_repair.lua",
+    "sha256": "96e3632b651e2da52d393b812d1bb595d1b2fd74bc4a12d93665ad55dc07ad72"
+  },
+  {
+    "path": "quests/steppes/399032.lua",
+    "sha256": "21cf406b25c796946e8e0ddfabba8842077e0c807f412d7249a45f11c4769062"
+  },
+  {
+    "path": "quests/steppes/399070.lua",
+    "sha256": "c233148bc5c191fd7a92004a9b4213770d4dc5b6b125ac20c79be2c2bd63319d"
+  },
+  {
+    "path": "quests/steppes/399073.lua",
+    "sha256": "c233148bc5c191fd7a92004a9b4213770d4dc5b6b125ac20c79be2c2bd63319d"
+  },
+  {
+    "path": "quests/steppes/399100.lua",
+    "sha256": "c233148bc5c191fd7a92004a9b4213770d4dc5b6b125ac20c79be2c2bd63319d"
+  },
+  {
+    "path": "quests/steppes/399139.lua",
+    "sha256": "c233148bc5c191fd7a92004a9b4213770d4dc5b6b125ac20c79be2c2bd63319d"
+  },
+  {
+    "path": "sql/000-shared-reward-state.sql",
+    "sha256": "f91af00c213590852f22d23b28e05241701be5e91d1a5da4627579a7524d1dbd"
+  },
+  {
+    "path": "sql/005-shared-admission-schema.sql",
+    "sha256": "3b4931e3b0bfeda46acf509795a1dcdcce82189298c4e832b7bd529fd2380927"
+  },
+  {
+    "path": "sql/010-catalogue.sql",
+    "sha256": "236a8e4964f6253521395de7920aaf337a40e8f0814e710adb842075c96e052b"
+  },
+  {
+    "path": "sql/020-tasks-rewards.sql",
+    "sha256": "974507300bb87f72673d16075eaca589535e6125cd8541b7011bb06eafb2cff1"
+  },
+  {
+    "path": "sql/030-actors-pickups.sql",
+    "sha256": "b132fc8290870e52f3419e2d81782e2a3c68e7979df54d5f67bd8dc2ad7b4c79"
+  },
+  {
+    "path": "sql/090-enable-reviewed-content.sql",
+    "sha256": "27bd43b6f36ac1d64cc505496a51bd5e85d469d9c4c701a29bdfc57fcd88e24f"
+  },
+  {
+    "path": "sql/095-gnoll-late-join-policy.sql",
+    "sha256": "18d23ed04edd38fa566bb06e4ad1e4de2d89a6b20b3a8280aa94a64286b215c6"
+  }
+]

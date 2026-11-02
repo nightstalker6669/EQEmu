@@ -1,8 +1,43 @@
 set(zone_sources
-	reward_selection.cpp
-	reward_selection_catalog.cpp
+	client_spirit_shroud.cpp
+	client_spirit_shroud_native.cpp
+	client_mercenary_transfer.cpp
+	fellowship_campfire.cpp
+	fellowship_campsite_bonuses.cpp
+	fellowship_campsite_materials.cpp
+	client_fellowship.cpp
+	client_fellowship_vitality.cpp
+	fellowship_chat.cpp
+	client_housing_anchor.cpp
+	client_housing_trophies.cpp
+	client_housing_guild_trophies.cpp
+	client_housing.cpp
+	client_housing_metadata.cpp
+	client_housing_interaction.cpp
+	client_housing_escrow.cpp
+	client_housing_purchase.cpp
+	client_housing_transfer.cpp
+	housing_inventory_bridge.cpp
+	housing_service_npcs.cpp
+	housing_pets.cpp
+	housing_service_tribute.cpp
+	housing_service_bank.cpp
+	housing_service_authority.cpp
+	housing_guild_portal.cpp
+	housing_actor_publication.cpp
+	housing_height_scene.cpp
+	housing_house_preload_fence.cpp
+	housing_house_reload.cpp
+	housing_house_runtime.cpp
+	housing_house_surface.cpp
+	housing_crate_runtime.cpp
+	housing_house_inventory_swap.cpp
+	housing_item_reconstruction.cpp
+	inventory_session_owner.cpp
 	aa.cpp
 	aa_ability.cpp
+	achievement_manager.cpp
+	achievement_state_updates.cpp
 	aggro.cpp
 	aggromanager.cpp
 	api_service.cpp
@@ -23,6 +58,7 @@ set(zone_sources
 	cli/tests/cli_test_util.cpp
 	cli/tests/cli_zone_state.cpp
 	client.cpp
+	client_achievements.cpp
 	client_bot.cpp
 	client_evolving_items.cpp
 	client_mods.cpp
@@ -81,6 +117,8 @@ set(zone_sources
 	questmgr.cpp
 	raids.cpp
 	raycast_mesh.cpp
+	reward_selection.cpp
+	reward_selection_catalog.cpp
 	shared_task_zone_messaging.cpp
 	sidecar_api/loot_simulator_controller.cpp
 	sidecar_api/sidecar_api.cpp
@@ -120,6 +158,8 @@ set(zone_sources
 set(zone_headers
 	aa.h
 	aa_ability.h
+	achievement_manager.h
+	achievement_state_updates.h
 	aggromanager.h
 	api_service.h
 	aura.h
@@ -130,6 +170,7 @@ set(zone_headers
 	bot_structs.h
 	cheat_manager.h
 	client.h
+	client_achievements.h
 	client_packet.h
 	client_version.h
 	combat_record.h
@@ -209,6 +250,8 @@ set(zone_headers
 	questmgr.h
 	raids.h
 	raycast_mesh.h
+	reward_selection.h
+	reward_selection_catalog.h
 	shared_task_zone_messaging.h
 	sidecar_api/sidecar_api.h
 	spawn2.h
@@ -369,6 +412,7 @@ set(gm_command_sources
 	bot_commands/bot_view_combos.cpp
 	command.cpp
 	gm_commands/acceptrules.cpp
+	gm_commands/achievement.cpp
 	gm_commands/advnpcspawn.cpp
 	gm_commands/aggrozone.cpp
 	gm_commands/ai.cpp
@@ -712,3 +756,7 @@ endif()
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set_property(TARGET zone PROPERTY FOLDER executables/servers)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+ set_property(SOURCE housing_height_scene.cpp housing_inventory_bridge.cpp APPEND PROPERTY COMPILE_OPTIONS -fno-fast-math -frounding-math -ffp-contract=off)
+endif()

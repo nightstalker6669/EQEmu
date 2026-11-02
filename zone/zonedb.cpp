@@ -15,6 +15,12 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "mercenary_scaling.h"
+
+#include "fellowship_campsite_bonuses.h"
+
+#include "../common/housing/admission_guard.h"
+
 #include "zonedb.h"
 
 #include "common/eqemu_logsys.h"
@@ -477,7 +483,7 @@ void ZoneDatabase::UpdateBuyLine(uint32 CharID, uint32 BuySlot, uint32 Quantity)
 #define StructDist(in, f1, f2) (uint32(&in->f2)-uint32(&in->f1))
 
 bool ZoneDatabase::LoadCharacterData(uint32 character_id, PlayerProfile_Struct* pp, ExtendedProfile_Struct* m_epp){
-	const auto& e = CharacterDataRepository::FindOne(database, character_id);
+	const auto& e = CharacterDataRepository::FindOne(*this, character_id);
 	if (!e.id) {
 		return false;
 	}
@@ -591,7 +597,7 @@ bool ZoneDatabase::LoadCharacterFactionValues(uint32 character_id, faction_map &
 bool ZoneDatabase::LoadCharacterMemmedSpells(uint32 character_id, PlayerProfile_Struct* pp)
 {
 	const auto& l = CharacterMemmedSpellsRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} ORDER BY `slot_id`",
 			character_id
@@ -614,7 +620,7 @@ bool ZoneDatabase::LoadCharacterMemmedSpells(uint32 character_id, PlayerProfile_
 bool ZoneDatabase::LoadCharacterSpellBook(uint32 character_id, PlayerProfile_Struct* pp)
 {
 	const auto& l = CharacterSpellsRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} ORDER BY `slot_id`",
 			character_id
@@ -772,7 +778,7 @@ bool ZoneDatabase::LoadCharacterCurrency(uint32 character_id, PlayerProfile_Stru
 bool ZoneDatabase::LoadCharacterMaterialColor(uint32 character_id, PlayerProfile_Struct* pp)
 {
 	const auto& l = CharacterMaterialRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} LIMIT 9",
 			character_id
@@ -792,7 +798,7 @@ bool ZoneDatabase::LoadCharacterMaterialColor(uint32 character_id, PlayerProfile
 bool ZoneDatabase::LoadCharacterBandolier(uint32 character_id, PlayerProfile_Struct* pp)
 {
 	const auto& l = CharacterBandolierRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} LIMIT {}",
 			character_id,
@@ -857,7 +863,7 @@ void ZoneDatabase::LoadCharacterTribute(Client* c){
 bool ZoneDatabase::LoadCharacterPotionBelt(uint32 character_id, PlayerProfile_Struct *pp)
 {
 	const auto& l = CharacterPotionbeltRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} LIMIT {}",
 			character_id,
@@ -889,7 +895,7 @@ bool ZoneDatabase::LoadCharacterPotionBelt(uint32 character_id, PlayerProfile_St
 bool ZoneDatabase::LoadCharacterBindPoint(uint32 character_id, PlayerProfile_Struct *pp)
 {
 	const auto& l = CharacterBindRepository::GetWhere(
-		database,
+		*this,
 		fmt::format(
 			"`id` = {} LIMIT 5",
 			character_id
@@ -1070,6 +1076,9 @@ bool ZoneDatabase::SaveCharacterData(
 	if (c->AccountID() <= 0) {
 		return false;
 	}
+
+	if (c->m_fellowship_xp_persistence_failed || c->m_fellowship_xp_transaction_active) return false;
+	if (c->SpiritShroudTransitionPending()) return false;
 
 	clock_t t = std::clock(); /* Function timer start */
 
@@ -1594,6 +1603,12 @@ void ZoneDatabase::DivergeCharacterInventoryFromInvSnapshot(uint32 character_id,
 }
 
 bool ZoneDatabase::RestoreCharacterInvSnapshot(uint32 character_id, uint32 timestamp) {
+	if (Housing::CheckInventoryMaintenance(RuleB(Housing, EnablePlayerHousing)) !=
+		Housing::InventoryAdmission::Allowed) {
+		LogError("Inventory restore for character [{}] refused before deletion: housing requires an atomic offline maintenance adapter", character_id);
+		return false;
+	}
+
 	// we should know what we're doing by the time we call this function..but,
 	// this is to prevent inventory deletions where no timestamp entries exists
 	if (!ValidateCharacterInvSnapshotTimestamp(character_id, timestamp)) {
@@ -2035,8 +2050,41 @@ const NPCType* ZoneDatabase::GetMercenaryType(uint32 merc_npc_type_id, uint16 ra
 	);
 
 	auto results = QueryDatabase(query);
-	if (!results.Success() || !results.RowCount()) {
+	if (!results.Success()) {
 		return nullptr;
+	}
+	if (!results.RowCount()) {
+		if (!RuleB(Mercs, ScaleAboveContentLevel) || owner_level > 100) {
+			return nullptr;
+		}
+		auto ceiling = QueryDatabase(fmt::format(
+			"SELECT MAX(s.clientlevel) FROM merc_stats s "
+			"JOIN merc_templates t ON t.merc_npc_type_id=s.merc_npc_type_id "
+			"JOIN merc_types y ON y.merc_type_id=t.merc_type_id "
+			"WHERE s.merc_npc_type_id={} AND y.race_id={} AND s.clientlevel<{}",
+			merc_npc_type_id, race_id, owner_level));
+		if (!ceiling.Success() || !ceiling.RowCount() || !ceiling.begin()[0]) {
+			return nullptr;
+		}
+		const uint32 content_level = Strings::ToUnsignedInt(ceiling.begin()[0]);
+		// Extrapolate only above the content ceiling; missing interior levels are data errors.
+		auto maximum = QueryDatabase(fmt::format(
+			"SELECT MAX(clientlevel) FROM merc_stats WHERE merc_npc_type_id={}", merc_npc_type_id));
+		if (!maximum.Success() || !maximum.RowCount() || !maximum.begin()[0] ||
+			owner_level <= Strings::ToUnsignedInt(maximum.begin()[0])) {
+			return nullptr;
+		}
+		const auto baseline = GetMercenaryType(merc_npc_type_id, race_id, content_level);
+		if (!baseline) {
+			return nullptr;
+		}
+		auto scaled = new NPCType(*baseline);
+		if (!Mercenary::ScaleAboveContentLevel(*scaled, content_level, owner_level)) {
+			delete scaled;
+			return nullptr;
+		}
+		zone->merctable[merc_type_id] = scaled;
+		return scaled;
 	}
 
 	const NPCType* n = nullptr;
@@ -2201,7 +2249,7 @@ bool ZoneDatabase::LoadMercenaryInfo(Client* c)
 		m.MercTimerRemaining = e.TimerRemaining;
 		m.Gender             = e.Gender;
 		m.MercSize           = e.MercSize;
-		m.State              = 5;
+		m.State              = e.IsSuspended ? MERC_STATE_SUSPENDED : MERC_STATE_NORMAL;
 		m.Stance             = e.StanceID;
 		m.hp                 = e.HP;
 		m.mana               = e.Mana;
@@ -2218,6 +2266,39 @@ bool ZoneDatabase::LoadMercenaryInfo(Client* c)
 		m.drakkinDetails     = e.DrakkinDetails;
 	}
 
+	// Restore a durable selection only after the entire owned roster is loaded.
+	const auto selected = c->GetBucket("eqemu.mercenary.selected_slot");
+	uint8 selected_slot = MAXMERCS;
+	if (selected.size() == 1 && selected[0] >= '0' && selected[0] < '0' + MAXMERCS) {
+		const auto candidate = static_cast<uint8>(selected[0] - '0');
+		if (c->GetMercInfo(candidate).mercid) {
+			selected_slot = candidate;
+		}
+	}
+	// An acknowledged live row outranks a stale bucket after a crash during switching.
+	for (uint8 slot = 0; slot < MAXMERCS; ++slot) {
+		if (c->GetMercInfo(slot).mercid && !c->GetMercInfo(slot).IsSuspended) {
+			selected_slot = slot;
+			break;
+		}
+	}
+	if (selected_slot == MAXMERCS) {
+		for (uint8 slot = 0; slot < MAXMERCS; ++slot) {
+			if (c->GetMercInfo(slot).mercid) {
+				selected_slot = slot;
+				break;
+			}
+		}
+	}
+	if (selected_slot == MAXMERCS) {
+		return false;
+	}
+	c->SetMercSlot(selected_slot);
+	for (uint8 slot = 0; slot < MAXMERCS; ++slot) {
+		if (slot != selected_slot && c->GetMercInfo(slot).mercid) {
+			c->GetMercInfo(slot).IsSuspended = true;
+		}
+	}
 	return true;
 }
 
@@ -2247,7 +2328,8 @@ bool ZoneDatabase::LoadCurrentMercenary(Client* c)
 	m.MercTimerRemaining = e.TimerRemaining;
 	m.Gender             = e.Gender;
 	m.MercSize           = e.MercSize;
-	m.State              = e.StanceID;
+	m.State              = e.IsSuspended ? MERC_STATE_SUSPENDED : MERC_STATE_NORMAL;
+	m.Stance             = e.StanceID;
 	m.hp                 = e.HP;
 	m.mana               = e.Mana;
 	m.endurance          = e.Endurance;
@@ -2261,122 +2343,30 @@ bool ZoneDatabase::LoadCurrentMercenary(Client* c)
 	m.drakkinHeritage    = e.DrakkinHeritage;
 	m.drakkinTattoo      = e.DrakkinTattoo;
 	m.drakkinDetails     = e.DrakkinDetails;
+	if (GetStatus() != DBcore::Connected) return false;
+	auto passive = QueryDatabase(fmt::format(
+		"SELECT PassiveUpkeepElapsedMS FROM mercs WHERE MercID={} AND OwnerCharacterID={} AND Slot={}",
+		e.MercID, c->CharacterID(), mercenary_slot), false);
+	if (!passive.Success() || passive.RowCount() != 1 || !passive.begin()[0]) return false;
+	m.PassiveUpkeepElapsedMS = Strings::ToUnsignedInt(passive.begin()[0]);
 
 	return true;
 }
 
-bool ZoneDatabase::SaveMercenary(Merc* m)
-{
-	Client* c = m->GetMercenaryOwner();
-
-	if (!c) {
-		return false;
-	}
-
-	if (!m->GetMercenaryID()) {
-		auto e = MercsRepository::NewEntity();
-
-		e.OwnerCharacterID = m->GetMercenaryCharacterID();
-		e.Slot             = c->GetMercSlot();
-		e.Name             = m->GetCleanName();
-		e.TemplateID       = m->GetMercenaryTemplateID();
-		e.SuspendedTime    = c->GetMercInfo().SuspendedTime;
-		e.IsSuspended      = m->IsSuspended();
-		e.TimerRemaining   = c->GetMercInfo().MercTimerRemaining;
-		e.Gender           = m->GetGender();
-		e.MercSize         = m->GetSize();
-		e.StanceID         = m->GetStance();
-		e.HP               = m->GetHP();
-		e.Mana             = m->GetMana();
-		e.Endurance        = m->GetEndurance();
-		e.Face             = m->GetLuclinFace();
-		e.LuclinHairStyle  = m->GetHairStyle();
-		e.LuclinHairColor  = m->GetHairColor();
-		e.LuclinEyeColor   = m->GetEyeColor1();
-		e.LuclinEyeColor2  = m->GetEyeColor2();
-		e.LuclinBeardColor = m->GetBeardColor();
-		e.LuclinBeard      = m->GetBeard();
-		e.DrakkinHeritage  = m->GetDrakkinHeritage();
-		e.DrakkinTattoo    = m->GetDrakkinTattoo();
-		e.DrakkinDetails   = m->GetDrakkinDetails();
-
-		e = MercsRepository::InsertOne(*this, e);
-
-		if (!e.MercID) {
-			c->Message(Chat::Red, "Unable to save mercenary to the database.");
-			return false;
-		}
-
-		m->SetMercID(e.MercID);
-		m->UpdateMercInfo(c);
-
-		database.SaveMercenaryBuffs(m);
-
-		return true;
-	}
-
-	auto e = MercsRepository::FindOne(*this, m->GetMercenaryID());
-
-	e.OwnerCharacterID = m->GetMercenaryCharacterID();
-	e.Slot             = c->GetMercSlot();
-	e.Name             = m->GetCleanName();
-	e.TemplateID       = m->GetMercenaryTemplateID();
-	e.SuspendedTime    = c->GetMercInfo().SuspendedTime;
-	e.IsSuspended      = m->IsSuspended();
-	e.TimerRemaining   = c->GetMercInfo().MercTimerRemaining;
-	e.Gender           = m->GetGender();
-	e.MercSize         = m->GetSize();
-	e.StanceID         = m->GetStance();
-	e.HP               = m->GetHP();
-	e.Mana             = m->GetMana();
-	e.Endurance        = m->GetEndurance();
-	e.Face             = m->GetLuclinFace();
-	e.LuclinHairStyle  = m->GetHairStyle();
-	e.LuclinHairColor  = m->GetHairColor();
-	e.LuclinEyeColor   = m->GetEyeColor1();
-	e.LuclinEyeColor2  = m->GetEyeColor2();
-	e.LuclinBeardColor = m->GetBeardColor();
-	e.LuclinBeard      = m->GetBeard();
-	e.DrakkinHeritage  = m->GetDrakkinHeritage();
-	e.DrakkinTattoo    = m->GetDrakkinTattoo();
-	e.DrakkinDetails   = m->GetDrakkinDetails();
-
-	const int updated = MercsRepository::UpdateOne(*this, e);
-
-	if (!updated) {
-		c->Message(Chat::Red, "Unable to save mercenary to the database.");
-		return false;
-	}
-
-	m->UpdateMercInfo(c);
-
-	database.SaveMercenaryBuffs(m);
-
-	return true;
-}
-
-void ZoneDatabase::SaveMercenaryBuffs(Merc* m)
+namespace {
+std::vector<MercBuffsRepository::MercBuffs> CollectMercenaryBuffs(Merc* m)
 {
 	auto buffs = m->GetBuffs();
-
-	MercBuffsRepository::DeleteWhere(
-		*this,
-		fmt::format(
-			"`MercID` = {}",
-			m->GetMercenaryID()
-		)
-	);
-
 	std::vector<MercBuffsRepository::MercBuffs> v;
 
 	auto e = MercBuffsRepository::NewEntity();
 
-	for (uint32 slot_id = 0; slot_id <= BUFF_COUNT; slot_id++) {
+	for (int slot_id = 0; slot_id < m->GetMaxTotalSlots(); slot_id++) {
 		if (!IsValidSpell(buffs[slot_id].spellid)) {
 			continue;
 		}
 
-		e.MercId             = m->GetMercenaryID();
+		e.MercId             = 0;
 		e.SpellId            = buffs[slot_id].spellid;
 		e.CasterLevel        = buffs[slot_id].casterlevel;
 		e.DurationFormula    = spells[buffs[slot_id].spellid].buff_duration_formula;
@@ -2400,15 +2390,279 @@ void ZoneDatabase::SaveMercenaryBuffs(Merc* m)
 		v.emplace_back(e);
 	}
 
-	if (!v.empty()) {
-		MercBuffsRepository::InsertMany(*this, v);
+	return v;
+}
+}
+
+Mercenary::SaveResult ZoneDatabase::SaveMercenaryAtomic(Merc* m, const Mercenary::Payment* payment)
+{
+	using Result = Mercenary::SaveResult;
+	const auto c = m ? m->GetMercenaryOwner() : nullptr;
+	if (!c || !c->CharacterID() || c->GetMercSlot() >= MAXMERCS || !payment || !payment->guard ||
+		m->GetMercenaryCharacterID() != c->CharacterID() || GetStatus() != DBcore::Connected) {
+		return Result::Failed;
 	}
+	uint64 before_total = 0, after_total = 0, denomination = 1;
+	for (size_t index = 0; index < 4; ++index) {
+		if (payment->before[index] > static_cast<uint32>(std::numeric_limits<int32>::max()) ||
+			payment->after[index] > static_cast<uint32>(std::numeric_limits<int32>::max())) {
+			return Result::Failed;
+		}
+		before_total += denomination * payment->before[index];
+		after_total += denomination * payment->after[index];
+		denomination *= 10;
+	}
+	if (after_total > before_total) return Result::Failed;
+	if (payment->alternate && (payment->alternate->currency_id != 19 || !payment->alternate->before ||
+		payment->alternate->after != payment->alternate->before - 1 || payment->before != payment->after)) {
+		return Result::Failed;
+	}
+	// This API owns its transaction and must never commit a caller's transaction.
+	auto identity = QueryDatabase(std::string("SELECT CONNECTION_ID(),@@in_transaction"), false);
+	if (!identity.Success() || identity.RowCount() != 1 || !identity.begin()[0] ||
+		!identity.begin()[1] || std::stoul(identity.begin()[1])) {
+		return Result::Failed;
+	}
+	const uint64 connection = std::stoull(identity.begin()[0]);
+	const bool initial_hire = !m->GetMercenaryID();
+	auto group = m->GetGroup();
+	if (initial_hire && (!group || !group->GetID() || c->GetGroup() != group ||
+		!group->IsGroupMember(c) || !group->IsGroupMember(m) || m->IsSuspended())) return Result::Failed;
+	std::string table_list = "'mercs','merc_buffs','character_currency'";
+	if (payment->alternate) table_list += ",'character_alt_currency'";
+	if (initial_hire) table_list += ",'group_id'";
+	if (initial_hire && c->IsSpiritShrouded()) table_list += ",'spirit_shroud_mercenary_fees'";
+	auto engines = QueryDatabase(fmt::format(
+		"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() "
+		"AND table_name IN ({}) AND engine='InnoDB'", table_list), false);
+	if (!engines.Success() || engines.RowCount() != 1 || !engines.begin()[0] ||
+		std::stoul(engines.begin()[0]) != (3 + (payment->alternate ? 1 : 0) + (initial_hire ? 1 : 0) + (initial_hire && c->IsSpiritShrouded() ? 1 : 0))) {
+		return Result::Failed;
+	}
+	auto e = MercsRepository::NewEntity();
+	e.OwnerCharacterID = m->GetMercenaryCharacterID();
+	e.Slot             = c->GetMercSlot();
+	e.Name             = m->GetCleanName();
+	e.TemplateID       = m->GetMercenaryTemplateID();
+	e.SuspendedTime    = c->GetMercInfo().SuspendedTime;
+	e.IsSuspended      = m->IsSuspended();
+	e.TimerRemaining   = c->GetMercInfo().MercTimerRemaining;
+	e.Gender           = m->GetGender();
+	e.MercSize         = m->GetSize();
+	e.StanceID         = m->GetStance();
+	e.HP               = std::clamp<int64>(m->GetHP(), 0, std::numeric_limits<int32>::max());
+	e.Mana             = m->GetMana();
+	e.Endurance        = m->GetEndurance();
+	e.Face             = m->GetLuclinFace();
+	e.LuclinHairStyle  = m->GetHairStyle();
+	e.LuclinHairColor  = m->GetHairColor();
+	e.LuclinEyeColor   = m->GetEyeColor1();
+	e.LuclinEyeColor2  = m->GetEyeColor2();
+	e.LuclinBeardColor = m->GetBeardColor();
+	e.LuclinBeard      = m->GetBeard();
+	e.DrakkinHeritage  = m->GetDrakkinHeritage();
+	e.DrakkinTattoo    = m->GetDrakkinTattoo();
+	e.DrakkinDetails   = m->GetDrakkinDetails();
+
+	const auto buffs = CollectMercenaryBuffs(m);
+	std::vector<std::pair<std::string, std::string>> fields = {
+		{ "OwnerCharacterID", std::to_string(e.OwnerCharacterID) },
+		{ "Slot", std::to_string(e.Slot) },
+		{ "Name", "\'" + Strings::Escape(e.Name) + "\'" },
+		{ "TemplateID", std::to_string(e.TemplateID) },
+		{ "SuspendedTime", std::to_string(e.SuspendedTime) },
+		{ "IsSuspended", std::to_string(e.IsSuspended) },
+		{ "TimerRemaining", std::to_string(e.TimerRemaining) },
+		{ "Gender", std::to_string(e.Gender) },
+		{ "MercSize", std::to_string(e.MercSize) },
+		{ "StanceID", std::to_string(e.StanceID) },
+		{ "HP", std::to_string(e.HP) },
+		{ "Mana", std::to_string(e.Mana) },
+		{ "Endurance", std::to_string(e.Endurance) },
+		{ "Face", std::to_string(e.Face) },
+		{ "LuclinHairStyle", std::to_string(e.LuclinHairStyle) },
+		{ "LuclinHairColor", std::to_string(e.LuclinHairColor) },
+		{ "LuclinEyeColor", std::to_string(e.LuclinEyeColor) },
+		{ "LuclinEyeColor2", std::to_string(e.LuclinEyeColor2) },
+		{ "LuclinBeardColor", std::to_string(e.LuclinBeardColor) },
+		{ "LuclinBeard", std::to_string(e.LuclinBeard) },
+		{ "DrakkinHeritage", std::to_string(e.DrakkinHeritage) },
+		{ "DrakkinTattoo", std::to_string(e.DrakkinTattoo) },
+		{ "DrakkinDetails", std::to_string(e.DrakkinDetails) },
+		{ "PassiveUpkeepElapsedMS", std::to_string(m->GetPassiveUpkeepElapsed()) }
+	};
+	bool begun = false;
+	bool committing = false;
+	const auto rollback = [&]() {
+		// Do not let DBcore reconnect and accidentally run commands on a new session.
+		if (begun && GetStatus() == DBcore::Connected) {
+			QueryDatabase(std::string("ROLLBACK"), false);
+		}
+	};
+	const auto check = [&]() {
+		if (GetStatus() != DBcore::Connected) return false;
+		auto state = QueryDatabase(std::string("SELECT CONNECTION_ID(),@@in_transaction"), false);
+		return state.Success() && state.RowCount() == 1 && state.begin()[0] && state.begin()[1] &&
+			std::stoull(state.begin()[0]) == connection && std::stoul(state.begin()[1]) == 1;
+	};
+	try {
+		if (GetStatus() != DBcore::Connected || !QueryDatabase(std::string("START TRANSACTION"), false).Success()) {
+			return Result::Failed;
+		}
+		begun = true;
+		if (!check() || (payment && (!payment->guard || !payment->guard(*this, connection))) || !check()) {
+			rollback(); return Result::Failed;
+		}
+		if (initial_hire) {
+			// The provisional member has no persistent mercenary ID. Lock and
+			// authenticate its owner's group before publishing membership below.
+			if (m->GetGroup() != group || c->GetGroup() != group ||
+				!group->IsGroupMember(c) || !group->IsGroupMember(m)) { rollback(); return Result::Failed; }
+			auto owner_group = QueryDatabase(fmt::format(
+				"SELECT group_id FROM group_id WHERE character_id={} AND bot_id=0 AND merc_id=0 FOR UPDATE",
+				c->CharacterID()), false);
+			if (!owner_group.Success() || owner_group.RowCount() != 1 || !owner_group.begin()[0] ||
+				Strings::ToUnsignedInt(owner_group.begin()[0]) != group->GetID()) { rollback(); return Result::Failed; }
+		}
+		// Serialize contracts for the entire owner, including concurrent first hires.
+		auto owned = QueryDatabase(fmt::format(
+			"SELECT MercID,Slot,IsSuspended FROM mercs WHERE OwnerCharacterID={} FOR UPDATE", c->CharacterID()), false);
+		if (!owned.Success()) { rollback(); return Result::Failed; }
+		bool found = false;
+		for (auto row : owned) {
+			const uint32 id = Strings::ToUnsignedInt(row[0]);
+			const uint32 slot = Strings::ToUnsignedInt(row[1]);
+			if (id == m->GetMercenaryID()) {
+				if (slot != c->GetMercSlot()) { rollback(); return Result::Failed; }
+				found = true;
+			} else if (slot == c->GetMercSlot() || (!e.IsSuspended && !Strings::ToUnsignedInt(row[2]))) {
+				rollback(); return Result::Failed;
+			}
+		}
+		if ((m->GetMercenaryID() && !found) ||
+			(!m->GetMercenaryID() && owned.RowCount() >= c->GetMercenaryCapacity())) {
+			rollback(); return Result::Failed;
+		}
+		if (payment) {
+			auto wallet = QueryDatabase(fmt::format(
+				"SELECT copper,silver,gold,platinum FROM character_currency WHERE id={} FOR UPDATE", c->CharacterID()), false);
+			if (!wallet.Success() || wallet.RowCount() != 1) { rollback(); return Result::Failed; }
+			for (size_t index = 0; index < 4; ++index) {
+				if (!wallet.begin()[index] || std::stoull(wallet.begin()[index]) != payment->before[index]) {
+					rollback(); return Result::Failed;
+				}
+			}
+		}
+		if (payment->alternate) {
+			auto alternate = QueryDatabase(fmt::format(
+				"SELECT amount FROM character_alt_currency WHERE char_id={} AND currency_id={} FOR UPDATE",
+				c->CharacterID(), payment->alternate->currency_id), false);
+			if (!alternate.Success() || alternate.RowCount() != 1 || !alternate.begin()[0] ||
+				std::stoull(alternate.begin()[0]) != payment->alternate->before) {
+				rollback(); return Result::Failed;
+			}
+		}
+		if (!check()) { rollback(); return Result::Failed; }
+		uint32 id = m->GetMercenaryID();
+		std::string sql;
+		if (id) {
+			sql = "UPDATE mercs SET ";
+			for (size_t index = 0; index < fields.size(); ++index) {
+				if (index) sql += ",";
+				sql += "`" + fields[index].first + "`=" + fields[index].second;
+			}
+			sql += fmt::format(" WHERE MercID={} AND OwnerCharacterID={}", id, c->CharacterID());
+		} else {
+			std::string columns, values;
+			for (const auto& field : fields) {
+				if (!columns.empty()) { columns += ","; values += ","; }
+				columns += "`" + field.first + "`"; values += field.second;
+			}
+			sql = "INSERT INTO mercs (" + columns + ") VALUES (" + values + ")";
+		}
+		auto saved = QueryDatabase(sql, false);
+		if (!saved.Success()) { rollback(); return Result::Failed; }
+		if (!id) id = saved.LastInsertedID();
+		if (initial_hire && id && c->IsSpiritShrouded()) {
+			// Commit the later full original-level hire fee with the new contract.
+			// Existing contracts and ordinary hires never acquire this liability.
+			auto shroud = QueryDatabase(fmt::format(
+				"SELECT s.active_session_id,b.level FROM spirit_shroud_state s "
+				"JOIN spirit_shroud_sessions x ON x.id=s.active_session_id AND x.character_id=s.character_id AND x.phase='active' "
+				"JOIN shroud_original_character_data b ON b.id=s.character_id "
+				"WHERE s.character_id={} AND s.template_id<>0 FOR UPDATE", c->CharacterID()), false);
+			if (!shroud.Success() || shroud.RowCount()!=1 || !shroud.begin()[0] || !shroud.begin()[1]) { rollback(); return Result::Failed; }
+			const auto original_level = Strings::ToUnsignedInt(shroud.begin()[1]);
+			if (!original_level || original_level>255) { rollback(); return Result::Failed; }
+			const uint64 fee = RuleB(Mercs, ChargeMercPurchaseCost) ?
+				uint64(Merc::CalcPurchaseCost(m->GetMercenaryTemplateID(), original_level))*100 : 0;
+			auto recorded = QueryDatabase(fmt::format(
+				"INSERT INTO spirit_shroud_mercenary_fees(merc_id,character_id,session_id,template_id,original_level,fee_copper) "
+				"VALUES ({},{},{},{},{},{})", id,c->CharacterID(),shroud.begin()[0],m->GetMercenaryTemplateID(),original_level,fee), false);
+			if (!recorded.Success() || recorded.RowsAffected()!=1) { rollback(); return Result::Failed; }
+		}
+		if (initial_hire && id) {
+			auto joined = QueryDatabase(fmt::format(
+				"INSERT INTO group_id (group_id,name,character_id,bot_id,merc_id) VALUES ({},'{}',0,0,{})",
+				group->GetID(), Strings::Escape(e.Name), id), false);
+			if (!joined.Success() || joined.RowsAffected() != 1) { rollback(); return Result::Failed; }
+		}
+		if (!id || !QueryDatabase(fmt::format("DELETE FROM merc_buffs WHERE MercId={}", id), false).Success()) {
+			rollback(); return Result::Failed;
+		}
+		for (const auto& buff : buffs) {
+			auto stored = QueryDatabase(fmt::format(
+				"INSERT INTO merc_buffs (MercId,SpellId,CasterLevel,DurationFormula,TicsRemaining,PoisonCounters,DiseaseCounters,CurseCounters,CorruptionCounters,HitCount,MeleeRune,MagicRune,dot_rune,caston_x,Persistent,caston_y,caston_z,ExtraDIChance) "
+				"VALUES ({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{})",
+				id,buff.SpellId,buff.CasterLevel,buff.DurationFormula,buff.TicsRemaining,buff.PoisonCounters,buff.DiseaseCounters,buff.CurseCounters,buff.CorruptionCounters,buff.HitCount,buff.MeleeRune,buff.MagicRune,buff.dot_rune,buff.caston_x,buff.Persistent,buff.caston_y,buff.caston_z,buff.ExtraDIChance), false);
+			if (!stored.Success()) { rollback(); return Result::Failed; }
+		}
+		if (payment) {
+			auto paid = QueryDatabase(fmt::format(
+				"UPDATE character_currency SET copper={},silver={},gold={},platinum={} "
+				"WHERE id={} AND copper={} AND silver={} AND gold={} AND platinum={}",
+				payment->after[0],payment->after[1],payment->after[2],payment->after[3],c->CharacterID(),
+				payment->before[0],payment->before[1],payment->before[2],payment->before[3]), false);
+			if (!paid.Success() || (payment->before != payment->after && paid.RowsAffected() != 1)) {
+				rollback(); return Result::Failed;
+			}
+		}
+		if (payment->alternate) {
+			auto paid = QueryDatabase(fmt::format(
+				"UPDATE character_alt_currency SET amount={} WHERE char_id={} AND currency_id={} AND amount={}",
+				payment->alternate->after, c->CharacterID(), payment->alternate->currency_id, payment->alternate->before), false);
+			if (!paid.Success() || paid.RowsAffected() != 1) { rollback(); return Result::Failed; }
+		}
+		if (!check()) { rollback(); return Result::Failed; }
+		committing = true;
+		if (!QueryDatabase(std::string("COMMIT"), false).Success()) {
+			rollback(); return Result::CommitUncertain;
+		}
+		begun = false;
+		m->SetMercID(id);
+		m->UpdateMercInfo(c);
+		return Result::Saved;
+	} catch (...) {
+		rollback(); return committing ? Result::CommitUncertain : Result::Failed;
+	}
+}
+
+bool ZoneDatabase::SaveMercenary(Merc* m)
+{
+	const auto owner = m ? m->GetMercenaryOwner() : nullptr;
+	return owner && owner->FinalizeMercenaryPayment(m, 0);
+}
+
+void ZoneDatabase::SaveMercenaryBuffs(Merc* m)
+{
+	// Standalone callers receive a complete atomic snapshot; nested transactions are refused.
+	SaveMercenary(m);
 }
 
 void ZoneDatabase::LoadMercenaryBuffs(Merc* m)
 {
 	auto      buffs     = m->GetBuffs();
-	const int max_slots = m->GetMaxBuffSlots();
+	const int max_slots = m->GetMaxTotalSlots();
 
 	const auto& l = MercBuffsRepository::GetWhere(
 		*this,
@@ -2425,8 +2679,11 @@ void ZoneDatabase::LoadMercenaryBuffs(Merc* m)
 	uint32 slot_id = 0;
 
 	for (const auto& e : l) {
-		if (slot_id == BUFF_COUNT) {
+		if (slot_id >= max_slots) {
 			break;
+		}
+		if (!IsValidSpell(e.SpellId)) {
+			continue;
 		}
 
 		buffs[slot_id].spellid         = e.SpellId;
@@ -2460,44 +2717,81 @@ void ZoneDatabase::LoadMercenaryBuffs(Merc* m)
 		if (CalculateCorruptionCounters(buffs[slot_id].spellid) > 0) {
 			buffs[slot_id].counters = e.CorruptionCounters;
 		}
+
+		++slot_id;
 	}
 
-	MercBuffsRepository::DeleteWhere(
-		*this,
-		fmt::format(
-			"`MercID` = {}",
-			m->GetMercenaryID()
-		)
-	);
+	// Loading must not erase the last durable buff snapshot.
 }
 
-bool ZoneDatabase::DeleteMercenary(uint32 mercenary_id)
+Mercenary::SaveResult ZoneDatabase::DeleteMercenaryAtomic(uint32 owner_id, uint32 mercenary_id, uint8 slot, const Mercenary::Payment* payment)
 {
-	if (!mercenary_id) {
-		return false;
+	using Result = Mercenary::SaveResult;
+	if (!owner_id || !mercenary_id || slot >= MAXMERCS || !payment ||
+		!payment->guard || payment->alternate || payment->before != payment->after || GetStatus() != DBcore::Connected) {
+		return Result::Failed;
 	}
-
-	MercBuffsRepository::DeleteWhere(
-		*this,
-		fmt::format(
-			"`MercID` = {}",
-			mercenary_id
-		)
-	);
-
-	const int deleted = MercsRepository::DeleteOne(*this, mercenary_id);
-	if (!deleted) {
-		return false;
+	auto identity = QueryDatabase(std::string("SELECT CONNECTION_ID(),@@in_transaction"), false);
+	if (!identity.Success() || identity.RowCount() != 1 || !identity.begin()[0] ||
+		!identity.begin()[1] || std::stoul(identity.begin()[1])) {
+		return Result::Failed;
 	}
-
-	return true;
+	const uint64 connection = std::stoull(identity.begin()[0]);
+	auto engines = QueryDatabase(std::string(
+		"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND "
+		"table_name IN ('mercs','merc_buffs','character_currency') AND engine='InnoDB'"), false);
+	if (!engines.Success() || engines.RowCount() != 1 || !engines.begin()[0] || std::stoul(engines.begin()[0]) != 3) {
+		return Result::Failed;
+	}
+	bool begun = false;
+	bool committing = false;
+	const auto rollback = [&]() {
+		if (begun && GetStatus() == DBcore::Connected) QueryDatabase(std::string("ROLLBACK"), false);
+	};
+	const auto check = [&]() {
+		if (GetStatus() != DBcore::Connected) return false;
+		auto row = QueryDatabase(std::string("SELECT CONNECTION_ID(),@@in_transaction"), false);
+		return row.Success() && row.RowCount() == 1 && row.begin()[0] && row.begin()[1] &&
+			std::stoull(row.begin()[0]) == connection && std::stoul(row.begin()[1]) == 1;
+	};
+	try {
+		if (GetStatus() != DBcore::Connected || !QueryDatabase(std::string("START TRANSACTION"), false).Success()) {
+			return Result::Failed;
+		}
+		begun = true;
+		if (!check() || !payment->guard(*this, connection) || !check()) { rollback(); return Result::Failed; }
+		auto owned = QueryDatabase(fmt::format(
+			"SELECT MercID FROM mercs WHERE OwnerCharacterID={} AND MercID={} AND Slot={} FOR UPDATE",
+			owner_id, mercenary_id, slot), false);
+		if (!owned.Success() || owned.RowCount() != 1) { rollback(); return Result::Failed; }
+		auto wallet = QueryDatabase(fmt::format(
+			"SELECT copper,silver,gold,platinum FROM character_currency WHERE id={} FOR UPDATE", owner_id), false);
+		if (!wallet.Success() || wallet.RowCount() != 1) { rollback(); return Result::Failed; }
+		for (size_t index = 0; index < 4; ++index) {
+			if (!wallet.begin()[index] || std::stoull(wallet.begin()[index]) != payment->before[index]) {
+				rollback(); return Result::Failed;
+			}
+		}
+		if (!check() || !QueryDatabase(fmt::format("DELETE FROM merc_buffs WHERE MercId={}", mercenary_id), false).Success()) {
+			rollback(); return Result::Failed;
+		}
+		auto removed = QueryDatabase(fmt::format(
+			"DELETE FROM mercs WHERE MercID={} AND OwnerCharacterID={} AND Slot={}", mercenary_id, owner_id, slot), false);
+		if (!removed.Success() || removed.RowsAffected() != 1 || !check()) { rollback(); return Result::Failed; }
+		committing = true;
+		if (!QueryDatabase(std::string("COMMIT"), false).Success()) { rollback(); return Result::CommitUncertain; }
+		begun = false;
+		return Result::Saved;
+	} catch (...) {
+		rollback(); return committing ? Result::CommitUncertain : Result::Failed;
+	}
 }
 
 void ZoneDatabase::LoadMercenaryEquipment(Merc* m)
 {
 	const int merc_subtype_id = MercSubtypesRepository::GetSubtype(*this, m->GetClass(), m->GetTierID());
 
-	const auto& l = MercInventoryRepository::GetWhere(
+	auto l = MercInventoryRepository::GetWhere(
 		*this,
 		fmt::format(
 			"`merc_subtype_id` = {} AND `min_level` <= {} AND `max_level` >= {}",
@@ -2507,6 +2801,17 @@ void ZoneDatabase::LoadMercenaryEquipment(Merc* m)
 		)
 	);
 
+	if (l.empty() && RuleB(Mercs, ScaleAboveContentLevel) && m->GetLevel() <= 100) {
+		auto ceiling = QueryDatabase(fmt::format(
+			"SELECT MAX(max_level) FROM merc_inventory WHERE merc_subtype_id={} AND max_level<{}",
+			merc_subtype_id, m->GetLevel()));
+		if (ceiling.Success() && ceiling.RowCount() && ceiling.begin()[0]) {
+			const auto content_level = Strings::ToUnsignedInt(ceiling.begin()[0]);
+			l = MercInventoryRepository::GetWhere(*this, fmt::format(
+				"merc_subtype_id={} AND min_level<={} AND max_level>={} ORDER BY merc_inventory_id",
+				merc_subtype_id, content_level, content_level));
+		}
+	}
 	if (l.empty()) {
 		return;
 	}
@@ -2916,6 +3221,9 @@ void ZoneDatabase::SaveBuffs(Client *client)
 	uint32 character_buff_count = 0;
 
 	for (int slot_id = 0; slot_id < max_buff_slots; slot_id++) {
+		// Campsite support buffs are renewable location leases, not saved buffs.
+		// Ordinary Faerune/DMF from another caster retain normal persistence.
+		if (IsFellowshipCampsiteAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
 		if (!IsValidSpell(buffs[slot_id].spellid)) {
 			continue;
 		}
@@ -2926,6 +3234,7 @@ void ZoneDatabase::SaveBuffs(Client *client)
 	v.reserve(character_buff_count);
 
 	for (int slot_id = 0; slot_id < max_buff_slots; slot_id++) {
+		if (IsFellowshipCampsiteAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
 		if (!IsValidSpell(buffs[slot_id].spellid)) {
 			continue;
 		}
@@ -2979,6 +3288,8 @@ void ZoneDatabase::LoadBuffs(Client *client)
 	}
 
 	for (const auto& e : l) {
+		// Discard a legacy saved campsite lease before caster-name normalization.
+		if (IsFellowshipCampsiteAuraBuff(e.spell_id, e.caster_name.data(), e.caster_name.size())) continue;
 		if (e.slot_id >= max_buff_slots) {
 			continue;
 		}

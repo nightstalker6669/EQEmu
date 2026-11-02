@@ -1,5 +1,38 @@
 set(common_sources
 	reward_display.cpp
+	fellowship/campsite_catalogue.cpp
+	fellowship/campsite_materials.cpp
+	fellowship/service.cpp
+	fellowship/vitality.cpp
+	fellowship/journal.cpp
+	housing/persistence_service.cpp
+	housing/escrow_service.cpp
+	housing/item_service.cpp
+	housing/live_item_service.cpp
+	housing/layout_batch_journal.cpp
+	housing/layout_inventory_units.cpp
+	housing/catalog_service.cpp
+	housing/inventory_process_recovery.cpp
+	housing/scene_service.cpp
+	housing/interior_storage_service.cpp
+	housing/house_swap_service.cpp
+	housing/native_access_service.cpp
+	housing/native_plot_purchase.cpp
+	housing/ownership_transfer_service.cpp
+	housing/live_escrow_service.cpp
+	housing/guild_purchase_authority.cpp
+	housing/current_estate_access.cpp
+	housing/house_binding_service.cpp
+	housing/crate_storage_service.cpp
+	housing/crate_binding.cpp
+	housing/house_interior_allocator.cpp
+	housing/house_binding_preload.cpp
+	housing/house_operation_authority.cpp
+	housing/house_custody_authority.cpp
+	housing/house_inventory_transition.cpp
+	housing/house_inventory_profile_fence.cpp
+	achievement_state_updates.cpp
+	achievements.cpp
 	shared_core/inventory_session_service.cpp
 	shared_core/inventory_snapshot.cpp
 	base_packet.cpp
@@ -160,6 +193,13 @@ set(repositories
 	repositories/base/base_adventure_template_entry_flavor_repository.h
 	repositories/base/base_adventure_template_entry_repository.h
 	repositories/base/base_adventure_template_repository.h
+	repositories/base/base_achievement_associations_repository.h
+	repositories/base/base_achievement_cast_requirements_repository.h
+	repositories/base/base_achievement_categories_repository.h
+	repositories/base/base_achievement_category_associations_repository.h
+	repositories/base/base_achievement_components_repository.h
+	repositories/base/base_achievement_criteria_repository.h
+	repositories/base/base_achievements_repository.h
 	repositories/base/base_alternate_currency_repository.h
 	repositories/base/base_auras_repository.h
 	repositories/base/base_base_data_repository.h
@@ -172,6 +212,11 @@ set(repositories
 	repositories/base/base_char_create_combinations_repository.h
 	repositories/base/base_char_create_point_allocations_repository.h
 	repositories/base/base_char_recipe_list_repository.h
+	repositories/base/base_character_achievement_pending_updates_repository.h
+	repositories/base/base_character_achievement_progress_repository.h
+	repositories/base/base_character_achievement_reward_selections_repository.h
+	repositories/base/base_character_achievement_rewards_repository.h
+	repositories/base/base_character_achievements_repository.h
 	repositories/base/base_character_activities_repository.h
 	repositories/base/base_character_alt_currency_repository.h
 	repositories/base/base_character_alternate_abilities_repository.h
@@ -367,6 +412,13 @@ set(repositories
 	repositories/adventure_template_entry_flavor_repository.h
 	repositories/adventure_template_entry_repository.h
 	repositories/adventure_template_repository.h
+	repositories/achievement_associations_repository.h
+	repositories/achievement_cast_requirements_repository.h
+	repositories/achievement_categories_repository.h
+	repositories/achievement_category_associations_repository.h
+	repositories/achievement_components_repository.h
+	repositories/achievement_criteria_repository.h
+	repositories/achievements_repository.h
 	repositories/alternate_currency_repository.h
 	repositories/auras_repository.h
 	repositories/base_data_repository.h
@@ -379,6 +431,11 @@ set(repositories
 	repositories/char_create_combinations_repository.h
 	repositories/char_create_point_allocations_repository.h
 	repositories/char_recipe_list_repository.h
+	repositories/character_achievement_pending_updates_repository.h
+	repositories/character_achievement_progress_repository.h
+	repositories/character_achievement_reward_selections_repository.h
+	repositories/character_achievement_rewards_repository.h
+	repositories/character_achievements_repository.h
 	repositories/character_activities_repository.h
 	repositories/character_alt_currency_repository.h
 	repositories/character_alternate_abilities_repository.h
@@ -560,6 +617,8 @@ set(repositories
 
 set(common_headers
 	additive_lagged_fibonacci_engine.h
+	achievement_state_updates.h
+	achievements.h
 	base_packet.h
 	bazaar.h
 	bodytypes.h
@@ -729,6 +788,7 @@ set(common_headers
 	raid.h
 	random.h
 	rdtsc.h
+	reward_selection.h
 	rulesys.h
 	ruletypes.h
 	say_link.h

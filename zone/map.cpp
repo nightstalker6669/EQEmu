@@ -15,6 +15,9 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/housing/curved_mount_support.h"
+#include "../common/housing/oriented_mount_volume.h"
+
 #include "common/compression.h"
 #include "common/file.h"
 #include "common/memory/ksm.h"
@@ -276,7 +279,68 @@ bool Map::CheckLoS(glm::vec3 myloc, glm::vec3 oloc) const {
 	return !imp->rm->raycast((const RmReal*)&myloc, (const RmReal*)&oloc, nullptr, nullptr, nullptr);
 }
 
+bool Map::CheckLoSToBoundModel(const glm::vec3& from, const glm::vec3& to, const glm::vec3& anchor, const std::string& model) const
+{
+	const BoundModelSource *match = nullptr;
+	for (const auto &source : bound_model_sources_) {
+		if (source.model != model) {
+			continue;
+		}
+		const auto delta = source.anchor - anchor;
+		const float distance_squared = glm::dot(delta, delta);
+		if (!std::isfinite(distance_squared) || distance_squared > .25f * .25f) {
+			continue;
+		}
+		if (match) {
+			// Never choose an arbitrary nearest instance from ambiguous ownership.
+			return CheckLoS(from, to);
+		}
+		match = &source;
+	}
+	if (!match || match->begin >= match->end || !imp || !imp->rm) {
+		return CheckLoS(from, to);
+	}
+	return !imp->rm->raycastExceptSourceRange(&from.x, &to.x, match->begin, match->end);
+}
+
 // returns true if a collision happens
+bool Map::IntersectsBox(const glm::vec3& minimum,const glm::vec3& maximum) const {
+ if(!imp||!imp->rm)return true;
+ return imp->rm->overlapsBox(&minimum.x,&maximum.x);
+}
+
+bool Map::IntersectsBoxExceptTriangles(const glm::vec3& minimum,const glm::vec3& maximum,uint32_t source_a,uint32_t source_b) const {
+ if(!imp||!imp->rm)return true;
+ return imp->rm->overlapsBoxExceptTriangles(&minimum.x,&maximum.x,source_a,source_b);
+}
+
+std::vector<uint32_t> Map::SourceMountPatch(const glm::vec3& minimum,const glm::vec3& maximum,uint32_t axis,uint32_t a,uint32_t b,const std::vector<uint32_t>& candidates) const {
+ if(!imp||!imp->rm)return {};return imp->rm->sourceMountPatch(&minimum.x,&maximum.x,axis,a,b,candidates);
+}
+bool Map::IntersectsBoxExceptTriangleList(const glm::vec3& minimum,const glm::vec3& maximum,const std::vector<uint32_t>& sources) const {
+ if(!imp||!imp->rm)return true;return imp->rm->overlapsBoxExceptTriangleList(&minimum.x,&maximum.x,sources);
+}
+
+std::vector<uint32_t> Map::SourceMountPatch(const Housing::OrientedMount::Volume&volume,uint32_t axis,uint32_t a,uint32_t b,const std::vector<uint32_t>&candidates) const {
+ if(!imp||!imp->rm)return {};return imp->rm->sourceMountPatch(volume,axis,a,b,candidates);
+}
+bool Map::IntersectsVolumeExceptTriangleList(const Housing::OrientedMount::Volume&volume,const std::vector<uint32_t>&sources) const {
+ if(!imp||!imp->rm)return true;return imp->rm->overlapsVolumeExceptTriangleList(volume,sources);
+}
+
+std::optional<Housing::PlanarMount::Trace> Map::TracePlanarMount(const glm::vec3&start,const glm::vec3&end) const {
+ if(!imp||!imp->rm)return {};glm::vec3 normal,point;float distance;Housing::PlanarMount::SurfaceSeed seed;
+ if(!imp->rm->raycastSurface(&start.x,&end.x,&point.x,&normal.x,&distance,seed))return {};
+ auto contact=Housing::PlacementContact::FromMapRay({start.x,start.y,start.z},{end.x,end.y,end.z},{normal.x,normal.y,normal.z},distance);if(!contact||(seed.side!=1&&seed.side!=-1))return {};return Housing::PlanarMount::Trace{*contact,seed};
+}
+Housing::CurvedMount::Proof Map::SourceCurvedMountPatch(const Housing::OrientedMount::Volume&v,const Housing::PlanarMount::SurfaceSeed&s,const std::vector<Housing::CurvedMount::Entry>&entries,Housing::CurvedMount::Limits limits) const {
+ if(!imp||!imp->rm)return {};return imp->rm->sourceCurvedMountPatch(v,s,entries,limits);
+}
+std::vector<uint32_t> Map::SourcePlanarMountPatch(const Housing::OrientedMount::Volume&volume,const Housing::PlanarMount::SurfaceSeed&seed,const std::vector<uint32_t>&candidates) const {
+ if(!imp||!imp->rm)return {};return imp->rm->sourcePlanarMountPatch(volume,seed,candidates);
+}
+uint32_t Map::SourceTriangleCount() const {return imp&&imp->rm?imp->rm->sourceTriangleCount():0;}
+
 bool Map::DoCollisionCheck(glm::vec3 myloc, glm::vec3 oloc, glm::vec3 &outnorm, float &distance) const {
 	if(!imp)
 		return false;
@@ -370,6 +434,7 @@ bool Map::Load(const std::string &filename)
 }
 
 bool Map::LoadV1(FILE *f) {
+	bound_model_sources_.clear();
 	uint32 face_count;
 	uint16 node_count;
 	uint32 facelist_count;
@@ -450,6 +515,8 @@ struct ModelEntry
 };
 
 bool Map::LoadV2(FILE *f) {
+	bound_model_sources_.clear();
+	std::vector<BoundModelSource> model_sources;
 	uint32 data_size;
 	if (fread(&data_size, sizeof(data_size), 1, f) != 1) {
 		return false;
@@ -624,6 +691,7 @@ bool Map::LoadV2(FILE *f) {
 		auto &model = models[name];
 		auto &mod_polys = model->polys;
 		auto &mod_verts = model->verts;
+		const auto source_begin = static_cast<uint32_t>(indices.size() / 3);
 		for (uint32 j = 0; j < mod_polys.size(); ++j) {
 			auto &current_poly = mod_polys[j];
 			if (current_poly.vis == 0)
@@ -651,6 +719,10 @@ bool Map::LoadV2(FILE *f) {
 			indices.emplace_back((uint32)verts.size() - 3);
 			indices.emplace_back((uint32)verts.size() - 2);
 			indices.emplace_back((uint32)verts.size() - 1);
+		}
+		const auto source_end = static_cast<uint32_t>(indices.size() / 3);
+		if (source_end > source_begin) {
+			model_sources.push_back({name, glm::vec3(y, x, z), source_begin, source_end});
 		}
 	}
 
@@ -966,6 +1038,7 @@ bool Map::LoadV2(FILE *f) {
 		return false;
 	}
 
+	bound_model_sources_ = std::move(model_sources);
 	return true;
 }
 
@@ -1022,6 +1095,8 @@ inline bool add_mmf_extension(std::string& mmf_file_name)
 
 bool Map::LoadMMF(const std::string& map_file_name, bool force_mmf_overwrite)
 {
+	// Legacy MMFs do not contain placement ownership. Keep ordinary LOS.
+	bound_model_sources_.clear();
 	if (force_mmf_overwrite)
 		return false;
 

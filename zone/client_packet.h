@@ -16,6 +16,40 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 	/* Connecting OpCode Handlers */
+	void Handle_OP_FellowshipAction(const EQApplicationPacket *app);
+	void Handle_OP_FellowshipCampRequest(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateNeighborhood(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateTrophyOpen(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateTrophy(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateTrophyToggle(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateAnchorConfirm(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateGo(const EQApplicationPacket *app);
+	bool HandleHousingHouseGo(const EQApplicationPacket *app);
+	bool TryHousingHouseExit(bool allow_absent = false);
+	bool HandleHousingInteriorDoor(uint8_t door_id, bool within_distance);
+	void Handle_OP_RealEstatePurchase(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateInspect(const EQApplicationPacket *app);
+	void Handle_OP_RealEstatePlacementBegin(const EQApplicationPacket *app);
+	void Handle_OP_RealEstatePlacementCommit(const EQApplicationPacket *app);
+	void Handle_OP_RealEstatePickup(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateStoreAll(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateLoadLayout(const EQApplicationPacket *app);
+	void Handle_OP_RealEstatePack(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateItemOperation(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateMetadata(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateInteraction(const EQApplicationPacket *app);
+    void Handle_OP_RealEstateCustomInteraction(const EQApplicationPacket *app);
+    bool ValidateHousingPet(const Housing::Pets::Binding&,bool command=false);
+	void Handle_OP_RealEstateItemInspect(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateHouseSwap(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateVotingOptOut(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateEscrow(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateTransfer(const EQApplicationPacket *app);
+ void Handle_OP_RealEstateTransferConsent(const EQApplicationPacket *app);
+	void Handle_OP_RealEstateSale(const EQApplicationPacket *app);
+	void SendHousingChairMenu(uint32_t estate,uint32_t item,std::array<uint32_t,2> mouse,const std::string& claimed_guid={});
+	void SendHousingPlacedScene();
+	void SendHousingNeighborhoods(const std::string& name_filter = "", const std::string& player_filter = "", bool owned_only = false, uint32_t context = 0);
 	void Handle_Connect_0x3e33(const EQApplicationPacket *app);
 	void Handle_Connect_OP_ApproveZone(const EQApplicationPacket *app);
 	void Handle_Connect_OP_ClientError(const EQApplicationPacket *app);
@@ -38,10 +72,16 @@
 	void Handle_Connect_OP_ZoneComplete(const EQApplicationPacket *app);
 	void Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app);
 	/* Connected opcode handlers*/
+	void Handle_OP_AAAction(const EQApplicationPacket *app);
+	void Handle_OP_AchievementCompareRequest(const EQApplicationPacket *app);
+	void Handle_OP_AchievementLinkRequest(const EQApplicationPacket *app);
+	void Handle_OP_AchievementRequest(const EQApplicationPacket *app);
 	void Handle_OP_AchievementReward(const EQApplicationPacket *app);
 	void Handle_OP_RewardSelection(const EQApplicationPacket *app);
-	void HandleRewardSelectionPacket(const EQApplicationPacket *app, RewardSelectionChannel channel);
-	void Handle_OP_AAAction(const EQApplicationPacket *app);
+	void HandleRewardSelectionPacket(
+		const EQApplicationPacket *app,
+		RewardSelectionChannel channel
+	);
 	void Handle_OP_AcceptNewTask(const EQApplicationPacket *app);
 	void Handle_OP_AdventureInfoRequest(const EQApplicationPacket *app);
 	void Handle_OP_AdventureLeaderboardRequest(const EQApplicationPacket *app);
@@ -234,13 +274,18 @@
 	void Handle_OP_Medding(const EQApplicationPacket *app);
 	void Handle_OP_MemorizeSpell(const EQApplicationPacket *app);
 	void Handle_OP_Mend(const EQApplicationPacket *app);
+	void Handle_OP_MercenaryTransferRequest(const EQApplicationPacket *app);
+	void Handle_OP_MercenaryTransferResponse(const EQApplicationPacket *app);
+	void Handle_OP_MercenaryAssist(const EQApplicationPacket *app);
+	void Handle_OP_MercenarySwitch(const EQApplicationPacket *app);
+	void Handle_OP_MercenarySwitchLegacy(const EQApplicationPacket *app);
+	void Handle_OP_MercenaryAutoAssist(const EQApplicationPacket *app);
 	void Handle_OP_MercenaryCommand(const EQApplicationPacket *app);
 	void Handle_OP_MercenaryDataRequest(const EQApplicationPacket *app);
 	void Handle_OP_MercenaryDataUpdateRequest(const EQApplicationPacket *app);
 	void Handle_OP_MercenaryDismiss(const EQApplicationPacket *app);
 	void Handle_OP_MercenaryHire(const EQApplicationPacket *app);
 	void Handle_OP_MercenarySuspendRequest(const EQApplicationPacket *app);
-	void Handle_OP_MercenarySwitch(const EQApplicationPacket *app);
 	void Handle_OP_MercenaryTimerRequest(const EQApplicationPacket *app);
 	void Handle_OP_MoveCoin(const EQApplicationPacket *app);
 	void Handle_OP_MoveItem(const EQApplicationPacket *app);

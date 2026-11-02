@@ -1,3 +1,4 @@
+#include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -15,7 +16,10 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/shroud/native_stats.h"
+
 #include "common/data_verification.h"
+#include "common/achievements.h"
 #include "common/eq_constants.h"
 #include "common/eq_packet_structs.h"
 #include "common/events/player_event_logs.h"
@@ -894,7 +898,8 @@ int Mob::GetClassRaceACBonus()
 //SYNC WITH: tune.cpp, mob.h TuneACSum
 int Mob::ACSum(bool skip_caps)
 {
-	int ac = 0; // this should be base AC whenever shrouds come around
+	int ac = IsClient() && CastToClient()->GetPP().shroud_native_stats_valid ?
+		CastToClient()->GetPP().shroud_native_stats[SpiritShroud::AC] : 0;
 	ac += itembonuses.AC; // items + food + tribute
 	int shield_ac = 0;
 	if (HasShieldEquipped() && IsOfClientBot()) {
@@ -1247,6 +1252,8 @@ int64 Mob::GetWeaponDamage(Mob *against, const EQ::ItemInstance *weapon_item, in
 
 		if (
 			!weapon_item->IsRaceEquipable(GetBaseRace()) &&
+			!(IsClient() && CastToClient()->IsSpiritShrouded() &&
+				CastToClient()->IsSpiritShroudStarterItem(weapon_item)) &&
 			(
 				!IsBot() ||
 				(IsBot() && !RuleB(Bots, AllowBotEquipAnyRaceGear))
@@ -1994,7 +2001,7 @@ bool Client::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::Skill
 		exploss *= zone->level_exp_mod[GetLevel()].ExpMod;
 	}
 
-	if (exploss > 0 && RuleB(Character, DeathKeepLevel)) {
+	if (exploss > 0 && RuleB(Character, DeathKeepLevel) && !IsSpiritShrouded()) {
 		int32 total_exp = GetEXP();
 		uint32 level_min_exp = GetEXPForLevel(killed_level);
 		int32 level_exp = total_exp - level_min_exp;
@@ -2030,7 +2037,9 @@ bool Client::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::Skill
 	// now we apply the exp loss, unmem their spells, and make a corpse
 	// unless they're a GM (or less than lvl 10
 	if (!GetGM()) {
-		if (exploss > 0) {
+		// Shrouded loss is applied to the original pending ledger only after
+		// a durable corpse identity exists; the temporary XP profile is fixed.
+		if (exploss > 0 && !IsSpiritShrouded()) {
 			int32 newexp = GetEXP();
 			if (exploss > newexp) {
 				//lost more than we have... wtf..
@@ -2059,7 +2068,7 @@ bool Client::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::Skill
 
 		if (
 			(RuleB(Character, LeaveCorpses) && GetLevel() >= RuleI(Character, DeathItemLossLevel)) ||
-			RuleB(Character, LeaveNakedCorpses)
+			RuleB(Character, LeaveNakedCorpses) || IsSpiritShrouded()
 		) {
 			// creating the corpse takes the cash/items off the player too
 			new_corpse = new Corpse(this, exploss, killed_by);
@@ -2431,6 +2440,9 @@ bool NPC::Attack(Mob* other, int Hand, bool bRiposte, bool IsStrikethrough, bool
 }
 
 void NPC::Damage(Mob* other, int64 damage, int32 spell_id, EQ::skills::SkillType attack_skill, bool avoidable, int8 buffslot, bool iBuffTic, eSpecialAttacks special) {
+	if (BoundDestructibles::IsBlocked(this)) {
+		return;
+	}
 	if (spell_id == 0)
 		spell_id = SPELL_UNKNOWN;
 
@@ -2469,6 +2481,14 @@ void NPC::Damage(Mob* other, int64 damage, int32 spell_id, EQ::skills::SkillType
 
 bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillType attack_skill, KilledByTypes killed_by, bool is_buff_tic)
 {
+	if (BoundDestructibles::IsBlocked(this)) {
+		return false;
+	}
+	BoundDestructibles::DeathTransition transition(this);
+
+	const auto achievement_npc_name_identity =
+		EQ::Achievements::NpcNameIdentityHash(GetOrigName());
+
 	LogCombat(
 		"Fatal blow dealt by [{}] with [{}] damage, spell [{}], skill [{}]",
 		(killer_mob ? killer_mob->GetName() : "[nullptr]"),
@@ -2500,6 +2520,13 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 	if (m_resumed_from_zone_suspend && !IsQueuedForCorpse()) {
 		LogInfo("NPC [{}] is resumed from zone suspend, cannot kill until zone resume is complete.", GetCleanName());
 		SetHP(0);
+		return false;
+	}
+
+	if (transition.Cancelled()) {
+		// A first-death callback explicitly reset/depopulated this spawn.
+		// Respect its timer/action; do not overwrite it with DeathReset below.
+		p_depop = true;
 		return false;
 	}
 
@@ -2571,6 +2598,7 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 		entity_list.QueueCloseClients(this, &p);
 	}
 
+	std::unique_ptr<EQApplicationPacket> deferred_death_packet;
 	auto app = new EQApplicationPacket(OP_Death, sizeof(Death_Struct));
 
 	auto d = (Death_Struct*) app->pBuffer;
@@ -2597,12 +2625,18 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 
 	app->priority = 1;
 
-	entity_list.QueueClients(killer_mob, app, false);
+	if (transition.Active()) {
+		deferred_death_packet.reset(app);
+		app = nullptr;
+	} else {
+		entity_list.QueueClients(killer_mob, app, false);
+	}
 
 	safe_delete(app);
 
 	if (respawn2) {
 		respawn2->DeathReset(1);
+		transition.AfterDeathReset();
 	}
 
 	if (killer_mob && GetClass() != Class::LDoNTreasure) {
@@ -2784,155 +2818,164 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 
 	const uint16 entity_id = GetID();
 
-	if (
-		(
-			!HasOwner() &&
-			!IsMerc() &&
-			!GetSwarmInfo() &&
-			(!is_merchant || allow_merchant_corpse) &&
+	auto finalize_corpse = [&](bool clear_x_targets) {
+		if (
 			(
+				!HasOwner() &&
+				!IsMerc() &&
+				!GetSwarmInfo() &&
+				(!is_merchant || allow_merchant_corpse) &&
 				(
-					killer &&
 					(
-						killer->IsClient() ||
+						killer &&
 						(
-							killer->HasOwner() &&
-							killer->GetUltimateOwner()->IsClient()
-						) ||
-						(
-							killer->IsNPC() &&
-							killer->CastToNPC()->GetSwarmInfo() &&
-							killer->CastToNPC()->GetSwarmInfo()->GetOwner() &&
-							killer->CastToNPC()->GetSwarmInfo()->GetOwner()->IsClient()
+							killer->IsClient() ||
+							(
+								killer->HasOwner() &&
+								killer->GetUltimateOwner()->IsClient()
+							) ||
+							(
+								killer->IsNPC() &&
+								killer->CastToNPC()->GetSwarmInfo() &&
+								killer->CastToNPC()->GetSwarmInfo()->GetOwner() &&
+								killer->CastToNPC()->GetSwarmInfo()->GetOwner()->IsClient()
+							)
 						)
+					) ||
+					(
+						killer_mob && is_ldon_treasure
 					)
-				) ||
-				(
-					killer_mob && is_ldon_treasure
 				)
 			)
-		)
-		|| IsQueuedForCorpse()
-		) {
-		if (killer) {
-			if (killer->GetOwner() != 0 && killer->GetOwner()->IsClient()) {
-				killer = killer->GetOwner();
-			}
-
-			if (killer->IsClient() && !killer->CastToClient()->GetGM()) {
-				CheckTrivialMinMaxLevelDrop(killer);
-			}
-		}
-
-		entity_list.RemoveFromAutoXTargets(this);
-
-		corpse = new Corpse(
-			this,
-			&m_loot_items,
-			GetNPCTypeID(),
-			&NPCTypedata,
-			(
-				level > 54 ?
-				RuleI(NPC, MajorNPCCorpseDecayTime) :
-				RuleI(NPC, MinorNPCCorpseDecayTime)
-			)
-		);
-
-		if (killer_mob && emoteid) {
-			DoNPCEmote(EQ::constants::EmoteEventTypes::AfterDeath, emoteid, killer_mob);
-		}
-
-		entity_list.LimitRemoveNPC(this);
-
-		entity_list.AddCorpse(corpse, GetID());
-
-		// The client sees NPC corpses as name's_corpse.  The server uses
-		// name`s_corpse so that %T works on corpses (client workaround)
-		// Rename the new corpse on client side.
-		std::string old_name = Strings::Replace(corpse->GetName(), "`s_corpse", "'s_corpse");
-		SendRename(killer_mob, old_name.c_str(), corpse->GetName());
-
-		entity_list.UnMarkNPC(GetID());
-		entity_list.RemoveNPC(GetID());
-
-		m_close_mobs.clear();
-		SetID(0);
-		ApplyIllusionToCorpse(illusion_spell_id, corpse);
-
-		if (killer && killer->IsClient()) {
-			corpse->AllowPlayerLoot(killer, 0);
-			if (killer->IsGrouped()) {
-				Group* g = entity_list.GetGroupByClient(killer->CastToClient());
-				if (g) {
-					uint8 slot_id = 0;
-
-					for (const auto &m : g->members) {
-						if (m) {
-							corpse->AllowPlayerLoot(m, slot_id);
-						}
-
-						slot_id++;
-					}
+			|| IsQueuedForCorpse()
+			) {
+			if (killer) {
+				if (killer->GetOwner() != 0 && killer->GetOwner()->IsClient()) {
+					killer = killer->GetOwner();
 				}
-			} else if (killer->IsRaidGrouped()) {
-				Raid* r = entity_list.GetRaidByClient(killer->CastToClient());
-				if (r) {
-					uint8 slot_id = 0;
-
-					for (const auto &m : r->members) {
-						if (m.is_bot) {
-							continue;
-						}
-
-						switch (r->GetLootType()) {
-							case RaidLootType::LeaderOnly:
-								if (m.member && m.is_raid_leader) {
-									corpse->AllowPlayerLoot(m.member, slot_id);
-									slot_id++;
-								}
-								break;
-							case RaidLootType::LeaderAndGroupLeadersOnly:
-								if (m.member && (m.is_raid_leader || m.is_group_leader)) {
-									corpse->AllowPlayerLoot(m.member, slot_id);
-									slot_id++;
-								}
-								break;
-							case RaidLootType::LeaderSelected:
-								if (m.member && m.is_looter) {
-									corpse->AllowPlayerLoot(m.member, slot_id);
-									slot_id++;
-								}
-								break;
-							case RaidLootType::EntireRaid:
-							default:
-								if (m.member) {
-									corpse->AllowPlayerLoot(m.member, slot_id);
-									slot_id++;
-								}
-								break;
-						}
-					}
+	
+				if (killer->IsClient() && !killer->CastToClient()->GetGM()) {
+					CheckTrivialMinMaxLevelDrop(killer);
 				}
 			}
-		} else if (killer_mob && is_ldon_treasure) {
-			Mob* ultimate_owner = killer_mob->GetUltimateOwner();
-			if (ultimate_owner->IsClient()) {
-				corpse->AllowPlayerLoot(ultimate_owner, 0);
+	
+			if (clear_x_targets) {
+				entity_list.RemoveFromAutoXTargets(this);
 			}
-		}
-
-		if (zone && zone->adv_data) {
-			auto sr = (ServerZoneAdventureDataReply_Struct *) zone->adv_data;
-			if (sr->type == Adventure_Kill) {
-				zone->DoAdventureCountIncrease();
-			} else if (sr->type == Adventure_Assassinate) {
-				if (sr->data_id == GetNPCTypeID()) {
+	
+			corpse = new Corpse(
+				this,
+				&m_loot_items,
+				GetNPCTypeID(),
+				&NPCTypedata,
+				(
+					level > 54 ?
+					RuleI(NPC, MajorNPCCorpseDecayTime) :
+					RuleI(NPC, MinorNPCCorpseDecayTime)
+				)
+			);
+	
+			if (killer_mob && emoteid) {
+				DoNPCEmote(EQ::constants::EmoteEventTypes::AfterDeath, emoteid, killer_mob);
+			}
+	
+			entity_list.LimitRemoveNPC(this);
+	
+			entity_list.AddCorpse(corpse, GetID());
+	
+			// The client sees NPC corpses as name's_corpse.  The server uses
+			// name`s_corpse so that %T works on corpses (client workaround)
+			// Rename the new corpse on client side.
+			std::string old_name = Strings::Replace(corpse->GetName(), "`s_corpse", "'s_corpse");
+			SendRename(killer_mob, old_name.c_str(), corpse->GetName());
+	
+			entity_list.UnMarkNPC(GetID());
+			entity_list.RemoveNPC(GetID());
+	
+			m_close_mobs.clear();
+			SetID(0);
+			ApplyIllusionToCorpse(illusion_spell_id, corpse);
+	
+			if (killer && killer->IsClient()) {
+				corpse->AllowPlayerLoot(killer, 0);
+				if (killer->IsGrouped()) {
+					Group* g = entity_list.GetGroupByClient(killer->CastToClient());
+					if (g) {
+						uint8 slot_id = 0;
+	
+						for (const auto &m : g->members) {
+							if (m) {
+								corpse->AllowPlayerLoot(m, slot_id);
+							}
+	
+							slot_id++;
+						}
+					}
+				} else if (killer->IsRaidGrouped()) {
+					Raid* r = entity_list.GetRaidByClient(killer->CastToClient());
+					if (r) {
+						uint8 slot_id = 0;
+	
+						for (const auto &m : r->members) {
+							if (m.is_bot) {
+								continue;
+							}
+	
+							switch (r->GetLootType()) {
+								case RaidLootType::LeaderOnly:
+									if (m.member && m.is_raid_leader) {
+										corpse->AllowPlayerLoot(m.member, slot_id);
+										slot_id++;
+									}
+									break;
+								case RaidLootType::LeaderAndGroupLeadersOnly:
+									if (m.member && (m.is_raid_leader || m.is_group_leader)) {
+										corpse->AllowPlayerLoot(m.member, slot_id);
+										slot_id++;
+									}
+									break;
+								case RaidLootType::LeaderSelected:
+									if (m.member && m.is_looter) {
+										corpse->AllowPlayerLoot(m.member, slot_id);
+										slot_id++;
+									}
+									break;
+								case RaidLootType::EntireRaid:
+								default:
+									if (m.member) {
+										corpse->AllowPlayerLoot(m.member, slot_id);
+										slot_id++;
+									}
+									break;
+							}
+						}
+					}
+				}
+			} else if (killer_mob && is_ldon_treasure) {
+				Mob* ultimate_owner = killer_mob->GetUltimateOwner();
+				if (ultimate_owner->IsClient()) {
+					corpse->AllowPlayerLoot(ultimate_owner, 0);
+				}
+			}
+	
+			if (zone && zone->adv_data) {
+				auto sr = (ServerZoneAdventureDataReply_Struct *) zone->adv_data;
+				if (sr->type == Adventure_Kill) {
 					zone->DoAdventureCountIncrease();
-				} else {
-					zone->DoAdventureAssassinationCountIncrease();
+				} else if (sr->type == Adventure_Assassinate) {
+					if (sr->data_id == GetNPCTypeID()) {
+						zone->DoAdventureCountIncrease();
+					} else {
+						zone->DoAdventureAssassinationCountIncrease();
+					}
 				}
 			}
+		} else if (clear_x_targets) {
+			entity_list.RemoveFromXTargets(this);
 		}
+	};
+	if (!transition.Active()) {
+		finalize_corpse(true);
 	} else {
 		entity_list.RemoveFromXTargets(this);
 	}
@@ -2968,9 +3011,11 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 
 	WipeHateList();
 
-	p_depop = true;
+	if (!transition.Active()) {
+		p_depop = true;
+	}
 
-	if (killer_mob && killer_mob->GetTarget() == this) { // We can kill things without having them targeted
+	if (!transition.Active() && killer_mob && killer_mob->GetTarget() == this) { // Ordinary NPC timing is unchanged.
 		killer_mob->SetTarget(nullptr);
 	}
 
@@ -2980,8 +3025,15 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 
 	if (give_exp_client && !IsCorpse()) {
 		const auto& v = give_exp_client->GetRaidOrGroupOrSelf(true);
+		const auto base_zone_id = zone ? zone->GetZoneID() : 0;
 		for (const auto& m : v) {
 			m->CastToClient()->RecordKilledNPCEvent(this);
+			m->CastToClient()->UpdateAchievementForKill(
+				GetNPCTypeID(),
+				GetBaseRace(),
+				achievement_npc_name_identity,
+				base_zone_id
+			);
 
 			if (parse->HasQuestSub(GetNPCTypeID(), EVENT_KILLED_MERIT)) {
 				parse->EventNPC(EVENT_KILLED_MERIT, this, m, "killed", 0);
@@ -3046,6 +3098,32 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 		std::vector<std::any> args = { corpse, this, owner_or_self };
 
 		parse->EventZone(EVENT_DEATH_ZONE, zone, export_string, 0, &args);
+	}
+
+	if (transition.Active()) {
+		if (transition.CanFinish()) {
+			BoundDestructibles::EnterRuins(this);
+		}
+		// EnterRuins sends existing target/HP notifications. Those callbacks
+		// can also reset the spawn or change loot/ownership, so validate again.
+		if (transition.CanFinish() && BoundDestructibles::IsRuins(this)) {
+			entity_list.LimitRemoveNPC(this);
+		} else {
+			DeleteEntityVariable("destructible_ruins");
+			if (!transition.Cancelled() && !p_depop) {
+				// Preserve newly added loot with the original corpse/rights code.
+				entity_list.QueueClients(killer_mob, deferred_death_packet.get(), false);
+				finalize_corpse(false);
+			}
+			p_depop = true;
+		}
+	}
+
+	// A late policy failure uses OP_Death; retain the ordinary server target
+	// clear after that deferred finalization. Committed ruins already cleared
+	// target, attack state and client selection together in SendHPUpdate.
+	if (transition.Active() && killer_mob && killer_mob->GetTarget() == this) {
+		killer_mob->SetTarget(nullptr);
 	}
 
 	return true;
@@ -3486,6 +3564,12 @@ uint8 Mob::GetWeaponDamageBonus(const EQ::ItemData *weapon, bool offhand)
 
 int Mob::GetHandToHandDamage(void)
 {
+	if (IsClient()) {
+		const auto& profile = CastToClient()->GetPP();
+		if (profile.shroud_native_stats_valid && profile.shroud_native_stats[SpiritShroud::UnarmedDamage]) {
+			return profile.shroud_native_stats[SpiritShroud::UnarmedDamage];
+		}
+	}
 	if (RuleB(Combat, UseRevampHandToHand)) {
 		// everyone uses this in the revamp!
 		int skill = GetSkill(EQ::skills::SkillHandtoHand);
@@ -4778,6 +4862,9 @@ void Mob::CommonDamage(Mob* attacker, int64 &damage, const int32 spell_id, const
 
 void Mob::HealDamage(uint64 amount, Mob* caster, int32 spell_id)
 {
+	if (IsNPC() && BoundDestructibles::IsRuins(CastToNPC())) {
+		return;
+	}
 #ifdef LUA_EQEMU
 	uint64 lua_ret = 0;
 	bool ignore_default = false;
@@ -6680,8 +6767,10 @@ void Client::SetAttackTimer()
 		int delay = 3500;
 
 		//if we have no weapon..
-		if (ItemToUse == nullptr)
-			delay = 100 * GetHandToHandDelay();
+		if (ItemToUse == nullptr) {
+			delay = m_pp.shroud_native_stats_valid && m_pp.shroud_native_stats[SpiritShroud::UnarmedDelay] ?
+				m_pp.shroud_native_stats[SpiritShroud::UnarmedDelay] : 100 * GetHandToHandDelay();
+		}
 		else
 			//we have a weapon, use its delay
 			delay = 100 * ItemToUse->Delay;

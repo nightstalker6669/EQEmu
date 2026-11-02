@@ -16,6 +16,8 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cstring>
+#include "housing/legacy_scaling_state.h"
+
 #include "inventory_profile.h"
 
 #include "common/data_verification.h"
@@ -144,6 +146,9 @@ EQ::ItemInstance::ItemInstance(const ItemInstance& copy)
 	}
 
 	m_SerialNumber = copy.m_SerialNumber;
+	m_housing_estate_id = copy.m_housing_estate_id;
+	m_housing_house_id = copy.m_housing_house_id;
+	m_housing_crate_id = copy.m_housing_crate_id;
 	m_custom_data  = copy.m_custom_data;
 	m_timers       = copy.m_timers;
 
@@ -166,6 +171,15 @@ EQ::ItemInstance::ItemInstance(const ItemInstance& copy)
 }
 
 // Clean up container contents
+EQ::ItemInstance* EQ::ItemInstance::CloneWithNewSerial() const
+{
+	auto* copy = Clone();
+	if (copy) {
+		copy->m_SerialNumber = GetNextItemInstSerialNumber();
+	}
+	return copy;
+}
+
 EQ::ItemInstance::~ItemInstance()
 {
 	Clear();
@@ -809,15 +823,16 @@ const EQ::ItemData* EQ::ItemInstance::GetUnscaledItem() const
 }
 
 std::string EQ::ItemInstance::GetCustomDataString() const {
- return EQEmu::SharedCore::LegacyScaling::Write(*this,m_custom_data);
+ return Housing::LegacyScaling::Write(*this,m_custom_data);
 }
 
 void EQ::ItemInstance::SetCustomDataString(const std::string& str)
 {
-    if (auto fields=EQEmu::SharedCore::LegacyScaling::Fields(str)) {
+    if (auto fields=Housing::LegacyScaling::Fields(str)) {
         for (const auto& [key,value]:*fields) SetCustomData(key,value);
         return;
     }
+    // Preserve the historical fallback for unrelated malformed quest data.
 
 	auto components = Strings::Split(str, "^");
 	auto value_count = components.size() / 2;

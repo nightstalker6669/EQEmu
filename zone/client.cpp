@@ -15,6 +15,23 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/mercenary/rof2_timer.h"
+
+#include "housing_guild_portal.h"
+#include "housing_actor_publication.h"
+#include "housing_inventory_bridge.h"
+#include "housing_house_runtime.h"
+#include "inventory_session_owner.h"
+#include "mercenary_transaction.h"
+#include <array>
+#include <limits>
+#include <stdexcept>
+#include "../common/housing/coin_pending_guard.h"
+#include "../common/housing/house_inventory_transition.h"
+#include "../common/eqemu_config.h"
+#include <chrono>
+#include <thread>
+
 #include "client.h"
 
 #include "common/data_bucket.h"
@@ -46,6 +63,7 @@
 #include "common/zone_store.h"
 #include "zone/bot_command.h"
 #include "zone/cheat_manager.h"
+#include "zone/client_achievements.h"
 #include "zone/client_version.h"
 #include "zone/command.h"
 #include "zone/dialogue_window.h"
@@ -696,15 +714,75 @@ Client::Client(EQStreamInterface *ieqs) : Mob(
 	AI_Init();
 }
 
+bool Client::ClaimInventorySessionReservation() {
+	if (m_inventory_session_reservation) return m_inventory_session_reservation->HeldFor(*this);
+	try { m_inventory_session_reservation = Housing::InventorySessions::ZoneReservation::ClaimForAuthenticatedClient(*this); }
+	catch (...) { m_inventory_session_rejected = true; return false; }
+	if (!m_inventory_session_reservation) m_inventory_session_rejected = true;
+	return bool(m_inventory_session_reservation);
+}
+bool Client::HasInventorySessionReservation() const {
+	return m_inventory_session_reservation && m_inventory_session_reservation->HeldFor(*this);
+}
+std::shared_ptr<Housing::InventorySessions::ZoneReservation> Client::InventorySessionReleaseTicket() const {
+	return m_inventory_session_reservation;
+}
+
+Housing::InventoryBridge::Bridge* Client::GetHousingInventoryBridge() {
+	if (!RuleB(Housing, EnablePlayerHousing) || ClientVersion() != EQ::versions::ClientVersion::RoF2 ||
+		!Housing::InventoryBridge::Bridge::CanCreateForClient(*this)) return nullptr;
+	if (!m_housing_inventory_bridge) {
+		try {
+			// Authoritative server config, exclusive fresh connection; no callbacks,
+			// event-loop pumping, shared MySQL handle or client-supplied credentials.
+			m_housing_inventory_bridge = std::make_unique<Housing::InventoryBridge::Bridge>(*this, [](Housing::HouseBinding::CustodyContext* houses, Housing::CrateBinding::CustodyContext* crates) {
+				const auto* config = EQEmuConfig::get();
+				if (!config) return std::unique_ptr<Housing::LiveItems::Service>{};
+				auto db = std::make_unique<Database>();
+				if (!db->Connect(config->DatabaseHost, config->DatabaseUsername, config->DatabasePassword,
+					config->DatabaseDB, config->DatabasePort, "housing-inventory-exclusive")) {
+					return std::unique_ptr<Housing::LiveItems::Service>{};
+				}
+				return std::make_unique<Housing::LiveItems::Service>(std::move(db), true, houses, crates);
+			}, Housing::HouseRuntime::MakeForClient);
+		} catch (const std::exception&) {
+			return nullptr;
+		}
+	}
+	return m_housing_inventory_bridge.get();
+}
+
 Client::~Client() {
+ Housing::GuildPortalRuntime::Forget(*this);
+	struct PublicationCleanup {Client& client;~PublicationCleanup(){Housing::ActorPublication::Forget(client);}} publication_cleanup{*this};
+	// First lifecycle action: no quests, save, stream release or inventory
+	// teardown can precede durable housing reconciliation/lease closure.
+	if (m_housing_inventory_bridge) {
+		for (;;) {
+			try {
+				if (m_housing_inventory_bridge->CloseSession()) break;
+			} catch (...) {
+				// An unresolved lease must never fall through to a stale save.
+			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(250));
+		}
+		m_housing_inventory_bridge.reset();
+	}
+
 	entity_list.RemoveMobFromCloseLists(this);
 	m_close_mobs.clear();
 
+	// A rejected/unloaded ingress has authenticated IDs but does not own the
+	// existing actor's profile. Skip writer/callback lifecycle for that shell.
+	const bool owns_loaded_profile = !m_inventory_session_rejected &&
+		(!(RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || m_inventory_session_reservation) ||
+		 (ClientDataLoaded() && HasInventorySessionReservation()));
+	mMovementManager->RemoveClient(this);
+	if (!owns_loaded_profile && trade) trade->Reset(); // shell owns no real trade partner
+	if (owns_loaded_profile) {
 	if (ClientVersion() == EQ::versions::ClientVersion::RoF2 && RuleB (Parcel, EnableParcelMerchants)) {
 		DoParcelCancel();
 	}
-
-	mMovementManager->RemoveClient(this);
 
 	DataBucket::DeleteCachedBuckets(DataBucketLoadType::Account, AccountID());
 	DataBucket::DeleteCachedBuckets(DataBucketLoadType::Client, CharacterID());
@@ -782,6 +860,7 @@ Client::~Client() {
 	// we save right now, because the client might be zoning and the world
 	// will need this data right away
 	Save(2); // This fails when database destructor is called first on shutdown
+	} // owned loaded-profile lifecycle
 
 	safe_delete(task_state);
 	safe_delete(KarmaUpdateTimer);
@@ -879,6 +958,8 @@ void Client::SendZoneInPackets()
 		SendLFGuildStatus();
 	}
 
+	SendHousingZoneCatalog();
+
 	//No idea why live sends this if even were not in a guild
 	SendGuildMOTD();
 }
@@ -930,6 +1011,8 @@ void Client::ReportConnectingState() {
 
 bool Client::SaveAA()
 {
+ if(m_spirit_shroud_transition)return false;
+	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
 	std::vector<CharacterAlternateAbilitiesRepository::CharacterAlternateAbilities> v;
 
 	uint32 aa_points_spent = 0;
@@ -959,13 +1042,15 @@ bool Client::SaveAA()
 		}
 	}
 
-	m_pp.aapoints_spent = aa_points_spent + m_epp.expended_aa;
-
-	if (v.empty()) {
-		return true;
+	const bool aa_saved =
+		v.empty() ||
+		CharacterAlternateAbilitiesRepository::ReplaceMany(database, v);
+	if (aa_saved && !IsSpiritShrouded()) {
+		m_pp.aapoints_spent = aa_points_spent + m_epp.expended_aa;
+		UpdateAchievementForAA(GetAchievementAAPointsSpent());
 	}
 
-	return CharacterAlternateAbilitiesRepository::ReplaceMany(database, v);
+	return aa_saved;
 }
 
 void Client::RemoveExpendedAA(int aa_id)
@@ -980,7 +1065,20 @@ void Client::RemoveExpendedAA(int aa_id)
 	);
 }
 
-bool Client::Save(uint8 iCommitNow) {
+bool Client::Save(uint8 iCommitNow)
+{
+	return Save(iCommitNow, true);
+}
+
+bool Client::Save(uint8 iCommitNow, bool update_achievements) {
+
+ if(m_spirit_shroud_transition)return false;
+	if (m_mercenary_persistence_failed) return false;
+	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
+	if (m_inventory_session_rejected ||
+		((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || m_inventory_session_reservation) &&
+		 !HasInventorySessionReservation())) return false;
+
 	if(!ClientDataLoaded())
 		return false;
 
@@ -1038,9 +1136,8 @@ bool Client::Save(uint8 iCommitNow) {
 		GetMercInfo().MercTimerRemaining = GetMercTimer()->GetRemainingTime();
 	}
 
-	if (dead || (!GetMerc() && !GetMercInfo().IsSuspended)) {
-		memset(&m_mercinfo, 0, sizeof(m_mercinfo));
-	}
+	// The owned roster survives death and temporary absence of its zone
+	// entity. Only a successful explicit dismissal may erase ownership.
 
 	m_pp.lastlogin = time(nullptr);
 
@@ -1088,7 +1185,10 @@ bool Client::Save(uint8 iCommitNow) {
 		}
 	}
 
-	database.SaveCharacterData(this, &m_pp, &m_epp); /* Save Character Data */
+	const bool character_data_saved = database.SaveCharacterData(this, &m_pp, &m_epp); /* Save Character Data */
+	if (character_data_saved && update_achievements && !IsSpiritShrouded()) {
+		UpdateAchievementForLevel(GetLevel());
+	}
 
 	database.SaveCharacterEXPModifier(this);
 
@@ -1152,8 +1252,10 @@ bool Client::SendAllPackets() {
 	CLIENTPACKET* cp = nullptr;
 	while (!clientpackets.empty()) {
 		cp = clientpackets.front().get();
-		if(eqs)
+		if(eqs) {
+			Housing::ActorPublication::Observe(*this,cp->app);
 			eqs->FastQueuePacket((EQApplicationPacket **)&cp->app, cp->ack_req);
+		}
 		clientpackets.pop_front();
 	}
 	return true;
@@ -1179,6 +1281,7 @@ void Client::QueuePacket(const EQApplicationPacket* app, bool ack_req, CLIENT_CO
 		AddPacket(app, ack_req);
 	}
 	else if (eqs) {
+		Housing::ActorPublication::Observe(*this,app);
 		eqs->QueuePacket(app, ack_req);
 	}
 }
@@ -1191,8 +1294,10 @@ void Client::FastQueuePacket(EQApplicationPacket** app, bool ack_req, CLIENT_CON
 		return;
 	}
 	else {
-		if(eqs)
+		if(eqs) {
+			Housing::ActorPublication::Observe(*this,app?*app:nullptr);
 			eqs->FastQueuePacket((EQApplicationPacket **)app, ack_req);
+		}
 		else if (app && (*app))
 			delete *app;
 		*app = nullptr;
@@ -1205,6 +1310,7 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 	strn0cpy(message, orig_message, sizeof(message));
 
 	LogDebug("Client::ChannelMessageReceived() Channel:[{}] message:[{}]", chan_num, message);
+ if(chan_num==8 && TrySpiritShroudChat(message))return;
 
 	if (RuleB(Chat, AlwaysCaptureCommandText)) {
 		if (message[0] == COMMAND_CHAR || message[0] == COMMAND_CHAR_NON_HASH) {
@@ -1358,6 +1464,10 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 		}
 		break;
 	}
+    case 21: { // RoF2 /fsay, confirmed in matching client at 0x5243e7.
+        SendFellowshipChat(message);
+        break;
+    }
 	case ChatChannel_Group: { /* Group Chat */
 		Raid* raid = entity_list.GetRaidByClient(this);
 		if(raid) {
@@ -2047,13 +2157,16 @@ void Client::SetSkill(EQ::skills::SkillType skillid, uint16 value) {
 		return;
 	m_pp.skills[skillid] = value; // We need to be able to #setskill 254 and 255 to reset skills
 
-	database.SaveCharacterSkill(CharacterID(), skillid, value);
+	const auto skill_saved = database.SaveCharacterSkill(CharacterID(), skillid, value);
 	auto outapp = new EQApplicationPacket(OP_SkillUpdate, sizeof(SkillUpdate_Struct));
 	SkillUpdate_Struct* skill = (SkillUpdate_Struct*)outapp->pBuffer;
 	skill->skillId=skillid;
 	skill->value=value;
 	QueuePacket(outapp);
 	safe_delete(outapp);
+	if (skill_saved) {
+		UpdateAchievementForSkill(static_cast<uint32>(skillid), value);
+	}
 }
 
 void Client::IncreaseLanguageSkill(uint8 language_id, uint8 increase)
@@ -3428,6 +3541,11 @@ void Client::Disarm(Client* disarmer, int chance) {
 			slot_id = m_inv.FindFreeSlot(false, true, inst->GetItem()->Size, (inst->GetItem()->ItemType == EQ::item::ItemTypeArrow));
 			if (slot_id != EQ::invslot::SLOT_INVALID)
 			{
+				if (!database.TransactionBeginStrict().Success()) {
+					disarmer->MessageString(Chat::Skills, DISARM_FAILED);
+					return;
+				}
+				BeginAchievementInventoryTransaction();
 				EQ::ItemInstance *InvItem = m_inv.PopItem(slot);
 				if (InvItem) { // there should be no way it is not there, but check anyway
 					EQApplicationPacket* outapp = new EQApplicationPacket(OP_MoveItem, sizeof(MoveItem_Struct));
@@ -3439,11 +3557,41 @@ void Client::Disarm(Client* disarmer, int chance) {
 					else
 						mi->number_in_stack = 0;
 					FastQueuePacket(&outapp); // this deletes item from the weapon slot on the client
-					if (PutItemInInventory(slot_id, *InvItem, true))
+					const auto destination_saved =
+						PutItemInInventory(slot_id, *InvItem, true);
+					const auto source_saved =
+						destination_saved &&
 						database.SaveInventory(CharacterID(), NULL, slot);
+					bool inventory_committed = false;
+					if (
+						source_saved &&
+						!database.TransactionStrictFailed()
+					) {
+						inventory_committed =
+							database.TransactionCommitStrict().Success();
+					}
+					else {
+						database.TransactionRollbackStrict();
+					}
+					EndAchievementInventoryTransaction(inventory_committed);
+					safe_delete(InvItem);
+					if (!inventory_committed) {
+						LogError(
+							"Disconnecting [{}] after an unresolved disarm inventory transaction",
+							GetCleanName()
+						);
+						Disconnect();
+						return;
+					}
 					auto matslot = (slot == EQ::invslot::slotPrimary ? EQ::textures::weaponPrimary : EQ::textures::weaponSecondary);
 					if (matslot != EQ::textures::materialInvalid)
 						SendWearChange(matslot);
+				}
+				else {
+					database.TransactionRollbackStrict();
+					EndAchievementInventoryTransaction(false);
+					disarmer->MessageString(Chat::Skills, DISARM_FAILED);
+					return;
 				}
 				MessageString(Chat::Skills, DISARMED);
 				if (disarmer != this)
@@ -4675,6 +4823,7 @@ bool Client::KeyRingAdd(uint32 item_id)
 	}
 
 	keyring.emplace_back(item_id);
+	UpdateAchievementForOwnItem(item_id);
 
 	if (!RuleB(World, UseItemLinksForKeyRing)) {
 		Message(Chat::LightBlue, "Added to keyring.");
@@ -4702,13 +4851,17 @@ bool Client::KeyRingClear()
 {
 	keyring.clear();
 
-	return KeyringRepository::DeleteWhere(
+	const auto cleared = KeyringRepository::DeleteWhere(
 		database,
 		fmt::format(
 			"`char_id` = {}",
 			CharacterID()
 		)
 	);
+	if (cleared) {
+		UpdateAchievementForOwnItem(0);
+	}
+	return cleared;
 }
 
 void Client::KeyRingList(Client* c)
@@ -4753,7 +4906,7 @@ bool Client::KeyRingRemove(uint32 item_id)
 		)
 	);
 
-	return KeyringRepository::DeleteWhere(
+	const auto removed = KeyringRepository::DeleteWhere(
 		database,
 		fmt::format(
 			"`char_id` = {} AND `item_id` = {}",
@@ -4761,6 +4914,10 @@ bool Client::KeyRingRemove(uint32 item_id)
 			item_id
 		)
 	);
+	if (removed) {
+		UpdateAchievementForOwnItem(item_id);
+	}
+	return removed;
 }
 
 bool Client::IsNameChangeAllowed() {
@@ -5820,6 +5977,12 @@ int	Client::LDoNChest_SkillCheck(NPC *target, int skill)
 
 void Client::SummonAndRezzAllCorpses()
 {
+	// This path also marks corpses resurrected before SetEXP. The ordinary
+	// resurrection-answer guard must apply to summon-all/quest invocations too.
+	if (IsSpiritShrouded()) {
+		Message(Chat::Yellow, "Remove your shroud before resurrecting your corpses.");
+		return;
+	}
 	PendingRezzXP = -1;
 
 	auto Pack = new ServerPacket(ServerOP_DepopAllPlayersCorpses, sizeof(ServerDepopAllPlayersCorpses_Struct));
@@ -7278,6 +7441,7 @@ void Client::SendAltCurrencies() {
 
 bool Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return false; }
 	if (!zone->DoesAlternateCurrencyExist(currency_id)) {
 		return false;
 	}
@@ -7313,6 +7477,7 @@ bool Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
 
 bool Client::RemoveAlternateCurrencyValue(uint32 currency_id, uint32 amount)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return false; }
 	if (!amount || !zone->DoesAlternateCurrencyExist(currency_id)) {
 		return false;
 	}
@@ -7357,6 +7522,7 @@ int Client::AddAlternateCurrencyValue(
 	if (persistence_succeeded) {
 		*persistence_succeeded = false;
 	}
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return 0; }
 	if (!zone->DoesAlternateCurrencyExist(currency_id)) {
 		return 0;
 	}
@@ -7450,6 +7616,7 @@ uint32 Client::GetAlternateCurrencyValue(uint32 currency_id) const
 }
 
 void Client::ProcessAlternateCurrencyQueue() {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return; }
 	while(!alternate_currency_queued_operations.empty()) {
 		std::pair<uint32, int32> op = alternate_currency_queued_operations.front();
 
@@ -7914,105 +8081,303 @@ void Client::SendWebLink(const char *website)
 	}
 }
 
+void Client::RejectMercenaryPersistence()
+{
+	m_mercenary_persistence_failed = true;
+	RejectInventorySessionAdmission();
+	Kick("Mercenary persistence requires authoritative reload");
+}
+
+bool Client::PrepareMercenaryPayment(Mercenary::Payment& payment, uint64 copper)
+{
+	if (m_mercenary_persistence_failed) {
+		return false;
+	}
+	if (m_pp.copper < 0 || m_pp.silver < 0 || m_pp.gold < 0 || m_pp.platinum < 0) {
+		return false;
+	}
+	payment.before = {uint32(m_pp.copper), uint32(m_pp.silver), uint32(m_pp.gold), uint32(m_pp.platinum)};
+	payment.after = payment.before;
+	const uint64 total = uint64(payment.before[0]) + 10ULL * payment.before[1] +
+		100ULL * payment.before[2] + 1000ULL * payment.before[3];
+	if (total < copper) {
+		return false;
+	}
+	if (copper) {
+		const uint64 remaining = total - copper;
+		if (remaining / 1000 > std::numeric_limits<int32>::max()) {
+			return false;
+		}
+		payment.after = {uint32(remaining % 10), uint32(remaining / 10 % 10),
+			uint32(remaining / 100 % 10), uint32(remaining / 1000)};
+	}
+	const auto ticket = InventorySessionReleaseTicket();
+	const auto lease = ticket ? ticket->SnapshotFor(*this) : std::nullopt;
+	if (!lease || lease->actor.character_id != CharacterID() || lease->actor.account_id != AccountID() ||
+		!ticket->HeldFor(*this) || !HasInventorySessionReservation()) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	payment.guard = [this, ticket, lease, before = payment.before](Database& db, uint64 connection) {
+		if (!connection || !ticket->HeldFor(*this) || InventorySessionReleaseTicket() != ticket ||
+			!HasInventorySessionReservation() || before != std::array<uint32, 4>{uint32(m_pp.copper), uint32(m_pp.silver), uint32(m_pp.gold), uint32(m_pp.platinum)}) {
+			return false;
+		}
+		const auto current = ticket->SnapshotFor(*this);
+		if (!current || current->epoch != lease->epoch || current->token != lease->token) {
+			return false;
+		}
+		auto query = [&db](const std::string& sql) {
+			if (db.GetStatus() != DBcore::Connected) throw std::runtime_error("Mercenary connection lost");
+			auto rows = db.QueryDatabase(sql, false);
+			if (!rows.Success()) throw std::runtime_error("Mercenary guard query failed");
+			return rows;
+		};
+		auto number = [](const char* value) -> uint64 {
+			if (!value) throw std::runtime_error("Mercenary guard missing value");
+			return std::stoull(value);
+		};
+		auto hex = [](const uint8* bytes, size_t length) {
+			const char* digits = "0123456789ABCDEF";
+			std::string result;
+			for (size_t i = 0; i < length; ++i) {
+				result += digits[bytes[i] >> 4];
+				result += digits[bytes[i] & 15];
+			}
+			return result;
+		};
+		auto engines = query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('character_data','housing_inventory_sessions','housing_live_item_leases')");
+		if (engines.RowCount() != 1 || number(engines.begin()[0]) != 3) return false;
+		const auto actor = std::to_string(CharacterID());
+		auto character = query("SELECT id FROM character_data WHERE id=" + actor + " AND account_id=" +
+			std::to_string(AccountID()) + " AND deleted_at IS NULL FOR UPDATE");
+		if (character.RowCount() != 1) return false;
+		auto sessions = query("SELECT account_id,epoch,HEX(token),HEX(process_key),HEX(client_key),zone_id,instance_id,active FROM housing_inventory_sessions WHERE character_id=" + actor + " FOR UPDATE");
+		if (sessions.RowCount() != 1) return false;
+		auto row = sessions.begin();
+		if (!lease->active || number(row[0]) != lease->actor.account_id || number(row[1]) != lease->epoch ||
+			!row[2] || std::string(row[2]) != hex(lease->token.data(), lease->token.size()) ||
+			!row[3] || std::string(row[3]) != hex(reinterpret_cast<const uint8*>(lease->owner.process_key.data()), lease->owner.process_key.size()) ||
+			!row[4] || std::string(row[4]) != hex(reinterpret_cast<const uint8*>(lease->owner.client_key.data()), lease->owner.client_key.size()) ||
+			number(row[5]) != lease->owner.zone_id || number(row[6]) != lease->owner.instance_id || number(row[7]) != 1) return false;
+		auto pending = query("SELECT account_id,pending_key FROM housing_live_item_leases WHERE character_id=" + actor + " FOR UPDATE");
+		if (pending.RowCount() > 1 || (pending.RowCount() &&
+			(number(pending.begin()[0]) != AccountID() || (pending.begin()[1] && *pending.begin()[1])))) return false;
+		return Housing::CoinPending::Inspect(db, CharacterID(), true) == Housing::CoinPending::State::Clear &&
+			Housing::HouseInventory::InspectPending(db, CharacterID(), true) == Housing::HouseInventory::PendingState::Clear;
+	};
+	return true;
+}
+
+bool Client::FinalizeMercenaryPayment(Merc* merc, uint64 copper, bool upkeep)
+{
+	if (!merc || merc->GetMercenaryOwner() != this) {
+		return false;
+	}
+	const auto ticket = InventorySessionReleaseTicket();
+	// Automatic Bayle-first upkeep is server policy. The native hire stance
+	// word is never interpreted as a currency selector.
+	const bool paid_upkeep = upkeep && copper && RuleB(Mercs, ChargeMercUpkeepCost);
+	if (paid_upkeep && !alternate_currency_loaded) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	const uint32 alternate_before = paid_upkeep ? GetAlternateCurrencyValue(19) : 0;
+	const bool paid_alternate = paid_upkeep && alternate_before > 0;
+	Mercenary::Payment payment;
+	if (!PrepareMercenaryPayment(payment, paid_alternate ? 0 : copper)) {
+		return false;
+	}
+	if (paid_alternate) {
+		payment.alternate = Mercenary::AlternatePayment{19, alternate_before, alternate_before - 1};
+		const auto guard = payment.guard;
+		payment.guard = [this, guard, alternate_before](Database& db, uint64 connection) {
+			return alternate_currency_loaded && GetAlternateCurrencyValue(19) == alternate_before && guard(db, connection);
+		};
+	}
+	const auto result = database.SaveMercenaryAtomic(merc, &payment);
+	if (result != Mercenary::SaveResult::Saved) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	if (!ticket->HeldFor(*this) || InventorySessionReleaseTicket() != ticket || !HasInventorySessionReservation()) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	if (payment.before != std::array<uint32, 4>{uint32(m_pp.copper), uint32(m_pp.silver), uint32(m_pp.gold), uint32(m_pp.platinum)}) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	if (paid_alternate && (!alternate_currency_loaded || GetAlternateCurrencyValue(19) != alternate_before)) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	m_pp.copper = payment.after[0];
+	m_pp.silver = payment.after[1];
+	m_pp.gold = payment.after[2];
+	m_pp.platinum = payment.after[3];
+	if (paid_alternate) {
+		// Apply only the already committed counter. The general setter would
+		// issue a second SQL write and replay quest currency-loss callbacks.
+		alternate_currency[19] = alternate_before - 1;
+		SendAlternateCurrencyValue(19);
+	} else if (copper) {
+		SendMoneyUpdate();
+		RecalcWeight();
+	}
+	if (paid_upkeep) {
+		SendMercenaryCostUpdate();
+		SendMercenaryUpkeep(paid_alternate);
+	}
+	return true;
+}
+
+void Client::SendMercenaryUpkeep(bool alternate)
+{
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2) {
+		SendMercResponsePackets(12);
+		return;
+	}
+	// A runtime rule change may leave the client holding an older unsafe
+	// interval. Publish current lifecycle/countdown and full period first.
+	SendMercTimer(GetMerc());
+	const auto interval = static_cast<uint32>(RuleI(Mercs, UpkeepIntervalMS));
+	if (!GetMercInfo().mercid || !Mercenary::RoF2::SafeNativeDuration(interval)) {
+		Message(Chat::LightGray, "Mercenary upkeep paid using %s. Next upkeep in %u seconds.",
+			alternate ? "Bayle Marks" : "coins", interval / 1000);
+		return;
+	}
+	EQApplicationPacket packet(OP_MercenaryUpkeep, 1);
+	packet.pBuffer[0] = alternate ? 1 : 0;
+	QueuePacket(&packet);
+}
+
+void Client::SendMercenaryCostUpdate()
+{
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2 || !GetMercInfo().mercid) {
+		return;
+	}
+	const auto id = GetMercInfo().MercTemplateID;
+	const uint32 costs[4] = {
+		RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(id, GetLevel()) : 0,
+		RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(id, GetLevel(), 19) : 0,
+		RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(id, GetLevel()) : 0,
+		RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(id, GetLevel(), 19) : 0
+	};
+	EQApplicationPacket packet(OP_MercenaryCostUpdate, sizeof(costs));
+	for (size_t index = 0; index < 4; ++index) {
+		for (unsigned byte = 0; byte < 4; ++byte) {
+			packet.pBuffer[index * 4 + byte] = uint8(costs[index] >> (8 * byte));
+		}
+	}
+	QueuePacket(&packet);
+}
+
+bool Client::GetMercenaryAutoAssist()
+{
+	if (!m_mercenary_auto_assist_loaded && CharacterID()) {
+		// Character-scoped data buckets preserve this preference across zones
+		// and sessions without changing the character or mercenary schema.
+		m_mercenary_auto_assist = GetBucket("eqemu.mercenary.auto_assist") != "0";
+		m_mercenary_auto_assist_loaded = true;
+	}
+	return m_mercenary_auto_assist;
+}
+
+void Client::SetMercenaryAutoAssist(bool enabled)
+{
+	m_mercenary_auto_assist = enabled;
+	m_mercenary_auto_assist_loaded = true;
+	SetBucket("eqemu.mercenary.auto_assist", enabled ? "1" : "0");
+}
+
+uint8 Client::GetMercenaryCapacity() const
+{
+	const int configured = RuleI(Mercs, MaxMercenaries);
+	const int capacity = std::max(1, std::min(configured, MAXMERCS));
+	return ClientVersion() == EQ::versions::ClientVersion::RoF2 ? capacity : 1;
+}
+
+void Client::PersistMercenarySelection()
+{
+	SetBucket("eqemu.mercenary.selected_slot", std::to_string(GetMercSlot()));
+}
+
 void Client::SendMercPersonalInfo()
 {
-	uint32 altCurrentType = 19; //TODO: Implement alternate currency purchases involving mercs!
+	if (GetMerc() && !GetMercInfo().IsSuspended) {
+		GetMercInfo().MercTimerRemaining = GetMercTimer()->GetRemainingTime();
+	}
 
-	if (ClientVersion() >= EQ::versions::ClientVersion::RoF) {
-		// Count owned mercs across all slots
-		uint32 mercCount = GetNumberOfMercenaries();
-		if (mercCount == 0) {
-			SendClearMercInfo();
+	const bool multiple = ClientVersion() == EQ::versions::ClientVersion::RoF2;
+	uint8 slots[MAXMERCS] = {};
+	uint32 count = 0;
+	int32 selected = -1;
+	for (uint8 slot = 0; slot < MAXMERCS; ++slot) {
+		if (!multiple && slot != GetMercSlot()) {
+			continue;
+		}
+		const auto& info = GetMercInfo(slot);
+		if (!info.mercid || !zone->GetMercTemplate(info.MercTemplateID)) {
+			continue;
+		}
+		if (zone->merc_stance_list[info.MercTemplateID].size() > MAX_MERC_STANCES) {
 			return;
 		}
-
-		uint32 packetSize = sizeof(MercenaryDataUpdate_Struct);
-		auto outapp = new EQApplicationPacket(OP_MercenaryDataUpdate, packetSize);
-		memset(outapp->pBuffer, 0, packetSize);
-		auto mdus   = (MercenaryDataUpdate_Struct *) outapp->pBuffer;
-
-		mdus->MercStatus = 0;
-		mdus->MercCount  = mercCount;
-
-		// Lambda to populate a single merc entry in the packet
-		int max_slots = std::min(RuleI(Mercs, MaxMercSlots), MAXMERCS);
-		uint32 merc_index = 0;
-
-		auto fillMercEntry = [&](int slot) {
-			auto& info = GetMercInfo(slot);
-			if (info.mercid == 0 || merc_index >= MAX_MERC) {
-				return;
-			}
-
-			auto tmpl_it = zone->merc_templates.find(info.MercTemplateID);
-			if (tmpl_it == zone->merc_templates.end()) {
-				return;
-			}
-
-			MercTemplate *mercData = &tmpl_it->second;
-			uint32 stancecount = 0;
-			auto stance_it = zone->merc_stance_list.find(mercData->MercTemplateID);
-			if (stance_it != zone->merc_stance_list.end()) {
-				stancecount = stance_it->second.size();
-			}
-
-			if (stancecount > MAX_MERC_STANCES) {
-				Log(Logs::General, Logs::Mercenaries, "SendMercPersonalInfo: stance count %u exceeds max for slot %i, skipping", stancecount, slot);
-				return;
-			}
-
-			mdus->MercData[merc_index].MercID            = mercData->MercTemplateID;
-			mdus->MercData[merc_index].MercType          = mercData->MercType;
-			mdus->MercData[merc_index].MercSubType       = mercData->MercSubType;
-			mdus->MercData[merc_index].PurchaseCost      = Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), 0);
-			mdus->MercData[merc_index].UpkeepCost        = Merc::CalcUpkeepCost(mercData->MercTemplateID, GetLevel(), 0);
-			mdus->MercData[merc_index].Status            = info.IsSuspended ? 0 : 1;
-			mdus->MercData[merc_index].AltCurrencyCost   = Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), altCurrentType);
-			mdus->MercData[merc_index].AltCurrencyUpkeep = Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), altCurrentType);
-			mdus->MercData[merc_index].AltCurrencyType   = altCurrentType;
-			mdus->MercData[merc_index].MercUnk01         = 0;
-			mdus->MercData[merc_index].TimeLeft          = info.MercTimerRemaining;
-			mdus->MercData[merc_index].MerchantSlot      = merc_index + 1;
-			mdus->MercData[merc_index].MercUnk02         = (slot == GetMercSlot()) ? 1 : 0;
-			mdus->MercData[merc_index].StanceCount       = stancecount;
-			mdus->MercData[merc_index].MercUnk03         = 0;
-			mdus->MercData[merc_index].MercUnk04         = 1;
-
-			strn0cpy(mdus->MercData[merc_index].MercName, info.merc_name, sizeof(mdus->MercData[merc_index].MercName));
-
-			uint32 stanceindex = 0;
-			if (stance_it != zone->merc_stance_list.end()) {
-				for (const auto& stance : stance_it->second) {
-					mdus->MercData[merc_index].Stances[stanceindex].StanceIndex = stanceindex;
-					mdus->MercData[merc_index].Stances[stanceindex].Stance      = stance.StanceID;
-					stanceindex++;
-				}
-			}
-
-			mdus->MercData[merc_index].MercUnk05 = std::min(RuleI(Mercs, MaxMercSlots), MAXMERCS);
-			merc_index++;
-		};
-
-		// Emit the active merc slot first — the client marks the first entry
-		// in the list with the X (active marker), so order matters.
-		if (GetMercSlot() < max_slots && GetMercInfo().mercid != 0) {
-			fillMercEntry(GetMercSlot());
+		if (slot == GetMercSlot()) {
+			selected = count;
 		}
-
-		// Then emit remaining owned mercs in slot order
-		for (int slot = 0; slot < max_slots; slot++) {
-			if (slot == GetMercSlot()) {
-				continue; // already emitted
-			}
-			fillMercEntry(slot);
-		}
-
-		// Update count in case we skipped any invalid entries
-		mdus->MercCount = merc_index;
-
-		FastQueuePacket(&outapp);
-		safe_delete(outapp);
+		slots[count++] = slot;
+	}
+	if (!count) {
+		SendClearMercInfo();
 		return;
+	}
+
+	// The native roster stores a command/state and selected stance index
+	// in each row. Neither field is the row's storage slot number.
+	auto fill_entry = [this](auto& entry, const MercInfo& info) {
+		const auto* data = zone->GetMercTemplate(info.MercTemplateID);
+		entry.MercID = data->MercTemplateID;
+		entry.MercType = data->MercType;
+		entry.MercSubType = data->MercSubType;
+		entry.PurchaseCost = RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(data->MercTemplateID, GetLevel()) : 0;
+		entry.UpkeepCost = RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(data->MercTemplateID, GetLevel()) : 0;
+		entry.Status = 0;
+		entry.AltCurrencyCost = RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(data->MercTemplateID, GetLevel(), 19) : 0;
+		entry.AltCurrencyUpkeep = RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(data->MercTemplateID, GetLevel(), 19) : 0;
+		entry.AltCurrencyType = 19;
+		entry.MercUnk01 = 0;
+		entry.TimeLeft = info.MercTimerRemaining;
+		entry.MerchantSlot = info.IsSuspended ? 0 : 5;
+		entry.MercUnk02 = 0;
+		entry.MercUnk03 = 0;
+		// Native owned-row byte 57 restores the selected contract's assist checkbox.
+		entry.MercUnk04 = GetMercenaryAutoAssist() ? 1 : 0;
+		strn0cpy(entry.MercName, info.merc_name, sizeof(entry.MercName));
+		uint32 index = 0;
+		for (const auto& stance : zone->merc_stance_list[data->MercTemplateID]) {
+			entry.Stances[index].StanceIndex = index;
+			entry.Stances[index].Stance = stance.StanceID;
+			if (stance.StanceID == info.Stance) {
+				entry.MercUnk02 = index;
+			}
+			++index;
+		}
+		entry.StanceCount = index;
+	};
+
+	if (ClientVersion() >= EQ::versions::ClientVersion::RoF) {
+		auto outapp = new EQApplicationPacket(OP_MercenaryDataUpdate, sizeof(MercenaryDataUpdate_Struct));
+		auto* data = reinterpret_cast<MercenaryDataUpdate_Struct*>(outapp->pBuffer);
+		data->MercStatus = selected;
+		data->MercCount = count;
+		for (uint32 row = 0; row < count; ++row) {
+			fill_entry(data->MercData[row], GetMercInfo(slots[row]));
+		}
+		// RoF2 carries capacity once, after the complete counted row array.
+		data->MercData[0].MercUnk05 = GetMercenaryCapacity();
+		FastQueuePacket(&outapp);
 	} else {
 		// Pre-RoF path (SoD and earlier) — single merc only
 		if (GetMercInfo().MercTemplateID == 0) {
@@ -8032,45 +8397,12 @@ void Client::SendMercPersonalInfo()
 		uint32 i = 0;
 
 		auto outapp = new EQApplicationPacket(OP_MercenaryDataResponse, sizeof(MercenaryMerchantList_Struct));
-		auto mml    = (MercenaryMerchantList_Struct *) outapp->pBuffer;
-
-		mml->MercTypeCount = mercTypeCount;
-		mml->MercGrades[i] = 1;
-
-		mml->MercCount                  = mercCount;
-		mml->Mercs[i].MercID            = mercData->MercTemplateID;
-		mml->Mercs[i].MercType          = mercData->MercType;
-		mml->Mercs[i].MercSubType       = mercData->MercSubType;
-		mml->Mercs[i].PurchaseCost      = RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), 0) : 0;
-		mml->Mercs[i].UpkeepCost        = RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(mercData->MercTemplateID, GetLevel(), 0) : 0;
-		mml->Mercs[i].Status            = 0;
-		mml->Mercs[i].AltCurrencyCost   = RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), altCurrentType) : 0;
-		mml->Mercs[i].AltCurrencyUpkeep = RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(mercData->MercTemplateID, GetLevel(), altCurrentType) : 0;
-		mml->Mercs[i].AltCurrencyType   = altCurrentType;
-		mml->Mercs[i].MercUnk01         = 0;
-		mml->Mercs[i].TimeLeft          = GetMercInfo().MercTimerRemaining;
-		mml->Mercs[i].MerchantSlot      = i + 1;
-		mml->Mercs[i].MercUnk02         = 1;
-		mml->Mercs[i].StanceCount       = zone->merc_stance_list[mercData->MercTemplateID].size();
-		mml->Mercs[i].MercUnk03         = 0;
-		mml->Mercs[i].MercUnk04         = 1;
-
-		strn0cpy(mml->Mercs[i].MercName, GetMercInfo().merc_name, sizeof(mml->Mercs[i].MercName));
-
-		int stanceindex = 0;
-		if (mml->Mercs[i].StanceCount != 0) {
-			auto iter = zone->merc_stance_list[mercData->MercTemplateID].begin();
-			while (iter != zone->merc_stance_list[mercData->MercTemplateID].end()) {
-				mml->Mercs[i].Stances[stanceindex].StanceIndex = stanceindex;
-				mml->Mercs[i].Stances[stanceindex].Stance      = (iter->StanceID);
-				stanceindex++;
-				++iter;
-			}
-		}
-
+		auto* data = reinterpret_cast<MercenaryMerchantList_Struct*>(outapp->pBuffer);
+		data->MercTypeCount = 1;
+		data->MercGrades[0] = 1;
+		data->MercCount = 1;
+		fill_entry(data->Mercs[0], GetMercInfo());
 		FastQueuePacket(&outapp);
-		safe_delete(outapp);
-		return;
 	}
 }
 
@@ -8080,7 +8412,7 @@ void Client::SendClearMercInfo()
 	NoMercenaryHired_Struct *nmhs = (NoMercenaryHired_Struct*)outapp->pBuffer;
 	nmhs->MercStatus = -1;
 	nmhs->MercCount = 0;
-	nmhs->MercID = 1;
+	nmhs->MercID = GetMercenaryCapacity();
 	FastQueuePacket(&outapp);
 }
 

@@ -1,0 +1,561 @@
+{
+  "cutoff": "2013-05-31",
+  "quests": [
+    {
+      "quest_id": 3964,
+      "achievement_id": 500060200,
+      "name": "Clay for Selana",
+      "giver_native_id": 394153,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103065010id_/http://everquest.allakhazam.com/db/quest.html?quest=3964",
+        "timestamp": "20121103065010",
+        "html_sha256": "0602a4e422eb4200c5e31246547420ea75c0951cce39664693d8428b121fdf1e",
+        "file": "quest3964-20121103065010.html"
+      },
+      "published_level": 65,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": false,
+      "objectives_paraphrased": [
+        "Kill10earthen/massiveelementals",
+        "Freshloot4LumpsofElementalClay",
+        "Deliver4claytoSelana"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53628,
+          "name": "Healing Mud",
+          "quantity": 10
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        84238
+      ],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "Kill10vsloot4concurrencyrequiresoriginaltaskwindowproof;donotassumefreshlootonlyafterkill10",
+        "2012firsthand confirmsmassiveelementaleligible;2026group-friendlydropchangeexcluded"
+      ],
+      "raw_period_metadata": " Level: 65 Maximum Level: 85 Monster Mission: No Repeatable: Yes Can Be Shrouded?: No Quest Type: Task Quest Goal: Experience Loot Quest Items: Lump of Elemental Clay Related Zones: The Steppes Related Creatures: an earthen elemental Era: Recommended: Group Size: Solo Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3722,
+      "achievement_id": 500060200,
+      "name": "Wood for Carving",
+      "giver_native_id": 394191,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20120507195026id_/http://everquest.allakhazam.com/db/quest.html?quest=3722",
+        "timestamp": "20120507195026",
+        "html_sha256": "41ae95127b26f463ba487b3ede97763103822dbecc968741a49b4a0da8ef17a0",
+        "file": "quest3722-20120507195026.html"
+      },
+      "published_level": 65,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": false,
+      "objectives_paraphrased": [
+        "Acquire4LivingWoodSamplesfromgrovewalkers",
+        "Deliver4toDaer`Lagar"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53623,
+          "name": "Saplift Potion",
+          "quantity": 10
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        84239
+      ],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "2007firsthand confirmsrepeatability; noactualrequestminimumtestrecovered",
+        "PreserveexistingpositivePEQlootrows; nodroprateinvented"
+      ],
+      "raw_period_metadata": " Level: 65 Maximum Level: 95 Monster Mission: No Repeatable: Yes Can Be Shrouded?: No Quest Type: Task Quest Goal: Experience Loot Quest Items: Living Wood Sample Related Zones: The Steppes Related Creatures: a grovewalker Era: Recommended: Group Size: Solo Min. # of Players: 1 Max. # of Players: 1 Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3879,
+      "achievement_id": 500060200,
+      "name": "Cull the Gnolls",
+      "giver_native_id": 394200,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103062518id_/http://everquest.allakhazam.com/db/quest.html?quest=3879",
+        "timestamp": "20121103062518",
+        "html_sha256": "1d403749ad077976488374d320f935b2e79fce175ab9f9c47108fe90e4cdd905",
+        "file": "quest3879-20121103062518.html"
+      },
+      "published_level": 60,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": false,
+      "objectives_paraphrased": [
+        "Acquire10DarkfellFangs;prelootingcounts",
+        "Deliver10toJakar"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53619,
+          "name": "Darkfell Wineshot",
+          "quantity": 5
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        84240
+      ],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "2006/2007/2012reportsconfirmprelootandrepeats",
+        "Level51deniedbutactualminimumunresolved"
+      ],
+      "raw_period_metadata": " Level: 60 Maximum Level: 85 Monster Mission: No Repeatable: Yes Can Be Shrouded?: No Quest Type: Task Quest Goal: Experience Loot Quest Items: Darkfell Fang Related Zones: The Steppes Era: Recommended: Group Size: Solo Min. # of Players: 1 Max. # of Players: 1 Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 4305,
+      "achievement_id": 500060200,
+      "name": "Cull the Goblins",
+      "giver_native_id": 394200,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103062700id_/http://everquest.allakhazam.com/db/quest.html?quest=4305",
+        "timestamp": "20121103062700",
+        "html_sha256": "d367d28a53d10a8736c4fc03891348cf4029844e3011e7d5e575b8a9adee5f22",
+        "file": "quest4305-20121103062700.html"
+      },
+      "published_level": 65,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": false,
+      "objectives_paraphrased": [
+        "Acquire10StonemightEars;prelootingcounts",
+        "Deliver10toJakar"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53618,
+          "name": "Stonemight Cupcake",
+          "quantity": 5
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        84241
+      ],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "2012firsthandconfirms5cupcakes,nocoin,nofaction;2010acceptedat62contradicts65header",
+        "RepeatabilityheaderNo conflictswith2009repeat/no-lockoutreport"
+      ],
+      "raw_period_metadata": " Level: 65 Maximum Level: 85 Monster Mission: No Repeatable: No Can Be Shrouded?: No Quest Type: Task Quest Goal: Experience Loot Quest Items: Stonemight Ear Related Zones: The Steppes Era: Recommended: Group Size: Solo Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3770,
+      "achievement_id": 500060200,
+      "name": "Sweeping the Steppes: Goblins",
+      "giver_native_id": 394200,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103062756id_/http://everquest.allakhazam.com/db/quest.html?quest=3770",
+        "timestamp": "20121103062756",
+        "html_sha256": "e8682b09c85edc4c0b8da5aa383716a7de215d0697ef68f563df72c9ad884a59",
+        "file": "quest3770-20121103062756.html"
+      },
+      "published_level": 60,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": true,
+      "objectives_paraphrased": [
+        "Kill30Stonemightgoblins",
+        "DefeatspawnedAdomesticatedbear",
+        "ReturnhailJakar"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53613,
+          "name": "Totem of the Stonemight",
+          "quantity": 1
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "2006six-hoursharedtask;1\u20136playersandlate-taskaddsupported",
+        "BearhutlocY-1750X465 in2006comment;notastaticbearspawn",
+        "Bearno-summon,root/snareable;~650maxobserved2007",
+        "Autoaggrorange/elite-addclaimsconflict;donotspawnsyntheticelitesfromassumption"
+      ],
+      "raw_period_metadata": " Level: 60 Maximum Level: 95 Monster Mission: No Repeatable: No Can Be Shrouded?: No Quest Type: Task Quest Goal: Experience Loot Time Limit: 06:00:00 Related Zones: The Steppes Related Creatures: a domesticated bear Era: Recommended: Group Size: Group Min. # of Players: 3 Max. # of Players: 6 Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3878,
+      "achievement_id": 500060200,
+      "name": "Sweeping the Steppes: Gnolls",
+      "giver_native_id": 394200,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20130521084545id_/http://everquest.allakhazam.com/db/quest.html?quest=3878",
+        "timestamp": "20130521084545",
+        "html_sha256": "6e3fc3185ebb52cde3fea311babd41953bc44d4863c44b2c6d39e02c58d17c22",
+        "file": "quest3878-20130521084545.html"
+      },
+      "published_level": 55,
+      "published_level_is_verified_request_gate": true,
+      "shared_task": true,
+      "objectives_paraphrased": [
+        "Kill20Darkfellgnolls",
+        "Kill4tribaldefenders;2spawnatkill5and2atkill10",
+        "Kill3Darkfellelitesafterkill20",
+        "ReturnhailJakar"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53614,
+          "name": "Gnollbiter",
+          "quantity": 1
+        },
+        {
+          "item_id": 53615,
+          "name": "Gnollcracker",
+          "quantity": 1
+        },
+        {
+          "item_id": 53616,
+          "name": "Gnollcleaver",
+          "quantity": 1
+        }
+      ],
+      "reward_semantics": "choose_one",
+      "required_items_native_ids": [],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "Rewardsarechoiceofthreeweapons,notallthree",
+        "2010testedrequest55,denied54;54canjoin",
+        "Defenders65\u201366,elites67+from2010;allmezzable/snareable",
+        "2013commentplacesaddsnearaggroplayercontrarytocorpse-spawndescription"
+      ],
+      "raw_period_metadata": " Level: 55 Maximum Level: 100 Monster Mission: No Repeatable: No Can Be Shrouded?: No Quest Type: Task Quest Goal: Experience Loot Related Zones: The Steppes Era: Recommended: Group Size: Solo Min. # of Players: 1 Max. # of Players: 6 Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 5101,
+      "achievement_id": 500060200,
+      "name": "Sowing Dissent",
+      "giver_native_id": 394200,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103063516id_/http://everquest.allakhazam.com/db/quest.html?quest=5101",
+        "timestamp": "20121103063516",
+        "html_sha256": "5dc3902ff39eceb808f8965704b13744d394de1e04ed490cafe0736329b9f104",
+        "file": "quest5101-20121103063516.html"
+      },
+      "published_level": 60,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": true,
+      "objectives_paraphrased": [
+        "AcquireGnollRuneTrapfromgnollcamp",
+        "CompletePlaceTrapcastinthegoblincamp",
+        "Trapmustslay3goblins",
+        "ReturnhailJakar"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53617,
+          "name": "Darkfell Starstone",
+          "quantity": 1
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        84243
+      ],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "Shared1\u20136;repeatableperiodheader",
+        "TrapgroundlocY1840X-1100Z188;twoexistingIT10831objectsnearbyitemid0",
+        "Nativeitem84243casts7230self;all12nativeeffectslotsBlank,soquestspelllogicneeded",
+        "2012comment:laytrapadvancesfirststage;groundobjectplacementandactualkillcustodymustbeowned/deduped"
+      ],
+      "raw_period_metadata": " Level: 60 Maximum Level: 85 Monster Mission: No Repeatable: Yes Can Be Shrouded?: No Quest Type: Task Quest Goal: Loot Quest Items: Gnoll Rune Trap Related Zones: The Steppes Era: Recommended: Group Size: Solo Min. # of Players: 1 Max. # of Players: 6 Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3630,
+      "achievement_id": 500060300,
+      "name": "Book for Toegnasher",
+      "giver_native_id": 399100,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20130315173244id_/http://everquest.allakhazam.com/db/quest.html?quest=3630",
+        "timestamp": "20130315173244",
+        "html_sha256": "4e7be368ed3e5d1f9caeb2263d084dd3b3fed8ace9854264b6e61a673dd06a85",
+        "file": "quest3630-20130315173244.html"
+      },
+      "published_level": 70,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": false,
+      "objectives_paraphrased": [
+        "Deliver3distinctAncientParchmentsinanyorder",
+        "Afterthreehand-ins,holdPieceofParchmentoncursorneardruidrunestone",
+        "ReceiveCopyofDruidicRuneanddeliverit"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53635,
+          "name": "Toegnasher's Token",
+          "quantity": 1
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        88137,
+        88138,
+        88139,
+        13063,
+        88140
+      ],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "Page1randomgrovegroundspawnmissing;2012coordinatesmultiplevalidlocations",
+        "Page2fromSteppeshillgiants;Page3Nightmoonkoboldsdropsalreadyexist",
+        "May2012cursorconversionconfirmed;notatradeskillrecipe",
+        "Factionprerequisitementioned2007butexactfaction/thresholdunknown",
+        "WhiteflamealternativealreadylistedintheJune2012archive;primaryNightmoonrouteintact"
+      ],
+      "raw_period_metadata": " Level: 70 Maximum Level: 100 Monster Mission: No Repeatable: Yes Can Be Shrouded?: No Quest Type: Task Quest Goal: Experience Loot Quest Items: Ancient Parchment [Part 1] Ancient Parchment [Part 2] Ancient Parchment [Part 3] Copy of Druidic Rune Piece of Parchment Related Zones: Icefall Glacier Era: Recommended: Group Size: Solo Min. # of Players: 1 Max. # of Players: 1 Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3720,
+      "achievement_id": 500060300,
+      "name": "Treasure of the Dead",
+      "giver_native_id": 399139,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103151737id_/http://everquest.allakhazam.com/db/quest.html?quest=3720",
+        "timestamp": "20121103151737",
+        "html_sha256": "a36c7745e4d109f8d172e42dec0aa968a80bf37d776c552bff5bcf7758b79d0d",
+        "file": "quest3720-20121103151737.html"
+      },
+      "published_level": 60,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": true,
+      "objectives_paraphrased": [
+        "Enterburialchamber",
+        "Approachancientchest;sealcryptdoorandspawnCryptGuardian",
+        "KillCryptGuardian",
+        "ReturnhailBordan"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53630,
+          "name": "Plundered Krithgorian Knife",
+          "quantity": 1
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "2006shared3\u20136,15levelgroupspread,openworldNOTinstance",
+        "2006onlyKnifegrantedeventocharactersunabletoequip;AppropriateClassesmetadataisnotgate",
+        "2009chestproximityratherthanopeningconfirmed;initialguardianaggroreportsconflict",
+        "Cryptdoor17254/doorid2exists;stockancientchest399147/148existsbutnoeventhandler",
+        "2006guardianroot/snareable,nosummon,observed664hitmitigated;HPexactunknown"
+      ],
+      "raw_period_metadata": " Level: 60 Maximum Level: 85 Monster Mission: No Repeatable: Yes Can Be Shrouded?: No Quest Type: Task Quest Goal: Loot Era: Recommended: Group Size: Group Min. # of Players: 3 Max. # of Players: 6 Appropriate Classes: Bard Beastlord Berserker Monk Paladin Ranger Rogue Shadowknight Warrior Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3631,
+      "achievement_id": 500060300,
+      "name": "Web of Curiosity",
+      "giver_native_id": 399032,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103151712id_/http://everquest.allakhazam.com/db/quest.html?quest=3631",
+        "timestamp": "20121103151712",
+        "html_sha256": "378746f6ef7727240802ae8aaa7cb3fe8e774ba153d47a6ea164c881ff2eff57",
+        "file": "quest3631-20121103151712.html"
+      },
+      "published_level": 53,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": true,
+      "objectives_paraphrased": [
+        "Fivecycles:deliver1TrailMix+1FreshGlacierWaterthenfightwave",
+        "Waves2spiderlings,2assassinspiders,3assassinspiders,2matureassassinspiders,1queen",
+        "FinalhailYavia"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53629,
+          "name": "Assassin Weave Cape",
+          "quantity": 1
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        88141,
+        88142
+      ],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "2012parentcommentshared1\u20136;2006firsthandfirstwaveonlyAFTERbothdeliveries",
+        "Food/watergrounditemsaremissing;Yaviahealthrisespercycle",
+        "2006queenlevel66;requestacceptedby59necro;header53notindependentlyminimum-tested",
+        "CasterAppropriateClassesmetadataisnotverifiedclassrequestrestriction"
+      ],
+      "raw_period_metadata": " Level: 53 Maximum Level: 85 Monster Mission: No Repeatable: Yes Can Be Shrouded?: No Quest Type: Task Quest Goal: Loot Quest Items: Drakkin Trail Mix Fresh Glacier Water Related Creatures: assassin spider assassin spider queen assassin spiderling mature assassin spider Era: Recommended: Group Size: Solo Min. # of Players: 1 Max. # of Players: 6 Appropriate Classes: Enchanter Magician Necromancer Wizard Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3714,
+      "achievement_id": 500060400,
+      "name": "The Talking Plant",
+      "giver_native_id": 399070,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103151717id_/http://everquest.allakhazam.com/db/quest.html?quest=3714",
+        "timestamp": "20121103151717",
+        "html_sha256": "892afe82f8aecb576ae182eb6e8b5f6531d44e26738eaab174e680a50382e74e",
+        "file": "quest3714-20121103151717.html"
+      },
+      "published_level": 65,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": false,
+      "objectives_paraphrased": [
+        "Exploreoriginalnorthcryptfork",
+        "KillspawnedProphetSpirit",
+        "LootAncientCharm",
+        "DeliverCharmtoMoldren"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 87206,
+          "name": "Portal Fragment",
+          "quantity": 1
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        54667
+      ],
+      "verified_prerequisite_quest_ids": [],
+      "historical_notes_and_limits": [
+        "2012singleProphet/singleCharmglobalspawnguard;pullawayworkarounddocumented",
+        "2009taskstagesand2010Moldrencompletionconfirmed",
+        "ModernwaypointY-544X963istheToegnasherpage1location,notoldnorthcrypt;exclude",
+        "HeaderSeasonalismetadataerror/conflict;doNOTseasonallygatepermanentTSSquest",
+        "Published65conflictsundatedJapanese53;actualminimumunresolved"
+      ],
+      "raw_period_metadata": " This Quest is Seasonal Level: 65 Maximum Level: 95 Monster Mission: No Repeatable: No Can Be Shrouded?: No Quest Type: Task Quest Goal: Advancement Quest Items: Ancient Charm Related Creatures: Prophet Spirit Wilped the Withered Related Quests: Rebuild the Portal #2: The Library Rebuild the Portal #3: The Destroyed Portal Era: Recommended: Group Size: Solo Min. # of Players: 1 Max. # of Players: 1 Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3892,
+      "achievement_id": 500060400,
+      "name": "The Library",
+      "giver_native_id": 399070,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103132354id_/http://everquest.allakhazam.com/db/quest.html?quest=3892",
+        "timestamp": "20121103132354",
+        "html_sha256": "a2cc54837281f6888a5dc667f9cd7b4356e4a5e66853b8acdd0f52fff60308d9",
+        "file": "quest3892-20121103132354.html"
+      },
+      "published_level": 60,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": false,
+      "objectives_paraphrased": [
+        "ExploreValdeholmlibraryhouses",
+        "PickupAncientGiantBookOneandTwo",
+        "DeliverbothbookstoMoldren"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 87207,
+          "name": "Portal Fragment",
+          "quantity": 1
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        54668,
+        54669
+      ],
+      "verified_prerequisite_quest_ids": [
+        3714
+      ],
+      "historical_notes_and_limits": [
+        "2007/2009/2010Moldrengiverconfirmed;early2006Wilpedbugexcluded",
+        "Firstrequestmustbefollowedbyseparatedialogue;notautomaticassignment",
+        "Oldbookspawncomments4minvs20minconflict;exacttimerunresolved",
+        "Bookshelfgeometryanditempositionsrequireclient/mapinspection;quotedlocsY-700X-1230andY-435X-1610needaxisvalidation"
+      ],
+      "raw_period_metadata": " Level: 60 Maximum Level: 95 Monster Mission: No Repeatable: Yes Can Be Shrouded?: No Quest Type: Task Quest Goal: Advancement Experience Loot Quest Items: Ancient Giant Book One Ancient Giant Book Two Related Zones: Valdeholm Related Quests: Rebuild the Portal #1: The Talking Plant Rebuild the Portal #3: The Destroyed Portal Era: Recommended: Group Size: Solo Min. # of Players: 1 Max. # of Players: 1 Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    },
+    {
+      "quest_id": 3893,
+      "achievement_id": 500060400,
+      "name": "The Destroyed Portal",
+      "giver_native_id": 399073,
+      "source": {
+        "archive_url": "https://web.archive.org/web/20121103101545id_/http://everquest.allakhazam.com/db/quest.html?quest=3893",
+        "timestamp": "20121103101545",
+        "html_sha256": "118eac847d3684f5113c890bb2cb4eb91e8179aab8f6a6d2db7c521bc66d5794",
+        "file": "quest3893-20121103101545.html"
+      },
+      "published_level": 60,
+      "published_level_is_verified_request_gate": false,
+      "shared_task": false,
+      "objectives_paraphrased": [
+        "Freshloot4PortalFragmentsfromDirewindgolems",
+        "Freshloot4PortalRocksfromIcefallkobolds",
+        "ExploreWarPortal",
+        "KillspawnedPortalGuardian",
+        "Deliver4fragmentand4rockstoMoldren"
+      ],
+      "confirmed_named_reward_items_native_match": [
+        {
+          "item_id": 53632,
+          "name": "Necklace of Warportal Fragments",
+          "quantity": 1
+        },
+        {
+          "item_id": 87208,
+          "name": "Portal Fragment",
+          "quantity": 1
+        }
+      ],
+      "reward_semantics": "grant_listed",
+      "required_items_native_ids": [
+        54671,
+        54670
+      ],
+      "verified_prerequisite_quest_ids": [
+        3892
+      ],
+      "historical_notes_and_limits": [
+        "Rewardfragments87206/7/8areNOTthelootitem54671",
+        "2006guardianonespawnperexplore;failuremayrequiretaskrestart;2007groupkillcreditconfirmed",
+        "2011guardian~120kHPparse;nativeactorabsent",
+        "2019koboldcaveentranceextensionismodern-only;preferperiodwizardspirekobolds",
+        "Necklace11504consumes2093SmallPortalFragmentsandteleportstoactualWarPortal;alreadydefinedspell",
+        "Portalrepairrates1/2/3percentconfirmedJan2007;Pummelcrush/Demetonraidisadjacentcontentnotrequiredbythese13questcriteria"
+      ],
+      "raw_period_metadata": " Level: 60 Maximum Level: 95 Monster Mission: No Repeatable: Yes Can Be Shrouded?: No Quest Type: Task Quest Goal: Experience Loot Quest Items: Portal Fragment Portal Rock Related Zones: Direwind Cliffs Icefall Glacier Related Creatures: Moldren the Wise Pummelcrush The Portal Guardian Related Quests: Rebuild the Portal #1: The Talking Plant Rebuild the Portal #2: The Library Era: Recommended: Group Size: Solo Min. # of Players: 1 Max. # of Players: 1 Appropriate Classes: All Appropriate Races: All ",
+      "completion_binding_present": false,
+      "native_task_present": false
+    }
+  ],
+  "count": 13,
+  "method": "Precutoffarchivedquestrecordsplusdatedfirsthandcomments. CurrentChromeusedforreadability/corroboration;moderneditsnotbackdated. NativeIDsarematchedexistingPEQitems/names/lore,notZAMwebIDs.",
+  "exact_xp_unknown": "UsepreviouslyapprovedlabelledconfigurablePEQ-styleXPdefaultsinimplementation;noXPnumbersinventedinresearch."
+}

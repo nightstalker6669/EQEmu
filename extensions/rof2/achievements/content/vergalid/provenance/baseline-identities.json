@@ -1,0 +1,21 @@
+{
+  "npc_types": {
+    "403100": "Rhuk_L`vere",
+    "403027": "Drazak_O`lyn",
+    "403086": "Mutaq_Busla",
+    "403029": "Gygun_Urulump",
+    "405150": "Captain_Orenu_Urulump",
+    "399135": "#Captain_Gul",
+    "399146": "#Priest_Ulkag",
+    "399123": "#Orumot_Uluntar",
+    "397176": "Togswell_Mophintok",
+    "403065": "Hranath_Velentok",
+    "403070": "Fentier_Meqental",
+    "403089": "Nhemen",
+    "399120": "Elder_Nezzen_Tru`tak"
+  },
+  "external_modules": [
+    "achievement_quest_blightfire",
+    "json"
+  ]
+}

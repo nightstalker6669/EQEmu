@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "housing_guild_portal.h"
+
 #include "client.h"
 
 #include "common/bazaar.h"
@@ -103,6 +105,11 @@ void Trade::AddEntity(uint16 trade_slot_id, uint32 stack_size) {
 
 	if (!inst) {
 		client->Message(Chat::Red, "Error: Could not find item on your cursor!");
+		return;
+	}
+
+	if(!client->CanTransferSpiritShroudItemTree(inst)){
+		client->Message(Chat::Yellow,"Your shroud's temporary supplies cannot be traded.");
 		return;
 	}
 
@@ -321,6 +328,13 @@ void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, st
 		return;
 	}
 
+	if(IsSpiritShrouded())for(int16 slot=EQ::invslot::TRADE_BEGIN;slot<=EQ::invslot::TRADE_END;++slot){
+		if(!CanTransferSpiritShroudItemTree(m_inv[slot])){
+			Message(Chat::Yellow,"Your shroud's temporary supplies cannot be transferred.");
+			ResetTrade();return;
+		}
+	}
+
 	if (tradingWith->IsClient()) {
 		Client                * other    = tradingWith->CastToClient();
 
@@ -507,6 +521,7 @@ void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, st
 		}
 	}
 	else if(tradingWith->IsNPC()) {
+		if (Housing::GuildPortalRuntime::HandIn(*this, tradingWith)) return;
 
 		bool quest_npc = false;
 		if (parse->HasQuestSub(tradingWith->GetNPCTypeID(), EVENT_TRADE)) {
@@ -744,7 +759,7 @@ bool Client::CheckTradeNonDroppable()
 		if (!inst)
 			continue;
 
-		if (!inst->IsDroppable())
+		if (!CanTransferSpiritShroudItemTree(inst) || !inst->IsDroppable())
 			return true;
 	}
 
@@ -1181,6 +1196,7 @@ void Client::NukeTraderItem(
 	//
 	const EQ::ItemInstance *Inst = m_inv[slot];
 	database.SaveInventory(CharacterID(), Inst, slot);
+	UpdateAchievementForOwnItem(static_cast<uint32>(item_id));
 
 	EQApplicationPacket *outapp2;
 

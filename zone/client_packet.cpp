@@ -15,6 +15,18 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "client_mercenary_transfer.h"
+
+#include "../common/housing/admission_guard.h"
+#include "housing_house_reload.h"
+#include "housing_house_runtime.h"
+#include "housing_service_npcs.h"
+#include "housing_service_tribute.h"
+#include "housing_service_bank.h"
+#include "housing_guild_portal.h"
+#include "../common/housing/guild_portal_db.h"
+#include "housing_plot_marker.h"
+
 #include "client.h"
 
 #include "common/data_bucket.h"
@@ -36,6 +48,7 @@
 #include "common/repositories/tradeskill_recipe_entries_repository.h"
 #include "common/rulesys.h"
 #include "common/shared_tasks.h"
+#include "zone/achievement_manager.h"
 #include "zone/bot.h"
 #include "zone/client_version.h"
 #include "zone/dialogue_window.h"
@@ -79,6 +92,13 @@ void MapOpcodes()
 	ConnectingOpcodes.clear();
 	memset(ConnectedOpcodes, 0, sizeof(ConnectedOpcodes));
 
+ ConnectedOpcodes[OP_SpiritShroudComplete]=&Client::Handle_OP_SpiritShroudComplete;
+ ConnectedOpcodes[OP_SpiritShroudRequest]=&Client::Handle_OP_SpiritShroudRequest;
+ ConnectedOpcodes[OP_SpiritShroudSelect]=&Client::Handle_OP_SpiritShroudSelect;
+ ConnectedOpcodes[OP_SpiritShroudCancel]=&Client::Handle_OP_SpiritShroudCancel;
+ ConnectedOpcodes[OP_SpiritShroudAbilityRequest]=&Client::Handle_OP_SpiritShroudPreview;
+ ConnectedOpcodes[OP_SpiritShroudEquipmentRequest]=&Client::Handle_OP_SpiritShroudPreview;
+ ConnectedOpcodes[OP_SpiritShroudBank]=&Client::Handle_OP_SpiritShroudBank;
 	// Now put all the opcodes into their home...
 	// connecting opcode handler assignments:
 	ConnectingOpcodes[OP_ApproveZone] = &Client::Handle_Connect_OP_ApproveZone;
@@ -106,9 +126,12 @@ void MapOpcodes()
 	ConnectingOpcodes[OP_ZoneEntry] = &Client::Handle_Connect_OP_ZoneEntry;
 
 	// connected opcode handler assignments:
+	ConnectedOpcodes[OP_AAAction] = &Client::Handle_OP_AAAction;
+	ConnectedOpcodes[OP_AchievementCompareRequest] = &Client::Handle_OP_AchievementCompareRequest;
+	ConnectedOpcodes[OP_AchievementLinkRequest] = &Client::Handle_OP_AchievementLinkRequest;
+	ConnectedOpcodes[OP_AchievementRequest] = &Client::Handle_OP_AchievementRequest;
 	ConnectedOpcodes[OP_AchievementReward] = &Client::Handle_OP_AchievementReward;
 	ConnectedOpcodes[OP_RewardSelection] = &Client::Handle_OP_RewardSelection;
-	ConnectedOpcodes[OP_AAAction] = &Client::Handle_OP_AAAction;
 	ConnectedOpcodes[OP_AcceptNewTask] = &Client::Handle_OP_AcceptNewTask;
 	ConnectedOpcodes[OP_AdventureInfoRequest] = &Client::Handle_OP_AdventureInfoRequest;
 	ConnectedOpcodes[OP_AdventureLeaderboardRequest] = &Client::Handle_OP_AdventureLeaderboardRequest;
@@ -116,6 +139,39 @@ void MapOpcodes()
 	ConnectedOpcodes[OP_AdventureMerchantRequest] = &Client::Handle_OP_AdventureMerchantRequest;
 	ConnectedOpcodes[OP_AdventureMerchantSell] = &Client::Handle_OP_AdventureMerchantSell;
 	ConnectedOpcodes[OP_AdventureRequest] = &Client::Handle_OP_AdventureRequest;
+	ConnectedOpcodes[OP_RealEstateNeighborhood] = &Client::Handle_OP_RealEstateNeighborhood;
+	ConnectedOpcodes[OP_FellowshipAction] = &Client::Handle_OP_FellowshipAction;
+	ConnectedOpcodes[OP_FellowshipCampRequest] = &Client::Handle_OP_FellowshipCampRequest;
+	ConnectedOpcodes[OP_GuildTrophyToggle]=&Client::Handle_OP_GuildTrophyToggle;
+    ConnectedOpcodes[OP_GuildTrophySave]=&Client::Handle_OP_GuildTrophySave;
+    ConnectedOpcodes[OP_GuildTrophyModify]=&Client::Handle_OP_GuildTrophyModify;
+    ConnectedOpcodes[OP_GuildTrophyOptIn]=&Client::Handle_OP_GuildTrophyOptIn;
+    ConnectedOpcodes[OP_RealEstateTrophyOpen] = &Client::Handle_OP_RealEstateTrophyOpen;
+    ConnectedOpcodes[OP_RealEstateTrophy] = &Client::Handle_OP_RealEstateTrophy;
+	ConnectedOpcodes[OP_RealEstateTrophyToggle] = &Client::Handle_OP_RealEstateTrophyToggle;
+	ConnectedOpcodes[OP_RealEstateAnchorConfirm] = &Client::Handle_OP_RealEstateAnchorConfirm;
+	ConnectedOpcodes[OP_RealEstateGo] = &Client::Handle_OP_RealEstateGo;
+	ConnectedOpcodes[OP_RealEstateExit] = &Client::Handle_OP_RealEstateGo; // Same checked routing dispatcher; distinct native frame.
+	ConnectedOpcodes[OP_RealEstatePurchase] = &Client::Handle_OP_RealEstatePurchase;
+	ConnectedOpcodes[OP_RealEstateInspect] = &Client::Handle_OP_RealEstateInspect;
+	ConnectedOpcodes[OP_RealEstatePlacementBegin] = &Client::Handle_OP_RealEstatePlacementBegin;
+	ConnectedOpcodes[OP_RealEstatePlacementCommit] = &Client::Handle_OP_RealEstatePlacementCommit;
+	ConnectedOpcodes[OP_RealEstatePickup] = &Client::Handle_OP_RealEstatePickup;
+	ConnectedOpcodes[OP_RealEstateStoreAll] = &Client::Handle_OP_RealEstateStoreAll;
+	ConnectedOpcodes[OP_RealEstateLoadLayout] = &Client::Handle_OP_RealEstateLoadLayout;
+	ConnectedOpcodes[OP_RealEstatePack] = &Client::Handle_OP_RealEstatePack;
+	ConnectedOpcodes[OP_RealEstateItemOperation] = &Client::Handle_OP_RealEstateItemOperation;
+	ConnectedOpcodes[OP_RealEstateAccessEdit] = &Client::Handle_OP_RealEstateMetadata;
+	ConnectedOpcodes[OP_RealEstateItemMenu] = &Client::Handle_OP_RealEstateInteraction;
+    ConnectedOpcodes[OP_RealEstateCustomInteraction] = &Client::Handle_OP_RealEstateCustomInteraction;
+	ConnectedOpcodes[OP_RealEstateItemQuery] = &Client::Handle_OP_RealEstateInteraction;
+	ConnectedOpcodes[OP_RealEstateItemInspect] = &Client::Handle_OP_RealEstateItemInspect;
+	ConnectedOpcodes[OP_RealEstateHouseSwap] = &Client::Handle_OP_RealEstateHouseSwap;
+	ConnectedOpcodes[OP_RealEstateVotingOptOut] = &Client::Handle_OP_RealEstateVotingOptOut;
+	ConnectedOpcodes[OP_RealEstateEscrow] = &Client::Handle_OP_RealEstateEscrow;
+	ConnectedOpcodes[OP_RealEstateTransfer] = &Client::Handle_OP_RealEstateTransfer;
+ ConnectedOpcodes[OP_RealEstateTransferConsent] = &Client::Handle_OP_RealEstateTransferConsent;
+	ConnectedOpcodes[OP_RealEstateSale] = &Client::Handle_OP_RealEstateSale;
 	ConnectedOpcodes[OP_AdventureStatsRequest] = &Client::Handle_OP_AdventureStatsRequest;
 	ConnectedOpcodes[OP_AggroMeterLockTarget] = &Client::Handle_OP_AggroMeterLockTarget;
 	ConnectedOpcodes[OP_AltCurrencyMerchantRequest] = &Client::Handle_OP_AltCurrencyMerchantRequest;
@@ -301,13 +357,17 @@ void MapOpcodes()
 	ConnectedOpcodes[OP_ManaChange] = &Client::Handle_OP_ManaChange;
 	ConnectedOpcodes[OP_MemorizeSpell] = &Client::Handle_OP_MemorizeSpell;
 	ConnectedOpcodes[OP_Mend] = &Client::Handle_OP_Mend;
+	ConnectedOpcodes[OP_MercenaryAssist] = &Client::Handle_OP_MercenaryAssist;
+	ConnectedOpcodes[OP_MercenarySwitch] = &Client::Handle_OP_MercenarySwitch;
+	ConnectedOpcodes[OP_MercenaryTransferRequest] = &Client::Handle_OP_MercenaryTransferRequest;
+	ConnectedOpcodes[OP_MercenaryTransferResponse] = &Client::Handle_OP_MercenaryTransferResponse;
+	ConnectedOpcodes[OP_MercenaryAutoAssist] = &Client::Handle_OP_MercenaryAutoAssist;
 	ConnectedOpcodes[OP_MercenaryCommand] = &Client::Handle_OP_MercenaryCommand;
 	ConnectedOpcodes[OP_MercenaryDataRequest] = &Client::Handle_OP_MercenaryDataRequest;
 	ConnectedOpcodes[OP_MercenaryDataUpdateRequest] = &Client::Handle_OP_MercenaryDataUpdateRequest;
 	ConnectedOpcodes[OP_MercenaryDismiss] = &Client::Handle_OP_MercenaryDismiss;
 	ConnectedOpcodes[OP_MercenaryHire] = &Client::Handle_OP_MercenaryHire;
 	ConnectedOpcodes[OP_MercenarySuspendRequest] = &Client::Handle_OP_MercenarySuspendRequest;
-	ConnectedOpcodes[OP_MercenarySwitch] = &Client::Handle_OP_MercenarySwitch;
 	ConnectedOpcodes[OP_MercenaryTimerRequest] = &Client::Handle_OP_MercenaryTimerRequest;
 	ConnectedOpcodes[OP_MoveCoin] = &Client::Handle_OP_MoveCoin;
 	ConnectedOpcodes[OP_MoveItem] = &Client::Handle_OP_MoveItem;
@@ -455,7 +515,53 @@ int Client::HandlePacket(const EQApplicationPacket *app)
 		(EQEmuLogSys::Instance()->IsLogEnabled(Logs::Detail, Logs::PacketClientServer) ? DumpPacketToString(app) : "")
 	);
 
-	EmuOpcode opcode = app->GetOpcode();
+ EmuOpcode opcode = app->GetOpcode();
+ // A committed profile exchange leaves this old Client read-only until the
+ // same-zone transfer deletes it; only that transfer handshake may proceed.
+ if(m_spirit_shroud_transition && !(opcode==OP_SpiritShroudComplete && m_spirit_shroud_native_pending) && opcode!=OP_ZoneChange && opcode!=OP_AckPacket && opcode!=OP_DeleteSpawn) return true;
+ if(IsSpiritShrouded() && (opcode==OP_Trader || opcode==OP_BazaarSearch || opcode==OP_AltCurrencyMerchantRequest)) return true;
+ if(IsSpiritShrouded() && opcode==OP_BankerChange && !SpiritShroudHasPersonalBank())return true;
+ if(IsSpiritShrouded() && opcode==OP_MoveCoin){
+  if(!SpiritShroudHasPersonalBank() || app->size!=sizeof(MoveCoin_Struct))return true;
+  auto* coin=reinterpret_cast<const MoveCoin_Struct*>(app->pBuffer);
+  // Only live carried/cursor/personal-bank/trade wallets are available.
+  // Shared-bank coin remains inaccessible even when a packet is forged.
+  if(coin->from_slot<0 || coin->from_slot>3 || coin->to_slot<0 || coin->to_slot>3)return true;
+ }
+ // Temporary equipment must remain in this profile until restoration. Broader
+ // trading and crafting support will require explicit transfer provenance.
+ if(IsSpiritShrouded() && (opcode==OP_GroundSpawn ||
+    opcode==OP_GuildBank || opcode==OP_TradeSkillCombine || opcode==OP_RecipeAutoCombine ||
+    opcode==OP_AugmentItem || opcode==OP_TributeItem || opcode==OP_GuildTributeDonateItem ||
+    opcode==OP_ShopSendParcel || opcode==OP_AltCurrencySell || opcode==OP_AltCurrencyReclaim))return true;
+
+ if(IsSpiritShrouded() && opcode==OP_MoveMultipleItems){
+  if(app->size<sizeof(MultiMoveItem_Struct))return true;
+  auto* moves=reinterpret_cast<const MultiMoveItem_Struct*>(app->pBuffer);
+  if(!moves->count || moves->count>100 || app->size!=sizeof(MultiMoveItem_Struct)+sizeof(MultiMoveItemSub_Struct)*moves->count)return true;
+  for(uint32 i=0;i<moves->count;++i){
+   // Bank transfers use the guarded single-item operation. The native bulk
+   // rearrangement implementation has direct writes outside SwapItem.
+   if(moves->moves[i].from_slot.Type!=EQ::invtype::typePossessions ||
+      moves->moves[i].to_slot.Type!=EQ::invtype::typePossessions)return true;
+   if(moves->moves[i].from_slot.Slot<EQ::invslot::GENERAL_BEGIN || moves->moves[i].from_slot.Slot>EQ::invslot::slotCursor ||
+      moves->moves[i].to_slot.Slot<EQ::invslot::GENERAL_BEGIN || moves->moves[i].to_slot.Slot>EQ::invslot::slotCursor)return true;
+  }
+ }
+ if(IsSpiritShrouded() && (opcode==OP_MoveItem || opcode==OP_DeleteItem || opcode==OP_DeleteCharge) && app->size==sizeof(MoveItem_Struct)) {
+  auto* move=reinterpret_cast<const MoveItem_Struct*>(app->pBuffer);
+  const auto held_bank=[this](uint32_t slot){return
+   (slot>=EQ::invslot::SHARED_BANK_BEGIN && slot<=EQ::invslot::SHARED_BANK_END) ||
+   (slot>=EQ::invbag::SHARED_BANK_BAGS_BEGIN && slot<=EQ::invbag::SHARED_BANK_BAGS_END) ||
+   (!SpiritShroudHasPersonalBank() && ((slot>=EQ::invslot::BANK_BEGIN && slot<=EQ::invslot::BANK_END) ||
+    (slot>=EQ::invbag::BANK_BAGS_BEGIN && slot<=EQ::invbag::BANK_BAGS_END)));};
+  if(held_bank(move->from_slot)||held_bank(move->to_slot))return true;
+  const auto external=[](uint32_t slot){return
+   (slot>=EQ::invslot::WORLD_BEGIN && slot<=EQ::invslot::WORLD_END);};
+  if(external(move->from_slot)||external(move->to_slot))return true;
+ }
+
+
 	if (opcode == OP_AckPacket) {
 		return true;
 	}
@@ -522,12 +628,21 @@ void Client::CompleteConnect()
 	UpdateWho();
 	client_state = CLIENT_CONNECTED;
 	SendAllPackets();
+	// Catalog packets queued during zone-in precede the durable placed-item scene.
 	hpupdate_timer.Start();
 	autosave_timer.Start();
 	SetDuelTarget(0);
 	SetDueling(false);
 
 	EnteringMessages(this);
+ // RoF2's alternate profile path does not request the normal AA definition
+ // table. Rebuild it on every shrouded zone entry, including a fresh login.
+ if(IsSpiritShrouded()) {
+  SendAlternateAdvancementTable();
+  SendAlternateAdvancementPoints();
+  SendAlternateAdvancementTimers();
+ }
+ SendSpiritShroudProgress();
 	LoadPEQZoneFlags();
 	LoadZoneFlags();
 	LoadAccountFlags();
@@ -537,6 +652,7 @@ void Client::CompleteConnect()
 
 	// Task Packets
 	LoadClientTaskState();
+	LoadAchievements();
 
 	// moved to dbload and translators since we iterate there also .. keep m_pp values whatever they are when they get here
 	/*const auto sbs = EQ::spells::DynamicLookup(ClientVersion(), GetGM())->SpellbookSize;
@@ -873,16 +989,26 @@ void Client::CompleteConnect()
 
 	/* This needs to be set, this determines whether or not data was loaded properly before a save */
 	client_data_loaded = true;
-	// Retry pending common-only rewards with a fully loaded save target.
+	// Pending common-only task rewards could not safely deliver during the
+	// earlier task-state load. Revisit them with a fully loaded save target.
 	if (task_state) {
 		task_state->RestorePendingRewardSelection(this);
 	}
 
+	SendAchievementPackets();
+
 	CalcItemScale();
 	DoItemEnterZone();
+	// Interior context requires the genuine loaded/connected inventory fence,
+	// so publish it here before the scene. Exterior catalog was queued earlier.
+	if (zone->GetZoneID() != 712) SendHousingZoneCatalog();
+	// Inventory admission and profile load must both be complete before a
+	// custody lease can publish persistent furniture to this connected client.
+	SendHousingPlacedScene();
 
 	if (zone->GetZoneID() == Zones::GUILDHALL && GuildBanks)
-		GuildBanks->SendGuildBank(this);
+		Housing::ServiceBank::Publish(*this);
+	else Housing::ServiceNpcs::PublishGuildBank(*this);
 
 	if (ClientVersion() >= EQ::versions::ClientVersion::SoD)
 		entity_list.SendFindableNPCList(this);
@@ -938,6 +1064,20 @@ void Client::CompleteConnect()
 		strcpy((char*)pack->pBuffer, GetName());
 		worldserver.SendPacket(pack);
 		delete pack;
+	}
+
+	// Ordinary profiles contain only long affects. Recreate only Song slots
+	// installed by the scoped restoration loader, once the login profile exists.
+	if (m_spirit_shroud_restored_short_buffs_pending) {
+		m_spirit_shroud_restored_short_buffs_pending = false;
+		if (ClientVersion() == EQ::versions::ClientVersion::RoF2 && !IsSpiritShrouded()) {
+			const int end = GetMaxBuffSlots() + GetMaxSongSlots();
+			for (int slot = GetMaxBuffSlots(); slot < end; ++slot) {
+				if (IsValidSpell(buffs[slot].spellid) && spells[buffs[slot].spellid].short_buff_box) {
+					SendBuffDurationPacket(buffs[slot], slot, true);
+				}
+			}
+		}
 	}
 
 	ClientPatch::SendFullBuffRefresh(this);
@@ -1066,7 +1206,14 @@ void Client::Handle_Connect_OP_ClientReady(const EQApplicationPacket *app)
 	if (!Spawned())
 		SendZoneInPackets();
 	CompleteConnect();
-	SendHPUpdate();
+	// RoF2 can clamp the alternate profile during initialization after sending
+	// ClientReady. Republish on a bounded number of ordinary HP timer ticks.
+	m_spirit_shroud_resource_refreshes = IsSpiritShrouded() ? 3 : 0;
+	SendHPUpdate(IsSpiritShrouded());
+	if (IsSpiritShrouded()) {
+		SendManaUpdate();
+		SendEnduranceUpdate();
+	}
 }
 
 void Client::Handle_Connect_OP_ClientUpdate(const EQApplicationPacket *app)
@@ -1248,6 +1395,7 @@ void Client::Handle_Connect_OP_ZoneComplete(const EQApplicationPacket *app)
 
 void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 {
+	if (m_inventory_session_rejected) { Disconnect(); return; }
 	if (app->size != sizeof(ClientZoneEntry_Struct))
 		return;
 	ClientZoneEntry_Struct *cze = (ClientZoneEntry_Struct *)app->pBuffer;
@@ -1269,10 +1417,36 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 	Client* client = entity_list.GetClientByName(cze->char_name);
 	if (!zone->GetAuth(ip, cze->char_name, &WID, &account_id, &character_id, &admin, lskey, &tellsoff)) {
 		LogClientLogin("[{}] failed zone auth check", cze->char_name);
+		if (RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs)) {
+			RejectInventorySessionAdmission();
+			Disconnect();
+			return; // unclaimed ingress must not save/kick a real reservation owner
+		}
+
 		if (nullptr != client) {
 			client->Save();
 			client->Kick("Failed auth check");
 		}
+		return;
+	}
+
+	// Trusted zone auth has resolved character/account. Reject before antighost
+	// saves or inventory load can touch a character with unresolved custody.
+	if (Housing::CheckInventoryAdmission(database, CharacterID(),
+		RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs)) !=
+		Housing::InventoryAdmission::Allowed) {
+		LogWarning("Character [{}] zone admission blocked by unresolved/unavailable housing custody state", CharacterID());
+		RejectInventorySessionAdmission();
+		Disconnect();
+		return;
+	}
+
+	// Mercenary coin payments share this ownership fence even when housing
+	// gameplay is disabled. Claim before antighost callbacks or profile loading.
+	if ((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs)) && !ClaimInventorySessionReservation()) {
+		LogWarning("Character [{}] inventory-session admission unavailable or already owned", CharacterID());
+		RejectInventorySessionAdmission();
+		Disconnect();
 		return;
 	}
 
@@ -1357,13 +1531,33 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 	// set to full support in case they're a gm with items in disabled expansion slots...but, have their gm flag off...
 	// item loss will occur when they use the 'empty' slots, if this is not done
 	m_inv.SetGMInventory(true);
-	loaditems = database.GetInventory(this); /* Load Character Inventory */
+	// Recheck already-issued ingress authorization just before GetInventory,
+	// which rewrites runtime GUID metadata. No timeout lease takeover.
+	if (Housing::CheckCustodyAdmission(database, CharacterID(),
+		RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || bool(InventorySessionReleaseTicket())) !=
+		Housing::InventoryAdmission::Allowed) {
+		RejectInventorySessionAdmission();
+		Disconnect();
+		return;
+	}
+	if ((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || InventorySessionReleaseTicket()) && !HasInventorySessionReservation()) {
+		RejectInventorySessionAdmission();
+		Disconnect();
+		return;
+	}
+	loaditems = Housing::HousePreload::LoadInventoryWithHouseBindings(*this,database,RuleB(Housing,EnablePlayerHousing));
+	if ((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || InventorySessionReleaseTicket()) && !loaditems) {
+		RejectInventorySessionAdmission();
+		Disconnect();
+		return;
+	}
 	database.LoadCharacterBandolier(cid, &m_pp); /* Load Character Bandolier */
 	database.LoadCharacterBindPoint(cid, &m_pp); /* Load Character Bind */
 	database.LoadCharacterMaterialColor(cid, &m_pp); /* Load Character Material */
 	database.LoadCharacterPotionBelt(cid, &m_pp); /* Load Character Potion Belt */
 	database.LoadCharacterCurrency(cid, &m_pp); /* Load Character Currency into PP */
 	database.LoadCharacterData(cid, &m_pp, &m_epp); /* Load Character Data from DB into PP as well as E_PP */
+ if(!LoadSpiritShroudState())return;
 	database.LoadCharacterSkills(cid, &m_pp); /* Load Character Skills */
 	database.LoadCharacterInspectMessage(cid, &m_inspect_message); /* Load Character Inspect Message */
 	database.LoadCharacterSpellBook(cid, &m_pp); /* Load Character Spell Book */
@@ -1491,7 +1685,9 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 		if (guild_mgr.GetCharInfo(CharacterID(), cgi)) {
 			m_pp.guildrank = cgi.rank;
 		}
-		if (zone->GetZoneID() == Zones::GUILDHALL) {
+		bool housing_guild_context=false;
+		try { auto scope=Housing::GuildPortal::Current(database,zone->GetZoneID(),zone->GetInstanceID(),false);housing_guild_context=scope&&scope->guild==GuildID(); } catch (...) {}
+		if (zone->GetZoneID() == Zones::GUILDHALL || housing_guild_context) {
 			GuildBanker = (guild_mgr.IsGuildLeader(GuildID(), CharacterID()) ||
 				guild_mgr.GetBankerFlag(CharacterID()) ||
 				ClientVersion() >= EQ::versions::ClientVersion::RoF ? true : false
@@ -1524,6 +1720,9 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 		size = 0;
 	}
 
+ // Preserve the captured shroud model scale instead of the player-race default.
+ if(IsSpiritShrouded() && SpiritShroudModelSize()>0)base_size=size=SpiritShroudModelSize();
+
 	/* Check for Invalid points */
 	if (m_pp.ldon_points_guk < 0 || m_pp.ldon_points_guk > 2000000000) { m_pp.ldon_points_guk = 0; }
 	if (m_pp.ldon_points_mir < 0 || m_pp.ldon_points_mir > 2000000000) { m_pp.ldon_points_mir = 0; }
@@ -1550,6 +1749,7 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 		}
 
 		database.LoadBuffs(this);
+		if (!LoadSpiritShroudRestoredShortBuffs()) return;
 		uint32 max_slots = GetMaxBuffSlots();
 		for (int i = 0; i < BUFF_COUNT; i++) {
 			if (IsValidSpell(buffs[i].spellid)) {
@@ -1712,6 +1912,23 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 	/* The entityid field in the Player Profile is used by the Client in relation to Group Leadership AA */
 	m_pp.entityid = GetID();
 	memcpy(outapp->pBuffer, &m_pp, outapp->size);
+	if (IsSpiritShrouded()) {
+		// Native alternate profiles use the same ownership triples as RespondAA:
+		// highest owned rank ID, cumulative cost, charges. Persisted AA counts
+		// and the server's profile remain in their ordinary storage format.
+		auto* profile = reinterpret_cast<PlayerProfile_Struct*>(outapp->pBuffer);
+		for (auto& owned : profile->aa_array) {
+			if (!owned.AA) continue;
+			auto* ability = zone->GetAlternateAdvancementAbilityByRank(owned.AA);
+			auto* rank = ability ? ability->GetRankByPointsSpent(owned.value) : nullptr;
+			if (rank) {
+				owned.AA = rank->id;
+				owned.value = rank->total_cost;
+			} else {
+				owned = {};
+			}
+		}
+	}
 	outapp->priority = 6;
 	FastQueuePacket(&outapp);
 
@@ -1889,6 +2106,7 @@ void Client::Handle_OP_AAAction(const EQApplicationPacket *app)
 		return;
 	}
 	AA_Action* action = (AA_Action*)app->pBuffer;
+ if(TrySpiritShroudAbility(action->action,action->ability))return;
 
 	if (action->action == aaActionActivate) {//AA Hotkey
 		LogAA("Activating AA [{}]", action->ability);
@@ -1921,6 +2139,172 @@ void Client::Handle_OP_AAAction(const EQApplicationPacket *app)
 	}
 }
 
+void Client::Handle_OP_AchievementCompareRequest(const EQApplicationPacket *app)
+{
+	constexpr uint32 kCompareRequestRateLimitMs = 1000;
+	constexpr float kCompareDistanceSquared = 20.0f * 20.0f;
+	if (
+		ClientVersion() != EQ::versions::ClientVersion::RoF2 ||
+		app->size != sizeof(uint32) * 2
+	) {
+		return;
+	}
+
+	uint32 target_spawn_id = 0;
+	uint32 requester_spawn_id = 0;
+	std::memcpy(&target_spawn_id, app->pBuffer, sizeof(target_spawn_id));
+	std::memcpy(
+		&requester_spawn_id,
+		app->pBuffer + sizeof(target_spawn_id),
+		sizeof(requester_spawn_id)
+	);
+	if (
+		requester_spawn_id != GetID() ||
+		target_spawn_id > std::numeric_limits<uint16>::max()
+	) {
+		return;
+	}
+
+	auto target = entity_list.GetClientByID(static_cast<uint16>(target_spawn_id));
+	if (
+		!target ||
+		GetTarget() != target ||
+		DistanceSquared(GetPosition(), target->GetPosition()) >
+			kCompareDistanceSquared
+	) {
+		return;
+	}
+
+	if (
+		m_achievement_compare_request_rate_limit.Enabled() &&
+		!m_achievement_compare_request_rate_limit.Check(false)
+	) {
+		return;
+	}
+	m_achievement_compare_request_rate_limit.Start(kCompareRequestRateLimitMs);
+	target->SendAchievementCompareSnapshotTo(*this);
+}
+
+void Client::Handle_OP_AchievementLinkRequest(const EQApplicationPacket *app)
+{
+	constexpr size_t kMaximumPlayerNameLength = 63;
+	constexpr uint32 kLinkRequestRateLimitMs = 100;
+	if (
+		ClientVersion() != EQ::versions::ClientVersion::RoF2 ||
+		app->size < sizeof(uint32) + sizeof(int16) + 2
+	) {
+		return;
+	}
+
+	const auto name_terminator = static_cast<const uint8 *>(
+		std::memchr(app->pBuffer, '\0', app->size)
+	);
+	if (!name_terminator) {
+		return;
+	}
+	const auto player_name_length = static_cast<size_t>(
+		name_terminator - app->pBuffer
+	);
+	if (
+		player_name_length == 0 ||
+		player_name_length > kMaximumPlayerNameLength
+	) {
+		return;
+	}
+
+	const auto identity_offset = player_name_length + 1;
+	if (
+		identity_offset + sizeof(uint32) + sizeof(int16) > app->size
+	) {
+		return;
+	}
+
+	uint32 achievement_id = 0;
+	int16 status_value = 0;
+	std::memcpy(
+		&achievement_id,
+		app->pBuffer + identity_offset,
+		sizeof(achievement_id)
+	);
+	std::memcpy(
+		&status_value,
+		app->pBuffer + identity_offset + sizeof(achievement_id),
+		sizeof(status_value)
+	);
+	if (
+		status_value <
+			static_cast<int16>(EQ::Achievements::Status::Completed) ||
+		status_value >
+			static_cast<int16>(EQ::Achievements::Status::Hidden)
+	) {
+		return;
+	}
+
+	const auto definition =
+		AchievementManager::Instance().FindDefinition(achievement_id);
+	if (
+		!definition ||
+		app->size != EQ::Achievements::ComparisonPayloadSize(
+			player_name_length,
+			*definition,
+			static_cast<EQ::Achievements::Status>(status_value)
+		)
+	) {
+		return;
+	}
+
+	std::string player_name(
+		reinterpret_cast<const char *>(app->pBuffer),
+		player_name_length
+	);
+	auto linked_player = entity_list.GetClientByName(player_name.c_str());
+	if (!linked_player) {
+		return;
+	}
+	if (
+		m_achievement_link_request_rate_limit.Enabled() &&
+		!m_achievement_link_request_rate_limit.Check(false)
+	) {
+		return;
+	}
+	m_achievement_link_request_rate_limit.Start(kLinkRequestRateLimitMs);
+	linked_player->SendAchievementComparisonTo(*this, achievement_id);
+}
+
+void Client::Handle_OP_AchievementRequest(const EQApplicationPacket *app)
+{
+	constexpr uint8 kRoF2AchievementWindowRequest = 0x30;
+	constexpr uint32 kAchievementWindowRequestRateLimitMs = 1000;
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2) {
+		return;
+	}
+
+	if (
+		app->size != 0 &&
+		(app->size != sizeof(kRoF2AchievementWindowRequest) ||
+		 !app->pBuffer ||
+		 app->pBuffer[0] != kRoF2AchievementWindowRequest)
+	) {
+		return;
+	}
+
+	if (
+		m_achievement_window_request_rate_limit.Enabled() &&
+		!m_achievement_window_request_rate_limit.Check(false)
+	) {
+		return;
+	}
+	m_achievement_window_request_rate_limit.Start(kAchievementWindowRequestRateLimitMs);
+
+	SendAchievementPackets();
+
+	// RoF2 has a dedicated zero-payload window opcode. OP_AchievementState is
+	// comparison-only and enables the comparison pane even when its payload is
+	// empty.
+	auto open_window = new EQApplicationPacket(OP_AchievementWindow, 0);
+	FastQueuePacket(&open_window);
+}
+
 void Client::Handle_OP_AchievementReward(const EQApplicationPacket *app)
 {
 	HandleRewardSelectionPacket(
@@ -1947,7 +2331,10 @@ void Client::HandleRewardSelectionPacket(
 	auto result = selection.HandlePacket(*app, channel);
 	switch (result.type) {
 	case RewardSelectionPacketResultType::ViewRequested:
-		if (
+		if (result.requested_source == RewardSelectionSource::Achievement) {
+			SendAchievementRewardDisplay(result.requested_id);
+		}
+		else if (
 			result.requested_source == RewardSelectionSource::Task &&
 			task_state
 		) {
@@ -1964,6 +2351,7 @@ void Client::HandleRewardSelectionPacket(
 		if (task_state) {
 			task_state->RestorePendingRewardSelection(this);
 		}
+		RestorePendingAchievementRewardSelection();
 		if (
 			!selection.HasActiveSession(RewardSelectionChannel::Claimable)
 		) {
@@ -1982,6 +2370,13 @@ void Client::HandleRewardSelectionPacket(
 
 	auto delivery_result = RewardSelectionDeliveryResult::RetryableFailure;
 	switch (result.claim->session.source.source) {
+	case RewardSelectionSource::Achievement:
+		delivery_result = ClaimAchievementReward(
+			result.claim->session.pending_reward_id,
+			result.claim->session.reward_set.reward_set_id,
+			result.claim->selected_option_id
+		);
+		break;
 	case RewardSelectionSource::Task:
 		if (task_state) {
 			delivery_result = task_state->ClaimRewardSelection(
@@ -2002,6 +2397,7 @@ void Client::HandleRewardSelectionPacket(
 	if (task_state) {
 		task_state->RestorePendingRewardSelection(this);
 	}
+	RestorePendingAchievementRewardSelection();
 	if (!selection.HasActiveSession(RewardSelectionChannel::Claimable)) {
 		selection.Clear(RewardSelectionChannel::Claimable);
 	}
@@ -2702,6 +3098,7 @@ void Client::Handle_OP_AltCurrencyMerchantRequest(const EQApplicationPacket *app
 
 void Client::Handle_OP_AltCurrencyPurchase(const EQApplicationPacket *app)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return; }
 	VERIFY_PACKET_LENGTH(OP_AltCurrencyPurchase, app, AltCurrencyPurchaseItem_Struct);
 	AltCurrencyPurchaseItem_Struct *purchase = (AltCurrencyPurchaseItem_Struct*)app->pBuffer;
 	NPC* tar = entity_list.GetNPCByID(purchase->merchant_entity_id);
@@ -2814,6 +3211,7 @@ void Client::Handle_OP_AltCurrencyPurchase(const EQApplicationPacket *app)
 
 void Client::Handle_OP_AltCurrencyReclaim(const EQApplicationPacket *app)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return; }
 	VERIFY_PACKET_LENGTH(OP_AltCurrencyReclaim, app, AltCurrencyReclaim_Struct);
 	AltCurrencyReclaim_Struct *reclaim = (AltCurrencyReclaim_Struct*)app->pBuffer;
 	uint32 item_id = zone->GetCurrencyItemID(reclaim->currency_id);
@@ -2858,6 +3256,7 @@ void Client::Handle_OP_AltCurrencyReclaim(const EQApplicationPacket *app)
 
 void Client::Handle_OP_AltCurrencySell(const EQApplicationPacket *app)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return; }
 	VERIFY_PACKET_LENGTH(OP_AltCurrencySell, app, AltCurrencySellItem_Struct);
 	EQApplicationPacket *outapp = app->Copy();
 	AltCurrencySellItem_Struct *sell = (AltCurrencySellItem_Struct*)outapp->pBuffer;
@@ -4782,7 +5181,34 @@ void Client::Handle_OP_ClickDoor(const EQApplicationPacket *app)
 		);
 	}
 
+	if (Housing::HouseRuntime::HandleVerifiedGuildLobbyDoor(*this,currentdoor->GetDoorID(),within_distance)) return;
+	if (HandleHousingInteriorDoor(currentdoor->GetDoorID(),within_distance)) return;
+
+	// Original type160 markers identify one plot. Inspect that plot directly;
+	// the normal inspection handler publishes its authoritative purchase offer.
+	if (RuleB(Housing, EnablePlayerHousing) && zone && zone->GetZoneID() == 712 &&
+		!zone->GetInstanceVersion() && zone->GetInstanceID() &&
+		ClientVersion() == EQ::versions::ClientVersion::RoF2 && currentdoor->GetOpenType() == 160) {
+		const auto estate = Housing::PlotMarker::InspectionEstate(this,currentdoor->GetDoorID(),RuleI(Range, MaxDistanceToClickDoors),within_distance);
+		if (estate && SendHousingZoneCatalogChecked()) {
+			EQApplicationPacket inspect(OP_RealEstateInspect,4);
+			for (size_t i=0;i<4;++i) inspect.pBuffer[i]=uint8_t(*estate>>(8*i));
+			Handle_OP_RealEstateInspect(&inspect);
+			LogInfo("Native housing plot marker inspected actor [{}] door [{}] estate [{}]",CharacterID(),currentdoor->GetDoorID(),*estate);
+		}
+		return;
+	}
+
+
 	// don't spam scripts with client controlled doors if not within distance
+	if (RuleB(Housing, EnablePlayerHousing) && zone->GetZoneID() == 344 &&
+		currentdoor->GetDoorID() == 77 && within_distance &&
+		ClientVersion() == EQ::versions::ClientVersion::RoF2) {
+		m_housing_gate_open = true;
+		SendHousingNeighborhoods();
+		return;
+	}
+
 	if (within_distance) {
 		int quest_return = 0;
 		if (parse->PlayerHasQuestSub(EVENT_CLICK_DOOR)) {
@@ -6554,8 +6980,11 @@ void Client::Handle_OP_FeignDeath(const EQApplicationPacket *app)
 	return;
 }
 
+bool HandleHousingPlotFind(Client*,const EQApplicationPacket*);
+
 void Client::Handle_OP_FindPersonRequest(const EQApplicationPacket *app)
 {
+	if (HandleHousingPlotFind(this,app)) return;
 	if (app->size != sizeof(FindPersonRequest_Struct))
 		printf("Error in FindPersonRequest_Struct. Expected size of: %zu, but got: %i\n", sizeof(FindPersonRequest_Struct), app->size);
 	else {
@@ -7755,12 +8184,11 @@ void Client::Handle_OP_GroupUpdate(const EQApplicationPacket *app)
 
 void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 {
-	if (!GuildBanks) {
-		GuildBankAck();
-		return;
-	}
+	const bool housing_banker=Housing::ServiceNpcs::HasNearby(*this,Housing::ServiceNpcs::Service::GuildBank);
+	if (!GuildBanks && housing_banker) GuildBanks=new GuildBankManager;
+	if (!GuildBanks) { GuildBankAck(); return; }
 
-	if (zone->GetZoneID() != Zones::GUILDHALL) {
+	if (zone->GetZoneID() != Zones::GUILDHALL && !housing_banker) {
 		Message(Chat::Red, "The Guild Bank is not available in this zone.");
 		GuildBankAck();
 		return;
@@ -7789,7 +8217,37 @@ void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 		return;
 	}
 
-	if (!IsGuildBanker())
+	// Validate each native action before reading its typed fields.
+	size_t required=0;
+	switch(Action){
+	 case GuildBankPromote:required=sizeof(GuildBankPromote_Struct);break;
+	 case GuildBankViewItem:required=sizeof(GuildBankViewItem_Struct);break;
+	 case GuildBankPermissions:required=sizeof(GuildBankPermissions_Struct);break;
+	 case GuildBankWithdraw:case GuildBankSplitStacks:case GuildBankMergeStacks:required=sizeof(GuildBankWithdrawItem_Struct);break;
+	 case GuildBankDeposit:required=sizeof(uint32);break;
+	 default:GuildBankAck();return;
+	}
+	if(app->size<required){GuildBankAck();return;}
+	if(Action==GuildBankPromote&&reinterpret_cast<const GuildBankPromote_Struct*>(app->pBuffer)->Slot>=40){GuildBankAck();return;}
+	if(Action==GuildBankPermissions){auto*r=reinterpret_cast<const GuildBankPermissions_Struct*>(app->pBuffer);if(r->SlotID>=200||r->Permissions>3||!std::memchr(r->MemberName,0,sizeof(r->MemberName))){GuildBankAck();return;}}
+	if(Action==GuildBankViewItem){auto*r=reinterpret_cast<const GuildBankViewItem_Struct*>(app->pBuffer);if(r->Area>1||r->SlotID>=(r->Area?200:40)){GuildBankAck();return;}}
+	if(Action==GuildBankWithdraw||Action==GuildBankSplitStacks||Action==GuildBankMergeStacks){auto*r=reinterpret_cast<const GuildBankWithdrawItem_Struct*>(app->pBuffer);if(r->Area>1||r->SlotID>=(r->Area?200:40)||(Action!=GuildBankMergeStacks&&(!r->Quantity||r->Quantity>INT16_MAX))){GuildBankAck();return;}}
+	Housing::ServiceBank::Request request(*this);
+	if(!request.Ready()){
+		if(Action==GuildBankDeposit){
+			GuildBankDepositAck(true,sentAction);
+			// RoF optimistically clears the cursor on deposit. A refused stale
+			// request keeps its authoritative item; republish it without copying,
+			// moving or saving inventory outside the bank transaction.
+			if(ClientVersion()>=EQ::versions::ClientVersion::RoF)
+				if(auto* item=GetInv().GetItem(EQ::invslot::slotCursor))SendItemPacket(EQ::invslot::slotCursor,item,ItemPacketTrade);
+		}else GuildBankAck();
+		return;
+	}
+	if(housing_banker)SetGuildBanker(guild_mgr.IsGuildLeader(GuildID(),CharacterID())||guild_mgr.GetBankerFlag(CharacterID())||ClientVersion()>=EQ::versions::ClientVersion::RoF);
+
+	const bool actual_banker=guild_mgr.IsGuildLeader(GuildID(),CharacterID())||guild_mgr.GetBankerFlag(CharacterID());
+	if (!actual_banker)
 	{
 		if (Action != GuildBankDeposit && Action != GuildBankViewItem && Action != GuildBankWithdraw)
 		{
@@ -7864,7 +8322,7 @@ void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 			const auto cursor_item_inst = GetInv().GetItem(EQ::invslot::slotCursor);
 			bool       allowed          = true;
 
-			if (!cursor_item_inst) {
+			if (!cursor_item_inst || std::distance(GetInv().cursor_cbegin(),GetInv().cursor_cend())!=1) {
 				Message(Chat::Red, "No Item on the cursor.");
 				GuildBankDepositAck(true, sentAction);
 				return;
@@ -7884,6 +8342,7 @@ void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 
 			if (!cursor_item->NoDrop ||
 				cursor_item_inst->IsAttuned() ||
+				cursor_item_inst->GetHousingHouseID() || cursor_item_inst->GetHousingCrateID() || cursor_item_inst->GetEvolveUniqueID() || cursor_item_inst->IsScaling() || !cursor_item_inst->GetCustomDataString().empty() ||
 				cursor_item_inst->IsNoneEmptyContainer() ||
 				cursor_item->NoRent == 0 ||
 				(cursor_item->LoreFlag && GuildBanks->HasItem(GuildID(), cursor_item->ID))
@@ -7999,9 +8458,9 @@ void Client::Handle_OP_GuildBank(const EQApplicationPacket *app)
 				gbwis->Quantity = inst->GetCharges();
 			}
 
-			PushItemOnCursor(*inst.get());
+			if(!GuildBanks->DeleteItem(GuildID(),gbwis->Area,gbwis->SlotID,gbwis->Quantity,this)){GuildBankAck();break;}
+			if(!PushItemOnCursor(*inst.get())){Housing::ServiceBank::AbortCurrent();GuildBankAck();break;}
 			SendItemPacket(EQ::invslot::slotCursor, inst.get(), ItemPacketLimbo);
-			GuildBanks->DeleteItem(GuildID(), gbwis->Area, gbwis->SlotID, gbwis->Quantity, this);
 
 			if (PlayerEventLogs::Instance()->IsEventEnabled(PlayerEvent::GUILD_BANK_WITHDRAWAL)) {
 				PlayerEvent::GuildBankTransaction log{};
@@ -10506,6 +10965,133 @@ void Client::Handle_OP_Mend(const EQApplicationPacket *app)
 	return;
 }
 
+void Client::Handle_OP_MercenaryTransferRequest(const EQApplicationPacket *app)
+{
+	MercenaryTransfer::Request(*this, *app);
+}
+
+void Client::Handle_OP_MercenaryTransferResponse(const EQApplicationPacket *app)
+{
+	MercenaryTransfer::Respond(*this, *app);
+}
+
+void Client::Handle_OP_MercenaryAssist(const EQApplicationPacket *app)
+{
+	if (app->size != 1 || app->pBuffer[0] != 0x30 || !RuleB(Mercs, AllowMercs)) {
+		return;
+	}
+	if (Merc* merc = GetMerc()) {
+		// The role-aware AI owns target/awareness checks. A healer's call
+		// temporarily permits puller healing and does not require an enemy target.
+		merc->CallAssist();
+	}
+}
+
+void Client::Handle_OP_MercenarySwitch(const EQApplicationPacket *app)
+{
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2) {
+		Handle_OP_MercenarySwitchLegacy(app);
+		return;
+	}
+	if (app->size != sizeof(uint32) || !RuleB(Mercs, AllowMercs)) {
+		return;
+	}
+	uint32 requested = 0;
+	memcpy(&requested, app->pBuffer, sizeof(requested));
+	uint8 slot = MAXMERCS;
+	uint32 row = 0;
+	for (uint8 candidate = 0; candidate < MAXMERCS; ++candidate) {
+		const auto& info = GetMercInfo(candidate);
+		if (!info.mercid || !zone->GetMercTemplate(info.MercTemplateID)) {
+			continue;
+		}
+		if (row++ == requested) {
+			slot = candidate;
+			break;
+		}
+	}
+	auto reply = [this](uint32 result, uint32 delay = 0) {
+		auto outapp = new EQApplicationPacket(OP_MercenarySwitch, 12);
+		uint32 data[3] = {0, delay, result};
+		memcpy(outapp->pBuffer, data, sizeof(data));
+		FastQueuePacket(&outapp);
+	};
+	if (slot == MAXMERCS || slot >= GetMercenaryCapacity()) {
+		reply(3);
+		return;
+	}
+	if (slot == GetMercSlot()) {
+		reply(0);
+		SendMercPersonalInfo();
+		return;
+	}
+	if (dead || GetHP() <= 0) {
+		reply(4);
+		return;
+	}
+	if (GetAggroCount() || !CanFastRegen()) {
+		reply(1);
+		return;
+	}
+	// Contract deadlines survive a crash even if the character timer row
+	// was not saved. Switching must not bypass suspend/death recovery.
+	const auto now = time(nullptr);
+	if (GetMercInfo(slot).SuspendedTime > now ||
+		(GetMercInfo().IsSuspended && GetMercInfo().SuspendedTime > now)) {
+		reply(5);
+		return;
+	}
+	if (!GetPTimers().Expired(&database, pTimerMercSuspend, false)) {
+		reply(5);
+		return;
+	}
+	if (!CheckCanSpawnMerc(GetMercInfo(slot).MercTemplateID)) {
+		reply(2);
+		return;
+	}
+	const uint8 previous_slot = GetMercSlot();
+	if (Merc* current = GetMerc()) {
+		if (!current->Suspend()) {
+			reply(5);
+			return;
+		}
+	}
+	// The previous cooldown was checked before this operation. The cooldown
+	// created by suspending the old contract belongs to this same switch;
+	// it must not prevent activating the new selected contract.
+	SetMercSlot(slot);
+	Merc* merc = Merc::LoadMercenary(this, zone->GetMercTemplate(GetMercInfo().MercTemplateID), 0, true);
+	if (!merc || !SpawnMerc(merc, false)) {
+		if (merc) {
+			Merc::DiscardFailedSpawn(merc);
+		}
+		// Keep the failed target's owned record intact; only its zone entity
+		// is removed. The previously saved contract remains suspended.
+		SetMercID(0);
+		GetMercTimer()->Disable();
+		SetMercSlot(previous_slot);
+		if (m_mercenary_persistence_failed) {
+			return;
+		}
+		reply(2);
+		SendMercPersonalInfo();
+		SendMercTimer(nullptr);
+		return;
+	}
+	PersistMercenarySelection();
+	reply(0);
+	SendMercPersonalInfo();
+	SendMercTimer(merc);
+}
+
+void Client::Handle_OP_MercenaryAutoAssist(const EQApplicationPacket *app)
+{
+	if (app->size != 1 || app->pBuffer[0] > 1 || !RuleB(Mercs, AllowMercs)) {
+		return;
+	}
+	SetMercenaryAutoAssist(app->pBuffer[0] != 0);
+}
+
 void Client::Handle_OP_MercenaryCommand(const EQApplicationPacket *app)
 {
 	if (app->size != sizeof(MercenaryCommand_Struct))
@@ -10525,37 +11111,31 @@ void Client::Handle_OP_MercenaryCommand(const EQApplicationPacket *app)
 	if (!RuleB(Mercs, AllowMercs))
 		return;
 
-	if (option >= 0)
+	if (merc_command == 1)
 	{
-		Merc* merc = GetMerc();
-		GetMercInfo().State = option;
-
-		if (merc)
-		{
-			uint8 numStances = 0;
-
-			//get number of available stances for the current merc
-			std::list<MercStanceInfo> mercStanceList = zone->merc_stance_list[merc->GetMercenaryTemplateID()];
-			auto iter = mercStanceList.begin();
-			while (iter != mercStanceList.end()) {
-				numStances++;
-				++iter;
-			}
-
-			MercTemplate* mercTemplate = zone->GetMercTemplate(GetMerc()->GetMercenaryTemplateID());
-			if (mercTemplate)
-			{
-				//check to see if selected option is a valid stance slot (option is the slot the stance is in, not the actual stance)
-				if (option >= 0 && option < numStances)
-				{
-					merc->SetStance(mercTemplate->Stances[option]);
-					GetMercInfo().Stance = mercTemplate->Stances[option];
-
-					Log(Logs::General, Logs::Mercenaries, "Set Stance: %u for %s (%s)", merc->GetStance(), merc->GetName(), GetName());
-				}
-			}
-		}
+		DismissMerc(GetMercInfo().mercid);
+		return;
 	}
+
+	// The option is the index in the stance list advertised by the server.
+	// It is not the mercenary lifecycle State (normal/suspended).
+	Merc* merc = GetMerc();
+	if (!merc || option < 0 || merc->IsSuspended() || merc->IsCharmed() || merc->IsFeared()) {
+		return;
+	}
+
+	const auto stances = zone->merc_stance_list.find(merc->GetMercenaryTemplateID());
+	if (stances == zone->merc_stance_list.end() ||
+		static_cast<size_t>(option) >= stances->second.size()) {
+		return;
+	}
+
+	auto stance = stances->second.begin();
+	std::advance(stance, option);
+	merc->SetStance(stance->StanceID);
+	GetMercInfo().Stance = stance->StanceID;
+	merc->Save();
+	Log(Logs::General, Logs::Mercenaries, "Set Stance: %u for %s (%s)", merc->GetStance(), merc->GetName(), GetName());
 }
 
 void Client::Handle_OP_MercenaryDataRequest(const EQApplicationPacket *app)
@@ -10576,19 +11156,11 @@ void Client::Handle_OP_MercenaryDataRequest(const EQApplicationPacket *app)
 
 	Log(Logs::General, Logs::Mercenaries, "Data Request for Merchant ID (%i) for %s.", merchant_id, GetName());
 
-	//client is requesting data about currently owned mercenary
+	// A selected slot may be empty just after dismissal while other owned
+	// contracts remain. The roster sender counts all owned slots itself.
 	if (merchant_id == 0) {
-
-		//send info about your current merc(s)
-		if (GetNumberOfMercenaries() > 0)
-		{
-			Log(Logs::General, Logs::Mercenaries, "SendMercPersonalInfo Request for %s.", GetName());
-			SendMercPersonalInfo();
-		}
-		else
-		{
-			Log(Logs::General, Logs::Mercenaries, "SendMercPersonalInfo Not Sent - no mercs owned for %s.", GetName());
-		}
+		SendMercPersonalInfo();
+		return;
 	}
 
 	if (!RuleB(Mercs, AllowMercs)) {
@@ -10608,23 +11180,18 @@ void Client::Handle_OP_MercenaryDataRequest(const EQApplicationPacket *app)
 			return;
 		}
 
-		mercTypeCount = tar->GetNumMercenaryTypes(static_cast<unsigned int>(ClientVersion()));
-		mercCount = tar->GetNumberOfMercenaries(static_cast<unsigned int>(ClientVersion()));
-
-		if (mercCount > MAX_MERC)
-			return;
-
 		std::list<MercType> mercTypeList = tar->GetMercenaryTypesList(static_cast<unsigned int>(ClientVersion()));
 		std::list<MercData> mercDataList = tar->GetMercenariesList(static_cast<unsigned int>(ClientVersion()));
+		mercTypeCount = mercTypeList.size();
+		mercCount = mercDataList.size();
+
+		if (mercCount > MAX_MERC || mercTypeCount > MAX_MERC_GRADES)
+			return;
 
 		int i = 0;
-		int StanceCount = 0;
-
-		for (auto mercListItr = mercDataList.begin(); mercListItr != mercDataList.end(); ++mercListItr) {
-			auto siter = zone->merc_stance_list[mercListItr->MercTemplateID].begin();
-			for (siter = zone->merc_stance_list[mercListItr->MercTemplateID].begin(); siter != zone->merc_stance_list[mercListItr->MercTemplateID].end(); ++siter)
-			{
-				StanceCount++;
+		for (const auto& entry : mercDataList) {
+			if (zone->merc_stance_list[entry.MercTemplateID].size() > MAX_MERC_STANCES) {
+				return;
 			}
 		}
 
@@ -10702,10 +11269,7 @@ void Client::Handle_OP_MercenaryDataUpdateRequest(const EQApplicationPacket *app
 
 	Log(Logs::General, Logs::Mercenaries, "Data Update Request Received for %s.", GetName());
 
-	if (GetMercenaryID())
-	{
-		SendMercPersonalInfo();
-	}
+	SendMercPersonalInfo();
 }
 
 void Client::Handle_OP_MercenaryDismiss(const EQApplicationPacket *app)
@@ -10765,27 +11329,46 @@ void Client::Handle_OP_MercenaryHire(const EQApplicationPacket *app)
 	if (merc_template)
 	{
 
+		uint8 initial_stance = Stance::Balanced;
+		if (ClientVersion() == EQ::versions::ClientVersion::RoF2) {
+			// Native merchant combo stores stance INDEX as row data and sends it
+			// at hire+4. It is not a payment selector or an unused constant.
+			const auto available = zone->merc_stance_list.find(merc_template_id);
+			if (available == zone->merc_stance_list.end() || merc_unk1 >= available->second.size()) return;
+			auto selected = available->second.begin();
+			std::advance(selected, merc_unk1);
+			initial_stance = selected->StanceID;
+		}
+
 		Mob* merchant = entity_list.GetNPCByID(merchant_id);
 		if (!CheckCanHireMerc(merchant, merc_template_id))
 		{
 			return;
 		}
 
-		// Suspend active merc if one exists before hiring into a new slot
-		Merc* current_merc = GetMerc();
-		if (current_merc) {
-			current_merc->Suspend();
-			current_merc->SetOwnerID(0);
-			SetMercID(0);
+		const uint8 previous_slot = GetMercSlot();
+		uint8 empty_slot = MAXMERCS;
+		for (uint8 slot = 0; slot < MAXMERCS; ++slot) {
+			if (!GetMercInfo(slot).mercid) {
+				empty_slot = slot;
+				break;
+			}
 		}
-
-		// Select a free slot for the new hire
-		int free_slot = GetFirstFreeMercSlot();
-		if (free_slot < 0) {
+		if (empty_slot == MAXMERCS) {
 			SendMercResponsePackets(6);
 			return;
 		}
-		SetMercSlot(static_cast<uint8>(free_slot));
+		SetMercSlot(empty_slot);
+		auto restore_selection = [this, previous_slot]() {
+			// If cleanup failed, retain the new authoritative owner selection.
+			if (!GetMerc()) {
+				GetMercTimer()->Disable();
+				if (!GetMercInfo().mercid) {
+					SetMercSlot(previous_slot);
+				}
+			}
+			SendMercPersonalInfo();
+		};
 
 		// Set time remaining to max on Hire
 		GetMercInfo().MercTimerRemaining = RuleI(Mercs, UpkeepIntervalMS);
@@ -10793,29 +11376,57 @@ void Client::Handle_OP_MercenaryHire(const EQApplicationPacket *app)
 		// Get merc, assign it to client & spawn
 		Merc* merc = Merc::LoadMercenary(this, merc_template, merchant_id, false);
 
-		if (merc)
-		{
-			SpawnMerc(merc, true);
-			merc->Save();
-
-			if (RuleB(Mercs, ChargeMercPurchaseCost))
-			{
-				uint32 cost = Merc::CalcPurchaseCost(merc_template->MercTemplateID, GetLevel()) * 100; // Cost is in gold
-				TakeMoneyFromPP(cost, true);
+		if (!merc) {
+			restore_selection();
+			SendMercResponsePackets(3);
+			return;
+		}
+		merc->SetStance(initial_stance);
+		GetMercInfo().Stance = initial_stance;
+		const bool spawned = SpawnMerc(merc, true);
+		const uint64 cost = RuleB(Mercs, ChargeMercPurchaseCost) ?
+			uint64(Merc::CalcPurchaseCost(merc_template->MercTemplateID, GetLevel())) * 100 : 0;
+		if (!spawned || GetMerc() != merc || merc->IsSuspended() || !FinalizeMercenaryPayment(merc, cost)) {
+			// A failed or uncertain transaction never deletes a possibly committed
+			// paid contract. The rejected session reloads authoritative state.
+			Merc::DiscardFailedSpawn(merc);
+			SetMerc(nullptr);
+			GetMercTimer()->Disable();
+			if (m_mercenary_persistence_failed) {
+				return;
 			}
-
-			// approved hire request
-			SendMercMerchantResponsePacket(0);
-
-			// Update the client's Manage tab with the newly hired merc info
-			SendMercPersonalInfo();
-			SendMercTimer(merc);
+			restore_selection();
+			SendMercResponsePackets(spawned ? 1 : 3);
+			return;
 		}
-		else
-		{
-			//merc failed to spawn
-			SendMercMerchantResponsePacket(3);
+
+		// The provisional group join occurred before the contract had its
+		// durable ID. Publish the complete in-memory roster only after the
+		// guarded purchase/membership commit, then synchronize member health.
+		if (Group* group = merc->GetGroup()) {
+			for (int index = 0; index < MAX_GROUP_MEMBERS; ++index) {
+				Mob* member = group->members[index];
+				if (member && member->IsClient()) {
+					group->SendUpdate(groupActUpdate, member);
+					Client* recipient = member->CastToClient();
+					if (recipient->ClientVersion() >= EQ::versions::ClientVersion::SoD) {
+						group->NotifyMainTank(recipient, 1);
+						group->NotifyPuller(recipient, 1);
+					}
+					group->NotifyMainAssist(recipient, 1);
+					group->NotifyMarkNPC(recipient);
+					group->NotifyAssistTarget(recipient);
+					group->NotifyTankTarget(recipient);
+					group->NotifyPullerTarget(recipient);
+					group->SendMarkedNPCsToMember(recipient);
+					group->SendHPManaEndPacketsTo(member);
+				}
+			}
 		}
+		PersistMercenarySelection();
+		SendMercMerchantResponsePacket(0);
+		SendMercPersonalInfo();
+		SendMercTimer(merc);
 	}
 	else
 	{
@@ -10846,7 +11457,7 @@ void Client::Handle_OP_MercenarySuspendRequest(const EQApplicationPacket *app)
 	SuspendMercCommand();
 }
 
-void Client::Handle_OP_MercenarySwitch(const EQApplicationPacket *app)
+void Client::Handle_OP_MercenarySwitchLegacy(const EQApplicationPacket *app)
 {
 	if (app->size != sizeof(SwitchMercenary_Struct)) {
 		LogDebug("Size mismatch in OP_MercenarySwitch expected [{}] got [{}]", sizeof(SwitchMercenary_Struct), app->size);
@@ -10945,27 +11556,9 @@ void Client::Handle_OP_MercenaryTimerRequest(const EQApplicationPacket *app)
 		return;
 	}
 
-	// To Do: Load Mercenary Timer Data to properly populate this reply packet
-	// All hard set values for now
-	uint32 entityID = 0;
-	uint32 mercState = 5;
-	uint32 suspendedTime = 0;
-	if (GetMercenaryID()) {
-		Merc* merc = GetMerc();
-
-		if (merc) {
-			entityID = merc->GetID();
-
-			if (GetMercInfo().IsSuspended) {
-				mercState = 1;
-				suspendedTime = GetMercInfo().SuspendedTime;
-			}
-		}
-	}
-
-	if (entityID > 0) {
-		SendMercTimerPacket(entityID, mercState, suspendedTime, GetMercInfo().MercTimerRemaining, RuleI(Mercs, SuspendIntervalMS));
-	}
+	// The shared sender also handles owned, suspended mercenaries, whose
+	// zone entity no longer exists.
+	SendMercTimer(GetMerc());
 }
 
 void Client::Handle_OP_MoveCoin(const EQApplicationPacket *app)
@@ -10995,6 +11588,7 @@ void Client::Handle_OP_MoveItem(const EQApplicationPacket *app)
 	BenchTimer bench;
 
 	MoveItem_Struct* mi = (MoveItem_Struct*) app->pBuffer;
+
 	if (spellend_timer.Enabled() && casting_spell_id && !IsBardSong(casting_spell_id)) {
 		if (mi->from_slot != mi->to_slot && (mi->from_slot <= EQ::invslot::GENERAL_END || mi->from_slot > 39) &&
 			IsValidSlot(mi->from_slot) && IsValidSlot(mi->to_slot)) {
@@ -11014,9 +11608,14 @@ void Client::Handle_OP_MoveItem(const EQApplicationPacket *app)
 		}
 	}
 
-	database.TransactionBegin();
+	if (!database.TransactionBeginStrict().Success()) {
+		SwapItemResync(mi);
+		return;
+	}
+	BeginAchievementInventoryTransaction();
 
-	if (!SwapItem(mi) && IsValidSlot(mi->from_slot) && IsValidSlot(mi->to_slot)) {
+	const bool moved = SwapItem(mi);
+	if (!moved && IsValidSlot(mi->from_slot) && IsValidSlot(mi->to_slot)) {
 		SwapItemResync(mi);
 
 		bool error = false;
@@ -11033,7 +11632,22 @@ void Client::Handle_OP_MoveItem(const EQApplicationPacket *app)
 		}
 	}
 
-	database.TransactionCommit();
+	const auto transaction_failed = database.TransactionStrictFailed();
+	bool inventory_committed = false;
+	if (!transaction_failed) {
+		inventory_committed = database.TransactionCommitStrict().Success();
+	}
+	else {
+		database.TransactionRollbackStrict();
+	}
+	EndAchievementInventoryTransaction(inventory_committed);
+	if (transaction_failed || !inventory_committed) {
+		LogError(
+			"Disconnecting [{}] after an unresolved inventory transaction",
+			GetCleanName()
+		);
+		Disconnect();
+	}
 
 	LogInventory("OP_MoveItem took [{}] ms", bench.elapsedMilliseconds());
 }
@@ -11053,7 +11667,12 @@ void Client::Handle_OP_MoveMultipleItems(const EQApplicationPacket *app)
 		}
 
 		const MultiMoveItem_Struct* multi_move = reinterpret_cast<const MultiMoveItem_Struct*>(app->pBuffer);
-		if (app->size != sizeof(MultiMoveItem_Struct) + sizeof(MultiMoveItemSub_Struct) * multi_move->count) {
+		if (
+			!multi_move->count ||
+			app->size !=
+				sizeof(MultiMoveItem_Struct) +
+				sizeof(MultiMoveItemSub_Struct) * multi_move->count
+		) {
 			LinkDead();
 			return; // Packet size does not match expected size
 		}
@@ -11074,6 +11693,13 @@ void Client::Handle_OP_MoveMultipleItems(const EQApplicationPacket *app)
 			}
 		}
 
+		if (!database.TransactionBeginStrict().Success()) {
+			Message(Chat::Red, "Unable to persist the multi-item move.");
+			return;
+		}
+		BeginAchievementInventoryTransaction();
+		bool operation_valid = true;
+
 		// This is a left click which is purely additive. This should always be cursor object or cursor bag contents into general\bank\whatever bag
 		if (left_click) {
 			for (int i = 0; i < multi_move->count; i++) {
@@ -11088,7 +11714,13 @@ void Client::Handle_OP_MoveMultipleItems(const EQApplicationPacket *app)
 				}
 
 				// This sends '1' as the stack count for unstackable items, which our titanium-era SwapItem blows up
-				if (m_inv.GetItem(mi->from_slot)->IsStackable()) {
+				auto *source_item = m_inv.GetItem(mi->from_slot);
+				if (!source_item) {
+					operation_valid = false;
+					safe_delete(mi);
+					break;
+				}
+				if (source_item->IsStackable()) {
 					mi->number_in_stack = multi_move->moves[i].number_in_stack;
 				} else {
 					mi->number_in_stack = 0;
@@ -11103,6 +11735,10 @@ void Client::Handle_OP_MoveMultipleItems(const EQApplicationPacket *app)
 					}
 				}
 				safe_delete(mi);
+				if (database.TransactionStrictFailed()) {
+					operation_valid = false;
+					break;
+				}
 			}
 		// This is the swap.
 		// Client behavior is just to move stacks without combining them
@@ -11140,18 +11776,46 @@ void Client::Handle_OP_MoveMultipleItems(const EQApplicationPacket *app)
 
 				if (move.item) {
 					items.push_back(move);
-					database.SaveInventory(CharacterID(), NULL, from_slot); // We have to manually save inventory here.
+					if (!database.SaveInventory(CharacterID(), NULL, from_slot)) {
+						operation_valid = false;
+						break;
+					}
 				} else {
 					LinkDead();
-					return; // Prevent inventory desync here. Forcing a resync would be better, but we don't have a MoveItem struct to work with.
+					operation_valid = false;
+					break;
 				}
 			}
 
-			for (const MoveInfo& move : items) {
-				PutItemInInventory(move.to_slot, *move.item); // This saves inventory too
+			if (operation_valid) {
+				for (auto &move : items) {
+					if (!PutItemInInventory(move.to_slot, *move.item)) {
+						operation_valid = false;
+						break;
+					}
+				}
+			}
+			for (auto &move : items) {
+				safe_delete(move.item);
 			}
 		}
 
+		const auto transaction_failed = database.TransactionStrictFailed();
+		bool inventory_committed = false;
+		if (operation_valid && !transaction_failed) {
+			inventory_committed = database.TransactionCommitStrict().Success();
+		}
+		else {
+			database.TransactionRollbackStrict();
+		}
+		EndAchievementInventoryTransaction(operation_valid && inventory_committed);
+		if (!operation_valid || transaction_failed || !inventory_committed) {
+			LogError(
+				"Disconnecting [{}] after an unresolved multi-item inventory transaction",
+				GetCleanName()
+			);
+			Disconnect();
+		}
 	} else {
 		LinkDead(); // This packet should not be sent by an older client
 		return;
@@ -11160,21 +11824,40 @@ void Client::Handle_OP_MoveMultipleItems(const EQApplicationPacket *app)
 
 void Client::Handle_OP_OpenContainer(const EQApplicationPacket *app)
 {
-	// Does not exist in Ti client
-	// SoF, SoD and UF clients send a 4-byte packet indicating the 'parent' slot
-	// SoF, SoD and UF slots are defined by a uint32 value and currently untranslated
-	// RoF client sends a 12-byte packet based on the RoF::Structs::ItemSlotStruct
+	// Other clients still send untranslated or unverified native slot layouts.
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2 ||
+		app->size != sizeof(OpenContainer_Struct)) {
+		return;
+	}
 
-	// RoF structure types are defined as signed uint16 and currently untranslated
-	// RoF::struct.SlotType = {0 - Equipment, 1 - Bank, 2 - Shared Bank} // not tested beyond listed types
-	// RoF::struct.Unknown2 = 0
-	// RoF::struct.MainSlot = { <parent slot range designated by slottype..zero-based> }
-	// RoF::struct.SubSlot = -1 (non-child)
-	// RoF::struct.AugSlot = -1 (non-child)
-	// RoF::struct.Unknown1 = 141 (unsure why, but always appears to be this value..combine containers not tested)
+	const auto slot = reinterpret_cast<const OpenContainer_Struct *>(app->pBuffer)->slot;
+	// Only an actual top-level personal bag can invoke an item script. Bank,
+	// shared-bank, cursor, nested, equipment and invented slots grant nothing.
+	if (slot < EQ::invslot::GENERAL_BEGIN || slot > EQ::invslot::GENERAL_END) {
+		return;
+	}
+	auto *inst = m_inv.GetItem(slot);
+	if (!inst || !inst->IsClassBag()) {
+		return;
+	}
 
-	// SideNote: Watching the slot translations, Unknown1 is showing '141' as well on certain item swaps.
-	// Manually looting a corpse results in a from '34' to '68' value for equipment items, '0' to '0' for inventory.
+	const auto opened_item_id = inst->GetID();
+	const auto opened_serial = inst->GetSerialNumber();
+
+	// Opening a bag is already client-side. The notification supplies the
+	// existing right-click quest event, without casting or consuming anything.
+	if (parse->ItemHasQuestSub(inst, EVENT_ITEM_CLICK)) {
+		parse->EventItem(EVENT_ITEM_CLICK, this, inst, nullptr, "", slot);
+	}
+	// An item callback may move or remove the original instance. Re-read its
+	// current custody before exposing it to the existing player callback.
+	inst = m_inv.GetItem(slot);
+	if (inst && inst->IsClassBag() && inst->GetID() == opened_item_id &&
+		inst->GetSerialNumber() == opened_serial && parse->PlayerHasQuestSub(EVENT_ITEM_CLICK_CLIENT)) {
+		std::vector<std::any> args;
+		args.emplace_back(inst);
+		parse->EventPlayer(EVENT_ITEM_CLICK_CLIENT, this, std::to_string(slot), 0, &args);
+	}
 }
 
 void Client::Handle_OP_OpenGuildTributeMaster(const EQApplicationPacket *app)
@@ -11188,7 +11871,8 @@ void Client::Handle_OP_OpenGuildTributeMaster(const EQApplicationPacket *app)
 		StartTribute_Struct* st = (StartTribute_Struct*)app->pBuffer;
 		Mob* tribmast = entity_list.GetMob(st->tribute_master_id);
 		if (tribmast && tribmast->IsNPC() && tribmast->GetClass() == Class::GuildTributeMaster
-			&& DistanceSquared(m_Position, tribmast->GetPosition()) <= USE_NPC_RANGE2) {
+			&& DistanceSquared(m_Position, tribmast->GetPosition()) <= USE_NPC_RANGE2
+			&& Housing::ServiceNpcs::Allows(*this,tribmast,Housing::ServiceNpcs::Service::GuildTribute)) {
 			st->response = 1;
 			QueuePacket(app);
 			tribute_master_id = st->tribute_master_id;
@@ -11218,7 +11902,8 @@ void Client::Handle_OP_OpenTributeMaster(const EQApplicationPacket *app)
 		StartTribute_Struct* st = (StartTribute_Struct*)app->pBuffer;
 		Mob* tribmast = entity_list.GetMob(st->tribute_master_id);
 		if (tribmast && tribmast->IsNPC() && tribmast->GetClass() == Class::TributeMaster
-			&& DistanceSquared(m_Position, tribmast->GetPosition()) <= USE_NPC_RANGE2) {
+			&& DistanceSquared(m_Position, tribmast->GetPosition()) <= USE_NPC_RANGE2
+			&& Housing::ServiceNpcs::Allows(*this,tribmast,Housing::ServiceNpcs::Service::PersonalTribute)) {
 			st->response = 1;
 			QueuePacket(app);
 			tribute_master_id = st->tribute_master_id;
@@ -11960,6 +12645,9 @@ void Client::Handle_OP_PetitionBug(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionCheckIn(const EQApplicationPacket *app)
 {
+	if (Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
 	if (app->size != sizeof(Petition_Struct)) {
 		LogError("Wrong size: OP_PetitionCheckIn, size=[{}], expected [{}]", app->size, sizeof(Petition_Struct));
 		return;
@@ -11967,6 +12655,9 @@ void Client::Handle_OP_PetitionCheckIn(const EQApplicationPacket *app)
 	Petition_Struct* inpet = (Petition_Struct*)app->pBuffer;
 
 	Petition* pet = PetitionList::Instance()->GetPetitionByID(inpet->petnumber);
+	if (!pet) {
+		return;
+	}
 	//if (inpet->urgency != pet->GetUrgency())
 	pet->SetUrgency(inpet->urgency);
 	pet->SetLastGM(GetName());
@@ -11981,6 +12672,9 @@ void Client::Handle_OP_PetitionCheckIn(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionCheckout(const EQApplicationPacket *app)
 {
+	if (Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
 	if (app->size != sizeof(uint32)) {
 		std::cout << "Wrong size: OP_PetitionCheckout, size=" << app->size << ", expected " << sizeof(uint32) << std::endl;
 		return;
@@ -12004,13 +12698,17 @@ void Client::Handle_OP_PetitionCheckout(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionDelete(const EQApplicationPacket *app)
 {
+	if (Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
 	if (app->size != sizeof(PetitionUpdate_Struct)) {
 		LogError("Wrong size: OP_PetitionDelete, size=[{}], expected [{}]", app->size, sizeof(PetitionUpdate_Struct));
 		return;
 	}
+	const uint32 petition_id = *((uint32*)app->pBuffer);
 	auto outapp = new EQApplicationPacket(OP_PetitionUpdate, sizeof(PetitionUpdate_Struct));
 	PetitionUpdate_Struct* pet = (PetitionUpdate_Struct*)outapp->pBuffer;
-	pet->petnumber = *((int*)app->pBuffer);
+	pet->petnumber = petition_id;
 	pet->color = 0x00;
 	pet->status = 0xFFFFFFFF;
 	pet->senttime = 0;
@@ -12020,8 +12718,8 @@ void Client::Handle_OP_PetitionDelete(const EQApplicationPacket *app)
 	strcpy(pet->charname, "");
 	FastQueuePacket(&outapp);
 
-	if (PetitionList::Instance()->DeletePetition(pet->petnumber) == -1)
-		std::cout << "Something is borked with: " << pet->petnumber << std::endl;
+	if (PetitionList::Instance()->DeletePetition(petition_id) == -1)
+		std::cout << "Something is borked with: " << petition_id << std::endl;
 	PetitionList::Instance()->ClearPetitions();
 	PetitionList::Instance()->UpdateGMQueue();
 	PetitionList::Instance()->ReadDatabase();
@@ -12031,9 +12729,10 @@ void Client::Handle_OP_PetitionDelete(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionQue(const EQApplicationPacket *app)
 {
-#ifdef _EQDEBUG
-	printf("%s looking at petitions..\n", GetName());
-#endif
+	if (app->size != 0 || Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
+	PetitionList::Instance()->UpdateGMQueue();
 	return;
 }
 
@@ -12052,6 +12751,9 @@ void Client::Handle_OP_PetitionResolve(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PetitionUnCheckout(const EQApplicationPacket *app)
 {
+	if (Admin() < AccountStatus::QuestTroupe) {
+		return;
+	}
 	if (app->size != sizeof(uint32)) {
 		std::cout << "Wrong size: OP_PetitionUnCheckout, size=" << app->size << ", expected " << sizeof(uint32) << std::endl;
 		return;
@@ -12161,6 +12863,7 @@ void Client::Handle_OP_PickZone(const EQApplicationPacket *app)
 
 void Client::Handle_OP_PopupResponse(const EQApplicationPacket *app)
 {
+	if (Housing::GuildPortalRuntime::HandlePopup(*this, app)) return;
 
 	if (app->size != sizeof(PopupResponse_Struct)) {
 		LogDebug("Size mismatch in OP_PopupResponse expected [{}] got [{}]", sizeof(PopupResponse_Struct), app->size);
@@ -13781,8 +14484,11 @@ void Client::Handle_OP_Rewind(const EQApplicationPacket *app)
 void Client::Handle_OP_RezzAnswer(const EQApplicationPacket *app)
 {
 	VERIFY_PACKET_LENGTH(OP_RezzAnswer, app, Resurrect_Struct);
-
-	const auto* r = (const Resurrect_Struct*) app->pBuffer;
+ const auto* r = reinterpret_cast<const Resurrect_Struct*>(app->pBuffer);
+ if (r->action == ResurrectionActions::Accept && !CanAcceptSpiritShroudResurrection(PendingRezzDBID)) {
+  Message(Chat::Yellow, "Remove your shroud before accepting this original-character resurrection.");
+  return;
+ }
 
 	LogSpells(
 		"[Client::Handle_OP_RezzAnswer] Received OP_RezzAnswer from client. Pendingrezzexp is [{}] action is [{}]",
@@ -13791,7 +14497,7 @@ void Client::Handle_OP_RezzAnswer(const EQApplicationPacket *app)
 	);
 
 
-	OPRezzAnswer(r->action, r->spellid, r->zone_id, r->instance_id, r->x, r->y, r->z);
+	if (!OPRezzAnswer(r->action, r->spellid, r->zone_id, r->instance_id, r->x, r->y, r->z)) return;
 
 	if (r->action == ResurrectionActions::Accept) {
 		if (PlayerEventLogs::Instance()->IsEventEnabled(PlayerEvent::REZ_ACCEPTED)) {
@@ -14234,6 +14940,7 @@ void Client::Handle_OP_ShopPlayerBuy(const EQApplicationPacket *app)
 		tmp == 0 ||
 		!tmp->IsNPC() ||
 		tmp->GetClass() != Class::Merchant ||
+		!Housing::ServiceNpcs::AllowsMerchant(*this,tmp) ||
 		mp->quantity < 1 ||
 		DistanceSquared(m_Position, tmp->GetPosition()) > USE_NPC_RANGE2
 	) {
@@ -14467,11 +15174,11 @@ void Client::Handle_OP_ShopPlayerSell(const EQApplicationPacket *app)
 			sizeof(Merchant_Purchase_Struct), app->size);
 		return;
 	}
-	
+
 	Merchant_Purchase_Struct* mp = (Merchant_Purchase_Struct*)app->pBuffer;
 	Mob* vendor = entity_list.GetMob(mp->npcid);
 
-	if (vendor == 0 || !vendor->IsNPC() || vendor->GetClass() != Class::Merchant)
+	if (vendor == 0 || !vendor->IsNPC() || vendor->GetClass() != Class::Merchant || !Housing::ServiceNpcs::AllowsMerchant(*this,vendor))
 		return;
 
 	//you have to be somewhat close to them to be properly using them
@@ -14487,6 +15194,9 @@ void Client::Handle_OP_ShopPlayerSell(const EQApplicationPacket *app)
 	if (!item || !inst) {
 		Message(Chat::Red, "You seem to have misplaced that item..");
 		return;
+	}
+	if(!CanTransferSpiritShroudItemTree(inst)){
+		Message(Chat::Yellow,"Your shroud's temporary supplies cannot be sold.");return;
 	}
 
 	if (!item->NoDrop) {
@@ -14691,7 +15401,7 @@ void Client::Handle_OP_ShopRequest(const EQApplicationPacket *app)
 	int tabs_to_display = None;
 	Mob *tmp            = entity_list.GetMob(mc->npc_id);
 
-	if (tmp == 0 || !tmp->IsNPC() || tmp->GetClass() != Class::Merchant) {
+	if (tmp == 0 || !tmp->IsNPC() || tmp->GetClass() != Class::Merchant || !Housing::ServiceNpcs::AllowsMerchant(*this,tmp)) {
 		return;
 	}
 
@@ -16028,7 +16738,7 @@ void Client::Handle_OP_TributeItem(const EQApplicationPacket *app)
 		tribute_master_id = t->tribute_master_id;
 		//make sure they are dealing with a valid tribute master
 		Mob* tribmast = entity_list.GetMob(t->tribute_master_id);
-		if (!tribmast || !tribmast->IsNPC() || tribmast->GetClass() != Class::TributeMaster)
+		if (!tribmast || !tribmast->IsNPC() || tribmast->GetClass() != Class::TributeMaster || !Housing::ServiceNpcs::Allows(*this,tribmast,Housing::ServiceNpcs::Service::PersonalTribute))
 			return;
 		if (DistanceSquared(m_Position, tribmast->GetPosition()) > USE_NPC_RANGE2)
 			return;
@@ -16055,7 +16765,7 @@ void Client::Handle_OP_TributeMoney(const EQApplicationPacket *app)
 		tribute_master_id = t->tribute_master_id;
 		//make sure they are dealing with a valid tribute master
 		Mob* tribmast = entity_list.GetMob(t->tribute_master_id);
-		if (!tribmast || !tribmast->IsNPC() || tribmast->GetClass() != Class::TributeMaster)
+		if (!tribmast || !tribmast->IsNPC() || tribmast->GetClass() != Class::TributeMaster || !Housing::ServiceNpcs::Allows(*this,tribmast,Housing::ServiceNpcs::Service::PersonalTribute))
 			return;
 		if (DistanceSquared(m_Position, tribmast->GetPosition()) > USE_NPC_RANGE2)
 			return;
@@ -17245,24 +17955,18 @@ void Client::Handle_OP_GuildTributeDonateItem(const EQApplicationPacket *app)
 
 	auto in = (GuildTributeDonateItemRequest_Struct *) app->pBuffer;
 
-	const auto *inst = GetInv().GetItem(in->slot);
-	auto favor = inst->GetItemGuildFavor() * in->quantity;
-
-	auto guild = guild_mgr.GetGuildByGuildID(guild_id);
+	auto* master=entity_list.GetMob(in->tribute_master_id);
+	if(!IsInAGuild() || in->guild_id!=GuildID() || !master || !master->IsNPC() || master->GetClass()!=Class::GuildTributeMaster || DistanceSquared(m_Position,master->GetPosition())>USE_NPC_RANGE2 || !Housing::ServiceNpcs::Allows(*this,master,Housing::ServiceNpcs::Service::GuildTribute)) return;
+	const auto* source=GetInv().GetItem(in->slot);
+	if(!source) return;
+	auto inst=std::unique_ptr<EQ::ItemInstance>(source->Clone());
+	auto guild=guild_mgr.GetGuildByGuildID(GuildID());
 	if (guild) {
-		guild->tribute.favor += favor;
-		guild_mgr.UpdateDbGuildFavor(GuildID(), guild->tribute.favor);
-		auto member_favor = guild_mgr.UpdateDbMemberFavor(GuildID(), CharacterID(), favor);
-
-		if (inst->IsStackable()) {
-			if (inst->GetCharges() < (int32) in->quantity) {
-				favor = 0;
-			}
-			DeleteItemInInventory(in->slot, in->quantity, false, true);
-		}
-		else {
-			DeleteItemInInventory(in->slot, 0, false, true);
-		}
+		auto receipt=Housing::ServiceTribute::DonateItem(*this,in->slot,in->quantity);
+		if(!receipt) return;
+		auto favor=receipt->favor;
+		auto member_favor=receipt->member_favor;
+		guild->tribute.favor=receipt->guild_favor;
 
 		SendGuildTributeDonateItemReply(in, favor);
 
@@ -17303,16 +18007,19 @@ void Client::Handle_OP_GuildTributeDonatePlat(const EQApplicationPacket *app)
 
 	auto in = (GuildTributeDonatePlatRequest_Struct *) app->pBuffer;
 
-	auto quantity = in->quantity;
-
-	auto favor = quantity * RuleI(Guild, TributePlatConversionRate);
-	auto guild = guild_mgr.GetGuildByGuildID(guild_id);
+	auto* master=entity_list.GetMob(in->tribute_master_id);
+	if(!IsInAGuild() || in->guild_id!=GuildID() || !master || !master->IsNPC() || master->GetClass()!=Class::GuildTributeMaster || DistanceSquared(m_Position,master->GetPosition())>USE_NPC_RANGE2 || !Housing::ServiceNpcs::Allows(*this,master,Housing::ServiceNpcs::Service::GuildTribute)) return;
+	const auto quantity=in->quantity;
+	const auto conversion=RuleI(Guild, TributePlatConversionRate);
+	if(conversion<=0) return;
+	auto guild = guild_mgr.GetGuildByGuildID(GuildID());
 	if (guild) {
-		guild->tribute.favor += favor;
-		guild_mgr.UpdateDbGuildFavor(GuildID(), guild->tribute.favor);
-		auto member_favor = guild_mgr.UpdateDbMemberFavor(GuildID(), CharacterID(), favor);
+		auto receipt=Housing::ServiceTribute::DonatePlatinum(*this,quantity,uint32_t(conversion));
+		if(!receipt) return;
+		auto favor=receipt->favor;
+		auto member_favor=receipt->member_favor;
+		guild->tribute.favor=receipt->guild_favor;
 
-		TakePlatinum(quantity, false);
 		SendGuildTributeDonatePlatReply(in, favor);
 
 		if(PlayerEventLogs::Instance()->IsEventEnabled(PlayerEvent::GUILD_TRIBUTE_DONATE_PLAT)) {
