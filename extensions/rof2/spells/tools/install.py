@@ -24,6 +24,42 @@ def sql_key(key):
     return " AND ".join(f"`{name}`=%s" for name in key), tuple(key.values())
 
 
+def check_merchant_requirements(cursor, payload):
+    """Refuse missing gain routes, shared lists, or unreviewed merchant edits."""
+    for rule in payload.get("required_rules", []):
+        cursor.execute("SELECT rule_value FROM rule_values WHERE rule_name=%s", (rule["rule_name"],))
+        if any(str(r["rule_value"]).strip() != str(rule["value"]) for r in cursor.fetchall()):
+            raise RuntimeError(f"Faction threshold rule differs: {rule['rule_name']}")
+    for requirement in payload.get("required_merchant_consumers", []):
+        cursor.execute("SELECT id,name FROM npc_types WHERE merchant_id=%s ORDER BY id FOR UPDATE",
+                       (requirement["merchantid"],))
+        if cursor.fetchall() != requirement["npcs"]:
+            raise RuntimeError(f"Merchant list consumers differ: {requirement['merchantid']}")
+    for requirement in payload.get("required_merchant_inventories", []):
+        cursor.execute("SELECT * FROM merchantlist WHERE merchantid=%s ORDER BY slot FOR UPDATE",
+                       (requirement["merchantid"],))
+        actual = cursor.fetchall()
+        if actual != requirement["before"] and actual != requirement["after"]:
+            raise RuntimeError(f"Merchant inventory was customized: {requirement['merchantid']}")
+    for faction in payload.get("required_gain_factions", []):
+        cursor.execute("SELECT id FROM tasks WHERE enabled=1 AND repeatable=1 "
+                       "AND faction_reward=%s AND faction_amount>0 LIMIT 1", (faction,))
+        task = cursor.fetchone()
+        cursor.execute("SELECT n.id FROM npc_faction_entries e "
+                       "JOIN npc_types n ON n.npc_faction_id=e.npc_faction_id "
+                       "JOIN spawnentry se ON se.npcID=n.id "
+                       "JOIN spawn2 s ON s.spawngroupID=se.spawngroupID "
+                       "WHERE e.faction_id=%s AND e.value>0 AND se.chance>0 LIMIT 1", (faction,))
+        if not task and not cursor.fetchone():
+            raise RuntimeError(f"No existing repeatable task or spawned kill faction gain route: {faction}")
+    for spell in payload.get("required_spells", []):
+        fields = list(spell)
+        cursor.execute("SELECT " + ",".join(f"`{f}`" for f in fields) +
+                       " FROM spells_new WHERE id=%s", (spell["id"],))
+        if cursor.fetchone() != spell:
+            raise RuntimeError(f"Dated merchant spell identity differs: {spell['id']}")
+
+
 def atomic_script_write(destination, content):
     """Replace a verified script on the same filesystem, preserving its mode."""
     mode = destination.stat().st_mode & 0o777
@@ -94,7 +130,7 @@ def main():
         quest_files.append((relative, source, destination))
     connection = pymysql.connect(**config, autocommit=False,
                                  cursorclass=pymysql.cursors.DictCursor)
-    inserts, updates, counts = [], [], {}
+    inserts, updates, deletes, counts = [], [], [], {}
     scripts_created, scripts_updated, directories_created = [], [], []
     committed = False
     try:
@@ -112,6 +148,7 @@ def main():
                 raise RuntimeError("Invalid durable reward wire allocator; do not reset its high-water mark")
             tables = {table for p in payloads for table in p["inserts"]}
             tables.update(u["table"] for p in payloads for u in p["updates"])
+            tables.update(d["table"] for p in payloads for d in p.get("deletes", []))
             for table in tables:
                 cursor.execute("SHOW TABLE STATUS WHERE Name=%s", (table,))
                 status = cursor.fetchone()
@@ -123,6 +160,7 @@ def main():
                 cursor.execute(f"SHOW COLUMNS FROM `{table}`")
                 columns[table] = {r["Field"] for r in cursor.fetchall()}
             for payload in payloads:
+                check_merchant_requirements(cursor, payload)
                 for npc in payload.get("required_npcs", []):
                     cursor.execute("SELECT id,name,merchant_id,class FROM npc_types WHERE id=%s FOR UPDATE", (npc["id"],))
                     if cursor.fetchone() != npc:
@@ -168,6 +206,20 @@ def main():
                     if not all(equal(old[k], v) for k, v in update["before"].items()):
                         raise RuntimeError(f"Vendor binding was customized: {update['key']}")
                     updates.append(update)
+                for deletion in payload.get("deletes", []):
+                    table, key, before = deletion["table"], deletion["key"], deletion["before"]
+                    if set(key) != set(manifest["primary_keys"][table]) or set(before) != columns[table]:
+                        raise RuntimeError(f"Deletion requires exact primary key and full row preimage: {table}")
+                    if any(before[k] != v for k, v in key.items()):
+                        raise RuntimeError(f"Deletion key/preimage differ: {table}")
+                    where, values = sql_key(key)
+                    cursor.execute(f"SELECT * FROM `{table}` WHERE {where} FOR UPDATE", values)
+                    old = cursor.fetchone()
+                    if old is None:
+                        continue
+                    if old != before:
+                        raise RuntimeError(f"Deletion preimage was customized: {table} {key}")
+                    deletes.append(deletion)
             incoming = {}
             for payload in payloads:
                 for table, rows in payload["inserts"].items():
@@ -265,6 +317,7 @@ def main():
                             raise RuntimeError(f"Ordered spell era/class/rank mismatch: {item['spell_id']}")
             report = {"stages": [s["name"] for s in selected], "content_rows": counts,
                       "new_rows": len(inserts), "vendor_updates": len(updates),
+                      "rows_removed": len(deletes),
                       "quest_scripts_new": [str(r) for r, _, d in quest_files if not d.exists()],
                       "quest_scripts_updated": [str(r) for r, s, d in quest_files
                                                 if d.exists() and d.read_bytes() != s.read_bytes()],
@@ -281,6 +334,7 @@ def main():
             fd = os.open(backup, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
             with os.fdopen(fd, "w") as handle:
                 json.dump({"new_rows": inserts, "updates": updates,
+                           "deleted_rows": deletes,
                            "quest_script_preimage": next((d.read_text() if d.exists() else None
                                                           for r, _, d in quest_files
                                                           if str(r) == "quests/shardslanding/#Tomekeeper_Kerkaz.lua"), None),
@@ -296,6 +350,11 @@ def main():
                 cursor.execute(f"UPDATE `{update['table']}` SET " +
                                ",".join(f"`{k}`=%s" for k in after) + " WHERE " + where,
                                tuple(after.values()) + values)
+            for deletion in deletes:
+                where, values = sql_key(deletion["key"])
+                cursor.execute(f"DELETE FROM `{deletion['table']}` WHERE {where}", values)
+                if cursor.rowcount != 1:
+                    raise RuntimeError("Guarded deletion did not remove exactly one row")
             for relative, source, destination in quest_files:
                 if destination.exists():
                     original = destination.read_bytes()

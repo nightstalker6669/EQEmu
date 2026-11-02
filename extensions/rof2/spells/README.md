@@ -60,3 +60,6 @@ The achievements maintainer extracted, independently built and published the com
 ## Further original acquisition routes
 
 Stages 009/010 restore the TSS rune teacher and Underfoot rank II gem trader, plus the separate SoD Kalim in Plane of Time. SoD bard Whirring/Glowing and beastlord Glowing sequences remain wholly withheld because the order or a required scroll identity is unresolved. No missing reward is skipped to reach a later one. The SoD NPC uses independently corroborated public map-label coordinates and a neutral existing Kalim template; exact original heading/noncombat secondary statistics and native placement are not established. The four downgrade combines use the original Mechamagical Metamorpher. See [legacy](provenance/legacy-exchanges.json) and [SoD](provenance/sod-runes-and-downgrades.json) provenance.
+
+
+Stage011 repairs four original SoF standard faction merchants with exact stock/consumer guards and receipt-owned rollback. Three factions lacking established gain routes remain withheld. See `docs/RESEARCH.md`, `docs/INSTALL.md`, and `provenance/sof-faction-merchants.json`; this does not complete all through-RoF acquisition or native acceptance.

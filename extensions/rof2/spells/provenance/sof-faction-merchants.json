@@ -1,0 +1,1605 @@
+{
+  "scope": "SoF standard faction merchants; four factions with existing gain routes only",
+  "source": "https://www.raspersrealm.com/Everquest/SoF/miscSpells.html",
+  "threshold_corrections": [
+    {
+      "spell_id": 14079,
+      "faction_required": 500,
+      "source": "https://everquest.allakhazam.com/db/spell/14079#msg1226692863277805966",
+      "date": "2008-11-14",
+      "note": "Contemporary report confirms Kindly, correcting the generic class guide."
+    },
+    {
+      "spell_id": 14058,
+      "faction_required": 500,
+      "source": "https://everquest.allakhazam.com/db/spell/14058#msg1226692684280575176",
+      "date": "2008-11-14",
+      "note": "Contemporary report confirms Kindly, correcting the generic class guide."
+    },
+    {
+      "name": "Wheel of Fists Rk. II",
+      "faction_required": 1100,
+      "source": "https://everquest.allakhazam.com/db/npc/26835",
+      "dates": [
+        "2007-11-22",
+        "2011-09-23"
+      ],
+      "note": "Dated inventories explicitly place this tome at Ally; the conflicting current vendor row is not used."
+    }
+  ],
+  "seridyn": {
+    "source": "https://everquest.allakhazam.com/db/npc/26835",
+    "dates": [
+      "2007-11-22",
+      "2008-05-01",
+      "2011-09-22",
+      "2011-09-23"
+    ],
+    "old_stock": [
+      {
+        "slot": 1,
+        "id": 115003,
+        "name": "Song: Amber's Last Lullaby",
+        "spell_id": 14003
+      },
+      {
+        "slot": 2,
+        "id": 115006,
+        "name": "Song: Cantata of Restoration",
+        "spell_id": 14006
+      },
+      {
+        "slot": 3,
+        "id": 115060,
+        "name": "Song: Aria of the Artist",
+        "spell_id": 14060
+      },
+      {
+        "slot": 4,
+        "id": 115063,
+        "name": "Song: Vyskudra's Chant of Disease",
+        "spell_id": 14063
+      },
+      {
+        "slot": 5,
+        "id": 115093,
+        "name": "Spell: Salve of Feldan",
+        "spell_id": 14093
+      },
+      {
+        "slot": 6,
+        "id": 115096,
+        "name": "Spell: Falrazim's Gnashing",
+        "spell_id": 14096
+      },
+      {
+        "slot": 7,
+        "id": 115102,
+        "name": "Spell: Focus of Zott",
+        "spell_id": 14102
+      },
+      {
+        "slot": 8,
+        "id": 115135,
+        "name": "Spell: Dragonscale Guard",
+        "spell_id": 14135
+      },
+      {
+        "slot": 9,
+        "id": 115176,
+        "name": "Tome of Axe of the Decimator",
+        "spell_id": 14176
+      },
+      {
+        "slot": 10,
+        "id": 115177,
+        "name": "Tome of Tendon Sever",
+        "spell_id": 14177
+      },
+      {
+        "slot": 11,
+        "id": 115207,
+        "name": "Spell: Blessing of Resolve",
+        "spell_id": 14207
+      },
+      {
+        "slot": 12,
+        "id": 115210,
+        "name": "Spell: Solemn Remedy",
+        "spell_id": 14210
+      },
+      {
+        "slot": 13,
+        "id": 115213,
+        "name": "Spell: Symbol of Kaerra",
+        "spell_id": 14213
+      },
+      {
+        "slot": 14,
+        "id": 115216,
+        "name": "Spell: Ward of the Resolute",
+        "spell_id": 14216
+      },
+      {
+        "slot": 15,
+        "id": 115219,
+        "name": "Spell: Aweshock",
+        "spell_id": 14219
+      },
+      {
+        "slot": 16,
+        "id": 115273,
+        "name": "Spell: Yaulp IX",
+        "spell_id": 14273
+      },
+      {
+        "slot": 17,
+        "id": 115288,
+        "name": "Spell: Mollify",
+        "spell_id": 14288
+      },
+      {
+        "slot": 18,
+        "id": 115352,
+        "name": "Spell: Torrid Sunray",
+        "spell_id": 14352
+      },
+      {
+        "slot": 19,
+        "id": 115355,
+        "name": "Spell: Tempest of the Stormborn",
+        "spell_id": 14355
+      },
+      {
+        "slot": 20,
+        "id": 115361,
+        "name": "Spell: Torrential Hail",
+        "spell_id": 14361
+      },
+      {
+        "slot": 21,
+        "id": 115367,
+        "name": "Spell: Nature's Calm",
+        "spell_id": 14367
+      },
+      {
+        "slot": 22,
+        "id": 115430,
+        "name": "Spell: Beast's Bewitching",
+        "spell_id": 14430
+      },
+      {
+        "slot": 23,
+        "id": 115494,
+        "name": "Spell: Shattered Consciousness",
+        "spell_id": 14494
+      },
+      {
+        "slot": 24,
+        "id": 115497,
+        "name": "Spell: Opalescent Rune",
+        "spell_id": 14497
+      },
+      {
+        "slot": 25,
+        "id": 115500,
+        "name": "Spell: Spellbound Shield",
+        "spell_id": 14500
+      },
+      {
+        "slot": 26,
+        "id": 115503,
+        "name": "Spell: Erradien's Animation",
+        "spell_id": 14503
+      },
+      {
+        "slot": 27,
+        "id": 115506,
+        "name": "Spell: Rune of Erradien",
+        "spell_id": 14506
+      },
+      {
+        "slot": 28,
+        "id": 115605,
+        "name": "Spell: Mystifying Flash",
+        "spell_id": 14605
+      },
+      {
+        "slot": 29,
+        "id": 115626,
+        "name": "Spell: Learner's Aura",
+        "spell_id": 14626
+      },
+      {
+        "slot": 30,
+        "id": 115659,
+        "name": "Spell: Malosinatia",
+        "spell_id": 14659
+      },
+      {
+        "slot": 31,
+        "id": 115662,
+        "name": "Spell: Lavaskin",
+        "spell_id": 14662
+      },
+      {
+        "slot": 32,
+        "id": 115668,
+        "name": "Spell: Prime Guard",
+        "spell_id": 14668
+      },
+      {
+        "slot": 33,
+        "id": 115671,
+        "name": "Spell: Core of Air",
+        "spell_id": 14671
+      },
+      {
+        "slot": 34,
+        "id": 115672,
+        "name": "Spell: Bolt of Molten Dross",
+        "spell_id": 14672
+      },
+      {
+        "slot": 35,
+        "id": 115679,
+        "name": "Spell: Summon Plate of the Prime",
+        "spell_id": 14679
+      },
+      {
+        "slot": 36,
+        "id": 115689,
+        "name": "Spell: Summon Nastel's Heirlooms",
+        "spell_id": 14689
+      },
+      {
+        "slot": 37,
+        "id": 115700,
+        "name": "Spell: Burnout VII",
+        "spell_id": 14700
+      },
+      {
+        "slot": 38,
+        "id": 115799,
+        "name": "Tome of Shimmering Silhouette",
+        "spell_id": 14799
+      },
+      {
+        "slot": 39,
+        "id": 115823,
+        "name": "Spell: Procure Corpse",
+        "spell_id": 14823
+      },
+      {
+        "slot": 40,
+        "id": 115824,
+        "name": "Spell: Ruinous Venin",
+        "spell_id": 14824
+      },
+      {
+        "slot": 41,
+        "id": 115830,
+        "name": "Spell: Bulwark of Shadows",
+        "spell_id": 14830
+      },
+      {
+        "slot": 42,
+        "id": 115833,
+        "name": "Spell: Eranon's Decay",
+        "spell_id": 14833
+      },
+      {
+        "slot": 43,
+        "id": 115846,
+        "name": "Spell: Siphon Essence",
+        "spell_id": 14846
+      },
+      {
+        "slot": 44,
+        "id": 115939,
+        "name": "Spell: Solemn Touch",
+        "spell_id": 14939
+      },
+      {
+        "slot": 45,
+        "id": 115942,
+        "name": "Spell: Solemn Force",
+        "spell_id": 14942
+      },
+      {
+        "slot": 46,
+        "id": 115951,
+        "name": "Spell: Atonement",
+        "spell_id": 14951
+      },
+      {
+        "slot": 47,
+        "id": 115990,
+        "name": "Spell: Benediction",
+        "spell_id": 14990
+      },
+      {
+        "slot": 48,
+        "id": 116017,
+        "name": "Spell: Shield of Spurs",
+        "spell_id": 15017
+      },
+      {
+        "slot": 49,
+        "id": 116023,
+        "name": "Spell: Horde of Hornets",
+        "spell_id": 15023
+      },
+      {
+        "slot": 50,
+        "id": 116026,
+        "name": "Spell: Dragonscale Aquifer",
+        "spell_id": 15026
+      },
+      {
+        "slot": 51,
+        "id": 116035,
+        "name": "Spell: Drifting Haze",
+        "spell_id": 15035
+      },
+      {
+        "slot": 52,
+        "id": 116079,
+        "name": "Spell: Skylight Sagacity",
+        "spell_id": 15079
+      },
+      {
+        "slot": 53,
+        "id": 116097,
+        "name": "Tome of Blinding Flare",
+        "spell_id": 15097
+      },
+      {
+        "slot": 54,
+        "id": 116118,
+        "name": "Tome of Waylay",
+        "spell_id": 15118
+      },
+      {
+        "slot": 55,
+        "id": 116142,
+        "name": "Spell: Bond of the Blackwater",
+        "spell_id": 15142
+      },
+      {
+        "slot": 56,
+        "id": 116148,
+        "name": "Spell: Blackwater Bite",
+        "spell_id": 15148
+      },
+      {
+        "slot": 57,
+        "id": 116160,
+        "name": "Spell: Terror of the Soulbleeder",
+        "spell_id": 15160
+      },
+      {
+        "slot": 58,
+        "id": 116232,
+        "name": "Spell: Vestax's Spear of Venom",
+        "spell_id": 15232
+      },
+      {
+        "slot": 59,
+        "id": 116235,
+        "name": "Spell: Spirit of the Stalwart",
+        "spell_id": 15235
+      },
+      {
+        "slot": 60,
+        "id": 116253,
+        "name": "Spell: Breath of Big Bynn",
+        "spell_id": 15253
+      },
+      {
+        "slot": 61,
+        "id": 116265,
+        "name": "Spell: Spirit of Vehemence",
+        "spell_id": 15265
+      },
+      {
+        "slot": 62,
+        "id": 116277,
+        "name": "Spell: Talisman of Vehemence",
+        "spell_id": 15277
+      },
+      {
+        "slot": 63,
+        "id": 116345,
+        "name": "Tome of Armor of Draconic Runes",
+        "spell_id": 15345
+      },
+      {
+        "slot": 64,
+        "id": 116384,
+        "name": "Spell: Lure of Isaz",
+        "spell_id": 15384
+      },
+      {
+        "slot": 65,
+        "id": 116387,
+        "name": "Spell: Bulwark of the Crystalwing",
+        "spell_id": 15387
+      },
+      {
+        "slot": 66,
+        "id": 116390,
+        "name": "Spell: Tears of the Forsaken",
+        "spell_id": 15390
+      },
+      {
+        "slot": 67,
+        "id": 116393,
+        "name": "Spell: Concussive Burst",
+        "spell_id": 15393
+      },
+      {
+        "slot": 68,
+        "id": 116462,
+        "name": "Spell: Bulwark of Caella",
+        "spell_id": 15462
+      },
+      {
+        "slot": 69,
+        "id": 116511,
+        "name": "Spell: Phase March",
+        "spell_id": 15511
+      },
+      {
+        "slot": 70,
+        "id": 115000,
+        "name": "Song: Elddar's Dawnsong",
+        "spell_id": 14000
+      }
+    ],
+    "new_stock": [
+      {
+        "slot": 1,
+        "id": 115082,
+        "name": "Song: Arcane Anthem Rk. II",
+        "spell_id": 14082,
+        "faction_required": 1100
+      },
+      {
+        "slot": 2,
+        "id": 115338,
+        "name": "Spell: Chromassault Rk. II",
+        "spell_id": 14338,
+        "faction_required": 500
+      },
+      {
+        "slot": 3,
+        "id": 115452,
+        "name": "Spell: Preincarnation Rk. II",
+        "spell_id": 14452,
+        "faction_required": 500
+      },
+      {
+        "slot": 4,
+        "id": 115621,
+        "name": "Spell: Mana Resurgence Aura Rk. II",
+        "spell_id": 14621,
+        "faction_required": 1100
+      },
+      {
+        "slot": 5,
+        "id": 115737,
+        "name": "Spell: Monster Summoning VI",
+        "spell_id": 14737,
+        "faction_required": 500
+      },
+      {
+        "slot": 6,
+        "id": 115753,
+        "name": "Spell: Summon Cauldron of Many Things",
+        "spell_id": 14753,
+        "faction_required": 1100
+      },
+      {
+        "slot": 7,
+        "id": 115797,
+        "name": "Tome of Wheel of Fists Rk. II",
+        "spell_id": 14797,
+        "faction_required": 1100
+      },
+      {
+        "slot": 8,
+        "id": 115911,
+        "name": "Spell: Phantasmal Orb Rk. II",
+        "spell_id": 14911,
+        "faction_required": 500
+      },
+      {
+        "slot": 9,
+        "id": 115955,
+        "name": "Spell: Trial for Honor Rk. II",
+        "spell_id": 14955,
+        "faction_required": 1100
+      },
+      {
+        "slot": 10,
+        "id": 116048,
+        "name": "Spell: Summer's Viridity Rk. II",
+        "spell_id": 15048,
+        "faction_required": 1100
+      },
+      {
+        "slot": 11,
+        "id": 116337,
+        "name": "Spell: Ward of Resurgence Rk. II",
+        "spell_id": 15337,
+        "faction_required": 1100
+      },
+      {
+        "slot": 12,
+        "id": 116478,
+        "name": "Spell: Tangleweave Energy Rk. II",
+        "spell_id": 15478,
+        "faction_required": 500
+      },
+      {
+        "slot": 13,
+        "id": 116501,
+        "name": "Spell: Funnel of Frost Rk. II",
+        "spell_id": 15501,
+        "faction_required": 500
+      }
+    ],
+    "ordinary_access_preserved_at": 442059
+  },
+  "merchants": [
+    {
+      "npc_id": 442012,
+      "name": "Automated_Vending_Unit_II",
+      "faction_id": 1190,
+      "group_id": 920682,
+      "scrolls": [
+        {
+          "item_id": 116376,
+          "spell_id": 15376,
+          "name": "Opportunistic Strike Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115815,
+          "spell_id": 14815,
+          "name": "Delay Death Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115196,
+          "spell_id": 14196,
+          "name": "Decimator's Volley Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115997,
+          "spell_id": 14997,
+          "name": "Sustenance of Tunare Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 116092,
+          "spell_id": 15092,
+          "name": "Aimshot Discipline Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 116221,
+          "spell_id": 15221,
+          "name": "Assiduous Impurity Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115058,
+          "spell_id": 14058,
+          "name": "Erradien's Psalm of Potency Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115256,
+          "spell_id": 14256,
+          "name": "Vow of Victory Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115316,
+          "spell_id": 14316,
+          "name": "Blood of the Devoted Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115887,
+          "spell_id": 14887,
+          "name": "Pyre of the Lifeless Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115723,
+          "spell_id": 14723,
+          "name": "Fickle Pyroclasm Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115588,
+          "spell_id": 14588,
+          "name": "Mystifier's Aura Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115645,
+          "spell_id": 14645,
+          "name": "Wake of Atrophy Aura Rk. II",
+          "faction_required": 500
+        }
+      ]
+    },
+    {
+      "npc_id": 442104,
+      "name": "Seridyn",
+      "faction_id": 1185,
+      "group_id": 920683,
+      "scrolls": [
+        {
+          "item_id": 115797,
+          "spell_id": 14797,
+          "name": "Wheel of Fists Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115955,
+          "spell_id": 14955,
+          "name": "Trial for Honor Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 116048,
+          "spell_id": 15048,
+          "name": "Summer's Viridity Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115082,
+          "spell_id": 14082,
+          "name": "Arcane Anthem Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115338,
+          "spell_id": 14338,
+          "name": "Chromassault Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115452,
+          "spell_id": 14452,
+          "name": "Preincarnation Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116337,
+          "spell_id": 15337,
+          "name": "Ward of Resurgence Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115911,
+          "spell_id": 14911,
+          "name": "Phantasmal Orb Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116501,
+          "spell_id": 15501,
+          "name": "Funnel of Frost Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116478,
+          "spell_id": 15478,
+          "name": "Tangleweave Energy Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115753,
+          "spell_id": 14753,
+          "name": "Summon Cauldron of Many Things",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115737,
+          "spell_id": 14737,
+          "name": "Monster Summoning VI",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115621,
+          "spell_id": 14621,
+          "name": "Mana Resurgence Aura Rk. II",
+          "faction_required": 1100
+        }
+      ]
+    },
+    {
+      "npc_id": 443162,
+      "name": "Derak_Fangbreaker",
+      "faction_id": 1191,
+      "group_id": 920685,
+      "scrolls": [
+        {
+          "item_id": 116379,
+          "spell_id": 15379,
+          "name": "Knuckle Smash Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115199,
+          "spell_id": 14199,
+          "name": "Battle Frenzy Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116006,
+          "spell_id": 15006,
+          "name": "Aurora of Morrow Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116095,
+          "spell_id": 15095,
+          "name": "Arc of Arrows Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116164,
+          "spell_id": 15164,
+          "name": "Trial for Power Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115146,
+          "spell_id": 14146,
+          "name": "Bite of the Borrower Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115152,
+          "spell_id": 14152,
+          "name": "Howl at the Moon Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115332,
+          "spell_id": 14332,
+          "name": "Eleventh-Hour Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116239,
+          "spell_id": 15239,
+          "name": "Talisman of the Cougar Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115492,
+          "spell_id": 14492,
+          "name": "Survival of the Fittest Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115468,
+          "spell_id": 14468,
+          "name": "Scales of the Reptile Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115916,
+          "spell_id": 14916,
+          "name": "Bonestitch Charm Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116452,
+          "spell_id": 15452,
+          "name": "Flashflames Rk. II",
+          "faction_required": 1100
+        }
+      ]
+    },
+    {
+      "npc_id": 438007,
+      "name": "Karri",
+      "faction_id": 1189,
+      "group_id": 920686,
+      "scrolls": [
+        {
+          "item_id": 116021,
+          "spell_id": 15021,
+          "name": "Jolting Snapkicks Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116191,
+          "spell_id": 15191,
+          "name": "Last Gasp Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115040,
+          "spell_id": 14040,
+          "name": "Kaerra's Spirited Crescendo Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115159,
+          "spell_id": 14159,
+          "name": "Harrow Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 116296,
+          "spell_id": 15296,
+          "name": "Rolist's Drowse Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 116275,
+          "spell_id": 15275,
+          "name": "Bite of the Brownie Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115461,
+          "spell_id": 14461,
+          "name": "Fernspike Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115359,
+          "spell_id": 14359,
+          "name": "Nature's Burning Wrath Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115908,
+          "spell_id": 14908,
+          "name": "Venonscale Venom Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 116484,
+          "spell_id": 15484,
+          "name": "Chaos Conflagration Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115773,
+          "spell_id": 14773,
+          "name": "Shock of Many Rk. II",
+          "faction_required": 500
+        },
+        {
+          "item_id": 115748,
+          "spell_id": 14748,
+          "name": "Rancorous Servant Rk. II",
+          "faction_required": 1100
+        },
+        {
+          "item_id": 115651,
+          "spell_id": 14651,
+          "name": "Runic Swirl Aura Rk. II",
+          "faction_required": 500
+        }
+      ]
+    }
+  ],
+  "held": [
+    {
+      "faction": "Bertox Chosen",
+      "faction_id": 1183,
+      "reason": "No existing enabled repeatable faction task or spawned positive kill faction route established; no gates/stock/bindings changed.",
+      "class_rank_entries": 7,
+      "unique_spells": 7,
+      "spells": [
+        {
+          "name": "Fadelure Rk. II",
+          "item_id": 116128,
+          "spell_id": 15128,
+          "vendors": [
+            "Lanika Shadestepper"
+          ]
+        },
+        {
+          "name": "Soulthirst Horror Rk. II",
+          "item_id": 116203,
+          "spell_id": 15203,
+          "vendors": [
+            "Lanika Shadestepper"
+          ]
+        },
+        {
+          "name": "War March of Meldrath Rk. II",
+          "item_id": 115079,
+          "spell_id": 14079,
+          "vendors": [
+            "Lanika Shadestepper"
+          ]
+        },
+        {
+          "name": "Growl of the Puma Rk. II",
+          "item_id": 115171,
+          "spell_id": 14171,
+          "vendors": [
+            "Lanika Shadestepper"
+          ]
+        },
+        {
+          "name": "Splort Rk. II",
+          "item_id": 115931,
+          "spell_id": 14931,
+          "vendors": [
+            "Lanika Shadestepper"
+          ]
+        },
+        {
+          "name": "Wildmagic Burst Rk. II",
+          "item_id": 116492,
+          "spell_id": 15492,
+          "vendors": [
+            "Lanika Shadestepper"
+          ]
+        },
+        {
+          "name": "Aura of Horror Rk. II",
+          "item_id": 115639,
+          "spell_id": 14639,
+          "vendors": [
+            "Lanika Shadestepper"
+          ]
+        }
+      ]
+    },
+    {
+      "faction": "Camp Valor",
+      "faction_id": 1184,
+      "reason": "No existing enabled repeatable faction task or spawned positive kill faction route established; no gates/stock/bindings changed.",
+      "class_rank_entries": 8,
+      "unique_spells": 7,
+      "spells": [
+        {
+          "name": "Burst of Morrow Rk. II",
+          "item_id": 115946,
+          "spell_id": 14946,
+          "vendors": [
+            "Hardrin"
+          ]
+        },
+        {
+          "name": "Promised Recovery Rk. II",
+          "item_id": 115109,
+          "spell_id": 14109,
+          "vendors": [
+            "Hardrin"
+          ]
+        },
+        {
+          "name": "Hallowed Ground Rk. II",
+          "item_id": 115319,
+          "spell_id": 14319,
+          "vendors": [
+            "Hardrin"
+          ]
+        },
+        {
+          "name": "Circle of Divinity Rk. II",
+          "item_id": 115326,
+          "spell_id": 14326,
+          "vendors": [
+            "Hardrin"
+          ]
+        },
+        {
+          "name": "Ancestral Intervention Rk. II",
+          "item_id": 116343,
+          "spell_id": 15343,
+          "vendors": [
+            "Hardrin"
+          ]
+        },
+        {
+          "name": "Solarsliver Rk. II",
+          "item_id": 115486,
+          "spell_id": 14486,
+          "vendors": [
+            "Hardrin"
+          ]
+        },
+        {
+          "name": "Promised Recovery Rk. II",
+          "item_id": 115109,
+          "spell_id": 14109,
+          "vendors": [
+            "Hardrin"
+          ]
+        },
+        {
+          "name": "Aura of Endless Glamour Rk. II",
+          "item_id": 115633,
+          "spell_id": 14633,
+          "vendors": [
+            "Hardrin"
+          ]
+        }
+      ]
+    },
+    {
+      "faction": "Crusaders of Veeshan",
+      "faction_id": 1188,
+      "reason": "No existing enabled repeatable faction task or spawned positive kill faction route established; no gates/stock/bindings changed.",
+      "class_rank_entries": 15,
+      "unique_spells": 15,
+      "spells": [
+        {
+          "name": "Swiftblade Rk. II",
+          "item_id": 116134,
+          "spell_id": 15134,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Righteous Fury Rk. II",
+          "item_id": 116009,
+          "spell_id": 15009,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Deadfall Rk. II",
+          "item_id": 116083,
+          "spell_id": 15083,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Umbral Skin Rk. II",
+          "item_id": 116215,
+          "spell_id": 15215,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Aura of the Artist Rk. II",
+          "item_id": 115088,
+          "spell_id": 14088,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Promised Restoration Rk. II",
+          "item_id": 115250,
+          "spell_id": 14250,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Languor Rk. II",
+          "item_id": 116324,
+          "spell_id": 15324,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Winter's Blaze Rk. II",
+          "item_id": 115401,
+          "spell_id": 14401,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Putrefaction Rk. II",
+          "item_id": 115934,
+          "spell_id": 14934,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Reaver's Pyre Rk. II",
+          "item_id": 115928,
+          "spell_id": 14928,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Rime Snap Rk. II",
+          "item_id": 116435,
+          "spell_id": 15435,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Ethereal Rime Rk. II",
+          "item_id": 116509,
+          "spell_id": 15509,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Burning Brimbody Rk. II",
+          "item_id": 115779,
+          "spell_id": 14779,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Mass Prime Transvergence Rk. II",
+          "item_id": 115732,
+          "spell_id": 14732,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        },
+        {
+          "name": "Mana Resurgence Rk. II",
+          "item_id": 115600,
+          "spell_id": 14600,
+          "vendors": [
+            "Aring",
+            "Jashy",
+            "Tonas",
+            "Vesiss"
+          ]
+        }
+      ]
+    }
+  ],
+  "gain_route_evidence": {
+    "kind": "Static database evidence, not native acceptance",
+    "tasks": [
+      {
+        "id": 3041001,
+        "title": "Farm Clean Up - Crows",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1190,
+        "faction_amount": 35
+      },
+      {
+        "id": 3041002,
+        "title": "Farm Clean Up - Scarecrows",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1190,
+        "faction_amount": 35
+      },
+      {
+        "id": 3041003,
+        "title": "Farm Clean Up - Doombugs",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1190,
+        "faction_amount": 35
+      },
+      {
+        "id": 3041004,
+        "title": "Forgetful Nanzie",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1190,
+        "faction_amount": 10
+      },
+      {
+        "id": 3041005,
+        "title": "A Horse of Course",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1191,
+        "faction_amount": 50
+      },
+      {
+        "id": 3041006,
+        "title": "Construction Junction, What's Your Function?",
+        "enabled": 1,
+        "repeatable": 0,
+        "faction_reward": 1190,
+        "faction_amount": 25
+      },
+      {
+        "id": 3041007,
+        "title": "Rise of the Machines",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1190,
+        "faction_amount": 20
+      },
+      {
+        "id": 3041008,
+        "title": "I Can Fly",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1190,
+        "faction_amount": 100
+      },
+      {
+        "id": 3041010,
+        "title": "Falrazim's Waggin Tongue",
+        "enabled": 1,
+        "repeatable": 0,
+        "faction_reward": 1190,
+        "faction_amount": 5
+      },
+      {
+        "id": 3041011,
+        "title": "Darwin's Award",
+        "enabled": 1,
+        "repeatable": 0,
+        "faction_reward": 1190,
+        "faction_amount": 25
+      },
+      {
+        "id": 3041012,
+        "title": "The Moonfires' Burning Desires",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1185,
+        "faction_amount": 25
+      },
+      {
+        "id": 3041013,
+        "title": "Mash Brownies",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1185,
+        "faction_amount": 25
+      },
+      {
+        "id": 3041014,
+        "title": "The Rescue",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1185,
+        "faction_amount": 25
+      },
+      {
+        "id": 3041015,
+        "title": "The Queen's Demise",
+        "enabled": 1,
+        "repeatable": 1,
+        "faction_reward": 1185,
+        "faction_amount": 15
+      }
+    ],
+    "positive_kill_npcs": [
+      {
+        "id": 442087,
+        "name": "a_wind_nymph",
+        "npc_faction_id": 3041012,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442151,
+        "name": "#Higoren",
+        "npc_faction_id": 3041015,
+        "faction_id": 1189,
+        "value": 1
+      },
+      {
+        "id": 442152,
+        "name": "a_Darkvine_guardian",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442154,
+        "name": "a_Darkvine_tangler",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442155,
+        "name": "#Gillipuzz",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442156,
+        "name": "a_Darkvine_guardian",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442157,
+        "name": "a_Darkvine_entrancer",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442158,
+        "name": "a_Darkvine_guardian",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442159,
+        "name": "a_Darkvine_thistle",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442160,
+        "name": "a_Darkvine_guardian",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442161,
+        "name": "a_Darkvine_tangler",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442162,
+        "name": "a_Darkvine_thistle",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442163,
+        "name": "a_Darkvine_nightcreeper",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442164,
+        "name": "a_Darkvine_thistle",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442165,
+        "name": "a_Darkvine_thistle",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442166,
+        "name": "a_Darkvine_nightcreeper",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442167,
+        "name": "a_Darkvine_runner",
+        "npc_faction_id": 3041011,
+        "faction_id": 1185,
+        "value": 2
+      },
+      {
+        "id": 442168,
+        "name": "#Tangler_Timbleton",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442169,
+        "name": "a_Darkvine_guardian",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442170,
+        "name": "a_Darkvine_soother",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442172,
+        "name": "a_Darkvine_entrancer",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442174,
+        "name": "a_Darkvine_runner",
+        "npc_faction_id": 3041011,
+        "faction_id": 1185,
+        "value": 2
+      },
+      {
+        "id": 442175,
+        "name": "a_Darkvine_shadereaper",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442176,
+        "name": "a_Darkvine_flamereaver",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442177,
+        "name": "a_Darkvine_champion",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442178,
+        "name": "a_Darkvine_champion",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442179,
+        "name": "a_Darkvine_champion",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442180,
+        "name": "#Queen_Veneneu",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442181,
+        "name": "a_Darkvine_soother",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442183,
+        "name": "a_Darkvine_guardian",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442184,
+        "name": "a_Darkvine_tangler",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442185,
+        "name": "a_Darkvine_thistle",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442186,
+        "name": "a_Darkvine_patroller",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442187,
+        "name": "a_Darkvine_tangler",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442188,
+        "name": "a_Darkvine_tangler",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442189,
+        "name": "a_Darkvine_nightcreeper",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442190,
+        "name": "#Leafrot",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      },
+      {
+        "id": 442900,
+        "name": "a_Darkvine_guard",
+        "npc_faction_id": 3041010,
+        "faction_id": 1185,
+        "value": 1
+      }
+    ]
+  },
+  "limitations": [
+    "No native faction shop, progression grind or stale-slot purchase was exercised in this batch.",
+    "Existing prices, faction bases/modifiers and nonspell rows are preserved.",
+    "All elite rankIII vendors/progression and three standard factions remain outside this stage."
+  ]
+}

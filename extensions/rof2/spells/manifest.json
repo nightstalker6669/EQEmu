@@ -63,6 +63,12 @@
       "path": "data/010-sod-runes-and-downgrades.json",
       "contains_estimates": false,
       "sha256": "1461744c2beba82be1e4e6cdd41b499b2adc2ec3287b283777ddf7c1381681ca"
+    },
+    {
+      "name": "011-sof-faction-merchants",
+      "path": "data/011-sof-faction-merchants.json",
+      "contains_estimates": false,
+      "sha256": "8f556cf14c66b4ab1231f7b0213b111ce71cc6f5727e8c7ccc45f44195dcd067"
     }
   ],
   "primary_keys": {

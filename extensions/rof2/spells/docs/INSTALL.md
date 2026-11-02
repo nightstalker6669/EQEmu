@@ -83,3 +83,18 @@ Stage 008 requires faction 680 to retain its Dream Delvers identity and both exi
 Stages 009/010 require the original input/reward item names, spell effects and dated class/rank/level identities. Stage 009 adds scripts only; stage 010 adds the separate original SoD NPC/spawn/merchant and four non-tradeskill rune downgrade recipes. No scroll IDs are invented. Install all manifest scripts/modules together. The existing rune module may upgrade only from the exact published predecessor SHA recorded in the manifest; other edits are refused. Its bytes are preserved in the private receipt and restored if database commit fails. This is a targeted upgrade, not permission to replace customized quest scripts.
 
 The stage 010 SQL rollback guards all overlay fields; FLOAT fields allow only database storage precision. It removes recipe entries before headers and spawn/merchant dependencies before the NPC. Prefer the private installation receipt when content predates this package or has been customized. Allocator state must never be reset during rollback.
+
+
+## Stage011 guarded faction merchant repair
+
+Use the Python installer for stage011. It requires schema9338, the existing content dependencies, original faction threshold rules(Kindly500/Ally1100), existing faction gain routes, exact merchant consumers and either the complete original or complete installed merchant inventories. It refuses customized rows, missing dependencies and incompatible rules before writing. Four new faction groups,56 row updates and57 guarded row removals are included; no item/spell, quest, engine, schema or faction-modifier changes are made. The three factions with unestablished gain routes are excluded.
+
+Retain the successful `--backup` directory. Its `changes.json` includes full deleted-row preimages; `receipt.json` binds the applied payload checksum. Stage011 has no unguarded raw-SQL deletion script. To plan rollback of only stage011, run:
+
+```sh
+python3 tools/rollback_sof_merchants.py --db-config /private/db.json --backup /private/successful-install-backup
+```
+
+Add `--apply` to execute that rollback in a separately coordinated maintenance window. Only changes actually owned by that receipt are restored; a no-op rerun receipt does not undo an earlier install. Rollback refuses altered inventories, altered installed rows, extra faction-group consumers or new kill/assist entries. Already-restored rows are a no-op. Older content stages and quest files are left in place. Retain a complete server/database backup as well; this targeted rollback is not a substitute for it.
+
+Replacing NPC faction bindings can change merchant refusal and faction con behavior, including the existing Ladies base of-300. Preserve all original faction modifiers. Existing zones require coordinated content/cache activation; the installer itself never restarts or reloads services. No native activation is implied by publication.
