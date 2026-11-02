@@ -17,6 +17,8 @@
 */
 #pragma once
 
+#include "../common/boat_passenger.h"
+
 class Client;
 class EQApplicationPacket;
 class DynamicZone;
@@ -577,6 +579,7 @@ public:
 	void BulkSendTraderInventory(uint32 char_id);
 	void SendSingleTraderItem(uint32 char_id, int serial_number);
 	void BulkSendMerchantInventory(int merchant_id, int npcid);
+	bool MeetsMerchantLanguageRequirement(const MerchantList &entry) const;
 
 	inline uint8 GetLanguageSkill(uint8 language_id) const { return m_pp.languages[language_id]; }
 
@@ -1669,6 +1672,8 @@ public:
 	Mob *GetBindSightTarget() { return bind_sight_target; }
 	void SetBindSightTarget(Mob *n) { bind_sight_target = n; }
 	const uint16 GetBoatID() const { return controlling_boat_id; }
+	// Recent movement-packet passenger state; does not grant boat control.
+	uint16 GetPassengerBoatID() const;
 	void SendRewards();
 	bool TryReward(uint32 claim_id);
 	ClientRewardSelection &GetRewardSelection();
@@ -2079,6 +2084,7 @@ private:
 	bool berserk;
 	bool dead;
 	uint16 controlling_boat_id;
+	EQ::BoatPassengerState m_boat_passenger;
 	uint16 controlled_mob_id;
 	uint16 TrackingID;
 	bool   trader;

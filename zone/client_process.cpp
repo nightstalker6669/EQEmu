@@ -24,6 +24,7 @@
 #include "client.h"
 
 #include "common/data_verification.h"
+#include "common/merchant_language.h"
 #include "common/eqemu_logsys.h"
 #include "common/events/player_event_logs.h"
 #include "common/rulesys.h"
@@ -838,6 +839,23 @@ void Client::BulkSendInventoryItems()
 	safe_delete(outapp);
 }
 
+bool Client::MeetsMerchantLanguageRequirement(const MerchantList &entry) const
+{
+	static_assert(EQ::MerchantLanguage::LanguageCount == MAX_PP_LANGUAGE);
+	static_assert(EQ::MerchantLanguage::MaximumSkill == Language::MaxValue);
+	if (!EQ::MerchantLanguage::ValidRequirement(entry.language_required, entry.language_skill_required)) {
+		return false;
+	}
+	if (!entry.language_skill_required) {
+		return true;
+	}
+	return EQ::MerchantLanguage::Eligible(
+		entry.language_required,
+		entry.language_skill_required,
+		GetLanguageSkill(static_cast<uint8>(entry.language_required))
+	);
+}
+
 void Client::BulkSendMerchantInventory(int merchant_id, int npcid) {
 	const EQ::ItemData* handy_item = nullptr;
 	const EQ::ItemData *item = nullptr;
@@ -859,6 +877,14 @@ void Client::BulkSendMerchantInventory(int merchant_id, int npcid) {
 	for (const auto& ml : merchant_list) {
 		if (slot_id > merchant_slots) {
 			break;
+		}
+		if (!MeetsMerchantLanguageRequirement(ml)) {
+			// Keep hidden permanent slots out of the shared resale catalogue.
+			// Purchase validation must never confuse resale stock with this row.
+			if (ml.slot >= slot_id) {
+				slot_id = ml.slot + 1;
+			}
+			continue;
 		}
 
 		auto bucket_name = ml.bucket_name;

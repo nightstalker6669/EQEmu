@@ -13,7 +13,7 @@ Every RoF2 branch starts from **upstream `develop` commit `c9c8747ac949deddb140d
 | `rof2-mercenaries` | Fellowship stack + mercenaries |
 | `rof2-spirit-shrouds` | Mercenary stack + Spirit Shrouds |
 | `rof2-achievements` | Shared core + achievement engine and reviewed quest content |
-| `rof2-spells` | Shared core with generic native task rewards + spell database/quest content; optional labelled pet/aura estimates |
+| `rof2-spells` | Shared core with generic native task rewards + merchant language eligibility + spell database/quest content; optional labelled pet/aura estimates |
 | `rof2-integration` | All five published features, including achievements |
 
 Each feature layer is a single review commit over its prerequisite. The combined branch is linear: the shroud stack followed by achievement integration. The separate achievement branch remains available; its production content is also included in the combined source. Gameplay dependencies are unchanged; these names do not imply independent cherry-picks.
@@ -22,4 +22,4 @@ The previous mixed master/develop heads are preserved under `archive/20261029-be
 
 Native source patches are already applied. Historical release preimages in `extensions/rof2/` preserve provenance; do not reapply them. Existing PEQ/MariaDB databases use the required migrations and reviewed content; no database fork or private dump is required. Unfinished unpublished quest research remains excluded.
 
-The spells branch preserves its original published content commit and merges shared-core revision `fc88a0ba79a05e437e7b61af4e38ead32131de0f`; it does not inherit the achievement feature. The merge preserves both published histories without rewriting either.
+The spells branch preserves its original published content commit and merges shared-core revision `17d63f7d512711e911787e630f4533ee14a1e785`; it does not inherit the achievement feature. The merge preserves both published histories without rewriting either.

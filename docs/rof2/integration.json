@@ -1,8 +1,9 @@
 {
-  "branch": "rof2-shared-core",
+  "branch": "rof2-spells",
   "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "features": [
-    "shared-core"
+    "shared-core",
+    "spells"
   ],
   "inputs": {
     "source": "eqemu-rof2-housing 710ecb7, fellowship 9382453, spirit-shrouds e32ca15",
@@ -17,7 +18,7 @@
   "backup_branch": "archive/20261029-before-develop/rof2-shared-core",
   "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base.",
   "shared_task_rewards": {
-    "binary_database_version": 9334,
+    "binary_database_version": 9336,
     "wire_api": "EQ::RewardSelection in common/reward_display.h",
     "historical_schema_envelopes": [
       9331,
@@ -60,5 +61,22 @@
     "origin": "Parent-reviewed contextual correction after immutable source extraction.",
     "validation": "Incremental core zone linked; actual-method behavior fixtures and contextual consumer client compilation recorded in private review evidence.",
     "schema_changes": "None"
+  },
+  "shared_task_transport": {
+    "source": "Parent-reviewed generic schema9335 candidate; contextual port over published fc88a0ba79a05e437e7b61af4e38ead32131de0f",
+    "schema": 9335,
+    "migration": "2026_11_01_shared_task_average_levels.sql",
+    "scope": "Recent boat passenger observations, owned shared-task mission instance lookup, optional persisted-member average-level admission",
+    "achievement_dependency": "None; Lua lookup uses stock shared-task and dynamic-zone APIs",
+    "content_activation": "None; policy table is empty and no mission or quest content is imported",
+    "protocol_document": "docs/rof2/transport-passenger-state.md",
+    "validation": "Offline core world/zone link and contextual consumer checks are recorded in private review evidence; no runtime, database or native gameplay acceptance claimed."
+  },
+  "spell_layer": {
+    "shared_core_base": "17d63f7d512711e911787e630f4533ee14a1e785",
+    "content_manifest": "extensions/rof2/spells/manifest.json",
+    "merchant_language_migration": 9336,
+    "scope": "Sourced Argath rank I stock and native merchant language eligibility, RoF spell/item/pet/aura content and physical Kerkaz mote tasks. Reconstructed pet/aura estimates remain optional.",
+    "deployment": "Merchant language source/schema/content not deployed during the active achievement test window. Native mote and language merchant acceptance pending."
   }
 }

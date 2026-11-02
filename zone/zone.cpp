@@ -623,7 +623,7 @@ void Zone::LoadNewMerchantData(uint32 merchantid) {
 
 	std::list<MerchantList> merchant_list;
 
-	const auto& l = MerchantlistRepository::GetWhere(
+	const auto& l = MerchantlistRepository::GetWhereWithLanguage(
 		content_db,
 		fmt::format(
 			"merchantid = {} {} ORDER BY slot",
@@ -651,6 +651,8 @@ void Zone::LoadNewMerchantData(uint32 merchantid) {
 		ml.bucket_name       = e.bucket_name;
 		ml.bucket_value      = e.bucket_value;
 		ml.bucket_comparison = e.bucket_comparison;
+		ml.language_required = e.language_required;
+		ml.language_skill_required = e.language_skill_required;
 		merchant_list.push_back(ml);
 	}
 
@@ -659,7 +661,7 @@ void Zone::LoadNewMerchantData(uint32 merchantid) {
 
 void Zone::LoadMerchants()
 {
-	const auto& l = MerchantlistRepository::GetWhere(
+	const auto& l = MerchantlistRepository::GetWhereWithLanguage(
 		content_db,
 		fmt::format(
 			SQL(
@@ -727,7 +729,9 @@ void Zone::LoadMerchants()
 				.probability = static_cast<uint8>(e.probability),
 				.bucket_name = e.bucket_name,
 				.bucket_value = e.bucket_value,
-				.bucket_comparison = e.bucket_comparison
+				.bucket_comparison = e.bucket_comparison,
+				.language_required = e.language_required,
+				.language_skill_required = e.language_skill_required
 			}
 		);
 	}

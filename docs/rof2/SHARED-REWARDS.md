@@ -23,7 +23,7 @@ same qualifying task cannot multiply credit.
 
 ## Schema compatibility
 
-Run the matching binary database updater through version 9334. Published
+Run the matching binary database updater through version 9335. Published
 migration IDs 9331 and 9332 and their exact SQL bytes remain compatibility
 envelopes. They historically mix generic reward DDL with empty achievement
 schema scaffolding. Keeping those definitions intact prevents a core-only
@@ -51,3 +51,9 @@ packet dispatcher and expose source-compatible aliases for the moved wire API.
 They must link the shared codec once and inherit this exact core revision.
 Consumer updates must merge shared client/header/packet changes contextually;
 copying integration headers would import unrelated housing code.
+
+## Shared task transport and average-level capabilities
+
+Schema 9335 retains the exact `2026_11_01_shared_task_average_levels.sql` registration and supplies an empty optional content policy table. It activates no mission or policy row by itself. Later feature migrations must retain this registration before advancing the binary schema version.
+
+`Client:GetPassengerBoatID()` exposes recent validated movement-packet passenger state without boat control. `Client:GetSharedTaskInstanceID(task_id, zone_id, zone_version)` returns one live mission instance owned by the current persisted shared-task occurrence and character membership. The lookup uses stock task/dynamic-zone APIs and has no achievement-provider dependency. See [transport state and owned-instance protocol](transport-passenger-state.md) for wire fields, freshness, ownership requirements and the optional average-level policy.

@@ -1,6 +1,6 @@
 # Install `rof2-spells`
 
-This branch already includes shared-core revision `fc88a0ba79a05e437e7b61af4e38ead32131de0f` and its native task reward engine. Build this branch directly; no achievement feature merge or source overlay is required. After the shared build/schema steps below, install the [spell content overlay](../../extensions/rof2/spells/docs/INSTALL.md), including its original supplemental class/identity/admission SQL prerequisites and guarded planner. Pet/aura estimates require deliberate opt-in.
+This branch already includes shared-core revision `17d63f7d512711e911787e630f4533ee14a1e785` and its native task reward engine. Build this branch directly; no achievement feature merge or source overlay is required. After the shared build/schema steps below, install the [spell content overlay](../../extensions/rof2/spells/docs/INSTALL.md), including its original supplemental class/identity/admission SQL prerequisites and guarded planner. Pet/aura estimates require deliberate opt-in.
 
 ## Current upstream foundation
 
@@ -14,4 +14,6 @@ Build through the normal upstream workflow. The core alone does not activate the
 
 [Branch map](BRANCHES.md) · [Provenance](integration.json)
 
-The shared core now also provides native task selectable rewards, shared occurrence ownership, carried Collect high-water tracking and distinct task-completion reward gates. Review [shared reward installation and migration compatibility](SHARED-REWARDS.md), including the original supplemental class/identity/admission SQL, before using those capabilities. Binary schema version is 9334.
+The shared core now also provides native task selectable rewards, shared occurrence ownership, carried Collect high-water tracking and distinct task-completion reward gates. Review [shared reward installation and migration compatibility](SHARED-REWARDS.md), including the original supplemental class/identity/admission SQL, before using those capabilities. Binary schema version is 9336, including the content merchant-language upgrade described in the spell installation guide.
+
+Schema 9335 adds only the empty `shared_task_average_level_policies` content table and its schema guard. No mission/policy/content rows are activated by the core. Keep the exact 9335 registration when combining this core with later feature migrations. [Transport and shared-task APIs](transport-passenger-state.md) describe the generic Lua accessors and optional average-level admission.

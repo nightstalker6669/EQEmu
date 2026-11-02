@@ -79,6 +79,14 @@ def main():
                 cursor.execute(f"SHOW COLUMNS FROM `{table}`")
                 columns[table] = {r["Field"] for r in cursor.fetchall()}
             for payload in payloads:
+                for npc in payload.get("required_npcs", []):
+                    cursor.execute("SELECT id,name,merchant_id,class FROM npc_types WHERE id=%s FOR UPDATE", (npc["id"],))
+                    if cursor.fetchone() != npc:
+                        raise RuntimeError(f"Merchant NPC identity/binding differs: {npc['id']}")
+                for item in payload.get("required_items", []):
+                    cursor.execute("SELECT id,scrolleffect FROM items WHERE id=%s FOR UPDATE", (item["id"],))
+                    if cursor.fetchone() != item:
+                        raise RuntimeError(f"Spell scroll identity differs: {item['id']}")
                 for table, rows in payload["inserts"].items():
                     counts[table] = counts.get(table, 0) + len(rows)
                     pk = manifest["primary_keys"][table]
@@ -98,11 +106,14 @@ def main():
                             inserts.append((table, row))
                 for update in payload["updates"]:
                     table = update["table"]
+                    fields = set(update["key"]) | set(update["identity"]) | set(update["before"]) | set(update["after"])
+                    if fields - columns[table]:
+                        raise RuntimeError(f"Unsupported schema {table}: missing {sorted(fields - columns[table])}")
                     where, values = sql_key(update["key"])
                     cursor.execute(f"SELECT * FROM `{table}` WHERE {where} FOR UPDATE", values)
                     old = cursor.fetchone()
                     if not old or any(old[k] != v for k, v in update["identity"].items()):
-                        raise RuntimeError(f"NPC identity differs: {update['key']}")
+                        raise RuntimeError(f"Row identity differs in {table}: {update['key']}")
                     if all(equal(old[k], v) for k, v in update["after"].items()):
                         continue
                     if not all(equal(old[k], v) for k, v in update["before"].items()):

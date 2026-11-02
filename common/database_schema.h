@@ -262,6 +262,7 @@ namespace DatabaseSchema {
 			"start_zones",
 			"starting_items",
 			"shared_task_admission_policies",
+			"shared_task_average_level_policies",
 			"task_activities",
 			"tasks",
 			"tasksets",

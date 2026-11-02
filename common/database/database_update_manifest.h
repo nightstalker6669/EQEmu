@@ -7570,6 +7570,62 @@ CREATE TABLE IF NOT EXISTS task_reward_option_gates (
 )SQL",
 		.content_schema_update = true
 	},
+	ManifestEntry{
+		.version = 9335,
+		.description = "2026_11_01_shared_task_average_levels.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Average-level content policy for original shared missions. Empty table
+-- preserves existing per-character admission. Mer requires an enabled row.
+SET NAMES utf8mb4;
+SET SESSION check_constraint_checks=1;
+CREATE TABLE IF NOT EXISTS shared_task_average_level_policies (
+ task_id INT UNSIGNED NOT NULL,
+ minimum_average_level TINYINT UNSIGNED NOT NULL,
+ enabled TINYINT UNSIGNED NOT NULL DEFAULT 0,
+ PRIMARY KEY(task_id),
+ CHECK(minimum_average_level BETWEEN 1 AND 255),
+ CHECK(enabled IN(0,1))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TEMPORARY TABLE IF EXISTS `_shared_average_schema_guard`;
+CREATE TEMPORARY TABLE `_shared_average_schema_guard`(ok TINYINT NOT NULL CHECK(ok=1))ENGINE=InnoDB;
+INSERT INTO `_shared_average_schema_guard` VALUES(
+ (SELECT COUNT(*)FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND ENGINE='InnoDB'AND TABLE_TYPE='BASE TABLE')=1
+ AND(SELECT COUNT(*)FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies')=3
+ AND(SELECT COUNT(*)FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND COLUMN_NAME='task_id'AND DATA_TYPE='int'AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO')=1
+ AND(SELECT COUNT(*)FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND COLUMN_NAME IN('minimum_average_level','enabled')AND DATA_TYPE='tinyint'AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO')=2
+ AND(SELECT COUNT(*)FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND INDEX_NAME='PRIMARY')=1
+ AND(SELECT COUNT(*)FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND INDEX_NAME='PRIMARY'AND COLUMN_NAME='task_id'AND SEQ_IN_INDEX=1)=1
+);
+DROP TEMPORARY TABLE `_shared_average_schema_guard`;
+)SQL",
+		.content_schema_update = true
+	},
+	ManifestEntry{
+		.version = 9336,
+		.description = "2026_11_01_merchant_language_requirements.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Content schema 9336. Requires the matching merchant-language binary.
+-- Additive defaults preserve unrestricted existing merchant catalogues.
+ALTER TABLE merchantlist
+ ADD COLUMN IF NOT EXISTS language_required SMALLINT NOT NULL DEFAULT -1,
+ ADD COLUMN IF NOT EXISTS language_skill_required TINYINT UNSIGNED NOT NULL DEFAULT 0;
+-- Refuse incompatible pre-existing columns instead of silently adopting them.
+DROP TEMPORARY TABLE IF EXISTS `_merchant_language_schema_guard`;
+CREATE TEMPORARY TABLE `_merchant_language_schema_guard`(ok TINYINT NOT NULL CHECK(ok=1)) ENGINE=InnoDB;
+INSERT INTO `_merchant_language_schema_guard` VALUES (
+ (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='merchantlist' AND COLUMN_NAME='language_required' AND DATA_TYPE='smallint' AND LOCATE('unsigned',COLUMN_TYPE)=0 AND IS_NULLABLE='NO' AND COLUMN_DEFAULT='-1')=1
+ AND (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='merchantlist' AND COLUMN_NAME='language_skill_required' AND DATA_TYPE='tinyint' AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO' AND COLUMN_DEFAULT='0')=1
+);
+DROP TEMPORARY TABLE `_merchant_language_schema_guard`;
+)SQL",
+		.content_schema_update = true
+	},
 // -- template; copy/paste this when you need to create a new entry
 //	ManifestEntry{
 //		.version = 9228,

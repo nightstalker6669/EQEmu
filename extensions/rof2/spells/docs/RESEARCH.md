@@ -27,3 +27,15 @@ The three Exigent summoned items use existing sibling templates and [Lucy item 6
 Aura parent-to-child links were checked against [Raidloot](https://www.raidloot.com/spells) and existing local effect spell IDs. Recipient/movement roles use existing native aura modes; range, timing, duration and visuals include estimates. Native ground-target placement and other C++ behavior remain limitations that this database-only repair does not solve. Existing 26 aura records were not replaced.
 
 The pet payload creates no world spawns, merchants, faction assignments or loot. Its 3,084 NPC templates are referenced by the reconstructed pets/focus variants. This is functional reconstruction content, not a complete historical-balance recovery.
+
+## Continued acquisition review (2026-11-01)
+
+A fresh database source scan found stock/loot/recipe/task-reward rows for all 1,678 initial direct RoF acquisition candidates after the earlier repairs. This proves database references, not gameplay reachability. Another 2,814 older scroll-backed spell candidates lacked those source rows before the staged VoA repair. Quest scripts and progression requirements still require expansion-by-expansion review.
+
+The [VoA guide](https://www.raspersrealm.com/Everquest/VoA/miscSpells.html), inspected in Chrome with all class tables expanded, supplies Argath merchant names and Alaran thresholds. The [row provenance](../provenance/voa-merchants.json) records each confirmed mapping. Stage 005 adds 182 rows and gates 159 existing rows, covering 336 distinct spells. Of the original 180 missing VoA rank I acquisition candidates, 177 are covered by this staged repair. Existing merchant pricing, currency, faction, class and expansion policies are preserved. It does not alter spell levels or effects.
+
+Perfected Blood and Tectonic Tremor have conflicting 25/50 requirements between class tables. Five guide names (Tendon Smash, Aura/Echo of the Order, Scalding Burst and Flashfires) do not match the dated database scope. Those entries are held pending independent evidence. Gouging Blade is another missing rank I acquisition candidate absent from the guide. No aliases or guessed thresholds are applied for these cases.
+
+Mark of the Exemplar rank I has no scroll in this database. A December 2012 comment on its [spell page](https://everquest.allakhazam.com/db/spell/34416) reports it missing from the vendor, so a new rank I scroll was not inferred. Its documented rank II/III options remain in Kerkaz's catalogue.
+
+The [HoT guide](https://www.raspersrealm.com/Everquest/HoT/miscSpells.html) also identifies Dream Mote and fragment acquisition with faction/progression restrictions. Rotharran currently has other zero-cost entries and no alternate-currency binding, so simply enabling Dream Motes would expose free stock. That repair and authentic fragment/VoA rank II/III turn-ins remain open research, separate from the completed RoF Kerkaz content.
