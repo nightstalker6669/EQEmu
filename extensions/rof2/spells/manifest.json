@@ -163,7 +163,10 @@
     },
     {
       "stage": "006-ordered-runes",
-      "path": "quests/lua_modules/rof2_spell_rune_data.lua"
+      "path": "quests/lua_modules/rof2_spell_rune_data.lua",
+      "previous_sha256": [
+        "f1a978e0fcabd6f024ddf5674dacb7cbde2537689c3d6a92a0233acee3f35124"
+      ]
     },
     {
       "stage": "006-ordered-runes",

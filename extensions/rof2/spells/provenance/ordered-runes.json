@@ -1,7 +1,8 @@
 {
   "source_urls": [
     "https://www.raspersrealm.com/Everquest/SoF/miscSpells.html",
-    "https://www.raspersrealm.com/Everquest/Underfoot/miscSpells.html"
+    "https://www.raspersrealm.com/Everquest/Underfoot/miscSpells.html",
+    "https://everquest.allakhazam.com/db/quest/4959"
   ],
   "catalogues": {
     "sof": [
@@ -3427,9 +3428,9 @@
         "name": "Necrotize Ally Rk. III",
         "item_id": 119587,
         "level": 85,
-        "rune": "Sparkling Precandescent Rune",
+        "rune": "Twinkling Hyperfiligreed Rune",
         "sequence": 1,
-        "source": "https://www.raspersrealm.com/Everquest/Underfoot/miscSpells.html"
+        "source": "https://everquest.allakhazam.com/db/quest/4959"
       },
       {
         "class": 11,
@@ -3437,9 +3438,9 @@
         "name": "Necrotic Pustules Rk. III",
         "item_id": 119599,
         "level": 84,
-        "rune": "Twinkling Hyperfiligreed Rune",
+        "rune": "Sparkling Precandescent Rune",
         "sequence": 1,
-        "source": "https://www.raspersrealm.com/Everquest/Underfoot/miscSpells.html"
+        "source": "https://everquest.allakhazam.com/db/quest/4959"
       },
       {
         "class": 11,
