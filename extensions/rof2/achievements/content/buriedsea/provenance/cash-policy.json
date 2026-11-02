@@ -1,0 +1,19 @@
+{
+  "policy": "Cash choice available from first completion; bone unlock thresholds remain separate.",
+  "correction": "An earlier staged candidate gated cash at three without specific evidence. That restriction is removed before any deployment.",
+  "sources": [
+    {
+      "quest": 4072,
+      "archive": "quest4072-20121101085433.txt",
+      "period_date": "2012-10-26",
+      "facts": "First two completions reward faction and coin, with additional bone options on the next three; the author states the families work similarly."
+    },
+    {
+      "quest": 4079,
+      "archive": "quest4079-20121101090347.txt",
+      "period_date": "2007-03-08",
+      "facts": "The first completion awarded 50 platinum. The report also interpreted XP and faction as exclusive; that interpretation remains unverified."
+    }
+  ],
+  "historical_limit": "The general guide omits cash when summarizing early rewards. Specific period firsthand reward reports take precedence; exact early UI presentation is not recovered."
+}

@@ -1,0 +1,5046 @@
+{
+  "schema_version": 1,
+  "cutoff": "2013-05-31",
+  "state": "staged_admission_and_reward_policy_resolved_world_dependencies_pending",
+  "tasks": [
+    {
+      "task_id": 3040901,
+      "component_id": 50239,
+      "achievement_id": 500090200,
+      "external_quest_id": 4044,
+      "title": "Scouting Monkey Rock",
+      "owner_npc_id": 422004,
+      "owner_name": "Trophy Hunter Locke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4044",
+        "timestamp": "20121101085824",
+        "url": "https://web.archive.org/web/20121101085824id_/http://everquest.allakhazam.com/db/quest.html?quest=4044",
+        "sha256": "29dc332c9fa26a10636fcaaee22a2f568bb1db15b8adffebe152825859a929f7"
+      },
+      "activities": [
+        {
+          "kind": "explore",
+          "target": "monkey_ruins_1",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "monkey_ruins_2",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "monkey_ruins_3",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "observatory",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "druid_rings",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 4,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "southern_sunken_head",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 5,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "central_sunken_head",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 6,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "north_extreme",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 7,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "south_extreme",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 8,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "west_extreme",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 9,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "east_extreme",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 10,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 1,
+          "activity_id": 11,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 60,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 5,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79929,
+            "item_name": "Jonas Dagmire's Forefinger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79930,
+            "item_name": "Jonas Dagmire's Long Finger Metacarpal",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79931,
+            "item_name": "Jonas Dagmire's Ring Finger Metacarpal",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040901,
+          3040902,
+          3040903,
+          3040904,
+          3040905
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040902,
+      "component_id": 50240,
+      "achievement_id": 500090200,
+      "external_quest_id": 4040,
+      "title": "Monkey Trophies",
+      "owner_npc_id": 422004,
+      "owner_name": "Trophy Hunter Locke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4040",
+        "timestamp": "20121101090041",
+        "url": "https://web.archive.org/web/20121101090041id_/http://everquest.allakhazam.com/db/quest.html?quest=4040",
+        "sha256": "d93eec63887351f4ebca776697c9b87897139152d68518f375c269fec30a0c1a"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 32753,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Gorilla Pelt",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32754,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Gorilla Paw",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32755,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Gorilla Canine",
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32756,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Lightly Damaged Gorilla Carcass",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32753,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Gorilla Pelt",
+          "activity_id": 4,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32754,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Gorilla Paw",
+          "activity_id": 5,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32755,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Gorilla Canine",
+          "activity_id": 6,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32756,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Lightly Damaged Gorilla Carcass",
+          "activity_id": 7,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 60,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 5,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79929,
+            "item_name": "Jonas Dagmire's Forefinger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79930,
+            "item_name": "Jonas Dagmire's Long Finger Metacarpal",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79931,
+            "item_name": "Jonas Dagmire's Ring Finger Metacarpal",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040901,
+          3040902,
+          3040903,
+          3040904,
+          3040905
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040903,
+      "component_id": 50241,
+      "achievement_id": 500090200,
+      "external_quest_id": 4041,
+      "title": "Jaguar Trophies",
+      "owner_npc_id": 422004,
+      "owner_name": "Trophy Hunter Locke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4041",
+        "timestamp": "20121101085854",
+        "url": "https://web.archive.org/web/20121101085854id_/http://everquest.allakhazam.com/db/quest.html?quest=4041",
+        "sha256": "6af3ec6f4ba920e50b9afd36864514cf53f941b18ff9493493d211feb9ffde71"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 32757,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Jaguar Pelt",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32758,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Jaguar Paw",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32759,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Jaguar Canine",
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32760,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Lightly Damaged Jaguar Carcass",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32757,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Jaguar Pelt",
+          "activity_id": 4,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32758,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Jaguar Paw",
+          "activity_id": 5,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32759,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Jaguar Canine",
+          "activity_id": 6,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32760,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Lightly Damaged Jaguar Carcass",
+          "activity_id": 7,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 60,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 5,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79929,
+            "item_name": "Jonas Dagmire's Forefinger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79930,
+            "item_name": "Jonas Dagmire's Long Finger Metacarpal",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79931,
+            "item_name": "Jonas Dagmire's Ring Finger Metacarpal",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040901,
+          3040902,
+          3040903,
+          3040904,
+          3040905
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040904,
+      "component_id": 50242,
+      "achievement_id": 500090200,
+      "external_quest_id": 4043,
+      "title": "Raptor Trophies",
+      "owner_npc_id": 422004,
+      "owner_name": "Trophy Hunter Locke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4043",
+        "timestamp": "20121101085428",
+        "url": "https://web.archive.org/web/20121101085428id_/http://everquest.allakhazam.com/db/quest.html?quest=4043",
+        "sha256": "b8a349e7cbe7d30d4bd1abab51a15ff5353acf577794fcd3bb1f4eedf1ce7871"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 32761,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Raptor Claw",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32762,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Raptor Skin",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32763,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Raptor Canine",
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32764,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Lightly Damaged Raptor Carcass",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32761,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Raptor Claw",
+          "activity_id": 4,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32762,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Raptor Skin",
+          "activity_id": 5,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32763,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Raptor Canine",
+          "activity_id": 6,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32764,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Lightly Damaged Raptor Carcass",
+          "activity_id": 7,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 60,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 5,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79929,
+            "item_name": "Jonas Dagmire's Forefinger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79930,
+            "item_name": "Jonas Dagmire's Long Finger Metacarpal",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79931,
+            "item_name": "Jonas Dagmire's Ring Finger Metacarpal",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040901,
+          3040902,
+          3040903,
+          3040904,
+          3040905
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040905,
+      "component_id": 50243,
+      "achievement_id": 500090200,
+      "external_quest_id": 4042,
+      "title": "Python Trophies",
+      "owner_npc_id": 422004,
+      "owner_name": "Trophy Hunter Locke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4042",
+        "timestamp": "20121101090356",
+        "url": "https://web.archive.org/web/20121101090356id_/http://everquest.allakhazam.com/db/quest.html?quest=4042",
+        "sha256": "dc70cc86857f88d3ef3563a9460d2c58030e788a61184e8bd3419f9b2ae33ab9"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 32765,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Python Skin",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32766,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Python Head",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32767,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Pristine Python Fang",
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 32768,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Lightly Damaged Python Carcass",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32765,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Python Skin",
+          "activity_id": 4,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32766,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Python Head",
+          "activity_id": 5,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32767,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Pristine Python Fang",
+          "activity_id": 6,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 32768,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Lightly Damaged Python Carcass",
+          "activity_id": 7,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 60,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 5,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79929,
+            "item_name": "Jonas Dagmire's Forefinger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79930,
+            "item_name": "Jonas Dagmire's Long Finger Metacarpal",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79931,
+            "item_name": "Jonas Dagmire's Ring Finger Metacarpal",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040901,
+          3040902,
+          3040903,
+          3040904,
+          3040905
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040906,
+      "component_id": 50244,
+      "achievement_id": 500090300,
+      "external_quest_id": 4080,
+      "title": "Charting Redfeather Isle",
+      "owner_npc_id": 423144,
+      "owner_name": "Johnny the Black Crow",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4080",
+        "timestamp": "20120923151420",
+        "url": "https://web.archive.org/web/20120923151420id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4080",
+        "sha256": "3efca8681b60ea7a86e8d6ddc545bf636a3a2cc270711f0553a1aedf1f11ec4e"
+      },
+      "activities": [
+        {
+          "kind": "explore",
+          "target": "northern_raindrop",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -3100,
+            "x": 2800
+          }
+        },
+        {
+          "kind": "explore",
+          "target": "central_raindrop",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -3600,
+            "x": 2800
+          }
+        },
+        {
+          "kind": "explore",
+          "target": "southern_raindrop",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -3900,
+            "x": 2900
+          }
+        },
+        {
+          "kind": "explore",
+          "target": "aviak_city_entrance",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -3800,
+            "x": 820
+          }
+        },
+        {
+          "kind": "explore",
+          "target": "karana_temple",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 4,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -3600,
+            "x": 700
+          }
+        },
+        {
+          "kind": "explore",
+          "target": "azure_flame_stair",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 5,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -4200,
+            "x": 1200
+          }
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 1,
+          "activity_id": 6,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79932,
+            "item_name": "Jonas Dagmire's Little Finger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79933,
+            "item_name": "Jonas Dagmire's Thumb Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79934,
+            "item_name": "Jonas Dagmire's Forefinger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040906,
+          3040907,
+          3040908,
+          3040909,
+          3040910
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040907,
+      "component_id": 50245,
+      "achievement_id": 500090300,
+      "external_quest_id": 4079,
+      "title": "Ahoy! Treasures Washed Ashore",
+      "owner_npc_id": 423144,
+      "owner_name": "Johnny the Black Crow",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4079",
+        "timestamp": "20121101090347",
+        "url": "https://web.archive.org/web/20121101090347id_/http://everquest.allakhazam.com/db/quest.html?quest=4079",
+        "sha256": "52b43365761aa92d2f3d16b83024087cbead066fc5845d71fc19683f66a234d7"
+      },
+      "activities": [
+        {
+          "kind": "collect",
+          "target": 52680,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Stack of Navigation Charts",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 52681,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Silver Belt Buckles",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 52682,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Ancient Sextant",
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 52683,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Merchant Vessel Trade Routes",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 52684,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Sister Island Skivvies",
+          "activity_id": 4,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 52680,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Stack of Navigation Charts",
+          "activity_id": 5,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 52681,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Silver Belt Buckles",
+          "activity_id": 6,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 52682,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Ancient Sextant",
+          "activity_id": 7,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 52683,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Merchant Vessel Trade Routes",
+          "activity_id": 8,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 52684,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Sister Island Skivvies",
+          "activity_id": 9,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 61,
+        "effective": 61,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79932,
+            "item_name": "Jonas Dagmire's Little Finger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79933,
+            "item_name": "Jonas Dagmire's Thumb Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79934,
+            "item_name": "Jonas Dagmire's Forefinger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040906,
+          3040907,
+          3040908,
+          3040909,
+          3040910
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040908,
+      "component_id": 50246,
+      "achievement_id": 500090300,
+      "external_quest_id": 4077,
+      "title": "Regrua-Shell Armor",
+      "owner_npc_id": 423146,
+      "owner_name": "Rickan",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4077",
+        "timestamp": "20121101085510",
+        "url": "https://web.archive.org/web/20121101085510id_/http://everquest.allakhazam.com/db/quest.html?quest=4077",
+        "sha256": "a9521163168d8ad9a70a9b3c435020767473e90244caaa83ed46ef85d8095a76"
+      },
+      "activities": [
+        {
+          "kind": "collect",
+          "target": 52685,
+          "count": 5,
+          "stage": 0,
+          "item_name": "Regrua Shell",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver_bundle",
+          "target": "owner",
+          "count": 1,
+          "stage": 1,
+          "items": [
+            {
+              "item_id": 52685,
+              "count": 5
+            }
+          ],
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 61,
+        "effective": 61,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79932,
+            "item_name": "Jonas Dagmire's Little Finger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79933,
+            "item_name": "Jonas Dagmire's Thumb Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79934,
+            "item_name": "Jonas Dagmire's Forefinger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040906,
+          3040907,
+          3040908,
+          3040909,
+          3040910
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040909,
+      "component_id": 50247,
+      "achievement_id": 500090300,
+      "external_quest_id": 4078,
+      "title": "A Red-Plumed Hat",
+      "owner_npc_id": 423146,
+      "owner_name": "Rickan",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4078",
+        "timestamp": "20121101085414",
+        "url": "https://web.archive.org/web/20121101085414id_/http://everquest.allakhazam.com/db/quest.html?quest=4078",
+        "sha256": "8538f3e92226543e306bd4aeb8bbd9339212df91618c1ab6ebef4512969b30e0"
+      },
+      "activities": [
+        {
+          "kind": "collect",
+          "target": 52686,
+          "count": 5,
+          "stage": 0,
+          "item_name": "Red Aviak Feather",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 52686,
+          "count": 5,
+          "stage": 1,
+          "item_name": "Red Aviak Feather",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79932,
+            "item_name": "Jonas Dagmire's Little Finger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79933,
+            "item_name": "Jonas Dagmire's Thumb Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79934,
+            "item_name": "Jonas Dagmire's Forefinger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040906,
+          3040907,
+          3040908,
+          3040909,
+          3040910
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040910,
+      "component_id": 50248,
+      "achievement_id": 500090300,
+      "external_quest_id": 4076,
+      "title": "Raptors, Basilisks, and Pumas. Oh My!",
+      "owner_npc_id": 423146,
+      "owner_name": "Rickan",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4076",
+        "timestamp": "20121101090303",
+        "url": "https://web.archive.org/web/20121101090303id_/http://everquest.allakhazam.com/db/quest.html?quest=4076",
+        "sha256": "d69959c3be41513d899295f4beec55b6ceee57e21c9d523453c6cc4a86d58c3a"
+      },
+      "activities": [
+        {
+          "kind": "collect",
+          "target": 52687,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Supple Basilisk Pelt",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 52688,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Supple Puma Skin",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 52689,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Supple Raptor Skin",
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 52687,
+          "count": 2,
+          "stage": 1,
+          "item_name": "Supple Basilisk Pelt",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 52688,
+          "count": 2,
+          "stage": 1,
+          "item_name": "Supple Puma Skin",
+          "activity_id": 4,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 52689,
+          "count": 2,
+          "stage": 1,
+          "item_name": "Supple Raptor Skin",
+          "activity_id": 5,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 61,
+        "effective": 61,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79932,
+            "item_name": "Jonas Dagmire's Little Finger Metacarpal",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79933,
+            "item_name": "Jonas Dagmire's Thumb Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79934,
+            "item_name": "Jonas Dagmire's Forefinger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040906,
+          3040907,
+          3040908,
+          3040909,
+          3040910
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040911,
+      "component_id": 50249,
+      "achievement_id": 500090400,
+      "external_quest_id": 4026,
+      "title": "Siren Combs",
+      "owner_npc_id": 422012,
+      "owner_name": "Merchant Wain",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4026",
+        "timestamp": "20121101085924",
+        "url": "https://web.archive.org/web/20121101085924id_/http://everquest.allakhazam.com/db/quest.html?quest=4026",
+        "sha256": "bf923b0be38edeb49a72a2798f465aab99dbe89cdc4e7c4943ea2d5333438277"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 84245,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Siren Comb",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 84245,
+          "count": 4,
+          "stage": 1,
+          "item_name": "Siren Comb",
+          "activity_id": 1,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 66,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79935,
+            "item_name": "Jonas Dagmire's Long Finger Proximal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79936,
+            "item_name": "Jonas Dagmire's Ring Finger Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79937,
+            "item_name": "Jonas Dagmire's Little Finger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040911,
+          3040912,
+          3040913,
+          3040914,
+          3040915
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040912,
+      "component_id": 50250,
+      "achievement_id": 500090400,
+      "external_quest_id": 4027,
+      "title": "Siren Hair",
+      "owner_npc_id": 422012,
+      "owner_name": "Merchant Wain",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4027",
+        "timestamp": "20121101090117",
+        "url": "https://web.archive.org/web/20121101090117id_/http://everquest.allakhazam.com/db/quest.html?quest=4027",
+        "sha256": "71637f9e288adce16acc994deb7ba88dc07aa8614fe87fb1f844a48078a5c7e0"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 84246,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Lock of Siren Hair",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 84246,
+          "count": 4,
+          "stage": 1,
+          "item_name": "Lock of Siren Hair",
+          "activity_id": 1,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 66,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79935,
+            "item_name": "Jonas Dagmire's Long Finger Proximal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79936,
+            "item_name": "Jonas Dagmire's Ring Finger Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79937,
+            "item_name": "Jonas Dagmire's Little Finger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040911,
+          3040912,
+          3040913,
+          3040914,
+          3040915
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040913,
+      "component_id": 50251,
+      "achievement_id": 500090400,
+      "external_quest_id": 4069,
+      "title": "Uncovered Treasure",
+      "owner_npc_id": 423151,
+      "owner_name": "Pirate Smythe",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4069",
+        "timestamp": "20121101090126",
+        "url": "https://web.archive.org/web/20121101090126id_/http://everquest.allakhazam.com/db/quest.html?quest=4069",
+        "sha256": "76f482212e549b45b52c40214762a05b39ec655f292d948b2f584eb80d5f1105"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 84248,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Bundle of Sea Charts",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 84248,
+          "count": 4,
+          "stage": 1,
+          "item_name": "Bundle of Sea Charts",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79935,
+            "item_name": "Jonas Dagmire's Long Finger Proximal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79936,
+            "item_name": "Jonas Dagmire's Ring Finger Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79937,
+            "item_name": "Jonas Dagmire's Little Finger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040911,
+          3040912,
+          3040913,
+          3040914,
+          3040915
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040914,
+      "component_id": 50252,
+      "achievement_id": 500090400,
+      "external_quest_id": 4067,
+      "title": "The Lost Crew",
+      "owner_npc_id": 423152,
+      "owner_name": "Captain Pete",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4067",
+        "timestamp": "20121101085556",
+        "url": "https://web.archive.org/web/20121101085556id_/http://everquest.allakhazam.com/db/quest.html?quest=4067",
+        "sha256": "cd1e138f6390756a1b51fa1dc6fd2da5e68c9dbb4463148de919f1bb4cad3e6a"
+      },
+      "activities": [
+        {
+          "kind": "deliver",
+          "target": 84247,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Sailor Remains",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79935,
+            "item_name": "Jonas Dagmire's Long Finger Proximal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79936,
+            "item_name": "Jonas Dagmire's Ring Finger Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79937,
+            "item_name": "Jonas Dagmire's Little Finger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040911,
+          3040912,
+          3040913,
+          3040914,
+          3040915
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040915,
+      "component_id": 50253,
+      "achievement_id": 500090400,
+      "external_quest_id": 4068,
+      "title": "Scouting Maiden's Grave",
+      "owner_npc_id": 423152,
+      "owner_name": "Captain Pete",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4068",
+        "timestamp": "20121101085713",
+        "url": "https://web.archive.org/web/20121101085713id_/http://everquest.allakhazam.com/db/quest.html?quest=4068",
+        "sha256": "3d4a7bb1a97870ed28a09baae13cc8b045e68598bf92f9f38840211b04782b64"
+      },
+      "activities": [
+        {
+          "kind": "explore",
+          "target": "gateway_arch",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "undead_beach",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "northern_beach",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "central_pool",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "outlying_island_1",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 4,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "outlying_island_2",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 5,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "outlying_island_3",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 6,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "outlying_island_4",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 7,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "explore",
+          "target": "outlying_island_5",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 8,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 1,
+          "activity_id": 9,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 50000,
+        "bone_options": [
+          {
+            "item_id": 79935,
+            "item_name": "Jonas Dagmire's Long Finger Proximal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79936,
+            "item_name": "Jonas Dagmire's Ring Finger Proximal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79937,
+            "item_name": "Jonas Dagmire's Little Finger Proximal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040911,
+          3040912,
+          3040913,
+          3040914,
+          3040915
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040916,
+      "component_id": 50254,
+      "achievement_id": 500090500,
+      "external_quest_id": 4075,
+      "title": "Snake Milk",
+      "owner_npc_id": 423148,
+      "owner_name": "Sid Hacke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4075",
+        "timestamp": "20121009020301",
+        "url": "https://web.archive.org/web/20121009020301id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4075",
+        "sha256": "7e1b2529559d34e424f4d36d604968104950cd774a0bfc83ebfdbb0bf2bc6d51"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 88230,
+          "count": 5,
+          "stage": 0,
+          "item_name": "Sea Snake Venom Sac",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 88230,
+          "count": 5,
+          "stage": 1,
+          "item_name": "Sea Snake Venom Sac",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 15,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79920,
+            "item_name": "Jonas Dagmire's Scaphoid",
+            "minimum_distinct": 1
+          },
+          {
+            "item_id": 79921,
+            "item_name": "Jonas Dagmire's Lunate",
+            "minimum_distinct": 2
+          },
+          {
+            "item_id": 79922,
+            "item_name": "Jonas Dagmire's Triquetrum",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79923,
+            "item_name": "Jonas Dagmire's Pisiform",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79924,
+            "item_name": "Jonas Dagmire's Trapezium",
+            "minimum_distinct": 5
+          },
+          {
+            "item_id": 79925,
+            "item_name": "Jonas Dagmire's Trapezoid",
+            "minimum_distinct": 6
+          },
+          {
+            "item_id": 79926,
+            "item_name": "Jonas Dagmire's Capitate",
+            "minimum_distinct": 7
+          },
+          {
+            "item_id": 79927,
+            "item_name": "Jonas Dagmire's Hamate",
+            "minimum_distinct": 8
+          },
+          {
+            "item_id": 79928,
+            "item_name": "Jonas Dagmire's Thumb Metacarpal",
+            "minimum_distinct": 9
+          }
+        ],
+        "qualifying_task_ids": [
+          3040916,
+          3040917,
+          3040918,
+          3040919,
+          3040920,
+          3040921,
+          3040922,
+          3040923,
+          3040924
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040917,
+      "component_id": 50255,
+      "achievement_id": 500090500,
+      "external_quest_id": 4091,
+      "title": "Just Desserts",
+      "owner_npc_id": 423105,
+      "owner_name": "Scurv-acious Bella Straw",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4091",
+        "timestamp": "20121009020636",
+        "url": "https://web.archive.org/web/20121009020636id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4091",
+        "sha256": "6bcd423103c74b0e71ad128c439b244ab432110a694dc9b5dc99a3306e209182"
+      },
+      "activities": [
+        {
+          "kind": "kill",
+          "target": "blacksail_pirates",
+          "count": 8,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 1,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 66,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 15,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79920,
+            "item_name": "Jonas Dagmire's Scaphoid",
+            "minimum_distinct": 1
+          },
+          {
+            "item_id": 79921,
+            "item_name": "Jonas Dagmire's Lunate",
+            "minimum_distinct": 2
+          },
+          {
+            "item_id": 79922,
+            "item_name": "Jonas Dagmire's Triquetrum",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79923,
+            "item_name": "Jonas Dagmire's Pisiform",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79924,
+            "item_name": "Jonas Dagmire's Trapezium",
+            "minimum_distinct": 5
+          },
+          {
+            "item_id": 79925,
+            "item_name": "Jonas Dagmire's Trapezoid",
+            "minimum_distinct": 6
+          },
+          {
+            "item_id": 79926,
+            "item_name": "Jonas Dagmire's Capitate",
+            "minimum_distinct": 7
+          },
+          {
+            "item_id": 79927,
+            "item_name": "Jonas Dagmire's Hamate",
+            "minimum_distinct": 8
+          },
+          {
+            "item_id": 79928,
+            "item_name": "Jonas Dagmire's Thumb Metacarpal",
+            "minimum_distinct": 9
+          }
+        ],
+        "qualifying_task_ids": [
+          3040916,
+          3040917,
+          3040918,
+          3040919,
+          3040920,
+          3040921,
+          3040922,
+          3040923,
+          3040924
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040918,
+      "component_id": 50256,
+      "achievement_id": 500090500,
+      "external_quest_id": 4083,
+      "title": "Low on Rum",
+      "owner_npc_id": 423091,
+      "owner_name": "Murderous Mal",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4083",
+        "timestamp": "20121101090247",
+        "url": "https://web.archive.org/web/20121101090247id_/http://everquest.allakhazam.com/db/quest.html?quest=4083",
+        "sha256": "1e5bde5016b4cd09637108bfa9fcb4e3a31be9945a994ffac2a5e909f4ace8a3"
+      },
+      "activities": [
+        {
+          "kind": "deliver",
+          "target": 88245,
+          "count": 10,
+          "stage": 0,
+          "item_name": "Remnant Rum",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 66,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 15,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79920,
+            "item_name": "Jonas Dagmire's Scaphoid",
+            "minimum_distinct": 1
+          },
+          {
+            "item_id": 79921,
+            "item_name": "Jonas Dagmire's Lunate",
+            "minimum_distinct": 2
+          },
+          {
+            "item_id": 79922,
+            "item_name": "Jonas Dagmire's Triquetrum",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79923,
+            "item_name": "Jonas Dagmire's Pisiform",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79924,
+            "item_name": "Jonas Dagmire's Trapezium",
+            "minimum_distinct": 5
+          },
+          {
+            "item_id": 79925,
+            "item_name": "Jonas Dagmire's Trapezoid",
+            "minimum_distinct": 6
+          },
+          {
+            "item_id": 79926,
+            "item_name": "Jonas Dagmire's Capitate",
+            "minimum_distinct": 7
+          },
+          {
+            "item_id": 79927,
+            "item_name": "Jonas Dagmire's Hamate",
+            "minimum_distinct": 8
+          },
+          {
+            "item_id": 79928,
+            "item_name": "Jonas Dagmire's Thumb Metacarpal",
+            "minimum_distinct": 9
+          }
+        ],
+        "qualifying_task_ids": [
+          3040916,
+          3040917,
+          3040918,
+          3040919,
+          3040920,
+          3040921,
+          3040922,
+          3040923,
+          3040924
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040919,
+      "component_id": 50257,
+      "achievement_id": 500090500,
+      "external_quest_id": 4084,
+      "title": "Thieves Among Thieves",
+      "owner_npc_id": 423091,
+      "owner_name": "Murderous Mal",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4084",
+        "timestamp": "20121009020306",
+        "url": "https://web.archive.org/web/20121009020306id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4084",
+        "sha256": "740d93887af602aeb283b707bf8325fe20fdb6f101e382019fd0fe08c013a268"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 88231,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Crate of Goods",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 88231,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Crate of Goods",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "evidence_status": "current_primary_corroboration_historical_full_stage_unverified"
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 66,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 15,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79920,
+            "item_name": "Jonas Dagmire's Scaphoid",
+            "minimum_distinct": 1
+          },
+          {
+            "item_id": 79921,
+            "item_name": "Jonas Dagmire's Lunate",
+            "minimum_distinct": 2
+          },
+          {
+            "item_id": 79922,
+            "item_name": "Jonas Dagmire's Triquetrum",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79923,
+            "item_name": "Jonas Dagmire's Pisiform",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79924,
+            "item_name": "Jonas Dagmire's Trapezium",
+            "minimum_distinct": 5
+          },
+          {
+            "item_id": 79925,
+            "item_name": "Jonas Dagmire's Trapezoid",
+            "minimum_distinct": 6
+          },
+          {
+            "item_id": 79926,
+            "item_name": "Jonas Dagmire's Capitate",
+            "minimum_distinct": 7
+          },
+          {
+            "item_id": 79927,
+            "item_name": "Jonas Dagmire's Hamate",
+            "minimum_distinct": 8
+          },
+          {
+            "item_id": 79928,
+            "item_name": "Jonas Dagmire's Thumb Metacarpal",
+            "minimum_distinct": 9
+          }
+        ],
+        "qualifying_task_ids": [
+          3040916,
+          3040917,
+          3040918,
+          3040919,
+          3040920,
+          3040921,
+          3040922,
+          3040923,
+          3040924
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [
+        "Archive leaves post-loot objectives unspecified; delivery follows current guide."
+      ],
+      "enabled": false,
+      "post_loot_review": {
+        "state": "current_primary_page_corroborated_period_full_stage_unverified",
+        "url": "https://everquest.allakhazam.com/db/quest/4084",
+        "observed": "2026-11-01",
+        "facts": [
+          "Current primary page explicitly lists delivery of one crate to Mal.",
+          "February2007 comment confirms repeating this quest at least five times."
+        ]
+      }
+    },
+    {
+      "task_id": 3040920,
+      "component_id": 50258,
+      "achievement_id": 500090500,
+      "external_quest_id": 4085,
+      "title": "Deliver The Goods",
+      "owner_npc_id": 423091,
+      "owner_name": "Murderous Mal",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4085",
+        "timestamp": "20120930033309",
+        "url": "https://web.archive.org/web/20120930033309id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4085",
+        "sha256": "d6db993cb52e5925fe5b26ab00e41da4c05f363d2f5e9f202f3ca7ea89f6acac"
+      },
+      "activities": [
+        {
+          "kind": "deliver",
+          "target": 88232,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Package of Goods",
+          "recipient": "silverlip_slim",
+          "zone_id": 422,
+          "activity_id": 0,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 88233,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Bill of Sale",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 15,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79920,
+            "item_name": "Jonas Dagmire's Scaphoid",
+            "minimum_distinct": 1
+          },
+          {
+            "item_id": 79921,
+            "item_name": "Jonas Dagmire's Lunate",
+            "minimum_distinct": 2
+          },
+          {
+            "item_id": 79922,
+            "item_name": "Jonas Dagmire's Triquetrum",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79923,
+            "item_name": "Jonas Dagmire's Pisiform",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79924,
+            "item_name": "Jonas Dagmire's Trapezium",
+            "minimum_distinct": 5
+          },
+          {
+            "item_id": 79925,
+            "item_name": "Jonas Dagmire's Trapezoid",
+            "minimum_distinct": 6
+          },
+          {
+            "item_id": 79926,
+            "item_name": "Jonas Dagmire's Capitate",
+            "minimum_distinct": 7
+          },
+          {
+            "item_id": 79927,
+            "item_name": "Jonas Dagmire's Hamate",
+            "minimum_distinct": 8
+          },
+          {
+            "item_id": 79928,
+            "item_name": "Jonas Dagmire's Thumb Metacarpal",
+            "minimum_distinct": 9
+          }
+        ],
+        "qualifying_task_ids": [
+          3040916,
+          3040917,
+          3040918,
+          3040919,
+          3040920,
+          3040921,
+          3040922,
+          3040923,
+          3040924
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false,
+      "acceptance_supply_item_id": 88232
+    },
+    {
+      "task_id": 3040921,
+      "component_id": 50259,
+      "achievement_id": 500090500,
+      "external_quest_id": 4087,
+      "title": "That Was The Deal",
+      "owner_npc_id": 423122,
+      "owner_name": "Darius Blythe",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4087",
+        "timestamp": "20121101085551",
+        "url": "https://web.archive.org/web/20121101085551id_/http://everquest.allakhazam.com/db/quest.html?quest=4087",
+        "sha256": "4bc90cdcd0047f87c0d78754023d6c53b2160f04e268d09dc2be85bbdc6f8442"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 88234,
+          "count": 5,
+          "stage": 0,
+          "item_name": "I. O. U. Note",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 88234,
+          "count": 5,
+          "stage": 1,
+          "item_name": "I. O. U. Note",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 66,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 15,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79920,
+            "item_name": "Jonas Dagmire's Scaphoid",
+            "minimum_distinct": 1
+          },
+          {
+            "item_id": 79921,
+            "item_name": "Jonas Dagmire's Lunate",
+            "minimum_distinct": 2
+          },
+          {
+            "item_id": 79922,
+            "item_name": "Jonas Dagmire's Triquetrum",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79923,
+            "item_name": "Jonas Dagmire's Pisiform",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79924,
+            "item_name": "Jonas Dagmire's Trapezium",
+            "minimum_distinct": 5
+          },
+          {
+            "item_id": 79925,
+            "item_name": "Jonas Dagmire's Trapezoid",
+            "minimum_distinct": 6
+          },
+          {
+            "item_id": 79926,
+            "item_name": "Jonas Dagmire's Capitate",
+            "minimum_distinct": 7
+          },
+          {
+            "item_id": 79927,
+            "item_name": "Jonas Dagmire's Hamate",
+            "minimum_distinct": 8
+          },
+          {
+            "item_id": 79928,
+            "item_name": "Jonas Dagmire's Thumb Metacarpal",
+            "minimum_distinct": 9
+          }
+        ],
+        "qualifying_task_ids": [
+          3040916,
+          3040917,
+          3040918,
+          3040919,
+          3040920,
+          3040921,
+          3040922,
+          3040923,
+          3040924
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040922,
+      "component_id": 50260,
+      "achievement_id": 500090500,
+      "external_quest_id": 4088,
+      "title": "Old Cutlasses For New",
+      "owner_npc_id": 423122,
+      "owner_name": "Darius Blythe",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4088",
+        "timestamp": "20121009020323",
+        "url": "https://web.archive.org/web/20121009020323id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4088",
+        "sha256": "eef26c62cbbffe744c52997f0d31c14b897a622ed517c4b0d18f2fc24e381cc0"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 88235,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Blacksail Officer's Cutlass",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 88235,
+          "count": 4,
+          "stage": 1,
+          "item_name": "Blacksail Officer's Cutlass",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 66,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 15,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79920,
+            "item_name": "Jonas Dagmire's Scaphoid",
+            "minimum_distinct": 1
+          },
+          {
+            "item_id": 79921,
+            "item_name": "Jonas Dagmire's Lunate",
+            "minimum_distinct": 2
+          },
+          {
+            "item_id": 79922,
+            "item_name": "Jonas Dagmire's Triquetrum",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79923,
+            "item_name": "Jonas Dagmire's Pisiform",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79924,
+            "item_name": "Jonas Dagmire's Trapezium",
+            "minimum_distinct": 5
+          },
+          {
+            "item_id": 79925,
+            "item_name": "Jonas Dagmire's Trapezoid",
+            "minimum_distinct": 6
+          },
+          {
+            "item_id": 79926,
+            "item_name": "Jonas Dagmire's Capitate",
+            "minimum_distinct": 7
+          },
+          {
+            "item_id": 79927,
+            "item_name": "Jonas Dagmire's Hamate",
+            "minimum_distinct": 8
+          },
+          {
+            "item_id": 79928,
+            "item_name": "Jonas Dagmire's Thumb Metacarpal",
+            "minimum_distinct": 9
+          }
+        ],
+        "qualifying_task_ids": [
+          3040916,
+          3040917,
+          3040918,
+          3040919,
+          3040920,
+          3040921,
+          3040922,
+          3040923,
+          3040924
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040923,
+      "component_id": 50261,
+      "achievement_id": 500090500,
+      "external_quest_id": 4089,
+      "title": "Fire In The Hold",
+      "owner_npc_id": 423122,
+      "owner_name": "Darius Blythe",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4089",
+        "timestamp": "20121009020328",
+        "url": "https://web.archive.org/web/20121009020328id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4089",
+        "sha256": "82aba686733265de728dbbcb3f01dde248b86965cf488f41e104d121dd348381"
+      },
+      "activities": [
+        {
+          "kind": "kill",
+          "target": "blacksail_dockworkers",
+          "count": 2,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "explore",
+          "target": "inn_shark_jaws",
+          "count": 1,
+          "stage": 1,
+          "requires_item_id": 88243,
+          "requires_visible": true,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 2,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 15,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79920,
+            "item_name": "Jonas Dagmire's Scaphoid",
+            "minimum_distinct": 1
+          },
+          {
+            "item_id": 79921,
+            "item_name": "Jonas Dagmire's Lunate",
+            "minimum_distinct": 2
+          },
+          {
+            "item_id": 79922,
+            "item_name": "Jonas Dagmire's Triquetrum",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79923,
+            "item_name": "Jonas Dagmire's Pisiform",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79924,
+            "item_name": "Jonas Dagmire's Trapezium",
+            "minimum_distinct": 5
+          },
+          {
+            "item_id": 79925,
+            "item_name": "Jonas Dagmire's Trapezoid",
+            "minimum_distinct": 6
+          },
+          {
+            "item_id": 79926,
+            "item_name": "Jonas Dagmire's Capitate",
+            "minimum_distinct": 7
+          },
+          {
+            "item_id": 79927,
+            "item_name": "Jonas Dagmire's Hamate",
+            "minimum_distinct": 8
+          },
+          {
+            "item_id": 79928,
+            "item_name": "Jonas Dagmire's Thumb Metacarpal",
+            "minimum_distinct": 9
+          }
+        ],
+        "qualifying_task_ids": [
+          3040916,
+          3040917,
+          3040918,
+          3040919,
+          3040920,
+          3040921,
+          3040922,
+          3040923,
+          3040924
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false,
+      "acceptance_supply_item_id": 88243
+    },
+    {
+      "task_id": 3040924,
+      "component_id": 50262,
+      "achievement_id": 500090500,
+      "external_quest_id": 4082,
+      "title": "The Meek Shall What?",
+      "owner_npc_id": 423079,
+      "owner_name": "Bilgewater Bill",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4082",
+        "timestamp": "20121101085536",
+        "url": "https://web.archive.org/web/20121101085536id_/http://everquest.allakhazam.com/db/quest.html?quest=4082",
+        "sha256": "f508c385750f5c4c2377185354ffca7788f1e35e9caba3ed4246052bd6ed0abb"
+      },
+      "activities": [
+        {
+          "kind": "consume_item_in_volume",
+          "target": "slop_beach",
+          "count": 4,
+          "stage": 0,
+          "item_id": 88244,
+          "requires_visible": true,
+          "requires_out_of_combat": true,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "kill",
+          "target": "scavenging_coralisk",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 1,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 66,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 15,
+          "status": "researched_current_corroboration_historical_amount_unverified",
+          "source": "https://everquest.allakhazam.com/db/faction/499"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79920,
+            "item_name": "Jonas Dagmire's Scaphoid",
+            "minimum_distinct": 1
+          },
+          {
+            "item_id": 79921,
+            "item_name": "Jonas Dagmire's Lunate",
+            "minimum_distinct": 2
+          },
+          {
+            "item_id": 79922,
+            "item_name": "Jonas Dagmire's Triquetrum",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79923,
+            "item_name": "Jonas Dagmire's Pisiform",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79924,
+            "item_name": "Jonas Dagmire's Trapezium",
+            "minimum_distinct": 5
+          },
+          {
+            "item_id": 79925,
+            "item_name": "Jonas Dagmire's Trapezoid",
+            "minimum_distinct": 6
+          },
+          {
+            "item_id": 79926,
+            "item_name": "Jonas Dagmire's Capitate",
+            "minimum_distinct": 7
+          },
+          {
+            "item_id": 79927,
+            "item_name": "Jonas Dagmire's Hamate",
+            "minimum_distinct": 8
+          },
+          {
+            "item_id": 79928,
+            "item_name": "Jonas Dagmire's Thumb Metacarpal",
+            "minimum_distinct": 9
+          }
+        ],
+        "qualifying_task_ids": [
+          3040916,
+          3040917,
+          3040918,
+          3040919,
+          3040920,
+          3040921,
+          3040922,
+          3040923,
+          3040924
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false,
+      "acceptance_supply_item_id": 88244
+    },
+    {
+      "task_id": 3040925,
+      "component_id": 50263,
+      "achievement_id": 500090600,
+      "external_quest_id": 4070,
+      "title": "Deadbone Meats",
+      "owner_npc_id": 423148,
+      "owner_name": "Sid Hacke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4070",
+        "timestamp": "20121101085913",
+        "url": "https://web.archive.org/web/20121101085913id_/http://everquest.allakhazam.com/db/quest.html?quest=4070",
+        "sha256": "3345f69530b31316296bf0df3fb2edba829abdcb449606a1ba39db1ccc747dce"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 29732,
+          "count": 3,
+          "stage": 0,
+          "item_name": "Thulii Meat",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 29733,
+          "count": 3,
+          "stage": 0,
+          "item_name": "Gali Balalaa Meat",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 29732,
+          "count": 3,
+          "stage": 1,
+          "item_name": "Thulii Meat",
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 29733,
+          "count": 3,
+          "stage": 1,
+          "item_name": "Gali Balalaa Meat",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 2,
+          "activity_id": 4,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79938,
+            "item_name": "Jonas Dagmire's Forefinger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79939,
+            "item_name": "Jonas Dagmire's Long Finger Middle Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79940,
+            "item_name": "Jonas Dagmire's Ring Finger Middle Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040925,
+          3040926,
+          3040927,
+          3040928,
+          3040929
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040926,
+      "component_id": 50264,
+      "achievement_id": 500090600,
+      "external_quest_id": 4071,
+      "title": "Small Matters",
+      "owner_npc_id": 423148,
+      "owner_name": "Sid Hacke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4071",
+        "timestamp": "20121101085937",
+        "url": "https://web.archive.org/web/20121101085937id_/http://everquest.allakhazam.com/db/quest.html?quest=4071",
+        "sha256": "05941a5dcc8705f1f2db9d019595c0571c264b7da729a8860ef02d964fbb4c7f"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 29734,
+          "count": 7,
+          "stage": 0,
+          "item_name": "Shrunken Head",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 29734,
+          "count": 7,
+          "stage": 1,
+          "item_name": "Shrunken Head",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 2,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79938,
+            "item_name": "Jonas Dagmire's Forefinger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79939,
+            "item_name": "Jonas Dagmire's Long Finger Middle Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79940,
+            "item_name": "Jonas Dagmire's Ring Finger Middle Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040925,
+          3040926,
+          3040927,
+          3040928,
+          3040929
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040927,
+      "component_id": 50265,
+      "achievement_id": 500090600,
+      "external_quest_id": 4072,
+      "title": "Rumors of a Flame",
+      "owner_npc_id": 423148,
+      "owner_name": "Sid Hacke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4072",
+        "timestamp": "20121101085433",
+        "url": "https://web.archive.org/web/20121101085433id_/http://everquest.allakhazam.com/db/quest.html?quest=4072",
+        "sha256": "5919b9fe860b1de352492f321a21f0bd88fe7e4e9233423fda0edc597fbe223e"
+      },
+      "activities": [
+        {
+          "kind": "explore",
+          "target": "underwater_flame",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "kill",
+          "target": "drowned_dead",
+          "count": 20,
+          "stage": 1,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 2,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79938,
+            "item_name": "Jonas Dagmire's Forefinger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79939,
+            "item_name": "Jonas Dagmire's Long Finger Middle Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79940,
+            "item_name": "Jonas Dagmire's Ring Finger Middle Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040925,
+          3040926,
+          3040927,
+          3040928,
+          3040929
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040928,
+      "component_id": 50266,
+      "achievement_id": 500090600,
+      "external_quest_id": 4073,
+      "title": "Shark Meat",
+      "owner_npc_id": 423148,
+      "owner_name": "Sid Hacke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4073",
+        "timestamp": "20121101090328",
+        "url": "https://web.archive.org/web/20121101090328id_/http://everquest.allakhazam.com/db/quest.html?quest=4073",
+        "sha256": "9e4343b525a1024b8994695c5a8994c0112f82adf498c739069fe3504fe1be4a"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 29735,
+          "count": 7,
+          "stage": 0,
+          "item_name": "Intact Deadbone Shark Fin",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 29735,
+          "count": 7,
+          "stage": 1,
+          "item_name": "Intact Deadbone Shark Fin",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "evidence_status": "secondary_reconstruction_pending_review"
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 2,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "evidence_status": "secondary_reconstruction_pending_review"
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79938,
+            "item_name": "Jonas Dagmire's Forefinger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79939,
+            "item_name": "Jonas Dagmire's Long Finger Middle Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79940,
+            "item_name": "Jonas Dagmire's Ring Finger Middle Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040925,
+          3040926,
+          3040927,
+          3040928,
+          3040929
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [
+        "Archive leaves post-loot objectives unspecified; delivery/report follow current guide."
+      ],
+      "enabled": false
+    },
+    {
+      "task_id": 3040929,
+      "component_id": 50267,
+      "achievement_id": 500090600,
+      "external_quest_id": 4074,
+      "title": "Hidden Riches",
+      "owner_npc_id": 423148,
+      "owner_name": "Sid Hacke",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4074",
+        "timestamp": "20121101085941",
+        "url": "https://web.archive.org/web/20121101085941id_/http://everquest.allakhazam.com/db/quest.html?quest=4074",
+        "sha256": "d8c2ea11742fef941630081310477df55190e9fc9d55822bf6bd466e46027a90"
+      },
+      "activities": [
+        {
+          "kind": "explore",
+          "target": "silver_sail",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "loot",
+          "target": 29736,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Sailor's Booty",
+          "req_activity_id": 0,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "explore",
+          "target": "sea_spirit",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "loot",
+          "target": 29737,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Knight's Booty",
+          "req_activity_id": 2,
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "explore",
+          "target": "red_storm",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 4,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume"
+        },
+        {
+          "kind": "loot",
+          "target": 29738,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Pirate Booty",
+          "req_activity_id": 4,
+          "activity_id": 5,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 29736,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Sailor's Booty",
+          "req_activity_id": 1,
+          "activity_id": 6,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 29737,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Knight's Booty",
+          "req_activity_id": 3,
+          "activity_id": 7,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 29738,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Pirate Booty",
+          "req_activity_id": 5,
+          "activity_id": 8,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 1,
+          "activity_id": 9,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79938,
+            "item_name": "Jonas Dagmire's Forefinger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79939,
+            "item_name": "Jonas Dagmire's Long Finger Middle Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79940,
+            "item_name": "Jonas Dagmire's Ring Finger Middle Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040925,
+          3040926,
+          3040927,
+          3040928,
+          3040929
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040930,
+      "component_id": 50268,
+      "achievement_id": 500090700,
+      "external_quest_id": 4028,
+      "title": "Steamdrake Potions",
+      "owner_npc_id": 422019,
+      "owner_name": "Brynden Snow",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4028",
+        "timestamp": "20121101090052",
+        "url": "https://web.archive.org/web/20121101090052id_/http://everquest.allakhazam.com/db/quest.html?quest=4028",
+        "sha256": "4474782b1bd3f2b6d041a86c14977781d02eb3b34666a6391c69b3bdbda3d9dc"
+      },
+      "activities": [
+        {
+          "kind": "collect",
+          "target": 54740,
+          "count": 10,
+          "stage": 0,
+          "item_name": "Fire Drake Wing",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 54741,
+          "count": 10,
+          "stage": 0,
+          "item_name": "Water Drake Wing",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 54740,
+          "count": 10,
+          "stage": 1,
+          "item_name": "Fire Drake Wing",
+          "activity_id": 2,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 54741,
+          "count": 10,
+          "stage": 1,
+          "item_name": "Water Drake Wing",
+          "activity_id": 3,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79941,
+            "item_name": "Jonas Dagmire's Little Finger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79942,
+            "item_name": "Jonas Dagmire's Thumb Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79943,
+            "item_name": "Jonas Dagmire's Forefinger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040930,
+          3040931,
+          3040932,
+          3040933,
+          3040934
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040931,
+      "component_id": 50269,
+      "achievement_id": 500090700,
+      "external_quest_id": 4029,
+      "title": "The Abandoned Relics",
+      "owner_npc_id": 422019,
+      "owner_name": "Brynden Snow",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4029",
+        "timestamp": "20121101085932",
+        "url": "https://web.archive.org/web/20121101085932id_/http://everquest.allakhazam.com/db/quest.html?quest=4029",
+        "sha256": "997da847e261fba57dca272395e14f6c6175b4ae98d77870231e9b932a795c7f"
+      },
+      "activities": [
+        {
+          "kind": "collect",
+          "target": 54742,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Crumbling Relic",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 54743,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Chipped Relic",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 54744,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Scratched Relic",
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 54745,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Eroded Relic",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 54742,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Crumbling Relic",
+          "activity_id": 4,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 54743,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Chipped Relic",
+          "activity_id": 5,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 54744,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Scratched Relic",
+          "activity_id": 6,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 54745,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Eroded Relic",
+          "activity_id": 7,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79941,
+            "item_name": "Jonas Dagmire's Little Finger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79942,
+            "item_name": "Jonas Dagmire's Thumb Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79943,
+            "item_name": "Jonas Dagmire's Forefinger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040930,
+          3040931,
+          3040932,
+          3040933,
+          3040934
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040932,
+      "component_id": 50270,
+      "achievement_id": 500090700,
+      "external_quest_id": 4030,
+      "title": "Mapping Suncrest Ridge",
+      "owner_npc_id": 422019,
+      "owner_name": "Brynden Snow",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4030",
+        "timestamp": "20121101090201",
+        "url": "https://web.archive.org/web/20121101090201id_/http://everquest.allakhazam.com/db/quest.html?quest=4030",
+        "sha256": "2b427a9cc99e0ec8c5d13298af66390937473ab9b63dc3b2cba60627df8fdc2f"
+      },
+      "activities": [
+        {
+          "kind": "explore",
+          "target": "combine_ruins",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -1310,
+            "x": -2275
+          }
+        },
+        {
+          "kind": "explore",
+          "target": "graveyard",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -60,
+            "x": -3040
+          }
+        },
+        {
+          "kind": "explore",
+          "target": "steam_fire_lake",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -780,
+            "x": -3080
+          }
+        },
+        {
+          "kind": "explore",
+          "target": "volcano",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -975,
+            "x": -3270
+          }
+        },
+        {
+          "kind": "explore",
+          "target": "coral_bridge",
+          "count": 1,
+          "stage": 0,
+          "activity_id": 4,
+          "zone_id": 423,
+          "static_zone_only": true,
+          "geometry_status": "needs_map_verified_volume",
+          "period_approx_loc": {
+            "y": -1335,
+            "x": -3310
+          }
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 1,
+          "activity_id": 5,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79941,
+            "item_name": "Jonas Dagmire's Little Finger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79942,
+            "item_name": "Jonas Dagmire's Thumb Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79943,
+            "item_name": "Jonas Dagmire's Forefinger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040930,
+          3040931,
+          3040932,
+          3040933,
+          3040934
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040933,
+      "component_id": 50271,
+      "achievement_id": 500090700,
+      "external_quest_id": 4031,
+      "title": "Totem of Water and Fire",
+      "owner_npc_id": 422019,
+      "owner_name": "Brynden Snow",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4031",
+        "timestamp": "20121101085732",
+        "url": "https://web.archive.org/web/20121101085732id_/http://everquest.allakhazam.com/db/quest.html?quest=4031",
+        "sha256": "54633ca753effb650621d105bb33426059c17d6b355575b7fed1ce6f99a36fda"
+      },
+      "activities": [
+        {
+          "kind": "kill",
+          "target": "tidewater_goblins",
+          "count": 10,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 54747,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Water Totem Piece",
+          "source_npc": "Lutzan_Magma_Reaver",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "kill",
+          "target": "sunstone_goblins",
+          "count": 10,
+          "stage": 2,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 54748,
+          "count": 1,
+          "stage": 3,
+          "item_name": "Fire Totem Piece",
+          "source_npc": "Maleko_Sea_Prophet",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver_bundle",
+          "target": "owner",
+          "count": 1,
+          "stage": 4,
+          "items": [
+            {
+              "item_id": 54748,
+              "count": 1
+            },
+            {
+              "item_id": 54747,
+              "count": 1
+            }
+          ],
+          "activity_id": 4,
+          "zone_id": 422,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 5,
+          "activity_id": 5,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79941,
+            "item_name": "Jonas Dagmire's Little Finger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79942,
+            "item_name": "Jonas Dagmire's Thumb Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79943,
+            "item_name": "Jonas Dagmire's Forefinger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040930,
+          3040931,
+          3040932,
+          3040933,
+          3040934
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [
+        "Water piece from Lutzan and fire piece from Maleko confirmed by June2007 first-person log; native Maleko missing and fire-piece loot source incorrect."
+      ],
+      "enabled": false
+    },
+    {
+      "task_id": 3040934,
+      "component_id": 50272,
+      "achievement_id": 500090700,
+      "external_quest_id": 4032,
+      "title": "Investigating the Combine Ruins",
+      "owner_npc_id": 422019,
+      "owner_name": "Brynden Snow",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4032",
+        "timestamp": "20121101090218",
+        "url": "https://web.archive.org/web/20121101090218id_/http://everquest.allakhazam.com/db/quest.html?quest=4032",
+        "sha256": "dab39c05a5f66096508722cc285e1dad2f416e98c31c28f3d65bc2c44f012b20"
+      },
+      "activities": [
+        {
+          "kind": "kill",
+          "target": "firemaw_tigers",
+          "count": 10,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "kill",
+          "target": "sharpfang_raptors",
+          "count": 10,
+          "stage": 0,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "kill",
+          "target": "darkclaw_basilisks",
+          "count": 10,
+          "stage": 0,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "collect",
+          "target": 54749,
+          "count": 10,
+          "stage": 0,
+          "item_name": "Combine Stone",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 54749,
+          "count": 10,
+          "stage": 1,
+          "item_name": "Combine Stone",
+          "activity_id": 4,
+          "zone_id": 422,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 70,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79941,
+            "item_name": "Jonas Dagmire's Little Finger Middle Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79942,
+            "item_name": "Jonas Dagmire's Thumb Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79943,
+            "item_name": "Jonas Dagmire's Forefinger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040930,
+          3040931,
+          3040932,
+          3040933,
+          3040934
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040935,
+      "component_id": 50273,
+      "achievement_id": 500090800,
+      "external_quest_id": 4196,
+      "title": "Recruitment Letters",
+      "owner_npc_id": 423107,
+      "owner_name": "Logan Grimm",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4196",
+        "timestamp": "20121101085610",
+        "url": "https://web.archive.org/web/20121101085610id_/http://everquest.allakhazam.com/db/quest.html?quest=4196",
+        "sha256": "f7332a2129646838d8181fb097be035f385967b64ad3959bdd1083c6463f125d"
+      },
+      "activities": [
+        {
+          "kind": "collect",
+          "target": 87325,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Letter of Recruitment",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 87325,
+          "count": 4,
+          "stage": 1,
+          "item_name": "Letter of Recruitment",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 2,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "No",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79944,
+            "item_name": "Jonas Dagmire's Long Finger Distal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79945,
+            "item_name": "Jonas Dagmire's Ring Finger Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79946,
+            "item_name": "Jonas Dagmire's Little Finger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040935,
+          3040936,
+          3040937,
+          3040938,
+          3040939
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [
+        "Find wording does not establish whether pre-looted letters count."
+      ],
+      "enabled": false
+    },
+    {
+      "task_id": 3040936,
+      "component_id": 50274,
+      "achievement_id": 500090800,
+      "external_quest_id": 4193,
+      "title": "Pirate Rum",
+      "owner_npc_id": 423107,
+      "owner_name": "Logan Grimm",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4193",
+        "timestamp": "20121009020341",
+        "url": "https://web.archive.org/web/20121009020341id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4193",
+        "sha256": "61e5807afd17aed12ec18404a4fd595408a3ddb7a8b6e8c03cf9821748466d34"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 87327,
+          "count": 1,
+          "stage": 0,
+          "item_name": "Blacksail Rum Recipe",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 87327,
+          "count": 1,
+          "stage": 1,
+          "item_name": "Blacksail Rum Recipe",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 2,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79944,
+            "item_name": "Jonas Dagmire's Long Finger Distal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79945,
+            "item_name": "Jonas Dagmire's Ring Finger Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79946,
+            "item_name": "Jonas Dagmire's Little Finger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040935,
+          3040936,
+          3040937,
+          3040938,
+          3040939
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040937,
+      "component_id": 50275,
+      "achievement_id": 500090800,
+      "external_quest_id": 4197,
+      "title": "The Makings of a Disguise",
+      "owner_npc_id": 423107,
+      "owner_name": "Logan Grimm",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4197",
+        "timestamp": "20121101090135",
+        "url": "https://web.archive.org/web/20121101090135id_/http://everquest.allakhazam.com/db/quest.html?quest=4197",
+        "sha256": "bcf32a513f26da2bd5b2048bb8c289ce49d9601e11a9c9a95eefb42ca8c9115c"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 87331,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Blacksail Pantaloons",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 87329,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Blacksail Tunic",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 87330,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Blacksail Sash",
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "loot",
+          "target": 87328,
+          "count": 2,
+          "stage": 0,
+          "item_name": "Blacksail Eye Patch",
+          "activity_id": 3,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 87331,
+          "count": 4,
+          "stage": 1,
+          "item_name": "Blacksail Pantaloons",
+          "activity_id": 4,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 87329,
+          "count": 4,
+          "stage": 1,
+          "item_name": "Blacksail Tunic",
+          "activity_id": 5,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 87330,
+          "count": 4,
+          "stage": 1,
+          "item_name": "Blacksail Sash",
+          "activity_id": 6,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 87328,
+          "count": 2,
+          "stage": 1,
+          "item_name": "Blacksail Eye Patch",
+          "activity_id": 7,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 2,
+          "activity_id": 8,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79944,
+            "item_name": "Jonas Dagmire's Long Finger Distal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79945,
+            "item_name": "Jonas Dagmire's Ring Finger Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79946,
+            "item_name": "Jonas Dagmire's Little Finger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040935,
+          3040936,
+          3040937,
+          3040938,
+          3040939
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040938,
+      "component_id": 50276,
+      "achievement_id": 500090800,
+      "external_quest_id": 4195,
+      "title": "Killing the Rivals",
+      "owner_npc_id": 423107,
+      "owner_name": "Logan Grimm",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4195",
+        "timestamp": "20121101090227",
+        "url": "https://web.archive.org/web/20121101090227id_/http://everquest.allakhazam.com/db/quest.html?quest=4195",
+        "sha256": "7768d0e5bf5c79e06100796a315ffef614573d8032e6e823f5b64217fab56e6b"
+      },
+      "activities": [
+        {
+          "kind": "kill",
+          "target": "sharpeye_recruits",
+          "count": 20,
+          "stage": 0,
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 1,
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79944,
+            "item_name": "Jonas Dagmire's Long Finger Distal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79945,
+            "item_name": "Jonas Dagmire's Ring Finger Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79946,
+            "item_name": "Jonas Dagmire's Little Finger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040935,
+          3040936,
+          3040937,
+          3040938,
+          3040939
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    },
+    {
+      "task_id": 3040939,
+      "component_id": 50277,
+      "achievement_id": 500090800,
+      "external_quest_id": 4194,
+      "title": "Hair of the Dog",
+      "owner_npc_id": 423107,
+      "owner_name": "Logan Grimm",
+      "source": {
+        "original_url": "https://everquest.allakhazam.com/db/quest/4194",
+        "timestamp": "20121101085541",
+        "url": "https://web.archive.org/web/20121101085541id_/http://everquest.allakhazam.com/db/quest.html?quest=4194",
+        "sha256": "c293e5f6501df29930f6ec711911685d946b982e7cdb7640aef4c5aa56e101e3"
+      },
+      "activities": [
+        {
+          "kind": "loot",
+          "target": 87332,
+          "count": 4,
+          "stage": 0,
+          "item_name": "Dog Hair",
+          "activity_id": 0,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "deliver",
+          "target": 87332,
+          "count": 4,
+          "stage": 1,
+          "item_name": "Dog Hair",
+          "activity_id": 1,
+          "zone_id": 423,
+          "static_zone_only": true
+        },
+        {
+          "kind": "speak",
+          "target": "owner",
+          "count": 1,
+          "stage": 2,
+          "activity_id": 2,
+          "zone_id": 423,
+          "static_zone_only": true
+        }
+      ],
+      "minimum_level": {
+        "archived_header": 65,
+        "effective": 65,
+        "status": "best_supported_period_admission_policy",
+        "reason": "July2007 report explicitly accepted all Monkey tasks at60; April2007 firsthand report accepted the wider task set at65 despite higher hail refusal. Lower individual archived headers retained. Exact original internal thresholds are not recovered."
+      },
+      "repeatability": {
+        "archived_header": "Yes",
+        "effective": true,
+        "reason": "Period guide describes replacement of consumed bones; duplicate task completion must not advance island unlocks."
+      },
+      "rewards": {
+        "mode": "distinct_island_progression",
+        "xp": {
+          "amount": 1000,
+          "provenance": "approved_configurable_PEQ_style_default",
+          "original_amount_unknown": true
+        },
+        "faction": {
+          "faction_id": 1169,
+          "direction": "positive",
+          "amount": 10,
+          "status": "approved_configurable_emulator_default",
+          "source": "data/server-defaults.json"
+        },
+        "cash_choice_copper": 75000,
+        "bone_options": [
+          {
+            "item_id": 79944,
+            "item_name": "Jonas Dagmire's Long Finger Distal Phalanx",
+            "minimum_distinct": 3
+          },
+          {
+            "item_id": 79945,
+            "item_name": "Jonas Dagmire's Ring Finger Distal Phalanx",
+            "minimum_distinct": 4
+          },
+          {
+            "item_id": 79946,
+            "item_name": "Jonas Dagmire's Little Finger Distal Phalanx",
+            "minimum_distinct": 5
+          }
+        ],
+        "qualifying_task_ids": [
+          3040935,
+          3040936,
+          3040937,
+          3040938,
+          3040939
+        ],
+        "cash_minimum_distinct": 1,
+        "cash_gate_provenance": "October26,2012 firsthand comment on quest4072 says firsttwo completions give faction andcoin and generalizes acrossfamilies. March8,2007 firstcompletion report on quest4079 says50pp was received. Availablefromfirst;bone thresholdsremainseparate.",
+        "unlock_provenance": "Period guide4188 establishes ordinary3/4/5 unlocks and Jardel fromfirst. Bone order follows archived option lists; Jardel cumulative1..9 ordering is an explicit best-supported reconstruction, not a recovered original task table."
+      },
+      "open_questions": [],
+      "enabled": false
+    }
+  ],
+  "invariants": [
+    "No task credit for instanced-copy kills or loot.",
+    "Collect accepts existing physical custody where confirmed; Loot requires a new native loot event.",
+    "All same-stage activities gate the next stage together.",
+    "Bundle delivery consumes each required item; duplicate substitutes cannot satisfy a bundle.",
+    "Task rewards use completion occurrence identity; repeated completions do not increment distinct island count.",
+    "Preserve ordinary lore custody, including bones becoming selectable again after combining."
+  ],
+  "unresolved_release_gates": [
+    "Native item drop/ground-acquisition audit",
+    "Map-verified exploration and item-use volumes",
+    "Doubloon acquisition and Halon merchant policy",
+    "Special encounter and supply lifecycle",
+    "Parent rewards and native batch acceptance"
+  ],
+  "release_policy_notes": [
+    "Dynamic reward engine native QA passed separately; historical quest content still requires batch acceptance.",
+    "Approved historical admission policy and faction defaults carry per-value provenance.",
+    "Jardel cumulative option ordering is labelled reconstruction; Shark Meat delivery/report remain secondary reconstruction."
+  ]
+}

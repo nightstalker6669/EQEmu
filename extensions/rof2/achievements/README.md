@@ -42,6 +42,8 @@ The release includes the engine/protocol and Crescent Reach, Blightfire Moors, S
 
 - [Vergalid Mines quests and rewards](content/vergalid/README.md): 17 native-completed quests, 56 objectives, four parent reward paths and seven restored actor types. Includes the chest, bait scenes, charged-shard/statue passage, shared orb encounter, native death-state corrections and a complete guarded installer. Quest/reward/key persistence passed fresh login. Historical defaults, head-variant inference and remaining multiplayer/Windows limits are explicit.
 
+- [Buried Sea islands and Jonas Dagmire’s hand](content/buriedsea/README.md): 39 island quests,180 objectives,seven armor reward sets and all27bones; seven native consumed-compound recipes produce the final hand. Includes Mer’s real three-member shared mission, original ferry/rowboat transport,40Doubloons per member,Halon’s complete stock,and a guarded whole-package installer plus a RoF2 ship-model-list repair. Native completion and combined login persistence passed within the documented scope; historical and platform limits remain explicit.
+
 **Reward coverage:** Install the complete [Blightfire parent gear upgrade](content/blightfire-parent-rewards/README.md) after the five Blightfire quest packages. It adds the eight quest-family parent reward sets, including class-appropriate armor/accessories and shield/weapon bundles. The separate Conqueror of Blightfire meta-achievement bundle remains unconfigured while its original selection rules are researched. Stone Hive’s four parent reward sets are included in its package. Historical and class-coverage limits are documented in each guide.
 
 No tests, captures, client assets or private runtime records are included.

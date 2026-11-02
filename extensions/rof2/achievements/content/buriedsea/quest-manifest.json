@@ -1,0 +1,138 @@
+[
+  {
+    "path": "barren/422000.lua",
+    "source": "quests/barren/422000.lua"
+  },
+  {
+    "path": "barren/422004.lua",
+    "source": "quests/barren/422004.lua"
+  },
+  {
+    "path": "barren/422008.lua",
+    "source": "quests/barren/422008.lua"
+  },
+  {
+    "path": "barren/422012.lua",
+    "source": "quests/barren/422012.lua"
+  },
+  {
+    "path": "barren/422019.lua",
+    "source": "quests/barren/422019.lua"
+  },
+  {
+    "path": "barren/422074.lua",
+    "source": "quests/barren/422074.lua"
+  },
+  {
+    "path": "barren/422112.lua",
+    "source": "quests/barren/422112.lua"
+  },
+  {
+    "path": "barren/422900.lua",
+    "source": "quests/barren/422900.lua"
+  },
+  {
+    "path": "barren/422901.lua",
+    "source": "quests/barren/422901.lua"
+  },
+  {
+    "path": "buriedsea/423000.lua",
+    "source": "quests/buriedsea/423000.lua"
+  },
+  {
+    "path": "buriedsea/423079.lua",
+    "source": "quests/buriedsea/423079.lua"
+  },
+  {
+    "path": "buriedsea/423091.lua",
+    "source": "quests/buriedsea/423091.lua"
+  },
+  {
+    "path": "buriedsea/423105.lua",
+    "source": "quests/buriedsea/423105.lua"
+  },
+  {
+    "path": "buriedsea/423107.lua",
+    "source": "quests/buriedsea/423107.lua"
+  },
+  {
+    "path": "buriedsea/423122.lua",
+    "source": "quests/buriedsea/423122.lua"
+  },
+  {
+    "path": "buriedsea/423140.lua",
+    "source": "quests/buriedsea/423140.lua"
+  },
+  {
+    "path": "buriedsea/423141.lua",
+    "source": "quests/buriedsea/423141.lua"
+  },
+  {
+    "path": "buriedsea/423144.lua",
+    "source": "quests/buriedsea/423144.lua"
+  },
+  {
+    "path": "buriedsea/423146.lua",
+    "source": "quests/buriedsea/423146.lua"
+  },
+  {
+    "path": "buriedsea/423148.lua",
+    "source": "quests/buriedsea/423148.lua"
+  },
+  {
+    "path": "buriedsea/423151.lua",
+    "source": "quests/buriedsea/423151.lua"
+  },
+  {
+    "path": "buriedsea/423152.lua",
+    "source": "quests/buriedsea/423152.lua"
+  },
+  {
+    "path": "buriedsea/423900.lua",
+    "source": "quests/buriedsea/423900.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_buriedsea.lua",
+    "source": "quests/lua_modules/achievement_quest_buriedsea.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_buriedsea_chests.lua",
+    "source": "quests/lua_modules/achievement_quest_buriedsea_chests.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_buriedsea_data.lua",
+    "source": "quests/lua_modules/achievement_quest_buriedsea_data.lua"
+  },
+  {
+    "path": "lua_modules/buriedsea_mer_native.lua",
+    "source": "quests/lua_modules/buriedsea_mer_native.lua"
+  },
+  {
+    "path": "lua_modules/buriedsea_mer_rules.lua",
+    "source": "quests/lua_modules/buriedsea_mer_rules.lua"
+  },
+  {
+    "path": "lua_modules/buriedsea_scene_native.lua",
+    "source": "quests/lua_modules/buriedsea_scene_native.lua"
+  },
+  {
+    "path": "lua_modules/buriedsea_scene_rules.lua",
+    "source": "quests/lua_modules/buriedsea_scene_rules.lua"
+  },
+  {
+    "path": "lua_modules/buriedsea_totem_rules.lua",
+    "source": "quests/lua_modules/buriedsea_totem_rules.lua"
+  },
+  {
+    "path": "lua_modules/buriedsea_totem_sources.lua",
+    "source": "quests/lua_modules/buriedsea_totem_sources.lua"
+  },
+  {
+    "path": "global/global_player.lua",
+    "source": "hooks/global-player-whole.fragment.lua"
+  },
+  {
+    "path": "global/global_npc.lua",
+    "source": "hooks/global-npc-buriedsea.fragment.lua"
+  }
+]

@@ -1,0 +1,53 @@
+{
+  "state": "historical_route_evidence_resolved_runtime_implementation_pending",
+  "sources": [
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4095",
+      "period_posts": [
+        "March16,2007",
+        "March17,2008",
+        "September25,2008",
+        "August22,2012"
+      ],
+      "facts": [
+        "Sunstone Savages payouts varied: 50 coins documented in 2007 and 2012, 25 in 2008, and 150 in 2008. Popularity scaling is a player explanation; its exact formula remains unrecovered.",
+        "Admission requires three to six group members. Kill 25 Sunstone goblins, King Vigdos and the Sunstone High Priest, then report to Daemon. A 2008 comment records no respawns.",
+        "The chain advances to Altar Call; a September 2008 comment says the first task repeats only after the whole chain."
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4039",
+      "period_posts": [
+        "February14/15,2007",
+        "July25/29,2009",
+        "September10,2008"
+      ],
+      "facts": [
+        "The first Mer mission rewards 40 Doubloons and faction. A February 2007 correction says these rewards are combined, rather than exclusive choices.",
+        "Original steps: receive a Pirate Seal, deliver it to Jor, buy the Maiden's Grave ticket and board the appropriate ship, loot four Wreckage pieces from the inner siren cluster, and deliver them to Mer.",
+        "Three group members and an average level of 70 are documented, with a six-hour duration. July 2009 repeatability reports support two runs for 80 coins.",
+        "A September 2008 post gives Y 2714, X 3966, Z 306 for the wreckage area."
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/24717",
+      "period_posts": [
+        "March1,2007",
+        "March16,2007",
+        "April13,2007",
+        "June15,2007",
+        "March28,2013"
+      ],
+      "facts": [
+        "Bone Joint Compound costs 10 Doubloons at Indifferent faction, supported by the March 2007 stock list and a 2012 confirmation.",
+        "Every existing native stock slot now has a researched price: 104 match the current primary table; the remaining two are found in original 2007 posts.",
+        "A March 2013 post reports that the Cloudy Energeian Light Orb is absent. Do not import items merely because the current table lists them."
+      ]
+    }
+  ],
+  "native_currency_item": 79910,
+  "native_currency_id": 10,
+  "native_compound_item": 79918,
+  "native_vendor_npc": 423124,
+  "no_active_changes": true
+}

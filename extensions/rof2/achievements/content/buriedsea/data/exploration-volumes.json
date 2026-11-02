@@ -1,0 +1,879 @@
+{
+  "state": "staged; native acceptance pending",
+  "volume_policy": "65-unit XY half-width, mesh-supported floor heights with -35/+45 vertical tolerance. These are configurable emulator trigger defaults, not recovered original extents.",
+  "points": {
+    "monkey_ruins_1": {
+      "xyz": [
+        -2500,
+        -3800,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -2565,
+        "max_x": -2435,
+        "min_y": -3865,
+        "max_y": -3735,
+        "min_z": 305.614014,
+        "max_z": 473.814026
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        340.614014,
+        375.440979,
+        428.814026
+      ]
+    },
+    "monkey_ruins_2": {
+      "xyz": [
+        -3300,
+        -3500,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -3365,
+        "max_x": -3235,
+        "min_y": -3565,
+        "max_y": -3435,
+        "min_z": 353.981201,
+        "max_z": 444.709595
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        388.981201,
+        399.709595
+      ]
+    },
+    "monkey_ruins_3": {
+      "xyz": [
+        -4250,
+        -4000,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -4315,
+        "max_x": -4185,
+        "min_y": -4065,
+        "max_y": -3935,
+        "min_z": 391.974091,
+        "max_z": 487.314087
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        426.974091,
+        442.314087
+      ]
+    },
+    "druid_rings": {
+      "xyz": [
+        -2900,
+        -3900,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -2965,
+        "max_x": -2835,
+        "min_y": -3965,
+        "max_y": -3835,
+        "min_z": 342.329895,
+        "max_z": 422.329895
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        377.329895
+      ]
+    },
+    "south_extreme": {
+      "xyz": [
+        -3550,
+        -5150,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -3615,
+        "max_x": -3485,
+        "min_y": -5215,
+        "max_y": -5085,
+        "min_z": 266.014038,
+        "max_z": 435.114014
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        301.014038,
+        379.888367,
+        390.114014
+      ]
+    },
+    "west_extreme": {
+      "xyz": [
+        -2400,
+        -3800,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -2465,
+        "max_x": -2335,
+        "min_y": -3865,
+        "max_y": -3735,
+        "min_z": 267.002075,
+        "max_z": 410.814026
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        302.002075,
+        365.814026
+      ]
+    },
+    "north_extreme": {
+      "xyz": [
+        -4350,
+        -3100,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -4415,
+        "max_x": -4285,
+        "min_y": -3165,
+        "max_y": -3035,
+        "min_z": 284.628601,
+        "max_z": 364.628601
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        319.628601
+      ]
+    },
+    "east_extreme": {
+      "xyz": [
+        -4400,
+        -3300,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -4465,
+        "max_x": -4335,
+        "min_y": -3365,
+        "max_y": -3235,
+        "min_z": 289.689697,
+        "max_z": 369.689697
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        324.689697
+      ]
+    },
+    "southern_sunken_head": {
+      "xyz": [
+        -3000,
+        -5050,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -3065,
+        "max_x": -2935,
+        "min_y": -5115,
+        "max_y": -4985,
+        "min_z": 329.914001,
+        "max_z": 444.114014
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        364.914001,
+        393.71405,
+        399.114014
+      ]
+    },
+    "central_sunken_head": {
+      "xyz": [
+        -3450,
+        -4250,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -3515,
+        "max_x": -3385,
+        "min_y": -4315,
+        "max_y": -4185,
+        "min_z": 292.27182,
+        "max_z": 408.114014
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        327.27182,
+        351.414032,
+        363.114014
+      ]
+    },
+    "observatory": {
+      "xyz": [
+        -3325,
+        -4600,
+        null
+      ],
+      "source_quest": 4044,
+      "source_date": "2007-03-03",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -3390,
+        "max_x": -3260,
+        "min_y": -4665,
+        "max_y": -4535,
+        "min_z": 474.682983,
+        "max_z": 565.864014
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        509.682983,
+        520.864014
+      ]
+    },
+    "gateway_arch": {
+      "xyz": [
+        3244.1724,
+        3359.0981,
+        315.8969
+      ],
+      "source_quest": 4068,
+      "source_date": "2012-09-20",
+      "coordinate_form": "map X,Y negated into native X,Y; Z retained",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 3179.1724,
+        "max_x": 3309.1724,
+        "min_y": 3294.0981,
+        "max_y": 3424.0981,
+        "min_z": 282.037292,
+        "max_z": 362.037292
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        317.037292
+      ]
+    },
+    "undead_beach": {
+      "xyz": [
+        3177.5994,
+        2750.2517,
+        329.0403
+      ],
+      "source_quest": 4068,
+      "source_date": "2012-09-20",
+      "coordinate_form": "map X,Y negated into native X,Y; Z retained",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 3112.5994,
+        "max_x": 3242.5994,
+        "min_y": 2685.2517,
+        "max_y": 2815.2517,
+        "min_z": 295.4953,
+        "max_z": 375.4953
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        330.4953
+      ]
+    },
+    "northern_beach": {
+      "xyz": [
+        4178.7144,
+        3741.6367,
+        325.7385
+      ],
+      "source_quest": 4068,
+      "source_date": "2012-09-20",
+      "coordinate_form": "map X,Y negated into native X,Y; Z retained",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 4113.7144,
+        "max_x": 4243.7144,
+        "min_y": 3676.6367,
+        "max_y": 3806.6367,
+        "min_z": 284.396484,
+        "max_z": 364.396484
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        319.396484
+      ]
+    },
+    "central_pool": {
+      "xyz": [
+        3822.2725,
+        2710.4915,
+        303.8476
+      ],
+      "source_quest": 4068,
+      "source_date": "2012-09-20",
+      "coordinate_form": "map X,Y negated into native X,Y; Z retained",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 3757.2725,
+        "max_x": 3887.2725,
+        "min_y": 2645.4915,
+        "max_y": 2775.4915,
+        "min_z": 265.644592,
+        "max_z": 345.644592
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        300.644592
+      ]
+    },
+    "outlying_island_1": {
+      "xyz": [
+        4058.2776,
+        4639.2437,
+        486.7662
+      ],
+      "source_quest": 4068,
+      "source_date": "2012-09-20",
+      "coordinate_form": "map X,Y negated into native X,Y; Z retained",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 3993.2776,
+        "max_x": 4123.277599999999,
+        "min_y": 4574.2437,
+        "max_y": 4704.2437,
+        "min_z": 449.964325,
+        "max_z": 529.9643249999999
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        484.964325
+      ]
+    },
+    "outlying_island_2": {
+      "xyz": [
+        3339.1328,
+        4234.4658,
+        435.7182
+      ],
+      "source_quest": 4068,
+      "source_date": "2012-09-20",
+      "coordinate_form": "map X,Y negated into native X,Y; Z retained",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 3274.1328,
+        "max_x": 3404.1328,
+        "min_y": 4169.4658,
+        "max_y": 4299.4658,
+        "min_z": 400.785645,
+        "max_z": 480.785645
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        435.785645
+      ]
+    },
+    "outlying_island_4": {
+      "xyz": [
+        3107.4045,
+        1640.5872,
+        493.5923
+      ],
+      "source_quest": 4068,
+      "source_date": "2012-09-20",
+      "coordinate_form": "map X,Y negated into native X,Y; Z retained",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 3042.4045,
+        "max_x": 3172.4045,
+        "min_y": 1575.5872,
+        "max_y": 1705.5872,
+        "min_z": 458.57605,
+        "max_z": 538.57605
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        493.57605
+      ]
+    },
+    "outlying_island_5": {
+      "xyz": [
+        4369.9395,
+        1576.2272,
+        451.2265
+      ],
+      "source_quest": 4068,
+      "source_date": "2012-09-20",
+      "coordinate_form": "map X,Y negated into native X,Y; Z retained",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 4304.9395,
+        "max_x": 4434.9395,
+        "min_y": 1511.2272,
+        "max_y": 1641.2272,
+        "min_z": 416.052216,
+        "max_z": 496.052216
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        451.052216
+      ]
+    },
+    "outlying_island_3": {
+      "xyz": [
+        2635.5881,
+        1820.7311,
+        390.9768
+      ],
+      "source_quest": 4068,
+      "source_date": "2012-09-20",
+      "coordinate_form": "map X,Y negated into native X,Y; Z retained",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 2570.5881,
+        "max_x": 2700.5881,
+        "min_y": 1755.7311,
+        "max_y": 1885.7311,
+        "min_z": 358.124603,
+        "max_z": 438.124603
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        393.124603
+      ]
+    },
+    "northern_raindrop": {
+      "xyz": [
+        2800,
+        -3100,
+        null
+      ],
+      "source_quest": 4080,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 2735,
+        "max_x": 2865,
+        "min_y": -3165,
+        "max_y": -3035,
+        "min_z": 250.47170999999997,
+        "max_z": 347.814026
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        285.47171,
+        301.914001,
+        302.814026
+      ]
+    },
+    "central_raindrop": {
+      "xyz": [
+        2800,
+        -3600,
+        null
+      ],
+      "source_quest": 4080,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 2735,
+        "max_x": 2865,
+        "min_y": -3665,
+        "max_y": -3535,
+        "min_z": 306.500641,
+        "max_z": 386.500641
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        341.500641
+      ]
+    },
+    "southern_raindrop": {
+      "xyz": [
+        2900,
+        -3900,
+        null
+      ],
+      "source_quest": 4080,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 2835,
+        "max_x": 2965,
+        "min_y": -3965,
+        "max_y": -3835,
+        "min_z": 311.46524,
+        "max_z": 405.255829
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        346.46524,
+        360.255829
+      ]
+    },
+    "aviak_city_entrance": {
+      "xyz": [
+        820,
+        -3800,
+        null
+      ],
+      "source_quest": 4080,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 755,
+        "max_x": 885,
+        "min_y": -3865,
+        "max_y": -3735,
+        "min_z": 446.631348,
+        "max_z": 544.9140620000001
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        481.631348,
+        499.914062
+      ]
+    },
+    "karana_temple": {
+      "xyz": [
+        700,
+        -3600,
+        null
+      ],
+      "source_quest": 4080,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 635,
+        "max_x": 765,
+        "min_y": -3665,
+        "max_y": -3535,
+        "min_z": 488.314087,
+        "max_z": 598.628296
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        523.314087,
+        553.628296
+      ]
+    },
+    "azure_flame_stair": {
+      "xyz": [
+        1200,
+        -4200,
+        null
+      ],
+      "source_quest": 4080,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": 1135,
+        "max_x": 1265,
+        "min_y": -4265,
+        "max_y": -4135,
+        "min_z": 269.614014,
+        "max_z": 415.314026
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        304.614014,
+        370.314026
+      ]
+    },
+    "combine_ruins": {
+      "xyz": [
+        -2275,
+        -1310,
+        null
+      ],
+      "source_quest": 4030,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -2340,
+        "max_x": -2210,
+        "min_y": -1375,
+        "max_y": -1245,
+        "min_z": 283.695679,
+        "max_z": 363.695679
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        318.695679
+      ]
+    },
+    "graveyard": {
+      "xyz": [
+        -3040,
+        -60,
+        null
+      ],
+      "source_quest": 4030,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -3105,
+        "max_x": -2975,
+        "min_y": -125,
+        "max_y": 5,
+        "min_z": 299.182434,
+        "max_z": 379.182434
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        334.182434
+      ]
+    },
+    "steam_fire_lake": {
+      "xyz": [
+        -3080,
+        -780,
+        null
+      ],
+      "source_quest": 4030,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -3145,
+        "max_x": -3015,
+        "min_y": -845,
+        "max_y": -715,
+        "min_z": 419.914062,
+        "max_z": 537.222107
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        454.914062,
+        492.222107
+      ]
+    },
+    "volcano": {
+      "xyz": [
+        -3270,
+        -975,
+        null
+      ],
+      "source_quest": 4030,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -3335,
+        "max_x": -3205,
+        "min_y": -1040,
+        "max_y": -910,
+        "min_z": 310.828705,
+        "max_z": 391.447845
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        345.828705,
+        346.447845
+      ]
+    },
+    "coral_bridge": {
+      "xyz": [
+        -3310,
+        -1335,
+        null
+      ],
+      "source_quest": 4030,
+      "source_date": "pre-cutoff archived description",
+      "coordinate_form": "original /loc Y,X",
+      "state": "period_location_mesh_supported",
+      "volume": {
+        "min_x": -3375,
+        "max_x": -3245,
+        "min_y": -1400,
+        "max_y": -1270,
+        "min_z": 279.261078,
+        "max_z": 404.514038
+      },
+      "volume_policy": "Configurable emulator landmark bounds; original trigger extents are unrecovered.",
+      "mesh_elevations": [
+        314.261078,
+        359.514038
+      ]
+    },
+    "silver_sail": {
+      "xyz": [
+        -3297,
+        3343,
+        300
+      ],
+      "source_quest": 4074,
+      "source_url": "https://www.thesilentminority.net/characters/questshow.php?ID=1052&QuestID=69",
+      "source_note": "First-person guide explicitly names this wreck and /loc; publication date not recovered. Period2008 unnamed three-wreck positions corroborate the area, not exact trigger extents.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": -3362,
+        "max_x": -3232,
+        "min_y": 3278,
+        "max_y": 3408,
+        "min_z": 205.71405,
+        "max_z": 341.514038
+      },
+      "mesh_elevations": [
+        240.71405,
+        296.514038
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": false
+    },
+    "sea_spirit": {
+      "xyz": [
+        -3342,
+        4064,
+        300
+      ],
+      "source_quest": 4074,
+      "source_url": "https://www.thesilentminority.net/characters/questshow.php?ID=1052&QuestID=69",
+      "source_note": "Named guide /loc, not a guessed association from the order of unnamed coordinates.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": -3407,
+        "max_x": -3277,
+        "min_y": 3999,
+        "max_y": 4129,
+        "min_z": 215.914001,
+        "max_z": 357.71405
+      },
+      "mesh_elevations": [
+        250.914001,
+        296.428009,
+        312.71405
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": false
+    },
+    "red_storm": {
+      "xyz": [
+        -3893,
+        3283,
+        300
+      ],
+      "source_quest": 4074,
+      "source_url": "https://www.thesilentminority.net/characters/questshow.php?ID=1052&QuestID=69",
+      "source_note": "Named guide /loc; requires native update check with the full batch.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": -3958,
+        "max_x": -3828,
+        "min_y": 3218,
+        "max_y": 3348,
+        "min_z": 224.19741800000003,
+        "max_z": 369.414001
+      },
+      "mesh_elevations": [
+        259.197418,
+        324.414001
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": false
+    },
+    "underwater_flame": {
+      "xyz": [
+        -3980,
+        2860,
+        -530
+      ],
+      "source_quest": 4072,
+      "source_url": "https://everquest.allakhazam.com/db/quest/4072",
+      "source_note": "May2008 entrance /loc Y2860,X-3980; original guide says flame at bottom of very deep vertical pit. Installed map geometry bottoms below-537; mesh-supported bottom floor at-562.145. This volume is near the pit bottom, never the entrance at Z240.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": -4055,
+        "max_x": -3905,
+        "min_y": 2785,
+        "max_y": 2935,
+        "min_z": -590.144653,
+        "max_z": -490.14465299999995
+      },
+      "mesh_elevations": [
+        -562.144653
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": false
+    },
+    "inn_shark_jaws": {
+      "xyz": [
+        2884,
+        -823,
+        311
+      ],
+      "source_quest": 4089,
+      "source_url": "https://everquest.allakhazam.com/db/quest/4089",
+      "source_note": "Period guide requires lower tavern shark-jaw/left-ladder area. Candidate lower-bar footprint is reconstructed from installed inn map and original dockworkers117934/117943/117948. Exact jaws anchor still requires native visual inspection; map-label center alone is not claimed to locate the jaws.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": 2863,
+        "max_x": 2920,
+        "min_y": -864,
+        "max_y": -782,
+        "min_z": 303,
+        "max_z": 320
+      },
+      "mesh_elevations": [
+        311.994446
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": false,
+      "native_visual_verification": {
+        "status": "confirmed_in_native_RoF2",
+        "landmark": "Mounted shark jaws around the Jardels Inn sign behind the lower bar, beside the left ladder/beam",
+        "lower_bar_verified_xyz": [
+          2891.5,
+          -823,
+          313.994
+        ],
+        "view_from_xyz": [
+          2872,
+          -823,
+          314
+        ],
+        "limits": "The original trigger extents remain unrecovered; configured bounds are labelled reconstruction."
+      }
+    }
+  }
+}

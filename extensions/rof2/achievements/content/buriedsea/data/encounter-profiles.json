@@ -1,0 +1,41 @@
+{
+  "provenance": "Approved labelled emulator defaults except identities, race composition and best-supported level reconstruction. See provenance/encounter-scenes.json.",
+  "profiles": [
+    {
+      "id": 423900,
+      "source": 423145,
+      "name": "a_scavenging_coralisk",
+      "level": 76,
+      "race": 436,
+      "gender": 2,
+      "hp": 45000,
+      "AC": 400,
+      "mindmg": 250,
+      "maxdmg": 1029
+    },
+    {
+      "id": 422900,
+      "source": 422001,
+      "name": "a_Blacksail_brigand",
+      "level": 74,
+      "race": 1,
+      "gender": 1,
+      "hp": 30000,
+      "AC": 350,
+      "mindmg": 150,
+      "maxdmg": 800
+    },
+    {
+      "id": 422901,
+      "source": 422001,
+      "name": "a_Blacksail_brigand",
+      "level": 75,
+      "race": 9,
+      "gender": 0,
+      "hp": 35000,
+      "AC": 375,
+      "mindmg": 200,
+      "maxdmg": 900
+    }
+  ]
+}

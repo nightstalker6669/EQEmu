@@ -1,0 +1,31 @@
+{
+  "historical_cutoff": "2013-05-31",
+  "inherited_spawn_anomalies": [
+    {
+      "zone": "buriedsea",
+      "spawn2_id": 118522,
+      "spawngroup_id": 80124,
+      "npc_type_id": 423341,
+      "npc_name": "a_rabid_jaguar",
+      "database_position_xyz": [
+        -1382.125,
+        -3609.875,
+        3465.0
+      ],
+      "finding": "The unchanged inherited row places the actor far above terrain. The correct original coordinate has not been recovered.",
+      "independent_emulator_database": "https://www.projectmiragul.org/npcs/view/423341",
+      "independent_observation": "Its spawn-group list repeats the same anomalous coordinate; this corroborates an inherited-data issue, not historical correctness.",
+      "repair_applied": false,
+      "policy": "Do not infer a corrected height from decimal placement. Retain the open location question until supported by evidence. Other original jaguar sources remain available."
+    }
+  ],
+  "quest_chest_classification": {
+    "npc_type_ids": [
+      423140,
+      423141
+    ],
+    "native_body_type": 5,
+    "rof2_observed_entity_class": "Object",
+    "scope": "These remain server NPC-backed LDoN treasure chests. Client automation must not equate an Object classification with absence of a spawn. This finding changes no opcode or layout."
+  }
+}
