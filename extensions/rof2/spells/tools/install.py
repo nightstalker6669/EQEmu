@@ -6,6 +6,7 @@ import hashlib
 import json
 import math
 import os
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -21,6 +22,21 @@ def equal(left, right):
 
 def sql_key(key):
     return " AND ".join(f"`{name}`=%s" for name in key), tuple(key.values())
+
+
+def atomic_script_write(destination, content):
+    """Replace a verified script on the same filesystem, preserving its mode."""
+    mode = destination.stat().st_mode & 0o777
+    fd, temporary = tempfile.mkstemp(prefix=".rof2-spells-", dir=destination.parent)
+    try:
+        with os.fdopen(fd, "wb") as handle:
+            handle.write(content)
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.chmod(temporary, mode)
+        os.replace(temporary, destination)
+    finally:
+        Path(temporary).unlink(missing_ok=True)
 
 
 def main():
@@ -56,6 +72,7 @@ def main():
         parser.error("Expected existing server quests directory")
     stage_names = {s["name"] for s in selected}
     quest_files = []
+    predecessors = {}
     for entry in manifest["quest_files"]:
         if entry["stage"] not in stage_names:
             continue
@@ -69,13 +86,16 @@ def main():
             alternatives += [destination.parent / f"{npc_id}{suffix}" for suffix in (".lua", ".pl")]
             if any(p.exists() for p in alternatives):
                 parser.error(f"Existing NPC quest takes precedence or conflicts; merge it first: {relative}")
+        allowed_preimages = set(entry.get("previous_sha256", []))
         if destination.exists() and destination.read_bytes() != source.read_bytes():
-            parser.error(f"Quest script already differs; merge it first: {relative}")
+            if hashlib.sha256(destination.read_bytes()).hexdigest() not in allowed_preimages:
+                parser.error(f"Quest script already differs; merge it first: {relative}")
+        predecessors[str(relative)] = allowed_preimages
         quest_files.append((relative, source, destination))
     connection = pymysql.connect(**config, autocommit=False,
                                  cursorclass=pymysql.cursors.DictCursor)
     inserts, updates, counts = [], [], {}
-    scripts_created, directories_created = [], []
+    scripts_created, scripts_updated, directories_created = [], [], []
     committed = False
     try:
         with connection.cursor() as cursor:
@@ -112,7 +132,8 @@ def main():
                     if cursor.fetchone() != faction:
                         raise RuntimeError(f"Faction identity differs: {faction['id']}")
                 for item in payload.get("required_items", []):
-                    cursor.execute("SELECT id,scrolleffect FROM items WHERE id=%s FOR UPDATE", (item["id"],))
+                    fields = "id,Name,scrolleffect" if "Name" in item else "id,scrolleffect"
+                    cursor.execute(f"SELECT {fields} FROM items WHERE id=%s FOR UPDATE", (item["id"],))
                     if cursor.fetchone() != item:
                         raise RuntimeError(f"Spell scroll identity differs: {item['id']}")
                 for table, rows in payload["inserts"].items():
@@ -150,17 +171,20 @@ def main():
             incoming = {}
             for payload in payloads:
                 for table, rows in payload["inserts"].items():
-                    if table in ("items", "npc_types", "npc_spells", "rewards", "npc_faction"):
+                    if table in ("items", "npc_types", "npc_spells", "rewards", "npc_faction", "spawngroup", "tradeskill_recipe"):
                         field = "reward_id" if table == "rewards" else "id"
                         incoming.setdefault(table, set()).update(r[field] for r in rows)
             dependencies = {"items": set(), "npc_types": {752146},
-                            "npc_spells": set(), "spells_new": set(),
-                            "npc_faction": set(), "faction_list": set()}
+                            "npc_spells": set(), "spells_new": set(), "spawngroup": set(),
+                            "tradeskill_recipe": set(), "npc_faction": set(), "faction_list": set()}
             for payload in payloads:
                 for table, rows in payload["inserts"].items():
                     for row in rows:
                         for target, field in {
                             "merchantlist": [("items", "item")],
+                            "spawn2": [("spawngroup", "spawngroupID")],
+                            "spawnentry": [("spawngroup", "spawngroupID"), ("npc_types", "npcID")],
+                            "tradeskill_recipe_entries": [("tradeskill_recipe", "recipe_id"), ("items", "item_id")],
                             "pets": [("npc_types", "npcID")],
                             "auras": [("npc_types", "npc_type"), ("spells_new", "type"),
                                       ("spells_new", "spell_id")],
@@ -210,6 +234,26 @@ def main():
                                 if cursor.fetchone() != {"name": item["name"], "rank": task["rank"],
                                                           "level": task["level"]}:
                                     raise RuntimeError(f"Spell era/class/rank mismatch in {stage}: {item['spell_id']}")
+            if "010-sod-runes-and-downgrades" in stage_names:
+                sod = json.loads((ROOT / "provenance/sod-runes-and-downgrades.json").read_text())
+                for item in sod["catalogue"]:
+                    cursor.execute(f"SELECT name,rank,`classes{int(item['class'])}` AS level "
+                                   "FROM spells_new WHERE id=%s", (item["spell_id"],))
+                    if cursor.fetchone() != {"name": item["name"], "rank": 10, "level": item["level"]}:
+                        raise RuntimeError(f"SoD rune spell identity differs: {item['spell_id']}")
+            if "009-legacy-exchanges" in stage_names:
+                legacy = json.loads((ROOT / "provenance/legacy-exchanges.json").read_text())
+                for item in legacy["catalogues"]["tss"]:
+                    cursor.execute(f"SELECT name,rank,`classes{int(item['class'])}` AS level "
+                                   "FROM spells_new WHERE id=%s", (item["spell_id"],))
+                    if cursor.fetchone() != {"name": item["name"], "rank": 10, "level": item["level"]}:
+                        raise RuntimeError(f"Legacy rune spell identity differs: {item['spell_id']}")
+                for item in legacy["catalogues"]["underfoot_gems"]:
+                    for cls, level in item["class_levels"].items():
+                        cursor.execute(f"SELECT name,rank,`classes{int(cls)}` AS level "
+                                       "FROM spells_new WHERE id=%s", (item["spell_id"],))
+                        if cursor.fetchone() != {"name": item["spell_name"], "rank": 5, "level": level}:
+                            raise RuntimeError(f"Legacy gem spell identity differs: {item['spell_id']}")
             if "006-ordered-runes" in stage_names:
                 ordered = json.loads((ROOT / "provenance/ordered-runes.json").read_text())
                 for catalogue in ordered["catalogues"].values():
@@ -222,6 +266,8 @@ def main():
             report = {"stages": [s["name"] for s in selected], "content_rows": counts,
                       "new_rows": len(inserts), "vendor_updates": len(updates),
                       "quest_scripts_new": [str(r) for r, _, d in quest_files if not d.exists()],
+                      "quest_scripts_updated": [str(r) for r, s, d in quest_files
+                                                if d.exists() and d.read_bytes() != s.read_bytes()],
                       "quest_script_new": any(str(r) == "quests/shardslanding/#Tomekeeper_Kerkaz.lua" and not d.exists()
                                               for r, _, d in quest_files), "applied": False,
                       "payload_sha256": files}
@@ -252,8 +298,14 @@ def main():
                                tuple(after.values()) + values)
             for relative, source, destination in quest_files:
                 if destination.exists():
-                    if destination.read_bytes() != source.read_bytes():
-                        raise RuntimeError(f"Concurrent quest edit: {relative}")
+                    original = destination.read_bytes()
+                    if original != source.read_bytes():
+                        if hashlib.sha256(original).hexdigest() not in predecessors[str(relative)]:
+                            raise RuntimeError(f"Concurrent quest edit: {relative}")
+                        # Only an explicitly recorded, byte-identical published predecessor
+                        # may be upgraded. Its original bytes are in the private receipt.
+                        atomic_script_write(destination, source.read_bytes())
+                        scripts_updated.append((source, destination, original))
                     continue
                 missing = []
                 parent = destination.parent
@@ -279,6 +331,9 @@ def main():
     except Exception:
         if not committed:
             connection.rollback()
+            for source, destination, original in reversed(scripts_updated):
+                if destination.exists() and destination.read_bytes() == source.read_bytes():
+                    atomic_script_write(destination, original)
             for source, destination in reversed(scripts_created):
                 if destination.exists() and destination.read_bytes() == source.read_bytes():
                     destination.unlink()

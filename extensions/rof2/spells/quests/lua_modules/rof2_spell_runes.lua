@@ -16,14 +16,14 @@ function M.next_reward(client, choices)
     end
 end
 
-function M.hand_in(e, era)
-    if e.self:GetNPCTypeID() ~= owners[era] then
+function M.hand_in_catalogue(e, owner, catalogue, minimum_level)
+    if e.self:GetNPCTypeID() ~= owner or
+       (minimum_level and e.other:GetLevel() < minimum_level) then
         item_lib.return_items(e.self, e.other, e.trade)
         return
     end
     -- This API reports the permanent class, including when shrouded.
     local class = classes[e.other:GetClassAbbreviation()]
-    local catalogue = data[era] or {}
     local handled = false
     for slot = 1, 4 do
         local inst = e.trade["item" .. slot]
@@ -40,6 +40,10 @@ function M.hand_in(e, era)
         end
     end
     item_lib.return_items(e.self, e.other, e.trade)
+end
+
+function M.hand_in(e, era)
+    M.hand_in_catalogue(e, owners[era], data[era] or {})
 end
 
 return M

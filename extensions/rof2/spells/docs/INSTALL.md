@@ -77,3 +77,9 @@ The wire allocator is durable server state. Never truncate, reset or decrease it
 Keep the shared server and clients parked during a coordinated deployment. Shared-core owner review and fresh native-client acceptance are still required for this offline batch. Verify Alaran boundary values, the original refund, whole bundles, learned spell/discipline filtering, relog restoration and a stale client selection after a list refresh. Do not deploy while another chat owns active native acceptance.
 
 Stage 008 requires faction 680 to retain its Dream Delvers identity and both existing HoT teacher bindings to match their recorded preimages. It creates a dedicated NPC faction group, preserving player faction and existing race/class/deity modifiers. Its rollback restores teacher bindings before removing that group. The two disputed rank III tasks and Rotharran’s progression-gated shop are deliberately absent.
+
+## Original legacy exchanges
+
+Stages 009/010 require the original input/reward item names, spell effects and dated class/rank/level identities. Stage 009 adds scripts only; stage 010 adds the separate original SoD NPC/spawn/merchant and four non-tradeskill rune downgrade recipes. No scroll IDs are invented. Install all manifest scripts/modules together. The existing rune module may upgrade only from the exact published predecessor SHA recorded in the manifest; other edits are refused. Its bytes are preserved in the private receipt and restored if database commit fails. This is a targeted upgrade, not permission to replace customized quest scripts.
+
+The stage 010 SQL rollback guards all overlay fields; FLOAT fields allow only database storage precision. It removes recipe entries before headers and spawn/merchant dependencies before the NPC. Prefer the private installation receipt when content predates this package or has been customized. Allocator state must never be reset during rollback.

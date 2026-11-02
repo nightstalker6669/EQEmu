@@ -18,6 +18,9 @@ The branch inherits `rof2-shared-core` commit `b3f795ea642d810d0af75dca39d6dd1f2
 
 | `008-hot-fragment-exchanges` | 287 verified missing HoT scrolls, eight original fragment exchanges covering 801 spells, and Dream Delvers bindings for the two existing teachers |
 
+| `009-legacy-exchanges` | 143 TSS class rewards from original ordered runes, and 57 original Underfoot named-gem exchanges using existing items/drops |
+| `010-sod-runes-and-downgrades` | 282 sourced SoD class/rune rewards, restoration of the original Plane of Time NPC, and four original SoF/SoD rune downgrade recipes |
+
 Stage 003 includes measured historical anchors where available, but all reconstructed pet NPCs contain estimated secondary statistics. Aura ranges, timings and visual templates also include estimates. It is excluded by the installer's default selection. The [pet model](provenance/pet-model.json) and [aura model](provenance/aura-model.json) identify the scope and sources. These estimates must not be presented as recovered Live balance.
 
 Kerkaz uses the original acquisition route: say `dreadmote` or `terrormote`, accept the matching task, deliver the physical mote, then choose a reward in the native window. Documented two- and three-scroll bundles remain one choice. The original mote can be selected back. There is no alternate-currency exchange merchant or added trade-down conversion. Hail/description text is paraphrased; this is not an exact dialogue transcript recovery.
@@ -53,3 +56,7 @@ Upstream [GPLv3 licensing](../../../LICENSE.md) applies to the code. Source link
 Stages 007 and 008 passed isolated installation, readback, idempotency and rollback validation. It has not been installed on the shared running server. Twenty rank III scroll identities remain unverified; the level 95 rank III shadowknight bundle catalogue explicitly lacks pairing information. Original item 132477 (Shared Savagery III) also conflicts with an inherited Scavenger Hunt Letter. The item and its choice are withheld while ownership/dependencies are researched. These gaps leave 25 source choices omitted. No synthetic scroll IDs, partial bundles or substitute acquisition routes were added.
 
 The achievements maintainer extracted, independently built and published the complete generic engine in the pinned shared-core revision. This branch merges that actual published core while preserving the latest spell content. Review [batch validation](docs/VERIFICATION.md#offline-voa-and-engine-batch) before deployment.
+
+## Further original acquisition routes
+
+Stages 009/010 restore the TSS rune teacher and Underfoot rank II gem trader, plus the separate SoD Kalim in Plane of Time. SoD bard Whirring/Glowing and beastlord Glowing sequences remain wholly withheld because the order or a required scroll identity is unresolved. No missing reward is skipped to reach a later one. The SoD NPC uses independently corroborated public map-label coordinates and a neutral existing Kalim template; exact original heading/noncombat secondary statistics and native placement are not established. The four downgrade combines use the original Mechamagical Metamorpher. See [legacy](provenance/legacy-exchanges.json) and [SoD](provenance/sod-runes-and-downgrades.json) provenance.
