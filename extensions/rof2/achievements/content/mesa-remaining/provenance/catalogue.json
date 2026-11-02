@@ -1,0 +1,463 @@
+{
+  "status": "Four original RoF2 achievement catalogue identities with36completion and8display components",
+  "cutoff": "2013-05-31",
+  "source": "Original May2013 RoF2 catalogue, matched against period quest identities; modern Live additions excluded",
+  "rows": {
+    "achievements": [
+      {
+        "id": 500040400,
+        "name": "Moving Up the Ranks (51-55)",
+        "description": "Marilena in the Windwillow's Grove seeks help against the threats facing the Dryads. Tudor and Laurentiu at the Minohtens' camp also have a few tasks to offer you:",
+        "icon_id": 603,
+        "points": 11,
+        "has_reward": 1,
+        "client_flag": 0,
+        "version": 0,
+        "reset_on_version_change": 1,
+        "enabled": 1
+      },
+      {
+        "id": 500040500,
+        "name": "Dorina's Love (Mesa 40+)",
+        "description": "Travel to the sacred grove north of the path to Blightfire Moors and learn of Dorina's plight:",
+        "icon_id": 3794,
+        "points": 6,
+        "has_reward": 1,
+        "client_flag": 0,
+        "version": 0,
+        "reset_on_version_change": 1,
+        "enabled": 1
+      },
+      {
+        "id": 500040600,
+        "name": "Madu's Armor (Mesa 40+)",
+        "description": "Just west to the path to Blightfire Moors you will find Scout Madu. He is offering armor in exchange for completing a number of tasks:",
+        "icon_id": 805,
+        "points": 7,
+        "has_reward": 1,
+        "client_flag": 0,
+        "version": 0,
+        "reset_on_version_change": 1,
+        "enabled": 1
+      },
+      {
+        "id": 500040700,
+        "name": "Ciodaru's Love (Mesa 45+)",
+        "description": "Travel to the Minohten camp to the west and learn of the troubles facing Ciodaru:",
+        "icon_id": 3299,
+        "points": 12,
+        "has_reward": 1,
+        "client_flag": 0,
+        "version": 0,
+        "reset_on_version_change": 1,
+        "enabled": 1
+      }
+    ],
+    "achievement_components": [
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 1,
+        "component_id": 50126,
+        "name": "Marilena - Pluck It!",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 2,
+        "component_id": 50127,
+        "name": "Marilena - Harpy Horrors",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 3,
+        "component_id": 50128,
+        "name": "Tudor - Tudor's Beer",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 4,
+        "component_id": 50129,
+        "name": "Tudor - Tudor's Ale",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 5,
+        "component_id": 50130,
+        "name": "Tudor - Tudor's Wine",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 6,
+        "component_id": 50131,
+        "name": "Tudor - Tudor's Spirits",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 7,
+        "component_id": 50132,
+        "name": "Laurentiu - Vermin Elimination",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 8,
+        "component_id": 50133,
+        "name": "Laurentiu - Birds of a Feather",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 9,
+        "component_id": 50134,
+        "name": "Laurentiu - Harping on Harpies",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 10,
+        "component_id": 50135,
+        "name": "Laurentiu - Dromrek Must Die",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 1,
+        "sequence": 11,
+        "component_id": 50136,
+        "name": "Laurentiu - Cleanse Serpent's Falls",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 2058,
+        "name": "Reach Level 50",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040400,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 7011,
+        "name": "Serpent",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040500,
+        "component_type": 1,
+        "sequence": 1,
+        "component_id": 50137,
+        "name": "Dorina - Dorina's Love",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040500,
+        "component_type": 1,
+        "sequence": 2,
+        "component_id": 50138,
+        "name": "Dorina - Dorina's Love Letter",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040500,
+        "component_type": 1,
+        "sequence": 3,
+        "component_id": 50139,
+        "name": "Dorina - Dorina's Gift",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040500,
+        "component_type": 1,
+        "sequence": 4,
+        "component_id": 50140,
+        "name": "Dorina - Dorina's Personalized Gift",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040500,
+        "component_type": 1,
+        "sequence": 5,
+        "component_id": 50141,
+        "name": "Dorina - Dorina's Potion",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040500,
+        "component_type": 1,
+        "sequence": 6,
+        "component_id": 50142,
+        "name": "Dorina - Dorina's Lament",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040500,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 2048,
+        "name": "Reach Level 40",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040500,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 7011,
+        "name": "Serpent",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040600,
+        "component_type": 1,
+        "sequence": 1,
+        "component_id": 50143,
+        "name": "Scout Madu - Wolf Skins for Madu",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040600,
+        "component_type": 1,
+        "sequence": 2,
+        "component_id": 50144,
+        "name": "Scout Madu - Bear Pelts for Madu",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040600,
+        "component_type": 1,
+        "sequence": 3,
+        "component_id": 50145,
+        "name": "Scout Madu - Snake Skins for Madu",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040600,
+        "component_type": 1,
+        "sequence": 4,
+        "component_id": 50146,
+        "name": "Scout Madu - Spider Silk for Madu",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040600,
+        "component_type": 1,
+        "sequence": 5,
+        "component_id": 50147,
+        "name": "Scout Madu - Madu Needs More Supplies",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040600,
+        "component_type": 1,
+        "sequence": 6,
+        "component_id": 50148,
+        "name": "Scout Madu - Kill Fantoma",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040600,
+        "component_type": 1,
+        "sequence": 7,
+        "component_id": 50149,
+        "name": "Scout Madu - Kill Ursalua",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040600,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 2048,
+        "name": "Reach Level 40",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040600,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 7011,
+        "name": "Serpent",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 1,
+        "component_id": 50150,
+        "name": "Ciodaru - Ciodaru's Love",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 2,
+        "component_id": 50151,
+        "name": "Ciodaru - Ciodaru's First Gift",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 3,
+        "component_id": 50152,
+        "name": "Ciodaru - Ciodaru's Second Gift",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 4,
+        "component_id": 50153,
+        "name": "Ciodaru - Protect Kathryn",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 5,
+        "component_id": 50154,
+        "name": "Ciodaru - Ciodaru's Third Gift",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 6,
+        "component_id": 50155,
+        "name": "Ciodaru - Ciodaru's Fourth Gift",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 7,
+        "component_id": 50156,
+        "name": "Ciodaru - Protect Kathryn Again",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 8,
+        "component_id": 50157,
+        "name": "Ciodaru - Ciodaru's Fifth Gift",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 9,
+        "component_id": 50158,
+        "name": "Ciodaru - Ciodaru's Sixth Gift",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 10,
+        "component_id": 50159,
+        "name": "Ciodaru - Protect Kathryn Some More",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 11,
+        "component_id": 50160,
+        "name": "Ciodaru - Who Wants to Kill Kathryn?",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 1,
+        "sequence": 12,
+        "component_id": 50161,
+        "name": "Ciodaru - Ciodaru's Gift Box",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 2053,
+        "name": "Reach Level 45",
+        "description": ""
+      },
+      {
+        "achievement_id": 500040700,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 7011,
+        "name": "Serpent",
+        "description": ""
+      }
+    ],
+    "achievement_category_associations": [
+      {
+        "category_id": 71,
+        "sequence": 0,
+        "achievement_id": 500040400,
+        "display_text": ""
+      },
+      {
+        "category_id": 72,
+        "sequence": 0,
+        "achievement_id": 500040500,
+        "display_text": ""
+      },
+      {
+        "category_id": 72,
+        "sequence": 0,
+        "achievement_id": 500040600,
+        "display_text": ""
+      },
+      {
+        "category_id": 72,
+        "sequence": 0,
+        "achievement_id": 500040700,
+        "display_text": ""
+      }
+    ],
+    "achievement_categories": [
+      {
+        "id": 70,
+        "parent_id": 0,
+        "sequence": 3,
+        "name": "The Hero's Journey",
+        "description": "The Hero's Journey",
+        "icon": "A_HJNY"
+      },
+      {
+        "id": 71,
+        "parent_id": 70,
+        "sequence": 1,
+        "name": "Progression",
+        "description": "Progression",
+        "icon": "A_ProgressionSub"
+      },
+      {
+        "id": 72,
+        "parent_id": 70,
+        "sequence": 2,
+        "name": "Advancement",
+        "description": "Advancement",
+        "icon": "A_AdvancementSub"
+      }
+    ]
+  }
+}

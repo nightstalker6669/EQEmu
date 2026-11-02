@@ -1,0 +1,46 @@
+-- Preserve all previous player callbacks and vetoes.
+local sunderock_previous_task_accepted=event_task_accepted
+function event_task_accepted(e)
+ if sunderock_previous_task_accepted then local r=sunderock_previous_task_accepted(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').resume(e)
+end
+local sunderock_previous_task_complete=event_task_complete
+function event_task_complete(e)
+ if sunderock_previous_task_complete then local r=sunderock_previous_task_complete(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').complete(e)
+end
+local sunderock_previous_task_update=event_task_update
+function event_task_update(e)
+ if sunderock_previous_task_update then local r=sunderock_previous_task_update(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').resume(e)
+end
+local sunderock_previous_task_stage_complete=event_task_stage_complete
+function event_task_stage_complete(e)
+ if sunderock_previous_task_stage_complete then local r=sunderock_previous_task_stage_complete(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').resume(e)
+end
+local sunderock_previous_enter_zone=event_enter_zone
+function event_enter_zone(e)
+ if sunderock_previous_enter_zone then local r=sunderock_previous_enter_zone(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').resume(e)
+end
+local sunderock_previous_task_fail=event_task_fail
+function event_task_fail(e)
+ if sunderock_previous_task_fail then local r=sunderock_previous_task_fail(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').resume(e)
+end
+local sunderock_previous_player_pickup=event_player_pickup
+function event_player_pickup(e)
+ if sunderock_previous_player_pickup then local r=sunderock_previous_player_pickup(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').pickup(e)
+end
+local sunderock_previous_loot=event_loot
+function event_loot(e)
+ if sunderock_previous_loot then local r=sunderock_previous_loot(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').loot(e)
+end
+local sunderock_previous_timer=event_timer
+function event_timer(e)
+ if require('achievement_quest_sunderock').timer(e)then return end
+ if sunderock_previous_timer then return sunderock_previous_timer(e)end
+end

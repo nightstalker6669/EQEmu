@@ -1,0 +1,65 @@
+{
+  "ready": true,
+  "faction_routes_reviewed": true,
+  "remaining": [],
+  "buzz": {
+    "reviewed": true,
+    "copy_npc": 396941,
+    "faction_id": 1124,
+    "maximum_raw_faction": -1500,
+    "copy_positions": [
+      {
+        "x": 80,
+        "y": 30,
+        "z": -54,
+        "h": 39,
+        "immediate_attack": true
+      },
+      {
+        "x": 96,
+        "y": 24,
+        "z": -54,
+        "h": 39,
+        "immediate_attack": true
+      },
+      {
+        "x": 145,
+        "y": -15,
+        "z": -54,
+        "h": 39,
+        "immediate_attack": false
+      }
+    ]
+  },
+  "faction_policy": {
+    "kind": "labelled configurable emulator defaults",
+    "file": "faction-policy.json",
+    "kill_hits": {
+      "1123": -1,
+      "1124": -1,
+      "1129": 1
+    },
+    "original_values_verified": false
+  },
+  "placement_provenance": {
+    "kind": "Reconstructed positions, not recovered original coordinates",
+    "evidence": "Native RoF2 floor survey reached all three locations and MQ2Nav traversed from the distant copy location to the near pair, with settled floor Z about -53.54. Two near attackers and one distant idle copy follow the 2008 report.",
+    "native_copy_encounter_verified": true
+  },
+  "installation_review": {
+    "reviewed": true,
+    "scope": "Deployed and native-verified four-quest milestone; historical reconstruction limits retained",
+    "unix_time": 1793438319,
+    "checks": [
+      "complete content-only MariaDB install/repeat/rollback",
+      "faction-only source NPC patches preserve combat/loot/spawn fields",
+      "native floor and connected navigation for copy positions",
+      "actual server read-only preflight",
+      "built zone candidate and matching source hashes",
+      "native /who all census before maintenance",
+      "four native quest completions, exact item custody and parent reward",
+      "native faction gate and three-copy encounter",
+      "fresh-login reward and completion persistence"
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "publication": "Nineteen enabled Mesa quests completed; installed live port and fresh-login persistence verified",
+  "cutoff": "2013-05-31",
+  "native_completed_tasks": [
+    3040401,
+    3040402,
+    3040403,
+    3040404,
+    3040405,
+    3040406,
+    3040407,
+    3040408,
+    3040409,
+    3040410,
+    3040412,
+    3040413,
+    3040414,
+    3040415,
+    3040416,
+    3040417,
+    3040418,
+    3040419,
+    3040420
+  ],
+  "defined_tasks": 20,
+  "enabled_tasks": 19,
+  "disabled_task": 3040411,
+  "required_components_completed": 19,
+  "completed_parent": 500040300,
+  "incomplete_parent": 500040200,
+  "claims": [
+    {
+      "source": "Reduce the Dromrek Threat",
+      "items": [
+        53568
+      ]
+    },
+    {
+      "source": "Pranks and Research",
+      "items": [
+        108574,
+        108583
+      ]
+    }
+  ],
+  "persistence": "All19completion timestamps,component rows,Pranks parent,quest/parent reward ledgers,selected item counts and20equipped slots survived actual client process exit and saved-profile freshlogin. Delivered rewards were not offered again.",
+  "native_interactions": [
+    "Campfire Burning Stick, original lake-stone ground pickup, four relocated bush/rock clicks each",
+    "Three original food pickups/deliveries,three original mine pickups/food replacement consumptions",
+    "Four scouts,two destructible tents and five rack credits,original giver returns",
+    "Four mushroom thefts,actual fruit/vegetable sacks and original brewing-barrel Object",
+    "Consumed quest fruit reacquired only while delivery pending,without repeated acquisition credit",
+    "Native wildlife kills,fresh Mesa supplies,and combined nymph/wings/hair acquisition and deliveries",
+    "Four Madu research areas,ordered giant kills,four cross-zone dialogue NPCs,actual StoneHivepollen loot and Naeema handin",
+    "Five native ten-charge-wand uses/hails,natural Bigone kill,both reward claims and nextResearch-cycle offer"
+  ],
+  "engine_fix": "All6zoneprocesses refreshed670tasks during a globalreload,including5idleprocesses. No stale-cache task loss during subsequent cross-zone Soothe route.",
+  "qa_scope": [
+    "Geared level85 Warrior withGMflag0; GM travel; no objective/completion grants",
+    "One unprogressed Soothe acceptance restored using nativeGM assignment after the diagnosed old idle-cache defect; its original NPC acceptance and all subsequent native objectives were observed",
+    "First-parlay ordered kill/completion path passed natively; the final named-target correction to the hostile hail callback has offline coverage only",
+    "First full Madu cycle and repeat-cycle offer verified; no second complete cycle replay",
+    "Single-character routes; multiplayer encounter behavior not independently verified",
+    "XP1000 is an approved configurable PEQ-style default; some minlevels/repeatability decisions use best-supported historical evidence",
+    "Object relocation anchors,interaction distances,dust calm duration and pickup respawn include explicitly labelled reconstructions",
+    "Welcome exact head variants,Berserker Pranks reward,capture location/blindness/physicalcontainment remain unresolved",
+    "Portable SQL/filesystem checks and clean-prefix Linux builds are separate from native gameplay on the existing port; native Windows and clean-port gameplay not run"
+  ],
+  "excluded": [
+    "Tests",
+    "Raw logs and captures",
+    "Private character/account fixtures",
+    "Client assets"
+  ]
+}

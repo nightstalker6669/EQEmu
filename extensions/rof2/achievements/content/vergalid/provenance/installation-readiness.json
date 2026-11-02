@@ -1,0 +1,41 @@
+{
+  "installable": true,
+  "runtime_enabled": true,
+  "expected_counts": {
+    "quests": 17,
+    "activities": 56,
+    "parent_groups": 4,
+    "new_actor_types": 7
+  },
+  "native_gameplay_verified": true,
+  "orb_encounter_review": {
+    "complete": true,
+    "period_guardians_confirmed": true,
+    "required": [
+      "Source-backed cleric/warrior guardian pair and recurring-guard behavior",
+      "Resolve conflicting2007 no-guardian attempt and encounter reset rules",
+      "Original invisibility removal/proximity reveal and unattended disappearance",
+      "Native HP/profile and six-hour duration review",
+      "Actual group-credit acceptance;2013 click-target claim is not replaced by fabricated completion"
+    ],
+    "sources": [
+      "https://everquest.allakhazam.com/db/quest/3710#msg1161846359243809714",
+      "https://everquest.allakhazam.com/db/quest/3710#msg135248417835817238",
+      "https://everquest.allakhazam.com/db/quest/3710#msg1167964755130449119",
+      "https://everquest.allakhazam.com/db/quest/3710#msg1367078205201036821"
+    ],
+    "implementation": "Native one-member shared reveal, combat, original cleric/warrior pair, open-bypass refusal, real kill and report reward, relog persistence, and post-corpse root/guardian death-state acceptance passed. Exact original numerical values and full multiplayer acceptance remain separate limitations."
+  },
+  "unresolved": [],
+  "native_pending": [
+    "Full multiplayer orb encounter and native Windows execution remain unverified",
+    "Original numerical combat/drop/timer/geometry values and head-variant associations retain documented historical limits"
+  ],
+  "runtime_data_sha256": "6809b274d1d4af11d1d22c09d9be707d0864f2e166271e9bab99ca7938c9a975",
+  "deployment_review": "Complete17-route installation and native completion/reward/fresh-login milestone passed. Exact historical numerical limits, full multiplayer orb and native Windows remain explicitly unverified.",
+  "historical_limits": [
+    "Original Consigned Cap family is confirmed; four named variants use current corroboration and pre2013 item family inference.",
+    "Exact class masks/option visibility are labelled server policy.",
+    "Missing numerical NPC/drop/timer values are approved labelled configurable defaults; reconstructed geometry/model binding retains provenance."
+  ]
+}

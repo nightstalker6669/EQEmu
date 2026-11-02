@@ -1,0 +1,154 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "338e94d41547e72ffda9644de087be7b299e97eeb03a70704d744bb63c4f5d15"
+  },
+  {
+    "path": "apply_quests.py",
+    "sha256": "fd1d95b5cc83d01f002149a82a6181aed6ab62830f0b18a966aa370e95adbc5d"
+  },
+  {
+    "path": "hooks/global-player-roost.fragment.lua",
+    "sha256": "afdbf0370865b77348cad14ec3d298a1b0e6015fb7a343a031e346330d5a3a4e"
+  },
+  {
+    "path": "install.py",
+    "sha256": "3ea5ba477b34ea7e8e87390a114ea4b6c302e7e80ed6f91484f779f8028a2b57"
+  },
+  {
+    "path": "preflight.py",
+    "sha256": "ff73ee7f78b85a399e258bc086a9f7859daad8031d040504d6bfe49f021d8ffa"
+  },
+  {
+    "path": "provenance/baseline-identities.json",
+    "sha256": "1a22007ee3a633b245fc17a04cda9bd6e99a50e1b3e6f7ae0f9205ab44a581b6"
+  },
+  {
+    "path": "provenance/defaults-and-limits.json",
+    "sha256": "213062fd697577ce0b6846f65700426418ce6ab2cc373fca6128de4e5be634a2"
+  },
+  {
+    "path": "provenance/engine.json",
+    "sha256": "4d653234ba6ed69e10c577e5fa0f7e43a32c0e359590a960797a1de9dcc9cc5f"
+  },
+  {
+    "path": "provenance/native-status.json",
+    "sha256": "cff73d3ac77ded3bda264079539846a6b520b3c5f3357bb1ac06155e733301eb"
+  },
+  {
+    "path": "provenance/parent-rewards.json",
+    "sha256": "736ee39e70600ecfe143802c3a2af0b5d22c3f40ff68303ea522af1f572b55c5"
+  },
+  {
+    "path": "provenance/quests.json",
+    "sha256": "81b307f5290f9eb90e4f759a98f54c43752422dc1130c4ebe08ecf2fb2b89c73"
+  },
+  {
+    "path": "provenance/unresolved-armour.json",
+    "sha256": "f3fac3c923cc9494833fc8dbc617f7f1c9d3c479b8a42429168d4a4452712f8d"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "9ed54a1631cd80c11a41caa36b36466b48e82b6ee46ca978d40712ebff2f5ba1"
+  },
+  {
+    "path": "quests/crescent/394097.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_roost.lua",
+    "sha256": "7c64cee1d508efa7c9e0db601126ee28a17803088620d00930b773ac1d20c050"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_roost_data.lua",
+    "sha256": "c1bca15ee394287834cc2112448b1846cb030d6d1aebd6dfaedf2c121872dd1a"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_roost_nests.lua",
+    "sha256": "10a285800d13db15d4e23add3d3c401073a302c4f4c06b3fea286e2033cdc5ed"
+  },
+  {
+    "path": "quests/mesa/397102.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "quests/roost/398018.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "quests/roost/398022.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "quests/roost/398023.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "quests/roost/398025.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "quests/roost/398027.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "quests/roost/398029.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "quests/roost/398032.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "quests/roost/398033.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "quests/roost/398039.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "quests/roost/398042.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "quests/roost/398047.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "quests/roost/398049.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "quests/roost/398067.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "quests/roost/398070.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "sql/01_catalogue.sql",
+    "sha256": "446b2d03d90a9370c1912d1c65594d48736f7f6f04f3e4d795bb401231d21fa3"
+  },
+  {
+    "path": "sql/02_acquisition.sql",
+    "sha256": "88048a63618b0455972da10b3549f127fca1533107e08c6bce98a6860425a6f7"
+  },
+  {
+    "path": "sql/03_tasks.sql",
+    "sha256": "676f3a3b2382e9e391c727d4ee17bb5a8cd0225351aba486f56d0f6522f0efb0"
+  },
+  {
+    "path": "sql/04_parent-rewards.sql",
+    "sha256": "2c32519b25633996a8832ff366efc7455c7d37342a48a98e52409da44ba0f937"
+  },
+  {
+    "path": "sql/05_nests.sql",
+    "sha256": "2b13692b370bbad63e20b27296e15e7858edc8d5b048817972a190aecab77b02"
+  },
+  {
+    "path": "sql/06_activation.sql",
+    "sha256": "af2178cec0e5f0d00c0b9f978ce3ec2a26e061b83460dbac6f8322cb87e31e48"
+  }
+]

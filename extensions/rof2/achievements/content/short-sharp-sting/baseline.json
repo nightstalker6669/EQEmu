@@ -1,0 +1,580 @@
+{
+  "primary_keys": {
+    "tasks": [
+      "id"
+    ],
+    "task_activities": [
+      "taskid",
+      "activityid"
+    ],
+    "tradeskill_recipe": [
+      "id"
+    ],
+    "tradeskill_recipe_entries": [
+      "id"
+    ],
+    "achievement_criteria": [
+      "id"
+    ],
+    "npc_types": [
+      "id"
+    ],
+    "reward_sets": [
+      "reward_set_id"
+    ],
+    "reward_sources": [
+      "source_type",
+      "source_id"
+    ],
+    "reward_options": [
+      "reward_set_id",
+      "option_id"
+    ],
+    "reward_option_entries": [
+      "reward_set_id",
+      "option_id",
+      "reward_id"
+    ],
+    "rewards": [
+      "reward_id"
+    ],
+    "npc_faction": [
+      "id"
+    ],
+    "npc_faction_entries": [
+      "npc_faction_id",
+      "faction_id"
+    ]
+  },
+  "unique_keys": {
+    "tasks": [
+      [
+        "id"
+      ]
+    ],
+    "task_activities": [
+      [
+        "taskid",
+        "activityid"
+      ]
+    ],
+    "tradeskill_recipe": [
+      [
+        "id"
+      ]
+    ],
+    "tradeskill_recipe_entries": [
+      [
+        "id"
+      ]
+    ],
+    "achievement_criteria": [
+      [
+        "achievement_id",
+        "component_type",
+        "component_id",
+        "event_type",
+        "target_id",
+        "target_id2"
+      ],
+      [
+        "id"
+      ]
+    ],
+    "npc_types": [
+      [
+        "id"
+      ]
+    ],
+    "reward_sets": [
+      [
+        "reward_set_id"
+      ]
+    ],
+    "reward_sources": [
+      [
+        "source_type",
+        "source_id"
+      ]
+    ],
+    "reward_options": [
+      [
+        "reward_set_id",
+        "option_id"
+      ]
+    ],
+    "reward_option_entries": [
+      [
+        "reward_set_id",
+        "option_id",
+        "reward_id"
+      ],
+      [
+        "reward_set_id",
+        "reward_id"
+      ]
+    ],
+    "rewards": [
+      [
+        "reward_id"
+      ]
+    ],
+    "npc_faction": [
+      [
+        "id"
+      ]
+    ],
+    "npc_faction_entries": [
+      [
+        "npc_faction_id",
+        "faction_id"
+      ]
+    ]
+  },
+  "identities": {
+    "items": [
+      {
+        "id": 53585,
+        "name": "Tome of Bixie Evolution"
+      },
+      {
+        "id": 53588,
+        "name": "Fertilizing Shovel"
+      },
+      {
+        "id": 53589,
+        "name": "Devious Drakkin Potion"
+      },
+      {
+        "id": 53590,
+        "name": "Devious Drakkin Disguise"
+      },
+      {
+        "id": 54625,
+        "name": "Unrefined Honeycomb"
+      },
+      {
+        "id": 54639,
+        "name": "Honey-Covered Journal",
+        "itemclass": 1,
+        "bagtype": 13,
+        "bagslots": 8,
+        "scriptfileid": 30019
+      },
+      {
+        "id": 54643,
+        "name": "Bixie Evolution Page 1"
+      },
+      {
+        "id": 54644,
+        "name": "Bixie Evolution Page 2"
+      },
+      {
+        "id": 54645,
+        "name": "Bixie Evolution Page 3"
+      },
+      {
+        "id": 54646,
+        "name": "Bixie Evolution Page 4"
+      },
+      {
+        "id": 54647,
+        "name": "Bixie Evolution Page 5"
+      },
+      {
+        "id": 54648,
+        "name": "Bixie Evolution Page 6"
+      },
+      {
+        "id": 54649,
+        "name": "Bixie Evolution Page 7"
+      },
+      {
+        "id": 54660,
+        "name": "The Bixie Evolution"
+      },
+      {
+        "id": 54661,
+        "name": "Imposter Clue"
+      },
+      {
+        "id": 108090,
+        "name": "Ornate Consigned Plate Gauntlets",
+        "classes": 151
+      },
+      {
+        "id": 108097,
+        "name": "Ornate Consigned Chain Gauntlets",
+        "classes": 33544
+      },
+      {
+        "id": 108104,
+        "name": "Ornate Consigned Leather Gloves",
+        "classes": 16480
+      },
+      {
+        "id": 108111,
+        "name": "Ornate Consigned Cloth Gloves",
+        "classes": 15360
+      }
+    ],
+    "npc_types": [
+      {
+        "id": 395209,
+        "name": "Assistant_Avellone",
+        "level": 1,
+        "race": 522,
+        "class": 1,
+        "hp": 11,
+        "loottable_id": 96758,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396222,
+        "name": "Bixie_Prankster",
+        "level": 37,
+        "race": 520,
+        "class": 1,
+        "hp": 1739,
+        "loottable_id": 92486,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396228,
+        "name": "a_slavemistress",
+        "level": 40,
+        "race": 520,
+        "class": 1,
+        "hp": 2000,
+        "loottable_id": 92473,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396232,
+        "name": "Prunae",
+        "level": 40,
+        "race": 522,
+        "class": 1,
+        "hp": 2000,
+        "loottable_id": 92492,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396233,
+        "name": "Caged_Drakkin",
+        "level": 40,
+        "race": 522,
+        "class": 1,
+        "hp": 2000,
+        "loottable_id": 92488,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 395224,
+        "name": "a_Stone_Hive_warrior"
+      },
+      {
+        "id": 395225,
+        "name": "a_Stone_Hive_warrior"
+      },
+      {
+        "id": 395226,
+        "name": "a_Stone_Hive_laborer"
+      },
+      {
+        "id": 395229,
+        "name": "a_Stone_Hive_laborer"
+      },
+      {
+        "id": 395235,
+        "name": "a_Stone_Hive_warrior"
+      },
+      {
+        "id": 395236,
+        "name": "a_Stone_Hive_gardener"
+      },
+      {
+        "id": 395256,
+        "name": "a_Stone_Hive_slaver"
+      },
+      {
+        "id": 396107,
+        "name": "a_gardener"
+      },
+      {
+        "id": 396126,
+        "name": "a_gardener"
+      },
+      {
+        "id": 396129,
+        "name": "an_animated_vinewalker"
+      },
+      {
+        "id": 396133,
+        "name": "a_gardener"
+      },
+      {
+        "id": 396135,
+        "name": "an_animated_vinewalker"
+      },
+      {
+        "id": 396137,
+        "name": "an_animated_vinewalker"
+      },
+      {
+        "id": 396173,
+        "name": "a_bixie_enthraller"
+      },
+      {
+        "id": 396176,
+        "name": "a_bixie_poisonbrewer"
+      },
+      {
+        "id": 396185,
+        "name": "a_bixie_commander"
+      },
+      {
+        "id": 396189,
+        "name": "a_bixie_harvester"
+      },
+      {
+        "id": 396196,
+        "name": "an_animated_vinewalker"
+      },
+      {
+        "id": 396200,
+        "name": "a_bixie_servant"
+      },
+      {
+        "id": 396202,
+        "name": "a_bixie_poisonmaker"
+      },
+      {
+        "id": 396214,
+        "name": "a_bixie_poisonbrewer"
+      },
+      {
+        "id": 396219,
+        "name": "a_bixie_rejuvenator"
+      },
+      {
+        "id": 396221,
+        "name": "a_bixie_arcanist"
+      },
+      {
+        "id": 396227,
+        "name": "a_bixie_spellcrafter"
+      },
+      {
+        "id": 396231,
+        "name": "a_bixie_rejuvenator"
+      },
+      {
+        "id": 396251,
+        "name": "an_animated_vinewalker"
+      }
+    ],
+    "achievement_components": [
+      {
+        "achievement_id": 500030300,
+        "component_type": 1,
+        "sequence": 1,
+        "component_id": 50091,
+        "name": "Assistant Avellone - Buzz on the Bixies",
+        "description": ""
+      },
+      {
+        "achievement_id": 500030300,
+        "component_type": 1,
+        "sequence": 2,
+        "component_id": 50092,
+        "name": "Assistant Avellone - The Festering Combs",
+        "description": ""
+      },
+      {
+        "achievement_id": 500030300,
+        "component_type": 1,
+        "sequence": 3,
+        "component_id": 50093,
+        "name": "Assistant Avellone - Jokes on You",
+        "description": ""
+      },
+      {
+        "achievement_id": 500030300,
+        "component_type": 1,
+        "sequence": 4,
+        "component_id": 50094,
+        "name": "Honey-Covered Journal - The Bixie Evolution",
+        "description": ""
+      },
+      {
+        "achievement_id": 500030300,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 2043,
+        "name": "Reach Level 35",
+        "description": ""
+      },
+      {
+        "achievement_id": 500030300,
+        "component_type": 3,
+        "sequence": 0,
+        "component_id": 7011,
+        "name": "Serpent",
+        "description": ""
+      }
+    ],
+    "achievements": [
+      {
+        "id": 500030300,
+        "name": "Short Sharp Sting (36-45)",
+        "enabled": 1,
+        "has_reward": 1
+      }
+    ],
+    "faction_list": [
+      {
+        "id": 1123,
+        "name": "Drones of Stonehive",
+        "base": 0
+      },
+      {
+        "id": 1124,
+        "name": "Legion of Stonehive",
+        "base": 0
+      },
+      {
+        "id": 1129,
+        "name": "Circle of the Crystalwing",
+        "base": 0
+      }
+    ],
+    "faction_base_data": [
+      {
+        "client_faction_id": 1123,
+        "min": -2000,
+        "max": 0
+      },
+      {
+        "client_faction_id": 1124,
+        "min": -2000,
+        "max": 0
+      },
+      {
+        "client_faction_id": 1129,
+        "min": -2000,
+        "max": 2000
+      }
+    ]
+  },
+  "npc_names": {
+    "395209": "Assistant_Avellone",
+    "396222": "Bixie_Prankster",
+    "396232": "Prunae",
+    "396233": "Caged_Drakkin"
+  },
+  "shared_delivery_sha256": [
+    "65f261bdc67b154432cbab23fd0a86445748dabf960635e4dbd4a9948fd5a600"
+  ],
+  "accepted_player_callbacks": {
+    "moors/player.lua": [
+      "1d5e46c51edd9cfc389f8c7f30c6c77aaedd38474ecbb46f34db125e97132ecc",
+      "87861a4caf354f2d01861cdb9ecc130227ed6c9619af9622732877939ea24e98"
+    ]
+  },
+  "loot_items": [
+    54625,
+    54639,
+    54643,
+    54644,
+    54645,
+    54646,
+    54647,
+    54648,
+    54649,
+    54661
+  ],
+  "spawn_routes": [
+    {
+      "npc": 395209,
+      "group": 60400,
+      "id": 98564,
+      "zone": "moors",
+      "x": -1690.0,
+      "y": -208.0,
+      "z": 6.625,
+      "heading": 379.0,
+      "chance": 100,
+      "respawn": 640
+    },
+    {
+      "npc": 396222,
+      "group": 70848,
+      "id": 109246,
+      "zone": "stonehive",
+      "x": 89.0,
+      "y": 37.0,
+      "z": -54.125,
+      "heading": 39.0,
+      "chance": 100,
+      "respawn": 640
+    },
+    {
+      "npc": 396228,
+      "group": 70858,
+      "id": 109256,
+      "zone": "stonehive",
+      "x": 197.25,
+      "y": -34.375,
+      "z": 266.875,
+      "heading": 129.75,
+      "chance": 100,
+      "respawn": 640
+    },
+    {
+      "npc": 396232,
+      "group": 70871,
+      "id": 109269,
+      "zone": "stonehive",
+      "x": 216.0,
+      "y": -36.0,
+      "z": 270.625,
+      "heading": 394.0,
+      "chance": 100,
+      "respawn": 640
+    },
+    {
+      "npc": 396233,
+      "group": 70874,
+      "id": 109272,
+      "zone": "stonehive",
+      "x": 191.0,
+      "y": -11.0,
+      "z": 270.75,
+      "heading": 259.0,
+      "chance": 100,
+      "respawn": 640
+    }
+  ],
+  "engine_requirements": {
+    "common/eq_packet_structs.h": [
+      "struct OpenContainer_Struct"
+    ],
+    "common/patches/rof2_ops.h": [
+      "D(OP_OpenContainer)"
+    ],
+    "common/patches/rof2.cpp": [
+      "DECODE(OP_OpenContainer)",
+      "DECODE_LENGTH_EXACT(structs::InventorySlot_Struct)"
+    ],
+    "utils/patches/patch_RoF2.conf": [
+      "OP_OpenContainer=0x06c8"
+    ],
+    "zone/client_packet.cpp": [
+      "void Client::Handle_OP_OpenContainer",
+      "ClientVersion() != EQ::versions::ClientVersion::RoF2 ||",
+      "EVENT_ITEM_CLICK_CLIENT",
+      "GetSerialNumber()"
+    ]
+  }
+}

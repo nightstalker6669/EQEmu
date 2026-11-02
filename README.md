@@ -1,13 +1,15 @@
-# EQEmu · RoF2 Shared Core
+# EQEmu · RoF2 Achievements
 
-Current EQEmu source with **shared inventory, session, task reward and database infrastructure** integrated on the common upstream foundation.
+Current EQEmu source with **achievements** integrated on the common upstream foundation.
 
 **[Install / upgrade](docs/rof2/INSTALL.md)** · **[Opcodes and packet structures](docs/rof2/PROTOCOL.md)** · **[Choose a feature branch](docs/rof2/BRANCHES.md)**
 
+This is the separate achievement feature branch. The earlier engine/content release is also included in [rof2-integration](https://github.com/nightstalker6669/EQEmu/tree/rof2-integration). New achievement milestones are committed to this branch; check the combined branch manifest before assuming it contains later content.
+
 All feature branches now start directly from **upstream develop `c9c8747a`**, without the earlier master/develop merge history. [Review a clean diff or update an existing clone](docs/rof2/COMPARE.md). `master` remains separate.
 
-Native infrastructure is already merged into the normal EQEmu directories. This core branch contains the shared implementation and additive schema; feature branches add their own production SQL, quests, opcode and structure references, and installation guides. Follow each selected branch’s installation guide.
+Native source is already merged into the normal EQEmu directories. Required SQL, quest/content tooling, opcode and structure references, attribution and evidence limits are retained in `extensions/rof2/`. Follow this branch’s installation guide; its historical release patches must not be reapplied. Feature dependencies and reconstructed/default policies remain documented.
 
-The core itself does not enable feature gameplay or create properties/accounts. [Core API and persistence boundaries](common/shared_core/README.md) describe the legacy identifiers retained for compatibility.
+Use an existing PEQ/MariaDB database with the required upstream and feature migrations; a separate PEQ fork is unnecessary. No unfinished quest research, private runtime records, client assets or custom test suites are shipped. Publication does not deploy the running server or establish native gameplay acceptance of this new combination.
 
 [Current source versions and validation](docs/rof2/integration.json) · [Upstream project documentation](docs/rof2/UPSTREAM-README.md) · [GPLv3](LICENSE.md)

@@ -1,0 +1,13 @@
+{
+  "npc_types": {
+    "403093": "#Captain_Zheren",
+    "403036": "#Anaglass",
+    "397148": "Watchman_Stormwren_Undaru",
+    "403035": "#Syrrengar_the_Hunter",
+    "403078": "#Armorer_Arkin"
+  },
+  "external_modules": [
+    "achievement_quest_blightfire",
+    "achievement_quest_blightfire_data"
+  ]
+}

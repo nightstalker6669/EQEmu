@@ -1,0 +1,111 @@
+{
+  "status": "Three period-confirmed parent jewellery sets; enabled only by reviewed activation.",
+  "parents": [
+    {
+      "achievement": 500050300,
+      "reward_set": 3050503,
+      "source": "https://everquest.allakhazam.com/db/quest/5607",
+      "historical_source": {
+        "capture": "20130315232723",
+        "sha256": "16989af29bc06f100ef62e8ebbf6b7a0da184aa9623cd36a971bf9873eec7b00"
+      },
+      "bundles": [
+        [
+          {
+            "id": 108410,
+            "name": "Intricate Soldier's Belt",
+            "class_mask": 49629
+          }
+        ],
+        [
+          {
+            "id": 108420,
+            "name": "Intricate Scryer's Belt",
+            "class_mask": 15906
+          }
+        ]
+      ],
+      "gates": "Native equipment class masks; equipment required levels do not impose a new achievement claim gate",
+      "unconfirmed_rewards": "No additional XP,AA,cash or faction invented"
+    },
+    {
+      "achievement": 500050400,
+      "reward_set": 3050504,
+      "source": "https://everquest.allakhazam.com/db/quest/5608",
+      "historical_source": {
+        "capture": "20130315232745",
+        "sha256": "116313e4202dd07835e0ccd536765dd4dcafec88e07c3bd9357c5e8a54c244be"
+      },
+      "bundles": [
+        [
+          {
+            "id": 108401,
+            "name": "Intricate Soldier's Earring",
+            "class_mask": 49629
+          },
+          {
+            "id": 108402,
+            "name": "Intricate Soldier's Ear Stud",
+            "class_mask": 49629
+          }
+        ],
+        [
+          {
+            "id": 108411,
+            "name": "Intricate Scryer's Earring",
+            "class_mask": 15906
+          },
+          {
+            "id": 108412,
+            "name": "Intricate Scryer's Ear Stud",
+            "class_mask": 15906
+          }
+        ]
+      ],
+      "gates": "Native equipment class masks; equipment required levels do not impose a new achievement claim gate",
+      "unconfirmed_rewards": "No additional XP,AA,cash or faction invented"
+    },
+    {
+      "achievement": 500050500,
+      "reward_set": 3050505,
+      "source": "https://everquest.allakhazam.com/db/quest/5609",
+      "historical_source": {
+        "capture": "20130315235722",
+        "sha256": "1be8a112a5aadb7211177a94795cef12ae3710c24234cd553ce070e37f713738"
+      },
+      "bundles": [
+        [
+          {
+            "id": 108409,
+            "name": "Intricate Soldier's Band",
+            "class_mask": 49629
+          },
+          {
+            "id": 108408,
+            "name": "Intricate Soldier's Ring",
+            "class_mask": 49629
+          }
+        ],
+        [
+          {
+            "id": 108419,
+            "name": "Intricate Scryer's Band",
+            "class_mask": 15906
+          },
+          {
+            "id": 108418,
+            "name": "Intricate Scryer's Ring",
+            "class_mask": 15906
+          }
+        ]
+      ],
+      "gates": "Native equipment class masks; equipment required levels do not impose a new achievement claim gate",
+      "unconfirmed_rewards": "No additional XP,AA,cash or faction invented"
+    }
+  ],
+  "claim_persistence": "Existing durable reward service; native claim/relog acceptance pending",
+  "pending_parents": {
+    "500050200": "Exact two-bracer selection identities not yet period-proven",
+    "500050100": "Exact generic consigned glove selection identities not yet period-proven"
+  }
+}

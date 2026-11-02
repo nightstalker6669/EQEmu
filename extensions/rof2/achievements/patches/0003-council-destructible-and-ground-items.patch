@@ -1,0 +1,43 @@
+diff --git a/common/patches/rof2.cpp b/common/patches/rof2.cpp
+--- a/common/patches/rof2.cpp
++++ b/common/patches/rof2.cpp
+@@ -4706,6 +4706,9 @@
+ 			{
+ 				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 0x1d600000);
+ 				Buffer = Buffer - 4;
++				// The legacy destructible flags also encode invisibility 2048.
++				// Retain the spawn's actual visibility so RoF2 can render and target it.
++				Bitfields->invis = emu->invis;
+ 			}
+ 
+ 			// Not currently found
+@@ -4728,7 +4731,10 @@
+ 				OtherData = OtherData | 32;
+ 			}
+ 			if (emu->DestructibleObject) {
+-				OtherData = OtherData | 0xe1;	// Live has 0xe1 for OtherData
++				// Bit 0x20 announces a suffix string later in this packet.
++				// Preserve the computed suffix bit above; forcing it without
++				// suffix bytes shifts the RoF2 mercenary/real-estate tail.
++				OtherData = OtherData | 0xc1;
+ 			}
+ 			if (emu->buyer) {
+ 				OtherData = OtherData | 0x01;
+diff --git a/zone/zone.cpp b/zone/zone.cpp
+--- a/zone/zone.cpp
++++ b/zone/zone.cpp
+@@ -353,6 +353,14 @@
+ 			const uint32 max_allowed = g.spawn[slot_id].max_allowed;
+ 
+ 			if (inst) {
++				// Fresh ground-spawn clickies must have their defined charges.
++				// CreateItem defaults to zero; that otherwise produces unusable
++				// quest scrolls such as Touch of the Six. Dropped items retain
++				// their existing charges through the separate Object path.
++				if (inst->GetItem()->MaxCharges > 0) {
++					inst->SetCharges(inst->GetItem()->MaxCharges);
++				}
++
+ 				for (uint32 i = 0; i < max_allowed; i++) {
+ 					auto object = new Object(
+ 						inst,

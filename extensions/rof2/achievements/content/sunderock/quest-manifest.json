@@ -1,0 +1,57 @@
+[
+  {
+    "path": "lua_modules/achievement_quest_sunderock.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/achievement_quest_sunderock.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_sunderock_data.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/achievement_quest_sunderock_data.lua"
+  },
+  {
+    "path": "lua_modules/sunderock_acquisition.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/sunderock_acquisition.lua"
+  },
+  {
+    "path": "global/global_player.lua",
+    "mode": "append",
+    "source": "hooks/global_player.lua.append"
+  },
+  {
+    "path": "global/global_npc.lua",
+    "mode": "append",
+    "source": "hooks/global_npc.lua.append"
+  },
+  {
+    "path": "mesa/397148.lua",
+    "mode": "append",
+    "source": "quests/mesa/397148.lua"
+  },
+  {
+    "path": "sunderock/403035.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403035.lua"
+  },
+  {
+    "path": "sunderock/403036.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403036.lua"
+  },
+  {
+    "path": "sunderock/403078.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403078.lua"
+  },
+  {
+    "path": "sunderock/403093.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403093.lua"
+  },
+  {
+    "path": "moors/player.lua",
+    "mode": "append",
+    "source": "quests/moors/player.lua"
+  }
+]

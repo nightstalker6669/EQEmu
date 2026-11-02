@@ -1,0 +1,91 @@
+{
+  "status": "All fifteen native quest routes and four parent item reward paths verified; historical side effects remain incomplete",
+  "historical_cutoff": "2013-05-31",
+  "task_completions": [
+    3040701,
+    3040702,
+    3040703,
+    3040704,
+    3040705,
+    3040706,
+    3040707,
+    3040708,
+    3040709,
+    3040710,
+    3040711,
+    3040712,
+    3040713,
+    3040714,
+    3040715
+  ],
+  "criteria": [
+    50203,
+    50204,
+    50205,
+    50206,
+    50207,
+    50208,
+    50209,
+    50210,
+    50211,
+    50212,
+    50213,
+    50214,
+    50215,
+    50216,
+    50217
+  ],
+  "aggregate_achievement": 500070100,
+  "aggregate_completed_children": [
+    500070200,
+    500070300,
+    500070400,
+    500070500
+  ],
+  "parent_rewards": [
+    {
+      "achievement": 500070200,
+      "selected_items": [
+        108185
+      ]
+    },
+    {
+      "achievement": 500070300,
+      "selected_items": [
+        108428
+      ]
+    },
+    {
+      "achievement": 500070400,
+      "selected_items": [
+        108429,
+        108430
+      ]
+    },
+    {
+      "achievement": 500070500,
+      "selected_items": [
+        108431
+      ]
+    }
+  ],
+  "persistence": "All criterion counts/completion flags and parent selections/grants saved; each selected grant status successful with attempt_count 1. This is not a fresh-login repetition of every route.",
+  "acquisition": [
+    "Original caravan barrel /open, actual Note loot and hand-in",
+    "Original courier and guards, actual Orders loot and delivery",
+    "Real pod children and their kill credit",
+    "Original named NPC drops and hand-ins",
+    "Stage-gated actual ground egg transfer with native loot credit",
+    "Original spring and Rites targets with native task credit"
+  ],
+  "acceleration": "Private GM travel and high-damage QA gear; one scoped Sunderock repop accelerated original respawns without changing spawn definitions or drop chances. No fabricated task credit or summoned objective items used for these completions.",
+  "remaining": [
+    "Exact historical numeric faction rewards for Captain tasks and Insignia; numeric grants unimplemented",
+    "Mine character flag and downstream Sergeant Kazzar raid request/encounter service not implemented",
+    "Exact original class filtering for task/parent choices; documented server eligibility policies remain",
+    "Collected egg suppression after native saved-zone reload is covered offline, not claimed as a native reload check",
+    "Historical combat balance, natural respawn cadence, multiplayer races and native Windows are not established"
+  ],
+  "raw_evidence_included": false,
+  "player_data_included": false
+}

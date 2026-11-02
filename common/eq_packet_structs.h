@@ -1916,6 +1916,7 @@ enum GuildInformationActions
 {
     GuildUpdateURL          = 0,
     GuildUpdateChannel      = 1,
+    GuildUpdateAchievement  = 3,
     GuildUpdateRanks        = 4,
     GuildUpdatePermissions  = 5
 };
@@ -5279,6 +5280,12 @@ struct spawnShroudOther
 struct ApplyPoison_Struct {
 	uint32 inventorySlot;
 	uint32 success;
+};
+
+// Canonical container-open notification. RoF2's 12-byte global item index is
+// translated to this server inventory slot by its patch decoder.
+struct OpenContainer_Struct {
+	int32 slot;
 };
 
 struct ItemVerifyRequest_Struct {

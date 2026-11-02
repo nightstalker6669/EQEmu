@@ -4707,6 +4707,9 @@ namespace RoF2
 			{
 				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 0x1d600000);
 				Buffer = Buffer - 4;
+				// The legacy destructible flags also encode invisibility 2048.
+				// Retain the spawn's actual visibility so RoF2 can render and target it.
+				Bitfields->invis = emu->invis;
 			}
 
 			// Not currently found
@@ -4729,7 +4732,10 @@ namespace RoF2
 				OtherData = OtherData | 32;
 			}
 			if (emu->DestructibleObject) {
-				OtherData = OtherData | 0xe1;	// Live has 0xe1 for OtherData
+				// Bit 0x20 announces a suffix string later in this packet.
+				// Preserve the computed suffix bit above; forcing it without
+				// suffix bytes shifts the RoF2 mercenary/real-estate tail.
+				OtherData = OtherData | 0xc1;
 			}
 			if (emu->buyer) {
 				OtherData = OtherData | 0x01;
@@ -5919,6 +5925,21 @@ namespace RoF2
 		}
 		IN(link_hash);
 		IN(icon);
+
+		FINISH_DIRECT_DECODE();
+	}
+
+	DECODE(OP_OpenContainer)
+	{
+		// Original May 2013 sender 0x65cae0: opcode 0x06c8 followed by the
+		// three DWORDs of the global item index (12 bytes, no item ID).
+		DECODE_LENGTH_EXACT(structs::InventorySlot_Struct);
+		SETUP_DIRECT_DECODE(OpenContainer_Struct, structs::InventorySlot_Struct);
+
+		emu->slot = EQ::invslot::SLOT_INVALID;
+		if (eq->SubIndex == invbag::SLOT_INVALID && eq->AugIndex == invaug::SOCKET_INVALID) {
+			emu->slot = RoF2ToServerSlot(*eq);
+		}
 
 		FINISH_DIRECT_DECODE();
 	}

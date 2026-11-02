@@ -25,6 +25,7 @@ class DynamicZone;
 class DzLockout;
 class ExpeditionRequest;
 class Group;
+class ClientAchievementState;
 class NPC;
 class Object;
 class Raid;
@@ -474,6 +475,7 @@ public:
 
 	virtual bool Save() { return Save(0); }
 	bool Save(uint8 iCommitNow); // 0 = delayed, 1=async now, 2=sync now
+	bool Save(uint8 iCommitNow, bool update_achievements);
 	inline void SaveCharacterData() {
 		database.SaveCharacterData(this, &m_pp, &m_epp);
 	};
@@ -1676,6 +1678,55 @@ public:
 	void SendRewards();
 	bool TryReward(uint32 claim_id);
 	ClientRewardSelection &GetRewardSelection();
+	bool LoadAchievements();
+	bool ReloadAchievements();
+	void SendAchievementPackets();
+	void ProcessAchievementRewards();
+	void NotifyAchievementStateUpdatePending();
+	bool HasCompletedAchievement(uint32 achievement_id) const;
+	int GetAchievementStatus(uint32 achievement_id) const;
+	int64 GetAchievementProgress(
+		uint32 achievement_id,
+		uint8 component_type,
+		uint32 component_id
+	) const;
+	bool PassAchievementCastRestriction(uint32 restriction_id) const;
+	void SendAchievementComparison(uint32 definition_index);
+	void SendAchievementComparisonTo(Client &recipient, uint32 achievement_id);
+	void SendAchievementCompareSnapshotTo(Client &recipient) const;
+	void SendAchievementRewardDisplay(uint32 definition_index);
+	bool RestorePendingAchievementRewardSelection();
+	RewardSelectionDeliveryResult ClaimAchievementReward(
+		uint32 pending_reward_id,
+		uint32 reward_set_id,
+		uint32 selected_option_id
+	);
+	void UpdateAchievementForKill(
+		uint32 npc_type_id,
+		uint32 race_id,
+		uint32 npc_name_identity,
+		uint32 zone_id
+	);
+	void UpdateAchievementForLevel(uint32 level);
+	void UpdateAchievementForTask(uint32 task_id);
+	void UpdateAchievementForZone(uint32 zone_id);
+	void UpdateAchievementForLoot(uint32 item_id, uint32 quantity = 1);
+	void UpdateAchievementForOwnItem(uint32 item_id);
+	void BeginAchievementInventoryTransaction();
+	void EndAchievementInventoryTransaction(bool committed);
+	void UpdateAchievementForTradeskill(uint32 recipe_id);
+	void UpdateAchievementForSkill(uint32 skill_id, uint32 value);
+	void UpdateAchievementForAA(uint32 spent_points);
+	uint32 GetAchievementAAPointsSpent();
+	bool SetAchievementProgress(
+		uint32 achievement_id,
+		uint8 component_type,
+		uint32 component_id,
+		uint32 value,
+		bool additive = false
+	);
+	bool CompleteAchievement(uint32 achievement_id);
+	bool ResetAchievement(uint32 achievement_id, bool reset_rewards = false);
 	QGlobalCache *GetQGlobals() { return qGlobals; }
 	QGlobalCache *CreateQGlobals() { qGlobals = new QGlobalCache(); return qGlobals; }
 	void GuildBankAck();
@@ -2348,6 +2399,48 @@ private:
 
 	std::vector<uint32_t> m_completed_shared_tasks;
 	std::unique_ptr<ClientRewardSelection> m_reward_selection;
+	std::unique_ptr<ClientAchievementState> m_achievement_state;
+	enum class DeferredAchievementStateUpdateType : uint8 {
+		Kill,
+		Level,
+		Task,
+		Zone,
+		Loot,
+		Tradeskill,
+		Skill,
+		AlternateAdvancement,
+		SetProgress,
+		Complete
+	};
+	struct DeferredAchievementStateUpdate {
+		DeferredAchievementStateUpdateType type;
+		uint32 value1 = 0;
+		uint32 value2 = 0;
+		uint32 value3 = 0;
+		uint32 value4 = 0;
+		bool flag = false;
+	};
+	bool ShouldDeferAchievementStateUpdate() const;
+	void QueueAchievementStateUpdate(const DeferredAchievementStateUpdate &update);
+	bool ReplaceAchievementState(bool send_initial, bool allow_disabled);
+	void ConfigureAchievementOwnershipReconciliation();
+	bool FlushAchievementInventoryUpdate();
+	void ReplayDeferredAchievementStateUpdates();
+	void ProcessPendingAchievementStateUpdates();
+	std::vector<DeferredAchievementStateUpdate> m_deferred_achievement_state_updates;
+	Timer m_achievement_state_load_retry_timer;
+	Timer m_achievement_ownership_reconcile_timer;
+	Timer m_achievement_window_request_rate_limit;
+	Timer m_achievement_compare_request_rate_limit;
+	Timer m_achievement_link_request_rate_limit;
+	uint32 m_achievement_inventory_transaction_depth = 0;
+	size_t m_achievement_inventory_transaction_update_checkpoint = 0;
+	bool m_achievement_inventory_update_pending = false;
+	bool m_achievement_inventory_transaction_failed = false;
+	bool m_achievement_pending_state_updates = false;
+	bool m_achievement_state_load_pending = false;
+	bool m_achievement_state_load_send_initial = false;
+	bool m_achievement_state_load_allow_disabled = false;
 
 public:
 	enum BotOwnerOption : size_t {
