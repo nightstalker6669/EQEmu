@@ -17,7 +17,7 @@
   "backup_branch": "archive/20261029-before-develop/rof2-shared-core",
   "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base.",
   "shared_task_rewards": {
-    "binary_database_version": 9335,
+    "binary_database_version": 9338,
     "wire_api": "EQ::RewardSelection in common/reward_display.h",
     "historical_schema_envelopes": [
       9331,
@@ -46,9 +46,9 @@
     "native_acceptance": "No new native gameplay or active server/database deployment during this rebase."
   },
   "validation": {
-    "status": "Shared reward extraction independently built and checked offline.",
+    "status": "Shared reward extraction and schema9336\u20139338 engine extension independently built and checked offline.",
     "compiler": "GCC12/C++20, original cached vcpkg SDK, separate build tree/container.",
-    "full_branch_link": "world and zone linked successfully with normal CMake/PCH configuration.",
+    "full_branch_link": "Complete shared-core world and zone linked successfully in a clean separate CMake/PCH build; no runtime binary installation.",
     "wire_compatibility": "386 serialized buffers byte-identical to published achievements1cfaaee4a across all seven reward wire entry types.",
     "task_contracts": "Carried Collect high-water, distinct completion and frozen gate behavior, common-only identity, explicit wire fixtures and duplicate-subset refusal passed in private harness.",
     "consumer_compatibility": "Seven contextual translation units checked for each of achievements1cfaaee4a and integrationf59defce0 consumer trees.",
@@ -70,5 +70,24 @@
     "content_activation": "None; policy table is empty and no mission or quest content is imported",
     "protocol_document": "docs/rof2/transport-passenger-state.md",
     "validation": "Offline core world/zone link and contextual consumer checks are recorded in private review evidence; no runtime, database or native gameplay acceptance claimed."
+  },
+  "shared_engine_9336_9338": {
+    "input_core_commit": "17d63f7d512711e911787e630f4533ee14a1e785",
+    "source_spell_commits": [
+      "8301c3b78727c48b1d41ce72c7141a5ae6c9f186",
+      "60c93741e6f91a85f59e15c07ad5438e12408f9b"
+    ],
+    "schema": 9338,
+    "scope": "Generic merchant language and ground-ring aura behavior; explicit personal task exchange policy; pinned learned-spell occurrence policy; durable semantic reward display IDs; owner-loop shutdown cleanup. No feature content activation.",
+    "migration_ownership": {
+      "9336": "content: merchant language requirements",
+      "9337": "content: empty personal exchange policy catalogue",
+      "9338": "state: default0 occurrence policy and monotonic display-ID allocator"
+    },
+    "migration_compatibility": "Original9331\u20139338 manifest entries and original migration files retained byte-for-byte from their published sources.",
+    "allocator_restore_policy": "Never reset/decrease the server-state counter; retain at least the greatest issued last_id before restoring older snapshots, content rollback or character reset/copy. Drain legacy sessions/client caches for the initial transition.",
+    "validation": "Independent clean shared-core world/zone links passed using GCC12/C++20, normal CMake/PCH, serial compilation and read-only matching-pinned SDK; fresh277 private policy/catalogue contracts passed; consumer feature patches retained unchanged before intentional documentation updates. No active deployment/native acceptance performed by extraction.",
+    "native_acceptance": "Pending coordinated native exchange, reconnect/stale-cache and shared-task regression checks.",
+    "protocol": "No opcode or wire-layout additions; MerchantList additions are server catalogue metadata."
   }
 }

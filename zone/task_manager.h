@@ -20,6 +20,7 @@
 #include "common/repositories/character_tasks_repository.h"
 #include "common/types.h"
 #include "common/task_reward_progression.h"
+#include "common/task_spell_rewards.h"
 #include "zone/reward_selection.h"
 #include "zone/task_client_state.h"
 #include "zone/tasks.h"
@@ -100,6 +101,13 @@ public:
 		return it == m_task_reward_progression.end() ? nullptr : &it->second;
 	}
 
+	bool MeetsSpellExchangeRequirements(Client *client, uint32_t task_id) const;
+	bool HideKnownSpellRewards(uint32_t task_id) const
+	{
+		const auto it = m_task_spell_policies.find(task_id);
+		return it != m_task_spell_policies.end() && it->second.hide_known_spells;
+	}
+
 	static TaskManager* Instance()
 	{
 		static TaskManager instance;
@@ -111,6 +119,9 @@ private:
 	std::unordered_map<uint32_t, TaskInformation> m_task_data;
 	std::unordered_map<uint32_t, RewardSelectionSet> m_task_reward_sets;
 	std::unordered_map<uint32_t, Tasks::RewardProgressionPolicy> m_task_reward_progression;
+	std::unordered_map<uint32_t, EQ::SpellTask::Policy> m_task_spell_policies;
+	bool LoadTaskSpellPolicies(const std::unordered_map<uint32_t, RewardSelectionSet> &sets,
+		std::unordered_map<uint32_t, EQ::SpellTask::Policy> &policies);
 	bool LoadTaskRewardProgression(
 		const std::unordered_map<uint32_t, RewardSelectionSet> &sets,
 		std::unordered_map<uint32_t, Tasks::RewardProgressionPolicy> &policies);

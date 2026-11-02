@@ -29,12 +29,14 @@ namespace EQ::Net {
 
 struct DNSBaton
 {
+	EQ::EventLoop *owner;
 	dns_callback_t cb;
 	bool ipv6;
 };
 
 void DNSLookup(const std::string& addr, int port, bool ipv6, dns_callback_t cb)
 {
+	if (EQ::EventLoop::IsThreadShuttingDown()) return;
 	addrinfo hints = {};
 	hints.ai_family = PF_INET;
 	hints.ai_socktype = SOCK_STREAM;
@@ -46,19 +48,27 @@ void DNSLookup(const std::string& addr, int port, bool ipv6, dns_callback_t cb)
 	memset(resolver, 0, sizeof(uv_getaddrinfo_t));
 	std::string port_str = std::to_string(port);
 	DNSBaton* baton = new DNSBaton();
+	baton->owner = &EQ::EventLoop::Get();
+	baton->owner->RegisterCleanup(resolver, [resolver] { uv_cancel(reinterpret_cast<uv_req_t*>(resolver)); });
 	baton->cb = std::move(cb);
 	baton->ipv6 = ipv6;
 	resolver->data = baton;
 
-	uv_getaddrinfo(loop, resolver, [](uv_getaddrinfo_t* req, int status, addrinfo* result)
+	const auto queued = uv_getaddrinfo(loop, resolver, [](uv_getaddrinfo_t* req, int status, addrinfo* result)
 	{
 		DNSBaton* baton = static_cast<DNSBaton*>(req->data);
 
 		dns_callback_t dns_callback = std::move(baton->cb);
 		bool ipv6 = baton->ipv6;
 
+		auto owner = baton->owner;
+		owner->RemoveCleanup(req);
 		delete baton;
 		delete req;
+		if (owner->IsShuttingDown()) {
+			if (result) uv_freeaddrinfo(result);
+			return;
+		}
 
 		if (status < 0)
 		{
@@ -81,6 +91,13 @@ void DNSLookup(const std::string& addr, int port, bool ipv6, dns_callback_t cb)
 
 		dns_callback(addr);
 	}, addr.c_str(), port_str.c_str(), &hints);
+	if (queued < 0) {
+		baton->owner->RemoveCleanup(resolver);
+		auto failed = std::move(baton->cb);
+		delete baton;
+		delete resolver;
+		failed({});
+	}
 }
 
 std::string DNSLookupSync(const std::string& addr, int port, bool ipv6 /* = false */)

@@ -22,6 +22,9 @@
 
 namespace EQ {
 
+thread_local EventLoop *EventLoop::m_current = nullptr;
+thread_local bool EventLoop::m_thread_shutting_down = false;
+
 EventLoop& EventLoop::Get()
 {
 	thread_local EventLoop inst;
@@ -33,11 +36,34 @@ EventLoop::EventLoop()
 {
 	memset(m_loop.get(), 0, sizeof(uv_loop_t));
 	uv_loop_init(m_loop.get());
+	m_current = this;
 }
 
 EventLoop::~EventLoop()
 {
+	m_shutting_down = true;
+	m_thread_shutting_down = true;
+	// TLS destructors precede static service destructors. Close owned handles
+	// while their owners and this loop still exist, then finish deferred frees.
+	while (!m_cleanup.empty()) {
+		auto it = m_cleanup.begin();
+		auto cleanup = std::move(it->second);
+		m_cleanup.erase(it);
+		cleanup();
+	}
+	while (uv_loop_alive(m_loop.get())) uv_run(m_loop.get(), UV_RUN_DEFAULT);
 	uv_loop_close(m_loop.get());
+	m_current = nullptr;
+}
+
+void EventLoop::RegisterCleanup(const void *owner, std::function<void()> cleanup)
+{
+	if (!m_shutting_down) m_cleanup[owner] = std::move(cleanup);
+}
+
+void EventLoop::RemoveCleanup(const void *owner)
+{
+	m_cleanup.erase(owner);
 }
 
 void EventLoop::Process()

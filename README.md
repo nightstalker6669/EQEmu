@@ -1,12 +1,14 @@
 # EQEmu · RoF2 Shared Core
 
-Current EQEmu source with **shared inventory, session, task reward and database infrastructure** integrated on the common upstream foundation.
+Current EQEmu source with **shared inventory, session, task reward, transport and database infrastructure** integrated on the common upstream foundation.
 
 **[Install / upgrade](docs/rof2/INSTALL.md)** · **[Opcodes and packet structures](docs/rof2/PROTOCOL.md)** · **[Choose a feature branch](docs/rof2/BRANCHES.md)**
 
 All feature branches now start directly from **upstream develop `c9c8747a`**, without the earlier master/develop merge history. [Review a clean diff or update an existing clone](docs/rof2/COMPARE.md). `master` remains separate.
 
 Native infrastructure is already merged into the normal EQEmu directories. This core branch contains the shared implementation and additive schema; feature branches add their own production SQL, quests, opcode and structure references, and installation guides. Follow each selected branch’s installation guide.
+
+This source targets binary database schema **9338**. It includes merchant language requirements, personal spell-exchange policies, persistent ground-ring auras, durable reward display identities and event-loop shutdown cleanup. [Engine contracts and upgrade requirements](docs/rof2/SPELL-EXCHANGE-ENGINE.md) explain the schema changes and pending native acceptance.
 
 The core itself does not enable feature gameplay or create properties/accounts. [Core API and persistence boundaries](common/shared_core/README.md) describe the legacy identifiers retained for compatibility.
 

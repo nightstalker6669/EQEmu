@@ -17,6 +17,7 @@
 */
 #include "task_client_state.h"
 #include "task_shared_reward_identity.h"
+#include "common/task_spell_rewards.h"
 #include "common/shared_task_admission.h"
 #include "common/task_collect.h"
 
@@ -64,6 +65,7 @@ struct PersistedTaskRewardSelection {
 	uint32_t                  selected_option_id = 0;
 	TaskRewardSelectionStatus status = TaskRewardSelectionStatus::Pending;
 	std::optional<uint32_t> progression_count;
+	std::optional<bool> hide_known_spells = false;
 };
 
 uint64_t ParseTaskRewardUInt64(const char *value)
@@ -96,6 +98,8 @@ PersistedTaskRewardSelection ParseTaskRewardSelection(
 	if (row[7]) {
 		selection.progression_count = ParseTaskRewardUInt32(row[7]);
 	}
+	selection.hide_known_spells = row[8] && (std::string(row[8]) == "0" || std::string(row[8]) == "1")
+		? std::optional(std::string(row[8]) == "1") : std::nullopt;
 	return selection;
 }
 
@@ -185,6 +189,22 @@ bool RewardSelectionsMatch(
 		left.data_id == right.data_id &&
 		left.amount == right.amount &&
 		left.description == right.description;
+}
+
+std::optional<RewardSelectionSet> FilterSpellRewards(
+	const RewardSelectionSet &set, Client *client,
+	std::optional<bool> hide_known, uint32_t locked_option_id)
+{
+	return EQ::SpellTask::Filter(set, hide_known, client->GetBaseClass(), locked_option_id,
+		[client](uint32_t item_id) {
+			const auto item = database.GetItem(item_id);
+			if (!item) return EQ::SpellTask::Learning::Invalid;
+			const auto spell = item->Scroll.Effect;
+			if (spell <= 0) return EQ::SpellTask::Learning::NotSpell;
+			if (!IsValidSpell(spell)) return EQ::SpellTask::Learning::Invalid;
+			return client->HasSpellScribed(spell) || client->HasDisciplineLearned(spell)
+				? EQ::SpellTask::Learning::Known : EQ::SpellTask::Learning::Unknown;
+		});
 }
 
 std::vector<RewardSelectionReward> ResolveTaskRewards(
@@ -1333,14 +1353,15 @@ bool ClientTaskState::RewardTask(
 		auto pending = database.QueryDatabase(fmt::format(
 			"INSERT IGNORE INTO character_task_reward_selections "
 			"(character_id, task_id, accepted_time, source_instance_id, "
-			"reward_set_id, status, progression_count) "
-			"VALUES ({}, {}, {}, {}, {}, 0, {})",
+			"reward_set_id, status, progression_count, hide_known_spells) "
+			"VALUES ({}, {}, {}, {}, {}, 0, {}, {})",
 			c->CharacterID(),
 			task_id,
 			accepted_time,
 			*source_instance_id,
 			reward_set->reward_set_id,
-			progression_count ? std::to_string(*progression_count) : "NULL"
+			progression_count ? std::to_string(*progression_count) : "NULL",
+			TaskManager::Instance()->HideKnownSpellRewards(task_id) ? 1 : 0
 		));
 		if (!pending.Success()) {
 			LogError(
@@ -1374,11 +1395,12 @@ bool ClientTaskState::RewardTask(
 			persisted.source_instance_id = *source_instance_id;
 			persisted.reward_set_id = reward_set->reward_set_id;
 			persisted.progression_count = progression_count;
+			persisted.hide_known_spells = TaskManager::Instance()->HideKnownSpellRewards(task_id);
 		}
 		else {
 			auto existing = database.QueryDatabase(fmt::format(
 				"SELECT pending_reward_id, task_id, accepted_time, "
-				"source_instance_id, reward_set_id, selected_option_id, status, progression_count "
+				"source_instance_id, reward_set_id, selected_option_id, status, progression_count, hide_known_spells "
 				"FROM character_task_reward_selections "
 				"WHERE character_id = {} AND source_instance_id = {} "
 				"LIMIT 1",
@@ -1411,9 +1433,13 @@ bool ClientTaskState::RewardTask(
 			return false;
 		}
 
-		const auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
+		auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
 			TaskManager::Instance()->GetTaskRewardProgression(task_id),
 			persisted.progression_count);
+		if (eligible_set) {
+			eligible_set = FilterSpellRewards(*eligible_set, c,
+				persisted.hide_known_spells, persisted.selected_option_id);
+		}
 		if (!eligible_set) {
 			LogError("Task reward [{}] has no valid progression snapshot",
 				persisted.pending_reward_id);
@@ -1739,7 +1765,7 @@ void ClientTaskState::SendRewardSelection(Client *client, uint32_t task_id)
 	if (active_source_instance_id) {
 		auto existing = database.QueryDatabase(fmt::format(
 			"SELECT pending_reward_id, task_id, accepted_time, "
-			"source_instance_id, reward_set_id, selected_option_id, status, progression_count "
+			"source_instance_id, reward_set_id, selected_option_id, status, progression_count, hide_known_spells "
 			"FROM character_task_reward_selections WHERE character_id = {} "
 			"AND task_id = {} AND source_instance_id = {} "
 			"ORDER BY pending_reward_id DESC LIMIT 1",
@@ -1775,8 +1801,12 @@ void ClientTaskState::SendRewardSelection(Client *client, uint32_t task_id)
 		progression_count = Tasks::DistinctRewardCompletions(*policy,
 			[&](uint32_t id) { return id == task_id || IsTaskCompleted(id); });
 	}
-	const auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
+	auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
 		policy, progression_count);
+	if (eligible_set) {
+		eligible_set = FilterSpellRewards(*eligible_set, client,
+			(persisted.pending_reward_id ? persisted.hide_known_spells : std::optional(TaskManager::Instance()->HideKnownSpellRewards(task_id))), selected_option_id);
+	}
 	if (!eligible_set) {
 		client->GetRewardSelection().Clear(RewardSelectionChannel::Preview);
 		return;
@@ -1855,7 +1885,7 @@ void ClientTaskState::RestorePendingRewardSelection(Client *client)
 
 	auto pending = database.QueryDatabase(fmt::format(
 		"SELECT pending_reward_id, task_id, accepted_time, source_instance_id, "
-		"reward_set_id, selected_option_id, status, progression_count "
+		"reward_set_id, selected_option_id, status, progression_count, hide_known_spells "
 		"FROM character_task_reward_selections "
 		"WHERE character_id = {} AND "
 		"((status = 0 AND selected_option_id = 0) OR status = 2) "
@@ -1888,9 +1918,13 @@ void ClientTaskState::RestorePendingRewardSelection(Client *client)
 				continue;
 			}
 
-			const auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
+			auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
 				TaskManager::Instance()->GetTaskRewardProgression(persisted.task_id),
 				persisted.progression_count);
+			if (eligible_set) {
+				eligible_set = FilterSpellRewards(*eligible_set, client,
+					persisted.hide_known_spells, persisted.selected_option_id);
+			}
 			if (!eligible_set) {
 				LogError("Pending task reward [{}] has no valid progression snapshot",
 					persisted.pending_reward_id);
@@ -1968,7 +2002,7 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 
 	auto selection_result = database.QueryDatabase(fmt::format(
 		"SELECT pending_reward_id, task_id, accepted_time, source_instance_id, "
-		"reward_set_id, selected_option_id, status, progression_count "
+		"reward_set_id, selected_option_id, status, progression_count, hide_known_spells "
 		"FROM character_task_reward_selections "
 		"WHERE pending_reward_id = {} AND character_id = {} LIMIT 1",
 		claim.session.pending_reward_id,
@@ -2002,9 +2036,13 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 		return RewardSelectionDeliveryResult::RetryableFailure;
 	}
 
-	const auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
+	auto eligible_set = Tasks::FilterRewardProgression(*reward_set,
 		TaskManager::Instance()->GetTaskRewardProgression(persisted.task_id),
 		persisted.progression_count);
+	if (eligible_set) {
+		eligible_set = FilterSpellRewards(*eligible_set, client,
+			persisted.hide_known_spells, persisted.selected_option_id);
+	}
 	if (!eligible_set) {
 		return RewardSelectionDeliveryResult::RetryableFailure;
 	}
@@ -2074,7 +2112,7 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 		"attempt_count = attempt_count + 1, last_attempt_at = {}, "
 		"last_error = '' "
 		"WHERE pending_reward_id = {} AND character_id = {} "
-		"AND reward_set_id = {} AND "
+		"AND reward_set_id = {} AND hide_known_spells = {} AND "
 		"((selected_option_id = 0 AND status = 0) OR "
 		"(selected_option_id = {} AND status = 2))",
 		claim.selected_option_id,
@@ -2082,6 +2120,7 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 		persisted.pending_reward_id,
 		client->CharacterID(),
 		persisted.reward_set_id,
+		persisted.hide_known_spells.value_or(false) ? 1 : 0,
 		claim.selected_option_id
 	));
 	if (!lock.Success() || lock.RowsAffected() == 0) {
@@ -3380,6 +3419,11 @@ void ClientTaskState::AcceptNewTask(
 				return;
 			}
 		}
+	}
+
+	if (!TaskManager::Instance()->MeetsSpellExchangeRequirements(client, task_id)) {
+		client->Message(Chat::Red, "You do not meet this spell exchange's language or faction requirements.");
+		return;
 	}
 
 	if (!world_shared_confirmation && enforce_level_requirement && !TaskManager::Instance()->ValidateLevel(task_id, client->GetLevel())) {

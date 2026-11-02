@@ -2107,7 +2107,7 @@ void Client::Handle_OP_AdventureMerchantPurchase(const EQApplicationPacket *app)
 	bool found = false;
 	std::list<MerchantList> merchantlists = zone->merchanttable[merchantid];
 	for (auto merchantlist : merchantlists) {
-		if (GetLevel() < merchantlist.level_required) {
+		if (GetLevel() < merchantlist.level_required || !MeetsMerchantLanguageRequirement(merchantlist)) {
 			continue;
 		}
 
@@ -2297,7 +2297,7 @@ void Client::Handle_OP_AdventureMerchantRequest(const EQApplicationPacket *app)
 	std::list<MerchantList>::const_iterator itr;
 	for (itr = merlist.begin(); itr != merlist.end(); ++itr) {
 		const MerchantList &ml = *itr;
-		if (GetLevel() < ml.level_required) {
+		if (GetLevel() < ml.level_required || !MeetsMerchantLanguageRequirement(ml)) {
 			continue;
 		}
 
@@ -2663,7 +2663,7 @@ void Client::Handle_OP_AltCurrencyMerchantRequest(const EQApplicationPacket *app
 		std::list<MerchantList>::const_iterator itr;
 		for (itr = merlist.begin(); itr != merlist.end() && count < 255; ++itr) {
 			const MerchantList &ml = *itr;
-			if (GetLevel() < ml.level_required) {
+			if (GetLevel() < ml.level_required || !MeetsMerchantLanguageRequirement(ml)) {
 				continue;
 			}
 
@@ -2727,7 +2727,7 @@ void Client::Handle_OP_AltCurrencyPurchase(const EQApplicationPacket *app)
 		std::list<MerchantList>::const_iterator itr;
 		for (itr = merlist.begin(); itr != merlist.end(); ++itr) {
 			MerchantList ml = *itr;
-			if (GetLevel() < ml.level_required) {
+			if (GetLevel() < ml.level_required || !MeetsMerchantLanguageRequirement(ml)) {
 				continue;
 			}
 
@@ -14248,6 +14248,10 @@ void Client::Handle_OP_ShopPlayerBuy(const EQApplicationPacket *app)
 	std::list<MerchantList>::const_iterator itr;
 	for (itr = merlist.begin(); itr != merlist.end(); ++itr) {
 		MerchantList ml = *itr;
+		if (mp->itemslot == ml.slot && !MeetsMerchantLanguageRequirement(ml)) {
+			Message(Chat::Red, "Your language skill is too low to purchase that item.");
+			return;
+		}
 		if (GetLevel() < ml.level_required) {
 			continue;
 		}

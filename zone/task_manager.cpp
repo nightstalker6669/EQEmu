@@ -18,6 +18,8 @@
 #include "task_manager.h"
 #include "task_shared_reward_identity.h"
 #include "common/shared_task_admission.h"
+#include "common/merchant_language.h"
+#include "common/faction.h"
 
 #include "common/misc_functions.h"
 #include "common/repositories/character_activities_repository.h"
@@ -161,6 +163,74 @@ bool TaskManager::LoadTaskRewardProgression(
 	return true;
 }
 
+bool TaskManager::MeetsSpellExchangeRequirements(Client *client, uint32_t task_id) const
+{
+	const auto it = m_task_spell_policies.find(task_id);
+	if (it == m_task_spell_policies.end()) return true;
+	if (!client) return false;
+	const auto &p = it->second;
+	const auto skill = p.language_id >= 0 ? client->GetLanguageSkill(p.language_id) : 0;
+	if (!EQ::MerchantLanguage::Eligible(p.language_id, p.language_skill, skill)) return false;
+	if (p.faction_id) {
+		FactionMods mods{};
+		mods.base = client->GetModCharacterFactionLevel(p.faction_id);
+		if (CalculateFaction(&mods, 0) > p.maximum_faction_con) return false;
+	}
+	return true;
+}
+
+bool TaskManager::LoadTaskSpellPolicies(
+	const std::unordered_map<uint32_t, RewardSelectionSet> &sets,
+	std::unordered_map<uint32_t, EQ::SpellTask::Policy> &policies)
+{
+	policies.clear();
+	auto exists = content_db.QueryDatabase("SHOW TABLES LIKE 'task_spell_exchange_policies'");
+	if (!exists.Success()) return false;
+	if (!exists.RowCount()) return true;
+	auto rows = content_db.QueryDatabase(
+		"SELECT task_id, return_item_id, language_required, language_skill_required, "
+		"faction_id, maximum_faction_con, hide_known_spells FROM task_spell_exchange_policies");
+	if (!rows.Success()) return false;
+	for (auto row : rows) {
+		const auto id = Strings::ToUnsignedInt(row[0]);
+		const auto set = sets.find(id);
+		if (set == sets.end()) continue; // Disabled sources may have staged content.
+		const auto task = GetTaskData(id);
+		const auto language = Strings::ToInt(row[2]);
+		const auto skill = Strings::ToUnsignedInt(row[3]);
+		const auto faction = Strings::ToUnsignedInt(row[4]);
+		const auto con = Strings::ToUnsignedInt(row[5]);
+		const auto hide = Strings::ToUnsignedInt(row[6]);
+		const auto refund = Strings::ToUnsignedInt(row[1]);
+		// These historical exchanges are personal tasks. Unregistered shared tasks
+		// retain their existing admission and reward behavior.
+		if (!task || task->type == TaskType::Shared || !refund || hide > 1 ||
+			!EQ::MerchantLanguage::ValidRequirement(language, skill) ||
+			((faction == 0) != (con == 0)) || con > 9) return false;
+		bool has_refund = false;
+		for (const auto &option : set->second.options) {
+			if (option.common_to_all || option.rewards.empty()) return false;
+			const bool refund_option = option.rewards.size() == 1 &&
+				option.rewards[0].type == RewardSelectionRewardType::Item &&
+				option.rewards[0].data_id == refund && option.rewards[0].amount == 1 &&
+				option.class_mask == 65535;
+			has_refund |= refund_option;
+			for (const auto &reward : option.rewards) {
+				if (reward.type != RewardSelectionRewardType::Item || reward.amount != 1) return false;
+				const auto item = database.GetItem(reward.data_id);
+				if (!item || (!refund_option && !IsValidSpell(item->Scroll.Effect)) ||
+					(refund_option && item->Scroll.Effect > 0)) return false;
+			}
+		}
+		if (!has_refund || !policies.emplace(id, EQ::SpellTask::Policy{
+			.return_item_id = refund, .language_id = static_cast<int16_t>(language),
+			.language_skill = static_cast<uint8_t>(skill), .faction_id = faction,
+			.maximum_faction_con = static_cast<uint8_t>(con), .hide_known_spells = hide != 0
+		}).second) return false;
+	}
+	return true;
+}
+
 bool TaskManager::LoadTaskRewardSets()
 {
 	const auto restore_existing_flags = [this]() {
@@ -239,6 +309,12 @@ bool TaskManager::LoadTaskRewardSets()
 		restore_existing_flags();
 		return false;
 	}
+	std::unordered_map<uint32_t, EQ::SpellTask::Policy> staged_spell_policies;
+	if (!LoadTaskSpellPolicies(staged_reward_sets, staged_spell_policies)) {
+		LogError("Invalid spell exchange policies; preserving previous reward catalog");
+		restore_existing_flags();
+		return false;
+	}
 	for (auto &[task_id, task] : m_task_data) {
 		if (
 			task.reward_method != METHODSELECT
@@ -256,6 +332,7 @@ bool TaskManager::LoadTaskRewardSets()
 	}
 	m_task_reward_sets = std::move(staged_reward_sets);
 	m_task_reward_progression = std::move(staged_progression);
+	m_task_spell_policies = std::move(staged_spell_policies);
 
 	LogInfo(
 		"Loaded [{}] selectable task reward set(s)",
@@ -1063,7 +1140,7 @@ void TaskManager::SendTaskSelector(Client* client, Mob* mob, const std::vector<i
 		if (!SupportsTaskRewardMethod(client, task_data)) {
 			continue;
 		}
-		if (!ValidateLevel(task_index, player_level)) {
+		if (!MeetsSpellExchangeRequirements(client, task_index) || !ValidateLevel(task_index, player_level)) {
 			continue;
 		}
 		if (client->IsTaskActive(task_index)) {
@@ -1093,7 +1170,7 @@ void TaskManager::SendTaskSelector(Client* client, Mob* mob, const std::vector<i
 		if (!SupportsTaskRewardMethod(client, task_data)) {
 			continue;
 		}
-		if (!ValidateLevel(task_list[i], player_level)) {
+		if (!MeetsSpellExchangeRequirements(client, task_list[i]) || !ValidateLevel(task_list[i], player_level)) {
 			continue;
 		}
 		if (client->IsTaskActive(task_list[i])) {

@@ -4387,6 +4387,9 @@ struct MerchantList {
 	std::string bucket_name;
 	std::string bucket_value;
 	uint8       bucket_comparison;
+	// Server-side merchant catalogue metadata; not a client packet layout.
+	int16       language_required = -1;
+	uint16      language_skill_required = 0;
 };
 
 struct TempMerchantList {

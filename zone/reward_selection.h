@@ -161,7 +161,6 @@ private:
 		const RewardSelectionSession &left,
 		const RewardSelectionSession &right
 	);
-	static bool AssignWireOptionIds(ChannelState &state);
 	ChannelState &State(RewardSelectionChannel channel);
 	const ChannelState &State(RewardSelectionChannel channel) const;
 	bool SendSessions(RewardSelectionChannel channel);
@@ -181,7 +180,6 @@ private:
 	);
 
 	// Shared across both channels; never reuse a client cache identity.
-	uint64_t      m_next_wire_reward_set_id = 1;
 	Client       &m_client;
 	ChannelState  m_claimable_channel;
 	ChannelState  m_preview_channel;

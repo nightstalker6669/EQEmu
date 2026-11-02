@@ -45,13 +45,15 @@ void EQ::Net::TCPServer::Listen(int port, bool ipv6, std::function<void(std::sha
 
 void EQ::Net::TCPServer::Listen(const std::string &addr, int port, bool ipv6, std::function<void(std::shared_ptr<TCPConnection>)> cb)
 {
-	if (m_socket) {
+	if (m_socket || EQ::EventLoop::IsThreadShuttingDown()) {
 		return;
 	}
 
 	m_on_new_connection = cb;
 
-	auto loop = EQ::EventLoop::Get().Handle();
+	m_loop = &EQ::EventLoop::Get();
+	m_loop->RegisterCleanup(this, [this] { Close(); });
+	auto loop = m_loop->Handle();
 	m_socket = new uv_tcp_t;
 	memset(m_socket, 0, sizeof(uv_tcp_t));
 	uv_tcp_init(loop, m_socket);
@@ -68,7 +70,7 @@ void EQ::Net::TCPServer::Listen(const std::string &addr, int port, bool ipv6, st
 	m_socket->data = this;
 
 	uv_listen((uv_stream_t*)m_socket, 128, [](uv_stream_t* server, int status) {
-		if (status < 0) {
+		if (status < 0 || EQ::EventLoop::IsThreadShuttingDown()) {
 			return;
 		}
 
@@ -78,7 +80,7 @@ void EQ::Net::TCPServer::Listen(const std::string &addr, int port, bool ipv6, st
 		uv_tcp_init(loop, client);
 
 		if (uv_accept(server, (uv_stream_t*)client) < 0) {
-			delete client;
+			uv_close(reinterpret_cast<uv_handle_t*>(client), on_close_tcp_server_handle);
 			return;
 		}
 
@@ -90,6 +92,8 @@ void EQ::Net::TCPServer::Listen(const std::string &addr, int port, bool ipv6, st
 void EQ::Net::TCPServer::Close()
 {
 	if (m_socket) {
+		if (m_loop) m_loop->RemoveCleanup(this);
+		m_loop = nullptr;
 		uv_close((uv_handle_t*)m_socket, on_close_tcp_server_handle);
 		m_socket = nullptr;
 	}
