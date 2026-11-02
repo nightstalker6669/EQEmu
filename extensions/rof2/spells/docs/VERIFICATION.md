@@ -1,5 +1,15 @@
 # Verification scope
 
+## Current checkpoint — 2026-11-02
+
+Content through stage010 and shared-core b3f795ea were deployed in a coordinated parked maintenance window. Matching integrated world, zone, shared_memory, loginserver, UCS and inventory-recovery binaries were built; migrations9337/9338, all content stages and the matching item/spell caches were activated. The installer added6,264 rows, changed two original teacher faction bindings, installed eight quest/module files and upgraded the exact supported rune-module predecessor. Readback and identical no-op rerun passed. Pre-existing player tables, pending rewards and unrelated quest files were verified unchanged before startup. Full private source/database/runtime rollback backups were retained. These deployment results supersede the earlier offline-only checkpoints below.
+
+A dedicated level100 Wizard exercised Kerkaz's Minor Dreadmote task in the native RoF2 client. GM travel and two GM-summoned original motes supplied the test; this does not validate natural loot acquisition. The original keyword opened all five Dreadmote tasks. Accepting Minor Dreadmote and handing over a stack of two consumed exactly one and returned one. The native reward window displayed the original-item refund and six Wizard choices, including paired scroll rewards. The pending choice survived a normal camp/re-entry; selecting the first spell bundle recorded one successful claim and awarded both original scrolls, Shield of the Dauntless Rk. II and Concussive Salvo Rk. II. Server inventory readback independently confirmed both items and the returned mote. No quest progress or reward-state rows were written to simulate completion.
+
+This single-class/tier test does not validate the refund choice itself, every rank/tier/class bundle, merchant language boundaries, HoT faction admission, ordered-rune or named-gem exchanges, downgrade recipes, shared-task regressions, natural drop coverage, or spell effects in combat. Those native cases remain pending. Estimated pet/aura data and unresolved original acquisition identities/gates remain explicitly qualified or withheld. The following sections retain earlier validation history; their offline-only status describes those earlier checkpoints.
+
+## Earlier checkpoints
+
 The deployed database additions were read back and checked against their plans. Kerkaz's 160 class/tier projections matched the complete grouped reward catalogue; all reward items resolved to existing spells with the expected class level and rank. Lua 5.1 syntax and a hail/keyword selector harness passed. The script uses the native task delivery/reward path and has no scripted reward summoning or trade handler.
 
 The public installer was exercised against an isolated MariaDB schema populated only with required baseline game content. Planning, full overlay application, identical no-op rerun and refusal of a conflicting item row passed. The same application passed without housing-specific item columns. No account, character, player inventory or housing state tables were copied into that exercise. Public files omit the private fixtures, connection files and raw test output.
