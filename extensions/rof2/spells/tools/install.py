@@ -82,6 +82,14 @@ def main():
             cursor.execute("SELECT GET_LOCK('rof2_spells_install',0) AS locked")
             if cursor.fetchone()["locked"] != 1:
                 raise RuntimeError("Another spell content installer holds the lock")
+            cursor.execute("SELECT version FROM db_version")
+            versions = cursor.fetchall()
+            if len(versions) != 1 or versions[0]["version"] < manifest["required_schema_version"]:
+                raise RuntimeError("Run the matching server database updater before installing spell content")
+            cursor.execute("SELECT id,last_id FROM reward_selection_wire_allocator")
+            allocator = cursor.fetchall()
+            if len(allocator) != 1 or allocator[0]["id"] != 1 or not 0 <= allocator[0]["last_id"] < 4294967295:
+                raise RuntimeError("Invalid durable reward wire allocator; do not reset its high-water mark")
             tables = {table for p in payloads for table in p["inserts"]}
             tables.update(u["table"] for p in payloads for u in p["updates"])
             for table in tables:
@@ -99,6 +107,10 @@ def main():
                     cursor.execute("SELECT id,name,merchant_id,class FROM npc_types WHERE id=%s FOR UPDATE", (npc["id"],))
                     if cursor.fetchone() != npc:
                         raise RuntimeError(f"Merchant NPC identity/binding differs: {npc['id']}")
+                for faction in payload.get("required_factions", []):
+                    cursor.execute("SELECT id,name FROM faction_list WHERE id=%s FOR UPDATE", (faction["id"],))
+                    if cursor.fetchone() != faction:
+                        raise RuntimeError(f"Faction identity differs: {faction['id']}")
                 for item in payload.get("required_items", []):
                     cursor.execute("SELECT id,scrolleffect FROM items WHERE id=%s FOR UPDATE", (item["id"],))
                     if cursor.fetchone() != item:
@@ -138,11 +150,12 @@ def main():
             incoming = {}
             for payload in payloads:
                 for table, rows in payload["inserts"].items():
-                    if table in ("items", "npc_types", "npc_spells", "rewards"):
+                    if table in ("items", "npc_types", "npc_spells", "rewards", "npc_faction"):
                         field = "reward_id" if table == "rewards" else "id"
                         incoming.setdefault(table, set()).update(r[field] for r in rows)
             dependencies = {"items": set(), "npc_types": {752146},
-                            "npc_spells": set(), "spells_new": set()}
+                            "npc_spells": set(), "spells_new": set(),
+                            "npc_faction": set(), "faction_list": set()}
             for payload in payloads:
                 for table, rows in payload["inserts"].items():
                     for row in rows:
@@ -151,7 +164,9 @@ def main():
                             "pets": [("npc_types", "npcID")],
                             "auras": [("npc_types", "npc_type"), ("spells_new", "type"),
                                       ("spells_new", "spell_id")],
-                            "npc_types": [("npc_spells", "npc_spells_id")],
+                            "npc_types": [("npc_spells", "npc_spells_id"),
+                                          ("npc_faction", "npc_faction_id")],
+                            "npc_faction": [("faction_list", "primaryfaction")],
                             "npc_spells_entries": [("spells_new", "spellid"),
                                                    ("npc_spells", "npc_spells_id")],
                             "items": [("spells_new", "scrolleffect"), ("spells_new", "clickeffect")],
@@ -176,18 +191,25 @@ def main():
                 cursor.execute("SELECT rule_value FROM rule_values WHERE rule_name=%s", (name,))
                 if any(r["rule_value"].lower() not in ("true", "1") for r in cursor.fetchall()):
                     raise RuntimeError(f"Required rule has a disabled ruleset: {name}")
-            # Every spell referenced by the task catalogue must retain the expected era level/rank.
-            catalog = json.loads((ROOT / "provenance/kerk-rewards.json").read_text())
-            for task in catalog:
-                for cls, choices in task["classes"].items():
-                    for choice in choices:
-                        for item in choice:
-                            cursor.execute(f"SELECT name,rank,`classes{int(cls)}` AS level "
-                                           "FROM spells_new WHERE id=%s", (item["spell_id"],))
-                            spell = cursor.fetchone()
-                            if not spell or spell != {"name": item["name"], "rank": task["rank"],
-                                                      "level": task["level"]}:
-                                raise RuntimeError(f"Spell era/class/rank mismatch: {item['spell_id']}")
+            # Validate each offered bundle against the dated spell catalogue.
+            catalogues = {
+                "004-kerk-motes": "provenance/kerk-rewards.json",
+                "007-voa-scrolls-and-tasks": "provenance/voa-tasks.json",
+                "008-hot-fragment-exchanges": "provenance/hot-tasks.json",
+            }
+            for stage, path in catalogues.items():
+                if stage not in stage_names:
+                    continue
+                data = json.loads((ROOT / path).read_text())
+                for task in data if isinstance(data, list) else data["catalogues"]:
+                    for cls, choices in task["classes"].items():
+                        for choice in choices:
+                            for item in choice:
+                                cursor.execute(f"SELECT name,rank,`classes{int(cls)}` AS level "
+                                               "FROM spells_new WHERE id=%s", (item["spell_id"],))
+                                if cursor.fetchone() != {"name": item["name"], "rank": task["rank"],
+                                                          "level": task["level"]}:
+                                    raise RuntimeError(f"Spell era/class/rank mismatch in {stage}: {item['spell_id']}")
             if "006-ordered-runes" in stage_names:
                 ordered = json.loads((ROOT / "provenance/ordered-runes.json").read_text())
                 for catalogue in ordered["catalogues"].values():

@@ -39,6 +39,18 @@
       "path": "data/006-ordered-runes.json",
       "contains_estimates": false,
       "sha256": "09957269c316e5bba413110d0a127b8b63fec1f4e15e11b8ca34588a20162716"
+    },
+    {
+      "name": "007-voa-scrolls-and-tasks",
+      "path": "data/007-voa-scrolls-and-tasks.json",
+      "contains_estimates": false,
+      "sha256": "41d9d58d4f0b269c444c90a26f497ef8e6204ed75b0a0234493b9654d094c61b"
+    },
+    {
+      "name": "008-hot-fragment-exchanges",
+      "path": "data/008-hot-fragment-exchanges.json",
+      "contains_estimates": false,
+      "sha256": "ac2cbc6ec3d8d7ddee9b1e2defdc70a40b07e8d366986aaf4f0f31213111c4f2"
     }
   ],
   "primary_keys": {
@@ -92,10 +104,13 @@
       "reward_set_id",
       "option_id",
       "reward_id"
+    ],
+    "task_spell_exchange_policies": [
+      "task_id"
     ]
   },
   "shared_core_base": "17d63f7d512711e911787e630f4533ee14a1e785",
-  "required_schema_version": 9336,
+  "required_schema_version": 9338,
   "quest_files": [
     {
       "stage": "004-kerk-motes",
@@ -119,6 +134,21 @@
     {
       "stage": "006-ordered-runes",
       "path": "quests/lua_modules/rof2_spell_runes.lua"
+    },
+    {
+      "stage": "007-voa-scrolls-and-tasks",
+      "path": "quests/beastdomain/The_Sklyg.lua",
+      "npc_id": 728000
+    },
+    {
+      "stage": "008-hot-fragment-exchanges",
+      "path": "quests/feerrott2/#Kaelynn_Stearns.lua",
+      "npc_id": 700076
+    },
+    {
+      "stage": "008-hot-fragment-exchanges",
+      "path": "quests/housegarden/#Spensur.lua",
+      "npc_id": 703037
     }
   ]
 }

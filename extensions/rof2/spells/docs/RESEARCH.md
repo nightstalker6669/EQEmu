@@ -39,3 +39,23 @@ Perfected Blood and Tectonic Tremor have conflicting 25/50 requirements between 
 Mark of the Exemplar rank I has no scroll in this database. A December 2012 comment on its [spell page](https://everquest.allakhazam.com/db/spell/34416) reports it missing from the vendor, so a new rank I scroll was not inferred. Its documented rank II/III options remain in Kerkaz's catalogue.
 
 The [HoT guide](https://www.raspersrealm.com/Everquest/HoT/miscSpells.html) also identifies Dream Mote and fragment acquisition with faction/progression restrictions. Rotharran currently has other zero-cost entries and no alternate-currency binding, so simply enabling Dream Motes would expose free stock. That repair and authentic fragment/VoA rank II/III turn-ins remain open research, separate from the completed RoF Kerkaz content.
+
+## VoA task restoration and unresolved data
+
+[Original task catalogues 5402–5411](https://everquest.allakhazam.com/db/quest/5402) supply class-specific bundles, original-item refund choices, physical delivery and learned-ability hiding. Exact source links and every omitted choice appear in `provenance/voa-tasks.json`; verified item identities/templates appear in `provenance/voa-scrolls.json`. Reward level/rank/class guards use the dated spell database. Shared scrolls may serve several classes at different learning levels; the spell data remains authoritative.
+
+RankII Alaran thresholds for levels91–95 are 0/25/25/50/25. The level95 task has a September22,2012 report of success at skill27, supporting25; the level94 task has a January9,2013 report confirming50. RankIII thresholds are25/50/50/75/75 from their individual task descriptions. The broad launch guide's level95II threshold50 and raid-AA skill71 threshold were not substituted for these task-specific requirements.
+
+The task page's recommended spell level/expansion level cap is not treated as proof of a maximum character level for acquisition. Tasks retain the existing spell-exchange min/max0 convention; exact lower-level task admission remains unverified. Spell learning levels are unchanged. This acquisition-boundary limitation must be considered during native acceptance.
+
+The 20 unverified rankIII item identities were absent from the official Lucy bulk catalogue and the independent EQResource search. Historical PEQ item data did not resolve them. Their spell records alone do not prove a released scroll. The level95III shadowknight page explicitly asks which spells are paired; rankII bundles were not copied into it. Magelo item pages required login and supplied no independent identity evidence.
+
+The inherited Scavenger Hunt Letter at132477 predates the current achievements content. Its relocation is withheld pending an offline dependency/origin audit. The original spell item ID is reserved in the research record, and no alternate ID has been invented.
+
+HoT source review found a December17,2012 trade/stack change in [Six-Step Pattern II item history](https://lucy.allakhazam.com/itemhistory.html?id=125616), predating the RoF2 client. Later comments reporting tradable scrolls do not by themselves date the change. Individual item histories also show later prices/appearance changes; current collection values are not proof of every 2013 item field.
+
+## HoT fragment exchange batch
+
+Stage 008 restores 287 independently verified original scroll identities and eight physical fragment tasks. Contemporary task catalogues supply each rank’s bundles independently. Dream Delvers faction 680 and existing racial/base modifiers are preserved; only the two existing teachers receive a dedicated NPC faction-group binding. Rank III level 87/88 admission is disputed and those tasks remain withheld. Three rank III scroll identities are unresolved; no IDs or partial bundles are invented. Additional level 90 paladin pairing information remains unverified. Raw current Lucy fields are not proof of every 2013 item field; the provenance records this limit and the historical overrides.
+
+Rotharran’s original shop also requires HoT progression. The baseline lacks the relevant mission definitions. No substitute flags, free unlocks or unrestricted stock changes were installed. SoD’s Plane of Time rune NPC, Underfoot mission/gem routes and older acquisition remain separate unresolved work. Publication is not deployment or native gameplay acceptance.

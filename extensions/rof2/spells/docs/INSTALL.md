@@ -2,7 +2,7 @@
 
 Use a supported current PEQ/MariaDB schema with the original spell/item/NPC content corresponding to this overlay. This is a targeted content repair, not a complete PEQ database or a replacement `spells_new` import. IDs are deliberately fixed and collision checks refuse customized rows rather than silently remapping them.
 
-The [pinned shared-core reward engine](../README.md#engine-ownership-and-dependency) is already integrated into this branch. Build this branch's matching world/zone binaries; no achievement branch, manager or quest content is required. Run the matching database updater through 9336 and review/apply the three original supplemental SQL files described below before installing spell content. Preserve their identities; do not create renamed duplicates.
+The [pinned shared-core reward engine](../README.md#engine-ownership-and-dependency) is already integrated into this branch. Build this branch's matching world/zone binaries; no achievement branch, manager or quest content is required. Run the matching database updater through 9338 and review/apply the three original supplemental SQL files described below before installing spell content. Preserve their identities; do not create renamed duplicates.
 
 - `utils/sql/git/2026_10_27_achievement_reward_classes.sql`: generic option class masks; its historical filename is retained.
 - `utils/sql/git/2026_10_30_shared_task_reward_identity.sql`: durable shared occurrence ownership in the player database.
@@ -32,7 +32,7 @@ python3 extensions/rof2/spells/tools/install.py \
   --server /srv/eqemu/server
 ```
 
-The plan selects stages 001, 002, 004, 005 and 006. Add `--include-estimates` only when deliberately selecting the labelled pet/aura reconstruction too. The planner checks table/column availability, InnoDB transactions, row collisions, vendor identities/bindings, external item/NPC/AI/spell references, required task/hand-in rules, and the expected rank/class level of every Kerkaz reward. It does not change persistent content or quest files. Matching already-installed rows are a no-op; conflicting rows abort the plan.
+The plan selects stages 001, 002, 004, 005, 006 and 007. Add `--include-estimates` only when deliberately selecting the labelled pet/aura reconstruction too. The planner checks table/column availability, InnoDB transactions, row collisions, vendor identities/bindings, external item/NPC/AI/spell references, required task/hand-in rules, and the expected rank/class level of every Kerkaz reward. It does not change persistent content or quest files. Matching already-installed rows are a no-op; conflicting rows abort the plan.
 
 After reviewing the plan, apply with a new private backup directory:
 
@@ -65,3 +65,15 @@ Before removing task reward definitions or items from a used server, account for
 ## Ordered rune exchanges
 
 Stage 006 checks the identities of Kalim`Kar (442026) and Dwekvard (480107), all six rune IDs, existing reward scroll effects, and every ordered reward’s dated class level, name and rank. The quest manifest installs scripts into `dragonscale` and `brellsrest` plus two `lua_modules` files. Existing conflicting quest logic requires an explicit merge. The original exchanges use one rune per hand-in, learning state for ordering, no invented experience/cash rewards, and native item return for extras. Test the next-unlearned choice, discipline handling, wrong/extra items and all-known return with a separate native client before declaring gameplay acceptance.
+
+## Stage 007 and durable reward identities
+
+Run the matching updater before content installation. Migration 9337 creates the content-only `task_spell_exchange_policies` table. Migration 9338 adds a default-disabled policy snapshot to existing task reward occurrences and creates the server-wide `reward_selection_wire_allocator`. Earlier migrations 9331–9336 retain their registrations and SQL.
+
+The installer checks the schema version and allocator row, then locks and validates incoming content identities. It verifies every offered VoA spell's dated name, rank and permanent class level. Install `quests/beastdomain/The_Sklyg.lua` from the manifest. Preserve any existing named Perl or numeric NPC script through an explicit merge. Native task delivery consumes one Cantrip/Periapt; the original input item remains a selectable refund. Each class's source bundle remains atomic. A bundle disappears from a new VoA reward list only when every spell/discipline in that bundle is learned. The language requirement is checked for task listing and acceptance, including direct client requests.
+
+The wire allocator is durable server state. Never truncate, reset or decrease it during content rollback, character reset/copy, backup restoration or deployments. Preserve the largest issued `last_id` when restoring older database snapshots. The independent allocator connection commits reservations separately from reward grants, so rolled-back grants cannot recycle published identities. ID exhaustion refuses new displays without wrapping. The content rollback does not alter this counter or player reward ledgers.
+
+Keep the shared server and clients parked during a coordinated deployment. Shared-core owner review and fresh native-client acceptance are still required for this offline batch. Verify Alaran boundary values, the original refund, whole bundles, learned spell/discipline filtering, relog restoration and a stale client selection after a list refresh. Do not deploy while another chat owns active native acceptance.
+
+Stage 008 requires faction 680 to retain its Dream Delvers identity and both existing HoT teacher bindings to match their recorded preimages. It creates a dedicated NPC faction group, preserving player faction and existing race/class/deity modifiers. Its rollback restores teacher bindings before removing that group. The two disputed rank III tasks and Rotharran’s progression-gated shop are deliberately absent.
