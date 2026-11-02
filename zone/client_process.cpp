@@ -977,6 +977,14 @@ void Client::BulkSendMerchantInventory(int merchant_id, int npcid) {
 		}
 	}
 
+	// Hidden permanent rows still own their slots. Keep resale stock beyond
+	// the complete catalogue so a purchase cannot resolve to a different item.
+	for (const auto& ml : merchant_list) {
+		if (ml.slot >= slot_id) {
+			slot_id = ml.slot + 1;
+		}
+	}
+
 	auto temporary_merchant_list_two = zone->tmpmerchanttable[npcid];
 	temporary_merchant_list.clear();
 	for (auto ml : temporary_merchant_list_two) {

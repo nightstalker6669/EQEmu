@@ -14252,6 +14252,16 @@ void Client::Handle_OP_ShopPlayerBuy(const EQApplicationPacket *app)
 			Message(Chat::Red, "Your language skill is too low to purchase that item.");
 			return;
 		}
+		if (mp->itemslot == ml.slot) {
+			const int32 faction_id = tmp->GetPrimaryFaction();
+			const int32 faction_level = (!faction_id || sneaking) ?
+				0 : GetModCharacterFactionLevel(faction_id);
+			if (faction_level < ml.faction_required) {
+				Message(Chat::Red, "Your faction standing is too low to purchase that item.");
+				SendMerchantEnd();
+				return;
+			}
+		}
 		if (GetLevel() < ml.level_required) {
 			continue;
 		}
