@@ -1,0 +1,43 @@
+{
+  "task_id": 3040940,
+  "title": "Mer's Lost Love",
+  "external_quest_id": 4039,
+  "source": "https://everquest.allakhazam.com/db/quest/4039",
+  "state": "staged_disabled_not_deployed",
+  "admission": {
+    "members_min": 3,
+    "members_max": 6,
+    "average_min_level": 70,
+    "native_individual_min_level": 0,
+    "duration_seconds": 21600,
+    "repeatable": true,
+    "late_join": "Recheck resulting party average using fresh member levels."
+  },
+  "supplies": {
+    "requester_only": 84253,
+    "ticket": 34021,
+    "ticket_cost_copper": 0,
+    "ticket_price_provenance": "Existing native zero corroborated by current primary item65533 free flag; pre-May2013 exact price not independently recovered."
+  },
+  "rewards": {
+    "doubloons": 40,
+    "currency_id": 10,
+    "currency_item": 79910,
+    "faction_id": 1169,
+    "faction_amount": 20,
+    "currency_provenance": "Original February2007 report confirms40 combined with faction. Fixed40 implements this documented payout; original variable/popularity formula remains unrecovered.",
+    "faction_provenance": "Current primary quest header corroboration; exact original amount unverified.",
+    "xp": 0,
+    "xp_policy": "No XP is invented where original reward evidence lists currency and faction only.",
+    "delivery": "Native common-only reward ledger, bound to actual shared occurrence; faction through native task reward, never script-granted."
+  },
+  "geometry": {
+    "entry_policy": "Native Maiden zone safe location; exact original shore arrival still requires native inspection.",
+    "original_rowboat_door_id": 1,
+    "original_rowboat_primary_id": 33698,
+    "original_rowboat_model": "OBJ_ROWBOAT",
+    "incoming_transfer": "Preserve observed deck-relative offset and heading on the original same-model incoming ferry, then ride its original grid to Weatherby. No guessed deck height or substitute transport NPC."
+  },
+  "wreckage_source_policy": "Four best-supported native inner-pool statics at the period /loc2714,3966,306, matching3level70+1level72. Native underwater scene, actual corpses and four wreckage pieces verified. Exact historical per-spawn identities remain unrecovered.",
+  "required_engine_schema": 9335
+}

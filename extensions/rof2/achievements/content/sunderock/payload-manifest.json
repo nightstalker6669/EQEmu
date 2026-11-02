@@ -1,0 +1,102 @@
+[
+  {
+    "path": "PROTOCOL.md",
+    "sha256": "bfa4df646c544ac27ea4f5e023ac3e4fca72e678bed5cccc66084a59b34d9c5a"
+  },
+  {
+    "path": "README.md",
+    "sha256": "56af6ee09adc152e7324d26a825b32112f20ada822ee63c40bf34c925549b9f6"
+  },
+  {
+    "path": "apply_quests.py",
+    "sha256": "d152f8454a365cbb9cbf95339ad4a39dd629ce95ef1f2636faf8fd1b5128c6a3"
+  },
+  {
+    "path": "hooks/global_npc.lua.append",
+    "sha256": "9b273c645bbf4a65f119b6440e8f978af35c73cf6508a5e3f4b08ecf30c4c795"
+  },
+  {
+    "path": "hooks/global_player.lua.append",
+    "sha256": "3233b3a3a5509e0fec8b1de34575957de7e2c9a0548847de6fbd78f0e9e0e0d4"
+  },
+  {
+    "path": "install.py",
+    "sha256": "a86f494e2dea9b1582d53379169a7d1c471f51f611bdfdfdb70c2bb4abcd0a3c"
+  },
+  {
+    "path": "preflight.py",
+    "sha256": "01dbb84c7a2febea2739d525fc737adbd8508fe76abc883d36254a5a114464e2"
+  },
+  {
+    "path": "provenance/baseline-identities.json",
+    "sha256": "37d95ae44b44ac30ac5c6832cf1532608660347264984fe0acf40fa83af42e27"
+  },
+  {
+    "path": "provenance/native-status.json",
+    "sha256": "d9db0259fd07d7115941114e488dd05b29e9186ab3062f469b9c78e8ec10d765"
+  },
+  {
+    "path": "provenance/previous-module-sha256.json",
+    "sha256": "8b743454f7a5815717ec9c093222b54c2b1c7ca79939413a16721566cd0c0c1e"
+  },
+  {
+    "path": "provenance/quest-decisions.json",
+    "sha256": "0cf5741d24f4ac87f19f84f940f71cc6389fba5d8af7a8bc4e8a278127c4700c"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "80a6d74fe3684b09473f8eedb69b32c4ac0c3d5388be66d68253256f052aa9a0"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_sunderock.lua",
+    "sha256": "1d72d624478b8684e1b105fc542578f4daa99738dc511e55f1950d104e5ad5cb"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_sunderock_data.lua",
+    "sha256": "20d96be7d2c4e656ed3cfd61a19f860c24636aa91d27caffa3901ee66f4d532d"
+  },
+  {
+    "path": "quests/lua_modules/sunderock_acquisition.lua",
+    "sha256": "bda1dbfe2b7b96d11274251477021579cd8180b6cb1d7491b5916fc36222660b"
+  },
+  {
+    "path": "quests/mesa/397148.lua",
+    "sha256": "2c6dfcc9f1c5b4731a6a4d3dae15fee664373089d41dbde36eebc1e3f4bdcd72"
+  },
+  {
+    "path": "quests/moors/player.lua",
+    "sha256": "1d5e46c51edd9cfc389f8c7f30c6c77aaedd38474ecbb46f34db125e97132ecc"
+  },
+  {
+    "path": "quests/sunderock/403035.lua",
+    "sha256": "2c6dfcc9f1c5b4731a6a4d3dae15fee664373089d41dbde36eebc1e3f4bdcd72"
+  },
+  {
+    "path": "quests/sunderock/403036.lua",
+    "sha256": "2c6dfcc9f1c5b4731a6a4d3dae15fee664373089d41dbde36eebc1e3f4bdcd72"
+  },
+  {
+    "path": "quests/sunderock/403078.lua",
+    "sha256": "2c6dfcc9f1c5b4731a6a4d3dae15fee664373089d41dbde36eebc1e3f4bdcd72"
+  },
+  {
+    "path": "quests/sunderock/403093.lua",
+    "sha256": "2c6dfcc9f1c5b4731a6a4d3dae15fee664373089d41dbde36eebc1e3f4bdcd72"
+  },
+  {
+    "path": "sql/015-known-owned-activity-upgrade.sql",
+    "sha256": "e3de604ae315fa637b430c305a3656a1f155ef723ad78bd68137f5614718ae91"
+  },
+  {
+    "path": "sql/020-journal-rewards.disabled.sql",
+    "sha256": "3ff5007f2c883aea7bd09972ff36451c41929b5ca1769f637659f70847352e9d"
+  },
+  {
+    "path": "sql/030-world-acquisition.review-required.sql",
+    "sha256": "17d55eaaac8bcf9827a927cea43ee55e36d999fbffebb3590b89d672a780b8c0"
+  },
+  {
+    "path": "sql/090-enable-whole-batch.sql",
+    "sha256": "6d1c32c9858043a09893b4e6f8d0f48d29a35ee5be04e9de6694b879756f0c55"
+  }
+]

@@ -1,0 +1,78 @@
+[
+  {
+    "path": "crescent/394097.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "lua_modules/achievement_quest_roost.lua",
+    "sha256": "7c64cee1d508efa7c9e0db601126ee28a17803088620d00930b773ac1d20c050"
+  },
+  {
+    "path": "lua_modules/achievement_quest_roost_data.lua",
+    "sha256": "c1bca15ee394287834cc2112448b1846cb030d6d1aebd6dfaedf2c121872dd1a"
+  },
+  {
+    "path": "lua_modules/achievement_quest_roost_nests.lua",
+    "sha256": "10a285800d13db15d4e23add3d3c401073a302c4f4c06b3fea286e2033cdc5ed"
+  },
+  {
+    "path": "mesa/397102.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "roost/398018.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "roost/398022.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "roost/398023.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "roost/398025.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "roost/398027.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "roost/398029.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "roost/398032.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "roost/398033.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "roost/398039.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "roost/398042.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "roost/398047.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  },
+  {
+    "path": "roost/398049.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "roost/398067.lua",
+    "sha256": "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+  },
+  {
+    "path": "roost/398070.lua",
+    "sha256": "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+  }
+]

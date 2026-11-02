@@ -1,0 +1,57 @@
+{
+  "cutoff": "2013-05-31",
+  "scope": "Three previously admitted historical identities; thirteen quest-completion components, six level/era display components, three category associations and three category ancestry rows. No guessed modern definition is added.",
+  "counts": {
+    "achievement_categories": 3,
+    "achievements": 3,
+    "achievement_components": 19,
+    "achievement_category_associations": 3
+  },
+  "metadata_origin": {
+    "definition_ids_icons_points_and_exact_strings": "Preserved current admitted resource-derived catalogue, byte-equal to the original Steppes audit. These numeric/display fields are not independently authenticated as a May2013 client definition dump.",
+    "period_proven": "Achievement semantic identities, Progression versus Advancement category membership, and all thirteen completion quest names/order are corroborated by pre-cutoff archived parent pages and individual task pages.",
+    "not_inferred": "has_reward is a raw metadata hint, not a reward ID or grant. Level/era display rows do not create new completion criteria. No quest/achievement/reward activation in this file."
+  },
+  "period_sources": [
+    {
+      "achievement_id": 500060200,
+      "archive_url": "https://web.archive.org/web/20130315122317id_/http://everquest.allakhazam.com/db/quest.html?quest=5568",
+      "capture_utc": "20130315122317",
+      "sha256": "c2d75b28b06c5f748fbadcb8f3620d7e6e9959a957e2c8f29cbf51b4e1e78a9b",
+      "facts": {
+        "category": "Progression",
+        "completion_quest_count": 7,
+        "identity_present_before_cutoff": true
+      }
+    },
+    {
+      "achievement_id": 500060300,
+      "archive_url": "https://web.archive.org/web/20130315233214id_/http://everquest.allakhazam.com/db/quest.html?quest=5610",
+      "capture_utc": "20130315233214",
+      "sha256": "0511dc48e3d40c07d4c16e0bdd9a2c4605939b987a253f30ffe1688e6efb16e3",
+      "facts": {
+        "category": "Advancement",
+        "completion_quest_count": 3,
+        "identity_present_before_cutoff": true
+      }
+    },
+    {
+      "achievement_id": 500060400,
+      "archive_url": "https://web.archive.org/web/20130315235331id_/http://everquest.allakhazam.com/db/quest.html?quest=5611",
+      "capture_utc": "20130315235331",
+      "sha256": "ac914e221f65e15982a4206389103ef33393406eb19c47cab55bbcbdb5c2489b",
+      "facts": {
+        "category": "Advancement",
+        "completion_quest_count": 3,
+        "identity_present_before_cutoff": true
+      }
+    }
+  ],
+  "source_digests": {
+    "original_steppes_audit_sha256": "5f023eb8b5825d1f5fc55e206c9c90eb860600bb85e15cd77545030c3685b5d2",
+    "quest_provenance_map_sha256": "37bc673c885c9d1554e7bc5792f267ace7aaa073cd45bece4e93612f3658aed8",
+    "catalogue_rows_sha256": "e9e724e34a0bb6b4898549b0995b1d7c8e5eed5e13639b71f2bf18f45db41fbd",
+    "schema_order_manifest_sha256": "63b7943fe1150c9d05e50160de77a0154f7e2633f85373414d0772c32cbe98d9"
+  },
+  "installation": "After required achievement schema/reward-class migration and shared-run occurrence table; before disabled Steppes task/content SQL. Existing exact rows remain untouched, including enabled/version/profile state; missing definitions inserted disabled. No category subtree replacement."
+}

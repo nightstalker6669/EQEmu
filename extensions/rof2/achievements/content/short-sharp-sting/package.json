@@ -1,0 +1,21 @@
+{
+  "name": "Short Sharp Sting",
+  "cutoff": "2013-05-31",
+  "row_contracts": [
+    "faction-row-contract.json",
+    "journal-row-contract.json",
+    "avellone-row-contract.json",
+    "parent-row-contract.json"
+  ],
+  "hooks": [
+    "hooks/global-player-bixie-journal.fragment.lua",
+    "hooks/global-player-sting.fragment.lua"
+  ],
+  "sql": [
+    "sql/010-factions.sql",
+    "sql/020-journal.sql",
+    "sql/030-avellone.sql",
+    "sql/040-parent-rewards.sql",
+    "sql/090-activate.sql"
+  ]
+}

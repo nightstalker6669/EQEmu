@@ -1,0 +1,254 @@
+{
+  "npc_faction": {
+    "scope": "id=396942",
+    "rows": [
+      {
+        "id": 396942,
+        "name": "May2013 Stonehive labelled kill defaults",
+        "primaryfaction": 0,
+        "ignore_primary_assist": 0
+      }
+    ]
+  },
+  "npc_faction_entries": {
+    "scope": "npc_faction_id=396942",
+    "rows": [
+      {
+        "npc_faction_id": 396942,
+        "faction_id": 1123,
+        "value": -1,
+        "npc_value": 0,
+        "temp": 0
+      },
+      {
+        "npc_faction_id": 396942,
+        "faction_id": 1124,
+        "value": -1,
+        "npc_value": 0,
+        "temp": 0
+      },
+      {
+        "npc_faction_id": 396942,
+        "faction_id": 1129,
+        "value": 1,
+        "npc_value": 0,
+        "temp": 0
+      }
+    ]
+  },
+  "npc_types": {
+    "scope": "id IN(395224,395225,395226,395229,395235,395236,395256,396107,396126,396129,396133,396135,396137,396173,396176,396185,396189,396196,396200,396202,396214,396219,396221,396227,396231,396251)",
+    "rows": [
+      {
+        "id": 395224,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 395225,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 395226,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 395229,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 395235,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 395236,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 395256,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396107,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396126,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396129,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396133,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396135,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396137,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396173,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396176,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396185,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396189,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396196,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396200,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396202,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396214,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396219,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396221,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396227,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396231,
+        "npc_faction_id": 396942
+      },
+      {
+        "id": 396251,
+        "npc_faction_id": 396942
+      }
+    ],
+    "accepted_existing": [
+      {
+        "id": 395224,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 395225,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 395226,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 395229,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 395235,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 395236,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 395256,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396107,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396126,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396129,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396133,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396135,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396137,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396173,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396176,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396185,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396189,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396196,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396200,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396202,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396214,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396219,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396221,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396227,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396231,
+        "npc_faction_id": 0
+      },
+      {
+        "id": 396251,
+        "npc_faction_id": 0
+      }
+    ]
+  }
+}

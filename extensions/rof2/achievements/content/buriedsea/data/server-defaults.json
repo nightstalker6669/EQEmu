@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "provenance": "Labelled configurable emulator defaults explicitly authorized by user; researched per-quest values take precedence.",
+  "xp_default": 1000,
+  "faction_default": 10,
+  "faction_family_defaults": {
+    "500090200": 5,
+    "500090300": 10,
+    "500090500": 15
+  }
+}

@@ -1,0 +1,302 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "5ae2ece7eb15b6342cc87d2f634e698d9fc628920ea7d7148e4020c6ee6bffa6"
+  },
+  {
+    "path": "apply_quests.py",
+    "sha256": "22214718813fa69900d96f041fee5ac39f88823623e2bc927a281642bf688691"
+  },
+  {
+    "path": "data/encounter-profiles.json",
+    "sha256": "c14573978a04806867804d7329f68c09c3ef4b8f5be8467e3b7a1f67d12f3587"
+  },
+  {
+    "path": "data/exploration-volumes.json",
+    "sha256": "77201a3fcdfc3d5d5a2bdfe32bf48fc7ed4ca0c7c81afcd398a311ddc5276778"
+  },
+  {
+    "path": "data/mer-mission.json",
+    "sha256": "fc4a7383f693b1f342bae8c83dfa147871bd3dee7db2f6d4683db9d264da1895"
+  },
+  {
+    "path": "data/merchant-prices.json",
+    "sha256": "87d9b65d5c2561700a6af154f5e6dc1fe31f96105b37e37b16ca25275770a450"
+  },
+  {
+    "path": "data/quest-contract.json",
+    "sha256": "191c7950b213a82516b760544ca13a62c1ebbfd3d3ed8eee3be144312b8e60cb"
+  },
+  {
+    "path": "data/resolved-quest-contract.json",
+    "sha256": "454d0e5edeffa3c03f3241836d3f4f7fbbeb17b90f144ea5dff2148315fecaf1"
+  },
+  {
+    "path": "data/server-defaults.json",
+    "sha256": "2894238206fc2541b9c3b413c15ea072607d27b9fd40f73d459da76ecfc5db02"
+  },
+  {
+    "path": "data/special-landmark-volumes.json",
+    "sha256": "999ff83ed435ee9c183db794058679125cdd1307a679f4b4c29a756b2a7b5ea1"
+  },
+  {
+    "path": "data/totem-restoration.json",
+    "sha256": "6cafe0daf4f850d8cfbd41868e9dc040efcd837b310b99ed1f83f962efeb561d"
+  },
+  {
+    "path": "hooks/global-npc-buriedsea.fragment.lua",
+    "sha256": "f28386d4c0b3121c90905bc6438c5af9fe010f23b21e99cb8d31108be6f2e327"
+  },
+  {
+    "path": "hooks/global-player-buriedsea.fragment.lua",
+    "sha256": "0a482060282120f1d03d700e29d6dc70995dafe2f0f9037fc8e8d4188fa00566"
+  },
+  {
+    "path": "hooks/global-player-mer.fragment.lua",
+    "sha256": "f9c62d88b0f3438ccccaef6376ae0e0cf6661d25f6ba4db0a20ce92507c12a4c"
+  },
+  {
+    "path": "hooks/global-player-whole.fragment.lua",
+    "sha256": "2451e5bc466d184b9d5234517ea40e30e29a08e6cff85befffcbd3de59e7fef0"
+  },
+  {
+    "path": "install.py",
+    "sha256": "5a17e225cb3fabc687de5464cfa6445b8d80e49823cebd6568d3e98bf2c03c98"
+  },
+  {
+    "path": "package.json",
+    "sha256": "7106eb81a74239711236499120b7003c5a1c18de28b258690dcd3aa0f4a79c93"
+  },
+  {
+    "path": "preflight.py",
+    "sha256": "2340f04864da2f875532958b6eaad44c7d6b4cb9f17c3efe0650b0d5e00558ad"
+  },
+  {
+    "path": "provenance/baseline-identities.json",
+    "sha256": "a0953e4916bf175b7c07ace39bcdef2aceda00e053d7415356d1669439509a52"
+  },
+  {
+    "path": "provenance/bone-recipes.json",
+    "sha256": "581b010b9e7f70dec6f1e5fe23745f47238d563c453f34f42857bc0bb5c34ad2"
+  },
+  {
+    "path": "provenance/cash-policy.json",
+    "sha256": "0e8161cf8740ba46407350209a60dc799253d2954338c20dd050dc782974da41"
+  },
+  {
+    "path": "provenance/client-ship-models.json",
+    "sha256": "eb14a44e64d9d7151da17144dbda53be0ddf0edd4c15ddc04e4eefb4299e334f"
+  },
+  {
+    "path": "provenance/currency-dependency.json",
+    "sha256": "01404083b1f7a756eb362f65efadac95120ad9cb325b17b221d2626aeb557543"
+  },
+  {
+    "path": "provenance/encounter-scenes.json",
+    "sha256": "305586d429d32a9b3bafd818110ac75b788939e0af2a42d97707217a18ebb435"
+  },
+  {
+    "path": "provenance/faction-values.json",
+    "sha256": "86afe7744e81bb8130cdb284de72b1a9b0a6121dbf1e10fd76e6aaead5d3c006"
+  },
+  {
+    "path": "provenance/halon-complete-stock.json",
+    "sha256": "72e3924a99e45f419390937112fd7774063a5fe30ca8b15b0c40ef34c7e55b6e"
+  },
+  {
+    "path": "provenance/known-world-limits.json",
+    "sha256": "c6d0f37047782a81dbb1ea2486367049b033ca779e8c45585bcc0cf6e772297c"
+  },
+  {
+    "path": "provenance/parent-rewards.json",
+    "sha256": "844ff61d8fe0c158c6a2edf33946351b71421cc4be5b473709d05f4d9dfa0787"
+  },
+  {
+    "path": "provenance/previous-module-sha256.json",
+    "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+  },
+  {
+    "path": "provenance/totem-world-sources.json",
+    "sha256": "c0684f37ac24c65d2de316a656ee4ddda8e0ce0612e2afa0795c7f509dbe705f"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "a39663ddc6621bb62ecbb077b2ddaf4b4a5195cfa1a6a5ca36cf29ac0a8fa00c"
+  },
+  {
+    "path": "quests/barren/422000.lua",
+    "sha256": "c8cca2faaf0344330602e9c67c905f4234507a7860ff3ad73bdb3f43e3cc45f2"
+  },
+  {
+    "path": "quests/barren/422004.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/barren/422008.lua",
+    "sha256": "39dce7b6d9480f229c07edb72b58009fee9af6c5e63d58e85dc5d506b68a2f9a"
+  },
+  {
+    "path": "quests/barren/422012.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/barren/422019.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/barren/422074.lua",
+    "sha256": "6fc9dce3de9171a99a68bb07846ea8d914ba7063c502907383c1ae3c6afd7c38"
+  },
+  {
+    "path": "quests/barren/422112.lua",
+    "sha256": "81476fab0ce20c9f34d1ee63e8e7d4d899bcb46d73d878d833dbdcb6ce24886e"
+  },
+  {
+    "path": "quests/barren/422900.lua",
+    "sha256": "d98e4765d2bf155fd789ef7f2b68d0bb59089ec9a07841d307b005a781ac77d9"
+  },
+  {
+    "path": "quests/barren/422901.lua",
+    "sha256": "d98e4765d2bf155fd789ef7f2b68d0bb59089ec9a07841d307b005a781ac77d9"
+  },
+  {
+    "path": "quests/buriedsea/423000.lua",
+    "sha256": "c8cca2faaf0344330602e9c67c905f4234507a7860ff3ad73bdb3f43e3cc45f2"
+  },
+  {
+    "path": "quests/buriedsea/423079.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423091.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423105.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423107.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423122.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423140.lua",
+    "sha256": "0b95a1a14b22046ede4ced6b32fa2d3761766304e0ecbf2b341c03cd11fd41d5"
+  },
+  {
+    "path": "quests/buriedsea/423141.lua",
+    "sha256": "0b95a1a14b22046ede4ced6b32fa2d3761766304e0ecbf2b341c03cd11fd41d5"
+  },
+  {
+    "path": "quests/buriedsea/423144.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423146.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423148.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423151.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423152.lua",
+    "sha256": "3d60a47e3cd7da2359fca46ba9ae00ada10e729228ea3960264a0fd5954c38b1"
+  },
+  {
+    "path": "quests/buriedsea/423900.lua",
+    "sha256": "d98e4765d2bf155fd789ef7f2b68d0bb59089ec9a07841d307b005a781ac77d9"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_buriedsea.lua",
+    "sha256": "3aacdf76215bb82c6a9a9e3154d6d0ce26fc95ef3d7cc2388adc3cf7bbd26285"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_buriedsea_chests.lua",
+    "sha256": "72d29507854f7d24ed48dfa0286d922201201ab5a50e8e4809763ebfc771f4ca"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_buriedsea_data.lua",
+    "sha256": "3f1a9486c283c848a695889721f5ca5475042bbda974ea5e543b41e75a255d06"
+  },
+  {
+    "path": "quests/lua_modules/buriedsea_mer_native.lua",
+    "sha256": "ca6cf393abccfaeba3cac2f08f2e859257920f03e7d0b172d26741c58ea58f1b"
+  },
+  {
+    "path": "quests/lua_modules/buriedsea_mer_rules.lua",
+    "sha256": "484623f74b3b9a0917a49dc514e9176697f53fce751248b9922ac941f16ac252"
+  },
+  {
+    "path": "quests/lua_modules/buriedsea_scene_native.lua",
+    "sha256": "61ce5b51dad407a2389c5d7aed04073d23e491404feba6c16e6b3189d25e8fc6"
+  },
+  {
+    "path": "quests/lua_modules/buriedsea_scene_rules.lua",
+    "sha256": "d5ded9fb67e618fa5bb5c511acbc1e777af73bda5edd608a42ed5c9a11e4711f"
+  },
+  {
+    "path": "quests/lua_modules/buriedsea_totem_rules.lua",
+    "sha256": "2566a127c7c024cdbb35d23289870d9611671560890f6138d93d833a32ed841f"
+  },
+  {
+    "path": "quests/lua_modules/buriedsea_totem_sources.lua",
+    "sha256": "7c798d88b22124d31232400d6744e9d267bd896a25ca183588d85f701edd995d"
+  },
+  {
+    "path": "repair_client_ships.py",
+    "sha256": "75638e593b7ae99e314b454e1ceb963dbf7a95c1159de79ffd099cb3680224f3"
+  },
+  {
+    "path": "sql/001-catalogue.disabled.sql",
+    "sha256": "15ea662133439ad7ba319e13ec9f0b0a088c009c2b9c4235e0883bfbf818465c"
+  },
+  {
+    "path": "sql/010-journal.disabled.sql",
+    "sha256": "6a7a646157bac93688abe38450a8efa3977ed7530a132034650fe5ab51fe5a34"
+  },
+  {
+    "path": "sql/020-progression-rewards.disabled.sql",
+    "sha256": "8e753a39a606bcd68ac49133dcc983b85917f00525a4480609381f599b98c46d"
+  },
+  {
+    "path": "sql/030-bone-recipes.sql",
+    "sha256": "8d3dfc75652d2d2ae53de09c4ee71d54dc48f4986c74bdc8aa519af66f35f50a"
+  },
+  {
+    "path": "sql/040-encounter-npcs.disabled.sql",
+    "sha256": "0cb10aefd1277c6e7d7fb78d00fd6a7733487466bc58682af83abaae9118c7f8"
+  },
+  {
+    "path": "sql/050-quest-chest-respawn.disabled.sql",
+    "sha256": "dfc9ea3e06a19ba57276febc2b8692c7e5de5276c688f6979d42036d94976245"
+  },
+  {
+    "path": "sql/060-halon-complete-stock.disabled.sql",
+    "sha256": "7ae073d5b8dfce105e8391e13fe77e266413f0099b254293c514aa9ee7757183"
+  },
+  {
+    "path": "sql/070-totem-world-sources.disabled.sql",
+    "sha256": "8244864c03f17ec4927e0fc87c3e23b522e7afd77eabb54f18667eb8171d0b62"
+  },
+  {
+    "path": "sql/080-mer-mission.disabled.sql",
+    "sha256": "df59f170d559addd46967b33b1ef881921b0b00096df004ff72fa7a51d713b5c"
+  },
+  {
+    "path": "sql/085-parent-rewards-hand.disabled.sql",
+    "sha256": "4455fb92942d1d80cf22a0876075250c21b72e4ddec142d4036a173f33b84eb3"
+  },
+  {
+    "path": "sql/090-enable-whole-batch.sql",
+    "sha256": "e64ca89ae014fd13fadf5ccbec403a1a2dbe450011c23c80d31e3f9693c472e4"
+  }
+]

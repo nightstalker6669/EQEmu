@@ -1,0 +1,3037 @@
+{
+  "status": "Production specification; see native-status.json for exact runtime coverage and limitations",
+  "cutoff": "2013-05-31",
+  "tasks": [
+    {
+      "id": 3040421,
+      "title": "Wolf Skins for Madu",
+      "giver": 397007,
+      "achievement_id": 500040600,
+      "component_id": 50143,
+      "min_level": 40,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Wolf Skins: slay the required creatures",
+          "goalcount": 10,
+          "item_ids": [],
+          "npc_ids": [
+            397001,
+            397002,
+            397004,
+            397035
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Low Quality Wolf Skin",
+          "goalcount": 5,
+          "item_ids": [
+            13753
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Medium Quality Wolf Skin",
+          "goalcount": 3,
+          "item_ids": [
+            13754
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot High Quality Wolf Skin",
+          "goalcount": 1,
+          "item_ids": [
+            13755
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Low Quality Wolf Skin to Scout Madu",
+          "goalcount": 5,
+          "item_ids": [
+            13753
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 4
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Medium Quality Wolf Skin to Scout Madu",
+          "goalcount": 3,
+          "item_ids": [
+            13754
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 5
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver High Quality Wolf Skin to Scout Madu",
+          "goalcount": 1,
+          "item_ids": [
+            13755
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 6
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3633",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [
+        {
+          "item_id": 53123,
+          "quantity": 1,
+          "class_mask": 1
+        },
+        {
+          "item_id": 53130,
+          "quantity": 1,
+          "class_mask": 2
+        },
+        {
+          "item_id": 53137,
+          "quantity": 1,
+          "class_mask": 4
+        },
+        {
+          "item_id": 53144,
+          "quantity": 1,
+          "class_mask": 8
+        },
+        {
+          "item_id": 53151,
+          "quantity": 1,
+          "class_mask": 16
+        },
+        {
+          "item_id": 53158,
+          "quantity": 1,
+          "class_mask": 32
+        },
+        {
+          "item_id": 53165,
+          "quantity": 1,
+          "class_mask": 64
+        },
+        {
+          "item_id": 53172,
+          "quantity": 1,
+          "class_mask": 128
+        },
+        {
+          "item_id": 53179,
+          "quantity": 1,
+          "class_mask": 256
+        },
+        {
+          "item_id": 53186,
+          "quantity": 1,
+          "class_mask": 512
+        },
+        {
+          "item_id": 53193,
+          "quantity": 1,
+          "class_mask": 1024
+        },
+        {
+          "item_id": 53200,
+          "quantity": 1,
+          "class_mask": 2048
+        },
+        {
+          "item_id": 53207,
+          "quantity": 1,
+          "class_mask": 4096
+        },
+        {
+          "item_id": 53214,
+          "quantity": 1,
+          "class_mask": 8192
+        },
+        {
+          "item_id": 53221,
+          "quantity": 1,
+          "class_mask": 16384
+        },
+        {
+          "item_id": 53228,
+          "quantity": 1,
+          "class_mask": 32768
+        }
+      ],
+      "missing_dependencies": [],
+      "selected_level_provenance": "40 best-supported original family gate; rewards require45 independently. Spider header47 conflicts original level40 completion signature.",
+      "offer_exclusions": []
+    },
+    {
+      "id": 3040422,
+      "title": "Bear Pelts for Madu",
+      "giver": 397007,
+      "achievement_id": 500040600,
+      "component_id": 50144,
+      "min_level": 40,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Bear Pelts: slay the required creatures",
+          "goalcount": 15,
+          "item_ids": [],
+          "npc_ids": [
+            397005,
+            397015,
+            397020
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Low Quality Bear Skin",
+          "goalcount": 5,
+          "item_ids": [
+            13750
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Medium Quality Bear Skin",
+          "goalcount": 3,
+          "item_ids": [
+            13751
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot High Quality Bear Skin",
+          "goalcount": 1,
+          "item_ids": [
+            13752
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Low Quality Bear Skin to Scout Madu",
+          "goalcount": 5,
+          "item_ids": [
+            13750
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 4
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Medium Quality Bear Skin to Scout Madu",
+          "goalcount": 3,
+          "item_ids": [
+            13751
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 5
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver High Quality Bear Skin to Scout Madu",
+          "goalcount": 1,
+          "item_ids": [
+            13752
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 6
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3634",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [
+        {
+          "item_id": 53125,
+          "quantity": 1,
+          "class_mask": 1
+        },
+        {
+          "item_id": 53132,
+          "quantity": 1,
+          "class_mask": 2
+        },
+        {
+          "item_id": 53139,
+          "quantity": 1,
+          "class_mask": 4
+        },
+        {
+          "item_id": 53146,
+          "quantity": 1,
+          "class_mask": 8
+        },
+        {
+          "item_id": 53153,
+          "quantity": 1,
+          "class_mask": 16
+        },
+        {
+          "item_id": 53160,
+          "quantity": 1,
+          "class_mask": 32
+        },
+        {
+          "item_id": 53167,
+          "quantity": 1,
+          "class_mask": 64
+        },
+        {
+          "item_id": 53174,
+          "quantity": 1,
+          "class_mask": 128
+        },
+        {
+          "item_id": 53181,
+          "quantity": 1,
+          "class_mask": 256
+        },
+        {
+          "item_id": 53188,
+          "quantity": 1,
+          "class_mask": 512
+        },
+        {
+          "item_id": 53195,
+          "quantity": 1,
+          "class_mask": 1024
+        },
+        {
+          "item_id": 53202,
+          "quantity": 1,
+          "class_mask": 2048
+        },
+        {
+          "item_id": 53209,
+          "quantity": 1,
+          "class_mask": 4096
+        },
+        {
+          "item_id": 53216,
+          "quantity": 1,
+          "class_mask": 8192
+        },
+        {
+          "item_id": 53223,
+          "quantity": 1,
+          "class_mask": 16384
+        },
+        {
+          "item_id": 53230,
+          "quantity": 1,
+          "class_mask": 32768
+        }
+      ],
+      "missing_dependencies": [],
+      "selected_level_provenance": "40 best-supported original family gate; rewards require45 independently. Spider header47 conflicts original level40 completion signature.",
+      "offer_exclusions": []
+    },
+    {
+      "id": 3040423,
+      "title": "Snake Skins for Madu",
+      "giver": 397007,
+      "achievement_id": 500040600,
+      "component_id": 50145,
+      "min_level": 40,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Snake Skins: slay the required creatures",
+          "goalcount": 10,
+          "item_ids": [],
+          "npc_ids": [
+            397003,
+            397008,
+            397010
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Large Snake Fang",
+          "goalcount": 5,
+          "item_ids": [
+            97229
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Snake Skin",
+          "goalcount": 3,
+          "item_ids": [
+            88121
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Snake Egg",
+          "goalcount": 1,
+          "item_ids": [
+            13088
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Large Snake Fang to Scout Madu",
+          "goalcount": 5,
+          "item_ids": [
+            97229
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 4
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Snake Skin to Scout Madu",
+          "goalcount": 3,
+          "item_ids": [
+            88121
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 5
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Snake Egg to Scout Madu",
+          "goalcount": 1,
+          "item_ids": [
+            13088
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 6
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3635",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [
+        {
+          "item_id": 53124,
+          "quantity": 1,
+          "class_mask": 1
+        },
+        {
+          "item_id": 53131,
+          "quantity": 1,
+          "class_mask": 2
+        },
+        {
+          "item_id": 53138,
+          "quantity": 1,
+          "class_mask": 4
+        },
+        {
+          "item_id": 53145,
+          "quantity": 1,
+          "class_mask": 8
+        },
+        {
+          "item_id": 53152,
+          "quantity": 1,
+          "class_mask": 16
+        },
+        {
+          "item_id": 53159,
+          "quantity": 1,
+          "class_mask": 32
+        },
+        {
+          "item_id": 53166,
+          "quantity": 1,
+          "class_mask": 64
+        },
+        {
+          "item_id": 53173,
+          "quantity": 1,
+          "class_mask": 128
+        },
+        {
+          "item_id": 53180,
+          "quantity": 1,
+          "class_mask": 256
+        },
+        {
+          "item_id": 53187,
+          "quantity": 1,
+          "class_mask": 512
+        },
+        {
+          "item_id": 53194,
+          "quantity": 1,
+          "class_mask": 1024
+        },
+        {
+          "item_id": 53201,
+          "quantity": 1,
+          "class_mask": 2048
+        },
+        {
+          "item_id": 53208,
+          "quantity": 1,
+          "class_mask": 4096
+        },
+        {
+          "item_id": 53215,
+          "quantity": 1,
+          "class_mask": 8192
+        },
+        {
+          "item_id": 53222,
+          "quantity": 1,
+          "class_mask": 16384
+        },
+        {
+          "item_id": 53229,
+          "quantity": 1,
+          "class_mask": 32768
+        }
+      ],
+      "missing_dependencies": [],
+      "selected_level_provenance": "40 best-supported original family gate; rewards require45 independently. Spider header47 conflicts original level40 completion signature.",
+      "offer_exclusions": []
+    },
+    {
+      "id": 3040424,
+      "title": "Spider Silk for Madu",
+      "giver": 397007,
+      "achievement_id": 500040600,
+      "component_id": 50146,
+      "min_level": 40,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Spider Silk: slay the required creatures",
+          "goalcount": 15,
+          "item_ids": [],
+          "npc_ids": [
+            397089,
+            397133,
+            397135,
+            397141
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Spider Silk",
+          "goalcount": 5,
+          "item_ids": [
+            13041
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Spider Legs",
+          "goalcount": 3,
+          "item_ids": [
+            13417
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Recluse Venom Sac",
+          "goalcount": 1,
+          "item_ids": [
+            97234
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Spider Silk to Scout Madu",
+          "goalcount": 5,
+          "item_ids": [
+            13041
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 4
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Spider Legs to Scout Madu",
+          "goalcount": 3,
+          "item_ids": [
+            13417
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 5
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Recluse Venom Sac to Scout Madu",
+          "goalcount": 1,
+          "item_ids": [
+            97234
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 6
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3636",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [
+        {
+          "item_id": 53121,
+          "quantity": 1,
+          "class_mask": 1
+        },
+        {
+          "item_id": 53128,
+          "quantity": 1,
+          "class_mask": 2
+        },
+        {
+          "item_id": 53135,
+          "quantity": 1,
+          "class_mask": 4
+        },
+        {
+          "item_id": 53142,
+          "quantity": 1,
+          "class_mask": 8
+        },
+        {
+          "item_id": 53149,
+          "quantity": 1,
+          "class_mask": 16
+        },
+        {
+          "item_id": 53156,
+          "quantity": 1,
+          "class_mask": 32
+        },
+        {
+          "item_id": 53163,
+          "quantity": 1,
+          "class_mask": 64
+        },
+        {
+          "item_id": 53170,
+          "quantity": 1,
+          "class_mask": 128
+        },
+        {
+          "item_id": 53177,
+          "quantity": 1,
+          "class_mask": 256
+        },
+        {
+          "item_id": 53184,
+          "quantity": 1,
+          "class_mask": 512
+        },
+        {
+          "item_id": 53191,
+          "quantity": 1,
+          "class_mask": 1024
+        },
+        {
+          "item_id": 53198,
+          "quantity": 1,
+          "class_mask": 2048
+        },
+        {
+          "item_id": 53205,
+          "quantity": 1,
+          "class_mask": 4096
+        },
+        {
+          "item_id": 53212,
+          "quantity": 1,
+          "class_mask": 8192
+        },
+        {
+          "item_id": 53219,
+          "quantity": 1,
+          "class_mask": 16384
+        },
+        {
+          "item_id": 53226,
+          "quantity": 1,
+          "class_mask": 32768
+        }
+      ],
+      "missing_dependencies": [],
+      "selected_level_provenance": "40 best-supported original family gate; rewards require45 independently. Spider header47 conflicts original level40 completion signature.",
+      "offer_exclusions": []
+    },
+    {
+      "id": 3040425,
+      "title": "Madu Needs More Supplies",
+      "giver": 397007,
+      "achievement_id": 500040600,
+      "component_id": 50147,
+      "min_level": 40,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Low Quality Wolf Skin",
+          "goalcount": 5,
+          "item_ids": [
+            13753
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Medium Quality Wolf Skin",
+          "goalcount": 3,
+          "item_ids": [
+            13754
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Low Quality Bear Skin",
+          "goalcount": 5,
+          "item_ids": [
+            13750
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Medium Quality Bear Skin",
+          "goalcount": 3,
+          "item_ids": [
+            13751
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Snake Skin",
+          "goalcount": 5,
+          "item_ids": [
+            88121
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 4
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Snake Fang",
+          "goalcount": 3,
+          "item_ids": [
+            13067
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 5
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Spider Silk",
+          "goalcount": 5,
+          "item_ids": [
+            13041
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 6
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Spider Legs",
+          "goalcount": 3,
+          "item_ids": [
+            13417
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 7
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Low Quality Wolf Skin to Scout Madu",
+          "goalcount": 5,
+          "item_ids": [
+            13753
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 8
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Medium Quality Wolf Skin to Scout Madu",
+          "goalcount": 3,
+          "item_ids": [
+            13754
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 9
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Low Quality Bear Skin to Scout Madu",
+          "goalcount": 5,
+          "item_ids": [
+            13750
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 10
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Medium Quality Bear Skin to Scout Madu",
+          "goalcount": 3,
+          "item_ids": [
+            13751
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 11
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Snake Skin to Scout Madu",
+          "goalcount": 5,
+          "item_ids": [
+            88121
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 12
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Snake Fang to Scout Madu",
+          "goalcount": 3,
+          "item_ids": [
+            13067
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 13
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Spider Silk to Scout Madu",
+          "goalcount": 5,
+          "item_ids": [
+            13041
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 14
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Spider Legs to Scout Madu",
+          "goalcount": 3,
+          "item_ids": [
+            13417
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 15
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3664",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [
+        {
+          "item_id": 53122,
+          "quantity": 1,
+          "class_mask": 1
+        },
+        {
+          "item_id": 53129,
+          "quantity": 1,
+          "class_mask": 2
+        },
+        {
+          "item_id": 53136,
+          "quantity": 1,
+          "class_mask": 4
+        },
+        {
+          "item_id": 53143,
+          "quantity": 1,
+          "class_mask": 8
+        },
+        {
+          "item_id": 53150,
+          "quantity": 1,
+          "class_mask": 16
+        },
+        {
+          "item_id": 53157,
+          "quantity": 1,
+          "class_mask": 32
+        },
+        {
+          "item_id": 53164,
+          "quantity": 1,
+          "class_mask": 64
+        },
+        {
+          "item_id": 53171,
+          "quantity": 1,
+          "class_mask": 128
+        },
+        {
+          "item_id": 53178,
+          "quantity": 1,
+          "class_mask": 256
+        },
+        {
+          "item_id": 53185,
+          "quantity": 1,
+          "class_mask": 512
+        },
+        {
+          "item_id": 53192,
+          "quantity": 1,
+          "class_mask": 1024
+        },
+        {
+          "item_id": 53199,
+          "quantity": 1,
+          "class_mask": 2048
+        },
+        {
+          "item_id": 53206,
+          "quantity": 1,
+          "class_mask": 4096
+        },
+        {
+          "item_id": 53213,
+          "quantity": 1,
+          "class_mask": 8192
+        },
+        {
+          "item_id": 53220,
+          "quantity": 1,
+          "class_mask": 16384
+        },
+        {
+          "item_id": 53227,
+          "quantity": 1,
+          "class_mask": 32768
+        }
+      ],
+      "missing_dependencies": [],
+      "selected_level_provenance": "40 best-supported original family gate; rewards require45 independently. Spider header47 conflicts original level40 completion signature.",
+      "offer_exclusions": [
+        3040421,
+        3040422,
+        3040423,
+        3040424
+      ]
+    },
+    {
+      "id": 3040426,
+      "title": "Kill Fantoma",
+      "giver": 397007,
+      "achievement_id": 500040600,
+      "component_id": 50148,
+      "min_level": 40,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Fantoma: slay the required creatures",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397904
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Fantoma's Pelt",
+          "goalcount": 1,
+          "item_ids": [
+            88127
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Fantoma's Pelt to Scout Madu",
+          "goalcount": 1,
+          "item_ids": [
+            88127
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 2
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3637",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [
+        {
+          "item_id": 53127,
+          "quantity": 1,
+          "class_mask": 1
+        },
+        {
+          "item_id": 53134,
+          "quantity": 1,
+          "class_mask": 2
+        },
+        {
+          "item_id": 53141,
+          "quantity": 1,
+          "class_mask": 4
+        },
+        {
+          "item_id": 53148,
+          "quantity": 1,
+          "class_mask": 8
+        },
+        {
+          "item_id": 53155,
+          "quantity": 1,
+          "class_mask": 16
+        },
+        {
+          "item_id": 53162,
+          "quantity": 1,
+          "class_mask": 32
+        },
+        {
+          "item_id": 53169,
+          "quantity": 1,
+          "class_mask": 64
+        },
+        {
+          "item_id": 53176,
+          "quantity": 1,
+          "class_mask": 128
+        },
+        {
+          "item_id": 53183,
+          "quantity": 1,
+          "class_mask": 256
+        },
+        {
+          "item_id": 53190,
+          "quantity": 1,
+          "class_mask": 512
+        },
+        {
+          "item_id": 53197,
+          "quantity": 1,
+          "class_mask": 1024
+        },
+        {
+          "item_id": 53204,
+          "quantity": 1,
+          "class_mask": 2048
+        },
+        {
+          "item_id": 53211,
+          "quantity": 1,
+          "class_mask": 4096
+        },
+        {
+          "item_id": 53218,
+          "quantity": 1,
+          "class_mask": 8192
+        },
+        {
+          "item_id": 53225,
+          "quantity": 1,
+          "class_mask": 16384
+        },
+        {
+          "item_id": 53232,
+          "quantity": 1,
+          "class_mask": 32768
+        }
+      ],
+      "missing_dependencies": [],
+      "selected_level_provenance": "40 best-supported original family gate; rewards require45 independently. Spider header47 conflicts original level40 completion signature.",
+      "offer_exclusions": []
+    },
+    {
+      "id": 3040427,
+      "title": "Kill Ursalua",
+      "giver": 397007,
+      "achievement_id": 500040600,
+      "component_id": 50149,
+      "min_level": 40,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Ursalua: slay the required creatures",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397073
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Loot Ursalua's Pelt",
+          "goalcount": 1,
+          "item_ids": [
+            88128
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Ursalua's Pelt to Scout Madu",
+          "goalcount": 1,
+          "item_ids": [
+            88128
+          ],
+          "npc_ids": [
+            397007
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 2
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3623",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [
+        {
+          "item_id": 53126,
+          "quantity": 1,
+          "class_mask": 1
+        },
+        {
+          "item_id": 53133,
+          "quantity": 1,
+          "class_mask": 2
+        },
+        {
+          "item_id": 53140,
+          "quantity": 1,
+          "class_mask": 4
+        },
+        {
+          "item_id": 53147,
+          "quantity": 1,
+          "class_mask": 8
+        },
+        {
+          "item_id": 53154,
+          "quantity": 1,
+          "class_mask": 16
+        },
+        {
+          "item_id": 53161,
+          "quantity": 1,
+          "class_mask": 32
+        },
+        {
+          "item_id": 53168,
+          "quantity": 1,
+          "class_mask": 64
+        },
+        {
+          "item_id": 53175,
+          "quantity": 1,
+          "class_mask": 128
+        },
+        {
+          "item_id": 53182,
+          "quantity": 1,
+          "class_mask": 256
+        },
+        {
+          "item_id": 53189,
+          "quantity": 1,
+          "class_mask": 512
+        },
+        {
+          "item_id": 53196,
+          "quantity": 1,
+          "class_mask": 1024
+        },
+        {
+          "item_id": 53203,
+          "quantity": 1,
+          "class_mask": 2048
+        },
+        {
+          "item_id": 53210,
+          "quantity": 1,
+          "class_mask": 4096
+        },
+        {
+          "item_id": 53217,
+          "quantity": 1,
+          "class_mask": 8192
+        },
+        {
+          "item_id": 53224,
+          "quantity": 1,
+          "class_mask": 16384
+        },
+        {
+          "item_id": 53231,
+          "quantity": 1,
+          "class_mask": 32768
+        }
+      ],
+      "missing_dependencies": [],
+      "selected_level_provenance": "40 best-supported original family gate; rewards require45 independently. Spider header47 conflicts original level40 completion signature.",
+      "offer_exclusions": []
+    },
+    {
+      "id": 3040428,
+      "title": "Pluck It!",
+      "giver": 397043,
+      "achievement_id": 500040400,
+      "component_id": 50126,
+      "min_level": 45,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Collect Sleek Griffon Feather",
+          "goalcount": 8,
+          "item_ids": [
+            57015
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 4,
+          "kind": "speak",
+          "description": "Hail Marilena at the Windwillow",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397043
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 1
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/4201",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "minimum_faction": "Indifferent maximum disposition: dated Apr10,2012 successful request supersedes undated Kindly header; old2009 rejection retained as historical conflict"
+    },
+    {
+      "id": 3040429,
+      "title": "Harpy Horrors",
+      "giver": 397043,
+      "achievement_id": 500040400,
+      "component_id": 50127,
+      "min_level": 45,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 3,
+          "kind": "loot",
+          "description": "Collect Harpy Plume",
+          "goalcount": 8,
+          "item_ids": [
+            57016
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 4,
+          "kind": "speak",
+          "description": "Hail Marilena at the Windwillow",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397043
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 1
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/4891",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "minimum_faction": "Indifferent maximum disposition: dated Apr10,2012 successful request supersedes undated Kindly header; old2009 rejection retained as historical conflict"
+    },
+    {
+      "id": 3040430,
+      "title": "Vermin Elimination",
+      "giver": 397097,
+      "achievement_id": 500040400,
+      "component_id": 50132,
+      "min_level": 40,
+      "repeatable": true,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Wolves",
+          "goalcount": 4,
+          "item_ids": [],
+          "npc_ids": [
+            397001,
+            397002,
+            397004,
+            397035
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Bears",
+          "goalcount": 4,
+          "item_ids": [],
+          "npc_ids": [
+            397005,
+            397015,
+            397020
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Diamondback snakes",
+          "goalcount": 4,
+          "item_ids": [],
+          "npc_ids": [
+            397016,
+            397017,
+            397018
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Earthen ooze",
+          "goalcount": 4,
+          "item_ids": [],
+          "npc_ids": [
+            397144,
+            397154,
+            397156,
+            397166
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 4,
+          "kind": "speak",
+          "description": "Hail Laurentiu at the Minohten camp",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397097
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 4
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3819",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "maximum_level": 0,
+      "level_provenance": "Original header minimum selected with provenance; obsolete upper gates removed by April11,2012 update"
+    },
+    {
+      "id": 3040431,
+      "title": "Birds of a Feather",
+      "giver": 397097,
+      "achievement_id": 500040400,
+      "component_id": 50133,
+      "min_level": 45,
+      "repeatable": false,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Griffons",
+          "goalcount": 12,
+          "item_ids": [],
+          "npc_ids": [
+            397241,
+            397245,
+            397261,
+            397266,
+            397267
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 4,
+          "kind": "speak",
+          "description": "Hail Laurentiu at the Minohten camp",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397097
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 1
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3822",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "maximum_level": 0,
+      "level_provenance": "Original header minimum selected with provenance; obsolete upper gates removed by April11,2012 update"
+    },
+    {
+      "id": 3040432,
+      "title": "Harping on Harpies",
+      "giver": 397097,
+      "achievement_id": 500040400,
+      "component_id": 50134,
+      "min_level": 45,
+      "repeatable": false,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Harpies",
+          "goalcount": 12,
+          "item_ids": [],
+          "npc_ids": [
+            397248,
+            397252,
+            397254,
+            397256,
+            397257,
+            397260,
+            397264,
+            397269,
+            397270,
+            397271,
+            397273,
+            397274
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 4,
+          "kind": "speak",
+          "description": "Hail Laurentiu at the Minohten camp",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397097
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 1
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3833",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "maximum_level": 0,
+      "level_provenance": "Original header minimum selected with provenance; obsolete upper gates removed by April11,2012 update"
+    },
+    {
+      "id": 3040433,
+      "title": "Dromrek Must Die",
+      "giver": 397097,
+      "achievement_id": 500040400,
+      "component_id": 50135,
+      "min_level": 50,
+      "repeatable": false,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Dromrek",
+          "goalcount": 12,
+          "item_ids": [],
+          "npc_ids": [
+            397155,
+            397163,
+            397164,
+            397167,
+            397171,
+            397175,
+            397177,
+            397187,
+            397189,
+            397190,
+            397194,
+            397197,
+            397198,
+            397209,
+            397217,
+            397223,
+            397249
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 4,
+          "kind": "speak",
+          "description": "Hail Laurentiu at the Minohten camp",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397097
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 1
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3820",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "maximum_level": 0,
+      "level_provenance": "Original header minimum selected with provenance; obsolete upper gates removed by April11,2012 update"
+    },
+    {
+      "id": 3040434,
+      "title": "Cleanse Serpent's Falls",
+      "giver": 397097,
+      "achievement_id": 500040400,
+      "component_id": 50136,
+      "min_level": 53,
+      "repeatable": false,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 2,
+          "kind": "kill",
+          "description": "Kill Waterfall potameids",
+          "goalcount": 12,
+          "item_ids": [],
+          "npc_ids": [
+            397233,
+            397236,
+            397237,
+            397238,
+            397240,
+            397242,
+            397244,
+            397258,
+            397262
+          ],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 4,
+          "kind": "speak",
+          "description": "Hail Laurentiu at the Minohten camp",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397097
+          ],
+          "step": 2,
+          "zone": 397,
+          "activityid": 1
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3832",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "maximum_level": 0,
+      "level_provenance": "Original header minimum selected with provenance; obsolete upper gates removed by April11,2012 update"
+    },
+    {
+      "id": 3040435,
+      "title": "Tudor's Beer",
+      "giver": 397096,
+      "achievement_id": 500040400,
+      "component_id": 50128,
+      "min_level": 40,
+      "repeatable": false,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Fresh Mesa Streamwater",
+          "goalcount": 1,
+          "item_ids": [
+            87151
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Hops",
+          "goalcount": 1,
+          "item_ids": [
+            16591
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Indigenous Mesa Yeast",
+          "goalcount": 1,
+          "item_ids": [
+            87154
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Malt",
+          "goalcount": 1,
+          "item_ids": [
+            16595
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 6,
+          "kind": "craft",
+          "description": "Create Liviu's Dark Stout",
+          "goalcount": 1,
+          "item_ids": [
+            87167
+          ],
+          "npc_ids": [],
+          "step": 2,
+          "zone": 0,
+          "activityid": 4
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Liviu's Dark Stout to Tudor",
+          "goalcount": 1,
+          "item_ids": [
+            87167
+          ],
+          "npc_ids": [
+            397096
+          ],
+          "step": 3,
+          "zone": 397,
+          "activityid": 5
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3806",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "missing_dependencies": [],
+      "craft_alternative": {
+        "npc_id": 397093,
+        "input_items": [
+          {
+            "item_id": 87151,
+            "quantity": 1
+          },
+          {
+            "item_id": 16591,
+            "quantity": 1
+          },
+          {
+            "item_id": 87154,
+            "quantity": 1
+          },
+          {
+            "item_id": 16595,
+            "quantity": 1
+          }
+        ],
+        "output": 87167,
+        "fee_copper": 0,
+        "source": "Aug11,2012 firsthand allfour Liviu conversion; exclude 2020 Nicoli rewrite"
+      }
+    },
+    {
+      "id": 3040436,
+      "title": "Tudor's Ale",
+      "giver": 397096,
+      "achievement_id": 500040400,
+      "component_id": 50129,
+      "min_level": 40,
+      "repeatable": false,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Barley",
+          "goalcount": 1,
+          "item_ids": [
+            16590
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Hops",
+          "goalcount": 1,
+          "item_ids": [
+            16591
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Worn Cask",
+          "goalcount": 1,
+          "item_ids": [
+            87157
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Rawhide Canteen",
+          "goalcount": 1,
+          "item_ids": [
+            87158
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 6,
+          "kind": "craft",
+          "description": "Create Liviu's Finest Brew",
+          "goalcount": 1,
+          "item_ids": [
+            87168
+          ],
+          "npc_ids": [],
+          "step": 2,
+          "zone": 0,
+          "activityid": 4
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Liviu's Finest Brew to Tudor",
+          "goalcount": 1,
+          "item_ids": [
+            87168
+          ],
+          "npc_ids": [
+            397096
+          ],
+          "step": 3,
+          "zone": 397,
+          "activityid": 5
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3807",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "missing_dependencies": [],
+      "craft_alternative": {
+        "npc_id": 397093,
+        "input_items": [
+          {
+            "item_id": 16590,
+            "quantity": 1
+          },
+          {
+            "item_id": 16591,
+            "quantity": 1
+          },
+          {
+            "item_id": 87157,
+            "quantity": 1
+          },
+          {
+            "item_id": 87158,
+            "quantity": 1
+          }
+        ],
+        "output": 87168,
+        "fee_copper": 0,
+        "source": "Aug11,2012 firsthand allfour Liviu conversion; exclude 2020 Nicoli rewrite"
+      }
+    },
+    {
+      "id": 3040437,
+      "title": "Tudor's Wine",
+      "giver": 397096,
+      "achievement_id": 500040400,
+      "component_id": 50130,
+      "min_level": 40,
+      "repeatable": false,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Bottle",
+          "goalcount": 1,
+          "item_ids": [
+            16598
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Dromrek Barbera Grapes",
+          "goalcount": 1,
+          "item_ids": [
+            87162
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Griffon Feather Spores",
+          "goalcount": 1,
+          "item_ids": [
+            87161
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Water Flask",
+          "goalcount": 1,
+          "item_ids": [
+            13006
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 6,
+          "kind": "craft",
+          "description": "Create Tudor's Aged Merlot",
+          "goalcount": 1,
+          "item_ids": [
+            87169
+          ],
+          "npc_ids": [],
+          "step": 2,
+          "zone": 0,
+          "activityid": 4
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Tudor's Aged Merlot to Tudor",
+          "goalcount": 1,
+          "item_ids": [
+            87169
+          ],
+          "npc_ids": [
+            397096
+          ],
+          "step": 3,
+          "zone": 397,
+          "activityid": 5
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3805",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "missing_dependencies": [],
+      "craft_alternative": {
+        "npc_id": 397093,
+        "input_items": [
+          {
+            "item_id": 16598,
+            "quantity": 1
+          },
+          {
+            "item_id": 87162,
+            "quantity": 1
+          },
+          {
+            "item_id": 87161,
+            "quantity": 1
+          },
+          {
+            "item_id": 13006,
+            "quantity": 1
+          }
+        ],
+        "output": 87169,
+        "fee_copper": 0,
+        "source": "Aug11,2012 firsthand allfour Liviu conversion; exclude 2020 Nicoli rewrite"
+      }
+    },
+    {
+      "id": 3040438,
+      "title": "Tudor's Spirits",
+      "giver": 397096,
+      "achievement_id": 500040400,
+      "component_id": 50131,
+      "min_level": 40,
+      "repeatable": false,
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; original exact XP unrecovered",
+      "faction_reward": 0,
+      "faction_provenance": "Direction known; numeric original amounts unverified; no invented faction amount",
+      "activities": [
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Flask of Mesa Stormwater",
+          "goalcount": 1,
+          "item_ids": [
+            87166
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 0
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Goru`kar Oakwood Barrel",
+          "goalcount": 1,
+          "item_ids": [
+            87165
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 1
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Lingering Dryad Skull",
+          "goalcount": 1,
+          "item_ids": [
+            87164
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 2
+        },
+        {
+          "activitytype": 255,
+          "kind": "scene",
+          "description": "Gather Tanglewood Seed Pod",
+          "goalcount": 1,
+          "item_ids": [
+            87163
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "activityid": 3
+        },
+        {
+          "activitytype": 6,
+          "kind": "craft",
+          "description": "Create Tudor's Stormwater Whiskey",
+          "goalcount": 1,
+          "item_ids": [
+            87170
+          ],
+          "npc_ids": [],
+          "step": 2,
+          "zone": 0,
+          "activityid": 4
+        },
+        {
+          "activitytype": 1,
+          "kind": "deliver",
+          "description": "Deliver Tudor's Stormwater Whiskey to Tudor",
+          "goalcount": 1,
+          "item_ids": [
+            87170
+          ],
+          "npc_ids": [
+            397096
+          ],
+          "step": 3,
+          "zone": 397,
+          "activityid": 5
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3804",
+      "status": "Implemented; exact native coverage in native-status.json",
+      "prerequisites": [],
+      "reward_choice_items": [],
+      "missing_dependencies": [],
+      "craft_alternative": {
+        "npc_id": 397093,
+        "input_items": [
+          {
+            "item_id": 87166,
+            "quantity": 1
+          },
+          {
+            "item_id": 87165,
+            "quantity": 1
+          },
+          {
+            "item_id": 87164,
+            "quantity": 1
+          },
+          {
+            "item_id": 87163,
+            "quantity": 1
+          }
+        ],
+        "output": 87170,
+        "fee_copper": 0,
+        "source": "Aug11,2012 firsthand allfour Liviu conversion; exclude 2020 Nicoli rewrite"
+      }
+    }
+  ],
+  "recipes": [
+    {
+      "id": 3041001,
+      "name": "Liviu's Dark Stout",
+      "tradeskill": 65,
+      "trivial": 172,
+      "output": 87167,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 87151,
+          "quantity": 1
+        },
+        {
+          "item_id": 16591,
+          "quantity": 1
+        },
+        {
+          "item_id": 87154,
+          "quantity": 1
+        },
+        {
+          "item_id": 16595,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041002,
+      "name": "Liviu's Finest Brew",
+      "tradeskill": 65,
+      "trivial": 210,
+      "output": 87168,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 16590,
+          "quantity": 1
+        },
+        {
+          "item_id": 16591,
+          "quantity": 1
+        },
+        {
+          "item_id": 87157,
+          "quantity": 1
+        },
+        {
+          "item_id": 87158,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041003,
+      "name": "Tudor's Aged Merlot",
+      "tradeskill": 65,
+      "trivial": 250,
+      "output": 87169,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 16598,
+          "quantity": 1
+        },
+        {
+          "item_id": 87162,
+          "quantity": 1
+        },
+        {
+          "item_id": 87161,
+          "quantity": 1
+        },
+        {
+          "item_id": 13006,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": [
+        {
+          "item_id": 16598,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 3041004,
+      "name": "Tudor's Stormwater Whiskey",
+      "tradeskill": 65,
+      "trivial": 290,
+      "output": 87170,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 87166,
+          "quantity": 1
+        },
+        {
+          "item_id": 87165,
+          "quantity": 1
+        },
+        {
+          "item_id": 87164,
+          "quantity": 1
+        },
+        {
+          "item_id": 87163,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041005,
+      "name": "Glowing Green Silver",
+      "tradeskill": 68,
+      "trivial": 190,
+      "output": 97740,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97233,
+          "quantity": 1
+        },
+        {
+          "item_id": 10300,
+          "quantity": 1
+        },
+        {
+          "item_id": 97231,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041006,
+      "name": "Glowing Emerald Pendant",
+      "tradeskill": 68,
+      "trivial": 190,
+      "output": 97739,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97740,
+          "quantity": 1
+        },
+        {
+          "item_id": 10029,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041007,
+      "name": "Spider Silk Filter",
+      "tradeskill": 61,
+      "trivial": 190,
+      "output": 97745,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 9650,
+          "quantity": 1
+        },
+        {
+          "item_id": 97230,
+          "quantity": 1
+        },
+        {
+          "item_id": 13041,
+          "quantity": 2
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041008,
+      "name": "Chilled Pure Water",
+      "tradeskill": 65,
+      "trivial": 190,
+      "output": 97728,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97735,
+          "quantity": 1
+        },
+        {
+          "item_id": 97742,
+          "quantity": 1
+        },
+        {
+          "item_id": 97745,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": [
+        {
+          "item_id": 97735,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 3041009,
+      "name": "Spiced Wind Willow Acorns",
+      "tradeskill": 60,
+      "trivial": 190,
+      "output": 97744,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 29742,
+          "quantity": 1
+        },
+        {
+          "item_id": 97228,
+          "quantity": 1
+        },
+        {
+          "item_id": 58280,
+          "quantity": 1
+        },
+        {
+          "item_id": 13425,
+          "quantity": 1
+        },
+        {
+          "item_id": 97236,
+          "quantity": 4
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041010,
+      "name": "Forest Green Silk Swatch",
+      "tradeskill": 61,
+      "trivial": 190,
+      "output": 97738,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 22104,
+          "quantity": 1
+        },
+        {
+          "item_id": 16482,
+          "quantity": 2
+        },
+        {
+          "item_id": 16486,
+          "quantity": 2
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041011,
+      "name": "Shimmering Dryad Dress",
+      "tradeskill": 61,
+      "trivial": 190,
+      "output": 97743,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97738,
+          "quantity": 1
+        },
+        {
+          "item_id": 97230,
+          "quantity": 1
+        },
+        {
+          "item_id": 88121,
+          "quantity": 4
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041012,
+      "name": "Envenomed Steel",
+      "tradeskill": 63,
+      "trivial": 190,
+      "output": 97733,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97228,
+          "quantity": 1
+        },
+        {
+          "item_id": 97234,
+          "quantity": 1
+        },
+        {
+          "item_id": 10468,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041013,
+      "name": "Envenomed Steel Blade",
+      "tradeskill": 63,
+      "trivial": 190,
+      "output": 97734,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97733,
+          "quantity": 1
+        },
+        {
+          "item_id": 22075,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041014,
+      "name": "Envenomed Athame",
+      "tradeskill": 63,
+      "trivial": 190,
+      "output": 97732,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97734,
+          "quantity": 1
+        },
+        {
+          "item_id": 97229,
+          "quantity": 2
+        },
+        {
+          "item_id": 88121,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041015,
+      "name": "Fine White Clay",
+      "tradeskill": 69,
+      "trivial": 190,
+      "output": 97737,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97228,
+          "quantity": 1
+        },
+        {
+          "item_id": 97230,
+          "quantity": 1
+        },
+        {
+          "item_id": 51850,
+          "quantity": 8
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041016,
+      "name": "Unfired Fine Green Perfume Bottle",
+      "tradeskill": 69,
+      "trivial": 190,
+      "output": 97746,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97194,
+          "quantity": 1
+        },
+        {
+          "item_id": 97753,
+          "quantity": 1
+        },
+        {
+          "item_id": 97737,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041017,
+      "name": "Fine Green Perfume Bottle",
+      "tradeskill": 69,
+      "trivial": 190,
+      "output": 97736,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 29355,
+          "quantity": 1
+        },
+        {
+          "item_id": 16908,
+          "quantity": 1
+        },
+        {
+          "item_id": 97746,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041018,
+      "name": "Ciodaru's Gift Box Parts",
+      "tradeskill": 64,
+      "trivial": 190,
+      "output": 97731,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97237,
+          "quantity": 6
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041019,
+      "name": "Petrified Spider Eyes",
+      "tradeskill": 68,
+      "trivial": 190,
+      "output": 97741,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97228,
+          "quantity": 1
+        },
+        {
+          "item_id": 97235,
+          "quantity": 2
+        }
+      ],
+      "nofail": false,
+      "failure_returns": [],
+      "source": "https://www.eqtraders.com/items/show_item.php?item=27037"
+    },
+    {
+      "id": 3041020,
+      "name": "Ciodaru's Gift Box",
+      "tradeskill": 64,
+      "trivial": 190,
+      "output": 97729,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97731,
+          "quantity": 1
+        },
+        {
+          "item_id": 97229,
+          "quantity": 4
+        },
+        {
+          "item_id": 97741,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041021,
+      "name": "Ciodaru's Gift Box (sealed)",
+      "tradeskill": 75,
+      "trivial": 0,
+      "output": 97730,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 97728,
+          "quantity": 1
+        },
+        {
+          "item_id": 97747,
+          "quantity": 1
+        },
+        {
+          "item_id": 97732,
+          "quantity": 1
+        },
+        {
+          "item_id": 97739,
+          "quantity": 1
+        },
+        {
+          "item_id": 97743,
+          "quantity": 1
+        },
+        {
+          "item_id": 97744,
+          "quantity": 1
+        }
+      ],
+      "nofail": true,
+      "failure_returns": [],
+      "required_container_item": 97729
+    },
+    {
+      "id": 3041022,
+      "name": "Spider Silk Thread",
+      "tradeskill": 61,
+      "trivial": 50,
+      "output": 88117,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 13041,
+          "quantity": 8
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041023,
+      "name": "Spool of Spider Silk Thread",
+      "tradeskill": 61,
+      "trivial": 50,
+      "output": 88118,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 88113,
+          "quantity": 1
+        },
+        {
+          "item_id": 88117,
+          "quantity": 3
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    },
+    {
+      "id": 3041024,
+      "name": "Wolf Canine Bead",
+      "tradeskill": 61,
+      "trivial": 50,
+      "output": 88146,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 10064,
+          "quantity": 1
+        },
+        {
+          "item_id": 88114,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": [
+        {
+          "item_id": 10064,
+          "quantity": 1
+        }
+      ],
+      "success_returns": [
+        {
+          "item_id": 10064,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 3041025,
+      "name": "Snake Fang Bead",
+      "tradeskill": 61,
+      "trivial": 50,
+      "output": 88147,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 10064,
+          "quantity": 1
+        },
+        {
+          "item_id": 97229,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": [
+        {
+          "item_id": 10064,
+          "quantity": 1
+        }
+      ],
+      "success_returns": [
+        {
+          "item_id": 10064,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "id": 3041026,
+      "name": "String of Teeth",
+      "tradeskill": 61,
+      "trivial": 92,
+      "output": 88148,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 88147,
+          "quantity": 5
+        },
+        {
+          "item_id": 88117,
+          "quantity": 1
+        },
+        {
+          "item_id": 88146,
+          "quantity": 4
+        }
+      ],
+      "nofail": false,
+      "failure_returns": [],
+      "container_restriction": "10-slot Deluxe Sewing Kit or stationary Loom; exact named-container restriction preserved"
+    },
+    {
+      "id": 3041027,
+      "name": "Folded Silkfang Pack",
+      "tradeskill": 61,
+      "trivial": 170,
+      "output": 88112,
+      "output_count": 1,
+      "components": [
+        {
+          "item_id": 12089,
+          "quantity": 1
+        },
+        {
+          "item_id": 88118,
+          "quantity": 1
+        },
+        {
+          "item_id": 88148,
+          "quantity": 1
+        },
+        {
+          "item_id": 88115,
+          "quantity": 1
+        }
+      ],
+      "nofail": false,
+      "failure_returns": []
+    }
+  ],
+  "remaining_love_chains": {
+    "Ciodaru": 12,
+    "Dorina": 6
+  },
+  "research_ledger": "See scene settings, parent-rewards.json, historical source URLs in each task and native-status.json"
+}

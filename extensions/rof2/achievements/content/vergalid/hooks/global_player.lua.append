@@ -1,0 +1,46 @@
+-- Preserve earlier player callbacks and their vetoes.
+local vergalid_previous_enter_zone=event_enter_zone
+function event_enter_zone(e)
+ if vergalid_previous_enter_zone then local r=vergalid_previous_enter_zone(e);if r and r~=0 then return r end end
+ return require('achievement_quest_vergalid').resume(e)
+end
+local vergalid_previous_task_accepted=event_task_accepted
+function event_task_accepted(e)
+ if vergalid_previous_task_accepted then local r=vergalid_previous_task_accepted(e);if r and r~=0 then return r end end
+ return require('achievement_quest_vergalid').resume(e)
+end
+local vergalid_previous_task_update=event_task_update
+function event_task_update(e)
+ if vergalid_previous_task_update then local r=vergalid_previous_task_update(e);if r and r~=0 then return r end end
+ return require('achievement_quest_vergalid').resume(e)
+end
+local vergalid_previous_task_stage_complete=event_task_stage_complete
+function event_task_stage_complete(e)
+ if vergalid_previous_task_stage_complete then local r=vergalid_previous_task_stage_complete(e);if r and r~=0 then return r end end
+ return require('achievement_quest_vergalid').resume(e)
+end
+local vergalid_previous_task_complete=event_task_complete
+function event_task_complete(e)
+ if vergalid_previous_task_complete then local r=vergalid_previous_task_complete(e);if r and r~=0 then return r end end
+ return require('achievement_quest_vergalid').resume(e)
+end
+local vergalid_previous_task_fail=event_task_fail
+function event_task_fail(e)
+ if vergalid_previous_task_fail then local r=vergalid_previous_task_fail(e);if r and r~=0 then return r end end
+ return require('achievement_quest_vergalid').resume(e)
+end
+local vergalid_previous_timer=event_timer
+function event_timer(e)
+ if require('achievement_quest_vergalid').timer(e)then return end
+ if vergalid_previous_timer then return vergalid_previous_timer(e)end
+end
+local vergalid_previous_cast=event_cast
+function event_cast(e)
+ if vergalid_previous_cast then local r=vergalid_previous_cast(e);if r and r~=0 then return r end end
+ return require('vergalid_inner_access').cast(e)
+end
+local vergalid_previous_click_door=event_click_door
+function event_click_door(e)
+ if vergalid_previous_click_door then local r=vergalid_previous_click_door(e);if r and r~=0 then return r end end
+ return require('vergalid_inner_access').click(e)
+end

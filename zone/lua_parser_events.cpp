@@ -953,6 +953,14 @@ void handle_player_cast(
 	lua_pushinteger(L, Strings::ToUnsignedInt(sep.arg[3]));
 	lua_setfield(L, -2, "target_id");
 
+	// Optional trailing fields supplied only by successful CastedSpellFinished.
+	lua_pushinteger(L, Strings::ToUnsignedInt(sep.arg[4]));
+	lua_setfield(L, -2, "cast_item_id");
+	lua_pushinteger(L, sep.arg[5][0] ? Strings::ToInt(sep.arg[5]) : -1);
+	lua_setfield(L, -2, "cast_item_slot");
+	lua_pushboolean(L, Strings::ToInt(sep.arg[6]) != 0);
+	lua_setfield(L, -2, "cast_item_charge_consumed");
+
 	if (extra_pointers && extra_pointers->size() == 1) {
 		Lua_Mob l_mob(std::any_cast<Mob*>(extra_pointers->at(0)));
 		luabind::adl::object l_mob_o = luabind::adl::object(L, l_mob);

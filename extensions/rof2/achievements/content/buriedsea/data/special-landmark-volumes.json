@@ -1,0 +1,130 @@
+{
+  "mesh_sha256": "fc4e4a292aa4107cb912202e8592ace71bfb8150efdc90a1270d88977cc4f90b",
+  "state": "staged; native acceptance pending",
+  "points": {
+    "silver_sail": {
+      "xyz": [
+        -3297,
+        3343,
+        300
+      ],
+      "source_quest": 4074,
+      "source_url": "https://www.thesilentminority.net/characters/questshow.php?ID=1052&QuestID=69",
+      "source_note": "First-person guide explicitly names this wreck and /loc; publication date not recovered. Period2008 unnamed three-wreck positions corroborate the area, not exact trigger extents.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": -3362,
+        "max_x": -3232,
+        "min_y": 3278,
+        "max_y": 3408,
+        "min_z": 205.71405,
+        "max_z": 341.514038
+      },
+      "mesh_elevations": [
+        240.71405,
+        296.514038
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": false
+    },
+    "sea_spirit": {
+      "xyz": [
+        -3342,
+        4064,
+        300
+      ],
+      "source_quest": 4074,
+      "source_url": "https://www.thesilentminority.net/characters/questshow.php?ID=1052&QuestID=69",
+      "source_note": "Named guide /loc, not a guessed association from the order of unnamed coordinates.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": -3407,
+        "max_x": -3277,
+        "min_y": 3999,
+        "max_y": 4129,
+        "min_z": 215.914001,
+        "max_z": 357.71405
+      },
+      "mesh_elevations": [
+        250.914001,
+        296.428009,
+        312.71405
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": false
+    },
+    "red_storm": {
+      "xyz": [
+        -3893,
+        3283,
+        300
+      ],
+      "source_quest": 4074,
+      "source_url": "https://www.thesilentminority.net/characters/questshow.php?ID=1052&QuestID=69",
+      "source_note": "Named guide /loc; requires native update check with the full batch.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": -3958,
+        "max_x": -3828,
+        "min_y": 3218,
+        "max_y": 3348,
+        "min_z": 224.19741800000003,
+        "max_z": 369.414001
+      },
+      "mesh_elevations": [
+        259.197418,
+        324.414001
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": false
+    },
+    "underwater_flame": {
+      "xyz": [
+        -3980,
+        2860,
+        -530
+      ],
+      "source_quest": 4072,
+      "source_url": "https://everquest.allakhazam.com/db/quest/4072",
+      "source_note": "May2008 entrance /loc Y2860,X-3980; original guide says flame at bottom of very deep vertical pit. Installed map geometry bottoms below-537; mesh-supported bottom floor at-562.145. This volume is near the pit bottom, never the entrance at Z240.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": -4055,
+        "max_x": -3905,
+        "min_y": 2785,
+        "max_y": 2935,
+        "min_z": -590.144653,
+        "max_z": -490.14465299999995
+      },
+      "mesh_elevations": [
+        -562.144653
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": false
+    },
+    "inn_shark_jaws": {
+      "xyz": [
+        2884,
+        -823,
+        311
+      ],
+      "source_quest": 4089,
+      "source_url": "https://everquest.allakhazam.com/db/quest/4089",
+      "source_note": "Period guide requires lower tavern shark-jaw/left-ladder area. Candidate lower-bar footprint is reconstructed from installed inn map and original dockworkers117934/117943/117948. Exact jaws anchor still requires native visual inspection; map-label center alone is not claimed to locate the jaws.",
+      "state": "source_landmark_mesh_supported",
+      "volume": {
+        "min_x": 2863,
+        "max_x": 2920,
+        "min_y": -864,
+        "max_y": -782,
+        "min_z": 303,
+        "max_z": 320
+      },
+      "mesh_elevations": [
+        311.994446
+      ],
+      "volume_policy": "Labelled configurable emulator bounds, not recovered original trigger extents.",
+      "native_visual_verification_required": true
+    }
+  }
+}

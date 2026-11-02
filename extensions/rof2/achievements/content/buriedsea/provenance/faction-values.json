@@ -1,0 +1,28 @@
+{
+  "observed_utc": "2026-11-01T19:21:28.417752+00:00",
+  "source": "https://everquest.allakhazam.com/db/faction/499",
+  "method": "Rendered Chrome faction quest list, matched by exact linked external quest identity",
+  "faction_id": 1169,
+  "external_faction_id": 499,
+  "documented_current_values": {
+    "4040": 5,
+    "4041": 5,
+    "4042": 5,
+    "4043": 5,
+    "4076": 10,
+    "4078": 10,
+    "4079": 10,
+    "4080": 10,
+    "4075": 15,
+    "4091": 15,
+    "4083": 15,
+    "4084": 15,
+    "4085": 15,
+    "4087": 15,
+    "4088": 15,
+    "4089": 15,
+    "4082": 15
+  },
+  "historical_limit": "Numeric values on the current catalogue are researched corroboration, not proof those amounts were identical before May2013. Period archives confirm direction. Never cite current modified dates as original dates.",
+  "missing_values_policy": "User approved clearly labelled configurable defaults unless stronger Chrome evidence is available. Default10 for unspecified ordinary tasks; Monkey5, Redfeather10, Jardel15 match researched family values but remain defaults where not individually documented."
+}

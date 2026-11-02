@@ -1,0 +1,73 @@
+{
+  "cutoff": "2013-05-31",
+  "state": "staged_disabled_not_deployed",
+  "authorization": "User approved labelled configurable missing encounter defaults after Chrome research.",
+  "sources": [
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/24727",
+      "period_observation": "May12,2007 quest spawn yellow to level75; current level76 corroborates a best-supported reconstruction, not an original recovered table."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/25433",
+      "period_observation": "Aug24,2007: actual package delivery triggers three northbound brigands, two humans and one troll; troll drops bill; no see invis, snareable, expire if not engaged."
+    },
+    {
+      "url": "https://web.archive.org/web/20121101090347id_/http://everquest.allakhazam.com/db/quest.html?quest=4079",
+      "period_observation": "May22,2007 six-minute chest respawn; March8,2007 mapped five distinct item positions, corrected Merchant Vessel Trade Routes coordinates Aug10,2007; Oct22,2007 /open."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4082",
+      "period_observation": "Original archived guide/comments: carried bucket automatically consumed at beach while visible, random spawn per dump, cannot dump engaged, return Bill for another bucket; original HP/chance/lifetime not recovered."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4085",
+      "period_observation": "Original guide supplies package and requires real Bill of Sale delivery; period report one level75 and two level70-74 enemies."
+    }
+  ],
+  "known_mechanics": [
+    "No bucket click effect invented; item88244 requires carried personal/cursor custody, not bank custody.",
+    "Each physical dump credits one manual objective; native kill owns the coralisk objective.",
+    "Four chances, not a guaranteed fourth spawn. Cancelling/reaccepting is available if no coralisk appears.",
+    "Confirmed native hand-in of88232 to original Slim422074, then three northbound leased actors.",
+    "Only troll422901 carries one88233; genuine corpse loot/delivery supplies progression.",
+    "Native class62 chest /open/death/corpse/loot; correct quest required."
+  ],
+  "defaults": {
+    "configuration_files": [
+      "quests/lua_modules/buriedsea_scene_rules.lua",
+      "data/encounter-profiles.json"
+    ],
+    "coralisk": {
+      "hp": 45000,
+      "AC": 400,
+      "mindmg": 250,
+      "maxdmg": 1029,
+      "maxdmg_note": "Emulator cap based on a single period damage observation; exact original cap unverified.",
+      "spawn_chance_percent": 50,
+      "idle_lifetime_seconds": 300,
+      "xy_radius": 45,
+      "z_radius": 35
+    },
+    "brigands": {
+      "human_level": 74,
+      "troll_level": 75,
+      "levels_note": "Reconstruction within period observed ranges, not an original recovered encounter distribution.",
+      "human_hp": 30000,
+      "troll_hp": 35000,
+      "other_combat_values": "Configurable defaults in encounter-profiles.json.",
+      "delay_seconds": 3,
+      "idle_lifetime_seconds": 90,
+      "aggro_distance": 80,
+      "arrival_distance": 25,
+      "spawn_positions": "All three originate at a mesh-supported point north of original Slim. Exact original spawn points unknown."
+    }
+  },
+  "release_gates": [
+    "Full installer/activation and batched native acceptance pending.",
+    "Guard existing scripts before installing numeric adapters; preserve or explicitly compose existing callbacks.",
+    "Verify three reserved NPC IDs and existing native supply/drop item dependencies."
+  ],
+  "chest_population_limit": "Existing PEQ supplies six Maiden chests and five Redfeather item chests. Period reports mention about18 possible Maiden points/one at a time and six Redfeather chests. Missing original population/rotation is not claimed recovered. Required known-item routes are staged at existing positions.",
+  "recovery_policy": "Per-character acceptance epochs and persistent leased actors. Ambiguous custody/spawn intent refuses replay; no inferred credit, replacement item or duplicate actor. Cancel/reaccept or explicit audited reconciliation, not automatic state reset.",
+  "protocol": "Uses existing task, trade, corpse and loot paths. No new opcode or packet structure recovered by this content work."
+}

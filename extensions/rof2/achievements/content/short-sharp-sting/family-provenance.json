@@ -1,0 +1,116 @@
+{
+  "scope": "Short Sharp Sting four-quest candidate, not installed or native verified",
+  "cutoff": "2013-05-31",
+  "sources": [
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/23122#msg116468294817087561",
+      "date": "2006-11-27",
+      "facts": [
+        "Buzz assignment through Avellone; prankster at /loc Y30.87 X93.38 Z-51.18.",
+        "The misleading second journal label says talk 0/3."
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/23122#msg120895084262316561",
+      "date": "2008-04-23",
+      "facts": [
+        "Bad faction precedes three copies: two attack immediately and one stays across the room.",
+        "Copy deaths advance the task; next hail makes the original attack; return to Avellone for XP.",
+        "Copies carry negative Legion/Drones and positive Crystalwing hits; original carries none. Exact amounts not supplied."
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/23122#msg120894940759533144",
+      "date": "2008-04-23",
+      "facts": [
+        "Scowling con alone did not suffice; a more negative underlying value was required. Neither threshold nor checked faction ID is specified."
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/3759",
+      "date_status": "Entered 2006; current description last updated2026",
+      "facts": [
+        "Five unrefined honeycomb followed by actual Avellone hand-in; Fertilizing Shovel and XP.",
+        "Current metadata minimum36/repeatable; pre-loot comment dated2013-07-14 is beyond cutoff."
+      ],
+      "uncertainty": "Fresh-loot implementation retained until pre-cutoff pre-loot behavior is established; item equip classes do not prove quest restrictions."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/3588#msg1159101969163646486",
+      "date": "2006-09-24, edited2006-09-29",
+      "facts": [
+        "Prunae /loc Y-36.39 X216.33 Z271.49, Caged Drakkin Y-4.91 X193.16 Z271.24.",
+        "Fresh clue after prisoner dialogue triggered the imposter attack; kill completed quest and offered potion or scroll.",
+        "The report warns that selecting the no-trade scroll is useless for non-enchanters, suggesting the option was not UI-hidden."
+      ],
+      "uncertainty": "The three documented journal goals do not separately list hails; later2011 report mentions Prunae alone. Mandatory hidden dual-hail gating is not invented."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/3588#msg1167784270281283806",
+      "date": "2007-01-02",
+      "facts": [
+        "Potion option gives ten stackable single-charge potions."
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/3588#msg11848194079239954",
+      "date": "2007-07-18",
+      "facts": [
+        "Jokes on You repeatability explicitly reported."
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/3588#msg124687705821224750",
+      "date": "2009-07-06",
+      "facts": [
+        "Nearby slave-hold mobs can drop the clue; named Slavemistress is not mandatory."
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/5563",
+      "date_status": "Entered2012-03-13, current reward list2026; Aug22,2012 comment confirms journal opening",
+      "facts": [
+        "Original four-quest parent identity and journal-opening route corroborated.",
+        "Current list contains the four ornate plate, chain, leather and cloth glove options."
+      ],
+      "uncertainty": "Exact original option visibility and unchanged reward list not independently captured as a2013 packet."
+    },
+    {
+      "url": "https://www.everquest.com/update-notes/eq-update-notes-9-16-26",
+      "date": "2026-09-16",
+      "facts": [
+        "Modern Festering Combs group-drop change deliberately excluded."
+      ]
+    }
+  ],
+  "native_database": {
+    "actors": "Existing Avellone, Prankster, slavemistress, Prunae and Caged Drakkin types and spawn rows preserved. Hizja not present but not required for clue route.",
+    "drops": "Existing weighted honeycomb, journal, pages and clue routes preserved. No guaranteed replacements or modern group drops.",
+    "copy": "Dedicated type396941 inherits original PEQ Prankster level37/stats; no extra loot table. Original copy statistics remain unverified.",
+    "faction_gap": "Original numerical threshold/kill hits remain unrecovered. User-approved labelled faction policy now supplies supported grind routes; see faction-routes.json and faction-policy.json. Source combat/loot/spawn fields and original neutral quest actors remain unchanged."
+  },
+  "defaults_and_choices": {
+    "quest_xp": "Approved1000PEQ XP defaults; Jokes uses common choice-reward XP with task XP0 to avoid duplication.",
+    "minimum_levels": "Buzz37/Festering36/Jokes43 from current task entries, labelled best-supported metadata, not verified2013 minima.",
+    "repeatable": "Jokes confirmed2007; other current metadata choices retain uncertainty.",
+    "exploration": "Boxes encompass original existing Prankster/prisoner coordinates; exact original trigger extents unknown.",
+    "parent_class_filter": "Existing item masks partition all16 classes and are used as labelled server eligibility policy; original UI filtering unverified.",
+    "prankster_configuration": "User-approved configurable defaults: gate Legion1124 raw <=-1500; kill Drones1123 -1, Legion1124 -1, Crystalwing1129 +1. Current faction pages corroborate these amounts on several mobs, but period amounts and checked faction ID are unverified. Three positions reconstructed from native RoF2 floor/navigation survey, not claimed as original coordinates."
+  },
+  "status": {
+    "task_count": 4,
+    "objective_count": 18,
+    "native_verified": true,
+    "active_deployed": true,
+    "ready_for_activation": true,
+    "faction_policy_approved": true,
+    "copy_positions_native_geometry_checked": true,
+    "native_encounter_verified": true
+  },
+  "installer_callback_review": {
+    "native_dispatch": "EventPlayer calls local and global handlers independently; local and global timer names must coexist.",
+    "accepted_moors_callback": "Reviewed50-line official job-board, Bixie-scene, spirit-door and Sunderock composition. It contains only door, enter-zone and prefixed timer handlers; no item/combine callbacks. Exact SHA is required; new/custom changes are not automatically accepted.",
+    "missing_named_actor": "Slavemistress Hizja remains absent; period2006/2009 reports establish other original slave-hold mobs drop the clue, so no invented named spawn is required for this quest."
+  },
+  "native_acceptance_limits": "All four quests and the eligible parent reward completed. QA used GM travel, combat gear, an initial summoned journal and per-instance appended existing-route drops to exercise fresh native loot. Original database loot rates were unchanged; this does not verify natural farming time or historical combat balance."
+}

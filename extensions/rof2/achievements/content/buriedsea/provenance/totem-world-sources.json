@@ -1,0 +1,30 @@
+{
+  "state": "staged_disabled_not_deployed",
+  "sources": [
+    "https://everquest.allakhazam.com/db/npc/25205",
+    "https://everquest.allakhazam.com/db/npc/24766",
+    "https://web.archive.org/web/20121101085732id_/http://everquest.allakhazam.com/db/quest.html?quest=4031"
+  ],
+  "period_facts": [
+    "June2007 firsthand task/loot log: Lutzan drops water piece; Maleko drops fire piece.",
+    "2007-2010 reports: Maleko may replace Tidewater goblins on bridge, in tower, underwater and elsewhere; not one permanent named point.",
+    "2007-2011 reports: Lutzan replaces Sunstone hut/static/roamer goblins; Aug2011 corroborates approximate3percent.",
+    "Feb2008 Maleko noncasting warrior, root/snareable, no summon/enrage/flurry, can quad; single observed max1446 is mitigation-dependent."
+  ],
+  "tidewater_points": 33,
+  "sunstone_points": 34,
+  "existing_lutzan_point": {
+    "spawn_id": 117901,
+    "native_named_group": 79503,
+    "common_npc": 423037,
+    "basis": "Labelled native common placeholder chosen from nearest existing Sunstone spawn, preserving original named spawn position/path/timer."
+  },
+  "geometry_policy": "Preserve every native spawn position/path/timer; rare inherits same existing point and grid. No guessed new spawn coordinates.",
+  "unverified": [
+    "Original exact rare formula/global restrictions; current approximate3percent independently per placeholder is a configurable reconstruction.",
+    "Maleko HP/AC/min/max damage values/drop percentage; original nonquest loot distribution not recovered.",
+    "Current Lutzan9m40 timer comes from2017; do not promote it to May2013. Native timers retained."
+  ],
+  "scope": "New Maleko template and original weighted populations; scoped Lua removes erroneous fire piece only from seven known BuriedSea template instances, never from shared global loot tables. Existing Lutzan nonquest loot and water-piece rate stay intact.",
+  "no_active_changes": true
+}

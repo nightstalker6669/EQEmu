@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-31",
+  "historical_cutoff": "2013-05-31",
+  "native_quests_completed": 17,
+  "native_objective_definition_count": 56,
+  "parent_groups_completed": 4,
+  "native_parent_reward_paths_claimed": 4,
+  "parent_reward_item_entries": 5,
+  "native_class_checked": "Warrior",
+  "native_shared_members_checked": 1,
+  "fresh_login_persistence": {
+    "passed": true,
+    "ordinary_completions": 16,
+    "completed_shared_task": 1,
+    "achievement_components": 17,
+    "achievement_parents": 4,
+    "quest_items_parent_items_and_permanent_key_retained": true,
+    "equipped_QA_baseline_preserved": true
+  },
+  "real_interactions": [
+    "Native offers, accepted-task prerequisites and issued supplies",
+    "Actual kills, corpse loot, hand-ins and original chest open/loot",
+    "Actual dam/cursor bait trigger and Vergalak combat/filet reward choice",
+    "Bile plant, physical safety/arrival, physical return, targetability, combat and saliva-alloy delivery",
+    "Original shard item9486 effect with actual87222 charged-item custody, permanent87246, unkeyed refusal and individual keyed passage both ways",
+    "Native shared orb destruction and report reward; open shortcut refused",
+    "Four class-filtered parent selections, paired-ear reward custody and once-only claims"
+  ],
+  "scene_death_bookkeeping_followup": {
+    "status": "Passed: focused native root/guardian combat, corpse state, actor_died marker and both dead-guardian replacement deadlines recorded against original death IDs",
+    "fix": "Use exported killed_entity_id after NPC::Death clears the live NPC ID; require exact lease/type/instance/generation identity. No kill/objective/reward credit is invented.",
+    "no_native_objective_or_reward_updates_added": true
+  },
+  "offline_checks": [
+    "Complete actual SQL assembly: fresh install, idempotent repeat, late-failure transaction rollback and separate activation refusal",
+    "Recorded original spawn positions, groups, timers and patrol-grid preservation",
+    "Actual Lua scene executor: ownership,64-bit shared occurrence, legacy flat-key migration, restored motion, stale identities and reset isolation",
+    "Actor and guardian post-corpse zero-live-ID death handling"
+  ],
+  "limits": [
+    "GM travel and QA equipment are not historical balance proof.",
+    "Temporary original-type rare spawns and bounded per-instance original-route drop additions accelerated acquisition checks; no natural rare-roll acceptance claimed.",
+    "Orb/shared task tested with one native member, not a complete multiplayer encounter.",
+    "Offline saved-actor/timer restoration fixtures do not establish every native crash/restart scenario.",
+    "Native Windows execution unverified.",
+    "Exact historical class masks, named head-variant associations, original model binding/volumes and missing numerical rates retain their documented uncertainty."
+  ],
+  "no_tests_or_private_evidence_in_release": true
+}

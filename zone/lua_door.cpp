@@ -134,6 +134,16 @@ void Lua_Door::SetDisableTimer(bool flag) {
 	self->SetDisableTimer(flag);
 }
 
+void Lua_Door::SetOpenState(bool open) {
+	Lua_Safe_Call_Void();
+	self->SetOpenState(open);
+}
+
+bool Lua_Door::IsDoorOpen() {
+	Lua_Safe_Call_Bool();
+	return self->IsDoorOpen();
+}
+
 bool Lua_Door::GetDisableTimer() {
 	Lua_Safe_Call_Bool();
 	return self->GetDisableTimer();
@@ -299,6 +309,8 @@ luabind::scope lua_register_door() {
 	.def("ForceClose", (void(Lua_Door::*)(Lua_Mob,bool))&Lua_Door::ForceClose)
 	.def("ForceOpen", (void(Lua_Door::*)(Lua_Mob))&Lua_Door::ForceOpen)
 	.def("ForceOpen", (void(Lua_Door::*)(Lua_Mob,bool))&Lua_Door::ForceOpen)
+	.def("SetOpenState", (void(Lua_Door::*)(bool))&Lua_Door::SetOpenState)
+	.def("IsDoorOpen", (bool(Lua_Door::*)(void))&Lua_Door::IsDoorOpen)
 	.def("GetDisableTimer", (bool(Lua_Door::*)(void))&Lua_Door::GetDisableTimer)
 	.def("GetClientVersionMask", (uint32(Lua_Door::*)(void))&Lua_Door::GetClientVersionMask)
 	.def("GetDestinationHeading", (float(Lua_Door::*)(void))&Lua_Door::GetDestinationHeading)

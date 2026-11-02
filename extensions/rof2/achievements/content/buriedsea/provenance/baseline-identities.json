@@ -1,0 +1,36 @@
+{
+  "npc_types": {
+    "422000": "#Isabeau",
+    "422004": "#Trophy_Hunter_Locke",
+    "422008": "Mer",
+    "422012": "Merchant_Wain",
+    "422019": "Brynden_Snow",
+    "422074": "Silverlip_Slim",
+    "422112": "Jor",
+    "422900": "a_Blacksail_brigand",
+    "422901": "a_Blacksail_brigand",
+    "423000": "#Isabeau",
+    "423079": "Bilgewater_Bill",
+    "423091": "Murderous_Mal",
+    "423105": "Scurv-acious_Bella_Straw",
+    "423107": "#Logan_Grimm",
+    "423122": "Darius_Blythe",
+    "423140": "a_waterlogged_chest",
+    "423141": "a_waterlogged_chest",
+    "423144": "Johnny_the_Black_Crow",
+    "423146": "Rickan",
+    "423148": "#Sid_Hacke",
+    "423151": "Pirate_Smythe",
+    "423152": "Captain_Pete",
+    "423900": "a_scavenging_coralisk"
+  },
+  "new_npc_ids": [
+    422900,
+    422901,
+    423900,
+    423901
+  ],
+  "external_modules": [
+    "json"
+  ]
+}

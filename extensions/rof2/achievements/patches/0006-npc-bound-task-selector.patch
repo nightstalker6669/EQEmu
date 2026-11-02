@@ -1,0 +1,69 @@
+diff --git a/zone/lua_client.cpp b/zone/lua_client.cpp
+--- a/zone/lua_client.cpp
++++ b/zone/lua_client.cpp
+@@ -18,6 +18,8 @@
+ #ifdef LUA_EQEMU
+ 
+ #include "lua_client.h"
++#include <cmath>
++#include <limits>
+ 
+ #include "zone/achievement_state_updates.h"
+ #include "zone/client.h"
+@@ -2722,6 +2724,37 @@
+ 	}
+ 
+ 	self->TaskQuestSetSelector(self, tasks, ignore_cooldown);
++}
++
++// Object/door scripts can offer tasks through an actual nearby NPC giver.
++// True means dispatched; native eligibility filters can still leave no offers.
++bool Lua_Client::TaskSelectorFromNPC(Lua_NPC npc, luabind::adl::object table) {
++	Lua_Safe_Call_Bool();
++	NPC* giver = npc;
++	if (!RuleB(TaskSystem, EnableTaskSystem) || !giver ||
++		entity_list.GetNPCByID(giver->GetID()) != giver || luabind::type(table) != LUA_TTABLE) {
++		return false;
++	}
++	const auto distance = giver->CalculateDistance(self);
++	if (!std::isfinite(distance) || distance > MAX_TASK_SELECT_DISTANCE) {
++		return false;
++	}
++	std::vector<int> tasks;
++	for (int i = 1; i <= MAXCHOOSERENTRIES; ++i) {
++		auto value = table[i];
++		if (luabind::type(value) == LUA_TNUMBER) {
++			const double task_id = luabind::object_cast<double>(value);
++			if (std::isfinite(task_id) && task_id > 0 &&
++				task_id <= std::numeric_limits<int>::max() && std::floor(task_id) == task_id) {
++				tasks.push_back(static_cast<int>(task_id));
++			}
++		}
++	}
++	if (tasks.empty()) {
++		return false;
++	}
++	self->TaskQuestSetSelector(giver, tasks, false);
++	return true;
+ }
+ 
+ bool Lua_Client::TeleportToPlayerByCharID(uint32 character_id) {
+@@ -4342,6 +4375,7 @@
+ 	.def("TakePlatinum", (bool(Lua_Client::*)(uint32,bool))&Lua_Client::TakePlatinum)
+ 	.def("TaskSelector", (void(Lua_Client::*)(luabind::adl::object))&Lua_Client::TaskSelector)
+ 	.def("TaskSelector", (void(Lua_Client::*)(luabind::adl::object, bool))&Lua_Client::TaskSelector)
++	.def("TaskSelectorFromNPC", &Lua_Client::TaskSelectorFromNPC)
+ 	.def("TeleportToPlayerByCharID", (bool(Lua_Client::*)(uint32))&Lua_Client::TeleportToPlayerByCharID)
+ 	.def("TeleportToPlayerByName", (bool(Lua_Client::*)(std::string))&Lua_Client::TeleportToPlayerByName)
+ 	.def("TeleportGroupToPlayerByCharID", (bool(Lua_Client::*)(uint32))&Lua_Client::TeleportGroupToPlayerByCharID)
+diff --git a/zone/lua_client.h b/zone/lua_client.h
+--- a/zone/lua_client.h
++++ b/zone/lua_client.h
+@@ -629,6 +629,7 @@
+ 	void SetSecondaryWeaponOrnamentation(uint32 model_id);
+ 	void TaskSelector(luabind::adl::object table);
+ 	void TaskSelector(luabind::adl::object table, bool ignore_cooldown);
++	bool TaskSelectorFromNPC(Lua_NPC npc, luabind::adl::object table);
+ 
+ 	void SetClientMaxLevel(uint8 max_level);
+ 	uint8 GetClientMaxLevel();

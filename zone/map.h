@@ -21,6 +21,9 @@
 #include "zone/zone_config.h"
 
 #include <cstdio>
+#include <cstdint>
+#include <string>
+#include <vector>
 
 #define BEST_Z_INVALID -99999
 
@@ -39,6 +42,9 @@ public:
 	bool LineIntersectsZone(glm::vec3 start, glm::vec3 end, float step, glm::vec3 *result) const;
 	bool LineIntersectsZoneNoZLeaps(glm::vec3 start, glm::vec3 end, float step_mag, glm::vec3 *result) const;
 	bool CheckLoS(glm::vec3 myloc, glm::vec3 oloc) const;
+	// Only an explicitly enrolled static destructible may ignore its own collider.
+	// Unknown or ambiguous ownership falls back to the original LOS.
+	bool CheckLoSToBoundModel(const glm::vec3& from, const glm::vec3& to, const glm::vec3& anchor, const std::string& model) const;
 	bool DoCollisionCheck(glm::vec3 myloc, glm::vec3 oloc, glm::vec3 &outnorm, float &distance) const;
 
 #ifdef USE_MAP_MMFS
@@ -60,6 +66,13 @@ private:
 	bool SaveMMF(const std::string& map_file_name, bool force_mmf_overwrite);
 #endif /*USE_MAP_MMFS*/
 
+	struct BoundModelSource {
+		std::string model;
+		glm::vec3 anchor;
+		uint32_t begin;
+		uint32_t end;
+	};
+	std::vector<BoundModelSource> bound_model_sources_;
 	struct impl;
 	impl *imp;
 };

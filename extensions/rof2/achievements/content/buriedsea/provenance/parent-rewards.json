@@ -1,0 +1,720 @@
+{
+  "historical_cutoff": "2013-05-31",
+  "parents": [
+    {
+      "achievement_id": 500090200,
+      "source_quest_id": 5572,
+      "archive": {
+        "quest_id": 5572,
+        "timestamp": "20130315235152",
+        "url": "https://web.archive.org/web/20130315235152id_/http://everquest.allakhazam.com/db/quest.html?quest=5572",
+        "sha256": "0b82ac439e404e98d0c89148f6e8e00fb3ad17de6b3d320b9cd25cc7cdb5f6f2",
+        "links": [
+          [
+            4041,
+            "Jaguar Trophies"
+          ],
+          [
+            4040,
+            "Monkey Trophies"
+          ],
+          [
+            4042,
+            "Python Trophies"
+          ],
+          [
+            4043,
+            "Raptor Trophies"
+          ],
+          [
+            4044,
+            "Scouting Monkey Rock"
+          ],
+          [
+            5553,
+            "click here"
+          ],
+          [
+            4044,
+            "Scouting Monkey Rock"
+          ],
+          [
+            4040,
+            "Monkey Trophies"
+          ],
+          [
+            4041,
+            "Jaguar Trophies"
+          ],
+          [
+            4043,
+            "Raptor Trophies"
+          ],
+          [
+            4042,
+            "Python Trophies"
+          ],
+          [
+            5572,
+            " Send a Correction "
+          ],
+          [
+            5572,
+            "Reply"
+          ],
+          [
+            5572,
+            "Reply"
+          ]
+        ]
+      },
+      "rewards": [
+        {
+          "native_item_id": 67792,
+          "name": "Hero's Chain Bracer",
+          "classes": 33544,
+          "slots": 1536,
+          "external_item_id": 103852,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67793,
+          "name": "Hero's Chain Wristguard",
+          "classes": 33544,
+          "slots": 1536,
+          "external_item_id": 103853,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67800,
+          "name": "Hero's Leather Bracer",
+          "classes": 16480,
+          "slots": 1536,
+          "external_item_id": 103720,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67801,
+          "name": "Hero's Leather Wristguard",
+          "classes": 16480,
+          "slots": 1536,
+          "external_item_id": 103721,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67783,
+          "name": "Hero's Plate Bracer",
+          "classes": 151,
+          "slots": 1536,
+          "external_item_id": 103870,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67785,
+          "name": "Hero's Plate Wristband",
+          "classes": 151,
+          "slots": 1536,
+          "external_item_id": 103872,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67784,
+          "name": "Hero's Plate Wristguard",
+          "classes": 151,
+          "slots": 1536,
+          "external_item_id": 103871,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67809,
+          "name": "Hero's Silk Wristband",
+          "classes": 15360,
+          "slots": 1536,
+          "external_item_id": 103789,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67808,
+          "name": "Hero's Silk Wristguard",
+          "classes": 15360,
+          "slots": 1536,
+          "external_item_id": 103788,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67810,
+          "name": "Hero's Silk Wristwrap",
+          "classes": 15360,
+          "slots": 1536,
+          "external_item_id": 103790,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "achievement_id": 500090300,
+      "source_quest_id": 5573,
+      "archive": {
+        "quest_id": 5573,
+        "timestamp": "20130315232910",
+        "url": "https://web.archive.org/web/20130315232910id_/http://everquest.allakhazam.com/db/quest.html?quest=5573",
+        "sha256": "8dcf52a203bbbdc0eb659be1f3719e00b3c20af7279095b3373eb507f599a5fd",
+        "links": [
+          [
+            5553,
+            "click here"
+          ],
+          [
+            4080,
+            "Charting Redfeather Isle"
+          ],
+          [
+            4079,
+            "Ahoy! Treasures Washed Ashore"
+          ],
+          [
+            4077,
+            "Regrua-Shell Armor"
+          ],
+          [
+            4078,
+            "A Red-Plumed Hat"
+          ],
+          [
+            4076,
+            "Raptors, Basilisks, and Pumas. Oh My!"
+          ],
+          [
+            5573,
+            " Send a Correction "
+          ],
+          [
+            5573,
+            "Reply"
+          ]
+        ]
+      },
+      "rewards": [
+        {
+          "native_item_id": 67794,
+          "name": "Hero's Chain Gauntlets",
+          "classes": 33544,
+          "slots": 4096,
+          "external_item_id": 103854,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67802,
+          "name": "Hero's Leather Gloves",
+          "classes": 16480,
+          "slots": 4096,
+          "external_item_id": 103722,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67786,
+          "name": "Hero's Plate Gauntlets",
+          "classes": 151,
+          "slots": 4096,
+          "external_item_id": 103882,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67811,
+          "name": "Hero's Silk Gloves",
+          "classes": 15360,
+          "slots": 4096,
+          "external_item_id": 103791,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "achievement_id": 500090400,
+      "source_quest_id": 5574,
+      "archive": {
+        "quest_id": 5574,
+        "timestamp": "20130315233516",
+        "url": "https://web.archive.org/web/20130315233516id_/http://everquest.allakhazam.com/db/quest.html?quest=5574",
+        "sha256": "80adefb49b78d2d3fb6970cdf4483d7486a4cb1f7c15b0d387fb2317e9fd907b",
+        "links": [
+          [
+            4068,
+            "Scouting Maiden's Grave"
+          ],
+          [
+            4026,
+            "Siren Combs"
+          ],
+          [
+            4027,
+            "Siren Hair"
+          ],
+          [
+            4067,
+            "The Lost Crew"
+          ],
+          [
+            4069,
+            "Uncovered Treasure"
+          ],
+          [
+            5553,
+            "click here"
+          ],
+          [
+            4026,
+            "Siren Combs"
+          ],
+          [
+            4027,
+            "Siren Hair"
+          ],
+          [
+            4069,
+            "Uncovered Treasure"
+          ],
+          [
+            4067,
+            "The Lost Crew"
+          ],
+          [
+            4068,
+            "Scouting Maiden's Grave"
+          ],
+          [
+            5574,
+            "Reply"
+          ]
+        ]
+      },
+      "rewards": [
+        {
+          "native_item_id": 67795,
+          "name": "Hero's Chain Boots",
+          "classes": 33544,
+          "slots": 524288,
+          "external_item_id": 103855,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67803,
+          "name": "Hero's Leather Boots",
+          "classes": 16480,
+          "slots": 524288,
+          "external_item_id": 103723,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67787,
+          "name": "Hero's Plate Boots",
+          "classes": 151,
+          "slots": 524288,
+          "external_item_id": 103883,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67812,
+          "name": "Hero's Silk Sandals",
+          "classes": 15360,
+          "slots": 524288,
+          "external_item_id": 103792,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "achievement_id": 500090500,
+      "source_quest_id": 5575,
+      "archive": {
+        "quest_id": 5575,
+        "timestamp": "20130315234812",
+        "url": "https://web.archive.org/web/20130315234812id_/http://everquest.allakhazam.com/db/quest.html?quest=5575",
+        "sha256": "259e436bb19aa761403756d85118c5a197ad15f4cadc04a409e34e08fe6b9764",
+        "links": [
+          [
+            4085,
+            "Deliver the Goods"
+          ],
+          [
+            4089,
+            "Fire in the Hold"
+          ],
+          [
+            4091,
+            "Just Desserts"
+          ],
+          [
+            4083,
+            "Low on Rum"
+          ],
+          [
+            4088,
+            "Old Cutlasses for New"
+          ],
+          [
+            4075,
+            "Snake Milk"
+          ],
+          [
+            4087,
+            "That was the Deal"
+          ],
+          [
+            4082,
+            "The Meek Shall What?"
+          ],
+          [
+            4084,
+            "Thieves Among Thieves"
+          ],
+          [
+            5553,
+            "click here"
+          ],
+          [
+            4075,
+            "Snake Milk"
+          ],
+          [
+            4091,
+            "Just Desserts"
+          ],
+          [
+            4083,
+            "Low on Rum"
+          ],
+          [
+            4084,
+            "Thieves Among Thieves"
+          ],
+          [
+            4085,
+            "Deliver the Goods"
+          ],
+          [
+            4087,
+            "That Was the Deal"
+          ],
+          [
+            4088,
+            "Old Cutlasses For New"
+          ],
+          [
+            4089,
+            "Fire in the Hold"
+          ],
+          [
+            4082,
+            "The Meek Shall What?"
+          ],
+          [
+            5575,
+            "Reply"
+          ],
+          [
+            5575,
+            "Reply"
+          ]
+        ]
+      },
+      "rewards": [
+        {
+          "native_item_id": 67791,
+          "name": "Hero's Breastplate",
+          "classes": 151,
+          "slots": 131072,
+          "external_item_id": 103887,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67799,
+          "name": "Hero's Chain Tunic",
+          "classes": 33544,
+          "slots": 131072,
+          "external_item_id": 103856,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67807,
+          "name": "Hero's Leather Tunic",
+          "classes": 16480,
+          "slots": 131072,
+          "external_item_id": 103731,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67816,
+          "name": "Hero's Silk Robe",
+          "classes": 15360,
+          "slots": 131072,
+          "external_item_id": 103796,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "achievement_id": 500090600,
+      "source_quest_id": 5576,
+      "archive": {
+        "quest_id": 5576,
+        "timestamp": "20130315232833",
+        "url": "https://web.archive.org/web/20130315232833id_/http://everquest.allakhazam.com/db/quest.html?quest=5576",
+        "sha256": "e49506bb0028644eca650deae8e6699c42cd664d578c723397bb18f1907aaa5e",
+        "links": [
+          [
+            4070,
+            "Deadbone Meats"
+          ],
+          [
+            4074,
+            "Hidden Riches"
+          ],
+          [
+            4072,
+            "Rumors of a Flame"
+          ],
+          [
+            4073,
+            "Shark Meat (Deadbone Reef)"
+          ],
+          [
+            4071,
+            "Small Matters"
+          ],
+          [
+            5553,
+            "click here"
+          ],
+          [
+            4070,
+            "Deadbone Meats"
+          ],
+          [
+            4071,
+            "Small Matters"
+          ],
+          [
+            4072,
+            "Rumors of a Flame"
+          ],
+          [
+            4073,
+            "Shark Meat"
+          ],
+          [
+            4074,
+            "Hidden Riches"
+          ],
+          [
+            5576,
+            " Send a Correction "
+          ],
+          [
+            5576,
+            "Reply"
+          ]
+        ]
+      },
+      "rewards": [
+        {
+          "native_item_id": 67798,
+          "name": "Hero's Chain Leggings",
+          "classes": 33544,
+          "slots": 262144,
+          "external_item_id": 103837,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67806,
+          "name": "Hero's Leather Trousers",
+          "classes": 16480,
+          "slots": 262144,
+          "external_item_id": 103726,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67790,
+          "name": "Hero's Plate Greaves",
+          "classes": 151,
+          "slots": 262144,
+          "external_item_id": 103886,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67815,
+          "name": "Hero's Silk Pantaloons",
+          "classes": 15360,
+          "slots": 262144,
+          "external_item_id": 103795,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "achievement_id": 500090700,
+      "source_quest_id": 5577,
+      "archive": {
+        "quest_id": 5577,
+        "timestamp": "20130315235239",
+        "url": "https://web.archive.org/web/20130315235239id_/http://everquest.allakhazam.com/db/quest.html?quest=5577",
+        "sha256": "18c85ceee5b16d0215ac7635987e659ff7c86fd36a5a4bf97ca76af513ec651d",
+        "links": [
+          [
+            5553,
+            "click here"
+          ],
+          [
+            4028,
+            "Steamdrake Potions"
+          ],
+          [
+            4029,
+            "The Abandoned Relics"
+          ],
+          [
+            4030,
+            "Mapping Suncrest Ridge"
+          ],
+          [
+            4031,
+            "Totem of Water and Fire"
+          ],
+          [
+            4032,
+            "Investigating the Combine Ruins"
+          ],
+          [
+            5577,
+            " Send a Correction "
+          ]
+        ]
+      },
+      "rewards": [
+        {
+          "native_item_id": 67796,
+          "name": "Hero's Chain Coif",
+          "classes": 33544,
+          "slots": 4,
+          "external_item_id": 103835,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67804,
+          "name": "Hero's Leather Cap",
+          "classes": 16480,
+          "slots": 4,
+          "external_item_id": 103724,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67788,
+          "name": "Hero's Plate Helm",
+          "classes": 151,
+          "slots": 4,
+          "external_item_id": 103884,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67813,
+          "name": "Hero's Silk Cap",
+          "classes": 15360,
+          "slots": 4,
+          "external_item_id": 103793,
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "achievement_id": 500090800,
+      "source_quest_id": 5578,
+      "archive": {
+        "quest_id": 5578,
+        "timestamp": "20130315235000",
+        "url": "https://web.archive.org/web/20130315235000id_/http://everquest.allakhazam.com/db/quest.html?quest=5578",
+        "sha256": "c4b16c581698e1cb2f03c95a065b45e741953b6b796bcc4536471937464b3700",
+        "links": [
+          [
+            5553,
+            "click here"
+          ],
+          [
+            4196,
+            "Recruitment Letters"
+          ],
+          [
+            4193,
+            "Pirate Rum"
+          ],
+          [
+            4197,
+            "The Makings of a Disguise"
+          ],
+          [
+            4195,
+            "Killing the Rivals"
+          ],
+          [
+            4194,
+            "Hair of the Dog"
+          ],
+          [
+            5578,
+            " Send a Correction "
+          ],
+          [
+            5578,
+            "Reply"
+          ]
+        ]
+      },
+      "rewards": [
+        {
+          "native_item_id": 67797,
+          "name": "Hero's Chain Sleeves",
+          "classes": 33544,
+          "slots": 128,
+          "external_item_id": 103836,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67805,
+          "name": "Hero's Leather Sleeves",
+          "classes": 16480,
+          "slots": 128,
+          "external_item_id": 103725,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67789,
+          "name": "Hero's Plate Vambraces",
+          "classes": 151,
+          "slots": 128,
+          "external_item_id": 103885,
+          "quantity": 1
+        },
+        {
+          "native_item_id": 67814,
+          "name": "Hero's Silk Sleeves",
+          "classes": 15360,
+          "slots": 128,
+          "external_item_id": 103794,
+          "quantity": 1
+        }
+      ]
+    }
+  ],
+  "native_class_selection": "Native equipment masks select equipable options; historical reward-window masks not recovered. Multiple wrist variants remain alternatives. Every class1\u201316 has at least one option per island.",
+  "quantity": "One item in each option. Period lists do not establish a two-bracer bundle; no duplicate quantity is invented.",
+  "redfeather_conflict": "May2012 necklace comment conflicts with the December2012 maintained page; archived pre-cutoff reward list names gloves, corroborated current list. Necklace options excluded.",
+  "skeletal_hand": {
+    "criterion": "Durable ownership of79953 including installed augments; ordinary native combine3040907 creates it. Supports already-crafted hands and reconnect reconciliation. This is an emulator consistency policy; original criterion internals are not recovered.",
+    "reward": "Original page header reports none; April2012 comment mentions class weapons/shield without an exact option list. No speculative final weapon reward is configured.",
+    "sources": [
+      "https://everquest.allakhazam.com/db/quest/5618",
+      "https://web.archive.org/web/20130315233307id_/http://everquest.allakhazam.com/db/quest.html?quest=5618"
+    ]
+  },
+  "unconfirmed_parent_XP_AA_cash_faction": "Not invented",
+  "native_gameplay_verified": false
+}

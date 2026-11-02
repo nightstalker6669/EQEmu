@@ -1,0 +1,222 @@
+{
+  "enabled": false,
+  "spawn_chance_percent": 3,
+  "water_piece": 54747,
+  "fire_piece": 54748,
+  "maleko_npc_id": 423901,
+  "lutzan_npc_id": 423061,
+  "maleko_profile": {
+    "id": 423901,
+    "name": "#Maleko,_Sea_Prophet",
+    "level": 77,
+    "class": 1,
+    "hp": 50000,
+    "AC": 450,
+    "mindmg": 400,
+    "maxdmg": 1482,
+    "special_abilities": "7,1",
+    "loottable_id": 0,
+    "npc_spells_id": 0,
+    "npc_spells_effects_id": 0,
+    "skip_global_loot": 1,
+    "unique_spawn_by_name": 0
+  },
+  "rate_provenance": "Approximate 3percent from current primary pages, corroborated for Lutzan by Aug2011 comment. Maleko period reports conflict; this is a labelled configurable reconstruction, not original server data.",
+  "hp_ac_min_damage_provenance": "Approved labelled configurable encounter defaults. Max hit1482 is current corroboration; period Feb2008 observed1446 against a particular monk does not establish an exact cap.",
+  "fire_piece_count": 1,
+  "fire_piece_drop_policy": "Configurable emulator default: one native corpse quest piece from Maleko. Period sources confirm the item/source, not an exact drop percentage.",
+  "wrong_source_spawn_pairs": [
+    {
+      "spawn_id": 117819,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 117826,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 117851,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 117878,
+      "npc_id": 423045
+    },
+    {
+      "spawn_id": 117887,
+      "npc_id": 423051
+    },
+    {
+      "spawn_id": 117915,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 117921,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 117968,
+      "npc_id": 423112
+    },
+    {
+      "spawn_id": 117973,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 117977,
+      "npc_id": 423116
+    },
+    {
+      "spawn_id": 117983,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 117991,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118026,
+      "npc_id": 423116
+    },
+    {
+      "spawn_id": 118028,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118029,
+      "npc_id": 423139
+    },
+    {
+      "spawn_id": 118034,
+      "npc_id": 423116
+    },
+    {
+      "spawn_id": 118036,
+      "npc_id": 423112
+    },
+    {
+      "spawn_id": 118087,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118123,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118152,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118210,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118213,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118220,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118231,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118239,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118242,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118247,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118249,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118298,
+      "npc_id": 423051
+    },
+    {
+      "spawn_id": 118440,
+      "npc_id": 423139
+    },
+    {
+      "spawn_id": 118462,
+      "npc_id": 423116
+    },
+    {
+      "spawn_id": 118482,
+      "npc_id": 423329
+    },
+    {
+      "spawn_id": 118485,
+      "npc_id": 423329
+    },
+    {
+      "spawn_id": 118525,
+      "npc_id": 423112
+    },
+    {
+      "spawn_id": 118526,
+      "npc_id": 423139
+    },
+    {
+      "spawn_id": 118530,
+      "npc_id": 423139
+    },
+    {
+      "spawn_id": 118533,
+      "npc_id": 423139
+    },
+    {
+      "spawn_id": 118537,
+      "npc_id": 423329
+    },
+    {
+      "spawn_id": 118546,
+      "npc_id": 423139
+    },
+    {
+      "spawn_id": 118553,
+      "npc_id": 423112
+    },
+    {
+      "spawn_id": 118559,
+      "npc_id": 423116
+    },
+    {
+      "spawn_id": 118561,
+      "npc_id": 423112
+    },
+    {
+      "spawn_id": 118580,
+      "npc_id": 423112
+    },
+    {
+      "spawn_id": 118622,
+      "npc_id": 423329
+    },
+    {
+      "spawn_id": 118701,
+      "npc_id": 423112
+    },
+    {
+      "spawn_id": 118710,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118711,
+      "npc_id": 423004
+    },
+    {
+      "spawn_id": 118713,
+      "npc_id": 423004
+    }
+  ]
+}

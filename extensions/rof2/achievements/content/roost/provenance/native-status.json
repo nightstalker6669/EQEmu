@@ -1,0 +1,29 @@
+{
+  "status": "Representative native gameplay passed on the develop-based combined server; explicit remaining limits retained",
+  "date_utc": "2026-10-30",
+  "observed": [
+    "Six quests completed through native objectives and final interactions: Ledge, Find My Son, Explore the Roost, Griffon Feathers, Knock the Nests Down and Harass the Harpies; matching achievement components persisted",
+    "Both wrong-island item rejection/return and correct Ledge handin passed; native Ledge recipe produced the actual treat",
+    "Earned gate2 transported the character; unearned gate4 refused transport",
+    "Real melee kill credit passed all seven original nest types; retained HP0 bindings cleared killer selection without a corpse/delete cycle",
+    "Late-entry retained ruin passed; original640second database deadline preserved and fresh original replacement observed74seconds after deadline, without exact visual-tick timing claim",
+    "All five red/brown/golden/black/white feather pickups and their paired exploration/possession objectives passed; red feather was collected before requesting the quest",
+    "Five feather handins completed the quest; confirmed Griffon Feather Cap and XP reward ledger entries each granted in one attempt",
+    "Develop-based combined server fullcompile/link, matched deployment, login/render/harmlesscommand, geared inventory and preexisting achievement persistence passed",
+    "Ten ordinary original griffon kills completed Harass the Harpies and simultaneously advanced the overlapping Strike a Blow griffon objective",
+    "Adrian's Calling parent completed; class-filtered native option delivered both Soldier earring items in one attempt with both durable reward rows granted",
+    "Both paired earrings, the completed quests and original weapons survived a clean logout and fresh client login"
+  ],
+  "not_claimed": [
+    "Every one of the15quests natively completed",
+    "Exact unknown Ascending wrist and Raider glove/bundle reward choices",
+    "Orderly snapshot ruin restoration or crash-before-snapshot durability natively verified",
+    "Automatic removal of client-local combat toggle; target selection clears but local attack toggle remains enabled until explicit attack off",
+    "New opcode discovery or new packet layout",
+    "Full standalone achievement-only server link/native rerun; nine public translation units and linked Map/BVH tests passed, native gameplay used corresponding housing-aware combined engine"
+  ],
+  "privacy": "No character/account identifiers, raw logs, captures or client assets are included",
+  "pending": [
+    "Remaining distinct transport-cycle, Queen-home and ground-trinket checks"
+  ]
+}

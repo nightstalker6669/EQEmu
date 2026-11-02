@@ -1,0 +1,21 @@
+{
+  "state": "staged_disabled_not_deployed",
+  "native_rows": 106,
+  "current_primary_price_matches": 104,
+  "period_only_price_matches": 2,
+  "documented_indifferent_rows": 37,
+  "period_confirmed_compound_cost": 10,
+  "indifferent_raw_threshold": 0,
+  "threshold_provenance": "common/ruletypes.h Faction:IndifferentlyFactionMinimum and current ruleset1 both zero; raw threshold is native engine policy, not recovered historical Live number.",
+  "unknown_item_faction_policy": "Other69 original stock requirements remain unchanged at-1100; absence of published information is not treated as proof of an original threshold.",
+  "period_limit": "Only compound faction/cost and selected other dated prices are period-confirmed. Current table corroborates remaining prices and36 other Indifferent requirements; no claim all are recovered May2013 values.",
+  "transaction_policy": "Require InnoDB, lock original vendor and entire stock range, verify all106 identities and full stock policy, verify native currency/items/faction, then update prices and vendor/group together. Reject unexpected customizations; do not silently override.",
+  "primary_faction_group": {
+    "id": 423124,
+    "primaryfaction": 1169,
+    "name": "Buried Sea Halon Blacksail Smugglers",
+    "ignore_primary_assist": 1,
+    "assist_policy": "Labelled emulator merchant-only group policy; no invented faction kill hits."
+  },
+  "missing_rule_adjustment": "If a server changes IndifferentlyFactionMinimum, regenerate the configured stock threshold before installation; installer must validate its active rule value."
+}

@@ -1,0 +1,42 @@
+{
+  "enabled": false,
+  "xp_default": 1000,
+  "xp_authorization": "User approved labelled configurable PEQ-style XP when precise original amount is unavailable.",
+  "cash_copper": 0,
+  "cash_note": "No unverified coin invented; historical Cull Goblins explicitly no coin.",
+  "request_level_by_quest": {
+    "3964": 65,
+    "3722": 65,
+    "3879": 60,
+    "4305": 62,
+    "3770": 60,
+    "3878": 55,
+    "5101": 60,
+    "3630": 70,
+    "3720": 60,
+    "3631": 53,
+    "3714": 65,
+    "3892": 60,
+    "3893": 60
+  },
+  "level_policy": "Period published level used as provisional request gate, not claimed experimentally exact. Cull Goblins62 is demonstrated 2010 acceptance (published65 is not the gate); Gnolls55 verified request but native shared min also rejects historically allowed54 taskjoin.",
+  "repeatable_by_quest": {
+    "3964": true,
+    "3722": true,
+    "3879": true,
+    "4305": true,
+    "3770": false,
+    "3878": true,
+    "5101": true,
+    "3630": true,
+    "3720": true,
+    "3631": true,
+    "3714": false,
+    "3892": true,
+    "3893": true
+  },
+  "repeat_policy": "Best-supported period metadata except repeated firsthand CullGoblins and Gnolls completion/repeat reports override conflicting headerNo. GoblinSweep repeatability remains periodheaderNo; must verify native.",
+  "unknown_treasure_xp": 0,
+  "treasure_xp_note": "Archived task page only labels Loot and does not specify XP; leave0 until XP evidence.",
+  "scene_policy": "No new combat stats/spawn rates are invented; encounter dependencies remain disabled/unresolved."
+}

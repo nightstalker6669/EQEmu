@@ -1,0 +1,859 @@
+{
+  "schema_version": 1,
+  "state": "staged_not_deployed",
+  "vendor_npc_id": 423124,
+  "currency_id": 10,
+  "currency_item_id": 79910,
+  "source": "https://everquest.allakhazam.com/db/npc/24717",
+  "policy": "Preserve all existing native merchant item identities. Current values are corroboration, not blanket proof of original prices; dated period posts are retained separately. Do not enable alternate-currency handling until every existing stock row is priced in the same migration.",
+  "items": [
+    {
+      "native_item_id": 78119,
+      "native_name": "Spell: Yaulp VIII",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66330",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 78182,
+      "native_name": "Spell: Hoar Frost",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66331",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 78254,
+      "native_name": "Spell: Vinelash Cascade",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66332",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 78363,
+      "native_name": "Spell: Talisman of Persistence",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66333",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 78471,
+      "native_name": "Spell: Thundering Blades",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66722",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 78564,
+      "native_name": "Spell: Touch of the Wailing Three",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66723",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 78710,
+      "native_name": "Spell: Mammoth-Hide Guard",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66334",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 78723,
+      "native_name": "Spell: Bite of the Empress",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66335",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79066,
+      "native_name": "Spell: Burnout VI",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66336",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79072,
+      "native_name": "Spell: Annihilate the Unnatural",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66337",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79199,
+      "native_name": "Spell: Tendrilmist Guard",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66326",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79327,
+      "native_name": "Spell: Unflinching Hammer of Zeal",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66338",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79330,
+      "native_name": "Spell: Divine Custody",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66339",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79333,
+      "native_name": "Spell: Consecrate Ground",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/npc/24717",
+      "price_provenance": "June15,2007 spell-price post (Consecreate typo) and March16,2007 item-price post (Sword); both retained native identities."
+    },
+    {
+      "native_item_id": 79336,
+      "native_name": "Spell: Blood of the Martyr",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66724",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79339,
+      "native_name": "Spell: Fernspur",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66341",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79342,
+      "native_name": "Spell: Lunarlight",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66725",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79345,
+      "native_name": "Spell: Fulkitcher Weave",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66342",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79348,
+      "native_name": "Spell: Nectar of Agony",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66343",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79351,
+      "native_name": "Spell: Specter of Renewal",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66726",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79354,
+      "native_name": "Spell: Lassitude",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66344",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79357,
+      "native_name": "Spell: Kedgefish Venom",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66727",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79360,
+      "native_name": "Spell: Umbra Orb",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66345",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79363,
+      "native_name": "Spell: Bonestitch Fetish",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66346",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79366,
+      "native_name": "Spell: Mind Dissection",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66347",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79369,
+      "native_name": "Spell: Pyre of the Fallen",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66348",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79372,
+      "native_name": "Spell: Beam of Molten Slag",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66349",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79375,
+      "native_name": "Spell: Iceflame Body",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66350",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79378,
+      "native_name": "Spell: Rampaging Servant",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66728",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79381,
+      "native_name": "Spell: Intertwining Energy",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66729",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79384,
+      "native_name": "Spell: Chaos Immolation",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66328",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79387,
+      "native_name": "Spell: Beam of Solteris",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66351",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79390,
+      "native_name": "Spell: Wildmagic Strike",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66352",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79393,
+      "native_name": "Spell: Nature's Entropy",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66353",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79396,
+      "native_name": "Spell: Force of Prexus",
+      "doubloon_cost": 350,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66730",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79399,
+      "native_name": "Tome of Armor of Righteousness",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66354",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79402,
+      "native_name": "Spell: Burial Rites",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66355",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79405,
+      "native_name": "Spell: Marrowthirst Horror",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66356",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79408,
+      "native_name": "Tome of Soul Carapace",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66357",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79411,
+      "native_name": "Spell: Bark at the Moon",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66731",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79414,
+      "native_name": "Song: Jonthan's Mightful Caretaker",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66358",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79417,
+      "native_name": "Song: Staccato Cadence",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66732",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79420,
+      "native_name": "Song: Aviak's Wondrous Warble",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66203",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79423,
+      "native_name": "Spell: Rune of the Kedge",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66359",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79426,
+      "native_name": "Spell: Entrancer's Aura",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66360",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79429,
+      "native_name": "Spell: Mind Phobiate",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66709",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79432,
+      "native_name": "Spell: Mana Recursion",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66361",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79435,
+      "native_name": "Spell: Perplexing Flash",
+      "doubloon_cost": 100,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66362",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79438,
+      "native_name": "Tome of Second Wind",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66363",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79441,
+      "native_name": "Tome of Brutal Onslaught Discipline",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66364",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79444,
+      "native_name": "Tome of Scaledfist Discipline",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66365",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79447,
+      "native_name": "Tome of Pinpoint Vulnerability",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66366",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79450,
+      "native_name": "Tome of Annihilator's Volley",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66367",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 79918,
+      "native_name": "Bone Joint Compound",
+      "doubloon_cost": 10,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66368",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80300,
+      "native_name": "Smuggler's Energeiac Plate Bracer",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66369",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80301,
+      "native_name": "Smuggler's Energeiac Chain Wristguard",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66370",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80302,
+      "native_name": "Smuggler's Energeiac Leather Wristguard",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66371",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80303,
+      "native_name": "Smuggler's Energeiac Cloth Wristband",
+      "doubloon_cost": 150,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66372",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80304,
+      "native_name": "Smuggler's Energeiac Plate Gauntlets",
+      "doubloon_cost": 175,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66373",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80305,
+      "native_name": "Smuggler's Energeiac Chain Gauntlets",
+      "doubloon_cost": 175,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66374",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80306,
+      "native_name": "Smuggler's Energeiac Leather Gloves",
+      "doubloon_cost": 175,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66375",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80307,
+      "native_name": "Smuggler's Energeiac Cloth Gloves",
+      "doubloon_cost": 175,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66376",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80308,
+      "native_name": "Smuggler's Energeiac Plate Boots",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66377",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80309,
+      "native_name": "Smuggler's Energeiac Chain Boots",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66378",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80310,
+      "native_name": "Smuggler's Energeiac Leather Boots",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66379",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80311,
+      "native_name": "Smuggler's Energeiac Cloth Sandals",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66380",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80312,
+      "native_name": "Smuggler's Energeiac Plate Helm",
+      "doubloon_cost": 225,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66381",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80313,
+      "native_name": "Smuggler's Energeiac Chain Coif",
+      "doubloon_cost": 225,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66382",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80314,
+      "native_name": "Smuggler's Energeiac Leather Cowl",
+      "doubloon_cost": 225,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66383",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80315,
+      "native_name": "Smuggler's Energeiac Cloth Cap",
+      "doubloon_cost": 225,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66384",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80316,
+      "native_name": "Smuggler's Energeiac Plate Vambraces",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66385",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80317,
+      "native_name": "Smuggler's Energeiac Chain Sleeves",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66386",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80318,
+      "native_name": "Smuggler's Energeiac Leather Armwraps",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66387",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80319,
+      "native_name": "Smuggler's Energeiac Cloth Sleeves",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66388",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80320,
+      "native_name": "Smuggler's Energeiac Plate Greaves",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66389",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80321,
+      "native_name": "Smuggler's Energeiac Chain Leggings",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66390",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80322,
+      "native_name": "Smuggler's Energeiac Leather Leggings",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66391",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80323,
+      "native_name": "Smuggler's Energeiac Cloth Pants",
+      "doubloon_cost": 300,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66327",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80324,
+      "native_name": "Smuggler's Energeiac Plate Breastplate",
+      "doubloon_cost": 350,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66230",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80325,
+      "native_name": "Smuggler's Energeiac Chain Coat",
+      "doubloon_cost": 350,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66700",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80326,
+      "native_name": "Smuggler's Energeiac Leather Tunic",
+      "doubloon_cost": 350,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66701",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80327,
+      "native_name": "Smuggler's Energeiac Cloth Robe",
+      "doubloon_cost": 350,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66702",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80344,
+      "native_name": "Buccaneer's Energeiac Plate Vambraces",
+      "doubloon_cost": 350,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66705",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80345,
+      "native_name": "Buccaneer's Energeiac Chain Sleeves",
+      "doubloon_cost": 350,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66690",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80347,
+      "native_name": "Buccaneer's Energeiac Silk Sleeves",
+      "doubloon_cost": 350,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66706",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80348,
+      "native_name": "Buccaneer's Energeiac Plate Greaves",
+      "doubloon_cost": 400,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66692",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80349,
+      "native_name": "Buccaneer's Energeiac Chain Leggings",
+      "doubloon_cost": 400,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66693",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80350,
+      "native_name": "Buccaneer's Energeiac Leather Leggings",
+      "doubloon_cost": 400,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66694",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80351,
+      "native_name": "Buccaneer's Energeiac Silk Pantaloons",
+      "doubloon_cost": 400,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66695",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80352,
+      "native_name": "Buccaneer's Energeiac Plate Breastplate",
+      "doubloon_cost": 450,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66696",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80353,
+      "native_name": "Buccaneer's Energeiac Chain Coat",
+      "doubloon_cost": 450,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66697",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80354,
+      "native_name": "Buccaneer's Energeiac Leather Tunic",
+      "doubloon_cost": 450,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66698",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80355,
+      "native_name": "Buccaneer's Energeiac Silk Robe",
+      "doubloon_cost": 450,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66699",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80357,
+      "native_name": "Jonas Dagmire's Ill-fated Helm",
+      "doubloon_cost": 200,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66750",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80360,
+      "native_name": "Sword of the Buried Deep",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/npc/24717",
+      "price_provenance": "June15,2007 spell-price post (Consecreate typo) and March16,2007 item-price post (Sword); both retained native identities."
+    },
+    {
+      "native_item_id": 80362,
+      "native_name": "Shark-tooth Ripper",
+      "doubloon_cost": 350,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66707",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80365,
+      "native_name": "Kraken Claw Hammer",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66741",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80370,
+      "native_name": "Jagged Shark-tooth Dagger",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66743",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80373,
+      "native_name": "Fishmonger's Trident",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66751",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80376,
+      "native_name": "Jonas Dagmire's Right Hook",
+      "doubloon_cost": 250,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66738",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80700,
+      "native_name": "Cloudy Energeian Ice Orb",
+      "doubloon_cost": 10,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66392",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80701,
+      "native_name": "Cloudy Energeian Fire Orb",
+      "doubloon_cost": 10,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66393",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80702,
+      "native_name": "Cloudy Energeian Earth Orb",
+      "doubloon_cost": 10,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/66394",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80703,
+      "native_name": "Cloudy Energeian Air Orb",
+      "doubloon_cost": 10,
+      "documented_faction_requirement": "Requires Indifferent standing with Blacksail Smugglers",
+      "source_url": "https://everquest.allakhazam.com/db/item/65954",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80705,
+      "native_name": "Cloudy Energeian Decay Orb",
+      "doubloon_cost": 10,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66395",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    },
+    {
+      "native_item_id": 80706,
+      "native_name": "Cloudy Energeian Poison Orb",
+      "doubloon_cost": 10,
+      "documented_faction_requirement": null,
+      "source_url": "https://everquest.allakhazam.com/db/item/66755",
+      "price_provenance": "Current primary merchant table; compare period stock posts before release"
+    }
+  ]
+}

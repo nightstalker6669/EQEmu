@@ -1,0 +1,15 @@
+{
+  "scope": "RoF2 Buried Sea local model-load compatibility",
+  "native_observation": {
+    "before": "The original server Isabeau NPC423000 existed, but the client reported race1; Buried Sea loaded no merchant ships.",
+    "after": "Adding existing b04/b05/b06 entries and re-entering made the same original Isabeau report MerchantShip race550. Original wreckage and shared occurrence were preserved."
+  },
+  "required_local_assets": [
+    "b04.eqg",
+    "b05.eqg",
+    "b06.eqg"
+  ],
+  "original_entries_preserved": true,
+  "distribution": "Model-list repair tool only; no copyrighted client assets or binaries.",
+  "limits": "This is client compatibility evidence, not recovered May2013 ferry schedule or a new opcode."
+}

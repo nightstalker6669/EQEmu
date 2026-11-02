@@ -1,0 +1,23 @@
+{
+  "historical_cutoff": "2013-05-31",
+  "configuration_status": "Reconstruction settings; exact original trigger dimensions and NPC spawn coordinates are not recovered",
+  "vergalak": {
+    "site": {"minx":-1667,"maxx":-1642,"miny":-302,"maxy":-277,"minz":-352,"maxz":-327},
+    "spawn": {"x":-1590,"y":-290,"z":-371.963898,"heading":128},
+    "site_evidence": "2012 walkthrough says stand on the dam blockade before the waterfall. Isolated RoF2 observation at(-1654.638,-289.536,-339.062) and rendered waterfall/blockade match the upper water-region boundaryX-1657.325. Dimensions are configurable server reconstruction, not recovered original volume.",
+    "spawn_evidence": "Configurable nearby upstream flooded-cave floor from Detour; original exact spawn point and downstream roaming path are not recovered.",
+    "native_quest_verified": false
+  },
+  "orb": {
+    "site": {"minx":-1800,"maxx":-1730,"miny":530,"maxy":600,"minz":-563,"maxz":-519},
+    "spawn": {"x":-1765,"y":565,"z":-539.774475,"heading":0},
+    "site_evidence": "Rasper reported /locY565,X-1765. Detour floor-543.215515 and isolated character floor observation-539.774475 identify the ruined-pillar level. Exact original orb model and placement height still require acceptance.",
+    "native_quest_verified": false,
+    "model_review_pending": true
+  },
+  "void": {
+    "bounds": {"minx":-1580,"maxx":-1020,"miny":80,"maxy":680,"minz":-1080,"maxz":-450},
+    "evidence": "2012-04-14 report in20121103151808 quest4152 capture describes Discover update while heading toward the downward spiral searching forHarLak, not falling into pit. Existing pit map, complete Detour route from ruins and originalHarLak114667 at(-1076.375,164.625,-535.375) bound the cavern/rim. Isolated character reached that rim atZ-536.666565 with rendered voidspawn/Priest. Broad cavern dimensions are labelled reconstruction settings, not exact original trigger recovery.",
+    "native_quest_verified": false
+  }
+}

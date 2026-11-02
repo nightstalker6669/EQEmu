@@ -1,0 +1,27 @@
+{
+  "schema": 9335,
+  "tasks": 40,
+  "objectives": 184,
+  "parent_rewards": 7,
+  "armor_options": 34,
+  "required_sql_files": [
+    "001-catalogue.disabled.sql",
+    "010-journal.disabled.sql",
+    "020-progression-rewards.disabled.sql",
+    "030-bone-recipes.sql",
+    "040-encounter-npcs.disabled.sql",
+    "050-quest-chest-respawn.disabled.sql",
+    "060-halon-complete-stock.disabled.sql",
+    "070-totem-world-sources.disabled.sql",
+    "080-mer-mission.disabled.sql",
+    "085-parent-rewards-hand.disabled.sql",
+    "090-enable-whole-batch.sql"
+  ],
+  "required_engine_apis": [
+    "GetPassengerBoatID",
+    "GetSharedTaskInstanceID"
+  ],
+  "activation": "One SQL transaction and composed quest files; no optional content pieces. Services remain under operator control.",
+  "deployed": false,
+  "native_acceptance": false
+}

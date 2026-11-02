@@ -57,6 +57,10 @@ public:
 	virtual const RmReal * getBoundMin(void) const = 0; // return the minimum bounding box
 	virtual const RmReal * getBoundMax(void) const = 0; // return the maximum bounding box.
 	virtual void release(void) = 0;
+	// Loader-owned half-open source triangle interval; legacy meshes stay conservative.
+	virtual bool raycastExceptSourceRange(const RmReal *from, const RmReal *to, RmUint32, RmUint32) {
+		return raycast(from, to, nullptr, nullptr, nullptr);
+	}
 protected:
 	virtual ~RaycastMesh(void) { };
 };

@@ -1,0 +1,71 @@
+{
+  "status": "All thirteen Steppes quest routes natively complete; targeted follow-up limits remain explicit",
+  "confirmed_native_quests": [
+    "Clay for Selana",
+    "Wood for Carving",
+    "The Talking Plant",
+    "The Library",
+    "Sweeping the Steppes: Gnolls",
+    "Web of Curiosity",
+    "Cull the Gnolls",
+    "Cull the Goblins",
+    "Sweeping the Steppes: Goblins",
+    "Sowing Dissent",
+    "Book for Toegnasher",
+    "The Destroyed Portal",
+    "Treasure of the Dead"
+  ],
+  "partial_native": [],
+  "pending": [
+    "Native Gnoll level54 late-join boundary and other shared-family variants; crypt native removal/rejoin and post-completion relog are verified",
+    "Recurring Yavia supply client actor/target failure after repeated pickups",
+    "Native Windows execution of the complete installer"
+  ],
+  "no_new_wire_opcode": true,
+  "historical_scope": "By May31 2013; approved missing-value defaults labelled in companion provenance",
+  "limitations": [
+    "Web of Curiosity required zone refreshes after two pickup failures; all supplies, waves, handins and rewards were native. Cause remains unresolved.",
+    "Crypt combat used the private high-damage QA setup. This verifies encounter/task/reward integration, not historical encounter difficulty."
+  ],
+  "confirmed_native_parent_rewards": [
+    {
+      "achievement_id": 500060200,
+      "components": 7,
+      "selected_option": 1,
+      "items": [
+        108599,
+        108598
+      ],
+      "durable_grants": "Both saved once, attempt_count1"
+    },
+    {
+      "achievement_id": 500060300,
+      "selected_option": 1,
+      "items": [
+        108404
+      ],
+      "durable_grants": "Selection and grant status1, attempt_count1"
+    },
+    {
+      "achievement_id": 500060400,
+      "selected_option": 1,
+      "items": [
+        108405
+      ],
+      "durable_grants": "Selection and grant status1, attempt_count1"
+    }
+  ],
+  "sowing_acceptance": "Real ground trap, native item cast7230, three owner-aggro goblin crossings/deaths, final hail, reward and achievement credit. Normal navigation preserved hate; native Taunt failures were retried.",
+  "book_acceptance": "Original giant/kobold page drops, three page handins, merchant-purchased parchment on cursor at the rune stone, final rune handin, reward53635 and component50199 saved.",
+  "portal_acceptance": "Original Icefall/Direwind loot (four rocks and four fragments), portal visit, owned guardian combat, all eight individual handins, rewards53632+87208 and task completion saved.",
+  "crypt_acceptance": {
+    "party": 3,
+    "original_minimum_preserved": true,
+    "entry": "Original door2 clicked and crossed by navigation",
+    "objectives": "Chamber, chest proximity, owned guardian kill, final Bordan hail",
+    "shared_rejoin": "One character removed itself and accepted a native task invitation; same run and chamber count restored",
+    "rewards": "All three members, including two clerics, received exactly one53630; per-character was_rewarded1 saved",
+    "persistence": "Completed header, all three members and all four objectives archived; third client cleanly camped and AutoLogin reconnected with all four counts and one knife",
+    "door_lease": "Released after guardian; completed scene door_sealed=false"
+  }
+}

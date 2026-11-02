@@ -1,33 +1,135 @@
 {
-  "branch": "rof2-shared-core",
+  "branch": "rof2-achievements",
   "upstream_commit": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "features": [
-    "shared-core"
+    "shared-core",
+    "achievements"
   ],
-  "inputs": {
-    "source": "eqemu-rof2-housing 710ecb7, fellowship 9382453, spirit-shrouds e32ca15",
-    "task_rewards": "rof2-achievements 1cfaaee4a2c02e2fb7c9992d971749790bfb83e7"
-  },
-  "compatibility": "Stable legacy table/type/custom-data names; source implementations extracted once into common/shared_core; feature-specific gameplay and recovery adapters excluded.",
-  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
-  "integration_scope": "All five published features share pure upstream develop. Achievements keeps its own branch and its published content is included in integration.",
+  "inputs": [
+    {
+      "feature": "achievements",
+      "repository": "nightstalker6669/eqemu-rof2-achievements",
+      "commit": "334a0e2c28079af07c9a4d07a0654f74ba9e4991",
+      "omitted_gallery_and_generated_files": []
+    }
+  ],
   "source_integration": "Feature-only changes replayed directly onto upstream develop; linear review commits without master merges or old mixed-history parents.",
-  "upstream_branch": "develop",
-  "previous_published_commit": "f84de86f885d6e0240ccb1559629a2cfc994708b",
-  "backup_branch": "archive/20261029-before-develop/rof2-shared-core",
-  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base.",
-  "shared_task_rewards": {
+  "validation": {
+    "status": "Latest achievement consumer independently passed clean world and zone compilation/linking on published shared-core b3f795ea.",
+    "compiler": "GCC12/C++20, cached matching-pinned vcpkg SDK, normal CMake/PCH, serial-j1, resource-limited network-disabled container.",
+    "validated_dependency": "b3f795ea642d810d0af75dca39d6dd1f28826385",
     "binary_database_version": 9338,
-    "wire_api": "EQ::RewardSelection in common/reward_display.h",
-    "historical_schema_envelopes": [
-      9331,
-      9332
+    "scope": "Core source adoption while preserving every published feature source/content file, including the77-file Buried Sea milestone.",
+    "deployment": "No active source, binary, database or client changes by adoption. Current local native milestone used schema9336.",
+    "native_acceptance": "New schema9338 engine exchange/reconnect/stale-cache/shared-task regression remains pending; BuriedSea native proof is recorded separately.",
+    "full_branch_link": "Complete achievement source, including all published Buried Sea content, linked world and zone successfully in an isolated clean build.",
+    "built_targets": [
+      "world",
+      "zone"
     ],
-    "supplemental_sql_identity": "Original class, shared occurrence and admission files retained; see SHARED-REWARDS.md",
-    "scope": "Generic reward catalogue, task selection/delivery/occurrence ownership, custody and idempotency, carried Collect and distinct task-completion gates; achievement runtime and content excluded.",
-    "validation": "See private extraction receipt; no runtime/database deployment or native acceptance claimed."
+    "result": "passed",
+    "clean_build": true,
+    "resource_limits": "One CPU, serial-j1, 3GiB memory/no swap, network disabled, read-only source and matching-pinned SDK.",
+    "binary_sha256": {
+      "world": "3bac3a68c53ce41a442cb8d1eef2b08039fdeb13a0bec3c87b83922e92825090",
+      "zone": "5c676173cc053d3c17a9d165e3cb8489f6f418e58a1b7b2731bdbcc2d86c99dd"
+    },
+    "source_corrections_needed": false,
+    "post_build_changes": "Documentation/provenance metadata only; compiled source/schema/content unchanged."
   },
-  "prior_rebase_validation": {
+  "database": "Existing PEQ/MariaDB database plus required migrations; no PEQ fork or database dump included.",
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "integration_scope": "The original five published features share pure upstream develop. Later achievement content milestones are committed to this branch separately; consult integration branch provenance before combining.",
+  "upstream_branch": "develop",
+  "previous_published_commit": "85644205995c3093b4de9db4d3ce8e92d6a0cf63",
+  "backup_branch": "archive/20261029-before-develop/rof2-achievements",
+  "history": "Linear feature layers over exact upstream develop; no merge commits ahead of base.",
+  "achievement_content_milestones": [
+    {
+      "name": "Mesa armor, gifts and encounters",
+      "package": "extensions/rof2/achievements/content/mesa-remaining",
+      "tasks": 36,
+      "activities": 277,
+      "recipes": 27,
+      "historical_achievement_definitions": 4,
+      "parent_reward_sets": 4,
+      "protocol_changes": "None; existing achievement/task/reward protocol retained",
+      "native_evidence": "Eight distinct tasks completed; all eight component bits, original20equipment slots, unrelated active tasks and earring scaling persisted through fresh process login. Dorina Lament saved reward offer survived login and native selection delivered an actual item. Escort uses explicitly labelled route-only administrative prerequisite checkpoint after separately observed genuine material acquisition.",
+      "historical_limits": "May31,2013 cutoff; unrecovered encounter balance/probabilities/path remain explicit user-approved configurable reconstructions; see package provenance."
+    },
+    {
+      "name": "Blackfeather Roost quests/acquisition/nests",
+      "package": "extensions/rof2/achievements/content/roost",
+      "historical_cutoff": "2013-05-31",
+      "quests": 15,
+      "activities": 54,
+      "catalogue_definitions": 5,
+      "engine_source_files": 12,
+      "reward_limits": "Ascending wrist and Raider glove/bundle choices unresolved; neither parent reward set configured.",
+      "native_status": "Six distinct quests completed with component credit; all seven nest types, retained ruins/late entry/native deadline, feather pickups/handins/item+XP reward and class-filtered paired earrings with fresh-login persistence passed on the corresponding develop combined build. Explicit remaining limits retained; client-local combat toggle unchanged.",
+      "validation": "Nine affected public translation units, linked Map/BVH tests and assertion-enabled lifecycle contracts passed. The corresponding combined develop server passed a full compile/link and scoped native gameplay. Full standalone public link/native rerun not repeated.",
+      "private_data_included": false
+    },
+    {
+      "name": "Vergalid Mines quests and rewards",
+      "package": "extensions/rof2/achievements/content/vergalid",
+      "historical_cutoff": "2013-05-31",
+      "quests": 17,
+      "activities": 56,
+      "achievement_groups": 4,
+      "new_actor_types": 7,
+      "native_completed_quests": 17,
+      "native_parent_reward_paths": 4,
+      "native_parent_reward_item_entries": 5,
+      "fresh_login_persistence": true,
+      "new_wire_opcodes": false,
+      "native_shared_members_checked": 1,
+      "historical_and_platform_limits": "Labelled numerical/geometry/class-policy defaults; head-variant family inference; full multiplayer orb and native Windows remain unverified. See package provenance.",
+      "private_data_included": false
+    },
+    {
+      "family": "Buried Sea islands and Jonas Dagmire hand",
+      "source_commit": "b29b371def9558529326fd4b09d7d1396ebf4e77",
+      "public_files": 77,
+      "individual_quests": 39,
+      "shared_missions": 1,
+      "objectives": 184,
+      "native_bones": 27,
+      "native_class_armor_choices": "Cleric choice from each of seven sets; other class variants not individually tested.",
+      "native_shared_mission": "Real three-member admission/owned instance; one member performed the physical voyage and all three received the payout.",
+      "native_recipes": 7,
+      "native_persistence": "Final hand and saved achievement/reward state survived one combined logout/login.",
+      "native_engine_schema": 9336,
+      "new_engine_9338_native_acceptance": "PENDING; no new runtime deployment by this source adoption.",
+      "scope_limit": "Local Linux RoF2 milestone, not the entire May 31, 2013 catalogue or native Windows acceptance.",
+      "private_qa_included": false
+    }
+  ],
+  "milestones": [
+    {
+      "name": "Steppes quests and shared-task persistence",
+      "package": "extensions/rof2/achievements/content/steppes",
+      "historical_cutoff": "2013-05-31",
+      "quests": 13,
+      "activities": 59,
+      "native_completed_quests": 10,
+      "native_parent": "Conquering the Steppes:7components and two-item class-appropriate bundle, each grant once",
+      "engine_source_files": 20,
+      "new_wire_opcodes": false,
+      "remaining": "Three quests, remaining parent/multiplayer coverage and recurring Yavia pickup issue; see native-status.json",
+      "private_data_included": false
+    }
+  ],
+  "shared_core_dependency": {
+    "commit": "b3f795ea642d810d0af75dca39d6dd1f28826385",
+    "branch": "rof2-shared-core",
+    "source_compatibility": "EQ::Achievements reward wire aliases resolve to EQ::RewardSelection; one shared codec linked",
+    "schema": "Binary schema9338; original9331\u20139338 migration registrations/SQL bytes retained.",
+    "previous_published_consumer": "b29b371def9558529326fd4b09d7d1396ebf4e77",
+    "new_engine_build": "PASS: complete latest achievement source independently linked world/zone using normal CMake/PCH after preserving all77 BuriedSea files.",
+    "previous_dependency": "17d63f7d512711e911787e630f4533ee14a1e785"
+  },
+  "historical_source_rebase_validation": {
     "status": "Passed targeted source and package checks on pure upstream develop; source publication only.",
     "compiler": "GCC12/C++20 with cached vcpkg SDK; targeted syntax compilation, normal source preamble for zone translation units.",
     "translation_units": [
@@ -43,33 +145,8 @@
     ],
     "history": "New linear review history; old heads preserved in archive branches.",
     "full_branch_link": "Not independently linked; full combined build recorded by the integration branch.",
-    "native_acceptance": "No new native gameplay or active server/database deployment during this rebase."
-  },
-  "validation": {
-    "status": "Shared reward extraction and schema9336\u20139338 engine extension independently built and checked offline.",
-    "compiler": "GCC12/C++20, original cached vcpkg SDK, separate build tree/container.",
-    "full_branch_link": "Complete shared-core world and zone linked successfully in a clean separate CMake/PCH build; no runtime binary installation.",
-    "wire_compatibility": "386 serialized buffers byte-identical to published achievements1cfaaee4a across all seven reward wire entry types.",
-    "task_contracts": "Carried Collect high-water, distinct completion and frozen gate behavior, common-only identity, explicit wire fixtures and duplicate-subset refusal passed in private harness.",
-    "consumer_compatibility": "Seven contextual translation units checked for each of achievements1cfaaee4a and integrationf59defce0 consumer trees.",
-    "migration_compatibility": "Registered manifest and supplemental SQL bytes identical to immutable published source; one9331-9334 registration each.",
-    "native_acceptance": "No server, client, database, binary installation, service or active session actions."
-  },
-  "currency_acknowledgement_followup": {
-    "scope": "Return actual alternate-currency persistence success to durable reward callers in ordinary and clamped paths; while currency is unloaded, durable callers retry explicitly without enqueuing a hidden grant. Ordinary three-argument callers retain their queue behavior.",
-    "origin": "Parent-reviewed contextual correction after immutable source extraction.",
-    "validation": "Incremental core zone linked; actual-method behavior fixtures and contextual consumer client compilation recorded in private review evidence.",
-    "schema_changes": "None"
-  },
-  "shared_task_transport": {
-    "source": "Parent-reviewed generic schema9335 candidate; contextual port over published fc88a0ba79a05e437e7b61af4e38ead32131de0f",
-    "schema": 9335,
-    "migration": "2026_11_01_shared_task_average_levels.sql",
-    "scope": "Recent boat passenger observations, owned shared-task mission instance lookup, optional persisted-member average-level admission",
-    "achievement_dependency": "None; Lua lookup uses stock shared-task and dynamic-zone APIs",
-    "content_activation": "None; policy table is empty and no mission or quest content is imported",
-    "protocol_document": "docs/rof2/transport-passenger-state.md",
-    "validation": "Offline core world/zone link and contextual consumer checks are recorded in private review evidence; no runtime, database or native gameplay acceptance claimed."
+    "native_acceptance": "No new native gameplay or active server/database deployment during this rebase.",
+    "vergalid_content_milestone": "All17quests/fourparent reward paths and charged shard/key passage verified natively, with fresh-login persistence. Real-module death/guardian ownership fixtures and guarded complete SQL install/repeat/rollback passed. No new engine binary build required; source integration unchanged."
   },
   "shared_engine_9336_9338": {
     "input_core_commit": "17d63f7d512711e911787e630f4533ee14a1e785",
@@ -88,6 +165,48 @@
     "allocator_restore_policy": "Never reset/decrease the server-state counter; retain at least the greatest issued last_id before restoring older snapshots, content rollback or character reset/copy. Drain legacy sessions/client caches for the initial transition.",
     "validation": "Independent clean shared-core world/zone links passed using GCC12/C++20, normal CMake/PCH, serial compilation and read-only matching-pinned SDK; fresh277 private policy/catalogue contracts passed; consumer feature patches retained unchanged before intentional documentation updates. No active deployment/native acceptance performed by extraction.",
     "native_acceptance": "Pending coordinated native exchange, reconnect/stale-cache and shared-task regression checks.",
-    "protocol": "No opcode or wire-layout additions; MerchantList additions are server catalogue metadata."
+    "protocol": "No opcode or wire-layout additions; MerchantList additions are server catalogue metadata.",
+    "adopted_core_commit": "b3f795ea642d810d0af75dca39d6dd1f28826385",
+    "consumer_validation": "Latest achievement consumer clean world/zone links passed; native schema9338 exchange/reconnect/shared-task regression remains pending."
+  },
+  "historical_shared_core_9335_validation": {
+    "status": "Both consumers independently passed clean Linux world and zone compilation and linking on the published shared core.",
+    "compiler": "GCC12/C++20 with cached vcpkg SDK; normal CMake precompiled headers, RelWithDebInfo -O0 -g0.",
+    "full_branch_link": "Clean world and zone links passed independently for BOTH rof2-achievements and rof2-integration; original serial build session completed successfully.",
+    "built_targets": [
+      "world",
+      "zone"
+    ],
+    "clean_consumer_builds": {
+      "rof2-integration": {
+        "targets": [
+          "world",
+          "zone"
+        ],
+        "result": "passed",
+        "clean_build": true,
+        "binary_sha256": {
+          "world": "f9e2941c967b037cba3f2821082d6ee688409748379d2a4b42be14fe03d6875b",
+          "zone": "3cf8da27059a32e90b238371b7036b942d0a83de77d91d534556022670d9d93f"
+        }
+      },
+      "rof2-achievements": {
+        "targets": [
+          "world",
+          "zone"
+        ],
+        "result": "passed",
+        "clean_build": true,
+        "binary_sha256": {
+          "world": "6aef5e1349202ad9f24e7c32ddb6409b7d283e77f03bece6e85912fcc4123a33",
+          "zone": "2a61fc1483f8cf1a480f1eaa4ad886b29ec214d01db3a8ab007f1e8cd15be094"
+        }
+      }
+    },
+    "resource_limits": "Each clean build used one CPU and 4GiB memory, sequentially.",
+    "validated_dependency": "rof2-shared-core 17d63f7d512711e911787e630f4533ee14a1e785, binary database schema9335.",
+    "scope": "Shared-core consumer adoption and wire codec boundary validation; metadata-only provenance correction after completed builds does not alter compiled source/schema/content.",
+    "deployment": "Source publication only; no runtime, client, database or new Buried Sea content actions.",
+    "native_acceptance": "No new native quest acceptance is claimed by this consumer adoption."
   }
 }

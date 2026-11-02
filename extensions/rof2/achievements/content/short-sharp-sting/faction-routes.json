@@ -1,0 +1,154 @@
+{
+  "group_id": 396942,
+  "actors": [
+    {
+      "id": 395224,
+      "name": "a_Stone_Hive_warrior",
+      "previous_group": 0
+    },
+    {
+      "id": 395225,
+      "name": "a_Stone_Hive_warrior",
+      "previous_group": 0
+    },
+    {
+      "id": 395226,
+      "name": "a_Stone_Hive_laborer",
+      "previous_group": 0
+    },
+    {
+      "id": 395229,
+      "name": "a_Stone_Hive_laborer",
+      "previous_group": 0
+    },
+    {
+      "id": 395235,
+      "name": "a_Stone_Hive_warrior",
+      "previous_group": 0
+    },
+    {
+      "id": 395236,
+      "name": "a_Stone_Hive_gardener",
+      "previous_group": 0
+    },
+    {
+      "id": 395256,
+      "name": "a_Stone_Hive_slaver",
+      "previous_group": 0
+    },
+    {
+      "id": 396107,
+      "name": "a_gardener",
+      "previous_group": 0
+    },
+    {
+      "id": 396126,
+      "name": "a_gardener",
+      "previous_group": 0
+    },
+    {
+      "id": 396129,
+      "name": "an_animated_vinewalker",
+      "previous_group": 0
+    },
+    {
+      "id": 396133,
+      "name": "a_gardener",
+      "previous_group": 0
+    },
+    {
+      "id": 396135,
+      "name": "an_animated_vinewalker",
+      "previous_group": 0
+    },
+    {
+      "id": 396137,
+      "name": "an_animated_vinewalker",
+      "previous_group": 0
+    },
+    {
+      "id": 396173,
+      "name": "a_bixie_enthraller",
+      "previous_group": 0
+    },
+    {
+      "id": 396176,
+      "name": "a_bixie_poisonbrewer",
+      "previous_group": 0
+    },
+    {
+      "id": 396185,
+      "name": "a_bixie_commander",
+      "previous_group": 0
+    },
+    {
+      "id": 396189,
+      "name": "a_bixie_harvester",
+      "previous_group": 0
+    },
+    {
+      "id": 396196,
+      "name": "an_animated_vinewalker",
+      "previous_group": 0
+    },
+    {
+      "id": 396200,
+      "name": "a_bixie_servant",
+      "previous_group": 0
+    },
+    {
+      "id": 396202,
+      "name": "a_bixie_poisonmaker",
+      "previous_group": 0
+    },
+    {
+      "id": 396214,
+      "name": "a_bixie_poisonbrewer",
+      "previous_group": 0
+    },
+    {
+      "id": 396219,
+      "name": "a_bixie_rejuvenator",
+      "previous_group": 0
+    },
+    {
+      "id": 396221,
+      "name": "a_bixie_arcanist",
+      "previous_group": 0
+    },
+    {
+      "id": 396227,
+      "name": "a_bixie_spellcrafter",
+      "previous_group": 0
+    },
+    {
+      "id": 396231,
+      "name": "a_bixie_rejuvenator",
+      "previous_group": 0
+    },
+    {
+      "id": 396251,
+      "name": "an_animated_vinewalker",
+      "previous_group": 0
+    }
+  ],
+  "copy_npc": 396941,
+  "unmodified_original": 396222,
+  "sources": [
+    {
+      "url": "https://everquest.allakhazam.com/db/faction/471",
+      "evidence": "Current membership/direction corroboration, not a preserved May 2013 numeric record."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/faction/472",
+      "evidence": "Current membership/direction corroboration, not a preserved May 2013 numeric record."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/faction/473",
+      "evidence": "Current membership/direction corroboration, not a preserved May 2013 numeric record."
+    }
+  ],
+  "period_copy_source": "https://everquest.allakhazam.com/db/npc/23122#msg120895084262316561",
+  "scope": "Supported native grind routes and quest copies only; not a complete zone faction reconstruction. Original Prankster, prisoners and quest givers retain existing factions.",
+  "combat_preservation": "Only npc_faction_id is updated on source actors. primaryfaction=0 retains their original group-zero aggro/assist behavior."
+}

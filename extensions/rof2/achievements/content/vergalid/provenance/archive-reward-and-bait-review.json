@@ -1,0 +1,52 @@
+{
+  "browser": "Chrome",
+  "retrieved": "2026-10-31",
+  "captures": [
+    {
+      "quest": 5571,
+      "url": "https://web.archive.org/web/20130315233404/http://everquest.allakhazam.com/db/quest.html?quest=5571",
+      "capture": "2013-03-15",
+      "page_modified": "2012-12-27",
+      "facts": [
+        "Four original component quests.",
+        "Elaborate Consigned Cap reward family."
+      ],
+      "limits": [
+        "Four individual variant names absent from archived reward list; current page supplies those names."
+      ]
+    },
+    {
+      "quest": 5615,
+      "url": "https://web.archive.org/web/20130315233233/http://everquest.allakhazam.com/db/quest.html?quest=5615",
+      "capture": "2013-03-15",
+      "page_modified": "2012-12-27",
+      "facts": [
+        "Soldier/Scryer facemask reward choices and corresponding melee/caster descriptions."
+      ]
+    },
+    {
+      "quest": 5616,
+      "url": "https://web.archive.org/web/20130315234548/http://everquest.allakhazam.com/db/quest.html?quest=5616",
+      "capture": "2013-03-15",
+      "page_modified": "2012-12-28",
+      "facts": [
+        "Paired Soldier earring/ear-stud or Scryer earring/ear-stud rewards."
+      ]
+    },
+    {
+      "quest": 4610,
+      "url": "https://web.archive.org/web/20131101090348/http://everquest.allakhazam.com/db/quest.html?quest=4610",
+      "capture": "2013-11-01",
+      "page_modified": "2012-08-29",
+      "facts": [
+        "Earlier header gives minimum65, conflicting with later70 report.",
+        "Dated2012-04-21 comment confirms cursor bait trigger.",
+        "Dated2012-10-26 comment requires returning physically; waiting makes beast despawn."
+      ],
+      "limits": [
+        "Capture itself is after cutoff; dated comments and older page metadata are distinguished from pre-cutoff capture proof.",
+        "No exact bait consumption or expiry seconds recovered."
+      ]
+    }
+  ]
+}
