@@ -18,10 +18,13 @@
 #pragma once
 
 #include "event_loop.h"
+#include "uv.h"
+#include <cstring>
 
 #include <any>
 #include <exception>
 #include <functional>
+#include <stdexcept>
 
 namespace EQ {
 	class Task
@@ -33,6 +36,7 @@ namespace EQ {
 		typedef std::function<void(ResolveFn, RejectFn)> TaskFn;
 		struct TaskBaton
 		{
+			EventLoop *owner;
 			TaskFn fn;
 			ResolveFn on_then;
 			RejectFn on_catch;
@@ -67,9 +71,12 @@ namespace EQ {
 		}
 
 		void Run() {
+			if (EventLoop::IsThreadShuttingDown()) return;
 			uv_work_t *m_work = new uv_work_t;
 			memset(m_work, 0, sizeof(uv_work_t));
 			TaskBaton *baton = new TaskBaton();
+			baton->owner = &EventLoop::Get();
+			baton->owner->RegisterCleanup(m_work, [m_work] { uv_cancel(reinterpret_cast<uv_req_t*>(m_work)); });
 			baton->fn = m_fn;
 			baton->on_then = m_then;
 			baton->on_catch = m_catch;
@@ -79,7 +86,7 @@ namespace EQ {
 
 			m_work->data = baton;
 
-			uv_queue_work(EventLoop::Get().Handle(), m_work, [](uv_work_t* req) {
+			const auto queued = uv_queue_work(EventLoop::Get().Handle(), m_work, [](uv_work_t* req) {
 				TaskBaton *baton = (TaskBaton*)req->data;
 
 				baton->fn([baton](const std::any& result) {
@@ -93,6 +100,13 @@ namespace EQ {
 				});
 			}, [](uv_work_t* req, int status) {
 				TaskBaton *baton = (TaskBaton*)req->data;
+
+				baton->owner->RemoveCleanup(req);
+				if (baton->owner->IsShuttingDown()) {
+					delete baton;
+					delete req;
+					return;
+				}
 
 				if (baton->has_error && baton->on_catch) {
 					baton->on_catch(baton->error);
@@ -108,6 +122,12 @@ namespace EQ {
 				delete baton;
 				delete req;
 			});
+			if (queued < 0) {
+				baton->owner->RemoveCleanup(m_work);
+				if (baton->on_catch) baton->on_catch(std::runtime_error(uv_strerror(queued)));
+				delete baton;
+				delete m_work;
+			}
 		}
 
 	private:

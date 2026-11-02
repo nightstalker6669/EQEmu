@@ -1,3 +1,6 @@
+#include "common/database.h"
+#include "common/eqemu_config.h"
+#include "common/reward_selection_wire_identity.h"
 #include "zone/reward_selection.h"
 
 #include "common/reward_display.h"
@@ -102,6 +105,24 @@ static EQ::RewardSelection::RewardDisplayEntry BuildDisplayEntry(
 	}
 
 	return entry;
+}
+
+// Commit independently of any caller's item/reward transaction: rolling back
+// that transaction must never make an already displayed token reusable.
+static std::optional<uint64_t> ReserveWireIdentities(uint64_t count)
+{
+	if (!count || count >= EQ::RewardSelection::CommonOnlySelection) return std::nullopt;
+	const auto config = EQEmuConfig::get();
+	Database allocator;
+	if (!allocator.Connect(config->DatabaseHost.c_str(), config->DatabaseUsername.c_str(),
+		config->DatabasePassword.c_str(), config->DatabaseDB.c_str(), config->DatabasePort)) return std::nullopt;
+	if (!allocator.QueryDatabase("SET autocommit=1").Success()) return std::nullopt;
+	auto reserved = allocator.QueryDatabase(fmt::format(
+		"UPDATE reward_selection_wire_allocator SET last_id=LAST_INSERT_ID(last_id+{}) "
+		"WHERE id=1 AND last_id<={}", count, EQ::RewardSelection::CommonOnlySelection - 1 - count));
+	if (!reserved.Success() || reserved.RowsAffected() != 1 || reserved.LastInsertedID() < count ||
+		reserved.LastInsertedID() >= EQ::RewardSelection::CommonOnlySelection) return std::nullopt;
+	return reserved.LastInsertedID() - count + 1;
 }
 
 static EQ::RewardSelection::RewardDisplaySet BuildDisplaySet(
@@ -218,20 +239,6 @@ bool ClientRewardSelection::SameSession(
 		left.reward_set.reward_set_id == right.reward_set.reward_set_id;
 }
 
-bool ClientRewardSelection::AssignWireOptionIds(ChannelState &state)
-{
-	uint64_t next_id = 1;
-	for (auto &session : state.sessions) {
-		for (auto &option : session.reward_set.options) {
-			if (next_id >= EQ::RewardSelection::CommonOnlySelection) {
-				return false;
-			}
-			option.wire_option_id = static_cast<uint32_t>(next_id++);
-		}
-	}
-	return true;
-}
-
 ClientRewardSelection::ChannelState &ClientRewardSelection::State(
 	RewardSelectionChannel channel
 )
@@ -298,6 +305,16 @@ bool ClientRewardSelection::Open(
 		}
 		updated.clear();
 	}
+	uint64_t needed = 0;
+	for (const auto &session : sessions) {
+		const auto previous = std::find_if(state.sessions.begin(), state.sessions.end(),
+			[&](const RewardSelectionSession &old) { return SameSession(old, session); });
+		needed += EQ::RewardSelection::WireIdentity::Required(session.reward_set,
+			previous != state.sessions.end() ? &previous->reward_set : nullptr);
+	}
+	auto reserved = needed ? ReserveWireIdentities(needed) : std::optional<uint64_t>(0);
+	if (!reserved) return false;
+	auto next_wire_identity = *reserved;
 	for (auto session : sessions) {
 		const auto previous = std::find_if(
 			state.sessions.begin(), state.sessions.end(),
@@ -305,15 +322,12 @@ bool ClientRewardSelection::Open(
 				return SameSession(existing, session);
 			}
 		);
-		if (previous != state.sessions.end()) {
-			session.wire_reward_set_id = previous->wire_reward_set_id;
-		}
-		else {
-			if (m_next_wire_reward_set_id > std::numeric_limits<uint32_t>::max()) {
-				return false;
-			}
-			session.wire_reward_set_id = static_cast<uint32_t>(m_next_wire_reward_set_id++);
-		}
+		const auto wire_set = EQ::RewardSelection::WireIdentity::Assign(
+			session.reward_set, previous != state.sessions.end() ? &previous->reward_set : nullptr,
+			previous != state.sessions.end() ? previous->wire_reward_set_id : 0,
+			next_wire_identity, next_wire_identity);
+		if (!wire_set) return false;
+		session.wire_reward_set_id = *wire_set;
 		const auto found = std::find_if(
 			updated.begin(), updated.end(),
 			[&session](const RewardSelectionSession &existing) {
@@ -328,9 +342,6 @@ bool ClientRewardSelection::Open(
 		}
 	}
 	state.sessions = std::move(updated);
-	if (!AssignWireOptionIds(state)) {
-		return false;
-	}
 
 	++state.session_generation;
 	if (!state.session_generation) {

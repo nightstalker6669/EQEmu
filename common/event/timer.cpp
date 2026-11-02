@@ -40,9 +40,12 @@ Timer::~Timer()
 
 void Timer::Start(uint64_t duration_ms, bool repeats)
 {
+	if (EventLoop::IsThreadShuttingDown()) return;
 	if (!m_timer)
 	{
-		uv_loop_t* loop = EventLoop::Get().Handle();
+		m_loop = &EventLoop::Get();
+		m_loop->RegisterCleanup(this, [this] { Stop(); });
+		uv_loop_t* loop = m_loop->Handle();
 
 		m_timer = std::make_unique<uv_timer_t>();
 		memset(m_timer.get(), 0, sizeof(uv_timer_t));
@@ -75,6 +78,8 @@ void Timer::Stop()
 {
 	if (m_timer)
 	{
+		m_loop->RemoveCleanup(this);
+		m_loop = nullptr;
 		uv_close(reinterpret_cast<uv_handle_t*>(m_timer.release()),
 			[](uv_handle_t* handle)
 		{

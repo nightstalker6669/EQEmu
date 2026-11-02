@@ -43,6 +43,7 @@ private:
 	void Execute();
 	
 	std::unique_ptr<uv_timer_t> m_timer;
+	EventLoop *m_loop = nullptr;
 	callback_t m_cb;
 };
 

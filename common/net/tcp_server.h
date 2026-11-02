@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "common/event/event_loop.h"
 
 #include "common/net/tcp_connection.h"
 
@@ -37,6 +38,7 @@ namespace EQ
 		private:
 			std::function<void(std::shared_ptr<TCPConnection>)> m_on_new_connection;
 			uv_tcp_t *m_socket;
+			EQ::EventLoop *m_loop = nullptr;
 		};
 	}
 }

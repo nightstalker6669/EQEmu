@@ -35,20 +35,16 @@ SendBufferPool send_buffer_pool;
 EQ::Net::ReliableStreamConnectionManager::ReliableStreamConnectionManager()
 {
 	m_attached = nullptr;
-	memset(&m_timer, 0, sizeof(uv_timer_t));
-	memset(&m_socket, 0, sizeof(uv_udp_t));
 
-	Attach(EQ::EventLoop::Get().Handle());
+	if (!EQ::EventLoop::IsThreadShuttingDown()) Attach(EQ::EventLoop::Get().Handle());
 }
 
 EQ::Net::ReliableStreamConnectionManager::ReliableStreamConnectionManager(const ReliableStreamConnectionManagerOptions &opts)
 {
 	m_attached = nullptr;
 	m_options = opts;
-	memset(&m_timer, 0, sizeof(uv_timer_t));
-	memset(&m_socket, 0, sizeof(uv_udp_t));
 
-	Attach(EQ::EventLoop::Get().Handle());
+	if (!EQ::EventLoop::IsThreadShuttingDown()) Attach(EQ::EventLoop::Get().Handle());
 }
 
 EQ::Net::ReliableStreamConnectionManager::~ReliableStreamConnectionManager()
@@ -58,27 +54,34 @@ EQ::Net::ReliableStreamConnectionManager::~ReliableStreamConnectionManager()
 
 void EQ::Net::ReliableStreamConnectionManager::Attach(uv_loop_t *loop)
 {
+	if (EQ::EventLoop::IsThreadShuttingDown()) return;
 	if (!m_attached) {
-		uv_timer_init(loop, &m_timer);
-		m_timer.data = this;
+		m_timer = new uv_timer_t{};
+		m_socket = new uv_udp_t{};
+		m_loop_owner = EQ::EventLoop::Current();
+		if (m_loop_owner && m_loop_owner->Handle() == loop)
+			m_loop_owner->RegisterCleanup(this, [this] { Detach(); });
+		else m_loop_owner = nullptr;
+		uv_timer_init(loop, m_timer);
+		m_timer->data = this;
 
 		auto update_rate = (uint64_t)(1000.0 / m_options.tic_rate_hertz);
 
-		uv_timer_start(&m_timer, [](uv_timer_t *handle) {
+		uv_timer_start(m_timer, [](uv_timer_t *handle) {
 			ReliableStreamConnectionManager *c = (ReliableStreamConnectionManager*)handle->data;
 			c->UpdateDataBudget();
 			c->Process();
 			c->ProcessResend();
 		}, update_rate, update_rate);
 
-		uv_udp_init(loop, &m_socket);
-		m_socket.data = this;
+		uv_udp_init(loop, m_socket);
+		m_socket->data = this;
 		struct sockaddr_in recv_addr;
 		uv_ip4_addr("0.0.0.0", m_options.port, &recv_addr);
-		int rc = uv_udp_bind(&m_socket, (const struct sockaddr *)&recv_addr, UV_UDP_REUSEADDR);
+		int rc = uv_udp_bind(m_socket, (const struct sockaddr *)&recv_addr, UV_UDP_REUSEADDR);
 
 		rc = uv_udp_recv_start(
-			&m_socket,
+			m_socket,
 			[](uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf) {
 				if (suggested_size > 65536) {
 					buf->base = new char[suggested_size];
@@ -113,8 +116,14 @@ void EQ::Net::ReliableStreamConnectionManager::Attach(uv_loop_t *loop)
 void EQ::Net::ReliableStreamConnectionManager::Detach()
 {
 	if (m_attached) {
-		uv_udp_recv_stop(&m_socket);
-		uv_timer_stop(&m_timer);
+		uv_udp_recv_stop(m_socket);
+		uv_timer_stop(m_timer);
+		uv_close(reinterpret_cast<uv_handle_t*>(m_timer), [](uv_handle_t *h) { delete reinterpret_cast<uv_timer_t*>(h); });
+		uv_close(reinterpret_cast<uv_handle_t*>(m_socket), [](uv_handle_t *h) { delete reinterpret_cast<uv_udp_t*>(h); });
+		m_timer = nullptr;
+		m_socket = nullptr;
+		if (m_loop_owner) m_loop_owner->RemoveCleanup(this);
+		m_loop_owner = nullptr;
 		m_attached = nullptr;
 	}
 }
@@ -295,6 +304,7 @@ std::shared_ptr<EQ::Net::ReliableStreamConnection> EQ::Net::ReliableStreamConnec
 
 void EQ::Net::ReliableStreamConnectionManager::SendDisconnect(const std::string &addr, int port)
 {
+	if (!m_socket) return;
 	ReliableStreamDisconnect header;
 	header.zero = 0;
 	header.opcode = OP_OutOfSession;
@@ -312,7 +322,7 @@ void EQ::Net::ReliableStreamConnectionManager::SendDisconnect(const std::string 
 	memcpy(data, out.Data(), out.Length());
 	send_buffers[0] = uv_buf_init(data, out.Length());
 	send_req->data = send_buffers[0].base;
-	int ret = uv_udp_send(send_req, &m_socket, send_buffers, 1, (sockaddr*)&send_addr,
+	int ret = uv_udp_send(send_req, m_socket, send_buffers, 1, (sockaddr*)&send_addr,
 		[](uv_udp_send_t* req, int status) {
 		delete[](char*)req->data;
 		delete req;
@@ -1394,6 +1404,9 @@ void EQ::Net::ReliableStreamConnection::SendKeepAlive()
 }
 
 void EQ::Net::ReliableStreamConnection::InternalSend(Packet &p) {
+	// A stream can outlive the owning TLS loop and be closed by a static
+	// service destructor after its manager has detached the UDP handle.
+	if (!m_owner->m_socket) return;
 	if (m_owner->m_options.outgoing_data_rate > 0.0) {
 		auto new_budget = m_outgoing_budget - (p.Length() / 1024.0);
 		if (new_budget <= 0.0) {
@@ -1464,7 +1477,7 @@ void EQ::Net::ReliableStreamConnection::InternalSend(Packet &p) {
 	}
 
 	int send_result = uv_udp_send(
-		send_req, &m_owner->m_socket, send_buffers, 1, (sockaddr *)&send_addr,
+		send_req, m_owner->m_socket, send_buffers, 1, (sockaddr *)&send_addr,
 		[](uv_udp_send_t *req, int status) {
 			auto *ctx = reinterpret_cast<EmbeddedContext *>(req->data);
 			if (!ctx) {

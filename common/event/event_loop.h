@@ -18,6 +18,8 @@
 #pragma once
 
 #include <memory>
+#include <functional>
+#include <unordered_map>
 
 typedef struct uv_loop_s uv_loop_t;
 
@@ -27,6 +29,11 @@ class EventLoop
 {
 public:
 	static EventLoop& Get();
+	static EventLoop* Current() { return m_current; }
+	static bool IsThreadShuttingDown() { return m_thread_shutting_down; }
+	bool IsShuttingDown() const { return m_shutting_down; }
+	void RegisterCleanup(const void *owner, std::function<void()> cleanup);
+	void RemoveCleanup(const void *owner);
 
 	~EventLoop();
 	EventLoop(const EventLoop&) = delete;
@@ -42,6 +49,10 @@ private:
 	EventLoop();
 
 	std::unique_ptr<uv_loop_t> m_loop;
+	std::unordered_map<const void*, std::function<void()>> m_cleanup;
+	bool m_shutting_down = false;
+	static thread_local EventLoop *m_current;
+	static thread_local bool m_thread_shutting_down;
 };
 
 } // namespace EQ

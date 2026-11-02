@@ -252,6 +252,7 @@ namespace DatabaseSchema {
 			"reward_sources",
 			"task_reward_progression_members",
 			"task_reward_option_gates",
+			"task_spell_exchange_policies",
 			"rewards",
 			"skill_caps",
 			"spawn2",
@@ -305,6 +306,7 @@ namespace DatabaseSchema {
 			"titles",
 			"rule_values",
 			"variables",
+			"reward_selection_wire_allocator",
 		};
 	}
 

@@ -32,6 +32,10 @@ EQ::Net::TCPConnection::TCPConnection(uv_tcp_t *socket)
 {
 	m_socket = socket;
 	m_socket->data = this;
+	m_loop = EQ::EventLoop::Current();
+	if (m_loop && m_loop->Handle() == socket->loop)
+		m_loop->RegisterCleanup(this, [this] { Disconnect(); });
+	else m_loop = nullptr;
 }
 
 EQ::Net::TCPConnection::~TCPConnection() {
@@ -40,8 +44,10 @@ EQ::Net::TCPConnection::~TCPConnection() {
 
 void EQ::Net::TCPConnection::Connect(const std::string &addr, int port, bool ipv6, std::function<void(std::shared_ptr<TCPConnection>)> cb)
 {
+	if (EQ::EventLoop::IsThreadShuttingDown()) return;
 	struct EQTCPConnectBaton
 	{
+		EQ::EventLoop *owner;
 		uv_tcp_t *socket;
 		std::function<void(std::shared_ptr<EQ::Net::TCPConnection>)> cb;
 	};
@@ -63,6 +69,10 @@ void EQ::Net::TCPConnection::Connect(const std::string &addr, int port, bool ipv
 	memset(connect, 0, sizeof(uv_connect_t));
 
 	EQTCPConnectBaton *baton = new EQTCPConnectBaton;
+	baton->owner = &EQ::EventLoop::Get();
+	baton->owner->RegisterCleanup(socket, [socket] {
+		if (!uv_is_closing(reinterpret_cast<uv_handle_t*>(socket))) uv_close(reinterpret_cast<uv_handle_t*>(socket), on_close_handle);
+	});
 	baton->cb = cb;
 	baton->socket = socket;
 	connect->data = baton;
@@ -72,12 +82,14 @@ void EQ::Net::TCPConnection::Connect(const std::string &addr, int port, bool ipv
 		auto socket = baton->socket;
 		auto cb = baton->cb;
 
+		auto owner = baton->owner;
+		owner->RemoveCleanup(socket);
 		delete baton;
 
-		if (status < 0) {
-			uv_close((uv_handle_t*)socket, on_close_handle);
+		if (status < 0 || owner->IsShuttingDown()) {
+			if (!uv_is_closing(reinterpret_cast<uv_handle_t*>(socket))) uv_close((uv_handle_t*)socket, on_close_handle);
 			delete req;
-			cb(nullptr);
+			if (!owner->IsShuttingDown()) cb(nullptr);
 		}
 		else {
 			delete req;
@@ -133,15 +145,19 @@ void EQ::Net::TCPConnection::OnDisconnect(std::function<void(TCPConnection*)> cb
 void EQ::Net::TCPConnection::Disconnect()
 {
 	if (m_socket) {
-		m_socket->data = this;
-		uv_close((uv_handle_t*)m_socket, [](uv_handle_t* handle) {
-			TCPConnection *connection = (TCPConnection*)handle->data;
-
-			if (connection->m_on_disconnect_cb) {
-				connection->m_on_disconnect_cb(connection);
-			}
-
-			delete (uv_tcp_t *)handle;
+		struct Closing {
+			std::shared_ptr<TCPConnection> owner;
+			EQ::EventLoop *loop;
+		};
+		auto closing = new Closing{weak_from_this().lock(), m_loop};
+		if (m_loop) m_loop->RemoveCleanup(this);
+		m_loop = nullptr;
+		m_socket->data = closing;
+		uv_close(reinterpret_cast<uv_handle_t*>(m_socket), [](uv_handle_t* handle) {
+			std::unique_ptr<Closing> closing(static_cast<Closing*>(handle->data));
+			if (closing->owner && (!closing->loop || !closing->loop->IsShuttingDown()) && closing->owner->m_on_disconnect_cb)
+				closing->owner->m_on_disconnect_cb(closing->owner.get());
+			delete reinterpret_cast<uv_tcp_t*>(handle);
 		});
 		m_socket = nullptr;
 	}
