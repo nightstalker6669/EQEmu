@@ -71,6 +71,7 @@
 #include "common/classes.h"
 #include "common/data_bucket.h"
 #include "common/data_verification.h"
+#include "common/ground_aura_position.h"
 #include "common/eqemu_logsys.h"
 #include "common/events/player_event_logs.h"
 #include "common/item_instance.h"
@@ -756,6 +757,21 @@ bool Mob::DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob *sp
 	bool ignore_on_casting = false;
 
 	if (check_on_casting) {
+		if (spells[spell_id].target_type == ST_Ring &&
+		    IsEffectInSpell(spell_id, SpellEffect::PersistentEffect)) {
+			if (!EQ::GroundAura::InRange(
+				GetX(), GetY(), GetZ(), GetTargetRingX(), GetTargetRingY(), GetTargetRingZ(),
+				GetActSpellRange(spell_id, spells[spell_id].range), spells[spell_id].min_range
+			)) {
+				MessageString(Chat::Red, TARGET_OUT_OF_RANGE);
+				return false;
+			}
+			if (IsDetrimentalSpell(spell_id) && !spells[spell_id].npc_no_los &&
+			    !CheckLosFN(GetTargetRingX(), GetTargetRingY(), GetTargetRingZ(), GetSize())) {
+				MessageString(Chat::Red, CANT_SEE_TARGET);
+				return false;
+			}
+		}
 		if (spells[spell_id].target_type == ST_AEClientV1 ||
 			spells[spell_id].target_type == ST_AECaster ||
 			spells[spell_id].target_type == ST_Ring ||
@@ -2724,7 +2740,14 @@ bool Mob::SpellFinished(int32 spell_id, Mob *spell_target, CastingSlot slot, int
 
 		case TargetRing:
 		{
-			entity_list.AESpell(this, nullptr, spell_id, false, resist_adjust);
+			if (IsEffectInSpell(spell_id, SpellEffect::PersistentEffect)) {
+				// The caster owns one persistent entity at the selected point.
+				// Applying this through AESpell would require a recipient inside
+				// the parent radius and create a separate aura on each recipient.
+				MakeAura(spell_id);
+			} else {
+				entity_list.AESpell(this, nullptr, spell_id, false, resist_adjust);
+			}
 			break;
 		}
 	}

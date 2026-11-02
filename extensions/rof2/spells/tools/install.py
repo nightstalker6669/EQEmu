@@ -50,16 +50,32 @@ def main():
     payloads = [json.loads((ROOT / s["path"]).read_text()) for s in selected]
     files = {s["path"]: hashlib.sha256((ROOT / s["path"]).read_bytes()).hexdigest()
              for s in selected}
-    source = ROOT / "quests/shardslanding/#Tomekeeper_Kerkaz.lua"
-    destination = args.server / "quests/shardslanding/#Tomekeeper_Kerkaz.lua"
-    if not destination.parent.is_dir():
-        parser.error("Expected existing server quests/shardslanding directory")
-    if destination.exists() and destination.read_bytes() != source.read_bytes():
-        parser.error("Kerkaz script already exists with different contents; merge it first")
+    if any(files[s["path"]] != s["sha256"] for s in selected):
+        parser.error("Content payload differs from its manifest checksum")
+    if not (args.server / "quests").is_dir():
+        parser.error("Expected existing server quests directory")
+    stage_names = {s["name"] for s in selected}
+    quest_files = []
+    for entry in manifest["quest_files"]:
+        if entry["stage"] not in stage_names:
+            continue
+        relative = Path(entry["path"])
+        if relative.is_absolute() or ".." in relative.parts or relative.parts[0] != "quests":
+            parser.error("Invalid quest path in manifest")
+        source, destination = ROOT / relative, args.server / relative
+        npc_id = entry.get("npc_id")
+        if npc_id:
+            alternatives = [destination.with_suffix(".pl")]
+            alternatives += [destination.parent / f"{npc_id}{suffix}" for suffix in (".lua", ".pl")]
+            if any(p.exists() for p in alternatives):
+                parser.error(f"Existing NPC quest takes precedence or conflicts; merge it first: {relative}")
+        if destination.exists() and destination.read_bytes() != source.read_bytes():
+            parser.error(f"Quest script already differs; merge it first: {relative}")
+        quest_files.append((relative, source, destination))
     connection = pymysql.connect(**config, autocommit=False,
                                  cursorclass=pymysql.cursors.DictCursor)
     inserts, updates, counts = [], [], {}
-    script_created = False
+    scripts_created, directories_created = [], []
     committed = False
     try:
         with connection.cursor() as cursor:
@@ -172,9 +188,20 @@ def main():
                             if not spell or spell != {"name": item["name"], "rank": task["rank"],
                                                       "level": task["level"]}:
                                 raise RuntimeError(f"Spell era/class/rank mismatch: {item['spell_id']}")
+            if "006-ordered-runes" in stage_names:
+                ordered = json.loads((ROOT / "provenance/ordered-runes.json").read_text())
+                for catalogue in ordered["catalogues"].values():
+                    for item in catalogue:
+                        cursor.execute(f"SELECT name,rank,`classes{int(item['class'])}` AS level "
+                                       "FROM spells_new WHERE id=%s", (item["spell_id"],))
+                        if cursor.fetchone() != {"name": item["name"], "rank": 10,
+                                                  "level": item["level"]}:
+                            raise RuntimeError(f"Ordered spell era/class/rank mismatch: {item['spell_id']}")
             report = {"stages": [s["name"] for s in selected], "content_rows": counts,
                       "new_rows": len(inserts), "vendor_updates": len(updates),
-                      "quest_script_new": not destination.exists(), "applied": False,
+                      "quest_scripts_new": [str(r) for r, _, d in quest_files if not d.exists()],
+                      "quest_script_new": any(str(r) == "quests/shardslanding/#Tomekeeper_Kerkaz.lua" and not d.exists()
+                                              for r, _, d in quest_files), "applied": False,
                       "payload_sha256": files}
             if not args.apply:
                 print(json.dumps(report, indent=2))
@@ -186,8 +213,11 @@ def main():
             fd = os.open(backup, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
             with os.fdopen(fd, "w") as handle:
                 json.dump({"new_rows": inserts, "updates": updates,
-                           "quest_script_preimage": None if not destination.exists() else
-                           destination.read_text()}, handle, default=str)
+                           "quest_script_preimage": next((d.read_text() if d.exists() else None
+                                                          for r, _, d in quest_files
+                                                          if str(r) == "quests/shardslanding/#Tomekeeper_Kerkaz.lua"), None),
+                           "quest_script_preimages": {str(r): d.read_text() if d.exists() else None
+                                                       for r, _, d in quest_files}}, handle, default=str)
             for table, row in inserts:
                 names = list(row)
                 cursor.execute(f"INSERT INTO `{table}` (" + ",".join(f"`{k}`" for k in names) +
@@ -198,22 +228,43 @@ def main():
                 cursor.execute(f"UPDATE `{update['table']}` SET " +
                                ",".join(f"`{k}`=%s" for k in after) + " WHERE " + where,
                                tuple(after.values()) + values)
-            if not destination.exists():
-                # Exclusive creation ensures that concurrent quest edits cannot be overwritten.
+            for relative, source, destination in quest_files:
+                if destination.exists():
+                    if destination.read_bytes() != source.read_bytes():
+                        raise RuntimeError(f"Concurrent quest edit: {relative}")
+                    continue
+                missing = []
+                parent = destination.parent
+                while not parent.exists():
+                    missing.append(parent)
+                    parent = parent.parent
+                for parent in reversed(missing):
+                    parent.mkdir()
+                    directories_created.append(parent)
+                # Exclusive creation preserves any concurrent quest edit.
                 with destination.open("xb") as handle:
                     handle.write(source.read_bytes())
-                script_created = True
+                scripts_created.append((source, destination))
             connection.commit()
             committed = True
             report["applied"] = True
-            report["quest_script_sha256"] = hashlib.sha256(source.read_bytes()).hexdigest()
+            report["quest_scripts_sha256"] = {str(r): hashlib.sha256(s.read_bytes()).hexdigest()
+                                              for r, s, _ in quest_files}
+            report["quest_script_sha256"] = report["quest_scripts_sha256"].get(
+                "quests/shardslanding/#Tomekeeper_Kerkaz.lua")
             (args.backup / "receipt.json").write_text(json.dumps(report, indent=2) + "\n")
             print(json.dumps(report, indent=2))
     except Exception:
         if not committed:
             connection.rollback()
-            if script_created and destination.read_bytes() == source.read_bytes():
-                destination.unlink()
+            for source, destination in reversed(scripts_created):
+                if destination.exists() and destination.read_bytes() == source.read_bytes():
+                    destination.unlink()
+            for directory in reversed(directories_created):
+                try:
+                    directory.rmdir()
+                except OSError:
+                    pass
         raise
     finally:
         with connection.cursor() as cursor:

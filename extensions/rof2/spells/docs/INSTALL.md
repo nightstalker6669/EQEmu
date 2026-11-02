@@ -32,7 +32,7 @@ python3 extensions/rof2/spells/tools/install.py \
   --server /srv/eqemu/server
 ```
 
-The plan selects stages 001, 002, 004 and 005. Add `--include-estimates` only when deliberately selecting the labelled pet/aura reconstruction too. The planner checks table/column availability, InnoDB transactions, row collisions, vendor identities/bindings, external item/NPC/AI/spell references, required task/hand-in rules, and the expected rank/class level of every Kerkaz reward. It does not change persistent content or quest files. Matching already-installed rows are a no-op; conflicting rows abort the plan.
+The plan selects stages 001, 002, 004, 005 and 006. Add `--include-estimates` only when deliberately selecting the labelled pet/aura reconstruction too. The planner checks table/column availability, InnoDB transactions, row collisions, vendor identities/bindings, external item/NPC/AI/spell references, required task/hand-in rules, and the expected rank/class level of every Kerkaz reward. It does not change persistent content or quest files. Matching already-installed rows are a no-op; conflicting rows abort the plan.
 
 After reviewing the plan, apply with a new private backup directory:
 
@@ -44,13 +44,13 @@ python3 extensions/rof2/spells/tools/install.py \
   --apply
 ```
 
-Use the same estimate flag for plan and application. The backup records exactly the newly created rows, prior vendor field values, and the quest-file preimage. The installer refuses to overwrite a different Kerkaz script. Merge any existing script deliberately before installation; other Shard's Landing scripts and global handlers are not replaced.
+Use the same estimate flag for plan and application. The backup records exactly the newly created rows, prior vendor field values, and the quest-file preimages. The installer refuses to overwrite different quest/module files or coexist with conflicting named Perl or numeric NPC scripts. Missing quest directories are created only during application. A failed transaction removes newly created, unchanged files and empty directories. Merge any existing script deliberately before installation; other Shard's Landing scripts and global handlers are not replaced.
 
 Native Windows: use `py -3` and native absolute paths. Akk-stack: run the installer in an appropriate one-off administrative Python environment with the checkout and server quest mounts, and database connectivity. Native Windows and Akk-stack execution of this installer have not been tested; the Python/MariaDB implementation was exercised on Linux.
 
 ## Activation and acceptance
 
-Regenerate the normal item/spell shared-memory cohort where required by the server installation, including the five newly restored items. Deploy matching binaries/schema before starting services. Use the normal supported quest/task reload only if a coordinated live-content upgrade is chosen instead of the offline workflow. Idle zone processes also cache task definitions; reloading only one occupied zone does not update every process.
+Regenerate the normal item/spell shared-memory cohort where required by the server installation, including the six newly restored items. Deploy matching binaries/schema before starting services. Use the normal supported quest/task reload only if a coordinated live-content upgrade is chosen instead of the offline workflow. Idle zone processes also cache task definitions; reloading only one occupied zone does not update every process.
 
 Kerkaz intentionally has **no `event_trade`**. In the pinned engine, native `FinishTrade` first credits delivery, then the no-script trade branch removes the exact credited quantity with `RemoveTaskDeliveredItems`. `Items:AlwaysReturnHandins=true` returns wrong items and unused stack quantities. A generic scripted `return_items` callback would bypass that consumption branch and could return a mote already credited to a task. Keep the existing task engine authoritative; do not add manual reward summoning or currency conversion.
 
@@ -60,4 +60,8 @@ With an independently assigned test character, verify both selectors, the five c
 
 Keep the private installation backup. The scripts under `sql/rollback-*` reverse the original full content additions; they are not an automatic rollback for a partial/no-op installation. Restore only the rows/fields actually changed by your receipt, in reverse dependency order. Do not remove independently added or subsequently edited content.
 
-Before removing task reward definitions or items from a used server, account for pending native reward choices and owned/active content. This package does not delete character task history or reward ledgers. Remove the new Kerkaz script only if its hash still matches the installed file; otherwise merge the rollback with later changes. Do not reset inventory leases, clear character inventories or replace a whole database to undo this content overlay.
+Before removing task reward definitions or items from a used server, account for pending native reward choices and owned/active content. This package does not delete character task history or reward ledgers. Remove newly installed quest scripts/modules only if their hashes still match the installed files; otherwise merge the rollback with later changes. Do not reset inventory leases, clear character inventories or replace a whole database to undo this content overlay.
+
+## Ordered rune exchanges
+
+Stage 006 checks the identities of Kalim`Kar (442026) and Dwekvard (480107), all six rune IDs, existing reward scroll effects, and every ordered reward’s dated class level, name and rank. The quest manifest installs scripts into `dragonscale` and `brellsrest` plus two `lua_modules` files. Existing conflicting quest logic requires an explicit merge. The original exchanges use one rune per hand-in, learning state for ordering, no invented experience/cash rewards, and native item return for extras. Test the next-unlearned choice, discipline handling, wrong/extra items and all-known return with a separate native client before declaring gameplay acceptance.

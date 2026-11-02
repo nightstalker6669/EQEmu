@@ -33,6 +33,12 @@
       "path": "data/005-voa-language.json",
       "contains_estimates": false,
       "sha256": "c3ae9d2671b8db0268b4fb6fdddb732a466466cfb2aef0f49edde275ccdbeb5b"
+    },
+    {
+      "name": "006-ordered-runes",
+      "path": "data/006-ordered-runes.json",
+      "contains_estimates": false,
+      "sha256": "09957269c316e5bba413110d0a127b8b63fec1f4e15e11b8ca34588a20162716"
     }
   ],
   "primary_keys": {
@@ -89,5 +95,30 @@
     ]
   },
   "shared_core_base": "17d63f7d512711e911787e630f4533ee14a1e785",
-  "required_schema_version": 9336
+  "required_schema_version": 9336,
+  "quest_files": [
+    {
+      "stage": "004-kerk-motes",
+      "path": "quests/shardslanding/#Tomekeeper_Kerkaz.lua",
+      "npc_id": 752146
+    },
+    {
+      "stage": "006-ordered-runes",
+      "path": "quests/brellsrest/#Dwekvard_Gravelpick.lua",
+      "npc_id": 480107
+    },
+    {
+      "stage": "006-ordered-runes",
+      "path": "quests/dragonscale/Kalim`Kar_the_Gold.lua",
+      "npc_id": 442026
+    },
+    {
+      "stage": "006-ordered-runes",
+      "path": "quests/lua_modules/rof2_spell_rune_data.lua"
+    },
+    {
+      "stage": "006-ordered-runes",
+      "path": "quests/lua_modules/rof2_spell_runes.lua"
+    }
+  ]
 }
