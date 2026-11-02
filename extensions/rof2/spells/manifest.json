@@ -2,7 +2,7 @@
   "format": 1,
   "source_base": "c9c8747ac949deddb140d196d241fa4e777500c7",
   "reward_engine_branch": "rof2-shared-core",
-  "reward_engine_commit": "17d63f7d512711e911787e630f4533ee14a1e785",
+  "reward_engine_commit": "b3f795ea642d810d0af75dca39d6dd1f28826385",
   "stages": [
     {
       "name": "001-exigent-items",
@@ -109,7 +109,7 @@
       "task_id"
     ]
   },
-  "shared_core_base": "17d63f7d512711e911787e630f4533ee14a1e785",
+  "shared_core_base": "b3f795ea642d810d0af75dca39d6dd1f28826385",
   "required_schema_version": 9338,
   "quest_files": [
     {

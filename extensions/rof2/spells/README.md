@@ -2,7 +2,7 @@
 
 Database and quest content repairs for class spells through Rain of Fear, targeting the May 10, 2013 RoF2 client. This branch contains the spell work completed so far. It does **not** establish exact Live implementation of every spell.
 
-The branch inherits `rof2-shared-core` commit `17d63f7d512711e911787e630f4533ee14a1e785` on upstream `develop` commit `c9c8747ac949deddb140d196d241fa4e777500c7`. The spell layer adds server-side merchant language eligibility, spell content, original rune exchange scripts and ground-target aura placement. Public files exclude client assets, private character data, credentials, logs, test fixtures and server binaries.
+The branch inherits `rof2-shared-core` commit `b3f795ea642d810d0af75dca39d6dd1f28826385` on upstream `develop` commit `c9c8747ac949deddb140d196d241fa4e777500c7`. The spell layer adds spell content and original acquisition scripts. Merchant language eligibility, task policies, durable reward IDs, ground-target aura placement and shutdown cleanup are inherited from this core. Public files exclude client assets, private character data, credentials, logs, test fixtures and server binaries.
 
 ## Included content
 
@@ -30,9 +30,9 @@ HoT teachers use original Nebulous/Tangible fragment delivery tasks and Dream De
 
 ## Engine ownership and dependency
 
-The generic task reward catalogue, native selection window, permanent-class filtering and persisted delivery ledger are now inherited from [`rof2-shared-core` commit `17d63f7d512711e911787e630f4533ee14a1e785`](https://github.com/nightstalker6669/EQEmu/tree/17d63f7d512711e911787e630f4533ee14a1e785). Achievement progress, criteria, providers and quest content are not required or enabled by this branch.
+The generic task reward catalogue, native selection window, permanent-class filtering and persisted delivery ledger are now inherited from [`rof2-shared-core` commit `b3f795ea642d810d0af75dca39d6dd1f28826385`](https://github.com/nightstalker6669/EQEmu/tree/b3f795ea642d810d0af75dca39d6dd1f28826385). Achievement progress, criteria, providers and quest content are not required or enabled by this branch.
 
-The shared engine is already integrated into the normal source directories. Build this branch; do not merge an achievement branch or reapply historical source overlays. Run its matching updater through schema version 9338 and review the three original supplemental class/shared-task SQL files in [shared reward installation](../../../docs/rof2/SHARED-REWARDS.md). Migration IDs 9331–9334 and their original SQL are preserved. The compatibility migrations retain empty achievement schema scaffolding so a later achievement installation remains compatible; those empty tables do not activate achievements. The original migration 9335 is also retained. Spells adds content migration 9336 for merchant language requirements without renaming earlier registrations.
+The shared engine is already integrated into the normal source directories. Build this branch; do not merge an achievement branch or reapply historical source overlays. Run its matching updater through schema version 9338 and review the three original supplemental class/shared-task SQL files in [shared reward installation](../../../docs/rof2/SHARED-REWARDS.md). Migration IDs 9331–9334 and their original SQL are preserved. The compatibility migrations retain empty achievement schema scaffolding so a later achievement installation remains compatible; those empty tables do not activate achievements. The original migration 9335 is also retained. The shared core also owns the original 9336–9338 registrations for merchant language, personal exchange policies and durable reward state.
 
 Stage 004 still requires the matching reward-capable binary; the content installer cannot attest which executable is running. A table-only installation on a stock `develop` binary is insufficient.
 
@@ -52,4 +52,4 @@ Upstream [GPLv3 licensing](../../../LICENSE.md) applies to the code. Source link
 
 Stages 007 and 008 passed isolated installation, readback, idempotency and rollback validation. It has not been installed on the shared running server. Twenty rank III scroll identities remain unverified; the level 95 rank III shadowknight bundle catalogue explicitly lacks pairing information. Original item 132477 (Shared Savagery III) also conflicts with an inherited Scavenger Hunt Letter. The item and its choice are withheld while ownership/dependencies are researched. These gaps leave 25 source choices omitted. No synthetic scroll IDs, partial bundles or substitute acquisition routes were added.
 
-The branch additionally contains generic task-policy, reward-wire identity and event-loop lifetime changes awaiting shared-core maintainer review. The pinned shared-core base remains unchanged; the achievements maintainer owns extraction/publication of generic changes to that branch. Review [batch validation](docs/VERIFICATION.md#offline-voa-and-engine-batch) before deployment.
+The achievements maintainer extracted, independently built and published the complete generic engine in the pinned shared-core revision. This branch merges that actual published core while preserving the latest spell content. Review [batch validation](docs/VERIFICATION.md#offline-voa-and-engine-batch) before deployment.

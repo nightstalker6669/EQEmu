@@ -10,7 +10,7 @@ These checks do not establish native in-game turn-in acceptance, exact Live pet/
 
 ## Shared-core integration
 
-This branch inherits the published core revision `17d63f7d512711e911787e630f4533ee14a1e785`. The achievements maintainer reported successful world/zone linking and 386 wire-compatibility cases/task contracts for that exact core tree. The prior published spell integration retained that inherited engine unchanged and added merchant language eligibility at migration 9336. The new offline batch below extends generic source behavior; its validation is separate. That inherited validation is separate from native gameplay acceptance of Kerkaz, which remains pending. The shared-core extraction was performed and published by the achievements maintainer, not duplicated in the spell layer.
+This branch now adopts published shared core `b3f795ea642d810d0af75dca39d6dd1f28826385`. Its generic source and original migration files match the core byte-for-byte. Adoption preserves the latest `949ee65e` spell content and changes documentation/dependency metadata only. The core maintainer independently linked world/zone and passed 277 fresh policy contracts. Earlier 386-case validation applied to the preceding core revision. These checks remain separate from native exchange/reconnect/shared-task acceptance, which is pending.
 
 ## Merchant language validation
 
