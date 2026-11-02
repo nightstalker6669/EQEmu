@@ -1,0 +1,19 @@
+{
+  "cutoff": "2013-05-31",
+  "tasks": 15,
+  "objectives": 43,
+  "achievement_bindings": 15,
+  "new_npcs": 2,
+  "nightmare_placeholder_groups": 23,
+  "source_branch": "rof2-achievements",
+  "required_content": "Install all SQL, adapters, modules and world repairs together; no optional quest fragments.",
+  "protocol_changes": "None. Existing RoF2 achievement/task opcodes and packet structures are retained.",
+  "validation": "Temporary-schema and synthetic rules checks are separate from native game acceptance.",
+  "deployed": true,
+  "native_acceptance": true,
+  "required_cast_fields": [
+    "cast_item_id",
+    "cast_item_slot",
+    "cast_item_charge_consumed"
+  ]
+}

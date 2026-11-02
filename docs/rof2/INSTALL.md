@@ -77,3 +77,10 @@ Back up both databases and the allocator high-water mark before upgrading. Stop 
 The Buried Sea milestone covers all 39 island quests, 27 bone rewards, seven Cleric armor choices, a real three-member Mer occurrence with one physical voyage and three payouts, seven hand recipes and one combined relog. It does not claim every armor variant, native Windows gameplay or the entire May 2013 achievement catalogue. The new engine is source/build adoption only until a coordinated deployment and native exchange/reconnect/shared-task regression pass.
 
 This achievement consumer source independently linked `world` and `zone` with GCC12/C++20 and normal CMake/PCH settings in an isolated clean serial build. That build preserves the full published Buried Sea package. The build did not replace the running server; native regression acceptance for the new engine remains pending.
+
+## Dragonscale Hills content upgrade
+
+Install the complete [Dragonscale package](../../extensions/rof2/achievements/content/dragonscale/README.md): all 15 tasks, 43 objectives, 15 achievement bindings, NPC adapters, acquisition repairs, faction policy and rescue actors belong to one guarded installation. Use the package installer for every SQL and quest file together. Its banner requires the existing authenticated completed-item-cast fields in this branch; no new opcode, wire layout or schema migration is introduced.
+
+All fifteen native quest routes, the three parent achievements, the six earned item rewards and fresh-login persistence were verified on the local combined schema9336 runtime. Temporary test faction points and elevated account flags were removed, while earned progression was retained. This content acceptance is separate from the pending native regressions for the newly adopted schema9338 shared engine. Numerical reconstruction and platform limits remain explicit in the package guide.
+

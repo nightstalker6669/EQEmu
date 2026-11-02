@@ -44,6 +44,8 @@ The release includes the engine/protocol and Crescent Reach, Blightfire Moors, S
 
 - [Buried Sea islands and Jonas Dagmire’s hand](content/buriedsea/README.md): 39 island quests,180 objectives,seven armor reward sets and all27bones; seven native consumed-compound recipes produce the final hand. Includes Mer’s real three-member shared mission, original ferry/rowboat transport,40Doubloons per member,Halon’s complete stock,and a guarded whole-package installer plus a RoF2 ship-model-list repair. Native completion and combined login persistence passed within the documented scope; historical and platform limits remain explicit.
 
+- [Dragonscale Hills quests](content/dragonscale/README.md): all 15 quests and 43 objectives for the strike force, challenges and Ladies of the Light families. Includes original givers, farm gears, physical banner planting, crystal/canvas pickups, Lelluran and claimant-owned rescue guards. Native completion, all three achievement families and fresh-login persistence passed; researched values and labelled defaults are documented.
+
 **Reward coverage:** Install the complete [Blightfire parent gear upgrade](content/blightfire-parent-rewards/README.md) after the five Blightfire quest packages. It adds the eight quest-family parent reward sets, including class-appropriate armor/accessories and shield/weapon bundles. The separate Conqueror of Blightfire meta-achievement bundle remains unconfigured while its original selection rules are researched. Stone Hive’s four parent reward sets are included in its package. Historical and class-coverage limits are documented in each guide.
 
 No tests, captures, client assets or private runtime records are included.
@@ -75,6 +77,7 @@ Each layer passed sequential patch-application checks against the pinned source 
 ## Attribution
 
 The engine originates in [EQEmu PR5119](https://github.com/EQEmu/EQEmu/pull/5119) by **fryguy503**, pinned at `c68d0074bbc35974b6413c208c4523dd7fd21954`. Follow-up changes were prepared during this project's RoF2 achievement restoration. The upstream EQEmu source is licensed under [GPLv3](LICENSE); retained upstream notices and license terms apply. See [ATTRIBUTION.md](ATTRIBUTION.md).
+
 
 
 
