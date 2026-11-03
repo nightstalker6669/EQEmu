@@ -1922,13 +1922,34 @@ bool Database::CopyCharacter(
 
 	std::vector<std::string> ignore_tables = {
 		"guilds",
+		// Journal identities and generations belong to the source character only.
+		"character_oculus_events",
+		"character_oculus_generations",
 	};
 
 	size_t total_rows_copied = 0;
 
 	TransactionBegin();
 
-	for (const auto &t : DatabaseSchema::GetCharacterTables()) {
+	// A feature opts into journal guards by registering its character tables.
+	// Neutral shared-core has no such registration and needs no journal schema.
+	const auto character_tables = DatabaseSchema::GetCharacterTables();
+	for (const auto& table_name : std::vector<std::string>{"character_oculus_events", "character_oculus_generations"}) {
+		if (character_tables.find(table_name) == character_tables.end()) {
+			continue;
+		}
+		auto journal = QueryDatabase(fmt::format(
+			"SELECT character_id FROM {} WHERE character_id = {} LIMIT 1 FOR UPDATE",
+			table_name, new_character_id
+		));
+		if (!journal.Success() || journal.RowCount() != 0) {
+			LogError("Character copy withheld: destination journal identity exists or schema is unavailable");
+			TransactionRollback();
+			return false;
+		}
+	}
+
+	for (const auto &t : character_tables) {
 		const std::string& table_name               = t.first;
 		const std::string& character_id_column_name = t.second;
 
