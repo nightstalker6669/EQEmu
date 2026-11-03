@@ -1980,29 +1980,35 @@ bool Database::CopyCharacter(
 
 			for (int column_index = 0; column_index < column_count; column_index++) {
 				const std::string& column = columns[column_index];
-				std::string value = row[column_index] ? row[column_index] : "null";
+				bool is_null = row[column_index] == nullptr;
+				std::string value = is_null ? "" : row[column_index];
 
 				if (column == "id" && Strings::Contains(tables_to_zero_id, table_name)) {
 					value = "0";
+					is_null = false;
 				}
 
 				if (column == character_id_column_name) {
 					value = std::to_string(new_character_id);
+					is_null = false;
 				}
 
 				if (column == "name" && table_name == "character_data") {
 					value = destination_character_name;
+					is_null = false;
 				}
 
 				if (column == "account_id" && table_name == "character_data") {
 					value = std::to_string(destination_account_id);
+					is_null = false;
 				}
 
-				if (!Strings::IsNumber(value)) {
+				if (!is_null && !Strings::IsNumber(value)) {
 					value = Strings::Escape(value);
 				}
 
-				new_values.emplace_back(value);
+				// Keep SQL NULL distinct from every non-NULL string, including "null".
+				new_values.emplace_back(is_null ? "NULL" : "'" + value + "'");
 			}
 
 			new_rows.emplace_back(new_values);
@@ -2011,7 +2017,7 @@ bool Database::CopyCharacter(
 		std::vector<std::string> insert_rows;
 
 		for (auto &r : new_rows) {
-			const std::string& insert_row = "(" + Strings::Implode(",", Strings::Wrap(r, "'")) + ")";
+			const std::string& insert_row = "(" + Strings::Implode(",", r) + ")";
 			insert_rows.emplace_back(insert_row);
 		}
 
