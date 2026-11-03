@@ -1,0 +1,9 @@
+# Event-family relocation and Shared Savagery III: applied status
+
+On November3,2026, one database transaction moved the nine inherited event definitions132477–132485to900000–900008, preserving every non-ID field, and restored native item132477 Tome of Shared Savagery III→spell30477/Berserker95. No other neighboring native replacements were guessed. Exact row backups and the committed transaction receipt are retained privately.
+
+The new option920119/1048578and item reward3810916021were initially staged disabled to prevent the old item cache from granting a letter at132477. Build completed the normal item-only cache rebuild and managed restart; its SPELLS-ITEM-CACHE-001receipt confirms the running world and six zone readers resolve the restored tome and relocated family. Spells then enabled exactly those two database flags in one transaction and read back their exact native item/class/level link.
+
+Beast Domain(zone728), served by The Sklyg's existing script, is the provider zone. Pending reward re-entry/claim also reads the catalog of the zone handling the client, so prestarted idle processes needed a post-activation refresh. Build's SPELLS-CATALOG-POOL-001receipt confirms the exact enabled set920119/option1048578/class32768→reward3810916021/item132477quantity1in all six normal serving processes after their normal restart. Runtime catalog availability is closed; no native exchange test is claimed.
+
+The migration and activation SQL changed no player inventory, GUID, lease, task-progress or terminal-history rows. Build separately reported protected state preserved. No native exchange/combat test is claimed. Full raw source maps138tome columns; remaining server-template fields are explicitly inherited estimates, not independently recovered historical values. The original event creator remains unknown; its definitions are preserved regardless of the unused-event hypothesis.

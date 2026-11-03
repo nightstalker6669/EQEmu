@@ -1,0 +1,79 @@
+{
+  "status": "APPLIED: DATABASE, ITEM CACHE AND LIVE TASK-REWARD CATALOG",
+  "date": "2026-11-03",
+  "event_mapping": [
+    {
+      "old_id": 132477,
+      "new_id": 900000
+    },
+    {
+      "old_id": 132478,
+      "new_id": 900001
+    },
+    {
+      "old_id": 132479,
+      "new_id": 900002
+    },
+    {
+      "old_id": 132480,
+      "new_id": 900003
+    },
+    {
+      "old_id": 132481,
+      "new_id": 900004
+    },
+    {
+      "old_id": 132482,
+      "new_id": 900005
+    },
+    {
+      "old_id": 132483,
+      "new_id": 900006
+    },
+    {
+      "old_id": 132484,
+      "new_id": 900007
+    },
+    {
+      "old_id": 132485,
+      "new_id": 900008
+    }
+  ],
+  "native_restoration": {
+    "item_id": 132477,
+    "spell_id": 30477,
+    "name": "Tome of Shared Savagery Rk. III",
+    "class": "Berserker",
+    "learning_level": 95
+  },
+  "reward": {
+    "reward_set_id": 920119,
+    "option_id": 1048578,
+    "option_enabled": true,
+    "reward_id": 3810916021,
+    "reward_enabled": true,
+    "item_id": 132477,
+    "amount": 1
+  },
+  "item_cache": {
+    "owner_receipt": "SPELLS-ITEM-CACHE-001",
+    "running_readers": 7,
+    "loaded_definitions_confirmed_by_owner": true
+  },
+  "task_catalog": {
+    "provider_zone": "beastdomain",
+    "provider_zone_id": 728,
+    "scope": "All six normal serving zone processes, including pending reward re-entry/claim",
+    "status": "Build confirmed exact enabled set920119/option1048578/class32768\u2192reward3810916021/item132477quantity1 in all six processes",
+    "owner_receipt": "SPELLS-CATALOG-POOL-001",
+    "serving_process_count": 6,
+    "native_exchange_test": false
+  },
+  "spells_sql_player_or_lease_writes": 0,
+  "native_exchange_test_performed": false,
+  "historical_qualification": "Native original identity/class/level and mapped fields are sourced; other sibling-template fields remain labelled inherited estimates. Only one native counterpart is established for the nine old IDs.",
+  "source_commits": [
+    "0ed395df6edad6089b4ac6724702cee9619a6de4",
+    "49515c77ef7a025d504389db783ed9501bf78cfd"
+  ]
+}

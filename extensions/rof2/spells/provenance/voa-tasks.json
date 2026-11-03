@@ -8546,6 +8546,14 @@
           ],
           [
             {
+              "spell_id": 30477,
+              "name": "Shared Savagery Rk. III",
+              "item_id": 132477,
+              "identity_source": "lucy-catalogue"
+            }
+          ],
+          [
+            {
               "spell_id": 30468,
               "name": "Steel Frenzy Rk. III",
               "item_id": 132468,
@@ -8948,21 +8956,6 @@
         }
       ],
       "reason": "No verified complete scroll bundle"
-    },
-    {
-      "task_id": 920119,
-      "quest": 5411,
-      "class_id": 16,
-      "source_ordinal": 2,
-      "spells": [
-        {
-          "spell_id": 30477,
-          "name": "Shared Savagery Rk. III",
-          "item_id": 132477,
-          "identity_source": "lucy-catalogue"
-        }
-      ],
-      "reason": "Original item132477 conflicts with inherited Scavenger Hunt Letter; ownership audit pending"
     }
   ],
   "source_urls": [
