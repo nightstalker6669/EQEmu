@@ -8,6 +8,7 @@ Every RoF2 branch starts from **upstream `develop` commit `c9c8747ac949deddb140d
 | `develop` | Unmodified upstream develop at the verified base |
 | `rof2-upstream-base` | Alias of that exact upstream develop commit; no custom merge |
 | `rof2-shared-core` | Shared inventory, sessions, task rewards, transport and additive engine schema |
+| `rof2-tradeskills` | Shared-core-based neutral tradeskill and optional combine hooks; achievement-specific journals, adapters and content remain on `rof2-achievements` |
 | `rof2-housing` | Shared core + published housing implementation and content |
 | `rof2-fellowship` | Housing stack + fellowship and its housing access adapter |
 | `rof2-mercenaries` | Fellowship stack + mercenaries |
