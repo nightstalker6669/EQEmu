@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-03T18:16:53.716421+00:00",
+  "era_cutoff": "2013-05-31",
+  "runtime_scope": {
+    "zones": [
+      730,
+      731
+    ],
+    "achievement_definitions": [
+      1973000,
+      1973100
+    ],
+    "existing_criteria": [
+      7670,
+      7671
+    ],
+    "no_new_criterion_rows": true,
+    "held_zones": [
+      732,
+      733
+    ],
+    "explorer_parent_1900050_unchanged": true,
+    "held_sepulcher_definition": 1973300
+  },
+  "readiness": {
+    "1973000": "native ordinary entry, required credit and one normalrelog accepted",
+    "1973100": "configured/enabled; native entry and return pending safe lift approach",
+    "1973300": "held; gateway not verified"
+  },
+  "native_acceptance": {
+    "admin": 0,
+    "gm": false,
+    "spell_id": 29842,
+    "spell_precondition": "temporary QA preowned spell; not FirstPilgrimage completion or normal spell acquisition",
+    "Pillars_progress_count": 1,
+    "Pillars_parent_count": 1,
+    "timestamps_and_versions_unchanged_after_relog": true,
+    "required_component_satisfied": true,
+    "client_numeric_component_counter": "unsupported; count1 verified separately in SQL",
+    "Windsong_entry_return_accepted": false,
+    "no_GM_transport_or_manual_achievement_credit": true
+  },
+  "cache_maintenance": {
+    "world_zone_fix_deployed_locally": true,
+    "actual_world_zone_cache_refreshes": 1,
+    "zone_process_refreshes": 6,
+    "idle_zone_processes_at_refresh": 5,
+    "loaded_zone_processes_at_refresh": 1,
+    "all_zone_refreshes_once": true,
+    "startup_auto_database_updates_held_then_original_configuration_restored": true,
+    "DB_schema_version_unchanged": 9338,
+    "protected_player_and_housing_state_preserved": true,
+    "new_source_behavior": [
+      "world includes idle zones in ZoneData broadcast and reloads its own ZoneStore",
+      "zone reloads ZoneStore even when idle and loads ZoneCFG only with a loaded zone"
+    ],
+    "actual_achievement_counts": [
+      30,
+      260,
+      1056
+    ],
+    "count_explanation": "Two enabled definitions admit their two existing criteria and expose existing category1902; category/criterion rows were not inserted."
+  },
+  "cleanup": {
+    "temporary_spell_staff_GM_position_and_owned_QA_credit_restored": true,
+    "current_inventory_GUIDs_and_legitimate_session_epochs_retained": true,
+    "assigned_clients_closed_and_managed_Lua_copies_clean": true,
+    "other_client_not_controlled": true
+  },
+  "limitations": [
+    "Not complete VoAExplorer parent/mission/raid support",
+    "Windsong and Sepulcher native admission remain unverified",
+    "No FirstPilgrimage quest or normal port-scroll acquisition acceptance",
+    "No new wire opcode or structure introduced by this metadata batch"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "cutoff": "2013-05-31",
+  "status": "versioned-two-child-admission; local runtime applied; readiness separated per achievement",
+  "achievements": [
+    {
+      "achievement_id": 1973000,
+      "catalogue_name": "The Pillars of Alra Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5829",
+      "evidence_date": "2012-10-24",
+      "evidence_type": "dated_individual_achievement_information",
+      "reason": "one visit to corresponding named zone; no additional reward",
+      "status": "verified_present",
+      "readiness_hold": null,
+      "admission_status": "enabled_native_entry_and_relog_accepted",
+      "validation": "ordinary native Alra Gate29842 using explicitly preowned QAspell; Admin0/GMfalse, ZoneEnter credit, one normalrelog, unchanged count/timestamps; original scroll acquisition not covered"
+    },
+    {
+      "achievement_id": 1973100,
+      "catalogue_name": "The Windsong Sanctuary Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5830",
+      "evidence_date": "2012-10-24",
+      "evidence_type": "dated_individual_achievement_information",
+      "reason": "one visit to corresponding named zone; no additional reward",
+      "status": "verified_present",
+      "readiness_hold": "safe visible lift/zonepoint approach and ordinary entry/reentry not verified",
+      "admission_status": "enabled_configured_native_acceptance_pending",
+      "validation": "metadata guarded/applied/read back; no native travel, movement or lift click acceptance claimed"
+    }
+  ]
+}
