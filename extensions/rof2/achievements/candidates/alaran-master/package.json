@@ -1,0 +1,20 @@
+{
+  "name": "alaran-language-master",
+  "status": "candidate-only-disabled-uninstalled",
+  "migration_reservation": 9342,
+  "schema": "existing-roF2-achievements",
+  "automatic_install": false,
+  "historical_cutoff": "2013-05-31",
+  "verification": {
+    "disposable_sql_protocol_cases_passed": 9,
+    "native_batch_accepted": false,
+    "cpp_updater_executed": false,
+    "current_live_newlearning_100_award_observed": true,
+    "original_2012_trigger_verified": false,
+    "already100_reconciliation_verified": false
+  },
+  "license": "inherited repository license",
+  "migration_status": "reserved-unregistered",
+  "installer_registration": false,
+  "quest_deployment": false
+}

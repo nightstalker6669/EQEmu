@@ -1,0 +1,42 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "446da60028cb4249e75ad4fde36eb02e04262c7b293d07bb98674e3ea7d60e7c"
+  },
+  {
+    "path": "package.json",
+    "sha256": "07a985acd5602c596efeb55bb108825d7ad746a275b56e7b613e3f3e7506d62c"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "439857b9878553ea36813a6f841078ff715a1c59c269c67942bda8aab6fe7881"
+  },
+  {
+    "path": "quests/lua_modules/achievement_native_delivery_handin.lua",
+    "sha256": "e44ccaec14deacf834f3e88e296afaf8ad8c2561f89fb7b988bd3496c7a854b7"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_gearing_up.lua",
+    "sha256": "1d637922248789a3376b33122f4d679e745536078e4da225ec92cd5f69eb1d21"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_gearing_up_policy.lua",
+    "sha256": "096c568688e3d8c6d1f9b61ab7b328ebf9a1f97f8b76fa3247829d0511fbdcb4"
+  },
+  {
+    "path": "quests/mechanotus/436006.lua",
+    "sha256": "82a39e44e9ea1a6303f867dadbbd094cb60652db741b207299d8fd9096806fd8"
+  },
+  {
+    "path": "review/preimages.json",
+    "sha256": "ca0ff748aedb895a394797c4ffffe25e695f7dafd07ead12964c1c77c17394b9"
+  },
+  {
+    "path": "review/updater-entry.proposed.txt",
+    "sha256": "9e75185531ad7c7502c3face5654fde7954c330b5e9c5a56c68ffc711191b2f1"
+  },
+  {
+    "path": "sql/2026_11_03_gearing_up_achievement.disabled.sql",
+    "sha256": "327b3c482d25efe1f2271ba63899412784c474199c36fc8ade1580cb132da33a"
+  }
+]
