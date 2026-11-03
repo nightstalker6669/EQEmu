@@ -255,8 +255,20 @@ void Object::HandleAugmentation(Client* user, const AugmentItem_Struct* in_augme
 // Perform tradeskill combine
 void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Object *worldo)
 {
+	if (!user) {
+		LogError("Client not set in Object::HandleCombine");
+		return;
+	}
+
 	if (!user || !in_combine) {
 		LogError("Client or NewCombine_Struct not set in Object::HandleCombine");
+		auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
+		user->QueuePacket(outapp);
+		safe_delete(outapp);
+		return;
+	}
+
+	if (!user->PrepareTradeskillInventoryConsumption()) {
 		auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
 		user->QueuePacket(outapp);
 		safe_delete(outapp);
@@ -582,6 +594,11 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
 
 void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac) {
 
+	if (!user || !rac) {
+		LogError("Client or RecipeAutoCombine_Struct not set in Object::HandleAutoCombine");
+		return;
+	}
+
 	//get our packet ready, gotta send one no matter what...
 	auto outapp = new EQApplicationPacket(OP_RecipeAutoCombine, sizeof(RecipeAutoCombine_Struct));
 	RecipeAutoCombine_Struct *outp = (RecipeAutoCombine_Struct *)outapp->pBuffer;
@@ -590,6 +607,12 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 	outp->unknown1 = rac->unknown1;
 	outp->recipe_id = rac->recipe_id;
 	outp->reply_code = 0xFFFFFFF5;	//default fail.
+
+	if (!user->PrepareTradeskillInventoryConsumption()) {
+		user->QueuePacket(outapp);
+		safe_delete(outapp);
+		return;
+	}
 
 
 	//ask the database for the recipe to make sure it exists...
@@ -997,6 +1020,11 @@ void Client::SendTradeskillDetails(uint32 recipe_id) {
 	safe_delete(outapp);
 }
 
+// Optional consumer adapters are supplied by their feature layer.
+// Neutral tradeskills accepts consumption and emits no extra side effects.
+bool Client::PrepareTradeskillInventoryConsumption() { return true; }
+void Client::RecordTradeskillSuccess(uint32) {}
+
 //returns true on success
 bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 	if (!spec) {
@@ -1190,6 +1218,7 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 
 			++itr;
 		}
+		RecordTradeskillSuccess(spec->recipe_id);
 		return(true);
 	}
 	/* Tradeskill Fail */
