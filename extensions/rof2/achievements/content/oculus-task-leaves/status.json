@@ -1,0 +1,21 @@
+{
+  "status": "source_candidate_not_applied",
+  "utc": "2026-11-03T19:57:30.273812+00:00",
+  "scope": {
+    "new_rules": 7,
+    "existing_tasks_reused": 7,
+    "achievement": 500120700,
+    "other_required_components": 48
+  },
+  "source_manifest_parity": true,
+  "installer_execution_verified": false,
+  "reapply_rollback_execution_verified": false,
+  "cached_admission_verified": false,
+  "new_leaf_credit_native_verified": false,
+  "normal_relog_persistence_verified": false,
+  "full_Oculus_complete": false,
+  "selected_journal_enabled": false,
+  "no_global_updater_version_required": true,
+  "next": "Coordinator review, isolated SQL execution/collision/reapply/rollback checks, then expressly scoped runtime/native acceptance",
+  "protocol_changes": false
+}
