@@ -4322,7 +4322,8 @@ bool NPC::CheckHandin(
 					 && h.money.copper == r.money.copper;
 
 	// if we started the hand-in process, we want to use the hand-in items from the member variable hand-in bucket
-	auto &handin_items = !m_handin_started ? h.items : m_hand_in.items;
+	// Match against a tentative bucket; failed checks must not consume live counts.
+	auto handin_items = !m_handin_started ? h.items : m_hand_in.items;
 
 	for (auto &h_item: h.items) {
 		LogNpcHandinDetail(
@@ -4429,8 +4430,8 @@ bool NPC::CheckHandin(
 		m_hand_in.original_money = m_hand_in.money;
 	}
 
-	// check if npc is guildmaster
-	if (IsGuildmaster()) {
+	// Only fulfilled item and money requirements can train a discipline.
+	if (requirement_met && IsGuildmaster()) {
 		for (const auto &remove_item : items_to_remove) {
 			if (!remove_item.item) {
 				continue;
@@ -4530,6 +4531,8 @@ bool NPC::CheckHandin(
 	}
 
 	if (requirement_met) {
+		// Commit tentative counts only after all hand-in checks accept.
+		m_hand_in.items = std::move(handin_items);
 		std::vector<std::string> log_entries = {};
 		for (const auto &remove_item: items_to_remove) {
 			m_hand_in.items.erase(
