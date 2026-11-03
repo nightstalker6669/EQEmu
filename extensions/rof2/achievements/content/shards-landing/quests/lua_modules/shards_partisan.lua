@@ -2,6 +2,8 @@
 -- Never install this file alone: tasks, recipes, hooks and item scripts are one batch.
 local M = {}
 local cfg = require('shards_partisan_config')
+-- Candidate only: helper remains disabled until qualifying trigger is verified.
+local alaran_master = require('achievement_alaran_master')
 -- The May2013 Icescale objective names the existing Iceclaw/Chillclaw family.
 local cold_wyvern_ids = {[752048]=true,[752050]=true,[752062]=true}
 local function active(c,t,a) return c:IsTaskActivityActive(t,a) end
@@ -110,6 +112,7 @@ function M.combine_success(e)
         local lang=c:GetLanguageSkill(25)
         if lang<100 then
             c:SetLanguageSkill(25,math.min(100,lang+(lang<80 and 5 or 1)))
+            alaran_master.credit_training(c,lang) -- actual prior and native postsetter readback
             return -- At less than100 the combine trains language and returns its inputs.
         end
         if lang==100 then

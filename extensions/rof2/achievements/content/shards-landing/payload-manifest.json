@@ -1,11 +1,11 @@
 [
   {
     "path": "README.md",
-    "sha256": "e466603cb8bd052e334255ce9dbd72a96ca0cee60cfa54c0db635639d0b0f7a7"
+    "sha256": "ddfdf36eae9d517df6e0c763da62b8a73ab73b8391488ee115f34a7b382884e5"
   },
   {
     "path": "apply_quests.py",
-    "sha256": "5daaed34bfc3a605bc23c833c0a395cc1aa5b11d1a5d59adb08b6210f262aa94"
+    "sha256": "82f15afdf7184fcc9cf38b696b42a89d1c4a4d6ca977e9e7d52acb9ca5189760"
   },
   {
     "path": "configuration/reconstruction-policy.json",
@@ -21,11 +21,15 @@
   },
   {
     "path": "patches/quest-hooks.patch",
-    "sha256": "b847ba68d6bded5dd2e1c332aa973c37841048adf90dd7e6a5dddade56b76762"
+    "sha256": "45e4c91daa466ace147d67b5231028b30ec1adf0f71528da10cfcfdf1a8050dd"
   },
   {
     "path": "preflight.py",
-    "sha256": "d1c1fa07a597a28d1b5da16c638c7f1daa768e755bbbe59dea80d21073c5829c"
+    "sha256": "bdecd6030d8b51b7bc29bc540c9a1cdf4d4d24b02d37c97eca0ccffd370047f2"
+  },
+  {
+    "path": "provenance/alaran-language-validation.json",
+    "sha256": "90ea00a586f5bfec5b1562a0feaec12143e4d464f838e4c575c8b25075dbda0f"
   },
   {
     "path": "provenance/baseline-identities.json",
@@ -45,11 +49,19 @@
   },
   {
     "path": "quest-manifest.json",
-    "sha256": "afa1b03d55cdd76dc658a55b7a0bfce10b39f6695beea7010fc5e086c1ce1bf6"
+    "sha256": "5d42c7d4fc91a66a65ecf2cfb3b848359418914aee4df9236ab9266fba0751f4"
+  },
+  {
+    "path": "quests/lua_modules/achievement_alaran_master.lua",
+    "sha256": "366004c063d11bf4d45bb57fc5ef52eaa7183f89b7dfa1b34c906713bb9819c5"
+  },
+  {
+    "path": "quests/lua_modules/achievement_alaran_master_data.lua",
+    "sha256": "0a7d4ef5cb4df67a89715f1e9720fa72a7ee0d21af7f40105fbb9cf0a8ecac94"
   },
   {
     "path": "quests/lua_modules/shards_partisan.lua",
-    "sha256": "af08d3a2c5400a9edce8a4ed560db75dfaf646ac5742058b960665bba00a4430"
+    "sha256": "1e9caf2603aabf168843d96aab7f5e209ed450387647e9bbad62f6eef0a389e7"
   },
   {
     "path": "quests/lua_modules/shards_partisan_config.lua",
@@ -66,5 +78,9 @@
   {
     "path": "sql/020-shards-partisan.sql",
     "sha256": "0ffbd645b82e337140c5da2f8b184689acd2617d1c5952c5912c7a5e3e85e458"
+  },
+  {
+    "path": "sql/030-alaran-language-achievements.sql",
+    "sha256": "9a44eacc66701aed6574571ed61e9abd617433059ba3d1ba1647d0474337dfb9"
   }
 ]

@@ -46,6 +46,7 @@ Apply these SQL files in order, without the client's `--force` option:
 1. `sql/010-shards-catalogue.sql`
 2. `sql/015-welcome-prerequisite.sql`
 3. `sql/020-shards-partisan.sql`
+4. `sql/030-alaran-language-achievements.sql`
 
 For example:
 
@@ -86,3 +87,11 @@ The advanced scenarios used clearly labelled QA stage setup and a supplied cryst
 The [April 20, 2013 progression guide](https://everquest.allakhazam.com/wiki.html?p=eq:Progression_Through_Rain_of_Fear&oldid=461435) establishes the period task roster. Separate dated sources establish individual objectives, language gains and selected AA/cash rewards. Historical identity admission is not proof that every modern description/reward was unchanged in May 2013.
 
 Flat XP, extraction probabilities, trigger radii, timers and some combat/model profiles are labelled reconstruction settings. The authoritative current settings are in `quests/lua_modules/shards_partisan_config.lua`; obsolete staged JSON/build snapshots are not distributed. To change supported Lua defaults before installation, run for example `python3 configure.py --extractor-chance 25 --radius 40 --sermon-seconds 60 --meditation-seconds 30`. This changes the release package and its hashes, with the previous module hash retained as a known upgrade preimage. It does not change a running server or its database. Flat task XP remains explicitly labelled in the SQL; review any intentional SQL customization separately. Exact Live encounter balance, model fidelity and every multiplayer branch are not claimed. No client binaries/resources, raw captures, private character records, research logs or test files are included.
+
+## Alaran language achievement integration
+
+The reviewed production proposal installs the existing Words training caller, its language helper and its data module together. All five language achievements use guarded Boolean rules: Aware25, Novice50, Fluent71, Expert90 and Master100. The existing below100 translation branch supplies the real prior skill and native readback; a70→75 combine crosses Fluent71. It grants no earlier history on login and makes no change to the already100 final translation branch.
+
+The final `030` migration accepts only the exact five catalogue identities, required components and absent/exact owned rules. It installs missing rules and enables the five definitions/rules transactionally, without changing optional components, rewards or character data. It must be installed with the complete three-file quest bundle during maintenance before fresh zones are started. It is a proposed package change until separately reviewed and deployed; the published disabled9342/9343 research candidates remain historical artifacts, not mandatory extra migrations.
+
+The normal route passed36ordinary combines, all five persisted awards and one logout/login check. The integrated installer passed fresh/upgrade/rerun and custom-file guards; the new database migration passed13isolated actual MariaDB client cases, including full rollback after a late insert failure. Read [the validation summary](provenance/alaran-language-validation.json) for synthetic-admission and failure-testing limits. This establishes the implemented training route; recovering an original Live callback is not a further requirement for this route. A failed database setter is not automatically replayed by this quest caller; general database failure recovery was not tested here.

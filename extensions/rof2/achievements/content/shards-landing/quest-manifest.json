@@ -862,6 +862,19 @@
   {
     "path": "lua_modules/shards_partisan.lua",
     "stock_before_sha256": null,
-    "after_sha256": "af08d3a2c5400a9edce8a4ed560db75dfaf646ac5742058b960665bba00a4430"
+    "after_sha256": "1e9caf2603aabf168843d96aab7f5e209ed450387647e9bbad62f6eef0a389e7",
+    "accepted_before_sha256": [
+      "af08d3a2c5400a9edce8a4ed560db75dfaf646ac5742058b960665bba00a4430"
+    ]
+  },
+  {
+    "path": "lua_modules/achievement_alaran_master.lua",
+    "stock_before_sha256": null,
+    "after_sha256": "366004c063d11bf4d45bb57fc5ef52eaa7183f89b7dfa1b34c906713bb9819c5"
+  },
+  {
+    "path": "lua_modules/achievement_alaran_master_data.lua",
+    "stock_before_sha256": null,
+    "after_sha256": "0a7d4ef5cb4df67a89715f1e9720fa72a7ee0d21af7f40105fbb9cf0a8ecac94"
   }
 ]

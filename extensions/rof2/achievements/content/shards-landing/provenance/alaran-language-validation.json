@@ -1,0 +1,57 @@
+{
+  "status": "native_normal_training_and_one_relog_verified;production_integration_proposed_not_deployed",
+  "historical_cutoff": "2013-05-31",
+  "thresholds": [
+    25,
+    50,
+    71,
+    90,
+    100
+  ],
+  "ordinary_combines": 36,
+  "actual_language": {
+    "start": 0,
+    "finish": 100
+  },
+  "fluent_crossing": {
+    "before": 70,
+    "after": 75,
+    "threshold": 71
+  },
+  "paired_persisted_required_components_and_parents": 5,
+  "notes_and_quill_count": 1,
+  "returned_material_charges": 1,
+  "tome_count": 1,
+  "cursor_empty": true,
+  "original_nonGUID_inventory_preserved": true,
+  "relog_count": 1,
+  "temporary_setup_removed": true,
+  "synthetic_admission": "Earlier Words objective stages were supplied solely to reach the translation step; tested language/achievement awards came from ordinary combines, not fabricated completion.",
+  "limits": [
+    "Full earlier quest acquisition not replayed in this language batch.",
+    "No final translation, optional component completion or item reward granted by this feature.",
+    "No already100/login/history credit.",
+    "No SQL failure-injection/recovery acceptance.",
+    "Award flags/parents paired in persisted SQL; native task read language/materials, not direct achievement UI counters.",
+    "No independently captured before/after session epoch pair."
+  ],
+  "opcodes_and_structures": "Existing achievement state/progress/completion transport reused; no new opcode or structure discovery in this milestone.",
+  "production_installer_checks": {
+    "fresh_install": true,
+    "published_preimage_upgrade": true,
+    "idempotent_rerun": true,
+    "partial_install": true,
+    "custom_and_symlink_refusal": true
+  },
+  "production_SQL_protocol": {
+    "surface": "actualMariaDBCLI DELIMITER against isolated authentic-schema fixture",
+    "cases_passed": 13,
+    "fresh_five_enabled": true,
+    "disabled_candidate_upgrade": true,
+    "exact_rerun": true,
+    "identity_reward_count_engine_guards": true,
+    "late_insert_transaction_rollback": true,
+    "foreign_routine_not_overwritten": true,
+    "production_apply": false
+  }
+}

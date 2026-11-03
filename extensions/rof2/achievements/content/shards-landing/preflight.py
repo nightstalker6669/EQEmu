@@ -16,6 +16,8 @@ def selected(table,col,expected,key="id"):
  vals=','.join(str(int(x))for x in expected)
  return query('SELECT JSON_OBJECT(\'id\',`'+key+'`,\'name\',`'+col+'`) FROM `'+table+'` WHERE `'+key+'` IN('+vals+');')if vals else[]
 checks=json.loads((ROOT/'provenance/baseline-identities.json').read_text());errors=[]
+if query("SELECT JSON_OBJECT('routine',ROUTINE_NAME) FROM information_schema.ROUTINES WHERE ROUTINE_SCHEMA=DATABASE() AND ROUTINE_NAME='install_alaran_language_training'"):
+ errors.append('Alaran installation routine name is already in use; inspect ownership before clearing any previous or foreign routine.')
 created_npcs=set(checks.get('created_npcs',[]))
 for table,col in [('items','Name'),('npc_types','name'),('tasks','title')]:
  wanted=checks[table];found={str(x['id']):x['name']for x in selected(table,col,wanted)}

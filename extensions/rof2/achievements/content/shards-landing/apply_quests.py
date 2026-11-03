@@ -89,7 +89,7 @@ if errors:
 text=(ROOT/'patches/quest-hooks.patch').read_text();sections=[]
 for section in text.split('diff --git ')[1:]:
  first=section.splitlines()[0];rel=first.split(' b/',1)[1]
- if rel in pending:sections.append('diff --git '+section)
+ if rel in pending and not (pathlib.PurePosixPath(rel).parts[0]=='lua_modules' and (ROOT/'quests'/rel).is_file()):sections.append('diff --git '+section)
 patch=''.join(sections)
 if patch:
  r=subprocess.run(['git','apply','--check','-'],cwd=dest,input=patch,text=True,capture_output=True)
