@@ -1,0 +1,42 @@
+{
+  "status": "THREE_RRC008_FORMULAS_MATCH_PERIOD_DATED_PRIMARY_PLAYER_POST",
+  "source_url": "https://mboards.eqtraders.com/eq/forum/tradeskills/tradeskill-guides-and-ui-mods/36211-the-ultimate-eq-tradeskill-guide",
+  "author": "Corwinne / Cristalla",
+  "post_number": 7,
+  "node_id": "353498",
+  "displayed_post_date": "2012-05-14",
+  "displayed_last_edit": "2012-06-16",
+  "raw_html_sha256": "49825b13caf59070fe8ea59f883f75cdb93ade514b2fbac4fe27ae26c72018b1",
+  "post_visible_text_sha256": "fe26fff9178a111da30a1f28450ac710f2364b88e9c8ed4f7a19d58513a24b70",
+  "formulas": [
+    {
+      "name": "Alaran Juice",
+      "displayed_trivial": 142,
+      "ingredient_quantities_exactly_match_RRC008": true,
+      "recipe_id": 3091214,
+      "historical_availability_corroborated_by_period_dated_post": true,
+      "yield_container_learning_still_not_proved": true
+    },
+    {
+      "name": "Alaran Medicinal Tonic",
+      "displayed_trivial": 448,
+      "ingredient_quantities_exactly_match_RRC008": true,
+      "recipe_id": 3091215,
+      "historical_availability_corroborated_by_period_dated_post": true,
+      "yield_container_learning_still_not_proved": true
+    },
+    {
+      "name": "Alaran Nostrum",
+      "displayed_trivial": 475,
+      "ingredient_quantities_exactly_match_RRC008": true,
+      "recipe_id": 3091216,
+      "historical_availability_corroborated_by_period_dated_post": true,
+      "yield_container_learning_still_not_proved": true
+    }
+  ],
+  "limits": [
+    "Current public rendering of a period-dated primary player report, not an immutable archived2012web capture.",
+    "Supports these three ingredient maps and trivials; not all10RRC008formulas or all other numeric/gate/container/yield fields.",
+    "Does not establish emulator/native acceptance or broad recipe completeness."
+  ]
+}
