@@ -1,0 +1,52 @@
+{
+  "cutoff": "2013-05-31",
+  "installed_batches": 6,
+  "added_recipes": 120,
+  "added_entries": 694,
+  "current_recipe_rows": 22943,
+  "current_entry_rows": 178313,
+  "source_pages_integrity_verified": 536,
+  "formula_catalogues": 499,
+  "explicit_empty_current_queries_not_historical_zero": 6,
+  "indexes_guides": 31,
+  "raw_source_rows_not_a_historical_denominator": 37579,
+  "role_quantity_audit": {
+    "snapshot_stage": "Before RRC006 installation",
+    "raw_rows": 37579,
+    "comparable_source_role_maps": 12936,
+    "counts": {
+      "NOT_ROLE_AUDITED_CAST_SPELL_PRODUCT_OUTSIDE_TRADESKILL_RECIPE_SCOPE": 271,
+      "NOT_ROLE_AUDITED_OUTPUT_ID_UNRESOLVED": 2512,
+      "ENABLED_ROLE_QUANTITY_AND_TRIVIAL_CANDIDATE": 8796,
+      "NOT_ROLE_AUDITED_NO_SAME_SKILL_OUTPUT_RECIPE_CANDIDATE": 17900,
+      "NO_EXACT_ROLE_QUANTITY_CANDIDATE": 800,
+      "COMPONENT_OR_RETURN_ID_UNRESOLVED": 1046,
+      "ENABLED_ROLE_QUANTITY_CANDIDATE_TRIVIAL_DIFFERS_OR_UNRESOLVED": 1413,
+      "NOT_ROLE_AUDITED_EXPLICIT_NATIVE_OUTPUT_ITEM_MISSING": 19,
+      "NOSKILL_GROUP_SEMANTICS_UNRESOLVED": 2025,
+      "DISABLED_ONLY_ROLE_QUANTITY_CANDIDATE": 1927,
+      "NOT_ROLE_AUDITED_OUTPUT_ID_AMBIGUOUS": 824,
+      "NOT_ROLE_AUDITED_SOURCE_SKILL_OR_COMPOUND_FILTER_UNRESOLVED": 46
+    },
+    "all110_pre_RRC006_applied_recipes_crosschecked": true,
+    "availability_accepted": false
+  },
+  "historical_universe_denominator": null,
+  "missing_output_item_definitions_previously_confirmed": 19,
+  "graph_closed": false,
+  "all_recipe_completeness": false,
+  "remaining": [
+    "Historical recipe eligibility and retired/TLP distinctions",
+    "Container, learning, race/class, skillneeded and salvage review",
+    "Unresolved or ambiguous item identities",
+    "NoSkill multioutput and charged-book mechanics",
+    "Missing output item definitions and natural material acquisition"
+  ],
+  "limits": [
+    "Counts include overlapping modern and retired rows, not distinct eligible recipes.",
+    "Unique-name item resolution is a candidate, separately labelled from explicit source-native receipts.",
+    "Unsuffixed linked components and returns are interpreted as one unit; complex/unlinked role text refuses comparison.",
+    "Input quantities, all success returns, failure returns and displayed trivial are compared. Container, learning, race/class, skillneeded, salvage and era remain unapproved.",
+    "NoSkill multioutput/charged-book groups deliberately remain unresolved. Disabled candidates are not available."
+  ]
+}
