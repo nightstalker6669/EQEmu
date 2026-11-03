@@ -1,0 +1,28 @@
+{
+  "status": "STRUCTURAL_SOURCE_REPAIR_CHECKS_PASS_SQL_NOT_EXECUTED",
+  "existing_recipes": 58,
+  "old_entries": 465,
+  "added_entries": 58,
+  "all16recipe_fields_preserved": true,
+  "all_old8field_entry_IDs_preserved": true,
+  "all58native_role_quantity_trivial_bindings_exact": true,
+  "output_component_ref_count": 123,
+  "period_family_counts": {
+    "black_lace_boned": 4,
+    "helanic_tundra": 12,
+    "northman_ring": 24,
+    "northman_weapon": 6,
+    "blackened_darkscale": 12
+  },
+  "current_world36_33_receipt_pinned": true,
+  "existing47_all_preserved": true,
+  "no_enabled_input_multiset_collision": true,
+  "rollback_only_exact_added_rows": true,
+  "native_actor_race_or_combine_accepted": false,
+  "sql_executions": 0,
+  "hashes": {
+    "rollback.sql": "5da35d9db70de8ff1bd5ede9bd9397226649502afe8b59afdba678fa511826d1",
+    "batch.public.json": "39972a3d17bde80e63c67acd15d8c0cce0b8cf8f7b436a27c99f80be478dacda",
+    "apply.sql": "e54e027fa540be0dee24bc876ae3bdb256018bee74b50879b5839d5fabaacae6"
+  }
+}
