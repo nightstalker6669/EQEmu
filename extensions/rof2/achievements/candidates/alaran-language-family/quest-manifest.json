@@ -1,0 +1,10 @@
+[
+  {
+    "path": "lua_modules/achievement_alaran_master.lua",
+    "sha256": "366004c063d11bf4d45bb57fc5ef52eaa7183f89b7dfa1b34c906713bb9819c5"
+  },
+  {
+    "path": "lua_modules/achievement_alaran_master_data.lua",
+    "sha256": "07cb9074739895b17eab6f78ed8cdae926265afbe8724a8020fbc8ea973d3773"
+  }
+]

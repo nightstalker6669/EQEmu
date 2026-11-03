@@ -1,0 +1,20 @@
+{
+  "name": "alaran-language-family",
+  "status": "candidate-only-disabled-uninstalled",
+  "migration_reservation": 9343,
+  "migration_status": "local-reserved-unregistered",
+  "automatic_install": false,
+  "installer_registration": false,
+  "quest_deployment": false,
+  "historical_cutoff": "2013-05-31",
+  "verification": {
+    "focused_Lua_checks_passed": true,
+    "source_compatibility_reviewed": true,
+    "sql_protocol_execution": "pending; resource preflight stopped before launch",
+    "native_sibling_awards_verified": false,
+    "native_persistence_verified": false,
+    "recovery_verified": false
+  },
+  "Master_9342_criterion_changed": false,
+  "license": "inherited repository license"
+}

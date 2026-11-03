@@ -1,0 +1,42 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "3a288608e93f47f978d64c1276d41c4bb25f5d40eef5321a2c531d1de554b524"
+  },
+  {
+    "path": "package.json",
+    "sha256": "6a1be2ade8b280b05fb94b7591e560451f088a5cd1d95be7dd8a0677f90ba578"
+  },
+  {
+    "path": "provenance/period-sources.json",
+    "sha256": "abd8fc12d3b24d17b0fac787f6a7af7f84bb41f5c229f15ff56af362bf008dce"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "36890adf2eac7321d0ac43e2cf11e8e18c97d665d0934d76766cf90fb0f714f4"
+  },
+  {
+    "path": "quests/lua_modules/achievement_alaran_master.lua",
+    "sha256": "366004c063d11bf4d45bb57fc5ef52eaa7183f89b7dfa1b34c906713bb9819c5"
+  },
+  {
+    "path": "quests/lua_modules/achievement_alaran_master_data.lua",
+    "sha256": "07cb9074739895b17eab6f78ed8cdae926265afbe8724a8020fbc8ea973d3773"
+  },
+  {
+    "path": "review/bundle.json",
+    "sha256": "bd84195d8c8300c88280f5e000d620b1b925d2e04c6ba8ebbf85ce5b0566df69"
+  },
+  {
+    "path": "review/updater-entry.proposed.txt",
+    "sha256": "46f5730abfd2bc019f01d8f85f9c575238fb6dd58456219e2796a92d41a6e747"
+  },
+  {
+    "path": "review/words-language-family.patch",
+    "sha256": "2b5cd2b9a9e580eee768ba45cc1734dec53d656590c0360d954bc018acb1829a"
+  },
+  {
+    "path": "sql/2026_11_03_alaran_language_family.disabled.sql",
+    "sha256": "128253db17e7e5737b9dcd2494f2faea1bdb2a6a8078ea4ec4f1003128227ef4"
+  }
+]
