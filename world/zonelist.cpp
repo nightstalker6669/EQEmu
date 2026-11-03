@@ -960,6 +960,7 @@ void ZSList::SendServerReload(ServerReload::Type type, uchar *packet)
 		ServerReload::Type::DataBucketsCache,
 		ServerReload::Type::Quests,
 		ServerReload::Type::QuestsTimerReset,
+		ServerReload::Type::ZoneData,
 		ServerReload::Type::WorldRepop,
 		ServerReload::Type::WorldWithRespawn
 	};
@@ -974,6 +975,8 @@ void ZSList::SendServerReload(ServerReload::Type type, uchar *packet)
 		ReloadAllPatches();
 	} else if (type == ServerReload::Type::Rules) {
 		RuleManager::Instance()->LoadRules(&database, RuleManager::Instance()->GetActiveRuleset(), true);
+	} else if (type == ServerReload::Type::ZoneData) {
+		ZoneStore::Instance()->LoadZones(content_db);
 	} else if (type == ServerReload::Type::SkillCaps) {
 		SkillCaps::Instance()->ReloadSkillCaps();
 	} else if (type == ServerReload::Type::ContentFlags) {
