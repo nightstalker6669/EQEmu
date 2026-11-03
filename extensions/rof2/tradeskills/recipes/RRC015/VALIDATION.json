@@ -1,0 +1,28 @@
+{
+  "rehearsal": {
+    "status": "PASS_FINITE_CONTENT_SQL_REHEARSAL",
+    "cases": 18,
+    "actual_refusals": 17,
+    "all_before_after_equal": true,
+    "owned_container_network_secrets_absent_independent": true,
+    "frozen_source_inputs_unchanged": true,
+    "published_exact": {
+      "commit": "1708565bb9ae0d09dcef1c53fdc17b7f504a8c8d",
+      "sha256": {
+        "README.md": "de202fce7238095fc3361e9ad67d1dcbdf46cd359a526a3a1b17f3f1bce33f86",
+        "apply.sql": "86f4c01b062d7e1a234b90c9f06c42f7bc384e538f617201f15fd0ab341b7e12",
+        "rollback.sql": "f39ac66303c6d9707d31f95a60fc7aa59d64019bad2472d5c0391bb67bf578c0",
+        "batch.json": "3d7e9a6b48ec2e7e3a8bab2b11d31cf798213bb74562f7e85596ff9481aae101"
+      }
+    },
+    "production_SQL_executions": 0,
+    "native_actions": 0
+  },
+  "preexecution_stop": {
+    "driver001": "read-only key mismatch before attempt marker;0 product SQL invocations",
+    "correction": "derive output IDs from exact product entries",
+    "successful_driver002": "single authorized invocation; no product retry"
+  },
+  "native_combine": false,
+  "native_book_scribing": false
+}

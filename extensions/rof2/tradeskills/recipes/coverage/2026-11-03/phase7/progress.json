@@ -1,0 +1,17 @@
+{
+  "status": "AUDIT_AND_IMPLEMENTATION_CONTINUE",
+  "installed_additions": {
+    "batches": 14,
+    "recipes": 284,
+    "logical_entries": 1619
+  },
+  "current_database_counts": {
+    "recipes": 23107,
+    "entries": 179238
+  },
+  "all_installed_source_postimages_exact": true,
+  "RRC014": "58 proposed entries held for actor validation; not installed or counted",
+  "next": "Earlier-expansion ordinary fruit baking chains; source identities, era, return and learning review before SQL.",
+  "all_recipe_completeness": false,
+  "native_combine_campaign": false
+}
