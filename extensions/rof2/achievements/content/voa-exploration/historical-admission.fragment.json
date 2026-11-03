@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "cutoff": "2013-05-31",
-  "status": "versioned-two-child-admission; local runtime applied; readiness separated per achievement",
+  "status": "versioned-four-child-admission; local runtime applied; readiness separated per achievement",
   "achievements": [
     {
       "achievement_id": 1973000,
@@ -26,6 +26,30 @@
       "readiness_hold": "safe visible lift/zonepoint approach and ordinary entry/reentry not verified",
       "admission_status": "enabled_configured_native_acceptance_pending",
       "validation": "metadata guarded/applied/read back; no native travel, movement or lift click acceptance claimed"
+    },
+    {
+      "achievement_id": 1972500,
+      "catalogue_name": "Valley of Lunanyn Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5824",
+      "evidence_date": "2012-10-24",
+      "evidence_type": "dated_individual_achievement_information",
+      "reason": "one visit to corresponding named zone; no additional reward",
+      "status": "verified_present",
+      "readiness_hold": "Safe ordinary Sarith/Valley transition and native credit/persistence unverified",
+      "admission_status": "enabled_configured_native_acceptance_pending",
+      "validation": "Guarded local metadata applied and all cache acknowledgments paired; no Valley travel attempted"
+    },
+    {
+      "achievement_id": 1972600,
+      "catalogue_name": "Sarith, City of Tides Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5825#msg13511304573148824",
+      "evidence_date": "2012-10-24",
+      "evidence_type": "dated_individual_achievement_information",
+      "reason": "one visit to corresponding named zone; no additional reward",
+      "status": "verified_present",
+      "readiness_hold": "Normal relog persistence not checked before bounded native softstop",
+      "admission_status": "enabled_native_entry_accepted_persistence_pending",
+      "validation": "One ordinary SarithGate29839 cast with explicitly preowned QAspell; Admin0/GMfalse, native arrival and required credit count1/completion1, no pending; no relog or original scroll acquisition claim"
     }
   ]
 }

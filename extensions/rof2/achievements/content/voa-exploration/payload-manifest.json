@@ -1,22 +1,26 @@
 {
   "schema_version": 1,
-  "scope": "only four sibling files in this versioned two-child package",
+  "scope": "Five source/doc siblings in cumulative four-traveler package; excludes private QA evidence and runtime scripts",
   "files": {
-    "extensions/rof2/achievements/content/voa-exploration/historical-admission.fragment.json": {
-      "sha256": "d3794a3e0d6d48db0774b446a061ad7a957a464bbd6d140aff086cc5dad50727",
-      "bytes": 1568
-    },
-    "extensions/rof2/achievements/content/voa-exploration/status.json": {
-      "sha256": "01e7fcdf42b30d255f7568aacb171bad751f2e9b17cd45b6659acc6cd4b2b7fc",
-      "bytes": 2757
-    },
     "extensions/rof2/achievements/content/voa-exploration/README.md": {
-      "sha256": "730d594de60896f0b50aa851c89afd9e1ec545341c3b25084a7de98c0213aa3f",
-      "bytes": 3160
+      "sha256": "67de01ece37579ef970e0b6c937aa52909944e5b0ee3b832429cbdc1a80a75a5",
+      "bytes": 4006
+    },
+    "extensions/rof2/achievements/content/voa-exploration/historical-admission.fragment.json": {
+      "sha256": "abd25f758be74668eaf8ac9e9a49439d6a806429590fef6f7de197b8ef961c62",
+      "bytes": 3064
     },
     "extensions/rof2/achievements/content/voa-exploration/sql/010-pillars-windsong-travelers.sql": {
       "sha256": "1f940ff9857b2a6d6391e43842daae95f1712e27dfc6322605b18f92791854c6",
       "bytes": 4053
+    },
+    "extensions/rof2/achievements/content/voa-exploration/sql/020-sarith-valley-travelers.sql": {
+      "sha256": "1e2cd18969604fc077a4b5d5ba96cb72e6a01111a37c58b0c4b4876a695862a3",
+      "bytes": 4152
+    },
+    "extensions/rof2/achievements/content/voa-exploration/status.json": {
+      "sha256": "a0f7d3c05a52d90dd01c1082f0b9d93d91e74feb5cb97398aca3254f712f5edf",
+      "bytes": 4405
     }
   }
 }
