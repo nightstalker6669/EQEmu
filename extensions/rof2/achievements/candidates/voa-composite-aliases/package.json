@@ -1,0 +1,19 @@
+{
+  "name": "voa-composite-aliases",
+  "status": "source-candidate-only-uninstalled",
+  "historical_cutoff": "2013-05-31",
+  "alias_count": 15,
+  "parent_count": 3,
+  "target": "utils/scripts/import_achievement_resources.py",
+  "preimage_sha256": "f40d0d29558cc5bad571fb2df6c73065f564f3ce97e5423c7fcdc9f622398e5f",
+  "candidate_sha256": "632b907997345659406958911000257eaaaeb6ecb09d57706fd2d3cff2458091",
+  "automatic_install": false,
+  "installer_registration": false,
+  "updater_registration": false,
+  "historical_selection_changed": false,
+  "definitions_enabled": false,
+  "database_migration": null,
+  "opcodes_or_structures_changed": false,
+  "native_completion_verified": false,
+  "license": "inherited repository license"
+}

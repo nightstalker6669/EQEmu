@@ -1,0 +1,22 @@
+[
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-composite-aliases/README.md",
+    "sha256": "19af687a243d6030f333ddcaa3c95816bba563d69fdd0274ed83d209e1e41059"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-composite-aliases/importer.patch",
+    "sha256": "4351655cd1cb1b80c66a304b44e07236e546d6c75c33c420c653b5772fb1e9c3"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-composite-aliases/package.json",
+    "sha256": "b9a69ae85603a4e4cea3a73deefa4dfeb1b988d9e52c588fd9f1f57d6f849bae"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-composite-aliases/provenance/period-dependencies.json",
+    "sha256": "f287efb0f768134dce85ec974a451341e521ab8efc18b75dae539acbe925f0ba"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-composite-aliases/source/utils/scripts/import_achievement_resources.py",
+    "sha256": "632b907997345659406958911000257eaaaeb6ecb09d57706fd2d3cff2458091"
+  }
+]
