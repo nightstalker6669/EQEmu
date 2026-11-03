@@ -1,11 +1,11 @@
 [
   {
     "path": "README.md",
-    "sha256": "3a288608e93f47f978d64c1276d41c4bb25f5d40eef5321a2c531d1de554b524"
+    "sha256": "634e636ce60399df2a711859a255de4c0fdc3da9768e4636b562ae44bbe882fd"
   },
   {
     "path": "package.json",
-    "sha256": "6a1be2ade8b280b05fb94b7591e560451f088a5cd1d95be7dd8a0677f90ba578"
+    "sha256": "211b1468958848a9c2553e48b4925ed82404a8c86eb06cde50bdd3fe046aa0e7"
   },
   {
     "path": "provenance/period-sources.json",

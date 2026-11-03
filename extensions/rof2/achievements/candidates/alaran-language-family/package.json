@@ -10,10 +10,11 @@
   "verification": {
     "focused_Lua_checks_passed": true,
     "source_compatibility_reviewed": true,
-    "sql_protocol_execution": "pending; resource preflight stopped before launch",
+    "sql_protocol_execution": "passed9isolatedCAPIcases",
     "native_sibling_awards_verified": false,
     "native_persistence_verified": false,
-    "recovery_verified": false
+    "recovery_verified": false,
+    "sql_protocol_cases_passed": 9
   },
   "Master_9342_criterion_changed": false,
   "license": "inherited repository license"

@@ -1,15 +1,15 @@
 [
   {
     "path": "extensions/rof2/achievements/candidates/alaran-language-family/README.md",
-    "sha256": "3a288608e93f47f978d64c1276d41c4bb25f5d40eef5321a2c531d1de554b524"
+    "sha256": "634e636ce60399df2a711859a255de4c0fdc3da9768e4636b562ae44bbe882fd"
   },
   {
     "path": "extensions/rof2/achievements/candidates/alaran-language-family/package.json",
-    "sha256": "6a1be2ade8b280b05fb94b7591e560451f088a5cd1d95be7dd8a0677f90ba578"
+    "sha256": "211b1468958848a9c2553e48b4925ed82404a8c86eb06cde50bdd3fe046aa0e7"
   },
   {
     "path": "extensions/rof2/achievements/candidates/alaran-language-family/payload-manifest.json",
-    "sha256": "6ccba6cf9fd1b057a64c8aa913d8a51bc6ba8560cf330bff525888aea797695c"
+    "sha256": "4bdc197c25f3cfd946dc019df908a0083ff7fbdbb992ba6370b2e413d097c2a7"
   },
   {
     "path": "extensions/rof2/achievements/candidates/alaran-language-family/provenance/period-sources.json",
@@ -45,6 +45,6 @@
   },
   {
     "path": "extensions/rof2/achievements/candidates/checkpoint-20261103-language-family/README.md",
-    "sha256": "0012641c0a3062649fe53203c563aa9a587e5865e23de2df6bb1fcdf6b2d78af"
+    "sha256": "2fde757eea89de20a571f9ae36383f819bfb4819525128aaf092f40b58d24ee4"
   }
 ]
