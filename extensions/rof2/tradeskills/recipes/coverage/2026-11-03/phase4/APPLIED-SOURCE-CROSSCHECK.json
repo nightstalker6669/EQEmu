@@ -1,0 +1,90 @@
+{
+  "status": "PASS_SOURCE_EXTRACTION_AND_FRESH_APPLIED_BATCH_POSTIMAGE_CROSSCHECK",
+  "reports": [
+    {
+      "batch": "RRC001",
+      "recipes": 19,
+      "entries": 104,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC002",
+      "recipes": 10,
+      "entries": 68,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC003",
+      "recipes": 64,
+      "entries": 354,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC004",
+      "recipes": 8,
+      "entries": 51,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC005",
+      "recipes": 9,
+      "entries": 67,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC006",
+      "recipes": 10,
+      "entries": 50,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC007",
+      "recipes": 91,
+      "entries": 520,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC008",
+      "recipes": 10,
+      "entries": 72,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC009",
+      "recipes": 28,
+      "entries": 127,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC010",
+      "recipes": 8,
+      "entries": 41,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    },
+    {
+      "batch": "RRC011",
+      "recipes": 9,
+      "entries": 60,
+      "source_ingredients_returns_quantities_yield_trivial_exact": true,
+      "fresh_database_postimages_exact": true
+    }
+  ],
+  "recipes": 266,
+  "entries": 1514,
+  "source_review_sha256": "1dc60d1fc384d04214c1583b29710e2913a833b2633c51b77cdd382e73a822fc",
+  "post_application_receipt_sha256": "95509a368dbd0530cee6160eb6f13dea2bafbb8a18ae5d18a4a64604438a18b1",
+  "script_sha256": "ad86f198b688097370405eb5b07c491583fa80d189f2b3d288ade8048bfd78eb",
+  "database_writes": false,
+  "native_combine": false,
+  "new_historical_formula_proof": false
+}

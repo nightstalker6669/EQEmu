@@ -1,0 +1,31 @@
+{
+  "batch": "RRC011",
+  "status": "PASS_FINITE_CONTENT_SQL_REHEARSAL",
+  "verified_recipes": 9,
+  "verified_logical_entries": 60,
+  "scenario_count": 11,
+  "scenarios": [
+    "fresh-reapply-rollback",
+    "id-collision",
+    "drift",
+    "missing-item",
+    "late-insert-failure",
+    "rollback-learned-reference",
+    "alias-output-collision",
+    "bowl-category-mismatch",
+    "oven-category-mismatch",
+    "prepared-producer-drift",
+    "grilled-producer-drift"
+  ],
+  "fresh_apply_exact_reapply_exact_rollback": true,
+  "actual_refusal_count": 10,
+  "actual_refusal_errno": 1644,
+  "actual_refusal_SQLSTATE": "45000",
+  "refusal_and_control_conservation": true,
+  "transactions_and_other_connections_after_stages": 0,
+  "owned_resources_credentials_removed_independent": true,
+  "published_four_files_exact": true,
+  "production_application_in_rehearsal": false,
+  "native_combine": false,
+  "historical_all_recipe_completeness": false
+}

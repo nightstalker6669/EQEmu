@@ -1,0 +1,29 @@
+{
+  "status": "AUDIT_AND_IMPLEMENTATION_CONTINUE",
+  "installed_additions": {
+    "batches": 11,
+    "recipes": 266,
+    "logical_entries": 1514
+  },
+  "current_database_counts": {
+    "recipes": 23089,
+    "entries": 179133
+  },
+  "all_installed_recipe16fields_entry7fields_exact": true,
+  "all_installed_source_ingredients_returns_quantities_yield_trivial_exact": true,
+  "historical_cutoff": "2013-05-31 working cutoff",
+  "source_corpus": {
+    "verified_pages": 536,
+    "formula_catalogues": 499,
+    "raw_rows_not_distinct_or_historical_denominator": 37579,
+    "graph_closed": false
+  },
+  "next_review": [
+    "Four residual current RoF Baking rows, including mandatory Merchant Alliance Tradebook and Shawl3.0 quest gates.",
+    "Resolve captured container identities and retain cultural/learning ambiguities.",
+    "Continue earlier expansion and quest/container coverage."
+  ],
+  "all_recipe_completeness": false,
+  "native_combine_campaign": false,
+  "limitations": "Current maintained source formulas and SQL postimages do not establish immutable May2013 per-formula values, runtime acquisition, native combines, or a historical coverage denominator."
+}
