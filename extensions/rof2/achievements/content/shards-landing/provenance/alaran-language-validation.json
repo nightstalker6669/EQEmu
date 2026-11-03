@@ -1,5 +1,5 @@
 {
-  "status": "native_normal_training_and_one_relog_verified;production_integration_proposed_not_deployed",
+  "status": "native_normal_training_one_relog_and_permanent_local_deployment_verified",
   "historical_cutoff": "2013-05-31",
   "thresholds": [
     25,
@@ -53,5 +53,28 @@
     "late_insert_transaction_rollback": true,
     "foreign_routine_not_overwritten": true,
     "production_apply": false
+  },
+  "local_permanent_deployment": {
+    "implementation_commit": "370c81d22df713b5ec7f34416cc7d4634434bb42",
+    "date": "2026-11-03",
+    "three_file_bundle_installed": true,
+    "only_new030migration_applied": true,
+    "five_rules_and_definitions_enabled": true,
+    "all_six_existing_zone_definition_caches_refreshed": true,
+    "local_shards_landing_quest_reload_only": true,
+    "loaded_categories": 29,
+    "loaded_definitions": 258,
+    "loaded_evaluation_criteria": 1054,
+    "client_rebuild_failures": 0,
+    "new_quest_errors": 0,
+    "no_process_restart": true,
+    "native_five_identities_and_required_components_present": true,
+    "Master_indirect_component_export": "truncated_at64;requiredcompletioncomponentobserved;wholeoptionalcataloguenotclaimed",
+    "temporary_test_status_position_restored": true,
+    "original_item_payloads_and_current_native_GUIDs_preserved": true,
+    "other_players_inventory_achievements_and_property_data_preserved": true,
+    "only_own_normal_closed_session_bookkeeping_changed": true,
+    "no_player_progress_reset": true,
+    "training_replay_on_deployment": false
   }
 }

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "cutoff": "2013-05-31",
+  "status": "candidate-only-unmerged; no runtime enablement",
+  "achievements": [
+    {
+      "achievement_id": 1973000,
+      "catalogue_name": "The Pillars of Alra Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5829",
+      "evidence_date": "2012-10-24",
+      "evidence_type": "dated_individual_achievement_information",
+      "reason": "one visit to corresponding named zone; no additional reward",
+      "status": "verified_present",
+      "current_definition_preimage_sha256": "1c8cb402168d920d81283bd792fa6bf5aac2e083049d2c9e3d1572a8d520fa57",
+      "readiness_hold": "zoneaccessminstatus80/nativeentryandrelogunverified",
+      "admission_status": "source_proposal_pending_access_and_native_acceptance"
+    },
+    {
+      "achievement_id": 1973100,
+      "catalogue_name": "The Windsong Sanctuary Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5830",
+      "evidence_date": "2012-10-24",
+      "evidence_type": "dated_individual_achievement_information",
+      "reason": "one visit to corresponding named zone; no additional reward",
+      "status": "verified_present",
+      "current_definition_preimage_sha256": "165d2cedfdd7f7f010c6e700077c095b42b63d2ae84ca02fd2069d0f4712a665",
+      "readiness_hold": "zoneaccessminstatus80/nativeentryandrelogunverified",
+      "admission_status": "source_proposal_pending_access_and_native_acceptance"
+    },
+    {
+      "achievement_id": 1973300,
+      "catalogue_name": "The Sepulcher of Order Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5832",
+      "evidence_date": "2012-10-24",
+      "evidence_type": "dated_individual_achievement_information",
+      "reason": "one visit to corresponding named zone; no additional reward",
+      "status": "verified_present",
+      "current_definition_preimage_sha256": "d095fe8fc832853cdbe8ac0d943bcc89b9c7bdf21b49b2d02b5ba8123fe47324",
+      "readiness_hold": "zoneaccessminstatus80/nativeentryandrelogunverified",
+      "admission_status": "source_proposal_pending_access_and_native_acceptance"
+    }
+  ]
+}

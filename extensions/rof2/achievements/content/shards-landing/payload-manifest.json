@@ -1,7 +1,7 @@
 [
   {
     "path": "README.md",
-    "sha256": "ddfdf36eae9d517df6e0c763da62b8a73ab73b8391488ee115f34a7b382884e5"
+    "sha256": "7fe65894c3fad3b0166218749faceb4622ce3cf746918ff4537a04fd9777f003"
   },
   {
     "path": "apply_quests.py",
@@ -29,7 +29,7 @@
   },
   {
     "path": "provenance/alaran-language-validation.json",
-    "sha256": "90ea00a586f5bfec5b1562a0feaec12143e4d464f838e4c575c8b25075dbda0f"
+    "sha256": "42df91b28a33153ac547c9fb917a1212033a4356686c0cf404629f08e55df44b"
   },
   {
     "path": "provenance/baseline-identities.json",
