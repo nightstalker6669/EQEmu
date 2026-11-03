@@ -1,0 +1,32 @@
+{
+  "batch": "RRC001",
+  "status": "PASS_ISOLATED_CONTENT_SQL_REHEARSAL",
+  "source_payload_manifest_sha256": "9c2a4220dcce58cb3686db5a83eec34a32ffc6237849e1d38868ab4897cc43ab",
+  "apply_sha256": "e3dc3f4f0c0003d21ebe072740c799084fe36d6d5a32801a74823a7d64fd1fa6",
+  "rollback_sha256": "83558481d8c9e8180179f6f888b6a8b9b6f89b6ae565609f062c24670e7497a9",
+  "verified_recipes": 19,
+  "verified_logical_entries": 104,
+  "fresh_apply_exact_reapply_exact_rollback": true,
+  "refusals": [
+    "ID collision",
+    "entry drift",
+    "missing required item",
+    "forced entry-insert failure after19recipe rows",
+    "rollback with learned-reference row"
+  ],
+  "actual_refusal_errno": 1644,
+  "actual_refusal_SQLSTATE": "45000",
+  "refusal_permanent_rows_preserved": true,
+  "unrelated_controls_and_metadata_indexes_preserved": true,
+  "transactions_and_extra_connections_after_stages": 0,
+  "owned_resources_and_credentials_removed": true,
+  "production_application": false,
+  "native_combines": false,
+  "all_recipes_covered": false,
+  "historical_formula_proof": false,
+  "limitations": [
+    "One initial setup attempt stopped before resource creation because stopped containers were incorrectly classified as active workloads; correction received a fresh authorized attempt.",
+    "Auto-increment highwaters are not rewound by rollback.",
+    "Recipe era/formula evidence is separate from structural SQL acceptance."
+  ]
+}
