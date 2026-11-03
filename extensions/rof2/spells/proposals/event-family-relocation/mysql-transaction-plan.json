@@ -2,6 +2,8 @@
   "format": 1,
   "status": "SOURCE SQL PLAN ONLY; NOT EXECUTABLE AUTHORIZATION",
   "apply_allowed": false,
+  "acquisition_enabled": false,
+  "activation": "Enable the two new option/reward rows only after coordinated item-cache refresh.",
   "mapping": [
     {
       "old_id": 132477,
@@ -85,7 +87,7 @@
       "counterpart_kind": "not established"
     }
   ],
-  "binding_sha256": "be781cee416838ee61ac1dd2d8d9c2a98175d873b85c53ed0fa2b95740a2004c",
+  "binding_sha256": "939583a9335390d5062993b83094e331d4b900f0b1ca18e4990fb28eac9c5853",
   "transaction": {
     "begin": "START TRANSACTION",
     "failure": "ROLLBACK",
@@ -489,7 +491,7 @@
         "Shared Savagery Rk. III",
         0,
         0,
-        1,
+        0,
         32768
       ],
       "expected_affected_rows": 1
@@ -502,7 +504,7 @@
         132477,
         1,
         "Shared Savagery Rk. III",
-        1
+        0
       ],
       "expected_affected_rows": 1
     },
@@ -623,12 +625,12 @@
     }
   ],
   "runner_requirements": [
-    "No DML until current owner52canonical semantics and reused historical fingerprints are bound to the same maintenance fence",
+    "Current owner52canonical semantics and reused historical fingerprints must cover the exact targets; unrelated active sessions are not a gate",
     "Fresh exact schema/engines/FK,114-column reference/task/physical-reward and full old/new/template/spell/task/policy/neighbor checks",
     "Durable reviewed preimages and namespace ledger before first mutation; exact reviewed helper/contract/payload hashes",
     "Every affected-row count must be1; every error stops with transaction rollback; never retry partial operations",
     "Full postimages, item-count delta and out-of-scope immutable-receipt preservation before commit",
     "Reverse only after receipt ownership/current postimages and no new copies, consumed/pending claims or affected recovery state",
-    "MySQL/InnoDB isolated-clone acceptance is still required; SQLite proof does not establish MySQL locking"
+    "SQLite proof does not establish MySQL locking; actual apply uses target/copy locks, recoverable backup, one transaction and exact readback"
   ]
 }

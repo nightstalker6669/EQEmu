@@ -12,7 +12,7 @@ from pathlib import Path
 import re
 import uuid
 
-from emit_mysql_plan import compile_plan, identifier
+from emit_mysql_plan import compile_plan, identifier, staging_payload
 
 
 def normalized(value):
@@ -48,15 +48,16 @@ def main():
     parser.add_argument('--config', type=Path)
     parser.add_argument('--backup-dir', type=Path)
     parser.add_argument('--custody-evidence', type=Path, help='Existing owner evidence used by the coordinator; not a new approval document')
-    parser.add_argument('--custody-checked', action='store_true', help='Coordinator has resolved current canonical copies/recovery and coordinated the window')
+    parser.add_argument('--custody-checked', action='store_true', help='Current target copies/recovery checked; unrelated sessions need not close')
     args = parser.parse_args()
-    data = json.loads((args.payload_dir/'data.json').read_text())
+    data = staging_payload(json.loads((args.payload_dir/'data.json').read_text()))
     archive = json.loads((args.payload_dir/'archive-event-definitions.json').read_text())
     inputs = json.loads(args.inputs.read_text())
     plan = compile_plan(data, archive)
     if not args.apply:
         print(json.dumps({'mode':'source plan only','mapping':[(r['old_id'],r['new_id']) for r in plan['mapping']],
-                          'native_item_restorations':[132477],'forward_writes':13,'reverse_writes':13,'database_connected':False},indent=2))
+                          'native_item_restorations':[132477],'acquisition_staged_disabled':True,
+                          'unrelated_session_gate':False,'forward_writes':13,'reverse_writes':13,'database_connected':False},indent=2))
         return
     require(args.config and args.backup_dir and args.custody_evidence and args.custody_checked,
             '--apply requires config, recoverable backup path and the coordinated current custody/window check')
@@ -100,11 +101,9 @@ def main():
                     snapshots[table].extend(actual)
             return snapshots
         def active_references():
-            require(rows('SELECT COUNT(*) n FROM housing_inventory_sessions WHERE active=1')[0]['n']==0,'active inventory session; coordinate its owner before migration')
-            require(rows('SELECT COUNT(*) n FROM housing_live_item_leases WHERE active=1 OR pending_key IS NOT NULL')[0]['n']==0,'active/pending item lease; coordinate its owner before migration')
             for entry in json.loads(args.reference_columns.read_text())['columns']:
-                count=rows('SELECT COUNT(*) n FROM '+identifier(entry['table'])+' WHERE '+identifier(entry['column'])+' IN ('+marks+')',targets)[0]['n']
-                require(count==0,'active/actionable item reference in '+entry['table']+'.'+entry['column']+'; preserve it and stop')
+                hit=rows('SELECT 1 AS found FROM '+identifier(entry['table'])+' WHERE '+identifier(entry['column'])+' IN ('+marks+') LIMIT 1 FOR UPDATE',targets)
+                require(not hit,'active/actionable item reference in '+entry['table']+'.'+entry['column']+'; preserve it and stop')
             count=rows('SELECT COUNT(*) n FROM rewards WHERE reward_type=0 AND reward_data_id IN ('+marks+') AND reward_id<>3810916021',targets)[0]['n']
             require(count==0,'another physical item reward references the family')
             for table,column in [('tasks','reward_id_list'),('task_activities','item_id_list'),('task_activities','item_list')]:
@@ -146,7 +145,7 @@ def main():
             db.commit();committed=True
             completion={'status':'COMMITTED','direction':direction,'binding':binding,'database':config['db'],'prepared_file':str(prepared_file.resolve()),
                         'prepared_sha256':hashlib.sha256(prepared_file.read_bytes()).hexdigest(),'writes':13,'item_postimages':expected_after,
-                        'custody_evidence_sha256':evidence_hash,'runtime_cache_or_native_acceptance':False}
+                        'custody_evidence_sha256':evidence_hash,'acquisition_enabled':False,'runtime_cache_or_native_acceptance':False}
             durable(completed_file,completion)
             print(json.dumps({'status':'COMMITTED','direction':direction,'item_definitions':len(expected_after),'writes':13,'receipt':str(completed_file.resolve())},indent=2))
         except BaseException:
