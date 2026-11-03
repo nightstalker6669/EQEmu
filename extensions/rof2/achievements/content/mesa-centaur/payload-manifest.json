@@ -1,0 +1,124 @@
+{
+  "install_sql": [
+    "sql/010-centaur-chain.sql",
+    "sql/030-corruption-internal-factions.sql",
+    "sql/050-shade-profile.sql",
+    "sql/070-enable-centaur-chain.sql"
+  ],
+  "rollback_sql": [
+    "sql/080-disable-centaur-chain.sql",
+    "sql/060-rollback-shade-profile.sql",
+    "sql/040-rollback-internal-factions.sql",
+    "sql/020-rollback-staged-chain.sql"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "55a380339cc84f8639cb8b59c43193e7762efb644481439e72ef30e9334aaed6"
+    },
+    {
+      "path": "apply_quests.py",
+      "sha256": "23105f112ecbf93bc1851994006c6f92b1a2b7913fe07b7615349ba3e83ff445"
+    },
+    {
+      "path": "hooks/global-npc.lua",
+      "sha256": "9b3f1c8d44cc9077e1b0e39a1aa97f7a1cbd3511f3ae2d1c92db33568c449203"
+    },
+    {
+      "path": "hooks/global-player.lua",
+      "sha256": "2bd4a1cc7ce67b4e3a60f1e5f14b1148bbba14bc1cbfabe90c211ef43cebb733"
+    },
+    {
+      "path": "install.py",
+      "sha256": "a3c4874f340ec5a83c1f8b1336eecd4fc4828a7e1e50be19e80dc6a49f21ab06"
+    },
+    {
+      "path": "provenance/baseline-identities.json",
+      "sha256": "aae97f3ee6d41830ad5f70dd1701a1319c5b29088187e4e847c0ca04fdc4119e"
+    },
+    {
+      "path": "provenance/research.json",
+      "sha256": "f4b831e5834fb8f6ea5d423b36e9222fe664c4f315fea407f68bb33b05e4e1ff"
+    },
+    {
+      "path": "provenance/server-settings.json",
+      "sha256": "e1a5fb6b231a77c5d248ba0dd28a8dd17f6a1f78f97edcf3336368bb04cd4a01"
+    },
+    {
+      "path": "quest-data.json",
+      "sha256": "94c2770936509d7ec644199084e3e33629a39cd49897f93286a763df03a0277c"
+    },
+    {
+      "path": "quest-manifest.json",
+      "sha256": "bdae5f0465dd3c25d859fbe484176033638162995dd391ab229e90f854a93c44"
+    },
+    {
+      "path": "quests/lua_modules/achievement_quest_mesa_centaur.lua",
+      "sha256": "4885e0d40a8c01dba95f0ab2b497f949449e780490a224344fc79ec7d4e9f005"
+    },
+    {
+      "path": "quests/lua_modules/achievement_quest_mesa_corruption.lua",
+      "sha256": "77ebc93bc8516a5c1586ac2b87c276859b033822081a64d834c1ad57a64fbd31"
+    },
+    {
+      "path": "quests/lua_modules/achievement_quest_mesa_corruption_data.lua",
+      "sha256": "c7896278b50a42901cc549d6267e403d8f28ae94dec56ced5e4832b8c347c750"
+    },
+    {
+      "path": "quests/mesa/397007.lua",
+      "sha256": "5266444d633ef93c5560787542632f9c2e953f886ff61fbdc170d63ec0c3714f"
+    },
+    {
+      "path": "quests/mesa/397149.lua",
+      "sha256": "92a8c909b962d3d880366babb675990a58300a584ccfce3b28c5b332cf1c8a4b"
+    },
+    {
+      "path": "quests/mesa/397196.lua",
+      "sha256": "be7187ac027324218c7be94f50135295afd6f9c688c8daf806e943ca486c02c4"
+    },
+    {
+      "path": "quests/mesa/zone_controller.lua",
+      "sha256": "397d79aaf31271b68d16770e85f73aa81da87f5735f7e8965cfc5d76c8b1e5b5"
+    },
+    {
+      "path": "script-preimages.json",
+      "sha256": "28eddc123f585df06de11f383ebfd18b47d990ede6782b97a3970dc291ae34e2"
+    },
+    {
+      "path": "sql/010-centaur-chain.sql",
+      "sha256": "da0bc71c6d0015ad68346b8d15dc71005c7cd8b26da7f0e48fa840c33bef2201"
+    },
+    {
+      "path": "sql/020-rollback-staged-chain.sql",
+      "sha256": "7fd1571d3122c72d18ed4923039f7876627e8feca252ba45d5c8f81a2ad38013"
+    },
+    {
+      "path": "sql/030-corruption-internal-factions.sql",
+      "sha256": "7ff13e7f149b43c14403810bcbe50c3b320ce78aacc78a1a8a8c9ac1f007e924"
+    },
+    {
+      "path": "sql/040-rollback-internal-factions.sql",
+      "sha256": "9ddc2a62f9b8c57d76640d6ebd31cc758da1f234b3358385626b235cb67dd531"
+    },
+    {
+      "path": "sql/050-shade-profile.sql",
+      "sha256": "e6df0d1c016aeb72a57bd8113dd082c5bab0d042e8e2ab2ac347e7357c317398"
+    },
+    {
+      "path": "sql/060-rollback-shade-profile.sql",
+      "sha256": "fa1e0246011083d1804e5d6dbf0afc64f4f76c6dde87a6ed7de51cfae2d19529"
+    },
+    {
+      "path": "sql/070-enable-centaur-chain.sql",
+      "sha256": "8d628a0cfcb836d7f8bdda60806cd9f5602c594e3306e8df93aee19e8895b425"
+    },
+    {
+      "path": "sql/080-disable-centaur-chain.sql",
+      "sha256": "e597bfba8de64b50427d179dcd80a1254d693b513a648db6996bcf1bf0a9d965"
+    },
+    {
+      "path": "status.json",
+      "sha256": "e496216f2d33a6cfc190ca88cd9366a9ada53568517c7c9e30287d332dc5b5c6"
+    }
+  ]
+}
