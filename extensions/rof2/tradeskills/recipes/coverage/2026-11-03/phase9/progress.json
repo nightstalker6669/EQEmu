@@ -1,0 +1,29 @@
+{
+  "status": "AUDIT_AND_IMPLEMENTATION_CONTINUE",
+  "installed_additions": {
+    "batches": 16,
+    "recipes": 340,
+    "logical_entries": 1927
+  },
+  "current_database_counts": {
+    "recipes": 23163,
+    "entries": 179546
+  },
+  "all_installed_source_postimages_exact": true,
+  "RRC014": "58 proposed cultural entries held for actor validation; not installed or counted",
+  "pending_ordinary_source_proposals": {
+    "RRC018": {
+      "recipes": 76,
+      "entries": 425,
+      "missing_output_rows_held": 10,
+      "executed": false
+    },
+    "RRC019": {
+      "recipes": 87,
+      "entries": 490,
+      "executed": false
+    }
+  },
+  "all_recipe_completeness": false,
+  "native_combine_campaign": false
+}
