@@ -2,12 +2,12 @@
   "schema_version": 1,
   "files": {
     "extensions/rof2/achievements/content/oculus-task-leaves/README.md": {
-      "sha256": "200cd645be7e4a4ca4843d9485c0a3a5776f40d56e0c4969731f36516da62148",
-      "bytes": 3638
+      "sha256": "fd3855f9156aa1578082d653d40a73b1d1745e5657ae06feeea5d80c3c2bf7c3",
+      "bytes": 5308
     },
     "extensions/rof2/achievements/content/oculus-task-leaves/bindings.json": {
-      "sha256": "4c6fb3726600e9b9ddc768b4a3c5aacf379d908e36e1ed2a243656457f49be3f",
-      "bytes": 2592
+      "sha256": "2716bd6f4598e6cc92d057b272c68ae300c3169fc3b7873f6f3c1ea37683b6bb",
+      "bytes": 2662
     },
     "extensions/rof2/achievements/content/oculus-task-leaves/sql/010-seven-existing-task-leaves.sql": {
       "sha256": "a9d510047d6c0bc4ef0f46aad308753fa4b3813ba19cb9c15110bd7c452a7ce2",
@@ -18,8 +18,8 @@
       "bytes": 28761
     },
     "extensions/rof2/achievements/content/oculus-task-leaves/status.json": {
-      "sha256": "82951faf19c70b8876008f8e16cbe9d5b6dd2f9a083110dc4fde766cf4975dc1",
-      "bytes": 763
+      "sha256": "aa6fe22ce845c3f269784f92a1ebf4b1754b5baa6859755583cbfcb2212d0331",
+      "bytes": 2649
     }
   }
 }

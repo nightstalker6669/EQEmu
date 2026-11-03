@@ -1,5 +1,5 @@
 {
-  "status": "source_candidate_not_applied",
+  "status": "enabled_locally_native_seven_leaf_credit_and_persistence_verified",
   "achievement_id": 500120700,
   "other48_requirements_unchanged": true,
   "rows": [
@@ -103,5 +103,6 @@
     }
   ],
   "full55_manifest_comparison": "Same row fields including sequence; only approved enabled0->1 differs",
-  "no_new_opcodes_structs": true
+  "no_new_opcodes_structs": true,
+  "full_Oculus_complete": false
 }

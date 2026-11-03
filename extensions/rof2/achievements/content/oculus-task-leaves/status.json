@@ -1,6 +1,6 @@
 {
-  "status": "source_candidate_not_applied",
-  "utc": "2026-11-03T19:57:30.273812+00:00",
+  "status": "enabled_and_native_seven_prerequisite_facts_accepted",
+  "utc": "2026-11-03T21:18:24.775994+00:00",
   "scope": {
     "new_rules": 7,
     "existing_tasks_reused": 7,
@@ -8,14 +8,58 @@
     "other_required_components": 48
   },
   "source_manifest_parity": true,
-  "installer_execution_verified": false,
-  "reapply_rollback_execution_verified": false,
-  "cached_admission_verified": false,
-  "new_leaf_credit_native_verified": false,
-  "normal_relog_persistence_verified": false,
+  "installer_execution_verified": true,
+  "reapply_rollback_execution_verified": true,
+  "cached_admission_verified": true,
+  "new_leaf_credit_native_verified": true,
+  "normal_relog_persistence_verified": true,
   "full_Oculus_complete": false,
   "selected_journal_enabled": false,
   "no_global_updater_version_required": true,
-  "next": "Coordinator review, isolated SQL execution/collision/reapply/rollback checks, then expressly scoped runtime/native acceptance",
-  "protocol_changes": false
+  "next": "Implement and verify the remaining Oculus requirements and other historical achievement content; this package covers only seven prerequisite leaves",
+  "protocol_changes": false,
+  "isolated_case_count": 12,
+  "late_failure_insert_ordinal": 6,
+  "fixture_database_removed": true,
+  "runtime_cache_counts": [
+    30,
+    262,
+    1065
+  ],
+  "native_validation": {
+    "Admin": 0,
+    "GM": false,
+    "required_components_observed": 55,
+    "exactly7_satisfied": true,
+    "other48_unsatisfied": true,
+    "fullparent_open": true,
+    "native_numeric_counter": "unsupported; persisted SQL count1 checked separately",
+    "SQL_count_completed": 1,
+    "timestamps_versions_unchanged": true,
+    "original_completed_task_history_unchanged": true,
+    "extra_quest_repeats": 0,
+    "additional_relog_requests": 0,
+    "single_subsequent_login_also_verified_corrective_inventory_recovery": true
+  },
+  "verification_corrective_action": {
+    "initial_inventory_failure_preserved": true,
+    "expired_summoned_containers": 3,
+    "permanent_contents_correctively_recovered": 4,
+    "original_instance_metadata_preserved": true,
+    "fresh_native_ids_and_persistence_verified": true,
+    "expired_containers_not_recreated": true,
+    "container_expiry_behavior_changed_by_update": false
+  },
+  "preservation": {
+    "125of128_scope_hashes_exact": true,
+    "remaining3_changes": "Seven intended earned progress records; documented container expiry and corrective four-instance recovery; legitimate closed-session inventory GUID/custody bookkeeping. All other player inventory and housing state verified.",
+    "protected_other_player_exact": true,
+    "currency_book_mem_history_base_profiles_preserved": true,
+    "eight_catalogue_tables_exact_seven_rule_postimage": true,
+    "server_processes_restarted": 0,
+    "temporary_access_profiles_clients_cleaned": true
+  },
+  "isolated_SQL_validation_scope": "One disposable authentic eight-table MariaDB CLI fixture",
+  "active_Oculus_criterion_count": 7,
+  "runtime_applied": true
 }
