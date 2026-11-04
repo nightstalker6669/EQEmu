@@ -433,8 +433,7 @@ void EntityList::ObjectProcess()
 	auto it = object_list.begin();
 	while (it != object_list.end()) {
 		if (!it->second->Process()) {
-			safe_delete(it->second);
-			free_ids.push(it->first);
+			RetireObject(it->first, it->second);
 			it = object_list.erase(it);
 		} else {
 			++it;
@@ -2748,8 +2747,7 @@ void EntityList::RemoveAllObjects()
 {
 	auto it = object_list.begin();
 	while (it != object_list.end()) {
-		safe_delete(it->second);
-		free_ids.push(it->first);
+		RetireObject(it->first, it->second);
 		it = object_list.erase(it);
 	}
 }
@@ -2992,12 +2990,55 @@ bool EntityList::RemoveClient(Client *delete_client)
 	return false;
 }
 
+EntityList::ObjectClickScope::~ObjectClickScope()
+{
+	if (owner_) {
+		owner_->EndObjectClick(object_);
+	}
+}
+
+EntityList::ObjectClickScope EntityList::PinObjectForClick(uint16 entity_id)
+{
+	auto object = GetObjectByID(entity_id);
+	if (!object) {
+		return {};
+	}
+	++object_click_depth[object];
+	return ObjectClickScope(this, object);
+}
+
+void EntityList::EndObjectClick(Object *object)
+{
+	auto depth = object_click_depth.find(object);
+	if (depth == object_click_depth.end() || --depth->second != 0) {
+		return;
+	}
+	object_click_depth.erase(depth);
+	auto retired = deferred_click_objects.find(object);
+	if (retired != deferred_click_objects.end()) {
+		const auto entity_id = retired->second;
+		deferred_click_objects.erase(retired);
+		delete object;
+		free_ids.push(entity_id);
+	}
+}
+
+void EntityList::RetireObject(uint16 entity_id, Object *object)
+{
+	if (object_click_depth.find(object) != object_click_depth.end()) {
+		// Keep both the instance and its ID out of reuse until click callbacks finish.
+		deferred_click_objects.emplace(object, entity_id);
+		return;
+	}
+	delete object;
+	free_ids.push(entity_id);
+}
+
 bool EntityList::RemoveObject(uint16 delete_id)
 {
 	auto it = object_list.find(delete_id);
 	if (it != object_list.end()) {
-		safe_delete(it->second);
-		free_ids.push(it->first);
+		RetireObject(it->first, it->second);
 		object_list.erase(it);
 		return true;
 	}
@@ -4694,6 +4735,51 @@ uint16 EntityList::CreateGroundObjectFromModel(const char *model, const glm::vec
 	}
 
 	return object->GetID();
+}
+
+std::pair<uint16, std::string> EntityList::CreateTransientClickObject(
+	const std::string &owner, const char *model, const glm::vec4 &position)
+{
+	if (!zone || owner.empty() || !model ||
+		!std::isfinite(position.x) || !std::isfinite(position.y) ||
+		!std::isfinite(position.z) || !std::isfinite(position.w)) {
+		return {};
+	}
+	const auto model_length = std::strlen(model);
+	if (model_length < 4 || model_length >= 32 || free_ids.empty() ||
+		free_ids.front() == 0 || GetID(free_ids.front()) != nullptr) {
+		return {};
+	}
+	const auto token = EQ::Util::UUID::Generate().ToString();
+	if (token.empty()) {
+		return {};
+	}
+	// This constructor has no item/world-container instance and preserves authored Z.
+	auto object = std::make_unique<Object>(
+		static_cast<const EQ::ItemInstance *>(nullptr), position.x, position.y,
+		position.z, position.w, 0, true);
+	strn0cpy(object->m_data.object_name, model, sizeof(object->m_data.object_name));
+	object->m_click_only = true;
+	object->m_click_owner = owner;
+	object->m_click_token = token;
+	AddObject(object.get(), true);
+	const auto entity_id = object->GetID();
+	object.release(); // object_list owns it, as for other AddObject callers.
+	return {entity_id, token};
+}
+
+bool EntityList::RemoveTransientClickObject(
+	const std::string &owner, uint16 entity_id, const std::string &token)
+{
+	auto object = GetObjectByID(entity_id);
+	if (!object || entity_id == 0 || owner.empty() || token.empty() ||
+		!object->m_click_only || object->m_id != 0 || object->m_inst != nullptr ||
+		object->m_ground_spawn || object->m_quest_ground_spawn ||
+		object->m_click_owner != owner || object->m_click_token != token) {
+		return false;
+	}
+	object->Depop();
+	return true;
 }
 
 std::pair<uint16, std::string> EntityList::CreateTransientDoor(

@@ -221,6 +221,10 @@ public:
 	bool EntityVariableExists(std::string variable_name);
 
 protected:
+	friend class EntityList;
+	bool m_click_only = false;
+	std::string m_click_owner;
+	std::string m_click_token;
 	void	ResetState();	// Set state back to original
 	void	RandomSpawn(bool send_packet = false);		//spawn this ground spawn at a random place
 

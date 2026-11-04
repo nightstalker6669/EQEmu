@@ -850,6 +850,8 @@ void handle_player_click_object(
 	luabind::adl::object l_object_o = luabind::adl::object(L, l_object);
 	l_object_o.push(L);
 	lua_setfield(L, -2, "object");
+	lua_pushinteger(L, Strings::ToUnsignedInt(data));
+	lua_setfield(L, -2, "object_id");
 }
 
 void handle_player_click_door(
@@ -3015,6 +3017,8 @@ void handle_zone_click_object(
 	luabind::adl::object l_object_o = luabind::adl::object(L, l_object);
 	l_object_o.push(L);
 	lua_setfield(L, -2, "object");
+	lua_pushinteger(L, Strings::ToUnsignedInt(data));
+	lua_setfield(L, -2, "object_id");
 
 	Lua_Client l_client(std::any_cast<Client*>(extra_pointers->at(1)));
 	luabind::adl::object l_client_o = luabind::adl::object(L, l_client);

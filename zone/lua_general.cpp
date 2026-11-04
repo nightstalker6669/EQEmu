@@ -880,6 +880,31 @@ uint16 lua_create_door(const char *model, float x, float y, float z, float h, ui
 	return quest_manager.CreateDoor(model, x, y, z, h, open_type, size);
 }
 
+luabind::object lua_create_transient_click_object(
+	lua_State *L, std::string owner, std::string model, float x, float y, float z, float heading)
+{
+	if (model.find('\0') != std::string::npos) {
+		return luabind::object();
+	}
+	const auto handle = entity_list.CreateTransientClickObject(
+		owner, model.c_str(), glm::vec4(x, y, z, heading));
+	if (handle.first == 0) {
+		return luabind::object();
+	}
+	auto result = luabind::newtable(L);
+	result["entity_id"] = handle.first;
+	result["token"] = handle.second;
+	return result;
+}
+
+bool lua_remove_transient_click_object(std::string owner, int entity_id, std::string token)
+{
+	if (entity_id <= 0 || entity_id > 65535) {
+		return false;
+	}
+	return entity_list.RemoveTransientClickObject(owner, static_cast<uint16>(entity_id), token);
+}
+
 luabind::object lua_create_transient_door(
 	lua_State *L, std::string owner, std::string model, float x, float y, float z, float heading,
 	int open_type, int size
@@ -6088,6 +6113,8 @@ luabind::scope lua_register_general() {
 		luabind::def("create_ground_object_from_model", (uint16(*)(const char*,float,float,float,float))&lua_create_ground_object_from_model),
 		luabind::def("create_ground_object_from_model", (uint16(*)(const char*,float,float,float,float,uint8))&lua_create_ground_object_from_model),
 		luabind::def("create_ground_object_from_model", (uint16(*)(const char*,float,float,float,float,uint8,uint32))&lua_create_ground_object_from_model),
+		luabind::def("create_transient_click_object", &lua_create_transient_click_object),
+		luabind::def("remove_transient_click_object", &lua_remove_transient_click_object),
 		luabind::def("create_transient_door", &lua_create_transient_door),
 		luabind::def("remove_transient_door", &lua_remove_transient_door),
 		luabind::def("create_door", (uint16(*)(const char*,float,float,float,float))&lua_create_door),

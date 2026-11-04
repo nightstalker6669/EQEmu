@@ -4817,31 +4817,36 @@ void Client::Handle_OP_ClickObject(const EQApplicationPacket *app)
 		return;
 	}
 
-	auto* click_object = (ClickObject_Struct*) app->pBuffer;
-	auto* entity = entity_list.GetID(click_object->drop_id);
-	if (entity && entity->IsObject()) {
-		auto* object = entity->CastToObject();
+	ClickObject_Struct click_object{};
+	memcpy(&click_object, app->pBuffer, sizeof(click_object));
+	if (click_object.drop_id == 0 || click_object.drop_id > UINT16_MAX) {
+		return;
+	}
+	const auto object_id = static_cast<uint16>(click_object.drop_id);
+	auto click_scope = entity_list.PinObjectForClick(object_id);
+	auto *object = click_scope.GetObject();
+	if (object) {
 
-		object->HandleClick(this, click_object);
+		object->HandleClick(this, &click_object);
 
 		if (parse->PlayerHasQuestSub(EVENT_CLICK_OBJECT)) {
 			std::vector<std::any> args = { object };
-			parse->EventPlayer(EVENT_CLICK_OBJECT, this, std::to_string(click_object->drop_id), GetID(), &args);
+			parse->EventPlayer(EVENT_CLICK_OBJECT, this, std::to_string(object_id), GetID(), &args);
 		}
 
 		if (parse->ZoneHasQuestSub(EVENT_CLICK_OBJECT)) {
 			std::vector<std::any> args = { object, this };
-			parse->EventZone(EVENT_CLICK_OBJECT, zone, std::to_string(click_object->drop_id), GetID(), &args);
+			parse->EventZone(EVENT_CLICK_OBJECT, zone, std::to_string(object_id), GetID(), &args);
 		}
 
-		if (IsDevToolsEnabled()) {
-			SetObjectToolEntityId(entity->GetID());
+		if (IsDevToolsEnabled() && entity_list.GetObjectByID(object_id) == object) {
+			SetObjectToolEntityId(object_id);
 			ObjectManipulation::CommandHeader(this);
 			Message(
 				Chat::White,
 				fmt::format(
 					"Object ({}) [{}] [{}]",
-					entity->CastToObject()->GetDBID(),
+					object->GetDBID(),
 					Saylink::Silent("#object edit", "Edit"),
 					Saylink::Silent("#object delete", "Delete")
 				).c_str()
