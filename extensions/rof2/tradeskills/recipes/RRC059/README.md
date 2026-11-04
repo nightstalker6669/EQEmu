@@ -16,3 +16,5 @@ Sources:
 - https://www.eqtraders.com/recipes/recipe_page.php?article=423&rsa=Brewing&sub=sof
 - https://www.eqtraders.com/recipes/recipe_page.php?article=537&rsa=Tinkering&sub=SOF
 - https://mboards.eqtraders.com/eq/forum/tradeskills/quests-requiring-trade-skills/31395-the-sof-tradeskill-quest/page5
+
+The first application stopped on a collation mismatch in the book guards. Independent readback confirmed rollback, with target rows absent and the existing producer unchanged. Revision 2 compares exact filenames and text hashes as bytes and preserves the native latin1 book-name lookup for uniqueness. Recipe and entry arrays, learning requirements, and rollback SQL are unchanged. A new application requires the corrected publication pin.

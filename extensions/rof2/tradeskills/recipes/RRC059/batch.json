@@ -8287,5 +8287,11 @@
     "ownership": "quest0forordinarycraftedoutputs/taskupdates; mustlearn1gatesactualattempt. ExistingHalfBarproducer3093107/3entries fullguarded.",
     "historical": "Nativeauthoredbooks corroboratelearning/stages; currentformula roles/era14estimates are notimmutableMay2013numeric/nativeproof. Dated2007primarypost supportsBlue+Clear; no booktextrewritten.",
     "native_combine": false
+  },
+  "source_correction": {
+    "revision": "r2-book-comparison-collations",
+    "problem": "Attempt001 stopped on ERROR1267 in native book guards; independent readback confirmed target range empty and old producer unchanged.",
+    "change": "Compare exact filename, book name and text hash as bytes; use native latin1_swedish_ci for book-name uniqueness lookup. No schema, formula or learning changes.",
+    "attempt001_committed": false
   }
 }
