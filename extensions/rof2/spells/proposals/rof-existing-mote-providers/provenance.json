@@ -1,0 +1,148 @@
+{
+  "format": 1,
+  "source_classification": {
+    "period_cragbeak_encounter": [
+      "https://everquest.allakhazam.com/db/npc/41144#msg1361625043224885636",
+      "https://everquest.allakhazam.com/db/npc/41144#msg1354551432152888461"
+    ],
+    "period_iremaw_presence": "https://everquest.allakhazam.com/db/npc/41146#msg136110749810262251",
+    "current_combat_guides": [
+      "https://rof.eqresource.com/cragbeak.php",
+      "https://rof.eqresource.com/iremaw.php",
+      "https://everquest.allakhazam.com/db/npc/41146"
+    ],
+    "current_mote_associations": "https://everquest.allakhazam.com/db/item/106464",
+    "current_quantity_rule": "https://rof.eqresource.com/spells.php"
+  },
+  "historical_limit": "2012 guide-thread creation dates do not independently date all current mechanics or loot fields. Period presence and rough combat observations do not establish exact drop probabilities.",
+  "database_observed_at_utc": "2026-11-03T22:17:52.272053+00:00",
+  "rowset_preimage_sha256": {
+    "npc_types": "602c035a9a1bed9782baf0fd11907d59a58b4bc693176826e594ea3196d5f3aa",
+    "spawnentry": "9b7feafbd186fa8ded60436f7ece0fda64232d6eb48515bf54529c4fb35767d3",
+    "spawngroup": "9266219912e64a1ff51721c191a694834545d3ede032b51a4c40f595e6432abb",
+    "spawn2": "bd4ef84f52f59a77286afda6ce64daf4d8966f51cad962d155fcc2d66d24cdd1",
+    "global_loot": "9a44dca5d4801e065de7706bfa01bb707c670bc25f26ff94e54fae889a50ab21",
+    "spells_new": "3ce1512251ac876695ff11d091bb372b12800f3f18e3ced44b9e3e8e682f8db0",
+    "mote_items": "1c4793943cc6ba05f86f1802aaac9174211ae69750935eda4d95c8d152402095",
+    "mote_loot_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "zero_loottable": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "zero_loottable_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "zero_spell_list": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "zero_spell_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "zero_spell_effect_list": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "zero_spell_effect_entries": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "pathgrid42_consumers": "d9bed5735f88da7e4da047ab24fd3884a9ee14cfc3a25660bdd1aa8ef1724366",
+    "pathgrid42_waypoints": "6d6492b892b924bd53198255382616c83eb2254586b3e4b983f3c99495b4b033",
+    "zone_spawn_conditions": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "zone_spawn_events": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "global_loottables": "09c20c42b41ea67247da74acb4dc40aa8b5f2a82d923ebc57ad2e3fdafa5912d",
+    "global_loottable_entries": "90c541e169cca2d71ea318a97fbe12185562f0edb7f779622df9b6a4f4461f6d",
+    "global_lootdrops": "fa2514a6f12c353f45f2d36621e3bacc7805434ec7d680986f7466af2dede4e1",
+    "global_lootdrop_entries": "50fd8063836f467a6a6abb553c7418df088dc9925ace9fef9837ec45dad58598"
+  },
+  "consumer_review": {
+    "existing_npc_loottable_bindings": [
+      0,
+      0
+    ],
+    "zero_loottable_rows": 0,
+    "zero_loottable_entries": 0,
+    "global_loot_rules": 20,
+    "global_loottables": 20,
+    "global_loottable_entries": 20,
+    "global_lootdrop_entries": 1029,
+    "global_mote_entry_count": 0,
+    "all_direct_mote_loot_entry_count": 0,
+    "pathgrid42_consumers": 1,
+    "pathgrid42_waypoints": 3,
+    "limit": "Exact full consumer preimages retained locally. Zero is an unbound ID, not permission to modify shared rows or bind a new ID."
+  },
+  "native_source_preimages": {
+    "runtime-source/common/spdat.h": {
+      "sha256": "0f5f876ccfea4389db6f157687d74be3fdc0131b739e7a3d4e4b2462e967769e"
+    },
+    "runtime-source/zone/spell_effects.cpp": {
+      "sha256": "71a19c77c416d16954b32ba5a7c154391b733634a42ad6e77930910dfd19cc24"
+    },
+    "runtime-source/zone/bonuses.cpp": {
+      "sha256": "8d4b470a676ec278d6441e87c347250624e4ada01f0b8b0c55aceac1a37a3e84"
+    },
+    "runtime-source/zone/mob.cpp": {
+      "sha256": "4b0590106b1482e66caf2781f4e3d65787a6d45988a1535308808c6b2419abfb"
+    },
+    "runtime-source/zone/attack.cpp": {
+      "sha256": "41e7429480265cb6b81092214cd26d069c2132da25b5071a170e453cfbaaa5de"
+    },
+    "runtime-source/zone/loot.cpp": {
+      "sha256": "f8fadda456dc163df12e0376aceb773da3241c1bc6d782a95133b581a17784e3"
+    },
+    "runtime-source/zone/global_loot_manager.cpp": {
+      "sha256": "cf569a8ba9428bbf98c814e8248dfca7f50650ba3190cbe563015a718ba9ebb8"
+    },
+    "runtime-quests/shardslanding/#Iremaw.lua": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/#Iremaw.pl": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/Iremaw.lua": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/Iremaw.pl": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/752053.lua": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/752053.pl": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/#Cragbeak.lua": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/#Cragbeak.pl": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/Cragbeak.lua": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/Cragbeak.pl": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/752234.lua": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/752234.pl": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/default.lua": {
+      "exists": false
+    },
+    "runtime-quests/shardslanding/default.pl": {
+      "exists": false
+    },
+    "runtime-quests/global/global_npc.lua": {
+      "exists": true,
+      "sha256": "808c3502fd1b38412237ff058b953662464183040282183293a007dd4968ec71"
+    },
+    "runtime-quests/global/global_npc.pl": {
+      "exists": false
+    }
+  },
+  "source_review": {
+    "distance_scaling": "zone/spell_effects.cpp Mob::CalcSpellPowerDistanceMod",
+    "forced_target": "zone/spell_effects.cpp Mob::ImprovedTaunt selects the buff caster entity. A self-cast Scent is not established as the original target binding.",
+    "cure_trigger": "zone/mob.cpp Mob::CastOnCurer and zone/spell_effects.cpp cure paths",
+    "distance_fade": "zone/spell_effects.cpp DistanceRemoval compares buff origin to current position",
+    "compile_runtime_native_acceptance": false,
+    "cragbeak_dispatch": "Native targettype32 ST_AETargetHateList requires nonnull spell target; range400 target-centered and caster-hate-list filtered. Do not replace with unrestricted PBAE. Initial target/delay still unrecovered.",
+    "scaling": "No level101 npc_scale_global_base rows in retained snapshot. Nonzero HP is preserved and all-zero IsAutoScaled condition is false. maxdmg4 alone does not prove runtime damage if min0 triggers scaling with a matching row; no native combat proof."
+  },
+  "payload_limits": {
+    "new_npc_or_spawn_ids": false,
+    "new_loot_or_spell_list_ids": false,
+    "combat_estimates_applied": false,
+    "loot_rates_guessed": false,
+    "installer_registered": false
+  }
+}
