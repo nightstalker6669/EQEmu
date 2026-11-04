@@ -1,5 +1,5 @@
 {
-  "status": "Enabled configured source; installed locally and cache refreshed; native acceptance pending",
+  "status": "Enabled installed content; all eight quests and parent passed one combined native completion/custody/reward/Admin0 persistence milestone",
   "cutoff": "2013-05-31",
   "achievement_id": 500120600,
   "tasks": [
@@ -155,16 +155,24 @@
     "xp": {
       "value": 1000,
       "provenance": "approved configurable PEQ-style default, not historical amount"
+    },
+    "minimum_level": {
+      "value": 75,
+      "provenance": "Labelled configurable server default, not recovered original minimum"
+    },
+    "base_faction": {
+      "faction_id": 1190,
+      "value": 10,
+      "provenance": "Labelled configurable base default; native reward modifiers apply"
     }
   },
   "unresolved": [
-    "Original minimum level",
-    "Original faction reward amount",
-    "Remaining item identity corroboration",
-    "Canonical migration registration on correct descendant",
-    "Build/deployment and native conservation/completion/persistence"
+    "Original minimum level and raw XP/base faction amount remain unverified; approved configurable defaults labelled",
+    "Canonical migration registration after prerequisite shared9339 remains assigned source-owner integration",
+    "Original loot farming/drop-rate accuracy was not part of native acceptance; existing thirteen acquisition routes retained",
+    "Ordinary Mechanotus entry after its administrative gate correction/cache refresh has not been natively observed"
   ],
-  "existing_data_policy": "Preserve NPC spawn, item definitions, loot tables, player data and housing. Native IDs are local bindings, not website IDs.",
+  "existing_data_policy": "Preserve NPC spawn, item definitions, loot tables, player data and housing. Required Mechanotus version0 minimum-admin-status80 is changed to0; unknown custom gates fail. All other zone fields retained. Native IDs are local bindings, not website IDs.",
   "protocol": "Existing task and achievement messages; no new opcodes or structures",
   "adapter_modes": {
     "standalone": "with_oculus=false; current target has no Tabazin script or Oculus module",
@@ -186,5 +194,24 @@
       "admission": "Native task appropriateness plus configured minimum and one-active-family policy; no invented faction threshold."
     }
   },
-  "supersedes": "Disabled r1/r2 policy and SQL placeholders"
+  "supersedes": "Disabled r1/r2 policy and SQL placeholders",
+  "native_acceptance": {
+    "quests": 8,
+    "delivery_objectives": 15,
+    "achievement_components": 8,
+    "parent_complete": true,
+    "custody": "One integrated partial/excess/unrelated-item/coin path plus ordinary remaining deliveries, native returned cursor items accounted; original gear and full wallet preserved",
+    "persistence": "One ordinary Admin0 logout/login cycle retained histories, component/parent state, inventory semantics, wallet, earned XP and faction",
+    "limits": "Administrative zone gate caused actual persistence arrival in Plane of Knowledge. This proves persistence, not normal Mechanotus entry. Gate corrected separately with exact-row readback; cache refresh/entry proof distinct. No replay or extra login requested. No private receipts, player identities or test scripts included."
+  },
+  "normal_player_access": {
+    "zone": "mechanotus",
+    "zone_id": 436,
+    "version": 0,
+    "minimum_status_before": 80,
+    "minimum_status_after": 0,
+    "actual_local_apply": "Exact full-preimage CAS and readback; all other zone fields unchanged",
+    "cache": "Coordinator-owned refresh pending at package preparation",
+    "native_entry": "Not proven after correction"
+  }
 }

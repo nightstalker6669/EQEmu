@@ -6,7 +6,7 @@ DELIMITER $$
 CREATE PROCEDURE install_gearing_up_9340()
 install_body:BEGIN
  DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN ROLLBACK; DROP TEMPORARY TABLE IF EXISTS `gear9340_tasks`; DROP TEMPORARY TABLE IF EXISTS `gear9340_task_activities`; DROP TEMPORARY TABLE IF EXISTS `gear9340_achievement_criteria`; RESIGNAL; END;
- IF (SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN('tasks','task_activities','achievement_criteria') AND ENGINE='InnoDB')<>3
+ IF (SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN('tasks','task_activities','achievement_criteria','zone') AND ENGINE='InnoDB')<>4
  THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Gearing Up requires transactional content tables'; END IF;
  IF NOT EXISTS(SELECT 1 FROM npc_types WHERE id=436006 AND name='#Tabazin_Gearflinger')
  OR (SELECT COUNT(*) FROM items WHERE id BETWEEN 36476 AND 36488 AND stackable=1 AND stacksize=20 AND nodrop=0)<>13
@@ -53,6 +53,19 @@ install_body:BEGIN
 (500120600,1,7,50359,4,3,0,3044007,0,0,1,1),
 (500120600,1,8,50360,4,3,0,3044008,0,0,1,1);
  START TRANSACTION;
+ -- Gearing Up is ordinary player content. Existing PEQ administrative gate80
+ -- denied the accepted level100/account0 fixture and relocated its login toPoK.
+ -- Preserve level/expansion/flag policy and every other zone; unknown gates fail.
+ IF (SELECT COUNT(*) FROM zone WHERE zoneidnumber=436 AND short_name='mechanotus'
+     AND version=0 AND min_status IN(0,80))<>1 THEN
+  SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Gearing Up Mechanotus admission policy differs';
+ END IF;
+ UPDATE zone SET min_status=0 WHERE zoneidnumber=436 AND short_name='mechanotus'
+  AND version=0 AND min_status=80;
+ IF (SELECT COUNT(*) FROM zone WHERE zoneidnumber=436 AND short_name='mechanotus'
+     AND version=0 AND min_status=0)<>1 THEN
+  SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='Gearing Up Mechanotus admission postimage differs';
+ END IF;
  IF EXISTS(SELECT 1 FROM `tasks` WHERE id BETWEEN 3044001 AND 3044008) OR EXISTS(SELECT 1 FROM `task_activities` WHERE taskid BETWEEN 3044001 AND 3044008) OR EXISTS(SELECT 1 FROM `achievement_criteria` WHERE achievement_id=500120600 AND component_type=1 AND component_id BETWEEN 50353 AND 50360) THEN
   IF (SELECT COUNT(*) FROM `tasks` WHERE id BETWEEN 3044001 AND 3044008)=8 AND (SELECT COUNT(*) FROM `tasks` a JOIN `gear9340_tasks` e ON a.`id`=e.`id` WHERE a.`id` <=> e.`id` AND a.`type` <=> e.`type` AND a.`duration` <=> e.`duration` AND BINARY a.`title` <=> BINARY e.`title` AND BINARY a.`description` <=> BINARY e.`description` AND BINARY a.`reward_text` <=> BINARY e.`reward_text` AND BINARY a.`reward_id_list` <=> BINARY e.`reward_id_list` AND a.`cash_reward` <=> e.`cash_reward` AND a.`exp_reward` <=> e.`exp_reward` AND a.`reward_method` <=> e.`reward_method` AND a.`min_level` <=> e.`min_level` AND a.`max_level` <=> e.`max_level` AND a.`min_players` <=> e.`min_players` AND a.`max_players` <=> e.`max_players` AND a.`repeatable` <=> e.`repeatable` AND a.`faction_reward` <=> e.`faction_reward` AND a.`faction_amount` <=> e.`faction_amount` AND a.`enabled` <=> e.`enabled`)=8 AND (SELECT COUNT(*) FROM `task_activities` WHERE taskid BETWEEN 3044001 AND 3044008)=15 AND (SELECT COUNT(*) FROM `task_activities` a JOIN `gear9340_task_activities` e ON a.`taskid`=e.`taskid` AND a.`activityid`=e.`activityid` WHERE a.`taskid` <=> e.`taskid` AND a.`activityid` <=> e.`activityid` AND a.`req_activity_id` <=> e.`req_activity_id` AND a.`step` <=> e.`step` AND a.`activitytype` <=> e.`activitytype` AND BINARY a.`target_name` <=> BINARY e.`target_name` AND a.`goalmethod` <=> e.`goalmethod` AND a.`goalcount` <=> e.`goalcount` AND BINARY a.`description_override` <=> BINARY e.`description_override` AND BINARY a.`npc_match_list` <=> BINARY e.`npc_match_list` AND BINARY a.`item_id_list` <=> BINARY e.`item_id_list` AND BINARY a.`zones` <=> BINARY e.`zones` AND a.`zone_version` <=> e.`zone_version` AND BINARY a.`spell_list` <=> BINARY e.`spell_list` AND a.`optional` <=> e.`optional`)=15 AND (SELECT COUNT(*) FROM `achievement_criteria` WHERE achievement_id=500120600 AND component_type=1 AND component_id BETWEEN 50353 AND 50360)=8 AND (SELECT COUNT(*) FROM `achievement_criteria` a JOIN `gear9340_achievement_criteria` e ON a.`achievement_id`=e.`achievement_id` AND a.`component_type`=e.`component_type` AND a.`component_sequence`=e.`component_sequence` AND a.`component_id`=e.`component_id` WHERE a.`achievement_id` <=> e.`achievement_id` AND a.`component_type` <=> e.`component_type` AND a.`component_sequence` <=> e.`component_sequence` AND a.`component_id` <=> e.`component_id` AND a.`event_type` <=> e.`event_type` AND a.`progress_mode` <=> e.`progress_mode` AND a.`behavior` <=> e.`behavior` AND a.`target_id` <=> e.`target_id` AND a.`target_id2` <=> e.`target_id2` AND a.`target_value` <=> e.`target_value` AND a.`required_count` <=> e.`required_count` AND a.`enabled` <=> e.`enabled`)=8 THEN
    COMMIT; DROP TEMPORARY TABLE IF EXISTS `gear9340_tasks`; DROP TEMPORARY TABLE IF EXISTS `gear9340_task_activities`; DROP TEMPORARY TABLE IF EXISTS `gear9340_achievement_criteria`; LEAVE install_body;

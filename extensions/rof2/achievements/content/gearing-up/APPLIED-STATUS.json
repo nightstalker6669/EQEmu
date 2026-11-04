@@ -1,8 +1,9 @@
 {
-  "source_revision": "r3",
-  "content_install": "8 enabled tasks, 15 delivery objectives, 8 enabled component bindings installed",
-  "cache": "Coordinator confirmed world and all six owned zone caches refreshed",
-  "native_acceptance": "pending combined I\u2013VIII hand-in, reward and persistence milestone",
-  "schema_version": "Not advanced by this content installer; reserved migration9340 must be integrated after shared9339 by source owner",
-  "platform_validation": "Source checks and local Linux installation only; portable installer has not been accepted on Windows or akk-stack"
+  "source_revision": "r4",
+  "content_install": "8 enabled tasks,15 delivery objectives,8 enabled component bindings installed",
+  "native_acceptance": "PASS combined eight-quest completion, custody, reward, parent and one Admin0 persistence cycle",
+  "normal_player_access": "Required Mechanotus minimum admin status80\u21920 applied/read back; metadata cache refresh pending; actual ordinary entry after correction not observed",
+  "preservation": "Original gear and full wallet preserved, real earned XP/faction/history retained, temporary admin access and original GM/location restored; native inventory GUID remints qualified",
+  "schema_version": "Not advanced by content installer; integrate reserved9340 after shared9339 through source owner",
+  "platform_validation": "Local Linux native quest milestone accepted. Portable content installer syntax checked; Windows/akk-stack installation and MSVC engine build not natively accepted"
 }

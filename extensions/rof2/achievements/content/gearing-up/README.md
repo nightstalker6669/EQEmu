@@ -2,11 +2,13 @@
 
 Eight repeatable quests from Tabazin Gearflinger in Fortress Mechanotus, with all 15 item-delivery objectives and eight component bindings for achievement **500120600**. Hail Tabazin and choose **brave enough** to open the native task selector. One Gearing Up task may be active at a time.
 
-**Status:** enabled content installed locally; world and six zone caches refreshed. Combined in-game item/coin custody, completion, reward and persistence acceptance is still pending. This supersedes the disabled r1/r2 package.
+**Status:** all eight quests, 15 deliveries, eight achievement components and the parent passed one combined native completion/custody/reward check and one normal-player persistence cycle. This supersedes the disabled r1/r2 package.
+
+The persistence login exposed an existing Fortress Mechanotus admin-status restriction and arrived in Plane of Knowledge. The required upgrade now removes the known status-80 restriction for Mechanotus version 0, preserving its other admission fields. That correction is applied locally; metadata refresh is pending at this snapshot, and normal entry after correction has not been observed. Persistence success does not prove zone-entry success.
 
 ## What is included
 
-All four required Lua files, guarded SQL, provenance, configuration record and installer are included. Existing NPC placement and 13 item drop routes are retained. No housing data, player data, client assets or test scripts are included.
+All four required Lua files, guarded SQL (including the normal-player zone-access correction), provenance, configuration record and installer are included. Existing NPC placement and 13 item drop routes are retained. No housing data, player data, client assets or test scripts are included.
 
 Minimum level **75**, base faction **+10** for Ak`Anon Strike Force V (1190), and **1000 XP** are labelled server defaults. Original minimum/reward amounts remain unverified. Native modifiers can change actual rewards. Cash reward is zero; no extra parent item reward or faction admission threshold is invented. `settings.json` records these values and their provenance; the installer uses the frozen SQL/Lua, and does not dynamically regenerate them. Change minimum level in both the policy and task definitions; change XP/faction in task definitions using a reviewed migration, then regenerate package hashes.
 
@@ -34,9 +36,9 @@ Example local client argument array (adjust paths and database):
 
 For Windows, use `python` or `py -3`, escaped Windows paths in JSON, and the full `mariadb.exe` path if needed. For akk-stack, use an argv array beginning `docker`, `exec`, `-i`, followed by your database container and its client command. Choose the actual mounted quests directory on the host.
 
-5. Inspect the private installation receipt. Start the server with fresh task/achievement caches and quest VMs. Verify native selection, deliveries, returned surplus/coins, rewards, eight components and one ordinary persistence cycle.
+5. Inspect the private installation receipt. Start the server with fresh zone metadata, task/achievement caches and quest VMs. Verify native selection, deliveries, returned surplus/coins, rewards, eight components and one ordinary persistence cycle.
 
-The installer checks package hashes and reviewed file preimages. SQL transactionally inserts exactly eight tasks, 15 activities and eight criteria; an exact existing payload is a no-op and drift/collisions fail. It never changes the global database version. Reservation **9340** must be registered after shared migration **9339** by the source owner; do not skip pending migrations. If installation fails, stop and inspect the receipt: SQL and filesystem updates are separate phases, with backups and no automatic replay or guessed rollback. Restoring scripts alone does not undo committed SQL or earned player progress.
+The installer checks package hashes and reviewed file preimages. SQL transactionally inserts exactly eight tasks, 15 activities and eight criteria; an exact existing payload is a no-op and drift/collisions fail. It also changes only the known Mechanotus version-0 admin gate from 80 to 0; an already-zero gate is accepted and an unknown custom gate is refused. It never changes the global database version. Reservation **9340** must be registered after shared migration **9339** by the source owner; do not skip pending migrations. If installation fails, stop and inspect the receipt: SQL and filesystem updates are separate phases, with backups and no automatic replay or guessed rollback. Restoring scripts alone does not undo committed SQL or earned player progress.
 
 ## Opcodes and structures
 
