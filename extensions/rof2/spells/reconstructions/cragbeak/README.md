@@ -19,3 +19,7 @@ The helper requires peq_housing_test, exact full NPC/spell preimages, native mot
 Publication precedes coordinated database/script deployment and a fresh affected zone/quest cache. Do not use a broad installer, force a repop into someone else's encounter, or overwrite another owner's scripts. Keep old spawned NPCs separate from proof of newly loaded stats. This directory is outside manifest.stages. Offline plan and source/API review are not compiled/runtime/native acceptance. Native input remains with the current tester.
 
 This supersedes the earlier two-provider proposal's assumption that unknown Cragbeak balance/drop parameters must block every repair. Iremaw's missing entity/caster binding, original reward grouping and unknown item identities remain distinct evidence gaps.
+
+## Applied status, November4,2026
+
+The eight-write database transaction committed with exact postimages and independent NPC/loot readback. Both new runtime files were installed exclusively and hash-verified; no existing script was overwritten. Build confirmed ShardsLanding752 is unloaded and all six normal zone pointers are null, with zone initialization creating a fresh quest VM and first loot access loading the database. Thus the next ordinary fresh zone/spawn will load this reconstruction; no global repop/restart was performed for it. An actual native Cragbeak spawn, cast or loot result has not been observed. All configured estimates remain labelled, and non-mote loot parity remains incomplete.

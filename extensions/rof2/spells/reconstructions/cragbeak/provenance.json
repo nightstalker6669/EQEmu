@@ -42,7 +42,7 @@
   ],
   "validation": {
     "python_syntax": "AST parsed",
-    "offline_plan": "Run separately; no database connection",
+    "offline_plan": "PASS/noDBconnection",
     "lua_compilation": false,
     "build": false,
     "native_encounter": false
@@ -63,5 +63,13 @@
     "Original non-mote equipment/cash loot",
     "Native encounter/drop acceptance"
   ],
-  "applied": false
+  "applied": true,
+  "applied_status": {
+    "date": "2026-11-04",
+    "database": "COMMITTED8writes; exactfullpostimages and independentreadbackpassed",
+    "runtime_files": "Twoabsenttargets exclusivelycreated/readbackmatched; nooverwrite",
+    "freshness": "BuildCRAGBEAK-CACHE-FRESHNESS-001 confirmsShard752unloaded/all6Zonepointersnull; nextordinaryinit/spawnloadsDBstats/loottableandfreshLuaVM",
+    "native_spawn_cast_or_drop_observed": false,
+    "player_or_lease_writes": false
+  }
 }
