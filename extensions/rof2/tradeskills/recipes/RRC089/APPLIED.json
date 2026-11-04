@@ -1,0 +1,35 @@
+{
+  "batch": "RRC089",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "504a00247ad0279eeea6979ecd7b7c392f0aacd0",
+  "source_sha256": "1556a345dfcbb00a75fd3390f3ab35a0b0effb1d17469fcef9a64473f1cae789",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 1,
+  "entries_updated": 0,
+  "recipe_ids": [
+    12800
+  ],
+  "recipe_definitions_preserved": 1,
+  "full_existing_entries_guarded": 9,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "historical_qualification": "Current positiveprimary explicitly requiresInkZek2. Preservetrivial450/learning2/output115997/93492kit/all9oldentries. Newsalvage2 islocalfamily convention, not independenthistoric proof.",
+  "after_counts": {
+    "recipes": 25718,
+    "entries": 193954
+  },
+  "commit_receipt": [
+    "RRC089",
+    "1",
+    "25718",
+    "25718",
+    "193953",
+    "193954",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}
