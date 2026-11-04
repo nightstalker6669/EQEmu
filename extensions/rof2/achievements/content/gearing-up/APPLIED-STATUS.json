@@ -1,0 +1,8 @@
+{
+  "source_revision": "r3",
+  "content_install": "8 enabled tasks, 15 delivery objectives, 8 enabled component bindings installed",
+  "cache": "Coordinator confirmed world and all six owned zone caches refreshed",
+  "native_acceptance": "pending combined I\u2013VIII hand-in, reward and persistence milestone",
+  "schema_version": "Not advanced by this content installer; reserved migration9340 must be integrated after shared9339 by source owner",
+  "platform_validation": "Source checks and local Linux installation only; portable installer has not been accepted on Windows or akk-stack"
+}

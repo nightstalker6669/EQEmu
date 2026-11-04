@@ -1,5 +1,5 @@
 -- Gearing Up (period choice selector and one-active-family policy).
--- Candidate only: deployment must supply reviewed admission policy and task SQL.
+-- Configured policy and native task SQL are installed together; no scripted rewards.
 local M={}
 local FIRST,LAST,GIVER=3044001,3044008,436006
 local function yes(v)return v==true or v==1 end
@@ -12,7 +12,14 @@ function M.new(policy)
  local H={}
  function H.say(e)
   if not e.other or not e.other.valid or e.self:GetNPCTypeID()~=GIVER then return false end
-  if not (e.message or ''):lower():find('brave enough',1,true)then return false end
+  local message=(e.message or ''):lower()
+  if message:find('hail',1,true)then
+   if yes(policy.admit(e.other))then
+    e.self:Say('We need recovered clockwork parts. If you are '..eq.say_link('brave enough',false,'brave enough')..', I can show you the work.')
+   end
+   return false -- Preserve a composed Screw Loose/Oculus hail, if installed.
+  end
+  if not message:find('brave enough',1,true)then return false end
   if other_active(e.other)then e.other:Message(13,'You are already working on a Gearing Up task.');return true end
   if not yes(policy.admit(e.other))then return true end
   local choices={}

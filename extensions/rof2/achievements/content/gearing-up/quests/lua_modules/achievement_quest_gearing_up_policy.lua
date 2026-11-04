@@ -1,7 +1,12 @@
--- PRIVATE DISABLED candidate. Unverified eligibility is not unrestricted access.
-return {
- enabled=false,
- with_oculus=false, -- Set true only when replacing the pinned, installed Oculus adapter.
- minimum_level=nil,
- admit=function(c)return false end
-}
+-- Generated from settings.json. Original numerical restrictions/rewards unknown.
+-- These are labelled configurable server defaults, not original historical facts.
+local P={enabled=true,with_oculus=false,minimum_level=75}
+function P.admit(c)
+ if not c or not c.valid then return false end
+ if c:GetLevel()<P.minimum_level then
+  c:Message(15,'This server currently offers Gearing Up from level '..P.minimum_level..'.')
+  return false
+ end
+ return true -- No unverified faction admission threshold.
+end
+return P

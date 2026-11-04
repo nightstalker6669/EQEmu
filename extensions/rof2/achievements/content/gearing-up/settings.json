@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "minimum_level": 75,
+  "faction_id": 1190,
+  "faction_amount": 10,
+  "xp": 1000,
+  "with_oculus": false,
+  "provenance": {
+    "authorization": "Direct user reply: always use labelled configurable defaults unless Chrome research establishes otherwise.",
+    "minimum_level": "Configurable server default, supported by current quest headers; exact original minimum is unverified. Ambiguous2007level70 report is not proof of75.",
+    "faction_amount": "Configurable base+10 server default informed by current Rasper family guide. Current7/13 reports conflict; not a claim of original raw value. Native modifiers can affect actual awarded faction.",
+    "faction_id": "Current local faction_list1190 Ak`Anon Strike Force V; original quest sources identify the strike-force faction.",
+    "xp": "Approved configurable PEQ-style1000default, not historical XP amount.",
+    "admission": "Native task appropriateness plus configured minimum and one-active-family policy; no invented faction threshold."
+  }
+}
