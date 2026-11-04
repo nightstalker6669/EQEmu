@@ -1,0 +1,39 @@
+{
+  "batch": "RRC098",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "93dd90a36214ff627060cee17ad0ad4de8113ec0",
+  "source_sha256": "2a98dbbee4fffc4f58c288d69d395413224f699a361c3676845a6f2154caa5ef",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "historical_qualification": "LABELLED_RECONSTRUCTION: current legacy EQTCg89 cost and g178 gear context, not individually authenticated May2013 formulas; uncertainty retained. Only explicit17048/17163 boxes; furniture held;37 existing Fishing formulas222entries preserved.",
+  "recipes": 2,
+  "entries": 12,
+  "ids": [
+    3093993,
+    3093994
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC098",
+    "0",
+    "25816",
+    "25818",
+    "194710",
+    "194722",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25818,
+    "entries": 194722
+  },
+  "affected_postimages_exact": true,
+  "unchanged_prototype_recipes": 37,
+  "unchanged_prototype_entries": 222,
+  "old_prototypes_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "legacy_learned_references_unchanged": true,
+  "target_learned_references_unchanged": true
+}
