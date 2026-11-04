@@ -32,7 +32,7 @@
     "apply_database.py": "d6239798636b129a07621919538da3abf1e6011a273e46efa3121fefbbe70f57",
     "callback-preimages.json": "34f26621c0c86f82ff361265bcc758dd79c2850bbfbd28e5f4d34d7cec9e359a",
     "class-reward-reference-preimages.json": "a98853f3b4df88cf92c8955437f72b35bc40261a31f676667eb32fc1f6dbb471",
-    "combined-data.json": "a01341c3ed40e9eec6c92dc2eb7c6c0ad4a9eae41ba8a416672c6a7fef425447",
+    "combined-data.json": "24af819520a5523634adbbecb2506f91d2b50746d43b38de709bfed74187e479",
     "mission-phase-layout.json": "5315b843592c6ae58a4cf4a6dddded844761ca0ce77d6ac0704f6663815c9833",
     "namespace-guards.json": "98909cd1b830baeccd27f48fe5e35356d72bb25d8e233cbfbaf761ce8908727e",
     "normal-cliknar-match-source.json": "cda6da0227aff2eb044cb3e16ec8bea10ce1ce2133f0eb563f90d92c8bae2af3",
@@ -76,7 +76,7 @@
     "reference-preimages.json": "d42f6044bbc226bb5035396d9bc5e0cf56a49685c922802de097405bd9325092",
     "reward-catalogue-intent.json": "41ef7ca72143c5a6935dd97171f31b0f966a3ce52f48f29ad220c96f6e9c5ac0",
     "source-contract.json": "d119c844ca24ea794b7c70e022d1422964de6e40ddf4239affec2df4a0b2a5f7",
-    "task-reward-data.draft.json": "9d7eb1c17677e68983fa0ee64fa3aecee92c2bd0263a010136ff7f57ac8ef042",
+    "task-reward-data.draft.json": "d528237a7584eb295d70ba814b3111f9e8e9f6d1c6b61a0280ea309602d706ac",
     "world-reference-identities.json": "919bbcece444e484bf9ffd6b56a94569d8f6cb60680c552de6e2264a2052daf7"
   },
   "runtime_files": [
