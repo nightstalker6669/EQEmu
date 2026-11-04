@@ -1,0 +1,85 @@
+{
+  "status": "FINAL_PUBLICATION_READY_SOURCE_ONLY_NOT_DEPLOYED_NOT_TESTED",
+  "spell_id": 39999,
+  "character_id": 337,
+  "account_min_admin": 200,
+  "level": 100,
+  "weapon_primary_slot13": 147495,
+  "current_profile": {
+    "damage_base": 2000000,
+    "phase": "kill_objectives",
+    "command": "#aidapply"
+  },
+  "candidate_profile": {
+    "damage_base": 100000,
+    "phase": "weakening",
+    "command": "#aidweaken"
+  },
+  "definition_delta": {
+    "cast_on_you": {
+      "before": "QA337 kill-objective aid is active.",
+      "after": "QA337 temporary melee aid is active."
+    },
+    "spell_fades": {
+      "before": "QA337 kill-objective aid has ended.",
+      "after": "QA337 temporary melee aid has ended."
+    },
+    "effect_base_value12": {
+      "before": 2000000,
+      "after": 100000
+    }
+  },
+  "client_row_field_changes": [
+    {
+      "index": 6,
+      "column": "cast_on_you",
+      "before": "QA337 kill-objective aid is active.",
+      "after": "QA337 temporary melee aid is active."
+    },
+    {
+      "index": 8,
+      "column": "spell_fades",
+      "before": "QA337 kill-objective aid has ended.",
+      "after": "QA337 temporary melee aid has ended."
+    },
+    {
+      "index": 31,
+      "column": "effect_base_value12",
+      "before": "2000000",
+      "after": "100000"
+    }
+  ],
+  "expected_owned_preimages": {
+    "spell_row_data_source_sha256": "461a10e0542c702fba593411fbf81fa5d22e3e9881e6d36881990d89627b63b4",
+    "client_single_row_2m_sha256": "7c37a5436ba4d75a3c480eb6198fd68bc4cec37447cdcef2965449c693067c46",
+    "helper_sha256": "3648a87763d6683807c0ea82b025a79824e3c119ceca152358f7cdeee278db65",
+    "xorbb_player_wrapper_sha256": "e79479ee6161f83822508e33d40a2f7b726dccaa143e39c96d1a04c9f0d5bf62"
+  },
+  "native_profile_guard": "Existing eq.get_spell39999 zero-based11: exact SPA220/Base100000/Base2=0/Max0/Formula100 for weakening; exact2M for kill. Self target6/beneficial1/ten ticks/formula7/zero range-AE-mana-cast/persistdeathfalse and empty slots0..10 checked. Current cache mismatch refuses before cast.",
+  "rollback": "Exactfullrow100k->retained2Mpreimage;singleclientrowrestore;ownedhelper/wrapperexactCASrestore. Buffabsent/nativeattackstopped atbothtransitions; ownerfreshness/readback required. No new ID/rowinsert/playerNPC/stat/progress changes.",
+  "actions": {
+    "database_queries": 0,
+    "database_mutations": 0,
+    "tests": 0,
+    "runtime_files_changed": 0
+  },
+  "application_weapon_guard": "Both application modes require exact native primary147495slot13; cleanup deliberately does not require weapon, so changed equipment cannot prevent guarded exact39999 removal.",
+  "stopped_guard": "Both apply/remove require actual IsAutoAttackEnabled=false and IsAutoFireEnabled=false. Client owner separately stops/verifies attack/stick/nav; server getter does not prove client navigation stopped.",
+  "commands": {
+    "aidapply": "ONLY native2M kill_objectives; refused under100k",
+    "aidweaken": "ONLY native100k weakening; refused under2M",
+    "aidremove": "Exact39999 fade/nativeabsence and native attack/autofire stopped before capture/solution/phase transition"
+  },
+  "definition_deployment": "Existing row replacement: Database-owner exact full-preimage CAS UPDATE contract required. Original INSERT/DELETE helper is not used.",
+  "publication_scope": "Public source is limited to QA definition/helper/wrapper/client-row/rollback contracts. Private native evidence, actual player/buff/inventory/session receipts, full client files and connection/credential data excluded.",
+  "future_window": "JARVIS coordinates one future window with assigned Binding846 Build/cache/client work; no independent restart or runtime action authorized here.",
+  "database_source": {
+    "commit": "09262f972a96d7e75b78928b5aeb806b57ae00ce",
+    "binding": "database-source-binding.json",
+    "apply_sql_sha256": "407068a5f875ad4c7ad263a3eee72f070b58e78045f658915a6f0331909e759d",
+    "restore_sql_sha256": "9e35a350cee678e46f7d601fcf5082e057435d67c9a23c4c7429e110dc64a588",
+    "receipt_contract_sha256": "5b6dcff2104475e91f3362b0b20d59c0ba41cfc3d02e96ebf162a591f855f8e9",
+    "row_images_unchanged": true,
+    "historical_proposal_metadata_pins_qualified": true
+  }
+}

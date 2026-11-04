@@ -1,0 +1,38 @@
+{
+  "status": "PUBLISHED_DATABASE_SOURCE_DEPENDENCY_NOT_APPLIED",
+  "repository": "nightstalker6669/EQEmu",
+  "branch": "rof2-spells",
+  "commit": "09262f972a96d7e75b78928b5aeb806b57ae00ce",
+  "files": {
+    "README.md": {
+      "repository_path": "extensions/rof2/spells/qa337-melee-aid/weakening-proposal/database-replacement/README.md",
+      "sha256": "22a50e00c12111372e8e3cf7b5460236c2ebed82b41495282e05af68a7c79adf"
+    },
+    "apply-100k.sql": {
+      "repository_path": "extensions/rof2/spells/qa337-melee-aid/weakening-proposal/database-replacement/apply-100k.sql",
+      "sha256": "407068a5f875ad4c7ad263a3eee72f070b58e78045f658915a6f0331909e759d"
+    },
+    "receipt-contract.json": {
+      "repository_path": "extensions/rof2/spells/qa337-melee-aid/weakening-proposal/database-replacement/receipt-contract.json",
+      "sha256": "5b6dcff2104475e91f3362b0b20d59c0ba41cfc3d02e96ebf162a591f855f8e9"
+    },
+    "restore-2m.sql": {
+      "repository_path": "extensions/rof2/spells/qa337-melee-aid/weakening-proposal/database-replacement/restore-2m.sql",
+      "sha256": "9e35a350cee678e46f7d601fcf5082e057435d67c9a23c4c7429e110dc64a588"
+    },
+    "row-after-100k.json": {
+      "repository_path": "extensions/rof2/spells/qa337-melee-aid/weakening-proposal/database-replacement/row-after-100k.json",
+      "sha256": "7b36b86f2be8771e8adca2cc9d58ce2c3ba36d03f7a21291442dc27be872ce06"
+    },
+    "row-before-2m.json": {
+      "repository_path": "extensions/rof2/spells/qa337-melee-aid/weakening-proposal/database-replacement/row-before-2m.json",
+      "sha256": "3c98fedd9e9f89df79d22b2855264607b9ce8f43f5ee9e04f846ea394ac5108e"
+    }
+  },
+  "six_database_files_already_published_not_additive_to_this_manifest": true,
+  "current_full_row_images_match_exact_database_source": true,
+  "database_receipt_contract_proposal_pins": "Historical original proposal inputs. Final helper/wrapper metadata is pinned by this package manifest. Row images and three-field delta are unchanged.",
+  "private_receipts_and_native_state_not_in_public_package": true,
+  "original_INSERT_helper_excluded": true,
+  "runtime_authority": false
+}
