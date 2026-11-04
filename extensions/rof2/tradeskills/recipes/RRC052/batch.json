@@ -18204,7 +18204,7 @@
         "tradeskill": 68,
         "min_expansion": 14
       },
-      "reason": "ERON_CHAIN_LEARNING_OR_REQUIRED250_DEPENDENCIES_NEED_REVIEW; seven nativebookitems exist buttext rows absent; preserve explicitscribe/minimum fields, do not guessflags."
+      "reason": "Deferred to RRC059 for native book-learning registration. The prior book-text absence claim used an incorrect numeric-ID lookup; lookup by books.name finds all seven Eron texts. Required learning and minimum skill are preserved."
     },
     {
       "source": {
@@ -18252,7 +18252,7 @@
         "tradeskill": 68,
         "min_expansion": 14
       },
-      "reason": "ERON_CHAIN_LEARNING_OR_REQUIRED250_DEPENDENCIES_NEED_REVIEW; seven nativebookitems exist buttext rows absent; preserve explicitscribe/minimum fields, do not guessflags."
+      "reason": "Deferred to RRC059 for native book-learning registration. The prior book-text absence claim used an incorrect numeric-ID lookup; lookup by books.name finds all seven Eron texts. Required learning and minimum skill are preserved."
     },
     {
       "source": {
@@ -18318,7 +18318,7 @@
         "tradeskill": 68,
         "min_expansion": 14
       },
-      "reason": "ERON_CHAIN_LEARNING_OR_REQUIRED250_DEPENDENCIES_NEED_REVIEW; seven nativebookitems exist buttext rows absent; preserve explicitscribe/minimum fields, do not guessflags."
+      "reason": "Deferred to RRC059 for native book-learning registration. The prior book-text absence claim used an incorrect numeric-ID lookup; lookup by books.name finds all seven Eron texts. Required learning and minimum skill are preserved."
     },
     {
       "source": {
@@ -18384,7 +18384,7 @@
         "tradeskill": 68,
         "min_expansion": 14
       },
-      "reason": "ERON_CHAIN_LEARNING_OR_REQUIRED250_DEPENDENCIES_NEED_REVIEW; seven nativebookitems exist buttext rows absent; preserve explicitscribe/minimum fields, do not guessflags."
+      "reason": "Deferred to RRC059 for native book-learning registration. The prior book-text absence claim used an incorrect numeric-ID lookup; lookup by books.name finds all seven Eron texts. Required learning and minimum skill are preserved."
     },
     {
       "source": {
@@ -18444,7 +18444,7 @@
         "tradeskill": 68,
         "min_expansion": 14
       },
-      "reason": "ERON_CHAIN_LEARNING_OR_REQUIRED250_DEPENDENCIES_NEED_REVIEW; seven nativebookitems exist buttext rows absent; preserve explicitscribe/minimum fields, do not guessflags."
+      "reason": "Deferred to RRC059 for native book-learning registration. The prior book-text absence claim used an incorrect numeric-ID lookup; lookup by books.name finds all seven Eron texts. Required learning and minimum skill are preserved."
     },
     {
       "source": {
@@ -18498,7 +18498,7 @@
         "tradeskill": 68,
         "min_expansion": 14
       },
-      "reason": "ERON_CHAIN_LEARNING_OR_REQUIRED250_DEPENDENCIES_NEED_REVIEW; seven nativebookitems exist buttext rows absent; preserve explicitscribe/minimum fields, do not guessflags."
+      "reason": "Deferred to RRC059 for native book-learning registration. The prior book-text absence claim used an incorrect numeric-ID lookup; lookup by books.name finds all seven Eron texts. Required learning and minimum skill are preserved."
     },
     {
       "source": {
@@ -18540,7 +18540,7 @@
         "tradeskill": 68,
         "min_expansion": 14
       },
-      "reason": "ERON_CHAIN_LEARNING_OR_REQUIRED250_DEPENDENCIES_NEED_REVIEW; seven nativebookitems exist buttext rows absent; preserve explicitscribe/minimum fields, do not guessflags."
+      "reason": "Deferred to RRC059 for native book-learning registration. The prior book-text absence claim used an incorrect numeric-ID lookup; lookup by books.name finds all seven Eron texts. Required learning and minimum skill are preserved."
     },
     {
       "source": {
@@ -18606,7 +18606,7 @@
         "tradeskill": 68,
         "min_expansion": 14
       },
-      "reason": "ERON_CHAIN_LEARNING_OR_REQUIRED250_DEPENDENCIES_NEED_REVIEW; seven nativebookitems exist buttext rows absent; preserve explicitscribe/minimum fields, do not guessflags."
+      "reason": "Deferred to RRC059 for native book-learning registration. The prior book-text absence claim used an incorrect numeric-ID lookup; lookup by books.name finds all seven Eron texts. Required learning and minimum skill are preserved."
     },
     {
       "source": {
@@ -18660,7 +18660,7 @@
         "tradeskill": 68,
         "min_expansion": 14
       },
-      "reason": "ERON_CHAIN_LEARNING_OR_REQUIRED250_DEPENDENCIES_NEED_REVIEW; seven nativebookitems exist buttext rows absent; preserve explicitscribe/minimum fields, do not guessflags."
+      "reason": "Deferred to RRC059 for native book-learning registration. The prior book-text absence claim used an incorrect numeric-ID lookup; lookup by books.name finds all seven Eron texts. Required learning and minimum skill are preserved."
     },
     {
       "source": {
@@ -18728,5 +18728,12 @@
       },
       "reason": "EXPLICIT_ABYSMAL_JEWELCRAFT_QUEST_COMPLETION; existingnativequest teachesPale8159/Shimmering8292only, required new learning route notprovided."
     }
-  ]
+  ],
+  "book_lookup_correction": {
+    "correct_lookup": "books.name=items.filename",
+    "previous_lookup_error": "Numeric books.id was incorrectly compared to the filename; the texts are present.",
+    "native_eron_text_rows": 7,
+    "registered_in": "RRC059",
+    "RRC052_recipe_entry_SQL_changes": false
+  }
 }

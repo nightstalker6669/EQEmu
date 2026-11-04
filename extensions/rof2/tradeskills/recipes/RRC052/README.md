@@ -4,6 +4,6 @@ Adds138missing ordinary formulas from https://www.eqtraders.com/recipes/recipe_p
 
 136formulas use normalJewelry20. DweriumBar permits exact17764Planar/17187Collapsible/62480Reinforced kits only; SmallShapedPearl permits exact17764Planar/62480Reinforced only. Neither receives generic20. Native17912four-slot and the other three six-slot capacities stay unchanged; max4ingredient units.
 
-11gated rows remain held: nineEronchain formulas need unresolved book/learning/required250provenance and missing nativebook text; Amber/IndigoNihilite explicitly require AbysmalSea questcompletion, while the checked teacher source teaches only other nativePale/Shimmering recipes. No missing learning route is replaced by default permissive flags. Eronrequired250and explicitscribe requirements are retained in held source evidence, not guessed.
+Eleven gated rows were deferred in RRC052. The Eron book-text absence reason was a lookup error: numeric `books.id` was compared to the filename. The correct `books.name` lookup finds all seven native Eron texts. RRC059 registers the nine Eron recipes with their book and minimum-skill requirements, without changing book text or RRC052 recipe, entry, or SQL data. The Amber and Indigo Nihilite Abysmal quest unlocks remain unresolved.
 
 MaintainedSoF14taxonomy is an era estimate, not immutable May2013 numeric/native proof. IDs3093062–3093199,138recipes/679entries. Additive guarded transaction, affected-row backup/readback and narrow owned rollback. No player/item/rule/runtime changes or new rehearsal suite.
