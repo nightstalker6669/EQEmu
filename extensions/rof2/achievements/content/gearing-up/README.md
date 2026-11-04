@@ -4,7 +4,7 @@ Status: **disabled; not accepted for installation or native gameplay yet**.
 
 This package reconstructs Tabazin Gearflinger’s eight repeatable Gearing Up tasks in Fortress Mechanotus. It includes 15 native delivery objectives and eight achievement component bindings for achievement 500120600. It preserves the researched player-choice selector and one-active-Gearing-Up rule; Screw Loose remains a separate task.
 
-The existing NPC placement and item drop tables are retained. No parent item reward is invented. XP 1000 is a labelled configurable PEQ-style default, not a recovered historical amount. The original minimum level and faction reward amount are unresolved; disabled zero-valued SQL placeholders must not be advertised as verified historical policy.
+The existing NPC placement and item drop tables are retained. The adapter can load independently: `with_oculus=false` is the standalone default. Set it true only when replacing the exact reviewed existing Oculus adapter; that mode requires its module and preserves Screw Loose routing. A missing required module is an error, not a silent fallback. Do not install unrelated Oculus content as a workaround. No parent item reward is invented. XP 1000 is a labelled configurable PEQ-style default, not a recovered historical amount. The original minimum level and faction reward amount are unresolved; disabled zero-valued SQL placeholders must not be advertised as verified historical policy.
 
 ## Required engine dependency
 

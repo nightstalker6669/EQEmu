@@ -165,5 +165,9 @@
     "Build/deployment and native conservation/completion/persistence"
   ],
   "existing_data_policy": "Preserve NPC spawn, item definitions, loot tables, player data and housing. Native IDs are local bindings, not website IDs.",
-  "protocol": "Existing task and achievement messages; no new opcodes or structures"
+  "protocol": "Existing task and achievement messages; no new opcodes or structures",
+  "adapter_modes": {
+    "standalone": "with_oculus=false; current target has no Tabazin script or Oculus module",
+    "composed": "with_oculus=true only for exact reviewed Oculus predecessor; module required; existing Screw Loose callbacks preserved"
+  }
 }

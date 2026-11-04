@@ -3,11 +3,11 @@
   "files": [
     {
       "path": "PROVENANCE.json",
-      "sha256": "6e7ce3f9c25b5e8e239949440520a688c4f9ec2011beac7ca2cee3d6518128f2"
+      "sha256": "eb6f66df54a6914595d326ea424086a5e5e98d51ebf6ff21fe4a2f074c1dd5c7"
     },
     {
       "path": "README.md",
-      "sha256": "3ec4b3018f9eba1a28cdea1a97bd3a87b4819f62077c5ec1e7be9fb256dbd1a8"
+      "sha256": "0a9249ce0cea88e4bbd6fcd7d9b87cecc982e3c5c79ca5fb0ac033e445553fd7"
     },
     {
       "path": "quests/lua_modules/achievement_native_delivery_handin.lua",
@@ -19,11 +19,11 @@
     },
     {
       "path": "quests/lua_modules/achievement_quest_gearing_up_policy.lua",
-      "sha256": "096c568688e3d8c6d1f9b61ab7b328ebf9a1f97f8b76fa3247829d0511fbdcb4"
+      "sha256": "9036f7f7ade74d6504459ac7e628a40db41daf1a958c351cd9b63a6d9da24462"
     },
     {
       "path": "quests/mechanotus/436006.lua",
-      "sha256": "82a39e44e9ea1a6303f867dadbbd094cb60652db741b207299d8fd9096806fd8"
+      "sha256": "7b7b9fdd4096407a45f5565aa50df58e709f8aa903c9b90b0c3793fe6fe717ac"
     },
     {
       "path": "sql/2026_11_03_gearing_up_achievement.sql",
