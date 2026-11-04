@@ -4,6 +4,9 @@ import argparse
 from datetime import datetime, timezone
 from pathlib import Path
 import hashlib,json,os
+from collections import Counter
+from decimal import Decimal
+from fractions import Fraction
 
 def require(ok,message):
     if not ok: raise RuntimeError(message)
@@ -12,9 +15,16 @@ def digest(value):
     return hashlib.sha256(json.dumps(value,sort_keys=True,default=str).encode()).hexdigest()
 
 def same(actual,expected,label):
-    # Rows contain only scalar database values; ordering of result sets is irrelevant.
-    norm=lambda rows: sorted(json.dumps(x,sort_keys=True,default=str) for x in rows)
-    require(norm(actual)==norm(expected),'Full row mismatch: '+label)
+    # Exact numeric values may have different int/float representations in source JSON
+    # and database FLOAT columns. Rational comparison adds no tolerance or rounding.
+    # Type tags preserve strings, nulls, bools and all other nonnumeric identities.
+    def scalar(value):
+        if type(value) in (int,float,Decimal):
+            return ('number',Fraction(value))
+        return (type(value).__module__,type(value).__qualname__,repr(value))
+    def rows(values):
+        return Counter(tuple(sorted((key,scalar(value)) for key,value in row.items())) for row in values)
+    require(rows(actual)==rows(expected),'Full row mismatch: '+label)
 
 def save(path,value):
     with os.fdopen(os.open(path,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600),'w') as f:
@@ -68,7 +78,8 @@ def main():
             same(read("SELECT zoneidnumber,short_name,min_status FROM zone WHERE zoneidnumber=202"),[d['required_zone']],'PoK zone access')
             if a.component!='new':
                 same(byids('npc_types','id',mids),d['required_npcs'],'existing actors')
-                same(read('SELECT id,merchant_id,class,alt_currency_id,npc_faction_id FROM npc_types WHERE merchant_id IN ('+','.join(['%s']*len(mids))+')',mids),d['merchant_consumers'],'sole merchant consumers')
+                consumer_columns='id,name,merchant_id,class' if a.component=='existing' else 'id,merchant_id,class,alt_currency_id,npc_faction_id'
+                same(read('SELECT '+consumer_columns+' FROM npc_types WHERE merchant_id IN ('+','.join(['%s']*len(mids))+')',mids),d['merchant_consumers'],'sole merchant consumers')
                 spawnids=[r['id'] for r in d['required_spawns']]
                 same(read('SELECT s.*,e.npcID,e.chance FROM spawn2 s JOIN spawnentry e ON e.spawngroupID=s.spawngroupID WHERE s.id IN ('+','.join(['%s']*len(spawnids))+')',spawnids),d['required_spawns'],'existing placements')
                 prior=[r for rows in d['merchant_before'].values() for r in rows]
