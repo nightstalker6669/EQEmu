@@ -1,0 +1,479 @@
+{
+  "status": "SOURCE_ONLY_NO_ALLOCATIONS_NO_APPLY",
+  "tasks": [
+    {
+      "external_quest_id": 4936,
+      "title": "Unrest in the Metal Mines",
+      "source": "https://everquest.allakhazam.com/db/quest/4936",
+      "requester_native_npc": 482192,
+      "request_phrase": "restored",
+      "prerequisites_external_ids": [],
+      "native_task_id": null,
+      "goal_sequence": [
+        {
+          "kind": "Explore",
+          "count": 1,
+          "role": "CopperMine"
+        },
+        {
+          "kind": "Kill",
+          "count": 1,
+          "role": "LordRagarrh482268"
+        },
+        {
+          "kind": "Explore",
+          "count": 1,
+          "role": "SilverMine"
+        },
+        {
+          "kind": "Kill",
+          "count": 1,
+          "role": "Protauris482257"
+        },
+        {
+          "kind": "Explore",
+          "count": 1,
+          "role": "GoldMine"
+        },
+        {
+          "kind": "Kill",
+          "count": 1,
+          "role": "Keolyx482262"
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Clontik482192"
+        }
+      ],
+      "goal_index_note": "Proposed sequential display indices, not recovered native activityIDs; exact Unrest branch unlock order remains reviewable, not silently imposed."
+    },
+    {
+      "external_quest_id": 4937,
+      "title": "Chaos in the Stonequarry",
+      "source": "https://everquest.allakhazam.com/db/quest/4937",
+      "requester_native_npc": 482192,
+      "request_phrase": "eliminate",
+      "prerequisites_external_ids": [],
+      "native_task_id": null,
+      "goal_sequence": [
+        {
+          "kind": "Explore",
+          "count": 1,
+          "role": "SouthernStonequarry"
+        },
+        {
+          "kind": "Kill",
+          "count": 5,
+          "role": "StonequarryEngineers"
+        },
+        {
+          "kind": "Kill",
+          "count": 5,
+          "role": "StonequarryForemen"
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Clontik482192"
+        }
+      ],
+      "goal_index_note": "Proposed sequential display indices, not recovered native activityIDs; exact Unrest branch unlock order remains reviewable, not silently imposed."
+    },
+    {
+      "external_quest_id": 4938,
+      "title": "An Alternative Explanation",
+      "source": "https://everquest.allakhazam.com/db/quest/4938",
+      "requester_native_npc": 482192,
+      "request_phrase": "deeper",
+      "prerequisites_external_ids": [
+        4936,
+        4937
+      ],
+      "native_task_id": null,
+      "goal_sequence": [
+        {
+          "kind": "Explore",
+          "count": 1,
+          "role": "NorthernStonequarry"
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Reggund482144",
+          "notes": "Distinct hail, exactly one current stage per event"
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Reggund482144",
+          "notes": "Distinct hail, exactly one current stage per event"
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Reggund482144",
+          "notes": "Distinct hail, exactly one current stage per event"
+        },
+        {
+          "kind": "Collect",
+          "count": 1,
+          "item_id": 40492
+        },
+        {
+          "kind": "Collect",
+          "count": 1,
+          "item_id": 40493
+        },
+        {
+          "kind": "Collect",
+          "count": 1,
+          "item_id": 40494
+        },
+        {
+          "kind": "Deliver",
+          "count": 1,
+          "role": "Clontik482192",
+          "item_id": 40492
+        },
+        {
+          "kind": "Deliver",
+          "count": 1,
+          "role": "Clontik482192",
+          "item_id": 40493
+        },
+        {
+          "kind": "Deliver",
+          "count": 1,
+          "role": "Clontik482192",
+          "item_id": 40494
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Clontik482192"
+        }
+      ],
+      "goal_index_note": "Proposed sequential display indices, not recovered native activityIDs; exact Unrest branch unlock order remains reviewable, not silently imposed."
+    },
+    {
+      "external_quest_id": 4939,
+      "title": "Overheated Production",
+      "source": "https://everquest.allakhazam.com/db/quest/4939",
+      "requester_native_npc": 482192,
+      "request_phrase": "agreement",
+      "prerequisites_external_ids": [
+        4936,
+        4937,
+        4938
+      ],
+      "native_task_id": null,
+      "goal_sequence": [
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Kronidar482005"
+        },
+        {
+          "kind": "Kill",
+          "count": 10,
+          "role": "RebelBurynai"
+        },
+        {
+          "kind": "Collect",
+          "count": 5,
+          "item_id": 40496
+        },
+        {
+          "kind": "Collect",
+          "count": 5,
+          "item_id": 40495
+        },
+        {
+          "kind": "Deliver",
+          "count": 5,
+          "role": "Kronidar482005",
+          "item_id": 40496
+        },
+        {
+          "kind": "Deliver",
+          "count": 5,
+          "role": "Kronidar482005",
+          "item_id": 40495
+        },
+        {
+          "kind": "Collect",
+          "count": 4,
+          "item_id": 40499
+        },
+        {
+          "kind": "Deliver",
+          "count": 4,
+          "role": "Kronidar482005",
+          "item_id": 40499
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Kronidar482005"
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Drenkar482244"
+        },
+        {
+          "kind": "Kill",
+          "count": 3,
+          "role": "SurlyGenati"
+        },
+        {
+          "kind": "Collect",
+          "count": 3,
+          "item_id": 40497
+        },
+        {
+          "kind": "Collect",
+          "count": 3,
+          "item_id": 40498
+        },
+        {
+          "kind": "Deliver",
+          "count": 3,
+          "role": "Drenkar482244",
+          "item_id": 40497
+        },
+        {
+          "kind": "Deliver",
+          "count": 3,
+          "role": "Drenkar482244",
+          "item_id": 40498
+        },
+        {
+          "kind": "Collect",
+          "count": 4,
+          "item_id": 40996
+        },
+        {
+          "kind": "Deliver",
+          "count": 4,
+          "role": "Drenkar482244",
+          "item_id": 40996
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Drenkar482244"
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Kronidar482005"
+        },
+        {
+          "kind": "SpeakWith",
+          "count": 1,
+          "role": "Clontik482192"
+        }
+      ],
+      "goal_index_note": "Proposed sequential display indices, not recovered native activityIDs; exact Unrest branch unlock order remains reviewable, not silently imposed."
+    }
+  ],
+  "goal_total": 42,
+  "existing_quest_items": [
+    {
+      "id": 40492,
+      "Name": "Golemite Sagecrystal of Emergent Awareness",
+      "lore": "This is a still-potent message crystal used by golems.",
+      "itemtype": 11,
+      "stackable": 1
+    },
+    {
+      "id": 40493,
+      "Name": "Vial of Protaurian Command-Flavor Hivejelly",
+      "lore": "A vial of cliknar hivejelly intended to relay orders.",
+      "itemtype": 11,
+      "stackable": 1
+    },
+    {
+      "id": 40494,
+      "Name": "Archtone Wheelstick",
+      "lore": "A message totem used by Burynai elites.",
+      "itemtype": 11,
+      "stackable": 1
+    },
+    {
+      "id": 40495,
+      "Name": "Golemite Sagecrystal of Iterative Progress",
+      "lore": "This is a still-potent message crystal used by golems.",
+      "itemtype": 11,
+      "stackable": 1
+    },
+    {
+      "id": 40496,
+      "Name": "Undertone Wheelstick",
+      "lore": "A message totem used by Burynai workers.",
+      "itemtype": 11,
+      "stackable": 1
+    },
+    {
+      "id": 40497,
+      "Name": "Genati Ore-Stash Map",
+      "lore": "A large sheet of cloth showing an illegal stash of ore.",
+      "itemtype": 11,
+      "stackable": 1
+    },
+    {
+      "id": 40498,
+      "Name": "Genati Ore Satchel",
+      "lore": "A big, dusty satchel once carried by an Underquarry Genati.",
+      "itemtype": 11,
+      "stackable": 1
+    },
+    {
+      "id": 40499,
+      "Name": "Wooden Pickaxe Rack Slat",
+      "lore": "A piece of wood, of sufficient size to be part of a rack.",
+      "itemtype": 11,
+      "stackable": 1
+    },
+    {
+      "id": 40996,
+      "Name": "Stonesaw Peg",
+      "lore": "A metal peg, durable enough to support a lot of weight.",
+      "itemtype": 11,
+      "stackable": 1
+    }
+  ],
+  "existing_quest_loot_paths": [
+    {
+      "loottable_id": 95031,
+      "lootdrop_id": 116443,
+      "probability": 100.0,
+      "item_id": 40495,
+      "chance": 71.318,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95033,
+      "lootdrop_id": 116448,
+      "probability": 100.0,
+      "item_id": 40496,
+      "chance": 68.799,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95034,
+      "lootdrop_id": 116451,
+      "probability": 100.0,
+      "item_id": 40494,
+      "chance": 48.796,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95035,
+      "lootdrop_id": 116454,
+      "probability": 100.0,
+      "item_id": 40494,
+      "chance": 46.957,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95036,
+      "lootdrop_id": 116457,
+      "probability": 100.0,
+      "item_id": 40496,
+      "chance": 68.482,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95037,
+      "lootdrop_id": 116460,
+      "probability": 100.0,
+      "item_id": 40496,
+      "chance": 68.667,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95046,
+      "lootdrop_id": 116486,
+      "probability": 100.0,
+      "item_id": 40493,
+      "chance": 67.454,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95055,
+      "lootdrop_id": 116511,
+      "probability": 100.0,
+      "item_id": 40996,
+      "chance": 100.0,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95056,
+      "lootdrop_id": 116514,
+      "probability": 100.0,
+      "item_id": 40495,
+      "chance": 68.343,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95059,
+      "lootdrop_id": 116521,
+      "probability": 100.0,
+      "item_id": 40497,
+      "chance": 66.667,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95059,
+      "lootdrop_id": 116521,
+      "probability": 100.0,
+      "item_id": 40498,
+      "chance": 69.666,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95060,
+      "lootdrop_id": 116523,
+      "probability": 100.0,
+      "item_id": 40499,
+      "chance": 100.0,
+      "multiplier": 2
+    },
+    {
+      "loottable_id": 95061,
+      "lootdrop_id": 116526,
+      "probability": 100.0,
+      "item_id": 40492,
+      "chance": 66.208,
+      "multiplier": 2
+    }
+  ],
+  "source_actors": {
+    "#Reggund_Tilecracker": [
+      482144
+    ],
+    "#Kronidar_Stoutaxe": [
+      482005
+    ],
+    "#Drenkar_Darkhammer": [
+      482244
+    ],
+    "#Lord_Ragarrh": [
+      482268
+    ],
+    "#Protauris": [
+      482257
+    ],
+    "#Keolyx": [
+      482262
+    ]
+  },
+  "excluded_other_zone_same_name_actor_ids": [
+    484331,
+    484394
+  ],
+  "limits": "Existing9itempaths retained, not originalrateverification. No NPCstat/AI/loot/placement edits. No item/protectedplayer writes. Actualburynai goalmembership and explorationbounds require exact target mapping beforeapply; no generic worldname-onlycredit."
+}
