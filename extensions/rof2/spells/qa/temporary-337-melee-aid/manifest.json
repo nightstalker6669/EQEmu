@@ -1,0 +1,16 @@
+{
+  "status": "READY_SOURCE_PROPOSAL_NOT_APPLIED_UNEXECUTED_UNPARSED",
+  "spell_id": 39999,
+  "reservation": "JARVIS_PROVISIONAL_FINITE_COLLISION_CLEAR",
+  "files": {
+    "CONTRACT.md": "0c1aea6a3115ddd604e6221c8cc11beac1ce2b60cf16c33a77df582d687a1281",
+    "data.json": "461a10e0542c702fba593411fbf81fa5d22e3e9881e6d36881990d89627b63b4",
+    "template-preimage.json": "1e3c62f260ba3f07239fab401d28288314a4693cbd1f77b94e9ad73a7b04c75a",
+    "namespace-preimage.json": "3b1884d941cc93ded1c5a6cc2270c2c3fd8b01c648a329eef28d81b55a79c9af",
+    "client-spell-row.txt": "7c37a5436ba4d75a3c480eb6198fd68bc4cec37447cdcef2965449c693067c46",
+    "client-row-order.json": "4ebf8f38ab940d2ae1ee6d07ffc5bcff09e7faf91ffbf380f20eab3ddb7b1ccc",
+    "qa337_melee_aid.lua": "3648a87763d6683807c0ea82b025a79824e3c119ceca152358f7cdeee278db65",
+    "content_helper.py": "c977b2c6cd1a9c54e6a7f5884f88e59eaef165296ab5fd8dc07b60d358cfb1e7",
+    "source-review.json": "5bbd89c830ee32cf4cfe2c236b91225a7412fcd6bb3aeaa1ba18d922b52ade2f"
+  }
+}
