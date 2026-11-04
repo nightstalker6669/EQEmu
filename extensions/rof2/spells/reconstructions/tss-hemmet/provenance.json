@@ -140,8 +140,16 @@
   },
   "validation": {
     "python_syntax": "ASTparsed",
-    "offline_plan": "Runseparately/noDBconnection",
+    "offline_plan": "PASS/noDBconnection",
     "native_purchase": false
   },
-  "applied": false
+  "applied": true,
+  "applied_status": {
+    "date": "2026-11-04",
+    "database": "Committed15stock+1NPCbinding, fullpostimages and independentRNG71\u201375/itemjoin passed",
+    "runtime_freshness": "BuildHEMMET-CACHE-FRESHNESS-001 confirmsSteppes399unloaded; deployedZoneInitLoadMerchants readszoneSpawn->NPCmerchantbinding->stockDBjoin. Nextnormalfreshbootready. Noextra reload/restart.",
+    "native_purchase": false,
+    "shared999999_and_all_other_NPCs": "Unchanged",
+    "player_item_spell_spawn_writes": false
+  }
 }

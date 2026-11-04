@@ -15,3 +15,7 @@ python3 apply_database.py --apply --config /private/eqemu_config.json --receipt-
 The helper requires peq_housing_test, exact full NPC preimage, unchanged native item/spell identities and Ranger levels, positive prices, transactional storage, and no rows or consumers of reserved merchant399084. It saves a durable NPC/empty-stock backup, inserts fifteen rows, changes the one binding in a transaction, and verifies full postimages before commit. It never writes merchant999999 or player rows. A prepared-only receipt must be reconciled against actual rows before further action. Reversal must refuse changed NPC/stock rows or new merchant consumers; do not restore player property.
 
 After publication and commit, coordinate fresh affected NPC/merchant-cache availability for The Steppes399. Preserve existing placements and other owners' encounters; no global repop, broad installer, client takeover, or new test suite is needed. Native purchase acceptance remains separate from database/cache proof.
+
+## Applied status, November4,2026
+
+The fifteen stock rows and one NPC binding are committed. Full postimages and an independent item/spell/Ranger-level join passed. Build confirmed TheSteppes399 is not loaded and its next ordinary zone initialization will read the new NPC binding and merchant stock. No extra restart/repop or native purchase was performed. Shared999999 and other NPCs, item/spell definitions, placements and player state remain unchanged. Exact historical price parity is still not claimed.
