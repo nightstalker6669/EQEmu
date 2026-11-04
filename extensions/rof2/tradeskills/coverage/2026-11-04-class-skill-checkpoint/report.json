@@ -1,0 +1,818 @@
+{
+  "status": "PARTIAL_SOURCE_AUDIT_CHECKPOINT_NOT_COMPLETE_RECIPE_UNIVERSE",
+  "updated_utc": "2026-11-04T13:11:12.859232+00:00",
+  "installed_additions": {
+    "additive_batches": 60,
+    "recipes": 2607,
+    "entries": 14053
+  },
+  "existing_corrections": {
+    "ingredient_item_ids": 16,
+    "empty_vial_failure_salvage_pairs": 6
+  },
+  "database_counts_at_RRC063_readback": {
+    "recipes": 25430,
+    "entries": 191672
+  },
+  "categories": [
+    {
+      "name": "OoW Alchemy",
+      "source_formulas": 5,
+      "current_exact_representatives": 5,
+      "new_recipes": 0,
+      "matches": [
+        {
+          "name": "Amber Resin",
+          "recipe_id": 1216,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 46,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        },
+        {
+          "name": "Hydrated Amber Resin",
+          "recipe_id": 1311,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 68,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 8
+        },
+        {
+          "name": "Reduced Amber Resin",
+          "recipe_id": 1392,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 62,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 8
+        },
+        {
+          "name": "Slugworm Acid",
+          "recipe_id": 1401,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 151,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        },
+        {
+          "name": "Treanic Acid",
+          "recipe_id": 1408,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 151,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        }
+      ],
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=258&rc=SHM&rsa=Alchemy&sub=OoW"
+    },
+    {
+      "name": "Alchemy dye formulas",
+      "source_formulas": 13,
+      "current_exact_matches_before_correction": 7,
+      "existing_failure_return_discrepancies_corrected_in": "RRC062",
+      "corrected_existing_recipes": [
+        1224,
+        1225,
+        1226,
+        1227,
+        1228,
+        1398
+      ],
+      "new_recipes": 0,
+      "qualification": "Current maintained source supports EmptyVial failure return; exact May2013 failure history not independently established.",
+      "source_urls": [
+        "https://www.eqtraders.com/recipes/recipe_page.php?article=290&rsa=Alchemy&sub=fpdye",
+        "https://www.eqtraders.com/recipes/recipe_page.php?article=291&rsa=Alchemy&sub=pdye"
+      ]
+    },
+    {
+      "name": "Alchemy Other",
+      "source_formulas": 12,
+      "existing_ordinary_matches": [
+        3092634,
+        10066
+      ],
+      "missing_powdered_glowrock_registered_in": "RRC063",
+      "required_skill20_for_Quintessence_preserved": true,
+      "held": [
+        {
+          "name": "Apprentice Alchemist Trophy",
+          "formula": "Components: Apprentice Alchemist Certificate\nIn: Medicine Bag, Reinforced Medicine Bag, Foldable Medicine Bag, Foldable Reinforced Medicine Bag, Alchemy Table (Placeable), Alchemy Table\nYield: 1\nThis combine may only be made by Shaman\nNotes: must have Beginner Alchemist Trophy equipped in Primary or Secondary slot",
+          "reason": "Equipped trophy prerequisite"
+        },
+        {
+          "name": "Expert Alchemist Trophy",
+          "formula": "Components: Expert Alchemist Certificate\nIn: Medicine Bag, Reinforced Medicine Bag, Foldable Medicine Bag, Foldable Reinforced Medicine Bag, Alchemy Table (Placeable), Alchemy Table\nYield: 1\nThis combine may only be made by Shaman\nNotes: must have Beginner Alchemist Trophy equipped in Primary or Secondary slot",
+          "reason": "Equipped trophy prerequisite"
+        },
+        {
+          "name": "Freshman Alchemist Trophy",
+          "formula": "Components: Freshman Alchemist Certificate\nIn: Medicine Bag, Foldable Medicine Bag, Foldable Reinforced Medicine Bag\nYield: 1\nThis combine may only be made by Shaman\nNotes: must have Beginner Alchemist Trophy equipped in Primary or Secondary slot",
+          "reason": "Equipped trophy prerequisite"
+        },
+        {
+          "name": "Grandmaster's Medicine Bag",
+          "formula": "Components: Artisan's Seal, Tonic of Benefit Affinity II\nIn: Medicine Bag\nYield: 1\nThis combine may only be made by Shaman",
+          "reason": "Non-numeric trivial >300; do not invent numeric value"
+        },
+        {
+          "name": "Journeyman Alchemist Trophy",
+          "formula": "Components: Journeyman Alchemist Certificate\nIn: Medicine Bag, Foldable Medicine Bag, Foldable Reinforced Medicine Bag\nYield: 1\nThis combine may only be made by Shaman\nNotes: must have Beginner Alchemist Trophy equipped in Primary or Secondary slot",
+          "reason": "Equipped trophy prerequisite"
+        },
+        {
+          "name": "Master Alchemist Trophy",
+          "formula": "Components: Master Alchemist Certificate\nIn: Medicine Bag, Foldable Medicine Bag, Foldable Reinforced Medicine Bag\nYield: 1\nThis combine may only be made by Shaman\nNotes: must have Beginner Alchemist Trophy equipped in Primary or Secondary slot",
+          "reason": "Equipped trophy prerequisite"
+        },
+        {
+          "name": "Powder of Ro",
+          "formula": "Components: Shards of Ro (removed)\nIn: Medicine Bag, Foldable Medicine Bag, Foldable Reinforced Medicine Bag\nYield: 2\nThis combine may only be made by Shaman",
+          "reason": "Removed ingredient route; period availability unresolved"
+        },
+        {
+          "name": "Sample of Filtered Highland Sludge",
+          "formula": "Components: Sample of Highland Sludge\nIn: Medicine Bag, Reinforced Medicine Bag, Foldable Medicine Bag, Foldable Reinforced Medicine Bag, Alchemy Table (Placeable), Alchemy Table\nYield: 1\nThis combine may only be made by Shaman\nNotes: The yield will be 1-3 depending upon how many times you have done this combine. You must complete the quests mentioned here in order to do the combine.",
+          "reason": "Per-player quest completion and progressive yield"
+        },
+        {
+          "name": "Sample of Filtered Taelosian Sludge",
+          "formula": "Components: Sample of Taelosian Sludge\nIn: Medicine Bag, Reinforced Medicine Bag, Foldable Medicine Bag, Foldable Reinforced Medicine Bag, Alchemy Table (Placeable), Alchemy Table\nYield: 1\nThis combine may only be made by Shaman\nNotes: The yield will be 1-3 depending upon how many times you have done this combine. You must complete the quests mentioned here in order to do the combine.",
+          "reason": "Per-player quest completion and progressive yield"
+        }
+      ],
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=376&rsa=Alchemy&sub=other"
+    },
+    {
+      "name": "PoK vendor basic distillates ranksI-X",
+      "source_formulas": 70,
+      "current_exact_representatives": 70,
+      "new_recipes": 0,
+      "full_current_entries_read": 616,
+      "matches": [
+        {
+          "source_name": "Distillate of Alacrity I",
+          "native_recipe_name": "Distillate Of Alacrity I",
+          "recipe_id": 12888,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 31,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        },
+        {
+          "source_name": "Distillate of Alacrity II",
+          "native_recipe_name": "Distillate Of Alacrity Ii",
+          "recipe_id": 12895,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 41,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Alacrity III",
+          "native_recipe_name": "Distillate Of Alacrity Iii",
+          "recipe_id": 12902,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 62,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Alacrity IV",
+          "native_recipe_name": "Distillate Of Alacrity Iv",
+          "recipe_id": 12909,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 88,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Alacrity IX",
+          "native_recipe_name": "Distillate Of Alacrity Ix",
+          "recipe_id": 12944,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 302,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Alacrity V",
+          "native_recipe_name": "Distillate Of Alacrity V",
+          "recipe_id": 12916,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 122,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Alacrity VI",
+          "native_recipe_name": "Distillate Of Alacrity Vi",
+          "recipe_id": 12923,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 162,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Alacrity VII",
+          "native_recipe_name": "Distillate Of Alacrity Vii",
+          "recipe_id": 12930,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 202,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Alacrity VIII",
+          "native_recipe_name": "Distillate Of Alacrity Viii",
+          "recipe_id": 12937,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 255,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Alacrity X",
+          "native_recipe_name": "Distillate Of Alacrity X",
+          "recipe_id": 12951,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 348,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Celestial Healing I",
+          "native_recipe_name": "Distillate Of Celestial Healing I",
+          "recipe_id": 12889,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 31,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        },
+        {
+          "source_name": "Distillate of Celestial Healing II",
+          "native_recipe_name": "Distillate Of Celestial Healing Ii",
+          "recipe_id": 12896,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 41,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Celestial Healing III",
+          "native_recipe_name": "Distillate Of Celestial Healing Iii",
+          "recipe_id": 12903,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 62,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Celestial Healing IV",
+          "native_recipe_name": "Distillate Of Celestial Healing Iv",
+          "recipe_id": 12910,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 88,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Celestial Healing IX",
+          "native_recipe_name": "Distillate Of Celestial Healing Ix",
+          "recipe_id": 12945,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 302,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Celestial Healing V",
+          "native_recipe_name": "Distillate Of Celestial Healing V",
+          "recipe_id": 12917,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 122,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Celestial Healing VI",
+          "native_recipe_name": "Distillate Of Celestial Healing Vi",
+          "recipe_id": 12924,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 162,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Celestial Healing VII",
+          "native_recipe_name": "Distillate Of Celestial Healing Vii",
+          "recipe_id": 12931,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 202,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Celestial Healing VIII",
+          "native_recipe_name": "Distillate Of Celestial Healing Viii",
+          "recipe_id": 12938,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 255,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Celestial Healing X",
+          "native_recipe_name": "Distillate Of Celestial Healing X",
+          "recipe_id": 12952,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 348,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Clarity I",
+          "native_recipe_name": "Distillate Of Clarity I",
+          "recipe_id": 12890,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 31,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        },
+        {
+          "source_name": "Distillate of Clarity II",
+          "native_recipe_name": "Distillate Of Clarity Ii",
+          "recipe_id": 12897,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 41,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Clarity III",
+          "native_recipe_name": "Distillate Of Clarity Iii",
+          "recipe_id": 12904,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 62,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Clarity IV",
+          "native_recipe_name": "Distillate Of Clarity Iv",
+          "recipe_id": 12911,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 88,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Clarity IX",
+          "native_recipe_name": "Distillate Of Clarity Ix",
+          "recipe_id": 12946,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 302,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Clarity V",
+          "native_recipe_name": "Distillate Of Clarity V",
+          "recipe_id": 12918,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 122,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Clarity VI",
+          "native_recipe_name": "Distillate Of Clarity Vi",
+          "recipe_id": 12925,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 162,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Clarity VII",
+          "native_recipe_name": "Distillate Of Clarity Vii",
+          "recipe_id": 12932,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 202,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Clarity VIII",
+          "native_recipe_name": "Distillate Of Clarity Viii",
+          "recipe_id": 12939,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 255,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Clarity X",
+          "native_recipe_name": "Distillate Of Clarity X",
+          "recipe_id": 12953,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 348,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Divine Healing I",
+          "native_recipe_name": "Distillate Of Divine Healing I",
+          "recipe_id": 12891,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 31,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        },
+        {
+          "source_name": "Distillate of Divine Healing II",
+          "native_recipe_name": "Distillate Of Divine Healing Ii",
+          "recipe_id": 12898,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 41,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Divine Healing III",
+          "native_recipe_name": "Distillate Of Divine Healing Iii",
+          "recipe_id": 12905,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 62,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Divine Healing IV",
+          "native_recipe_name": "Distillate Of Divine Healing Iv",
+          "recipe_id": 12912,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 88,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Divine Healing IX",
+          "native_recipe_name": "Distillate Of Divine Healing Ix",
+          "recipe_id": 12947,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 302,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Divine Healing V",
+          "native_recipe_name": "Distillate Of Divine Healing V",
+          "recipe_id": 12919,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 122,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Divine Healing VI",
+          "native_recipe_name": "Distillate Of Divine Healing Vi",
+          "recipe_id": 12926,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 162,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Divine Healing VII",
+          "native_recipe_name": "Distillate Of Divine Healing Vii",
+          "recipe_id": 12933,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 202,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Divine Healing VIII",
+          "native_recipe_name": "Distillate Of Divine Healing Viii",
+          "recipe_id": 12940,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 255,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Divine Healing X",
+          "native_recipe_name": "Distillate Of Divine Healing X",
+          "recipe_id": 12954,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 348,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Health I",
+          "native_recipe_name": "Distillate Of Health I",
+          "recipe_id": 12892,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 31,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        },
+        {
+          "source_name": "Distillate of Health II",
+          "native_recipe_name": "Distillate Of Health Ii",
+          "recipe_id": 12899,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 41,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Health III",
+          "native_recipe_name": "Distillate Of Health Iii",
+          "recipe_id": 12906,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 62,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Health IV",
+          "native_recipe_name": "Distillate Of Health Iv",
+          "recipe_id": 12913,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 88,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Health IX",
+          "native_recipe_name": "Distillate Of Health Ix",
+          "recipe_id": 12948,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 302,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Health V",
+          "native_recipe_name": "Distillate Of Health V",
+          "recipe_id": 12920,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 122,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Health VI",
+          "native_recipe_name": "Distillate Of Health Vi",
+          "recipe_id": 12927,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 162,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Health VII",
+          "native_recipe_name": "Distillate Of Health Vii",
+          "recipe_id": 12934,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 202,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Health VIII",
+          "native_recipe_name": "Distillate Of Health Viii",
+          "recipe_id": 12941,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 255,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Health X",
+          "native_recipe_name": "Distillate Of Health X",
+          "recipe_id": 12955,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 348,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Replenishment I",
+          "native_recipe_name": "Distillate Of Replenishment I",
+          "recipe_id": 12893,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 31,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        },
+        {
+          "source_name": "Distillate of Replenishment II",
+          "native_recipe_name": "Distillate Of Replenishment Ii",
+          "recipe_id": 12900,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 41,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Replenishment III",
+          "native_recipe_name": "Distillate Of Replenishment Iii",
+          "recipe_id": 12907,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 62,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Replenishment IV",
+          "native_recipe_name": "Distillate Of Replenishment Iv",
+          "recipe_id": 12914,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 88,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Replenishment IX",
+          "native_recipe_name": "Distillate Of Replenishment Ix",
+          "recipe_id": 12949,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 302,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Replenishment V",
+          "native_recipe_name": "Distillate Of Replenishment V",
+          "recipe_id": 12921,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 122,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Replenishment VI",
+          "native_recipe_name": "Distillate Of Replenishment Vi",
+          "recipe_id": 12928,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 162,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Replenishment VII",
+          "native_recipe_name": "Distillate Of Replenishment Vii",
+          "recipe_id": 12935,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 202,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Replenishment VIII",
+          "native_recipe_name": "Distillate Of Replenishment Viii",
+          "recipe_id": 12942,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 255,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Replenishment X",
+          "native_recipe_name": "Distillate Of Replenishment X",
+          "recipe_id": 12956,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 348,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Spirituality I",
+          "native_recipe_name": "Distillate Of Spirituality I",
+          "recipe_id": 12894,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 31,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 7
+        },
+        {
+          "source_name": "Distillate of Spirituality II",
+          "native_recipe_name": "Distillate Of Spirituality Ii",
+          "recipe_id": 12901,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 41,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Spirituality III",
+          "native_recipe_name": "Distillate Of Spirituality Iii",
+          "recipe_id": 12908,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 62,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Spirituality IV",
+          "native_recipe_name": "Distillate Of Spirituality Iv",
+          "recipe_id": 12915,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 88,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Spirituality IX",
+          "native_recipe_name": "Distillate Of Spirituality Ix",
+          "recipe_id": 12950,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 302,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Spirituality V",
+          "native_recipe_name": "Distillate Of Spirituality V",
+          "recipe_id": 12922,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 122,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Spirituality VI",
+          "native_recipe_name": "Distillate Of Spirituality Vi",
+          "recipe_id": 12929,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 162,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Spirituality VII",
+          "native_recipe_name": "Distillate Of Spirituality Vii",
+          "recipe_id": 12936,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 202,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Spirituality VIII",
+          "native_recipe_name": "Distillate Of Spirituality Viii",
+          "recipe_id": 12943,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 255,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        },
+        {
+          "source_name": "Distillate of Spirituality X",
+          "native_recipe_name": "Distillate Of Spirituality X",
+          "recipe_id": 12957,
+          "exact_ingredient_success_failure_salvage_roles": true,
+          "trivial": 348,
+          "required_native_medicine_bag_links_present": true,
+          "full_current_entries": 9
+        }
+      ],
+      "classification": "PoK vendor index; not PlanesofPower expansion classification. Higher current tiers excluded from this audit.",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=344&rsa=Alchemy&sub=pop"
+    },
+    {
+      "name": "OldWorld Alchemy index qualification",
+      "source_formulas": 261,
+      "explicit_current_TLP_only_rows": 261,
+      "new_recipes": 0,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=665&rsa=Alchemy&sub=oldworld",
+      "qualification": "Do not import current TLP-only legacy formulas as ordinary May2013 RoF recipes. The tag is a contemporary ruleset restriction and does not independently establish historical retirement/introduction dates. Retain existing legacy recipes; no deletion or activation from this view."
+    }
+  ],
+  "additional_missing_routes": {
+    "batch": "RRC063",
+    "recipes": 3,
+    "entries": 12,
+    "skills": [
+      "Alchemy",
+      "Jewelcraft",
+      "Make Poison"
+    ],
+    "output_item_id": 33250,
+    "tool_return_item_id": 16883,
+    "source_url": "https://www.eqtraders.com/items/show_item.php?item=21347",
+    "era_qualification": "Inherited by-DoDH use context; not independently dated introduction of each manufacturing route."
+  },
+  "limits": [
+    "Maintained source and current database matches do not prove immutable May2013 values or native client execution.",
+    "Current TLP-only rows are not imported into ordinary RoF coverage from that classification. Existing legacy data is not deleted or activated.",
+    "Existing Poison and Brewing counterparts are preserved unless separate source review supports a change.",
+    "Remaining Eron altar/time/order, static-field, Smithing-learning and mixed charm-learning cases remain unresolved.",
+    "No source-category count is asserted as the historical total recipe denominator."
+  ],
+  "native_actions": 0,
+  "player_item_writes": false
+}
