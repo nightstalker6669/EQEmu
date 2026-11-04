@@ -1685,7 +1685,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -1718,7 +1718,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "95930a693b124953167ccc545ad92bd9c1e9b801395d4c2ae92feb8d0f4928fa"
+      "source_raw_html_sha256": "95930a693b124953167ccc545ad92bd9c1e9b801395d4c2ae92feb8d0f4928fa",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092640,
@@ -1729,7 +1730,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -1762,7 +1763,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "e0e1f4f6c8b3d50356096bf3281eb4065d29d8d167ef2f1b4fc36e16f8ca7d9c"
+      "source_raw_html_sha256": "e0e1f4f6c8b3d50356096bf3281eb4065d29d8d167ef2f1b4fc36e16f8ca7d9c",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092641,
@@ -1773,7 +1775,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -1806,7 +1808,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "218ea5d0c3ec00aa666d3849d5f1508c536eea3d53f52186ea72e120510973ee"
+      "source_raw_html_sha256": "218ea5d0c3ec00aa666d3849d5f1508c536eea3d53f52186ea72e120510973ee",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092642,
@@ -1817,7 +1820,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -1850,7 +1853,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "d47dfd4ca7e3aa56e822ec1020876796694a3786230cbd8766285b84eb8da492"
+      "source_raw_html_sha256": "d47dfd4ca7e3aa56e822ec1020876796694a3786230cbd8766285b84eb8da492",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092643,
@@ -1861,7 +1865,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -1894,7 +1898,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "a7b4fa9b7a26eb9b5a2b36bd8ac52d774f5ad13e84e98da5884ef67a87786256"
+      "source_raw_html_sha256": "a7b4fa9b7a26eb9b5a2b36bd8ac52d774f5ad13e84e98da5884ef67a87786256",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092644,
@@ -1905,7 +1910,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -1938,7 +1943,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "7f56a551d8d3c7d19e9fac9f914ec969d418ee7dd2336cb69d61c93b7b54f604"
+      "source_raw_html_sha256": "7f56a551d8d3c7d19e9fac9f914ec969d418ee7dd2336cb69d61c93b7b54f604",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092645,
@@ -1949,7 +1955,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -1982,7 +1988,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "6eb913c80eda34b4cc584a40911fd2d4036eae51d89b0e557fe692f0aa24a2b0"
+      "source_raw_html_sha256": "6eb913c80eda34b4cc584a40911fd2d4036eae51d89b0e557fe692f0aa24a2b0",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092646,
@@ -1993,7 +2000,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2026,7 +2033,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "41b3e986418332cb43724da92e834a1760d562696a757c6db50207f25ba7c546"
+      "source_raw_html_sha256": "41b3e986418332cb43724da92e834a1760d562696a757c6db50207f25ba7c546",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092647,
@@ -2037,7 +2045,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2070,7 +2078,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "07993aaa6cf6c861fd61b8af844c5fe78d8795623976f05510ba39c5da8dabd0"
+      "source_raw_html_sha256": "07993aaa6cf6c861fd61b8af844c5fe78d8795623976f05510ba39c5da8dabd0",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092648,
@@ -2081,7 +2090,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2114,7 +2123,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "ed6cb167b5baa991b2a668b274e3b3aa76210b5d80824076fb65131238d000a4"
+      "source_raw_html_sha256": "ed6cb167b5baa991b2a668b274e3b3aa76210b5d80824076fb65131238d000a4",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092649,
@@ -2125,7 +2135,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2158,7 +2168,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "e3938aa5134805a8f496ede1162d3d2a936c8cadded332c5505725b9e4eda394"
+      "source_raw_html_sha256": "e3938aa5134805a8f496ede1162d3d2a936c8cadded332c5505725b9e4eda394",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092650,
@@ -2169,7 +2180,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2202,7 +2213,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "4efc1e65a56270818c7e7b9f48da29f128bd3eacb75f4209e4d7af48645f4523"
+      "source_raw_html_sha256": "4efc1e65a56270818c7e7b9f48da29f128bd3eacb75f4209e4d7af48645f4523",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092651,
@@ -2213,7 +2225,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2246,7 +2258,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "90019dde3e3ae2bfa012ced8c2a96b13ae8b172b72940e10b5188198d3a5d4da"
+      "source_raw_html_sha256": "90019dde3e3ae2bfa012ced8c2a96b13ae8b172b72940e10b5188198d3a5d4da",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092652,
@@ -2257,7 +2270,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2290,7 +2303,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "1e00c69713d8fed2df23d3c598ed84782c856ff88ed049809ae34d4085ae53c3"
+      "source_raw_html_sha256": "1e00c69713d8fed2df23d3c598ed84782c856ff88ed049809ae34d4085ae53c3",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092653,
@@ -2301,7 +2315,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2334,7 +2348,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "81175a1ffd6ba9ae50b8d9abc35891f622ecbbbe0493a8dd2b8c17f895e1b2d5"
+      "source_raw_html_sha256": "81175a1ffd6ba9ae50b8d9abc35891f622ecbbbe0493a8dd2b8c17f895e1b2d5",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092654,
@@ -2345,7 +2360,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2378,7 +2393,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "1e05a1849f17c70bc0237ae9b1b6aa45502f42b4f4c214c97ed7479612a83cc9"
+      "source_raw_html_sha256": "1e05a1849f17c70bc0237ae9b1b6aa45502f42b4f4c214c97ed7479612a83cc9",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092655,
@@ -2389,7 +2405,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2422,7 +2438,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "c6e0914166cc3d197d65b9f3755ae77cbc4a03c4e99c3e1b460f1e17f97ce184"
+      "source_raw_html_sha256": "c6e0914166cc3d197d65b9f3755ae77cbc4a03c4e99c3e1b460f1e17f97ce184",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092656,
@@ -2433,7 +2450,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: Ambleshift's Golden Automated Amalgamator is consumed in this combine. You will not get it back."
@@ -2466,7 +2483,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "4f6978cbb0526f3394693eb1d12b235be6c052e2d61640a019f3fbd80e394263"
+      "source_raw_html_sha256": "4f6978cbb0526f3394693eb1d12b235be6c052e2d61640a019f3fbd80e394263",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092657,
@@ -2477,7 +2495,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2510,7 +2528,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "86a3a423618258f1534d5ea0afd7912f531f7dab44adf55388d98f0f0e16655d"
+      "source_raw_html_sha256": "86a3a423618258f1534d5ea0afd7912f531f7dab44adf55388d98f0f0e16655d",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092658,
@@ -2521,7 +2540,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: Ambleshift's Golden Automated Amalgamator is consumed in this combine. You will not get it back."
@@ -2554,7 +2573,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "29ba15ca457615e665e79206a32cfda0e630f9026e72fcc8920cfa7eb97d5f7c"
+      "source_raw_html_sha256": "29ba15ca457615e665e79206a32cfda0e630f9026e72fcc8920cfa7eb97d5f7c",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092659,
@@ -2565,7 +2585,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: The Ambleshift's Golden Automated Amalgamtor is consumed in the combine. You will not get it back."
@@ -2598,7 +2618,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "dc811145fce249a82377789d3a93218abdbe99abc347d987ce78a5700cccc707"
+      "source_raw_html_sha256": "dc811145fce249a82377789d3a93218abdbe99abc347d987ce78a5700cccc707",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092660,
@@ -2609,7 +2630,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: Ambleshift's Golden Automated Amalgamator is consumed in this combine. You will not get it back."
@@ -2642,7 +2663,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "fa438cee892b7f9f1fae5b2649aae8a95762841942c55c9764ea2914511e5777"
+      "source_raw_html_sha256": "fa438cee892b7f9f1fae5b2649aae8a95762841942c55c9764ea2914511e5777",
+      "container_item_id": 37553
     },
     {
       "recipe_id": 3092661,
@@ -2653,7 +2675,7 @@
       "nofail": 1,
       "replace_container": 1,
       "yield_count": 1,
-      "container_bagtype": 37553,
+      "container_bagtype": 13,
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=511&rsa=No+Skill&sub=TSS",
       "source_notes": [
         "Notes: Ambleshift's Golden Automated Amalgamator is consumed in this combine. You will not get it back."
@@ -2686,7 +2708,8 @@
       ],
       "also_returns": [],
       "failure_returns": [],
-      "source_raw_html_sha256": "632698f75767e264fa45cf77acffddc82325b91c3a45aa34f119e60062225216"
+      "source_raw_html_sha256": "632698f75767e264fa45cf77acffddc82325b91c3a45aa34f119e60062225216",
+      "container_item_id": 37553
     }
   ],
   "item_dependencies": [
