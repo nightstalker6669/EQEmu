@@ -72,7 +72,7 @@ def main():
             cur.execute('SELECT DATABASE() AS target')
             require(cur.fetchone()['target'] == 'peq_housing_test', 'Wrong live target')
             cur.execute('SELECT * FROM spells_new WHERE id=39999 FOR UPDATE')
-            before = cur.fetchall()
+            before = list(cur.fetchall())
             require(before == ([row] if args.remove or args.verify else []), 'Spell preimage drift')
             receipt['before']['spells_new'] = before
             if args.verify:
@@ -94,7 +94,7 @@ def main():
                     require(not cur.fetchall(), 'QA name reused')
                     continue
                 cur.execute(guard['query'] + ' FOR UPDATE')
-                found = cur.fetchall()
+                found = list(cur.fetchall())
                 require(found == guard['rows'], 'Spell consumer changed: ' + name)
                 receipt['before'][name] = found
             receipt['intended_after'] = [] if args.remove else [row]
@@ -109,7 +109,7 @@ def main():
                             ') VALUES (' + ','.join(['%s']*len(columns)) + ')', tuple(row[k] for k in columns))
             require(cur.rowcount == 1, 'Unexpected content mutation count')
             cur.execute('SELECT * FROM spells_new WHERE id=39999')
-            receipt['after'] = cur.fetchall()
+            receipt['after'] = list(cur.fetchall())
             require(receipt['after'] == receipt['intended_after'], 'Full spell postimage mismatch')
         connection.commit()
         receipt['status'] = 'COMMITTED_ONE_QA_CONTENT_ROW_CHANGE_NO_CACHE_OR_CLIENT_ACTION'
