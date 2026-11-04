@@ -1,6 +1,6 @@
 {
-  "status": "SOURCE_ONLY_UNAPPLIED",
-  "database_writes": 0,
+  "status": "DATABASE_APPLIED_INDEPENDENT_READBACK_PASS_NEXT_FRESH_ARGATH_BOOT_READY",
+  "database_writes": 2,
   "native_acceptance": false,
   "merchant": 724039,
   "before_stock_rows": 71,
@@ -52,5 +52,16 @@
       "finding": "initial2011-11-14,norecoveredlateraliaslink"
     }
   ],
-  "preservation": "Original71stock/mixedlanguagegates, NPC/soleconsumer, nativeitemspells/prices/levels/playerstate unchanged. No rankII/III edits."
+  "preservation": "Original71stock/mixedlanguagegates, NPC/soleconsumer, nativeitemspells/prices/levels/playerstate unchanged. No rankII/III edits.",
+  "deployment": {
+    "source_commit": "1ca42d25c39a7a7aa8b6384ab8c2ac3bf4c8c612",
+    "helper_sha256": "f02e110f2898ec6219df2620f6b5f456fe8b2454ea246895312f619e876c3edc",
+    "full73stock_independent_readback": "PASS",
+    "prior71_stock_preserved": true,
+    "freshness_receipt": "MATIMA2-CACHE-FRESHNESS-001",
+    "cache_status": "ALL6UNLOADED_EXPANSION19_NEXT_ORDINARY_FRESH_ARGATH724_BOOT_READY",
+    "reload_restart_repop": false,
+    "player_tables_written": false,
+    "native_acceptance": false
+  }
 }
