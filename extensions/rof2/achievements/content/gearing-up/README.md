@@ -4,7 +4,7 @@ Eight repeatable quests from Tabazin Gearflinger in Fortress Mechanotus, with al
 
 **Status:** all eight quests, 15 deliveries, eight achievement components and the parent passed one combined native completion/custody/reward check and one normal-player persistence cycle. This supersedes the disabled r1/r2 package.
 
-The persistence login exposed an existing Fortress Mechanotus admin-status restriction and arrived in Plane of Knowledge. The required upgrade now removes the known status-80 restriction for Mechanotus version 0, preserving its other admission fields. That correction is applied locally; metadata refresh is pending at this snapshot, and normal entry after correction has not been observed. Persistence success does not prove zone-entry success.
+The persistence login exposed an existing Fortress Mechanotus admin-status restriction and arrived in Plane of Knowledge. The required upgrade now removes the known status-80 restriction for Mechanotus version 0, preserving its other admission fields. That correction is applied locally, and the cached minimum status is verified as zero in world and all six zones. Normal entry after correction has not been observed. Persistence success does not prove zone-entry success.
 
 ## What is included
 

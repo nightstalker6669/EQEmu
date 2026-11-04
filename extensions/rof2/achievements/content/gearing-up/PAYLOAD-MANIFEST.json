@@ -1,9 +1,9 @@
 {
-  "revision": "r4",
+  "revision": "r5",
   "sha256": {
-    "APPLIED-STATUS.json": "c24ee0d2d33425a70f5c126ed43f8b82f956e670faf77cbd8944655aece47db2",
-    "PROVENANCE.json": "077e3db5005c71a7004e0362ba023901d005d6cc09e4dbc1149b58e6da6c9e9e",
-    "README.md": "c8562a353b5d44683b6828832a47f8b5d67d76d9c06d710c0a41a0e4aba6dd94",
+    "APPLIED-STATUS.json": "4343764b635b518aa4e255568c05650b776e27f2398166ebd3dfbc76dd51ec1f",
+    "PROVENANCE.json": "1e56d6f7d30b940499a7052e55394dbe8e7af5480db2351e992b5ebdfd85f0fd",
+    "README.md": "493351a2c3b397a6a8bebdefa8f27c3315db75a965baad1d1666de8d0a13cecc",
     "install.py": "e7e7bbed005d0a38426834108ce90d12b2bafc1ab4b1e0a2e7dec0b3e99b5f2f",
     "quests/lua_modules/achievement_native_delivery_handin.lua": "85eeb3d426a98e70dd923e9e2bf87ff344c0bf24ecc54ab6d6edc84e924f71a9",
     "quests/lua_modules/achievement_quest_gearing_up.lua": "e9c64868cbb154d24d39a5877032dfc943ad1471d1e5ff12144918c3eea1c96c",

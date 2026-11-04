@@ -202,7 +202,7 @@
     "parent_complete": true,
     "custody": "One integrated partial/excess/unrelated-item/coin path plus ordinary remaining deliveries, native returned cursor items accounted; original gear and full wallet preserved",
     "persistence": "One ordinary Admin0 logout/login cycle retained histories, component/parent state, inventory semantics, wallet, earned XP and faction",
-    "limits": "Administrative zone gate caused actual persistence arrival in Plane of Knowledge. This proves persistence, not normal Mechanotus entry. Gate corrected separately with exact-row readback; cache refresh/entry proof distinct. No replay or extra login requested. No private receipts, player identities or test scripts included."
+    "limits": "Administrative zone gate caused the single Admin0 persistence arrival in Plane of Knowledge. This proves persistence, not normal Mechanotus entry. Gate corrected separately with exact-row readback and verified metadata in world/all six zones. No extra login or native entry proof claimed. Private player receipts and test scripts excluded."
   },
   "normal_player_access": {
     "zone": "mechanotus",
@@ -211,7 +211,7 @@
     "minimum_status_before": 80,
     "minimum_status_after": 0,
     "actual_local_apply": "Exact full-preimage CAS and readback; all other zone fields unchanged",
-    "cache": "Coordinator-owned refresh pending at package preparation",
+    "cache": "Verified minstatus0 in world and all six owned zone metadata caches after coordinated zero-client restart",
     "native_entry": "Not proven after correction"
   }
 }
