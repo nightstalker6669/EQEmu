@@ -68,7 +68,15 @@ def main():
             def read(sql,args=()):
                 q.execute(sql,args);return list(q.fetchall())
             def byids(table,field,ids):
-                return read('SELECT * FROM `'+table+'` WHERE `'+field+'` IN ('+','.join(['%s']*len(ids))+')',ids)
+                values=read('SELECT * FROM `'+table+'` WHERE `'+field+'` IN ('+','.join(['%s']*len(ids))+')',ids)
+                if table=='items':
+                    # Saved full item snapshots serialize these DB datetime metadata
+                    # fields via default=str. Preserve that exact timestamp text only.
+                    for row in values:
+                        for metadata in ('updated','verified'):
+                            if isinstance(row.get(metadata),datetime):
+                                row[metadata]=str(row[metadata])
+                return values
             require(read('SELECT DATABASE() AS target')[0]['target']=='peq_housing_test','Wrong actual target')
             for table in ['merchantlist']+list(tables):
                 engine=read('SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=%s',(table,))
