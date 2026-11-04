@@ -233,3 +233,7 @@ bd6bed2729f747824b48b50ef16822b719020256c251a9b5147ccae658dbba7b  reconstruction
 c977b2c6cd1a9c54e6a7f5884f88e59eaef165296ab5fd8dc07b60d358cfb1e7  qa/temporary-337-melee-aid/content_helper.py
 5bbd89c830ee32cf4cfe2c236b91225a7412fcd6bb3aeaa1ba18d922b52ade2f  qa/temporary-337-melee-aid/source-review.json
 9ed2690c43d13dc408cb73b49859f911d1608ce6f9b0d62b7089416c04c904fb  qa/temporary-337-melee-aid/manifest.json
+e79479ee6161f83822508e33d40a2f7b726dccaa143e39c96d1a04c9f0d5bf62  qa/temporary-337-melee-aid/invocation-wrapper/quests/xorbb/player.lua
+b4686f0de738476875ac1138c2c47c1081ee82e377f8dc7327e74ef4dc550bb8  qa/temporary-337-melee-aid/invocation-wrapper/CONTRACT.md
+b66532911f070c3177cff35fb92c3d1c1a2090f8b66123c8a0a46f482535d3c9  qa/temporary-337-melee-aid/invocation-wrapper/preimage.json
+099881f2dc5341c9e27bee507dccba9dea24616d01c123f044b2ec4bc38c6bef  qa/temporary-337-melee-aid/invocation-wrapper/manifest.json
