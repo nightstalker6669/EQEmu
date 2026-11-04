@@ -50,15 +50,23 @@
   ],
   "validation": {
     "python_syntax": "ASTparsed",
-    "offline_plan": "Runseparately/noDBconnection",
+    "offline_plan": "PASS/noDBconnection",
     "native_purchase": false,
     "new_test_suite": false
   },
-  "applied": false,
+  "applied": true,
   "remaining": [
     "Original non-spell costs/progression",
     "Unqualified exact Rilfedprice and per-item historical gates",
     "Natural original DreamMote quest acquisition",
     "Nativepurchase/currencydebit acceptance"
-  ]
+  ],
+  "applied_status": {
+    "date": "2026-11-04",
+    "database": "COMMITTED356writes; fullpostimages and independentNPC/355stockgroupreadbackpassed",
+    "availability": "197cost30spellrows;194standing0andoneeach100/500/750;158nonspellrowsretainedandfiltered, pendingflagundefined",
+    "runtime_freshness": "BuildROTH-CACHE-FRESHNESS-001 confirmsFeerrott700unloaded andall6liveprocesscontentflagcacheslackpendingflag; exactdeployedfilteradmits197andexcludes158. Nextordinaryfreshbootready, noextra reload/restart.",
+    "native_purchase_or_currency_debit_observed": false,
+    "faction_base_race_mods_other_consumers_player_state": "Unchanged"
+  }
 }
