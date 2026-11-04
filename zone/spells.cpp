@@ -224,7 +224,7 @@ bool AllowsBindingRestriction846(
 		return false;
 	}
 	for (const auto *hate : target->GetHateList()) {
-		if (!hate || !BindingParticipant(client, hate->ent)) { return false; }
+		if (!hate || !BindingParticipant(client, hate->entity_on_hatelist)) { return false; }
 	}
 	return true;
 }
