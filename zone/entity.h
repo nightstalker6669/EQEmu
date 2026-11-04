@@ -28,6 +28,8 @@
 #include "zone/zonedump.h"
 
 #include <queue>
+#include <string>
+#include <utility>
 #include <unordered_map>
 
 class Encounter;
@@ -518,6 +520,10 @@ public:
 	uint16	CreateGroundObject(uint32 itemid, const glm::vec4& position, uint32 decay_time = 300000);
 	uint16	CreateGroundObjectFromModel(const char *model, const glm::vec4& position, uint8 type = 0x00, uint32 decay_time = 0);
 	uint16	CreateDoor(const char *model, const glm::vec4& position, uint8 type = 0, uint16 size = 100);
+	std::pair<uint16, std::string> CreateTransientDoor(
+		const std::string &owner, const char *model, const glm::vec4 &position, uint8 type, uint16 size
+	);
+	bool RemoveTransientDoor(const std::string &owner, uint16 entity_id, const std::string &token);
 	void	ZoneWho(Client *c, Who_All_Struct* Who);
 	void	UnMarkNPC(uint16 ID);
 
