@@ -4042,7 +4042,8 @@ struct GroundSpawn {
 };
 
 struct GroundSpawns {
-	struct GroundSpawn spawn[50]; //Assigned max number to allow
+	static constexpr uint32 kMaxSpawns = 64;
+	struct GroundSpawn spawn[kMaxSpawns];
 };
 
 //struct PetitionBug_Struct{

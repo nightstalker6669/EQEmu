@@ -884,10 +884,11 @@ GroundSpawns* ZoneDatabase::LoadGroundSpawns(
 	const auto& l = GroundSpawnsRepository::GetWhere(
 		*this,
 		fmt::format(
-			"`zoneid` = {} AND (`version` = {} OR `version` = -1) {} LIMIT 50",
+			"`zoneid` = {} AND (`version` = {} OR `version` = -1) {} LIMIT {}",
 			zone_id,
 			instance_version,
-			ContentFilterCriteria::apply()
+			ContentFilterCriteria::apply(),
+			GroundSpawns::kMaxSpawns
 		)
 	);
 

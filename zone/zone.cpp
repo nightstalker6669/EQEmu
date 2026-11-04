@@ -346,7 +346,7 @@ bool Zone::LoadGroundSpawns() {
 
 	uint32 added = 0;
 
-	for (uint16 slot_id = 0; slot_id < 50; slot_id++) {
+	for (uint16 slot_id = 0; slot_id < GroundSpawns::kMaxSpawns; slot_id++) {
 		if (EQ::ValueWithin(g.spawn[slot_id].item_id, 1, (SAYLINK_ITEM_ID - 1))) {
 			auto inst = database.CreateItem(g.spawn[slot_id].item_id);
 
