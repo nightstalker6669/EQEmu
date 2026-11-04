@@ -15,3 +15,9 @@ The helper requires peq_housing_test, transactional items storage, the reviewed 
 These native IDs are absent definitions, so insertion resolves their original identities without replacing another item or altering stored copies. There is no blanket serialized-reference absence requirement. This supersedes the earlier proposal's generic Housing clearance and separate default-acceptance holds.
 
 A prepared receipt with no completed receipt requires inspection of the actual two rows before further action; never retry blindly. Retain both receipts. Do not automatically delete the new definitions after they can be acquired: rollback would require confirming exact inserted rows and absence of new item copies/references. Item-cache refresh is a separately coordinated runtime action following successful commit. Database insertion and cache availability do not establish native exchange acceptance or resolve historical reward grouping.
+
+## Applied status, November 4, 2026
+
+Both native definitions are committed in peq_housing_test. Exact full-row readback and an independent spell/Paladin-level join passed. Build confirmed both definitions in actual world and all six zone item maps after an item-only refresh. No spell-cache rebuild, task/reward change, player/inventory/lease write or native exchange claim is included. The existing five Paladin reward choices remain unchanged pending original grouping evidence.
+
+The first transaction rolled back before commit because Python datetime objects were compared directly with JSON strings. Target absence was confirmed; the corrected helper compares the established canonical row digests, and its second transaction committed both rows. Prepared/completed receipts and backup templates remain private. The corrected helper is published; do not use the earlier direct-equality revision.

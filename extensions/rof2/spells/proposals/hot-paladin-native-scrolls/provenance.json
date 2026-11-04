@@ -1,5 +1,5 @@
 {
-  "status": "IMPLEMENTED two-item definition restoration; original reward grouping unresolved",
+  "status": "APPLIED two native definitions; item cache confirmed; original reward grouping unresolved",
   "apply_allowed": true,
   "items": [
     {
@@ -5617,8 +5617,22 @@
   ],
   "schema_engine": "InnoDB",
   "grouping": "UNRESOLVED: no task920129 reward changes; norankIIpairingcopy",
-  "no_live_changes": true,
+  "no_live_changes": false,
   "definition_insert_policy": "Native IDs absent: insert original definitions without replacing rows or rewriting stored references. Exact target, sibling, spell and schema checks plus transaction, durable backup and readback. No blanket serialized absence requirement.",
   "inherited_field_policy": "149/150 sibling-derived ordinary defaults accepted as labelled estimates; not exact recovered historical fields.",
-  "execution_helper": "insert_scrolls.py; separate coordinated item cache refresh after successful apply"
+  "execution_helper": "insert_scrolls.py; separate coordinated item cache refresh after successful apply",
+  "applied": {
+    "date": "2026-11-04",
+    "database": "peq_housing_test",
+    "inserted_item_ids": [
+      125060,
+      125066
+    ],
+    "item_definition_readback": "Exact full canonical row hashes and independent item/spell/level join passed",
+    "item_cache": "Build PAL90-BATCH-MAINTENANCE-001 confirms actual world and six zone maps hold125060->25371 and125066->25377",
+    "reward_or_task_changes": false,
+    "native_exchange_acceptance": false,
+    "player_inventory_or_lease_writes": false,
+    "source_helper": "Canonical default=str row comparison; corrected helper verified through GitHub connector"
+  }
 }
