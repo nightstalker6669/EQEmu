@@ -46,16 +46,9 @@ EQ::Net::ConsoleServerConnection::ConsoleServerConnection(ConsoleServer *parent,
 
 	SendLine(fmt::format("Establishing connection from: {0}:{1}", addr, m_connection->RemotePort()));
 
-	if (addr.find("127.0.0.1") != std::string::npos || addr.find("::0") != std::string::npos) {
-		SendLine("Connection established from localhost, assuming admin");
-		m_status = ConsoleStatusLoggedIn;
-		m_admin = AccountStatus::Max;
-		SendPrompt();
-	}
-	else {
-		m_status = ConsoleStatusWaitingForLogin;
-		Send("Username: ");
-	}
+	// Local management connections use the same login and command permissions.
+	m_status = ConsoleStatusWaitingForLogin;
+	Send("Username: ");
 }
 
 EQ::Net::ConsoleServerConnection::~ConsoleServerConnection()
