@@ -6,6 +6,16 @@ local books = {
     [76276] = { ability = 1800, level = 95 },
     [76277] = { ability = 1801, level = 96 },
     [81136] = { ability = 754, level = 80 },
+    [37589] = { ability = 3208, level = 51 },
+    [37598] = { ability = 3203, level = 52 },
+    [37590] = { ability = 3204, level = 53 },
+    [37596] = { ability = 3205, level = 54 },
+    [37599] = { ability = 3206, level = 60 },
+    [37600] = { ability = 3207, level = 61 },
+    [39749] = { ability = 3209, level = 65 },
+    [39750] = { ability = 3210, level = 66 },
+    [45974] = { ability = 3218, level = 70 },
+    [45975] = { ability = 3219, level = 71 },
     [81137] = { ability = 755, level = 81 }
 }
 
