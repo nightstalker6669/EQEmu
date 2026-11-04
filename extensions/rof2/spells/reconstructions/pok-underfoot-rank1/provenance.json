@@ -1,7 +1,7 @@
 {
-  "status": "SOURCE_ONLY_UNAPPLIED",
+  "status": "DATABASE_APPLIED_INDEPENDENT_FULL_READBACK_PASS_CACHE_PENDING",
   "native_validation": false,
-  "database_writes": 0,
+  "database_writes": 102,
   "new_stock_rows": 43,
   "existing_original_stock_rows": 9,
   "existing_tome_stock_rows": 2,
@@ -36,5 +36,23 @@
         "new_actual_name": "Zhao_V`karin"
       }
     ]
+  },
+  "deployment": {
+    "source_commit": "3b223c05f2447f7278411346e006124fab0bbf9a",
+    "helper_sha256": "d5b8dc40d5061fccee4611f7752b9d9723104c6d8244ce5eb45c4a019ed3796b",
+    "components": {
+      "existing9": "COMMITTED_AND_INDEPENDENT_READBACK_PASS",
+      "tomes2": "COMMITTED_AND_INDEPENDENT_READBACK_PASS",
+      "new91": "COMMITTED_AND_INDEPENDENT_READBACK_PASS"
+    },
+    "existing_stock_preserved": {
+      "original_three": 122,
+      "Ulin": 8,
+      "Zhao": 8
+    },
+    "player_tables_written": false,
+    "cache_freshness": "PENDING_BUILD_VIA_JARVIS",
+    "native_acceptance": false,
+    "prior_attempts": "001and002stoppedbeforepreparedorINSERT,rollback/noDBwrites"
   }
 }
