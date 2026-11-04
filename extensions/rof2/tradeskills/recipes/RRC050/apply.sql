@@ -1,4 +1,5 @@
 -- RRC050: exactly16existing entry item IDs only; strict pre/postimages, no new recipe IDs.
+DELIMITER //
 BEGIN NOT ATOMIC
  DECLARE own_transaction BOOLEAN DEFAULT FALSE;
  DECLARE recipes_before BIGINT DEFAULT 0;
@@ -339,4 +340,5 @@ BEGIN NOT ATOMIC
  COMMIT;
  SET own_transaction=FALSE;
  SELECT 'RRC050',changed_rows,recipes_before,(SELECT COUNT(*) FROM tradeskill_recipe),entries_before,(SELECT COUNT(*) FROM tradeskill_recipe_entries),@@in_transaction;
-END;
+END//
+DELIMITER ;

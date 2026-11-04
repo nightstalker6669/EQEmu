@@ -6,6 +6,8 @@ The16recipe definitions and142fullentry rows are guarded before/after, including
 
 Four existing walnut trivials255 differ from current primary values88/95/88/102. They remain unchanged and explicitly held for separate historical/numeric review. Current primary counterparts support intended component roles; they are not immutable May2013 or native evidence. This correction fixes the concrete boot-component anomaly without claiming all legacy formula fields are verified.
 
+Original attempt001stopped at CLI parsing because its delimiter wrapper was missing, before transaction/update. Exact saved16recipe/142entry preimages remained unchanged. This revision supplies the CLI wrapper for apply and rollback; it requires a separately authorized correction, preserving the original failure receipt.
+
 Source pages:
 https://www.eqtraders.com/items/show_item.php?item=16405
 https://www.eqtraders.com/items/show_item.php?item=16412
