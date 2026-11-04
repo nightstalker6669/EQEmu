@@ -1,0 +1,11 @@
+# Research audit checkpoint through RRC073
+
+The seven maintained source categories contain186 formula rows. After the recorded changes,161 match reviewed source roles, specified numeric values and physical-kit lists; three further existing ink formulas retain held trivial35 versus source38 differences. Fifteen unrepresented solution formulas need period qualification, two quest formulas have uncertain numeric/failure facts, and five trophy formulas require equipped-item behavior. This is a partial audit, not a historical recipe denominator.
+
+Sixty-five thickener, quill, DoDH and PoR mana formulas already matched. All55 inks had matching ingredients and success/failure outputs; RRC071 supplied eight missing kit links for two inks. RRC069 supplied sixteen links for four existing Crescent Research recipes. RRC070 added four missing bone/repaired-scrap formulas. RRC072 added ten Charta/Tablet solutions, and RRC073 supplied four missing vial-return rows on two old solutions.
+
+Since RRC068, these changes add14 recipes and189 entries:161 entries for new recipes,24 alternative-kit links and4 old-recipe return rows. The RRC073 readback has25,450 recipes and191,914 entries. Every change used exact published source, one guarded transaction and affected postimage readback. RRC072 also preserved27 common-return producers and370 old entries; RRC073 preserved those ten newly added recipe definitions/137 entries. No native or player-item action occurred.
+
+The exact source kit lists matter: Tablet solutions omit Prayer Writing Kit, while Charta solutions list all five physical Research kits. Furniture links remain unqualified. Existing local water/acid salvage settings and learning flags are preserved. Unspecified numeric values on no-fail formulas remain existing values, not newly source-verified numbers. Maintained sources and dated discussions support qualified period contexts; exact introduction of every field and native execution are not established. The current FAQ's universal cross-class finished-spell behavior is explicitly datedJune2016 and is not projected back toMay2013.
+
+The attached report identifies source URLs, held names and applied batches. RRC073's application receipt is included. Remaining categories and prior recorded holds remain open.

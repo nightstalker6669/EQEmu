@@ -1,0 +1,270 @@
+{
+  "status": "PARTIAL_RESEARCH_SOURCE_AUDIT_NOT_HISTORICAL_COMPLETENESS",
+  "updated_utc": "2026-11-04T15:05:59.262861+00:00",
+  "maintained_category_formula_rows": 186,
+  "source_role_numeric_reviewed_physical_kit_matches_after_resolution": 161,
+  "represented_with_numeric_difference_holds": 3,
+  "unrepresented_period_holds": 15,
+  "uncertain_trivial_holds": 2,
+  "equipped_trophy_holds": 5,
+  "categories": [
+    {
+      "name": "Thickeners",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=267&rsa=Spell+Research&sub=thickener",
+      "source_formulas": 16,
+      "existing_exact_formulas": 16,
+      "full_entries_reviewed": 137,
+      "new_recipes": 0,
+      "recipe_ids": [
+        11258,
+        11259,
+        11260,
+        11261,
+        11262,
+        11263,
+        11264,
+        11265,
+        11266,
+        11267,
+        11268,
+        11288,
+        11289,
+        11310,
+        11311,
+        11312
+      ],
+      "qualification": "Current maintained formulas match existing manufacturing quantities/trivials and reviewed explicit native containers. Source furniture links were not assumed preMay2013 and were not added. Salvage convention is local encoded behavior, not an explicit primary-source assertion."
+    },
+    {
+      "name": "Quills",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=427&rsa=Spell+Research&sub=quill",
+      "source_formulas": 20,
+      "existing_exact_formulas": 20,
+      "full_entries_reviewed": 176,
+      "new_recipes": 0,
+      "recipe_ids": [
+        11290,
+        11291,
+        11292,
+        11293,
+        11294,
+        11295,
+        11296,
+        11297,
+        11298,
+        11299,
+        11300,
+        11301,
+        11302,
+        11303,
+        11304,
+        11305,
+        11306,
+        11307,
+        11308,
+        11309
+      ],
+      "qualification": "Current maintained formulas match existing manufacturing quantities/trivials and reviewed explicit native containers. Source furniture links were not assumed preMay2013 and were not added. Salvage convention is local encoded behavior, not an explicit primary-source assertion."
+    },
+    {
+      "name": "DoDH mechanoinstructions and manual",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=349&rsa=Spell+Research&sub=dodh",
+      "source_formulas": 24,
+      "existing_exact_formulas": 24,
+      "full_entries_reviewed": 145,
+      "new_recipes": 0,
+      "recipe_ids": [
+        12749,
+        12750,
+        12751,
+        12752,
+        12753,
+        12754,
+        12755,
+        12756,
+        12757,
+        12758,
+        12759,
+        12760,
+        12761,
+        12762,
+        12763,
+        12764,
+        12765,
+        12766,
+        12767,
+        12768,
+        12769,
+        12770,
+        12771,
+        3091808
+      ],
+      "qualification": "Current maintained formulas match existing manufacturing quantities/trivials and reviewed explicit native containers. Source numeric nofail omission preserves existing trivial0. All existing must_learn flags including23 flag16 values remain unchanged. Salvage convention is local encoded behavior, not an explicit primary-source assertion."
+    },
+    {
+      "name": "PoR mana vials",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=374&rsa=Spell+Research&sub=por",
+      "source_formulas": 5,
+      "existing_exact_formulas": 5,
+      "full_entries_reviewed": 50,
+      "new_recipes": 0,
+      "recipe_ids": [
+        10958,
+        10959,
+        10960,
+        10961,
+        10962
+      ],
+      "qualification": "Current maintained formulas match existing manufacturing quantities/trivials and reviewed explicit native containers. Source furniture links were not assumed preMay2013 and were not added. Salvage convention is local encoded behavior, not an explicit primary-source assertion."
+    },
+    {
+      "name": "Inks",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=345&rsa=Spell+Research&sub=ink",
+      "source_formulas": 55,
+      "existing_ingredient_success_failure_matches": 55,
+      "source_role_numeric_physical_kit_matches_after071": 52,
+      "kit_extension_batch": "RRC071",
+      "held_numeric_differences": [
+        {
+          "recipe_id": 11277,
+          "name": "Ink of Prexus",
+          "existing_trivial": 35,
+          "source_trivial": 38
+        },
+        {
+          "recipe_id": 11280,
+          "name": "Ink of the Boar",
+          "existing_trivial": 35,
+          "source_trivial": 38
+        },
+        {
+          "recipe_id": 11286,
+          "name": "Ink of Tunare",
+          "existing_trivial": 35,
+          "source_trivial": 38
+        }
+      ],
+      "local_water_salvage0_preserved": true
+    },
+    {
+      "name": "Quest Research",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=389&rsa=Spell+Research&sub=quest",
+      "source_formulas": 10,
+      "represented_after069_070": 8,
+      "existing_four_recipes": [
+        12745,
+        12746,
+        12747,
+        12748
+      ],
+      "kit_extension_batch": "RRC069",
+      "new_formula_batch": "RRC070",
+      "new_recipe_ids": [
+        3093614,
+        3093615,
+        3093616,
+        3093617
+      ],
+      "new_formulas": [
+        "Runed Lepertoloth Bone Segment",
+        "Tattered Mechanoinstruction (Configuration)",
+        "Tattered Mechanoinstruction (Mechanotablet)",
+        "Tattered Mechanoinstruction (Advisory Book)"
+      ],
+      "held": [
+        {
+          "name": "Engraved Rune",
+          "reason": "Source <=190 rather than exact trivial and class-specific container context."
+        },
+        {
+          "name": "Spell: Electrical Charge",
+          "reason": "Unknown numeric trivial/failure behavior; no default assigned."
+        }
+      ],
+      "NPC_task_native_acceptance": false
+    },
+    {
+      "name": "Scroll/paper/tablet solutions",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=395&rsa=Spell+Research&sub=suspension",
+      "source_formulas": 51,
+      "existing_matches_before_correction": 24,
+      "existing_missing_return_rows_fixed_in": "RRC073",
+      "corrected_existing_recipes": [
+        12233,
+        12239
+      ],
+      "new_formulas_added_in": "RRC072",
+      "new_recipe_ids": [
+        3093618,
+        3093627
+      ],
+      "source_role_numeric_physical_kit_matches_after072_073": 36,
+      "held_unrepresented_formulas": [
+        "Fine Numen Plaque Solution",
+        "Fine Orphic Card Solution",
+        "Fine Runic Numen Plaque Solution",
+        "Fine Runic Orphic Card Solution",
+        "Fine Runic Sortilege Sheet Solution",
+        "Fine Sortilege Sheet Solution",
+        "Numen Plaque Solution",
+        "Orphic Card Solution",
+        "Rough Numen Plaque Solution",
+        "Rough Orphic Card Solution",
+        "Rough Sortilege Sheet Solution",
+        "Runic Numen Plaque Solution",
+        "Runic Orphic Card Solution",
+        "Runic Sortilege Sheet Solution",
+        "Sortilege Sheet Solution"
+      ],
+      "qualification": "Dated2010\u201311 Charta book/success discussion and2012 Tablet-use guide supply qualified pre-cutoff context. Other15 Numen/Orphic/Sortilege gaps need manufacturing-route period qualification; level ranges and current vendor presence alone do not establish that. Exact May2013 return history remains unconfirmed."
+    },
+    {
+      "name": "Other Research trophies",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=388&rsa=Spell+Research&sub=other",
+      "source_formulas": 5,
+      "equipped_trophy_holds": [
+        "Apprentice Researcher Trophy",
+        "Expert Researcher Trophy",
+        "Freshman Researcher Trophy",
+        "Journeyman Researcher Trophy",
+        "Master Researcher Trophy"
+      ],
+      "reason": "Source requires equipped evolving trophy; ordinary inventory-only recipe insertion does not model this prerequisite."
+    }
+  ],
+  "application_since_RRC068": {
+    "new_recipes": 14,
+    "new_entries_for_new_recipes": 161,
+    "alternative_kit_links_added": 24,
+    "return_rows_added_to_existing_recipes": 4,
+    "entries_total_added": 189
+  },
+  "database_counts_at_RRC073": {
+    "recipes": 25450,
+    "entries": 191914
+  },
+  "cumulative_installed_additions": {
+    "new_recipe_batches": 64,
+    "container_extension_batches": 5,
+    "return_extension_batches": 1,
+    "recipes": 2627,
+    "entries": 14295
+  },
+  "existing_updated_rows": {
+    "ingredient_item_ids": 16,
+    "failure_salvage_pairs": 8
+  },
+  "mechanics_qualification": {
+    "source_url": "https://www.eqtraders.com/articles/article_page.php?article=g342",
+    "cross_class": "Current FAQ explicitly dates any-class crafting of any finished spell/song/tome toJune2016; that behavior is not backdated toMay2013. Commodity-kit evidence remains separately qualified.",
+    "learning": "Existing0/2/16 learning flags preserved; new solution flag2 follows recorded local family encoding, not a recovered historical scribe flag.",
+    "native": "No native combine, NPC/task progression, or client UI acceptance claimed."
+  },
+  "limits": [
+    "Maintained formulas and mutable historical discussions are not immutable May2013 exports.",
+    "Source category counts are not the historical recipe denominator or proof that unreviewed categories are complete.",
+    "No item/NPC/spell/player/rule/runtime mutation from this documentation checkpoint."
+  ],
+  "native_actions": 0,
+  "player_item_writes": false
+}
