@@ -1,0 +1,153 @@
+{
+  "status": "Offline only. Not native-verified.",
+  "settings": {
+    "enabled": true,
+    "timer": "achievement_mesa_friends_controller",
+    "interval": 1,
+    "wave_delay_seconds": 45,
+    "timeout_seconds": 1200,
+    "camp_pause_seconds": 60,
+    "spawn_z_offset": 2,
+    "orders_chance_percent": 25,
+    "tree_radius": 22,
+    "vertical_radius": 35,
+    "defender_reach": 85,
+    "trigger_radius": 45,
+    "actors": {
+      "glasson": 397905,
+      "treekiller": 397906,
+      "raider": 397907,
+      "caster": 397908,
+      "captain": 397909
+    },
+    "defenders": [
+      397019,
+      397023,
+      397027,
+      397032,
+      397042,
+      397062,
+      397070,
+      397080,
+      397115
+    ],
+    "scenes": {
+      "3040466": {
+        "kind": "orders",
+        "shared": true,
+        "trigger": {
+          "x": -1106.2356,
+          "y": -1310.8745,
+          "z": 18.985739424894817
+        },
+        "spawn": {
+          "x": -1106.2356,
+          "y": -1310.8745,
+          "z": 18.985739424894817
+        },
+        "waves": [
+          [
+            "glasson",
+            "treekiller",
+            "treekiller",
+            "treekiller",
+            "treekiller",
+            "treekiller"
+          ]
+        ]
+      },
+      "3040467": {
+        "kind": "tree",
+        "shared": false,
+        "trigger": {
+          "x": -401.5999755859375,
+          "y": -839.199951171875,
+          "z": 149.21566772460938
+        },
+        "spawn": {
+          "x": -470,
+          "y": -960,
+          "z": 27.646900221112713
+        },
+        "destination": {
+          "x": -69,
+          "y": -678,
+          "z": 181.74985525662078
+        },
+        "waves": [
+          [
+            "treekiller",
+            "treekiller",
+            "treekiller"
+          ],
+          [
+            "treekiller",
+            "treekiller",
+            "treekiller"
+          ],
+          [
+            "treekiller",
+            "treekiller",
+            "treekiller"
+          ]
+        ]
+      },
+      "3040468": {
+        "kind": "raiders",
+        "shared": true,
+        "trigger": {
+          "x": -949,
+          "y": 1575,
+          "z": 108.34223424376324
+        },
+        "spawn": {
+          "x": -1220,
+          "y": 1650,
+          "z": 114.63782460299424
+        },
+        "destination": {
+          "x": 1170,
+          "y": -840,
+          "z": 86.3591364870566
+        },
+        "waves": [
+          [
+            "raider",
+            "raider"
+          ],
+          [
+            "raider",
+            "raider",
+            "caster"
+          ],
+          [
+            "raider",
+            "raider",
+            "caster"
+          ],
+          [
+            "raider",
+            "raider",
+            "captain"
+          ]
+        ]
+      }
+    }
+  },
+  "historical": [
+    "Glasson plus five treekillers",
+    "Three waves of three treekillers at the tree",
+    "Raid captain kill alone required",
+    "NPC defenders can win tree defense",
+    "Glasson retry requires new shared task identity"
+  ],
+  "defaults": [
+    "45second wave gaps,20minute scene timeout,60second camp pause",
+    "25percent independent Orders chance on Glasson and his five guards; original chance unknown, never guaranteed",
+    "Trigger45units,tree breach22units,defender reach85units,vertical35units",
+    "One concurrent scene per task in open zone, keyed by opaque shared task identity or solo character",
+    "Raider2+3+3+3 waves use2007report; contradictory period3+3+3 retained in historical research",
+    "Navigation surface projections define configurable placement; whole routes unverified",
+    "Glasson EntrancingSong8639 uses native mezAI2048 with20second recast; NPCeffect from currentmetadata, recast reconstructed"
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "utc": "2026-11-03T23:13:08.564998+00:00",
+  "utc": "2026-11-04T00:29:12.953153+00:00",
   "status": "SOURCE_READY_FOR_FULL_INSTALL_NOT_NATIVE_ACCEPTED",
   "repository": "nightstalker6669/EQEmu",
   "branch": "rof2-achievements",
@@ -11,13 +11,13 @@
     "generic_centaur_types": 19,
     "original_conditional_spawn_points": 40
   },
-  "source_profile": "Full installation required; data module enabled by default;070 enables staged records. All four forwardSQL files mandatory.",
-  "runtime_applied": false,
+  "source_profile": "All listed forward SQL migrations mandatory; source module enabled by default.",
+  "runtime_applied": true,
   "native_accepted": false,
   "published": false,
   "evidence_reused": "Earlier taskSQL20assertions/reactionSQL34assertions passed; databases absent. Source behavior checks passed before final data/default additions. Changed Lua/Python syntax compiled; no new test matrix or rehearsal.",
   "installer": "Reuses established quest overlay tool; affected-row/file backups, explicit forward manifest, preserves composed callbacks. No service control. Native Windows runtime not exercised.",
-  "next": "Coordinate runtime/input slot, install all required components with affected-row guards/backup/readback, run one related four-quest native batch.",
+  "next": "Finish the related native quest batch; this checkpoint does not claim full in-game acceptance.",
   "historical_limits": [
     "Aura200 uses native spell-range reconstruction, not original environmental extent",
     "PEQ named55HP22200/min61 plus observed-hit proxy377 are labelled defaults, not recovered rawLive stats",
@@ -25,5 +25,8 @@
     "Personal faction standing and unknown quest faction awards omitted",
     "No invented original admission minimum; unrestricted server policy",
     "Parent achievement reward remains independent"
-  ]
+  ],
+  "runtime_state": "Installed locally; fourquest native batch in progress. Firstquest offer/acceptance and corrected level47snake progress observed. Completefourquest acceptance and persistence remain pending.",
+  "published_base_commit": "3a5e10ebfe08ffd1286a60024f549b7197d7397d",
+  "pending_source_delta": "Required090journal labels and110allHighlandSnakevariants plus corresponding rollback/provenance."
 }

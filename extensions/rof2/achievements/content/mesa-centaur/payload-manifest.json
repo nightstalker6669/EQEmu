@@ -3,9 +3,13 @@
     "sql/010-centaur-chain.sql",
     "sql/030-corruption-internal-factions.sql",
     "sql/050-shade-profile.sql",
-    "sql/070-enable-centaur-chain.sql"
+    "sql/070-enable-centaur-chain.sql",
+    "sql/090-journal-labels.sql",
+    "sql/110-highland-snake-targets.sql"
   ],
   "rollback_sql": [
+    "sql/120-rollback-highland-snake-targets.sql",
+    "sql/100-rollback-journal-labels.sql",
     "sql/080-disable-centaur-chain.sql",
     "sql/060-rollback-shade-profile.sql",
     "sql/040-rollback-internal-factions.sql",
@@ -14,7 +18,7 @@
   "files": [
     {
       "path": "README.md",
-      "sha256": "55a380339cc84f8639cb8b59c43193e7762efb644481439e72ef30e9334aaed6"
+      "sha256": "bf2650c4f4e38a0a2566c0060b508319d2a69391a016a591cad5f53767789b18"
     },
     {
       "path": "apply_quests.py",
@@ -35,6 +39,14 @@
     {
       "path": "provenance/baseline-identities.json",
       "sha256": "aae97f3ee6d41830ad5f70dd1701a1319c5b29088187e4e847c0ca04fdc4119e"
+    },
+    {
+      "path": "provenance/highland-snake-targets.json",
+      "sha256": "dce86c1883da1bc9b2fd621772930ea786bd3db38bbbe3fdb1ec3e8047577b59"
+    },
+    {
+      "path": "provenance/journal-labels.json",
+      "sha256": "fb32ea4780fce6e826584d0db6c516652a629703d54119ae4b024bd98ce74061"
     },
     {
       "path": "provenance/research.json",
@@ -117,8 +129,24 @@
       "sha256": "e597bfba8de64b50427d179dcd80a1254d693b513a648db6996bcf1bf0a9d965"
     },
     {
+      "path": "sql/090-journal-labels.sql",
+      "sha256": "08b8c10027f30b9bd4302773a4e723a1e00b73807a8f16f3a8d57653f1d7285a"
+    },
+    {
+      "path": "sql/100-rollback-journal-labels.sql",
+      "sha256": "417081bb903fde528a5a34dc8906edddeb90ea61723fd9d772d852b03e9c9805"
+    },
+    {
+      "path": "sql/110-highland-snake-targets.sql",
+      "sha256": "d5cc0f85d99878c46186f4303eebfa49f9396b0abedbc5849e69987e9c2d9ee6"
+    },
+    {
+      "path": "sql/120-rollback-highland-snake-targets.sql",
+      "sha256": "ae6a44d5ac1b05889fcf74c1881d216c70e6b707af5760d12138f7572f8c5158"
+    },
+    {
       "path": "status.json",
-      "sha256": "e496216f2d33a6cfc190ca88cd9366a9ada53568517c7c9e30287d332dc5b5c6"
+      "sha256": "b4258d20265652734f12e3696b188c70e5da7928604d933250b629757b286aac"
     }
   ]
 }

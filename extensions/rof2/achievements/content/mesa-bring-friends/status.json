@@ -1,0 +1,21 @@
+{
+  "utc": "2026-11-04T00:40:30.334165+00:00",
+  "status": "SOURCE_CANDIDATE_NOT_INSTALLED_NOT_NATIVE_ACCEPTED",
+  "branch": "rof2-achievements",
+  "scope": "Bring Friends fourquest chain; three original Hanook tasks plus Peretaenu raid",
+  "authored": {
+    "tasks": 4,
+    "activities": 15,
+    "achievement_links": 4,
+    "new_npc_types": 5,
+    "scripted_encounters": 3
+  },
+  "defaults": "See provenance. Configurable combat/timers/drop-chance/trigger geometry are labelled reconstructions, not original recovered values. XP1000 approvedPEQdefault.",
+  "runtime_changed": false,
+  "native_accepted": false,
+  "dependencies": [
+    "Existing Roost quest module",
+    "Existing Mesa corruption controller module"
+  ],
+  "next": "One source check, then coordinate installation after current centaur native batch; one related fourquest native run."
+}

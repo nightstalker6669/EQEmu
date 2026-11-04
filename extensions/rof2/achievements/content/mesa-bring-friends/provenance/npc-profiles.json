@@ -1,0 +1,62 @@
+{
+  "profiles": [
+    [
+      397905,
+      "Glasson",
+      45,
+      529,
+      8,
+      10000,
+      35,
+      180,
+      0
+    ],
+    [
+      397906,
+      "a_Tuffein_treekiller",
+      44,
+      529,
+      1,
+      8000,
+      35,
+      150,
+      0
+    ],
+    [
+      397907,
+      "a_drakkin_raider",
+      57,
+      522,
+      1,
+      15000,
+      80,
+      300,
+      0
+    ],
+    [
+      397908,
+      "a_drakkin_raider",
+      57,
+      522,
+      12,
+      12000,
+      60,
+      240,
+      2
+    ],
+    [
+      397909,
+      "a_raider_captain",
+      60,
+      522,
+      1,
+      22000,
+      100,
+      500,
+      0
+    ]
+  ],
+  "provenance": "Configurable emulator combat defaults, not recovered original Live HP/AC/damage/casting rates. Level44treekillers supported by quest walkthrough; Glasson45 from currentNPCmetadata; raider57/captain60 from later report. Captain max500 proxy for2007 observed hit, not recovered raw field.",
+  "caster_spells": "Existing PEQ default Wizard list2; not original raider spell list.",
+  "hostility": "Synthetic local group3040466 primary-10; no player standings written. Native hate/invisibility rules retained; original defenders join only scene-tagged tree attackers."
+}

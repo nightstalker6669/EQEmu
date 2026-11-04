@@ -72,6 +72,10 @@ The achievement’s parent reward is separate from the final task item choice an
 
 ## Recovery and evidence
 
-Required forward SQL is **010 → 030 → 050 → 070**. Exact reverse operations are **080 → 060 → 040 → 020**; use only the stages appropriate to the completed installation, with game services stopped. Player achievement progress, task history, reward ledgers, inventory and housing are not deleted by these scripts.
+Required forward SQL is **010 → 030 → 050 → 070 → 090**. Exact reverse operations are **100 → 080 → 060 → 040 → 020**; use only the stages appropriate to the completed installation, with game services stopped. Player achievement progress, task history, reward ledgers, inventory and housing are not deleted by these scripts.
 
 Earlier task and reaction-group SQL rehearsals passed; the initial task rollback FLOAT comparison failure was retained and corrected. Later target/profile/default additions reuse that mechanism and have not been separately rehearsed. Source checks are not native gameplay acceptance. Tests, raw captures, private player data and client assets are excluded from this package.
+
+### Required corrections after the initial installation
+
+Run `sql/090-journal-labels.sql` and then `sql/110-highland-snake-targets.sql` after the initial four migrations. These supply readable kill objectives and allow all three original Highland Snake variants to count. They preserve earned task progress. Roll back `120`, then `100`, before the original rollback sequence. After a running-server content update, reload tasks locally in Mesa so its task cache uses the corrected targets.

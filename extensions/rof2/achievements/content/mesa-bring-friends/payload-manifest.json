@@ -1,0 +1,132 @@
+{
+  "install_sql": [
+    "sql/010-bring-friends.sql",
+    "sql/030-enable-bring-friends.sql"
+  ],
+  "rollback_sql": [
+    "sql/040-disable-bring-friends.sql",
+    "sql/020-rollback-staged.sql"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "17c42bf2eb6fedf82b2ed68c89a42f488cb30687a46942ab578f48ff49bdc086"
+    },
+    {
+      "path": "apply_quests.py",
+      "sha256": "33f3bbca853843d1c230f687295e9e9cf545363e6c99e9a3483af23eebb61612"
+    },
+    {
+      "path": "hooks/global-npc.lua",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "hooks/global-player.lua",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "install.py",
+      "sha256": "bd31596f69fe692dfc22b92f23750888aff1b464f84a8ac8d40857a2e349d8f0"
+    },
+    {
+      "path": "provenance/baseline-identities.json",
+      "sha256": "557ce879dea4c64c762b5734500660a9b42c83fd9959319b7083a9f63df36396"
+    },
+    {
+      "path": "provenance/encounter-defaults.json",
+      "sha256": "c847551352003f330d165c52fd052f67dc70cbcf27bf3bba5ff1cf0ae2570d90"
+    },
+    {
+      "path": "provenance/historical-research.json",
+      "sha256": "18d95507de7f6b5108f18591e3c1cebaf8a27f46f55750d85324ba9c55b2bde1"
+    },
+    {
+      "path": "provenance/npc-profiles.json",
+      "sha256": "3951c36c1e5b3847d4dabcb3fc4ade8c855b9a9598dac42ffa0f2cf612022433"
+    },
+    {
+      "path": "quest-data.json",
+      "sha256": "2179b3686ee0133ae6f860bcdc0624c735ec3d6b2dc90c58b066b83c1905bcec"
+    },
+    {
+      "path": "quest-manifest.json",
+      "sha256": "bc78cd77c5aee467d340e2ef87f79076afb2345bd7e560db3ef942124bb0c27f"
+    },
+    {
+      "path": "quest-specification.json",
+      "sha256": "a6b10205262c4f0e7a3dc7b8d5ed5cc41f74939f1441be210e291e97b71e565d"
+    },
+    {
+      "path": "quests/lua_modules/achievement_quest_mesa_friends.lua",
+      "sha256": "3aa8aa0bc486d7351d7b75e161ef60aee847aed6a689deee61657e295d7d3f65"
+    },
+    {
+      "path": "quests/lua_modules/achievement_quest_mesa_friends_data.lua",
+      "sha256": "7e0e415e53dd14f6a98d2c297022e2cfcd0d9fb4bb5fc31239af3210fb0dba6e"
+    },
+    {
+      "path": "quests/lua_modules/achievement_quest_mesa_friends_scenes.lua",
+      "sha256": "a0ff2bcac7cf89a4cace38f72859d2847acafaf01b0f06ecd5d1e77ab40bdeb6"
+    },
+    {
+      "path": "quests/lua_modules/achievement_quest_mesa_friends_scenes_data.lua",
+      "sha256": "09294604276f6521950ad2a3566d60d708550ffc675cbba31a186fb7f9e2f91b"
+    },
+    {
+      "path": "quests/mesa/397040.lua",
+      "sha256": "de80290fbab569ca8ec2143a1d2b9e0262927587e3ba227b1ed22fa4373cce9e"
+    },
+    {
+      "path": "quests/mesa/397092.lua",
+      "sha256": "cf650652c2a80ca87dc15f21326c141a6b9ff3a42de5a5fc90356543e3471932"
+    },
+    {
+      "path": "quests/mesa/397102.lua",
+      "sha256": "8e523609a2378b7992f86ff0a0f15fe2b88621e459944648258cf9c328c1a965"
+    },
+    {
+      "path": "quests/mesa/397905.lua",
+      "sha256": "52b449447a9252540ed4e29525106e18becb8c787fb6a889b48dc9617f0a2cca"
+    },
+    {
+      "path": "quests/mesa/397906.lua",
+      "sha256": "52b449447a9252540ed4e29525106e18becb8c787fb6a889b48dc9617f0a2cca"
+    },
+    {
+      "path": "quests/mesa/397907.lua",
+      "sha256": "52b449447a9252540ed4e29525106e18becb8c787fb6a889b48dc9617f0a2cca"
+    },
+    {
+      "path": "quests/mesa/397908.lua",
+      "sha256": "52b449447a9252540ed4e29525106e18becb8c787fb6a889b48dc9617f0a2cca"
+    },
+    {
+      "path": "quests/mesa/397909.lua",
+      "sha256": "52b449447a9252540ed4e29525106e18becb8c787fb6a889b48dc9617f0a2cca"
+    },
+    {
+      "path": "quests/mesa/zone_controller.lua",
+      "sha256": "062e735b8b5bd1da5bc8cd7165e9ec7d0b73ddb25d57b3f5a93360b2ab10bcf1"
+    },
+    {
+      "path": "sql/010-bring-friends.sql",
+      "sha256": "9685317fe7a669070c8f1b2e11c9afe3ef6f47eec803ebeb4817cae52c5a2fb5"
+    },
+    {
+      "path": "sql/020-rollback-staged.sql",
+      "sha256": "74772f78634d7276c9c9653a3e33ad5deb533c076f526bd49f3382446b8fd318"
+    },
+    {
+      "path": "sql/030-enable-bring-friends.sql",
+      "sha256": "8e142ce51bc527915c4313627f469c77060bb5241999f9581e3253e9f0166b62"
+    },
+    {
+      "path": "sql/040-disable-bring-friends.sql",
+      "sha256": "d6298829c36fad11a1a0b87850bcc9294c509416739d073495b66053183d9970"
+    },
+    {
+      "path": "status.json",
+      "sha256": "05e1204f6d05e52972a750a5f43603f86035faafaec64d10a499124dda8711ff"
+    }
+  ]
+}
