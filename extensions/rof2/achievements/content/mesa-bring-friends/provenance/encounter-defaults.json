@@ -38,12 +38,12 @@
         "trigger": {
           "x": -1106.2356,
           "y": -1310.8745,
-          "z": 18.985739424894817
+          "z": 29.6722
         },
         "spawn": {
           "x": -1106.2356,
           "y": -1310.8745,
-          "z": 18.985739424894817
+          "z": 29.6722
         },
         "waves": [
           [
@@ -62,17 +62,17 @@
         "trigger": {
           "x": -401.5999755859375,
           "y": -839.199951171875,
-          "z": 149.21566772460938
+          "z": 147.7119
         },
         "spawn": {
           "x": -470,
           "y": -960,
-          "z": 27.646900221112713
+          "z": 24.7944
         },
         "destination": {
           "x": -69,
           "y": -678,
-          "z": 181.74985525662078
+          "z": 179.4645
         },
         "waves": [
           [
@@ -98,17 +98,17 @@
         "trigger": {
           "x": -949,
           "y": 1575,
-          "z": 108.34223424376324
+          "z": 78.4864
         },
         "spawn": {
           "x": -1220,
           "y": 1650,
-          "z": 114.63782460299424
+          "z": 113.7205
         },
         "destination": {
           "x": 1170,
           "y": -840,
-          "z": 86.3591364870566
+          "z": 84.672
         },
         "waves": [
           [
@@ -147,7 +147,101 @@
     "Trigger45units,tree breach22units,defender reach85units,vertical35units",
     "One concurrent scene per task in open zone, keyed by opaque shared task identity or solo character",
     "Raider2+3+3+3 waves use2007report; contradictory period3+3+3 retained in historical research",
-    "Navigation surface projections define configurable placement; whole routes unverified",
+    "Server collision floors define configurable placement; full movement routes still require native verification",
     "Glasson EntrancingSong8639 uses native mezAI2048 with20second recast; NPCeffect from currentmetadata, recast reconstructed"
-  ]
+  ],
+  "collision_floor_correction": {
+    "reason": "Native Glasson and guards spawned below terrain using a navigation polygon height",
+    "selection": "At each retained XY select collision floor nearest the original intended altitude, then add configurable2unit spawn offset",
+    "anchors": {
+      "glasson": {
+        "surface_point": {
+          "x": -1106.2356,
+          "y": -1310.8745,
+          "z": 27.6722
+        },
+        "collision_heights": [
+          27.6722
+        ],
+        "old_nav_surface_z": 16.985739424894817,
+        "requested_z": 28.3167
+      },
+      "tree": {
+        "surface_point": {
+          "x": -69,
+          "y": -678,
+          "z": 177.4645
+        },
+        "collision_heights": [
+          177.4645
+        ],
+        "old_nav_surface_z": 179.74985525662078,
+        "requested_z": 176
+      },
+      "plateau_entrance": {
+        "surface_point": {
+          "x": -401.5999755859375,
+          "y": -839.199951171875,
+          "z": 145.7119
+        },
+        "collision_heights": [
+          145.7119
+        ],
+        "old_nav_surface_z": 147.21566772460938,
+        "requested_z": 145
+      },
+      "tree_attack_start": {
+        "surface_point": {
+          "x": -470,
+          "y": -960,
+          "z": 22.7944
+        },
+        "collision_heights": [
+          22.7944
+        ],
+        "old_nav_surface_z": 25.646900221112713,
+        "requested_z": 110
+      },
+      "raiders_trigger": {
+        "surface_point": {
+          "x": -949,
+          "y": 1575,
+          "z": 76.4864
+        },
+        "collision_heights": [
+          76.4864
+        ],
+        "old_nav_surface_z": 106.34223424376324,
+        "requested_z": 79
+      },
+      "raiders_spawn": {
+        "surface_point": {
+          "x": -1220,
+          "y": 1650,
+          "z": 111.7205
+        },
+        "collision_heights": [
+          111.7205
+        ],
+        "old_nav_surface_z": 112.63782460299424,
+        "requested_z": 115
+      },
+      "minohten_camp": {
+        "surface_point": {
+          "x": 1170,
+          "y": -840,
+          "z": 82.672
+        },
+        "collision_heights": [
+          -11.3791,
+          25.5205,
+          82.672
+        ],
+        "old_nav_surface_z": 84.3591364870566,
+        "requested_z": 83
+      }
+    },
+    "map_sha256": "c26ff2653f94a47620cc443fe05d2b9b28b418f356c69959b7a40e36479bcf93",
+    "native_status": "Corrected Glasson native spawn Z31.595367, LOS true and own kill/objective credit verified. Other changed scene anchors still await native encounter acceptance."
+  }
 }

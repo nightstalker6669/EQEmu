@@ -34,7 +34,7 @@
     },
     {
       "path": "provenance/encounter-defaults.json",
-      "sha256": "82d12f77cf114d66ee6f76b60453ed75c0c2020b999acae7eda39aaa7cdf4674"
+      "sha256": "e3525a1b315b675ed65dee3b98613678eda9e2f39b0eae37dad9395ebeea1b41"
     },
     {
       "path": "provenance/historical-research.json",
@@ -50,7 +50,7 @@
     },
     {
       "path": "quest-manifest.json",
-      "sha256": "bc78cd77c5aee467d340e2ef87f79076afb2345bd7e560db3ef942124bb0c27f"
+      "sha256": "38124877800c6b5c6bc8f182cd2de17a3f4d2e576592b2155093a47bdaa276b6"
     },
     {
       "path": "quest-specification.json",
@@ -70,7 +70,7 @@
     },
     {
       "path": "quests/lua_modules/achievement_quest_mesa_friends_scenes_data.lua",
-      "sha256": "09294604276f6521950ad2a3566d60d708550ffc675cbba31a186fb7f9e2f91b"
+      "sha256": "615e93f01f0b55fe85319780eb8ff420e6dde40334fa196765a1494160c0f3df"
     },
     {
       "path": "quests/mesa/397040.lua",
