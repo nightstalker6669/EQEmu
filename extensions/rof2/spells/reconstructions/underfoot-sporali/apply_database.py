@@ -5,6 +5,7 @@ import hashlib
 import json
 import math
 import os
+import re
 from datetime import date, datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -68,9 +69,25 @@ def postimages(cur, data, lock=False):
     out={}
     for table, rows in data.items():
         out[table]=[]
+        require(table in KEYS, 'Unknown postimage table')
+        cur.execute('SHOW COLUMNS FROM `'+table+'`')
+        columns=list(cur.fetchall())
+        projection=[]
+        for column in columns:
+            name=column['Field']
+            require(re.fullmatch(r'[A-Za-z_][A-Za-z0-9_]*',name), 'Unsafe column identifier')
+            quoted='`'+name+'`'
+            # Native FLOAT text-protocol output can lose significant digits.
+            # Widen only the read projection, retaining the stored value,
+            # every field and the existing comparison tolerance unchanged.
+            if column['Type'].lower().split('(',1)[0].split()[0]=='float':
+                projection.append('CAST('+quoted+' AS DOUBLE) AS '+quoted)
+            else:
+                projection.append(quoted)
         for row in rows:
             clause,args=where(table,row)
-            cur.execute('SELECT * FROM `'+table+'` WHERE '+clause+(' FOR UPDATE' if lock else ''),args)
+            cur.execute('SELECT '+','.join(projection)+' FROM `'+table+'` WHERE '+clause+
+                        (' FOR UPDATE' if lock else ''),args)
             found=list(cur.fetchall())
             require(len(found)==1 and equal(found[0],row),'Full postimage mismatch: '+table)
             out[table].append(found[0])
