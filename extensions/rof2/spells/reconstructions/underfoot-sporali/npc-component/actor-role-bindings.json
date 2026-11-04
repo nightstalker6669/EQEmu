@@ -1,0 +1,150 @@
+{
+  "enabled": false,
+  "mission_task": 920140,
+  "rows": [
+    {
+      "role": "grazden",
+      "npc_type_id": 485900,
+      "external_source_npc": 34496,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485900.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "west_guard",
+      "npc_type_id": 485901,
+      "external_source_npc": 34497,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485901.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "east_guard",
+      "npc_type_id": 485902,
+      "external_source_npc": 34498,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485902.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "kerod",
+      "npc_type_id": 485903,
+      "external_source_npc": 34501,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485903.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "dek",
+      "npc_type_id": 485904,
+      "external_source_npc": 34502,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485904.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "koryx",
+      "npc_type_id": 485905,
+      "external_source_npc": 34503,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485905.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "kikivin",
+      "npc_type_id": 485906,
+      "external_source_npc": 34504,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485906.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "rotak",
+      "npc_type_id": 485907,
+      "external_source_npc": 34505,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485907.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "thaurnek",
+      "npc_type_id": 485908,
+      "external_source_npc": 34506,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485908.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "extract_chest",
+      "npc_type_id": 485909,
+      "external_source_npc": 34499,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 304053000,
+      "callback_candidate": "arthicrex/485909.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "compound_chest",
+      "npc_type_id": 485910,
+      "external_source_npc": 34500,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 304053001,
+      "callback_candidate": "arthicrex/485910.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "reward_chest",
+      "npc_type_id": 485911,
+      "external_source_npc": 35258,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 304053002,
+      "callback_candidate": "arthicrex/485911.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    },
+    {
+      "role": "grogald_instance",
+      "npc_type_id": 485912,
+      "external_source_npc": 34507,
+      "zone_id": 485,
+      "zone_version": 1,
+      "task_id": 920140,
+      "loottable_id": 0,
+      "callback_candidate": "arthicrex/485912.lua",
+      "identity": "Exactreservedsourcebinding, not inserted/nativeaccepted"
+    }
+  ],
+  "reservation_contract_sha256": "1f8b07250c1c722bbbc72ff2f14ef2c662d27246c4f445bdeb306c9b759c92ea"
+}

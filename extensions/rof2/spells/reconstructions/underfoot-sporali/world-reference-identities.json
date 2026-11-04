@@ -1,0 +1,73 @@
+{
+  "basis": "Narrowactualnormal-v0actor/spawnidentitySELECT, no mutation; HaegerreusedretainedScentnativebaseline.",
+  "actors": [
+    {
+      "role": "mardan",
+      "id": 485068,
+      "name": "#Mardan_Howlinblade",
+      "level": 86,
+      "race": 8,
+      "class": 1,
+      "spawn_id": 133832,
+      "zone": "arthicrex",
+      "version": 0
+    },
+    {
+      "role": "entricalla",
+      "id": 485090,
+      "name": "#Entricalla",
+      "level": 80,
+      "race": 456,
+      "class": 1,
+      "spawn_id": 133961,
+      "zone": "arthicrex",
+      "version": 0
+    },
+    {
+      "role": "borgar",
+      "id": 486067,
+      "name": "#Borgar_Rompinstomp",
+      "level": 86,
+      "race": 8,
+      "class": 1,
+      "spawn_id": 134427,
+      "zone": "foundation",
+      "version": 0
+    },
+    {
+      "role": "gronkin",
+      "id": 483056,
+      "name": "#Foreman_Gronkin",
+      "level": 85,
+      "race": 645,
+      "class": 1,
+      "spawn_id": 131719,
+      "zone": "coolingchamber",
+      "version": 0
+    },
+    {
+      "role": "haeger",
+      "id": 482189,
+      "name": "#Haeger_Stonecracker",
+      "level": 88,
+      "race": 8,
+      "class": 1,
+      "spawn_id": 134927,
+      "zone": "underquarry",
+      "version": 0
+    },
+    {
+      "role": "world_grogald",
+      "id": 485001,
+      "name": "#Grogald_Elderhammer",
+      "level": 85,
+      "race": 8,
+      "class": 2,
+      "spawn_id": 133703,
+      "zone": "arthicrex",
+      "version": 0
+    }
+  ],
+  "preservation": "Read-only identity records, not replacements/fullNPCpostimages. No class/stat/spawn mutation.",
+  "lookup_note": "InitialconnectorfunctionREPLACEwasrejectedbeforeexecution; correctedexact-nameSELECTsucceeded. Not a namespaceaudit."
+}
