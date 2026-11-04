@@ -1,6 +1,6 @@
 {
-  "status": "SOURCE_ONLY_QUALIFIED_INFERENCE_CANDIDATE_UNAPPLIED",
-  "database_writes": 0,
+  "status": "DATABASE_APPLIED_INDEPENDENT_READBACK_PASS_NEXT_ORDINARY_FRESH_POK_BOOT_READY",
+  "database_writes": 3,
   "native_acceptance": false,
   "individual_period_inventory_verified": false,
   "original_rankI_quest_or_drop_implemented": false,
@@ -63,5 +63,25 @@
     "reason": "Wraithguard positivecut/late2016reports; no modernstock\u2192RoFactivation"
   },
   "policy_qualification": "Ordinary PoK stock cohort numerical defaults chosen explicitly for empty dedicated merchants; preserve native item prices/spell levels. No new Alaran or advanced-rank entitlement.",
-  "preservation": "No NPC/spawn/item/spell/old-era stock/task/achievement/player changes."
+  "preservation": "No NPC/spawn/item/spell/old-era stock/task/achievement/player changes.",
+  "deployment": {
+    "source_commit": "714b8d142d7229ccd34e488fb315f58f3faa3b28",
+    "helper_sha256": "5eb88cf223840567c8f491501a1475215fd0b102696f9f2f6e5af391b2d75888",
+    "full_postimage_and_independent_readback": "PASS",
+    "selected_merchants": [
+      202175,
+      202185,
+      202215
+    ],
+    "older_era_variants_untouched": [
+      202338,
+      202499,
+      202504
+    ],
+    "cache_receipt": "POK-OLDER3-CACHE-FRESHNESS-001",
+    "cache_status": "NEXT_ORDINARY_FRESH_POK202_BOOT_READY",
+    "native_acceptance": false,
+    "reload_restart_repop": false,
+    "original_quests_or_drops_implemented": false
+  }
 }
