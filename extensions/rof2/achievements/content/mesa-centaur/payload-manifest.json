@@ -18,7 +18,7 @@
   "files": [
     {
       "path": "README.md",
-      "sha256": "bf2650c4f4e38a0a2566c0060b508319d2a69391a016a591cad5f53767789b18"
+      "sha256": "7577e1c0ca5a6f0ac9c02220a3079a19673db0650599b1410f3d23cc689cc432"
     },
     {
       "path": "apply_quests.py",
@@ -146,7 +146,7 @@
     },
     {
       "path": "status.json",
-      "sha256": "b4258d20265652734f12e3696b188c70e5da7928604d933250b629757b286aac"
+      "sha256": "6b1b08221515455cd930446b3f7bcbfce065ae1bddcd50da373b291977c84887"
     }
   ]
 }

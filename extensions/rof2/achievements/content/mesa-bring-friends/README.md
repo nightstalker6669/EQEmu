@@ -2,7 +2,7 @@
 
 This package reconstructs **A Bad Dream**, **Oh No!**, **Stand With Us**, and **They are Coming!**, with their four achievement requirements. It includes the NPC scripts, three scripted encounters, native objectives and confirmed Windwillow necklace/bauble rewards.
 
-**Status: source candidate, not installed or verified in game.** Historical sources and labelled configurable estimates are in `provenance/`. This is content using the achievement branch's existing protocol; it adds no new opcode or packet structure. See the branch's protocol documentation for those definitions.
+**Installed locally; in-game verification is pending.** Historical sources and labelled configurable estimates are in `provenance/`. This is content using the achievement branch's existing protocol; it adds no new opcode or packet structure. See the branch's protocol documentation for those definitions.
 
 ## What happens in game
 
@@ -34,3 +34,5 @@ For rollback, first stop the affected runtime and restore backed-up quest files.
 ## Fidelity and configurable values
 
 Confirmed mechanics and rewards are separated from estimates. Original HP, several spawn/trigger coordinates, wave timing and Orders percentages were not recovered. Their defaults are explicit in `provenance/encounter-defaults.json` and `provenance/npc-profiles.json`. Navigation-surface placement is evidence of terrain support, **not** proof of a traversable full route or an original Live coordinate. Shared tasks use a labelled six-hour duration inferred from period timer reports and later explicit values. Unknown original XP uses the approved 1,000-XP configurable PEQ-style default. Unverified faction award amounts are omitted.
+
+Database requirement: these guarded SQL migrations target MariaDB. A MySQL-compatible client can connect to MariaDB; native MySQL-server compatibility has not been verified. Native Windows refers to the server/client tools running on Windows, not an assertion that every database backend was tested.

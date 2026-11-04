@@ -2,7 +2,7 @@
 
 This content package adds all five **Ekaterina's Lament** tasks and their five achievement requirements: Ekaterina's Lament, It Can't Be the Queen, Find the Cure, Parts For a Cure, and Tunare Save the Queen. It uses the original Ekaterina, Ramona and Queen Nhyalea NPCs, existing creature drops, and the confirmed **Flowing Watersilk Robe** reward.
 
-**Source candidate: not installed or verified in game.** These tasks use the branch's existing native achievement/task opcodes and structures; this package adds no new protocol mapping.
+**Installed locally; in-game verification is pending.** These tasks use the branch's existing native achievement/task opcodes and structures; this package adds no new protocol mapping.
 
 ## Quest behavior
 
@@ -31,3 +31,5 @@ For rollback, stop the affected runtime, restore the backed-up quest scripts, ru
 The five walkthroughs were entered in October 2006. Their period comments confirm locations, fresh Roost loot requirements, the rare Snake Fang drop, and protector Complete Healing. Research and configurable server defaults are recorded in `provenance/`.
 
 Original raw XP and numerical faction rewards are unavailable. XP uses the approved labelled 1,000-XP default; unverified faction amounts are omitted. Original admission minima and exact trigger/assist/casting tolerances are unverified and labelled accordingly. The fourth task's final “return with the cure” is implemented as an actual antidote delivery; its original native activity-type record has not been recovered. The parent achievement's independent reward configuration is preserved.
+
+Database requirement: these guarded SQL migrations target MariaDB. A MySQL-compatible client can connect to MariaDB; native MySQL-server compatibility has not been verified. Native Windows refers to the server/client tools running on Windows, not an assertion that every database backend was tested.

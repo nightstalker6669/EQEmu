@@ -1,5 +1,5 @@
 {
-  "status": "Offline only. Not native-verified.",
+  "status": "Installed locally; encounter movement/completion verification pending.",
   "settings": {
     "enabled": true,
     "timer": "achievement_mesa_friends_controller",

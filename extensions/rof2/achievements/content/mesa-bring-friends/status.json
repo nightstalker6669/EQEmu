@@ -1,6 +1,6 @@
 {
-  "utc": "2026-11-04T00:40:30.334165+00:00",
-  "status": "SOURCE_CANDIDATE_NOT_INSTALLED_NOT_NATIVE_ACCEPTED",
+  "utc": "2026-11-04T01:56:05.343961+00:00",
+  "status": "INSTALLED_LOCALLY_GAMEPLAY_VERIFICATION_PENDING",
   "branch": "rof2-achievements",
   "scope": "Bring Friends fourquest chain; three original Hanook tasks plus Peretaenu raid",
   "authored": {
@@ -17,5 +17,9 @@
     "Existing Roost quest module",
     "Existing Mesa corruption controller module"
   ],
-  "next": "One source check, then coordinate installation after current centaur native batch; one related fourquest native run."
+  "next": "One coherent native nine-quest batch with Bring Friends and Save the Queen, followed by one persistence relog.",
+  "runtime_applied": true,
+  "published": true,
+  "runtime_cache_refreshed": true,
+  "runtime_state": "All required SQL/scripts installed with affected backups and exact readback; owned world/task/achievement/NPC/Lua readers refreshed together. Gameplay acceptance remains pending."
 }

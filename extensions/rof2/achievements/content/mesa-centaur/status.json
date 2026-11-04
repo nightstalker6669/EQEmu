@@ -1,6 +1,6 @@
 {
-  "utc": "2026-11-04T00:29:12.953153+00:00",
-  "status": "SOURCE_READY_FOR_FULL_INSTALL_NOT_NATIVE_ACCEPTED",
+  "utc": "2026-11-04T01:56:05.340780+00:00",
+  "status": "FOUR_QUEST_FLOW_REWARD_AND_PERSISTENCE_VERIFIED_LOCALLY",
   "repository": "nightstalker6669/EQEmu",
   "branch": "rof2-achievements",
   "authored": {
@@ -13,11 +13,11 @@
   },
   "source_profile": "All listed forward SQL migrations mandatory; source module enabled by default.",
   "runtime_applied": true,
-  "native_accepted": false,
-  "published": false,
+  "native_accepted": true,
+  "published": true,
   "evidence_reused": "Earlier taskSQL20assertions/reactionSQL34assertions passed; databases absent. Source behavior checks passed before final data/default additions. Changed Lua/Python syntax compiled; no new test matrix or rehearsal.",
   "installer": "Reuses established quest overlay tool; affected-row/file backups, explicit forward manifest, preserves composed callbacks. No service control. Native Windows runtime not exercised.",
-  "next": "Finish the related native quest batch; this checkpoint does not claim full in-game acceptance.",
+  "next": "No repeat of this accepted four-quest batch; continue the installed Bring Friends and Save the Queen content.",
   "historical_limits": [
     "Aura200 uses native spell-range reconstruction, not original environmental extent",
     "PEQ named55HP22200/min61 plus observed-hit proxy377 are labelled defaults, not recovered rawLive stats",
@@ -26,7 +26,20 @@
     "No invented original admission minimum; unrestricted server policy",
     "Parent achievement reward remains independent"
   ],
-  "runtime_state": "Installed locally; fourquest native batch in progress. Firstquest offer/acceptance and corrected level47snake progress observed. Completefourquest acceptance and persistence remain pending.",
+  "runtime_state": "Four-quest milestone complete locally; temporary account privileges restored. User-requested QA weapon remains equipped and original staff/shield retained. Native inventory loading remints serials; exact GUID invariance is not claimed.",
   "published_base_commit": "3a5e10ebfe08ffd1286a60024f549b7197d7397d",
-  "pending_source_delta": "Required090journal labels and110allHighlandSnakevariants plus corresponding rollback/provenance."
+  "pending_source_delta": "None for accepted journal/Highland Snake corrections.",
+  "runtime_cache_refreshed": true,
+  "native_acceptance_scope": [
+    "All four native quest completions and four achievement components",
+    "Exactly one selected Fieldstrider Blanket, no other choice granted",
+    "One native centaur witness changed hostile to indifferent after Shade death",
+    "One normal Admin0 relog preserved completion, reward and equipment"
+  ],
+  "native_limits": [
+    "QA weapon accelerated the final native kill; combat balance is not established",
+    "One observed replacement does not prove native identities for all40 original spawn points",
+    "Earlier invalid-free zone crash remains unexplained; no fix is claimed",
+    "No parent-achievement item reward or unselected class/reward combination is claimed"
+  ]
 }

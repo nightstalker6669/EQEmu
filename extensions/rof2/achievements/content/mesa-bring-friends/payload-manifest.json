@@ -10,7 +10,7 @@
   "files": [
     {
       "path": "README.md",
-      "sha256": "17c42bf2eb6fedf82b2ed68c89a42f488cb30687a46942ab578f48ff49bdc086"
+      "sha256": "1202dc3b0a8ff5a6a1bf5881b84800aa2522f0d85fd6a3aaa29e076ca79b7da9"
     },
     {
       "path": "apply_quests.py",
@@ -34,7 +34,7 @@
     },
     {
       "path": "provenance/encounter-defaults.json",
-      "sha256": "c847551352003f330d165c52fd052f67dc70cbcf27bf3bba5ff1cf0ae2570d90"
+      "sha256": "82d12f77cf114d66ee6f76b60453ed75c0c2020b999acae7eda39aaa7cdf4674"
     },
     {
       "path": "provenance/historical-research.json",
@@ -126,7 +126,7 @@
     },
     {
       "path": "status.json",
-      "sha256": "05e1204f6d05e52972a750a5f43603f86035faafaec64d10a499124dda8711ff"
+      "sha256": "b907f1af11800feb22fb45e2d52f12e9c2626efa493c1263da7946805f71b32c"
     }
   ]
 }

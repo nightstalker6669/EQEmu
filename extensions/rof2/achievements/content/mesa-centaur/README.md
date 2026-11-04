@@ -2,9 +2,11 @@
 
 This package adds the complete four-quest route from **Scout Madu to Klassr**: exploration, hunting, investigation and defeating the Shade of Corruption. It includes **15 objectives, four achievement links, the final choice of one Fieldstrider reward, and the centaurs’ corruption-state changes**.
 
-**Deployment and the combined in-game check are still pending.** Existing task/reward machinery is reused; no C++ build or client modification is introduced by this content package.
+**The four-quest flow, one reward claim and relog persistence are verified locally in RoF2.** Existing task/reward machinery is reused; no C++ build or client modification is introduced by this content package.
 
 [Achievement opcodes and packet structures](../../protocol/README.md) · [Historical research](provenance/research.json) · [Exact server settings and labelled defaults](provenance/server-settings.json)
+
+A local run completed all four tasks, satisfied the achievement components, claimed exactly one Fieldstrider Blanket and retained that state after a normal relog without temporary account privileges. A centaur witness changed from hostile to indifferent after the Shade died. The final kill used an overpowered QA weapon, so this is quest-flow verification, not historical combat-balance proof. An earlier zone crash remains unexplained; no crash fix is claimed. The other reward choices and every original spawn identity were not individually verified.
 
 ## What players do
 
@@ -79,3 +81,5 @@ Earlier task and reaction-group SQL rehearsals passed; the initial task rollback
 ### Required corrections after the initial installation
 
 Run `sql/090-journal-labels.sql` and then `sql/110-highland-snake-targets.sql` after the initial four migrations. These supply readable kill objectives and allow all three original Highland Snake variants to count. They preserve earned task progress. Roll back `120`, then `100`, before the original rollback sequence. After a running-server content update, reload tasks locally in Mesa so its task cache uses the corrected targets.
+
+Database requirement: these guarded SQL migrations target MariaDB. A MySQL-compatible client can connect to MariaDB; native MySQL-server compatibility has not been verified. Native Windows refers to the server/client tools running on Windows, not an assertion that every database backend was tested.
