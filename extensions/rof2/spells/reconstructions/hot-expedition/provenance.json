@@ -114,5 +114,20 @@
     "ExactXP/cash/exploration/phaseoriginalparameters",
     "OrdinaryHoTzoneaccess/remainingoriginalquestchain",
     "Nativequest/spawn/reward/persistenceacceptance"
-  ]
+  ],
+  "catalog_binding_correction": {
+    "first_attempt": "Eight rows installed but native catalog had has_reward_selection=false: explicit reward_sets/reward_sources missing",
+    "required_set": 920131,
+    "required_source_type": 2,
+    "required_source_id": 920131,
+    "fresh_install_total_rows": 10,
+    "installed_component_repair_rows": 2,
+    "existing_eight_rows": "must remain exact",
+    "native_reward_acceptance": false,
+    "source_contract": [
+      "zone/task_manager.cpp LoadTaskRewardSets",
+      "zone/reward_selection_catalog.cpp LoadRewardSelectionCatalog",
+      "common/reward_selection.h Task=2"
+    ]
+  }
 }

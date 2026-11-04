@@ -37,16 +37,17 @@ def main():
     p.add_argument('--port',type=int,default=3306)
     args=p.parse_args()
     d=json.loads(Path(__file__).with_name('data.json').read_text());rows=d['inserts']
-    require({k:len(v) for k,v in rows.items()}=={'tasks':1,'task_activities':4,'rewards':1,'reward_options':1,'reward_option_entries':1},'Unexpected row scope')
+    require({k:len(v) for k,v in rows.items()}=={'tasks':1,'task_activities':4,'rewards':1,'reward_options':1,'reward_option_entries':1,'reward_sets':1,'reward_sources':1},'Unexpected row scope')
     t=rows['tasks'][0];reward=rows['rewards'][0]
     require(t['id']==920131 and t['repeatable']==0 and t['min_level']==80,'Wrong task/component eligibility')
     require(t['reward_method']==3 and t['reward_points']==0 and t['reward_id_list']=='','Duplicate/incorrect payout route')
     require(reward['reward_id']==3839201311 and reward['reward_type']==4 and reward['reward_data_id']==22 and reward['amount']==5,'Wrong native Mote reward')
+    require(rows['reward_sets']==[{'reward_set_id':920131,'title':'An Expedition Gone Awry','enabled':1}] and rows['reward_sources']==[{'source_type':2,'source_id':920131,'reward_set_id':920131,'enabled':1}],'Missing native set/source bindings')
     require(rows['reward_options'][0]['common_to_all']==1 and rows['reward_options'][0]['reward_set_id']==920131,'Not a fixed common reward')
     require(rows['reward_option_entries'][0]=={'reward_set_id':920131,'option_id':1,'sequence':1,'reward_id':3839201311},'Reward link changed')
     if not args.apply:
         print(json.dumps({'mode':'offline_plan','database_connected':False,'task_id':920131,
-            'database_inserts':8,'native_Dream_Motes':5,'repeat_enabled':False,'new_global_or_CPP_event':False}))
+            'database_inserts':10,'native_Dream_Motes':5,'repeat_enabled':False,'new_global_or_CPP_event':False}))
         return
     require(args.config and args.quest_root and args.receipt_dir,'--apply requires private config, quest-root and new receipt-dir')
     helper=args.quest_root/'lua_modules/achievement_native_delivery_handin.lua'
@@ -66,10 +67,13 @@ def main():
         with c.cursor() as cur:
             cur.execute('SELECT DATABASE() AS target')
             require(cur.fetchone()['target']=='peq_housing_test','Wrong live target')
-            cur.execute("SELECT TABLE_NAME,ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ('tasks','task_activities','rewards','reward_options','reward_option_entries')")
+            cur.execute("SELECT TABLE_NAME,ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ('tasks','task_activities','rewards','reward_options','reward_option_entries','reward_sets','reward_sources')")
             engines=cur.fetchall()
-            require(len(engines)==5 and all(r['ENGINE']=='InnoDB' for r in engines),'Nontransactional mutation tables')
-            checks=[('SELECT * FROM tasks WHERE id=920131 OR title=%s FOR UPDATE',('An Expedition Gone Awry',)),
+            require(len(engines)==7 and all(r['ENGINE']=='InnoDB' for r in engines),'Nontransactional mutation tables')
+            checks=[('SELECT * FROM reward_sets WHERE reward_set_id=920131 FOR UPDATE',()),
+                ('SELECT * FROM reward_sources WHERE (source_type=2 AND source_id=920131) OR reward_set_id=920131 FOR UPDATE',()),
+                ('SELECT * FROM reward_source_entries WHERE (source_type=2 AND source_id=920131) OR reward_id=3839201311 FOR UPDATE',()),
+                ('SELECT * FROM tasks WHERE id=920131 OR title=%s FOR UPDATE',('An Expedition Gone Awry',)),
                 ('SELECT * FROM task_activities WHERE taskid=920131 FOR UPDATE',()),
                 ('SELECT * FROM rewards WHERE reward_id=3839201311 FOR UPDATE',()),
                 ('SELECT * FROM reward_options WHERE reward_set_id=920131 FOR UPDATE',()),
@@ -101,7 +105,9 @@ def main():
                     keys=list(row)
                     cur.execute('INSERT INTO `'+table+'` ('+','.join('`'+k+'`' for k in keys)+') VALUES ('+','.join(['%s']*len(keys))+')',tuple(row[k] for k in keys))
                     require(cur.rowcount==1,'Unexpected insert count')
-            reads={'tasks':'SELECT * FROM tasks WHERE id=920131',
+            reads={'reward_sets':'SELECT * FROM reward_sets WHERE reward_set_id=920131',
+                'reward_sources':'SELECT * FROM reward_sources WHERE source_type=2 AND source_id=920131',
+                'tasks':'SELECT * FROM tasks WHERE id=920131',
                 'task_activities':'SELECT * FROM task_activities WHERE taskid=920131 ORDER BY activityid',
                 'rewards':'SELECT * FROM rewards WHERE reward_id=3839201311',
                 'reward_options':'SELECT * FROM reward_options WHERE reward_set_id=920131 ORDER BY option_id',

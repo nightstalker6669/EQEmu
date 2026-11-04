@@ -173,6 +173,21 @@
         "sequence": 1,
         "reward_id": 3839201311
       }
+    ],
+    "reward_sets": [
+      {
+        "reward_set_id": 920131,
+        "title": "An Expedition Gone Awry",
+        "enabled": 1
+      }
+    ],
+    "reward_sources": [
+      {
+        "source_type": 2,
+        "source_id": 920131,
+        "reward_set_id": 920131,
+        "enabled": 1
+      }
     ]
   },
   "required_actors": [
