@@ -5,7 +5,7 @@ import hashlib
 import json
 import math
 import os
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from decimal import Decimal
 from pathlib import Path
 
@@ -36,6 +36,12 @@ def sha(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 def equal(a, b):
+    # Receipts use json.dump(default=str); preserve timestamp values while
+    # comparing the driver's date/datetime objects to that exact representation.
+    if isinstance(a, (datetime, date)):
+        a = str(a)
+    if isinstance(b, (datetime, date)):
+        b = str(b)
     if isinstance(a, dict) and isinstance(b, dict):
         return a.keys() == b.keys() and all(equal(a[k], b[k]) for k in a)
     if isinstance(a, list) and isinstance(b, list):
