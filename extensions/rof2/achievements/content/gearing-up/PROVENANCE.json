@@ -1,0 +1,169 @@
+{
+  "status": "disabled source candidate",
+  "cutoff": "2013-05-31",
+  "achievement_id": 500120600,
+  "tasks": [
+    {
+      "part": "I",
+      "component_id": 50353,
+      "deliver": [
+        {
+          "name": "Class \"A\" Cog",
+          "count": 6,
+          "candidate_item_id": 36476
+        },
+        {
+          "name": "Large Coil Spring",
+          "count": 3,
+          "candidate_item_id": 36477
+        }
+      ],
+      "task_id": 3044001
+    },
+    {
+      "part": "II",
+      "component_id": 50354,
+      "deliver": [
+        {
+          "name": "Small Coil Spring",
+          "count": 5,
+          "candidate_item_id": 36478
+        },
+        {
+          "name": "Large Hex Bolt",
+          "count": 4,
+          "candidate_item_id": 36479
+        }
+      ],
+      "task_id": 3044002
+    },
+    {
+      "part": "III",
+      "component_id": 50355,
+      "deliver": [
+        {
+          "name": "Large Hex Bolt",
+          "count": 6,
+          "candidate_item_id": 36479
+        },
+        {
+          "name": "Steel Beam",
+          "count": 3,
+          "candidate_item_id": 36480
+        }
+      ],
+      "task_id": 3044003
+    },
+    {
+      "part": "IV",
+      "component_id": 50356,
+      "deliver": [
+        {
+          "name": "Small Coil Spring",
+          "count": 5,
+          "candidate_item_id": 36478
+        },
+        {
+          "name": "Micro-Cog",
+          "count": 4,
+          "candidate_item_id": 36481
+        }
+      ],
+      "task_id": 3044004
+    },
+    {
+      "part": "V",
+      "component_id": 50357,
+      "deliver": [
+        {
+          "name": "Sheet of Steel",
+          "count": 3,
+          "candidate_item_id": 36482
+        },
+        {
+          "name": "Hex Bolt",
+          "count": 6,
+          "candidate_item_id": 36483
+        }
+      ],
+      "task_id": 3044005
+    },
+    {
+      "part": "VI",
+      "component_id": 50358,
+      "deliver": [
+        {
+          "name": "Spool of Fine Wire",
+          "count": 1,
+          "candidate_item_id": 36484
+        },
+        {
+          "name": "Steel Wire",
+          "count": 8,
+          "candidate_item_id": 36485
+        }
+      ],
+      "task_id": 3044006
+    },
+    {
+      "part": "VII",
+      "component_id": 50359,
+      "deliver": [
+        {
+          "name": "Oil Can",
+          "count": 4,
+          "candidate_item_id": 36486
+        },
+        {
+          "name": "Grease Tin",
+          "count": 5,
+          "candidate_item_id": 36487
+        }
+      ],
+      "task_id": 3044007
+    },
+    {
+      "part": "VIII",
+      "component_id": 50360,
+      "deliver": [
+        {
+          "name": "Steamwork Powersource",
+          "count": 9,
+          "candidate_item_id": 36488
+        }
+      ],
+      "task_id": 3044008
+    }
+  ],
+  "historical_sources": {
+    "achievement": {
+      "source": "https://everquest.allakhazam.com/db/quest/5628",
+      "entered": "2012-03-14",
+      "basis": "Achievement requires all eight versions; parent reward listed none. Current mutable body is not a pristine historical snapshot."
+    },
+    "quest_family": {
+      "source": "https://everquest.allakhazam.com/db/quest/4399",
+      "entered": "2007-12-10",
+      "period_list": "2011-12-05 participant enumerates all eight named parts and delivery counts.",
+      "offer_rule": "2012-05-06 participant confirms player-choice popup and only one Gearing Up active at a time; do not reproduce earlier random offering or seven concurrent-task exploit.",
+      "trigger": "brave enough",
+      "reward": "XP and AkAnon faction confirmed; source Rasper reports10, current Allakh13 is backed by a2017comment. Neither13nor10 should silently be called verified May2013 base. RawXP unknown: approved labelled XP defaults available."
+    }
+  },
+  "required_core_commit": "94e5f72768635a504c9b13feed093ddcef81d82b",
+  "defaults": {
+    "xp": {
+      "value": 1000,
+      "provenance": "approved configurable PEQ-style default, not historical amount"
+    }
+  },
+  "unresolved": [
+    "Original minimum level",
+    "Original faction reward amount",
+    "Remaining item identity corroboration",
+    "Canonical migration registration on correct descendant",
+    "Build/deployment and native conservation/completion/persistence"
+  ],
+  "existing_data_policy": "Preserve NPC spawn, item definitions, loot tables, player data and housing. Native IDs are local bindings, not website IDs.",
+  "protocol": "Existing task and achievement messages; no new opcodes or structures"
+}
