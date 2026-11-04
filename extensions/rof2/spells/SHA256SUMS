@@ -315,3 +315,5 @@ e05ad58294e78ed7a877bb0d6210bb139a64178e286127e60005a5bce60ecf9a  qa337-melee-ai
 7b36b86f2be8771e8adca2cc9d58ce2c3ba36d03f7a21291442dc27be872ce06  qa337-melee-aid/weakening-proposal/row-after-100k.json
 3c98fedd9e9f89df79d22b2855264607b9ce8f43f5ee9e04f846ea394ac5108e  qa337-melee-aid/weakening-proposal/row-before-2m.json
 e79479ee6161f83822508e33d40a2f7b726dccaa143e39c96d1a04c9f0d5bf62  qa337-melee-aid/weakening-proposal/wrapper-before-2m.lua
+0355eba795c3883ee03455bdb440f74f011237d3111ab9a44e84c8eef53b8b9a  qa337-melee-aid/weakening-proposal/database-replacement/LOGGED-OUT-MODE.md
+89875716543ca64d5f74aab35f6596763c91556a89014f0c75c447d1dfd9718f  qa337-melee-aid/weakening-proposal/database-replacement/receipt-contract-v2.json
