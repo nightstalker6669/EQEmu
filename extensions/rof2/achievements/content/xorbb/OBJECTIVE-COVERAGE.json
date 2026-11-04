@@ -1,0 +1,735 @@
+{
+  "scope": "Source producer coverage only, NOT native completion. NPC/AI/default fidelity and activation dependencies remain open.",
+  "objectives": [
+    {
+      "task": 3040477,
+      "activity": 0,
+      "kind": "kill_autogrant",
+      "objective": "Defeat surface minotaurs and collect horns",
+      "producer_source": "mercenary.merit; native eligible kill -> actual proof item -> manual count",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040477,
+      "activity": 1,
+      "kind": "deliver",
+      "objective": "Give the scout ten horns",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040478,
+      "activity": 0,
+      "kind": "kill_autogrant",
+      "objective": "Defeat water and earth elementals and collect cores",
+      "producer_source": "mercenary.merit; native eligible kill -> actual proof item -> manual count",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040478,
+      "activity": 1,
+      "kind": "deliver",
+      "objective": "Give the scout ten natural cores",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040479,
+      "activity": 0,
+      "kind": "kill_autogrant",
+      "objective": "Defeat muddites and storm creatures and collect cores",
+      "producer_source": "mercenary.merit; native eligible kill -> actual proof item -> manual count",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040479,
+      "activity": 1,
+      "kind": "deliver",
+      "objective": "Give the scout ten elemental cores",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040480,
+      "activity": 0,
+      "kind": "kill",
+      "objective": "Defeat forest bears",
+      "producer_source": "Native kill activity with explicit existing family IDs",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040480,
+      "activity": 1,
+      "kind": "speak",
+      "objective": "Report to Oolab",
+      "producer_source": "Native SpeakWith at exact matched NPC",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040481,
+      "activity": 0,
+      "kind": "kill",
+      "objective": "Defeat forest snakes",
+      "producer_source": "Native kill activity with explicit existing family IDs",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040481,
+      "activity": 1,
+      "kind": "speak",
+      "objective": "Report to Oolab",
+      "producer_source": "Native SpeakWith at exact matched NPC",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040482,
+      "activity": 0,
+      "kind": "kill",
+      "objective": "Defeat underground goblins",
+      "producer_source": "Native kill activity with explicit existing family IDs",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040482,
+      "activity": 1,
+      "kind": "speak",
+      "objective": "Report to Scout Gavrilo",
+      "producer_source": "Native SpeakWith at exact matched NPC",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040483,
+      "activity": 0,
+      "kind": "loot",
+      "objective": "Recover animated clay",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040483,
+      "activity": 1,
+      "kind": "loot",
+      "objective": "Recover animated crystal",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040483,
+      "activity": 2,
+      "kind": "loot",
+      "objective": "Recover animated flesh",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040483,
+      "activity": 3,
+      "kind": "deliver",
+      "objective": "Feed clay to the Smasher",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040483,
+      "activity": 4,
+      "kind": "deliver",
+      "objective": "Feed crystal to the Smasher",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040483,
+      "activity": 5,
+      "kind": "deliver",
+      "objective": "Feed flesh to the Smasher",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040483,
+      "activity": 6,
+      "kind": "speak",
+      "objective": "Report to Crazy Verken",
+      "producer_source": "Native SpeakWith at exact matched NPC",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 0,
+      "kind": "item_use",
+      "objective": "Siphon camp smoke",
+      "producer_source": "phials.cast successful native original item/spell/target",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 1,
+      "kind": "kill",
+      "objective": "Collect muddite mud",
+      "producer_source": "Native kill activity with explicit existing family IDs",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 2,
+      "kind": "kill",
+      "objective": "Collect mephit blood",
+      "producer_source": "Native kill activity with explicit existing family IDs",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 3,
+      "kind": "dialogue",
+      "objective": "Discuss the first mixture",
+      "producer_source": "mercenary_dialogue.say at exact giver/stage/required language",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 4,
+      "kind": "item_use",
+      "objective": "Blind an evil eye",
+      "producer_source": "eyes.cast successful original transformation, exact normal world source/native respawn lifecycle",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 5,
+      "kind": "kill",
+      "objective": "Defeat the blackened eye",
+      "producer_source": "eyes.merit on exact owned replacement actor/owner/currentrun",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 6,
+      "kind": "dialogue",
+      "objective": "Discuss the result",
+      "producer_source": "mercenary_dialogue.say at exact giver/stage/required language",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 7,
+      "kind": "item_use",
+      "objective": "Siphon sewer fluid",
+      "producer_source": "phials.cast successful native original item/spell/target",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 8,
+      "kind": "ground_pickup",
+      "objective": "Collect kitchen pepper",
+      "producer_source": "Guarded existing-garden conversion + native successful ground pickup/Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 9,
+      "kind": "kill",
+      "objective": "Collect sewer rat fur",
+      "producer_source": "Native kill activity with explicit existing family IDs",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 10,
+      "kind": "speak",
+      "objective": "Return to Lurr",
+      "producer_source": "Native SpeakWith at exact matched NPC",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 11,
+      "kind": "item_use",
+      "objective": "Apply burning agony to an eye",
+      "producer_source": "eyes.cast successful original transformation, exact normal world source/native respawn lifecycle",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 12,
+      "kind": "kill",
+      "objective": "Defeat the irritated eye",
+      "producer_source": "eyes.merit on exact owned replacement actor/owner/currentrun",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 13,
+      "kind": "speak",
+      "objective": "Report to Lurr",
+      "producer_source": "Native SpeakWith at exact matched NPC",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 14,
+      "kind": "item_use",
+      "objective": "Siphon elemental water",
+      "producer_source": "phials.cast successful native original item/spell/target",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 15,
+      "kind": "ground_pickup",
+      "objective": "Collect riverbank ragweed",
+      "producer_source": "Guarded existing-garden conversion + native successful ground pickup/Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 16,
+      "kind": "speak",
+      "objective": "Return to Lurr",
+      "producer_source": "Native SpeakWith at exact matched NPC",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 17,
+      "kind": "item_use",
+      "objective": "Apply the tear distillate",
+      "producer_source": "eyes.cast successful original transformation, exact normal world source/native respawn lifecycle",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 18,
+      "kind": "item_use",
+      "objective": "Capture the runny eye",
+      "producer_source": "eyes.capture original blanket -> actual owned runny target -> verified68614 custody",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040484,
+      "activity": 19,
+      "kind": "deliver",
+      "objective": "Return the dozing evil eye",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 0,
+      "kind": "dialogue",
+      "objective": "Ask an imprisoned halfling for an idea",
+      "producer_source": "mercenary_dialogue.say at exact giver/stage/required language",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 1,
+      "kind": "dialogue",
+      "objective": "Discuss lightning in Goblin",
+      "producer_source": "mercenary_dialogue.say at exact giver/stage/required language",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 2,
+      "kind": "item_use",
+      "objective": "Capture cloudburst lightning",
+      "producer_source": "lightning.cast capture",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 3,
+      "kind": "loot",
+      "objective": "Collect minotaur heads",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 4,
+      "kind": "loot",
+      "objective": "Collect a minotaur torso",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 5,
+      "kind": "loot",
+      "objective": "Collect minotaur limbs",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 6,
+      "kind": "ground_pickup",
+      "objective": "Gather pondweed",
+      "producer_source": "Guarded existing-garden conversion + native successful ground pickup/Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 7,
+      "kind": "speak",
+      "objective": "Return to Grolak in Goblin",
+      "producer_source": "mercenary_dialogue.say genuine Goblin hail + one-call beforeupdate witness",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 8,
+      "kind": "combine",
+      "objective": "Sit and assemble the golem",
+      "producer_source": "Native exact-container recipe + mercenary_dialogue.validate before ingredient use/current-run permission",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 9,
+      "kind": "deliver",
+      "objective": "Give Grolak the golem",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 10,
+      "kind": "scene",
+      "objective": "Listen to Grolak",
+      "producer_source": "golem.timer owned actual signal observed by nearby owner",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 11,
+      "kind": "item_use",
+      "objective": "Energize the golem on the signal",
+      "producer_source": "golem.cast actual original lightning during witnessed signal window",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 12,
+      "kind": "speak",
+      "objective": "Speak to Grolak",
+      "producer_source": "mercenary_dialogue.say genuine Goblin hail + one-call beforeupdate witness",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040485,
+      "activity": 13,
+      "kind": "speak",
+      "objective": "Report to Dabbin",
+      "producer_source": "Native SpeakWith at exact matched NPC",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 0,
+      "kind": "object_click",
+      "objective": "Collect blue crystal energy",
+      "producer_source": "krystuls.click; native owned itemless Object + scoped actual click/count witness",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 1,
+      "kind": "object_click",
+      "objective": "Collect yellow crystal energy",
+      "producer_source": "krystuls.click; native owned itemless Object + scoped actual click/count witness",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 2,
+      "kind": "object_click",
+      "objective": "Collect red crystal energy",
+      "producer_source": "krystuls.click; native owned itemless Object + scoped actual click/count witness",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 3,
+      "kind": "object_click",
+      "objective": "Collect green crystal energy",
+      "producer_source": "krystuls.click; native owned itemless Object + scoped actual click/count witness",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 4,
+      "kind": "dialogue",
+      "objective": "Ask Gronk about protection",
+      "producer_source": "mercenary_dialogue.say at exact giver/stage/required language",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 5,
+      "kind": "kill",
+      "objective": "Defeat sewer crocodiles",
+      "producer_source": "Native kill activity with explicit existing family IDs",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 6,
+      "kind": "dialogue",
+      "objective": "Ask Gronk about the robe",
+      "producer_source": "mercenary_dialogue.say at exact giver/stage/required language",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 7,
+      "kind": "posture_dialogue",
+      "objective": "Duck and discuss the army",
+      "producer_source": "gronk.giver_timer observes actual duck + stage progression",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 8,
+      "kind": "kill",
+      "objective": "Defeat the three taunted halflings",
+      "producer_source": "gronk.merit on three owned actual enemy deaths/currentrun",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040486,
+      "activity": 9,
+      "kind": "dialogue",
+      "objective": "Interrogate Gronk",
+      "producer_source": "mercenary_dialogue.say at exact giver/stage/required language",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 0,
+      "kind": "loot",
+      "objective": "Collect binding residue",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 1,
+      "kind": "loot",
+      "objective": "Collect osmium ore",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 2,
+      "kind": "loot",
+      "objective": "Collect purified direflame",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 3,
+      "kind": "loot",
+      "objective": "Collect ancient words",
+      "producer_source": "solution.death original augmentation or corpse.death original material -> real corpse -> native Loot",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 4,
+      "kind": "deliver",
+      "objective": "Give Zerkis the residue",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 5,
+      "kind": "deliver",
+      "objective": "Give Zerkis the ore",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 6,
+      "kind": "deliver",
+      "objective": "Give Zerkis the direflame",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 7,
+      "kind": "deliver",
+      "objective": "Give Zerkis the ancient text",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 8,
+      "kind": "item_use",
+      "objective": "Bind a weakened evil eye",
+      "producer_source": "binding.cast actual original ring/weak normal eye -> verified17893 custody",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    },
+    {
+      "task": 3040487,
+      "activity": 9,
+      "kind": "deliver",
+      "objective": "Return the empowered binding ring",
+      "producer_source": "Native task delivery + exclusive achievement_native_delivery_handin custody reconciliation",
+      "producer_source_present": true,
+      "installed": false,
+      "native_accepted": false
+    }
+  ]
+}

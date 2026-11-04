@@ -1,0 +1,20 @@
+{
+  "status": "REVIEWED_SOURCE_CONTENT_INACTIVE",
+  "canonical_version_reserved": 9345,
+  "canonical_identity": "xorbb-mercenary-required-v1",
+  "canonical_sha256": "8c5450a65bda941580e2f569ac47f3b49c53543d998fd3e90136277f68c1afc1",
+  "database_review": "PASS includingcorrect2doorpostimagecardinality; unaffectedreviewreused",
+  "isolated_syntax_parse": "Exactroutine CREATE accepted byMariaDB10.11.19; noCALL/migrationbodyexecution, isolatedcleanupcomplete",
+  "local_content_SQL_applied": false,
+  "source_registry_changed": false,
+  "runtime_db_version_changed": false,
+  "native_accepted": false,
+  "installer": "Portable reviewstage only, noapplymode;90stagedquestfiles/0conflicts,2mergedglobals syntaxchecked. Private fixture/checkreceipts excluded.",
+  "quest_scope": "14sourcequests/120objectives (9344partisan3/47 +9345mercenary11/73); allsourceenable/readinessflagsfalse",
+  "remaining": [
+    "Publication throughassignedGitHubowner",
+    "Coordinated authoritativeconnection/backup/applyplan",
+    "Controlledcompletepackageactivation",
+    "Proportionalgroupednativequest/custody/persistence/rewardverification"
+  ]
+}

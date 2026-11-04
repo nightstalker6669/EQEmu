@@ -1,0 +1,52 @@
+{
+  "status": "Disabled source; not installed or native accepted",
+  "guide_sources": [
+    {
+      "url": "https://rof.eqresource.com/wehavetogodeeper.php",
+      "period_report_date": "2012-12-27",
+      "supports": [
+        "actual player/group attack contribution needed for tent update",
+        "native torch and ordinary combat routes"
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/6107",
+      "period_report_dates": [
+        "2013-01-05",
+        "2013-01-13",
+        "2013-01-21",
+        "2013-02-27"
+      ],
+      "supports": [
+        "torch burning/stacking behavior",
+        "normal damage contribution rather than item-click task credit"
+      ],
+      "qualification": "Current mutable guide plus dated comments; original add count and exact timing unverified."
+    }
+  ],
+  "source_contracts": {
+    "permanent": "Weakness of Canvas33532 formula50/rawduration0 is permanent; native IsBuffSpell accepts nonzero formula; CalcBuffDuration_formula50 returns-1.",
+    "helper_limit": "Mob::ApplySpellBuff returns before casting when rawbuff_duration is0, ignoring formula. This source uses normal n:SpellFinished(33532,n), verifies FindBuff and requires no engine modification.",
+    "torch_focus": "33532 SPA297 withbase600000 and SPA139 limit33531 lets native focus evaluation amplify only the original33531torch. Native GetActDoTDamage applies incoming focus and current DOTBonusDamageSplitOverDuration; no scripted damage multiplication.",
+    "native_merit": "CommonDamage calls AddToHateList with iBuffTic; AddToHateList passes !iBuffTic as AddIfNotExist. DOT ticks alone do not create a new hate entry. Preserve real attack/kill attribution rather than faking a quest update.",
+    "damage_callback": "DamageTaken is late in native damage handling and a positive return overrides damage. The new callback returns nil and never calls Damage or UpdateTaskActivity.",
+    "coldwater": "33529 has native45000DD and push values; script calls original spell instead of moving characters."
+  },
+  "configurable_defaults": {
+    "waterbrigade_count": 2,
+    "cold_water_interval_seconds": 20,
+    "owned_lifetime_seconds": 600,
+    "timer_seconds": 1
+  },
+  "preservation": "Only exact owned tagged spawned waterbrigade actors are cleaned. Existing untagged guards and other owners are preserved; shelter death does not erase surviving attackers.",
+  "remaining": [
+    "Combat profile and actual shelter floor geometry",
+    "Native permanent focus/magnitude, DOT and melee contribution",
+    "Native new actor placement/ColdWater movement and objective completion"
+  ],
+  "spell_ids": {
+    "cold_water": 33529,
+    "torch_burn": 33531,
+    "weakness_of_canvas": 33532
+  }
+}

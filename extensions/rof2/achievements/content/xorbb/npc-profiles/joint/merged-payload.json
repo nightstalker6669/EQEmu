@@ -1,0 +1,7230 @@
+{
+  "status": "DISABLED_MERGED_SOURCE_NOT_APPLIED",
+  "spells_publication_pin": "e5de8074ea90dbefb91fd04a90564e01bc153503",
+  "normal_profiles": [
+    {
+      "id": 753002,
+      "family": "earth_elementals",
+      "template": "earth",
+      "preimage": {
+        "id": 753002,
+        "name": "a_groundswell_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 476,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753002,
+        "name": "a_groundswell_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 476,
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753004,
+      "family": "earth_elementals",
+      "template": "earth",
+      "preimage": {
+        "id": 753004,
+        "name": "a_groundswell_elemental",
+        "level": 98,
+        "class": 1,
+        "race": 476,
+        "hp": 10584,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 482,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753004,
+        "name": "a_groundswell_elemental",
+        "level": 98,
+        "class": 1,
+        "race": 476,
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753005,
+      "family": "earth_elementals",
+      "template": "earth",
+      "preimage": {
+        "id": 753005,
+        "name": "an_earthcrust_elemental",
+        "level": 100,
+        "class": 1,
+        "race": 476,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753005,
+        "name": "an_earthcrust_elemental",
+        "level": 100,
+        "class": 1,
+        "race": 476,
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753006,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753006,
+        "name": "a_watchman_minotaur",
+        "level": 100,
+        "class": 1,
+        "race": 574,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753006,
+        "name": "a_watchman_minotaur",
+        "level": 100,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753008,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753008,
+        "name": "an_overseer_minotaur",
+        "level": 102,
+        "class": 1,
+        "race": 574,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753008,
+        "name": "an_overseer_minotaur",
+        "level": 102,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753009,
+      "family": "rats",
+      "template": "light",
+      "preimage": {
+        "id": 753009,
+        "name": "a_sewer_rat",
+        "level": 99,
+        "class": 1,
+        "race": 415,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_postimage": {
+        "id": 753009,
+        "name": "a_sewer_rat",
+        "level": 99,
+        "class": 1,
+        "race": 415,
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753013,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753013,
+        "name": "a_deathraiser_goblin",
+        "level": 101,
+        "class": 11,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3
+      },
+      "merged_postimage": {
+        "id": 753013,
+        "name": "a_deathraiser_goblin",
+        "level": 101,
+        "class": 11,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753016,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753016,
+        "name": "a_corpsebinder_goblin",
+        "level": 102,
+        "class": 11,
+        "race": 433,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3
+      },
+      "merged_postimage": {
+        "id": 753016,
+        "name": "a_corpsebinder_goblin",
+        "level": 102,
+        "class": 11,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753018,
+      "family": "crocodiles",
+      "template": "standard",
+      "preimage": {
+        "id": 753018,
+        "name": "a_sickwater_crocodile",
+        "level": 100,
+        "class": 1,
+        "race": 259,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753018,
+        "name": "a_sickwater_crocodile",
+        "level": 100,
+        "class": 1,
+        "race": 259,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753019,
+      "family": "crocodiles",
+      "template": "standard",
+      "preimage": {
+        "id": 753019,
+        "name": "a_deadeater_crocodile",
+        "level": 101,
+        "class": 1,
+        "race": 259,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753019,
+        "name": "a_deadeater_crocodile",
+        "level": 101,
+        "class": 1,
+        "race": 259,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753020,
+      "family": "muddites",
+      "template": "standard",
+      "preimage": {
+        "id": 753020,
+        "name": "a_creekbottom_muddite",
+        "level": 99,
+        "class": 1,
+        "race": 608,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753020,
+        "name": "a_creekbottom_muddite",
+        "level": 99,
+        "class": 1,
+        "race": 608,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753021,
+      "family": "muddites",
+      "template": "standard",
+      "preimage": {
+        "id": 753021,
+        "name": "a_creekbottom_muddite",
+        "level": 100,
+        "class": 1,
+        "race": 608,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753021,
+        "name": "a_creekbottom_muddite",
+        "level": 100,
+        "class": 1,
+        "race": 608,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753023,
+      "family": "muddites",
+      "template": "standard",
+      "preimage": {
+        "id": 753023,
+        "name": "a_sedimentary_muddite",
+        "level": 100,
+        "class": 1,
+        "race": 608,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753023,
+        "name": "a_sedimentary_muddite",
+        "level": 100,
+        "class": 1,
+        "race": 608,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753026,
+      "family": "crocodiles",
+      "template": "standard",
+      "preimage": {
+        "id": 753026,
+        "name": "a_sickwater_crocodile",
+        "level": 99,
+        "class": 1,
+        "race": 259,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753026,
+        "name": "a_sickwater_crocodile",
+        "level": 99,
+        "class": 1,
+        "race": 259,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753028,
+      "family": "earth_elementals",
+      "template": "earth",
+      "preimage": {
+        "id": 753028,
+        "name": "a_core_elemental",
+        "level": 100,
+        "class": 1,
+        "race": 476,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753028,
+        "name": "a_core_elemental",
+        "level": 100,
+        "class": 1,
+        "race": 476,
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753029,
+      "family": "earth_elementals",
+      "template": "earth",
+      "preimage": {
+        "id": 753029,
+        "name": "an_earthcrust_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 476,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753029,
+        "name": "an_earthcrust_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 476,
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753031,
+      "family": "hydras",
+      "template": "heavy",
+      "preimage": {
+        "id": 753031,
+        "name": "a_lifeshard_hydra",
+        "level": 100,
+        "class": 1,
+        "race": 615,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753031,
+        "name": "a_lifeshard_hydra",
+        "level": 100,
+        "class": 1,
+        "race": 615,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753035,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753035,
+        "name": "a_deadfiend_goblin",
+        "level": 102,
+        "class": 11,
+        "race": 433,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3
+      },
+      "merged_postimage": {
+        "id": 753035,
+        "name": "a_deadfiend_goblin",
+        "level": 102,
+        "class": 11,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753042,
+      "family": "earth_elementals",
+      "template": "earth",
+      "preimage": {
+        "id": 753042,
+        "name": "an_earthcrust_elemental",
+        "level": 101,
+        "class": 1,
+        "race": 476,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753042,
+        "name": "an_earthcrust_elemental",
+        "level": 101,
+        "class": 1,
+        "race": 476,
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753049,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753049,
+        "name": "a_direflame_goblin",
+        "level": 101,
+        "class": 12,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000
+      },
+      "merged_postimage": {
+        "id": 753049,
+        "name": "a_direflame_goblin",
+        "level": 101,
+        "class": 12,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753054,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753054,
+        "name": "a_deathraiser_goblin",
+        "level": 99,
+        "class": 11,
+        "race": 433,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3
+      },
+      "merged_postimage": {
+        "id": 753054,
+        "name": "a_deathraiser_goblin",
+        "level": 99,
+        "class": 11,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753068,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753068,
+        "name": "a_deathraiser_goblin",
+        "level": 100,
+        "class": 11,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3
+      },
+      "merged_postimage": {
+        "id": 753068,
+        "name": "a_deathraiser_goblin",
+        "level": 100,
+        "class": 11,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753078,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753078,
+        "name": "a_workmaster_goblin",
+        "level": 101,
+        "class": 1,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753078,
+        "name": "a_workmaster_goblin",
+        "level": 101,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753079,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753079,
+        "name": "an_evenflame_goblin",
+        "level": 99,
+        "class": 12,
+        "race": 433,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000
+      },
+      "merged_postimage": {
+        "id": 753079,
+        "name": "an_evenflame_goblin",
+        "level": 99,
+        "class": 12,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753088,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753088,
+        "name": "a_pickslave_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753088,
+        "name": "a_pickslave_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753089,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753089,
+        "name": "a_workmaster_goblin",
+        "level": 102,
+        "class": 1,
+        "race": 433,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753089,
+        "name": "a_workmaster_goblin",
+        "level": 102,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753090,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753090,
+        "name": "a_deadfiend_goblin",
+        "level": 101,
+        "class": 11,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3
+      },
+      "merged_postimage": {
+        "id": 753090,
+        "name": "a_deadfiend_goblin",
+        "level": 101,
+        "class": 11,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 3,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753094,
+      "family": "earth_elementals",
+      "template": "earth",
+      "preimage": {
+        "id": 753094,
+        "name": "a_core_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 476,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753094,
+        "name": "a_core_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 476,
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753098,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753098,
+        "name": "a_waterknight_goblin",
+        "level": 99,
+        "class": 1,
+        "race": 433,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753098,
+        "name": "a_waterknight_goblin",
+        "level": 99,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753099,
+      "family": "muddites",
+      "template": "standard",
+      "preimage": {
+        "id": 753099,
+        "name": "a_sedimentary_muddite",
+        "level": 99,
+        "class": 1,
+        "race": 608,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753099,
+        "name": "a_sedimentary_muddite",
+        "level": 99,
+        "class": 1,
+        "race": 608,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753100,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753100,
+        "name": "a_pickslave_goblin",
+        "level": 99,
+        "class": 1,
+        "race": 433,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753100,
+        "name": "a_pickslave_goblin",
+        "level": 99,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753103,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753103,
+        "name": "a_watchman_minotaur",
+        "level": 99,
+        "class": 1,
+        "race": 574,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753103,
+        "name": "a_watchman_minotaur",
+        "level": 99,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753104,
+      "family": "bears",
+      "template": "standard",
+      "preimage": {
+        "id": 753104,
+        "name": "a_deepwoods_bear",
+        "level": 99,
+        "class": 1,
+        "race": 305,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753104,
+        "name": "a_deepwoods_bear",
+        "level": 99,
+        "class": 1,
+        "race": 305,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753105,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753105,
+        "name": "a_guardian_minotaur",
+        "level": 99,
+        "class": 1,
+        "race": 574,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753105,
+        "name": "a_guardian_minotaur",
+        "level": 99,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753107,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753107,
+        "name": "a_hungry_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753107,
+        "name": "a_hungry_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753111,
+      "family": "snakes",
+      "template": "light",
+      "preimage": {
+        "id": 753111,
+        "name": "a_deepwoods_snake",
+        "level": 100,
+        "class": 1,
+        "race": 468,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_postimage": {
+        "id": 753111,
+        "name": "a_deepwoods_snake",
+        "level": 100,
+        "class": 1,
+        "race": 468,
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753117,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753117,
+        "name": "a_waterknight_goblin",
+        "level": 101,
+        "class": 1,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753117,
+        "name": "a_waterknight_goblin",
+        "level": 101,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753118,
+      "family": "crystal_golems",
+      "template": "heavy",
+      "preimage": {
+        "id": 753118,
+        "name": "a_crystalfear_golem",
+        "level": 100,
+        "class": 1,
+        "race": 374,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753118,
+        "name": "a_crystalfear_golem",
+        "level": 100,
+        "class": 1,
+        "race": 374,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753120,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753120,
+        "name": "a_woundhealer_goblin",
+        "level": 100,
+        "class": 10,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6
+      },
+      "merged_postimage": {
+        "id": 753120,
+        "name": "a_woundhealer_goblin",
+        "level": 100,
+        "class": 10,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753122,
+      "family": "crystal_golems",
+      "template": "heavy",
+      "preimage": {
+        "id": 753122,
+        "name": "a_shardcraft_golem",
+        "level": 99,
+        "class": 1,
+        "race": 374,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753122,
+        "name": "a_shardcraft_golem",
+        "level": 99,
+        "class": 1,
+        "race": 374,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753123,
+      "family": "snakes",
+      "template": "light",
+      "preimage": {
+        "id": 753123,
+        "name": "a_forest_snake",
+        "level": 99,
+        "class": 1,
+        "race": 468,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_postimage": {
+        "id": 753123,
+        "name": "a_forest_snake",
+        "level": 99,
+        "class": 1,
+        "race": 468,
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753125,
+      "family": "hydras",
+      "template": "heavy",
+      "preimage": {
+        "id": 753125,
+        "name": "a_lifeshard_hydra",
+        "level": 101,
+        "class": 1,
+        "race": 615,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753125,
+        "name": "a_lifeshard_hydra",
+        "level": 101,
+        "class": 1,
+        "race": 615,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753126,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753126,
+        "name": "an_evenflame_goblin",
+        "level": 101,
+        "class": 12,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000
+      },
+      "merged_postimage": {
+        "id": 753126,
+        "name": "an_evenflame_goblin",
+        "level": 101,
+        "class": 12,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753127,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753127,
+        "name": "a_subservient_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753127,
+        "name": "a_subservient_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753128,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753128,
+        "name": "a_shamanic_goblin",
+        "level": 101,
+        "class": 10,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6
+      },
+      "merged_postimage": {
+        "id": 753128,
+        "name": "a_shamanic_goblin",
+        "level": 101,
+        "class": 10,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753135,
+      "family": "crocodiles",
+      "template": "standard",
+      "preimage": {
+        "id": 753135,
+        "name": "a_deadeater_crocodile",
+        "level": 100,
+        "class": 1,
+        "race": 259,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753135,
+        "name": "a_deadeater_crocodile",
+        "level": 100,
+        "class": 1,
+        "race": 259,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753136,
+      "family": "cloudburst_cyclones",
+      "template": "standard",
+      "preimage": {
+        "id": 753136,
+        "name": "a_cloudburst_cyclone",
+        "level": 102,
+        "class": 1,
+        "race": 431,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753136,
+        "name": "a_cloudburst_cyclone",
+        "level": 102,
+        "class": 1,
+        "race": 431,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753137,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753137,
+        "name": "a_workmaster_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753137,
+        "name": "a_workmaster_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753139,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753139,
+        "name": "a_pickslave_goblin",
+        "level": 101,
+        "class": 1,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753139,
+        "name": "a_pickslave_goblin",
+        "level": 101,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753140,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753140,
+        "name": "a_woundhealer_goblin",
+        "level": 102,
+        "class": 10,
+        "race": 433,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6
+      },
+      "merged_postimage": {
+        "id": 753140,
+        "name": "a_woundhealer_goblin",
+        "level": 102,
+        "class": 10,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753145,
+      "family": "cloudburst_cyclones",
+      "template": "standard",
+      "preimage": {
+        "id": 753145,
+        "name": "a_cloudburst_cyclone",
+        "level": 101,
+        "class": 1,
+        "race": 431,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753145,
+        "name": "a_cloudburst_cyclone",
+        "level": 101,
+        "class": 1,
+        "race": 431,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753148,
+      "family": "water_elementals",
+      "template": "standard",
+      "preimage": {
+        "id": 753148,
+        "name": "a_streamswell_elemental",
+        "level": 100,
+        "class": 1,
+        "race": 478,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753148,
+        "name": "a_streamswell_elemental",
+        "level": 100,
+        "class": 1,
+        "race": 478,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753149,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753149,
+        "name": "a_waterknight_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753149,
+        "name": "a_waterknight_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753150,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753150,
+        "name": "a_ritualtalker_goblin",
+        "level": 100,
+        "class": 10,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6
+      },
+      "merged_postimage": {
+        "id": 753150,
+        "name": "a_ritualtalker_goblin",
+        "level": 100,
+        "class": 10,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753151,
+      "family": "snakes",
+      "template": "light",
+      "preimage": {
+        "id": 753151,
+        "name": "a_forest_snake",
+        "level": 100,
+        "class": 1,
+        "race": 468,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_postimage": {
+        "id": 753151,
+        "name": "a_forest_snake",
+        "level": 100,
+        "class": 1,
+        "race": 468,
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753153,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753153,
+        "name": "a_vigilant_eye",
+        "level": 99,
+        "class": 1,
+        "race": 469,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753153,
+        "name": "a_vigilant_eye",
+        "level": 99,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753154,
+      "family": "rats",
+      "template": "light",
+      "preimage": {
+        "id": 753154,
+        "name": "a_sewer_rat",
+        "level": 98,
+        "class": 1,
+        "race": 415,
+        "hp": 10584,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 482,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_postimage": {
+        "id": 753154,
+        "name": "a_sewer_rat",
+        "level": 98,
+        "class": 1,
+        "race": 415,
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753155,
+      "family": "minotaurs",
+      "template": "caster",
+      "preimage": {
+        "id": 753155,
+        "name": "a_shamanic_minotaur",
+        "level": 101,
+        "class": 10,
+        "race": 574,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6
+      },
+      "merged_postimage": {
+        "id": 753155,
+        "name": "a_shamanic_minotaur",
+        "level": 101,
+        "class": 10,
+        "race": 574,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753156,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753156,
+        "name": "an_evenflame_goblin",
+        "level": 100,
+        "class": 12,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000
+      },
+      "merged_postimage": {
+        "id": 753156,
+        "name": "an_evenflame_goblin",
+        "level": 100,
+        "class": 12,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753158,
+      "family": "muddites",
+      "template": "standard",
+      "preimage": {
+        "id": 753158,
+        "name": "a_creekbottom_muddite",
+        "level": 98,
+        "class": 1,
+        "race": 608,
+        "hp": 10584,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 482,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753158,
+        "name": "a_creekbottom_muddite",
+        "level": 98,
+        "class": 1,
+        "race": 608,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753163,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753163,
+        "name": "an_overseer_minotaur",
+        "level": 100,
+        "class": 1,
+        "race": 574,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753163,
+        "name": "an_overseer_minotaur",
+        "level": 100,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753165,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753165,
+        "name": "a_ritualtalker_goblin",
+        "level": 101,
+        "class": 10,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6
+      },
+      "merged_postimage": {
+        "id": 753165,
+        "name": "a_ritualtalker_goblin",
+        "level": 101,
+        "class": 10,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753166,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753166,
+        "name": "a_guardian_minotaur",
+        "level": 101,
+        "class": 1,
+        "race": 574,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753166,
+        "name": "a_guardian_minotaur",
+        "level": 101,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753168,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753168,
+        "name": "an_icewarrior_goblin",
+        "level": 101,
+        "class": 1,
+        "race": 433,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753168,
+        "name": "an_icewarrior_goblin",
+        "level": 101,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753169,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753169,
+        "name": "an_evilgaze_eye",
+        "level": 101,
+        "class": 1,
+        "race": 469,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753169,
+        "name": "an_evilgaze_eye",
+        "level": 101,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753170,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753170,
+        "name": "a_vigilant_eye",
+        "level": 98,
+        "class": 1,
+        "race": 469,
+        "hp": 10584,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 482,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753170,
+        "name": "a_vigilant_eye",
+        "level": 98,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753171,
+      "family": "hydras",
+      "template": "heavy",
+      "preimage": {
+        "id": 753171,
+        "name": "a_shardcraft_hydra",
+        "level": 101,
+        "class": 1,
+        "race": 615,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753171,
+        "name": "a_shardcraft_hydra",
+        "level": 101,
+        "class": 1,
+        "race": 615,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753172,
+      "family": "water_elementals",
+      "template": "standard",
+      "preimage": {
+        "id": 753172,
+        "name": "a_streamswell_elemental",
+        "level": 97,
+        "class": 1,
+        "race": 478,
+        "hp": 10379,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 478,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753172,
+        "name": "a_streamswell_elemental",
+        "level": 97,
+        "class": 1,
+        "race": 478,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753174,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753174,
+        "name": "a_focused_eye",
+        "level": 101,
+        "class": 1,
+        "race": 469,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753174,
+        "name": "a_focused_eye",
+        "level": 101,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753176,
+      "family": "hydras",
+      "template": "heavy",
+      "preimage": {
+        "id": 753176,
+        "name": "a_shardcraft_hydra",
+        "level": 100,
+        "class": 1,
+        "race": 615,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753176,
+        "name": "a_shardcraft_hydra",
+        "level": 100,
+        "class": 1,
+        "race": 615,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753178,
+      "family": "minotaurs",
+      "template": "caster",
+      "preimage": {
+        "id": 753178,
+        "name": "a_shamanic_minotaur",
+        "level": 99,
+        "class": 10,
+        "race": 574,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6
+      },
+      "merged_postimage": {
+        "id": 753178,
+        "name": "a_shamanic_minotaur",
+        "level": 99,
+        "class": 10,
+        "race": 574,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753179,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753179,
+        "name": "a_clouded_eye",
+        "level": 100,
+        "class": 1,
+        "race": 469,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753179,
+        "name": "a_clouded_eye",
+        "level": 100,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753182,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753182,
+        "name": "an_omnifocus_eye",
+        "level": 100,
+        "class": 1,
+        "race": 469,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753182,
+        "name": "an_omnifocus_eye",
+        "level": 100,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753184,
+      "family": "water_elementals",
+      "template": "standard",
+      "preimage": {
+        "id": 753184,
+        "name": "a_riverfoam_elemental",
+        "level": 101,
+        "class": 1,
+        "race": 478,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753184,
+        "name": "a_riverfoam_elemental",
+        "level": 101,
+        "class": 1,
+        "race": 478,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753185,
+      "family": "water_elementals",
+      "template": "standard",
+      "preimage": {
+        "id": 753185,
+        "name": "a_riverfoam_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 478,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753185,
+        "name": "a_riverfoam_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 478,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753186,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753186,
+        "name": "a_bruiser_minotaur",
+        "level": 100,
+        "class": 1,
+        "race": 574,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753186,
+        "name": "a_bruiser_minotaur",
+        "level": 100,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753187,
+      "family": "snakes",
+      "template": "light",
+      "preimage": {
+        "id": 753187,
+        "name": "a_deepwoods_snake",
+        "level": 99,
+        "class": 1,
+        "race": 468,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_postimage": {
+        "id": 753187,
+        "name": "a_deepwoods_snake",
+        "level": 99,
+        "class": 1,
+        "race": 468,
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753188,
+      "family": "rats",
+      "template": "light",
+      "preimage": {
+        "id": 753188,
+        "name": "a_sewer_rat",
+        "level": 100,
+        "class": 1,
+        "race": 415,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_postimage": {
+        "id": 753188,
+        "name": "a_sewer_rat",
+        "level": 100,
+        "class": 1,
+        "race": 415,
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753189,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753189,
+        "name": "a_shamanic_goblin",
+        "level": 99,
+        "class": 10,
+        "race": 433,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6
+      },
+      "merged_postimage": {
+        "id": 753189,
+        "name": "a_shamanic_goblin",
+        "level": 99,
+        "class": 10,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753190,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753190,
+        "name": "a_farsighted_eye",
+        "level": 99,
+        "class": 1,
+        "race": 469,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753190,
+        "name": "a_farsighted_eye",
+        "level": 99,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753194,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753194,
+        "name": "an_icewarrior_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753194,
+        "name": "an_icewarrior_goblin",
+        "level": 100,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753195,
+      "family": "crocodiles",
+      "template": "standard",
+      "preimage": {
+        "id": 753195,
+        "name": "a_thickhide_crocodile",
+        "level": 101,
+        "class": 1,
+        "race": 259,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753195,
+        "name": "a_thickhide_crocodile",
+        "level": 101,
+        "class": 1,
+        "race": 259,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753197,
+      "family": "eyes",
+      "template": "caster",
+      "preimage": {
+        "id": 753197,
+        "name": "a_magician`s_eye",
+        "level": 100,
+        "class": 13,
+        "race": 469,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 4
+      },
+      "merged_postimage": {
+        "id": 753197,
+        "name": "a_magician`s_eye",
+        "level": 100,
+        "class": 13,
+        "race": 469,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 4,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753201,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753201,
+        "name": "a_watchman_minotaur",
+        "level": 98,
+        "class": 1,
+        "race": 574,
+        "hp": 10584,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 482,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753201,
+        "name": "a_watchman_minotaur",
+        "level": 98,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753205,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753205,
+        "name": "an_omnifocus_eye",
+        "level": 99,
+        "class": 1,
+        "race": 469,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753205,
+        "name": "an_omnifocus_eye",
+        "level": 99,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753206,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753206,
+        "name": "a_bruiser_minotaur",
+        "level": 102,
+        "class": 1,
+        "race": 574,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753206,
+        "name": "a_bruiser_minotaur",
+        "level": 102,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753207,
+      "family": "crocodiles",
+      "template": "standard",
+      "preimage": {
+        "id": 753207,
+        "name": "a_sickwater_crocodile",
+        "level": 98,
+        "class": 1,
+        "race": 259,
+        "hp": 10584,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 482,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753207,
+        "name": "a_sickwater_crocodile",
+        "level": 98,
+        "class": 1,
+        "race": 259,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753208,
+      "family": "water_elementals",
+      "template": "standard",
+      "preimage": {
+        "id": 753208,
+        "name": "a_streamswell_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 478,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753208,
+        "name": "a_streamswell_elemental",
+        "level": 99,
+        "class": 1,
+        "race": 478,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753209,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753209,
+        "name": "an_omnifocus_eye",
+        "level": 101,
+        "class": 1,
+        "race": 469,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753209,
+        "name": "an_omnifocus_eye",
+        "level": 101,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753210,
+      "family": "goblins",
+      "template": "caster",
+      "preimage": {
+        "id": 753210,
+        "name": "a_direflame_goblin",
+        "level": 100,
+        "class": 12,
+        "race": 433,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000
+      },
+      "merged_postimage": {
+        "id": 753210,
+        "name": "a_direflame_goblin",
+        "level": 100,
+        "class": 12,
+        "race": 433,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753215,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753215,
+        "name": "a_clouded_eye",
+        "level": 101,
+        "class": 1,
+        "race": 469,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753215,
+        "name": "a_clouded_eye",
+        "level": 101,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753218,
+      "family": "cloudburst_cyclones",
+      "template": "standard",
+      "preimage": {
+        "id": 753218,
+        "name": "a_cloudburst_cyclone",
+        "level": 100,
+        "class": 1,
+        "race": 431,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753218,
+        "name": "a_cloudburst_cyclone",
+        "level": 100,
+        "class": 1,
+        "race": 431,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753219,
+      "family": "muddites",
+      "template": "standard",
+      "preimage": {
+        "id": 753219,
+        "name": "a_clayborn_muddite",
+        "level": 101,
+        "class": 1,
+        "race": 608,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753219,
+        "name": "a_clayborn_muddite",
+        "level": 101,
+        "class": 1,
+        "race": 608,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753220,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753220,
+        "name": "a_farsighted_eye",
+        "level": 97,
+        "class": 1,
+        "race": 469,
+        "hp": 10379,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 478,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753220,
+        "name": "a_farsighted_eye",
+        "level": 97,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753221,
+      "family": "bears",
+      "template": "standard",
+      "preimage": {
+        "id": 753221,
+        "name": "a_forest_bear",
+        "level": 98,
+        "class": 1,
+        "race": 305,
+        "hp": 10584,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 482,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753221,
+        "name": "a_forest_bear",
+        "level": 98,
+        "class": 1,
+        "race": 305,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753222,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753222,
+        "name": "a_focused_eye",
+        "level": 100,
+        "class": 1,
+        "race": 469,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753222,
+        "name": "a_focused_eye",
+        "level": 100,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753223,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753223,
+        "name": "a_vigilant_eye",
+        "level": 97,
+        "class": 1,
+        "race": 469,
+        "hp": 10379,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 478,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753223,
+        "name": "a_vigilant_eye",
+        "level": 97,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753227,
+      "family": "bears",
+      "template": "standard",
+      "preimage": {
+        "id": 753227,
+        "name": "a_deepwoods_bear",
+        "level": 100,
+        "class": 1,
+        "race": 305,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753227,
+        "name": "a_deepwoods_bear",
+        "level": 100,
+        "class": 1,
+        "race": 305,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753231,
+      "family": "bears",
+      "template": "standard",
+      "preimage": {
+        "id": 753231,
+        "name": "a_forest_bear",
+        "level": 100,
+        "class": 1,
+        "race": 305,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753231,
+        "name": "a_forest_bear",
+        "level": 100,
+        "class": 1,
+        "race": 305,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753235,
+      "family": "muddites",
+      "template": "standard",
+      "preimage": {
+        "id": 753235,
+        "name": "an_eskerdirt_muddite",
+        "level": 102,
+        "class": 1,
+        "race": 608,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753235,
+        "name": "an_eskerdirt_muddite",
+        "level": 102,
+        "class": 1,
+        "race": 608,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753236,
+      "family": "muddites",
+      "template": "standard",
+      "preimage": {
+        "id": 753236,
+        "name": "an_eskerdirt_muddite",
+        "level": 101,
+        "class": 1,
+        "race": 608,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753236,
+        "name": "an_eskerdirt_muddite",
+        "level": 101,
+        "class": 1,
+        "race": 608,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753237,
+      "family": "crocodiles",
+      "template": "standard",
+      "preimage": {
+        "id": 753237,
+        "name": "a_thickhide_crocodile",
+        "level": 99,
+        "class": 1,
+        "race": 259,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753237,
+        "name": "a_thickhide_crocodile",
+        "level": 99,
+        "class": 1,
+        "race": 259,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753238,
+      "family": "earth_elementals",
+      "template": "earth",
+      "preimage": {
+        "id": 753238,
+        "name": "a_groundswell_elemental",
+        "level": 100,
+        "class": 1,
+        "race": 476,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753238,
+        "name": "a_groundswell_elemental",
+        "level": 100,
+        "class": 1,
+        "race": 476,
+        "hp": 1800000,
+        "mindmg": 1500,
+        "maxdmg": 10000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753240,
+      "family": "crystal_golems",
+      "template": "heavy",
+      "preimage": {
+        "id": 753240,
+        "name": "a_shardcraft_golem",
+        "level": 100,
+        "class": 1,
+        "race": 374,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753240,
+        "name": "a_shardcraft_golem",
+        "level": 100,
+        "class": 1,
+        "race": 374,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753242,
+      "family": "muddites",
+      "template": "standard",
+      "preimage": {
+        "id": 753242,
+        "name": "a_sedimentary_muddite",
+        "level": 101,
+        "class": 1,
+        "race": 608,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753242,
+        "name": "a_sedimentary_muddite",
+        "level": 101,
+        "class": 1,
+        "race": 608,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753244,
+      "family": "bears",
+      "template": "standard",
+      "preimage": {
+        "id": 753244,
+        "name": "a_deepwoods_bear",
+        "level": 101,
+        "class": 1,
+        "race": 305,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753244,
+        "name": "a_deepwoods_bear",
+        "level": 101,
+        "class": 1,
+        "race": 305,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753247,
+      "family": "water_elementals",
+      "template": "standard",
+      "preimage": {
+        "id": 753247,
+        "name": "a_streamswell_elemental",
+        "level": 98,
+        "class": 1,
+        "race": 478,
+        "hp": 10584,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 482,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753247,
+        "name": "a_streamswell_elemental",
+        "level": 98,
+        "class": 1,
+        "race": 478,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753248,
+      "family": "bears",
+      "template": "standard",
+      "preimage": {
+        "id": 753248,
+        "name": "a_forest_bear",
+        "level": 99,
+        "class": 1,
+        "race": 305,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753248,
+        "name": "a_forest_bear",
+        "level": 99,
+        "class": 1,
+        "race": 305,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753249,
+      "family": "bears",
+      "template": "standard",
+      "preimage": {
+        "id": 753249,
+        "name": "a_rabid_bear",
+        "level": 100,
+        "class": 1,
+        "race": 305,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753249,
+        "name": "a_rabid_bear",
+        "level": 100,
+        "class": 1,
+        "race": 305,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753252,
+      "family": "rats",
+      "template": "light",
+      "preimage": {
+        "id": 753252,
+        "name": "a_longfang_rat",
+        "level": 100,
+        "class": 1,
+        "race": 415,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_postimage": {
+        "id": 753252,
+        "name": "a_longfang_rat",
+        "level": 100,
+        "class": 1,
+        "race": 415,
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753259,
+      "family": "crystal_golems",
+      "template": "heavy",
+      "preimage": {
+        "id": 753259,
+        "name": "a_crystalfear_golem",
+        "level": 101,
+        "class": 1,
+        "race": 374,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753259,
+        "name": "a_crystalfear_golem",
+        "level": 101,
+        "class": 1,
+        "race": 374,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753262,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753262,
+        "name": "an_overseer_minotaur",
+        "level": 101,
+        "class": 1,
+        "race": 574,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753262,
+        "name": "an_overseer_minotaur",
+        "level": 101,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753265,
+      "family": "snakes",
+      "template": "light",
+      "preimage": {
+        "id": 753265,
+        "name": "a_forest_snake",
+        "level": 98,
+        "class": 1,
+        "race": 468,
+        "hp": 10584,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 482,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_set": {
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100
+      },
+      "merged_postimage": {
+        "id": 753265,
+        "name": "a_forest_snake",
+        "level": 98,
+        "class": 1,
+        "race": 468,
+        "hp": 750000,
+        "mindmg": 500,
+        "maxdmg": 4000,
+        "AC": 1200,
+        "ATK": 1100,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753274,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753274,
+        "name": "a_warrior_minotaur",
+        "level": 100,
+        "class": 1,
+        "race": 574,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753274,
+        "name": "a_warrior_minotaur",
+        "level": 100,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753275,
+      "family": "minotaurs",
+      "template": "heavy",
+      "preimage": {
+        "id": 753275,
+        "name": "a_warrior_minotaur",
+        "level": 101,
+        "class": 1,
+        "race": 574,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753275,
+        "name": "a_warrior_minotaur",
+        "level": 101,
+        "class": 1,
+        "race": 574,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753276,
+      "family": "crystal_golems",
+      "template": "heavy",
+      "preimage": {
+        "id": 753276,
+        "name": "a_terror_golem",
+        "level": 102,
+        "class": 1,
+        "race": 374,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753276,
+        "name": "a_terror_golem",
+        "level": 102,
+        "class": 1,
+        "race": 374,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753277,
+      "family": "crystal_golems",
+      "template": "heavy",
+      "preimage": {
+        "id": 753277,
+        "name": "a_terror_golem",
+        "level": 100,
+        "class": 1,
+        "race": 374,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753277,
+        "name": "a_terror_golem",
+        "level": 100,
+        "class": 1,
+        "race": 374,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753279,
+      "family": "bears",
+      "template": "standard",
+      "preimage": {
+        "id": 753279,
+        "name": "a_rabid_bear",
+        "level": 101,
+        "class": 1,
+        "race": 305,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753279,
+        "name": "a_rabid_bear",
+        "level": 101,
+        "class": 1,
+        "race": 305,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753280,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753280,
+        "name": "an_icewarrior_goblin",
+        "level": 102,
+        "class": 1,
+        "race": 433,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753280,
+        "name": "an_icewarrior_goblin",
+        "level": 102,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753285,
+      "family": "bears",
+      "template": "standard",
+      "preimage": {
+        "id": 753285,
+        "name": "a_timbercrush_bear",
+        "level": 101,
+        "class": 1,
+        "race": 305,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753285,
+        "name": "a_timbercrush_bear",
+        "level": 101,
+        "class": 1,
+        "race": 305,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753286,
+      "family": "minotaurs",
+      "template": "caster",
+      "preimage": {
+        "id": 753286,
+        "name": "a_shamanic_minotaur",
+        "level": 100,
+        "class": 10,
+        "race": 574,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6
+      },
+      "merged_postimage": {
+        "id": 753286,
+        "name": "a_shamanic_minotaur",
+        "level": 100,
+        "class": 10,
+        "race": 574,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 6,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753293,
+      "family": "crystal_golems",
+      "template": "heavy",
+      "preimage": {
+        "id": 753293,
+        "name": "a_crystalfear_golem",
+        "level": 102,
+        "class": 1,
+        "race": 374,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753293,
+        "name": "a_crystalfear_golem",
+        "level": 102,
+        "class": 1,
+        "race": 374,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753297,
+      "family": "hydras",
+      "template": "heavy",
+      "preimage": {
+        "id": 753297,
+        "name": "a_crystalfear_hydra",
+        "level": 102,
+        "class": 1,
+        "race": 615,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753297,
+        "name": "a_crystalfear_hydra",
+        "level": 102,
+        "class": 1,
+        "race": 615,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753298,
+      "family": "hydras",
+      "template": "heavy",
+      "preimage": {
+        "id": 753298,
+        "name": "a_multifacet_hydra",
+        "level": 102,
+        "class": 1,
+        "race": 615,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753298,
+        "name": "a_multifacet_hydra",
+        "level": 102,
+        "class": 1,
+        "race": 615,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753300,
+      "family": "hydras",
+      "template": "heavy",
+      "preimage": {
+        "id": 753300,
+        "name": "a_multifacet_hydra",
+        "level": 101,
+        "class": 1,
+        "race": 615,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753300,
+        "name": "a_multifacet_hydra",
+        "level": 101,
+        "class": 1,
+        "race": 615,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753301,
+      "family": "mephits",
+      "template": "standard",
+      "preimage": {
+        "id": 753301,
+        "name": "a_nightfear_mephit",
+        "level": 100,
+        "class": 1,
+        "race": 294,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753301,
+        "name": "a_nightfear_mephit",
+        "level": 100,
+        "class": 1,
+        "race": 294,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753302,
+      "family": "mephits",
+      "template": "standard",
+      "preimage": {
+        "id": 753302,
+        "name": "a_nullmind_mephit",
+        "level": 102,
+        "class": 1,
+        "race": 294,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753302,
+        "name": "a_nullmind_mephit",
+        "level": 102,
+        "class": 1,
+        "race": 294,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753303,
+      "family": "mephits",
+      "template": "standard",
+      "preimage": {
+        "id": 753303,
+        "name": "a_geosplint_mephit",
+        "level": 101,
+        "class": 1,
+        "race": 292,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753303,
+        "name": "a_geosplint_mephit",
+        "level": 101,
+        "class": 1,
+        "race": 292,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753304,
+      "family": "mephits",
+      "template": "standard",
+      "preimage": {
+        "id": 753304,
+        "name": "a_nullmind_mephit",
+        "level": 101,
+        "class": 1,
+        "race": 294,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753304,
+        "name": "a_nullmind_mephit",
+        "level": 101,
+        "class": 1,
+        "race": 294,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753308,
+      "family": "mephits",
+      "template": "standard",
+      "preimage": {
+        "id": 753308,
+        "name": "a_nightfear_mephit",
+        "level": 102,
+        "class": 1,
+        "race": 294,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753308,
+        "name": "a_nightfear_mephit",
+        "level": 102,
+        "class": 1,
+        "race": 294,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753309,
+      "family": "mephits",
+      "template": "caster",
+      "preimage": {
+        "id": 753309,
+        "name": "a_fleshburn_mephit",
+        "level": 102,
+        "class": 12,
+        "race": 293,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000
+      },
+      "merged_postimage": {
+        "id": 753309,
+        "name": "a_fleshburn_mephit",
+        "level": 102,
+        "class": 12,
+        "race": 293,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753310,
+      "family": "mephits",
+      "template": "caster",
+      "preimage": {
+        "id": 753310,
+        "name": "a_fleshburn_mephit",
+        "level": 100,
+        "class": 12,
+        "race": 293,
+        "hp": 11000,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 490,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000
+      },
+      "merged_postimage": {
+        "id": 753310,
+        "name": "a_fleshburn_mephit",
+        "level": 100,
+        "class": 12,
+        "race": 293,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753311,
+      "family": "mephits",
+      "template": "caster",
+      "preimage": {
+        "id": 753311,
+        "name": "a_fleshburn_mephit",
+        "level": 101,
+        "class": 12,
+        "race": 293,
+        "hp": 11211,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 495,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400
+      },
+      "merged_set": {
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000
+      },
+      "merged_postimage": {
+        "id": 753311,
+        "name": "a_fleshburn_mephit",
+        "level": 101,
+        "class": 12,
+        "race": 293,
+        "hp": 1200000,
+        "mindmg": 800,
+        "maxdmg": 6000,
+        "AC": 1500,
+        "ATK": 1400,
+        "npc_spells_id": 925000,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753312,
+      "family": "eyes",
+      "template": "standard",
+      "preimage": {
+        "id": 753312,
+        "name": "an_evilgaze_eye",
+        "level": 102,
+        "class": 1,
+        "race": 469,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753312,
+        "name": "an_evilgaze_eye",
+        "level": 102,
+        "class": 1,
+        "race": 469,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753313,
+      "family": "hydras",
+      "template": "heavy",
+      "preimage": {
+        "id": 753313,
+        "name": "a_shardcraft_hydra",
+        "level": 99,
+        "class": 1,
+        "race": 615,
+        "hp": 10791,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 486,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753313,
+        "name": "a_shardcraft_hydra",
+        "level": 99,
+        "class": 1,
+        "race": 615,
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    },
+    {
+      "id": 753317,
+      "family": "goblins",
+      "template": "standard",
+      "preimage": {
+        "id": 753317,
+        "name": "a_subservient_goblin",
+        "level": 102,
+        "class": 1,
+        "race": 433,
+        "hp": 11424,
+        "mindmg": 0,
+        "maxdmg": 4,
+        "AC": 499,
+        "ATK": 0,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      },
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600
+      },
+      "merged_postimage": {
+        "id": 753317,
+        "name": "a_subservient_goblin",
+        "level": 102,
+        "class": 1,
+        "race": 433,
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "npc_spells_id": 0,
+        "loottable_id": 0
+      }
+    }
+  ],
+  "new_ai_rows": {
+    "npc_spells": [
+      {
+        "id": 925000,
+        "name": "RoF2 Xorbb Wizard fallback",
+        "parent_list": 0,
+        "attack_proc": -1,
+        "proc_chance": 10,
+        "range_proc": -1,
+        "rproc_chance": 0,
+        "defensive_proc": -1,
+        "dproc_chance": 0,
+        "fail_recast": 0,
+        "engaged_no_sp_recast_min": 0,
+        "engaged_no_sp_recast_max": 0,
+        "engaged_b_self_chance": 0,
+        "engaged_b_other_chance": 0,
+        "engaged_d_chance": 0,
+        "pursue_no_sp_recast_min": 0,
+        "pursue_no_sp_recast_max": 0,
+        "pursue_d_chance": 0,
+        "idle_no_sp_recast_min": 0,
+        "idle_no_sp_recast_max": 0,
+        "idle_b_chance": 0
+      }
+    ],
+    "npc_spells_entries": [
+      {
+        "id": 925001,
+        "npc_spells_id": 925000,
+        "spellid": 2884,
+        "type": 1,
+        "minlevel": 60,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 22,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925002,
+        "npc_spells_id": 925000,
+        "spellid": 3335,
+        "type": 1,
+        "minlevel": 63,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 23,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925003,
+        "npc_spells_id": 925000,
+        "spellid": 3339,
+        "type": 1,
+        "minlevel": 65,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 24,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925004,
+        "npc_spells_id": 925000,
+        "spellid": 3332,
+        "type": 1,
+        "minlevel": 65,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925005,
+        "npc_spells_id": 925000,
+        "spellid": 1636,
+        "type": 1,
+        "minlevel": 59,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925006,
+        "npc_spells_id": 925000,
+        "spellid": 3333,
+        "type": 1,
+        "minlevel": 64,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925007,
+        "npc_spells_id": 925000,
+        "spellid": 3194,
+        "type": 4,
+        "minlevel": 61,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 5,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925008,
+        "npc_spells_id": 925000,
+        "spellid": 1526,
+        "type": 512,
+        "minlevel": 53,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925009,
+        "npc_spells_id": 925000,
+        "spellid": 3302,
+        "type": 8,
+        "minlevel": 64,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925010,
+        "npc_spells_id": 925000,
+        "spellid": 3301,
+        "type": 8,
+        "minlevel": 63,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925011,
+        "npc_spells_id": 925000,
+        "spellid": 1419,
+        "type": 8,
+        "minlevel": 34,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925012,
+        "npc_spells_id": 925000,
+        "spellid": 3191,
+        "type": 1,
+        "minlevel": 65,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 24,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925013,
+        "npc_spells_id": 925000,
+        "spellid": 3331,
+        "type": 1,
+        "minlevel": 62,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 23,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925014,
+        "npc_spells_id": 925000,
+        "spellid": 230,
+        "type": 4,
+        "minlevel": 4,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925015,
+        "npc_spells_id": 925000,
+        "spellid": 11839,
+        "type": 1,
+        "minlevel": 71,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925016,
+        "npc_spells_id": 925000,
+        "spellid": 10853,
+        "type": 8,
+        "minlevel": 71,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925017,
+        "npc_spells_id": 925000,
+        "spellid": 10862,
+        "type": 8,
+        "minlevel": 73,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      }
+    ]
+  },
+  "ai_actor_updates": [
+    {
+      "id": 753013,
+      "name": "a_deathraiser_goblin",
+      "class": 11,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753016,
+      "name": "a_corpsebinder_goblin",
+      "class": 11,
+      "level": 102,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753035,
+      "name": "a_deadfiend_goblin",
+      "class": 11,
+      "level": 102,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753049,
+      "name": "a_direflame_goblin",
+      "class": 12,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753054,
+      "name": "a_deathraiser_goblin",
+      "class": 11,
+      "level": 99,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753068,
+      "name": "a_deathraiser_goblin",
+      "class": 11,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753079,
+      "name": "an_evenflame_goblin",
+      "class": 12,
+      "level": 99,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753090,
+      "name": "a_deadfiend_goblin",
+      "class": 11,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753120,
+      "name": "a_woundhealer_goblin",
+      "class": 10,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753126,
+      "name": "an_evenflame_goblin",
+      "class": 12,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753128,
+      "name": "a_shamanic_goblin",
+      "class": 10,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753140,
+      "name": "a_woundhealer_goblin",
+      "class": 10,
+      "level": 102,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753150,
+      "name": "a_ritualtalker_goblin",
+      "class": 10,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753155,
+      "name": "a_shamanic_minotaur",
+      "class": 10,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753156,
+      "name": "an_evenflame_goblin",
+      "class": 12,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753165,
+      "name": "a_ritualtalker_goblin",
+      "class": 10,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753178,
+      "name": "a_shamanic_minotaur",
+      "class": 10,
+      "level": 99,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753189,
+      "name": "a_shamanic_goblin",
+      "class": 10,
+      "level": 99,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753197,
+      "name": "a_magician`s_eye",
+      "class": 13,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 4,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753210,
+      "name": "a_direflame_goblin",
+      "class": 12,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753286,
+      "name": "a_shamanic_minotaur",
+      "class": 10,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753309,
+      "name": "a_fleshburn_mephit",
+      "class": 12,
+      "level": 102,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753310,
+      "name": "a_fleshburn_mephit",
+      "class": 12,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753311,
+      "name": "a_fleshburn_mephit",
+      "class": 12,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    }
+  ],
+  "source_entry_map": [
+    {
+      "new_entry_id": 925001,
+      "source_entry_id": 120,
+      "spell_id": 2884,
+      "spell_name": "Garrison's Superior Sundering",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925002,
+      "source_entry_id": 121,
+      "spell_id": 3335,
+      "spell_name": "Agnarr's Thunder",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925003,
+      "source_entry_id": 122,
+      "spell_id": 3339,
+      "spell_name": "Strike of Solusek",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925004,
+      "source_entry_id": 137,
+      "spell_id": 3332,
+      "spell_name": "Tears of Marr",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925005,
+      "source_entry_id": 139,
+      "spell_id": 1636,
+      "spell_name": "Invert Gravity",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925006,
+      "source_entry_id": 144,
+      "spell_id": 3333,
+      "spell_name": "Telekin",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925007,
+      "source_entry_id": 150,
+      "spell_id": 3194,
+      "spell_name": "Greater Fetter",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925008,
+      "source_entry_id": 153,
+      "spell_id": 1526,
+      "spell_name": "Annul Magic",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925009,
+      "source_entry_id": 162,
+      "spell_id": 3302,
+      "spell_name": "Shield of Maelin",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925010,
+      "source_entry_id": 168,
+      "spell_id": 3301,
+      "spell_name": "Force Shield",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925011,
+      "source_entry_id": 3175,
+      "spell_id": 1419,
+      "spell_name": "O`Keil's Flickering Flame",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925012,
+      "source_entry_id": 6649,
+      "spell_id": 3191,
+      "spell_name": "Shock of Magic",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925013,
+      "source_entry_id": 6650,
+      "spell_id": 3331,
+      "spell_name": "Lure of Ro",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925014,
+      "source_entry_id": 7841,
+      "spell_id": 230,
+      "spell_name": "Root",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925015,
+      "source_entry_id": 20052,
+      "spell_id": 11839,
+      "spell_name": "Wildmagic Strike",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925016,
+      "source_entry_id": 20053,
+      "spell_id": 10853,
+      "spell_name": "Defense of Calrena",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925017,
+      "source_entry_id": 20054,
+      "spell_id": 10862,
+      "spell_name": "Tendrilmist Guard",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    }
+  ],
+  "held_ids": [
+    753000,
+    753001,
+    753003,
+    753012,
+    753030,
+    753033,
+    753034,
+    753045,
+    753046,
+    753050,
+    753053,
+    753056,
+    753059,
+    753060,
+    753071,
+    753072,
+    753077,
+    753080,
+    753085,
+    753087,
+    753114,
+    753133,
+    753214,
+    753216,
+    753284,
+    753290
+  ],
+  "excluded_ids": [
+    753010,
+    753014,
+    753015,
+    753022,
+    753051,
+    753081,
+    753086,
+    753106,
+    753124,
+    753130,
+    753147,
+    753160,
+    753162,
+    753234,
+    753246,
+    753253,
+    753273,
+    753900,
+    753901,
+    753902,
+    753903,
+    753910,
+    753911,
+    753912,
+    753913,
+    753914
+  ],
+  "preimage_scope": "Complete retained initial guarded column union for all136NPCs; not a newly captured full row/appearance/runtime snapshot",
+  "historical_qualification": "Configurable local fallback and balance defaults, not recovered original RoF spell membership or native acceptance. Mana preserved. Exact10840/5460 omitted; no Pet32 retagging.",
+  "transaction_owner": "Achievements integrated required package through coordinator; no installer/CALL/COMMIT here"
+}

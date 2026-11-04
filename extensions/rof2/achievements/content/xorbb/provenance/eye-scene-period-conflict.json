@@ -1,0 +1,38 @@
+{
+  "source": "https://everquest.allakhazam.com/db/quest/6172",
+  "period_comments": [
+    {
+      "date": "2012-12-21",
+      "comment_id": "1356141429266418456"
+    },
+    {
+      "date": "2012-12-30",
+      "comment_id": "135691833757144666"
+    }
+  ],
+  "evidence_route": "Coordinator relay of assigned NPC-owner research; original page not independently captured in this source turn",
+  "findings": [
+    "Concoction encounter may produce one or two irritated eyes, conflicting with a single-result assumption",
+    "Blackened-eye replacement can despawn the original target and start at full health"
+  ],
+  "implementation_requirements": [
+    "Do not hardcode universally one irritated replacement as historical fact",
+    "Exact probability remains unknown; any selection rule must be a labelled configurable default",
+    "Track actual replacement actors separately; completing one kill must not silently delete surviving attackers",
+    "Source IDs42443,42444,42445 are external research identifiers, not local NPC IDs"
+  ],
+  "status": "Owned source implementation present; all profile/readiness flags false, native acceptance missing",
+  "selected_defaults": {
+    "irritated_two_probability": 0.5,
+    "interval_seconds": 1,
+    "lifetime_seconds": 600,
+    "prepare_timeout_seconds": 5,
+    "qualification": "Clearly labelled configurable emulator probabilities/timers; exact original values unknown"
+  },
+  "source_files": [
+    "quests/lua_modules/achievement_quest_xorbb_eyes.lua",
+    "quests/lua_modules/achievement_quest_xorbb_eyes_data.lua",
+    "quests/lua_modules/achievement_quest_xorbb_world_eye.lua"
+  ],
+  "lifecycle": "Prepare all inert exact-owned outputs, original native respawn timer starts once at conversion, confirm exact source disappearance before activation/cast credit; one required kill retains second attacker. Captured68614 actual inventory must precede dynamic runny removal/capture credit."
+}

@@ -1,0 +1,66 @@
+{
+  "scope": "Unapplied authored reconstruction; source readiness is distinct from native acceptance",
+  "source_urls": [
+    "https://rof.eqresource.com/plansgoneawry.php",
+    "https://rof.eqresource.com/krystulsforthekrystulking.php"
+  ],
+  "period_anchors": [
+    {
+      "date": "2013-01-25",
+      "url": "https://eqresource.com/board/index.php?topic=1399.msg2235",
+      "finding": "Repeating ready in Goblin can recover the Grolak instruction step"
+    },
+    {
+      "date": "2013-02-03",
+      "url": "https://eqresource.com/board/index.php?topic=1399.msg2265",
+      "finding": "Ready can update instructions even when the original scene failed to spawn; source reconstruction requires an actual actor before progress"
+    },
+    {
+      "date": "2013-03-03",
+      "url": "https://eqresource.com/board/index.php?topic=1399.msg2348",
+      "finding": "Goblin hail and correct prior stage matter; premature container/combine can otherwise strand original task"
+    }
+  ],
+  "configurable_defaults": {
+    "golem_cue_delay_seconds": 5,
+    "golem_now_window_seconds": 10,
+    "golem_lifetime_seconds": 120,
+    "golem_offset_from_giver": [
+      6,
+      0
+    ],
+    "gronk_initial_count": 3,
+    "gronk_floor_anchor_offset": [
+      -6,
+      12
+    ],
+    "gronk_offsets_from_giver": [
+      [
+        -9,
+        12
+      ],
+      [
+        -6,
+        16
+      ],
+      [
+        -3,
+        12
+      ]
+    ],
+    "gronk_lifetime_seconds": 600,
+    "geometry_sample_spacing": 1,
+    "max_floor_delta": 3,
+    "max_floor_step": 1,
+    "max_anchor_floor_delta": 16
+  },
+  "qualification": "Scene existence/actions are researched; exact original timers, placement offsets, actor model/appearance/balance remain qualified defaults. Gronk3initial attackers follows guide; recovery count3minus authoritative earned kills is an explicit emulator recovery rule.",
+  "progress_ownership": {
+    "golem": "Real prior delivery, actual Goblin ready, owned scene and witnessed cue; later successful consumed original68487/33705 in exact actor/window. Timer cannot complete lightning objective.",
+    "gronk": "Actual nearby native crouch appearance2 and army dialogue, exact owned native merit. Authoritative counts read only in real SAY/KILLED_MERIT client initiator contexts. Ambiguous credit blocks recovery without rolling back earned progress."
+  },
+  "noncombat_golem": "Explicit melee immunity/no-aggro/no-aggro-on, targetable, no blanket magic immunity. DBzero damage/radii alone not relied on.",
+  "geometry_evidence": "Locally retained supplied-nav centerline audit: revised four scene segments plausible, initial bad defaults rejected. Does not prove native capsule/route/rendering. Native evidence remains pending.",
+  "native_acceptance": false,
+  "installed_or_SQL_applied": false
+}
