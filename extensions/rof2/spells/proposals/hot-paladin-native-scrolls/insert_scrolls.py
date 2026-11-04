@@ -90,7 +90,9 @@ def main():
                 require(cursor.rowcount == 1, 'Unexpected insert count')
             cursor.execute('SELECT * FROM items WHERE id IN (125060,125066) ORDER BY id')
             after = cursor.fetchall()
-            require(after == rows, 'Inserted item readback differs')
+            # JSON stores template datetimes as strings; compare using the same
+            # canonical form as the exact reviewed full-row hashes above.
+            require(digest(after) == digest(rows), 'Inserted item readback differs')
             receipt['readback_sha256'] = digest(after)
         connection.commit()
         receipt['status'] = 'COMMITTED_TWO_NATIVE_SCROLL_DEFINITIONS'
