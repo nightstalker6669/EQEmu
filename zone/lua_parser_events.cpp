@@ -915,6 +915,9 @@ void handle_player_pick_up(
 	uint32 extra_data,
 	std::vector<std::any> *extra_pointers
 ) {
+	lua_pushinteger(L, extra_data);
+	lua_setfield(L, -2, "object_id");
+
 	Lua_ItemInst l_item(std::any_cast<EQ::ItemInstance*>(extra_pointers->at(0)));
 	luabind::adl::object l_item_o = luabind::adl::object(L, l_item);
 	l_item_o.push(L);
@@ -3163,6 +3166,9 @@ void handle_zone_pickup(
 	uint32 extra_data,
 	std::vector<std::any> *extra_pointers
 ) {
+	lua_pushinteger(L, extra_data);
+	lua_setfield(L, -2, "object_id");
+
 	Lua_ItemInst l_item(std::any_cast<EQ::ItemInstance*>(extra_pointers->at(0)));
 	luabind::adl::object l_item_o = luabind::adl::object(L, l_item);
 	l_item_o.push(L);
