@@ -1,0 +1,24 @@
+{
+  "before_any_mutation": [
+    "Coordinatorhasreserved2rewardentryIDs3839201321/3839201341andtask/setIDs920132\u2013135; exactnamespaceguardsstillapply",
+    "Publish exact final payload and guardedhelper first",
+    "Recheck all nine finite namespace queries FOR UPDATE; noexisting definitions/title/consumers/timer/tasksets refs permitted",
+    "Guard referencedNPC/item/loot/spawn/currencyfullpreimages and exactdeliveryhelperhash; no updates to them",
+    "Require exclusive absence of all5runtimefiles and fallback callback collision review",
+    "Durable preimage+intendedpostimage receipt fsync; InnoDB single56row transaction; exact fullpostimages; commit then completedreceipt; independentreadback",
+    "Stage5questfiles exclusively/hashverify through runtimeowner; no runtimecache actions bySpells",
+    "Onprepared-only/uncertaincommit/partialdiskstate STOP reconcile once; no blindretry",
+    "Rollback rejectschangedrows/foreignconsumers/newtaskusers/progress and never removesearnedplayerproperty/history"
+  ],
+  "counts": {
+    "tasks": 4,
+    "task_activities": 42,
+    "rewards": 2,
+    "reward_sets": 2,
+    "reward_sources": 2,
+    "reward_options": 2,
+    "reward_option_entries": 2
+  },
+  "writes_total": 56,
+  "not_apply_ready_reason": "GuardedDBhelper authored, not applied. Exactpublication and Buildownedcapability/runtime scheduling pending; exclusive questfile installation remains runtimeowner-owned. Never execute raw inserts."
+}
