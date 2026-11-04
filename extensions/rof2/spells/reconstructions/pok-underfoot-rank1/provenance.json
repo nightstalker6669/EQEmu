@@ -1,5 +1,5 @@
 {
-  "status": "DATABASE_APPLIED_INDEPENDENT_FULL_READBACK_PASS_CACHE_PENDING",
+  "status": "DATABASE_APPLIED_INDEPENDENT_READBACK_PASS_FRESH_BOOT_READY",
   "native_validation": false,
   "database_writes": 102,
   "new_stock_rows": 43,
@@ -51,8 +51,10 @@
       "Zhao": 8
     },
     "player_tables_written": false,
-    "cache_freshness": "PENDING_BUILD_VIA_JARVIS",
+    "cache_freshness": "BUILD_CONFIRMED_NEXT_ORDINARY_FRESH_POK202_BOOT_READY",
     "native_acceptance": false,
-    "prior_attempts": "001and002stoppedbeforepreparedorINSERT,rollback/noDBwrites"
+    "prior_attempts": "001and002stoppedbeforepreparedorINSERT,rollback/noDBwrites",
+    "cache_receipt": "POK-VENDORS-CACHE-FRESHNESS-001",
+    "runtime_reload_restart_repop": false
   }
 }

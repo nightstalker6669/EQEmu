@@ -1,6 +1,6 @@
 {
-  "status": "SOURCE_ONLY_UNAPPLIED",
-  "database_writes": 0,
+  "status": "DATABASE_APPLIED_INDEPENDENT_READBACK_PASS_FRESH_BOOT_READY",
+  "database_writes": 1,
   "native_acceptance": false,
   "item": 138370,
   "spell": 36370,
@@ -29,5 +29,17 @@
     }
   ],
   "numeric_policy": "Preserve native positive baseprice1110623and inheritedstockstanding-100; numerical standing policy qualified as existing emulator/default, not original item-specific gate proof.",
-  "spells_items_actors_placements_player_state_changed": false
+  "spells_items_actors_placements_player_state_changed": false,
+  "deployment": {
+    "source_commit": "0332a883e3876ecbffd7d456a6f9592f589f08f9",
+    "helper_sha256": "096a3fe54121b297990a2ea10c3b22446241fb52e64a1eda53196b832f5c88e8",
+    "stock_rows_after": 74,
+    "prior73_stock_preserved": true,
+    "independent_readback": "PASS",
+    "native_acceptance": false,
+    "cache_freshness": "BUILD_CONFIRMED_NEXT_ORDINARY_FRESH_SHARDSLANDING752_BOOT_READY",
+    "player_tables_written": false,
+    "cache_receipt": "VARILLE-CACHE-FRESHNESS-001",
+    "runtime_reload_restart_repop": false
+  }
 }
