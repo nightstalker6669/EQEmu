@@ -40,8 +40,15 @@ function M.death(e)
    if chance and chance==chance and chance>=0 and chance<=1
     and corpse:CountItem(r.item)==0 and chance>0 and math.random()<=chance then
     n:SetEntityVariable(key..'.state','pending')
+    local was_empty=corpse:IsEmpty()
+    local decay_before=corpse:GetDecayTime()
     corpse:AddItem(r.item,1)
-    if corpse:CountItem(r.item)==1 then n:SetEntityVariable(key..'.state','done')
+    if corpse:CountItem(r.item)==1 then
+     if was_empty then
+      corpse:ResetDecayTimer()
+      eq.debug('Xorbb filled quest corpse lifetime item='..r.item..' corpse='..corpse:GetID()..' before_ms='..decay_before..' after_ms='..corpse:GetDecayTime())
+     end
+     n:SetEntityVariable(key..'.state','done')
     else eq.debug('Xorbb corpse addition ambiguous; route quarantined without replay.')end
    end
   end

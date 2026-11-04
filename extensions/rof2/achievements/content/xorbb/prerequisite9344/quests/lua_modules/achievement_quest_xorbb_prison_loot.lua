@@ -25,8 +25,15 @@ function M.death(e)
  if corpse:CountItem(66521)~=0 then n:SetEntityVariable(NS..'.supplied','other_producer');return end
  local count=math.random(P.lens_min,P.lens_max)
  n:SetEntityVariable(NS..'.supplied','pending')
+ local was_empty=corpse:IsEmpty()
+ local decay_before=corpse:GetDecayTime()
  for _=1,count do corpse:AddItem(66521,1)end
- if corpse:CountItem(66521)==count then n:SetEntityVariable(NS..'.supplied','done')
+ if corpse:CountItem(66521)==count then
+  if was_empty then
+   corpse:ResetDecayTimer()
+   eq.debug('Xorbb filled lens corpse lifetime item=66521 corpse='..corpse:GetID()..' before_ms='..decay_before..' after_ms='..corpse:GetDecayTime())
+  end
+  n:SetEntityVariable(NS..'.supplied','done')
  else eq.debug('Xorbb lens corpse supply needs review; no automatic retry.')end
 end
 return M

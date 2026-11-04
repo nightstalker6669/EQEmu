@@ -67,8 +67,15 @@ function M.death(e)
  if corpse:CountItem(p.item)~=0 then return end
  if math.random()>P.drop_chance then return end
  n:SetEntityVariable(NS..'.supplied','pending')
+ local was_empty=corpse:IsEmpty()
+ local decay_before=corpse:GetDecayTime()
  corpse:AddItem(p.item,1)
- if corpse:CountItem(p.item)==1 then n:SetEntityVariable(NS..'.supplied','done')
+ if corpse:CountItem(p.item)==1 then
+  if was_empty then
+   corpse:ResetDecayTimer()
+   eq.debug('Xorbb filled animated corpse lifetime item='..p.item..' corpse='..corpse:GetID()..' before_ms='..decay_before..' after_ms='..corpse:GetDecayTime())
+  end
+  n:SetEntityVariable(NS..'.supplied','done')
  else eq.debug('Xorbb animated corpse item delta ambiguous; no replay.')end
 end
 return M
