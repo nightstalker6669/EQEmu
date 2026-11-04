@@ -1,0 +1,42 @@
+{
+  "batch": "RRC062",
+  "attempt": 1,
+  "total_SQL_attempts": 1,
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "012dfe3f84232167d88bf08e6cf12996851f6061",
+  "source_sha256": "380e362183509d0003bbfc640f47c3bfc37099178fbc04465db250f44aa34fb2",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 0,
+  "entries_updated": 6,
+  "recipe_ids": [
+    1224,
+    1225,
+    1226,
+    1227,
+    1228,
+    1398
+  ],
+  "recipe_definitions_preserved": 6,
+  "full_entries_guarded": 48,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "historical_qualification": "Current maintained source correction evidence; exact2013failure behavior not independently established.",
+  "after_counts": {
+    "recipes": 25427,
+    "entries": 191660
+  },
+  "commit_receipt": [
+    "RRC062",
+    "6",
+    "25427",
+    "25427",
+    "191660",
+    "191660",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}
