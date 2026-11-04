@@ -1,0 +1,14 @@
+{
+  "utc": "2026-11-04T01:28:38.017087+00:00",
+  "status": "SOURCE_CANDIDATE_NOT_INSTALLED_NOT_NATIVE_ACCEPTED",
+  "branch": "rof2-achievements",
+  "authored": {
+    "tasks": 5,
+    "activities": 22,
+    "achievement_links": 5,
+    "confirmed_item_reward": 53572
+  },
+  "preserved": "Existing NPCs, placements, loot, item profiles, parent achievement rewards and player records",
+  "limits": "See provenance; unknown original XP uses1000PEQdefault, geometry/guard timings labelled. Exact original task4 final-return activity type is inferred as delivery.",
+  "next": "Compile changed Lua/Python, check affected script composition, then publish source checkpoint through coordinator and batch native testing after prior native milestones."
+}

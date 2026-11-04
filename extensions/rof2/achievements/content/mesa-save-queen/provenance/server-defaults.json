@@ -1,0 +1,24 @@
+{
+  "values": {
+    "xp": 1000,
+    "min_level": 0,
+    "explore_radius": 45,
+    "explore_vertical": 50,
+    "water_radius": 40,
+    "water_vertical": 50,
+    "guard_assist_range": 85,
+    "guard_heal_threshold": 45,
+    "guard_heal_recast_seconds": 20
+  },
+  "limits": [
+    "Original XP unknown;1000 approved labelled PEQ-style default",
+    "No exact original admission minima;0 unrestricted policy",
+    "Task4 last return-with-cure interpreted as real antidote delivery; original native activity record not recovered",
+    "Guard Complete Heal13 supported by2009 report; exact assist/recast thresholds not recovered",
+    "No numeric faction awards invented",
+    "Original NPC types/placements/loot retained; native acceptance pending"
+  ],
+  "inventory_safety": "CountItem covers personal+bank/sharedbank slots; existing quest objects are retrieved rather than duplicated. Native no-callback Ramona delivery consumes credited ingredients only.",
+  "preservation": "No original NPC/loot/item/profile/placement updates; only new task rows and composed scripts. Queen and nearby native guards react to real antidote handin.",
+  "source_status": "Not installed or native accepted"
+}

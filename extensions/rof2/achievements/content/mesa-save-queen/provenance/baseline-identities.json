@@ -1,0 +1,14 @@
+{
+  "accepted_previous_scripts": {},
+  "npc_types": {
+    "397081": "#Ramona",
+    "397105": "Ekaterina",
+    "397250": "Queen_Nhyalea"
+  },
+  "callback_npc_ids": {},
+  "known_lower_priority_callbacks": [],
+  "external_modules": [
+    "achievement_quest_mesa_inventory",
+    "achievement_quest_blightfire"
+  ]
+}
