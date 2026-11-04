@@ -12,9 +12,13 @@
       "https://everquest.allakhazam.com/db/npc/41146"
     ],
     "current_mote_associations": "https://everquest.allakhazam.com/db/item/106464",
-    "current_quantity_rule": "https://rof.eqresource.com/spells.php"
+    "current_quantity_rule": "https://rof.eqresource.com/spells.php",
+    "period_archived_encounter_revisions": [
+      "https://everquest.allakhazam.com/wiki/EQ_Mob:Iremaw?oldid=451423",
+      "https://everquest.allakhazam.com/wiki/EQ_Mob:Cragbeak?oldid=451419"
+    ]
   },
-  "historical_limit": "2012 guide-thread creation dates do not independently date all current mechanics or loot fields. Period presence and rough combat observations do not establish exact drop probabilities.",
+  "historical_limit": "Archived November30,2012 wiki revisions establish the documented45/25second cycles and NPC-movement interpretation. Current non-tank exclusion is not in the period Iremaw text. These revisions do not establish loot probabilities, complete combat stats, first delay or native entity/caster binding.",
   "database_observed_at_utc": "2026-11-03T22:17:52.272053+00:00",
   "rowset_preimage_sha256": {
     "npc_types": "602c035a9a1bed9782baf0fd11907d59a58b4bc693176826e594ea3196d5f3aa",
@@ -136,7 +140,8 @@
     "distance_fade": "zone/spell_effects.cpp DistanceRemoval compares buff origin to current position",
     "compile_runtime_native_acceptance": false,
     "cragbeak_dispatch": "Native targettype32 ST_AETargetHateList requires nonnull spell target; range400 target-centered and caster-hate-list filtered. Do not replace with unrestricted PBAE. Initial target/delay still unrecovered.",
-    "scaling": "No level101 npc_scale_global_base rows in retained snapshot. Nonzero HP is preserved and all-zero IsAutoScaled condition is false. maxdmg4 alone does not prove runtime damage if min0 triggers scaling with a matching row; no native combat proof."
+    "scaling": "No level101 npc_scale_global_base rows in retained snapshot. Nonzero HP is preserved and all-zero IsAutoScaled condition is false. maxdmg4 alone does not prove runtime damage if min0 triggers scaling with a matching row; no native combat proof.",
+    "period_priority": "For Iremaw, use dated2012NPC-movement then aggro-switch description as the historical requirement. Current guide immediate following/marked-player movement and non-tank restriction are not promoted to original behavior. Native forced-target binding still unresolved."
   },
   "payload_limits": {
     "new_npc_or_spawn_ids": false,

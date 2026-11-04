@@ -453,8 +453,9 @@
         "max_dist": 200.0,
         "max_dist_mod": 1.0
       },
-      "execution": "Reuse existing spell effects and distance scaling; do not add a second script nuke. Exact caster/target dispatch and first-cast timing require review.",
-      "spell_definition_update": false
+      "execution": "Existing33544 effects/distance scaling, nativeST_AETargetHateList32 target-centered within400 and caster-hate-list filtering; nonnull initial target/first delay remain unknown. No script duplicate nuke.",
+      "spell_definition_update": false,
+      "period_cycle_source": "https://everquest.allakhazam.com/wiki/EQ_Mob:Cragbeak?oldid=451419"
     },
     "752053": {
       "attention_spell_id": 33553,
@@ -462,17 +463,19 @@
       "vengeance_spell_id": 33555,
       "repeat_interval_seconds": 45,
       "first_cast_delay_seconds": null,
-      "attention_selection": "Current EQResource guide describes a random non-tank player. Pet/merc inclusion, tank definition and empty eligible set are unresolved.",
+      "attention_selection": "Period2012revision says random target; tank exclusion/pet/merc eligibility and empty set remain unknown.",
       "forced_target_binding": null,
       "scent_cast_origin_entity": null,
       "movement_contract": {
         "native_attention_distance": 300,
         "native_scent_distance": 250,
         "unit": "native spell distance",
-        "guide_variants": "Alla describes NPC movement and later target switch; EQResource describes immediate following and marked player movement. Do not silently choose one."
+        "guide_variants": "Modern EQResource immediate-follow/marked-player-movement description is not promoted to original behavior.",
+        "historical_requirement": "NPC moves250+from cast position, then holds top aggro on Attention target per archived2012revision."
       },
       "native_fade_and_cure": "Attention has existing 33555 cure/fade triggers; reuse those and do not duplicate damage in quest callbacks.",
-      "spell_definition_update": false
+      "spell_definition_update": false,
+      "period_source": "https://everquest.allakhazam.com/wiki/EQ_Mob:Iremaw?oldid=451423"
     }
   },
   "required_existing_spells": [
