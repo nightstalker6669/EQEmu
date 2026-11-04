@@ -1,6 +1,6 @@
 {
-  "status": "SOURCE_ONLY_UNAPPLIED_RESEARCH_QUALIFIED_CANDIDATE",
-  "database_writes": 0,
+  "status": "DATABASE_APPLIED_INDEPENDENT_READBACK_PASS_NEXT_ORDINARY_FRESH_BOOT_READY",
+  "database_writes": 3,
   "native_acceptance": false,
   "npc": 202156,
   "merchant": 202156,
@@ -56,5 +56,17 @@
   "native_legacy_task_reference": 5723,
   "legacy_tasks_achievements_modified": false,
   "numeric_policy": "Preserve native positive prices, inherit ordinary standing-1100/standardstatus/class defaults; gate newroute18.",
-  "original_missions_preserved": true
+  "original_missions_preserved": true,
+  "deployment": {
+    "source_commit": "71cc1fdae08ee8a0463f3f4c70e0f568b59e04e4",
+    "helper_sha256": "c09febde10b94b10ebdbdd1084f09d54ec4bad7769bbadcb27d33bda1e847ba0",
+    "prior_stock_preserved": 28,
+    "full_stock_after": 31,
+    "independent_readback": "PASS",
+    "freshness_receipt": "BLANE-ROGUE3-CACHE-FRESHNESS-001",
+    "cache_status": "NEXT_ORDINARY_FRESH_ZONE_BOOT_READY",
+    "reload_restart_repop": false,
+    "native_acceptance": false,
+    "player_tasks_achievements_written": false
+  }
 }

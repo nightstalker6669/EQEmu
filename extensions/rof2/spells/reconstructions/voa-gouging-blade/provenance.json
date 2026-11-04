@@ -1,6 +1,6 @@
 {
-  "status": "SOURCE_ONLY_UNAPPLIED",
-  "database_writes": 0,
+  "status": "DATABASE_APPLIED_INDEPENDENT_READBACK_PASS_NEXT_ORDINARY_FRESH_BOOT_READY",
+  "database_writes": 1,
   "native_acceptance": false,
   "npc": 724022,
   "merchant": 724022,
@@ -39,5 +39,17 @@
       "finding": "generalrankI91\u201393common0/uncommon25, notexacttomeclassification"
     }
   ],
-  "preservation": "Existing78stock/mixedlanguagegates/fullNPC/soleconsumer/itemspellpricelevel/playerstate unchanged; no rankII/IIIedits."
+  "preservation": "Existing78stock/mixedlanguagegates/fullNPC/soleconsumer/itemspellpricelevel/playerstate unchanged; no rankII/IIIedits.",
+  "deployment": {
+    "source_commit": "3fd8045a8acfb69416c1f09213f4c576144dd4f0",
+    "helper_sha256": "51698fdf3fa336f54f3f20979e9719e63332f627e3f74bd8f4a034e1f1a4aed6",
+    "prior_stock_preserved": 78,
+    "full_stock_after": 79,
+    "independent_readback": "PASS",
+    "freshness_receipt": "DANIBI-GOUGING-CACHE-FRESHNESS-001",
+    "cache_status": "NEXT_ORDINARY_FRESH_ZONE_BOOT_READY",
+    "reload_restart_repop": false,
+    "native_acceptance": false,
+    "player_tasks_achievements_written": false
+  }
 }

@@ -8,7 +8,6 @@
   "total_stock_rows": 54,
   "new_actor_rows": 48,
   "new_route_min_expansion": 18,
-  "rogue_held": 3,
   "research_method": "Chrome, one site tab, paced3seconds between source navigation batches; no premium bypass",
   "historical_membership_qualification": "Current named stock plus dated 2012 provider roles/global rollout is cross-era membership inference, not independently dated each-item stock proof. Prices are not imported.",
   "original_rollout": "https://www.redguides.com/community/threads/big-everquest-patch-march-16-2012.24356/post-195066",
@@ -56,5 +55,13 @@
     "prior_attempts": "001and002stoppedbeforepreparedorINSERT,rollback/noDBwrites",
     "cache_receipt": "POK-VENDORS-CACHE-FRESHNESS-001",
     "runtime_reload_restart_repop": false
+  },
+  "rogue_excluded_from_this_component": 3,
+  "separate_rogue_followup": {
+    "component": "pok-rogue-three",
+    "stock_rows": 3,
+    "source_commit": "71cc1fdae08ee8a0463f3f4c70e0f568b59e04e4",
+    "status": "APPLIED_INDEPENDENT_READBACK_PASS_INCREMENTAL_FRESH_BOOT_READY",
+    "original54_payload_unchanged": true
   }
 }
