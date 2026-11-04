@@ -1,0 +1,38 @@
+{
+  "batch": "RRC075",
+  "attempt": 1,
+  "total_SQL_attempts": 1,
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "5fda0f7a751fd8b41655bf046a96fc72127ed4d1",
+  "source_sha256": "3f75c19bfe668a1c35f218c1e220bd43660deac96bfe0d91e13a975a287e6eaf",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 0,
+  "entries_updated": 2,
+  "recipe_ids": [
+    518,
+    947
+  ],
+  "recipe_definitions_preserved": 2,
+  "full_entries_guarded": 34,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "historical_qualification": "Current maintained LoY swatch primary formula and exact linked right-page IDs support correction; category metadata lastmodified2005 supplies qualifiedcontext, not immutable per-fieldMay2013proof. All modern/legacykit conflicts remain held.",
+  "after_counts": {
+    "recipes": 25451,
+    "entries": 191921
+  },
+  "commit_receipt": [
+    "RRC075",
+    "2",
+    "25451",
+    "25451",
+    "191921",
+    "191921",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}
