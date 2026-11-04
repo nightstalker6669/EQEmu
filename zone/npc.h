@@ -565,6 +565,8 @@ public:
 		uint32           count              = 0;
 		EQ::ItemInstance *item              = nullptr;
 		bool             is_multiquest_item = false; // state
+		uint32           original_count     = 0;
+		uint32           task_delivered_count = 0;
 	};
 
 	struct HandinMoney {
@@ -575,7 +577,7 @@ public:
 	};
 
 	struct Handin {
-		std::vector<HandinEntry> original_items = {}; // this is what the player originally handed in, never modified
+		std::vector<HandinEntry> original_items = {}; // owns cloned items; active entries are aliases
 		std::vector<HandinEntry> items          = {}; // items can be removed from this set as successful handins are made
 		HandinMoney              original_money = {}; // this is what the player originally handed in, never modified
 		HandinMoney              money          = {}; // money can be removed from this set as successful handins are made
@@ -795,6 +797,8 @@ public:
 	const Handin GetHandin() { return m_hand_in; }
 
 private:
+	void ReconcileHandinTaskDeliveries();
+
 	uint32              m_loottable_id;
 	bool                m_skip_global_loot;
 	bool                m_skip_auto_scale;

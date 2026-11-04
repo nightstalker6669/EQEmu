@@ -528,6 +528,10 @@ NPC::~NPC()
 	safe_delete(swarmInfoPtr);
 	safe_delete(qGlobals);
 	UninitializeBuffSlots();
+	// Also release clones retained by an unfinished multiquest hand-in.
+	if (!m_hand_in.original_items.empty()) {
+		ResetMultiQuest();
+	}
 }
 
 void NPC::SetTarget(Mob* mob) {
@@ -4301,12 +4305,22 @@ bool NPC::CheckHandin(
 				continue;
 			}
 
+			const uint32 original_count = std::max(
+				static_cast<uint16>(i->IsStackable() ? i->GetCharges() : 1),
+				static_cast<uint16>(1)
+			);
+			// Clone does not retain the original trade instance's native delivery tag.
+			const uint32 task_delivered_count = std::min(
+				original_count, static_cast<uint32>(std::max(i->GetTaskDeliveredCount(), 0))
+			);
 			h.items.emplace_back(
 				HandinEntry{
 					.item_id = std::to_string(i->GetItem()->ID),
-					.count = std::max(static_cast<uint16>(i->IsStackable() ? i->GetCharges() : 1), static_cast<uint16>(1)),
+					.count = original_count,
 					.item = i->Clone(),
-					.is_multiquest_item = false
+					.is_multiquest_item = false,
+					.original_count = original_count,
+					.task_delivered_count = task_delivered_count
 				}
 			);
 		}
@@ -4611,8 +4625,32 @@ bool NPC::CheckHandin(
 	return requirement_met;
 }
 
+void NPC::ReconcileHandinTaskDeliveries()
+{
+	m_hand_in.items.erase(
+		std::remove_if(
+			m_hand_in.items.begin(),
+			m_hand_in.items.end(),
+			[](HandinEntry &i) {
+				// Native delivery and accepted script claims can consume the same units.
+				// Cap against the original quantity instead of subtracting twice from the remainder.
+				// Entries without captured native consumption keep their script remainder.
+				if (i.original_count > 0 && i.task_delivered_count > 0) {
+					const uint32 delivered = std::min(i.task_delivered_count, i.original_count);
+					i.count = std::min(i.count, i.original_count - delivered);
+				}
+				// original_items owns the clone until reset or NPC destruction.
+				return i.count == 0;
+			}
+		),
+		m_hand_in.items.end()
+	);
+}
+
 NPC::Handin NPC::ReturnHandinItems(Client *c)
 {
+	ReconcileHandinTaskDeliveries();
+
 	// player event
 	std::vector<PlayerEvent::HandinEntry> handin_items;
 	PlayerEvent::HandinMoney              handin_money{};
@@ -4626,7 +4664,7 @@ NPC::Handin NPC::ReturnHandinItems(Client *c)
 					.item_name = i.item->GetItem()->Name,
 					.augment_ids = i.item->GetAugmentIDs(),
 					.augment_names = i.item->GetAugmentNames(),
-					.charges = std::max(static_cast<uint16>(i.item->GetCharges()), static_cast<uint16>(1))
+					.charges = i.item->IsStackable() ? static_cast<uint16>(i.original_count ? i.original_count : i.count) : std::max(static_cast<uint16>(i.item->GetCharges()), static_cast<uint16>(1))
 				}
 			);
 		}
@@ -4670,27 +4708,27 @@ NPC::Handin NPC::ReturnHandinItems(Client *c)
 			m_hand_in.items.begin(),
 			m_hand_in.items.end(),
 			[&](HandinEntry &i) {
-				if (i.item && i.item->GetItem() && !i.is_multiquest_item && !returned_items_already) {
+				if (i.count > 0 && i.item && i.item->GetItem() && !i.is_multiquest_item && !returned_items_already) {
+					// The event and returned stack must describe the same positive remainder.
+					if (i.item->IsStackable()) {
+						i.item->SetCharges(i.count);
+					}
+
 					return_items.emplace_back(
 						PlayerEvent::HandinEntry{
 							.item_id = i.item->GetID(),
 							.item_name = i.item->GetItem()->Name,
 							.augment_ids = i.item->GetAugmentIDs(),
 							.augment_names = i.item->GetAugmentNames(),
-							.charges = std::max(static_cast<uint16>(i.item->GetCharges()), static_cast<uint16>(1))
+							.charges = i.item->IsStackable() ? static_cast<uint16>(i.count) : std::max(static_cast<uint16>(i.item->GetCharges()), static_cast<uint16>(1))
 						}
 					);
 
-					// If the item is stackable and the new charges don't match the original count
-					// set the charges to the original count
-					if (i.item->IsStackable() && i.item->GetCharges() != i.count) {
-						i.item->SetCharges(i.count);
-					}
-
 					c->PushItemOnCursor(*i.item, true);
 					LogNpcHandin(
-						"Hand-in failed, returning item [{}] i.is_multiquest_item [{}]",
+						"Hand-in remainder, returning item [{}] count [{}] i.is_multiquest_item [{}]",
 						i.item->GetItem()->Name,
+						i.count,
 						i.is_multiquest_item
 					);
 
@@ -4800,6 +4838,9 @@ NPC::Handin NPC::ReturnHandinItems(Client *c)
 
 void NPC::ResetHandin()
 {
+	// Reconcile even when returns were disabled, before a multiquest bucket is retained.
+	ReconcileHandinTaskDeliveries();
+
 	LogNpcHandin("Resetting hand-in bucket for [{}]", GetCleanName());
 	m_has_processed_handin_return = false;
 	m_handin_started              = false;
@@ -4809,6 +4850,26 @@ void NPC::ResetHandin()
 		}
 
 		m_hand_in = {};
+	} else {
+		m_hand_in.original_items.erase(
+			std::remove_if(
+				m_hand_in.original_items.begin(),
+				m_hand_in.original_items.end(),
+				[this](HandinEntry &original) {
+					const bool retained = std::any_of(
+						m_hand_in.items.begin(), m_hand_in.items.end(),
+						[&original](const HandinEntry &active) { return active.item == original.item; }
+					);
+					if (retained) {
+						return false;
+					}
+					// Return logging is complete; no active entry aliases this clone.
+					safe_delete(original.item);
+					return true;
+				}
+			),
+			m_hand_in.original_items.end()
+		);
 	}
 }
 
