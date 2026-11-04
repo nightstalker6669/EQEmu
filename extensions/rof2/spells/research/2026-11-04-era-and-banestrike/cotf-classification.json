@@ -1,0 +1,1380 @@
+{
+  "observed": "Chrome, one tab, serial class pages with3second spacing,2026-11-04",
+  "index": "https://cotf.eqresource.com/spells.php",
+  "method": "Exact Rank1 hyperlink spellID membership under explicit Call of the Forsaken class-page headings; not ID-range inference. Current compilation proves catalogue classification, not authenticated period spell fields. No DB/client/source mutation.",
+  "catalogue_pages": {
+    "wizard": [
+      40363,
+      40405,
+      40411,
+      40415,
+      40419
+    ],
+    "bard": [
+      40254,
+      40257,
+      40260
+    ],
+    "beastlord": [
+      40516,
+      40519,
+      40522
+    ],
+    "berserker": [
+      40549,
+      40555,
+      40564
+    ],
+    "cleric": [
+      40036,
+      40042,
+      40051
+    ],
+    "druid": [
+      40184,
+      40187,
+      40193
+    ],
+    "enchanter": [
+      40363,
+      40480,
+      40486,
+      40489
+    ],
+    "magician": [
+      40363,
+      40444,
+      40450,
+      40453
+    ],
+    "monk": [
+      40220,
+      40223,
+      40229
+    ],
+    "necromancer": [
+      40363,
+      40372,
+      40378,
+      40381
+    ],
+    "paladin": [
+      40075,
+      40078,
+      40084
+    ],
+    "ranger": [
+      40105,
+      40108,
+      40111,
+      40114
+    ],
+    "rogue": [
+      40294,
+      40297,
+      40300
+    ],
+    "shadowknight": [
+      40136,
+      40145,
+      40148
+    ],
+    "shaman": [
+      40324,
+      40330,
+      40333
+    ],
+    "warrior": [
+      40000,
+      40006,
+      40012
+    ]
+  },
+  "inventory_total": 83,
+  "classified_count": 83,
+  "classified": [
+    {
+      "spell_id": 40000,
+      "name": "No Time to Bleed",
+      "items": [
+        114000
+      ],
+      "levels": {
+        "1": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/warrior.php"
+      ]
+    },
+    {
+      "spell_id": 40006,
+      "name": "Last Stand Discipline",
+      "items": [
+        114006
+      ],
+      "levels": {
+        "1": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/warrior.php"
+      ]
+    },
+    {
+      "spell_id": 40012,
+      "name": "Phantom Aggressor",
+      "items": [
+        114012
+      ],
+      "levels": {
+        "1": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/warrior.php"
+      ]
+    },
+    {
+      "spell_id": 40018,
+      "name": "Determined Reprisal",
+      "items": [
+        114018
+      ],
+      "levels": {
+        "1": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40027,
+      "name": "Wade In to Battle",
+      "items": [
+        114027
+      ],
+      "levels": {
+        "1": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40036,
+      "name": "Anticipated Interposition",
+      "items": [
+        114036
+      ],
+      "levels": {
+        "2": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/cleric.php"
+      ]
+    },
+    {
+      "spell_id": 40042,
+      "name": "Syllable of Renewal",
+      "items": [
+        114042
+      ],
+      "levels": {
+        "2": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/cleric.php"
+      ]
+    },
+    {
+      "spell_id": 40045,
+      "name": "Cleansing Acquittal",
+      "items": [
+        114045
+      ],
+      "levels": {
+        "2": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40051,
+      "name": "Aura of Divinity",
+      "items": [
+        114051
+      ],
+      "levels": {
+        "2": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/cleric.php"
+      ]
+    },
+    {
+      "spell_id": 40057,
+      "name": "Hammer of Reverence",
+      "items": [
+        114057
+      ],
+      "levels": {
+        "2": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40075,
+      "name": "Doctrine of Abrogation",
+      "items": [
+        114075
+      ],
+      "levels": {
+        "3": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/paladin.php"
+      ]
+    },
+    {
+      "spell_id": 40078,
+      "name": "Valiant Deflection",
+      "items": [
+        114078
+      ],
+      "levels": {
+        "3": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/paladin.php"
+      ]
+    },
+    {
+      "spell_id": 40084,
+      "name": "Force of Abrogation",
+      "items": [
+        114084
+      ],
+      "levels": {
+        "3": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/paladin.php"
+      ]
+    },
+    {
+      "spell_id": 40087,
+      "name": "Reverent Penitence",
+      "items": [
+        114087
+      ],
+      "levels": {
+        "3": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40096,
+      "name": "Blunted Blade",
+      "items": [
+        114096
+      ],
+      "levels": {
+        "3": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40105,
+      "name": "Storm of Blades",
+      "items": [
+        114105
+      ],
+      "levels": {
+        "4": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/ranger.php"
+      ]
+    },
+    {
+      "spell_id": 40108,
+      "name": "Focused Storm of Blades",
+      "items": [
+        114108
+      ],
+      "levels": {
+        "4": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/ranger.php"
+      ]
+    },
+    {
+      "spell_id": 40111,
+      "name": "Bosquetender's Unity",
+      "items": [
+        114111
+      ],
+      "levels": {
+        "4": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/ranger.php"
+      ]
+    },
+    {
+      "spell_id": 40114,
+      "name": "Shout of the Bosquetender",
+      "items": [
+        114114
+      ],
+      "levels": {
+        "4": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/ranger.php"
+      ]
+    },
+    {
+      "spell_id": 40117,
+      "name": "Ro's Burning Cloak",
+      "items": [
+        114117
+      ],
+      "levels": {
+        "4": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40123,
+      "name": "Pureshot Discipline",
+      "items": [
+        114123
+      ],
+      "levels": {
+        "4": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40136,
+      "name": "Mental Terror",
+      "items": [
+        114136
+      ],
+      "levels": {
+        "5": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/shadowknight.php"
+      ]
+    },
+    {
+      "spell_id": 40145,
+      "name": "Insidious Deflection",
+      "items": [
+        114145
+      ],
+      "levels": {
+        "5": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/shadowknight.php"
+      ]
+    },
+    {
+      "spell_id": 40148,
+      "name": "Torrent of Agony",
+      "items": [
+        114148
+      ],
+      "levels": {
+        "5": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/shadowknight.php"
+      ]
+    },
+    {
+      "spell_id": 40154,
+      "name": "Insolent Influence",
+      "items": [
+        114154
+      ],
+      "levels": {
+        "5": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40163,
+      "name": "Spite of Ronak",
+      "items": [
+        114163
+      ],
+      "levels": {
+        "5": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40184,
+      "name": "Pillar of Ro",
+      "items": [
+        114184
+      ],
+      "levels": {
+        "6": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/druid.php"
+      ]
+    },
+    {
+      "spell_id": 40187,
+      "name": "Remote Moonfire",
+      "items": [
+        114187
+      ],
+      "levels": {
+        "6": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/druid.php"
+      ]
+    },
+    {
+      "spell_id": 40193,
+      "name": "Natural Unity",
+      "items": [
+        114193
+      ],
+      "levels": {
+        "6": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/druid.php"
+      ]
+    },
+    {
+      "spell_id": 40196,
+      "name": "Nurturing Growth",
+      "items": [
+        114196
+      ],
+      "levels": {
+        "6": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40202,
+      "name": "Mysterious Ways",
+      "items": [
+        114202
+      ],
+      "levels": {
+        "6": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40220,
+      "name": "Sting of the Wasp",
+      "items": [
+        114220
+      ],
+      "levels": {
+        "7": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/monk.php"
+      ]
+    },
+    {
+      "spell_id": 40223,
+      "name": "Reflex",
+      "items": [
+        114223
+      ],
+      "levels": {
+        "7": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/monk.php"
+      ]
+    },
+    {
+      "spell_id": 40229,
+      "name": "Phantom Partisan",
+      "items": [
+        114229
+      ],
+      "levels": {
+        "7": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/monk.php"
+      ]
+    },
+    {
+      "spell_id": 40236,
+      "name": "Technique of the Crimson Fist",
+      "items": [
+        114236
+      ],
+      "levels": {
+        "7": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40245,
+      "name": "Contraforce Discipline",
+      "items": [
+        114245
+      ],
+      "levels": {
+        "7": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40254,
+      "name": "War Chorus of Protan",
+      "items": [
+        114254
+      ],
+      "levels": {
+        "8": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/bard.php"
+      ]
+    },
+    {
+      "spell_id": 40257,
+      "name": "Psalm of the Forsaken",
+      "items": [
+        114257
+      ],
+      "levels": {
+        "8": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/bard.php"
+      ]
+    },
+    {
+      "spell_id": 40260,
+      "name": "Brusco's Burning Call",
+      "items": [
+        114260
+      ],
+      "levels": {
+        "8": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/bard.php"
+      ]
+    },
+    {
+      "spell_id": 40263,
+      "name": "Garath's Insult",
+      "items": [
+        114263
+      ],
+      "levels": {
+        "8": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40266,
+      "name": "Corpseflower's Assonant Binding",
+      "items": [
+        114266
+      ],
+      "levels": {
+        "8": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40294,
+      "name": "Thief's Vision",
+      "items": [
+        114294
+      ],
+      "levels": {
+        "9": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/rogue.php"
+      ]
+    },
+    {
+      "spell_id": 40297,
+      "name": "Knifeplay Discipline",
+      "items": [
+        114297
+      ],
+      "levels": {
+        "9": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/rogue.php"
+      ]
+    },
+    {
+      "spell_id": 40300,
+      "name": "Phantom Assassin",
+      "items": [
+        114300
+      ],
+      "levels": {
+        "9": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/rogue.php"
+      ]
+    },
+    {
+      "spell_id": 40306,
+      "name": "Conditioned Reflexes",
+      "items": [
+        114306
+      ],
+      "levels": {
+        "9": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40315,
+      "name": "Holdout Blade",
+      "items": [
+        114315
+      ],
+      "levels": {
+        "9": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40324,
+      "name": "Putrescent Decay",
+      "items": [
+        114324
+      ],
+      "levels": {
+        "10": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/shaman.php"
+      ]
+    },
+    {
+      "spell_id": 40327,
+      "name": "Flock's Breath",
+      "items": [
+        114327
+      ],
+      "levels": {
+        "10": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40330,
+      "name": "Spirit Bolstering",
+      "items": [
+        114330
+      ],
+      "levels": {
+        "10": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/shaman.php"
+      ]
+    },
+    {
+      "spell_id": 40333,
+      "name": "Spiritual Surge",
+      "items": [
+        114333
+      ],
+      "levels": {
+        "10": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/shaman.php"
+      ]
+    },
+    {
+      "spell_id": 40342,
+      "name": "Crippling Counterbias",
+      "items": [
+        114342
+      ],
+      "levels": {
+        "10": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40363,
+      "name": "Shield of Fate",
+      "items": [
+        114363
+      ],
+      "levels": {
+        "11": 97,
+        "12": 97,
+        "13": 97,
+        "14": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/wizard.php",
+        "https://cotf.eqresource.com/enchanter.php",
+        "https://cotf.eqresource.com/magician.php",
+        "https://cotf.eqresource.com/necromancer.php"
+      ]
+    },
+    {
+      "spell_id": 40366,
+      "name": "Mirror",
+      "items": [
+        114366
+      ],
+      "levels": {
+        "11": 98,
+        "12": 98,
+        "13": 98,
+        "14": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40372,
+      "name": "Pact of Fate",
+      "items": [
+        114372
+      ],
+      "levels": {
+        "11": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/necromancer.php"
+      ]
+    },
+    {
+      "spell_id": 40378,
+      "name": "Soulrip",
+      "items": [
+        114378
+      ],
+      "levels": {
+        "11": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/necromancer.php"
+      ]
+    },
+    {
+      "spell_id": 40381,
+      "name": "Dark Leech",
+      "items": [
+        114381
+      ],
+      "levels": {
+        "11": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/necromancer.php"
+      ]
+    },
+    {
+      "spell_id": 40387,
+      "name": "Scourge of Fates",
+      "items": [
+        114387
+      ],
+      "levels": {
+        "11": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40390,
+      "name": "Flesh to Poison",
+      "items": [
+        114390
+      ],
+      "levels": {
+        "11": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40405,
+      "name": "Depart",
+      "items": [
+        114405
+      ],
+      "levels": {
+        "12": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/wizard.php"
+      ]
+    },
+    {
+      "spell_id": 40411,
+      "name": "Permeating Blaze",
+      "items": [
+        114411
+      ],
+      "levels": {
+        "12": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/wizard.php"
+      ]
+    },
+    {
+      "spell_id": 40415,
+      "name": "Permeating Ice",
+      "items": [
+        114415
+      ],
+      "levels": {
+        "12": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/wizard.php"
+      ]
+    },
+    {
+      "spell_id": 40419,
+      "name": "Splash of Pyroxene",
+      "items": [
+        114419
+      ],
+      "levels": {
+        "12": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/wizard.php"
+      ]
+    },
+    {
+      "spell_id": 40422,
+      "name": "Permeating Ether",
+      "items": [
+        114422
+      ],
+      "levels": {
+        "12": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40426,
+      "name": "Bucolic Gambit",
+      "items": [
+        114426
+      ],
+      "levels": {
+        "12": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40444,
+      "name": "Maloseniac Eminence",
+      "items": [
+        114444
+      ],
+      "levels": {
+        "13": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/magician.php"
+      ]
+    },
+    {
+      "spell_id": 40450,
+      "name": "Iron Bolt",
+      "items": [
+        114450
+      ],
+      "levels": {
+        "13": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/magician.php"
+      ]
+    },
+    {
+      "spell_id": 40453,
+      "name": "Remote Relentless Servant",
+      "items": [
+        114453
+      ],
+      "levels": {
+        "13": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/magician.php"
+      ]
+    },
+    {
+      "spell_id": 40456,
+      "name": "Call of the Heroes",
+      "items": [
+        114456
+      ],
+      "levels": {
+        "13": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40459,
+      "name": "Summon Cauldron of Endless Bounty",
+      "items": [
+        114459
+      ],
+      "levels": {
+        "13": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40480,
+      "name": "Mental Appropriation",
+      "items": [
+        114480
+      ],
+      "levels": {
+        "14": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/enchanter.php"
+      ]
+    },
+    {
+      "spell_id": 40486,
+      "name": "Aegis of the Keeper",
+      "items": [
+        114486
+      ],
+      "levels": {
+        "14": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/enchanter.php"
+      ]
+    },
+    {
+      "spell_id": 40489,
+      "name": "Legion of the Keeper",
+      "items": [
+        114489
+      ],
+      "levels": {
+        "14": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/enchanter.php"
+      ]
+    },
+    {
+      "spell_id": 40492,
+      "name": "Empowered Minion",
+      "items": [
+        114492
+      ],
+      "levels": {
+        "14": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40498,
+      "name": "Slackening Glance",
+      "items": [
+        114498
+      ],
+      "levels": {
+        "14": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40516,
+      "name": "Focused Clamor of Claws",
+      "items": [
+        114516
+      ],
+      "levels": {
+        "15": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/beastlord.php"
+      ]
+    },
+    {
+      "spell_id": 40519,
+      "name": "Monkey's Spirit Discipline",
+      "items": [
+        114519
+      ],
+      "levels": {
+        "15": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/beastlord.php"
+      ]
+    },
+    {
+      "spell_id": 40522,
+      "name": "Spiritual Unity",
+      "items": [
+        114522
+      ],
+      "levels": {
+        "15": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/beastlord.php"
+      ]
+    },
+    {
+      "spell_id": 40531,
+      "name": "Warder's Unity",
+      "items": [
+        114531
+      ],
+      "levels": {
+        "15": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40549,
+      "name": "Open Wound",
+      "items": [
+        114549
+      ],
+      "levels": {
+        "16": 96
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/berserker.php"
+      ]
+    },
+    {
+      "spell_id": 40555,
+      "name": "Festering Rage",
+      "items": [
+        114555
+      ],
+      "levels": {
+        "16": 98
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/berserker.php"
+      ]
+    },
+    {
+      "spell_id": 40564,
+      "name": "Phantom Assailant",
+      "items": [
+        114564
+      ],
+      "levels": {
+        "16": 100
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://cotf.eqresource.com/berserker.php"
+      ]
+    },
+    {
+      "spell_id": 40570,
+      "name": "Conditioned Retaliation",
+      "items": [
+        114570
+      ],
+      "levels": {
+        "16": 97
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    },
+    {
+      "spell_id": 40579,
+      "name": "Arcblade",
+      "items": [
+        114579
+      ],
+      "levels": {
+        "16": 99
+      },
+      "classification": "Call of the Forsaken; outside through-RoF acquisition scope",
+      "sources": [
+        "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken"
+      ],
+      "observed_expansion": "Call of the Forsaken",
+      "name_match": "Exact native name except Wade In to Battle40027 rendered Wade into Battle; exactID retained"
+    }
+  ],
+  "unresolved_count": 0,
+  "unresolved": [],
+  "limitations": [
+    "Current catalogue classification is not authenticated May2013 spell-field data.",
+    "Extraordinary Velocity36370 is an already documented counterexample to trusting all current expansion tags; its recovered2012history overrides its CotFtag. It is outside this83IDset and is not reversed here.",
+    "No spell disable/delete/remap/merchant mutation. No new DB compatibility scan.",
+    "No out-of-scope level/effect/acquisition correctness claim."
+  ],
+  "catalogue_search_followup": {
+    "url": "https://everquest.allakhazam.com/db/spells?name=&type=any&level=--N%2FA--&opt=Only&expansion=forsaken",
+    "selected_expansion": "Call of the Forsaken",
+    "result_rows": 297,
+    "matched_remaining_exact_ids": [
+      40018,
+      40027,
+      40045,
+      40057,
+      40087,
+      40096,
+      40117,
+      40123,
+      40154,
+      40163,
+      40196,
+      40202,
+      40236,
+      40245,
+      40263,
+      40266,
+      40306,
+      40315,
+      40327,
+      40342,
+      40366,
+      40387,
+      40390,
+      40422,
+      40426,
+      40456,
+      40459,
+      40492,
+      40498,
+      40531,
+      40570,
+      40579
+    ],
+    "observed": "Single Chrome page; rendered297resultrows, each selected32row carries Call of the Forsaken imagealt. No guessed ID-range grouping."
+  }
+}
