@@ -1,0 +1,38 @@
+{
+  "batch": "RRC068",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "fc5774039aba1ce16ac8bfda93e2e1265d84546a",
+  "source_sha256": "44e9833c57d933824d7fe89f795601237f9cb942a197fb81835102db01307aba",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 4,
+  "entries_updated": 0,
+  "recipe_ids": [
+    302,
+    303,
+    304,
+    305
+  ],
+  "recipe_definitions_preserved": 4,
+  "full_existing_entries_guarded": 20,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "historical_qualification": "Maintained explicit MarbleMortar source; exactMay2013container support not independently established. Existing quantities/trivials/must_learn2 and all old fields preserved.",
+  "after_counts": {
+    "recipes": 25436,
+    "entries": 191725
+  },
+  "commit_receipt": [
+    "RRC068",
+    "4",
+    "25436",
+    "25436",
+    "191721",
+    "191725",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}
