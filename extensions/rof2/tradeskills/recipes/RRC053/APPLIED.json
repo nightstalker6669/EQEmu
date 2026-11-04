@@ -1,0 +1,38 @@
+{
+  "batch": "RRC053",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "8db4829878cddea8caafbfdb4a65f2e11d952fb8",
+  "source_sha256": "39374a90a71c3a9f7bb5b4255c992f428baab9756e35b5efdb4578860069a8ef",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes": 25,
+  "entries": 147,
+  "ids": [
+    3093200,
+    3093224
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC053",
+    "0",
+    "25022",
+    "25047",
+    "189135",
+    "189282",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25047,
+    "entries": 189282
+  },
+  "affected_postimages_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "existing_producer_guards": {
+    "recipes": 7,
+    "full_entry_rows": 21,
+    "scope": "Exact seven prior fishBait definitions/fullentries checked before/after bysourceSQL; untouched."
+  }
+}
