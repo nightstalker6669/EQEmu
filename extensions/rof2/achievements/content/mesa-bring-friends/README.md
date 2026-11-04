@@ -2,7 +2,7 @@
 
 This package reconstructs **A Bad Dream**, **Oh No!**, **Stand With Us**, and **They are Coming!**, with their four achievement requirements. It includes the NPC scripts, three scripted encounters, native objectives and confirmed Windwillow necklace/bauble rewards.
 
-**Installed locally; in-game verification is pending.** Historical sources and labelled configurable estimates are in `provenance/`. This is content using the achievement branch's existing protocol; it adds no new opcode or packet structure. See the branch's protocol documentation for those definitions.
+**Installed and verified in game, including persistence after an ordinary relog.** Historical sources and labelled configurable estimates are in `provenance/`. This is content using the achievement branch's existing protocol; it adds no new opcode or packet structure. See the branch's protocol documentation for those definitions.
 
 ## What happens in game
 
@@ -33,6 +33,12 @@ For rollback, first stop the affected runtime and restore backed-up quest files.
 
 ## Fidelity and configurable values
 
-Confirmed mechanics and rewards are separated from estimates. Original HP, several spawn/trigger coordinates, wave timing and Orders percentages were not recovered. Their defaults are explicit in `provenance/encounter-defaults.json` and `provenance/npc-profiles.json`. Navigation-surface placement is evidence of terrain support, **not** proof of a traversable full route or an original Live coordinate. Shared tasks use a labelled six-hour duration inferred from period timer reports and later explicit values. Unknown original XP uses the approved 1,000-XP configurable PEQ-style default. Unverified faction award amounts are omitted.
+Confirmed mechanics and rewards are separated from estimates. Original HP, several spawn/trigger coordinates, wave timing and Orders percentages were not recovered. Their defaults are explicit in `provenance/encounter-defaults.json` and `provenance/npc-profiles.json`. Encounter anchors now use server collision floors. These are authored emulator placements, not recovered original Live coordinates. Shared tasks use a labelled six-hour duration inferred from period timer reports and later explicit values. Unknown original XP uses the approved 1,000-XP configurable PEQ-style default. Unverified faction award amounts are omitted.
 
 Database requirement: these guarded SQL migrations target MariaDB. A MySQL-compatible client can connect to MariaDB; native MySQL-server compatibility has not been verified. Native Windows refers to the server/client tools running on Windows, not an assertion that every database backend was tested.
+
+## Verified milestone
+
+All four quests completed through native NPC offers, actual kills, loot, deliveries and reports. Their four achievement components and parent completion survived one ordinary Admin0 relog. Exactly one necklace and one bauble were retained. The terrain-height bug and early raider return were corrected.
+
+The corrected raid route has native outbound movement, a continuous camp stay of over61seconds, and return movement to within28.36units of its origin followed by disappearance. The exact inside25-unit departure frame was not captured; that final boundary remains source-supported rather than directly observed. No second completion or reward was used for this movement check.

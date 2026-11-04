@@ -242,6 +242,18 @@
       }
     },
     "map_sha256": "c26ff2653f94a47620cc443fe05d2b9b28b418f356c69959b7a40e36479bcf93",
-    "native_status": "Corrected Glasson native spawn Z31.595367, LOS true and own kill/objective credit verified. Other changed scene anchors still await native encounter acceptance."
+    "native_status": "Corrected Glasson spawn, line of sight and genuine kill verified; all three associated encounter quests completed. This does not imply direct native acceptance of every anchor or the final departure frame."
+  },
+  "raider_camp_pause_correction": {
+    "reason": "Nongrid outbound MoveTo(false) allowed native AI to return home before the controller pause; native observation showed about8seconds between camp approach and leaving its vicinity",
+    "fix": "Save the camp guard point for outbound raiders, require continuous unengaged dwell within camp bounds, then explicitly return with the origin as guard point",
+    "reload_cleanup": "Run existing namespace-tagged actor cleanup once from first controller timer after Lua reload, since local reload does not fire NPC spawn",
+    "scope": "Tree movement and task/reward/achievement logic unchanged",
+    "native_status": "The corrected raid route has native outbound movement, a continuous camp stay of over61seconds, and return movement to within28.36units of its origin followed by disappearance. The exact inside25-unit departure frame was not captured; that final boundary remains source-supported rather than directly observed. No second completion or reward was used for this movement check."
+  },
+  "native_milestone": {
+    "utc": "2026-11-04T05:47:13.438802+00:00",
+    "scope": "Native quest objectives/completion, associated achievement facts, single confirmed item rewards and one Admin0 persistence relog",
+    "historical_limits": "Configurable combat, timing, geometry and unknown-XP defaults remain labelled; native acceptance does not turn them into recovered May2013 values."
   }
 }

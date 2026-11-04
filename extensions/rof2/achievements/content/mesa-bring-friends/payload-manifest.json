@@ -10,7 +10,7 @@
   "files": [
     {
       "path": "README.md",
-      "sha256": "1202dc3b0a8ff5a6a1bf5881b84800aa2522f0d85fd6a3aaa29e076ca79b7da9"
+      "sha256": "b244e5cd427e62f99d4bec0bfe2a42ca2fd5d2ec7dfbbc2dcb383b01a0d1dcf8"
     },
     {
       "path": "apply_quests.py",
@@ -34,7 +34,7 @@
     },
     {
       "path": "provenance/encounter-defaults.json",
-      "sha256": "e3525a1b315b675ed65dee3b98613678eda9e2f39b0eae37dad9395ebeea1b41"
+      "sha256": "2c59a347b599bef4f06cab4d219308f0da3a1c9d959071ff2e828a78ea6bbb15"
     },
     {
       "path": "provenance/historical-research.json",
@@ -50,7 +50,7 @@
     },
     {
       "path": "quest-manifest.json",
-      "sha256": "38124877800c6b5c6bc8f182cd2de17a3f4d2e576592b2155093a47bdaa276b6"
+      "sha256": "756961b08edc57e4468db72df565a38cea111f9428a3c8d91534ddf6f78d8d6d"
     },
     {
       "path": "quest-specification.json",
@@ -66,7 +66,7 @@
     },
     {
       "path": "quests/lua_modules/achievement_quest_mesa_friends_scenes.lua",
-      "sha256": "a0ff2bcac7cf89a4cace38f72859d2847acafaf01b0f06ecd5d1e77ab40bdeb6"
+      "sha256": "718af9bbd27a42801343d2f0773cf5fe123e29da4676beb19b5f282579c1e579"
     },
     {
       "path": "quests/lua_modules/achievement_quest_mesa_friends_scenes_data.lua",
@@ -126,7 +126,7 @@
     },
     {
       "path": "status.json",
-      "sha256": "b907f1af11800feb22fb45e2d52f12e9c2626efa493c1263da7946805f71b32c"
+      "sha256": "ddc5db1d7ce2d845cd8be98f0d6cb3069e990253f36f580ecb6bc2ccd0df1cc7"
     }
   ]
 }

@@ -20,5 +20,10 @@
   ],
   "inventory_safety": "CountItem covers personal+bank/sharedbank slots; existing quest objects are retrieved rather than duplicated. Native no-callback Ramona delivery consumes credited ingredients only.",
   "preservation": "No original NPC/loot/item/profile/placement updates; only new task rows and composed scripts. Queen and nearby native guards react to real antidote handin.",
-  "source_status": "Installed locally; native quest acceptance pending."
+  "source_status": "Installed locally; native quest acceptance pending.",
+  "native_milestone": {
+    "utc": "2026-11-04T05:47:13.438802+00:00",
+    "scope": "Native quest objectives/completion, associated achievement facts, single confirmed item rewards and one Admin0 persistence relog",
+    "historical_limits": "Configurable combat, timing, geometry and unknown-XP defaults remain labelled; native acceptance does not turn them into recovered May2013 values."
+  }
 }

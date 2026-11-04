@@ -3,6 +3,7 @@
 local D=require('achievement_quest_mesa_friends_scenes_data')
 local M={}
 local scenes,claims={},{}
+local initialized=false
 local sequence=0
 local tag='mesa.friends.scene'
 local actor_tag='mesa.friends.actor'
@@ -75,7 +76,10 @@ local function spawn_wave(s,index)
   if cfg.kind=='orders'and math.random(100)<=D.orders_chance_percent then n:AddItem(21491,1)end
   if role=='glasson'then n:AddAISpell(1,8639,2048,-1,20,0)end -- Entrancing Song; native mez AI, reconstructed recast.
   if cfg.destination then
-   local d=cfg.destination;n:MoveTo(d.x,d.y,d.z,0,false)
+   -- Nongrid MoveTo(false) leaves the original guard point intact, causing an
+   -- automatic home return before the scripted camp pause has elapsed.
+   -- Raiders must guard the destination until this controller orders return.
+   local d=cfg.destination;n:MoveTo(d.x,d.y,d.z,0,cfg.kind=='raiders')
   end
  end
  s.next_wave=index+1;s.next_due=os.time()+D.wave_delay_seconds
@@ -99,6 +103,7 @@ function M.controller_spawn(e)
    for _,id in pairs(D.actors)do if n:GetNPCTypeID()==id then n:Depop(false);break end end
   end
  end
+ initialized=true
  e.self:SetTimer(D.timer,D.interval)
  return true
 end
@@ -143,12 +148,17 @@ local function tick_scene(s)
     if cfg.kind=='tree'then
      if near(n,cfg.destination,D.tree_radius)then fail(s,'The treekillers reached the Windwillow.');return end
      defend(n)
-    elseif cfg.kind=='raiders'and not n:IsEngaged()then
-     if not a.returning and near(n,cfg.destination,25)then
+    elseif cfg.kind=='raiders'then
+     if n:IsEngaged()then
+      a.arrived=nil
+     elseif not a.returning and near(n,cfg.destination,25)then
       a.arrived=a.arrived or os.time()
       if os.time()-a.arrived>=D.camp_pause_seconds then
-       a.returning=true;local p=cfg.spawn;n:MoveTo(p.x,p.y,p.z,0,false)
+       a.returning=true;local p=cfg.spawn;n:MoveTo(p.x,p.y,p.z,0,true)
       end
+     elseif not a.returning then
+      -- Count a continuous camp stay, not time spent fighting or outside it.
+      a.arrived=nil
      elseif a.returning and near(n,cfg.spawn,25)then
       a.departed=true;n:Depop(false)
       if a.role=='captain'and not s.credited then fail(s,'The raider captain escaped. Please request the task again.');return end
@@ -166,6 +176,10 @@ end
 function M.controller_timer(e)
  if e.timer~=D.timer then return false end
  if not D.enabled or eq.get_zone_id()~=397 or e.self:GetNPCTypeID()~=10 then return true end
+ -- A local quest reload reconstructs Lua state without firing NPC EVENT_SPAWN.
+ -- The existing controller timer must run the same namespace-owned orphan
+ -- cleanup once before accepting another scene, rather than leaking old waves.
+ if not initialized then M.controller_spawn(e)end
  -- One controller tick owns each scene; one timer per party member would
  -- duplicate waves and race shared-task activity updates.
  local pending={};for _,s in pairs(scenes)do pending[#pending+1]=s end

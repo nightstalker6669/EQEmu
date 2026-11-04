@@ -2,7 +2,7 @@
 
 This content package adds all five **Ekaterina's Lament** tasks and their five achievement requirements: Ekaterina's Lament, It Can't Be the Queen, Find the Cure, Parts For a Cure, and Tunare Save the Queen. It uses the original Ekaterina, Ramona and Queen Nhyalea NPCs, existing creature drops, and the confirmed **Flowing Watersilk Robe** reward.
 
-**Installed locally; in-game verification is pending.** These tasks use the branch's existing native achievement/task opcodes and structures; this package adds no new protocol mapping.
+**Installed and verified in game, including persistence after an ordinary relog.** These tasks use the branch's existing native achievement/task opcodes and structures; this package adds no new protocol mapping.
 
 ## Quest behavior
 
@@ -33,3 +33,7 @@ The five walkthroughs were entered in October 2006. Their period comments confir
 Original raw XP and numerical faction rewards are unavailable. XP uses the approved labelled 1,000-XP default; unverified faction amounts are omitted. Original admission minima and exact trigger/assist/casting tolerances are unverified and labelled accordingly. The fourth task's final “return with the cure” is implemented as an actual antidote delivery; its original native activity-type record has not been recovered. The parent achievement's independent reward configuration is preserved.
 
 Database requirement: these guarded SQL migrations target MariaDB. A MySQL-compatible client can connect to MariaDB; native MySQL-server compatibility has not been verified. Native Windows refers to the server/client tools running on Windows, not an assertion that every database backend was tested.
+
+## Verified milestone
+
+All five quests completed through genuine exploration, kills, fresh Blackfeather Roost loot, ingredient deliveries and cure hand-ins. The Queen became hostile and nearby guards assisted. All five achievement components, parent completion and exactly one Flowing Watersilk Robe survived one ordinary Admin0 relog. Numerical combat balance and every protector casting condition are not implied by this completion result.
