@@ -1,6 +1,6 @@
 {
-  "status": "HELD concrete two-item restoration candidate",
-  "apply_allowed": false,
+  "status": "IMPLEMENTED two-item definition restoration; original reward grouping unresolved",
+  "apply_allowed": true,
   "items": [
     {
       "item_id": 125060,
@@ -5617,12 +5617,8 @@
   ],
   "schema_engine": "InnoDB",
   "grouping": "UNRESOLVED: no task920129 reward changes; norankIIpairingcopy",
-  "custody_clearance": "OPEN: partial negatives do not clear opaque/serialized domains",
-  "required_before_registration": [
-    "Fullfieldreviewacceptanceorapprovedexplicitreconstructionpolicy",
-    "Owningcustody/referenceclearance",
-    "Guardintegrationandreceipt-ownedrollbackreview",
-    "Freshschema/template/absenceandbackups"
-  ],
-  "no_live_changes": true
+  "no_live_changes": true,
+  "definition_insert_policy": "Native IDs absent: insert original definitions without replacing rows or rewriting stored references. Exact target, sibling, spell and schema checks plus transaction, durable backup and readback. No blanket serialized absence requirement.",
+  "inherited_field_policy": "149/150 sibling-derived ordinary defaults accepted as labelled estimates; not exact recovered historical fields.",
+  "execution_helper": "insert_scrolls.py; separate coordinated item cache refresh after successful apply"
 }
