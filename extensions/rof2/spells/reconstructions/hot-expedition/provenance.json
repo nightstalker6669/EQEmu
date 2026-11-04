@@ -103,12 +103,12 @@
   ],
   "validation": {
     "python_syntax": "ASTparsed",
-    "offline_plan": "Runseparately/noDBconnection",
+    "offline_plan": "PASS/noDBconnection for correctedfresh10rowhelper and2rowrepairhelper",
     "Lua_API": "Readsourcebindings/dispatchorder; noLuac/compiler/nativeexecution",
     "native_quest_spawn_payout": false,
     "new_test_suite": false
   },
-  "applied": false,
+  "applied": true,
   "remaining": [
     "Authenticfullchainrepeateligibility",
     "ExactXP/cash/exploration/phaseoriginalparameters",
@@ -129,5 +129,13 @@
       "zone/reward_selection_catalog.cpp LoadRewardSelectionCatalog",
       "common/reward_selection.h Task=2"
     ]
+  },
+  "applied_status": {
+    "date": "2026-11-04",
+    "database": "First8inserts committed; actualcatalogfailure exposed missingnativebindings; corrected2bindingtransaction committed; all10fullpostimages+independentreadbackPASS",
+    "runtime_files": "3exclusiveLua files installed/hashmatched; reviewedhelperunchanged/globalplayerdispatchpreserved",
+    "runtime_catalog": "BuildXORBB-CLEANUP-EXPEDITION-001 actualworld+all6zones task920131/fouractivities loaded; all6rewardselectiontrue/commonoption1->3839201311/type4/currency22/amount5,140sets. Managednormalstartup2026-11-04T11:35:18Z; api27 NOTissued/no redundantreload. Feerrott700unloaded,nextordinarybootfreshVM.",
+    "native_quest_payout_observed": false,
+    "repeat": "Firstcompletiononly; originalcompletechainreplayunimplemented"
   }
 }

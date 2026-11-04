@@ -23,3 +23,15 @@ Publication precedes deployment. Coordinate all normal process TaskManager task/
 The first eight-row deployment omitted reward_sets and reward_sources. Build’s actual TaskManager readback caught has_reward_selection=false; no native reward availability was established. The complete fresh-install package now includes enabled reward_set920131 and source_type2(Task)/source_id920131→set920131, for ten total rows. Existing options/entry/reward are retained. No reward_source_entries automatic payout is introduced. The current native LoadTaskRewardSets loads the shared catalog through these explicit bindings; equal task/set identifiers alone do not create a binding.
 
 For the already installed eight-row component only, repair_reward_bindings.py guards their exact unchanged postimages and absent bindings/consumers, durably backs up and inserts only the two missing binding rows in one transaction, then verifies all ten rows. It refuses conflicting or already repaired state. The ordinary fresh installer must not be rerun against the installed component. Cache reload follows successful repair and independent readback through JARVIS/Build.
+
+## Applied status,2026-11-04
+
+First8inserts committed; actualcatalogfailure exposed missingnativebindings; corrected2bindingtransaction committed; all10fullpostimages+independentreadbackPASS
+
+3exclusiveLua files installed/hashmatched; reviewedhelperunchanged/globalplayerdispatchpreserved
+
+BuildXORBB-CLEANUP-EXPEDITION-001 actualworld+all6zones task920131/fouractivities loaded; all6rewardselectiontrue/commonoption1->3839201311/type4/currency22/amount5,140sets. Managednormalstartup2026-11-04T11:35:18Z; api27 NOTissued/no redundantreload. Feerrott700unloaded,nextordinarybootfreshVM.
+
+False
+
+Firstcompletiononly; originalcompletechainreplayunimplemented

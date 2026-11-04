@@ -15,3 +15,15 @@ python3 apply_database.py --apply --config /private/eqemu_config.json --receipt-
 The helper requires peq_housing_test, transactional mutation tables, exact six-NPC preimages, empty reserved stock/consumer namespaces, unchanged VoidA/zone-access/placement preimages, native currency identity, and all77 item/spell/class-level identities. It backs up actual definitions/empty stock, inserts278 rows and updates six bindings in one transaction, then verifies full postimages before commit. A prepared-only receipt must be reconciled against actual rows before further action; never retry blindly.
 
 Publication precedes deployment. Coordinate fresh affected Void NPC/merchant caches while preserving the active tester; no global repop, GM gate removal or broad installer is included. A rollback must match receipt postimages and refuse intervening edits/new merchant consumers, restoring only these definitions without altering acquired player property. This source is outside manifest.stages. Database/cache proof is not a native purchase or ordinary progression test.
+
+## Applied status, 2026-11-04
+
+COMMITTED284writes:278merchantrows+6NPCbindings; fullpostimages and independent77distinctrank1readbackpassed
+
+BuildVOID-BG-CACHE-FRESHNESS-001: affected460-465unloaded; nextordinaryfreshboot DBmerchant/NPCloadready. Noextra reload/restart.
+
+[8, 22, 40, 54, 77, 77]
+
+VoidAempty/allsevenGM80zones/III/player/faction/spawns unchanged
+
+False

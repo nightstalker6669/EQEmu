@@ -9,3 +9,17 @@ The existing native currency22→DreamMote52149 and faction680 binding remain un
 Default invocation of apply_database.py prints an offline plan without connecting. Coordinated manual apply requires a private configuration and new receipt directory. It guards the exact full current merchant catalogue, sole NPC consumer, complete item/spell/NPC preimages and native currency binding; requires an InnoDB merchant table; durably backs up preimages; inserts one row in one transaction and compares the full356-row postimage. Prepared-only receipts require reconciliation before any retry. No active installer stage or runtime Lua is introduced.
 
 Source publication precedes any live apply. After actual apply, route affected merchant-cache freshness through JARVIS/Build under current tester ownership. No private restart, repop or client input. Source readiness is not native purchase/currency-debit acceptance.
+
+## Applied status,2026-11-04
+
+One row merchant700070slot356/item125184 committed; full356stockpostimage+independentreadbackPASS
+
+Prior355exactunchanged;198spellrows/158pendingnonspellsfiltered
+
+BuildSUMMER-STORM-CACHE-FRESHNESS-001: actualnativefilter198cost30spellrows/158heldexcluded;125184->25495/gate0verified;Feerrott700unloaded,nextordinaryfreshbootready,noreload/restartrequired
+
+False
+
+30Motes/Indifferentlabelledconfigurabledefaults
+
+https://www.redguides.com/community/threads/everquest-game-update-notes-november-10-2010.23163/post-186930 contemporaryNov10,2010repost

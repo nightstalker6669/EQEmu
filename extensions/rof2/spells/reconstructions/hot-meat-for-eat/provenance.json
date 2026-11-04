@@ -68,11 +68,20 @@
     "native_task_or_reward": false,
     "new_test_suite": false
   },
-  "applied": false,
+  "applied": true,
   "remaining": [
     "ExactoriginalnumericXP/phaseordering/periodguidefielddates",
     "OrdinaryHoTzoneaccess",
     "FullnaturalDreamMotequestacquisition",
     "Nativequestacceptance/reward/replay"
-  ]
+  ],
+  "applied_status": {
+    "date": "2026-11-04",
+    "database": "COMMITTED5inserts:task920130+4activities; fullpostimages and independentreadbackpassed",
+    "runtime": "Exclusivefeerrott2/700000.lua installed; reviewed85eeb3 deliveryhelper unchanged",
+    "runtime_catalogs": "BuildMEAT-FOR-EAT-CATALOG-001 authenticatedapi27 actualworld+all6taskcatalogs task920130/exact4activities and rewardcatalogs loaded; Feerrottunloaded nextordinaryfreshVM",
+    "reward": "Nativefaction680+5; NO DreamMotes",
+    "preserved": "Player/global/actor/loot/GM80 unchanged",
+    "native_quest_or_handin_observed": false
+  }
 }

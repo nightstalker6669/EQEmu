@@ -60,11 +60,26 @@
     "ordinary_progression_acceptance": false,
     "new_test_suite": false
   },
-  "applied": false,
+  "applied": true,
   "remaining": [
     "AuthenticordinaryVoidprogression/portselection",
     "OriginalrankIIIraidpredicateconflicts",
     "Exactperitemperiodpricedates",
     "Nativepurchase/debitacceptance"
-  ]
+  ],
+  "applied_status": {
+    "date": "2026-11-04",
+    "database": "COMMITTED284writes:278merchantrows+6NPCbindings; fullpostimages and independent77distinctrank1readbackpassed",
+    "runtime_freshness": "BuildVOID-BG-CACHE-FRESHNESS-001: affected460-465unloaded; nextordinaryfreshboot DBmerchant/NPCloadready. Noextra reload/restart.",
+    "counts_B_through_G": [
+      8,
+      22,
+      40,
+      54,
+      77,
+      77
+    ],
+    "preserved": "VoidAempty/allsevenGM80zones/III/player/faction/spawns unchanged",
+    "native_purchase_observed": false
+  }
 }

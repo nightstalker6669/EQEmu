@@ -43,8 +43,17 @@
   },
   "remaining": [
     "Exactindividualprice/standing",
-    "Actualguardedapply",
-    "Affectedmerchantcachefreshness",
     "Nativepurchase/debit"
-  ]
+  ],
+  "applied": true,
+  "applied_status": {
+    "date": "2026-11-04",
+    "database": "One row merchant700070slot356/item125184 committed; full356stockpostimage+independentreadbackPASS",
+    "existing_stock": "Prior355exactunchanged;198spellrows/158pendingnonspellsfiltered",
+    "runtime_freshness": "BuildSUMMER-STORM-CACHE-FRESHNESS-001: actualnativefilter198cost30spellrows/158heldexcluded;125184->25495/gate0verified;Feerrott700unloaded,nextordinaryfreshbootready,noreload/restartrequired",
+    "native_purchase_debit_observed": false,
+    "cost_gate": "30Motes/Indifferentlabelledconfigurabledefaults",
+    "period_corroboration": "https://www.redguides.com/community/threads/everquest-game-update-notes-november-10-2010.23163/post-186930 contemporaryNov10,2010repost",
+    "later_managed_start": "BuildXORBB-CLEANUP-EXPEDITION-001 confirms198spell/158heldfilterretained in freshnormalpool, affectedFeerrottunloaded"
+  }
 }

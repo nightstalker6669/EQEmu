@@ -19,3 +19,17 @@ python3 apply_database.py --apply --config /private/eqemu_config.json --quest-ro
 The helper requires exact target, task/title/activity/timer namespace absence, native actor/item/faction identities, unchanged zone access and the reviewed installed delivery helper hash. It durably records the empty-row backup and five after-images, inserts one task/four activities in a transaction and verifies full postimages. Native task/spell/item IDs are separate namespaces. This is outside manifest.stages and does not run a broad installer or new test suite.
 
 Publication precedes coordinated database/script deployment. TaskManager caches tasks at process startup, so a fresh Feerrott NPC/quest VM alone does not prove task920130 is loaded: coordinate normal serving-process task-catalog freshness after the active tester releases its window. Do not globally restart/repop or take client input. A prepared-only receipt must be reconciled against actual rows before further action. Rollback must refuse changed definitions or new task users/progress; never erase player task history, legitimate items, faction or currency. Native task acceptance, kills, loot, hand-in, rewards and replay remain untested by this source checkpoint.
+
+## Applied status, 2026-11-04
+
+COMMITTED5inserts:task920130+4activities; fullpostimages and independentreadbackpassed
+
+Exclusivefeerrott2/700000.lua installed; reviewed85eeb3 deliveryhelper unchanged
+
+BuildMEAT-FOR-EAT-CATALOG-001 authenticatedapi27 actualworld+all6taskcatalogs task920130/exact4activities and rewardcatalogs loaded; Feerrottunloaded nextordinaryfreshVM
+
+Nativefaction680+5; NO DreamMotes
+
+Player/global/actor/loot/GM80 unchanged
+
+False
