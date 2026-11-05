@@ -1,0 +1,83 @@
+{
+  "status": "INTEGRATION_SOURCE_PACKAGE_NOT_STANDALONE_BUILD_OR_RUNTIME_READY",
+  "repository": "nightstalker6669/EQEmu",
+  "publication_branch": "rof2-aa",
+  "publication_baseline_commit": "bddf6f580a3328809b2a3bf8e1e45f3e6429e94a",
+  "publication_mode": "Add only these integration artifacts; leave all four raw native baseline files unchanged. No global_player overlay exists on this branch.",
+  "native_target": {
+    "description": "Exact integrated-source preimages, not publication-branch preimages. Full preimages retained privately. Coordinator must integrate against reviewed actual source before Build.",
+    "preimage_sha256": {
+      "zone/aa.cpp": "fe12edf0c8a276c70e8b05805d5cf61635c7f004413550244fd7e192341aa908",
+      "zone/client.h": "23756b1d647a769e191f629a39670fc93c5ed266680f8361da42e09f676e37b5",
+      "zone/lua_client.cpp": "2e3eaea16689f7d8c4d668449e29bc43c1b428d09f197005e440091830fa5f0d",
+      "zone/lua_client.h": "ebfa277d9d4356285feb5aa9374fb57fb72edaf54ec09636a1776a9dd3fb6809"
+    },
+    "postimage_sha256": {
+      "zone/aa.cpp": "7a00a44979af2885b9de904a7cd5570e6759e5f3dedb08ef0fdd76ccfb84fbb5",
+      "zone/client.h": "86384613dfe4b4c833255908b576a789a13c623f31ce40c1fee0f185c213e8e8",
+      "zone/lua_client.cpp": "a94abd487f693dc2dc9fb4622dc1eeff606fd8e777d7ba340d925f94fd546576",
+      "zone/lua_client.h": "5634a2b828a809a8dd2c913aaabf4a20f4656482e77dccf248f49df32c1e477e"
+    }
+  },
+  "quest_target": {
+    "path": "global/global_player.lua",
+    "preimage_sha256": "791da12d91bcc7d05b60f850bbc93fe4b08f2ed323ce3d6c77e768420eeee696",
+    "postimage_sha256": "381c76d8ee5df8f1f0de1a152fd128782e63dbda7e7469a66c87d0715cbd4f03",
+    "mode": "context patch only; preserve existing callbacks and nonzero returns; do not publish or install a full integrated global file"
+  },
+  "guard_dependencies": {
+    "required_symbols": [
+      "Client::IsSpiritShrouded",
+      "Client::m_spirit_shroud_transition",
+      "Client::m_fellowship_xp_persistence_failed",
+      "Client::m_fellowship_xp_transaction_active"
+    ],
+    "required_context_header": "common/shroud/aa_preview.h",
+    "published_provenance": {
+      "branch": "rof2-spirit-shrouds",
+      "commit": "e7cb5dc2279bd1badde768e370463e447a9fcdf3",
+      "paths": {
+        "zone/client.h": {
+          "git_blob": "567868d29251e50646789a3d5f5069e4eb286698",
+          "contains": "all four guard symbols"
+        },
+        "common/shroud/aa_preview.h": {
+          "git_blob": "867d7f6317ec763eb4beed773b4f392e78a93b62",
+          "dependencies": [
+            "common/shroud/wire.h",
+            "SpiritShroud template definitions"
+          ]
+        }
+      }
+    },
+    "qualification": "Symbol provenance only, not selective integration certification. No whole companion feature import, false-return stubs or weakened guards authorized. Root integration required."
+  },
+  "behavior": "Origin331/rank1000 only, eligible level5+, private existing Database connection, verified autocommit and postcommit exact row readback before memory/packets/popup; existing ownership and charges preserved.",
+  "validation": {
+    "native": "Prior exact-target patch apply check and focused review only; no C++ build or native acceptance. Public AA baseline is not an apply or compile target.",
+    "quest": "Prior exact-target patch apply check and Lua syntax only; no event execution or runtime install."
+  },
+  "runtime_install": "Separate private runtime-install-map; publication is not installation. Matching native binding must be built/deployed before helper or hooks activate.",
+  "artifacts": {
+    "docs/INSTALL.md": {
+      "sha256": "3b08e9ccf87e3061bbf64cef1c0ef2b54a0c73b43014c58c8021b246a13ab387",
+      "bytes": 3009
+    },
+    "native-integration.patch": {
+      "sha256": "0fcd56fc7012a91e7971ac4cda08d2e4552e1ae9692fd6a751e99e32685ae037",
+      "bytes": 7133
+    },
+    "native-rollback.patch": {
+      "sha256": "305d9fcc83114c43775a1e8d12e1dfb82b76bbbd24c5d8c3d454d064921c1ab0",
+      "bytes": 7133
+    },
+    "quest-overlay/global_player.origin.patch": {
+      "sha256": "41ae2afefa38766b24acdbd7564b0ab9a569ae00e1a77757932e4c2f8c6d2ad2",
+      "bytes": 2096
+    },
+    "quest-overlay/lua_modules/aa_origin_entitlement.lua": {
+      "sha256": "91498dd15a5427e61fb7148e72422a182f758acabb67139f967fbd57cb3dd220",
+      "bytes": 857
+    }
+  }
+}
