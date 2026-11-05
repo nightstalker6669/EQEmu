@@ -1,0 +1,482 @@
+--- a/zone/task_client_state.cpp
++++ b/zone/task_client_state.cpp
+@@ -30,14 +30,12 @@
+ #include "common/rulesys.h"
+ #include "common/shared_tasks.h"
+ #include "zone/client.h"
+-#include "zone/npc.h"
+ #include "zone/dynamic_zone.h"
+ #include "zone/queryserv.h"
+ #include "zone/quest_parser_collection.h"
+ #include "zone/string_ids.h"
+ #include "zone/worldserver.h"
+ #include "zone/zonedb.h"
+-#include "fire_personal_successor_dispatch.h"
+ 
+ #include <cstdlib>
+ #include <limits>
+@@ -47,154 +45,6 @@
+ 
+ extern WorldServer worldserver;
+ extern QueryServ   *QServ;
+-
+-namespace {
+-
+-// One synchronous native AssignTask call only. No client-owned pointer is
+-// dereferenced after TASK_ACCEPTED, and no state survives this dispatch frame.
+-struct FirePersonalAcceptanceFrame {
+-	Client* expected_client;
+-	FirePersonalOccurrenceSource::Handoff* original_handoff;
+-	uint32_t expected_character_id;
+-	uint32_t expected_task_id;
+-	int expected_giver_entity_id;
+-	uint64_t native_reserved_occurrence_id = 0;
+-	uint32_t native_reward_accepted_time = 0;
+-	bool acceptance_entered = false;
+-	bool completion_observed = false;
+-	bool recorded_before_callbacks = false;
+-};
+-
+-// This is a stack-scope pointer, not a retry/character/task registry.
+-thread_local FirePersonalAcceptanceFrame* fire_personal_acceptance_frame = nullptr;
+-
+-class FirePersonalAcceptanceScope {
+-public:
+-	explicit FirePersonalAcceptanceScope(FirePersonalAcceptanceFrame& frame)
+-		: previous_(fire_personal_acceptance_frame)
+-	{
+-		fire_personal_acceptance_frame = &frame;
+-	}
+-
+-	~FirePersonalAcceptanceScope()
+-	{
+-		// Do not touch Client, ClientTaskState, NPC or the handoff after callbacks.
+-		fire_personal_acceptance_frame = previous_;
+-	}
+-
+-	FirePersonalAcceptanceScope(const FirePersonalAcceptanceScope&) = delete;
+-	FirePersonalAcceptanceScope& operator=(const FirePersonalAcceptanceScope&) = delete;
+-
+-private:
+-	FirePersonalAcceptanceFrame* previous_;
+-};
+-
+-FirePersonalAcceptanceFrame* ClaimFirePersonalAcceptance(
+-	Client* client,
+-	int task_id,
+-	int giver_entity_id
+-)
+-{
+-	auto* frame = fire_personal_acceptance_frame;
+-	if (!frame || frame->acceptance_entered || frame->expected_client != client ||
+-		frame->expected_task_id != static_cast<uint32_t>(task_id) ||
+-		frame->expected_giver_entity_id != giver_entity_id ||
+-		frame->expected_character_id != client->CharacterID()) {
+-		return nullptr;
+-	}
+-	// Only the actual direct acceptance invocation can own this receipt. A
+-	// re-entrant acceptance, even for the same task, cannot replace it.
+-	frame->acceptance_entered = true;
+-	return frame;
+-}
+-
+-void RecordFirePersonalAcceptanceBeforeCallbacks(
+-	FirePersonalAcceptanceFrame* frame,
+-	Client* client,
+-	TaskType actual_type,
+-	const ClientTaskInformation& active_slot,
+-	bool actual_save_result
+-)
+-{
+-	if (!frame || frame->completion_observed) {
+-		return;
+-	}
+-	// Seal before the persisted-state read or any mutable task callbacks.
+-	frame->completion_observed = true;
+-	if (frame->expected_client != client || actual_type != TaskType::Quest ||
+-		active_slot.task_id != static_cast<int>(frame->expected_task_id) ||
+-		client->CharacterID() != frame->expected_character_id ||
+-		!frame->native_reserved_occurrence_id ||
+-		active_slot.accepted_time <= 0 ||
+-		static_cast<uint32_t>(active_slot.accepted_time) != frame->native_reward_accepted_time) {
+-		return;
+-	}
+-
+-	const auto binding = FirePersonalOccurrenceSource::BindAccepted(
+-		database, client->CharacterID(), actual_type, active_slot,
+-		frame->native_reserved_occurrence_id, actual_save_result
+-	);
+-	if (binding) {
+-		frame->recorded_before_callbacks =
+-			FirePersonalOccurrenceSource::RecordActualPersonalAcceptance(
+-				*frame->original_handoff, *binding
+-			);
+-	}
+-}
+-
+-} // namespace
+-
+-namespace FirePersonalOccurrenceSource {
+-
+-PersonalDispatchResult DispatchActualOriginalPersonalSuccessorOnce(
+-	Handoff& original_handoff,
+-	const Binding& actual_original_finish,
+-	Client& actual_client,
+-	NPC& actual_gotonur,
+-	uint32_t actual_zone,
+-	uint32_t actual_instance,
+-	uint32_t owner_selected_original_spawn
+-)
+-{
+-	// Nested private dispatches are held before consuming another R2 handoff.
+-	if (fire_personal_acceptance_frame ||
+-		(actual_original_finish.task_id != 920167 && actual_original_finish.task_id != 920168) ||
+-		actual_client.CharacterID() != actual_original_finish.character_id ||
+-		actual_zone != 490 || actual_instance != 0 || actual_gotonur.GetNPCTypeID() != 490061 ||
+-		!actual_gotonur.GetID() || !owner_selected_original_spawn ||
+-		actual_gotonur.GetSpawnPointID() != owner_selected_original_spawn) {
+-		return PersonalDispatchResult::Hold;
+-	}
+-	const uint32_t expected_next = NextTask(actual_original_finish.task_id);
+-	const auto* next = TaskManager::Instance()->GetTaskData(expected_next);
+-	if (!next || next->type != TaskType::Quest) {
+-		return PersonalDispatchResult::Hold;
+-	}
+-	const auto intent = TakeOriginalHandoffOnce(original_handoff);
+-	if (!intent || intent->next_type != TaskType::Quest || intent->next_task != expected_next ||
+-		!intent->pending_reward_id ||
+-		intent->finished.character_id != actual_original_finish.character_id ||
+-		intent->finished.task_id != actual_original_finish.task_id ||
+-		intent->finished.occurrence_id != actual_original_finish.occurrence_id ||
+-		intent->finished.slot != actual_original_finish.slot ||
+-		intent->finished.accepted_time != actual_original_finish.accepted_time) {
+-		return PersonalDispatchResult::Hold;
+-	}
+-
+-	FirePersonalAcceptanceFrame frame{
+-		&actual_client, &original_handoff, intent->finished.character_id,
+-		intent->next_task, actual_gotonur.GetID()
+-	};
+-	FirePersonalAcceptanceScope scope(frame);
+-	actual_client.AssignTask(static_cast<int>(expected_next), frame.expected_giver_entity_id, true);
+-	// Read only our stack result. The callbacks may have destroyed/replaced
+-	// client-owned state, and neither its slot nor its mapping is queried here.
+-	return frame.recorded_before_callbacks
+-		? PersonalDispatchResult::AcceptedBeforeCallbacks
+-		: PersonalDispatchResult::SubmittedNotAccepted;
+-}
+-
+-} // namespace FirePersonalOccurrenceSource
+ 
+ namespace
+ {
+@@ -3456,7 +3306,6 @@
+ 	bool enforce_level_requirement
+ )
+ {
+-	auto* const fire_acceptance = ClaimFirePersonalAcceptance(client, task_id, npc_entity_id);
+ 	if (task_id < 0) {
+ 		client->Message(Chat::Red, "Task system not functioning, or task_id %i out of range.", task_id);
+ 		return;
+@@ -3703,11 +3552,6 @@
+ 			);
+ 			return;
+ 		}
+-		if (fire_acceptance && task->type == TaskType::Quest) {
+-			// Retain this SAME native reservation, before its locals go out of scope.
+-			fire_acceptance->native_reserved_occurrence_id = *occurrence_id;
+-			fire_acceptance->native_reward_accepted_time = reward_accepted_time;
+-		}
+ 	}
+ 
+ 	active_slot->task_id       = task_id;
+@@ -3762,10 +3606,7 @@
+ 	client->StartTaskRequestCooldownTimer();
+ 	client->MessageString(Chat::DefaultText, YOU_ASSIGNED_TASK, task->title.c_str());
+ 
+-	const bool acceptance_saved = TaskManager::Instance()->SaveClientState(client, this);
+-	RecordFirePersonalAcceptanceBeforeCallbacks(
+-		fire_acceptance, client, task->type, *active_slot, acceptance_saved
+-	);
++	TaskManager::Instance()->SaveClientState(client, this);
+ 
+ 	NPC *npc = entity_list.GetNPCByID(npc_entity_id);
+ 	if (npc) {
+--- a/zone/fire_personal_occurrence.h
++++ /dev/null
+@@ -1,105 +0,0 @@
+-/*	EQEmu: EQEmulator
+-
+-	Copyright (C) 2001-2026 EQEmu Development Team
+-
+-	This program is free software; you can redistribute it and/or modify
+-	it under the terms of the GNU General Public License as published by
+-	the Free Software Foundation; either version 3 of the License, or
+-	(at your option) any later version.
+-
+-	This program is distributed in the hope that it will be useful,
+-	but WITHOUT ANY WARRANTY; without even the implied warranty of
+-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+-	GNU General Public License for more details.
+-
+-	You should have received a copy of the GNU General Public License
+-	along with this program. If not, see <http://www.gnu.org/licenses/>.
+-*/
+-#pragma once
+-
+-// Feature-private native Fire support; no scripting API or recovery allocator.
+-#include "common/database.h"
+-#include "zone/tasks.h"
+-#include "fmt/format.h"
+-#include <cstdint>
+-#include <optional>
+-#include <string>
+-
+-namespace FirePersonalOccurrenceSource {
+-struct Binding {
+- uint32_t character_id;
+- uint32_t task_id;
+- int slot;
+- int accepted_time;
+- uint64_t occurrence_id;
+-};
+-struct Rule {
+- uint32_t task_id, ingredient_a, ingredient_b, inactive_item, construct_npc, encounter_zone;
+-};
+-inline std::optional<Rule> OriginalRule(uint32_t task_id) {
+- switch (task_id) {
+- case 920167: return Rule{920167,50745,50744,50746,490922,487};
+- case 920168: return Rule{920168,50747,50748,50749,490923,481};
+- case 920169: return Rule{920169,50750,50751,50752,490924,490};
+- default: return std::nullopt;
+- }
+-}
+-inline bool MatchesLocal(const Binding& b,uint32_t character_id,TaskType type,
+- const ClientTaskInformation& current) {
+- return OriginalRule(b.task_id).has_value() && b.character_id!=0 &&
+-  b.occurrence_id!=0 && b.character_id==character_id && type==TaskType::Quest &&
+-  current.task_id==static_cast<int>(b.task_id) && current.slot==b.slot &&
+-  current.accepted_time==b.accepted_time && !current.was_rewarded;
+-}
+-// Fresh persisted state, not an inventory/actor commit. Never cache a true result across operations.
+-inline std::optional<bool> PersistedMatches(Database& db,const Binding& b,bool initial_acceptance) {
+- if (!OriginalRule(b.task_id) || !b.character_id || !b.occurrence_id || b.accepted_time<=0 || b.slot<0)
+-  return false;
+- const std::string initial=initial_acceptance ?
+-  " AND (SELECT COUNT(*) FROM character_activities a WHERE a.charid=ct.charid "
+-  "AND a.taskid=ct.taskid AND a.activityid BETWEEN 0 AND 3 "
+-  "AND a.donecount=0 AND a.completed=0)=4" : "";
+- auto result=db.QueryDatabase(fmt::format(
+-  "SELECT r.occurrence_id FROM character_task_reward_instances r "
+-  "JOIN character_tasks ct ON ct.charid=r.character_id AND ct.taskid=r.task_id "
+-  "AND ct.acceptedtime=r.accepted_time "
+-  "WHERE r.character_id={} AND r.task_id={} AND r.occurrence_id={} "
+-  "AND r.accepted_time={} AND ct.slot={} AND ct.type=2 AND ct.was_rewarded=0{}",
+-  b.character_id,b.task_id,b.occurrence_id,b.accepted_time,b.slot,initial));
+- if (!result.Success() || result.RowCount()>1) return std::nullopt;
+- if (result.RowCount()==0) return false;
+- auto row=result.begin();
+- return row[0] && std::string(row[0])==std::to_string(b.occurrence_id);
+-}
+-// actual_save_result is ONLY the actual native SaveClientState return from this acceptance.
+-// fresh_id is ONLY the actual successful ReserveTaskRewardInstance result from this acceptance.
+-// Neither parameter comes from Lua, a packet, a historical lookup or an invented getter.
+-inline std::optional<Binding> BindAccepted(Database& db,uint32_t character_id,TaskType type,
+- const ClientTaskInformation& actual,uint64_t fresh_id,bool actual_save_result) {
+- if (!actual_save_result || !OriginalRule(static_cast<uint32_t>(actual.task_id))) return std::nullopt;
+- Binding b{character_id,static_cast<uint32_t>(actual.task_id),actual.slot,actual.accepted_time,fresh_id};
+- if (!MatchesLocal(b,character_id,type,actual)) return std::nullopt;
+- auto matched=PersistedMatches(db,b,true);
+- return matched && *matched ? std::optional<Binding>(b) : std::nullopt;
+-}
+-enum class Consumer { CombineIngredients, ActivateConstruct, ActualConstructDeath, FinalHail };
+-struct Context {
+- Binding acceptance;
+- Rule rule;
+- Consumer consumer;
+- int activity;
+-};
+-// Produces acceptance/stage context ONLY. Not permission to debit, summon, spawn, credit or reward.
+-inline std::optional<Context> ForConsumer(Database& db,const Binding& binding,
+- uint32_t actual_character_id,TaskType actual_type,const ClientTaskInformation& current,
+- Consumer consumer) {
+- if (!MatchesLocal(binding,actual_character_id,actual_type,current)) return std::nullopt;
+- auto persisted=PersistedMatches(db,binding,false);
+- if (!persisted || !*persisted) return std::nullopt;
+- const int activity=consumer==Consumer::FinalHail ? 3 : 2;
+- if (current.activity[activity].activity_state!=ActivityActive) return std::nullopt;
+- auto rule=OriginalRule(binding.task_id);
+- if (!rule) return std::nullopt;
+- return Context{binding,*rule,consumer,activity};
+-}
+-} // namespace FirePersonalOccurrenceSource
+--- a/zone/fire_personal_after_reward_r2.h
++++ /dev/null
+@@ -1,132 +0,0 @@
+-/*	EQEmu: EQEmulator
+-
+-	Copyright (C) 2001-2026 EQEmu Development Team
+-
+-	This program is free software; you can redistribute it and/or modify
+-	it under the terms of the GNU General Public License as published by
+-	the Free Software Foundation; either version 3 of the License, or
+-	(at your option) any later version.
+-
+-	This program is distributed in the hope that it will be useful,
+-	but WITHOUT ANY WARRANTY; without even the implied warranty of
+-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+-	GNU General Public License for more details.
+-
+-	You should have received a copy of the GNU General Public License
+-	along with this program. If not, see <http://www.gnu.org/licenses/>.
+-*/
+-#pragma once
+-
+-// Feature-private native Fire support; no scripting API or recovery allocator.
+-#include "fire_personal_occurrence.h"
+-#include <charconv>
+-
+-namespace FirePersonalOccurrenceSource {
+-struct NextIntent {
+- Binding finished;
+- uint64_t pending_reward_id;
+- uint32_t next_task;
+- TaskType next_type;
+-};
+-inline uint32_t NextTask(uint32_t finished) {
+- switch(finished) { case 920167:return 920168; case 920168:return 920169; case 920169:return 920170; }
+- return 0;
+-}
+-inline uint64_t OriginalCurrencyReward(uint32_t task) {
+- switch(task) { case 920167:return 3839201671ULL; case 920168:return 3839201681ULL;
+-  case 920169:return 3839201691ULL; default:return 0; }
+-}
+-// Called only by the original physical-final-hail orchestrator AFTER its real RewardTask succeeds,
+-// BEFORE native removal invalidates current/active pointer. Never from TASK_COMPLETE or a generic retry loop.
+-struct ActualOriginalRewardCall {
+- bool executed=false;
+- bool was_rewarded_before_call=true;
+- bool result=false;
+-};
+-inline std::optional<NextIntent> AfterOriginalRewardTask(Database& db,const Binding& finished,
+- uint32_t actual_character_id,TaskType actual_type,const ClientTaskInformation& current,
+- const ActualOriginalRewardCall& actual_call) {
+- if (!actual_call.executed || actual_call.was_rewarded_before_call || !actual_call.result || actual_type!=TaskType::Quest || !finished.occurrence_id ||
+-  !finished.character_id || actual_character_id!=finished.character_id ||
+-  current.task_id!=static_cast<int>(finished.task_id) || current.slot!=finished.slot ||
+-  current.accepted_time!=finished.accepted_time || !current.was_rewarded || !NextTask(finished.task_id))
+-  return std::nullopt;
+- for(int activity=0;activity<4;++activity)
+-  if(current.activity[activity].activity_state!=ActivityCompleted) return std::nullopt;
+- const uint64_t original_currency_reward=OriginalCurrencyReward(finished.task_id);
+- auto result=db.QueryDatabase(fmt::format(
+-  "SELECT s.pending_reward_id FROM character_task_reward_selections s "
+-  "JOIN character_task_reward_instances r ON r.character_id=s.character_id "
+-  "AND r.task_id=s.task_id AND r.occurrence_id=s.source_instance_id "
+-  "WHERE s.character_id={} AND s.task_id={} AND s.accepted_time={} "
+-  "AND r.accepted_time={} AND s.source_instance_id={} AND s.reward_set_id={} AND s.status=1 "
+-  "AND EXISTS(SELECT 1 FROM character_task_rewards e "
+-  "WHERE e.character_id=s.character_id AND e.pending_reward_id=s.pending_reward_id "
+-  "AND e.reward_id={} AND e.status=1)",
+-  finished.character_id,finished.task_id,finished.accepted_time,finished.accepted_time,
+-  finished.occurrence_id,finished.task_id,original_currency_reward));
+- if(!result.Success() || result.RowCount()!=1) return std::nullopt;
+- auto row=result.begin();
+- if(!row[0]) return std::nullopt;
+- // Existing native typed parser; no floating conversion of occurrence/pending identities.
+- const std::string pending_text(row[0]);
+- uint64_t pending=0;
+- const auto parsed=std::from_chars(pending_text.data(),pending_text.data()+pending_text.size(),pending);
+- if(parsed.ec!=std::errc{} || parsed.ptr!=pending_text.data()+pending_text.size() || !pending)
+-  return std::nullopt;
+- return NextIntent{finished,pending,NextTask(finished.task_id),
+-  finished.task_id==920169 ? TaskType::Shared : TaskType::Quest};
+-}
+-// Required private observations of the SAME original native completion/cleanup call.
+-// These are NOT new callback fields/getters and are not available until the native owner captures them.
+-struct ActualOriginalCleanup {
+- uint32_t character=0,finished_task=0;
+- uint64_t original_occurrence=0;
+- int original_slot=-1;
+- bool original_removal_executed=false;
+- bool task_and_activity_removal_known=false;
+- bool original_pointer_removal_known=false;
+- bool original_slot_now_free=false;
+- bool original_completion_save_executed=false;
+- bool original_completion_save_succeeded=false;
+-};
+-class Handoff {
+- NextIntent intent_;
+- bool cleanup_known_=false,attempted_=false,personal_accepted_=false;
+- uint64_t next_personal_occurrence_=0;
+- friend bool ConfirmOriginalCleanup(Handoff&,const ActualOriginalCleanup&);
+- friend std::optional<NextIntent> TakeOriginalHandoffOnce(Handoff&);
+- friend bool RecordActualPersonalAcceptance(Handoff&,const Binding&);
+-public:
+- explicit Handoff(const NextIntent& original):intent_(original) {}
+- Handoff(const Handoff&)=delete;
+- Handoff& operator=(const Handoff&)=delete;
+- Handoff(Handoff&&)=delete;
+- Handoff& operator=(Handoff&&)=delete;
+-};
+-inline bool ConfirmOriginalCleanup(Handoff& handoff,const ActualOriginalCleanup& actual) {
+- const auto& old=handoff.intent_.finished;
+- if(handoff.attempted_ || actual.character!=old.character_id || actual.finished_task!=old.task_id ||
+-  actual.original_occurrence!=old.occurrence_id || actual.original_slot!=old.slot ||
+-  !actual.original_removal_executed || !actual.task_and_activity_removal_known ||
+-  !actual.original_pointer_removal_known || !actual.original_slot_now_free ||
+-  !actual.original_completion_save_executed || !actual.original_completion_save_succeeded) return false;
+- handoff.cleanup_known_=true;return true;
+-}
+-inline std::optional<NextIntent> TakeOriginalHandoffOnce(Handoff& handoff) {
+- if(!handoff.cleanup_known_ || handoff.attempted_) return std::nullopt;
+- handoff.attempted_=true; // Before the native owner's ONE actual successor dispatch.
+- return handoff.intent_;
+-}
+-inline bool RecordActualPersonalAcceptance(Handoff& handoff,const Binding& actual_next) {
+- if(!handoff.attempted_ || handoff.personal_accepted_ || handoff.intent_.next_type!=TaskType::Quest ||
+-  actual_next.character_id!=handoff.intent_.finished.character_id ||
+-  actual_next.task_id!=handoff.intent_.next_task || !actual_next.occurrence_id ||
+-  actual_next.occurrence_id==handoff.intent_.finished.occurrence_id) return false;
+- handoff.personal_accepted_=true;
+- handoff.next_personal_occurrence_=actual_next.occurrence_id;
+- return true;
+-}
+-// No assignment, World request or invented World-success receipt is provided.
+-// Native owner retains ONE object per original physical finish. Reconstructing another resets state and is forbidden.
+-} // namespace FirePersonalOccurrenceSource
+--- a/zone/fire_personal_successor_dispatch.h
++++ /dev/null
+@@ -1,32 +0,0 @@
+-#pragma once
+-
+-#include "fire_personal_after_reward_r2.h"
+-
+-class Client;
+-class NPC;
+-
+-namespace FirePersonalOccurrenceSource {
+-
+-enum class PersonalDispatchResult {
+-	Hold,
+-	// Legacy name: submission lacks a verified fresh-binding receipt. The native
+-	// task may nevertheless exist. Never cancel, allocate again or retry on this.
+-	SubmittedNotAccepted,
+-	// Records the actual persisted acceptance before mutable TASK_ACCEPTED.
+-	// Subsequent callbacks may change the task; this is not a post-callback view.
+-	AcceptedBeforeCallbacks
+-};
+-
+-// Only the original physical-final-hail owner, after R2 confirms actual cleanup.
+-// The Shared920169->920170 edge is rejected before taking its handoff.
+-PersonalDispatchResult DispatchActualOriginalPersonalSuccessorOnce(
+-	Handoff& original_handoff,
+-	const Binding& actual_original_finish,
+-	Client& actual_client,
+-	NPC& actual_gotonur,
+-	uint32_t actual_zone,
+-	uint32_t actual_instance,
+-	uint32_t owner_selected_original_spawn
+-);
+-
+-} // namespace FirePersonalOccurrenceSource
