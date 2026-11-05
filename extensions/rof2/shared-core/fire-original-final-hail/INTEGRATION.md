@@ -1,0 +1,31 @@
+# Fire original final-hail integration source
+
+This additive artifact package preserves the exact reviewed patch `8035f9a1eb43f0d4742b3ebadca52265e6a144a7a296ef78458c29c5cfb8cdc1`. It remains uncompiled, unapplied and UNREGISTERED. Publishing these artifacts does not activate the Fire feature or modify native branch files.
+
+## Required predecessor
+
+The prerequisite is the corrected acceptance R2 artifact package published at commit `c2955cd37a7d38f130f743d95437eec06e3f5458`, under `extensions/rof2/shared-core/fire-personal-acceptance-r2/`, with exact patch SHA256 `b71dc874870e6c0ab0ac78f85536c75913da594089ae4a18b3aa9e7cdd976764`. Its matching runtime strata and exact four postimages must already be reconciled. That publication added source artifacts only; it did not apply the acceptance bridge to native branch sources. The published native task source differs from the required runtime preimage, as documented in that predecessor package.
+
+This delta requires the acceptance R2 task source postimage SHA256 `7788256d13297bda707f27149b8a08cd6067ff2c6217f890c3bc76e27f06cbcd` and absence of `zone/fire_original_final_hail_frame.h`. The three predecessor headers and existing reward/save/ledger dependencies must remain exact. Do not import whole runtime source files, replace guards or invent adapters to bypass a mismatch.
+
+## Original final-hail boundary
+
+The feature-private entry is SubmitActualOriginalFinalHailOnce for actual original Gotonur490061 WORLD490/0 hails completing personal920167 or920168. The native owner supplies the original accepted Binding/current slot/type, exact original spawn and real actor. The owner must already retain authentic construct/death commit ownership. ForConsumer and completed activity2 alone are not physical-commit proof. A noncopyable per-original-acceptance attempt is marked before the existing UpdateTaskActivity(task,3,1); it may not be recreated/reset after an uncertain result, login or reconnect. There is no new item debit/output or manual reward call in this genuine final hail.
+
+One synchronous private frame is claimed only by that actual IncrementDoneCount for goal3/count1/current occurrence. It cannot be claimed again by mutable callbacks. At the existing RewardTask call it captures executed, pre-call was_rewarded and actual result, then invokes the already reviewed AfterOriginalRewardTask before pointer removal. A default reward_ready=true, a suppressed call, failed reward, already-rewarded early true or wrong current identity cannot stage a handoff. Normal native reward/callback behavior is preserved.
+
+The original RemoveTask calls execute once. Their existing DeleteWhere return values are retained: exactly four activity rows and one task row must have been removed. Those repository helpers return zero on query failure, so zero is not success. The existing current-occurrence DELETE result must succeed and affect exactly one row. The actual original quest slot must then be empty. These checks do not undo partial native cleanup; any partial/unknown outcome holds without another delete, a compensating grant, rollback claim or retry.
+
+The original IncrementDoneCount SaveClientState still runs once at its existing position. Its actual boolean, together with those exact deletion/free-slot observations, feeds ConfirmOriginalCleanup. Achievement processing retains its original ordering. Only after all original task/achievement accesses, immediately before the original function returns, may the corrected acceptance dispatcher consume the same staged Handoff. The direct native UpdateTaskActivity caller then only returns; it has no remaining task/activity iterator using a reused slot.
+
+After mutable callbacks the stored original NPC pointer is used only for equality comparison. Dispatch looks up the current live entity and requires matching pointer/entity/type/spawn and WORLD490/0 before dereferencing that freshly returned object. A despawn or different object holds. This is synchronous object identity, not a durable generation token: the original NPC callback owner must guarantee its event lifetime and prohibit same-frame entity-ID/address reuse, or leave this entry unregistered until that boundary is resolved. The native caller's existing client lifetime obligations also remain. No raw pointer escapes this synchronous source frame.
+
+After successor TASK_ACCEPTED callbacks, this delta reads/writes only its own stack result. AcceptedBeforeCallbacks means the actual new persisted acceptance was recorded before those callbacks; it is not a post-callback view. Every other dispatched outcome remains unconfirmed and must not trigger cancellation, another assignment or reconstruction from task history/reward rows. Shared920169→920170 is excluded, as are generic retry/recovery calls and all initial920167 acceptance hooks.
+
+## Publication, review and rollback limits
+
+The entry MUST remain UNREGISTERED unless the genuine original Gotonur callback, authentic original construct/death commit ownership, and synchronous client/NPC lifetime guarantees are supplied by the native owner. Pointer equality is not a durable generation token; prohibit same-frame entity-ID/address reuse or leave the entry unregistered. Activity progress alone does not establish a physical commit.
+
+Focused source review found no new concrete defects and confirmed the exact base/postimage/header delta. It did not apply, parse, compile or execute the source. No SQL, build, tests, rehearsal, runtime or native gameplay validation was performed for publication. Initial task 920167 acceptance and shared task 920169 to 920170 admission remain outside this delta; this package does not establish whole Fire readiness.
+
+`native-integration.patch` is the exact frozen patch. `native-rollback.patch` is its inverse target transformation, generated from the pinned task source base/postimage and new header. Use the inverse only with both exact delta postimages, restoring the acceptance R2 task source and removing only the new final-hail header. It does not roll back acceptance R2 or grant permission to mutate a live checkout. Changed preimages/postimages require reconciliation. The predecessor acceptance R2 published revision and all raw branch native files are preserved.
