@@ -19,3 +19,5 @@ Source only; finite package publication and separate exact coordinatorSQLGO requ
 Source: https://www.eqtraders.com/recipes/recipe_page.php?article=147&rsa=Baking&sub=oldworld
 Source: https://www.eqtraders.com/recipes/recipe_page.php?article=228&rsa=Baking&sub=GoD
 Source: https://www.eqtraders.com/recipes/recipe_page.php?article=36&rsa=Brewing&sub=non-alcoholic
+
+Revision 2: recipe display names include the source Learned-as input label, or a descriptive input label where omitted, to distinguish existing output recipes. Source titles, formulas, quantities, gates, native item preimages and all SQL guards remain unchanged. Original attempt164 was rejected by the name guard and reconciled with no new rows; no automatic retry.

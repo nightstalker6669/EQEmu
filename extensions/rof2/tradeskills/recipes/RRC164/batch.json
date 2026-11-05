@@ -16,7 +16,7 @@
   "recipes": [
     {
       "id": 3095805,
-      "name": "Block of High Quality Steel",
+      "name": "Block of High Quality Steel (Large Bricks)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 31,
@@ -34,7 +34,7 @@
     },
     {
       "id": 3095806,
-      "name": "Large Brick of High Quality Steel",
+      "name": "Large Brick of High Quality Steel (Block)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 26,
@@ -52,7 +52,7 @@
     },
     {
       "id": 3095807,
-      "name": "Large Brick of High Quality Steel",
+      "name": "Large Brick of High Quality Steel (Small Brick)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 31,
@@ -70,7 +70,7 @@
     },
     {
       "id": 3095808,
-      "name": "Large Brick of Refined High Quality Ore",
+      "name": "Large Brick of Refined High Quality Ore (Block)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 26,
@@ -88,7 +88,7 @@
     },
     {
       "id": 3095809,
-      "name": "Large Brick of Refined High Quality Ore",
+      "name": "Large Brick of Refined High Quality Ore (Small Brick)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 26,
@@ -106,7 +106,7 @@
     },
     {
       "id": 3095810,
-      "name": "Small Brick of High Quality Steel",
+      "name": "Small Brick of High Quality Steel (Large Brick)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 26,
@@ -124,7 +124,7 @@
     },
     {
       "id": 3095811,
-      "name": "Small Brick of High Quality Steel",
+      "name": "Small Brick of High Quality Steel (Small Piece)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 31,
@@ -142,7 +142,7 @@
     },
     {
       "id": 3095812,
-      "name": "Small Piece of High Quality Steel",
+      "name": "Small Piece of High Quality Steel (Small Brick)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 26,
@@ -160,7 +160,7 @@
     },
     {
       "id": 3095813,
-      "name": "Laminator Blade",
+      "name": "Laminator Blade (Small Brick of High Quality Steel)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 102,
@@ -178,7 +178,7 @@
     },
     {
       "id": 3095814,
-      "name": "Laminator Roller",
+      "name": "Laminator Roller (Small Brick of High Quality Steel)",
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 102,

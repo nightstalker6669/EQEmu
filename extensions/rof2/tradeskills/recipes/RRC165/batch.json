@@ -16,7 +16,7 @@
   "recipes": [
     {
       "id": 3095815,
-      "name": "Egg Batter",
+      "name": "Egg Batter (Green Snake Egg)",
       "tradeskill": 60,
       "skillneeded": 0,
       "trivial": 17,
@@ -34,7 +34,7 @@
     },
     {
       "id": 3095816,
-      "name": "Clump of Dough",
+      "name": "Clump of Dough (Stone Snake Egg)",
       "tradeskill": 60,
       "skillneeded": 0,
       "trivial": 17,
@@ -52,7 +52,7 @@
     },
     {
       "id": 3095817,
-      "name": "Clump of Dough",
+      "name": "Clump of Dough (Green Snake Egg)",
       "tradeskill": 60,
       "skillneeded": 0,
       "trivial": 17,
@@ -70,7 +70,7 @@
     },
     {
       "id": 3095818,
-      "name": "Snake Egg Oil",
+      "name": "Snake Egg Oil (Stone Snake Egg)",
       "tradeskill": 65,
       "skillneeded": 0,
       "trivial": 68,
@@ -88,7 +88,7 @@
     },
     {
       "id": 3095819,
-      "name": "Snake Egg Oil",
+      "name": "Snake Egg Oil (Sand Snake Egg)",
       "tradeskill": 65,
       "skillneeded": 0,
       "trivial": 68,
@@ -106,7 +106,7 @@
     },
     {
       "id": 3095820,
-      "name": "Snake Egg Oil",
+      "name": "Snake Egg Oil (Green Snake Egg)",
       "tradeskill": 65,
       "skillneeded": 0,
       "trivial": 68,
