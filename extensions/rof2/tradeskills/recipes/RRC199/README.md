@@ -30,3 +30,5 @@ Primary identity: https://www.eqtraders.com/items/show_item.php?item=16406
 Primary identity: https://www.eqtraders.com/items/show_item.php?item=16715
 Primary identity: https://www.eqtraders.com/items/show_item.php?item=7724
 Primary identity: https://www.eqtraders.com/items/show_item.php?item=7723
+
+Revision 2 corrects only the generated recipe-count delta guard from42 to8. Original publication/failed attempt are preserved; the first transaction rolled back and affected rows/readback were unchanged. Recipe formulas, identities, quantities, entry count42 and source qualifications are unchanged. Named count inputs are rendered in one pass to prevent replacement collisions. This revision needs new publication and exact coordinator SQL GO after the shared writer hold is released.
