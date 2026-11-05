@@ -1,0 +1,136 @@
+{
+  "status": "SOURCE_PROPOSAL_FOR_COORDINATOR_REVIEW_NOT_BUILT_OR_INSTALLED",
+  "feature": "HT_LoH_automatic_first_ten_only",
+  "repository": "nightstalker6669/EQEmu",
+  "publication_branch": "rof2-aa",
+  "publication_base_from_coordinator": "a40f127991146c98f99d4c7cb2a46c73ba662720",
+  "publication_mode": "Integration artifacts only; all five raw native branch files remain unchanged.",
+  "native_target": {
+    "preimages_sha256": {
+      "zone/aa.cpp": "fe12edf0c8a276c70e8b05805d5cf61635c7f004413550244fd7e192341aa908",
+      "zone/client.cpp": "b10f3456ec3cf7689f38ac300ee09bc4d1259f22bbb97e3a30c48013d56cc680",
+      "zone/client.h": "23756b1d647a769e191f629a39670fc93c5ed266680f8361da42e09f676e37b5",
+      "zone/client_packet.cpp": "69693bbb0fab63b59e2344cd4ea63b9ce36811a1dd2dd52277472ebf82aab8b1",
+      "zone/exp.cpp": "369b32d1dd1fd6321201e66fdeb6dd5157e016dc3d207c36c1d52fa8baf516af"
+    },
+    "postimages_sha256": {
+      "zone/aa.cpp": "422ce7be25ef70b92d9a602e76e56b2c90c02a2ab8fc0248d38c5714a00b595e",
+      "zone/client.cpp": "0059ddb7686731c04a8a7c2649cb99583d5d70e08fdd6985006230f17a6b475a",
+      "zone/client.h": "aaed61c0d19ebbef47557f8fdfca9b04584eb4594828fe44afaca6fe533d37fd",
+      "zone/client_packet.cpp": "0b94e94bdf72ea185c0289b7ed2ed84c2661fa2e41a294e90bf7407435edca2f",
+      "zone/exp.cpp": "65f36f63041f56af4561dc04a1cb8ef11148c11b5aaf7f44aedb36ab2ea6365a"
+    },
+    "description": "Exact integrated target only; not the public AA branch preimages. Full source snapshots retained privately."
+  },
+  "entry_points": [
+    "Client::CompleteConnect after generic AutoGrantAAPoints",
+    "Client::SetLevel after new level publication and LevelUpdate packet cleanup, ordinary and command branches"
+  ],
+  "scope": {
+    "clients": "maskSoFAndLater; Titanium/older unchanged",
+    "classes": [
+      "actual ShadowKnight -> ability6000/root7800",
+      "actual Paladin -> ability6001/root7850"
+    ],
+    "rank_levels": [
+      1,
+      6,
+      11,
+      16,
+      21,
+      26,
+      31,
+      36,
+      41,
+      46
+    ],
+    "harm_touch_rank_ids": [
+      7800,
+      7801,
+      7802,
+      7803,
+      7804,
+      7805,
+      7806,
+      7807,
+      7808,
+      7809
+    ],
+    "lay_on_hands_rank_ids": [
+      7850,
+      7851,
+      7852,
+      7853,
+      7854,
+      7855,
+      7856,
+      7857,
+      7858,
+      7859
+    ],
+    "first_paid_boundaries": {
+      "7810": "rank11/level51/cost3; never granted",
+      "7860": "rank11/level51/cost3; never granted"
+    },
+    "preserved": [
+      "all existing ownership >= eligible free count",
+      "all nonzero charges",
+      "all paid tails",
+      "AA points",
+      "other AA rows",
+      "existing quest callbacks",
+      "existing timers and reset-on-death behavior"
+    ]
+  },
+  "persistence": "Private existingDatabase; verified autocommit/noTX; retry=false; only absent-rowINSERT with loadedvalue0 or expected-prior-value zero-charge conditionalUPDATE. Exact committed readback before SetAA/packets. Prior durable/cache mismatch holds writes and disconnects client. No REPLACE/upsert/DeleteAll/SaveAA grant acknowledgement.",
+  "positive_rank_uncertainty": "Client-local flag before DML; SaveAA and RemoveExpendedAA refuse while latched; failed write/readback/publication disconnects only that client. Successful readback+SetAA clears flag. No zone freeze/retry/general framework/schema.",
+  "dependencies": {
+    "real_runtime_guards": [
+      "IsSpiritShrouded",
+      "m_spirit_shroud_transition",
+      "m_fellowship_xp_persistence_failed",
+      "m_fellowship_xp_transaction_active"
+    ],
+    "companion_provenance": {
+      "branch": "rof2-spirit-shrouds",
+      "commit": "e7cb5dc2279bd1badde768e370463e447a9fcdf3",
+      "client_header_blob": "567868d29251e50646789a3d5f5069e4eb286698",
+      "context_header": "common/shroud/aa_preview.h",
+      "context_header_blob": "867d7f6317ec763eb4beed773b4f392e78a93b62",
+      "qualification": "Symbol provenance only, not selective integration or standalone compile certification."
+    },
+    "overlap": "Coordinator reconciles Origin AA include/insertion and Merc/shared client header/connect/level changes. No whole feature imports or guard stubs."
+  },
+  "period_sources": [
+    {
+      "url": "https://www.redguides.com/community/threads/november-13th-patch-message.18735/",
+      "qualification": "Nov2007 preview conversion/first-ten/free-vs-paid contract."
+    },
+    {
+      "url": "https://www.redguides.com/community/threads/patch-today-march-9th-2011.23439/",
+      "qualification": "Separately dated Feb17,2011 actual emergency patch receipt corroborates automatic AA model."
+    }
+  ],
+  "validation": {
+    "temporary_patch_roundtrip": "PASS earlier revision546d12cf only; not rerun for corrected92f72575",
+    "corrected_patch_apply_check": "PASS exact active preimages; read-only check, not applied",
+    "active_source_unchanged": true,
+    "cpp_compile": "NOT_RUN_BUILD_OWNERSHIP",
+    "native_acceptance": "NOT_RUN",
+    "runtime_player_sql": "NONE"
+  },
+  "artifacts": {
+    "docs/INSTALL.md": {
+      "sha256": "826bc2cf582e7a7e6e1e9438939d61ebc3108a69688aa37ba049dd99abe83ab5",
+      "bytes": 4373
+    },
+    "native-integration.patch": {
+      "sha256": "92f72575ce780fd5b74747262e5e605749f6fba5286e77200155317d6c51f457",
+      "bytes": 9192
+    },
+    "native-rollback.patch": {
+      "sha256": "517a68fad77d86c5c7deff0bdc961205deb4d5132c5c25b9b533f583ca34b9bb",
+      "bytes": 9192
+    }
+  }
+}
