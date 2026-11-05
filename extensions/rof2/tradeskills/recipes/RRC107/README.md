@@ -24,3 +24,6 @@ Source-only; exact publication and individual SQL GO separate.
 - https://www.eqtraders.com/items/show_item.php?item=37824
 - https://www.eqtraders.com/items/show_item.php?item=37821
 - https://www.eqtraders.com/items/show_item.php?item=37819
+
+
+Guard correction r2: the first attempt stopped at the existing ten-second statement limit and exact target readback confirmed rollback. Each complete-input collision query now starts from an indexed, required physical input before checking the same full component multiset and kit predicate. The extra anchor is already required by the original predicate; no guard is relaxed, no timeout raised and all recipe/entry/item/book data and rollback bytes remain unchanged. Correction publication and a separately authorized attempt are required; the failed attempt is never replayed automatically.
