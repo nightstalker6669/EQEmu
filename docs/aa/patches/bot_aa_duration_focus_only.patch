@@ -1,0 +1,32 @@
+--- a/zone/bot.cpp
++++ b/zone/bot.cpp
+@@ -5812,29 +5812,6 @@
+ 	int64 tic_inc = 0;
+ 	tic_inc = GetFocusEffect(focusSpellDurByTic, spell_id);
+ 
+-	if (IsBeneficialSpell(spell_id)) {
+-		switch (GetAA(aaSpellCastingReinforcement)) {
+-			case 1:
+-				increase += 5;
+-				break;
+-			case 2:
+-				increase += 15;
+-				break;
+-			case 3:
+-				increase += 30;
+-				if (GetAA(aaSpellCastingReinforcementMastery) == 1)
+-					increase += 20;
+-
+-				break;
+-		}
+-
+-		if (GetAA(aaSpellCastingReinforcementMastery))
+-			increase += 20;
+-	}
+-
+-	if (IsMesmerizeSpell(spell_id))
+-		tic_inc += GetAA(aaMesmerizationMastery);
+-
+ 	return (((duration * increase) / 100) + tic_inc);
+ }
+ 
