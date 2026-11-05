@@ -11,3 +11,5 @@ One full recipe header and seven existing entries/IDs exactly guarded before/aft
 Positive maintained GoD manufacturing family source reconciliation, exact immutable May2013 per-field quantities not independently authenticated. Existing min/max expansion header remains unchanged.
 
 Source only pending publication and exact SQL GO, sequential after216. Exact guarded inverse supplied, never automatically invoked. No new rows/player/item/core/quest edits/tests/rehearsal/build/runtime/native combine or quest acceptance. Overall coverage incomplete.
+
+Revision 2 corrects only the entry-schema column expectation to eight. The seven affected entry rows, one changed row, and sugar quantity contract are unchanged.

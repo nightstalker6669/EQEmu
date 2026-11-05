@@ -336,5 +336,7 @@
     }
   ],
   "migration_dependencies": [],
-  "held_source_rows": []
+  "held_source_rows": [],
+  "source_revision": 2,
+  "source_revision_scope": "Only schema column expectation corrected7to8; exact seven affected entries, one changed row/two quantity fields and all recipe data unchanged"
 }
