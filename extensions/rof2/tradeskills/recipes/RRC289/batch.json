@@ -222909,9 +222909,9 @@
     "learning": "2Transcendent weapon augments source omits book note,explicit primary book135564 requires scribing for weapon augments;exact native authored book135564/text guarded as in accepted286. BindMUST1/book135564,no guessed300minimum. Othersordinary0/book0/minimum0/quest0/enabled1/salvage conventions labelled where source omits fields.",
     "charges": "Selected outputs MaxCharges0 or1 and native result argument agrees with source physical output.13charged-output views held:4nativeMinus1without positive primary charge quantity;9positive source charge5/10/60 items would be created with1charge by existing SummonItem(item,successcount1). Raising successcount would also inflate native task craft count;no silent quantity conversion/item normalization. Evidence retained in CHARGE-SEMANTICS-DISPOSITION.private.json.7explicit recharge sources separately held for physical charge handling.",
     "era": "Current numeric bodies are observations,not immutable May2013 per-field introduction proof. ThroughRoF source catalogue family floors are labelled reconstruction(default0where broad older listing);no dates inferred from import timestamps or current item name. Existing old alternative definitions are guarded unchanged,not declared correct/incorrect by shared name.",
-    "peers": "2245all-state output-use/name-peer headers17818entries guarded including returned tools.20exact same-name peer IDs for MagneticMetalBrick/SimpleStud remain unchanged and only these captured IDs exempted. All source input multisets absent,IDs/counts/learned/native fields/book text guarded;rollback refuses learned references.",
-    "holds": "128source views:80nonnumeric NoFail-only trivials,8unbound mandatorybook gates,7recharge physical semantics,5trophies,5current literal mismatches,2explicitminima requiring disposition,2missingstationfields,1sourceitselfunconfirmed,5namedstation/creator gate exclusions,13outputcharge issues. Local NoFail-only trivial0 policy was not silently invented. No charged output/creator/learning bypass or modern reconstruction asserted retail-authenticated.",
-    "execution": "Source only pending coordinator disposition,exact publication,separate one-use SQL GO. No actor/build/SQL/tests/rehearsal/runtime/native acceptance."
+    "peers": "2245all-state output-use/name-peer headers17818entries guarded including returned tools.21exact same-name peer IDs for MagneticMetalBrick/SimpleStud/FoldedSheetOfAcrylia remain unchanged and only these captured IDs exempted. All source input multisets absent,IDs/counts/learned/native fields/book text guarded;rollback refuses learned references. Case-variant4437 Folded Sheet Of Acrylia was already an exact captured guarded peer with different inputs;only thatID is added to the existing20name exemptions.",
+    "holds": "128source views:80nonnumeric trivials(74explicitNoFail-only,3unknown,3upper-bound-only),8unbound mandatorybook gates,7recharge physical semantics,5trophies,5current literal mismatches,2explicitminima requiring disposition,2missingstationfields,1sourceitselfunconfirmed,5namedstation/creator gate exclusions,13outputcharge issues. Local NoFail-only trivial0 policy was not silently invented. No charged output/creator/learning bypass or modern reconstruction asserted retail-authenticated.",
+    "execution": "Source revision2 after stopped001/strict rollback:exact affected recipe/entry/learned preimages unchanged,counts34056/259144,transaction0. Only case-variant peer4437 added to name guard;all29bodies/2245peer guards remain identical. No retry/inverse;fresh publication and explicit attempt002GO required."
   },
   "source_urls": [
     "https://www.eqtraders.com/items/show_item.php?item=12830",
@@ -223811,5 +223811,6 @@
       "name": "Rocketeer Boots",
       "reason": "NATIVE_OUTPUT_MINUS1_WITH_NO_POSITIVE_PRIMARY_CHARGES"
     }
-  ]
+  ],
+  "source_revision": 2
 }

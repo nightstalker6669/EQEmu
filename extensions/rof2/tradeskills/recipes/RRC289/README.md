@@ -1,4 +1,4 @@
-# RRC289 strict recipes
+# RRC289 strict recipes source revision2
 
 Whole152strict groups/159source views triaged together:29native-count-concordant literal source bodies proposed,31source views including2same-body BattleBolts/Gears aliases;128views remain held.301primary targets299authenticated retained+2newcaptures,4kit profiles,113full18native dependencies,2245fullpeer headers17818entries;zero fullinput matches.
 
@@ -14,10 +14,8 @@ Selected outputs MaxCharges0 or1 and native result argument agrees with source p
 
 Current numeric bodies are observations,not immutable May2013 per-field introduction proof. ThroughRoF source catalogue family floors are labelled reconstruction(default0where broad older listing);no dates inferred from import timestamps or current item name. Existing old alternative definitions are guarded unchanged,not declared correct/incorrect by shared name.
 
-2245all-state output-use/name-peer headers17818entries guarded including returned tools.20exact same-name peer IDs for MagneticMetalBrick/SimpleStud remain unchanged and only these captured IDs exempted. All source input multisets absent,IDs/counts/learned/native fields/book text guarded;rollback refuses learned references.
+2245all-state output-use/name-peer headers17818entries guarded including returned tools.21exact same-name peer IDs for MagneticMetalBrick/SimpleStud/FoldedSheetOfAcrylia remain unchanged and only these captured IDs exempted. All source input multisets absent,IDs/counts/learned/native fields/book text guarded;rollback refuses learned references. Case-variant4437 Folded Sheet Of Acrylia was already an exact captured guarded peer with different inputs;only thatID is added to the existing20name exemptions.
 
-128source views:80nonnumeric NoFail-only trivials,8unbound mandatorybook gates,7recharge physical semantics,5trophies,5current literal mismatches,2explicitminima requiring disposition,2missingstationfields,1sourceitselfunconfirmed,5namedstation/creator gate exclusions,13outputcharge issues. Local NoFail-only trivial0 policy was not silently invented. No charged output/creator/learning bypass or modern reconstruction asserted retail-authenticated.
+128source views:80nonnumeric trivials(74explicitNoFail-only,3unknown,3upper-bound-only),8unbound mandatorybook gates,7recharge physical semantics,5trophies,5current literal mismatches,2explicitminima requiring disposition,2missingstationfields,1sourceitselfunconfirmed,5namedstation/creator gate exclusions,13outputcharge issues. Local NoFail-only trivial0 policy was not silently invented. No charged output/creator/learning bypass or modern reconstruction asserted retail-authenticated.
 
-Source only pending coordinator disposition,exact publication,separate one-use SQL GO. No actor/build/SQL/tests/rehearsal/runtime/native acceptance.
-
-Context: https://www.eqtraders.com/items/show_item.php?item=39585
+Source revision2 after stopped001/strict rollback:exact affected recipe/entry/learned preimages unchanged,counts34056/259144,transaction0. Only case-variant peer4437 added to name guard;all29bodies/2245peer guards remain identical. No retry/inverse;fresh publication and explicit attempt002GO required.
