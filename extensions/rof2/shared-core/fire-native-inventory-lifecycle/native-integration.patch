@@ -1,0 +1,2724 @@
+--- a/common/CMakeLists.txt
++++ b/common/CMakeLists.txt
+@@ -1,4 +1,5 @@
+ set(common_sources
++	fire_native_inventory_fence.cpp
+ 	fellowship/campsite_catalogue.cpp
+ 	fellowship/campsite_materials.cpp
+ 	fellowship/service.cpp
+--- /dev/null
++++ b/common/fire_native_inventory_fence.cpp
+@@ -0,0 +1,52 @@
++#include "fire_native_inventory_fence.h"
++#include "inventory_profile.h"
++#include <algorithm>
++namespace FirePersonalOccurrenceSource {
++thread_local NativeInventoryFence* NativeInventoryFence::first_=nullptr;
++namespace {
++int16_t Root(int16_t slot) noexcept {
++ const auto parent=EQ::InventoryProfile::CalcSlotId(slot);
++ return parent==INVALID_INDEX?slot:parent;
++}
++bool Cursor(int16_t slot) noexcept {
++ return slot==EQ::invslot::slotCursor ||
++  EQ::ValueWithin(slot,EQ::invbag::CURSOR_BAG_BEGIN,EQ::invbag::CURSOR_BAG_END);
++}
++}
++void NativeInventoryFence::Attach() noexcept {
++ if(attached_)return;
++ next_=first_;first_=this;attached_=true;
++}
++void NativeInventoryFence::Detach() noexcept {
++ if(!attached_)return;
++ auto** link=&first_;
++ while(*link&&*link!=this)link=&(*link)->next_;
++ if(*link)*link=next_;
++ attached_=false;next_=nullptr;writer_=nullptr;
++}
++bool NativeInventoryFence::ItemAllowed(const EQ::ItemInstance* item) noexcept {
++ for(auto* f=first_;f;f=f->next_)
++  if(f->Active()&&std::find(f->instances_.begin(),f->instances_.end(),item)!=f->instances_.end())return false;
++ return true;
++}
++bool NativeInventoryFence::SlotAllowed(const EQ::InventoryProfile* inv,int16_t slot) noexcept {
++ for(auto* f=first_;f;f=f->next_)if(f->Active()&&f->inventory_==inv) {
++  if((f->cursor_&&Cursor(slot))||std::find(f->roots_.begin(),f->roots_.end(),Root(slot))!=f->roots_.end())return false;
++ }
++ return true;
++}
++bool NativeInventoryFence::ProfileAllowed(const EQ::InventoryProfile* inv) noexcept {
++ for(auto* f=first_;f;f=f->next_)if(f->Active()&&f->inventory_==inv)return false;
++ return true;
++}
++bool NativeInventoryFence::SaveAllowed(const SharedDatabase* db,uint32_t character,int16_t slot,bool whole_cursor) noexcept {
++ for(auto* f=first_;f;f=f->next_)if(f->Active()&&f->character_==character) {
++  const bool selected=(f->cursor_&&(whole_cursor||Cursor(slot)))||
++   std::find(f->roots_.begin(),f->roots_.end(),Root(slot))!=f->roots_.end();
++  // This grant is set only around the original selected writer's synchronous
++  // SaveInventory/SaveCursor calls, with no callbacks, sends or event pumping.
++  if(selected&&f->writer_!=db)return false;
++ }
++ return true;
++}
++}
+--- /dev/null
++++ b/common/fire_native_inventory_fence.h
+@@ -0,0 +1,36 @@
++#pragma once
++// Fire's selected native roots only. Client-owned intrusive membership; no
++// generic transaction/session framework, timers, timeout or ownership takeover.
++#include <cstdint>
++#include <vector>
++class SharedDatabase;
++namespace EQ {class InventoryProfile;class ItemInstance;}
++namespace FirePersonalOccurrenceSource {
++class NativeItemCustody;
++class NativeInventoryFence final {
++ friend class NativeItemCustody;
++ NativeInventoryFence()=default;
++ const EQ::InventoryProfile* inventory_=nullptr;
++ uint32_t character_=0;
++ std::vector<int16_t> roots_;
++ std::vector<const EQ::ItemInstance*> instances_;
++ bool cursor_=false,attached_=false,launched_=false;
++ const bool* native_packet_returned_=nullptr;
++ bool Active()const noexcept {
++  return attached_&&!(native_packet_returned_&&*native_packet_returned_&&!launched_);
++ }
++ const SharedDatabase* writer_=nullptr;
++ NativeInventoryFence* next_=nullptr;
++ static thread_local NativeInventoryFence* first_;
++ void Attach() noexcept;
++ void Detach() noexcept;
++public:
++ ~NativeInventoryFence(){Detach();}
++ NativeInventoryFence(const NativeInventoryFence&)=delete;
++ NativeInventoryFence& operator=(const NativeInventoryFence&)=delete;
++ static bool ItemAllowed(const EQ::ItemInstance*) noexcept;
++ static bool SlotAllowed(const EQ::InventoryProfile*,int16_t) noexcept;
++ static bool ProfileAllowed(const EQ::InventoryProfile*) noexcept;
++ static bool SaveAllowed(const SharedDatabase*,uint32_t,int16_t,bool whole_cursor=false) noexcept;
++};
++}
+--- a/common/inventory_profile.cpp
++++ b/common/inventory_profile.cpp
+@@ -119,11 +119,13 @@
+ }
+ 
+ void EQ::InventoryProfile::SetInventoryVersion(versions::MobVersion inventory_version) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(this))return;
+ 	m_mob_version = versions::ValidateMobVersion(inventory_version);
+ 	SetGMInventory(m_gm_inventory);
+ }
+ 
+ void EQ::InventoryProfile::SetGMInventory(bool gmi_flag) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(this))return;
+ 	m_gm_inventory = gmi_flag;
+ 
+ 	m_lookup = inventory::DynamicLookup(m_mob_version, gmi_flag);
+@@ -132,14 +134,14 @@
+ void EQ::InventoryProfile::CleanDirty() {
+ 	auto iter = dirty_inst.begin();
+ 	while (iter != dirty_inst.end()) {
++  if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(*iter)){++iter;continue;}
+ 		delete (*iter);
+-		++iter;
+-	}
+-
+-	dirty_inst.clear();
++  iter=dirty_inst.erase(iter);
++	}
+ }
+ 
+ void EQ::InventoryProfile::MarkDirty(ItemInstance *inst) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(inst))return;
+ 	if (inst) {
+ 		dirty_inst.push_back(inst);
+ 	}
+@@ -213,6 +215,8 @@
+ // Put an item into specified slot
+ int16 EQ::InventoryProfile::PutItem(int16 slot_id, const ItemInstance& inst)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&inst))return INVALID_INDEX;
++	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,slot_id))return INVALID_INDEX;
+ 	if (EQ::ValueWithin(slot_id, EQ::invslot::POSSESSIONS_BEGIN, EQ::invslot::POSSESSIONS_END)) {
+ 		if ((((uint64) 1 << slot_id) & m_lookup->PossessionsBitmask) == 0) {
+ 			return EQ::invslot::SLOT_INVALID;
+@@ -248,6 +252,8 @@
+ }
+ 
+ int16 EQ::InventoryProfile::PushCursor(const ItemInstance &inst) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&inst))return INVALID_INDEX;
++	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,EQ::invslot::slotCursor))return INVALID_INDEX;
+ 	m_cursor.push(inst.Clone());
+ 	return invslot::slotCursor;
+ }
+@@ -266,6 +272,7 @@
+ 	uint32 deity_id,
+ 	uint8 level
+ ) {
++	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,source_slot)||!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,destination_slot)){fail_state=swapNotAllowed;return false;}
+ 	fail_state = swapInvalid;
+ 
+ 	if (EQ::ValueWithin(source_slot, EQ::invslot::POSSESSIONS_BEGIN, EQ::invslot::POSSESSIONS_END)) {
+@@ -399,6 +406,7 @@
+ 
+ // Remove item from inventory (with memory delete)
+ bool EQ::InventoryProfile::DeleteItem(int16 slot_id, int16 quantity) {
++	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,slot_id))return false;
+ 	// Pop item out of inventory map (or queue)
+ 	ItemInstance *item_to_delete = PopItem(slot_id);
+ 
+@@ -445,6 +453,7 @@
+ // Returns item pointer if full delete was successful
+ EQ::ItemInstance* EQ::InventoryProfile::PopItem(int16 slot_id)
+ {
++	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,slot_id))return nullptr;
+ 	ItemInstance* p = nullptr;
+ 
+ 	if (slot_id == invslot::slotCursor) {
+@@ -1393,6 +1402,8 @@
+ // Assumes item has already been allocated
+ int16 EQ::InventoryProfile::_PutItem(int16 slot_id, ItemInstance* inst)
+ {
++ if(inst&&!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(inst))return INVALID_INDEX;
++	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,slot_id))return INVALID_INDEX;
+ 	// What happens here when we _PutItem(MainCursor)? Bad things..really bad things...
+ 	//
+ 	// If putting a nullptr into slot, we need to remove slot without memory delete
+--- a/common/inventory_profile.h
++++ b/common/inventory_profile.h
+@@ -26,6 +26,8 @@
+ #include "common/races.h"
+ 
+ #include <list>
++#include "fire_native_inventory_fence.h"
++namespace FirePersonalOccurrenceSource {class NativeItemCustody;}
+ #include <vector>
+ 
+ 
+@@ -82,6 +84,7 @@
+ 	class InventoryProfile
+ 	{
+ 		friend class ItemInstance;
++		friend class FirePersonalOccurrenceSource::NativeItemCustody;
+ 	public:
+ 		///////////////////////////////
+ 		// Public Methods
+@@ -96,6 +99,7 @@
+ 		// Exchange only character-profile ownership. Shared-bank/account and
+ 		// trade buckets, lookup/version and GM policy remain with this Client.
+ 		void SwapProfileInventory(InventoryProfile& other) noexcept {
++			if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(this)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&other))return;
+ 			m_worn.swap(other.m_worn);m_inv.swap(other.m_inv);
+ 			m_bank.swap(other.m_bank);m_cursor.Swap(other.m_cursor);
+ 		}
+@@ -212,8 +216,8 @@
+ 		std::string GetCustomItemData(int16 slot_id, const std::string& identifier);
+ 		static const int GetItemStatValue(uint32 item_id, const std::string& identifier);
+ 
+-		std::map<int16, ItemInstance*>& GetWorn() { return m_worn; }
+-		std::map<int16, ItemInstance*>& GetPersonal() { return m_inv; }
++		const std::map<int16, ItemInstance*>& GetWorn() { return m_worn; }
++		const std::map<int16, ItemInstance*>& GetPersonal() { return m_inv; }
+ 		int16 HasEvolvingItem(uint64 evolve_unique_id, uint8 quantity, uint8 where);
+ 
+ 		inline int16 PushItem(int16 slot_id, ItemInstance* inst) { return _PutItem(slot_id, inst); }
+--- a/common/item_instance.cpp
++++ b/common/item_instance.cpp
+@@ -374,6 +374,8 @@
+ 
+ void EQ::ItemInstance::PutItem(uint8 index, const ItemInstance& inst)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&inst))return;
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	// Clean up item already in slot (if exists)
+ 	DeleteItem(index);
+ 
+@@ -384,6 +386,7 @@
+ // Remove item inside container
+ void EQ::ItemInstance::DeleteItem(uint8 index)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	ItemInstance* inst = PopItem(index);
+ 	safe_delete(inst);
+ }
+@@ -392,6 +395,7 @@
+ // Hands over memory ownership to client of this function call
+ EQ::ItemInstance* EQ::ItemInstance::PopItem(uint8 index)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return nullptr;
+ 	auto iter = m_contents.find(index);
+ 	if (iter != m_contents.end()) {
+ 		ItemInstance* inst = iter->second;
+@@ -405,6 +409,7 @@
+ // Remove all items from container
+ void EQ::ItemInstance::Clear()
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	// Destroy container contents
+ 	for (auto iter = m_contents.begin(); iter != m_contents.end(); ++iter) {
+ 		safe_delete(iter->second);
+@@ -415,6 +420,7 @@
+ // Remove all items from container
+ void EQ::ItemInstance::ClearByFlags(byFlagSetting is_nodrop, byFlagSetting is_norent)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	// TODO: This needs work...
+ 
+ 	// Destroy container contents
+@@ -598,6 +604,7 @@
+ 
+ bool EQ::ItemInstance::UpdateOrnamentationInfo()
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false;
+ 	if (!m_item || !m_item->IsClassCommon()) {
+ 		return false;
+ 	}
+@@ -687,6 +694,8 @@
+ // Add an augment to the item
+ void EQ::ItemInstance::PutAugment(uint8 slot, const ItemInstance& augment)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&augment))return;
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	if (!m_item || !m_item->IsClassCommon())
+ 		return;
+ 
+@@ -695,6 +704,7 @@
+ 
+ void EQ::ItemInstance::PutAugment(SharedDatabase *db, uint8 slot, uint32 item_id)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	if (item_id == 0) { return; }
+ 	if (db == nullptr) { return; /* TODO: add log message for nullptr */ }
+ 
+@@ -708,6 +718,7 @@
+ // Remove augment from item and destroy it
+ void EQ::ItemInstance::DeleteAugment(uint8 index)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	if (!m_item || !m_item->IsClassCommon())
+ 		return;
+ 
+@@ -717,6 +728,7 @@
+ // Remove augment from item and return it
+ EQ::ItemInstance* EQ::ItemInstance::RemoveAugment(uint8 index)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return nullptr;
+ 	if (!m_item || !m_item->IsClassCommon())
+ 		return nullptr;
+ 
+@@ -828,6 +840,7 @@
+ 
+ void EQ::ItemInstance::SetCustomDataString(const std::string& str)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+     if (auto fields=Housing::LegacyScaling::Fields(str)) {
+         for (const auto& [key,value]:*fields) SetCustomData(key,value);
+         return;
+@@ -855,11 +868,13 @@
+ }
+ 
+ void EQ::ItemInstance::SetCustomData(const std::string& identifier, const std::string& value) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	DeleteCustomData(identifier);
+ 	m_custom_data[identifier] = value;
+ }
+ 
+ void EQ::ItemInstance::SetCustomData(const std::string& identifier, int value) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	DeleteCustomData(identifier);
+ 	std::stringstream ss;
+ 	ss << value;
+@@ -867,6 +882,7 @@
+ }
+ 
+ void EQ::ItemInstance::SetCustomData(const std::string& identifier, float value) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	DeleteCustomData(identifier);
+ 	std::stringstream ss;
+ 	ss << value;
+@@ -874,6 +890,7 @@
+ }
+ 
+ void EQ::ItemInstance::SetCustomData(const std::string& identifier, bool value) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	DeleteCustomData(identifier);
+ 	std::stringstream ss;
+ 	ss << value;
+@@ -881,6 +898,7 @@
+ }
+ 
+ void EQ::ItemInstance::DeleteCustomData(const std::string& identifier) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	auto iter = m_custom_data.find(identifier);
+ 	if (iter != m_custom_data.end()) {
+ 		m_custom_data.erase(iter);
+@@ -939,6 +957,7 @@
+ }
+ 
+ void EQ::ItemInstance::Initialize(SharedDatabase *db) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	// if there's no actual item, don't do anything
+ 	if (!m_item) {
+ 		return;
+@@ -957,6 +976,7 @@
+ }
+ 
+ void EQ::ItemInstance::ScaleItem() {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	if (!m_item)
+ 		return;
+ 
+@@ -1041,12 +1061,14 @@
+ }
+ 
+ void EQ::ItemInstance::SetTimer(std::string name, uint32 time) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	Timer t(time);
+ 	t.Start(time, false);
+ 	m_timers[name] = t;
+ }
+ 
+ void EQ::ItemInstance::StopTimer(std::string name) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	auto iter = m_timers.find(name);
+ 	if(iter != m_timers.end()) {
+ 		m_timers.erase(iter);
+@@ -1054,6 +1076,7 @@
+ }
+ 
+ void EQ::ItemInstance::ClearTimers() {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	m_timers.clear();
+ }
+ 
+@@ -1762,6 +1785,7 @@
+ 
+ int EQ::ItemInstance::RemoveTaskDeliveredItems()
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return GetCharges();
+ 	int count = IsStackable() ? GetCharges() : 1;
+ 	count -= GetTaskDeliveredCount();
+ 	if (IsStackable())
+@@ -1953,6 +1977,7 @@
+ 
+ bool EQ::ItemInstance::TransferOwnership(Database &db, const uint32 to_char_id) const
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false;
+ 	if (!to_char_id || !IsEvolving()) {
+ 		return false;
+ 	}
+@@ -1977,6 +2002,7 @@
+ }
+ 
+ void EQ::ItemInstance::SetTimer(std::string name, uint32 time) const{
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	Timer t(time);
+ 	t.Start(time, false);
+ 	m_timers[name] = t;
+@@ -1984,6 +2010,7 @@
+ 
+ void EQ::ItemInstance::SetEvolveEquipped(const bool in) const
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+ 	if (!IsEvolving()) {
+ 		return;
+ 	}
+@@ -1995,9 +2022,9 @@
+ 	}
+ 
+ 	if (in) {
+-		GetTimers().at("evolve").SetTimer(RuleI(EvolvingItems, DelayUponEquipping));
++		m_timers.at("evolve").SetTimer(RuleI(EvolvingItems, DelayUponEquipping));
+ 		return;
+ 	}
+ 
+-	GetTimers().at("evolve").Disable();
+-}
++	m_timers.at("evolve").Disable();
++}
+--- a/common/item_instance.h
++++ b/common/item_instance.h
+@@ -1,3 +1,4 @@
++#include "fire_native_inventory_fence.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -61,6 +62,7 @@
+ //	Base class for an instance of an item
+ //	An item instance encapsulates item data + data specific
+ //	to an item instance (includes dye, augments, charges, etc)
++namespace FirePersonalOccurrenceSource { class OriginalItemSnapshot; }
+ namespace EQ
+ {
+ 	class InventoryProfile;
+@@ -79,6 +81,7 @@
+ 		ItemInstance(ItemInstTypes use_type);
+ 
+ 		ItemInstance(const ItemInstance& copy);
++		ItemInstance& operator=(const ItemInstance&)=delete; // never shallow-copy owned native trees
+ 
+ 		~ItemInstance();
+ 
+@@ -126,7 +129,7 @@
+ 		uint8 FirstOpenSlot() const;
+ 		uint8 GetTotalItemCount() const;
+ 		bool IsNoneEmptyContainer();
+-		std::map<uint8, ItemInstance*>* GetContents() { return &m_contents; }
++		const std::map<uint8, ItemInstance*>* GetContents() const { return &m_contents; }
+ 
+ 		//
+ 		// Augments
+@@ -158,26 +161,26 @@
+ 		const uint8 GetItemType() const { return m_item ? m_item->ItemType : 255; } // Return 255 so you know there's no valid item
+ 
+ 		int16 GetCharges() const				{ return m_charges; }
+-		void SetCharges(int16 charges)			{ m_charges = charges; }
++		void SetCharges(int16 charges)			{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_charges = charges; }
+ 
+ 		uint32 GetPrice() const					{ return m_price; }
+-		void SetPrice(uint32 price)				{ m_price = price; }
+-
+-		void SetColor(uint32 color)				{ m_color = color; }
++		void SetPrice(uint32 price)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_price = price; }
++
++		void SetColor(uint32 color)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_color = color; }
+ 		uint32 GetColor() const					{ return m_color; }
+ 
+ 		uint32 GetMerchantSlot() const			{ return m_merchantslot; }
+-		void SetMerchantSlot(uint32 slot)		{ m_merchantslot = slot; }
++		void SetMerchantSlot(uint32 slot)		{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_merchantslot = slot; }
+ 
+ 		int32 GetMerchantCount() const			{ return m_merchantcount; }
+-		void SetMerchantCount(int32 count)		{ m_merchantcount = count; }
++		void SetMerchantCount(int32 count)		{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_merchantcount = count; }
+ 
+ 		int16 GetCurrentSlot() const			{ return m_currentslot; }
+-		void SetCurrentSlot(int16 curr_slot)	{ m_currentslot = curr_slot; }
++		void SetCurrentSlot(int16 curr_slot)	{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_currentslot = curr_slot; }
+ 
+ 		// Is this item already attuned?
+ 		bool IsAttuned() const					{ return m_attuned; }
+-		void SetAttuned(bool flag)				{ m_attuned = flag; }
++		void SetAttuned(bool flag)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_attuned = flag; }
+ 
+ 		std::string GetCustomDataString() const;
+ 		std::string GetCustomData(const std::string &identifier);
+@@ -204,19 +207,19 @@
+ 
+ 		bool IsScaling() const				{ return m_scaling; }
+ 		uint32 GetExp() const				{ return m_exp; }
+-		void SetExp(uint32 exp)				{ m_exp = exp; }
+-		void AddExp(uint32 exp)				{ m_exp += exp; }
+-		void SetScaling(bool v)				{ m_scaling = v; }
++		void SetExp(uint32 exp)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_exp = exp; }
++		void AddExp(uint32 exp)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_exp += exp; }
++		void SetScaling(bool v)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_scaling = v; }
+ 		uint32 GetOrnamentationIcon() const							{ return m_ornamenticon; }
+-		void SetOrnamentIcon(uint32 ornament_icon)					{ m_ornamenticon = ornament_icon; }
++		void SetOrnamentIcon(uint32 ornament_icon)					{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_ornamenticon = ornament_icon; }
+ 		uint32 GetOrnamentationIDFile() const						{ return m_ornamentidfile; }
+-		void SetOrnamentationIDFile(uint32 ornament_idfile)			{ m_ornamentidfile = ornament_idfile; }
++		void SetOrnamentationIDFile(uint32 ornament_idfile)			{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_ornamentidfile = ornament_idfile; }
+ 		uint32 GetNewIDFile() const						            { return m_new_id_file; }
+-		void SetNewIDFile(uint32 new_id_file)			            { m_new_id_file = new_id_file; }
++		void SetNewIDFile(uint32 new_id_file)			            { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_new_id_file = new_id_file; }
+ 		uint32 GetOrnamentHeroModel(int32 material_slot = -1) const;
+-		void SetOrnamentHeroModel(uint32 ornament_hero_model)		{ m_ornament_hero_model = ornament_hero_model; }
++		void SetOrnamentHeroModel(uint32 ornament_hero_model)		{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_ornament_hero_model = ornament_hero_model; }
+ 		uint32 GetRecastTimestamp() const							{ return m_recast_timestamp; }
+-		void SetRecastTimestamp(uint32 in)							{ m_recast_timestamp = in; }
++		void SetRecastTimestamp(uint32 in)							{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_recast_timestamp = in; }
+ 
+ 		void Initialize(SharedDatabase *db = nullptr);
+ 		void ScaleItem();
+@@ -227,14 +230,14 @@
+ 		// Explicit split-instance copy. Ordinary Clone retains its historic serial.
+ 		ItemInstance* CloneWithNewSerial() const;
+ 		inline int32 GetSerialNumber() const { return m_SerialNumber; }
+-		inline void SetSerialNumber(int32 id) { m_SerialNumber = id; }
++		inline void SetSerialNumber(int32 id) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_SerialNumber = id; }
+ 
+ 		// Independent server ledger identity, including houses with no interior
+ 		// allocated yet. This is never a client wire field or a generated GUID.
+ 		// Only checked ledger reconstruction/acquisition may assign it. Copying
+ 		// preserves identity for relocation, not permission to mint another row.
+ 		uint64 GetHousingHouseID() const { return m_housing_house_id; }
+-		bool SetHousingHouseID(uint64 id) {
++		bool SetHousingHouseID(uint64 id) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false; 
+ 			if (!id) { m_housing_house_id = 0; return true; }
+ 			const auto* item = GetItem();
+ 			if (m_housing_crate_id || !item || !item->HousingDefinitionID || item->HousingDefinitionID == UINT32_MAX)
+@@ -245,7 +248,7 @@
+ 		// Independent crate ledger identity. Only checked custody/reload adapters
+ 		// may assign it; this is not a GUID, HouseID or native wire field.
+ 		uint64 GetHousingCrateID() const { return m_housing_crate_id; }
+-		bool SetHousingCrateID(uint64 id) {
++		bool SetHousingCrateID(uint64 id) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false; 
+ 			if (!id) { m_housing_crate_id = 0; return true; }
+ 			const auto* item = GetItem();
+ 			if (m_housing_house_id || !item || !item->HousingDefinitionID || item->HousingDefinitionID == UINT32_MAX)
+@@ -259,7 +262,7 @@
+ 		// Durable housing admission/reconstruction must assign this explicitly;
+ 		// never populate it from client fields or unvalidated custom data.
+ 		uint32 GetHousingEstateID() const { return m_housing_estate_id; }
+-		bool SetHousingEstateID(uint32 id) {
++		bool SetHousingEstateID(uint32 id) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false; 
+ 			if (id == UINT32_MAX) { m_housing_estate_id = id; return true; }
+ 			const auto* item = GetItem();
+ 			if (!id || !item || !item->HousingDefinitionID || item->HousingDefinitionID == UINT32_MAX)
+@@ -268,14 +271,22 @@
+ 			return true;
+ 		}
+ 
+-		std::map<std::string, ::Timer>& GetTimers() const { return m_timers; }
++		const std::map<std::string, ::Timer>& GetTimers() const { return m_timers; }
++        bool CheckTimer(const std::string& name,bool reset=true) const {
++         if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false;
++         const auto it=m_timers.find(name);return it!=m_timers.end()&&it->second.Check(reset);
++        }
++        bool SetEvolvingDetails(const CharacterEvolvingItemsRepository::CharacterEvolvingItems& value) {
++         if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false;
++         m_evolving_details=value;return true;
++        }
+ 		void SetTimer(std::string name, uint32 time);
+ 		void SetTimer(std::string name, uint32 time) const;
+ 		void StopTimer(std::string name);
+ 		void ClearTimers();
+ 
+ 		int GetTaskDeliveredCount() const { return m_task_delivered_count; }
+-		void SetTaskDeliveredCount(int count) { m_task_delivered_count = count; }
++		void SetTaskDeliveredCount(int count) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_task_delivered_count = count; }
+ 		// This function should only be used by trade return apis
+ 		// Removes delivered task items from stack count and returns remaining count
+ 		// Return value should be used to determine if an item still exists (for stackable and non-stackable)
+@@ -347,7 +358,7 @@
+ 		static void ClearGUIDMap();
+ 
+ 		// evolving items stuff
+-		CharacterEvolvingItemsRepository::CharacterEvolvingItems &GetEvolvingDetails() const { return m_evolving_details; }
++		const CharacterEvolvingItemsRepository::CharacterEvolvingItems &GetEvolvingDetails() const { return m_evolving_details; }
+ 
+ 		int8             GetEvolveLvl() const { if (GetItem()) { return GetItem()->EvolvingLevel; } return false; }
+ 		bool             IsEvolving() const { if (GetItem()) { return GetItem()->EvolvingItem; } return false; }
+@@ -363,27 +374,29 @@
+ 		uint32           GetEvolveFinalItemID() const { return m_evolving_details.final_item_id; }
+ 		uint32           GetAugmentEvolveUniqueID(uint8 augment_index) const;
+ 		void             SetEvolveEquipped(const bool in) const;
+-		void             SetEvolveActivated(const bool in) const { m_evolving_details.activated = in; }
+-		void             SetEvolveProgression(const double in) const { m_evolving_details.progression = in; }
+-		void             SetEvolveUniqueID(const uint64 in) const { m_evolving_details.id = in; }
+-		void             SetEvolveCharID(const uint32 in) const { m_evolving_details.character_id = in; }
+-		void             SetEvolveItemID(const uint32 in) const { m_evolving_details.item_id = in; }
+-		void             SetEvolveCurrentAmount(const uint64 in) const { m_evolving_details.current_amount = in; }
+-		void             SetEvolveAddToCurrentAmount(const uint64 in) const { m_evolving_details.current_amount += in; }
+-		void             SetEvolveFinalItemID(const uint32 in) const { m_evolving_details.final_item_id = in; }
++		void             SetEvolveActivated(const bool in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.activated = in; }
++		void             SetEvolveProgression(const double in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.progression = in; }
++		void             SetEvolveUniqueID(const uint64 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.id = in; }
++		void             SetEvolveCharID(const uint32 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.character_id = in; }
++		void             SetEvolveItemID(const uint32 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.item_id = in; }
++		void             SetEvolveCurrentAmount(const uint64 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.current_amount = in; }
++		void             SetEvolveAddToCurrentAmount(const uint64 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.current_amount += in; }
++		void             SetEvolveFinalItemID(const uint32 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.final_item_id = in; }
+ 		bool             TransferOwnership(Database& db, const uint32 to_char_id) const;
+-		void             CalculateEvolveProgression() const { m_evolving_details.progression = EvolvingItemsManager::Instance()->CalculateProgression(GetEvolveCurrentAmount(), GetID()); }
++		void             CalculateEvolveProgression() const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.progression = EvolvingItemsManager::Instance()->CalculateProgression(GetEvolveCurrentAmount(), GetID()); }
+ 
+ 	protected:
+ 		//////////////////////////
+ 		// Protected Members
+ 		//////////////////////////
+ 		friend class InventoryProfile;
++		friend class FirePersonalOccurrenceSource::OriginalItemSnapshot;
++		friend class FirePersonalOccurrenceSource::NativeItemCustody;
+ 
+ 		std::map<uint8, ItemInstance*>::const_iterator _cbegin() { return m_contents.cbegin(); }
+ 		std::map<uint8, ItemInstance*>::const_iterator _cend() { return m_contents.cend(); }
+ 
+-		void _PutItem(uint8 index, ItemInstance* inst) { m_contents[index] = inst; }
++		void _PutItem(uint8 index, ItemInstance* inst) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_contents[index] = inst; }
+ 
+ 		ItemInstTypes    m_use_type{ItemInstNormal};// Usage type for item
+ 		const ItemData * m_item{nullptr};           // Ptr to item data
+--- a/common/shared_core/evolving_item_custody.h
++++ b/common/shared_core/evolving_item_custody.h
+@@ -22,7 +22,7 @@
+ inline EQ::ItemInstance* Component(EQ::ItemInstance& item,uint8_t c){return c?(item.IsClassCommon()?item.GetAugment(c-1):nullptr):&item;}
+ inline bool Has(const EQ::ItemInstance& item){if(item.IsEvolving())return true;if(item.IsClassCommon())for(unsigned i=0;i<6;++i)if(auto*a=item.GetAugment(i);a&&a->IsEvolving())return true;return false;}
+ inline bool Matches(const Bytes& b,EQ::ItemInstance& item,uint32_t owner){try{auto states=Decode(b);unsigned count=0;for(unsigned k=0;k<=6;++k)if(auto*n=Component(item,k);n&&n->IsEvolving())++count;if(count!=states.size())return false;for(const auto&s:states){auto*n=Component(item,s.component);if(!n||!n->IsEvolving()||n->GetID()!=s.item||s.owner!=owner||n->GetEvolveUniqueID()!=s.id||n->GetEvolveCharID()!=owner||n->GetEvolveItemID()!=s.item||n->GetEvolveActivated()!=bool(s.activated)||n->GetEvolveEquipped()!=bool(s.equipped)||n->GetEvolveCurrentAmount()!=uint64_t(s.amount)||Bits(n->GetEvolveProgression())!=s.runtime_progression_bits||n->GetEvolveFinalItemID()!=s.final_item)return false;}return true;}catch(...){return false;}}
+-inline bool Restore(const Bytes& b,EQ::ItemInstance& item,uint32_t owner){try{auto states=Decode(b);unsigned count=0;for(unsigned k=0;k<=6;++k)if(auto*n=Component(item,k);n&&n->IsEvolving())++count;if(count!=states.size())return false;for(const auto&s:states){auto*n=Component(item,s.component);if(!n||!n->IsEvolving()||n->GetID()!=s.item||s.owner!=owner||(n->GetEvolveUniqueID()&&n->GetEvolveUniqueID()!=s.id))return false;}for(const auto&s:states){auto*n=Component(item,s.component);auto&e=n->GetEvolvingDetails();e.id=s.id;e.character_id=owner;e.item_id=s.item;e.activated=s.activated;e.equipped=s.equipped;e.current_amount=s.amount;e.progression=Float(s.runtime_progression_bits);e.final_item_id=s.final_item;e.deleted_at=0;}return Matches(b,item,owner);}catch(...){return false;}}
++inline bool Restore(const Bytes& b,EQ::ItemInstance& item,uint32_t owner){try{auto states=Decode(b);unsigned count=0;for(unsigned k=0;k<=6;++k)if(auto*n=Component(item,k);n&&n->IsEvolving())++count;if(count!=states.size())return false;for(const auto&s:states){auto*n=Component(item,s.component);if(!n||!n->IsEvolving()||n->GetID()!=s.item||s.owner!=owner||(n->GetEvolveUniqueID()&&n->GetEvolveUniqueID()!=s.id))return false;}for(const auto&s:states){auto*n=Component(item,s.component);auto e=n->GetEvolvingDetails();e.id=s.id;e.character_id=owner;e.item_id=s.item;e.activated=s.activated;e.equipped=s.equipped;e.current_amount=s.amount;e.progression=Float(s.runtime_progression_bits);e.final_item_id=s.final_item;e.deleted_at=0;if(!n->SetEvolvingDetails(e))return false;}return Matches(b,item,owner);}catch(...){return false;}}
+ }
+ #endif
+ 
+--- a/common/shareddb.cpp
++++ b/common/shareddb.cpp
+@@ -1,3 +1,4 @@
++#include "fire_native_inventory_fence.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -161,9 +162,10 @@
+ 	std::list<EQ::ItemInstance*>::const_iterator& end
+ )
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::SaveAllowed(this,char_id,EQ::invslot::slotCursor,true))return false;
+     // Validate the complete queue before its old SQL rows are removed.
+     for (auto it=start;it!=end;++it)
+-        if (*it && !Housing::LegacyScaling::Persistable(**it)) return false;
++        if (*it && (!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(*it) || !Housing::LegacyScaling::Persistable(**it))) return false;
+ 
+ 	if (!InventoryRepository::TryDeleteWhere(
+ 		*this,
+@@ -230,6 +232,8 @@
+ 
+ bool SharedDatabase::SaveInventory(uint32 char_id, const EQ::ItemInstance* inst, int16 slot_id)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::SaveAllowed(this,char_id,slot_id))return false;
++ if(inst&&!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(inst))return false;
+     if (inst && !Housing::LegacyScaling::Persistable(*inst)) return false;
+ 	// Reject stale held identities before container clearing can delete any rows.
+ 	try { if (inst && !Housing::EvolvingItemCustody::InventorySaveAllowed(*this, char_id, *inst)) return false; }
+@@ -863,7 +867,7 @@
+ 				}
+ 				if (candidate == e_results.end() || candidate->character_id != char_id || candidate->item_id != evolving->GetID() || Housing::EvolvingItemCustody::Held(*this, candidate->id))
+ 					throw std::invalid_argument("Tracked evolving inventory identity missing");
+-				evolving->GetEvolvingDetails() = *candidate;
++				if(!evolving->SetEvolvingDetails(*candidate))throw std::invalid_argument("Fire custody blocks evolving replacement");
+ 				evolving->CalculateEvolveProgression();
+ 			}
+ 		} catch (...) { safe_delete(inst); return false; }
+--- a/common/timer.h
++++ b/common/timer.h
+@@ -27,6 +27,7 @@
+ 
+ #include <chrono>
+ 
++namespace FirePersonalOccurrenceSource { class OriginalItemSnapshot; }
+ class Timer
+ {
+ public:
+@@ -46,7 +47,7 @@
+ 	void Trigger();
+ 	void SetAtTrigger(uint32 set_at_trigger, bool iEnableIfDisabled = false, bool ChangeTimerTime = false);
+ 
+-	inline bool Enabled() { return enabled; }
++	inline bool Enabled() const { return enabled; }
+ 	inline uint32 GetStartTime() { return(start_time); }
+ 	inline uint32 GetDuration() { return(timer_time); }
+ 
+@@ -56,6 +57,7 @@
+ 	static const uint32 GetTimeSeconds();
+ 
+ private:
++	friend class FirePersonalOccurrenceSource::OriginalItemSnapshot;
+ 	uint32	start_time;
+ 	uint32	timer_time;
+ 	bool	enabled;
+--- a/zone/CMakeLists.txt
++++ b/zone/CMakeLists.txt
+@@ -58,6 +58,7 @@
+ 	cli/tests/cli_test_util.cpp
+ 	cli/tests/cli_zone_state.cpp
+ 	client.cpp
++	fire_native_item_custody.cpp
+ 	client_achievements.cpp
+ 	client_bot.cpp
+ 	client_evolving_items.cpp
+--- a/zone/attack.cpp
++++ b/zone/attack.cpp
+@@ -32,6 +32,13 @@
+ #include "zone/lua_parser.h"
+ #include "zone/mob.h"
+ #include "zone/npc.h"
++#include "fire_original_construct_death.h"
++#include "fire_construct_death_receipt.h"
++#include <charconv>
++#include <new>
++#include <cstring>
++#include <stdexcept>
++#include <system_error>
+ #include "zone/queryserv.h"
+ #include "zone/quest_parser_collection.h"
+ #include "zone/string_ids.h"
+@@ -2481,6 +2488,7 @@
+ 
+ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillType attack_skill, KilledByTypes killed_by, bool is_buff_tic)
+ {
++	FirePersonalOccurrenceSource::OriginalConstructNativeDeath fire_original_death(*this);
+ 	if (BoundDestructibles::IsBlocked(this)) {
+ 		return false;
+ 	}
+@@ -3126,6 +3134,7 @@
+ 		killer_mob->SetTarget(nullptr);
+ 	}
+ 
++	fire_original_death.SealSuccess(*this, entity_id);
+ 	return true;
+ }
+ 
+@@ -7116,3 +7125,244 @@
+ {
+ 	return 0; // not implemented
+ }
++
++namespace FirePersonalOccurrenceSource {
++OriginalConstructDeathQueue::Pending* OriginalConstructDeathQueue::head_=nullptr;
++OriginalConstructDeathQueue::Pending* OriginalConstructDeathQueue::tail_=nullptr;
++std::shared_ptr<OriginalConstructDeathQueue::Lifetime> OriginalConstructDeathQueue::lifetime_;
++std::shared_ptr<OriginalConstructDeathQueue::Lifetime> OriginalConstructDeathQueue::ForActualZone(const Zone* owner) {
++ if(lifetime_ && lifetime_->owner!=owner) Discard();
++ if(!lifetime_) lifetime_=std::make_shared<Lifetime>(Lifetime{owner});
++ return lifetime_;
++}
++OriginalConstructNativeDeath::OriginalConstructNativeDeath(NPC& actual)
++ :attempt_(actual.m_fire_original_construct),actor_(&actual) {
++ if(!attempt_ || !zone || !attempt_->captured_ ||
++  attempt_->original_object_!=&actual || attempt_->death_entry_active_ ||
++  attempt_->death_success_sealed_ || attempt_->caster_death_submitted_ ||
++  attempt_->original_.personal.acceptance.task_id==920169) return;
++ killed_entity_=actual.GetID();zone_=zone->GetZoneID();instance_=zone->GetInstanceID();
++ if(!MatchesActualConstructDeath(*attempt_->captured_,actual,killed_entity_,zone_,instance_)) return;
++ // Allocate before native mutable death callbacks. A failed allocation holds
++ // this feature's delivery; the ordinary NPC death still follows its own path.
++ try {
++  const auto lifetime=OriginalConstructDeathQueue::ForActualZone(zone);
++  pending_.reset(new(std::nothrow) OriginalConstructDeathQueue::Pending{attempt_,lifetime,zone,zone_,instance_});
++ } catch(const std::bad_alloc&) {return;}
++ if(!pending_) return;
++ attempt_->death_entry_active_=true;entered_=true;
++}
++void OriginalConstructNativeDeath::SealSuccess(NPC& actual,uint32_t native_killed_entity) {
++ if(!entered_ || completed_ || actor_!=&actual ||
++  actual.m_fire_original_construct.get()!=attempt_.get() ||
++  native_killed_entity!=killed_entity_ || !zone ||
++  zone->GetZoneID()!=zone_ || zone->GetInstanceID()!=instance_) return;
++ completed_=true;attempt_->death_success_sealed_=true;
++ // No task update, SQL or mutable callback inside NPC::Death.
++}
++OriginalConstructNativeDeath::~OriginalConstructNativeDeath() {
++ if(entered_) attempt_->death_entry_active_=false;
++ // This scope was declared FIRST. DeathTransition and every later local have
++ // finished destruction before this allocation-free enqueue. No actor access.
++ if(completed_ && pending_) OriginalConstructDeathQueue::Push(pending_.release());
++}
++void OriginalConstructDeathQueue::Push(Pending* node) noexcept {
++ if(tail_) tail_->next=node;else head_=node;
++ tail_=node;
++}
++void OriginalConstructDeathQueue::Discard() noexcept {
++ if(lifetime_) lifetime_->active=false;
++ lifetime_.reset();
++ auto* pending=head_;head_=tail_=nullptr;
++ while(pending) {auto* next=pending->next;delete pending;pending=next;}
++}
++void OriginalConstructDeathQueue::Drain() {
++ // Detach the finite batch before callbacks. New genuine deaths go to the NEXT
++ // normal pass; the current batch is never iterated twice or automatically retried.
++ auto* pending=head_;head_=tail_=nullptr;
++ while(pending) {
++  std::unique_ptr<Pending> event(pending);pending=pending->next;
++  const auto attempt=event->attempt;
++  if(!event->lifetime->active || !zone || event->zone_owner!=zone || zone->GetZoneID()!=event->zone_id ||
++   zone->GetInstanceID()!=event->instance_id || !attempt ||
++   !attempt->death_success_sealed_ || attempt->caster_death_submitted_) continue;
++  attempt->caster_death_submitted_=true;
++  const auto& binding=attempt->original_.personal.acceptance;
++  auto* client=entity_list.GetClientByCharID(binding.character_id);
++  if(!client || !client->GetTaskState() || binding.slot<0 || binding.slot>=MAXACTIVEQUESTS) continue;
++  const auto* current=client->GetTaskState()->GetClientTaskInfo(TaskType::Quest,binding.slot);
++  if(!current || !ForConsumer(database,binding,client->CharacterID(),TaskType::Quest,
++   *current,Consumer::ActualConstructDeath)) continue;
++  OriginalConstructDeathFrame frame{binding,client};
++  OriginalConstructDeathScope scope(frame);
++  client->UpdateTaskActivity(binding.task_id,2,1);
++  // Native actor stacks and entity iteration have already unwound. After the
++  // mutable update use only retained attempt/stack data, never client/NPC/slot.
++  attempt->caster_death_committed_=frame.committed;
++  if(frame.committed)
++   attempt->persisted_death_=ConstructDeathReceiptStore::PersistActualDeath(database,*attempt);
++ }
++}
++} // namespace FirePersonalOccurrenceSource
++
++namespace FirePersonalOccurrenceSource {
++namespace {
++uint64_t FireReceiptNumber(const char* value) {
++ if(!value || !*value) throw std::runtime_error("Fire receipt null number");
++ uint64_t n=0;const auto end=value+std::strlen(value);
++ const auto result=std::from_chars(value,end,n);
++ if(result.ec!=std::errc{} || result.ptr!=end) throw std::runtime_error("Fire receipt invalid number");
++ return n;
++}
++int64_t FireReceiptSigned(const char* value) {
++ if(!value || !*value) throw std::runtime_error("Fire receipt null signed field");
++ int64_t n=0;const auto end=value+std::strlen(value);
++ const auto result=std::from_chars(value,end,n);
++ if(result.ec!=std::errc{} || result.ptr!=end) throw std::runtime_error("Fire receipt invalid signed field");
++ return n;
++}
++MySQLRequestResult FireReceiptQuery(Database& db,const std::string& sql) {
++ if(db.GetStatus()!=DBcore::Connected) throw std::runtime_error("Fire receipt disconnected");
++ auto result=db.QueryDatabase(sql,false);
++ if(!result.Success()) throw std::runtime_error("Fire receipt query failed");
++ return result;
++}
++uint64_t FireReceiptFreshSession(Database& db) {
++ auto q=FireReceiptQuery(db,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
++ if(q.RowCount()!=1 || FireReceiptNumber(q.begin()[1])!=0 ||
++  FireReceiptNumber(q.begin()[2])!=1) throw std::runtime_error("Fire receipt nested session");
++ return FireReceiptNumber(q.begin()[0]);
++}
++void FireReceiptFoundation(Database& db) {
++ auto q=FireReceiptQuery(db,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() "
++  "AND engine='InnoDB' AND table_name IN ('rof2_fire_construct_death_receipts','character_tasks',"
++  "'character_activities','character_task_reward_instances')");
++ if(q.RowCount()!=1 || FireReceiptNumber(q.begin()[0])!=4)
++  throw std::runtime_error("Fire receipt transactional foundation differs");
++}
++void FireReceiptStage(Database& db,const Binding& b) {
++ auto pointer=FireReceiptQuery(db,fmt::format(
++  "SELECT r.occurrence_id FROM character_task_reward_instances r JOIN character_tasks ct "
++  "ON ct.charid=r.character_id AND ct.taskid=r.task_id AND ct.acceptedtime=r.accepted_time "
++  "WHERE r.character_id={} AND r.task_id={} AND r.occurrence_id={} AND r.accepted_time={} "
++  "AND ct.slot={} AND ct.type=2 AND ct.was_rewarded=0 FOR UPDATE",
++  b.character_id,b.task_id,b.occurrence_id,b.accepted_time,b.slot));
++ if(pointer.RowCount()!=1 || FireReceiptNumber(pointer.begin()[0])!=b.occurrence_id)
++  throw std::runtime_error("Fire receipt accepted occurrence differs");
++ auto activity=FireReceiptQuery(db,fmt::format(
++  "SELECT activityid,donecount,completed FROM character_activities WHERE charid={} "
++  "AND taskid={} ORDER BY activityid FOR UPDATE",b.character_id,b.task_id));
++ if(activity.RowCount()!=4) throw std::runtime_error("Fire receipt activity universe differs");
++ unsigned i=0;
++ for(auto row=activity.begin();row!=activity.end();++row,++i) {
++  const uint64_t expected_done=i==1?10:(i==3?0:1);
++  if(FireReceiptNumber(row[0])!=i || FireReceiptNumber(row[1])!=expected_done ||
++   FireReceiptNumber(row[2])!=(i==3?0:1))
++   throw std::runtime_error("Fire receipt exact saved stage differs");
++ }
++}
++void FireReceiptBeforeCommit(Database& db,uint64_t connection) {
++ auto q=FireReceiptQuery(db,"SELECT CONNECTION_ID(),@@in_transaction");
++ if(q.RowCount()!=1 || FireReceiptNumber(q.begin()[0])!=connection ||
++  FireReceiptNumber(q.begin()[1])!=1 || db.TransactionStrictFailed())
++  throw std::runtime_error("Fire receipt strict session changed");
++}
++} // finite feature-local SQL helpers, not a generic persistence service
++
++bool ConstructDeathReceiptStore::PersistActualDeath(Database& db,const OriginalConstructAttempt& actual) {
++ if(!actual.captured_ || !actual.death_success_sealed_ || !actual.caster_death_submitted_ ||
++  !actual.caster_death_committed_ || !actual.native_click_sequence_) return false;
++ const auto& identity=*actual.captured_;
++ const auto& use=actual.original_;
++ const auto& b=use.personal.acceptance;
++ const auto rule=OriginalRule(b.task_id);
++ if(!rule || (b.task_id!=920167 && b.task_id!=920168) || !b.character_id ||
++  !b.occurrence_id || b.slot<0 || b.slot>=MAXACTIVEQUESTS || b.accepted_time<=0 ||
++  use.personal.consumer!=Consumer::ActivateConstruct || use.item_id!=rule->inactive_item ||
++  !use.item_serial || use.charges_before<=0 || !use.caster_entity ||
++  identity.npc_type_id!=rule->construct_npc || !identity.entity_id ||
++  identity.zone_id!=rule->encounter_zone || identity.instance_id!=0) return false;
++ bool transaction=false;
++ try {
++  const auto connection=FireReceiptFreshSession(db);
++  if(!db.TransactionBeginStrict().Success()) return false;
++  transaction=true;
++  FireReceiptFoundation(db);FireReceiptStage(db,b);
++  const auto inserted=FireReceiptQuery(db,fmt::format(
++   "INSERT INTO rof2_fire_construct_death_receipts (character_id,task_id,occurrence_id,accepted_time,"
++   "accepted_slot,native_click_sequence,original_item_id,original_item_serial,original_item_slot,"
++   "original_charges,original_caster_entity,original_target_entity,construct_npc_id,construct_entity_id,"
++   "construct_spawn_id,construct_zone_id,construct_instance_id,saved_at,claimed_at) "
++   "VALUES ({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},UNIX_TIMESTAMP(),NULL)",
++   b.character_id,b.task_id,b.occurrence_id,b.accepted_time,b.slot,actual.native_click_sequence_,
++   use.item_id,use.item_serial,use.slot,use.charges_before,use.caster_entity,use.requested_target_entity,
++   identity.npc_type_id,identity.entity_id,identity.spawn_point_id,identity.zone_id,identity.instance_id));
++  if(inserted.RowsAffected()!=1) throw std::runtime_error("Fire receipt insert not exact");
++  FireReceiptBeforeCommit(db,connection);
++  const auto commit=db.TransactionCommitStrict();transaction=false;
++  return commit.Success(); // no readback/replay/upsert/retry on unknown commit
++ } catch(const std::exception&) {
++  if(transaction) db.TransactionRollbackStrict();
++  return false;
++ }
++}
++
++std::shared_ptr<PersistedConstructFinish> ConstructDeathReceiptStore::ClaimForActualHail(
++ Database& db,Client& client,NPC& giver,const ClientTaskInformation& current) {
++ if(!zone || zone->GetZoneID()!=490 || zone->GetInstanceID()!=0 ||
++  giver.GetNPCTypeID()!=490061 || !giver.GetID() || !giver.GetSpawnPointID() ||
++  (current.task_id!=920167 && current.task_id!=920168) || current.slot<0 ||
++  current.slot>=MAXACTIVEQUESTS || current.accepted_time<=0 || current.was_rewarded ||
++  current.activity[2].activity_state!=ActivityCompleted ||
++  current.activity[3].activity_state!=ActivityActive) return {};
++ bool transaction=false;
++ try {
++  const auto connection=FireReceiptFreshSession(db);
++  if(!db.TransactionBeginStrict().Success()) return {};
++  transaction=true;FireReceiptFoundation(db);
++  auto q=FireReceiptQuery(db,fmt::format(
++   "SELECT p.occurrence_id,p.native_click_sequence,p.original_item_id,p.original_item_serial,p.construct_npc_id,"
++   "p.construct_entity_id,p.construct_zone_id,p.construct_instance_id,p.original_caster_entity,p.original_charges "
++   "FROM rof2_fire_construct_death_receipts p JOIN character_task_reward_instances r "
++   "ON r.character_id=p.character_id AND r.task_id=p.task_id AND r.occurrence_id=p.occurrence_id "
++   "AND r.accepted_time=p.accepted_time WHERE p.character_id={} AND p.task_id={} AND p.accepted_time={} "
++   "AND p.accepted_slot={} AND p.claimed_at IS NULL FOR UPDATE",
++   client.CharacterID(),current.task_id,current.accepted_time,current.slot));
++  if(q.RowCount()!=1) throw std::runtime_error("Fire receipt absent or ambiguous");
++  auto row=q.begin();
++  Binding b{client.CharacterID(),static_cast<uint32_t>(current.task_id),current.slot,
++   current.accepted_time,FireReceiptNumber(row[0])};
++  const auto rule=OriginalRule(b.task_id);
++  if(!rule || !MatchesLocal(b,client.CharacterID(),TaskType::Quest,current) ||
++   !FireReceiptNumber(row[1]) || FireReceiptNumber(row[2])!=rule->inactive_item ||
++   !FireReceiptSigned(row[3]) || FireReceiptNumber(row[4])!=rule->construct_npc ||
++   !FireReceiptNumber(row[5]) || FireReceiptNumber(row[6])!=rule->encounter_zone ||
++   FireReceiptNumber(row[7])!=0 || !FireReceiptNumber(row[8]) || FireReceiptSigned(row[9])<=0)
++   throw std::runtime_error("Fire receipt original event identity differs");
++  FireReceiptStage(db,b);
++  // Allocate the actual opaque handoff before persistence. It becomes authority
++  // only after the exact claim COMMIT response, never from a count/history row.
++  auto finish=std::shared_ptr<PersistedConstructFinish>(new PersistedConstructFinish(b,client,giver));
++  auto claim=FireReceiptQuery(db,fmt::format(
++   "UPDATE rof2_fire_construct_death_receipts SET claimed_at=UNIX_TIMESTAMP() "
++   "WHERE character_id={} AND task_id={} AND occurrence_id={} AND claimed_at IS NULL",
++   b.character_id,b.task_id,b.occurrence_id));
++  if(claim.RowsAffected()!=1) throw std::runtime_error("Fire receipt claim not exact");
++  FireReceiptBeforeCommit(db,connection);
++  const auto commit=db.TransactionCommitStrict();transaction=false;
++  if(!commit.Success()) return {};
++  return finish;
++ } catch(const std::exception&) {
++  if(transaction) db.TransactionRollbackStrict();
++  return {};
++ }
++}
++
++void PersistedConstructFinish::Submit(Client& client,NPC& giver,const ClientTaskInformation& current) {
++ if(used_ || owner_!=&client) return;
++ used_=true; // before any validation query, allocation or native mutable effect
++ if(giver.GetID()!=giver_entity_ || giver.GetSpawnPointID()!=giver_spawn_) return;
++ SubmitActualOriginalFinalHailOnce(database,hail_,client,TaskType::Quest,current,giver,490,0,giver_spawn_);
++ // Only this retained private object may be accessed after mutable callbacks.
++}
++} // namespace FirePersonalOccurrenceSource
+--- a/zone/client.cpp
++++ b/zone/client.cpp
+@@ -17,6 +17,9 @@
+ */
+ #include "../common/mercenary/rof2_timer.h"
+ #include "fire_shared_successor_native.h"
++#include "fire_published_use_sink.h"
++#include "fire_original_construct_hail.h"
++#include "fire_construct_death_receipt.h"
+ 
+ #include "housing_guild_portal.h"
+ #include "housing_actor_publication.h"
+@@ -34,6 +37,7 @@
+ #include <thread>
+ 
+ #include "client.h"
++#include "fire_native_item_custody.h"
+ 
+ #include "common/data_bucket.h"
+ #include "common/data_verification.h"
+@@ -1749,6 +1753,7 @@
+ 					if (UpdateTasksOnSpeakWith(t->CastToNPC())) {
+ 						t->CastToNPC()->DoQuestPause(this);
+ 					}
++					FirePersonalOccurrenceSource::OriginalConstructNativeHail::OnActualTargetedSay(*this,*t->CastToNPC(),message);
+ 				}
+ 			}
+ 		}
+@@ -8962,7 +8967,7 @@
+ void Client::TryItemTimer(int slot)
+ {
+ 	EQ::ItemInstance* inst = m_inv.GetItem(slot);
+-	if(!inst) {
++	if(!inst || !FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(inst)) {
+ 		return;
+ 	}
+ 
+@@ -8984,14 +8989,14 @@
+ 	for (int x = EQ::invaug::SOCKET_BEGIN; x <= EQ::invaug::SOCKET_END; ++x)
+ 	{
+ 		EQ::ItemInstance * a_inst = inst->GetAugment(x);
+-		if(!a_inst) {
++		if(!a_inst || !FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(a_inst)) {
+ 			continue;
+ 		}
+ 
+-		auto& item_timers = a_inst->GetTimers();
++		const auto& item_timers = a_inst->GetTimers();
+ 		auto it_iter = item_timers.begin();
+ 		while(it_iter != item_timers.end()) {
+-			if(it_iter->second.Check()) {
++			if(a_inst->CheckTimer(it_iter->first)) {
+ 				if (parse->ItemHasQuestSub(a_inst, EVENT_TIMER)) {
+ 					parse->EventItem(EVENT_TIMER, this, a_inst, nullptr, it_iter->first, 0);
+ 				}
+@@ -13667,3 +13672,108 @@
+ 
+ 	return task_state->UncompleteTask(task_id);
+ }
++
++namespace FirePersonalOccurrenceSource {
++void OnOriginalNativeUsePublished(Client& actual_owner,PublishedNativeUse& receipt) {
++ PublishedNativeUseSink::Receive(actual_owner,receipt);
++}
++
++void PublishedNativeUseSink::Receive(Client& client,PublishedNativeUse& receipt) {
++ // This MUST precede queries, allocation, inventory observations and callbacks.
++ const auto published=receipt.Take(client);
++ if(!published) return;
++ const auto& view=*published;
++ const auto& original=view.original;
++ const auto& binding=original.personal.acceptance;
++ if(!view.native_click_sequence || binding.slot<0 || binding.slot>=MAXACTIVEQUESTS ||
++  client.CharacterID()!=binding.character_id || client.GetID()!=original.caster_entity ||
++  !zone || zone->GetZoneID()!=original.actual_zone ||
++  zone->GetInstanceID()!=original.actual_instance || !client.GetTaskState()) return;
++ const auto* current=client.GetTaskState()->GetClientTaskInfo(TaskType::Quest,binding.slot);
++ if(!current) return;
++ const auto consumer=original.personal.consumer;
++ if(consumer!=Consumer::CombineIngredients && consumer!=Consumer::ActivateConstruct) return;
++ const auto context=ForConsumer(database,binding,client.CharacterID(),TaskType::Quest,*current,consumer);
++ if(!context || original.personal.activity!=context->activity ||
++  original.personal.rule.task_id!=context->rule.task_id ||
++  original.personal.rule.ingredient_a!=context->rule.ingredient_a ||
++  original.personal.rule.ingredient_b!=context->rule.ingredient_b ||
++  original.personal.rule.inactive_item!=context->rule.inactive_item ||
++  original.personal.rule.construct_npc!=context->rule.construct_npc ||
++  original.personal.rule.encounter_zone!=context->rule.encounter_zone) return;
++ if(consumer==Consumer::CombineIngredients) {
++  if(original.item_id!=context->rule.ingredient_a ||
++   view.published_output_item!=context->rule.inactive_item ||
++   !view.published_output_serial) return;
++  // The writer receipt identifies the actual published output, including cursor
++  // queue placement and canonical native charges. Do not assume cursor-top or
++  // invent a one-charge default from a one-unit output quantity.
++  // Inventory is ALREADY conserved and published by the actual writer.
++  // No extra debit, output, spawn, activity2, save, or successor follows a combine.
++  return;
++ }
++ if(original.item_id!=context->rule.inactive_item || original.charges_before<=0 ||
++  original.actual_zone!=context->rule.encounter_zone || original.actual_instance!=0 ||
++  view.published_output_item || view.published_output_serial ||
++  view.published_output_charges ||
++  original_construct_registration) return;
++ if(client.m_fire_published_construct) {
++  const auto& previous=*client.m_fire_published_construct;
++  if(!previous.caster_death_committed_ ||
++   (previous.original_.personal.acceptance.occurrence_id==binding.occurrence_id &&
++    previous.original_.personal.acceptance.task_id==binding.task_id)) return;
++ }
++ // These are unresolved owner decisions, never booleans supplied by a caller.
++ // A source revision with the real placement and lifetime guarantees is required.
++ constexpr bool actor_lifetime_and_no_same_frame_reuse_selected=false;
++ const OriginalConstructPlacement placement{};
++ if(!actor_lifetime_and_no_same_frame_reuse_selected || !placement.selected ||
++  binding.task_id==920169) return; // authentic participant cohort remains held
++ const auto* definition=content_db.LoadNPCTypesData(context->rule.construct_npc);
++ if(!definition || !std::isfinite(placement.point.x) || !std::isfinite(placement.point.y) ||
++  !std::isfinite(placement.point.z) || !std::isfinite(placement.point.w)) return;
++ // Retain the SAME original use before publication; no history/context factory.
++ client.m_fire_published_construct=std::make_shared<OriginalConstructAttempt>(original);
++ auto& attempt=*client.m_fire_published_construct;
++ attempt.attempted_=true;
++ attempt.native_click_sequence_=view.native_click_sequence;
++ auto* actor=new NPC(definition,nullptr,placement.point,GravityBehavior::Water);
++ if(actor->GetNPCTypeID()!=context->rule.construct_npc) {delete actor;return;}
++ actor->m_fire_original_construct=client.m_fire_published_construct;
++ actor->AddLootTable();
++ if(actor->DropsGlobalLoot()) actor->CheckGlobalLootTables();
++ OriginalConstructRegistration frame{attempt,actor,original.actual_zone,original.actual_instance};
++ OriginalConstructRegistrationScope scope(frame);
++ entity_list.AddNPC(actor,true,true);
++ // AddNPC has mutable callbacks: no client/actor/attempt dereference after it.
++ // The real death owner still needs the retained attempt plus original actor identity.
++}
++} // namespace FirePersonalOccurrenceSource
++
++namespace FirePersonalOccurrenceSource {
++void OriginalConstructNativeHail::OnActualTargetedSay(Client& client,NPC& actual,const char* message) {
++ constexpr uint32_t selected_original_gotonur_spawn=0; // authenticated serving binding still held
++ if(!selected_original_gotonur_spawn) return;
++ if(!message || !Strings::BeginsWith(Strings::ToLower(message),"hail") || !zone ||
++  zone->GetZoneID()!=490 || zone->GetInstanceID()!=0 || actual.GetNPCTypeID()!=490061 ||
++  actual.IsEngaged() || client.GetTarget()!=&actual ||
++  actual.GetSpawnPointID()!=selected_original_gotonur_spawn || !client.GetTaskState()) return;
++ const ClientTaskInformation* selected=nullptr;
++ for(int slot=0;slot<MAXACTIVEQUESTS;++slot) {
++  const auto* current=client.GetTaskState()->GetClientTaskInfo(TaskType::Quest,slot);
++  if(!current || (current->task_id!=920167 && current->task_id!=920168) ||
++   current->was_rewarded || current->activity[2].activity_state!=ActivityCompleted ||
++   current->activity[3].activity_state!=ActivityActive) continue;
++  if(selected) return; // no inferred sequence among multiple abnormal active originals
++  selected=current;
++ }
++ if(!selected) return;
++ // Read/claim the actual typed death receipt, including its original occurrence;
++ // never construct physical ownership from generic activity/reward history.
++ const auto finish=ConstructDeathReceiptStore::ClaimForActualHail(database,client,actual,*selected);
++ if(!finish) return;
++ finish->Submit(client,actual,*selected);
++ // The private receipt survives mutable reward/successor callbacks independently.
++ // No client, NPC, slot or accepted pointer is accessed afterward.
++}
++} // namespace FirePersonalOccurrenceSource
+--- a/zone/client.h
++++ b/zone/client.h
+@@ -23,7 +23,7 @@
+ 
+ #include "../common/boat_passenger.h"
+ 
+-namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; }
++namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalConstructNativeHail; }
+ namespace SpiritShroud { struct Template; }
+ class ZoneDatabase;
+ struct SpiritShroudDestination;
+@@ -264,6 +264,7 @@
+ 	std::string swap_name;
+ };
+ 
++namespace FirePersonalOccurrenceSource { class NativeItemCustody; }
+ class Client : public Mob
+ {
+ public:
+@@ -2133,6 +2134,10 @@
+ private:
+ 	friend class FirePersonalOccurrenceSource::SharedSuccessorNative;
+ 	std::unique_ptr<FirePersonalOccurrenceSource::SharedSuccessorPending> m_fire_shared_successor;
++	friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
++	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
++	friend class FirePersonalOccurrenceSource::OriginalConstructNativeHail;
++	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_published_construct;
+ 	ExternalHandinMoneyReturned m_external_handin_money_returned = {};
+ 	std::vector<uint32_t>       m_external_handin_items_returned = {};
+ public:
+@@ -2225,6 +2230,8 @@
+ 
+ 	uint8 playeraction;
+ 
++	friend class FirePersonalOccurrenceSource::NativeItemCustody;
++	std::unique_ptr<FirePersonalOccurrenceSource::NativeItemCustody> m_fire_item_custody;
+ 	bool m_inventory_session_rejected = false;
+  bool m_spirit_shroud_transition = false;
+  bool m_spirit_shroud_native_pending = false;
+--- a/zone/client_evolving_items.cpp
++++ b/zone/client_evolving_items.cpp
+@@ -107,7 +107,7 @@
+ 			continue;
+ 		}
+ 
+-		if (inst->GetTimers().contains("evolve") && !inst->GetTimers().at("evolve").Check(false)) {
++		if (inst->GetTimers().contains("evolve") && !inst->CheckTimer("evolve",false)) {
+ 			LogEvolveItemDetail(
+ 				"CharacterID <green>[{}], item ID <yellow>[{}] timer not yet expired. <red>[{}] secs remaining.",
+ 				CharacterID(),
+--- a/zone/client_packet.cpp
++++ b/zone/client_packet.cpp
+@@ -28,6 +28,7 @@
+ #include "housing_plot_marker.h"
+ 
+ #include "client.h"
++#include "fire_native_item_custody.h"
+ 
+ #include "common/data_bucket.h"
+ #include "common/data_verification.h"
+@@ -4925,6 +4926,12 @@
+ 
+ 				if ((item->Click.Type == EQ::item::ItemEffectClick) || (item->Click.Type == EQ::item::ItemEffectExpendable) || (item->Click.Type == EQ::item::ItemEffectEquipClick) || (item->Click.Type == EQ::item::ItemEffectClick2))
+ 				{
++					FirePersonalOccurrenceSource::NativeItemCustody::ClickTicket fire_click;
++					if (!FirePersonalOccurrenceSource::NativeItemCustody::Click(*this,
++						castspell->inventoryslot,inst,castspell->target_id,
++						m_inv.SupportsClickCasting(castspell->inventoryslot),fire_click)) {
++						SendSpellBarEnable(castspell->spell_id);return;
++					}
+ 					if (item->Click.Level2 > 0)
+ 					{
+ 						if (GetLevel() >= item->Click.Level2)
+@@ -4943,7 +4950,11 @@
+ 							}
+ 
+ 							if (i == 0) {
+-								CastSpell(item->Click.Effect, castspell->target_id, slot, item->CastTime, 0, 0, castspell->inventoryslot);
++								if (!FirePersonalOccurrenceSource::NativeItemCustody::Launch(*this,
++								castspell->inventoryslot,castspell->spell_id,castspell->target_id,fire_click)) {
++								SendSpellBarEnable(castspell->spell_id);return;
++							}
++							CastSpell(item->Click.Effect, castspell->target_id, slot, item->CastTime, 0, 0, castspell->inventoryslot);
+ 							}
+ 							else {
+ 								InterruptSpell(castspell->spell_id);
+@@ -4975,6 +4986,10 @@
+ 						}
+ 
+ 						if (i == 0) {
++							if (!FirePersonalOccurrenceSource::NativeItemCustody::Launch(*this,
++								castspell->inventoryslot,castspell->spell_id,castspell->target_id,fire_click)) {
++								SendSpellBarEnable(castspell->spell_id);return;
++							}
+ 							CastSpell(item->Click.Effect, castspell->target_id, slot, item->CastTime, 0, 0, castspell->inventoryslot);
+ 						}
+ 						else {
+@@ -10055,6 +10070,11 @@
+ 
+ 	if (m_inv.SupportsClickCasting(slot_id) || ((item->ItemType == EQ::item::ItemTypePotion || item->PotionBelt) && m_inv.SupportsPotionBeltCasting(slot_id))) // sanity check
+ 	{
++		FirePersonalOccurrenceSource::NativeItemCustody::ClickTicket fire_click;
++		if (!FirePersonalOccurrenceSource::NativeItemCustody::Click(*this,slot_id,inst,
++			request->target,m_inv.SupportsClickCasting(slot_id),fire_click)) {
++			SendSpellBarEnable(spell_id);return;
++		}
+ 		auto* p_inst = (EQ::ItemInstance*) inst;
+ 
+ 		if (parse->ItemHasQuestSub(p_inst, EVENT_ITEM_CLICK)) {
+@@ -10192,6 +10212,8 @@
+ 						return;
+ 					}
+ 					if (i == 0) {
++						if (!FirePersonalOccurrenceSource::NativeItemCustody::Launch(*this,slot_id,
++							spell_id,target_id,fire_click)) {SendSpellBarEnable(spell_id);return;}
+ 						if (!IsCastWhileInvisibleSpell(item->Click.Effect)) {
+ 							CommonBreakInvisible(); // client can't do this for us :(
+ 						}
+--- a/zone/client_spirit_shroud.cpp
++++ b/zone/client_spirit_shroud.cpp
+@@ -498,6 +498,7 @@
+ }
+ 
+ void Client::ChangeSpiritShroud(uint32_t id) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&m_inv))return;
+  if((id&&!RuleB(Character,EnableSpiritShrouds))||ClientVersion()!=EQ::versions::ClientVersion::RoF2||!Keeper(*this)||m_spirit_shroud_transition)return;
+  if((id&&IsSpiritShrouded())||(!id&&!IsSpiritShrouded()))return;
+  if(IsDead()||GetHP()<=0||IsCasting()||HasActiveSong()||IsMezzed()||IsStunned()||IsEngaged()||GetAggroCount()||
+--- a/zone/client_spirit_shroud_native.cpp
++++ b/zone/client_spirit_shroud_native.cpp
+@@ -256,6 +256,7 @@
+ }
+ 
+ bool Client::InstallSpiritShroudDestination(SpiritShroudDestination& next) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&m_inv)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&next.inventory))return false;
+  if(!m_spirit_shroud_transition || next.self_bytes.empty() || next.observer_bytes.empty() || next.buffs.size()!=size_t(GetMaxTotalSlots()) || !buffs)return false;
+  // All authoritative state and ownership allocations were prepared before
+  // COMMIT. No Save/Load, lease takeover, queue release or SQL occurs here.
+--- a/zone/entity.cpp
++++ b/zone/entity.cpp
+@@ -36,6 +36,8 @@
+ #include "zone/string_ids.h"
+ #include "zone/water_map.h"
+ #include "zone/worldserver.h"
++#include "fire_original_construct_producer.h"
++#include "fire_original_construct_death.h"
+ 
+ #include <cstdarg>
+ #include <cstdio>
+@@ -572,6 +574,7 @@
+ 			entity_list.RemoveMob(id);
+ 		}
+ 	}
++	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Drain();
+ }
+ 
+ void EntityList::BeaconProcess()
+@@ -687,6 +690,7 @@
+ 	npc_list.emplace(std::pair<uint16, NPC *>(npc->GetID(), npc));
+ 	mob_list.emplace(std::pair<uint16, Mob *>(npc->GetID(), npc));
+ 
++	FirePersonalOccurrenceSource::CaptureConstructBeforeOriginalSpawnCallbacks(npc);
+ 	entity_list.ScanCloseMobs(npc);
+ 
+ 	if (!BoundDestructibles::IsRuins(npc) && parse->HasQuestSub(npc->GetNPCTypeID(), EVENT_SPAWN)) {
+--- /dev/null
++++ b/zone/fire_construct_death_receipt.h
+@@ -0,0 +1,31 @@
++#pragma once
++#include "fire_original_construct_producer.h"
++#include <memory>
++namespace FirePersonalOccurrenceSource {
++class ConstructDeathReceiptStore;
++class PersistedConstructFinish final {
++ friend class ConstructDeathReceiptStore;
++ friend class OriginalConstructNativeHail;
++ Binding original_;
++ OriginalFinalHailAttempt hail_;
++ Client* owner_;
++ uint32_t giver_entity_,giver_spawn_;
++ bool used_=false;
++ PersistedConstructFinish(const Binding& b,Client& c,NPC& n)
++  :original_(b),hail_(b),owner_(&c),giver_entity_(n.GetID()),giver_spawn_(n.GetSpawnPointID()) {}
++ void Submit(Client&,NPC&,const ClientTaskInformation&);
++public:
++ PersistedConstructFinish(const PersistedConstructFinish&)=delete;
++ PersistedConstructFinish& operator=(const PersistedConstructFinish&)=delete;
++};
++class ConstructDeathReceiptStore final {
++ friend class OriginalConstructNativeDeath;
++ friend class OriginalConstructDeathQueue;
++ friend class OriginalConstructNativeHail;
++ // No public write/factory/context-only proof. Only actual native death scope
++ // can persist, after its SAME original goal2 save was positively observed.
++ static bool PersistActualDeath(Database&,const OriginalConstructAttempt&);
++ static std::shared_ptr<PersistedConstructFinish> ClaimForActualHail(
++  Database&,Client&,NPC&,const ClientTaskInformation&);
++};
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_native_item_custody.cpp
+@@ -0,0 +1,566 @@
++// Native selected writer and custody source proposal. Not installed/built or
++// activation-ready; retained placement/actor/initial167/169 holds still apply.
++#include "client.h"
++#include "task_client_state.h"
++#include "zonedb.h"
++#include "zone.h"
++#include "fire_personal_item_use.h"
++#include "entity.h"
++#include "fire_native_item_custody.h"
++#include "fire_original_item_snapshot.h"
++#include "fire_native_published_use.h"
++#include "inventory_session_owner.h"
++#include "../common/fire_native_inventory_fence.h"
++#include "../common/housing/inventory_row_db.h"
++#include "../common/housing/inventory_projection.h"
++#include <list>
++#include <stdexcept>
++#include <algorithm>
++#include <array>
++#include <limits>
++#include <map>
++#include <vector>
++extern Zone* zone;
++extern ZoneDatabase database;
++namespace FirePersonalOccurrenceSource {
++namespace {
++int RuleIndex(uint32_t task) {
++ switch(task){case 920167:return 0;case 920168:return 1;case 920169:return 2;default:return -1;}
++}
++bool OriginalClickItem(uint32_t item) {
++ switch(item){case 50745:case 50746:case 50747:case 50749:case 50750:case 50752:return true;default:return false;}
++}
++int16_t RootSlot(int16_t slot) {
++ if(EQ::ValueWithin(slot,EQ::invbag::GENERAL_BAGS_BEGIN,EQ::invbag::GENERAL_BAGS_END))
++  return EQ::InventoryProfile::CalcSlotId(slot);
++ return slot;
++}
++bool CarriedGeneral(const EQ::InventoryProfile& inv,int16_t slot) {
++ const auto root=RootSlot(slot);
++ return EQ::ValueWithin(root,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END)&&
++  inv.GetLookup()&&((uint64_t(1)<<root)&inv.GetLookup()->PossessionsBitmask);
++}
++}
++struct NativeItemCustody::State {
++ enum class Phase { Captured,LaunchReady,Casting,Finishing,SpellSucceeded,Rejected,Unknown,Committed };
++ struct Take {int16_t slot;int16_t quantity;const EQ::ItemInstance* original;};
++ struct Click {
++  Click(Context value,std::shared_ptr<PacketFence> p,uint64_t seq,uint32_t who,uint32_t to,uint32_t z,uint32_t instance_id,int16_t where)
++   :context(std::move(value)),packet(std::move(p)),sequence(seq),caster(who),target(to),zone(z),instance(instance_id),slot(where){}
++  Context context;
++  std::shared_ptr<PacketFence> packet;
++  uint64_t sequence;
++  uint32_t caster,target,zone,instance;
++  int16_t slot;
++  int16_t debit_slot=-1;
++  Phase phase=Phase::Captured;
++  std::unique_ptr<OriginalItemSnapshot> clicked;
++  std::map<int16_t,std::unique_ptr<OriginalItemSnapshot>> roots;
++  std::vector<std::unique_ptr<OriginalItemSnapshot>> cursor;
++  std::vector<Take> b;
++  std::unique_ptr<EQ::ItemInstance> output;
++  std::array<unsigned char,sizeof(EQ::ItemData)> output_definition{};
++  int16_t output_slot=-1;
++  bool cursor_participates=false;
++  std::optional<OriginalItemUse> original_use;
++  std::shared_ptr<Housing::InventorySessions::ZoneReservation> session;
++  std::optional<Housing::InventorySessions::Lease> lease;
++  NativeInventoryFence fence;
++  std::unique_ptr<EQ::InventoryProfile> staged;
++  std::vector<uint8_t> save_results;
++  std::vector<std::unique_ptr<EQApplicationPacket>> packets;
++  bool persistence_entered=false,commit_attempted=false;
++
++ };
++ std::array<std::optional<Binding>,3> accepted;
++ uint64_t sequence=0;
++ std::unique_ptr<Click> click;
++};
++NativeItemCustody::NativeItemCustody():state_(std::make_unique<State>()){}
++NativeItemCustody::~NativeItemCustody()=default;
++NativeItemCustody* NativeItemCustody::Owned(Client& c){return c.m_fire_item_custody.get();}
++void NativeItemCustody::Accepted(Client& c,const Binding& b) {
++ const auto n=RuleIndex(b.task_id);if(n<0||b.character_id!=c.CharacterID()||!b.occurrence_id)return;
++ // Caller supplies ONLY the actual successful native BindAccepted receipt.
++ // No Reserve/Ensure/history reconstruction is performed here.
++ if(!c.m_fire_item_custody)c.m_fire_item_custody.reset(new NativeItemCustody);
++ auto& owner=*c.m_fire_item_custody;
++ if(owner.state_->click&&owner.state_->click->phase==State::Phase::Unknown)return;
++ owner.state_->accepted[n]=b;
++}
++bool NativeItemCustody::ReloadAccepted(Client& c) {
++ if(!c.CharacterID()||!c.task_state||!NativeInventoryFence::ProfileAllowed(&c.m_inv))return false;
++ if(!c.m_fire_item_custody)c.m_fire_item_custody.reset(new NativeItemCustody);
++ auto& owner=*c.m_fire_item_custody;
++ // Reload acceptance/stage context only. No native use/tree/output/death proof,
++ // cast ticket, Reserve/Ensure, grant, task save or fresh acceptance is revived.
++ if(owner.state_->click) {
++  if(owner.state_->click->fence.Active())return false;
++  owner.state_->click.reset();
++ }
++ owner.state_->accepted={};
++ std::array<std::optional<Binding>,3> restored;
++ try {
++  for(int slot=0;slot<MAXACTIVEQUESTS;++slot) {
++   const auto* current=c.task_state->GetClientTaskInfo(TaskType::Quest,slot);
++   if(!current||current->task_id<=0||current->slot!=slot||current->accepted_time<=0||current->was_rewarded)continue;
++   const auto index=RuleIndex(uint32_t(current->task_id));if(index<0)continue;
++   if(restored[index])return false;
++   auto rows=database.QueryDatabase(fmt::format(
++    "SELECT r.occurrence_id FROM character_task_reward_instances r "
++    "JOIN character_tasks ct ON ct.charid=r.character_id AND ct.taskid=r.task_id "
++    "AND ct.acceptedtime=r.accepted_time WHERE r.character_id={} AND r.task_id={} "
++    "AND r.accepted_time={} AND ct.slot={} AND ct.type=2 AND ct.was_rewarded=0",
++    c.CharacterID(),current->task_id,current->accepted_time,slot),false);
++   if(!rows.Success()||rows.RowCount()>1)return false;
++   if(!rows.RowCount())continue; // legacy/unbound rows never get a new occurrence
++   auto row=rows.begin();if(!row[0])return false;
++   const std::string value=row[0];size_t end=0;
++   if(value.empty()||value.find_first_not_of("0123456789")!=std::string::npos)return false;
++   const auto occurrence=std::stoull(value,&end);if(!occurrence||end!=value.size())return false;
++   Binding binding{c.CharacterID(),uint32_t(current->task_id),slot,current->accepted_time,occurrence};
++   if(!MatchesLocal(binding,c.CharacterID(),TaskType::Quest,*current))return false;
++   restored[index]=binding;
++  }
++ }catch(...){return false;}
++ owner.state_->accepted=restored;
++ return true;
++}
++bool NativeItemCustody::Capture(Client& c,int16_t slot,const EQ::ItemInstance* actual,
++ uint32_t target,bool supported) {
++ if(!actual||!actual->GetItem()||!OriginalClickItem(actual->GetID())||!supported||
++  (!CarriedGeneral(c.m_inv,slot)&&slot!=EQ::invslot::slotCursor)||
++  !zone||!c.task_state||!c.GetID()||state_->sequence==std::numeric_limits<uint64_t>::max())return false;
++ if(state_->click&&(state_->click->phase==State::Phase::Captured||
++  state_->click->phase==State::Phase::LaunchReady)&&state_->click->packet&&
++  state_->click->packet->returned)state_->click->phase=State::Phase::Rejected;
++ if(state_->click&&state_->click->phase!=State::Phase::Rejected&&
++  state_->click->phase!=State::Phase::Committed)return false;
++ std::optional<Context> context;
++ for(const auto& bound:state_->accepted) {
++  if(!bound)continue;
++  const auto rule=OriginalRule(bound->task_id);if(!rule)continue;
++  const bool combine=actual->GetID()==rule->ingredient_a;
++  if(!combine&&actual->GetID()!=rule->inactive_item)continue;
++  if(bound->slot<0||bound->slot>=MAXACTIVEQUESTS)continue;
++  const auto* current=c.task_state->GetClientTaskInfo(TaskType::Quest,bound->slot);
++  if(!current||current->activity[0].activity_state!=ActivityCompleted||
++   current->activity[1].activity_state!=ActivityCompleted)continue;
++  context=ForConsumer(database,*bound,c.CharacterID(),TaskType::Quest,*current,
++   combine?Consumer::CombineIngredients:Consumer::ActivateConstruct);
++  if(context)break;
++ }
++ if(!context)return false;
++ // Source-selected activation stays held BEFORE cast or spend. Spells owns the
++ // real placement/lifetime/cross-zone SAME-death-save transfer composition.
++ // No inactive construct may be consumed merely because the sink holds later.
++ if(context->consumer==Consumer::ActivateConstruct)return false;
++ const auto use=CaptureOriginalItemUse(*context,*actual,slot,supported,c.GetID(),target,
++  zone->GetZoneID(),zone->GetInstanceID());
++ if(!use||actual->GetCharges()!=1||actual->IsStackable()||!actual->IsExpendable())return false;
++ auto click=std::make_unique<State::Click>(*context,std::make_shared<PacketFence>(),++state_->sequence,
++  c.GetID(),target,zone->GetZoneID(),zone->GetInstanceID(),slot);
++ click->packet->sequence=click->sequence;
++ click->original_use=*use;
++ click->session=c.InventorySessionReleaseTicket();
++ click->lease=click->session?click->session->SnapshotFor(c):std::nullopt;
++ if(!click->lease||!c.HasInventorySessionReservation())return false;
++
++ click->clicked=OriginalItemSnapshot::Capture(slot,actual);if(!click->clicked)return false;
++ const auto capture_root=[&](int16_t selected) {
++  const auto root=RootSlot(selected);
++  if(root==EQ::invslot::slotCursor){click->cursor_participates=true;return true;}
++  if(click->roots.count(root))return true;
++  auto snapshot=OriginalItemSnapshot::Capture(root,c.m_inv.GetItem(root));
++  if(!snapshot)return false;
++  click->roots.emplace(root,std::move(snapshot));return true;
++ };
++ if(!capture_root(slot))return false;
++ if(context->consumer==Consumer::CombineIngredients) {
++  int need=10;
++  for(const auto candidate:c.GetInventorySlots()) {
++   if(need==0)break;
++   if(candidate==slot||!CarriedGeneral(c.m_inv,candidate))continue;
++   const auto* item=c.m_inv.GetItem(candidate);
++   if(!item||item->GetID()!=context->rule.ingredient_b||!item->IsStackable()||
++    item->GetCharges()<=0)continue;
++   const auto quantity=static_cast<int16_t>(std::min<int>(need,item->GetCharges()));
++   if(!capture_root(candidate))return false;
++   click->b.push_back({candidate,quantity,item});need-=quantity;
++  }
++  if(need)return false;
++  const auto* definition=database.GetItem(context->rule.inactive_item);
++  if(!definition||definition->Stackable||definition->MaxCharges<=0||
++   definition->Click.Effect!=7651||definition->Click.Type!=3||c.CheckLoreConflict(definition))return false;
++  std::memcpy(click->output_definition.data(),definition,sizeof(EQ::ItemData));
++  click->output.reset(database.CreateItem(definition,definition->MaxCharges));
++  if(!click->output||click->output->GetID()!=context->rule.inactive_item||
++   click->output->GetCharges()!=definition->MaxCharges)return false;
++  bool fits=CarriedGeneral(c.m_inv,slot);
++  const auto root=RootSlot(slot);
++  if(fits&&root!=slot) {
++   const auto* parent=c.m_inv.GetItem(root);
++   fits=parent&&parent->GetItem()&&
++    EQ::InventoryProfile::CanItemFitInContainer(definition,parent->GetItem());
++  }
++  if(fits)click->output_slot=slot;
++  else {click->output_slot=EQ::invslot::slotCursor;click->cursor_participates=true;}
++ }
++ if(click->cursor_participates) {
++  // Capture the complete actual queue before callbacks. Capacity qualification
++  // accounts for removing A only if A itself is the current cursor item.
++  const auto old_count=c.m_inv.CursorSize();
++  const auto add=context->consumer==Consumer::CombineIngredients?1:0;
++  const auto remove=slot==EQ::invslot::slotCursor?1:0;
++  if(old_count+add-remove>EQ::invbag::CURSOR_BAG_COUNT)return false;
++  for(auto it=c.m_inv.cursor_cbegin();it!=c.m_inv.cursor_cend();++it) {
++   auto snapshot=OriginalItemSnapshot::Capture(EQ::invslot::slotCursor,*it);
++   if(!snapshot)return false;
++   click->cursor.push_back(std::move(snapshot));
++  }
++ }
++ // Selected original trees are held through callbacks, cast, persistence and
++ // publication. Never lock a whole zone or unrelated Client/root.
++ click->fence.inventory_=&c.m_inv;click->fence.character_=c.CharacterID();
++ click->fence.cursor_=click->cursor_participates;
++ click->fence.native_packet_returned_=&click->packet->returned;
++ const auto protect=[&](const auto& self,const EQ::ItemInstance* item,unsigned depth)->bool {
++  // Existing native evolving/house identity writers are separate owners.
++  // Unsupported selected tree shapes reject BEFORE spend, never shed identity.
++  if(!item||item->IsEvolving()||item->GetEvolveUniqueID()||item->GetHousingHouseID()||item->GetHousingCrateID()||(depth&&item->IsClassBag()))return false;
++  click->fence.instances_.push_back(item);
++  for(const auto& child:*const_cast<EQ::ItemInstance*>(item)->GetContents())
++   if(child.second&&!self(self,child.second,depth+1))return false;
++  return true;
++ };
++ for(const auto& root:click->roots) {
++  click->fence.roots_.push_back(root.first);
++  if(!protect(protect,c.m_inv.GetItem(root.first),0))return false;
++ }
++ if(click->cursor_participates)for(auto it=c.m_inv.cursor_cbegin();it!=c.m_inv.cursor_cend();++it) {
++  // Native SaveCursor shares its durable queue range with cursor bag children.
++  // Non-container queue trees only; never assume unsupported queue capacity.
++  if((*it)->IsClassBag()||!(*it)->GetContents()->empty()||!protect(protect,*it,0))return false;
++ }
++ state_->click=std::move(click);state_->click->fence.Attach();
++ if(!Revalidate(c)){state_->click.reset();return false;}
++ return true;
++}
++bool NativeItemCustody::Revalidate(Client& c)const {
++ if(!state_->click||!zone||!c.task_state)return false;
++ const auto& f=*state_->click;
++ if(!f.session||c.InventorySessionReleaseTicket()!=f.session||!f.session->HeldFor(c))return false;
++ if(f.context.consumer==Consumer::CombineIngredients) {
++  const auto* definition=database.GetItem(f.context.rule.inactive_item);
++  if(!definition||std::memcmp(f.output_definition.data(),definition,sizeof(EQ::ItemData))||c.CheckLoreConflict(definition))return false;
++ }
++ if(c.GetID()!=f.caster||c.CharacterID()!=f.context.acceptance.character_id||
++  zone->GetZoneID()!=f.zone||zone->GetInstanceID()!=f.instance||
++  !f.clicked->Matches(f.slot,c.m_inv.GetItem(f.slot)))return false;
++ const auto* current=c.task_state->GetClientTaskInfo(TaskType::Quest,f.context.acceptance.slot);
++ if(!current||current->activity[0].activity_state!=ActivityCompleted||
++  current->activity[1].activity_state!=ActivityCompleted)return false;
++ if(!ForConsumer(database,f.context.acceptance,c.CharacterID(),TaskType::Quest,*current,f.context.consumer))return false;
++ for(const auto& entry:f.roots)
++  if(!entry.second->Matches(entry.first,c.m_inv.GetItem(entry.first)))return false;
++ if(f.cursor_participates) {
++  if(c.m_inv.CursorSize()!=static_cast<int>(f.cursor.size()))return false;
++  auto it=c.m_inv.cursor_cbegin();
++  for(const auto& snapshot:f.cursor) {
++   if(it==c.m_inv.cursor_cend()||!snapshot->Matches(EQ::invslot::slotCursor,*it))return false;
++   ++it;
++  }
++ }
++ return true;
++}
++bool NativeItemCustody::Click(Client& c,int16_t slot,const EQ::ItemInstance* actual,
++ uint32_t target,bool supported,ClickTicket& ticket) {
++ if(ticket.fence_)return false;
++ if(!actual||!OriginalClickItem(actual->GetID()))return true;
++ auto* owner=Owned(c);
++ if(!owner||!owner->Capture(c,slot,actual,target,supported))return false;
++ ticket.fence_=owner->state_->click->packet;return true;
++}
++bool NativeItemCustody::Launch(Client& c,int16_t slot,int32_t spell,uint32_t target,const ClickTicket& ticket) {
++ const auto* actual=c.m_inv.GetItem(slot);
++ if(!ticket.fence_)return !actual||!OriginalClickItem(actual->GetID());
++ auto* owner=Owned(c);if(!owner||!owner->state_->click)return false;
++ auto& f=*owner->state_->click;
++ if(f.packet!=ticket.fence_||f.sequence!=ticket.fence_->sequence||ticket.fence_->returned||
++  f.phase!=State::Phase::Captured||spell!=7651||
++  slot!=f.slot||target!=f.target||!owner->Revalidate(c))return false;
++ f.phase=State::Phase::LaunchReady;return true;
++}
++bool NativeItemCustody::Start(Client& c,int16_t slot,int32_t spell,uint32_t target) {
++ const auto* actual=c.m_inv.GetItem(slot);
++ auto* owner=Owned(c);
++ if(!owner||!owner->state_->click||owner->state_->click->slot!=slot)
++  return !actual||!OriginalClickItem(actual->GetID());
++ auto& f=*owner->state_->click;
++ if(f.phase!=State::Phase::LaunchReady||slot!=f.slot||spell!=7651||target!=f.target||!owner->Revalidate(c))return false;
++ f.fence.launched_=true;f.phase=State::Phase::Casting;return true;
++}
++bool NativeItemCustody::FinishEntry(Client& c,int16_t slot,int32_t spell,int16_t debit,FinishTicket& ticket) {
++ if(ticket.Selected())return false;
++ auto* owner=Owned(c);
++ if(!owner||!owner->state_->click||owner->state_->click->slot!=slot) {
++  const auto* actual=c.m_inv.GetItem(slot);return !actual||!OriginalClickItem(actual->GetID());
++ }
++ auto& f=*owner->state_->click;
++ if(f.slot!=slot||spell!=7651||f.phase!=State::Phase::Casting||debit!=f.slot||!owner->Revalidate(c))return false;
++ f.debit_slot=debit;f.phase=State::Phase::Finishing;ticket.packet_=f.packet;ticket.session_=f.session;ticket.original_=&c;ticket.character_=c.CharacterID();return true;
++}
++thread_local NativeItemCustody::DeleteScope* NativeItemCustody::DeleteScope::current_=nullptr;
++NativeItemCustody::DeleteScope::DeleteScope(const FinishTicket& ticket) noexcept
++ :ticket_(ticket),previous_(current_){current_=this;}
++NativeItemCustody::DeleteScope::~DeleteScope(){current_=previous_;}
++bool NativeItemCustody::StillLive(const FinishTicket& ticket) noexcept {
++ if(!ticket.Selected())return true;
++ auto* live=entity_list.GetClientByCharID(ticket.character_);
++ return live&&live==ticket.original_&&live->InventorySessionReleaseTicket()==ticket.session_&&
++  ticket.session_&&ticket.session_->HeldFor(*live);
++}
++bool NativeItemCustody::Finished(FinishTicket& ticket,bool success) {
++ if(!ticket.Selected())return true;
++ if(!StillLive(ticket))return false;
++ auto& c=*entity_list.GetClientByCharID(ticket.character_);
++ auto* owner=Owned(c);if(!owner||!owner->state_->click)return false;
++ auto& f=*owner->state_->click;
++ if(f.packet!=ticket.packet_||f.phase!=State::Phase::Finishing)return false;
++ f.phase=success?State::Phase::SpellSucceeded:State::Phase::Rejected;
++ if(!success)owner->state_->click.reset();
++ return true;
++}
++void NativeItemCustody::Cancel(Client& c) {
++ auto* owner=Owned(c);if(!owner||!owner->state_->click)return;
++ const auto phase=owner->state_->click->phase;
++ // CastSpell clears old native variables before accepting a LaunchReady cast.
++ // Unknown custody must survive cancellation and is not a retry opportunity.
++ if(phase==State::Phase::Casting||phase==State::Phase::Finishing||
++  phase==State::Phase::Rejected)owner->state_->click.reset();
++}
++bool NativeItemCustody::DeleteSelected(Client& c,int16_t slot,int16_t quantity,bool client_update,bool update_db) {
++ auto* scope=DeleteScope::current_;
++ if(!scope||scope->entered_||!scope->ticket_.Selected())return false; // exact ordinary non-Fire path
++ scope->entered_=true; // SAME one invocation; callbacks cannot borrow its authority
++ const auto& ticket=scope->ticket_;
++ // A selected native invocation must never fall through to the old live debit,
++ // even if a mutable spell callback canceled/replaced the owned cast context.
++ if(ticket.original_!=&c||!StillLive(ticket))return true;
++ auto* owner=Owned(c);if(!owner||!owner->state_->click)return true;
++ auto& f=*owner->state_->click;
++ if(f.packet!=ticket.packet_||f.phase!=State::Phase::SpellSucceeded||
++  f.slot!=slot||f.debit_slot!=slot||quantity!=1||!update_db||!f.original_use)return true;
++ if(!owner->Revalidate(c)){f.phase=State::Phase::Rejected;f.fence.Detach();return true;}
++ bool transaction=false;
++ bool known_commit=false;
++ std::optional<PublishedNativeUseView> handoff;
++ try {
++  f.staged=std::make_unique<EQ::InventoryProfile>();
++  f.staged->SetInventoryVersion(c.m_inv.InventoryVersion());
++  f.staged->SetGMInventory(c.m_inv.GMInventory());
++  for(const auto& root:f.roots) {
++   auto value=root.second->CloneValue();if(!value)throw std::runtime_error("Fire root clone failed");
++   if(f.staged->PushItem(root.first,value.get())!=root.first)throw std::runtime_error("Fire staged root failed");
++   value.release();
++  }
++  if(f.cursor_participates)for(const auto& snapshot:f.cursor) {
++   auto value=snapshot->CloneValue();if(!value)throw std::runtime_error("Fire cursor clone failed");
++   f.staged->m_cursor.push(value.get());value.release();
++  }
++  // These mutations touch only owned off-profile values, never selected live A/B.
++  if(!f.staged->DeleteItem(slot,1))throw std::runtime_error("Fire staged A not removed");
++  for(const auto& take:f.b) {
++   auto* before=f.staged->GetItem(take.slot);
++   if(!before||before->GetID()!=f.context.rule.ingredient_b||before->GetCharges()<take.quantity)
++    throw std::runtime_error("Fire staged B changed");
++   f.staged->DeleteItem(take.slot,take.quantity);
++  }
++  uint32_t output_item=0;int32_t output_serial=0;int16_t output_charges=0;
++  if(f.context.consumer==Consumer::CombineIngredients) {
++   if(!f.output)throw std::runtime_error("Fire canonical output absent");
++   output_item=f.output->GetID();output_serial=f.output->GetSerialNumber();output_charges=f.output->GetCharges();
++   if(f.output_slot==EQ::invslot::slotCursor)f.staged->m_cursor.push(f.output.get());
++   else if(f.staged->PushItem(f.output_slot,f.output.get())!=f.output_slot)
++    throw std::runtime_error("Fire staged output destination failed");
++   f.output.release();
++  }
++  // Reserve null root nodes and pin actual map-value addresses BEFORE SQL.
++  // std::map insertion elsewhere cannot invalidate these selected node addresses.
++  std::vector<std::pair<EQ::ItemInstance**,EQ::ItemInstance**>> exchanges;
++  exchanges.reserve(f.roots.size());
++  for(const auto& root:f.roots) {
++   auto live=c.m_inv.m_inv.find(root.first);
++   if(live==c.m_inv.m_inv.end())throw std::runtime_error("Fire live root node disappeared");
++   auto staged=f.staged->m_inv.emplace(root.first,nullptr).first;
++   exchanges.emplace_back(&live->second,&staged->second);
++  }
++  // Prepare only the native selected-slot deltas, not a replay of the queue.
++  // Serialize retains pointers to staged instances that become the SAME live
++  // instances at publication. No cloned packet-only output identity is minted.
++  f.packets.reserve(f.b.size()+3);
++  const auto packet=[&](int16_t changed,const EQ::ItemInstance* item,ItemPacketType type) {
++   if(item) {
++    const auto bytes=item->Serialize(changed);
++    auto p=std::make_unique<EQApplicationPacket>(OP_ItemPacket,bytes.size()+sizeof(ItemPacket_Struct));
++    auto* wire=reinterpret_cast<ItemPacket_Struct*>(p->pBuffer);wire->PacketType=type;
++    std::memcpy(wire->SerializedItem,bytes.data(),bytes.size());f.packets.push_back(std::move(p));
++   }else {
++    auto p=std::make_unique<EQApplicationPacket>(OP_MoveItem,sizeof(MoveItem_Struct));
++    auto* wire=reinterpret_cast<MoveItem_Struct*>(p->pBuffer);
++    wire->from_slot=changed;wire->to_slot=0xFFFFFFFF;wire->number_in_stack=0xFFFFFFFF;
++    f.packets.push_back(std::move(p));
++   }
++  };
++  if(client_update) {
++   packet(slot,slot==EQ::invslot::slotCursor?nullptr:f.staged->GetItem(slot),ItemPacketTrade);
++   for(const auto& take:f.b)packet(take.slot,f.staged->GetItem(take.slot),ItemPacketTrade);
++   if(output_item&&f.output_slot==EQ::invslot::slotCursor) {
++    auto it=f.staged->m_cursor.end();--it;packet(EQ::invslot::slotCursor,*it,ItemPacketLimbo);
++   }
++  }
++  f.save_results.assign(f.roots.size()+(f.cursor_participates?1:0),0);
++  const auto original=*f.original_use;const auto sequence=f.sequence;
++  const auto output_slot=f.output_slot;
++  const std::array<uint32_t,3> achievement_items{original.item_id,
++   f.context.consumer==Consumer::CombineIngredients?f.context.rule.ingredient_b:0,output_item};
++  // No callbacks/sends/event pumping in the following transaction/publication.
++  const auto query=[&](const std::string& sql) {
++   if(database.GetStatus()!=DBcore::Connected)throw std::runtime_error("Fire disconnected");
++   auto result=database.QueryDatabase(sql,false);
++   if(!result.Success())throw std::runtime_error("Fire strict native query failed");
++   return result;
++  };
++  const auto number=[](const char* value)->uint64_t {
++   if(!value)throw std::runtime_error("Fire null native field");return std::stoull(value);
++  };
++  const auto hex=[](const uint8_t* value,size_t size) {
++   const char* digits="0123456789ABCDEF";std::string out;out.reserve(size*2);
++   for(size_t i=0;i<size;++i){out+=digits[value[i]>>4];out+=digits[value[i]&15];}return out;
++  };
++  auto session=query("SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
++  if(session.RowCount()!=1||number(session.begin()[1])||number(session.begin()[2])!=1)
++   throw std::runtime_error("Fire writer requires a fresh native transaction");
++  const auto connection=number(session.begin()[0]);
++  if(!database.TransactionBeginStrict().Success())throw std::runtime_error("Fire strict begin failed");
++  transaction=true;
++  const auto& lease=*f.lease;const auto actor=std::to_string(c.CharacterID());
++  auto engines=query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','character_data','housing_inventory_sessions','housing_live_item_leases')");
++  if(engines.RowCount()!=1||number(engines.begin()[0])!=4)throw std::runtime_error("Fire native foundation differs");
++  auto character=query("SELECT id FROM character_data WHERE id="+actor+" AND account_id="+std::to_string(c.AccountID())+" AND deleted_at IS NULL FOR UPDATE");
++  if(character.RowCount()!=1)throw std::runtime_error("Fire native actor changed");
++  auto held=query("SELECT account_id,epoch,HEX(token),HEX(process_key),HEX(client_key),zone_id,instance_id,active FROM housing_inventory_sessions WHERE character_id="+actor+" FOR UPDATE");
++  if(held.RowCount()!=1)throw std::runtime_error("Fire inventory session absent");
++  auto row=held.begin();
++  if(!lease.active||number(row[0])!=lease.actor.account_id||number(row[1])!=lease.epoch||!row[2]||
++   std::string(row[2])!=hex(lease.token.data(),lease.token.size())||!row[3]||
++   std::string(row[3])!=hex(reinterpret_cast<const uint8_t*>(lease.owner.process_key.data()),lease.owner.process_key.size())||!row[4]||
++   std::string(row[4])!=hex(reinterpret_cast<const uint8_t*>(lease.owner.client_key.data()),lease.owner.client_key.size())||
++   number(row[5])!=lease.owner.zone_id||number(row[6])!=lease.owner.instance_id||number(row[7])!=1)
++   throw std::runtime_error("Fire inventory lease differs");
++  auto custody=query("SELECT account_id,pending_key FROM housing_live_item_leases WHERE character_id="+actor+" FOR UPDATE");
++  if(custody.RowCount()>1||(custody.RowCount()&&
++   (number(custody.begin()[0])!=c.AccountID()||(custody.begin()[1]&&*custody.begin()[1]))))
++   throw std::runtime_error("Fire inventory has pending custody");
++  // Lock and compare ONLY the selected native durable rows. Existing projection
++  // semantics supply NULL/custom data/color/ornament/augment checks; no new codec.
++  std::string where;
++  const auto clause=[&](const std::string& term){if(!where.empty())where+=" OR ";where+=term;};
++  for(const auto& root:f.roots) {
++   clause("slot_id="+std::to_string(root.first));
++   const auto begin=EQ::InventoryProfile::CalcSlotId(root.first,uint8_t(0));
++   if(begin!=INVALID_INDEX)clause("slot_id BETWEEN "+std::to_string(begin)+" AND "+std::to_string(begin+EQ::invbag::SLOT_COUNT-1));
++  }
++  if(f.cursor_participates){clause("slot_id="+std::to_string(EQ::invslot::slotCursor));clause("slot_id BETWEEN "+std::to_string(EQ::invbag::CURSOR_BAG_BEGIN)+" AND "+std::to_string(EQ::invbag::CURSOR_BAG_END));}
++  auto persisted=query("SELECT "+std::string(Housing::InventoryRowDB::Columns)+" FROM inventory WHERE character_id="+actor+" AND ("+where+") ORDER BY slot_id FOR UPDATE");
++  std::map<int16_t,Housing::LiveItems::InventoryRow> roots;
++  std::vector<Housing::LiveItems::InventoryRow> children;
++  std::map<int16_t,Housing::LiveItems::InventoryRow> cursor;
++  for(auto sqlrow=persisted.begin();sqlrow!=persisted.end();++sqlrow) {
++   auto value=Housing::InventoryRowDB::Decode(sqlrow);const auto physical=int16_t(value.values.slot_id);
++   if(f.cursor_participates&&(physical==EQ::invslot::slotCursor||EQ::ValueWithin(physical,EQ::invbag::CURSOR_BAG_BEGIN,EQ::invbag::CURSOR_BAG_END)))cursor.emplace(physical,std::move(value));
++   else if(f.roots.count(physical))roots.emplace(physical,std::move(value));
++   else children.push_back(std::move(value));
++  }
++  for(auto& child:children) {
++   const auto parent=EQ::InventoryProfile::CalcSlotId(int16_t(child.values.slot_id));auto at=roots.find(parent);
++   if(at==roots.end())throw std::runtime_error("Fire native orphan child");
++   child.values.slot_id=EQ::InventoryProfile::CalcBagIdx(int16_t(child.values.slot_id));at->second.children.push_back(std::move(child));
++  }
++  using Scope=Housing::InventoryProjection::ReconstructionScope;
++  if(roots.size()!=f.roots.size())throw std::runtime_error("Fire native root universe differs");
++  for(auto& root:roots)if(!Housing::InventoryProjection::Matches(root.second,*c.m_inv.GetItem(root.first),Scope::CharacterProfile))
++   throw std::runtime_error("Fire native root preimage differs");
++  if(f.cursor_participates) {
++   if(cursor.size()!=f.cursor.size())throw std::runtime_error("Fire native cursor universe differs");
++   auto it=c.m_inv.cursor_cbegin();
++   for(size_t i=0;i<f.cursor.size();++i,++it) {
++    const auto physical=i==0?EQ::invslot::slotCursor:int16_t(EQ::invbag::CURSOR_BAG_BEGIN+i);
++    auto at=cursor.find(physical);
++    if(at==cursor.end()||!Housing::InventoryProjection::Matches(at->second,**it,Scope::CharacterProfile))
++     throw std::runtime_error("Fire native cursor preimage differs");
++   }
++  }
++  if(!owner->Revalidate(c))throw std::runtime_error("Fire selected frame changed before save");
++  f.persistence_entered=true;f.fence.writer_=&database;
++  size_t step=0;
++  for(const auto& root:f.roots) {
++   const bool saved=database.SaveInventory(c.CharacterID(),f.staged->GetItem(root.first),root.first);
++   f.save_results[step++]=saved?1:2;if(!saved)throw std::runtime_error("Fire selected root save failed");
++  }
++  if(f.cursor_participates) {
++   auto begin=f.staged->cursor_cbegin(),end=f.staged->cursor_cend();
++   const bool saved=database.SaveCursor(c.CharacterID(),begin,end);
++   f.save_results[step++]=saved?1:2;if(!saved)throw std::runtime_error("Fire whole cursor save failed");
++  }
++  f.fence.writer_=nullptr;
++  auto final_session=query("SELECT CONNECTION_ID(),@@in_transaction");
++  if(final_session.RowCount()!=1||number(final_session.begin()[0])!=connection||number(final_session.begin()[1])!=1||database.TransactionStrictFailed())
++   throw std::runtime_error("Fire strict session changed");
++  f.commit_attempted=true;
++  const auto commit=database.TransactionCommitStrict();transaction=false;
++  if(!commit.Success())throw std::runtime_error("Fire COMMIT not known successful");
++  known_commit=true;
++  // NO ALLOCATION, callbacks, sends, SQL, lookup or fallible native mutation.
++  // The preallocated map values and complete list change ownership by noexcept
++  // swaps only. Old original trees stay owned in f.staged until normal teardown.
++  for(const auto& exchange:exchanges)std::swap(*exchange.first,*exchange.second);
++  if(f.cursor_participates)c.m_inv.m_cursor.Swap(f.staged->m_cursor);
++  f.phase=State::Phase::Committed;f.fence.Detach();
++  const PublishedNativeUseView issued{original,sequence,output_item,output_serial,output_slot,output_charges};
++  for(auto& prepared:f.packets) {
++   auto* send=prepared.release();c.FastQueuePacket(&send);safe_delete(send);
++  }
++  // Beyond the first mutable callback use only stack values and the existing
++  // independent native session ticket/registry lifetime check, never f/owner.
++  for(const auto item:achievement_items)if(item) {
++   c.UpdateAchievementForOwnItem(item);
++   if(!StillLive(ticket))return true;
++  }
++  handoff=issued; // stack values only; no selected/owner state after callbacks.
++ }catch(...) {
++  if(known_commit) {
++   // Publication above cannot throw. A later packet failure must not replay a
++   // committed debit, republish output, create a receipt or run the old branch.
++   if(StillLive(ticket))c.RejectInventorySessionAdmission();
++   return true;
++  }
++  f.fence.writer_=nullptr;
++  if(transaction)database.TransactionRollbackStrict();
++  if(f.persistence_entered||f.commit_attempted) {
++   f.phase=State::Phase::Unknown;
++   c.RejectInventorySessionAdmission(); // existing lease retained to full delete
++  }else {f.phase=State::Phase::Rejected;f.fence.Detach();}
++  return true;
++ }
++ // Deliberately outside catch: even an exception from the mutable sink must
++ // never send control back into code that dereferences Client or held trees.
++ const auto& published=*handoff;
++ PublishedNativeUse receipt(c,published.original,published.native_click_sequence,
++  published.published_output_item,published.published_output_serial,
++  published.published_output_slot,published.published_output_charges);
++ OnOriginalNativeUsePublished(c,receipt);
++ return true;
++}
++
++}
+--- /dev/null
++++ b/zone/fire_native_item_custody.h
+@@ -0,0 +1,73 @@
++#pragma once
++#include <cstdint>
++#include <memory>
++class Client;
++namespace EQEmu::SharedCore::InventorySessions {class ZoneReservation;}
++namespace EQ { class ItemInstance; }
++namespace FirePersonalOccurrenceSource {
++struct Binding;
++// Client-owned, feature-private native input state. No packet/Lua constructor.
++class NativeItemCustody final {
++ struct PacketFence {uint64_t sequence=0;bool returned=false;};
++public:
++ class ClickTicket final {
++  friend class NativeItemCustody;
++  std::shared_ptr<PacketFence> fence_;
++ public:
++  ClickTicket()=default;
++  ~ClickTicket(){if(fence_)fence_->returned=true;}
++  ClickTicket(const ClickTicket&)=delete;
++  ClickTicket& operator=(const ClickTicket&)=delete;
++ };
++public:
++ class FinishTicket final {
++  friend class NativeItemCustody;
++  std::shared_ptr<PacketFence> packet_;
++  std::shared_ptr<EQEmu::SharedCore::InventorySessions::ZoneReservation> session_;
++  const Client* original_=nullptr;
++  uint32_t character_=0;
++ public:
++  FinishTicket()=default;
++  FinishTicket(const FinishTicket&)=delete;
++  FinishTicket& operator=(const FinishTicket&)=delete;
++  bool Selected()const noexcept{return bool(packet_);}
++ };
++ // The actual ordinary native charge call enters this stack scope. Empty
++ // tickets are ordinary calls. Only FinishEntry may fill a selected ticket.
++ class DeleteScope final {
++  friend class NativeItemCustody;
++  const FinishTicket& ticket_;
++  DeleteScope* previous_;
++  bool entered_=false;
++  static thread_local DeleteScope* current_;
++ public:
++  explicit DeleteScope(const FinishTicket&) noexcept;
++  ~DeleteScope();
++  DeleteScope(const DeleteScope&)=delete;
++  DeleteScope& operator=(const DeleteScope&)=delete;
++ };
++private:
++ struct State;
++ std::unique_ptr<State> state_;
++ NativeItemCustody();
++ static NativeItemCustody* Owned(Client&);
++ bool Capture(Client&,int16_t,const EQ::ItemInstance*,uint32_t,bool);
++ bool Revalidate(Client&)const;
++public:
++ ~NativeItemCustody();
++ NativeItemCustody(const NativeItemCustody&)=delete;
++ NativeItemCustody& operator=(const NativeItemCustody&)=delete;
++ static void Accepted(Client&,const Binding&);
++ static bool ReloadAccepted(Client&);
++ // Return true for ordinary items or a qualified selected input. False means
++ // reject before any spend; never fall through to the old Fire cast/debit.
++ static bool Click(Client&,int16_t,const EQ::ItemInstance*,uint32_t,bool,ClickTicket&);
++ static bool Launch(Client&,int16_t,int32_t,uint32_t,const ClickTicket&);
++ static bool Start(Client&,int16_t,int32_t,uint32_t);
++ static bool FinishEntry(Client&,int16_t,int32_t,int16_t,FinishTicket&);
++ static bool Finished(FinishTicket&,bool);
++ static bool StillLive(const FinishTicket&) noexcept;
++ static bool DeleteSelected(Client&,int16_t,int16_t,bool,bool);
++ static void Cancel(Client&);
++};
++}
+--- /dev/null
++++ b/zone/fire_native_published_use.h
+@@ -0,0 +1,53 @@
++#pragma once
++// Feature-private SOURCE INTERFACE ONLY. No writer or callback is installed.
++#include "fire_personal_item_use.h"
++#include <cstdint>
++#include <optional>
++#include <type_traits>
++class Client;
++namespace FirePersonalOccurrenceSource {
++class NativeItemCustody;
++struct PublishedNativeUseView {
++ OriginalItemUse original; // SAME pre-callback native item-use capture, by value
++ std::uint64_t native_click_sequence;
++ std::uint32_t published_output_item;
++ std::int32_t published_output_serial;
++ std::int16_t published_output_slot;
++ std::int16_t published_output_charges;
++};
++static_assert(std::is_trivially_copyable<PublishedNativeUseView>::value,
++ "The post-commit handoff must not allocate or clone native trees");
++// Created ONLY by the selected custody writer after strict known COMMIT and
++// allocation-free memory publication. Context/SpellFinished/SaveInventory alone
++// MUST NEVER construct it. Failed/unknown persistence produces no such object.
++class PublishedNativeUse final {
++ friend class NativeItemCustody;
++ const Client* owner_;
++ PublishedNativeUseView view_;
++ bool taken_=false;
++ PublishedNativeUse(const Client& owner,const OriginalItemUse& original,
++  std::uint64_t sequence,std::uint32_t output_item,std::int32_t output_serial,
++  std::int16_t output_slot,std::int16_t output_charges) noexcept
++  :owner_(&owner),view_{original,sequence,output_item,output_serial,output_slot,output_charges} {}
++public:
++ PublishedNativeUse()=delete;
++ PublishedNativeUse(const PublishedNativeUse&)=delete;
++ PublishedNativeUse& operator=(const PublishedNativeUse&)=delete;
++ PublishedNativeUse(PublishedNativeUse&&)=delete;
++ PublishedNativeUse& operator=(PublishedNativeUse&&)=delete;
++ // Caller seals the one native producer attempt BEFORE any mutable callback,
++ // allocation, spawn, counter increment or query. View copies are evidence for
++ // that attempt, never authority to construct or replay another receipt.
++ std::optional<PublishedNativeUseView> Take(const Client& actual_owner) noexcept {
++  if(taken_ || owner_!=&actual_owner)return std::nullopt;
++  taken_=true;
++  return view_;
++ }
++};
++// Spells can implement this exact native sink independently. The writer will
++// invoke it once at its final publication boundary, then MUST NOT dereference
++// Client/custody/selected objects after this mutable producer callback.
++// CombineIngredients never spawns or credits activity2. ActivateConstruct may
++// proceed only through the existing held placement/lifetime/cohort predicates.
++void OnOriginalNativeUsePublished(Client& actual_owner,PublishedNativeUse& receipt);
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_original_construct_death.h
+@@ -0,0 +1,44 @@
++#pragma once
++#include "fire_original_construct_producer.h"
++#include <memory>
++class Zone;
++namespace FirePersonalOccurrenceSource {
++class OriginalConstructNativeDeath;
++// Finite native-event queue. No timer, retry, history scan or public script API.
++class OriginalConstructDeathQueue final {
++ friend class OriginalConstructNativeDeath;
++ friend class ::EntityList;
++ friend class ::Zone;
++ struct Lifetime {const Zone* owner;bool active=true;};
++ static std::shared_ptr<Lifetime> lifetime_;
++ static std::shared_ptr<Lifetime> ForActualZone(const Zone*);
++ struct Pending {
++  std::shared_ptr<OriginalConstructAttempt> attempt;
++  std::shared_ptr<Lifetime> lifetime;
++  const Zone* zone_owner;
++  uint32_t zone_id,instance_id;
++  Pending* next=nullptr;
++ };
++ static Pending* head_;
++ static Pending* tail_;
++ static void Push(Pending*) noexcept;
++ static void Drain(); // at end of normal EntityList::MobProcess, outside actor stacks
++ static void Discard() noexcept; // Zone destruction: no late event recreation
++};
++class OriginalConstructNativeDeath final {
++ friend class ::NPC;
++ std::shared_ptr<OriginalConstructAttempt> attempt_;
++ std::unique_ptr<OriginalConstructDeathQueue::Pending> pending_;
++ NPC* actor_=nullptr; // used only during the genuine owning NPC::Death call
++ uint32_t killed_entity_=0,zone_=0,instance_=0;
++ bool entered_=false,completed_=false;
++ explicit OriginalConstructNativeDeath(NPC&);
++ void SealSuccess(NPC&,uint32_t actual_native_killed_entity);
++public:
++ ~OriginalConstructNativeDeath();
++ OriginalConstructNativeDeath(const OriginalConstructNativeDeath&)=delete;
++ OriginalConstructNativeDeath& operator=(const OriginalConstructNativeDeath&)=delete;
++ OriginalConstructNativeDeath(OriginalConstructNativeDeath&&)=delete;
++ OriginalConstructNativeDeath& operator=(OriginalConstructNativeDeath&&)=delete;
++};
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_original_construct_hail.h
+@@ -0,0 +1,9 @@
++#pragma once
++#include "fire_original_construct_producer.h"
++namespace FirePersonalOccurrenceSource {
++// Called only at the existing targeted, visible, in-range, unengaged NPC say path.
++class OriginalConstructNativeHail final {
++public:
++ static void OnActualTargetedSay(Client&,NPC&,const char* actual_message);
++};
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_original_construct_producer.h
+@@ -0,0 +1,103 @@
++// SOURCE ONLY: original transient construct producer; no registration/runtime authority.
++#pragma once
++#include "zone/entity.h"
++#include "zone/client.h"
++#include "zone/npc.h"
++#include "fire_personal_item_use.h"
++#include "fire_personal_construct_identity.h"
++#include "fire_original_final_hail_frame.h"
++#include <cmath>
++namespace FirePersonalOccurrenceSource {
++enum class OriginalConstructDeathResult { Hold, SubmittedWithoutCommitReceipt, CommittedAtOriginalSave };
++struct OriginalConstructPlacement {
++ bool selected=false; // original supported-region/position remains owner-unbound
++ glm::vec4 point{};
++};
++class OriginalConstructAttempt {
++ friend struct OriginalConstructRegistration;
++ friend void CaptureConstructBeforeOriginalSpawnCallbacks(NPC*);
++ friend class PublishedNativeUseSink;
++ friend class OriginalConstructNativeDeath;
++ friend class ConstructDeathReceiptStore;
++ friend class OriginalConstructDeathQueue;
++ friend class OriginalConstructNativeHail;
++ OriginalItemUse original_;
++ uint64_t native_click_sequence_=0;
++ bool persisted_death_=false;
++ bool attempted_=false,caster_death_submitted_=false,caster_death_committed_=false,death_entry_active_=false,death_success_sealed_=false;
++ NPC* original_object_=nullptr; // only compare during genuine live native death
++ std::optional<ConstructIdentity> captured_;
++public:
++ explicit OriginalConstructAttempt(const OriginalItemUse& original):original_(original) {}
++ OriginalConstructAttempt(const OriginalConstructAttempt&)=delete;
++ OriginalConstructAttempt& operator=(const OriginalConstructAttempt&)=delete;
++};
++struct OriginalConstructRegistration {
++ OriginalConstructAttempt& attempt;
++ NPC* expected_object;
++ uint32_t actual_zone,actual_instance;
++ bool entered=false,captured_before_callbacks=false;
++};
++inline thread_local OriginalConstructRegistration* original_construct_registration=nullptr;
++class OriginalConstructRegistrationScope {
++ OriginalConstructRegistration* previous_;
++public:
++ explicit OriginalConstructRegistrationScope(OriginalConstructRegistration& f)
++  :previous_(original_construct_registration) { original_construct_registration=&f; }
++ ~OriginalConstructRegistrationScope() { original_construct_registration=previous_; }
++ OriginalConstructRegistrationScope(const OriginalConstructRegistrationScope&)=delete;
++ OriginalConstructRegistrationScope& operator=(const OriginalConstructRegistrationScope&)=delete;
++};
++// Native AddNPC seam: AFTER its actual ID/list insertion, BEFORE ScanCloseMobs/EVENT_SPAWN.
++inline void CaptureConstructBeforeOriginalSpawnCallbacks(NPC* actual_registered) {
++ auto* f=original_construct_registration;
++ if(!f || f->entered || actual_registered!=f->expected_object) return;
++ f->entered=true;
++ auto captured=CaptureActualReturnedConstruct(f->attempt.original_,*actual_registered,
++  f->actual_zone,f->actual_instance);
++ if(!captured) return;
++ f->attempt.original_object_=actual_registered;
++ f->attempt.captured_=*captured;
++ f->captured_before_callbacks=true;
++}
++struct OriginalConstructDeathFrame {
++ Binding original;
++ Client* client;
++ bool entered=false,save_observed=false,committed=false;
++};
++inline thread_local OriginalConstructDeathFrame* original_construct_death_frame=nullptr;
++class OriginalConstructDeathScope {
++ OriginalConstructDeathFrame* previous_;
++public:
++ explicit OriginalConstructDeathScope(OriginalConstructDeathFrame& f)
++  :previous_(original_construct_death_frame) { original_construct_death_frame=&f; }
++ ~OriginalConstructDeathScope() { original_construct_death_frame=previous_; }
++ OriginalConstructDeathScope(const OriginalConstructDeathScope&)=delete;
++ OriginalConstructDeathScope& operator=(const OriginalConstructDeathScope&)=delete;
++};
++inline OriginalConstructDeathFrame* ClaimOriginalConstructDeathUpdate(Client* client,TaskType type,
++ const ClientTaskInformation& current,int goal,int count) {
++ auto* f=original_construct_death_frame;
++ if(!f || f->entered || f->client!=client || goal!=2 || count!=1 ||
++  !MatchesLocal(f->original,client->CharacterID(),type,current) ||
++  current.activity[2].activity_state!=ActivityActive) return nullptr;
++ f->entered=true;return f;
++}
++inline void ObserveOriginalConstructDeathSave(OriginalConstructDeathFrame* f,Database& db,Client* client,
++ TaskType type,const ClientTaskInformation& current,bool actual_existing_save_result) {
++ if(!f || f->save_observed || f->client!=client) return;
++ f->save_observed=true;
++ if(!actual_existing_save_result || !MatchesLocal(f->original,client->CharacterID(),type,current) ||
++  current.activity[2].activity_state!=ActivityCompleted ||
++  current.activity[3].activity_state!=ActivityActive) return;
++ auto matched=PersistedMatches(db,f->original,false);
++ if(!matched || !*matched) return;
++ auto row=db.QueryDatabase(fmt::format(
++  "SELECT 1 FROM character_activities WHERE charid={} AND taskid={} "
++  "AND activityid=2 AND donecount=1 AND completed=1",
++  f->original.character_id,f->original.task_id));
++ f->committed=row.Success() && row.RowCount()==1;
++}
++// Other eligible original personal participants, especially920169, need their OWN accepted Binding/one-use claim.
++// This producer neither selects that cohort nor converts the encounter to a shared task or one fight per player.
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_original_item_snapshot.h
+@@ -0,0 +1,115 @@
++#pragma once
++// Feature-private Fire custody component. The native caller must capture before
++// mutable callbacks and revalidate before staging. This is not a debit receipt.
++#include "../common/item_instance.h"
++#include <array>
++#include <cstring>
++#include <map>
++#include <memory>
++#include <tuple>
++#include <type_traits>
++
++namespace FirePersonalOccurrenceSource {
++class NativeItemCustody;
++class OriginalItemSnapshot final {
++ friend class NativeItemCustody;
++ struct Node {
++  const EQ::ItemInstance* original = nullptr; // comparison only, never dereferenced
++  std::unique_ptr<EQ::ItemInstance> value;
++  std::array<unsigned char,sizeof(EQ::ItemData)> definition{};
++  std::array<unsigned char,sizeof(EQ::ItemData)> scaled_definition{};
++  std::map<uint8,std::unique_ptr<Node>> children;
++ };
++ int16 slot_;
++ std::unique_ptr<Node> root_;
++ OriginalItemSnapshot(int16 slot,std::unique_ptr<Node> root)
++  :slot_(slot),root_(std::move(root)){}
++ OriginalItemSnapshot(const OriginalItemSnapshot&)=delete;
++ OriginalItemSnapshot& operator=(const OriginalItemSnapshot&)=delete;
++
++ static bool SameTimer(const Timer& a,const Timer& b) noexcept {
++  return std::tie(a.start_time,a.timer_time,a.enabled,a.set_at_trigger,a.pUseAcurateTiming)==
++   std::tie(b.start_time,b.timer_time,b.enabled,b.set_at_trigger,b.pUseAcurateTiming);
++ }
++ static bool SameValues(const EQ::ItemInstance& a,const EQ::ItemInstance& b) noexcept {
++  const auto values=[](const EQ::ItemInstance& i) {
++   const auto& e=i.m_evolving_details;
++   return std::tie(i.m_use_type,i.m_charges,i.m_price,i.m_color,i.m_merchantslot,
++    i.m_currentslot,i.m_attuned,i.m_merchantcount,i.m_SerialNumber,i.m_exp,
++    i.m_evolveLvl,i.m_scaling,i.m_ornamenticon,i.m_ornamentidfile,
++    i.m_new_id_file,i.m_ornament_hero_model,i.m_recast_timestamp,
++    i.m_housing_estate_id,i.m_housing_house_id,i.m_housing_crate_id,
++    i.m_task_delivered_count,e.id,e.character_id,e.item_id,e.activated,
++    e.equipped,e.current_amount,e.progression,e.final_item_id,e.deleted_at);
++  };
++  if(values(a)!=values(b)||a.m_custom_data!=b.m_custom_data||
++   a.m_timers.size()!=b.m_timers.size())return false;
++  auto ai=a.m_timers.cbegin(),bi=b.m_timers.cbegin();
++  for(;ai!=a.m_timers.cend();++ai,++bi)
++   if(ai->first!=bi->first||!SameTimer(ai->second,bi->second))return false;
++  return true;
++ }
++ // The existing native copy constructor omits m_task_delivered_count. Correct
++ // only this feature's owned copy, recursively; do not change global Clone().
++ static bool CompleteClone(EQ::ItemInstance& copy,const EQ::ItemInstance& source) {
++  copy.m_task_delivered_count=source.m_task_delivered_count;
++  // Clone normally omits null map entries. Preserve those keys as well.
++  for(const auto& entry:source.m_contents) {
++   auto found=copy.m_contents.find(entry.first);
++   if(!entry.second) {
++    if(found==copy.m_contents.end())copy.m_contents.emplace(entry.first,nullptr);
++    else if(found->second)return false;
++   }else if(found==copy.m_contents.end()||!found->second||
++    !CompleteClone(*found->second,*entry.second))return false;
++  }
++  return copy.m_contents.size()==source.m_contents.size();
++ }
++ static std::unique_ptr<Node> CaptureNode(const EQ::ItemInstance* actual) {
++  if(!actual)return {};
++  static_assert(std::is_trivially_copyable<EQ::ItemData>::value,
++   "Native definition snapshots require actual object representation");
++  auto n=std::make_unique<Node>();n->original=actual;n->value.reset(actual->Clone());
++  if(!n->value||!CompleteClone(*n->value,*actual))return {};
++  if(actual->m_item)std::memcpy(n->definition.data(),actual->m_item,sizeof(EQ::ItemData));
++  if(actual->m_scaledItem)std::memcpy(n->scaled_definition.data(),actual->m_scaledItem,sizeof(EQ::ItemData));
++  for(const auto& entry:actual->m_contents) {
++   auto child=CaptureNode(entry.second);
++   if(entry.second&&!child)return {};
++   n->children.emplace(entry.first,std::move(child));
++  }
++  return n;
++ }
++ static bool MatchesNode(const Node& n,const EQ::ItemInstance* live) noexcept {
++  if(!live||live!=n.original||!n.value||!SameValues(*live,*n.value)||
++   bool(live->m_item)!=bool(n.value->m_item)||
++   bool(live->m_scaledItem)!=bool(n.value->m_scaledItem)||
++   live->m_contents.size()!=n.children.size())return false;
++  // Compare to bytes captured from the original, not padding reconstructed by
++  // Clone. Changes to an original definition also invalidate this frame.
++  if(live->m_item&&std::memcmp(n.definition.data(),live->m_item,sizeof(EQ::ItemData)))return false;
++  if(live->m_scaledItem&&std::memcmp(n.scaled_definition.data(),live->m_scaledItem,sizeof(EQ::ItemData)))return false;
++  auto it=live->m_contents.cbegin();
++  for(const auto& entry:n.children) {
++   if(it==live->m_contents.cend()||it->first!=entry.first)return false;
++   if(entry.second) {if(!MatchesNode(*entry.second,it->second))return false;}
++   else if(it->second)return false;
++   ++it;
++  }
++  return true;
++ }
++ static std::unique_ptr<OriginalItemSnapshot> Capture(int16 slot,const EQ::ItemInstance* actual) {
++  auto root=CaptureNode(actual);if(!root)return {};
++  return std::unique_ptr<OriginalItemSnapshot>(new OriginalItemSnapshot(slot,std::move(root)));
++ }
++ bool Matches(int16 slot,const EQ::ItemInstance* live)const noexcept {
++  return slot==slot_&&root_&&MatchesNode(*root_,live);
++ }
++ // Each returned clone is an owned value only. It never proves object identity.
++ std::unique_ptr<EQ::ItemInstance> CloneValue()const {
++  if(!root_||!root_->value)return {};
++  std::unique_ptr<EQ::ItemInstance> copy(root_->value->Clone());
++  if(!copy||!CompleteClone(*copy,*root_->value))return {};
++  return copy;
++ }
++};
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_personal_construct_identity.h
+@@ -0,0 +1,42 @@
++#pragma once
++#include "fire_personal_item_use.h"
++#include "zone/npc.h"
++// REVIEW-ONLY finite Fire construct identity. No spawn, inventory mutation, task credit or reward.
++namespace FirePersonalOccurrenceSource {
++struct ConstructIdentity {
++ OriginalItemUse original_activation;
++ uint32_t entity_id;
++ uint32_t npc_type_id;
++ uint32_t spawn_point_id;
++ uint32_t zone_id;
++ uint32_t instance_id;
++};
++// Only the actual native create operation's returned actor may be passed by the private owner.
++// Lookup by name/type, quest history or a later observed actor is not this capture seam.
++inline std::optional<ConstructIdentity> CaptureActualReturnedConstruct(
++ const OriginalItemUse& original,NPC& actual_returned,uint32_t actual_zone,uint32_t actual_instance) {
++ if(original.personal.consumer!=Consumer::ActivateConstruct ||
++  original.item_id!=original.personal.rule.inactive_item || !actual_returned.GetID() ||
++  actual_returned.GetNPCTypeID()!=original.personal.rule.construct_npc ||
++  actual_zone!=original.personal.rule.encounter_zone || actual_instance!=0 ||
++  original.actual_zone!=actual_zone || original.actual_instance!=actual_instance)
++  return std::nullopt;
++ return ConstructIdentity{original,actual_returned.GetID(),actual_returned.GetNPCTypeID(),
++  actual_returned.GetSpawnPointID(),actual_zone,actual_instance};
++}
++// Only an identity predicate inside the actual native death-complete call, not a commit/credit API.
++inline bool MatchesActualConstructDeath(const ConstructIdentity& original,NPC& actual_dead,
++ uint32_t actual_killed_entity,uint32_t actual_zone,uint32_t actual_instance) {
++ return actual_killed_entity!=0 && actual_killed_entity==original.entity_id &&
++  actual_dead.GetID()==original.entity_id && actual_dead.GetNPCTypeID()==original.npc_type_id &&
++  actual_dead.GetSpawnPointID()==original.spawn_point_id && actual_zone==original.zone_id &&
++  actual_instance==original.instance_id;
++}
++// Caster-only source context. Does NOT select/implement original 920169 eligible-group credit.
++inline std::optional<Context> CasterDeathAcceptanceContext(Database& db,
++ const ConstructIdentity& original,uint32_t actual_character_id,TaskType actual_type,
++ const ClientTaskInformation& actual_personal) {
++ return ForConsumer(db,original.original_activation.personal.acceptance,actual_character_id,
++  actual_type,actual_personal,Consumer::ActualConstructDeath);
++}
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_personal_item_use.h
+@@ -0,0 +1,42 @@
++#pragma once
++#include "fire_personal_occurrence.h"
++#include "common/item_instance.h"
++// REVIEW-ONLY, feature-private Fire original item-use context. No native checkout includes this file.
++// Owner must include the existing ItemInstance declaration and private occurrence proposal in its native unit.
++namespace FirePersonalOccurrenceSource {
++struct OriginalItemUse {
++ Context personal;
++ uint32_t item_id;
++ int32_t item_serial;
++ int16_t slot;
++ int16_t charges_before;
++ uint32_t caster_entity;
++ uint32_t requested_target_entity;
++ uint32_t actual_zone;
++ uint32_t actual_instance;
++};
++// Call only from actual native original-item path before CastSpell/instant completion can run.
++// native_slot_supported is the result of the EXISTING native supported-slot/item lookup, not a Lua assertion.
++inline std::optional<OriginalItemUse> CaptureOriginalItemUse(const Context& personal,
++ const EQ::ItemInstance& original,int16_t actual_slot,bool native_slot_supported,
++ uint32_t actual_caster_entity,uint32_t actual_requested_target,
++ uint32_t actual_zone,uint32_t actual_instance) {
++ const bool combine=personal.consumer==Consumer::CombineIngredients;
++ const bool activate=personal.consumer==Consumer::ActivateConstruct;
++ if ((!combine && !activate) || personal.activity!=2 || !native_slot_supported ||
++  !actual_caster_entity || !original.GetItem() || original.GetSerialNumber()==0) return std::nullopt;
++ const auto expected=combine ? personal.rule.ingredient_a : personal.rule.inactive_item;
++ if (original.GetID()!=expected || original.GetItem()->Click.Effect!=7651 ||
++  original.GetItem()->Click.Type!=3) return std::nullopt;
++ // Ingredients B do not click: original cores/essence/orbs are stackable native -1 effect inputs.
++ if (activate && (actual_zone!=personal.rule.encounter_zone || actual_instance!=0)) return std::nullopt;
++ return OriginalItemUse{personal,original.GetID(),original.GetSerialNumber(),actual_slot,
++  original.GetCharges(),actual_caster_entity,actual_requested_target,actual_zone,actual_instance};
++}
++// Pre-consumption in-process identity check ONLY. No durable GUID or post-consumption receipt is claimed.
++inline bool SameOriginalBeforeConsumption(const OriginalItemUse& use,
++ const EQ::ItemInstance& current,int16_t current_slot) {
++ return current_slot==use.slot && current.GetID()==use.item_id &&
++  current.GetSerialNumber()==use.item_serial && current.GetCharges()==use.charges_before;
++}
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_published_use_sink.h
+@@ -0,0 +1,10 @@
++#pragma once
++// SOURCE ONLY: private receipt sink, not a writer or registered callback.
++#include "fire_native_published_use.h"
++#include "fire_original_construct_producer.h"
++namespace FirePersonalOccurrenceSource {
++class PublishedNativeUseSink final {
++public:
++ static void Receive(Client&,PublishedNativeUse&);
++};
++} // namespace FirePersonalOccurrenceSource
+--- a/zone/inventory.cpp
++++ b/zone/inventory.cpp
+@@ -1,3 +1,4 @@
++#include "fire_native_item_custody.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -994,6 +995,11 @@
+ 
+ // Remove item from inventory
+ void Client::DeleteItemInInventory(int16 slot_id, int16 quantity, bool client_update, bool update_db) {
++ // SAME native invocation: selected Fire writer consumes this call before any
++ // ordinary live mutation, persistence, packet or achievement side effect.
++ if(FirePersonalOccurrenceSource::NativeItemCustody::DeleteSelected(*this,slot_id,quantity,client_update,update_db))return;
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(&m_inv,slot_id))return;
++
+ 	#if (EQDEBUG >= 5)
+ 		LogDebug("DeleteItemInInventory([{}], [{}], [{}])", slot_id, quantity, (client_update) ? "true":"false");
+ 	#endif
+@@ -1074,6 +1080,8 @@
+ 
+ bool Client::PushItemOnCursor(const EQ::ItemInstance& inst, bool client_update)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&inst))return false;
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(&m_inv,EQ::invslot::slotCursor))return false;
+ 	LogInventory("Putting item [{}] ([{}]) on the cursor", inst.GetItem()->Name, inst.GetItem()->ID);
+ 
+ 	EvolvingItemsManager::Instance()->DoLootChecks(CharacterID(), EQ::invslot::slotCursor, inst);
+@@ -1094,6 +1102,8 @@
+ // (Also saves changes back to the database: this may be optimized in the future)
+ // client_update: Sends packet to client
+ bool Client::PutItemInInventory(int16 slot_id, const EQ::ItemInstance& inst, bool client_update) {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&inst))return false;
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(&m_inv,slot_id))return false;
+ 	LogInventory("Putting item [{}] ([{}]) into slot [{}]", inst.GetItem()->Name, inst.GetItem()->ID, slot_id);
+ 
+ 	if (slot_id == EQ::invslot::slotCursor) { // don't trust macros before conditional statements...
+@@ -1128,6 +1138,8 @@
+ 
+ void Client::PutLootInInventory(int16 slot_id, const EQ::ItemInstance &inst, LootItem** bag_item_data)
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&inst))return ;
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(&m_inv,slot_id))return;
+ 	LogInventory("Putting loot item [{}] ([{}]) into slot [{}]", inst.GetItem()->Name, inst.GetItem()->ID, slot_id);
+ 
+ 	bool cursor_empty = m_inv.CursorEmpty();
+@@ -1665,6 +1677,7 @@
+ }
+ 
+ bool Client::SwapItem(MoveItem_Struct* move_in) {
++ if(!move_in||!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(&m_inv,move_in->from_slot)||!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(&m_inv,move_in->to_slot))return false;
+ 	if (!move_in) return false;
+ 	// Apply custody checks at the inventory operation as well as packet dispatch:
+ 	// multi-move and quest callers must not bypass the shroud's escrow domain.
+--- a/zone/npc.h
++++ b/zone/npc.h
+@@ -31,6 +31,8 @@
+ 
+ #include <deque>
+ #include <list>
++#include <memory>
++namespace FirePersonalOccurrenceSource { class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; }
+ 
+ struct NPCProximity {
+ 	float	min_x;
+@@ -795,6 +797,9 @@
+ 	const Handin GetHandin() { return m_hand_in; }
+ 
+ private:
++	friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
++	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
++	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_original_construct;
+ 	uint32              m_loottable_id;
+ 	bool                m_skip_global_loot;
+ 	bool                m_skip_auto_scale;
+--- a/zone/spells.cpp
++++ b/zone/spells.cpp
+@@ -85,6 +85,7 @@
+ #include "common/strings.h"
+ #include "zone/bot.h"
+ #include "zone/client.h"
++#include "fire_native_item_custody.h"
+ #include "zone/client_version.h"
+ #include "zone/fastmath.h"
+ #include "zone/lua_parser.h"
+@@ -312,6 +313,9 @@
+ 	LogSpells("DoCastSpell called for spell [{}] ([{}]) on entity [{}], slot [{}], time [{}], mana [{}], from item [{}]",
+ 		spell.name, spell_id, target_id, static_cast<int>(slot), cast_time, mana_cost, item_slot==0xFFFFFFFF?999:item_slot);
+ 
++	if (IsClient() && (slot == CastingSlot::Item || slot == CastingSlot::PotionBelt) &&
++		!FirePersonalOccurrenceSource::NativeItemCustody::Start(*CastToClient(),
++			static_cast<int16>(item_slot),spell_id,target_id)) {InterruptSpell();return false;}
+ 	casting_spell_id = spell_id;
+ 	casting_spell_slot = slot;
+ 	casting_spell_inventory_slot = item_slot;
+@@ -1219,6 +1223,7 @@
+ 
+ void Mob::ZeroCastingVars()
+ {
++	if(IsClient())FirePersonalOccurrenceSource::NativeItemCustody::Cancel(*CastToClient());
+ 	// zero out the state keeping vars
+ 	attacked_count = 0;
+ 	spellend_timer.Disable();
+@@ -1753,8 +1758,15 @@
+ 	const int32 completed_cast_item_slot = completed_cast_item_id
+ 		? static_cast<int32>(inventory_slot) : -1;
+ 
++	FirePersonalOccurrenceSource::NativeItemCustody::FinishTicket fire_finish;
++	if(IsClient() && IsFromItem && !FirePersonalOccurrenceSource::NativeItemCustody::FinishEntry(
++		*CastToClient(),static_cast<int16>(inventory_slot),spell_id,DeleteChargeFromSlot,fire_finish)) {
++		StopCasting();return;
++	}
+ 	// we're done casting, now try to apply the spell
+-	if(!SpellFinished(spell_id, spell_target, slot, mana_used, inventory_slot, resist_adjust, false,-1, 0xFFFFFFFF, 0, true))
++	const bool fire_spell_success=SpellFinished(spell_id, spell_target, slot, mana_used, inventory_slot, resist_adjust, false,-1, 0xFFFFFFFF, 0, true);
++	if(fire_finish.Selected() && !FirePersonalOccurrenceSource::NativeItemCustody::Finished(fire_finish,fire_spell_success))return;
++	if(!fire_spell_success)
+ 	{
+ 		LogSpells("Casting of [{}] canceled: SpellFinished returned false", spell_id);
+ 		// most of the cases we return false have a message already or are logic errors that shouldn't happen
+@@ -1766,11 +1778,22 @@
+ 	if(IsOfClientBotMerc()) {
+ 		TrySympatheticProc(target, spell_id);
+ 	}
++	if(fire_finish.Selected() && !FirePersonalOccurrenceSource::NativeItemCustody::StillLive(fire_finish))return;
+ 
+ 	TryTwincast(this, target, spell_id);
++	if(fire_finish.Selected() && !FirePersonalOccurrenceSource::NativeItemCustody::StillLive(fire_finish))return;
+ 
+ 	TryTriggerOnCastFocusEffect(focusTriggerOnCast, spell_id);
+-
++	if(fire_finish.Selected() && !FirePersonalOccurrenceSource::NativeItemCustody::StillLive(fire_finish))return;
++
++	// Selected receipt delivery is the final mutable callback. The SAME original
++	// charge invocation dispatches before live mutation and never falls through
++	// to the legacy boolean observer or any later Client/item dereference.
++	if(fire_finish.Selected()) {
++		FirePersonalOccurrenceSource::NativeItemCustody::DeleteScope fire_debit(fire_finish);
++		CastToClient()->DeleteItemInInventory(DeleteChargeFromSlot,1,true);
++		return;
++	}
+ 	bool completed_cast_charge_consumed = false;
+ 	if (IsClient() && DeleteChargeFromSlot >= 0) {
+ 		const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+@@ -7163,7 +7186,23 @@
+ 		const uint32 completed_item_id = completed_item && completed_item->GetItem()->Click.Effect == spell_id
+ 			? completed_item->GetID() : 0;
+ 		bool completed_charge_consumed = false;
+-		if (SpellFinished(spell_id, entity_list.GetMob(target_id), CastingSlot::Item, 0, item_slot)) {
++		FirePersonalOccurrenceSource::NativeItemCustody::FinishTicket fire_finish;
++		if(IsClient() && (!FirePersonalOccurrenceSource::NativeItemCustody::Start(
++			*CastToClient(),static_cast<int16>(item_slot),spell_id,target_id) ||
++			!FirePersonalOccurrenceSource::NativeItemCustody::FinishEntry(
++				*CastToClient(),static_cast<int16>(item_slot),spell_id,DeleteChargeFromSlot,fire_finish))) {
++			CastToClient()->SendSpellBarEnable(spell_id);return;
++		}
++		const bool fire_native_cast_finished = SpellFinished(spell_id, entity_list.GetMob(target_id), CastingSlot::Item, 0, item_slot);
++        if(fire_finish.Selected()) {
++         if(!FirePersonalOccurrenceSource::NativeItemCustody::Finished(fire_finish,fire_native_cast_finished))return;
++         if(fire_native_cast_finished) {
++          FirePersonalOccurrenceSource::NativeItemCustody::DeleteScope fire_debit(fire_finish);
++          CastToClient()->DeleteItemInInventory(DeleteChargeFromSlot,1,true);
++         }else CastToClient()->SendSpellBarEnable(spell_id);
++         return;
++        }
++		if (fire_native_cast_finished) {
+ 			if (IsClient() && DeleteChargeFromSlot >= 0) {
+ 				const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+ 				const uint32 before_id = before ? before->GetID() : 0;
+--- a/zone/task_client_state.cpp
++++ b/zone/task_client_state.cpp
+@@ -39,6 +39,8 @@
+ #include "zone/zonedb.h"
+ #include "fire_personal_successor_dispatch.h"
+ #include "fire_original_final_hail_frame.h"
++#include "fire_original_construct_producer.h"
++#include "fire_native_item_custody.h"
+ #include "fire_shared_successor_native.h"
+ #include "common/fire_shared_activity_origin.h"
+ 
+@@ -142,6 +144,9 @@
+ 			FirePersonalOccurrenceSource::RecordActualPersonalAcceptance(
+ 				*frame->original_handoff, *binding
+ 			);
++		if (frame->recorded_before_callbacks) {
++			FirePersonalOccurrenceSource::NativeItemCustody::Accepted(*client, *binding);
++		}
+ 	}
+ }
+ 
+@@ -1232,6 +1237,9 @@
+ 		return 0;
+ 	}
+ 
++	auto* const fire_construct_death_update = FirePersonalOccurrenceSource::ClaimOriginalConstructDeathUpdate(
++		client, task_data->type, *info, activity_id, count
++	);
+ 	auto* const fire_final_update = FirePersonalOccurrenceSource::ClaimOriginalFinalUpdate(
+ 		client, task_data->type, *info, activity_id, count
+ 	);
+@@ -1432,6 +1440,9 @@
+ 	}
+ 
+ 	const bool fire_original_completion_saved = TaskManager::Instance()->SaveClientState(client, this);
++	FirePersonalOccurrenceSource::ObserveOriginalConstructDeathSave(
++		fire_construct_death_update, database, client, task_data->type, *info, fire_original_completion_saved
++	);
+ 	FirePersonalOccurrenceSource::ObserveOriginalCompletionSave(fire_final_update, fire_original_completion_saved);
+ 	if (
+ 		fire_original_completion_saved &&
+--- a/zone/task_client_state.h
++++ b/zone/task_client_state.h
+@@ -48,7 +48,10 @@
+ 	TaskMethodType method = TaskMethodType::METHODSINGLEID;
+ };
+ 
++namespace FirePersonalOccurrenceSource { class NativeItemCustody; }
+ class ClientTaskState {
++ friend class FirePersonalOccurrenceSource::NativeItemCustody;
++
+ 
+ public:
+ 	ClientTaskState();
+--- a/zone/tasks.cpp
++++ b/zone/tasks.cpp
+@@ -16,6 +16,7 @@
+ 	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+ #include "tasks.h"
++#include "fire_native_item_custody.h"
+ 
+ #include "common/misc_functions.h"
+ #include "common/repositories/character_task_timers_repository.h"
+@@ -31,6 +32,7 @@
+ 
+ void Client::LoadClientTaskState()
+ {
++ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&m_inv))return;
+ 	if (m_reward_selection) {
+ 		m_reward_selection->ClearSource(RewardSelectionSource::Task);
+ 	}
+@@ -44,6 +46,8 @@
+ 			safe_delete(task_state);
+ 		}
+ 		else {
++            // Existing accepted occurrence ONLY, before any reload reward callbacks.
++            FirePersonalOccurrenceSource::NativeItemCustody::ReloadAccepted(*this);
+ 			task_state->RetryCompletedSelectableRewards(this, true);
+ 			TaskManager::Instance()->SendActiveTasksToClient(this);
+ 			TaskManager::Instance()->SendCompletedTasksToClient(this, task_state);
+--- a/zone/zone.cpp
++++ b/zone/zone.cpp
+@@ -23,6 +23,7 @@
+ #include "housing_pets.h"
+ 
+ #include "zone.h"
++#include "fire_original_construct_death.h"
+ 
+ #include "common/data_verification.h"
+ #include "common/eqemu_logsys.h"
+@@ -1109,6 +1110,7 @@
+ }
+ 
+ Zone::~Zone() {
++	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Discard();
+ 	ClearFellowshipCampfires();
+  Housing::Pets::Clear();
+  Housing::ServiceAuthority::Clear();

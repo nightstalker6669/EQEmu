@@ -1,0 +1,200 @@
+{
+  "status": "REVIEWED_DISABLED_COMBINED_NATIVE_SOURCE_NOT_INSTALLED",
+  "source_revision": "writerR3 plus reviewed deferred actual-death delivery and typed persisted receipt",
+  "review_status": "PASS_FOCUSED_LIFETIME_REPAIR_AND_COMBINED_WRITER_SEAMS_SOURCE_ONLY",
+  "review_receipt_sha256": "ee4d0cdb7de0e4fd7ccd3c2aa5bab4d0c1787666bc9c64d2d56e106995821c33",
+  "native_files": {
+    "common/CMakeLists.txt": {
+      "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
+      "postimage_sha256": "2bfa6595ecb318c715bc7740eb5826483b348db62c60c3de977e80f5ebfad77a"
+    },
+    "common/fire_native_inventory_fence.cpp": {
+      "preimage_sha256": null,
+      "postimage_sha256": "5f6c3fb607d988b6f0e859bcfb2538df7dcf621c968c4baa1b9868f6555fee7a"
+    },
+    "common/fire_native_inventory_fence.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "602973209fe99eea62e10637ac4b49bd6c27cbd07e9e47ea8c6b504ec1a2ba20"
+    },
+    "common/inventory_profile.cpp": {
+      "preimage_sha256": "f26243ed757c7c3e75d30e0405774ddcb39cb9db0ae47b7ad70ece1031c42e31",
+      "postimage_sha256": "26d4b3cdb5ab9c135e3d041d14d4fa78d8e21984da4785ee55920e1f9af8f968"
+    },
+    "common/inventory_profile.h": {
+      "preimage_sha256": "74388673aefbb33b6bc34d3ab18f4192482aa55688161499569ebd68e1c861aa",
+      "postimage_sha256": "02a38cd8913fb90105915293eeac71753e9bac5771662981f5180c1e77c743f4"
+    },
+    "common/item_instance.cpp": {
+      "preimage_sha256": "dc5627ce3615b8ede7a3169e187df128230a3cbc394979ee07214b67638c8126",
+      "postimage_sha256": "ea5634d4c23695c352ecefbdc4f89df05abdf5bb31e252f2cdf8449c44032b53"
+    },
+    "common/item_instance.h": {
+      "preimage_sha256": "85b52b532316aafdc64a3c2ff46a9cfbae6d95c04cdc4ea40bf19d683f2a5d90",
+      "postimage_sha256": "7abd6509ac94499b055c333a8d9d590d686dbc06fb8dcd291280f51346e38351"
+    },
+    "common/shared_core/evolving_item_custody.h": {
+      "preimage_sha256": "a63be5423650399a04e7bc2191e6a84e1a5b138ea35bdb418818c72ff9907307",
+      "postimage_sha256": "75cdefd64ed2806f629a35e714d9e488af404356e21c13604c7d345970600031"
+    },
+    "common/shareddb.cpp": {
+      "preimage_sha256": "f42e48ed64f150afefd15d85ed586f7819bce7d47e571d6a41d44e54b8613925",
+      "postimage_sha256": "a28f62b3c1ceb9b4432a3479b309b8894e1cea765dd57f7eb0007d8385455009"
+    },
+    "common/timer.h": {
+      "preimage_sha256": "49c01639ba19c520e6d74107b06edaaf6d43633ee09b0ef8f8d51c43c25dd721",
+      "postimage_sha256": "4824f4d65ee19d198d17580a9888fbabc97874a815bd985525a019bf1e673f7f"
+    },
+    "zone/CMakeLists.txt": {
+      "preimage_sha256": "62fe0b7380c7fbaee34f6bb9d46db82b5a84f21d0ce8d32370a1871a70842501",
+      "postimage_sha256": "57589fdd617fa404d788c813f983002c6fd5a46ef5bb49d3806c07e4c47a6e9d"
+    },
+    "zone/attack.cpp": {
+      "preimage_sha256": "41e7429480265cb6b81092214cd26d069c2132da25b5071a170e453cfbaaa5de",
+      "postimage_sha256": "fef01163fa6667b7097b423ea5c75e6d8c969133f41db2743c750296765fe2af"
+    },
+    "zone/client.cpp": {
+      "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
+      "postimage_sha256": "3a33d73478e0f96d4b7dc404ae41255401a4f6045d2655ea327cc899ea029147"
+    },
+    "zone/client.h": {
+      "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
+      "postimage_sha256": "f62dd53fba8edfb38c5fc8595a0e55d5df6d4854380089a7405d5f1068de61f0"
+    },
+    "zone/client_evolving_items.cpp": {
+      "preimage_sha256": "9abfd986b2b0a851e685741c89c97085b6f8b8754aae58371cca030a396baeae",
+      "postimage_sha256": "1aab37bc2672ef8811a411b8d00a551944ef8f77e5394923dba97305edfd5a5e"
+    },
+    "zone/client_packet.cpp": {
+      "preimage_sha256": "d9b74da6ccef54df2e8c8f736a19a0fa1a2701d07ae20496039c354ca00a8871",
+      "postimage_sha256": "2c274242593c1bcd46be25fa3b89a3af3b2c979a1e6c4ffd1a194407a3d78bff"
+    },
+    "zone/client_spirit_shroud.cpp": {
+      "preimage_sha256": "153900d357a1fe13e7edc9baaf6406ed5b6a2a57efc79acce9bd358d67997785",
+      "postimage_sha256": "4f94fa164ede3cea3e0f0c23a8d1e92c06ddb2b3014894a5ad5b1b34d733f2bc"
+    },
+    "zone/client_spirit_shroud_native.cpp": {
+      "preimage_sha256": "7454762e25b4db799f7f28d1f4f84b8bbb508a463b1db443e0fa6a5ab04c7073",
+      "postimage_sha256": "aac1e27bcdd7597c6d13c34bcfb9e65740c5b37ecc565c248ca567ea98f76e82"
+    },
+    "zone/entity.cpp": {
+      "preimage_sha256": "112b1a3121f7664b26ae2815a391007eb03fedc1e3888a7fc28954e26470acc3",
+      "postimage_sha256": "966701c00b25645274ed39da315b4744d26b48a0f2f436da5797c4aa367266a1"
+    },
+    "zone/fire_construct_death_receipt.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "82c2f96f708b9ebb7b585c067f51c802f6e4235e08c595ece1d7636150a2e671"
+    },
+    "zone/fire_native_item_custody.cpp": {
+      "preimage_sha256": null,
+      "postimage_sha256": "ccc71b84b95331a79dc339980be85505cf513b6ceaceda9f862c17fbe7355cfc"
+    },
+    "zone/fire_native_item_custody.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "ca5aae16b609c89ff5f86ab3ea1e3453d741674085c1448035a16a9b6271d901"
+    },
+    "zone/fire_native_published_use.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b7d0b7e1c9b92d39ab01fdad06fa5ba64adc230c9bb6780b37a137a445b17fc8"
+    },
+    "zone/fire_original_construct_death.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "8517361ccd42fe554e04007963f7d63ab02dce1de238cbc8d3a0b6386b4fdadc"
+    },
+    "zone/fire_original_construct_hail.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "8ee6edf9e00c8d78b553f254dae4675129f38b0923e55eba5909a4b47fc97d6b"
+    },
+    "zone/fire_original_construct_producer.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "452472bbebbcad5662fe7d8875bee2e2716a34498d06744911e984a0f44094a5"
+    },
+    "zone/fire_original_item_snapshot.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "4bfd47c339863d0731f45b4437ec16765f42cae4a236e29ecdaa1b0c584dac98"
+    },
+    "zone/fire_personal_construct_identity.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "dbe3a557a25d15805daeb06f5600106610da09eae8da86d55ce0bb0b389f2ef7"
+    },
+    "zone/fire_personal_item_use.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "80fdcb249b2e0c6bbe5ab958a7fffc51be936e0824c150e8ab49c2ddb8d94649"
+    },
+    "zone/fire_published_use_sink.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "52e92089e69e1c8b468aa994523515207785453ff118f9526e1e922bcee02395"
+    },
+    "zone/inventory.cpp": {
+      "preimage_sha256": "5538219e5625b4baa51e7bd4182465be502a77796dd2ff41b70bcfc2a0f8b3ff",
+      "postimage_sha256": "a67890b2fe79b420d5418adcb5e357cb9838ffb6e1beb89c8bbf8249058f4d68"
+    },
+    "zone/npc.h": {
+      "preimage_sha256": "1f7fdf0cb82b6f7999c4622fb7f8dafe15877df09c56f659d5f19a48ef6a85b7",
+      "postimage_sha256": "63590dee53313765b9bad4e39e3e618457dde2f8f8328fd84c96309717f2b35b"
+    },
+    "zone/spells.cpp": {
+      "preimage_sha256": "e1ba4e4815384990dd37c3884e0fc3bbf3687ce494cca4c773110d637db93853",
+      "postimage_sha256": "575d3e833b8bcf1afb16baa172d24985b75db61234b9cbf6da221b205f28f6c8"
+    },
+    "zone/task_client_state.cpp": {
+      "preimage_sha256": "8e1328f7152fc7f226e5099be6099fcb3ad112b32172ccf80d2d5118d3d2adfe",
+      "postimage_sha256": "7cbd47abc543dc3c21e8b7b23da07bab7f6ad486ab238fe0802511a75ba49c65"
+    },
+    "zone/task_client_state.h": {
+      "preimage_sha256": "4556499e483da7785759f87c53c6f1704c217c288f2f892aa877ebd7abb1d428",
+      "postimage_sha256": "3f51d0a703f999f581161afcc941915d2de0a5c03d415ff7f0208cfa9d58bc09"
+    },
+    "zone/tasks.cpp": {
+      "preimage_sha256": "18bf1975f9ebbc3f0ee7b999ab1e388b6adebc05485466c9d52d986624a73e39",
+      "postimage_sha256": "d49c60a7d34cf096692c7bf23b6b2107112f39ee3c05182011acdecf7e5a24e9"
+    },
+    "zone/zone.cpp": {
+      "preimage_sha256": "1e9fc96fd833e02649c9744d70927225f833d91484e4d6490aab080481a97054",
+      "postimage_sha256": "a23d4dba58ea724001351ae0ecb78c76345a34f60090bc51c54394081efef674"
+    }
+  },
+  "native_patch_sha256": "56e79c7769c3b35908cfe12e131dce1d17f3928eb0d0b3c657da5a5c0355c0e4",
+  "schema": {
+    "path": "001_fire_construct_death_receipts.sql.disabled",
+    "sha256": "ec487b9955095e5bbdccc02f003b7849b4258e6bed505d35ccffcb030458e9b9",
+    "status": "SOURCE_ONLY_DATABASE_OWNER_APPLICATION_NOT_AUTHORIZED"
+  },
+  "required_build_parents": [
+    {
+      "kind": "acceptanceR2",
+      "source_publication": "c2955cd37a7d38f130f743d95437eec06e3f5458",
+      "native_patch_sha256": "b71dc874870e6c0ab0ac78f85536c75913da594089ae4a18b3aa9e7cdd976764"
+    },
+    {
+      "kind": "finalhail",
+      "source_publication": "83538da0f157744c0eb26b9bde677d34268508d0",
+      "native_patch_sha256": "8035f9a1eb43f0d4742b3ebadca52265e6a144a7a296ef78458c29c5cfb8cdc1"
+    },
+    {
+      "kind": "matchedWorldActivity",
+      "source_publication": "f14dd6a9a42c2125f71ff2acb349eb77d033ccf7",
+      "prior_build": "PASS_ISOLATED_MATCHED_FIRE_WORLD_ZONE_COMPILE_LINK_NO_DEPLOY"
+    }
+  ],
+  "earlier_sink_publication": {
+    "source": "da80b090df7a75ff75d6162787e27c2741e2e17d",
+    "instruction": "Provenance only: final native sink is already included in this combined patch. Do NOT separately apply its native patch before this one."
+  },
+  "build_instruction": "Use exact compiled matched Fire World/Zone parents, not raw branch. Apply this combined native patch ONCE, verify all37 final postimages, preserve current unrelated source/cohort, compile/link matched World+Zone only. No test suites, migration, deployment, activation or client actions.",
+  "actual_source_connections": [
+    "Exact owner R3 writer/source fences/accepted reload/real opaque receipt issuing callsite composed, unchanged owner26file semantics",
+    "All original Spells actor/save observation/typed durable death receipt/Gotonur native hail source composed; required native item-use/identity/sink headers included",
+    "NPC::Death only seals actual success at final return. First-declared scope enqueues after DeathTransition and all later native cleanup; no task progress/SQL inside actor stack",
+    "Preallocated intrusive feature queue drains once after EntityList::MobProcess actor stacks/iteration end; no NPC lookup/dereference in delivery; same original goal2 save and strict receipt remain",
+    "Actual Zone destructor revokes independently retained lifetime guard and discards pending batch. Already detached batches observe revoked lifetime even on same-frame Zone address reuse; no event recreation on reload"
+  ],
+  "material_exceptions": [
+    "Activation rejected BEFORE cast/spend in actual writer",
+    "Construct placement/lifetime selection stillfalse",
+    "Exact Gotonur spawn0/unselected",
+    "Initial167 admission and genuine169 participant cohort held",
+    "Known claim crash gaps/unknown writes held with no replay/retry/refund",
+    "No serving migration/runtime/integration/build yet"
+  ],
+  "native_rollback": "Source inverse artifact only; not authority for a serving rollback or dropping earned receipts."
+}
