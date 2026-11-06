@@ -32,16 +32,10 @@
  	// Character hasn't learnt the recipe yet.
  	// must_learn:
  	// bit 1 (0x01): recipe can't be experimented
-@@ -717,6 +735,23 @@
- 			!CulturalTailoringBulk::Allows(*requirement, spec.tradeskill,
- 				user->GetPP().race, kit->ID, kit->BagType, kit->BagSlots, kit->BagSize)) {
- 			user->Message(Chat::Red, "This cultural armor requires the correct race and sewing kit.");
-+			user->QueuePacket(outapp);
-+			safe_delete(outapp);
-+			return;
-+		}
-+	}
-+
+@@ -723,6 +741,23 @@
+ 		}
+ 	}
+ 
 +	if (const auto* requirement = WorldLoom13::Find(spec.recipe_id)) {
 +		// Use the actual owned open native world object, never packet IDs alone.
 +		auto* station = user->GetTradeskillObject();
@@ -53,9 +47,24 @@
 +				zone->GetInstanceVersion(), station->GetDBID(), station->GetType(),
 +				item ? item->ID : 0, EQ::invtype::WORLD_SIZE)) {
 +			user->Message(Chat::Red, "This recipe requires the loom in the Plane of Knowledge.");
++			user->QueuePacket(outapp);
++			safe_delete(outapp);
++			return;
++		}
++	}
++
+ 	// Character hasn't learnt the recipe yet.
+ 	// This shouldn't happen.
+ 	if ((spec.must_learn&0xf) && !spec.has_learnt) {
+@@ -759,7 +794,7 @@
+ 		}
+ 	}
+ 	else if (spec.tradeskill == EQ::skills::SkillTinkering) {
+-		if (user->GetRace() != Race::Gnome) {
++		if (user->GetPP().race != Race::Gnome) {
+ 			user->Message(Chat::Red, "Only gnomes can tinker.");
+ 			auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
  			user->QueuePacket(outapp);
- 			safe_delete(outapp);
- 			return;
 --- /dev/null
 +++ b/zone/world_loom13_actor.h
 @@ -0,0 +1,33 @@

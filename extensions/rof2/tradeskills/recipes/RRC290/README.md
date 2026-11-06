@@ -17,3 +17,5 @@ Maintained throughRoF family/catalogue floors remain explicit reconstruction,cur
 Source-only SQL HOLD until exact13world-only actor code is published/compiled/installed by assigned Build owner,then separate exact one-use SQLGO. Actor source or compile alone is not installed compatibility. No ownSQL/tests/rehearsal/build/runtime or native gameplay acceptance.
 
 Context: https://www.eqtraders.com/items/show_item.php?item=1791
+
+Source revision 2 combines the world loom actor with the existing auto Tinkering race correction (GetPP().race). Recipe SQL is byte-identical. Apply the source delta onto the actual Fire+RRC284 serving parent; never overwrite that parent with the standalone reference postimage. Installation receipt remains required before SQL.

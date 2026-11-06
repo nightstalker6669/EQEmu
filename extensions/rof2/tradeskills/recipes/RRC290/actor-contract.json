@@ -105,16 +105,21 @@
   "files": {
     "zone/tradeskills.cpp": {
       "preimage_sha256": "b8b8cf6867105c2574c38d3f05e578a991729ed30f03522db0e16704c2b397b7",
-      "postimage_sha256": "f01c0241cb5e6385182787a31f772b3e2ecc56e5a2a330adecdf022ba399fabf"
+      "postimage_sha256": "a897fe2c9e018b14ea81100d5f3a4e1394069d86d43f29c3d293cc14b96d6acb"
     },
     "zone/world_loom13_actor.h": {
       "preimage_sha256": null,
       "postimage_sha256": "a23d3dbb929ff5535551369a391c3169b3a426a977e4e93ec15ab19734de36c4"
     }
   },
-  "patch_sha256": "31994c10d4d5c6ecfd3d7e6459a9a98c2248b49fdd6f6549edf48aaeaaf73adc",
+  "patch_sha256": "0f3543a0934b5251fdccf854ad2d3238654f3a23dc9b92bbfea06707c7b85673",
   "tests": 0,
   "builds": 0,
   "SQL_execution": 0,
-  "runtime_actions": 0
+  "runtime_actions": 0,
+  "native_tinkering_correction": {
+    "scope": "Existing auto Tinkering race check only; use GetPP().race to match manual native original player profile. No recipe data redo.",
+    "previous_handoff_manifest_sha256": "f620988851193173c913a26215452c4700dff57195a2cdbd9e99d42e70a247f4"
+  },
+  "composition_requirement": "Apply delta to actual Fire+RRC284 serving parent; standalone postimage is reference only, never replace serving file wholesale. SQL remains held until compatible installed owner receipt."
 }
