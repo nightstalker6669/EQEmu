@@ -1,0 +1,137 @@
+{
+  "scope": "Mandatory complete-batch source assembly inventory. Not installed, not a working upgrade yet. Missing dependencies are required, not optional.",
+  "all_components_required": true,
+  "ready_to_apply": false,
+  "native_accepted": false,
+  "components": [
+    {
+      "id": "shared-core",
+      "source": "Required native cast/death/delivery APIs and deployed capacity64 + ownedclick966b510",
+      "status": "Compiled64/ownedclick deployedPASS per Build receipt; nativeACK/render/pickup still unaccepted",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "task-definitions",
+      "source": "sql/xorbb_mercenary_disabled.sql",
+      "status": "11tasks/73activities/11criteria + fixed rewards authored, alldisabled",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "normal-npcs",
+      "source": "npc-profiles/joint/apply-merged.sql.disabled",
+      "status": "Merged136stat/24AI guardedunion,18newAIrows; replaces separate component writes, no execution",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "prior-world-profiles",
+      "source": "npc-profiles/prior-world/2026_11_04_xorbb_npc_profiles.sql",
+      "status": "Prior9344fullbody integrated once when absent, or exactownedpostimages checked when present;21profileownership unchanged",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "owned-scenes",
+      "source": "npc-profiles/scenes/definitions.sql.disabled",
+      "status": "5reserved definitions plus outer ID/spawnentry/pet-reference collision guards authored",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "caster-ai",
+      "source": "npc-profiles/joint/apply-merged.sql.disabled",
+      "status": "24selectedclassfallbackbindings merged with136statguard; isolatedWIZ925000/17entries, not originalAIclaim",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "recipe",
+      "source": "sql/xorbb_hollowflesh_disabled.sql",
+      "status": "Original10ingredientunits/container/output; defaultflags labelled; native combine permission guard authored",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "garden-pickups",
+      "source": "sql/xorbb_garden_conversion.sql.disabled",
+      "status": "26existing objects + exactrollback. Same-schema-only source; integrated split-DB custody guard pending",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "quest-scripts",
+      "source": "quests/",
+      "status": "Bothrequiredgenerations:88questLua +4globalfragments,37NPCslots; stagingproduces90filesincluding2mergedglobals. Allreadinessfalse; sourcechecks only",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "global-composition",
+      "source": "hook-fragments/",
+      "status": "Both9344and9345fragments compose once; preserve predecessor returns/vetoes and exacthandlerpreimages; no duplicatehandin owner",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "protocol",
+      "source": "protocol/",
+      "status": "Existing configured opcodes/structs; no new wire mapping/client change",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "review-stage",
+      "source": "prepare_install.py",
+      "status": "Portable90file reviewstage prepared with0conflicts; noapplymode or DBactions",
+      "source_present": true,
+      "required": true
+    },
+    {
+      "id": "activation",
+      "source": "utils/sql/git/2026_11_04_xorbb_mercenary_required.sql",
+      "status": "Oneoutertransaction sourcecandidate authored; allcontentenable/readinessflags false; registration/apply/nativeactivation pending",
+      "source_present": false,
+      "required": true
+    },
+    {
+      "id": "native-acceptance",
+      "source": "pending assigned tester",
+      "status": "One coherent related quest/progression/custody/persistence/reward batch after deployment",
+      "source_present": false,
+      "required": true
+    }
+  ],
+  "source_objectives_covered": 73,
+  "prerequisite9344_source_objectives": 47,
+  "combined_source_objectives": 120,
+  "database_roles": {
+    "content_db": [
+      "tasks",
+      "task_activities",
+      "achievement_criteria",
+      "reward_sets",
+      "reward_sources",
+      "reward_options",
+      "reward_option_entries",
+      "rewards",
+      "npc_types",
+      "tradeskill_recipe",
+      "tradeskill_recipe_entries",
+      "object",
+      "ground_spawns"
+    ],
+    "runtime_database": [
+      "object_contents custody guard; existing container contents never exported or deleted"
+    ],
+    "qualification": "Retained source call sites checked. Deployment owner must verify current descendant/configuration. Same-schema candidate refuses split configuration until actual runtimeguard is integrated."
+  },
+  "transaction_order": "Canonical9345contains oneoutertransaction andhoistedroutineDDL. Prior9344includedonce or exactpostimagesverified. NPCjointcomponentverifies initial136actorcolumnunionbeforeits mergedwrites; no obsolete separate136/24scripts. Individualsourcecomponent wrappers must never be nested-CALLed.",
+  "public_exclusions": [
+    "Private checks and receipts",
+    "Player/account/inventory fixtures",
+    "Client executables, meshes and textures",
+    "Credentials and active runtime config"
+  ]
+}

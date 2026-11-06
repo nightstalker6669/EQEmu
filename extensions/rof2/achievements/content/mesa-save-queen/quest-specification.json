@@ -1,0 +1,233 @@
+{
+  "achievement": 500040900,
+  "tasks": [
+    {
+      "id": 3040469,
+      "title": "Ekaterina's Lament",
+      "component": 50166,
+      "keyword": "help",
+      "activities": [
+        {
+          "kind": "explore",
+          "step": 0,
+          "scripted": true,
+          "label": "Gather a water sample near the base of the waterfall"
+        },
+        {
+          "kind": "deliver",
+          "step": 1,
+          "npc": 397105,
+          "item": 87180,
+          "label": "Return the sample to Ekaterina"
+        }
+      ]
+    },
+    {
+      "id": 3040470,
+      "title": "It Can't Be the Queen",
+      "component": 50167,
+      "keyword": "further",
+      "previous": 3040469,
+      "activities": [
+        {
+          "kind": "explore",
+          "step": 0,
+          "x": 1245.95,
+          "y": -817.23,
+          "z": 86.79,
+          "label": "Explore the satyr encampment to the west"
+        },
+        {
+          "kind": "explore",
+          "step": 0,
+          "x": 32,
+          "y": -567,
+          "z": 180,
+          "label": "Explore the dryad sanctuary atop the mesa"
+        },
+        {
+          "kind": "explore",
+          "step": 0,
+          "x": -1048.86,
+          "y": 1632.74,
+          "z": 75.22,
+          "label": "Explore the desert passage to the north"
+        },
+        {
+          "kind": "speak",
+          "step": 1,
+          "npc": 397105,
+          "label": "Return to Ekaterina with your findings"
+        }
+      ]
+    },
+    {
+      "id": 3040471,
+      "title": "Find the Cure",
+      "component": 50168,
+      "keyword": "stand a chance",
+      "previous": 3040470,
+      "activities": [
+        {
+          "kind": "kill",
+          "step": 0,
+          "npc_ids": [
+            397199,
+            397213,
+            397214
+          ],
+          "count": 2,
+          "label": "Kill 2 dark widows"
+        },
+        {
+          "kind": "kill",
+          "step": 0,
+          "npc_ids": [
+            397162,
+            397201,
+            397202,
+            397219,
+            397246
+          ],
+          "count": 4,
+          "label": "Kill 4 murkwater oozes"
+        },
+        {
+          "kind": "kill",
+          "step": 0,
+          "npc_ids": [
+            397150,
+            397158,
+            397224
+          ],
+          "count": 4,
+          "label": "Kill 4 ring snakes"
+        },
+        {
+          "kind": "speak",
+          "step": 1,
+          "npc": 397105,
+          "label": "Return and speak with Ekaterina"
+        }
+      ]
+    },
+    {
+      "id": 3040472,
+      "title": "Parts For a Cure",
+      "component": 50169,
+      "keyword": "go see Ramona",
+      "previous": 3040471,
+      "activities": [
+        {
+          "kind": "speak",
+          "step": 0,
+          "npc": 397081,
+          "label": "Speak with Ramona"
+        },
+        {
+          "kind": "loot",
+          "step": 1,
+          "zone": 398,
+          "item": 92816,
+          "label": "Loot a Puma Paw in Blackfeather Roost"
+        },
+        {
+          "kind": "loot",
+          "step": 1,
+          "zone": 398,
+          "item": 87177,
+          "label": "Loot a Mountain Recluse Venom Sac in Blackfeather Roost"
+        },
+        {
+          "kind": "loot",
+          "step": 1,
+          "zone": 398,
+          "item": 13067,
+          "label": "Loot a Snake Fang in Blackfeather Roost"
+        },
+        {
+          "kind": "deliver",
+          "step": 2,
+          "npc": 397081,
+          "item": 92816,
+          "label": "Deliver the Puma Paw to Ramona"
+        },
+        {
+          "kind": "deliver",
+          "step": 2,
+          "npc": 397081,
+          "item": 87177,
+          "label": "Deliver the Mountain Recluse Venom Sac to Ramona"
+        },
+        {
+          "kind": "deliver",
+          "step": 2,
+          "npc": 397081,
+          "item": 13067,
+          "label": "Deliver the Snake Fang to Ramona"
+        },
+        {
+          "kind": "speak",
+          "step": 3,
+          "npc": 397081,
+          "label": "Speak to Ramona and receive the antidote"
+        },
+        {
+          "kind": "deliver",
+          "step": 4,
+          "npc": 397105,
+          "item": 87175,
+          "label": "Return to Ekaterina with the cure"
+        }
+      ]
+    },
+    {
+      "id": 3040473,
+      "title": "Tunare Save the Queen",
+      "component": 50170,
+      "keyword": "deliver",
+      "previous": 3040472,
+      "reward_item": 53572,
+      "activities": [
+        {
+          "kind": "deliver",
+          "step": 0,
+          "npc": 397250,
+          "item": 87175,
+          "label": "Deliver the cure to Queen Nhyalea"
+        },
+        {
+          "kind": "kill",
+          "step": 1,
+          "npc": 397250,
+          "label": "Kill the Queen"
+        },
+        {
+          "kind": "speak",
+          "step": 2,
+          "npc": 397105,
+          "label": "Return to Ekaterina with news of the Queen's demise"
+        }
+      ]
+    }
+  ],
+  "defaults": {
+    "xp": 1000,
+    "min_level": 0,
+    "explore_radius": 45,
+    "explore_vertical": 50,
+    "water_radius": 40,
+    "water_vertical": 50,
+    "guard_assist_range": 85,
+    "guard_heal_threshold": 45,
+    "guard_heal_recast_seconds": 20
+  },
+  "historical_limits": [
+    "Original XP unknown;1000 approved labelled PEQ-style default",
+    "No exact original admission minima;0 unrestricted policy",
+    "Task4 last return-with-cure interpreted as real antidote delivery; original native activity record not recovered",
+    "Guard Complete Heal13 supported by2009 report; exact assist/recast thresholds not recovered",
+    "No numeric faction awards invented",
+    "Original NPC types/placements/loot retained; native acceptance pending"
+  ]
+}

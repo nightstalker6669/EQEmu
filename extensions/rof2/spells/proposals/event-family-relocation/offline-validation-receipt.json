@@ -1,0 +1,342 @@
+{
+  "status": "PASS OFFLINE SQLITE FIXTURES ONLY",
+  "test_count": 81,
+  "tests": [
+    {
+      "name": "forward_commit_reopen_exact_guarded_reverse",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_01",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_01",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_02",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_02",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_03",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_03",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_04",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_04",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_05",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_05",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_06",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_06",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_07",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_07",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_08",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_08",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_09",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_09",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_10",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_10",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_11",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_11",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_12",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_12",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_13",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_after_13",
+      "passed": true
+    },
+    {
+      "name": "forward_atomic_failure_before_commit",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_01",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_01",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_02",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_02",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_03",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_03",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_04",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_04",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_05",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_05",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_06",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_06",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_07",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_07",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_08",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_08",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_09",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_09",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_10",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_10",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_11",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_11",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_12",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_12",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_13",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_after_13",
+      "passed": true
+    },
+    {
+      "name": "reverse_atomic_failure_before_commit",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_destination_collision",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_old_definition_drift",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_template_drift",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_native_level_drift",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_task_drift",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_policy_drift",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_neighbor_choice_drift",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_old_player_copy",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_new_player_copy",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_augment_copy",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_reachable_recovery",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_unclassified_reader",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_active_session",
+      "passed": true
+    },
+    {
+      "name": "forward_stop_existing_reward_target",
+      "passed": true
+    },
+    {
+      "name": "reverse_preserves_current_state_native_tome_copy",
+      "passed": true
+    },
+    {
+      "name": "reverse_preserves_current_state_relocated_event_copy",
+      "passed": true
+    },
+    {
+      "name": "reverse_preserves_current_state_consumed_reward_claim",
+      "passed": true
+    },
+    {
+      "name": "reverse_preserves_current_state_pending_reward_claim",
+      "passed": true
+    },
+    {
+      "name": "reverse_preserves_current_state_relocated_postimage_drift",
+      "passed": true
+    },
+    {
+      "name": "reverse_preserves_current_state_native_postimage_drift",
+      "passed": true
+    },
+    {
+      "name": "reverse_preserves_current_state_unrelated_player_progress",
+      "passed": true
+    },
+    {
+      "name": "late_native_drift_rolls_back",
+      "passed": true
+    },
+    {
+      "name": "late_player_copy_rolls_back",
+      "passed": true
+    },
+    {
+      "name": "late_terminal_rewrite_rolls_back",
+      "passed": true
+    },
+    {
+      "name": "wrong_receipt_binding_stops",
+      "passed": true
+    },
+    {
+      "name": "non_fixture_connection_rejected_before_sql",
+      "passed": true
+    }
+  ],
+  "helper_sha256": "002fd20d70a48d4f07df7cc6c789d785269b7ee2f42feb4e6ef952c3b6113180",
+  "payload_sha256": "09557171a325edee23dbca53c7691a6aa4a1bc97361e00d64fe3ce4cdf793fc0",
+  "inputs_sha256": "3ae3b1cf696c6a36d28155c302549c1e6cbdefed9ff03e9fccb3e39ee420a3f2",
+  "forward_dml_steps": 13,
+  "reverse_dml_steps": 13,
+  "failpoints_per_direction": 27,
+  "scope_limits": [
+    "SQLite transactions, not MySQL/InnoDB lock/engine acceptance",
+    "Synthetic semantic recovery guards, not Housing decoder evidence",
+    "No production adapter, maintenance authorization or current owner clearance",
+    "No server DB/client/build/cache action"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "scope": "Existing configured RoF2 dependencies, not newly recovered opcodes or native acceptance of this batch. No active mapping changed.",
+  "patch_sha256": "1fe391ec40c9d99d3236cfbfb12da90f85c1e05aa5d6c694bfae4a3581f50a82",
+  "opcodes": {
+    "OP_GroundSpawn": "0x6fca",
+    "OP_ClickObject": "0x4aa1",
+    "OP_ClickObjectAction": "0x0c1e",
+    "OP_TaskDescription": "0x3714",
+    "OP_TaskActivityComplete": "0x5e19",
+    "OP_TaskHistoryReply": "0x3d05"
+  },
+  "new_owned_object_fields": "e.object_id and owner/UUID leases are server/Lua metadata, not new wire fields."
+}

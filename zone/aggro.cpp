@@ -1,3 +1,4 @@
+#include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -736,6 +737,11 @@ bool Mob::IsAttackAllowed(Mob *target, bool isSpellAttack)
 		return false;
 	}
 
+	if ((target->IsNPC() && BoundDestructibles::IsBlocked(target->CastToNPC())) ||
+		(IsNPC() && BoundDestructibles::IsBlocked(CastToNPC()))) {
+		return false;
+	}
+
 	if (this == target) {    // you can attack yourself
 		return true;
 	}
@@ -1254,11 +1260,29 @@ bool Mob::CheckLosFN(Mob *other)
 	bool Result = false;
 
 	if (other) {
-		Result = CheckLosFN(other->GetX(), other->GetY(), other->GetZ(), other->GetSize());
+		bool checked_bound_model = false;
+		if (zone->zonemap && other->IsNPC() && other->IsDestructibleObject()) {
+			// SendTo may adjust Z during NPC construction. Placement identity is
+			// the immutable constructor anchor, not the adjusted LOS endpoint.
+			const glm::vec3 source_anchor(other->CastToNPC()->GetSpawnPoint());
+			const auto delta = glm::vec3(other->GetPosition()) - source_anchor;
+			if (glm::dot(delta, delta) <= .5f * .5f) {
+				const auto model = other->GetEntityVariable("destructible_map_model");
+				const auto actor = other->GetEntityVariable("destructible_zone_actor");
+				if (!model.empty() && !actor.empty()) {
+					const glm::vec3 from(GetX(), GetY(), GetZ() + (GetSize() == 0.0f ? 6.0f : GetSize()) * .5f * HEAD_POSITION);
+					const glm::vec3 to(other->GetX(), other->GetY(), other->GetZ() + (other->GetSize() == 0.0f ? 6.0f : other->GetSize()) * .5f * SEE_POSITION);
+					Result = zone->zonemap->CheckLoSToBoundModel(from, to, source_anchor, model);
+					checked_bound_model = true;
+				}
+			}
+		}
+		if (!checked_bound_model) {
+			Result = CheckLosFN(other->GetX(), other->GetY(), other->GetZ(), other->GetSize());
+		}
 	}
 
 	SetLastLosState(Result);
-
 	return Result;
 }
 

@@ -1,3 +1,34 @@
+#include "fungal_item_operation_source.h"
+#include <ctime>
+#include "fire_run_terminal_scene.h"
+#include "fire_run_terminal_custody.h"
+#include "fire_terminal_local_profiles.h"
+#include "fire_run_action_scene.h"
+#include "fire_material_loot_source.h"
+#include "fire_run_item_origin.h"
+#include "fire_run_action_geometry.h"
+#include "fire_run_helper_profile.h"
+#include "doors.h"
+#include "corpse.h"
+#include "common/fire_shared_activity_origin.h"
+#include "worldserver.h"
+#include "task_manager.h"
+#include "map.h"
+#include "pathfinder_interface.h"
+#include "mob_movement_manager.h"
+#include "zonedump.h"
+#include <set>
+#include "fire_shared_transform_use.h"
+#include "fire_shared_transform_published.h"
+#include "task_shared_reward_identity.h"
+#include "common/dynamic_zone_base.h"
+#include "fire_construct_local_profiles.h"
+#include "fire_prepared_construct_plan.h"
+#include "fire_construct_participants.h"
+#include "map.h"
+#include "zonedump.h"
+#include <charconv>
+#include <cstring>
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -15,7 +46,31 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/mercenary/rof2_timer.h"
+#include "fire_shared_successor_native.h"
+#include "fire_published_use_sink.h"
+#include "fire_original_construct_hail.h"
+#include "fire_construct_death_receipt.h"
+#include "fire_initial_admission.h"
+#include "fire_gotonur_say_queue.h"
+
+#include "housing_guild_portal.h"
+#include "housing_actor_publication.h"
+#include "housing_inventory_bridge.h"
+#include "housing_house_runtime.h"
+#include "inventory_session_owner.h"
+#include "mercenary_transaction.h"
+#include <array>
+#include <limits>
+#include <stdexcept>
+#include "../common/housing/coin_pending_guard.h"
+#include "../common/housing/house_inventory_transition.h"
+#include "../common/eqemu_config.h"
+#include <chrono>
+#include <thread>
+
 #include "client.h"
+#include "fire_native_item_custody.h"
 
 #include "common/data_bucket.h"
 #include "common/data_verification.h"
@@ -46,6 +101,7 @@
 #include "common/zone_store.h"
 #include "zone/bot_command.h"
 #include "zone/cheat_manager.h"
+#include "zone/client_achievements.h"
 #include "zone/client_version.h"
 #include "zone/command.h"
 #include "zone/dialogue_window.h"
@@ -58,6 +114,7 @@
 #include "zone/position.h"
 #include "zone/queryserv.h"
 #include "zone/quest_parser_collection.h"
+#include "zone/reward_selection.h"
 #include "zone/string_ids.h"
 #include "zone/water_map.h"
 #include "zone/worldserver.h"
@@ -695,15 +752,77 @@ Client::Client(EQStreamInterface *ieqs) : Mob(
 	AI_Init();
 }
 
+bool Client::ClaimInventorySessionReservation() {
+	if (m_inventory_session_reservation) return m_inventory_session_reservation->HeldFor(*this);
+	try { m_inventory_session_reservation = Housing::InventorySessions::ZoneReservation::ClaimForAuthenticatedClient(*this); }
+	catch (...) { m_inventory_session_rejected = true; return false; }
+	if (!m_inventory_session_reservation) m_inventory_session_rejected = true;
+	return bool(m_inventory_session_reservation);
+}
+bool Client::HasInventorySessionReservation() const {
+	return m_inventory_session_reservation && m_inventory_session_reservation->HeldFor(*this);
+}
+std::shared_ptr<Housing::InventorySessions::ZoneReservation> Client::InventorySessionReleaseTicket() const {
+	return m_inventory_session_reservation;
+}
+
+Housing::InventoryBridge::Bridge* Client::GetHousingInventoryBridge() {
+	if (!RuleB(Housing, EnablePlayerHousing) || ClientVersion() != EQ::versions::ClientVersion::RoF2 ||
+		!Housing::InventoryBridge::Bridge::CanCreateForClient(*this)) return nullptr;
+	if (!m_housing_inventory_bridge) {
+		try {
+			// Authoritative server config, exclusive fresh connection; no callbacks,
+			// event-loop pumping, shared MySQL handle or client-supplied credentials.
+			m_housing_inventory_bridge = std::make_unique<Housing::InventoryBridge::Bridge>(*this, [](Housing::HouseBinding::CustodyContext* houses, Housing::CrateBinding::CustodyContext* crates) {
+				const auto* config = EQEmuConfig::get();
+				if (!config) return std::unique_ptr<Housing::LiveItems::Service>{};
+				auto db = std::make_unique<Database>();
+				if (!db->Connect(config->DatabaseHost, config->DatabaseUsername, config->DatabasePassword,
+					config->DatabaseDB, config->DatabasePort, "housing-inventory-exclusive")) {
+					return std::unique_ptr<Housing::LiveItems::Service>{};
+				}
+				return std::make_unique<Housing::LiveItems::Service>(std::move(db), true, houses, crates);
+			}, Housing::HouseRuntime::MakeForClient);
+		} catch (const std::exception&) {
+			return nullptr;
+		}
+	}
+	return m_housing_inventory_bridge.get();
+}
+
 Client::~Client() {
+ FungalItemSource::NativeEvents::Revoke(*this);
+	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
+ Housing::GuildPortalRuntime::Forget(*this);
+	struct PublicationCleanup {Client& client;~PublicationCleanup(){Housing::ActorPublication::Forget(client);}} publication_cleanup{*this};
+	// First lifecycle action: no quests, save, stream release or inventory
+	// teardown can precede durable housing reconciliation/lease closure.
+	if (m_housing_inventory_bridge) {
+		for (;;) {
+			try {
+				if (m_housing_inventory_bridge->CloseSession()) break;
+			} catch (...) {
+				// An unresolved lease must never fall through to a stale save.
+			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(250));
+		}
+		m_housing_inventory_bridge.reset();
+	}
+
 	entity_list.RemoveMobFromCloseLists(this);
 	m_close_mobs.clear();
 
+	// A rejected/unloaded ingress has authenticated IDs but does not own the
+	// existing actor's profile. Skip writer/callback lifecycle for that shell.
+	const bool owns_loaded_profile = !m_inventory_session_rejected &&
+		(!(RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || m_inventory_session_reservation) ||
+		 (ClientDataLoaded() && HasInventorySessionReservation()));
+	mMovementManager->RemoveClient(this);
+	if (!owns_loaded_profile && trade) trade->Reset(); // shell owns no real trade partner
+	if (owns_loaded_profile) {
 	if (ClientVersion() == EQ::versions::ClientVersion::RoF2 && RuleB (Parcel, EnableParcelMerchants)) {
 		DoParcelCancel();
 	}
-
-	mMovementManager->RemoveClient(this);
 
 	DataBucket::DeleteCachedBuckets(DataBucketLoadType::Account, AccountID());
 	DataBucket::DeleteCachedBuckets(DataBucketLoadType::Client, CharacterID());
@@ -781,6 +900,7 @@ Client::~Client() {
 	// we save right now, because the client might be zoning and the world
 	// will need this data right away
 	Save(2); // This fails when database destructor is called first on shutdown
+	} // owned loaded-profile lifecycle
 
 	safe_delete(task_state);
 	safe_delete(KarmaUpdateTimer);
@@ -878,6 +998,8 @@ void Client::SendZoneInPackets()
 		SendLFGuildStatus();
 	}
 
+	SendHousingZoneCatalog();
+
 	//No idea why live sends this if even were not in a guild
 	SendGuildMOTD();
 }
@@ -929,6 +1051,8 @@ void Client::ReportConnectingState() {
 
 bool Client::SaveAA()
 {
+ if(m_spirit_shroud_transition)return false;
+	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
 	std::vector<CharacterAlternateAbilitiesRepository::CharacterAlternateAbilities> v;
 
 	uint32 aa_points_spent = 0;
@@ -958,13 +1082,15 @@ bool Client::SaveAA()
 		}
 	}
 
-	m_pp.aapoints_spent = aa_points_spent + m_epp.expended_aa;
-
-	if (v.empty()) {
-		return true;
+	const bool aa_saved =
+		v.empty() ||
+		CharacterAlternateAbilitiesRepository::ReplaceMany(database, v);
+	if (aa_saved && !IsSpiritShrouded()) {
+		m_pp.aapoints_spent = aa_points_spent + m_epp.expended_aa;
+		UpdateAchievementForAA(GetAchievementAAPointsSpent());
 	}
 
-	return CharacterAlternateAbilitiesRepository::ReplaceMany(database, v);
+	return aa_saved;
 }
 
 void Client::RemoveExpendedAA(int aa_id)
@@ -979,7 +1105,20 @@ void Client::RemoveExpendedAA(int aa_id)
 	);
 }
 
-bool Client::Save(uint8 iCommitNow) {
+bool Client::Save(uint8 iCommitNow)
+{
+	return Save(iCommitNow, true);
+}
+
+bool Client::Save(uint8 iCommitNow, bool update_achievements) {
+
+ if(m_spirit_shroud_transition)return false;
+	if (m_mercenary_persistence_failed) return false;
+	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
+	if (m_inventory_session_rejected ||
+		((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs) || m_inventory_session_reservation) &&
+		 !HasInventorySessionReservation())) return false;
+
 	if(!ClientDataLoaded())
 		return false;
 
@@ -1037,9 +1176,8 @@ bool Client::Save(uint8 iCommitNow) {
 		GetMercInfo().MercTimerRemaining = GetMercTimer()->GetRemainingTime();
 	}
 
-	if (dead || (!GetMerc() && !GetMercInfo().IsSuspended)) {
-		memset(&m_mercinfo, 0, sizeof(m_mercinfo));
-	}
+	// The owned roster survives death and temporary absence of its zone
+	// entity. Only a successful explicit dismissal may erase ownership.
 
 	m_pp.lastlogin = time(nullptr);
 
@@ -1087,7 +1225,10 @@ bool Client::Save(uint8 iCommitNow) {
 		}
 	}
 
-	database.SaveCharacterData(this, &m_pp, &m_epp); /* Save Character Data */
+	const bool character_data_saved = database.SaveCharacterData(this, &m_pp, &m_epp); /* Save Character Data */
+	if (character_data_saved && update_achievements && !IsSpiritShrouded()) {
+		UpdateAchievementForLevel(GetLevel());
+	}
 
 	database.SaveCharacterEXPModifier(this);
 
@@ -1151,8 +1292,10 @@ bool Client::SendAllPackets() {
 	CLIENTPACKET* cp = nullptr;
 	while (!clientpackets.empty()) {
 		cp = clientpackets.front().get();
-		if(eqs)
+		if(eqs) {
+			Housing::ActorPublication::Observe(*this,cp->app);
 			eqs->FastQueuePacket((EQApplicationPacket **)&cp->app, cp->ack_req);
+		}
 		clientpackets.pop_front();
 	}
 	return true;
@@ -1178,6 +1321,7 @@ void Client::QueuePacket(const EQApplicationPacket* app, bool ack_req, CLIENT_CO
 		AddPacket(app, ack_req);
 	}
 	else if (eqs) {
+		Housing::ActorPublication::Observe(*this,app);
 		eqs->QueuePacket(app, ack_req);
 	}
 }
@@ -1190,8 +1334,10 @@ void Client::FastQueuePacket(EQApplicationPacket** app, bool ack_req, CLIENT_CON
 		return;
 	}
 	else {
-		if(eqs)
+		if(eqs) {
+			Housing::ActorPublication::Observe(*this,app?*app:nullptr);
 			eqs->FastQueuePacket((EQApplicationPacket **)app, ack_req);
+		}
 		else if (app && (*app))
 			delete *app;
 		*app = nullptr;
@@ -1204,6 +1350,7 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 	strn0cpy(message, orig_message, sizeof(message));
 
 	LogDebug("Client::ChannelMessageReceived() Channel:[{}] message:[{}]", chan_num, message);
+ if(chan_num==8 && TrySpiritShroudChat(message))return;
 
 	if (RuleB(Chat, AlwaysCaptureCommandText)) {
 		if (message[0] == COMMAND_CHAR || message[0] == COMMAND_CHAR_NON_HASH) {
@@ -1357,6 +1504,10 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 		}
 		break;
 	}
+    case 21: { // RoF2 /fsay, confirmed in matching client at 0x5243e7.
+        SendFellowshipChat(message);
+        break;
+    }
 	case ChatChannel_Group: { /* Group Chat */
 		Raid* raid = entity_list.GetRaidByClient(this);
 		if(raid) {
@@ -1598,6 +1749,8 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 			sender = GetPet();
 		}
 
+		if(sender==this) FungalItemSource::NativeEvents::CaptureSay(*this,message);
+		if(sender==this) FirePersonalOccurrenceSource::OriginalGotonurSayQueue::CaptureActual(*this,message);
 		if (!is_silent) {
 			entity_list.ChannelMessage(sender, chan_num, language, lang_skill, message);
 		}
@@ -2046,13 +2199,16 @@ void Client::SetSkill(EQ::skills::SkillType skillid, uint16 value) {
 		return;
 	m_pp.skills[skillid] = value; // We need to be able to #setskill 254 and 255 to reset skills
 
-	database.SaveCharacterSkill(CharacterID(), skillid, value);
+	const auto skill_saved = database.SaveCharacterSkill(CharacterID(), skillid, value);
 	auto outapp = new EQApplicationPacket(OP_SkillUpdate, sizeof(SkillUpdate_Struct));
 	SkillUpdate_Struct* skill = (SkillUpdate_Struct*)outapp->pBuffer;
 	skill->skillId=skillid;
 	skill->value=value;
 	QueuePacket(outapp);
 	safe_delete(outapp);
+	if (skill_saved) {
+		UpdateAchievementForSkill(static_cast<uint32>(skillid), value);
+	}
 }
 
 void Client::IncreaseLanguageSkill(uint8 language_id, uint8 increase)
@@ -3427,6 +3583,11 @@ void Client::Disarm(Client* disarmer, int chance) {
 			slot_id = m_inv.FindFreeSlot(false, true, inst->GetItem()->Size, (inst->GetItem()->ItemType == EQ::item::ItemTypeArrow));
 			if (slot_id != EQ::invslot::SLOT_INVALID)
 			{
+				if (!database.TransactionBeginStrict().Success()) {
+					disarmer->MessageString(Chat::Skills, DISARM_FAILED);
+					return;
+				}
+				BeginAchievementInventoryTransaction();
 				EQ::ItemInstance *InvItem = m_inv.PopItem(slot);
 				if (InvItem) { // there should be no way it is not there, but check anyway
 					EQApplicationPacket* outapp = new EQApplicationPacket(OP_MoveItem, sizeof(MoveItem_Struct));
@@ -3438,11 +3599,41 @@ void Client::Disarm(Client* disarmer, int chance) {
 					else
 						mi->number_in_stack = 0;
 					FastQueuePacket(&outapp); // this deletes item from the weapon slot on the client
-					if (PutItemInInventory(slot_id, *InvItem, true))
+					const auto destination_saved =
+						PutItemInInventory(slot_id, *InvItem, true);
+					const auto source_saved =
+						destination_saved &&
 						database.SaveInventory(CharacterID(), NULL, slot);
+					bool inventory_committed = false;
+					if (
+						source_saved &&
+						!database.TransactionStrictFailed()
+					) {
+						inventory_committed =
+							database.TransactionCommitStrict().Success();
+					}
+					else {
+						database.TransactionRollbackStrict();
+					}
+					EndAchievementInventoryTransaction(inventory_committed);
+					safe_delete(InvItem);
+					if (!inventory_committed) {
+						LogError(
+							"Disconnecting [{}] after an unresolved disarm inventory transaction",
+							GetCleanName()
+						);
+						Disconnect();
+						return;
+					}
 					auto matslot = (slot == EQ::invslot::slotPrimary ? EQ::textures::weaponPrimary : EQ::textures::weaponSecondary);
 					if (matslot != EQ::textures::materialInvalid)
 						SendWearChange(matslot);
+				}
+				else {
+					database.TransactionRollbackStrict();
+					EndAchievementInventoryTransaction(false);
+					disarmer->MessageString(Chat::Skills, DISARM_FAILED);
+					return;
 				}
 				MessageString(Chat::Skills, DISARMED);
 				if (disarmer != this)
@@ -4674,6 +4865,7 @@ bool Client::KeyRingAdd(uint32 item_id)
 	}
 
 	keyring.emplace_back(item_id);
+	UpdateAchievementForOwnItem(item_id);
 
 	if (!RuleB(World, UseItemLinksForKeyRing)) {
 		Message(Chat::LightBlue, "Added to keyring.");
@@ -4701,13 +4893,17 @@ bool Client::KeyRingClear()
 {
 	keyring.clear();
 
-	return KeyringRepository::DeleteWhere(
+	const auto cleared = KeyringRepository::DeleteWhere(
 		database,
 		fmt::format(
 			"`char_id` = {}",
 			CharacterID()
 		)
 	);
+	if (cleared) {
+		UpdateAchievementForOwnItem(0);
+	}
+	return cleared;
 }
 
 void Client::KeyRingList(Client* c)
@@ -4752,7 +4948,7 @@ bool Client::KeyRingRemove(uint32 item_id)
 		)
 	);
 
-	return KeyringRepository::DeleteWhere(
+	const auto removed = KeyringRepository::DeleteWhere(
 		database,
 		fmt::format(
 			"`char_id` = {} AND `item_id` = {}",
@@ -4760,6 +4956,10 @@ bool Client::KeyRingRemove(uint32 item_id)
 			item_id
 		)
 	);
+	if (removed) {
+		UpdateAchievementForOwnItem(item_id);
+	}
+	return removed;
 }
 
 bool Client::IsNameChangeAllowed() {
@@ -5582,6 +5782,7 @@ void Client::SendRespawnBinds()
 
 void Client::HandleLDoNOpen(NPC *target)
 {
+ if(target&&!FireRunActionSource::NativeRunTerminalSource::AuthorizeActualChestOpen(*this,*target))return;
 	if(target)
 	{
 		if(target->GetClass() != Class::LDoNTreasure)
@@ -5819,6 +6020,12 @@ int	Client::LDoNChest_SkillCheck(NPC *target, int skill)
 
 void Client::SummonAndRezzAllCorpses()
 {
+	// This path also marks corpses resurrected before SetEXP. The ordinary
+	// resurrection-answer guard must apply to summon-all/quest invocations too.
+	if (IsSpiritShrouded()) {
+		Message(Chat::Yellow, "Remove your shroud before resurrecting your corpses.");
+		return;
+	}
 	PendingRezzXP = -1;
 
 	auto Pack = new ServerPacket(ServerOP_DepopAllPlayersCorpses, sizeof(ServerDepopAllPlayersCorpses_Struct));
@@ -6096,6 +6303,14 @@ void Client::SendRewards()
 	}
 
 	FastQueuePacket(&vetapp);
+}
+
+ClientRewardSelection &Client::GetRewardSelection()
+{
+	if (!m_reward_selection) {
+		m_reward_selection = std::make_unique<ClientRewardSelection>(*this);
+	}
+	return *m_reward_selection;
 }
 
 bool Client::TryReward(uint32 claim_id)
@@ -7267,10 +7482,11 @@ void Client::SendAltCurrencies() {
 	}
 }
 
-void Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
+bool Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return false; }
 	if (!zone->DoesAlternateCurrencyExist(currency_id)) {
-		return;
+		return false;
 	}
 
 	const uint32 current_amount = alternate_currency[currency_id];
@@ -7280,11 +7496,11 @@ void Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
 	const uint32 change_amount = is_gain ? (new_amount - current_amount) : (current_amount - new_amount);
 
 	if (!change_amount) {
-		return;
+		return true;
 	}
 
 	alternate_currency[currency_id] = new_amount;
-	database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_amount);
+	const auto persistence_succeeded = database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_amount);
 	SendAlternateCurrencyValue(currency_id);
 
 	QuestEventID event_id = is_gain ? EVENT_ALT_CURRENCY_GAIN : EVENT_ALT_CURRENCY_LOSS;
@@ -7298,10 +7514,13 @@ void Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
 
 		parse->EventPlayer(event_id, this, export_string, 0);
 	}
+
+	return persistence_succeeded;
 }
 
 bool Client::RemoveAlternateCurrencyValue(uint32 currency_id, uint32 amount)
 {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return false; }
 	if (!amount || !zone->DoesAlternateCurrencyExist(currency_id)) {
 		return false;
 	}
@@ -7333,6 +7552,20 @@ bool Client::RemoveAlternateCurrencyValue(uint32 currency_id, uint32 amount)
 
 int Client::AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_scripted)
 {
+	return AddAlternateCurrencyValue(currency_id, amount, is_scripted, nullptr);
+}
+
+int Client::AddAlternateCurrencyValue(
+	uint32 currency_id,
+	int amount,
+	bool is_scripted,
+	bool *persistence_succeeded
+)
+{
+	if (persistence_succeeded) {
+		*persistence_succeeded = false;
+	}
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return 0; }
 	if (!zone->DoesAlternateCurrencyExist(currency_id)) {
 		return 0;
 	}
@@ -7342,7 +7575,11 @@ int Client::AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_sc
 	}
 
 	if (!alternate_currency_loaded) {
-		alternate_currency_queued_operations.push(std::make_pair(currency_id, amount));
+		// A durable reward caller must retry explicitly after loading; do not
+		// enqueue an unacknowledged grant that could run after that retry.
+		if (!persistence_succeeded) {
+			alternate_currency_queued_operations.push(std::make_pair(currency_id, amount));
+		}
 		return 0;
 	}
 
@@ -7357,10 +7594,16 @@ int Client::AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_sc
 	if (new_value < 0) {
 		new_value = 0;
 		alternate_currency[currency_id] = 0;
-		database.UpdateAltCurrencyValue(CharacterID(), currency_id, 0);
+		const auto persisted = database.UpdateAltCurrencyValue(CharacterID(), currency_id, 0);
+		if (persistence_succeeded) {
+			*persistence_succeeded = persisted;
+		}
 	} else {
 		alternate_currency[currency_id] = new_value;
-		database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_value);
+		const auto persisted = database.UpdateAltCurrencyValue(CharacterID(), currency_id, new_value);
+		if (persistence_succeeded) {
+			*persistence_succeeded = persisted;
+		}
 	}
 
 	SendAlternateCurrencyValue(currency_id);
@@ -7416,6 +7659,7 @@ uint32 Client::GetAlternateCurrencyValue(uint32 currency_id) const
 }
 
 void Client::ProcessAlternateCurrencyQueue() {
+	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return; }
 	while(!alternate_currency_queued_operations.empty()) {
 		std::pair<uint32, int32> op = alternate_currency_queued_operations.front();
 
@@ -7880,105 +8124,303 @@ void Client::SendWebLink(const char *website)
 	}
 }
 
+void Client::RejectMercenaryPersistence()
+{
+	m_mercenary_persistence_failed = true;
+	RejectInventorySessionAdmission();
+	Kick("Mercenary persistence requires authoritative reload");
+}
+
+bool Client::PrepareMercenaryPayment(Mercenary::Payment& payment, uint64 copper)
+{
+	if (m_mercenary_persistence_failed) {
+		return false;
+	}
+	if (m_pp.copper < 0 || m_pp.silver < 0 || m_pp.gold < 0 || m_pp.platinum < 0) {
+		return false;
+	}
+	payment.before = {uint32(m_pp.copper), uint32(m_pp.silver), uint32(m_pp.gold), uint32(m_pp.platinum)};
+	payment.after = payment.before;
+	const uint64 total = uint64(payment.before[0]) + 10ULL * payment.before[1] +
+		100ULL * payment.before[2] + 1000ULL * payment.before[3];
+	if (total < copper) {
+		return false;
+	}
+	if (copper) {
+		const uint64 remaining = total - copper;
+		if (remaining / 1000 > std::numeric_limits<int32>::max()) {
+			return false;
+		}
+		payment.after = {uint32(remaining % 10), uint32(remaining / 10 % 10),
+			uint32(remaining / 100 % 10), uint32(remaining / 1000)};
+	}
+	const auto ticket = InventorySessionReleaseTicket();
+	const auto lease = ticket ? ticket->SnapshotFor(*this) : std::nullopt;
+	if (!lease || lease->actor.character_id != CharacterID() || lease->actor.account_id != AccountID() ||
+		!ticket->HeldFor(*this) || !HasInventorySessionReservation()) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	payment.guard = [this, ticket, lease, before = payment.before](Database& db, uint64 connection) {
+		if (!connection || !ticket->HeldFor(*this) || InventorySessionReleaseTicket() != ticket ||
+			!HasInventorySessionReservation() || before != std::array<uint32, 4>{uint32(m_pp.copper), uint32(m_pp.silver), uint32(m_pp.gold), uint32(m_pp.platinum)}) {
+			return false;
+		}
+		const auto current = ticket->SnapshotFor(*this);
+		if (!current || current->epoch != lease->epoch || current->token != lease->token) {
+			return false;
+		}
+		auto query = [&db](const std::string& sql) {
+			if (db.GetStatus() != DBcore::Connected) throw std::runtime_error("Mercenary connection lost");
+			auto rows = db.QueryDatabase(sql, false);
+			if (!rows.Success()) throw std::runtime_error("Mercenary guard query failed");
+			return rows;
+		};
+		auto number = [](const char* value) -> uint64 {
+			if (!value) throw std::runtime_error("Mercenary guard missing value");
+			return std::stoull(value);
+		};
+		auto hex = [](const uint8* bytes, size_t length) {
+			const char* digits = "0123456789ABCDEF";
+			std::string result;
+			for (size_t i = 0; i < length; ++i) {
+				result += digits[bytes[i] >> 4];
+				result += digits[bytes[i] & 15];
+			}
+			return result;
+		};
+		auto engines = query("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('character_data','housing_inventory_sessions','housing_live_item_leases')");
+		if (engines.RowCount() != 1 || number(engines.begin()[0]) != 3) return false;
+		const auto actor = std::to_string(CharacterID());
+		auto character = query("SELECT id FROM character_data WHERE id=" + actor + " AND account_id=" +
+			std::to_string(AccountID()) + " AND deleted_at IS NULL FOR UPDATE");
+		if (character.RowCount() != 1) return false;
+		auto sessions = query("SELECT account_id,epoch,HEX(token),HEX(process_key),HEX(client_key),zone_id,instance_id,active FROM housing_inventory_sessions WHERE character_id=" + actor + " FOR UPDATE");
+		if (sessions.RowCount() != 1) return false;
+		auto row = sessions.begin();
+		if (!lease->active || number(row[0]) != lease->actor.account_id || number(row[1]) != lease->epoch ||
+			!row[2] || std::string(row[2]) != hex(lease->token.data(), lease->token.size()) ||
+			!row[3] || std::string(row[3]) != hex(reinterpret_cast<const uint8*>(lease->owner.process_key.data()), lease->owner.process_key.size()) ||
+			!row[4] || std::string(row[4]) != hex(reinterpret_cast<const uint8*>(lease->owner.client_key.data()), lease->owner.client_key.size()) ||
+			number(row[5]) != lease->owner.zone_id || number(row[6]) != lease->owner.instance_id || number(row[7]) != 1) return false;
+		auto pending = query("SELECT account_id,pending_key FROM housing_live_item_leases WHERE character_id=" + actor + " FOR UPDATE");
+		if (pending.RowCount() > 1 || (pending.RowCount() &&
+			(number(pending.begin()[0]) != AccountID() || (pending.begin()[1] && *pending.begin()[1])))) return false;
+		return Housing::CoinPending::Inspect(db, CharacterID(), true) == Housing::CoinPending::State::Clear &&
+			Housing::HouseInventory::InspectPending(db, CharacterID(), true) == Housing::HouseInventory::PendingState::Clear;
+	};
+	return true;
+}
+
+bool Client::FinalizeMercenaryPayment(Merc* merc, uint64 copper, bool upkeep)
+{
+	if (!merc || merc->GetMercenaryOwner() != this) {
+		return false;
+	}
+	const auto ticket = InventorySessionReleaseTicket();
+	// Automatic Bayle-first upkeep is server policy. The native hire stance
+	// word is never interpreted as a currency selector.
+	const bool paid_upkeep = upkeep && copper && RuleB(Mercs, ChargeMercUpkeepCost);
+	if (paid_upkeep && !alternate_currency_loaded) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	const uint32 alternate_before = paid_upkeep ? GetAlternateCurrencyValue(19) : 0;
+	const bool paid_alternate = paid_upkeep && alternate_before > 0;
+	Mercenary::Payment payment;
+	if (!PrepareMercenaryPayment(payment, paid_alternate ? 0 : copper)) {
+		return false;
+	}
+	if (paid_alternate) {
+		payment.alternate = Mercenary::AlternatePayment{19, alternate_before, alternate_before - 1};
+		const auto guard = payment.guard;
+		payment.guard = [this, guard, alternate_before](Database& db, uint64 connection) {
+			return alternate_currency_loaded && GetAlternateCurrencyValue(19) == alternate_before && guard(db, connection);
+		};
+	}
+	const auto result = database.SaveMercenaryAtomic(merc, &payment);
+	if (result != Mercenary::SaveResult::Saved) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	if (!ticket->HeldFor(*this) || InventorySessionReleaseTicket() != ticket || !HasInventorySessionReservation()) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	if (payment.before != std::array<uint32, 4>{uint32(m_pp.copper), uint32(m_pp.silver), uint32(m_pp.gold), uint32(m_pp.platinum)}) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	if (paid_alternate && (!alternate_currency_loaded || GetAlternateCurrencyValue(19) != alternate_before)) {
+		RejectMercenaryPersistence();
+		return false;
+	}
+	m_pp.copper = payment.after[0];
+	m_pp.silver = payment.after[1];
+	m_pp.gold = payment.after[2];
+	m_pp.platinum = payment.after[3];
+	if (paid_alternate) {
+		// Apply only the already committed counter. The general setter would
+		// issue a second SQL write and replay quest currency-loss callbacks.
+		alternate_currency[19] = alternate_before - 1;
+		SendAlternateCurrencyValue(19);
+	} else if (copper) {
+		SendMoneyUpdate();
+		RecalcWeight();
+	}
+	if (paid_upkeep) {
+		SendMercenaryCostUpdate();
+		SendMercenaryUpkeep(paid_alternate);
+	}
+	return true;
+}
+
+void Client::SendMercenaryUpkeep(bool alternate)
+{
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2) {
+		SendMercResponsePackets(12);
+		return;
+	}
+	// A runtime rule change may leave the client holding an older unsafe
+	// interval. Publish current lifecycle/countdown and full period first.
+	SendMercTimer(GetMerc());
+	const auto interval = static_cast<uint32>(RuleI(Mercs, UpkeepIntervalMS));
+	if (!GetMercInfo().mercid || !Mercenary::RoF2::SafeNativeDuration(interval)) {
+		Message(Chat::LightGray, "Mercenary upkeep paid using %s. Next upkeep in %u seconds.",
+			alternate ? "Bayle Marks" : "coins", interval / 1000);
+		return;
+	}
+	EQApplicationPacket packet(OP_MercenaryUpkeep, 1);
+	packet.pBuffer[0] = alternate ? 1 : 0;
+	QueuePacket(&packet);
+}
+
+void Client::SendMercenaryCostUpdate()
+{
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2 || !GetMercInfo().mercid) {
+		return;
+	}
+	const auto id = GetMercInfo().MercTemplateID;
+	const uint32 costs[4] = {
+		RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(id, GetLevel()) : 0,
+		RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(id, GetLevel(), 19) : 0,
+		RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(id, GetLevel()) : 0,
+		RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(id, GetLevel(), 19) : 0
+	};
+	EQApplicationPacket packet(OP_MercenaryCostUpdate, sizeof(costs));
+	for (size_t index = 0; index < 4; ++index) {
+		for (unsigned byte = 0; byte < 4; ++byte) {
+			packet.pBuffer[index * 4 + byte] = uint8(costs[index] >> (8 * byte));
+		}
+	}
+	QueuePacket(&packet);
+}
+
+bool Client::GetMercenaryAutoAssist()
+{
+	if (!m_mercenary_auto_assist_loaded && CharacterID()) {
+		// Character-scoped data buckets preserve this preference across zones
+		// and sessions without changing the character or mercenary schema.
+		m_mercenary_auto_assist = GetBucket("eqemu.mercenary.auto_assist") != "0";
+		m_mercenary_auto_assist_loaded = true;
+	}
+	return m_mercenary_auto_assist;
+}
+
+void Client::SetMercenaryAutoAssist(bool enabled)
+{
+	m_mercenary_auto_assist = enabled;
+	m_mercenary_auto_assist_loaded = true;
+	SetBucket("eqemu.mercenary.auto_assist", enabled ? "1" : "0");
+}
+
+uint8 Client::GetMercenaryCapacity() const
+{
+	const int configured = RuleI(Mercs, MaxMercenaries);
+	const int capacity = std::max(1, std::min(configured, MAXMERCS));
+	return ClientVersion() == EQ::versions::ClientVersion::RoF2 ? capacity : 1;
+}
+
+void Client::PersistMercenarySelection()
+{
+	SetBucket("eqemu.mercenary.selected_slot", std::to_string(GetMercSlot()));
+}
+
 void Client::SendMercPersonalInfo()
 {
-	uint32 altCurrentType = 19; //TODO: Implement alternate currency purchases involving mercs!
+	if (GetMerc() && !GetMercInfo().IsSuspended) {
+		GetMercInfo().MercTimerRemaining = GetMercTimer()->GetRemainingTime();
+	}
 
-	if (ClientVersion() >= EQ::versions::ClientVersion::RoF) {
-		// Count owned mercs across all slots
-		uint32 mercCount = GetNumberOfMercenaries();
-		if (mercCount == 0) {
-			SendClearMercInfo();
+	const bool multiple = ClientVersion() == EQ::versions::ClientVersion::RoF2;
+	uint8 slots[MAXMERCS] = {};
+	uint32 count = 0;
+	int32 selected = -1;
+	for (uint8 slot = 0; slot < MAXMERCS; ++slot) {
+		if (!multiple && slot != GetMercSlot()) {
+			continue;
+		}
+		const auto& info = GetMercInfo(slot);
+		if (!info.mercid || !zone->GetMercTemplate(info.MercTemplateID)) {
+			continue;
+		}
+		if (zone->merc_stance_list[info.MercTemplateID].size() > MAX_MERC_STANCES) {
 			return;
 		}
-
-		uint32 packetSize = sizeof(MercenaryDataUpdate_Struct);
-		auto outapp = new EQApplicationPacket(OP_MercenaryDataUpdate, packetSize);
-		memset(outapp->pBuffer, 0, packetSize);
-		auto mdus   = (MercenaryDataUpdate_Struct *) outapp->pBuffer;
-
-		mdus->MercStatus = 0;
-		mdus->MercCount  = mercCount;
-
-		// Lambda to populate a single merc entry in the packet
-		int max_slots = std::min(RuleI(Mercs, MaxMercSlots), MAXMERCS);
-		uint32 merc_index = 0;
-
-		auto fillMercEntry = [&](int slot) {
-			auto& info = GetMercInfo(slot);
-			if (info.mercid == 0 || merc_index >= MAX_MERC) {
-				return;
-			}
-
-			auto tmpl_it = zone->merc_templates.find(info.MercTemplateID);
-			if (tmpl_it == zone->merc_templates.end()) {
-				return;
-			}
-
-			MercTemplate *mercData = &tmpl_it->second;
-			uint32 stancecount = 0;
-			auto stance_it = zone->merc_stance_list.find(mercData->MercTemplateID);
-			if (stance_it != zone->merc_stance_list.end()) {
-				stancecount = stance_it->second.size();
-			}
-
-			if (stancecount > MAX_MERC_STANCES) {
-				Log(Logs::General, Logs::Mercenaries, "SendMercPersonalInfo: stance count %u exceeds max for slot %i, skipping", stancecount, slot);
-				return;
-			}
-
-			mdus->MercData[merc_index].MercID            = mercData->MercTemplateID;
-			mdus->MercData[merc_index].MercType          = mercData->MercType;
-			mdus->MercData[merc_index].MercSubType       = mercData->MercSubType;
-			mdus->MercData[merc_index].PurchaseCost      = Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), 0);
-			mdus->MercData[merc_index].UpkeepCost        = Merc::CalcUpkeepCost(mercData->MercTemplateID, GetLevel(), 0);
-			mdus->MercData[merc_index].Status            = info.IsSuspended ? 0 : 1;
-			mdus->MercData[merc_index].AltCurrencyCost   = Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), altCurrentType);
-			mdus->MercData[merc_index].AltCurrencyUpkeep = Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), altCurrentType);
-			mdus->MercData[merc_index].AltCurrencyType   = altCurrentType;
-			mdus->MercData[merc_index].MercUnk01         = 0;
-			mdus->MercData[merc_index].TimeLeft          = info.MercTimerRemaining;
-			mdus->MercData[merc_index].MerchantSlot      = merc_index + 1;
-			mdus->MercData[merc_index].MercUnk02         = (slot == GetMercSlot()) ? 1 : 0;
-			mdus->MercData[merc_index].StanceCount       = stancecount;
-			mdus->MercData[merc_index].MercUnk03         = 0;
-			mdus->MercData[merc_index].MercUnk04         = 1;
-
-			strn0cpy(mdus->MercData[merc_index].MercName, info.merc_name, sizeof(mdus->MercData[merc_index].MercName));
-
-			uint32 stanceindex = 0;
-			if (stance_it != zone->merc_stance_list.end()) {
-				for (const auto& stance : stance_it->second) {
-					mdus->MercData[merc_index].Stances[stanceindex].StanceIndex = stanceindex;
-					mdus->MercData[merc_index].Stances[stanceindex].Stance      = stance.StanceID;
-					stanceindex++;
-				}
-			}
-
-			mdus->MercData[merc_index].MercUnk05 = std::min(RuleI(Mercs, MaxMercSlots), MAXMERCS);
-			merc_index++;
-		};
-
-		// Emit the active merc slot first — the client marks the first entry
-		// in the list with the X (active marker), so order matters.
-		if (GetMercSlot() < max_slots && GetMercInfo().mercid != 0) {
-			fillMercEntry(GetMercSlot());
+		if (slot == GetMercSlot()) {
+			selected = count;
 		}
-
-		// Then emit remaining owned mercs in slot order
-		for (int slot = 0; slot < max_slots; slot++) {
-			if (slot == GetMercSlot()) {
-				continue; // already emitted
-			}
-			fillMercEntry(slot);
-		}
-
-		// Update count in case we skipped any invalid entries
-		mdus->MercCount = merc_index;
-
-		FastQueuePacket(&outapp);
-		safe_delete(outapp);
+		slots[count++] = slot;
+	}
+	if (!count) {
+		SendClearMercInfo();
 		return;
+	}
+
+	// The native roster stores a command/state and selected stance index
+	// in each row. Neither field is the row's storage slot number.
+	auto fill_entry = [this](auto& entry, const MercInfo& info) {
+		const auto* data = zone->GetMercTemplate(info.MercTemplateID);
+		entry.MercID = data->MercTemplateID;
+		entry.MercType = data->MercType;
+		entry.MercSubType = data->MercSubType;
+		entry.PurchaseCost = RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(data->MercTemplateID, GetLevel()) : 0;
+		entry.UpkeepCost = RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(data->MercTemplateID, GetLevel()) : 0;
+		entry.Status = 0;
+		entry.AltCurrencyCost = RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(data->MercTemplateID, GetLevel(), 19) : 0;
+		entry.AltCurrencyUpkeep = RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(data->MercTemplateID, GetLevel(), 19) : 0;
+		entry.AltCurrencyType = 19;
+		entry.MercUnk01 = 0;
+		entry.TimeLeft = info.MercTimerRemaining;
+		entry.MerchantSlot = info.IsSuspended ? 0 : 5;
+		entry.MercUnk02 = 0;
+		entry.MercUnk03 = 0;
+		// Native owned-row byte 57 restores the selected contract's assist checkbox.
+		entry.MercUnk04 = GetMercenaryAutoAssist() ? 1 : 0;
+		strn0cpy(entry.MercName, info.merc_name, sizeof(entry.MercName));
+		uint32 index = 0;
+		for (const auto& stance : zone->merc_stance_list[data->MercTemplateID]) {
+			entry.Stances[index].StanceIndex = index;
+			entry.Stances[index].Stance = stance.StanceID;
+			if (stance.StanceID == info.Stance) {
+				entry.MercUnk02 = index;
+			}
+			++index;
+		}
+		entry.StanceCount = index;
+	};
+
+	if (ClientVersion() >= EQ::versions::ClientVersion::RoF) {
+		auto outapp = new EQApplicationPacket(OP_MercenaryDataUpdate, sizeof(MercenaryDataUpdate_Struct));
+		auto* data = reinterpret_cast<MercenaryDataUpdate_Struct*>(outapp->pBuffer);
+		data->MercStatus = selected;
+		data->MercCount = count;
+		for (uint32 row = 0; row < count; ++row) {
+			fill_entry(data->MercData[row], GetMercInfo(slots[row]));
+		}
+		// RoF2 carries capacity once, after the complete counted row array.
+		data->MercData[0].MercUnk05 = GetMercenaryCapacity();
+		FastQueuePacket(&outapp);
 	} else {
 		// Pre-RoF path (SoD and earlier) — single merc only
 		if (GetMercInfo().MercTemplateID == 0) {
@@ -7998,45 +8440,12 @@ void Client::SendMercPersonalInfo()
 		uint32 i = 0;
 
 		auto outapp = new EQApplicationPacket(OP_MercenaryDataResponse, sizeof(MercenaryMerchantList_Struct));
-		auto mml    = (MercenaryMerchantList_Struct *) outapp->pBuffer;
-
-		mml->MercTypeCount = mercTypeCount;
-		mml->MercGrades[i] = 1;
-
-		mml->MercCount                  = mercCount;
-		mml->Mercs[i].MercID            = mercData->MercTemplateID;
-		mml->Mercs[i].MercType          = mercData->MercType;
-		mml->Mercs[i].MercSubType       = mercData->MercSubType;
-		mml->Mercs[i].PurchaseCost      = RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), 0) : 0;
-		mml->Mercs[i].UpkeepCost        = RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(mercData->MercTemplateID, GetLevel(), 0) : 0;
-		mml->Mercs[i].Status            = 0;
-		mml->Mercs[i].AltCurrencyCost   = RuleB(Mercs, ChargeMercPurchaseCost) ? Merc::CalcPurchaseCost(mercData->MercTemplateID, GetLevel(), altCurrentType) : 0;
-		mml->Mercs[i].AltCurrencyUpkeep = RuleB(Mercs, ChargeMercUpkeepCost) ? Merc::CalcUpkeepCost(mercData->MercTemplateID, GetLevel(), altCurrentType) : 0;
-		mml->Mercs[i].AltCurrencyType   = altCurrentType;
-		mml->Mercs[i].MercUnk01         = 0;
-		mml->Mercs[i].TimeLeft          = GetMercInfo().MercTimerRemaining;
-		mml->Mercs[i].MerchantSlot      = i + 1;
-		mml->Mercs[i].MercUnk02         = 1;
-		mml->Mercs[i].StanceCount       = zone->merc_stance_list[mercData->MercTemplateID].size();
-		mml->Mercs[i].MercUnk03         = 0;
-		mml->Mercs[i].MercUnk04         = 1;
-
-		strn0cpy(mml->Mercs[i].MercName, GetMercInfo().merc_name, sizeof(mml->Mercs[i].MercName));
-
-		int stanceindex = 0;
-		if (mml->Mercs[i].StanceCount != 0) {
-			auto iter = zone->merc_stance_list[mercData->MercTemplateID].begin();
-			while (iter != zone->merc_stance_list[mercData->MercTemplateID].end()) {
-				mml->Mercs[i].Stances[stanceindex].StanceIndex = stanceindex;
-				mml->Mercs[i].Stances[stanceindex].Stance      = (iter->StanceID);
-				stanceindex++;
-				++iter;
-			}
-		}
-
+		auto* data = reinterpret_cast<MercenaryMerchantList_Struct*>(outapp->pBuffer);
+		data->MercTypeCount = 1;
+		data->MercGrades[0] = 1;
+		data->MercCount = 1;
+		fill_entry(data->Mercs[0], GetMercInfo());
 		FastQueuePacket(&outapp);
-		safe_delete(outapp);
-		return;
 	}
 }
 
@@ -8046,7 +8455,7 @@ void Client::SendClearMercInfo()
 	NoMercenaryHired_Struct *nmhs = (NoMercenaryHired_Struct*)outapp->pBuffer;
 	nmhs->MercStatus = -1;
 	nmhs->MercCount = 0;
-	nmhs->MercID = 1;
+	nmhs->MercID = GetMercenaryCapacity();
 	FastQueuePacket(&outapp);
 }
 
@@ -8595,7 +9004,7 @@ void Client::ItemTimerCheck()
 void Client::TryItemTimer(int slot)
 {
 	EQ::ItemInstance* inst = m_inv.GetItem(slot);
-	if(!inst) {
+	if(!inst || !FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(inst)) {
 		return;
 	}
 
@@ -8617,14 +9026,14 @@ void Client::TryItemTimer(int slot)
 	for (int x = EQ::invaug::SOCKET_BEGIN; x <= EQ::invaug::SOCKET_END; ++x)
 	{
 		EQ::ItemInstance * a_inst = inst->GetAugment(x);
-		if(!a_inst) {
+		if(!a_inst || !FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(a_inst)) {
 			continue;
 		}
 
-		auto& item_timers = a_inst->GetTimers();
+		const auto& item_timers = a_inst->GetTimers();
 		auto it_iter = item_timers.begin();
 		while(it_iter != item_timers.end()) {
-			if(it_iter->second.Check()) {
+			if(a_inst->CheckTimer(it_iter->first)) {
 				if (parse->ItemHasQuestSub(a_inst, EVENT_TIMER)) {
 					parse->EventItem(EVENT_TIMER, this, a_inst, nullptr, it_iter->first, 0);
 				}
@@ -13300,3 +13709,1738 @@ bool Client::UncompleteTask(int task_id)
 
 	return task_state->UncompleteTask(task_id);
 }
+
+namespace FirePersonalOccurrenceSource {
+void OnOriginalNativeUsePublished(Client& actual_owner,PublishedNativeUse& receipt) {
+ PublishedNativeUseSink::Receive(actual_owner,receipt);
+}
+
+void PublishedNativeUseSink::Receive(Client& client,PublishedNativeUse& receipt) {
+ // This MUST precede queries, allocation, inventory observations and callbacks.
+ const auto published=receipt.Take(client);
+ if(!published) return;
+ const auto& view=*published;
+ const auto& original=view.original;
+ const auto& binding=original.personal.acceptance;
+ if(!view.native_click_sequence || binding.slot<0 || binding.slot>=MAXACTIVEQUESTS ||
+  client.CharacterID()!=binding.character_id || client.GetID()!=original.caster_entity ||
+  !zone || zone->GetZoneID()!=original.actual_zone ||
+  zone->GetInstanceID()!=original.actual_instance || !client.GetTaskState()) return;
+ const auto* current=client.GetTaskState()->GetClientTaskInfo(TaskType::Quest,binding.slot);
+ if(!current) return;
+ const auto consumer=original.personal.consumer;
+ if(consumer!=Consumer::CombineIngredients && consumer!=Consumer::ActivateConstruct) return;
+ const auto context=ForConsumer(database,binding,client.CharacterID(),TaskType::Quest,*current,consumer);
+ if(!context || original.personal.activity!=context->activity ||
+  original.personal.rule.task_id!=context->rule.task_id ||
+  original.personal.rule.ingredient_a!=context->rule.ingredient_a ||
+  original.personal.rule.ingredient_b!=context->rule.ingredient_b ||
+  original.personal.rule.inactive_item!=context->rule.inactive_item ||
+  original.personal.rule.construct_npc!=context->rule.construct_npc ||
+  original.personal.rule.encounter_zone!=context->rule.encounter_zone) return;
+ if(consumer==Consumer::CombineIngredients) {
+  if(original.item_id!=context->rule.ingredient_a ||
+   view.published_output_item!=context->rule.inactive_item ||
+   !view.published_output_serial) return;
+  // The writer receipt identifies the actual published output, including cursor
+  // queue placement and canonical native charges. Do not assume cursor-top or
+  // invent a one-charge default from a one-unit output quantity.
+  // Inventory is ALREADY conserved and published by the actual writer.
+  // No extra debit, output, spawn, activity2, save, or successor follows a combine.
+  return;
+ }
+ if(original.item_id!=context->rule.inactive_item || original.charges_before<=0 ||
+  original.actual_zone!=context->rule.encounter_zone || original.actual_instance!=0 ||
+  view.published_output_item || view.published_output_serial ||
+  view.published_output_charges ||
+  original_construct_registration) return;
+ if(client.m_fire_published_construct) {
+  const auto& previous=*client.m_fire_published_construct;
+  if(!previous.caster_death_committed_ ||
+   (previous.original_.personal.acceptance.occurrence_id==binding.occurrence_id &&
+    previous.original_.personal.acceptance.task_id==binding.task_id)) return;
+ }
+ // SAME prespend actual plan, owned by the private writer receipt.
+ auto* plan=view.prepared_construct_plan;
+ if(!plan || !plan->actor_ || !plan->attempt_ ||
+  plan->sequence_!=view.native_click_sequence ||
+  plan->original_.personal.acceptance.character_id!=binding.character_id ||
+  plan->original_.personal.acceptance.task_id!=binding.task_id ||
+  plan->original_.personal.acceptance.occurrence_id!=binding.occurrence_id ||
+  plan->original_.item_serial!=original.item_serial) return;
+ auto attempt=plan->attempt_; // retain across mutable loot/registration callbacks
+ auto* actor=plan->actor_.release();
+ client.m_fire_published_construct=attempt;
+ attempt->attempted_=true;
+ actor->m_fire_original_construct=attempt;
+ // Qualified definitions have no new actor factory/click/debit at this point.
+ actor->AddLootTable();
+ if(actor->DropsGlobalLoot()) actor->CheckGlobalLootTables();
+ OriginalConstructRegistration frame{*attempt,actor,original.actual_zone,original.actual_instance};
+ OriginalConstructRegistrationScope scope(frame);
+ entity_list.AddNPC(actor,true,true);
+ // AddNPC has mutable callbacks: no client/actor/attempt dereference after it.
+ // The real death owner still needs the retained attempt plus original actor identity.
+}
+} // namespace FirePersonalOccurrenceSource
+
+namespace FirePersonalOccurrenceSource {
+void OriginalConstructNativeHail::OnActualTargetedSay(Client& client,NPC& actual,const char* message) {
+ constexpr uint32_t selected_original_gotonur_spawn=OriginalGotonurStaticSpawn; // qualified static source; actual owner witnesses required
+ if(!selected_original_gotonur_spawn) return;
+ if(!message || !zone ||
+  zone->GetZoneID()!=490 || zone->GetInstanceID()!=0 || actual.GetNPCTypeID()!=490061 ||
+  actual.IsEngaged() || client.GetTarget()!=&actual ||
+  actual.GetSpawnPointID()!=selected_original_gotonur_spawn || !client.GetTaskState()) return;
+ const auto lower=Strings::ToLower(message);
+ if(lower.find("prove")!=std::string::npos) {
+  InitialAdmissionNative::Request(client,actual,490,0,selected_original_gotonur_spawn);
+  return; // no Client/NPC/slot access after native acceptance callbacks
+ }
+ if(!Strings::BeginsWith(lower,"hail")) return;
+ const ClientTaskInformation* selected=nullptr;
+ for(int slot=0;slot<MAXACTIVEQUESTS;++slot) {
+  const auto* current=client.GetTaskState()->GetClientTaskInfo(TaskType::Quest,slot);
+  if(!current || (current->task_id!=920167 && current->task_id!=920168 && current->task_id!=920169) ||
+   current->was_rewarded || current->activity[2].activity_state!=ActivityCompleted ||
+   current->activity[3].activity_state!=ActivityActive) continue;
+  if(selected) return; // no inferred sequence among multiple abnormal active originals
+  selected=current;
+ }
+ if(!selected) return;
+ // Read/claim the actual typed death receipt, including its original occurrence;
+ // never construct physical ownership from generic activity/reward history.
+ const auto finish=ConstructDeathReceiptStore::ClaimForActualHail(database,client,actual,*selected);
+ if(!finish) return;
+ finish->Submit(client,actual,*selected);
+ // The private receipt survives mutable reward/successor callbacks independently.
+ // No client, NPC, slot or accepted pointer is accessed afterward.
+}
+} // namespace FirePersonalOccurrenceSource
+
+namespace FirePersonalOccurrenceSource {
+OriginalGotonurSayQueue::Pending* OriginalGotonurSayQueue::head_=nullptr;
+OriginalGotonurSayQueue::Pending* OriginalGotonurSayQueue::tail_=nullptr;
+bool OriginalGotonurSayQueue::MatchesActualContext(Client& client,NPC& npc) {
+ return zone && zone->GetZoneID()==490 && zone->GetInstanceID()==0 &&
+  client.CharacterID() && client.GetID() && npc.GetID() &&
+  client.GetTarget()==&npc && npc.GetNPCTypeID()==490061 &&
+  npc.GetSpawnPointID()==OriginalGotonurStaticSpawn && !npc.GetDepop() && !npc.IsEngaged() &&
+  !client.IsInvisible(&npc) &&
+  DistanceNoZ(client.GetPosition(),npc.GetPosition())<=RuleI(Range,Say);
+}
+void OriginalGotonurSayQueue::CaptureActual(Client& client,const char* message) {
+ if(!message || !zone || zone->GetZoneID()!=490 || zone->GetInstanceID()!=0) return;
+ auto* target=client.GetTarget();
+ if(!target || !target->IsNPC()) return;
+ auto* npc=target->CastToNPC();
+ if(!MatchesActualContext(client,*npc)) return;
+ try {
+  const auto lower=Strings::ToLower(message);
+  if(lower.find("prove")==std::string::npos && !Strings::BeginsWith(lower,"hail")) return;
+  if(!client.m_fire_gotonur_say_lifetime)
+   client.m_fire_gotonur_say_lifetime=std::shared_ptr<OriginalGotonurSayLifetime>(new OriginalGotonurSayLifetime);
+  if(!npc->m_fire_gotonur_say_lifetime)
+   npc->m_fire_gotonur_say_lifetime=std::shared_ptr<OriginalGotonurSayLifetime>(new OriginalGotonurSayLifetime);
+  if(!client.m_fire_gotonur_say_lifetime->active_ || !npc->m_fire_gotonur_say_lifetime->active_) return;
+  const auto zone_lifetime=OriginalConstructDeathQueue::ForActualZone(zone);
+  auto event=std::unique_ptr<Pending>(new Pending{
+   client.m_fire_gotonur_say_lifetime,npc->m_fire_gotonur_say_lifetime,zone_lifetime,
+   &client,npc,client.CharacterID(),client.GetID(),npc->GetID(),std::string(message)});
+  if(tail_) tail_->next=event.get();else head_=event.get();
+  tail_=event.release();
+ } catch(const std::bad_alloc&) {
+  // No callback/task/SQL happened. Preserve the ordinary native say path.
+ }
+}
+void OriginalGotonurSayQueue::Discard() noexcept {
+ auto* pending=head_;head_=tail_=nullptr;
+ while(pending) {auto* next=pending->next;delete pending;pending=next;}
+}
+void OriginalGotonurSayQueue::Drain() {
+ auto* pending=head_;head_=tail_=nullptr;
+ while(pending) {
+  std::unique_ptr<Pending> event(pending);pending=pending->next;
+  if(!event->zone_lifetime->active || event->zone_lifetime->owner!=zone ||
+   !event->client_lifetime->active_ || !event->npc_lifetime->active_) continue;
+  // Fresh native resolution is necessary but is not the identity proof: the
+  // retained private owner witnesses must still match the SAME actual objects.
+  auto* client=entity_list.GetClientByCharID(event->character_id);
+  auto* npc=entity_list.GetNPCByID(static_cast<uint16>(event->npc_entity));
+  if(!client || !npc || client!=event->original_client || npc!=event->original_npc ||
+   client->m_fire_gotonur_say_lifetime!=event->client_lifetime ||
+   npc->m_fire_gotonur_say_lifetime!=event->npc_lifetime ||
+   client->GetID()!=event->client_entity || !MatchesActualContext(*client,*npc)) continue;
+  OriginalConstructNativeHail::OnActualTargetedSay(*client,*npc,event->message.c_str());
+  // No Client/NPC/registry/target access after mutable native accept/hail.
+  // Destruction revokes retained witnesses before any later node can resolve.
+ }
+}
+} // namespace FirePersonalOccurrenceSource
+
+namespace FirePersonalOccurrenceSource {
+namespace {
+bool FireActualPoseAllowed(const OriginalItemUse& use,const glm::vec4& p,float* ground) {
+ if(!zone || zone->GetZoneID()!=use.actual_zone || zone->GetInstanceID()!=0 ||
+  use.actual_instance || !zone->zonemap || !std::isfinite(p.x) || !std::isfinite(p.y) ||
+  !std::isfinite(p.z) || !std::isfinite(p.w)) return false;
+ const auto task=use.personal.acceptance.task_id;
+ double dx=0,dy=0;
+ if(task==920167) {if(use.actual_zone!=487)return false;dx=double(p.x)-900;dy=double(p.y)+1280;}
+ else if(task==920168) {if(use.actual_zone!=481)return false;dx=double(p.x)+560;dy=double(p.y)+560;}
+ else if(task!=920169 || use.actual_zone!=490) return false;
+ // Explicit LOCAL horizontal radius; no historical Z manufactured.
+ if(dx*dx+dy*dy>10000.0) return false;
+ glm::vec3 start(p.x,p.y,p.z);
+ const float z=zone->zonemap->FindBestZ(start,nullptr);
+ if(!std::isfinite(z) || z==BEST_Z_INVALID) return false;
+ if(ground)*ground=z;
+ return true; // actual caster Z retained; native gravity/levitation stays native
+}
+uint32_t FireActualGroup(Client& c) {auto* g=c.GetGroup();return g?g->GetID():0;}
+bool FireSameBinding(const Binding& a,const Binding& b) {
+ return a.character_id==b.character_id && a.task_id==b.task_id && a.slot==b.slot &&
+  a.accepted_time==b.accepted_time && a.occurrence_id==b.occurrence_id;
+}
+}
+std::optional<Binding> NativeConstructParticipants::OwnEligibleOccurrence(Client& c,uint32_t task) {
+ if(!c.ClientDataLoaded() || !c.HasTaskState() || !c.GetTaskState())return {};
+ std::optional<Binding> selected;
+ for(int slot=0;slot<MAXACTIVEQUESTS;++slot) {
+  const auto* current=c.GetTaskState()->GetClientTaskInfo(TaskType::Quest,slot);
+  if(!current || current->task_id!=int(task) || current->was_rewarded ||
+   current->activity[0].activity_state!=ActivityCompleted ||
+   current->activity[1].activity_state!=ActivityCompleted ||
+   current->activity[2].activity_state!=ActivityActive)continue;
+  if(selected)return {}; // ambiguous personal slot never selects arbitrary occurrence
+  auto q=database.QueryDatabase(fmt::format(
+   "SELECT occurrence_id FROM character_task_reward_instances WHERE character_id={} "
+   "AND task_id={} AND accepted_time={}",c.CharacterID(),task,current->accepted_time));
+  if(!q.Success() || q.RowCount()!=1 || !q.begin()[0])return {};
+  const char* text=q.begin()[0];uint64_t occurrence=0;
+  const auto parsed=std::from_chars(text,text+std::strlen(text),occurrence);
+  if(parsed.ec!=std::errc{} || parsed.ptr!=text+std::strlen(text) || !occurrence)return {};
+  Binding b{c.CharacterID(),task,slot,current->accepted_time,occurrence};
+  // Read existing own accepted pointer only, never Reserve/Ensure/history origin.
+  if(!ForConsumer(database,b,c.CharacterID(),TaskType::Quest,*current,Consumer::ActualConstructDeath))return {};
+  selected=b;
+ }
+ return selected;
+}
+PreparedConstructPlan::PreparedConstructPlan(const OriginalItemUse& o,uint64_t sequence) noexcept
+ :original_(o),sequence_(sequence) {}
+PreparedConstructPlan::~PreparedConstructPlan()=default;
+std::unique_ptr<PreparedConstructPlan> PreparedConstructPlan::PrepareActual(
+ Client& c,const OriginalItemUse& use,uint64_t sequence) {
+ if(!sequence || use.personal.consumer!=Consumer::ActivateConstruct || c.GetRaid() ||
+  c.CharacterID()!=use.personal.acceptance.character_id || c.GetID()!=use.caster_entity ||
+  use.item_id!=use.personal.rule.inactive_item || !use.item_serial || use.charges_before<=0 ||
+  original_construct_registration)return {};
+ const auto own=NativeConstructParticipants::OwnEligibleOccurrence(c,use.personal.acceptance.task_id);
+ if(!own || !FireSameBinding(*own,use.personal.acceptance))return {};
+ if(c.m_fire_published_construct) {
+  const auto& prior=*c.m_fire_published_construct;
+  if(!prior.caster_death_committed_ ||
+   (prior.original_.personal.acceptance.task_id==own->task_id &&
+    prior.original_.personal.acceptance.occurrence_id==own->occurrence_id))return {};
+ }
+ auto result=std::unique_ptr<PreparedConstructPlan>(new PreparedConstructPlan(use,sequence));
+ result->point_=c.GetPosition();
+ if(!FireActualPoseAllowed(use,result->point_,&result->native_ground_))return {};
+ const auto* definition=content_db.LoadNPCTypesData(use.personal.rule.construct_npc);
+ // Exact owner-selected LOCAL full-row loader profile, not ID/HP-only acceptance.
+ if(!definition || (definition->npc_id!=use.personal.rule.construct_npc || !FireConstructLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition)))return {};
+ result->expected_definition_=std::make_unique<NPCType>();
+ std::memcpy(result->expected_definition_.get(),definition,sizeof(NPCType));
+ result->attempt_=std::make_shared<OriginalConstructAttempt>(use);
+ auto& a=*result->attempt_;a.native_click_sequence_=sequence;
+ result->group_id_=FireActualGroup(c);a.activation_group_id_=result->group_id_;
+ if(UsesBoundedNativeGroupCredit(own->task_id) && result->group_id_) {
+  for(auto* member:c.GetPartyMembers()) {
+   if(!member || member->GetRaid() || FireActualGroup(*member)!=result->group_id_ ||
+    member->GetZoneID()!=int(use.actual_zone) || member->GetInstanceID()!=0)continue;
+   const auto b=NativeConstructParticipants::OwnEligibleOccurrence(*member,own->task_id);
+   if(!b)continue;
+   if(a.activation_count_>=a.activation_cohort_.size())return {};
+   for(size_t i=0;i<a.activation_count_;++i)
+    if(a.activation_cohort_[i].original.character_id==b->character_id)return {};
+   a.activation_cohort_[a.activation_count_++].original=*b;
+  }
+ } else {a.activation_cohort_[0].original=*own;a.activation_count_=1;}
+ bool has_creator=false;
+ for(size_t i=0;i<a.activation_count_;++i)
+  if(FireSameBinding(a.activation_cohort_[i].original,*own))has_creator=true;
+ if(!has_creator)return {};
+ // Native NPC retains the type pointer: actor gets a distinct owned full copy.
+ auto owned_type=std::make_unique<NPCType>();
+ std::memcpy(owned_type.get(),definition,sizeof(NPCType));
+ result->actor_=std::make_unique<NPC>(owned_type.get(),nullptr,result->point_,GravityBehavior::Water);
+ result->actor_->GiveNPCTypeData(owned_type.release());
+ if(result->actor_->GetID()!=0 || result->actor_->GetNPCTypeID()!=use.personal.rule.construct_npc)return {};
+ if(!result->RevalidateBeforePersist(c))return {};
+ return result;
+}
+bool PreparedConstructPlan::RevalidateBeforePersist(Client& c) const {
+ if(!actor_ || !attempt_ || !expected_definition_ || !sequence_ || c.GetRaid() ||
+  c.CharacterID()!=original_.personal.acceptance.character_id || c.GetID()!=original_.caster_entity ||
+  FireActualGroup(c)!=group_id_ || actor_->GetID()!=0)return false;
+ const auto p=c.GetPosition();
+ if(p.x!=point_.x || p.y!=point_.y || p.z!=point_.z || p.w!=point_.w)return false;
+ float ground=0;
+ if(!FireActualPoseAllowed(original_,p,&ground) || ground!=native_ground_)return false;
+ const auto* definition=content_db.LoadNPCTypesData(original_.personal.rule.construct_npc);
+ if(!definition || (definition->npc_id!=original_.personal.rule.construct_npc || !FireConstructLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition)) ||
+  std::memcmp(definition,expected_definition_.get(),sizeof(NPCType))!=0)return false;
+ const auto* item=c.GetInv().GetItem(original_.slot);
+ if(!item || !SameOriginalBeforeConsumption(original_,*item,original_.slot))return false;
+ const auto own=NativeConstructParticipants::OwnEligibleOccurrence(c,original_.personal.acceptance.task_id);
+ if(!own || !FireSameBinding(*own,original_.personal.acceptance))return false;
+ for(size_t i=0;i<attempt_->activation_count_;++i) {
+  const auto& b=attempt_->activation_cohort_[i].original;
+  auto* member=entity_list.GetClientByCharID(b.character_id);
+  if(!member || member->GetRaid() || member->GetZoneID()!=int(original_.actual_zone) ||
+   member->GetInstanceID()!=0 || FireActualGroup(*member)!=group_id_)return false;
+  const auto now=NativeConstructParticipants::OwnEligibleOccurrence(*member,b.task_id);
+  if(!now || !FireSameBinding(*now,b))return false;
+ }
+ return true;
+}
+void NativeConstructParticipants::ObserveActualTaskKillVisit(Client& candidate,Client& exp,NPC& actor) {
+ try {
+ const auto a=actor.m_fire_original_construct;
+ if(!a || !zone || !a->death_entry_active_ || a->death_success_sealed_ ||
+  !a->captured_ || a->original_object_!=&actor ||
+  !UsesBoundedNativeGroupCredit(a->original_.personal.acceptance.task_id) ||
+  !MatchesActualConstructDeath(*a->captured_,actor,actor.GetID(),zone->GetZoneID(),zone->GetInstanceID()) ||
+  candidate.GetRaid() || exp.GetRaid() || FireActualGroup(candidate)!=a->activation_group_id_ ||
+  FireActualGroup(exp)!=a->activation_group_id_ ||
+  candidate.GetZoneID()!=int(a->captured_->zone_id) || candidate.GetInstanceID()!=int(a->captured_->instance_id))return;
+ if(!a->activation_group_id_ && (exp.CharacterID()!=a->original_.personal.acceptance.character_id ||
+  candidate.CharacterID()!=exp.CharacterID()))return;
+ for(size_t i=0;i<a->activation_count_;++i) {
+  const auto& b=a->activation_cohort_[i].original;auto& v=a->native_visits_[i];
+  if(b.character_id!=candidate.CharacterID() || v.observed_)continue;
+  const auto own=OwnEligibleOccurrence(candidate,b.task_id);
+  if(!own || !FireSameBinding(*own,b))return;
+  if(!candidate.m_fire_gotonur_say_lifetime)
+   candidate.m_fire_gotonur_say_lifetime=std::shared_ptr<OriginalGotonurSayLifetime>(new OriginalGotonurSayLifetime);
+  v.recipient_=b;v.original_client_=&candidate;v.client_entity_=candidate.GetID();
+  v.client_lifetime_=candidate.m_fire_gotonur_say_lifetime;
+  v.group_id_=a->activation_group_id_;v.observed_=true;
+  return; // actual visit, still NOT a successful-death or save receipt
+ }
+ } catch(...) {return;} // allocation/query failure cannot interrupt ordinary native death
+}
+} // namespace FirePersonalOccurrenceSource
+
+namespace FireSharedTransformSource {
+namespace {
+std::optional<uint64_t> SharedTransformNumber(const char* text) {
+ if(!text || !*text)return {};
+ uint64_t value=0;const auto end=text+std::strlen(text);
+ const auto parsed=std::from_chars(text,end,value);
+ if(parsed.ec!=std::errc{} || parsed.ptr!=end)return {};
+ return value;
+}
+bool SameSharedTransformContext(const SharedTransformContext& a,const SharedTransformContext& b) {
+ return a.run==b.run && a.local_occurrence==b.local_occurrence && a.character==b.character &&
+  a.accepted_time==b.accepted_time && a.zone_id==b.zone_id && a.instance_id==b.instance_id &&
+  a.dynamic_zone_id==b.dynamic_zone_id && a.rule.clicked_item==b.rule.clicked_item &&
+  a.rule.output_item==b.rule.output_item && a.rule.activity==b.rule.activity &&
+  a.rule.inputs==b.rule.inputs && a.rule.input_count==b.rule.input_count;
+}
+}
+thread_local NativeSharedTransform::Dispatch* NativeSharedTransform::dispatch_=nullptr;
+std::optional<SharedTransformContext> NativeSharedTransform::CaptureContextActual(Client& c,uint32_t clicked) {
+ const auto rule=OriginalRule(clicked);
+ if(!rule || !zone || zone->GetZoneID()!=490 || zone->GetInstanceVersion()!=1 ||
+  !zone->GetInstanceID() || !c.GetID() || !c.ClientDataLoaded() || !c.HasTaskState() ||
+  !c.GetTaskState() || c.GetSharedTaskId()<=0)return {};
+ const auto& current=c.GetTaskState()->GetActiveSharedTask();
+ if(current.task_id!=int(Task) || current.accepted_time<=0 || current.was_rewarded ||
+  current.activity[rule->activity].activity_state!=ActivityActive ||
+  current.activity[rule->activity].done_count!=0)return {};
+ const int first=rule->activity==6?4:8;
+ for(int goal=first;goal<rule->activity;++goal)
+  if(current.activity[goal].activity_state!=ActivityCompleted || current.activity[goal].done_count!=1)return {};
+ const auto run=TaskSharedRewardIdentity::ReadRun(database,c.CharacterID(),Task);
+ if(!run || run->id!=uint64_t(c.GetSharedTaskId()) || run->accepted_time!=uint32_t(current.accepted_time))return {};
+ // Existing accepted mapping and actual mission membership only. This does not
+ // create an accepted occurrence, Ready/origin receipt or physical cast proof.
+ auto q=database.QueryDatabase(fmt::format(
+  "SELECT h.occurrence_id,d.id FROM shared_tasks s "
+  "JOIN shared_task_members m ON m.shared_task_id=s.id AND m.character_id={} "
+  "JOIN character_shared_task_reward_instances h ON h.shared_task_id=s.id "
+  "AND h.character_id=m.character_id AND h.task_id=s.task_id "
+  "JOIN character_task_reward_instances r ON r.character_id=h.character_id AND r.task_id=h.task_id "
+  "AND r.occurrence_id=h.occurrence_id AND r.accepted_time={} "
+  "JOIN shared_task_dynamic_zones link ON link.shared_task_id=s.id "
+  "JOIN dynamic_zones d ON d.id=link.dynamic_zone_id "
+  "JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=d.id AND dm.character_id=m.character_id "
+  "JOIN instance_list i ON i.id=d.instance_id "
+  "JOIN instance_list_player ip ON ip.id=i.id AND ip.charid=m.character_id "
+  "JOIN shared_task_activity_state a ON a.shared_task_id=s.id AND a.activity_id={} "
+  "WHERE s.id={} AND s.task_id={} AND s.accepted_time=FROM_UNIXTIME({}) "
+  "AND s.completion_time IS NULL AND (s.expire_time IS NULL OR s.expire_time>NOW()) "
+  "AND d.instance_id={} AND d.type={} AND i.zone=490 AND i.version=1 "
+  "AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP()) "
+  "AND a.done_count=0 AND (a.completed_time IS NULL OR a.completed_time=0) "
+  "AND (SELECT COUNT(*) FROM shared_task_dynamic_zones WHERE shared_task_id=s.id)=1 "
+  "AND (SELECT COUNT(*) FROM shared_task_activity_state p WHERE p.shared_task_id=s.id "
+  "AND p.activity_id BETWEEN {} AND {} AND p.done_count=1 AND p.completed_time>0)={}",
+  c.CharacterID(),current.accepted_time,rule->activity,run->id,Task,current.accepted_time,
+  zone->GetInstanceID(),static_cast<int>(DynamicZoneType::Mission),first,rule->activity-1,
+  rule->activity-first),false);
+ if(!q.Success() || q.RowCount()!=1)return {};
+ const auto occurrence=SharedTransformNumber(q.begin()[0]);const auto dz=SharedTransformNumber(q.begin()[1]);
+ if(!occurrence || !*occurrence || !dz || !*dz || *dz>UINT32_MAX)return {};
+ return SharedTransformContext{run->id,*occurrence,c.CharacterID(),uint32_t(current.accepted_time),
+  zone->GetZoneID(),zone->GetInstanceID(),uint32_t(*dz),*rule};
+}
+bool NativeSharedTransform::ContextMatchesActual(Client& c,const SharedTransformContext& original) {
+ const auto now=CaptureContextActual(c,original.rule.clicked_item);
+ return now && SameSharedTransformContext(original,*now);
+}
+std::optional<OriginalSharedTransformUse> NativeSharedTransform::CaptureActual(Client& c,
+ const EQ::ItemInstance& item,int16_t slot,bool supported,uint32_t target) {
+ if(!supported || c.GetInv().GetItem(slot)!=&item || !item.GetItem() || !item.GetSerialNumber() ||
+  item.GetItem()->Click.Effect!=7651 || item.GetItem()->Click.Type!=3 ||
+  item.GetItem()->MaxCharges!=1 || item.GetCharges()!=1 || item.IsStackable() || !item.IsExpendable())return {};
+ const auto shared=CaptureContextActual(c,item.GetID());
+ if(!shared)return {};
+ return OriginalSharedTransformUse{*shared,item.GetID(),c.GetID(),target,item.GetSerialNumber(),slot,item.GetCharges()};
+}
+bool NativeSharedTransform::RevalidateActual(Client& c,const OriginalSharedTransformUse& original) {
+ if(original.caster_entity!=c.GetID() || original.shared.character!=c.CharacterID() ||
+  original.item_id!=original.shared.rule.clicked_item || !original.item_serial || original.charges_before!=1)return false;
+ const auto* actual=c.GetInv().GetItem(original.slot);
+ return actual && actual->GetID()==original.item_id && actual->GetSerialNumber()==original.item_serial &&
+  actual->GetCharges()==original.charges_before && actual->GetItem() &&
+  actual->GetItem()->Click.Effect==7651 && actual->GetItem()->Click.Type==3 && actual->GetItem()->MaxCharges==1 &&
+  actual->IsExpendable() && !actual->IsStackable() && ContextMatchesActual(c,original.shared);
+}
+bool NativeSharedTransform::ClaimActualSubmission(Client& c,uint32_t task,int activity,uint64_t run) {
+ if(task!=Task || (activity!=6 && activity!=13))return true;
+ auto* actual=dispatch_;
+ if(!actual || actual->entered || actual->owner!=&c || !actual->original)return false;
+ const auto& original=*actual->original;
+ if(original.shared.character!=c.CharacterID() || original.caster_entity!=c.GetID() ||
+  original.shared.run!=run || original.shared.rule.activity!=activity)return false;
+ actual->entered=true;
+ return true; // entering native shim only, never a World durable-save acknowledgment
+}
+void OnOriginalSharedTransformPublished(Client& c,PublishedSharedTransformUse& receipt) {
+ PublishedSharedTransformSink::Receive(c,receipt);
+}
+void PublishedSharedTransformSink::Receive(Client& c,PublishedSharedTransformUse& receipt) {
+ const auto published=receipt.Take(c); // FIRST action; no query/allocation before one-use seal
+ if(!published)return;
+ const auto& view=*published;const auto& original=view.original;
+ const auto rule=OriginalRule(original.item_id);
+ if(!rule || !view.native_click_sequence || !original.item_serial || original.charges_before!=1 ||
+  original.caster_entity!=c.GetID() || original.shared.character!=c.CharacterID() ||
+  view.published_output_item!=rule->output_item || !view.published_output_serial ||
+  view.published_output_charges!=(rule->output_item==47762?0:1) ||
+  NativeSharedTransform::dispatch_ || !NativeSharedTransform::ContextMatchesActual(c,original.shared))return;
+ // Canonical output identity belongs to this SAME private writer receipt. Do
+ // not summon another item, spend inputs again or infer ownership from history.
+ NativeSharedTransform::Dispatch frame{&original,&c};
+ NativeSharedTransform::dispatch_=&frame;
+ try {c.UpdateTaskActivity(Task,rule->activity,1);}
+ catch(...) {NativeSharedTransform::dispatch_=nullptr;throw;}
+ NativeSharedTransform::dispatch_=nullptr;
+ // After mutable native update: stack/thread-local only, no Client/item access.
+ // Native shim stamps captured run; eventual World echo is ordinary correlated
+ // state, not a private physical-origin/save receipt or replay authority.
+}
+} // namespace FireSharedTransformSource
+
+namespace FireRunActionSource {
+namespace {
+constexpr uint32_t MissionTask=920170;
+// Native accessor is nonconst but implemented as map::find only; keep this
+// compatibility read local rather than changing the common ItemInstance API.
+std::string ReadRunOriginSeal(const EQ::ItemInstance& item){return const_cast<EQ::ItemInstance&>(item).GetCustomData(RunOriginSealKey);}
+std::optional<uint64_t> RunNumber(const char* p) {
+ if(!p || !*p)return {};uint64_t n=0;const auto end=p+std::strlen(p);
+ const auto r=std::from_chars(p,end,n);if(r.ec!=std::errc{} || r.ptr!=end)return {};return n;
+}
+bool Inside(const glm::vec3& p,const glm::vec3& lo,const glm::vec3& hi) {
+ return std::isfinite(p.x)&&std::isfinite(p.y)&&std::isfinite(p.z)&&
+  p.x>=lo.x&&p.y>=lo.y&&p.z>=lo.z&&p.x<=hi.x&&p.y<=hi.y&&p.z<=hi.z;
+}
+const GateBinding* GateFor(Doors& d) {
+ if(!zone || zone->GetZoneID()!=490)return nullptr;
+ for(const auto& b:BoundGates())
+  if(b.version==zone->GetInstanceVersion() && d.GetDoorDBID()==b.database_id &&
+   d.GetDoorID()==b.native_id && (b.version?zone->GetInstanceID()!=0:zone->GetInstanceID()==0))return &b;
+ return nullptr;
+}
+const GateBinding* GateForRole(GateRole role) {
+ for(const auto& b:BoundGates())if(b.role==role)return &b;return nullptr;
+}
+bool GateProfile(Doors& d,const GateBinding& b) {
+ const auto p=d.GetPosition();const auto q=b.pose;
+ return d.GetDoorDBID()==b.database_id && d.GetDoorID()==b.native_id &&
+  d.GetDoorName() && std::strcmp(d.GetDoorName(),"OBJ_DOOR_BRELLS")==0 &&
+  std::abs(p.x-q.x)<=0.02f&&std::abs(p.y-q.y)<=0.02f&&std::abs(p.z-q.z)<=0.02f&&std::abs(p.w-q.w)<=0.02f&&
+  d.GetOpenType()==77&&d.GetSize()==b.size&&d.GetLockpick()==b.lockpick&&d.GetKeyItem()==b.key&&
+  d.GetNoKeyring()==b.nokeyring&&d.GetDisableTimer()==b.disable_timer&&d.GetIncline()==0&&
+  d.GetInvertState()==0&&!d.IsLDoNDoor()&&d.GetDzSwitchID()==0&&d.GetGuildID()==0&&
+  d.GetTriggerDoorID()==0&&d.GetTriggerType()==0&&d.GetDestinationZoneName()=="NONE"&&d.GetDestinationInstanceID()==0;
+}
+bool NativeClickRange(Client& c,Doors& d) {
+ const auto p=c.GetPosition(),q=d.GetPosition();const double dx=double(p.x)-q.x,dy=double(p.y)-q.y;
+ const int r=RuleI(Range,MaxDistanceToClickDoors);
+ return r>0&&std::isfinite(dx)&&std::isfinite(dy)&&dx*dx+dy*dy<double(r)*r;
+}
+bool SameRun(const MissionRunFacts& a,const MissionRunFacts& b) {
+ return a.run==b.run&&a.local_occurrence==b.local_occurrence&&a.character==b.character&&
+  a.accepted_time==b.accepted_time&&a.zone==b.zone&&a.version==b.version&&
+  a.instance==b.instance&&a.dynamic_zone==b.dynamic_zone;
+}
+// Current native accepted context only. Never an item, death, open or cast proof.
+std::optional<MissionRunFacts> CaptureRun(Client& c,int goal,bool allow_completed) {
+ if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID()||
+  !c.ClientDataLoaded()||!c.HasTaskState()||!c.GetTaskState()||c.GetSharedTaskId()<=0)return {};
+ const auto* catalog=TaskManager::Instance()->GetTaskData(MissionTask);
+ if(!catalog||catalog->type!=TaskType::Shared||catalog->activity_count!=19)return {};
+ const auto& task=c.GetTaskState()->GetActiveSharedTask();
+ if(task.task_id!=int(MissionTask)||task.accepted_time<=0||task.was_rewarded)return {};
+ if(goal>=0 && (task.activity[goal].activity_state!=ActivityActive &&
+  (!allow_completed||task.activity[goal].activity_state!=ActivityCompleted)))return {};
+ auto q=database.QueryDatabase(fmt::format(
+  "SELECT s.id,h.occurrence_id,d.id FROM shared_task_members m JOIN shared_tasks s ON s.id=m.shared_task_id "
+  "JOIN character_shared_task_reward_instances h ON h.character_id=m.character_id AND h.shared_task_id=s.id AND h.task_id=s.task_id "
+  "JOIN character_task_reward_instances r ON r.character_id=h.character_id AND r.task_id=h.task_id AND r.occurrence_id=h.occurrence_id "
+  "JOIN shared_task_dynamic_zones link ON link.shared_task_id=s.id JOIN dynamic_zones d ON d.id=link.dynamic_zone_id "
+  "JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=d.id AND dm.character_id=m.character_id "
+  "JOIN instance_list i ON i.id=d.instance_id JOIN instance_list_player ip ON ip.id=i.id AND ip.charid=m.character_id "
+  "WHERE m.character_id={} AND s.id={} AND s.task_id={} AND UNIX_TIMESTAMP(s.accepted_time)={} "
+  "AND r.accepted_time={} AND s.completion_time IS NULL AND (s.expire_time IS NULL OR s.expire_time>NOW()) "
+  "AND d.instance_id={} AND d.type={} AND i.zone=490 AND i.version=1 "
+  "AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP()) "
+  "AND (SELECT COUNT(*) FROM shared_task_dynamic_zones WHERE shared_task_id=s.id)=1",
+  c.CharacterID(),uint64_t(c.GetSharedTaskId()),MissionTask,task.accepted_time,task.accepted_time,
+  zone->GetInstanceID(),int(DynamicZoneType::Mission)),false);
+ if(!q.Success()||q.RowCount()!=1)return {};
+ const auto run=RunNumber(q.begin()[0]),occ=RunNumber(q.begin()[1]),dz=RunNumber(q.begin()[2]);
+ if(!run||!*run||!occ||!*occ||!dz||!*dz||*dz>UINT32_MAX)return {};
+ if(goal>=0) {
+  if(catalog->activity_information[goal].goal_count!=1)return {};
+  auto activity=database.QueryDatabase(fmt::format("SELECT done_count,UNIX_TIMESTAMP(completed_time) "
+   "FROM shared_task_activity_state WHERE shared_task_id={} AND activity_id={}",*run,goal),false);
+  if(!activity.Success()||activity.RowCount()!=1)return {};
+  const auto done=RunNumber(activity.begin()[0]),completed=RunNumber(activity.begin()[1]);
+  const bool local_done=task.activity[goal].activity_state==ActivityCompleted;
+  if(!done||*done!=(local_done?1:0)||task.activity[goal].done_count!=int(*done)||
+   (local_done?(!completed||!*completed):(completed&&*completed)))return {};
+ }
+ return MissionRunFacts{*run,*occ,c.CharacterID(),uint32_t(task.accepted_time),490,1,zone->GetInstanceID(),uint32_t(*dz)};
+}
+bool RunStillActual(const MissionRunFacts& r) {
+ if(!zone||zone->GetZoneID()!=r.zone||zone->GetInstanceVersion()!=r.version||zone->GetInstanceID()!=r.instance)return false;
+ auto q=database.QueryDatabase(fmt::format(
+  "SELECT 1 FROM shared_tasks s JOIN shared_task_dynamic_zones l ON l.shared_task_id=s.id "
+  "JOIN dynamic_zones d ON d.id=l.dynamic_zone_id JOIN instance_list i ON i.id=d.instance_id "
+  "WHERE s.id={} AND s.task_id=920170 AND UNIX_TIMESTAMP(s.accepted_time)={} "
+  "AND s.completion_time IS NULL AND (s.expire_time IS NULL OR s.expire_time>NOW()) "
+  "AND d.id={} AND d.instance_id={} AND i.zone=490 AND i.version=1 "
+  "AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP())",r.run,r.accepted_time,r.dynamic_zone,r.instance),false);
+ return q.Success()&&q.RowCount()==1;
+}
+bool CarriedSlot(Client& c,int16_t slot) {
+ int16_t root=slot;
+ if(EQ::ValueWithin(slot,EQ::invbag::GENERAL_BAGS_BEGIN,EQ::invbag::GENERAL_BAGS_END))root=EQ::InventoryProfile::CalcSlotId(slot);
+ return slot==EQ::invslot::slotCursor || (EQ::ValueWithin(root,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END)&&
+  c.GetInv().GetLookup()&&((uint64_t(1)<<root)&c.GetInv().GetLookup()->PossessionsBitmask));
+}
+std::unique_ptr<ServerPacket> ProgressPacket(const MissionRunFacts& run,int goal) {
+ auto p=std::make_unique<ServerPacket>(ServerOP_SharedTaskUpdate,
+  sizeof(ServerSharedTaskActivityUpdate_Struct)+sizeof(FireSharedActivityOrigin::Trailer));
+ auto* a=reinterpret_cast<ServerSharedTaskActivityUpdate_Struct*>(p->pBuffer);
+ a->source_character_id=run.character;a->task_id=MissionTask;a->activity_id=goal;a->done_count=1;a->ignore_quest_update=false;
+ FireSharedActivityOrigin::Write(p->pBuffer,run.run);return p;
+}
+}
+// Closed feature witness, reusing actual Client/Zone private owners. A fresh
+// ID/address match alone never survives destructor/replacement callbacks.
+class RunUseWitness final {
+ friend class NativeRunDoorSource;
+ friend class PublishedRunActionSink;
+ friend class NativeRunTerminalSource;
+ friend class PreparedTerminalChestPlan;
+ friend class PublishedTerminalReturnSink;
+ friend class OriginalTerminalDeath;
+ friend class NativeRunHelperSource;
+ friend class PreparedRunDoorPlan;
+ friend class PreparedRunHelperPlan;
+ friend class OriginalMissionMaterialDeath;
+ friend class NativeRunLootSource;
+ std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Lifetime> zone_;
+ std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> client_,npc_;
+ std::shared_ptr<RunDoorLifetime> door_;
+ std::shared_ptr<RunCorpseLifetime> corpse_;
+ Client* original_client_=nullptr;Doors* original_door_=nullptr;Corpse* original_corpse_=nullptr;
+ uint32_t character_=0,client_entity_=0;uint8_t native_door_=0;
+ static std::shared_ptr<RunUseWitness> Capture(Client* c,Doors* d,Corpse* corpse) {
+  auto w=std::shared_ptr<RunUseWitness>(new RunUseWitness);
+  w->zone_=FirePersonalOccurrenceSource::OriginalConstructDeathQueue::ForActualZone(zone);
+  if(c) {
+   if(!c->m_fire_gotonur_say_lifetime)c->m_fire_gotonur_say_lifetime=
+    std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime>(new FirePersonalOccurrenceSource::OriginalGotonurSayLifetime);
+   w->client_=c->m_fire_gotonur_say_lifetime;w->original_client_=c;w->character_=c->CharacterID();w->client_entity_=c->GetID();
+  }
+  if(d) {
+   if(!d->m_fire_run_action_lifetime)d->m_fire_run_action_lifetime=std::shared_ptr<RunDoorLifetime>(new RunDoorLifetime);
+   w->door_=d->m_fire_run_action_lifetime;w->original_door_=d;w->native_door_=d->GetDoorID();
+  }
+  if(corpse) {
+   if(!corpse->m_fire_run_action_lifetime)corpse->m_fire_run_action_lifetime=std::shared_ptr<RunCorpseLifetime>(new RunCorpseLifetime);
+   w->corpse_=corpse->m_fire_run_action_lifetime;w->original_corpse_=corpse;
+  }
+  return w;
+ }
+ static std::shared_ptr<RunUseWitness> CaptureNPCScene(NPC& npc) {
+  auto w=Capture(nullptr,nullptr,nullptr);
+  if(!npc.m_fire_gotonur_say_lifetime)npc.m_fire_gotonur_say_lifetime=
+   std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime>(new FirePersonalOccurrenceSource::OriginalGotonurSayLifetime);
+  w->npc_=npc.m_fire_gotonur_say_lifetime;return w;
+ }
+ bool NPCStillAlive()const{return ZoneAlive()&&npc_&&npc_->active_;}
+ bool ZoneAlive()const{return zone_&&zone_->active&&zone&&zone_->owner==zone;}
+ Client* LiveClient()const {
+  if(!ZoneAlive()||!client_||!client_->active_)return nullptr;
+  auto* c=entity_list.GetClientByCharID(character_);
+  return c&&c==original_client_&&c->GetID()==client_entity_&&c->m_fire_gotonur_say_lifetime==client_?c:nullptr;
+ }
+ Doors* LiveDoor()const {
+  if(!ZoneAlive()||!door_||!door_->active_)return nullptr;
+  auto* d=entity_list.FindDoor(native_door_);
+  return d&&d==original_door_&&d->m_fire_run_action_lifetime==door_?d:nullptr;
+ }
+ Corpse* LiveCorpse(uint32_t actual_registered_entity)const {
+  if(!ZoneAlive()||!corpse_||!corpse_->active_||!actual_registered_entity)return nullptr;
+  auto* p=entity_list.GetCorpseByID(actual_registered_entity);
+  return p&&p==original_corpse_&&p->m_fire_run_action_lifetime==corpse_?p:nullptr;
+ }
+};
+struct NativeRunPublication::State {
+ NativeRunPublicationFacts actual;
+ std::shared_ptr<RunUseWitness> owner;
+ std::shared_ptr<RunHelperAttempt> helper;
+};
+NativeRunPublication::NativeRunPublication(std::unique_ptr<State> state)noexcept
+ :facts_(state->actual),state_(std::move(state)){}
+NativeRunPublication::~NativeRunPublication()=default;
+} // namespace FireRunActionSource
+
+namespace FireRunActionSource {
+namespace {
+struct MaterialSceneRun {uint64_t run=0;uint32_t accepted=0,dynamic_zone=0,instance=0;};
+std::optional<MaterialSceneRun> CaptureMaterialSceneRun() {
+ if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID())return {};
+ auto q=database.QueryDatabase(fmt::format(
+  "SELECT s.id,UNIX_TIMESTAMP(s.accepted_time),d.id FROM shared_tasks s "
+  "JOIN shared_task_dynamic_zones l ON l.shared_task_id=s.id JOIN dynamic_zones d ON d.id=l.dynamic_zone_id "
+  "JOIN instance_list i ON i.id=d.instance_id WHERE s.task_id=920170 AND d.instance_id={} "
+  "AND d.type={} AND i.zone=490 AND i.version=1 AND s.completion_time IS NULL "
+  "AND (s.expire_time IS NULL OR s.expire_time>NOW()) AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP()) "
+  "AND (SELECT COUNT(*) FROM shared_task_dynamic_zones WHERE shared_task_id=s.id)=1",
+  zone->GetInstanceID(),int(DynamicZoneType::Mission)),false);
+ if(!q.Success()||q.RowCount()!=1)return {};
+ const auto r=RunNumber(q.begin()[0]),a=RunNumber(q.begin()[1]),d=RunNumber(q.begin()[2]);
+ if(!r||!*r||!a||!*a||*a>UINT32_MAX||!d||!*d||*d>UINT32_MAX)return {};
+ return MaterialSceneRun{*r,uint32_t(*a),uint32_t(*d),zone->GetInstanceID()};
+}
+const MaterialSpawnBinding* MaterialSpawn(uint32_t spawn,uint32_t npc) {
+ for(const auto& b:BoundMaterialSpawns())if(b.spawn==spawn&&b.npc==npc)return &b;return nullptr;
+}
+}
+class MissionMaterialCorpseOrigin final {
+ friend class OriginalMissionMaterialDeath;
+ friend class NativeRunLootSource;
+ MaterialSceneRun scene_;
+ MaterialSpawnBinding original_{};
+ uint64_t death_sequence_=0;
+ uint32_t original_npc_entity_=0,corpse_entity_=0;
+ NPC* original_npc_=nullptr;
+ std::shared_ptr<RunUseWitness> corpse_witness_;
+ bool registered_=false,death_succeeded_=false;
+ std::set<uint16_t> claimed_loot_slots_;
+};
+struct OriginalMissionMaterialDeath::State {
+ NPC* original=nullptr;uint32_t native_entity=0;
+ MaterialSceneRun scene;MaterialSpawnBinding binding{};uint64_t sequence=0;
+ std::shared_ptr<RunUseWitness> actor_witness;
+ std::shared_ptr<MissionMaterialCorpseOrigin> corpse;
+};
+thread_local OriginalMissionMaterialDeath* OriginalMissionMaterialDeath::current_=nullptr;
+OriginalMissionMaterialDeath::OriginalMissionMaterialDeath(NPC& npc)noexcept:previous_(current_) {
+ current_=this;
+ try {
+  const auto* b=MaterialSpawn(npc.GetSpawnPointID(),npc.GetNPCTypeID());
+  if(!b)return;const auto scene=CaptureMaterialSceneRun();if(!scene)return;
+  static uint64_t actual_death_sequence=0;if(actual_death_sequence==UINT64_MAX)return;
+  state_=std::make_shared<State>();state_->original=&npc;state_->native_entity=npc.GetID();
+  state_->scene=*scene;state_->binding=*b;state_->sequence=b->npc==490911?OriginalTerminalDeath::ActualGuardianSequence(npc):++actual_death_sequence;
+  if(!state_->sequence){state_.reset();return;}
+  state_->actor_witness=RunUseWitness::CaptureNPCScene(npc);
+ }catch(...) {state_.reset();}
+}
+OriginalMissionMaterialDeath::~OriginalMissionMaterialDeath(){current_=previous_;}
+void OriginalMissionMaterialDeath::CaptureActualCorpse(Corpse& corpse,NPC& npc) {
+ auto* f=current_;
+ if(!f||!f->state_||f->state_->original!=&npc||f->state_->corpse||!f->state_->actor_witness->NPCStillAlive()||!corpse.IsNPCCorpse()||
+  corpse.GetNPCTypeID()!=f->state_->binding.npc)return;
+ try {
+  auto o=std::make_shared<MissionMaterialCorpseOrigin>();
+  o->scene_=f->state_->scene;o->original_=f->state_->binding;o->death_sequence_=f->state_->sequence;
+  o->original_npc_=&npc;o->original_npc_entity_=f->state_->native_entity;
+  o->corpse_witness_=RunUseWitness::Capture(nullptr,nullptr,&corpse);
+  corpse.m_fire_material_origin=o;f->state_->corpse=std::move(o);
+ }catch(...) {return;}
+}
+void OriginalMissionMaterialDeath::ObserveActualCorpseRegistered(Corpse& corpse) {
+ const auto o=corpse.m_fire_material_origin;
+ if(!o||o->registered_||!current_||!current_->state_||current_->state_->corpse!=o||
+  !corpse.GetID()||o->corpse_witness_->LiveCorpse(corpse.GetID())!=&corpse)return;
+ o->corpse_entity_=corpse.GetID();o->registered_=true;
+}
+void OriginalMissionMaterialDeath::SealActualSuccess(NPC& npc,uint32_t actual_killed_entity) {
+ if(!state_||state_->original!=&npc||state_->native_entity!=actual_killed_entity||
+  !state_->actor_witness->NPCStillAlive()||!state_->corpse||!state_->corpse->registered_||!state_->corpse->corpse_witness_->LiveCorpse(state_->corpse->corpse_entity_))return;
+ state_->corpse->death_succeeded_=true; // retained record only; never dereference departed corpse
+}
+struct OriginalRunLootUse::State {
+ std::shared_ptr<MissionMaterialCorpseOrigin> origin;
+ std::shared_ptr<RunUseWitness> client_and_corpse;
+};
+OriginalRunLootUse::OriginalRunLootUse(RunLootFacts f,std::shared_ptr<State> s)
+ :facts_(f),state_(std::move(s)){}
+OriginalRunLootUse::~OriginalRunLootUse()=default;
+struct NativeRunLootPublication::State {
+ RunLootFacts original;
+ std::shared_ptr<OriginalRunLootUse::State> use;
+};
+NativeRunLootPublication::NativeRunLootPublication(std::unique_ptr<PreparedRunLootSeal> seal,std::unique_ptr<State> s)noexcept
+ :facts_(s->original),seal_(std::move(seal)),state_(std::move(s)){}
+NativeRunLootPublication::~NativeRunLootPublication()=default;
+struct NativeRunLootSource::State {
+ Client* owner=nullptr;Corpse* corpse=nullptr;
+ std::shared_ptr<MissionMaterialCorpseOrigin> origin;
+ std::shared_ptr<RunUseWitness> witness;
+ std::unique_ptr<OriginalRunLootUse> use;
+ RunLootFacts original{};
+ std::unique_ptr<PreparedRunLootSeal> pending;
+ std::unique_ptr<NativeRunLootPublication::State> publication;
+ std::unique_ptr<ServerPacket> mold_progress;
+ bool selected=false,armed=false,save_observed=false,saved=false,removal_seen=false;
+};
+thread_local NativeRunLootSource* NativeRunLootSource::current_=nullptr;
+NativeRunLootSource::NativeRunLootSource(Client& c,Corpse& corpse)noexcept:previous_(current_) {
+ current_=this;
+ try {
+  if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID()||!corpse.IsNPCCorpse())return;
+  bool tracked=false;for(const auto& b:BoundMaterialSpawns())if(b.npc==corpse.GetNPCTypeID())tracked=true;
+  if(!tracked)return;
+  scene_candidate_=true;source_npc_type_=corpse.GetNPCTypeID();
+  state_=std::make_shared<State>();state_->selected=true;state_->owner=&c;state_->corpse=&corpse;
+  state_->origin=corpse.m_fire_material_origin;
+  state_->witness=RunUseWitness::Capture(&c,nullptr,&corpse);
+ }catch(...) {state_.reset();}
+}
+NativeRunLootSource::~NativeRunLootSource(){current_=previous_;}
+bool NativeRunLootSource::PrepareActualItem(EQ::ItemInstance& item,uint16_t actual_slot) {
+ if(!scene_candidate_)return true;
+ // Other loot remains ordinary. A tracked material never falls back to a
+ // tokenless item/goal lookup when the actual death/corpse lineage is absent.
+ bool tracked=false;
+ for(const auto& b:BoundMaterialSpawns())if(b.npc==source_npc_type_&&b.item==item.GetID())tracked=true;
+ if(!tracked)return true;
+ if(!state_)return false;auto& s=*state_;const auto o=s.origin;
+ try {
+  if(!o||!o->registered_||!o->death_succeeded_||s.armed||!item.GetSerialNumber()||!item.GetItem()||!item.GetItem()->IsClassCommon()||
+   item.GetItem()->ItemType!=11||item.IsStackable()||
+   !s.witness->LiveClient()||s.witness->LiveCorpse(o->corpse_entity_)!=s.corpse||
+   o->original_.item!=item.GetID()||o->claimed_loot_slots_.count(actual_slot))return false;
+  auto* actual=s.corpse->GetItem(actual_slot);
+  if(!actual||actual->item_id!=item.GetID())return false;
+  auto run=CaptureRun(*s.owner,o->original_.activity,true);
+  if(!run||run->run!=o->scene_.run||run->accepted_time!=o->scene_.accepted||
+   run->dynamic_zone!=o->scene_.dynamic_zone||run->instance!=o->scene_.instance)return false;
+  if(o->original_.item==47758&&!NativeRunTerminalSource::AuthorizeAcknowledgedGuardianCorpse(*s.corpse,*run,o->death_sequence_))return false;
+  o->claimed_loot_slots_.insert(actual_slot); // this SAME actual corpse slot gets one attempt, no unknown retry
+  auto u=std::make_shared<OriginalRunLootUse::State>();u->origin=o;u->client_and_corpse=s.witness;
+  static uint64_t actual_loot_sequence=0;if(actual_loot_sequence==UINT64_MAX)return false;
+  RunLootFacts f{*run,++actual_loot_sequence,o->death_sequence_,o->original_.npc,o->original_.spawn,o->corpse_entity_,
+   actual_slot,item.GetID(),item.GetSerialNumber(),item.GetCharges()};
+  s.original=f;
+  if(f.item_id==47758)s.mold_progress=ProgressPacket(f.mission,17);
+  s.use=std::unique_ptr<OriginalRunLootUse>(new OriginalRunLootUse(f,u));
+  s.publication=std::make_unique<NativeRunLootPublication::State>();s.publication->original=f;s.publication->use=u;
+  s.pending=NativeRunItemOrigins::SealOriginalLoot(std::move(s.use),item);
+  if(!s.pending||s.pending->Token().empty()||ReadRunOriginSeal(item)!=s.pending->Token())return false;
+  s.armed=true;return true;
+ }catch(...) {return false;}
+}
+void NativeRunLootSource::ObserveActualInventorySave(Client& c,const EQ::ItemInstance& item,
+ int16_t slot,bool same_existing_save_result) {
+ auto* f=current_;if(!f||!f->state_)return;auto& s=*f->state_;
+ if(!s.armed||s.save_observed||s.owner!=&c||!s.pending||(item.GetID()!=s.original.item_id||item.GetSerialNumber()!=s.original.native_item_serial||ReadRunOriginSeal(item)!=s.pending->Token()))return;
+ s.save_observed=true;
+ if(!same_existing_save_result||s.witness->LiveClient()!=&c)return;
+ bool live_match=false;
+ if(slot==EQ::invslot::slotCursor) {
+  for(auto i=c.GetInv().cursor_cbegin();i!=c.GetInv().cursor_cend();++i)
+   if(*i&&(*i)->GetID()==s.original.item_id&&(*i)->GetSerialNumber()==s.original.native_item_serial&&ReadRunOriginSeal(**i)==s.pending->Token())live_match=true;
+ }else {const auto* actual=c.GetInv().GetItem(slot);live_match=actual&&actual->GetID()==s.original.item_id&&actual->GetSerialNumber()==s.original.native_item_serial&&ReadRunOriginSeal(*actual)==s.pending->Token();}
+ s.saved=live_match;
+ if(live_match){s.original.saved_slot=slot;s.publication->original.saved_slot=slot;}
+}
+void NativeRunLootSource::ObserveActualRemoval(Corpse& actual,uint16_t actual_removed_slot) {
+ if(!state_)return;auto& s=*state_;
+ if(!s.armed||s.removal_seen||!s.saved||!s.origin||s.original.source_loot_slot!=actual_removed_slot)return;
+ s.removal_seen=true;
+ if(s.witness->LiveCorpse(s.origin->corpse_entity_)!=&actual||actual.GetItem(actual_removed_slot))return;
+ // Positive proof is minted only from the SAME original successful inventory
+ // save plus actual corpse removal. Item ID/task history never calls this.
+ NativeRunLootPublication proof(std::move(s.pending),std::move(s.publication));
+ const bool origin_published=NativeRunItemOrigins::PublishOriginalLoot(proof);
+ if(origin_published&&s.original.item_id==47758&&s.mold_progress)worldserver.SendPacket(s.mold_progress.get());
+ // Core only persists typed provenance here. No grant, save, task increment or retry.
+}
+} // namespace FireRunActionSource
+
+namespace FireRunActionSource {
+namespace {
+RunActionKind KindFor(GateRole role) {
+ switch(role) {
+ case GateRole::InnerVault:return RunActionKind::InnerVault;
+ case GateRole::WorshipLeft:case GateRole::WorshipRight:return RunActionKind::WorshipPair;
+ case GateRole::GuardianVault:return RunActionKind::GuardianVaultKey;
+ case GateRole::KeymasterGarden:case GateRole::KeymasterPool:return RunActionKind::HelperActivation;
+ default:return RunActionKind::WorldFontKey;
+ }
+}
+int ObjectiveFor(RunActionKind kind) {
+ switch(kind){case RunActionKind::InnerVault:return 3;case RunActionKind::WorshipPair:return 7;
+ case RunActionKind::GuardianVaultKey:return 15;case RunActionKind::HelperActivation:return 14;default:return -1;}
+}
+std::unique_ptr<EQApplicationPacket> OpenPacket(uint8_t native_id) {
+ auto p=std::make_unique<EQApplicationPacket>(OP_MoveDoor,sizeof(MoveDoor_Struct));
+ auto* d=reinterpret_cast<MoveDoor_Struct*>(p->pBuffer);d->doorid=native_id;d->action=0x02; // native doors.cpp OPEN_DOOR, selected invert_state0
+return p;
+}
+}
+struct OriginalDoorUse::State {std::shared_ptr<RunUseWitness> witness;const GateBinding* gate=nullptr;};
+OriginalDoorUse::OriginalDoorUse(DoorUseFacts f,std::shared_ptr<State> s):facts_(f),state_(std::move(s)){}
+OriginalDoorUse::~OriginalDoorUse()=default;
+struct PreparedRunDoorPlan::State {
+ const OriginalDoorUse* original=nullptr;
+ std::shared_ptr<RunUseWitness> witness;
+ const GateBinding* gate=nullptr;
+ std::unique_ptr<EQApplicationPacket> open;
+ std::unique_ptr<ServerPacket> progress;
+ std::unique_ptr<NativeRunPublication::State> native_publication;
+ bool submitted=false;
+};
+PreparedRunDoorPlan::PreparedRunDoorPlan(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
+PreparedRunDoorPlan::~PreparedRunDoorPlan()=default;
+bool NativeRunDoorSource::RevalidateOriginalUse(Client& c,const OriginalDoorUse& use) {
+ if(!use.state_||!use.state_->witness||use.state_->witness->LiveClient()!=&c)return false;
+ auto* door=use.state_->witness->LiveDoor();const auto* b=use.state_->gate;
+ const auto& f=use.facts_;
+ if(!door||!b||!GateProfile(*door,*b)||!NativeClickRange(c,*door)||
+  f.character!=c.CharacterID()||f.client_entity!=c.GetID()||!zone||f.zone!=zone->GetZoneID()||
+  f.version!=zone->GetInstanceVersion()||f.instance!=zone->GetInstanceID())return false;
+ if(f.mission) {
+  const auto run=CaptureRun(c,ObjectiveFor(f.kind),true);
+  if(!run||!SameRun(*run,*f.mission)||!Inside(glm::vec3(c.GetPosition()),b->low,b->high))return false;
+ }else if(f.kind!=RunActionKind::WorldFontKey||f.role!=GateRole::WorldFont)return false;
+ for(size_t i=0;i<f.physical_count;++i) {
+  const auto& p=f.physical_items[i];const auto* item=c.GetInv().GetItem(p.slot);
+  if(!item||!CarriedSlot(c,p.slot)||item->GetID()!=p.item_id||item->GetSerialNumber()!=p.serial||
+   item->GetCharges()!=p.charges)return false;
+  if(f.mission&&!NativeRunItemOrigins::HasActualPublishedOrigin(c,*item,p.slot,*f.mission))return false;
+ }
+ return true;
+}
+bool NativeRunDoorSource::HandleOriginalPacket(Client& c,Doors& door,uint8_t actual_packet_door) {
+ const auto* b=GateFor(door);if(!b)return false;
+ // ALL selected rejects return from the native packet. Generic lockpick,
+ // keyring and far client-controlled-door paths cannot substitute for this use.
+ try {
+  if(actual_packet_door!=b->native_id||!GateProfile(door,*b)||!NativeClickRange(c,door))return true;
+  static uint64_t native_sequence=0;if(native_sequence==UINT64_MAX)return true;
+  DoorUseFacts f;f.kind=KindFor(b->role);f.role=b->role;f.native_sequence=++native_sequence;
+  f.character=c.CharacterID();f.client_entity=c.GetID();f.zone=490;f.version=b->version;
+  f.instance=zone->GetInstanceID();f.door_database_id=b->database_id;f.native_door_id=b->native_id;
+  if(b->role!=GateRole::WorldFont) {
+   f.mission=CaptureRun(c,ObjectiveFor(f.kind),true);
+   if(!f.mission||!Inside(glm::vec3(c.GetPosition()),b->low,b->high))return true;
+  }
+  switch(f.kind) {
+  case RunActionKind::InnerVault:f.required_item_ids={{47748,47749,47750}};f.required_count=3;break;
+  case RunActionKind::WorshipPair:f.required_item_ids[0]=47762;f.required_count=1;break;
+  case RunActionKind::GuardianVaultKey:f.required_item_ids[0]=47757;f.required_count=1;break;
+  case RunActionKind::WorldFontKey:f.required_item_ids[0]=47759;f.required_count=1;break;
+  case RunActionKind::HelperActivation:break; // door event is published CHOSEN barrier only; never a new helper/debit
+  }
+  for(size_t i=0;i<f.required_count;++i) {
+   for(const auto slot:c.GetInventorySlots()) {
+    if(!CarriedSlot(c,slot))continue;const auto* item=c.GetInv().GetItem(slot);
+    if(!item||item->GetID()!=f.required_item_ids[i]||!item->GetSerialNumber()||item->IsStackable()||
+     !item->GetItem()||!item->GetItem()->IsClassCommon())continue;
+    if(f.mission&&!NativeRunItemOrigins::HasActualPublishedOrigin(c,*item,slot,*f.mission))continue;
+    f.physical_items[f.physical_count++]={item->GetID(),item->GetSerialNumber(),slot,item->GetCharges(),1};break;
+   }
+  }
+  if(f.kind==RunActionKind::WorldFontKey&&f.physical_count!=1)return true;
+  auto s=std::make_shared<OriginalDoorUse::State>();s->witness=RunUseWitness::Capture(&c,&door,nullptr);s->gate=b;
+  auto original=std::unique_ptr<OriginalDoorUse>(new OriginalDoorUse(f,s));
+  auto plan=PreparedRunDoorPlan::PrepareActual(c,*original);if(!plan)return true;
+  NativeRunActionCustody::ExecuteOriginalDoor(c,std::move(original),std::move(plan));
+  return true; // stack result only after mutable final sink; no Client/Door dereference
+ }catch(...) {return true;}
+}
+std::unique_ptr<PreparedRunDoorPlan> PreparedRunDoorPlan::PrepareActual(Client& c,const OriginalDoorUse& use) {
+ if(!NativeRunDoorSource::RevalidateOriginalUse(c,use))return {};
+ auto s=std::make_unique<State>();s->original=&use;s->witness=use.state_->witness;s->gate=use.state_->gate;
+ s->open=OpenPacket(use.facts_.native_door_id);
+ s->native_publication=std::make_unique<NativeRunPublication::State>();s->native_publication->owner=s->witness;
+ if(use.facts_.mission&&(use.facts_.kind==RunActionKind::InnerVault||use.facts_.kind==RunActionKind::WorshipPair))
+  s->progress=ProgressPacket(*use.facts_.mission,ObjectiveFor(use.facts_.kind));
+ return std::unique_ptr<PreparedRunDoorPlan>(new PreparedRunDoorPlan(std::move(s)));
+}
+bool PreparedRunDoorPlan::RevalidateBeforePersist(Client& c)const {
+ return state_&&state_->original&&!state_->submitted&&NativeRunDoorSource::RevalidateOriginalUse(c,*state_->original);
+}
+bool NativeRunDoorSource::AuthorizeActualHandle(Client*,Doors& d,uint8_t) {
+ return GateFor(d)==nullptr; // selected task/key gates open only through actual owned publication below
+}
+void NativeRunDoorSource::ObserveActualOpened(Doors&) {
+ // Generic HandleClick is intentionally never a positive source event for a
+ // selected gate. The original owned publisher sets/publishes its exact state.
+}
+void OnOriginalRunActionPublished(Client& c,PublishedRunActionReceipt& receipt) {
+ PublishedRunActionSink::Receive(c,receipt);
+}
+void PublishedRunActionSink::Receive(Client& c,PublishedRunActionReceipt& receipt) {
+ const auto published=receipt.Take(c); // FIRST: no query/allocation/callback before one-use seal
+ if(!published)return;
+ const auto v=*published;
+ if(v.helper_plan) {
+  // Actual helper transfer is defined alongside the owned movement producer.
+  NativeRunHelperSource::PublishActual(c,v);return;
+ }
+ if(!v.door_plan||!v.door_original||v.helper_original)return;
+ auto& p=*v.door_plan;auto* s=p.state_.get();const auto& use=*v.door_original;const auto& f=use.facts_;
+ if(!s||s->submitted||s->original!=&use||v.kind!=f.kind||v.native_sequence!=f.native_sequence||
+  (f.mission?(v.run_id!=f.mission->run||!v.run_action_id||v.boundary==RunActionBoundary::RetainedWorldPhysicalKey):
+   (v.run_id||v.run_action_id||v.boundary!=RunActionBoundary::RetainedWorldPhysicalKey)))return;
+ s->submitted=true;
+ auto* owner=s->witness->LiveClient();auto* door=s->witness->LiveDoor();
+ if(owner!=&c||!door||!GateProfile(*door,*s->gate)||!NativeClickRange(*owner,*door))return;
+ // Preserve original Player then Zone callback order. The plan/receipt owns
+ // copied intent; fresh private owners are required before EVERY later use.
+ int quest_return=0;
+ if(parse->PlayerHasQuestSub(EVENT_CLICK_DOOR)) {
+  std::vector<std::any> args={door};
+  quest_return=parse->EventPlayer(EVENT_CLICK_DOOR,owner,std::to_string(f.native_door_id),0,&args);
+ }
+ owner=s->witness->LiveClient();door=s->witness->LiveDoor();if(!owner||!door)return;
+ if(parse->ZoneHasQuestSub(EVENT_CLICK_DOOR)) {
+  std::vector<std::any> args={door,owner};
+  quest_return=parse->EventZone(EVENT_CLICK_DOOR,zone,std::to_string(f.native_door_id),0,&args);
+ }
+ owner=s->witness->LiveClient();door=s->witness->LiveDoor();
+ if(!owner||!door||quest_return||!GateProfile(*door,*s->gate)||!NativeClickRange(*owner,*door))return;
+ if(f.mission) {const auto run=CaptureRun(*owner,ObjectiveFor(f.kind),true);if(!run||!SameRun(*run,*f.mission))return;}
+ // Retained physical keys must STILL be the captured native instance after
+ // callbacks. Debited materials are already conserved by the committed writer.
+ if(f.kind==RunActionKind::WorldFontKey||
+  (f.kind==RunActionKind::GuardianVaultKey&&v.boundary==RunActionBoundary::CommittedFirstRunAction)) {
+  if(f.physical_count!=1)return;const auto& key=f.physical_items[0];const auto* now=owner->GetInv().GetItem(key.slot);
+  if(!now||now->GetID()!=key.item_id||now->GetSerialNumber()!=key.serial||now->GetCharges()!=key.charges)return;
+ }
+ // This is the scoped real native OP_MoveDoor publication, not ForceOpen or a
+ // caller-supplied open Boolean. Selected locked/no-keyring policy stays private.
+ const bool already_open=door->m_is_open;
+ door->m_is_open=true;
+ if(f.kind==RunActionKind::WorldFontKey) {if(!already_open)door->m_close_timer.Start(30000);}
+ else {door->m_disable_timer=true;door->m_close_timer.Disable();}
+ entity_list.QueueClients(nullptr,s->open.get(),false);
+ if(!door->m_is_open)return;
+ if(f.mission&&(v.boundary==RunActionBoundary::CommittedFirstRunAction||f.kind==RunActionKind::WorshipPair)) {
+  auto& proof=s->native_publication->actual;
+  proof={v.kind,f.role,v.run_action_id,v.run_id,v.native_sequence,f.character,490,f.instance,
+   f.door_database_id,0,f.native_door_id};
+  NativeRunPublication actual(std::move(s->native_publication));
+  if(!NativeRunActionCustody::AcknowledgeNativePublication(actual))return;
+  if(s->progress&&v.boundary==RunActionBoundary::CommittedFirstRunAction)worldserver.SendPacket(s->progress.get());
+  // One native correlated submission is not World durable-save acceptance.
+ }
+ // No Client/door/item access after the mutable original callbacks/publication.
+}
+} // namespace FireRunActionSource
+
+namespace FireRunActionSource {
+namespace {
+bool NearAnchor(const glm::vec3& p,const glm::vec3& q) {
+ const double dx=double(p.x)-q.x,dy=double(p.y)-q.y;
+ return std::isfinite(dx)&&std::isfinite(dy)&&std::isfinite(p.z)&&dx*dx+dy*dy<=25.0&&std::abs(p.z-q.z)<=6.0f;
+}
+const HelperRouteBinding* RouteAt(const glm::vec3& p) {
+ const HelperRouteBinding* found=nullptr;
+ for(const auto& r:BoundRoutes())if(Inside(p,r.low,r.high)) {
+  const auto d=p-r.anchors[0];if(glm::dot(d,d)>35.0f*35.0f)continue;
+  if(found)return nullptr;found=&r;
+ }
+ return found;
+}
+bool NativeRouteQualified(const HelperRouteBinding& r,NPC& actual) {
+ if(!zone||!zone->zonemap||!zone->pathing)return false;
+ for(const auto& p:r.anchors) {
+  glm::vec3 from=p;const auto z=zone->zonemap->FindBestZ(from,nullptr);
+  if(z==BEST_Z_INVALID||!std::isfinite(z)||std::abs((z+actual.GetZOffset())-p.z)>0.25f)return false;
+ }
+ for(size_t i=1;i<r.anchors.size();++i) {
+  bool partial=false,stuck=false;
+  const auto path=zone->pathing->FindRoute(r.anchors[i-1],r.anchors[i],partial,stuck,PathingNotDisabled&~PathingPortal);
+  if(path.empty()||partial||stuck)return false;
+  for(const auto& n:path)if(n.teleport)return false;
+ }
+ return true; // preflight is not actual walk/arrival/passage proof
+}
+}
+class RunHelperAttempt final {
+ friend class PreparedRunHelperPlan;
+ friend class NativeRunHelperSource;
+ friend class NativeRunDoorSource;
+ friend class PublishedRunActionSink;
+ enum class Step {AwaitRegistration,WalkAnchors,WalkPassage,Dust,AwaitDestruction,Held,Complete};
+ HelperUseFacts original;
+ const HelperRouteBinding* route=nullptr;
+ const GateBinding* gate=nullptr;
+ std::shared_ptr<RunUseWitness> witness,actor_lifetime;
+ NPC* original_object=nullptr;
+ uint64_t sequence=0,action_id=0;
+ uint32_t entity=0,started=0,dust_started=0;
+ Step step=Step::AwaitRegistration;
+ size_t anchor=0;
+ glm::vec3 last_walk{};double walked=0;bool expected_walk=false;
+ bool registered=false,commanded=false,stopped=false,barrier_opened=false,passage_completed=false,published=false,queued=false;
+ std::unique_ptr<EQApplicationPacket> gate_packet;
+ std::unique_ptr<ServerPacket> progress;
+ std::unique_ptr<NativeRunPublication::State> publication;
+ struct Completion {std::shared_ptr<RunHelperAttempt> actual;Completion* next=nullptr;};
+ std::unique_ptr<Completion> pending;
+ static Completion* head;
+ static Completion* tail;
+};
+RunHelperAttempt::Completion* RunHelperAttempt::head=nullptr;
+RunHelperAttempt::Completion* RunHelperAttempt::tail=nullptr;
+static thread_local RunHelperAttempt* actual_helper_registration=nullptr;
+struct OriginalHelperUse::State {std::shared_ptr<RunUseWitness> witness;const HelperRouteBinding* route=nullptr;const GateBinding* gate=nullptr;};
+OriginalHelperUse::OriginalHelperUse(HelperUseFacts f,std::shared_ptr<State> s):facts_(f),state_(std::move(s)){}
+OriginalHelperUse::~OriginalHelperUse()=default;
+struct PreparedRunHelperPlan::State {
+ const OriginalHelperUse* original=nullptr;
+ std::unique_ptr<NPCType> expected;
+ std::unique_ptr<NPC> actor;
+ std::shared_ptr<RunHelperAttempt> attempt;
+ Map* map=nullptr;IPathfinder* pathing=nullptr;
+};
+PreparedRunHelperPlan::PreparedRunHelperPlan(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
+PreparedRunHelperPlan::~PreparedRunHelperPlan()=default;
+std::unique_ptr<OriginalHelperUse> NativeRunHelperSource::CaptureActual(Client& c,const EQ::ItemInstance& item,
+ int16_t slot,bool supported,uint32_t target) {
+ if(!supported||!zone||!CarriedSlot(c,slot)||c.GetInv().GetItem(slot)!=&item||item.GetID()!=47756||
+  !item.GetSerialNumber()||!item.GetItem()||item.GetItem()->Click.Effect!=7651||item.GetItem()->Click.Type!=3||
+  item.GetItem()->MaxCharges!=1||item.GetCharges()!=1||item.IsStackable()||!item.IsExpendable())return {};
+ const auto run=CaptureRun(c,14,false);if(!run)return {};
+ const auto* route=RouteAt(glm::vec3(c.GetPosition()));if(!route)return {};
+ const auto* gate=GateForRole(route->target);if(!gate)return {};
+ auto* door=entity_list.FindDoor(gate->native_id);
+ if(!door||!GateProfile(*door,*gate)||!NativeRunItemOrigins::HasActualPublishedOrigin(c,item,slot,*run))return {};
+ const auto& task=c.GetTaskState()->GetActiveSharedTask();
+ if(task.activity[13].activity_state!=ActivityCompleted||task.activity[13].done_count!=1)return {};
+ auto s=std::make_shared<OriginalHelperUse::State>();s->witness=RunUseWitness::Capture(&c,door,nullptr);s->route=route;s->gate=gate;
+ HelperUseFacts f{*run,{item.GetID(),item.GetSerialNumber(),slot,item.GetCharges(),1},c.GetID(),target,route->target};
+ return std::unique_ptr<OriginalHelperUse>(new OriginalHelperUse(f,std::move(s)));
+}
+bool NativeRunHelperSource::RevalidateActual(Client& c,const OriginalHelperUse& use) {
+ const auto& f=use.facts_;
+ if(!use.state_||use.state_->witness->LiveClient()!=&c||f.caster_entity!=c.GetID()||f.mission.character!=c.CharacterID())return false;
+ const auto run=CaptureRun(c,14,false);if(!run||!SameRun(*run,f.mission))return false;
+ auto* door=use.state_->witness->LiveDoor();
+ if(!door||!GateProfile(*door,*use.state_->gate)||RouteAt(glm::vec3(c.GetPosition()))!=use.state_->route)return false;
+ const auto* item=c.GetInv().GetItem(f.clicked.slot);
+ return item&&item->GetID()==47756&&item->GetSerialNumber()==f.clicked.serial&&item->GetCharges()==1&&
+  item->GetItem()&&item->GetItem()->MaxCharges==1&&item->GetItem()->Click.Effect==7651&&item->GetItem()->Click.Type==3&&
+  NativeRunItemOrigins::HasActualPublishedOrigin(c,*item,f.clicked.slot,f.mission);
+}
+std::unique_ptr<PreparedRunHelperPlan> PreparedRunHelperPlan::PrepareActual(Client& c,const OriginalHelperUse& use,uint64_t sequence) {
+ if(!sequence||!NativeRunHelperSource::RevalidateActual(c,use))return {};
+ const auto* definition=content_db.LoadNPCTypesData(490913);
+ if(!definition||!FireHelperLocalSourceProfile::MatchesExpectedLoadedNPCType(*definition))return {};
+ auto s=std::make_unique<State>();s->original=&use;s->expected=std::make_unique<NPCType>();
+ std::memcpy(s->expected.get(),definition,sizeof(NPCType));s->map=zone->zonemap;s->pathing=zone->pathing;
+ auto type=std::make_unique<NPCType>();std::memcpy(type.get(),definition,sizeof(NPCType));
+ const auto& p=use.state_->route->anchors[0];
+ s->actor=std::make_unique<NPC>(type.get(),nullptr,glm::vec4(p.x,p.y,p.z,0),GravityBehavior::Water);
+ s->actor->GiveNPCTypeData(type.release());s->actor->SetCanOpenDoors(false);
+ if(s->actor->GetID()||!NativeRouteQualified(*use.state_->route,*s->actor))return {};
+ auto a=std::make_shared<RunHelperAttempt>();a->original=use.facts_;a->route=use.state_->route;a->gate=use.state_->gate;
+ a->witness=use.state_->witness;a->actor_lifetime=RunUseWitness::CaptureNPCScene(*s->actor);a->sequence=sequence;
+ a->original_object=s->actor.get();a->gate_packet=OpenPacket(a->gate->native_id);
+ a->progress=ProgressPacket(a->original.mission,14);a->publication=std::make_unique<NativeRunPublication::State>();
+ a->publication->owner=a->witness;a->pending=std::make_unique<RunHelperAttempt::Completion>();s->attempt=std::move(a);
+ auto plan=std::unique_ptr<PreparedRunHelperPlan>(new PreparedRunHelperPlan(std::move(s)));
+ if(!plan->RevalidateBeforePersist(c))return {};return plan;
+}
+bool PreparedRunHelperPlan::RevalidateBeforePersist(Client& c)const {
+ if(!state_||!state_->original||!state_->actor||!state_->expected||!zone||
+  state_->map!=zone->zonemap||state_->pathing!=zone->pathing||state_->actor->GetID()||
+  !NativeRunHelperSource::RevalidateActual(c,*state_->original))return false;
+ const auto* d=content_db.LoadNPCTypesData(490913);
+ return d&&FireHelperLocalSourceProfile::MatchesExpectedLoadedNPCType(*d)&&
+  std::memcmp(d,state_->expected.get(),sizeof(NPCType))==0&&NativeRouteQualified(*state_->attempt->route,*state_->actor);
+}
+void NativeRunHelperSource::PublishActual(Client&,const PublishedRunActionView& v) {
+ if(v.kind!=RunActionKind::HelperActivation||v.boundary!=RunActionBoundary::CommittedFirstRunAction||
+  !v.helper_original||!v.helper_plan||v.door_original||!v.run_action_id||!v.run_id||!v.native_sequence)return;
+ auto* s=v.helper_plan->state_.get();
+ if(!s||s->original!=v.helper_original||!s->actor||!s->attempt||
+  v.helper_original->facts_.mission.run!=v.run_id||s->attempt->sequence!=v.native_sequence||actual_helper_registration)return;
+ auto a=s->attempt;a->action_id=v.run_action_id;
+ auto* actor=s->actor.release();actor->m_fire_run_helper_attempt=a;
+ actual_helper_registration=a.get();
+ struct Restore {~Restore(){actual_helper_registration=nullptr;}} restore;
+ entity_list.AddNPC(actor,true,true);
+ // No actor/Client access after genuine spawn callbacks. Private actual AddNPC
+ // hook bound the same actor before those callbacks; later native Process owns it.
+}
+void NativeRunHelperSource::ObserveActualRegistration(NPC* actor) {
+ if(!actor||!actual_helper_registration||!actor->m_fire_run_helper_attempt)return;
+ auto& a=*actor->m_fire_run_helper_attempt;
+ if(&a!=actual_helper_registration||a.registered||a.original_object!=actor||!a.action_id||
+  !a.witness->ZoneAlive()||!actor->GetID()||actor->GetNPCTypeID()!=490913||
+  entity_list.GetNPCByID(actor->GetID())!=actor)return;
+ a.entity=actor->GetID();a.registered=true;a.started=Timer::GetCurrentTime();a.step=RunHelperAttempt::Step::WalkAnchors;
+}
+bool NativeRunDoorSource::PublishHelperBarrier(RunHelperAttempt& a) {
+ auto* door=a.witness->LiveDoor();
+ if(!door||a.barrier_opened||!a.registered||!GateProfile(*door,*a.gate)||!a.gate_packet||!RunStillActual(a.original.mission))return false;
+ // Only the same committed helper, after all actual route anchors, reaches
+ // this native scene publisher. No public ForceOpen/teleport/timer-only claim.
+ door->m_is_open=true;door->m_disable_timer=true;door->m_close_timer.Disable();
+ entity_list.QueueClients(nullptr,a.gate_packet.get(),false);
+ a.barrier_opened=door->m_is_open;return a.barrier_opened;
+}
+std::optional<bool> NativeRunHelperSource::ProcessActual(NPC& actor) {
+ const auto a=actor.m_fire_run_helper_attempt;if(!a)return {};
+ const auto hold=[&]() {a->step=RunHelperAttempt::Step::Held;};
+ if(!a->registered||a->original_object!=&actor||actor.GetID()!=a->entity||!a->actor_lifetime->NPCStillAlive())hold();
+ if(a->step==RunHelperAttempt::Step::Held) {
+  if(!a->stopped){a->stopped=true;actor.StopNavigation();}return true;
+ }
+ if(uint32_t(Timer::GetCurrentTime()-a->started)>90000&&a->step!=RunHelperAttempt::Step::Dust)hold();
+ auto* door=a->witness->LiveDoor();
+ if(!door||!GateProfile(*door,*a->gate)||!RunStillActual(a->original.mission))hold();
+ if(a->step==RunHelperAttempt::Step::Held)return true;
+ if(a->step==RunHelperAttempt::Step::WalkAnchors) {
+  if(NearAnchor(glm::vec3(actor.GetPosition()),a->route->anchors[a->anchor])) {
+   if(a->anchor>0) {
+    const auto delta=a->route->anchors[a->anchor]-a->route->anchors[a->anchor-1];
+    const auto at=glm::vec3(actor.GetPosition())-a->last_walk;
+    const double required=std::max(0.0,std::sqrt(double(delta.x)*delta.x+double(delta.y)*delta.y)-10.0);
+    if(!a->expected_walk||a->walked+0.01<required||double(at.x)*at.x+double(at.y)*at.y>0.0625){hold();return true;}
+   }
+   ++a->anchor;a->commanded=false;
+   if(a->anchor==a->route->anchors.size()) {
+    actor.StopNavigation();
+    if(!NativeRunDoorSource::PublishHelperBarrier(*a)){hold();return true;}
+    a->step=RunHelperAttempt::Step::WalkPassage;a->expected_walk=false;
+   }
+  }
+  if(a->step==RunHelperAttempt::Step::WalkAnchors&&!a->commanded) {
+   const auto& p=a->route->anchors[a->anchor];a->commanded=true;a->expected_walk=true;a->walked=0;a->last_walk=glm::vec3(actor.GetPosition());actor.WalkTo(p.x,p.y,p.z);return true;
+  }
+ }
+ if(a->step==RunHelperAttempt::Step::WalkPassage) {
+  if(!door->IsDoorOpen()){hold();return true;}
+  if(!NearAnchor(glm::vec3(actor.GetPosition()),a->route->passage)) {
+   if(!a->commanded){a->commanded=true;a->expected_walk=true;a->walked=0;a->last_walk=glm::vec3(actor.GetPosition());const auto p=a->route->passage;actor.WalkTo(p.x,p.y,p.z);}return true;
+  }
+  const auto span=a->route->passage-a->route->anchors.back();const auto at=glm::vec3(actor.GetPosition())-a->last_walk;
+  const double required=std::max(0.0,std::sqrt(double(span.x)*span.x+double(span.y)*span.y)-10.0);
+  if(!a->expected_walk||a->walked+0.01<required||double(at.x)*at.x+double(at.y)*at.y>0.0625){hold();return true;}
+  actor.StopNavigation();
+  auto& proof=a->publication->actual;
+  proof={RunActionKind::HelperActivation,a->gate->role,a->action_id,a->original.mission.run,a->sequence,
+   a->original.mission.character,490,a->original.mission.instance,a->gate->database_id,a->entity,a->gate->native_id};
+  a->passage_completed=true;
+  a->step=RunHelperAttempt::Step::Dust;a->dust_started=Timer::GetCurrentTime();
+  actor.Emote("crumbles into dust.");return true; // no actor access after mutable visual/native callbacks
+ }
+ if(a->step==RunHelperAttempt::Step::Dust&&uint32_t(Timer::GetCurrentTime()-a->dust_started)>=2000) {
+  a->step=RunHelperAttempt::Step::AwaitDestruction;
+  return false; // normal native MobProcess removal/destructor is the actual retirement, no respawn
+ }
+ return true; // only owned helper bypasses ordinary combat/quest waypoint AI
+}
+void NativeRunHelperSource::RecordActualWalkingStep(NPC& actor,const glm::vec3& before,const glm::vec3& after,int mode) {
+ const auto a=actor.m_fire_run_helper_attempt;
+ if(!a||!a->registered||a->original_object!=&actor)return;
+ if(a->step!=RunHelperAttempt::Step::WalkAnchors&&a->step!=RunHelperAttempt::Step::WalkPassage)return;
+ const auto gap=before-a->last_walk;const auto step=after-before;
+ if(!a->expected_walk||mode!=int(MovementWalking)||actor.GetDepop()||
+  !std::isfinite(step.x)||!std::isfinite(step.y)||double(gap.x)*gap.x+double(gap.y)*gap.y>0.0625) {
+  a->step=RunHelperAttempt::Step::Held;return;
+ }
+ a->walked+=std::sqrt(double(step.x)*step.x+double(step.y)*step.y);a->last_walk=after;
+}
+bool NativeRunHelperSource::RejectActualTeleport(NPC& actor) {
+ const auto a=actor.m_fire_run_helper_attempt;
+ if(!a||a->original_object!=&actor||!a->registered)return false;
+ a->step=RunHelperAttempt::Step::Held;return true; // native fallback never becomes arrival proof
+}
+void NativeRunHelperSource::ObserveActualDestruction(NPC& actor) {
+ const auto a=actor.m_fire_run_helper_attempt;
+ if(!a||a->queued||a->original_object!=&actor||!a->registered||!a->passage_completed||
+  a->step!=RunHelperAttempt::Step::AwaitDestruction||!a->witness->ZoneAlive()||!a->pending)return;
+ a->queued=true;a->step=RunHelperAttempt::Step::Complete;
+ a->pending->actual=a;auto* node=a->pending.release();
+ if(RunHelperAttempt::tail)RunHelperAttempt::tail->next=node;else RunHelperAttempt::head=node;
+ RunHelperAttempt::tail=node; // allocation-free; queue drains only AFTER actual destructor/stacks
+}
+void NativeRunHelperSource::DrainCompletions() {
+ auto* next=RunHelperAttempt::head;RunHelperAttempt::head=RunHelperAttempt::tail=nullptr;
+ while(next) {
+  std::unique_ptr<RunHelperAttempt::Completion> node(next);next=next->next;const auto a=node->actual;
+  if(!a||!a->queued||a->step!=RunHelperAttempt::Step::Complete||!a->witness->ZoneAlive()||
+   !RunStillActual(a->original.mission)||!a->progress)continue;
+  auto* door=a->witness->LiveDoor();
+  if(!door||!door->IsDoorOpen()||!GateProfile(*door,*a->gate)||!a->publication||!a->passage_completed)continue;
+  // Actual NPC destructor/retirement has now finished. Only this completed
+  // native lifecycle, not spawn/open/arrival alone, may seal terminal helper2.
+  a->publication->helper=a;
+  NativeRunPublication actual(std::move(a->publication));
+  if(!NativeRunActionCustody::AcknowledgeNativePublication(actual))continue;
+  a->published=true;
+  worldserver.SendPacket(a->progress.get());a->progress.reset();
+  // Actual original run-stamped native update only. No actor/Client/history
+  // access, replay, second helper/debit or claim of durable World save.
+ }
+}
+void NativeRunHelperSource::DiscardCompletions()noexcept {
+ auto* next=RunHelperAttempt::head;RunHelperAttempt::head=RunHelperAttempt::tail=nullptr;
+ while(next){auto* tail=next->next;delete next;next=tail;}
+}
+} // namespace FireRunActionSource
+
+namespace FireRunActionSource {
+class RunTerminalAttempt final {
+ friend class NativeRunTerminalSource;
+ friend class PreparedTerminalChestPlan;
+ friend class PublishedTerminalReturnSink;
+ friend class OriginalTerminalDeath;
+ TerminalReturnFacts original;
+ std::vector<TerminalAcceptedMemberFacts> members;
+ std::shared_ptr<RunUseWitness> zone_owner,actor_owner;
+ NPC* original_actor=nullptr;
+ uint64_t row=0;
+ uint32_t entity=0;
+ LootItem expected_loot{};
+ bool registered=false,registration_acknowledged=false,terminal_acknowledged=false,open_entered=false,opened=false,lost=false;
+};
+namespace {
+uint32_t OriginalTerminalLeaseRemaining(const TerminalReturnFacts& f) {
+ if(!zone||!zone->GetInstanceTimer()||!zone->GetInstanceTimer()->Enabled())return 0;
+ const auto now=std::time(nullptr);
+ if(now<=0||!f.instance_expire_at||uint64_t(now)>=f.instance_expire_at)return 0;
+ const auto original=std::min<uint64_t>((f.instance_expire_at-uint64_t(now))*1000,UINT32_MAX);
+ return uint32_t(std::min<uint64_t>(original,zone->GetInstanceTimer()->GetRemainingTime()));
+}
+constexpr std::array<uint32_t,11> TerminalGear{{110240,110231,110244,110296,110232,110272,110285,110286,110271,110259,110297}};
+bool TerminalLootDefinitionQualified(NPC& actual) {
+ if(!zone||RuleI(Zone,GlobalLootMultiplier)!=1||actual.GetLoottableID()!=304062012)return false;
+ zone->LoadLootTable(304062012);
+ const auto* table=zone->GetLootTable(304062012);
+ const auto entries=zone->GetLootTableEntries(304062012);
+ const auto drop=zone->GetLootdropEntries(304062012);
+ if(!table||table->id!=304062012||table->mincash||table->maxcash||table->avgcoin||
+  table->min_expansion!=16||table->max_expansion!=-1||!table->content_flags.empty()||!table->content_flags_disabled.empty()||
+  entries.size()!=1||drop.size()!=TerminalGear.size())return false;
+ const auto& e=entries.front();
+ if(e.loottable_id!=304062012||e.lootdrop_id!=304062012||e.multiplier!=1||e.droplimit!=1||e.mindrop!=1||e.probability!=100)return false;
+ std::set<uint32_t> ids;
+ for(const auto& x:drop) {
+  if(x.lootdrop_id!=304062012||std::find(TerminalGear.begin(),TerminalGear.end(),x.item_id)==TerminalGear.end()||
+   !ids.insert(x.item_id).second||x.item_charges!=1||x.equip_item||x.chance!=1||x.disabled_chance||
+   x.trivial_min_level||x.trivial_max_level||x.multiplier!=1||x.npc_min_level||x.npc_max_level||
+   x.min_expansion!=16||x.max_expansion!=-1||!x.content_flags.empty()||!x.content_flags_disabled.empty())return false;
+ }
+ return true;
+}
+bool SameTerminalLoot(const LootItem& a,const LootItem& b) {
+ return a.item_id==b.item_id&&
+  a.equip_slot==b.equip_slot&&
+  a.charges==b.charges&&
+  a.lootslot==b.lootslot&&
+  a.aug_1==b.aug_1&&
+  a.aug_2==b.aug_2&&
+  a.aug_3==b.aug_3&&
+  a.aug_4==b.aug_4&&
+  a.aug_5==b.aug_5&&
+  a.aug_6==b.aug_6&&
+  a.attuned==b.attuned&&
+  a.custom_data==b.custom_data&&
+  a.ornamenticon==b.ornamenticon&&
+  a.ornamentidfile==b.ornamentidfile&&
+  a.ornament_hero_model==b.ornament_hero_model&&
+  a.trivial_min_level==b.trivial_min_level&&
+  a.trivial_max_level==b.trivial_max_level&&
+  a.npc_min_level==b.npc_min_level&&
+  a.npc_max_level==b.npc_max_level&&
+  a.lootdrop_id==b.lootdrop_id;
+}
+bool TerminalActualLootQualified(NPC& actual) {
+ const auto& items=actual.GetLootItems();if(items.size()!=1||!items.front())return false;
+ const auto& x=*items.front();
+ return std::find(TerminalGear.begin(),TerminalGear.end(),x.item_id)!=TerminalGear.end()&&
+  x.charges==1&&x.lootdrop_id==304062012&&!x.aug_1&&!x.aug_2&&!x.aug_3&&!x.aug_4&&!x.aug_5&&!x.aug_6&&
+  !x.attuned&&x.custom_data.empty()&&!x.ornamenticon&&!x.ornamentidfile&&!x.ornament_hero_model;
+}
+bool TerminalMemberStillActual(Client& c,const MissionRunFacts& run,const std::vector<TerminalAcceptedMemberFacts>& snapshot) {
+ if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||zone->GetInstanceID()!=run.instance||
+  std::none_of(snapshot.begin(),snapshot.end(),[&](const auto& m){return m.character==c.CharacterID();})||!c.ClientDataLoaded())return false;
+ // Completion does not revoke corpse access. Explicit quit/removal/expiry does.
+ // Require SAME original run membership/DZ/instance, permitting its completed
+ // state while never accepting a different run or nearby group/raid member.
+ auto q=database.QueryDatabase(fmt::format(
+  "SELECT s.id FROM shared_tasks s JOIN shared_task_members m ON m.shared_task_id=s.id "
+  "JOIN shared_task_dynamic_zones l ON l.shared_task_id=s.id JOIN dynamic_zones d ON d.id=l.dynamic_zone_id "
+  "JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=d.id AND dm.character_id=m.character_id "
+  "JOIN instance_list i ON i.id=d.instance_id JOIN instance_list_player ip ON ip.id=i.id AND ip.charid=m.character_id "
+  "WHERE s.id={} AND s.task_id=920170 AND UNIX_TIMESTAMP(s.accepted_time)={} AND m.character_id={} "
+  "AND d.id={} AND d.instance_id={} AND i.zone=490 AND i.version=1 AND d.type={} "
+  "AND (s.expire_time IS NULL OR s.expire_time>NOW()) AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP())",
+  run.run,run.accepted_time,c.CharacterID(),run.dynamic_zone,run.instance,int(DynamicZoneType::Mission)),false);
+ return q.Success()&&q.RowCount()==1;
+}
+struct TerminalOriginalOpen {
+ NPC* actor=nullptr;Client* client=nullptr;
+ std::shared_ptr<RunTerminalAttempt> actual;
+ std::shared_ptr<RunUseWitness> opener;
+ MissionRunFacts opening;
+ TerminalOriginalOpen* previous=nullptr;
+ static thread_local TerminalOriginalOpen* current;
+ TerminalOriginalOpen(NPC& a,Client& c,std::shared_ptr<RunTerminalAttempt> s,MissionRunFacts f,std::shared_ptr<RunUseWitness> w)
+  :actor(&a),client(&c),actual(std::move(s)),opener(std::move(w)),opening(f),previous(current){current=this;}
+ ~TerminalOriginalOpen(){current=previous;}
+};
+thread_local TerminalOriginalOpen* TerminalOriginalOpen::current=nullptr;
+}
+static thread_local RunTerminalAttempt* actual_terminal_registration=nullptr;
+bool NativeRunTerminalSource::AuthorizeActualChestOpen(Client& c,NPC& npc) {
+ const auto a=npc.m_fire_run_terminal_attempt;if(!a)return !(zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&npc.GetNPCTypeID()==490914);
+ const auto* original=TerminalOriginalOpen::current;
+ return original&&original->actor==&npc&&original->client==&c&&original->actual==a&&
+  original->opener->LiveClient()==&c&&a->registered&&!a->lost&&a->open_entered&&
+  a->actor_owner->NPCStillAlive()&&npc.GetID()==a->entity&&entity_list.GetNPCByID(a->entity)==&npc;
+}
+bool NativeRunTerminalSource::HandleOriginalChestOpen(Client& c,NPC& npc) {
+ const auto a=npc.m_fire_run_terminal_attempt;if(!a)return zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&npc.GetNPCTypeID()==490914;
+ try {
+  if(!a->registered||!a->registration_acknowledged||!OriginalTerminalLeaseRemaining(a->original)||a->lost||a->open_entered||!a->row||a->original_actor!=&npc||
+   !a->actor_owner->NPCStillAlive()||npc.GetID()!=a->entity||entity_list.GetNPCByID(a->entity)!=&npc||
+   !TerminalMemberStillActual(c,a->original.mission,a->members)||!TerminalActualLootQualified(npc)||
+   !SameTerminalLoot(*npc.GetLootItems().front(),a->expected_loot)||
+   npc.GetClass()!=Class::LDoNTreasure||npc.GetSpecialAbility(SpecialAbility::OpenImmunity)||
+   npc.IsLDoNLocked()||npc.IsLDoNTrapped()||npc.GetLDoNTrapType()||npc.GetLDoNTrapSpellID()||
+   DistanceSquaredNoZ(c.GetPosition(),npc.GetPosition())>RuleI(Adventure,LDoNTrapDistanceUse))return true;
+  const auto opening=CaptureRun(c,18,false);if(!opening||opening->run!=a->original.mission.run)return true;
+  // One original actual native packet target. Do not restart an interrupted or
+  // vetoed opening, damage the chest manually, or reconstruct it from a corpse.
+  TerminalOriginalOpen original(npc,c,a,*opening,RunUseWitness::Capture(&c,nullptr,nullptr));a->open_entered=true;
+  c.HandleLDoNOpen(&npc);
+  return true; // no Client/NPC dereference after native open/death callbacks
+ }catch(...) {return true;}
+}
+bool NativeRunTerminalSource::RejectOrdinaryChestDeath(NPC& npc) {
+ if(!npc.m_fire_run_terminal_attempt)return zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&npc.GetNPCTypeID()==490914;
+ const auto* original=TerminalOriginalOpen::current;
+ return !original||original->actor!=&npc||original->actual!=npc.m_fire_run_terminal_attempt;
+}
+void NativeRunTerminalSource::ObserveActualRegistration(NPC* actor) {
+ if(!actor||!actual_terminal_registration||!actor->m_fire_run_terminal_attempt)return;
+ const auto a=actor->m_fire_run_terminal_attempt;
+ if(a.get()!=actual_terminal_registration||a->registered||a->original_actor!=actor||!a->row||
+  !a->actor_owner->NPCStillAlive()||!actor->GetID()||actor->GetNPCTypeID()!=490914||
+  entity_list.GetNPCByID(actor->GetID())!=actor)return;
+ a->entity=actor->GetID();a->registered=true;
+ NativeTerminalPublication original({TerminalNativeBoundary::Registered,a->original.mission,a->row,a->original.native_sequence,0,a->entity,0},a);
+ a->registration_acknowledged=NativeRunTerminalCustody::AcknowledgeNativePublication(original);
+}
+void NativeRunTerminalSource::ObserveActualDestruction(NPC& actor) {
+ const auto a=actor.m_fire_run_terminal_attempt;
+ if(a&&a->original_actor==&actor&&!a->opened)a->lost=true;
+}
+std::optional<bool> NativeRunTerminalSource::ProcessActualChest(NPC& actor) {
+ const auto a=actor.m_fire_run_terminal_attempt;if(!a)return {};
+ if(!a->registered||a->lost||a->original_actor!=&actor||!a->actor_owner->NPCStillAlive()||
+  actor.GetID()!=a->entity||!OriginalTerminalLeaseRemaining(a->original)||!RunStillActual(a->original.mission)){a->lost=true;return false;}
+ return true; // owned unopened class62 actor, no combat/waypoint/quest AI
+}
+} // namespace FireRunActionSource
+
+namespace FireRunActionSource {
+// Genuine native death producer. It cannot be invoked from a task count,
+// remembered item, NPC ID lookup after callbacks or a replacement corpse.
+struct OriginalTerminalDeathProof::State {
+ std::shared_ptr<RunUseWitness> original_actor,corpse_owner;
+ std::shared_ptr<RunTerminalAttempt> chest;
+ TerminalDeathFacts original;
+ std::unique_ptr<ServerPacket> progress;
+ bool registered=false,positive_return=false,guardian_acknowledged=false,queued=false;
+ std::shared_ptr<State> next;
+};
+struct OriginalTerminalDeath::State {
+ NPC* original=nullptr;
+ uint32_t original_entity=0,original_spawn=0,npc_type=0;
+ std::shared_ptr<RunUseWitness> actor;
+ std::shared_ptr<OriginalTerminalDeathProof::State> positive;
+ bool kill_visit_captured=false;
+};
+thread_local OriginalTerminalDeath* OriginalTerminalDeath::current_=nullptr;
+std::shared_ptr<OriginalTerminalDeathProof::State> NativeRunTerminalSource::death_head_,NativeRunTerminalSource::death_tail_;
+OriginalTerminalDeathProof::OriginalTerminalDeathProof(TerminalDeathFacts f,std::shared_ptr<State> s)
+ :facts_(f),state_(std::move(s)){}
+OriginalTerminalDeathProof::~OriginalTerminalDeathProof()=default;
+OriginalTerminalDeath::OriginalTerminalDeath(NPC& npc)noexcept:previous_(current_) {
+ current_=this;
+ try {
+  if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID())return;
+  const bool guardian=npc.GetNPCTypeID()==490911&&npc.GetSpawnPointID()==304062014;
+  const auto chest=npc.m_fire_run_terminal_attempt;
+  if(!guardian&&!chest)return;
+  if(guardian&&(!npc.NPCTypedata||!FireTerminalLocalSourceProfiles::MatchesExpectedLoadedNPCType(*npc.NPCTypedata)))return;
+  if(!npc.GetID()||entity_list.GetNPCByID(npc.GetID())!=&npc)return;
+  auto s=std::make_shared<State>();s->original=&npc;s->original_entity=npc.GetID();
+  s->original_spawn=npc.GetSpawnPointID();s->npc_type=npc.GetNPCTypeID();
+  s->actor=RunUseWitness::CaptureNPCScene(npc);
+  s->positive=std::make_shared<OriginalTerminalDeathProof::State>();s->positive->original_actor=s->actor;
+  static uint64_t sequence=0;if(sequence==UINT64_MAX)return;
+  auto& f=s->positive->original;f.native_sequence=++sequence;f.npc_type=s->npc_type;
+  f.original_spawn=s->original_spawn;f.original_entity=s->original_entity;
+  if(chest) {
+   // Only a live original OP_LDoNOpen scope for this SAME owned actor enters
+   // its real HandleLDoNOpen -> NPC::Death. Generic damage/Death cannot qualify.
+   if(!NativeRunTerminalSource::CaptureOriginalOpenDeath(npc,*s->positive))return;
+   s->positive->chest=chest;
+  }
+  state_=std::move(s);
+ }catch(...) {state_.reset();}
+}
+OriginalTerminalDeath::~OriginalTerminalDeath(){current_=previous_;}
+uint64_t OriginalTerminalDeath::ActualGuardianSequence(NPC& npc) {
+ const auto* f=current_;
+ return f&&f->state_&&f->state_->original==&npc&&f->state_->npc_type==490911&&
+  f->state_->original_spawn==304062014&&f->state_->positive?
+  f->state_->positive->original.native_sequence:0;
+}
+void OriginalTerminalDeath::ObserveActualKillVisit(Client& candidate,NPC& npc) {
+ auto* f=current_;
+ if(!f||!f->state_)return;auto& s=*f->state_;
+ if(s.original!=&npc||s.npc_type!=490911||s.original_spawn!=304062014||s.kill_visit_captured||
+  !s.actor->NPCStillAlive())return;
+ const auto accepted=CaptureRun(candidate,16,false);if(!accepted)return;
+ // This visit is made by the original native TaskManager party eligibility
+ // loop, not a later search of clients near the boss or current group history.
+ s.positive->original.mission=*accepted;
+ s.positive->progress=ProgressPacket(*accepted,16);
+ s.kill_visit_captured=true;
+}
+void OriginalTerminalDeath::CaptureActualCorpse(Corpse& corpse,NPC& npc) {
+ auto* f=current_;
+ if(!f||!f->state_)return;auto& s=*f->state_;
+ if(s.original!=&npc||!s.actor->NPCStillAlive()||!s.positive||s.positive->corpse_owner||
+  !corpse.IsNPCCorpse()||corpse.GetNPCTypeID()!=s.npc_type)return;
+ if(s.npc_type==490911&&!s.kill_visit_captured)return;
+ try {
+  s.positive->corpse_owner=RunUseWitness::Capture(nullptr,nullptr,&corpse);
+  corpse.m_fire_terminal_death_origin=s.positive;
+ }catch(...) {s.positive->corpse_owner.reset();}
+}
+void OriginalTerminalDeath::ObserveActualCorpseRegistered(Corpse& corpse) {
+ const auto p=corpse.m_fire_terminal_death_origin;
+ if(!p||p->registered||!current_||!current_->state_||current_->state_->positive!=p||
+  !corpse.GetID()||!p->corpse_owner||p->corpse_owner->LiveCorpse(corpse.GetID())!=&corpse)return;
+ p->original.corpse_entity=corpse.GetID();p->registered=true;
+ if(p->chest)NativeRunTerminalSource::BindOriginalOpenedCorpse(corpse,*p);
+}
+void OriginalTerminalDeath::SealActualSuccess(NPC& npc,uint32_t original_entity) {
+ if(!state_)return;const auto& s=*state_;const auto p=s.positive;
+ if(!p||p->queued||s.original!=&npc||s.original_entity!=original_entity||!s.actor->NPCStillAlive()||
+  !p->registered||!p->corpse_owner||!p->corpse_owner->LiveCorpse(p->original.corpse_entity)||
+  !p->original.mission.run||!p->progress)return;
+ if(!NativeRunTerminalSource::SealOriginalChestCorpse(*p))return;
+ p->positive_return=true;p->queued=true;
+ if(NativeRunTerminalSource::death_tail_)NativeRunTerminalSource::death_tail_->next=p;else NativeRunTerminalSource::death_head_=p;
+ NativeRunTerminalSource::death_tail_=p; // all nodes/packets prepared before original positive return
+}
+void NativeRunTerminalSource::DrainCompletions() {
+ auto next=std::move(NativeRunTerminalSource::death_head_);NativeRunTerminalSource::death_tail_.reset();
+ while(next) {
+  auto p=std::move(next);next=std::move(p->next);
+  if(!p->queued||!p->positive_return||!p->registered||!p->corpse_owner||
+   !p->corpse_owner->LiveCorpse(p->original.corpse_entity)||!p->progress||
+   !p->corpse_owner->ZoneAlive()||!RunStillActual(p->original.mission))continue;
+  OriginalTerminalDeathProof proof(p->original,p);
+  // Core seals FIRST and validates the actual original run/finite row. Known
+  // positive same-source death custody, not an optimistic World count, decides
+  // whether this one original run-stamped progress invocation is authorized.
+  bool acknowledged=false;
+  if(p->chest) {
+   const auto a=p->chest;
+   NativeTerminalPublication publication({TerminalNativeBoundary::OpenedDeath,p->original.mission,p->original.terminal_row,a->original.native_sequence,p->original.native_sequence,p->original.original_entity,p->original.corpse_entity},a);
+   acknowledged=NativeRunTerminalCustody::AcknowledgeNativePublication(publication);
+  }else acknowledged=NativeRunTerminalCustody::AcknowledgeOriginalDeath(proof);
+  if(!acknowledged)continue;
+  if(p->chest)p->chest->terminal_acknowledged=true;
+  else p->guardian_acknowledged=true;
+  worldserver.SendPacket(p->progress.get());
+  // Native send is not a positive durable World save acknowledgment.
+ }
+}
+bool NativeRunTerminalSource::AuthorizeAcknowledgedGuardianCorpse(Corpse& corpse,const MissionRunFacts& run,uint64_t death_sequence) {
+ const auto p=corpse.m_fire_terminal_death_origin;
+ if(!p||!p->guardian_acknowledged||!p->positive_return||!p->registered||p->chest||
+  !p->corpse_owner||p->corpse_owner->LiveCorpse(p->original.corpse_entity)!=&corpse)return false;
+ const auto& actual=p->original;const auto& original=actual.mission;
+ // Numeric actor/corpse IDs and process-local death counters can repeat after
+ // restart. ONLY this same opaque live corpse node's known original Guardian
+ // acknowledgment is authority; an older database row cannot set this bit.
+ // Different accepted looters keep their own occurrence; compare mission scene.
+ return actual.npc_type==490911&&actual.original_spawn==304062014&&
+  actual.native_sequence==death_sequence&&original.run==run.run&&original.accepted_time==run.accepted_time&&
+  original.zone==run.zone&&original.version==run.version&&original.instance==run.instance&&original.dynamic_zone==run.dynamic_zone;
+}
+void NativeRunTerminalSource::DiscardCompletions()noexcept {
+ NativeRunTerminalSource::death_head_.reset();NativeRunTerminalSource::death_tail_.reset();
+}
+} // namespace FireRunActionSource
+
+namespace FireRunActionSource {
+bool NativeRunTerminalSource::RejectUnissuedFinishTrade(Client&,NPC& giver) {
+ return zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&zone->GetInstanceID()&&giver.GetNPCTypeID()==490912;
+}
+namespace {
+std::optional<std::vector<TerminalAcceptedMemberFacts>> TerminalAcceptedMembers(const MissionRunFacts& run) {
+ if(!RunStillActual(run))return {};
+ auto q=database.QueryDatabase(fmt::format("SELECT m.character_id,h.occurrence_id,r.accepted_time FROM shared_task_members m LEFT JOIN character_shared_task_reward_instances h ON h.shared_task_id=m.shared_task_id AND h.character_id=m.character_id AND h.task_id=920170 LEFT JOIN character_task_reward_instances r ON r.character_id=h.character_id AND r.task_id=h.task_id AND r.occurrence_id=h.occurrence_id WHERE m.shared_task_id={} ORDER BY m.character_id",run.run),false);
+ if(!q.Success()||!q.RowCount()||q.RowCount()>6)return {};
+ std::vector<TerminalAcceptedMemberFacts> members;members.reserve(q.RowCount());
+ for(auto r:q){const auto id=RunNumber(r[0]),occ=RunNumber(r[1]),accepted=RunNumber(r[2]);if(!id||!*id||*id>UINT32_MAX||!occ||!*occ||!accepted||*accepted!=run.accepted_time)return {};members.push_back({uint32_t(*id),uint32_t(*accepted),*occ});}
+ if(std::adjacent_find(members.begin(),members.end(),[](const auto&a,const auto&b){return a.character==b.character;})!=members.end())return {};
+ return members; // actual accepted run members, including elsewhere; no online/radius filter
+}
+bool TerminalNativeRange(Client& c,NPC& giver) {
+ const auto d=glm::vec3(c.GetPosition())-glm::vec3(giver.GetPosition());
+ const double squared_limit=USE_NPC_RANGE2;
+ return squared_limit>0&&std::isfinite(d.x)&&std::isfinite(d.y)&&std::isfinite(d.z)&&
+  double(d.x)*d.x+double(d.y)*d.y+double(d.z)*d.z<=squared_limit;
+}
+}
+struct OriginalMoldTrade::State {
+ std::shared_ptr<RunUseWitness> player,giver;
+ NPC* original_giver=nullptr;
+};
+OriginalMoldTrade::OriginalMoldTrade(TerminalReturnFacts f,std::shared_ptr<State> s)
+ :state_(std::move(s)),facts_(f){}
+OriginalMoldTrade::~OriginalMoldTrade()=default;
+struct PreparedTerminalChestPlan::State {
+ const OriginalMoldTrade* original=nullptr;
+ std::shared_ptr<RunTerminalAttempt> actual;
+ std::unique_ptr<NPCType> expected;
+ std::unique_ptr<NPC> chest;
+ std::unique_ptr<EQApplicationPacket> finish;
+};
+PreparedTerminalChestPlan::PreparedTerminalChestPlan(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
+PreparedTerminalChestPlan::~PreparedTerminalChestPlan()=default;
+const std::vector<TerminalAcceptedMemberFacts>& PreparedTerminalChestPlan::AcceptedMembers()const noexcept {
+ return state_->actual->members;
+}
+bool NativeRunTerminalSource::RevalidateOriginalReturn(Client& c,const OriginalMoldTrade& use) {
+ const auto& f=use.facts_;const auto& s=use.state_;
+ if(!s||s->player->LiveClient()!=&c||!s->giver->NPCStillAlive()||!zone||
+  f.client_entity!=c.GetID()||f.mission.character!=c.CharacterID())return false;
+ auto* giver=entity_list.GetNPCByID(f.giver_entity);
+ if(!giver||giver!=s->original_giver||giver->GetNPCTypeID()!=490912||giver->GetSpawnPointID()!=304062015||
+  giver->GetDepop()||!TerminalNativeRange(c,*giver))return false;
+ const auto* definition=content_db.LoadNPCTypesData(490912);
+ if(!definition||!FireTerminalLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition))return false;
+ const auto run=CaptureRun(c,18,false);if(!run||!SameRun(*run,f.mission))return false;
+ const auto members=TerminalAcceptedMembers(*run);if(!members||*members!=f.accepted_members)return false;
+ auto expiry=database.QueryDatabase(fmt::format("SELECT expire_at FROM instance_list WHERE id={} AND never_expires=0 AND expire_at={} AND expire_at>UNIX_TIMESTAMP()",f.mission.instance,f.instance_expire_at),false);
+ if(!expiry.Success()||expiry.RowCount()!=1)return false;
+ if(!c.trade||c.trade->state!=Trading||c.trade->With()!=giver||c.trade->cp||c.trade->sp||c.trade->gp||c.trade->pp)return false;
+ size_t offered=0;
+ for(int16_t slot=EQ::invslot::TRADE_BEGIN;slot<=EQ::invslot::TRADE_NPC_END;++slot) {
+  const auto* item=c.GetInv().GetItem(slot);if(!item)continue;++offered;
+  if(slot!=f.mold.slot||item->GetID()!=47758||item->GetSerialNumber()!=f.mold.serial||
+   item->GetCharges()!=f.mold.charges||item->IsStackable()||!item->GetItem()||
+   !item->GetItem()->IsClassCommon()||item->GetItem()->ItemType!=11)return false;
+ }
+ // The normal origin reader intentionally excludes trade slots. Core's narrow
+ // original-return validator must bind THIS private use and the exact native
+ // NPC trade slot, not relax the general carried-item ownership predicate.
+ return offered==1&&NativeRunTerminalCustody::ValidateOriginalMoldReturn(c,use);
+}
+bool NativeRunTerminalSource::HandleOriginalAccept(Client& c,NPC& giver) {
+ if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID()||
+  giver.GetNPCTypeID()!=490912)return false;
+ try {
+  if(giver.GetSpawnPointID()!=304062015||!giver.GetID()||entity_list.GetNPCByID(giver.GetID())!=&giver) {
+   return true;
+  }
+  const auto run=CaptureRun(c,18,false);
+  if(!run){return true;}
+  const auto accepted_members=TerminalAcceptedMembers(*run);if(!accepted_members)return true;
+  auto expiry=database.QueryDatabase(fmt::format("SELECT expire_at FROM instance_list WHERE id={} AND zone=490 AND version=1 AND never_expires=0 AND expire_at>UNIX_TIMESTAMP()",run->instance),false);
+  if(!expiry.Success()||expiry.RowCount()!=1)return true;
+  const auto expires=RunNumber(expiry.begin()[0]);if(!expires||!*expires)return true;
+  TerminalReturnFacts f;f.accepted_members=*accepted_members;f.instance_expire_at=*expires;f.mission=*run;f.client_entity=c.GetID();f.giver_entity=giver.GetID();
+  f.giver_spawn=giver.GetSpawnPointID();f.giver_npc=giver.GetNPCTypeID();
+  static uint64_t sequence=0;if(sequence==UINT64_MAX){return true;}f.native_sequence=++sequence;
+  size_t offered=0;
+  for(int16_t slot=EQ::invslot::TRADE_BEGIN;slot<=EQ::invslot::TRADE_NPC_END;++slot) {
+   const auto* item=c.GetInv().GetItem(slot);if(!item)continue;++offered;
+   f.mold={item->GetID(),item->GetSerialNumber(),slot,item->GetCharges(),1};
+  }
+  if(offered!=1||f.mold.item_id!=47758){return true;}
+  auto s=std::make_shared<OriginalMoldTrade::State>();s->player=RunUseWitness::Capture(&c,nullptr,nullptr);
+  s->giver=RunUseWitness::CaptureNPCScene(giver);s->original_giver=&giver;
+  auto original=std::unique_ptr<OriginalMoldTrade>(new OriginalMoldTrade(f,std::move(s)));
+  if(!RevalidateOriginalReturn(c,*original)){return true;}
+  auto plan=PreparedTerminalChestPlan::PrepareActual(c,*original);
+  if(!plan){return true;}
+  const auto result=NativeRunTerminalCustody::ExecuteOriginalReturn(c,std::move(original),std::move(plan));
+  (void)result; // rejected original accept leaves all native trade roots/coins intact
+  // This original accept returns BEFORE native TradeAccepted/Finish/Reset.
+  // Only the positive receipt sink finishes metadata after known memory removal.
+  // Unknown holds never refund, cancel or regrant.
+  return true;
+ }catch(...) {return true;} // no blind property return when boundary is unknown
+}
+std::unique_ptr<PreparedTerminalChestPlan> PreparedTerminalChestPlan::PrepareActual(Client& c,const OriginalMoldTrade& use) {
+ if(!NativeRunTerminalSource::RevalidateOriginalReturn(c,use))return {};
+ const auto members=TerminalAcceptedMembers(use.facts_.mission);if(!members)return {};
+ const auto* definition=content_db.LoadNPCTypesData(490914);
+ if(!definition||!FireTerminalLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition)||
+  definition->loottable_id!=304062012||definition->class_!=Class::LDoNTreasure||RuleI(Zone,GlobalLootMultiplier)!=1)return {};
+ auto s=std::make_unique<State>();s->finish=std::make_unique<EQApplicationPacket>(OP_FinishTrade,0);s->original=&use;s->expected=std::make_unique<NPCType>();
+ std::memcpy(s->expected.get(),definition,sizeof(NPCType));
+ auto type=std::make_unique<NPCType>();std::memcpy(type.get(),definition,sizeof(NPCType));
+ s->chest=std::make_unique<NPC>(type.get(),nullptr,glm::vec4(-35.0f,650.0f,19.875f,0.0f),GravityBehavior::Water);
+ s->chest->GiveNPCTypeData(type.release());s->chest->SetCanOpenDoors(false);
+ if(s->chest->GetID()||!TerminalLootDefinitionQualified(*s->chest))return {};
+ // Native original table factory runs once on this unregistered prepared actor.
+ // The exact one actual native loot result is retained through commit/spawn.
+ s->chest->AddLootTable(304062012,false);
+ if(!TerminalActualLootQualified(*s->chest))return {};
+ auto a=std::make_shared<RunTerminalAttempt>();a->original=use.facts_;a->members=*members;
+ a->zone_owner=RunUseWitness::Capture(nullptr,nullptr,nullptr);a->actor_owner=RunUseWitness::CaptureNPCScene(*s->chest);
+ a->original_actor=s->chest.get();a->expected_loot=*s->chest->GetLootItems().front();
+ s->actual=std::move(a);
+ auto plan=std::unique_ptr<PreparedTerminalChestPlan>(new PreparedTerminalChestPlan(std::move(s)));
+ if(!plan->RevalidateBeforePersist(c))return {};return plan;
+}
+bool PreparedTerminalChestPlan::RevalidateBeforePersist(Client& c)const {
+ if(!state_||!state_->chest||!state_->actual||!state_->original||!state_->expected||
+  state_->chest->GetID()||!NativeRunTerminalSource::RevalidateOriginalReturn(c,*state_->original)||
+  !TerminalLootDefinitionQualified(*state_->chest)||!TerminalActualLootQualified(*state_->chest))return false;
+ const auto* definition=content_db.LoadNPCTypesData(490914);
+ const auto members=TerminalAcceptedMembers(state_->original->facts_.mission);
+ const auto* actual=state_->chest->GetLootItems().front();const auto& expected=state_->actual->expected_loot;
+ return definition&&FireTerminalLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition)&&
+  std::memcmp(definition,state_->expected.get(),sizeof(NPCType))==0&&members&&*members==state_->actual->members&&
+  actual&&SameTerminalLoot(*actual,expected);
+}
+} // namespace FireRunActionSource
+
+namespace FireRunActionSource {
+NativeTerminalPublication::NativeTerminalPublication(TerminalNativeFacts f,std::shared_ptr<RunTerminalAttempt> a):facts_(f),owner_(std::move(a)){}
+NativeTerminalPublication::~NativeTerminalPublication()=default;
+void OnOriginalTerminalReturnPublished(Client& c,PublishedTerminalReturnReceipt& receipt) {
+ PublishedTerminalReturnSink::Receive(c,receipt);
+}
+void PublishedTerminalReturnSink::Receive(Client& c,PublishedTerminalReturnReceipt& receipt) {
+ const auto published=receipt.Take(c); // FIRST: same owned one-use strict writer receipt
+ if(!published)return;const auto v=*published;
+ if(!v.original||!v.plan||!v.terminal_row||!v.run_id||!v.native_sequence)return;
+ auto* s=v.plan->state_.get();
+ if(!s||s->original!=v.original||!s->chest||!s->actual||s->actual->row||
+  v.original->facts_.mission.run!=v.run_id||v.original->facts_.native_sequence!=v.native_sequence||
+  !s->actual->zone_owner->ZoneAlive()||actual_terminal_registration)return;
+ auto* owner=v.original->state_->player->LiveClient();
+ if(owner!=&c||!owner->trade||!s->finish)return;
+ // Original accept has not sent finish or reset metadata. SAME known commit
+ // and native memory removal now authorize these exact original final steps.
+ owner->QueuePacket(s->finish.get());owner->trade->Reset();
+ auto a=s->actual;a->row=v.terminal_row;
+ auto* actor=s->chest.release();actor->m_fire_run_terminal_attempt=a;
+ actual_terminal_registration=a.get();
+ struct Restore {~Restore(){actual_terminal_registration=nullptr;}} restore;
+ entity_list.AddNPC(actor,true,true);
+ // Actual AddNPC registered same actor before mutable spawn callbacks. Never
+ // dereference actor/Client after those callbacks or create a replacement.
+}
+bool NativeRunTerminalSource::CaptureOriginalOpenDeath(NPC& actor,OriginalTerminalDeathProof::State& positive) {
+ const auto* original=TerminalOriginalOpen::current;const auto a=actor.m_fire_run_terminal_attempt;
+ if(!original||!a||original->actor!=&actor||original->actual!=a||!a->row||!a->registered||
+  a->lost||a->opened||!a->open_entered||!a->actor_owner->NPCStillAlive()||
+  actor.GetID()!=a->entity||!original->opener->LiveClient())return false;
+ positive.original.mission=original->opening;positive.original.terminal_row=a->row;
+ positive.original.original_chest_open=true;positive.progress=ProgressPacket(original->opening,18);
+ return bool(positive.progress);
+}
+void NativeRunTerminalSource::BindOriginalOpenedCorpse(Corpse& corpse,OriginalTerminalDeathProof::State& positive) {
+ if(!positive.chest||!positive.registered||!positive.original.original_chest_open||
+  !zone||!zone->GetInstanceTimer()||!zone->GetInstanceTimer()->Enabled())return;
+ const uint32_t remaining=OriginalTerminalLeaseRemaining(positive.chest->original);
+ if(!remaining)return;
+ corpse.SetDecayTimer(std::min(corpse.GetDecayTime(),remaining));
+ // Native rules/actual level choose normal decay; only cap the original lease.
+}
+bool NativeRunTerminalSource::SealOriginalChestCorpse(OriginalTerminalDeathProof::State& positive) {
+ if(!positive.chest)return true;
+ auto& a=*positive.chest;
+ auto* corpse=positive.corpse_owner?positive.corpse_owner->LiveCorpse(positive.original.corpse_entity):nullptr;
+ if(!corpse||!a.registered||a.opened||a.lost||!positive.original.original_chest_open||
+  !a.row||a.row!=positive.original.terminal_row||a.members.empty()||
+  a.members.size()>std::size(corpse->m_allowed_looters)||!zone||!zone->GetInstanceTimer()||
+  !zone->GetInstanceTimer()->Enabled()||!OriginalTerminalLeaseRemaining(a.original))return false;
+ // Final native death success occurs AFTER ordinary killer/group/raid rights.
+ // Replace only this actual selected chest corpse with its accepted snapshot;
+ // source authorization additionally requires SAME current run membership.
+ std::fill(std::begin(corpse->m_allowed_looters),std::end(corpse->m_allowed_looters),0);
+ for(size_t i=0;i<a.members.size();++i)corpse->m_allowed_looters[i]=a.members[i].character;
+ corpse->SetDecayTimer(std::min(corpse->GetDecayTime(),OriginalTerminalLeaseRemaining(a.original)));
+ a.opened=true;return true;
+}
+bool NativeRunTerminalSource::AuthorizeActualCorpse(Client& c,Corpse& corpse) {
+ const auto p=corpse.m_fire_terminal_death_origin;
+ if(!p||!p->chest) {
+  return !(zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&corpse.GetNPCTypeID()==490914);
+ }
+ return p->positive_return&&p->registered&&p->original.original_chest_open&&p->chest->opened&&p->chest->terminal_acknowledged&&OriginalTerminalLeaseRemaining(p->chest->original)&&
+  p->corpse_owner&&p->corpse_owner->LiveCorpse(p->original.corpse_entity)==&corpse&&
+  TerminalMemberStillActual(c,p->chest->original.mission,p->chest->members);
+}
+} // namespace FireRunActionSource
+
+#include "fungal_item_source_impl.inc"

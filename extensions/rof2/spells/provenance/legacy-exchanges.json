@@ -1,0 +1,2203 @@
+{
+  "scope": "Original TSS rankIII ordered rune and Underfoot rankII named-gem exchanges",
+  "sources": [
+    "https://everquest.allakhazam.com/db/quest/3629",
+    "https://www.raspersrealm.com/Everquest/Underfoot/miscSpells.html",
+    "http://www.bonzz.com/ufspells.htm"
+  ],
+  "catalogues": {
+    "tss": [
+      {
+        "class": 1,
+        "sequence": 1,
+        "spell_id": 10961,
+        "name": "Aura of Draconic Runes Rk. III",
+        "source_name": "Tome of Aura of Draconic Runes Rk. III",
+        "item_id": 79298,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 1,
+        "sequence": 2,
+        "spell_id": 10973,
+        "name": "Vortex Blade Rk. III",
+        "source_name": "Tome of Vortex Blade Rk. III",
+        "item_id": 79310,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 1,
+        "sequence": 3,
+        "spell_id": 10976,
+        "name": "Scowl Rk. III",
+        "source_name": "Tome of Scowl Rk. III",
+        "item_id": 79313,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 1,
+        "spell_id": 9708,
+        "name": "Sacred Remedy Rk. III",
+        "source_name": "Spell: Sacred Remedy Rk. III",
+        "item_id": 78045,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 2,
+        "spell_id": 9738,
+        "name": "Sacred Elixir Rk. III",
+        "source_name": "Spell: Sacred Elixir Rk. III",
+        "item_id": 78075,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 3,
+        "spell_id": 9741,
+        "name": "Reproval Rk. III",
+        "source_name": "Spell: Reproval Rk. III",
+        "item_id": 78078,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 4,
+        "spell_id": 9748,
+        "name": "Sacred Light Rk. III",
+        "source_name": "Spell: Sacred Light Rk. III",
+        "item_id": 78085,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 5,
+        "spell_id": 9757,
+        "name": "Promised Renewal Rk. III",
+        "source_name": "Spell: Promised Renewal Rk. III",
+        "item_id": 78094,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 6,
+        "spell_id": 9714,
+        "name": "Ward of the Dauntless Rk. III",
+        "source_name": "Spell: Ward of the Dauntless Rk. III",
+        "item_id": 78051,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 7,
+        "spell_id": 9778,
+        "name": "Tectonic Quake Rk. III",
+        "source_name": "Spell: Tectonic Quake Rk. III",
+        "item_id": 78115,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 8,
+        "spell_id": 9793,
+        "name": "Shared Purity Rk. III",
+        "source_name": "Spell: Shared Purity Rk. III",
+        "item_id": 78130,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 9,
+        "spell_id": 9796,
+        "name": "Expunge Corruption Rk. III",
+        "source_name": "Spell: Expunge Corruption Rk. III",
+        "item_id": 78133,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 10,
+        "spell_id": 9808,
+        "name": "Elushar's Mark Rk. III",
+        "source_name": "Spell: Elushar's Mark Rk. III",
+        "item_id": 78145,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 11,
+        "spell_id": 9811,
+        "name": "Hand of Tenacity Rk. III",
+        "source_name": "Spell: Hand of Tenacity Rk. III",
+        "item_id": 78148,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 12,
+        "spell_id": 9814,
+        "name": "Elixir of Redemption Rk. III",
+        "source_name": "Spell: Elixir of Redemption Rk. III",
+        "item_id": 78151,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 2,
+        "sequence": 13,
+        "spell_id": 9820,
+        "name": "Rallied Aegis of Vie Rk. III",
+        "source_name": "Spell: Rallied Aegis of Vie Rk. III",
+        "item_id": 78157,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 3,
+        "sequence": 1,
+        "spell_id": 10157,
+        "name": "Sacred Touch Rk. III",
+        "source_name": "Spell: Sacred Touch Rk. III",
+        "item_id": 78494,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 3,
+        "sequence": 2,
+        "spell_id": 10172,
+        "name": "Absolve Rk. III",
+        "source_name": "Spell: Absolve Rk. III",
+        "item_id": 78509,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 3,
+        "sequence": 3,
+        "spell_id": 10175,
+        "name": "Challenge for Honor Rk. III",
+        "source_name": "Spell: Challenge for Honor Rk. III",
+        "item_id": 78512,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 3,
+        "sequence": 4,
+        "spell_id": 10187,
+        "name": "Gleaming Light Rk. III",
+        "source_name": "Spell: Gleaming Light Rk. III",
+        "item_id": 78524,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 3,
+        "sequence": 5,
+        "spell_id": 10196,
+        "name": "Fenegar's Mark Rk. III",
+        "source_name": "Spell: Fenegar's Mark Rk. III",
+        "item_id": 78533,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 3,
+        "sequence": 6,
+        "spell_id": 10202,
+        "name": "Sacred Cleansing Rk. III",
+        "source_name": "Spell: Sacred Cleansing Rk. III",
+        "item_id": 78539,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 3,
+        "sequence": 7,
+        "spell_id": 10211,
+        "name": "Brell's Stony Guard Rk. III",
+        "source_name": "Spell: Brell's Stony Guard Rk. III",
+        "item_id": 78548,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 3,
+        "sequence": 8,
+        "spell_id": 10208,
+        "name": "Wave of Forgiveness Rk. III",
+        "source_name": "Spell: Wave of Forgiveness Rk. III",
+        "item_id": 78545,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 4,
+        "sequence": 1,
+        "spell_id": 10094,
+        "name": "Sunderock Springwater Rk. III",
+        "source_name": "Spell: Sunderock Springwater Rk. III",
+        "item_id": 78431,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 4,
+        "sequence": 2,
+        "spell_id": 10091,
+        "name": "Cloud of Wasps Rk. III",
+        "source_name": "Spell: Cloud of Wasps Rk. III",
+        "item_id": 78428,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 4,
+        "sequence": 3,
+        "spell_id": 10106,
+        "name": "Icefall Chill Rk. III",
+        "source_name": "Spell: Icefall Chill Rk. III",
+        "item_id": 78443,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 4,
+        "sequence": 4,
+        "spell_id": 10118,
+        "name": "Volcanic Ash Rk. III",
+        "source_name": "Spell: Volcanic Ash Rk. III",
+        "item_id": 78455,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 4,
+        "sequence": 5,
+        "spell_id": 10142,
+        "name": "Eyes of the Owl Rk. III",
+        "source_name": "Spell: Eyes of the Owl Rk. III",
+        "item_id": 78479,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 4,
+        "sequence": 6,
+        "spell_id": 10124,
+        "name": "Summer's Dew Rk. III",
+        "source_name": "Spell: Summer's Dew Rk. III",
+        "item_id": 78461,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 4,
+        "sequence": 7,
+        "spell_id": 10130,
+        "name": "Obsidian Skin Rk. III",
+        "source_name": "Spell: Obsidian Skin Rk. III",
+        "item_id": 78467,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 4,
+        "sequence": 8,
+        "spell_id": 10133,
+        "name": "Protection of the Minohten Rk. III",
+        "source_name": "Spell: Protection of the Minohten Rk. III",
+        "item_id": 78470,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 5,
+        "sequence": 1,
+        "spell_id": 10235,
+        "name": "Bond of the Blacktalon Rk. III",
+        "source_name": "Spell: Bond of the Blacktalon Rk. III",
+        "item_id": 78572,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 5,
+        "sequence": 2,
+        "spell_id": 10259,
+        "name": "Terror of Vergalid Rk. III",
+        "source_name": "Spell: Terror of Vergalid Rk. III",
+        "item_id": 78596,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 5,
+        "sequence": 3,
+        "spell_id": 10247,
+        "name": "Blacktalon Bite Rk. III",
+        "source_name": "Spell: Blacktalon Bite Rk. III",
+        "item_id": 78584,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 5,
+        "sequence": 4,
+        "spell_id": 10262,
+        "name": "Challenge for Power Rk. III",
+        "source_name": "Spell: Challenge for Power Rk. III",
+        "item_id": 78599,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 5,
+        "sequence": 5,
+        "spell_id": 10284,
+        "name": "Amplify Death Rk. III",
+        "source_name": "Spell: Amplify Death Rk. III",
+        "item_id": 78621,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 5,
+        "sequence": 6,
+        "spell_id": 10290,
+        "name": "Rotroot Spear Rk. III",
+        "source_name": "Spell: Rotroot Spear Rk. III",
+        "item_id": 78627,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 5,
+        "sequence": 7,
+        "spell_id": 10293,
+        "name": "Vilify Rk. III",
+        "source_name": "Spell: Vilify Rk. III",
+        "item_id": 78630,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 5,
+        "sequence": 8,
+        "spell_id": 10329,
+        "name": "Touch of Severan Rk. III",
+        "source_name": "Spell: Touch of Severan Rk. III",
+        "item_id": 78666,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 1,
+        "spell_id": 9835,
+        "name": "Cloudburst Hail Rk. III",
+        "source_name": "Spell: Cloudburst Hail Rk. III",
+        "item_id": 78172,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 2,
+        "spell_id": 9859,
+        "name": "Mammoth's Strength Rk. III",
+        "source_name": "Spell: Mammoth's Strength Rk. III",
+        "item_id": 78196,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 3,
+        "spell_id": 9877,
+        "name": "Pure Life Rk. III",
+        "source_name": "Spell: Pure Life Rk. III",
+        "item_id": 78214,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 4,
+        "spell_id": 9702,
+        "name": "Cure Corruption Rk. III",
+        "source_name": "Spell: Cure Corruption Rk. III",
+        "item_id": 78039,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 5,
+        "spell_id": 9880,
+        "name": "Swarm of Fireants Rk. III",
+        "source_name": "Spell: Swarm of Fireants Rk. III",
+        "item_id": 78217,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 6,
+        "spell_id": 9889,
+        "name": "Winter's Flame Rk. III",
+        "source_name": "Spell: Winter's Flame Rk. III",
+        "item_id": 78226,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 7,
+        "spell_id": 9723,
+        "name": "Resist Corruption Rk. III",
+        "source_name": "Spell: Resist Corruption Rk. III",
+        "item_id": 78060,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 8,
+        "spell_id": 9778,
+        "name": "Tectonic Quake Rk. III",
+        "source_name": "Spell: Tectonic Quake Rk. III",
+        "item_id": 78115,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 9,
+        "spell_id": 9913,
+        "name": "Equinox Burn Rk. III",
+        "source_name": "Spell: Equinox Burn Rk. III",
+        "item_id": 78250,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 10,
+        "spell_id": 9922,
+        "name": "Chant of the Napaea Rk. III",
+        "source_name": "Spell: Chant of the Napaea Rk. III",
+        "item_id": 78259,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 11,
+        "spell_id": 9943,
+        "name": "Adrenaline Surge Rk. III",
+        "source_name": "Spell: Adrenaline Surge Rk. III",
+        "item_id": 78280,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 12,
+        "spell_id": 9931,
+        "name": "Blessing of the Direwild Rk. III",
+        "source_name": "Spell: Blessing of the Direwild Rk. III",
+        "item_id": 78268,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 6,
+        "sequence": 13,
+        "spell_id": 9934,
+        "name": "Rime Crystals Rk. III",
+        "source_name": "Spell: Rime Crystals Rk. III",
+        "item_id": 78271,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 7,
+        "sequence": 1,
+        "spell_id": 10949,
+        "name": "Phantom Silhouette Rk. III",
+        "source_name": "Tome of Phantom Silhouette Rk. III",
+        "item_id": 79286,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 7,
+        "sequence": 2,
+        "spell_id": 10946,
+        "name": "Clawstriker's Flurry Rk. III",
+        "source_name": "Tome of Clawstriker's Flurry Rk. III",
+        "item_id": 79283,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 7,
+        "sequence": 3,
+        "spell_id": 10952,
+        "name": "Moment of Calm Rk. III",
+        "source_name": "Tome of Moment of Calm Rk. III",
+        "item_id": 79289,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 8,
+        "sequence": 1,
+        "spell_id": 10421,
+        "name": "Erollisi's Cantata Rk. III",
+        "source_name": "Song: Erollisi's Cantata Rk. III",
+        "item_id": 78758,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 8,
+        "sequence": 2,
+        "spell_id": 10433,
+        "name": "Weshlu's Chillsong Aria Rk. III",
+        "source_name": "Song: Weshlu's Chillsong Aria Rk. III",
+        "item_id": 78770,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 8,
+        "sequence": 3,
+        "spell_id": 10442,
+        "name": "Performer's Psalm of Pyrotechnics Rk. III",
+        "source_name": "Song: Performer's Psalm of Pyrotechnics Rk. III",
+        "item_id": 78779,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 8,
+        "sequence": 4,
+        "spell_id": 10445,
+        "name": "Erollisi's Chorus Rk. III",
+        "source_name": "Song: Erollisi's Chorus Rk. III",
+        "item_id": 78782,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 8,
+        "sequence": 5,
+        "spell_id": 10448,
+        "name": "Minohten's Purifying Panpipes Rk. III",
+        "source_name": "Song: Minohten's Purifying Panpipes Rk. III",
+        "item_id": 78785,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 8,
+        "sequence": 6,
+        "spell_id": 10460,
+        "name": "Staccato Rhythms Rk. III",
+        "source_name": "Song: Staccato Rhythms Rk. III",
+        "item_id": 78797,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 8,
+        "sequence": 7,
+        "spell_id": 10463,
+        "name": "Veshma's Lively Crescendo Rk. III",
+        "source_name": "Song: Veshma's Lively Crescendo Rk. III",
+        "item_id": 78800,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 8,
+        "sequence": 8,
+        "spell_id": 10469,
+        "name": "Denon's Dirge of Destruction Rk. III",
+        "source_name": "Song: Denon's Dirge of Destruction Rk. III",
+        "item_id": 78806,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 9,
+        "sequence": 1,
+        "spell_id": 10885,
+        "name": "Blinding Flash Rk. III",
+        "source_name": "Tome of Blinding Flash Rk. III",
+        "item_id": 79222,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 9,
+        "sequence": 2,
+        "spell_id": 10894,
+        "name": "Guide of Toxicity Rk. III",
+        "source_name": "Tome of Guide of Toxicity Rk. III",
+        "item_id": 79231,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 9,
+        "sequence": 3,
+        "spell_id": 10900,
+        "name": "Assassin Discipline Rk. III",
+        "source_name": "Tome of Assassin Discipline Rk. III",
+        "item_id": 79237,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 1,
+        "spell_id": 9964,
+        "name": "Ahnkaul's Spear of Venom Rk. III",
+        "source_name": "Spell: Ahnkaul's Spear of Venom Rk. III",
+        "item_id": 78301,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 2,
+        "spell_id": 9702,
+        "name": "Cure Corruption Rk. III",
+        "source_name": "Spell: Cure Corruption Rk. III",
+        "item_id": 78039,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 3,
+        "spell_id": 10004,
+        "name": "Ahnkaul's Mending Rk. III",
+        "source_name": "Spell: Ahnkaul's Mending Rk. III",
+        "item_id": 78341,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 4,
+        "spell_id": 10061,
+        "name": "Halcyon Breeze Rk. III",
+        "source_name": "Spell: Halcyon Breeze Rk. III",
+        "item_id": 78398,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 5,
+        "spell_id": 10016,
+        "name": "Ancestral Bargain Rk. III",
+        "source_name": "Spell: Ancestral Bargain Rk. III",
+        "item_id": 78353,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 6,
+        "spell_id": 10019,
+        "name": "Sting of the Queen Rk. III",
+        "source_name": "Spell: Sting of the Queen Rk. III",
+        "item_id": 78356,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 7,
+        "spell_id": 10013,
+        "name": "Talisman of Foresight Rk. III",
+        "source_name": "Spell: Talisman of Foresight Rk. III",
+        "item_id": 78350,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 8,
+        "spell_id": 9922,
+        "name": "Chant of the Napaea Rk. III",
+        "source_name": "Spell: Chant of the Napaea Rk. III",
+        "item_id": 78259,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 9,
+        "spell_id": 10031,
+        "name": "Talisman of the Stoic One Rk. III",
+        "source_name": "Spell: Talisman of the Stoic One Rk. III",
+        "item_id": 78368,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 10,
+        "spell_id": 10034,
+        "name": "Glacial Avalanche Rk. III",
+        "source_name": "Spell: Glacial Avalance Rk. III",
+        "item_id": 78371,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 11,
+        "spell_id": 10058,
+        "name": "Talisman of the Dire Rk. III",
+        "source_name": "Spell: Talisman of the Dire Rk. III",
+        "item_id": 78395,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 12,
+        "spell_id": 10046,
+        "name": "Wishka's Favor Rk. III",
+        "source_name": "Spell: Protection of Wishka Rk. III",
+        "item_id": 78383,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 10,
+        "sequence": 13,
+        "spell_id": 10055,
+        "name": "Vengeance of Ahnkaul Rk. III",
+        "source_name": "Spell: Vengeance of Ahnkaul Rk. III",
+        "item_id": 78392,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 1,
+        "spell_id": 10496,
+        "name": "Drain Life Rk. III",
+        "source_name": "Spell: Drain Life Rk. III",
+        "item_id": 78833,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 2,
+        "spell_id": 10490,
+        "name": "Drink of Vitae Rk. III",
+        "source_name": "Spell: Drink of Vitae Rk. III",
+        "item_id": 78827,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 3,
+        "spell_id": 10509,
+        "name": "Curse of Mortality Rk. III",
+        "source_name": "Spell: Curse of Mortality Rk. III",
+        "item_id": 78846,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 4,
+        "spell_id": 10512,
+        "name": "Dyn`leth's Grasp Rk. III",
+        "source_name": "Spell: Dyn`leth's Grasp Rk. III",
+        "item_id": 78849,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 5,
+        "spell_id": 10518,
+        "name": "Scent of Twilight Rk. III",
+        "source_name": "Spell: Scent of Twilight Rk. III",
+        "item_id": 78855,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 6,
+        "spell_id": 10524,
+        "name": "Bloodcurdling Shriek Rk. III",
+        "source_name": "Spell: Bloodcurdling Shriek Rk. III",
+        "item_id": 78861,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 7,
+        "spell_id": 10533,
+        "name": "Wraithskin Rk. III",
+        "source_name": "Spell: Wraithskin Rk. III",
+        "item_id": 78870,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 8,
+        "spell_id": 10539,
+        "name": "Chilling Renewal Rk. III",
+        "source_name": "Spell: Chilling Renewal Rk. III",
+        "item_id": 78876,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 9,
+        "spell_id": 10545,
+        "name": "Ashengate Pyre Rk. III",
+        "source_name": "Spell: Ashengate Pyre Rk. III",
+        "item_id": 78882,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 10,
+        "spell_id": 10557,
+        "name": "Vakk`dra's Sickly Mists Rk. III",
+        "source_name": "Spell: Vakk`dra's Sickly Mists Rk. III",
+        "item_id": 78894,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 11,
+        "spell_id": 10560,
+        "name": "Otherside Rk. III",
+        "source_name": "Spell: Otherside Rk. III",
+        "item_id": 78897,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 12,
+        "spell_id": 10743,
+        "name": "Aegis of Calliav Rk. III",
+        "source_name": "Spell: Aegis of Calliav Rk. III",
+        "item_id": 79080,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 11,
+        "sequence": 13,
+        "spell_id": 10484,
+        "name": "Demand for Blood Rk. III",
+        "source_name": "Spell: Demand for Blood Rk. III",
+        "item_id": 78821,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 1,
+        "spell_id": 10772,
+        "name": "Rimelure Rk. III",
+        "source_name": "Spell: Rimelure Rk. III",
+        "item_id": 79109,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 2,
+        "spell_id": 10775,
+        "name": "Shield of the Crystalwing Rk. III",
+        "source_name": "Spell: Shield of the Crystalwing Rk. III",
+        "item_id": 79112,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 3,
+        "spell_id": 10784,
+        "name": "Concussive Blast Rk. III",
+        "source_name": "Spell: Concussive Blast Rk. III",
+        "item_id": 79121,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 4,
+        "spell_id": 10794,
+        "name": "Patient Harvest Rk. III",
+        "source_name": "Spell: Patient Harvest Rk. III",
+        "item_id": 79131,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 5,
+        "spell_id": 10790,
+        "name": "Magmaraug's Presence Rk. III",
+        "source_name": "Spell: Magmaraug's Presence Rk. III",
+        "item_id": 79127,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 6,
+        "spell_id": 10812,
+        "name": "Scales of the Crystalwing Rk. III",
+        "source_name": "Spell: Scales of the Crystalwing Rk. III",
+        "item_id": 79149,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 7,
+        "spell_id": 10818,
+        "name": "Ball Lightning Rk. III",
+        "source_name": "Spell: Ball Lightning Rk. III",
+        "item_id": 79155,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 8,
+        "spell_id": 10809,
+        "name": "Lavalure Rk. III",
+        "source_name": "Spell: Lavalure Rk. III",
+        "item_id": 79146,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 9,
+        "spell_id": 10843,
+        "name": "Flashfires Rk. III",
+        "source_name": "Spell: Flashfires Rk. III",
+        "item_id": 79180,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 10,
+        "spell_id": 10839,
+        "name": "Icefall Avalanche Rk. III",
+        "source_name": "Spell: Icefall Avalanche Rk. III",
+        "item_id": 79176,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 11,
+        "spell_id": 10861,
+        "name": "Sothgar's Flame Rk. III",
+        "source_name": "Spell: Sothgar's Flame Rk. III",
+        "item_id": 79198,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 12,
+        "spell_id": 10849,
+        "name": "Claw of Selay Rk. III",
+        "source_name": "Spell: Claw of Selay Rk. III",
+        "item_id": 79186,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 12,
+        "sequence": 13,
+        "spell_id": 10542,
+        "name": "Ethereal Conflagration Rk. III",
+        "source_name": "Spell: Ethereal Conflagration Rk. III",
+        "item_id": 78879,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 1,
+        "spell_id": 9982,
+        "name": "Malosinise Rk. III",
+        "source_name": "Spell: Malosinise Rk. III",
+        "item_id": 78319,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 2,
+        "spell_id": 10686,
+        "name": "Magmaskin Rk. III",
+        "source_name": "Spell: Magmaskin Rk. III",
+        "item_id": 79023,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 3,
+        "spell_id": 10698,
+        "name": "Bolt of Molten Slag Rk. III",
+        "source_name": "Spell: Bolt of Molten Slag Rk. III",
+        "item_id": 79035,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 4,
+        "spell_id": 10718,
+        "name": "Shock of Silvered Steel Rk. III",
+        "source_name": "Spell: Shock of Silvered Steel Rk. III",
+        "item_id": 79055,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 5,
+        "spell_id": 10722,
+        "name": "Scorching Skin Rk. III",
+        "source_name": "Spell: Scorching Skin Rk. III",
+        "item_id": 79059,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 6,
+        "spell_id": 10728,
+        "name": "Granite Stance Rk. III",
+        "source_name": "Spell: Granite Stance Rk. III",
+        "item_id": 79065,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 7,
+        "spell_id": 10734,
+        "name": "Scalding Sands Rk. III",
+        "source_name": "Spell: Scalding Sands Rk. III",
+        "item_id": 79071,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 8,
+        "spell_id": 10740,
+        "name": "Renewal of Aenda Rk. III",
+        "source_name": "Spell: Renewal of Aenda Rk. III",
+        "item_id": 79077,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 9,
+        "spell_id": 10690,
+        "name": "Summon Wintry Paradox Rk. III",
+        "source_name": "Spell: Summon Wintry Paradox Rk. III",
+        "item_id": 79027,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 10,
+        "spell_id": 10743,
+        "name": "Aegis of Calliav Rk. III",
+        "source_name": "Spell: Aegis of Calliav Rk. III",
+        "item_id": 79080,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 11,
+        "spell_id": 10749,
+        "name": "Circle of Magmaskin Rk. III",
+        "source_name": "Spell: Circle of Magmaskin Rk. III",
+        "item_id": 79086,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 12,
+        "spell_id": 10756,
+        "name": "Fickle Inferno Rk. III",
+        "source_name": "Spell: Fickle Inferno Rk. III",
+        "item_id": 79093,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 13,
+        "sequence": 13,
+        "spell_id": 10768,
+        "name": "Blazing Stance Rk. III",
+        "source_name": "Spell: Blazing Stance Rk. III",
+        "item_id": 79105,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 1,
+        "spell_id": 10582,
+        "name": "Draconic Rune Rk. III",
+        "source_name": "Spell: Draconic Rune Rk. III",
+        "item_id": 78919,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 2,
+        "spell_id": 10598,
+        "name": "Rune of Ellowind Rk. III",
+        "source_name": "Spell: Rune of Ellowind Rk. III",
+        "item_id": 78935,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 3,
+        "spell_id": 10649,
+        "name": "Bewilderment Rk. III",
+        "source_name": "Spell: Bewilderment Rk. III",
+        "item_id": 78986,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 4,
+        "spell_id": 10604,
+        "name": "Speed of Ellowind Rk. III",
+        "source_name": "Spell: Speed of Ellowind Rk. III",
+        "item_id": 78941,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 5,
+        "spell_id": 10619,
+        "name": "Seer's Intuition Rk. III",
+        "source_name": "Spell: Seer's Intuition Rk. III",
+        "item_id": 78956,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 6,
+        "spell_id": 10622,
+        "name": "Aegis of Alendar Rk. III",
+        "source_name": "Spell: Aegis of Alendar Rk. III",
+        "item_id": 78959,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 7,
+        "spell_id": 10625,
+        "name": "Polychromatic Assault Rk. III",
+        "source_name": "Spell: Polychromatic Assault Rk. III",
+        "item_id": 78962,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 8,
+        "spell_id": 10637,
+        "name": "Thin Air Rk. III",
+        "source_name": "Spell: Thin Air Rk. III",
+        "item_id": 78974,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 9,
+        "spell_id": 10646,
+        "name": "Color Collapse Rk. III",
+        "source_name": "Spell: Color Collapse Rk. III",
+        "item_id": 78983,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 10,
+        "spell_id": 10655,
+        "name": "Legion of Alendar Rk. III",
+        "source_name": "Spell: Legion of Alendar Rk. III",
+        "item_id": 78992,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 11,
+        "spell_id": 10661,
+        "name": "Hastening of Ellowind Rk. III",
+        "source_name": "Spell: Hastening of Ellowind Rk. III",
+        "item_id": 78998,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 12,
+        "spell_id": 10664,
+        "name": "Voice of Intuition Rk. III",
+        "source_name": "Spell: Voice of Intuition Rk. III",
+        "item_id": 79001,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 14,
+        "sequence": 13,
+        "spell_id": 10676,
+        "name": "Polychromatic Rune Rk. III",
+        "source_name": "Spell: Polychromatic Rune Rk. III",
+        "item_id": 79013,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 15,
+        "sequence": 1,
+        "spell_id": 10323,
+        "name": "Healing of Uluanes Rk. III",
+        "source_name": "Spell: Healing of Uluanes Rk. III",
+        "item_id": 78660,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 15,
+        "sequence": 2,
+        "spell_id": 10338,
+        "name": "Focus of Amilan Rk. III",
+        "source_name": "Spell: Focus of Amilan Rk. III",
+        "item_id": 78675,
+        "level": 71,
+        "rank": 10
+      },
+      {
+        "class": 15,
+        "sequence": 3,
+        "spell_id": 10335,
+        "name": "Minohten Mending Rk. III",
+        "source_name": "Spell: Minohten Mending Rk. III",
+        "item_id": 78672,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 15,
+        "sequence": 4,
+        "spell_id": 10344,
+        "name": "Promised Mending Rk. III",
+        "source_name": "Spell: Promised Mending Rk. III",
+        "item_id": 78681,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 15,
+        "sequence": 5,
+        "spell_id": 10351,
+        "name": "Unparalleled Voracity Rk. III",
+        "source_name": "Spell: Unparalleled Voracity Rk. III",
+        "item_id": 78688,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 15,
+        "sequence": 6,
+        "spell_id": 10366,
+        "name": "Spiked Sleet Rk. III",
+        "source_name": "Spell: Spiked Sleet Rk. III",
+        "item_id": 78703,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 15,
+        "sequence": 7,
+        "spell_id": 10372,
+        "name": "Spiritual Enlightenment Rk. III",
+        "source_name": "Spell: Spiritual Enlightenment Rk. III",
+        "item_id": 78709,
+        "level": 74,
+        "rank": 10
+      },
+      {
+        "class": 15,
+        "sequence": 8,
+        "spell_id": 10385,
+        "name": "Ruthless Ferocity Rk. III",
+        "source_name": "Spell: Ruthless Ferocity Rk. III",
+        "item_id": 78722,
+        "level": 75,
+        "rank": 10
+      },
+      {
+        "class": 16,
+        "sequence": 1,
+        "spell_id": 10916,
+        "name": "Unsettling Scream Rk. III",
+        "source_name": "Tome of Unsettling Scream Rk. III",
+        "item_id": 79253,
+        "level": 72,
+        "rank": 10
+      },
+      {
+        "class": 16,
+        "sequence": 2,
+        "spell_id": 10919,
+        "name": "Temple Blow Rk. III",
+        "source_name": "Tome of Temple Blow Rk. III",
+        "item_id": 79256,
+        "level": 73,
+        "rank": 10
+      },
+      {
+        "class": 16,
+        "sequence": 3,
+        "spell_id": 10925,
+        "name": "Berserking Discipline Rk. III",
+        "source_name": "Tome of Berserking Discipline Rk. III",
+        "item_id": 79262,
+        "level": 75,
+        "rank": 10
+      }
+    ],
+    "underfoot_gems": [
+      {
+        "input_item_id": 113556,
+        "input_name": "Trade-In Gem: Arcane Disjunction Aura Rk. II",
+        "spell_id": 19806,
+        "spell_name": "Arcane Disjunction Aura Rk. II",
+        "rank": 5,
+        "reward_item_id": 119556,
+        "reward_name": "Spell: Arcane Disjunction Aura Rk. II",
+        "existing_lootdrop_rows": 47,
+        "class_levels": {
+          "14": 84
+        }
+      },
+      {
+        "input_item_id": 113565,
+        "input_name": "Trade-In Gem: Arcane Distillect Rk. II",
+        "spell_id": 22653,
+        "spell_name": "Arcane Distillect Rk II",
+        "rank": 5,
+        "reward_item_id": 119565,
+        "reward_name": "Spell: Arcane Distillect Rk. II",
+        "existing_lootdrop_rows": 26,
+        "class_levels": {
+          "13": 85
+        }
+      },
+      {
+        "input_item_id": 113716,
+        "input_name": "Trade-In Gem: Assault Rk. II",
+        "spell_id": 22541,
+        "spell_name": "Assault Rk. II",
+        "rank": 5,
+        "reward_item_id": 119716,
+        "reward_name": "Tome of Assault Rk. II",
+        "existing_lootdrop_rows": 13,
+        "class_levels": {
+          "9": 85
+        }
+      },
+      {
+        "input_item_id": 113683,
+        "input_name": "Trade-In Gem: Autarchian Mindwrack Rk. II",
+        "spell_id": 22498,
+        "spell_name": "Autarchian Mindwrack Rk. II",
+        "rank": 5,
+        "reward_item_id": 119683,
+        "reward_name": "Song: Autarchian Mindwrack Rk. II",
+        "existing_lootdrop_rows": 21,
+        "class_levels": {
+          "8": 85
+        }
+      },
+      {
+        "input_item_id": 113492,
+        "input_name": "Trade-In Gem: Axe of Rallos Rk. II",
+        "spell_id": 19742,
+        "spell_name": "Axe of Rallos Rk. II",
+        "rank": 5,
+        "reward_item_id": 119492,
+        "reward_name": "Tome of Axe of Rallos Rk. II",
+        "existing_lootdrop_rows": 8,
+        "class_levels": {
+          "16": 85
+        }
+      },
+      {
+        "input_item_id": 113595,
+        "input_name": "Trade-In Gem: Bestow Undeath Rk. II",
+        "spell_id": 19845,
+        "spell_name": "Bestow Undeath Rk. II",
+        "rank": 5,
+        "reward_item_id": 119595,
+        "reward_name": "Spell: Bestow Undeath Rk. II",
+        "existing_lootdrop_rows": 14,
+        "class_levels": {
+          "11": 83
+        }
+      },
+      {
+        "input_item_id": 113538,
+        "input_name": "Trade-In Gem: Blast of Hypergrowth Rk. II",
+        "spell_id": 19788,
+        "spell_name": "Blast of Hypergrowth Rk. II",
+        "rank": 5,
+        "reward_item_id": 119538,
+        "reward_name": "Spell: Blast of Hypergrowth Rk. II",
+        "existing_lootdrop_rows": 27,
+        "class_levels": {
+          "6": 84
+        }
+      },
+      {
+        "input_item_id": 113725,
+        "input_name": "Trade-In Gem: Bracing Defense Rk. II",
+        "spell_id": 22557,
+        "spell_name": "Bracing Defense Rk. II",
+        "rank": 5,
+        "reward_item_id": 119725,
+        "reward_name": "Tome of Bracing Defense Rk. II",
+        "existing_lootdrop_rows": 18,
+        "class_levels": {
+          "1": 85
+        }
+      },
+      {
+        "input_item_id": 113707,
+        "input_name": "Trade-In Gem: Call Skeleton Swarm Rk. II",
+        "spell_id": 22529,
+        "spell_name": "Call Skeleton Swarm Rk. II",
+        "rank": 5,
+        "reward_item_id": 119707,
+        "reward_name": "Spell: Call Skeleton Swarm Rk. II",
+        "existing_lootdrop_rows": 34,
+        "class_levels": {
+          "11": 85
+        }
+      },
+      {
+        "input_item_id": 113562,
+        "input_name": "Trade-In Gem: Chaotic Befuddling Rk. II",
+        "spell_id": 19812,
+        "spell_name": "Chaotic Befuddling Rk. II",
+        "rank": 5,
+        "reward_item_id": 119562,
+        "reward_name": "Spell: Chaotic Befuddling Rk. II",
+        "existing_lootdrop_rows": 19,
+        "class_levels": {
+          "14": 83
+        }
+      },
+      {
+        "input_item_id": 113571,
+        "input_name": "Trade-In Gem: Chaotic Boon Rk. II",
+        "spell_id": 19821,
+        "spell_name": "Chaotic Boon Rk. II",
+        "rank": 5,
+        "reward_item_id": 119571,
+        "reward_name": "Spell: Chaotic Boon Rk. II",
+        "existing_lootdrop_rows": 32,
+        "class_levels": {
+          "13": 84
+        }
+      },
+      {
+        "input_item_id": 113698,
+        "input_name": "Trade-In Gem: Compliant Lurch Rk. II",
+        "spell_id": 22520,
+        "spell_name": "Compliant Lurch Rk. II",
+        "rank": 5,
+        "reward_item_id": 119698,
+        "reward_name": "Spell: Compliant Lurch Rk. II",
+        "existing_lootdrop_rows": 13,
+        "class_levels": {
+          "14": 85
+        }
+      },
+      {
+        "input_item_id": 113677,
+        "input_name": "Trade-In Gem: Crystallizing Circle Rk. II",
+        "spell_id": 19927,
+        "spell_name": "Crystallizing Circle Rk. II",
+        "rank": 5,
+        "reward_item_id": 119677,
+        "reward_name": "Spell: Crystallizing Circle Rk. II",
+        "existing_lootdrop_rows": 17,
+        "class_levels": {
+          "12": 83
+        }
+      },
+      {
+        "input_item_id": 113625,
+        "input_name": "Trade-In Gem: Desperate Escape Rk. II",
+        "spell_id": 19875,
+        "spell_name": "Desperate Escape Rk. II",
+        "rank": 5,
+        "reward_item_id": 119625,
+        "reward_name": "Tome of Desperate Escape Rk. II",
+        "existing_lootdrop_rows": 23,
+        "class_levels": {
+          "9": 85
+        }
+      },
+      {
+        "input_item_id": 113719,
+        "input_name": "Trade-In Gem: Dire Constriction Rk. II",
+        "spell_id": 22660,
+        "spell_name": "Dire Constriction Rk. II",
+        "rank": 5,
+        "reward_item_id": 119719,
+        "reward_name": "Spell: Dire Constriction Rk. II",
+        "existing_lootdrop_rows": 20,
+        "class_levels": {
+          "5": 85
+        }
+      },
+      {
+        "input_item_id": 113641,
+        "input_name": "Trade-In Gem: Dire Implication Rk. II",
+        "spell_id": 19891,
+        "spell_name": "Dire Implication Rk. II",
+        "rank": 5,
+        "reward_item_id": 119641,
+        "reward_name": "Spell: Dire Implication Rk. II",
+        "existing_lootdrop_rows": 26,
+        "class_levels": {
+          "5": 85
+        }
+      },
+      {
+        "input_item_id": 113704,
+        "input_name": "Trade-In Gem: Drunken Monkey Style Rk. II",
+        "spell_id": 22526,
+        "spell_name": "Drunken Monkey Style Rk. II",
+        "rank": 5,
+        "reward_item_id": 119704,
+        "reward_name": "Tome of Drunken Monkey Style Rk. II",
+        "existing_lootdrop_rows": 17,
+        "class_levels": {
+          "7": 85
+        }
+      },
+      {
+        "input_item_id": 113507,
+        "input_name": "Trade-In Gem: Erud's Retort Rk. II",
+        "spell_id": 19757,
+        "spell_name": "Erud's Retort Rk. II",
+        "rank": 5,
+        "reward_item_id": 119507,
+        "reward_name": "Spell: Erud's Retort Rk. II",
+        "existing_lootdrop_rows": 20,
+        "class_levels": {
+          "2": 85
+        }
+      },
+      {
+        "input_item_id": 113668,
+        "input_name": "Trade-In Gem: Field Armorer Rk. II",
+        "spell_id": 19918,
+        "spell_name": "Field Armorer Rk. II",
+        "rank": 5,
+        "reward_item_id": 119668,
+        "reward_name": "Tome of the Field Armorer Rk. II",
+        "existing_lootdrop_rows": 14,
+        "class_levels": {
+          "1": 85
+        }
+      },
+      {
+        "input_item_id": 113580,
+        "input_name": "Trade-In Gem: Flinch Rk. II",
+        "spell_id": 19830,
+        "spell_name": "Flinch Rk. II",
+        "rank": 5,
+        "reward_item_id": 119580,
+        "reward_name": "Tome of Flinch Rk. II",
+        "existing_lootdrop_rows": 22,
+        "class_levels": {
+          "7": 85
+        }
+      },
+      {
+        "input_item_id": 113713,
+        "input_name": "Trade-In Gem: Focused Storm of Arrows Rk. II",
+        "spell_id": 22638,
+        "spell_name": "Focused Storm of Arrows Rk. II",
+        "rank": 5,
+        "reward_item_id": 119713,
+        "reward_name": "Spell: Focused Storm of Arrows Rk. II",
+        "existing_lootdrop_rows": 20,
+        "class_levels": {
+          "4": 85
+        }
+      },
+      {
+        "input_item_id": 113486,
+        "input_name": "Trade-In Gem: Friendly Pet Rk. II",
+        "spell_id": 19736,
+        "spell_name": "Friendly Pet Rk. II",
+        "rank": 5,
+        "reward_item_id": 119486,
+        "reward_name": "Spell: Friendly Pet Rk. II",
+        "existing_lootdrop_rows": 23,
+        "class_levels": {
+          "15": 83
+        }
+      },
+      {
+        "input_item_id": 113662,
+        "input_name": "Trade-In Gem: Frost Gift Rk. II",
+        "spell_id": 19912,
+        "spell_name": "Frost Gift Rk. II",
+        "rank": 5,
+        "reward_item_id": 119662,
+        "reward_name": "Spell: Frost Gift Rk. II",
+        "existing_lootdrop_rows": 20,
+        "class_levels": {
+          "10": 85
+        }
+      },
+      {
+        "input_item_id": 113477,
+        "input_name": "Trade-In Gem: Frozen Venom Rk. II",
+        "spell_id": 19727,
+        "spell_name": "Frozen Venom Rk. II",
+        "rank": 5,
+        "reward_item_id": 119477,
+        "reward_name": "Spell: Frozen Venom Rk. II",
+        "existing_lootdrop_rows": 17,
+        "class_levels": {
+          "15": 84
+        }
+      },
+      {
+        "input_item_id": 113528,
+        "input_name": "Trade-In Gem: Glorious Denunciation Rk. II",
+        "spell_id": 19778,
+        "spell_name": "Glorious Denunciation Rk. II",
+        "rank": 5,
+        "reward_item_id": 119528,
+        "reward_name": "Spell: Glorious Denunciation Rk. II",
+        "existing_lootdrop_rows": 35,
+        "class_levels": {
+          "2": 84
+        }
+      },
+      {
+        "input_item_id": 113607,
+        "input_name": "Trade-In Gem: Glorious Vindication Rk. II",
+        "spell_id": 19857,
+        "spell_name": "Glorious Vindication Rk. II",
+        "rank": 5,
+        "reward_item_id": 119607,
+        "reward_name": "Spell: Glorious Vindication Rk. II",
+        "existing_lootdrop_rows": 17,
+        "class_levels": {
+          "3": 85
+        }
+      },
+      {
+        "input_item_id": 113686,
+        "input_name": "Trade-In Gem: Haergen's Feralgia Rk. II",
+        "spell_id": 22501,
+        "spell_name": "Haergen's Feralgia Rk. II",
+        "rank": 5,
+        "reward_item_id": 119686,
+        "reward_name": "Spell: Haergen's Feralgia Rk. II",
+        "existing_lootdrop_rows": 17,
+        "class_levels": {
+          "15": 85
+        }
+      },
+      {
+        "input_item_id": 113650,
+        "input_name": "Trade-In Gem: Healing Counterbias Rk. II",
+        "spell_id": 19900,
+        "spell_name": "Healing Counterbias Rk II",
+        "rank": 5,
+        "reward_item_id": 119650,
+        "reward_name": "Spell: Healing Counterbias Rk. II",
+        "existing_lootdrop_rows": 19,
+        "class_levels": {
+          "10": 83
+        }
+      },
+      {
+        "input_item_id": 113692,
+        "input_name": "Trade-In Gem: Holy Contravention Rk. II",
+        "spell_id": 22629,
+        "spell_name": "Holy Contravention Rk. II",
+        "rank": 5,
+        "reward_item_id": 119692,
+        "reward_name": "Spell: Holy Contravention Rk. II",
+        "existing_lootdrop_rows": 50,
+        "class_levels": {
+          "2": 85
+        }
+      },
+      {
+        "input_item_id": 113519,
+        "input_name": "Trade-In Gem: Holy Intervention Rk. II",
+        "spell_id": 19769,
+        "spell_name": "Holy Intervention Rk. II",
+        "rank": 5,
+        "reward_item_id": 119519,
+        "reward_name": "Spell: Holy Intervention Rk. II",
+        "existing_lootdrop_rows": 25,
+        "class_levels": {
+          "2": 83
+        }
+      },
+      {
+        "input_item_id": 113710,
+        "input_name": "Trade-In Gem: Honorific Mantle Rk. II",
+        "spell_id": 22666,
+        "spell_name": "Honorific Mantle Rk. II",
+        "rank": 5,
+        "reward_item_id": 119710,
+        "reward_name": "Tome of Honorific Mantle Rk. II",
+        "existing_lootdrop_rows": 15,
+        "class_levels": {
+          "3": 83
+        }
+      },
+      {
+        "input_item_id": 113541,
+        "input_name": "Trade-In Gem: Hypnotic Stare Rk. II",
+        "spell_id": 19791,
+        "spell_name": "Hypnotic Stare Rk. II",
+        "rank": 5,
+        "reward_item_id": 119541,
+        "reward_name": "Spell: Hypnotic Stare Rk. II",
+        "existing_lootdrop_rows": 20,
+        "class_levels": {
+          "14": 85
+        }
+      },
+      {
+        "input_item_id": 113665,
+        "input_name": "Trade-In Gem: Lionhearted Rally-Cry Rk. II",
+        "spell_id": 19915,
+        "spell_name": "Lionhearted Rally-Cry Rk. II",
+        "rank": 5,
+        "reward_item_id": 119665,
+        "reward_name": "Tome of Lionhearted Rally-Cry Rk. II",
+        "existing_lootdrop_rows": 22,
+        "class_levels": {
+          "1": 83
+        }
+      },
+      {
+        "input_item_id": 113634,
+        "input_name": "Trade-In Gem: Malarian Mantle Rk. II",
+        "spell_id": 22663,
+        "spell_name": "Malarian Mantle Rk. II",
+        "rank": 5,
+        "reward_item_id": 119634,
+        "reward_name": "Tome of Malarian Mantle Rk. II",
+        "existing_lootdrop_rows": 18,
+        "class_levels": {
+          "5": 83
+        }
+      },
+      {
+        "input_item_id": 113680,
+        "input_name": "Trade-In Gem: Malediction of Havoc Rk. II",
+        "spell_id": 19930,
+        "spell_name": "Malediction of Havoc Rk. II",
+        "rank": 5,
+        "reward_item_id": 119680,
+        "reward_name": "Spell: Malediction of Havoc Rk. II",
+        "existing_lootdrop_rows": 31,
+        "class_levels": {
+          "12": 84
+        }
+      },
+      {
+        "input_item_id": 113598,
+        "input_name": "Trade-In Gem: Necrotic Pustules Rk. II",
+        "spell_id": 19848,
+        "spell_name": "Necrotic Pustules Rk. II",
+        "rank": 5,
+        "reward_item_id": 119598,
+        "reward_name": "Spell: Necrotic Pustules Rk. II",
+        "existing_lootdrop_rows": 29,
+        "class_levels": {
+          "11": 84
+        }
+      },
+      {
+        "input_item_id": 113586,
+        "input_name": "Trade-In Gem: Necrotize Ally Rk. II",
+        "spell_id": 19836,
+        "spell_name": "Necrotize Ally Rk. II",
+        "rank": 5,
+        "reward_item_id": 119586,
+        "reward_name": "Spell: Necrotize Ally Rk. II",
+        "existing_lootdrop_rows": 24,
+        "class_levels": {
+          "11": 85
+        }
+      },
+      {
+        "input_item_id": 113731,
+        "input_name": "Trade-In Gem: Protective Confession Rk. II",
+        "spell_id": 22532,
+        "spell_name": "Protective Confession Rk. II",
+        "rank": 5,
+        "reward_item_id": 119731,
+        "reward_name": "Spell: Protective Confession Rk. II",
+        "existing_lootdrop_rows": 23,
+        "class_levels": {
+          "3": 85
+        }
+      },
+      {
+        "input_item_id": 113535,
+        "input_name": "Trade-In Gem: Remote Manaflux Rk. II",
+        "spell_id": 19785,
+        "spell_name": "Remote Manaflux Rk. II",
+        "rank": 5,
+        "reward_item_id": 119535,
+        "reward_name": "Spell: Remote Manaflux Rk. II",
+        "existing_lootdrop_rows": 22,
+        "class_levels": {
+          "6": 83
+        }
+      },
+      {
+        "input_item_id": 113671,
+        "input_name": "Trade-In Gem: Self-Immolation Rk. II",
+        "spell_id": 19921,
+        "spell_name": "Self-Immolation Rk. II",
+        "rank": 5,
+        "reward_item_id": 119671,
+        "reward_name": "Spell: Self-Immolation Rk. II",
+        "existing_lootdrop_rows": 18,
+        "class_levels": {
+          "12": 85
+        }
+      },
+      {
+        "input_item_id": 113689,
+        "input_name": "Trade-In Gem: Shared Bloodlust Rk. II",
+        "spell_id": 22507,
+        "spell_name": "Shared Bloodlust Rk. II",
+        "rank": 5,
+        "reward_item_id": 119689,
+        "reward_name": "Tome of Shared Bloodlust Rk. II",
+        "existing_lootdrop_rows": 25,
+        "class_levels": {
+          "16": 85
+        }
+      },
+      {
+        "input_item_id": 113728,
+        "input_name": "Trade-In Gem: Splash of Brimstone Rk. II",
+        "spell_id": 22560,
+        "spell_name": "Splash of Brimstone Rk. II",
+        "rank": 5,
+        "reward_item_id": 119728,
+        "reward_name": "Spell: Splash of Brimstone Rk. II",
+        "existing_lootdrop_rows": 38,
+        "class_levels": {
+          "12": 85
+        }
+      },
+      {
+        "input_item_id": 113722,
+        "input_name": "Trade-In Gem: Splash of Runedust Rk. II",
+        "spell_id": 22554,
+        "spell_name": "Splash of Runedust Rk. II",
+        "rank": 5,
+        "reward_item_id": 119722,
+        "reward_name": "Spell: Splash of Runedust Rk. II",
+        "existing_lootdrop_rows": 49,
+        "class_levels": {
+          "10": 85
+        }
+      },
+      {
+        "input_item_id": 113604,
+        "input_name": "Trade-In Gem: Splash of Sanctification Rk. II",
+        "spell_id": 19854,
+        "spell_name": "Splash of Sanctification Rk. II",
+        "rank": 5,
+        "reward_item_id": 119604,
+        "reward_name": "Spell: Splash of Sanctification Rk. II",
+        "existing_lootdrop_rows": 23,
+        "class_levels": {
+          "3": 83
+        }
+      },
+      {
+        "input_item_id": 113610,
+        "input_name": "Trade-In Gem: Storm of Arrows Rk. II",
+        "spell_id": 19860,
+        "spell_name": "Storm of Arrows Rk. II",
+        "rank": 5,
+        "reward_item_id": 119610,
+        "reward_name": "Spell: Storm of Arrows Rk. II",
+        "existing_lootdrop_rows": 11,
+        "class_levels": {
+          "4": 85
+        }
+      },
+      {
+        "input_item_id": 113532,
+        "input_name": "Trade-In Gem: Sundew Blessing Rk. II",
+        "spell_id": 19782,
+        "spell_name": "Sundew Blessing Rk. II",
+        "rank": 5,
+        "reward_item_id": 119532,
+        "reward_name": "Spell: Sundew Blessing Rk. II",
+        "existing_lootdrop_rows": 18,
+        "class_levels": {
+          "6": 84
+        }
+      },
+      {
+        "input_item_id": 113695,
+        "input_name": "Trade-In Gem: Surge of Ironvines Rk. II",
+        "spell_id": 22517,
+        "spell_name": "Surge of Ironvines Rk. II",
+        "rank": 5,
+        "reward_item_id": 119695,
+        "reward_name": "Spell: Surge of Ironvines Rk. II",
+        "existing_lootdrop_rows": 18,
+        "class_levels": {
+          "6": 85
+        }
+      },
+      {
+        "input_item_id": 113701,
+        "input_name": "Trade-In Gem: Surge of Thaumacretion Rk. II",
+        "spell_id": 22523,
+        "spell_name": "Surge of Thaumacretion Rk. II",
+        "rank": 5,
+        "reward_item_id": 119701,
+        "reward_name": "Spell: Surge of Thaumacretion Rk. II",
+        "existing_lootdrop_rows": 19,
+        "class_levels": {
+          "13": 85
+        }
+      },
+      {
+        "input_item_id": 113613,
+        "input_name": "Trade-In Gem: Swarm of Bees Rk. II",
+        "spell_id": 19863,
+        "spell_name": "Swarm of Bees Rk. II",
+        "rank": 5,
+        "reward_item_id": 119613,
+        "reward_name": "Spell: Swarm of Bees Rk. II",
+        "existing_lootdrop_rows": 16,
+        "class_levels": {
+          "4": 83
+        }
+      },
+      {
+        "input_item_id": 113574,
+        "input_name": "Trade-In Gem: Thaumatize Pet Rk. II",
+        "spell_id": 19957,
+        "spell_name": "Thaumatize Pet Rk. II",
+        "rank": 5,
+        "reward_item_id": 119574,
+        "reward_name": "Spell: Thaumatize Pet Rk. II",
+        "existing_lootdrop_rows": 20,
+        "class_levels": {
+          "13": 83
+        }
+      },
+      {
+        "input_item_id": 113734,
+        "input_name": "Trade-In Gem: Unsavory Sacrifice Rk. II",
+        "spell_id": 19884,
+        "spell_name": "Unsavory Sacrifice Rk. II",
+        "rank": 5,
+        "reward_item_id": 119734,
+        "reward_name": "Spell: Unsavory Sacrifice Rk. II",
+        "existing_lootdrop_rows": 16,
+        "class_levels": {
+          "5": 83
+        }
+      },
+      {
+        "input_item_id": 113474,
+        "input_name": "Trade-In Gem: Venimor's Insult Rk. II",
+        "spell_id": 19724,
+        "spell_name": "Venimor's Insult Rk. II",
+        "rank": 5,
+        "reward_item_id": 119474,
+        "reward_name": "Song: Venimor's Insult Rk. II",
+        "existing_lootdrop_rows": 14,
+        "class_levels": {
+          "8": 85
+        }
+      },
+      {
+        "input_item_id": 113504,
+        "input_name": "Trade-In Gem: Vigorous Axe-Throw Rk. II",
+        "spell_id": 19754,
+        "spell_name": "Vigorous Axe Throw Rk. II",
+        "rank": 5,
+        "reward_item_id": 119504,
+        "reward_name": "Tome of Vigorous Axe Throw Rk. II",
+        "existing_lootdrop_rows": 18,
+        "class_levels": {
+          "16": 83
+        }
+      },
+      {
+        "input_item_id": 113622,
+        "input_name": "Trade-In Gem: Vigorous Dagger-Throw Rk. II",
+        "spell_id": 19872,
+        "spell_name": "Vigorous Dagger-Throw Rk. II",
+        "rank": 5,
+        "reward_item_id": 119622,
+        "reward_name": "Tome of Vigorous Dagger-Throw Rk. II",
+        "existing_lootdrop_rows": 15,
+        "class_levels": {
+          "9": 83
+        }
+      },
+      {
+        "input_item_id": 113577,
+        "input_name": "Trade-In Gem: Vigorous Shuriken Rk. II",
+        "spell_id": 19827,
+        "spell_name": "Vigorous Shuriken Rk. II",
+        "rank": 5,
+        "reward_item_id": 119577,
+        "reward_name": "Tome of Vigorous Shuriken Rk. II",
+        "existing_lootdrop_rows": 19,
+        "class_levels": {
+          "7": 83
+        }
+      },
+      {
+        "input_item_id": 113468,
+        "input_name": "Trade-In Gem: Wave of Slumber Rk. II",
+        "spell_id": 19718,
+        "spell_name": "Wave of Slumber Rk. II",
+        "rank": 5,
+        "reward_item_id": 119468,
+        "reward_name": "Song: Wave of Slumber Rk. II",
+        "existing_lootdrop_rows": 13,
+        "class_levels": {
+          "8": 85
+        }
+      },
+      {
+        "input_item_id": 113659,
+        "input_name": "Trade-In Gem: Wind of Malis Rk. II",
+        "spell_id": 22647,
+        "spell_name": "Wind of Malis Rk. II",
+        "rank": 5,
+        "reward_item_id": 119659,
+        "reward_name": "Spell: Wind of Malis Rk. II",
+        "existing_lootdrop_rows": 42,
+        "class_levels": {
+          "10": 84
+        }
+      }
+    ]
+  },
+  "corrections": [
+    {
+      "fact": "Shaman reward12 is Wishka's Favor; Glacial Avalance is a source typo for Avalanche",
+      "source": "https://everquest.allakhazam.com/db/quest/3629",
+      "dated_comment": "2009-02-09"
+    },
+    {
+      "fact": "Paladin Brell seventh, Wave eighth follows the contemporary 2008-05-03 report and maintainer acknowledgement. A later 2013-12-01 report reverses them and is outside the target cutoff.",
+      "source": "https://everquest.allakhazam.com/db/quest/3629"
+    }
+  ],
+  "limits": [
+    "Dialogue paraphrased; original spell order/identities retained.",
+    "TSS minimum71 follows quest metadata; active level is checked.",
+    "Underfoot gem exchange is fixed by gem identity, independent of class or already learned state.",
+    "Existing lootdrop rows exist for all57 gems. Exact Live probabilities and all drop-zone distributions are not established. No loot probabilities are changed.",
+    "Underfoot rankI missions, SoD exchange/NPC and other unresolved acquisition remain separate."
+  ]
+}

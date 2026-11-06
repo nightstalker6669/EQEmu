@@ -1,3 +1,4 @@
+#include "fungal_unknown_inventory.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -87,6 +88,7 @@ EQ::ItemInstance* ItemInstQueue::peek_front() const
 //
 EQ::InventoryProfile::~InventoryProfile()
 {
+ FungalInventory::UnknownInventory::Destructing(this);
 	for (auto iter = m_worn.begin(); iter != m_worn.end(); ++iter) {
 		safe_delete(iter->second);
 	}
@@ -119,11 +121,13 @@ EQ::InventoryProfile::~InventoryProfile()
 }
 
 void EQ::InventoryProfile::SetInventoryVersion(versions::MobVersion inventory_version) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(this))return;
 	m_mob_version = versions::ValidateMobVersion(inventory_version);
 	SetGMInventory(m_gm_inventory);
 }
 
 void EQ::InventoryProfile::SetGMInventory(bool gmi_flag) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(this))return;
 	m_gm_inventory = gmi_flag;
 
 	m_lookup = inventory::DynamicLookup(m_mob_version, gmi_flag);
@@ -132,14 +136,14 @@ void EQ::InventoryProfile::SetGMInventory(bool gmi_flag) {
 void EQ::InventoryProfile::CleanDirty() {
 	auto iter = dirty_inst.begin();
 	while (iter != dirty_inst.end()) {
+  if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(*iter)){++iter;continue;}
 		delete (*iter);
-		++iter;
+  iter=dirty_inst.erase(iter);
 	}
-
-	dirty_inst.clear();
 }
 
 void EQ::InventoryProfile::MarkDirty(ItemInstance *inst) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(inst))return;
 	if (inst) {
 		dirty_inst.push_back(inst);
 	}
@@ -213,6 +217,8 @@ EQ::ItemInstance* EQ::InventoryProfile::GetItem(int16 slot_id, uint8 bagidx) con
 // Put an item into specified slot
 int16 EQ::InventoryProfile::PutItem(int16 slot_id, const ItemInstance& inst)
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&inst))return INVALID_INDEX;
+	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,slot_id))return INVALID_INDEX;
 	if (EQ::ValueWithin(slot_id, EQ::invslot::POSSESSIONS_BEGIN, EQ::invslot::POSSESSIONS_END)) {
 		if ((((uint64) 1 << slot_id) & m_lookup->PossessionsBitmask) == 0) {
 			return EQ::invslot::SLOT_INVALID;
@@ -248,6 +254,8 @@ int16 EQ::InventoryProfile::PutItem(int16 slot_id, const ItemInstance& inst)
 }
 
 int16 EQ::InventoryProfile::PushCursor(const ItemInstance &inst) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&inst))return INVALID_INDEX;
+	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,EQ::invslot::slotCursor))return INVALID_INDEX;
 	m_cursor.push(inst.Clone());
 	return invslot::slotCursor;
 }
@@ -266,6 +274,7 @@ bool EQ::InventoryProfile::SwapItem(
 	uint32 deity_id,
 	uint8 level
 ) {
+	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,source_slot)||!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,destination_slot)){fail_state=swapNotAllowed;return false;}
 	fail_state = swapInvalid;
 
 	if (EQ::ValueWithin(source_slot, EQ::invslot::POSSESSIONS_BEGIN, EQ::invslot::POSSESSIONS_END)) {
@@ -399,6 +408,7 @@ bool EQ::InventoryProfile::SwapItem(
 
 // Remove item from inventory (with memory delete)
 bool EQ::InventoryProfile::DeleteItem(int16 slot_id, int16 quantity) {
+	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,slot_id))return false;
 	// Pop item out of inventory map (or queue)
 	ItemInstance *item_to_delete = PopItem(slot_id);
 
@@ -445,6 +455,7 @@ bool EQ::InventoryProfile::CheckNoDrop(int16 slot_id, bool recurse)
 // Returns item pointer if full delete was successful
 EQ::ItemInstance* EQ::InventoryProfile::PopItem(int16 slot_id)
 {
+	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,slot_id))return nullptr;
 	ItemInstance* p = nullptr;
 
 	if (slot_id == invslot::slotCursor) {
@@ -1393,6 +1404,8 @@ EQ::ItemInstance* EQ::InventoryProfile::_GetItem(const std::map<int16, ItemInsta
 // Assumes item has already been allocated
 int16 EQ::InventoryProfile::_PutItem(int16 slot_id, ItemInstance* inst)
 {
+ if(inst&&!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(inst))return INVALID_INDEX;
+	if(!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(this,slot_id))return INVALID_INDEX;
 	// What happens here when we _PutItem(MainCursor)? Bad things..really bad things...
 	//
 	// If putting a nullptr into slot, we need to remove slot without memory delete

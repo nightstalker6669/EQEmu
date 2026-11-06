@@ -1,0 +1,32 @@
+{
+  "client": "RoF2",
+  "status": "Existing configured mappings; no new recovery or active mapping edit",
+  "mappings": {
+    "OP_SharedTaskMemberList": "0x1e7d",
+    "OP_SharedTaskRemovePlayer": "0x4865",
+    "OP_SharedTaskAddPlayer": "0x36e8",
+    "OP_SharedTaskMakeLeader": "0x37f2",
+    "OP_SharedTaskInvite": "0x3444",
+    "OP_SharedTaskInviteResponse": "0x7582",
+    "OP_SharedTaskAcceptNew": "0x6646",
+    "OP_SharedTaskMemberChange": "0x0119",
+    "OP_SharedTaskQuit": "0x322e",
+    "OP_SharedTaskSelectWindow": "0x48a2",
+    "OP_SharedTaskPlayerList": "0x5727",
+    "OP_TaskTimers": "0x2b0f",
+    "OP_TaskDescription": "0x3714",
+    "OP_TaskActivity": "0x08d3",
+    "OP_TaskActivityComplete": "0x5e19",
+    "OP_CancelTask": "0x39f0",
+    "OP_TaskHistoryRequest": "0x5f1c",
+    "OP_TaskHistoryReply": "0x3d05",
+    "OP_TaskRequestTimer": "0x7a48",
+    "OP_TaskSelectWindow": "0x705b",
+    "OP_DzExpeditionInfo": "0x9119",
+    "OP_DzMemberList": "0x5ae4",
+    "OP_DzChooseZone": "0x0b7d",
+    "OP_DzChooseZoneReply": "0x4de1",
+    "OP_LDoNOpen": "0x3d5c"
+  },
+  "qualification": "Current local source/config proof, not May2013Livevalues or newnativepacketacceptance. InternalServerOP enums/sharedtask64bit IDs are distinct namespaces."
+}

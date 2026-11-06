@@ -1,0 +1,49 @@
+{
+  "utc": "2026-11-04T05:47:13.438802+00:00",
+  "status": "NATIVE_QUESTS_AND_PERSISTENCE_VERIFIED",
+  "branch": "rof2-achievements",
+  "scope": "Bring Friends fourquest chain; three original Hanook tasks plus Peretaenu raid",
+  "authored": {
+    "tasks": 4,
+    "activities": 15,
+    "achievement_links": 4,
+    "new_npc_types": 5,
+    "scripted_encounters": 3
+  },
+  "defaults": "See provenance. Configurable combat/timers/drop-chance/trigger geometry are labelled reconstructions, not original recovered values. XP1000 approvedPEQdefault.",
+  "runtime_changed": true,
+  "native_accepted": true,
+  "dependencies": [
+    "Existing Roost quest module",
+    "Existing Mesa corruption controller module"
+  ],
+  "next": "Continue remaining historical achievement content; retain the documented fidelity limits.",
+  "runtime_applied": true,
+  "published": true,
+  "runtime_cache_refreshed": true,
+  "runtime_state": "Genuine native quest objectives/completions, achievement credit and single confirmed item rewards verified; one ordinary Admin0 relog verified persistence.",
+  "native_acceptance_scope": {
+    "tasks": [
+      3040465,
+      3040466,
+      3040467,
+      3040468
+    ],
+    "components": [
+      50162,
+      50163,
+      50164,
+      50165
+    ],
+    "parent_completed": 500040800,
+    "confirmed_item_rewards_single": [
+      53552,
+      53563
+    ],
+    "facts_and_rewards_survived_Admin0_relog": true,
+    "original_fixture_restored": true,
+    "no_forced_progress": true,
+    "parent_reward_claim": "Not inferred from completion; pre-existing independent reward configuration preserved."
+  },
+  "movement_evidence_limit": "The corrected raid route has native outbound movement, a continuous camp stay of over61seconds, and return movement to within28.36units of its origin followed by disappearance. The exact inside25-unit departure frame was not captured; that final boundary remains source-supported rather than directly observed. No second completion or reward was used for this movement check."
+}

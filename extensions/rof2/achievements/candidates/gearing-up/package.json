@@ -1,0 +1,17 @@
+{
+  "name": "gearing-up",
+  "status": "candidate-only-disabled-uninstalled",
+  "migration_reservation": 9340,
+  "schema": "existing-roF2-achievements",
+  "automatic_install": false,
+  "historical_cutoff": "2013-05-31",
+  "verification": {
+    "disposable_sql_protocol_cases_passed": 6,
+    "native_batch_accepted": false,
+    "cpp_updater_executed": false
+  },
+  "license": "inherited repository license",
+  "migration_status": "reserved-unregistered",
+  "installer_registration": false,
+  "quest_deployment": false
+}

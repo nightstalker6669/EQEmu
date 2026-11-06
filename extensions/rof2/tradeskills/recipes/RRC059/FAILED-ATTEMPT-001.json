@@ -1,0 +1,21 @@
+{
+  "batch": "RRC059",
+  "status": "STOPPED_NO_RETRY",
+  "SQL_invocations": 1,
+  "published_commit": "4cac9a1b892e0899e37ffe7d45e163be2918ef33",
+  "source_sha256": "0f3b81b096484b93ad98c17d0e991807a357f4b985a23ba19014243b901e3764",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "error": "product SQL failed; stop, no retry",
+  "independent_readback": {
+    "target_recipes": 0,
+    "target_entries": 0,
+    "target_learned_references": 0,
+    "old_recipe_3093107_preserved": true,
+    "old_full_entries_preserved": 3,
+    "recipes": 25355,
+    "entries": 191101
+  },
+  "retry": false
+}

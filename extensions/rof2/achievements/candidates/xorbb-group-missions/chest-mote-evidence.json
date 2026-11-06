@@ -1,0 +1,92 @@
+{
+  "enabled": false,
+  "source": "Private source receipt retained by project; not redistributed",
+  "source_sha256": "9b152b5f0821ace8280e9f1342b595332fb8a8af90a4a963864131ef7bb3e291",
+  "motes": [
+    {
+      "native_item_id": 76551,
+      "name": "Lesser Dreadmote",
+      "exchange_level": 97,
+      "website_item_key": 106476
+    },
+    {
+      "native_item_id": 76552,
+      "name": "Median Dreadmote",
+      "exchange_level": 98,
+      "website_item_key": 106509
+    },
+    {
+      "native_item_id": 76553,
+      "name": "Greater Dreadmote",
+      "exchange_level": 99,
+      "website_item_key": 106464
+    },
+    {
+      "native_item_id": 76554,
+      "name": "Glowing Dreadmote",
+      "exchange_level": 100,
+      "website_item_key": 106497
+    }
+  ],
+  "historical_qualification": {
+    "family": "Dreadmotes are the existing RoF rankII exchange items, not raid Terrormotes. Existing closed audit establishes levels96\u2013100/76550\u201376554. The requested97\u2013100 category maps to76551\u201376554.",
+    "exact_xorbb_pool": "Current four-mote membership corroborated on all3 mission chest pages. Period Battle quest6109 reports directly associate Greater76553 and Glowing76554 with its chest in two dated runs. Period Lesser/Median Battle membership and other two missions remain unestablished by these reports.",
+    "quantity_and_odds": "Two period Battle runs establish gear+mote co-occurrence. Unknown universal per-chest count, guarantee, selection distribution or co-occurrence policy; do not generalize to every Battle run or the other two missions.",
+    "excluded_inference": "Do not infer Minor76550 impossible from its absence, do not invent equal25percent weights, guarantee1mote, assign all4 at once, or use Terrormote76555\u201376559. Do not merge disputed gear lists."
+  },
+  "period_battle_chest_reports": [
+    {
+      "date": "2013-01-20",
+      "author": "qxx",
+      "comment_title": "Chest Reward was...",
+      "gear": "Tainted Loam",
+      "mote": "Greater Dreadmote",
+      "native_mote_item_id": 76553,
+      "source": "https://everquest.allakhazam.com/db/quest/6109",
+      "provenance": "Actual Chrome source retained by NPC owner; exact author/date/report routed by JARVIS. No Spells refetch.",
+      "supports": "Gear and specified mote co-occurred in this reported Battle for Rivervale chest run; no universal count, guarantee or distribution inferred."
+    },
+    {
+      "date": "2013-01-01",
+      "author": "Tobynn",
+      "comment_title": "Advice",
+      "gear": "Strength of Legions (1HS)",
+      "mote": "Glowing Dreadmote",
+      "native_mote_item_id": 76554,
+      "source": "https://everquest.allakhazam.com/db/quest/6109",
+      "provenance": "Actual Chrome source retained by NPC owner; exact author/date/report routed by JARVIS. No Spells refetch.",
+      "supports": "Gear and specified mote co-occurred in this reported Battle for Rivervale chest run; no universal count, guarantee or distribution inferred."
+    }
+  ],
+  "loot_selection_policy": {
+    "status": "SELECTED_CONFIGURABLE_EMULATOR_DEFAULT",
+    "approval": "Coordinator source-policy approval2026-11-04; standing user defaults permission",
+    "qualification": "One equipment item plus one uniformly selected97-100 Dreadmote is a local configurable default. Neither universal quantity nor probabilities were recovered from original Live. Two dated Battle reports establish co-occurrence in those runs only.",
+    "equipment_quantity": 1,
+    "equipment_weights": "Equal weight1 for each retained per-mission interface entry, explicitly configurable emulator weights. Conflicting guide additions held.",
+    "mote_quantity": 1,
+    "motes": [
+      {
+        "item_id": 76551,
+        "weight": 1
+      },
+      {
+        "item_id": 76552,
+        "weight": 1
+      },
+      {
+        "item_id": 76553,
+        "weight": 1
+      },
+      {
+        "item_id": 76554,
+        "weight": 1
+      }
+    ],
+    "enabled": false,
+    "native_accepted": false
+  },
+  "drop_probabilities": "Uniform1/4 selected local default, not historical evidence",
+  "guaranteed_quantity": "Localdefault1mote per reward chest, not historical guarantee",
+  "runtime_writes": 0
+}

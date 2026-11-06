@@ -1,0 +1,61 @@
+{
+  "scope": "Guarded SAME-SCHEMA source-only candidate conversion; split runtime/content deployment requires authoritative runtime contents qualification. No SQL run/native acceptance.",
+  "reservation": "Coordinator reserved exact26 original object IDs in ground_spawns, excluding228415; supersedes additive304048500..515",
+  "source_object_ids": [
+    228396,
+    228397,
+    228398,
+    228399,
+    228400,
+    228401,
+    228402,
+    228403,
+    228404,
+    228405,
+    228406,
+    228407,
+    228408,
+    228409,
+    228410,
+    228411,
+    228412,
+    228413,
+    228414,
+    228416,
+    228417,
+    228418,
+    228419,
+    228420,
+    228421,
+    228422
+  ],
+  "held_object_ids": [
+    228415
+  ],
+  "preserve": [
+    "All32other ground rows",
+    "All11ambiguous IT12499objects",
+    "Suspicious pepper228415",
+    "All player inventory, progression, property and custody data"
+  ],
+  "native_capacity_requirement": 64,
+  "current_expected_total": 58,
+  "placement": "Raw originalXYZ/heading/model unchanged. Native ground default fix_z0 invokes floor resolution from z+5, unlike existing object loader initial exactZ ray; final rendered floor/scale/click reach requires native verification. Underwater228398nav mismatch remains qualified; no position repair invented.",
+  "defaults": {
+    "respawn_seconds": 300,
+    "max_allowed": 1,
+    "fix_z": 0,
+    "quantity": "native one-item pickup",
+    "min_expansion": 19,
+    "qualification": "Configurable emulator defaults; ragweed approximate5min period report does not prove every node timer."
+  },
+  "activation": "Full package only after actual capacity64deployment, fresh exactpreimage/contents guards and zone cache coordination. Session authorization alone does not prove binary.",
+  "runtime_or_SQL_writes": 0,
+  "source_preimages": "Embedded in exact guarded source conversion/rollback; not player records",
+  "sql_sha256": {
+    "xorbb_garden_rollback.sql.disabled": "b998a539f1b59a9bc80e2da5fb285dad3c0770260bae39f48fa5bdb6e14a11c7",
+    "xorbb_garden_conversion.cli.sql.disabled": "ed071fc8b84325bcacf8c8644454332c3b5c03c419b48733a327ea2f75a6f748",
+    "xorbb_garden_rollback.cli.sql.disabled": "a0ecee242a3030f8a207aae7cfc7bf0152231a0b5f9831f8b183772067efb235",
+    "xorbb_garden_conversion.sql.disabled": "dbde70851a1593c316c827d553669f2a465e754610df39c4b7ea09ab7570a612"
+  }
+}

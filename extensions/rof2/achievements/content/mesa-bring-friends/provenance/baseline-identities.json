@@ -1,0 +1,29 @@
+{
+  "accepted_previous_scripts": {
+    "mesa/397102.lua": [
+      "b014ec938f29b86c515336e31d23db4de22efdf28fa9edf9af650dbc580e13e6"
+    ],
+    "mesa/zone_controller.lua": [
+      "397d79aaf31271b68d16770e85f73aa81da87f5735f7e8965cfc5d76c8b1e5b5"
+    ]
+  },
+  "npc_types": {
+    "10": "zone_controller",
+    "397040": "Hanook",
+    "397092": "Peretaenu",
+    "397102": "Elder_Vasile",
+    "397905": "Glasson",
+    "397906": "a_Tuffein_treekiller",
+    "397907": "a_drakkin_raider",
+    "397908": "a_drakkin_raider",
+    "397909": "a_raider_captain"
+  },
+  "callback_npc_ids": {
+    "mesa/zone_controller.lua": 10
+  },
+  "known_lower_priority_callbacks": [],
+  "external_modules": [
+    "achievement_quest_roost",
+    "achievement_quest_mesa_corruption"
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "scope": "Local installedengine capability evidence, not nativequest/ACK/render/pickup acceptance. Otherdeployments require their own matchingengine.",
+  "source_pins": {
+    "ground_capacity64": "ac9be92fb935685224c93355df2fe2946c4c95dd",
+    "owned_click_objects": "966b510f4467a7af83913e5bbaecc542a723654b"
+  },
+  "local_build_deployed_status": "PASS_CAPACITY_OWNED_CLICK_DEPLOYED_AA006_009_010_INSTALLED",
+  "local_deployment_utc": "2026-11-04T15:09:27Z",
+  "local_binary_sha256": {
+    "world": "fd6d7608e63fb8ef1a195886f2d4437eced83cf44a1b53ff2f778b68c70ee672",
+    "zone": "3820f76cad8a7257030df1a01466dedbd20e154cb62dc32cb35ed84526e7e44b"
+  },
+  "native_acceptance": false,
+  "content_activation": false
+}

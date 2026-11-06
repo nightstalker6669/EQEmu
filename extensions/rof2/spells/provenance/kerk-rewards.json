@@ -1,0 +1,8000 @@
+[
+  {
+    "id": 920100,
+    "title": "Minor Dreadmote",
+    "level": 96,
+    "rank": 5,
+    "rank_name": "II",
+    "mote": 76550,
+    "source": "https://everquest.allakhazam.com/db/quest/6004",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34010,
+            "name": "Armor of Stalwart Runes Rk. II",
+            "item_id": 136010
+          }
+        ],
+        [
+          {
+            "spell_id": 34016,
+            "name": "Krondal's Roar Rk. II",
+            "item_id": 136016
+          }
+        ],
+        [
+          {
+            "spell_id": 34001,
+            "name": "Rest Rk. II",
+            "item_id": 136001
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34073,
+            "name": "Abrogate the Undead Rk. II",
+            "item_id": 136073
+          },
+          {
+            "spell_id": 34104,
+            "name": "Graceful Remedy Rk. II",
+            "item_id": 136104
+          }
+        ],
+        [
+          {
+            "spell_id": 34089,
+            "name": "Aweclash Rk. II",
+            "item_id": 136089
+          },
+          {
+            "spell_id": 34128,
+            "name": "Yaulp XIII Rk. II",
+            "item_id": 136128
+          }
+        ],
+        [
+          {
+            "spell_id": 34095,
+            "name": "Soothing Glow Rk. II",
+            "item_id": 136095
+          },
+          {
+            "spell_id": 34110,
+            "name": "Unity of Gezat Rk. II",
+            "item_id": 136110
+          }
+        ],
+        [
+          {
+            "spell_id": 34101,
+            "name": "Acquittal Rk. II",
+            "item_id": 136101
+          },
+          {
+            "spell_id": 34122,
+            "name": "Word of Renewal Rk. II",
+            "item_id": 136122
+          }
+        ],
+        [
+          {
+            "spell_id": 34269,
+            "name": "Infusion of the Graceful Rk. II",
+            "item_id": 136269
+          }
+        ],
+        [
+          {
+            "spell_id": 34113,
+            "name": "Vow of Vitality Rk. II",
+            "item_id": 136113
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34324,
+            "name": "Expurgate Rk. II",
+            "item_id": 136324
+          },
+          {
+            "spell_id": 34333,
+            "name": "Reverent Force Rk. II",
+            "item_id": 136333
+          }
+        ],
+        [
+          {
+            "spell_id": 34327,
+            "name": "Reverent Purity Rk. II",
+            "item_id": 136327
+          },
+          {
+            "spell_id": 34345,
+            "name": "Reconcile Rk. II",
+            "item_id": 136345
+          }
+        ],
+        [
+          {
+            "spell_id": 34330,
+            "name": "Reverent Touch Rk. II",
+            "item_id": 136330
+          },
+          {
+            "spell_id": 34077,
+            "name": "Shackle Rk. II",
+            "item_id": 136077
+          }
+        ],
+        [
+          {
+            "spell_id": 34336,
+            "name": "Laudation Rk. II",
+            "item_id": 136336
+          },
+          {
+            "spell_id": 34342,
+            "name": "Mark of Olsif Rk. II",
+            "item_id": 136342
+          }
+        ],
+        [
+          {
+            "spell_id": 34001,
+            "name": "Rest Rk. II",
+            "item_id": 136001
+          },
+          {
+            "spell_id": 34073,
+            "name": "Abrogate the Undead Rk. II",
+            "item_id": 136073
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34501,
+            "name": "Drifting Shadow Rk. II",
+            "item_id": 136501
+          },
+          {
+            "spell_id": 34001,
+            "name": "Rest Rk. II",
+            "item_id": 136001
+          }
+        ],
+        [
+          {
+            "spell_id": 34510,
+            "name": "Arbor Veil Rk. II",
+            "item_id": 136510
+          },
+          {
+            "spell_id": 34522,
+            "name": "Shield of Nettlespines Rk. II",
+            "item_id": 136522
+          }
+        ],
+        [
+          {
+            "spell_id": 34516,
+            "name": "Cloudburst Rk. II",
+            "item_id": 136516
+          }
+        ],
+        [
+          {
+            "spell_id": 34519,
+            "name": "Dreadbeetle Swarm Rk. II",
+            "item_id": 136519
+          }
+        ],
+        [
+          {
+            "spell_id": 34498,
+            "name": "Forecasted Shots Rk. II",
+            "item_id": 136498
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34673,
+            "name": "Zombie Skin Rk. II",
+            "item_id": 136673
+          },
+          {
+            "spell_id": 34676,
+            "name": "Bond of Ralstok Rk. II",
+            "item_id": 136676
+          }
+        ],
+        [
+          {
+            "spell_id": 34664,
+            "name": "Grelleth's Horror Rk. II",
+            "item_id": 136664
+          }
+        ],
+        [
+          {
+            "spell_id": 34682,
+            "name": "Ralstok's Bite Rk. II",
+            "item_id": 136682
+          }
+        ],
+        [
+          {
+            "spell_id": 34001,
+            "name": "Rest Rk. II",
+            "item_id": 136001
+          }
+        ],
+        [
+          {
+            "spell_id": 34688,
+            "name": "Terror of Poira Rk. II",
+            "item_id": 136688
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34835,
+            "name": "Spirit of the Steadfast Rk. II",
+            "item_id": 136835
+          },
+          {
+            "spell_id": 34854,
+            "name": "Hailstorm Rk. II",
+            "item_id": 136854
+          }
+        ],
+        [
+          {
+            "spell_id": 34851,
+            "name": "Beast's Bespelling Rk. II",
+            "item_id": 136851
+          },
+          {
+            "spell_id": 34873,
+            "name": "Whirlwind of the Stormborn Rk. II",
+            "item_id": 136873
+          }
+        ],
+        [
+          {
+            "spell_id": 34857,
+            "name": "Heliacal Fire Rk. II",
+            "item_id": 136857
+          },
+          {
+            "spell_id": 34860,
+            "name": "Bosquetender's Breeze Rk. II",
+            "item_id": 136860
+          }
+        ],
+        [
+          {
+            "spell_id": 34863,
+            "name": "Nature's Repose Rk. II",
+            "item_id": 136863
+          },
+          {
+            "spell_id": 34866,
+            "name": "Stemfang Rk. II",
+            "item_id": 136866
+          }
+        ],
+        [
+          {
+            "spell_id": 35020,
+            "name": "Clutch of Ro Rk. II",
+            "item_id": 137020
+          }
+        ],
+        [
+          {
+            "spell_id": 34870,
+            "name": "Incinerating Sunray Rk. II",
+            "item_id": 136870
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35090,
+            "name": "Earthforce Discipline Rk. II",
+            "item_id": 137090
+          }
+        ],
+        [
+          {
+            "spell_id": 34001,
+            "name": "Rest Rk. II",
+            "item_id": 136001
+          }
+        ],
+        [
+          {
+            "spell_id": 35048,
+            "name": "Shaded Apparition Rk. II",
+            "item_id": 137048
+          }
+        ],
+        [
+          {
+            "spell_id": 35044,
+            "name": "Shadewalker's Synergy Rk. II",
+            "item_id": 137044
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35111,
+            "name": "Aria of Absolution Rk. II",
+            "item_id": 137111
+          },
+          {
+            "spell_id": 35129,
+            "name": "Siavonn's Chant of Disease Rk. II",
+            "item_id": 137129
+          }
+        ],
+        [
+          {
+            "spell_id": 35123,
+            "name": "Resounding Barrier Rk. II",
+            "item_id": 137123
+          },
+          {
+            "spell_id": 35132,
+            "name": "Silence of the Forsaken Rk. II",
+            "item_id": 137132
+          }
+        ],
+        [
+          {
+            "spell_id": 35114,
+            "name": "Aria of Va'Ker Rk. II",
+            "item_id": 137114
+          }
+        ],
+        [
+          {
+            "spell_id": 35117,
+            "name": "Lullaby of the Forsaken Rk. II",
+            "item_id": 137117
+          }
+        ],
+        [
+          {
+            "spell_id": 35120,
+            "name": "Pulse of Salarra Rk. II",
+            "item_id": 137120
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35252,
+            "name": "Beset Rk. II",
+            "item_id": 137252
+          }
+        ],
+        [
+          {
+            "spell_id": 35255,
+            "name": "Blinding Blaze Rk. II",
+            "item_id": 137255
+          }
+        ],
+        [
+          {
+            "spell_id": 35258,
+            "name": "Gullible Mark Rk. II",
+            "item_id": 137258
+          }
+        ],
+        [
+          {
+            "spell_id": 34001,
+            "name": "Rest Rk. II",
+            "item_id": 136001
+          }
+        ],
+        [
+          {
+            "spell_id": 35319,
+            "name": "Venomous Spike Trap Rk. II",
+            "item_id": 137319
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35346,
+            "name": "Breath of Natigo Rk. II",
+            "item_id": 137346
+          },
+          {
+            "spell_id": 35349,
+            "name": "Slaunk's Spear of Venom Rk. II",
+            "item_id": 137349
+          }
+        ],
+        [
+          {
+            "spell_id": 35467,
+            "name": "Curse of Insects Rk. II",
+            "item_id": 137467
+          }
+        ],
+        [
+          {
+            "spell_id": 34838,
+            "name": "Rampant Growth Rk. II",
+            "item_id": 136838
+          }
+        ],
+        [
+          {
+            "spell_id": 34835,
+            "name": "Spirit of the Steadfast Rk. II",
+            "item_id": 136835
+          }
+        ],
+        [
+          {
+            "spell_id": 35352,
+            "name": "Talisman of the Snow Leopard Rk. II",
+            "item_id": 137352
+          }
+        ],
+        [
+          {
+            "spell_id": 35358,
+            "name": "Unity of the Courageous Rk. II",
+            "item_id": 137358
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35509,
+            "name": "Shield of the Dauntless Rk. II",
+            "item_id": 137509
+          },
+          {
+            "spell_id": 35526,
+            "name": "Grip of Zalikor Rk. II",
+            "item_id": 137526
+          }
+        ],
+        [
+          {
+            "spell_id": 35515,
+            "name": "Plunder Essence Rk. II",
+            "item_id": 137515
+          },
+          {
+            "spell_id": 35518,
+            "name": "Vollmondnacht Orb Rk. II",
+            "item_id": 137518
+          }
+        ],
+        [
+          {
+            "spell_id": 35681,
+            "name": "Crippling Incapacity Rk. II",
+            "item_id": 137681
+          }
+        ],
+        [
+          {
+            "spell_id": 35512,
+            "name": "Dissolving Venin Rk. II",
+            "item_id": 137512
+          }
+        ],
+        [
+          {
+            "spell_id": 35529,
+            "name": "Slaunk's Swift Venom Rk. II",
+            "item_id": 137529
+          }
+        ],
+        [
+          {
+            "spell_id": 35523,
+            "name": "Wuran's Decay Rk. II",
+            "item_id": 137523
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35509,
+            "name": "Shield of the Dauntless Rk. II",
+            "item_id": 137509
+          },
+          {
+            "spell_id": 35739,
+            "name": "Concussive Salvo Rk. II",
+            "item_id": 137739
+          }
+        ],
+        [
+          {
+            "spell_id": 35717,
+            "name": "Aegis of Velishan Rk. II",
+            "item_id": 137717
+          },
+          {
+            "spell_id": 35720,
+            "name": "Claw of the Ashwing Rk. II",
+            "item_id": 137720
+          }
+        ],
+        [
+          {
+            "spell_id": 35748,
+            "name": "Incinerating Beam Rk. II",
+            "item_id": 137748
+          },
+          {
+            "spell_id": 35753,
+            "name": "Lure of the Wastes Rk. II",
+            "item_id": 137753
+          }
+        ],
+        [
+          {
+            "spell_id": 35756,
+            "name": "Tears of Gosik Rk. II",
+            "item_id": 137756
+          },
+          {
+            "spell_id": 35759,
+            "name": "Katelanaka Rk. II",
+            "item_id": 137759
+          }
+        ],
+        [
+          {
+            "spell_id": 35873,
+            "name": "Incandescent Vortex Rk. II",
+            "item_id": 137873
+          }
+        ],
+        [
+          {
+            "spell_id": 35762,
+            "name": "Wildether Barrage Rk. II",
+            "item_id": 137762
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 36050,
+            "name": "Blast of Sand Rk. II",
+            "item_id": 138050
+          },
+          {
+            "spell_id": 36053,
+            "name": "Auspice of Shadows Rk. II",
+            "item_id": 138053
+          }
+        ],
+        [
+          {
+            "spell_id": 35918,
+            "name": "Bolt of Molten Magma Rk. II",
+            "item_id": 137918
+          }
+        ],
+        [
+          {
+            "spell_id": 35921,
+            "name": "Burnout XI Rk. II",
+            "item_id": 137921
+          }
+        ],
+        [
+          {
+            "spell_id": 35925,
+            "name": "Flameskin Rk. II",
+            "item_id": 137925
+          }
+        ],
+        [
+          {
+            "spell_id": 35343,
+            "name": "Malosenia Rk. II",
+            "item_id": 137343
+          }
+        ],
+        [
+          {
+            "spell_id": 35509,
+            "name": "Shield of the Dauntless Rk. II",
+            "item_id": 137509
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36087,
+            "name": "Xorlex's Animation Rk. II",
+            "item_id": 138087
+          },
+          {
+            "spell_id": 35509,
+            "name": "Shield of the Dauntless Rk. II",
+            "item_id": 137509
+          }
+        ],
+        [
+          {
+            "spell_id": 36090,
+            "name": "Rune of Xolok Rk. II",
+            "item_id": 138090
+          },
+          {
+            "spell_id": 36093,
+            "name": "Mastermind's Rune Rk. II",
+            "item_id": 138093
+          }
+        ],
+        [
+          {
+            "spell_id": 36278,
+            "name": "Chromatic Percussion Rk. II",
+            "item_id": 138278
+          }
+        ],
+        [
+          {
+            "spell_id": 36084,
+            "name": "Confound Rk. II",
+            "item_id": 138084
+          }
+        ],
+        [
+          {
+            "spell_id": 36099,
+            "name": "Demolished Consciousness Rk. II",
+            "item_id": 138099
+          }
+        ],
+        [
+          {
+            "spell_id": 36096,
+            "name": "Speed of Sviir Rk. II",
+            "item_id": 138096
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36338,
+            "name": "Salve of Blezon Rk. II",
+            "item_id": 138338
+          },
+          {
+            "spell_id": 36341,
+            "name": "Asp Blood Rk. II",
+            "item_id": 138341
+          }
+        ],
+        [
+          {
+            "spell_id": 36332,
+            "name": "Plakt's Aggression Rk. II",
+            "item_id": 138332
+          },
+          {
+            "spell_id": 36335,
+            "name": "Plakt's Protection Rk. II",
+            "item_id": 138335
+          }
+        ],
+        [
+          {
+            "spell_id": 36457,
+            "name": "Natural Cooperation Rk. II",
+            "item_id": 138457
+          },
+          {
+            "spell_id": 36053,
+            "name": "Auspice of Shadows Rk. II",
+            "item_id": 138053
+          }
+        ],
+        [
+          {
+            "spell_id": 36320,
+            "name": "Bestial Evulsing Rk. II",
+            "item_id": 138320
+          }
+        ],
+        [
+          {
+            "spell_id": 36329,
+            "name": "Focus of Sanera Rk. II",
+            "item_id": 138329
+          }
+        ],
+        [
+          {
+            "spell_id": 34001,
+            "name": "Rest Rk. II",
+            "item_id": 136001
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36497,
+            "name": "Advanced Retaliation Rk. II",
+            "item_id": 138497
+          }
+        ],
+        [
+          {
+            "spell_id": 36548,
+            "name": "Capricious Rage Discipline Rk. II",
+            "item_id": 138548
+          }
+        ],
+        [
+          {
+            "spell_id": 34001,
+            "name": "Rest Rk. II",
+            "item_id": 136001
+          }
+        ],
+        [
+          {
+            "spell_id": 36506,
+            "name": "Tendon Gash Rk. II",
+            "item_id": 138506
+          }
+        ],
+        [
+          {
+            "spell_id": 36503,
+            "name": "Vanquishing Frenzy Rk. II",
+            "item_id": 138503
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": 920101,
+    "title": "Lesser Dreadmote",
+    "level": 97,
+    "rank": 5,
+    "rank_name": "II",
+    "mote": 76551,
+    "source": "https://everquest.allakhazam.com/db/quest/6005",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34046,
+            "name": "Offensive Discipline Rk. II",
+            "item_id": 136046
+          }
+        ],
+        [
+          {
+            "spell_id": 34004,
+            "name": "Seventh Wind Rk. II",
+            "item_id": 136004
+          }
+        ],
+        [
+          {
+            "spell_id": 34019,
+            "name": "Unbroken Attention Rk. II",
+            "item_id": 136019
+          }
+        ],
+        [
+          {
+            "spell_id": 34007,
+            "name": "Weapon Covenant Rk. II",
+            "item_id": 136007
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34077,
+            "name": "Shackle Rk. II",
+            "item_id": 136077
+          },
+          {
+            "spell_id": 34155,
+            "name": "Unified Certitude Rk. II",
+            "item_id": 136155
+          }
+        ],
+        [
+          {
+            "spell_id": 34134,
+            "name": "Divine Haven Rk. II",
+            "item_id": 136134
+          },
+          {
+            "spell_id": 34149,
+            "name": "Castigation Rk. II",
+            "item_id": 136149
+          }
+        ],
+        [
+          {
+            "spell_id": 34137,
+            "name": "Divine Interposition Rk. II",
+            "item_id": 136137
+          },
+          {
+            "spell_id": 34152,
+            "name": "Fifteenth Emblem Rk. II",
+            "item_id": 136152
+          }
+        ],
+        [
+          {
+            "spell_id": 34140,
+            "name": "Reverent Elixir Rk. II",
+            "item_id": 136140
+          },
+          {
+            "spell_id": 34158,
+            "name": "Ward of Indictment Rk. II",
+            "item_id": 136158
+          }
+        ],
+        [
+          {
+            "spell_id": 34143,
+            "name": "Mark of Tohan Rk. II",
+            "item_id": 136143
+          }
+        ],
+        [
+          {
+            "spell_id": 34275,
+            "name": "Ward of Certitude Rk. II",
+            "item_id": 136275
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34348,
+            "name": "Pledged Keeper Rk. II",
+            "item_id": 136348
+          },
+          {
+            "spell_id": 34375,
+            "name": "Devout Audacity Rk. II",
+            "item_id": 136375
+          }
+        ],
+        [
+          {
+            "spell_id": 34360,
+            "name": "Ostracize Rk. II",
+            "item_id": 136360
+          },
+          {
+            "spell_id": 34372,
+            "name": "Symbol of Burim Rk. II",
+            "item_id": 136372
+          }
+        ],
+        [
+          {
+            "spell_id": 34366,
+            "name": "Dazzling Light Rk. II",
+            "item_id": 136366
+          },
+          {
+            "spell_id": 34369,
+            "name": "Lesson of Sorrow Rk. II",
+            "item_id": 136369
+          }
+        ],
+        [
+          {
+            "spell_id": 34357,
+            "name": "Crush of the Iceclad Rk. II",
+            "item_id": 136357
+          }
+        ],
+        [
+          {
+            "spell_id": 34351,
+            "name": "Demand for Honor Rk. II",
+            "item_id": 136351
+          }
+        ],
+        [
+          {
+            "spell_id": 34480,
+            "name": "Holy Guardian Discipline Rk. II",
+            "item_id": 136480
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34528,
+            "name": "Enraging Heel Kicks Rk. II",
+            "item_id": 136528
+          },
+          {
+            "spell_id": 34531,
+            "name": "Jolting Heel Kicks Rk. II",
+            "item_id": 136531
+          }
+        ],
+        [
+          {
+            "spell_id": 34543,
+            "name": "Bitter Wind Rk. II",
+            "item_id": 136543
+          }
+        ],
+        [
+          {
+            "spell_id": 34525,
+            "name": "Cloak of Spurs Rk. II",
+            "item_id": 136525
+          }
+        ],
+        [
+          {
+            "spell_id": 34534,
+            "name": "Jolting Shock Rk. II",
+            "item_id": 136534
+          }
+        ],
+        [
+          {
+            "spell_id": 34540,
+            "name": "Strength of the Bosquestalker Rk. II",
+            "item_id": 136540
+          }
+        ],
+        [
+          {
+            "spell_id": 34646,
+            "name": "Windblast Boon Rk. II",
+            "item_id": 136646
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34700,
+            "name": "Smoldering Darkness Rk. II",
+            "item_id": 136700
+          },
+          {
+            "spell_id": 34715,
+            "name": "Gashing Blade Rk. II",
+            "item_id": 136715
+          }
+        ],
+        [
+          {
+            "spell_id": 34694,
+            "name": "Demand for Power Rk. II",
+            "item_id": 136694
+          },
+          {
+            "spell_id": 34703,
+            "name": "Duplicitous Audacity Rk. II",
+            "item_id": 136703
+          }
+        ],
+        [
+          {
+            "spell_id": 34691,
+            "name": "Blood of Ralstok Rk. II",
+            "item_id": 136691
+          }
+        ],
+        [
+          {
+            "spell_id": 34706,
+            "name": "Plague of Klonda Rk. II",
+            "item_id": 136706
+          }
+        ],
+        [
+          {
+            "spell_id": 34709,
+            "name": "Shroud of the Darksworn Rk. II",
+            "item_id": 136709
+          }
+        ],
+        [
+          {
+            "spell_id": 34817,
+            "name": "Unholy Guardian Discipline Rk. II",
+            "item_id": 136817
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34838,
+            "name": "Rampant Growth Rk. II",
+            "item_id": 136838
+          },
+          {
+            "spell_id": 34903,
+            "name": "Wildspark Aura Rk. II",
+            "item_id": 136903
+          }
+        ],
+        [
+          {
+            "spell_id": 34876,
+            "name": "Frosthowl Breath Rk. II",
+            "item_id": 136876
+          },
+          {
+            "spell_id": 34888,
+            "name": "Sterivida Rk. II",
+            "item_id": 136888
+          }
+        ],
+        [
+          {
+            "spell_id": 34882,
+            "name": "Spikethistle Bulwark Rk. II",
+            "item_id": 136882
+          },
+          {
+            "spell_id": 34891,
+            "name": "Frosthowl Chill Rk. II",
+            "item_id": 136891
+          }
+        ],
+        [
+          {
+            "spell_id": 34885,
+            "name": "Granitebark Skin Rk. II",
+            "item_id": 136885
+          },
+          {
+            "spell_id": 34897,
+            "name": "Promised Recovery Rk. II",
+            "item_id": 136897
+          }
+        ],
+        [
+          {
+            "spell_id": 34894,
+            "name": "Beastsnag Guard Rk. II",
+            "item_id": 136894
+          },
+          {
+            "spell_id": 34576,
+            "name": "Vinelash Assault Rk. II",
+            "item_id": 136576
+          }
+        ],
+        [
+          {
+            "spell_id": 35026,
+            "name": "Thornmaw Vines Rk. II",
+            "item_id": 137026
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35051,
+            "name": "Eagle's Balance Rk. II",
+            "item_id": 137051
+          }
+        ],
+        [
+          {
+            "spell_id": 34004,
+            "name": "Seventh Wind Rk. II",
+            "item_id": 136004
+          }
+        ],
+        [
+          {
+            "spell_id": 35060,
+            "name": "Shaded Step Rk. II",
+            "item_id": 137060
+          }
+        ],
+        [
+          {
+            "spell_id": 35093,
+            "name": "Swift Reflexes Rk. II",
+            "item_id": 137093
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35135,
+            "name": "Aura of Salarra Rk. II",
+            "item_id": 137135
+          }
+        ],
+        [
+          {
+            "spell_id": 35141,
+            "name": "Echo of Salarra Rk. II",
+            "item_id": 137141
+          }
+        ],
+        [
+          {
+            "spell_id": 35150,
+            "name": "Edoth's Chant of Frost Rk. II",
+            "item_id": 137150
+          }
+        ],
+        [
+          {
+            "spell_id": 35147,
+            "name": "Fatesong of Protan Rk. II",
+            "item_id": 137147
+          }
+        ],
+        [
+          {
+            "spell_id": 35240,
+            "name": "Harmony of Tone Rk. II",
+            "item_id": 137240
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35267,
+            "name": "Indiscernible Discipline Rk. II",
+            "item_id": 137267
+          }
+        ],
+        [
+          {
+            "spell_id": 35264,
+            "name": "Jugular Lacerate Rk. II",
+            "item_id": 137264
+          }
+        ],
+        [
+          {
+            "spell_id": 34004,
+            "name": "Seventh Wind Rk. II",
+            "item_id": 136004
+          }
+        ],
+        [
+          {
+            "spell_id": 35325,
+            "name": "Spell Evasion Discipline Rk. II",
+            "item_id": 137325
+          }
+        ],
+        [
+          {
+            "spell_id": 34007,
+            "name": "Weapon Covenant Rk. II",
+            "item_id": 136007
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35343,
+            "name": "Malosenia Rk. II",
+            "item_id": 137343
+          },
+          {
+            "spell_id": 35383,
+            "name": "Falhotep's Affliction Rk. II",
+            "item_id": 137383
+          }
+        ],
+        [
+          {
+            "spell_id": 35380,
+            "name": "Elsrop's Malady Rk. II",
+            "item_id": 137380
+          },
+          {
+            "spell_id": 34077,
+            "name": "Shackle Rk. II",
+            "item_id": 136077
+          }
+        ],
+        [
+          {
+            "spell_id": 35389,
+            "name": "Enalam's Drowse Rk. II",
+            "item_id": 137389
+          },
+          {
+            "spell_id": 35395,
+            "name": "Kriegas' Faithful Rk. II",
+            "item_id": 137395
+          }
+        ],
+        [
+          {
+            "spell_id": 35470,
+            "name": "Blezon's Recourse Rk. II",
+            "item_id": 137470
+          }
+        ],
+        [
+          {
+            "spell_id": 35370,
+            "name": "Fatigue Rk. II",
+            "item_id": 137370
+          }
+        ],
+        [
+          {
+            "spell_id": 35367,
+            "name": "Feralisenia Rk. II",
+            "item_id": 137367
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35532,
+            "name": "Halstor's Grasp Rk. II",
+            "item_id": 137532
+          },
+          {
+            "spell_id": 35557,
+            "name": "Sigil of the Sundered Rk. II",
+            "item_id": 137557
+          }
+        ],
+        [
+          {
+            "spell_id": 35539,
+            "name": "Bonefuse Fetish Rk. II",
+            "item_id": 137539
+          },
+          {
+            "spell_id": 35554,
+            "name": "Scent of Dread Rk. II",
+            "item_id": 137554
+          }
+        ],
+        [
+          {
+            "spell_id": 35684,
+            "name": "Cascading Boneshield Rk. II",
+            "item_id": 137684
+          }
+        ],
+        [
+          {
+            "spell_id": 35548,
+            "name": "Dissolution Rk. II",
+            "item_id": 137548
+          }
+        ],
+        [
+          {
+            "spell_id": 35551,
+            "name": "Itkari's Swift Deconstruction Rk. II",
+            "item_id": 137551
+          }
+        ],
+        [
+          {
+            "spell_id": 35545,
+            "name": "Termination Rk. II",
+            "item_id": 137545
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35772,
+            "name": "Icebound Pillar Rk. II",
+            "item_id": 137772
+          },
+          {
+            "spell_id": 35778,
+            "name": "Circle of Flame Rk. II",
+            "item_id": 137778
+          }
+        ],
+        [
+          {
+            "spell_id": 35781,
+            "name": "Bucolic Harvest Rk. II",
+            "item_id": 137781
+          }
+        ],
+        [
+          {
+            "spell_id": 35877,
+            "name": "Cloudburst Thunderbolt Rk. II",
+            "item_id": 137877
+          }
+        ],
+        [
+          {
+            "spell_id": 35769,
+            "name": "Ethereal Salvo Rk. II",
+            "item_id": 137769
+          }
+        ],
+        [
+          {
+            "spell_id": 35775,
+            "name": "Leap of Static Sparks Rk. II",
+            "item_id": 137775
+          }
+        ],
+        [
+          {
+            "spell_id": 35765,
+            "name": "Skullfreeze Rk. II",
+            "item_id": 137765
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 35932,
+            "name": "Beam of Brimstone Rk. II",
+            "item_id": 137932
+          }
+        ],
+        [
+          {
+            "spell_id": 35939,
+            "name": "Phantasmal Guardian Rk. II",
+            "item_id": 137939
+          }
+        ],
+        [
+          {
+            "spell_id": 36056,
+            "name": "Rain of Blistersteel Rk. II",
+            "item_id": 138056
+          }
+        ],
+        [
+          {
+            "spell_id": 35936,
+            "name": "Salvo of Many Rk. II",
+            "item_id": 137936
+          }
+        ],
+        [
+          {
+            "spell_id": 35943,
+            "name": "Shock of Blistersteel Rk. II",
+            "item_id": 137943
+          }
+        ],
+        [
+          {
+            "spell_id": 35946,
+            "name": "Wand of Phantasmal Modulation Rk. II",
+            "item_id": 137946
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36102,
+            "name": "Confounding Flash Rk. II",
+            "item_id": 138102
+          },
+          {
+            "spell_id": 36126,
+            "name": "Enunciation of Tashan Rk. II",
+            "item_id": 138126
+          }
+        ],
+        [
+          {
+            "spell_id": 36105,
+            "name": "Mastermind's Aura Rk. II",
+            "item_id": 138105
+          },
+          {
+            "spell_id": 36111,
+            "name": "Mastermind's Echo Rk. II",
+            "item_id": 138111
+          }
+        ],
+        [
+          {
+            "spell_id": 36117,
+            "name": "Quiescent Mind Rk. II",
+            "item_id": 138117
+          },
+          {
+            "spell_id": 36120,
+            "name": "Remote Color Confluence Rk. II",
+            "item_id": 138120
+          }
+        ],
+        [
+          {
+            "spell_id": 36123,
+            "name": "Chromaclash Rk. II",
+            "item_id": 138123
+          },
+          {
+            "spell_id": 36132,
+            "name": "Tempting Aura Rk. II",
+            "item_id": 138132
+          }
+        ],
+        [
+          {
+            "spell_id": 36284,
+            "name": "Runic Radiance Aura Rk. II",
+            "item_id": 138284
+          }
+        ],
+        [
+          {
+            "spell_id": 36129,
+            "name": "Temptation Rk. II",
+            "item_id": 138129
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36359,
+            "name": "Huaene's Melioration Rk. II",
+            "item_id": 138359
+          },
+          {
+            "spell_id": 36347,
+            "name": "Clamor of Claws Rk. II",
+            "item_id": 138347
+          }
+        ],
+        [
+          {
+            "spell_id": 36350,
+            "name": "Jaerol's Mending Rk. II",
+            "item_id": 138350
+          }
+        ],
+        [
+          {
+            "spell_id": 36344,
+            "name": "Merciless Ferocity Rk. II",
+            "item_id": 138344
+          }
+        ],
+        [
+          {
+            "spell_id": 36353,
+            "name": "Natigo's Endemic Rk. II",
+            "item_id": 138353
+          }
+        ],
+        [
+          {
+            "spell_id": 36356,
+            "name": "Spiritual Vindication Rk. II",
+            "item_id": 138356
+          }
+        ],
+        [
+          {
+            "spell_id": 36466,
+            "name": "Withering Bite Rk. II",
+            "item_id": 138466
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36509,
+            "name": "Punch in the Throat Rk. II",
+            "item_id": 138509
+          }
+        ],
+        [
+          {
+            "spell_id": 34004,
+            "name": "Seventh Wind Rk. II",
+            "item_id": 136004
+          }
+        ],
+        [
+          {
+            "spell_id": 36554,
+            "name": "Vicious Spiral Rk. II",
+            "item_id": 138554
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": 920102,
+    "title": "Median Dreadmote",
+    "level": 98,
+    "rank": 5,
+    "rank_name": "II",
+    "mote": 76552,
+    "source": "https://everquest.allakhazam.com/db/quest/6006",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34049,
+            "name": "Harassing Shout Rk. II",
+            "item_id": 136049
+          }
+        ],
+        [
+          {
+            "spell_id": 34028,
+            "name": "Ridicule Rk. II",
+            "item_id": 136028
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34080,
+            "name": "Thwart Corruption Rk. II",
+            "item_id": 136080
+          },
+          {
+            "spell_id": 34185,
+            "name": "Promised Reformation Rk. II",
+            "item_id": 136185
+          }
+        ],
+        [
+          {
+            "spell_id": 34179,
+            "name": "Bastion of Vie Rk. II",
+            "item_id": 136179
+          },
+          {
+            "spell_id": 34164,
+            "name": "Reverent Light Rk. II",
+            "item_id": 136164
+          }
+        ],
+        [
+          {
+            "spell_id": 34191,
+            "name": "Sermon of Rebuke Rk. II",
+            "item_id": 136191
+          },
+          {
+            "spell_id": 34167,
+            "name": "Virtuous Intervention Rk. II",
+            "item_id": 136167
+          }
+        ],
+        [
+          {
+            "spell_id": 34173,
+            "name": "Issuance of Grace Rk. II",
+            "item_id": 136173
+          },
+          {
+            "spell_id": 34197,
+            "name": "Vow of Vehemence Rk. II",
+            "item_id": 136197
+          }
+        ],
+        [
+          {
+            "spell_id": 34281,
+            "name": "Glorified Ground Rk. II",
+            "item_id": 136281
+          }
+        ],
+        [
+          {
+            "spell_id": 34194,
+            "name": "Sound of Plangency Rk. II",
+            "item_id": 136194
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34315,
+            "name": "Reprove Rk. II",
+            "item_id": 136315
+          },
+          {
+            "spell_id": 34393,
+            "name": "Reverent Cleansing Rk. II",
+            "item_id": 136393
+          }
+        ],
+        [
+          {
+            "spell_id": 34378,
+            "name": "Armor of Reverence Rk. II",
+            "item_id": 136378
+          },
+          {
+            "spell_id": 34396,
+            "name": "Brightwing Mantle Rk. II",
+            "item_id": 136396
+          }
+        ],
+        [
+          {
+            "spell_id": 34390,
+            "name": "Burst of Sunrise Rk. II",
+            "item_id": 136390
+          },
+          {
+            "spell_id": 34402,
+            "name": "Righteous Umbrage Rk. II",
+            "item_id": 136402
+          }
+        ],
+        [
+          {
+            "spell_id": 34387,
+            "name": "Armor of Formidable Grace Rk. II",
+            "item_id": 136387
+          }
+        ],
+        [
+          {
+            "spell_id": 34411,
+            "name": "Splash of Cleansing Rk. II",
+            "item_id": 136411
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34546,
+            "name": "Swarm of Vespines Rk. II",
+            "item_id": 136546
+          },
+          {
+            "spell_id": 34555,
+            "name": "Herbal Balm Rk. II",
+            "item_id": 136555
+          }
+        ],
+        [
+          {
+            "spell_id": 34558,
+            "name": "Vileoak Ash Rk. II",
+            "item_id": 136558
+          },
+          {
+            "spell_id": 34576,
+            "name": "Vinelash Assault Rk. II",
+            "item_id": 136576
+          }
+        ],
+        [
+          {
+            "spell_id": 34561,
+            "name": "Heartspike Rk. II",
+            "item_id": 136561
+          },
+          {
+            "spell_id": 34573,
+            "name": "Bosquestalker's Vigor Rk. II",
+            "item_id": 136573
+          }
+        ],
+        [
+          {
+            "spell_id": 34564,
+            "name": "Lingering Shadow Rk. II",
+            "item_id": 136564
+          },
+          {
+            "spell_id": 34567,
+            "name": "Shout of the Predator Rk. II",
+            "item_id": 136567
+          }
+        ],
+        [
+          {
+            "spell_id": 34650,
+            "name": "Ashcloud Boon Rk. II",
+            "item_id": 136650
+          }
+        ],
+        [
+          {
+            "spell_id": 34570,
+            "name": "Spurcoat Rk. II",
+            "item_id": 136570
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34718,
+            "name": "Gift of Falsin Rk. II",
+            "item_id": 136718
+          },
+          {
+            "spell_id": 34737,
+            "name": "Minion of Grelleth Rk. II",
+            "item_id": 136737
+          }
+        ],
+        [
+          {
+            "spell_id": 34731,
+            "name": "Bonebrood Mantle Rk. II",
+            "item_id": 136731
+          }
+        ],
+        [
+          {
+            "spell_id": 34721,
+            "name": "Falhotep's Covenant Rk. II",
+            "item_id": 136721
+          }
+        ],
+        [
+          {
+            "spell_id": 34725,
+            "name": "Grelleth's Carapace Rk. II",
+            "item_id": 136725
+          }
+        ],
+        [
+          {
+            "spell_id": 34315,
+            "name": "Reprove Rk. II",
+            "item_id": 136315
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34841,
+            "name": "Exterminate the Unnatural Rk. II",
+            "item_id": 136841
+          },
+          {
+            "spell_id": 34936,
+            "name": "Survival of the Fortuitous Rk. II",
+            "item_id": 136936
+          }
+        ],
+        [
+          {
+            "spell_id": 34912,
+            "name": "Horde of Mutillids Rk. II",
+            "item_id": 136912
+          },
+          {
+            "spell_id": 34080,
+            "name": "Thwart Corruption Rk. II",
+            "item_id": 136080
+          }
+        ],
+        [
+          {
+            "spell_id": 34915,
+            "name": "Spikethistle Coat Rk. II",
+            "item_id": 136915
+          },
+          {
+            "spell_id": 34927,
+            "name": "Remote Sunfire Rk. II",
+            "item_id": 136927
+          }
+        ],
+        [
+          {
+            "spell_id": 34918,
+            "name": "Frostone Aura Rk. II",
+            "item_id": 136918
+          },
+          {
+            "spell_id": 34939,
+            "name": "Winter's Wildfire Rk. II",
+            "item_id": 136939
+          }
+        ],
+        [
+          {
+            "spell_id": 35029,
+            "name": "Katabatic Roar Rk. II",
+            "item_id": 137029
+          }
+        ],
+        [
+          {
+            "spell_id": 34933,
+            "name": "Skin to Seedlings Rk. II",
+            "item_id": 136933
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35066,
+            "name": "Echo of Prevarication Rk. II",
+            "item_id": 137066
+          }
+        ],
+        [
+          {
+            "spell_id": 35063,
+            "name": "Eye of the Storm Rk. II",
+            "item_id": 137063
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35153,
+            "name": "Ameliorating Accelerando Rk. II",
+            "item_id": 137153
+          },
+          {
+            "spell_id": 35177,
+            "name": "Slaunk's Chant of Poison Rk. II",
+            "item_id": 137177
+          }
+        ],
+        [
+          {
+            "spell_id": 35162,
+            "name": "Ruaabri's Reckless Renewal Rk. II",
+            "item_id": 137162
+          },
+          {
+            "spell_id": 35174,
+            "name": "Gosik's Aria Rk. II",
+            "item_id": 137174
+          }
+        ],
+        [
+          {
+            "spell_id": 35156,
+            "name": "Chorus of Salarra Rk. II",
+            "item_id": 137156
+          }
+        ],
+        [
+          {
+            "spell_id": 35171,
+            "name": "Doben's Spry Sonata Rk. II",
+            "item_id": 137171
+          }
+        ],
+        [
+          {
+            "spell_id": 35159,
+            "name": "Siavonn's Psalm of Potency Rk. II",
+            "item_id": 137159
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35273,
+            "name": "Asp Blade Rk. II",
+            "item_id": 137273
+          }
+        ],
+        [
+          {
+            "spell_id": 35282,
+            "name": "Energetic Dagger-Throw Rk. II",
+            "item_id": 137282
+          }
+        ],
+        [
+          {
+            "spell_id": 35328,
+            "name": "Fatal Aim Discipline Rk. II",
+            "item_id": 137328
+          }
+        ],
+        [
+          {
+            "spell_id": 35285,
+            "name": "Gash Rk. II",
+            "item_id": 137285
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35407,
+            "name": "Halcyon Shear Rk. II",
+            "item_id": 137407
+          },
+          {
+            "spell_id": 35410,
+            "name": "Vilefeaster's Pandemic Rk. II",
+            "item_id": 137410
+          }
+        ],
+        [
+          {
+            "spell_id": 35398,
+            "name": "Ancestral Pact Rk. II",
+            "item_id": 137398
+          }
+        ],
+        [
+          {
+            "spell_id": 35401,
+            "name": "Antecessor's Intervention Rk. II",
+            "item_id": 137401
+          }
+        ],
+        [
+          {
+            "spell_id": 35413,
+            "name": "Blezon's Mending Rk. II",
+            "item_id": 137413
+          }
+        ],
+        [
+          {
+            "spell_id": 35485,
+            "name": "Restoring Counterbias Rk. II",
+            "item_id": 137485
+          }
+        ],
+        [
+          {
+            "spell_id": 35404,
+            "name": "Seedspitter's Bite Rk. II",
+            "item_id": 137404
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35560,
+            "name": "Bestow Mortality Rk. II",
+            "item_id": 137560
+          },
+          {
+            "spell_id": 35587,
+            "name": "Osalur's Flashblaze Rk. II",
+            "item_id": 137587
+          }
+        ],
+        [
+          {
+            "spell_id": 35566,
+            "name": "Chaotic Corruption Rk. II",
+            "item_id": 137566
+          },
+          {
+            "spell_id": 35578,
+            "name": "Algid Mending Rk. II",
+            "item_id": 137578
+          }
+        ],
+        [
+          {
+            "spell_id": 35575,
+            "name": "Foreboding Rk. II",
+            "item_id": 137575
+          },
+          {
+            "spell_id": 35593,
+            "name": "Sphere of Dissolution Rk. II",
+            "item_id": 137593
+          }
+        ],
+        [
+          {
+            "spell_id": 35590,
+            "name": "Pyre of the Forsaken Rk. II",
+            "item_id": 137590
+          },
+          {
+            "spell_id": 34077,
+            "name": "Shackle Rk. II",
+            "item_id": 136077
+          }
+        ],
+        [
+          {
+            "spell_id": 35581,
+            "name": "Zombieskin Rk. II",
+            "item_id": 137581
+          },
+          {
+            "spell_id": 35584,
+            "name": "Deathclutch Manacles Rk. II",
+            "item_id": 137584
+          }
+        ],
+        [
+          {
+            "spell_id": 35699,
+            "name": "Phantasmal Ward Rk. II",
+            "item_id": 137699
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35784,
+            "name": "Armor of the Stonescale Rk. II",
+            "item_id": 137784
+          },
+          {
+            "spell_id": 35810,
+            "name": "Barbed Lightning Rk. II",
+            "item_id": 137810
+          }
+        ],
+        [
+          {
+            "spell_id": 35787,
+            "name": "Frigid Beam Rk. II",
+            "item_id": 137787
+          },
+          {
+            "spell_id": 35798,
+            "name": "Flashfreeze Rk. II",
+            "item_id": 137798
+          }
+        ],
+        [
+          {
+            "spell_id": 35882,
+            "name": "Ether Vortex Rk. II",
+            "item_id": 137882
+          },
+          {
+            "spell_id": 35886,
+            "name": "Bleakmist Guard Rk. II",
+            "item_id": 137886
+          }
+        ],
+        [
+          {
+            "spell_id": 35795,
+            "name": "Claw of the Flamewing Rk. II",
+            "item_id": 137795
+          }
+        ],
+        [
+          {
+            "spell_id": 35807,
+            "name": "Lightning Squall Rk. II",
+            "item_id": 137807
+          }
+        ],
+        [
+          {
+            "spell_id": 35792,
+            "name": "Magmalure Rk. II",
+            "item_id": 137792
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 35950,
+            "name": "Broiling Sands Rk. II",
+            "item_id": 137950
+          },
+          {
+            "spell_id": 35964,
+            "name": "Renewal of Hererra Rk. II",
+            "item_id": 137964
+          }
+        ],
+        [
+          {
+            "spell_id": 35953,
+            "name": "Infernal Skin Rk. II",
+            "item_id": 137953
+          },
+          {
+            "spell_id": 34841,
+            "name": "Exterminate the Unnatural Rk. II",
+            "item_id": 136841
+          }
+        ],
+        [
+          {
+            "spell_id": 36059,
+            "name": "Beam of Scythes Rk. II",
+            "item_id": 138059
+          }
+        ],
+        [
+          {
+            "spell_id": 35979,
+            "name": "Groundswell Stance Rk. II",
+            "item_id": 137979
+          }
+        ],
+        [
+          {
+            "spell_id": 35912,
+            "name": "Promised Amelioration Rk. II",
+            "item_id": 137912
+          }
+        ],
+        [
+          {
+            "spell_id": 35967,
+            "name": "Summon Imperious Servant Rk. II",
+            "item_id": 137967
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36138,
+            "name": "Aegis of Xorbb Rk. II",
+            "item_id": 138138
+          },
+          {
+            "spell_id": 36185,
+            "name": "Phantasmal Assault Rk. II",
+            "item_id": 138185
+          }
+        ],
+        [
+          {
+            "spell_id": 36141,
+            "name": "Quiescent Issuance Rk. II",
+            "item_id": 138141
+          },
+          {
+            "spell_id": 36157,
+            "name": "Foresight Rk. II",
+            "item_id": 138157
+          }
+        ],
+        [
+          {
+            "spell_id": 36147,
+            "name": "Chaotic Confounding Rk. II",
+            "item_id": 138147
+          },
+          {
+            "spell_id": 36161,
+            "name": "Mana Reverberation Rk. II",
+            "item_id": 138161
+          }
+        ],
+        [
+          {
+            "spell_id": 36151,
+            "name": "Stifle Rk. II",
+            "item_id": 138151
+          },
+          {
+            "spell_id": 36188,
+            "name": "Terrifying Rune Rk. II",
+            "item_id": 138188
+          }
+        ],
+        [
+          {
+            "spell_id": 36154,
+            "name": "Diminishing Helix Rk. II",
+            "item_id": 138154
+          },
+          {
+            "spell_id": 36179,
+            "name": "Disorientation Rk. II",
+            "item_id": 138179
+          }
+        ],
+        [
+          {
+            "spell_id": 36290,
+            "name": "Amplifying Aura Rk. II",
+            "item_id": 138290
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36365,
+            "name": "Invigorating Warder Rk. II",
+            "item_id": 138365
+          }
+        ],
+        [
+          {
+            "spell_id": 36380,
+            "name": "Poantaar's Bite Rk. II",
+            "item_id": 138380
+          }
+        ],
+        [
+          {
+            "spell_id": 35912,
+            "name": "Promised Amelioration Rk. II",
+            "item_id": 137912
+          }
+        ],
+        [
+          {
+            "spell_id": 36377,
+            "name": "Ruaabri's Fury Rk. II",
+            "item_id": 138377
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36512,
+            "name": "Blood Brand Rk. II",
+            "item_id": 138512
+          }
+        ],
+        [
+          {
+            "spell_id": 36518,
+            "name": "Brutal Axe Throw Rk. II",
+            "item_id": 138518
+          }
+        ],
+        [
+          {
+            "spell_id": 36557,
+            "name": "Cry Carnage Rk. II",
+            "item_id": 138557
+          }
+        ],
+        [
+          {
+            "spell_id": 36521,
+            "name": "Temple Crush Rk. II",
+            "item_id": 138521
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": 920103,
+    "title": "Greater Dreadmote",
+    "level": 99,
+    "rank": 5,
+    "rank_name": "II",
+    "mote": 76553,
+    "source": "https://everquest.allakhazam.com/db/quest/6007",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34034,
+            "name": "Stormwheel Blades Rk. II",
+            "item_id": 136034
+          }
+        ],
+        [
+          {
+            "spell_id": 34055,
+            "name": "Warrior's Auspice Rk. II",
+            "item_id": 136055
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34083,
+            "name": "Cleansed Blood Rk. II",
+            "item_id": 136083
+          },
+          {
+            "spell_id": 34221,
+            "name": "Silent Order Rk. II",
+            "item_id": 136221
+          }
+        ],
+        [
+          {
+            "spell_id": 34206,
+            "name": "Chromacrush Rk. II",
+            "item_id": 136206
+          },
+          {
+            "spell_id": 34215,
+            "name": "Abrogate Corruption Rk. II",
+            "item_id": 136215
+          }
+        ],
+        [
+          {
+            "spell_id": 34212,
+            "name": "Infallible Hammer of Reverence Rk. II",
+            "item_id": 136212
+          },
+          {
+            "spell_id": 34218,
+            "name": "Glorious Rebuke Rk. II",
+            "item_id": 136218
+          }
+        ],
+        [
+          {
+            "spell_id": 34288,
+            "name": "Shining Bastion Rk. II",
+            "item_id": 136288
+          },
+          {
+            "spell_id": 34297,
+            "name": "Hand of Graceful Infusion Rk. II",
+            "item_id": 136297
+          }
+        ],
+        [
+          {
+            "spell_id": 34209,
+            "name": "Mark of the Zealot Rk. II",
+            "item_id": 136209
+          }
+        ],
+        [
+          {
+            "spell_id": 34086,
+            "name": "Tectonic Temblor Rk. II",
+            "item_id": 136086
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34321,
+            "name": "Steadfast Stance Rk. II",
+            "item_id": 136321
+          },
+          {
+            "spell_id": 34426,
+            "name": "Sorrow Rk. II",
+            "item_id": 136426
+          }
+        ],
+        [
+          {
+            "spell_id": 34417,
+            "name": "Mark of the Exemplar Rk. II",
+            "item_id": 136417
+          },
+          {
+            "spell_id": 34420,
+            "name": "Reinvigorating Steel Rk. II",
+            "item_id": 136420
+          }
+        ],
+        [
+          {
+            "spell_id": 34414,
+            "name": "Brell's Steadfast Bulwark Rk. II",
+            "item_id": 136414
+          }
+        ],
+        [
+          {
+            "spell_id": 34474,
+            "name": "Force of Reverence Rk. II",
+            "item_id": 136474
+          }
+        ],
+        [
+          {
+            "spell_id": 34429,
+            "name": "Unbroken Affirmation Rk. II",
+            "item_id": 136429
+          }
+        ],
+        [
+          {
+            "spell_id": 34438,
+            "name": "Wave of Sorrow Rk. II",
+            "item_id": 136438
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34580,
+            "name": "Desperate Drenching Rk. II",
+            "item_id": 136580
+          },
+          {
+            "spell_id": 34598,
+            "name": "Shadowscale Rk. II",
+            "item_id": 136598
+          }
+        ],
+        [
+          {
+            "spell_id": 34589,
+            "name": "Eyes of the Howler Rk. II",
+            "item_id": 136589
+          },
+          {
+            "spell_id": 34601,
+            "name": "Summer's Gale Rk. II",
+            "item_id": 136601
+          }
+        ],
+        [
+          {
+            "spell_id": 34583,
+            "name": "Devastating Impact Rk. II",
+            "item_id": 136583
+          }
+        ],
+        [
+          {
+            "spell_id": 34595,
+            "name": "Shared Cloak of Spurs Rk. II",
+            "item_id": 136595
+          }
+        ],
+        [
+          {
+            "spell_id": 34592,
+            "name": "Squall of Arrows Rk. II",
+            "item_id": 136592
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34740,
+            "name": "Call of Gloomhaze Rk. II",
+            "item_id": 136740
+          },
+          {
+            "spell_id": 34749,
+            "name": "Surreptitious Blight Rk. II",
+            "item_id": 136749
+          }
+        ],
+        [
+          {
+            "spell_id": 34743,
+            "name": "Drape of the Fallen Rk. II",
+            "item_id": 136743
+          },
+          {
+            "spell_id": 34746,
+            "name": "Spear of Grelleth Rk. II",
+            "item_id": 136746
+          }
+        ],
+        [
+          {
+            "spell_id": 34752,
+            "name": "Repugnance Rk. II",
+            "item_id": 136752
+          }
+        ],
+        [
+          {
+            "spell_id": 34806,
+            "name": "Repugnant Bargain Rk. II",
+            "item_id": 136806
+          }
+        ],
+        [
+          {
+            "spell_id": 34321,
+            "name": "Steadfast Stance Rk. II",
+            "item_id": 136321
+          }
+        ],
+        [
+          {
+            "spell_id": 34755,
+            "name": "Unbroken Acrimony Rk. II",
+            "item_id": 136755
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34845,
+            "name": "Chant of Jaerol Rk. II",
+            "item_id": 136845
+          },
+          {
+            "spell_id": 34954,
+            "name": "Frigid Moonbeam Rk. II",
+            "item_id": 136954
+          },
+          {
+            "spell_id": 34086,
+            "name": "Tectonic Temblor Rk. II",
+            "item_id": 136086
+          }
+        ],
+        [
+          {
+            "spell_id": 34848,
+            "name": "Talisman of the Steadfast Rk. II",
+            "item_id": 136848
+          },
+          {
+            "spell_id": 34957,
+            "name": "Sporali Assault Rk. II",
+            "item_id": 136957
+          }
+        ],
+        [
+          {
+            "spell_id": 34948,
+            "name": "Lustrous Frost Rk. II",
+            "item_id": 136948
+          },
+          {
+            "spell_id": 34978,
+            "name": "Sunblaze Rk. II",
+            "item_id": 136978
+          }
+        ],
+        [
+          {
+            "spell_id": 34963,
+            "name": "Husk of the Reptile Rk. II",
+            "item_id": 136963
+          },
+          {
+            "spell_id": 34083,
+            "name": "Cleansed Blood Rk. II",
+            "item_id": 136083
+          }
+        ],
+        [
+          {
+            "spell_id": 34972,
+            "name": "Sunbeam Blessing Rk. II",
+            "item_id": 136972
+          },
+          {
+            "spell_id": 34981,
+            "name": "Summer Suncrest Rk. II",
+            "item_id": 136981
+          }
+        ],
+        [
+          {
+            "spell_id": 35032,
+            "name": "Frigid Thornmaw Rk. II",
+            "item_id": 137032
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35075,
+            "name": "Eight-Step Pattern Rk. II",
+            "item_id": 137075
+          }
+        ],
+        [
+          {
+            "spell_id": 35072,
+            "name": "Terrorpalm Discipline Rk. II",
+            "item_id": 137072
+          }
+        ],
+        [
+          {
+            "spell_id": 35102,
+            "name": "Zalikor's Fang Rk. II",
+            "item_id": 137102
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35180,
+            "name": "Dirge of Salubra Rk. II",
+            "item_id": 137180
+          }
+        ],
+        [
+          {
+            "spell_id": 35165,
+            "name": "Kaficus' Song of Suffering Rk. II",
+            "item_id": 137165
+          }
+        ],
+        [
+          {
+            "spell_id": 35243,
+            "name": "Protan's Melodic Binding Rk. II",
+            "item_id": 137243
+          }
+        ],
+        [
+          {
+            "spell_id": 35183,
+            "name": "Slumber of Motlak Rk. II",
+            "item_id": 137183
+          }
+        ],
+        [
+          {
+            "spell_id": 35186,
+            "name": "Voice of Motlak Rk. II",
+            "item_id": 137186
+          }
+        ],
+        [
+          {
+            "spell_id": 35189,
+            "name": "War March of Protan Rk. II",
+            "item_id": 137189
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35288,
+            "name": "Agile-Footed Discipline Rk. II",
+            "item_id": 137288
+          }
+        ],
+        [
+          {
+            "spell_id": 35334,
+            "name": "Aspbleeder Discipline Rk. II",
+            "item_id": 137334
+          }
+        ],
+        [
+          {
+            "spell_id": 35291,
+            "name": "Deceit Rk. II",
+            "item_id": 137291
+          }
+        ],
+        [
+          {
+            "spell_id": 35297,
+            "name": "Pinpoint Deficiencies Rk. II",
+            "item_id": 137297
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35416,
+            "name": "Falhotep's Rain of Venom Rk. II",
+            "item_id": 137416
+          },
+          {
+            "spell_id": 34845,
+            "name": "Chant of Jaerol Rk. II",
+            "item_id": 136845
+          }
+        ],
+        [
+          {
+            "spell_id": 35422,
+            "name": "Ice Burst Rk. II",
+            "item_id": 137422
+          },
+          {
+            "spell_id": 35431,
+            "name": "Banescale's Venom Rk. II",
+            "item_id": 137431
+          }
+        ],
+        [
+          {
+            "spell_id": 35494,
+            "name": "Falhotep's Malosenia Rk. II",
+            "item_id": 137494
+          }
+        ],
+        [
+          {
+            "spell_id": 35419,
+            "name": "Naganaga Rk. II",
+            "item_id": 137419
+          }
+        ],
+        [
+          {
+            "spell_id": 35425,
+            "name": "Nectar of Anguish Rk. II",
+            "item_id": 137425
+          }
+        ],
+        [
+          {
+            "spell_id": 34848,
+            "name": "Talisman of the Steadfast Rk. II",
+            "item_id": 136848
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35599,
+            "name": "Halstor's Pallid Haze Rk. II",
+            "item_id": 137599
+          },
+          {
+            "spell_id": 35602,
+            "name": "Forsakenside Rk. II",
+            "item_id": 137602
+          }
+        ],
+        [
+          {
+            "spell_id": 35605,
+            "name": "Necrotic Cysts Rk. II",
+            "item_id": 137605
+          },
+          {
+            "spell_id": 35614,
+            "name": "Bora's Swift Sickness Rk. II",
+            "item_id": 137614
+          }
+        ],
+        [
+          {
+            "spell_id": 35617,
+            "name": "Conscripted Sacrifice Rk. II",
+            "item_id": 137617
+          },
+          {
+            "spell_id": 35632,
+            "name": "Ignite Thoughts Rk. II",
+            "item_id": 137632
+          }
+        ],
+        [
+          {
+            "spell_id": 35629,
+            "name": "Clutching Darkness Rk. II",
+            "item_id": 137629
+          },
+          {
+            "spell_id": 35635,
+            "name": "Mind Strip Rk. II",
+            "item_id": 137635
+          }
+        ],
+        [
+          {
+            "spell_id": 35702,
+            "name": "Aegis of Nefori Rk. II",
+            "item_id": 137702
+          }
+        ],
+        [
+          {
+            "spell_id": 35611,
+            "name": "Pyre of Marnek Rk. II",
+            "item_id": 137611
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35813,
+            "name": "Flamelocked Pillar Rk. II",
+            "item_id": 137813
+          },
+          {
+            "spell_id": 35819,
+            "name": "Stonescale Husk Rk. II",
+            "item_id": 137819
+          }
+        ],
+        [
+          {
+            "spell_id": 35816,
+            "name": "Chaos Incandescence Rk. II",
+            "item_id": 137816
+          },
+          {
+            "spell_id": 35837,
+            "name": "Mul's Pyroblade Rk. II",
+            "item_id": 137837
+          }
+        ],
+        [
+          {
+            "spell_id": 35825,
+            "name": "Flashsear Rk. II",
+            "item_id": 137825
+          },
+          {
+            "spell_id": 35834,
+            "name": "Hoarfrost Cascade Rk. II",
+            "item_id": 137834
+          }
+        ],
+        [
+          {
+            "spell_id": 35822,
+            "name": "Ethereal Hoarfrost Rk. II",
+            "item_id": 137822
+          }
+        ],
+        [
+          {
+            "spell_id": 35890,
+            "name": "Ice Slab Rk. II",
+            "item_id": 137890
+          }
+        ],
+        [
+          {
+            "spell_id": 35840,
+            "name": "Magmatic Vent Rk. II",
+            "item_id": 137840
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 35983,
+            "name": "Magmatic Veil Rk. II",
+            "item_id": 137983
+          },
+          {
+            "spell_id": 35998,
+            "name": "Grant Icebound Paradox Rk. II",
+            "item_id": 137998
+          }
+        ],
+        [
+          {
+            "spell_id": 36062,
+            "name": "Chaotic Benevolence Rk. II",
+            "item_id": 138062
+          },
+          {
+            "spell_id": 35702,
+            "name": "Aegis of Nefori Rk. II",
+            "item_id": 137702
+          }
+        ],
+        [
+          {
+            "spell_id": 36007,
+            "name": "Broiling Blast Rk. II",
+            "item_id": 138007
+          }
+        ],
+        [
+          {
+            "spell_id": 35989,
+            "name": "Circle of Flameskin Rk. II",
+            "item_id": 137989
+          }
+        ],
+        [
+          {
+            "spell_id": 35992,
+            "name": "Iceflame Eminence Rk. II",
+            "item_id": 137992
+          }
+        ],
+        [
+          {
+            "spell_id": 36004,
+            "name": "Rain of Scythes Rk. II",
+            "item_id": 138004
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36192,
+            "name": "Confounding Constriction Rk. II",
+            "item_id": 138192
+          },
+          {
+            "spell_id": 36216,
+            "name": "Umbral Rune Rk. II",
+            "item_id": 138216
+          }
+        ],
+        [
+          {
+            "spell_id": 36195,
+            "name": "Brimstone Eminence Rk. II",
+            "item_id": 138195
+          },
+          {
+            "spell_id": 36201,
+            "name": "Dizzying Squall Rk. II",
+            "item_id": 138201
+          }
+        ],
+        [
+          {
+            "spell_id": 36204,
+            "name": "Echo of Temptation Rk. II",
+            "item_id": 138204
+          },
+          {
+            "spell_id": 36210,
+            "name": "Legion of Xolok Rk. II",
+            "item_id": 138210
+          }
+        ],
+        [
+          {
+            "spell_id": 36198,
+            "name": "Color Confluence Rk. II",
+            "item_id": 138198
+          }
+        ],
+        [
+          {
+            "spell_id": 36213,
+            "name": "Slackening Wave Rk. II",
+            "item_id": 138213
+          }
+        ],
+        [
+          {
+            "spell_id": 36296,
+            "name": "Umbral Auspice Rk. II",
+            "item_id": 138296
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36387,
+            "name": "Savage Rage Rk. II",
+            "item_id": 138387
+          },
+          {
+            "spell_id": 36405,
+            "name": "Kromrif Roar Rk. II",
+            "item_id": 138405
+          }
+        ],
+        [
+          {
+            "spell_id": 36393,
+            "name": "Frozen Carbomate Rk. II",
+            "item_id": 138393
+          },
+          {
+            "spell_id": 36402,
+            "name": "Kromrif Lance Rk. II",
+            "item_id": 138402
+          }
+        ],
+        [
+          {
+            "spell_id": 36472,
+            "name": "Edoth's Chill Rk. II",
+            "item_id": 138472
+          },
+          {
+            "spell_id": 35702,
+            "name": "Aegis of Nefori Rk. II",
+            "item_id": 137702
+          }
+        ],
+        [
+          {
+            "spell_id": 36408,
+            "name": "Growl of the Snow Leopard Rk. II",
+            "item_id": 138408
+          }
+        ],
+        [
+          {
+            "spell_id": 36414,
+            "name": "Spirit of Nak Rk. II",
+            "item_id": 138414
+          }
+        ],
+        [
+          {
+            "spell_id": 36420,
+            "name": "Spiritual Evolution Rk. II",
+            "item_id": 138420
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36560,
+            "name": "Augmented Frenzy Rk. II",
+            "item_id": 138560
+          }
+        ],
+        [
+          {
+            "spell_id": 36524,
+            "name": "Brutal Volley Rk. II",
+            "item_id": 138524
+          }
+        ],
+        [
+          {
+            "spell_id": 36527,
+            "name": "Jarring Crush Rk. II",
+            "item_id": 138527
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": 920104,
+    "title": "Glowing Dreadmote",
+    "level": 100,
+    "rank": 5,
+    "rank_name": "II",
+    "mote": 76554,
+    "source": "https://everquest.allakhazam.com/db/quest/6008",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34037,
+            "name": "Field Guardian Rk. II",
+            "item_id": 136037
+          }
+        ],
+        [
+          {
+            "spell_id": 34043,
+            "name": "Steadfast Defense Rk. II",
+            "item_id": 136043
+          }
+        ],
+        [
+          {
+            "spell_id": 34061,
+            "name": "Tempestuous Defense Discipline Rk. II",
+            "item_id": 136061
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34224,
+            "name": "Armor of the Reverent Rk. II",
+            "item_id": 136224
+          },
+          {
+            "spell_id": 34230,
+            "name": "Olsif's Retort Rk. II",
+            "item_id": 136230
+          }
+        ],
+        [
+          {
+            "spell_id": 34227,
+            "name": "Unified Hand of Gezat Rk. II",
+            "item_id": 136227
+          },
+          {
+            "spell_id": 34257,
+            "name": "Elixir of the Acquittal Rk. II",
+            "item_id": 136257
+          }
+        ],
+        [
+          {
+            "spell_id": 34242,
+            "name": "Fraught Renewal Rk. II",
+            "item_id": 136242
+          },
+          {
+            "spell_id": 34245,
+            "name": "Unified Hand of Certitude Rk. II",
+            "item_id": 136245
+          }
+        ],
+        [
+          {
+            "spell_id": 34239,
+            "name": "Reforming Splash Rk. II",
+            "item_id": 136239
+          },
+          {
+            "spell_id": 34263,
+            "name": "Rallied Bastion of Vie Rk. II",
+            "item_id": 136263
+          }
+        ],
+        [
+          {
+            "spell_id": 34248,
+            "name": "Virtuous Contravention Rk. II",
+            "item_id": 136248
+          },
+          {
+            "spell_id": 34266,
+            "name": "Word of Reformation Rk. II",
+            "item_id": 136266
+          }
+        ],
+        [
+          {
+            "spell_id": 34300,
+            "name": "Aura of the Reverent Rk. II",
+            "item_id": 136300
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34441,
+            "name": "Aurora of Sunrise Rk. II",
+            "item_id": 136441
+          },
+          {
+            "spell_id": 34459,
+            "name": "Hand of the Pledged Keeper Rk. II",
+            "item_id": 136459
+          }
+        ],
+        [
+          {
+            "spell_id": 34447,
+            "name": "Reverent Fury Rk. II",
+            "item_id": 136447
+          },
+          {
+            "spell_id": 34462,
+            "name": "Preservation of the Iceclad Rk. II",
+            "item_id": 136462
+          }
+        ],
+        [
+          {
+            "spell_id": 34456,
+            "name": "Glorious Expurgation Rk. II",
+            "item_id": 136456
+          },
+          {
+            "spell_id": 34468,
+            "name": "Protective Allegiance Rk. II",
+            "item_id": 136468
+          }
+        ],
+        [
+          {
+            "spell_id": 34444,
+            "name": "Crush of Tarew Rk. II",
+            "item_id": 136444
+          }
+        ],
+        [
+          {
+            "spell_id": 34453,
+            "name": "Force of the Iceclad Rk. II",
+            "item_id": 136453
+          }
+        ],
+        [
+          {
+            "spell_id": 34489,
+            "name": "Reflexive Righteousness Rk. II",
+            "item_id": 136489
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34610,
+            "name": "Deafening Weapons Rk. II",
+            "item_id": 136610
+          },
+          {
+            "spell_id": 34625,
+            "name": "Angering Shot Rk. II",
+            "item_id": 136625
+          }
+        ],
+        [
+          {
+            "spell_id": 34619,
+            "name": "Heartcarve Rk. II",
+            "item_id": 136619
+          },
+          {
+            "spell_id": 34628,
+            "name": "Inspired by the Hunt Rk. II",
+            "item_id": 136628
+          }
+        ],
+        [
+          {
+            "spell_id": 34616,
+            "name": "Bosquestalker's Discipline Rk. II",
+            "item_id": 136616
+          },
+          {
+            "spell_id": 34640,
+            "name": "Reflexive Bladespurs Rk. II",
+            "item_id": 136640
+          }
+        ],
+        [
+          {
+            "spell_id": 34637,
+            "name": "Focused Rain of Arrows Rk. II",
+            "item_id": 136637
+          }
+        ],
+        [
+          {
+            "spell_id": 34622,
+            "name": "Protection of the Bosque Rk. II",
+            "item_id": 136622
+          }
+        ],
+        [
+          {
+            "spell_id": 34634,
+            "name": "Rain of Arrows Rk. II",
+            "item_id": 136634
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34764,
+            "name": "Dire Insinuation Rk. II",
+            "item_id": 136764
+          },
+          {
+            "spell_id": 34785,
+            "name": "Scarlet Blade Rk. II",
+            "item_id": 136785
+          }
+        ],
+        [
+          {
+            "spell_id": 34767,
+            "name": "Dire Stricture Rk. II",
+            "item_id": 136767
+          },
+          {
+            "spell_id": 34776,
+            "name": "Terminal Breath Rk. II",
+            "item_id": 136776
+          }
+        ],
+        [
+          {
+            "spell_id": 34770,
+            "name": "Grelleth's Skin Rk. II",
+            "item_id": 136770
+          }
+        ],
+        [
+          {
+            "spell_id": 34800,
+            "name": "Reflexive Rancor Rk. II",
+            "item_id": 136800
+          }
+        ],
+        [
+          {
+            "spell_id": 34791,
+            "name": "Touch of Falsin Rk. II",
+            "item_id": 136791
+          }
+        ],
+        [
+          {
+            "spell_id": 34794,
+            "name": "Touch of Klonda Rk. II",
+            "item_id": 136794
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34984,
+            "name": "Legacy of Spikethistles Rk. II",
+            "item_id": 136984
+          },
+          {
+            "spell_id": 35005,
+            "name": "Chill of the Visionary Rk. II",
+            "item_id": 137005
+          }
+        ],
+        [
+          {
+            "spell_id": 34987,
+            "name": "Granitebark Blessing Rk. II",
+            "item_id": 136987
+          },
+          {
+            "spell_id": 35014,
+            "name": "Nature's Withering Wrath Rk. II",
+            "item_id": 137014
+          }
+        ],
+        [
+          {
+            "spell_id": 34990,
+            "name": "Gelid Crystals Rk. II",
+            "item_id": 136990
+          },
+          {
+            "spell_id": 35002,
+            "name": "Lunassuage Rk. II",
+            "item_id": 137002
+          }
+        ],
+        [
+          {
+            "spell_id": 34993,
+            "name": "Mask of the Bosquetender Rk. II",
+            "item_id": 136993
+          },
+          {
+            "spell_id": 35011,
+            "name": "Vivification Rk. II",
+            "item_id": 137011
+          }
+        ],
+        [
+          {
+            "spell_id": 34996,
+            "name": "Adrenaline Rush Rk. II",
+            "item_id": 136996
+          }
+        ],
+        [
+          {
+            "spell_id": 35035,
+            "name": "Stemfang Rush Rk. II",
+            "item_id": 137035
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35078,
+            "name": "Forestall Death Rk. II",
+            "item_id": 137078
+          }
+        ],
+        [
+          {
+            "spell_id": 35087,
+            "name": "Heel of Zagali Rk. II",
+            "item_id": 137087
+          }
+        ],
+        [
+          {
+            "spell_id": 35105,
+            "name": "Protection of the Shadewalker Rk. II",
+            "item_id": 137105
+          }
+        ],
+        [
+          {
+            "spell_id": 35084,
+            "name": "Seven Breaths Rk. II",
+            "item_id": 137084
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35192,
+            "name": "Arcane Hymn Rk. II",
+            "item_id": 137192
+          },
+          {
+            "spell_id": 35231,
+            "name": "Wave of Quietude Rk. II",
+            "item_id": 137231
+          }
+        ],
+        [
+          {
+            "spell_id": 35201,
+            "name": "Aura of Va'Ker Rk. II",
+            "item_id": 137201
+          },
+          {
+            "spell_id": 35207,
+            "name": "Echo of Va'Ker Rk. II",
+            "item_id": 137207
+          }
+        ],
+        [
+          {
+            "spell_id": 35216,
+            "name": "Kaficus' Spiteful Lyric Rk. II",
+            "item_id": 137216
+          },
+          {
+            "spell_id": 35222,
+            "name": "Motlak's Lively Crescendo Rk. II",
+            "item_id": 137222
+          }
+        ],
+        [
+          {
+            "spell_id": 35228,
+            "name": "Gosik's Chant of Flame Rk. II",
+            "item_id": 137228
+          }
+        ],
+        [
+          {
+            "spell_id": 35213,
+            "name": "Kaficus' Insult Rk. II",
+            "item_id": 137213
+          }
+        ],
+        [
+          {
+            "spell_id": 35234,
+            "name": "Reflexive Retort Rk. II",
+            "item_id": 137234
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35306,
+            "name": "Daggerthrust Rk. II",
+            "item_id": 137306
+          }
+        ],
+        [
+          {
+            "spell_id": 35309,
+            "name": "Daring Escape Rk. II",
+            "item_id": 137309
+          }
+        ],
+        [
+          {
+            "spell_id": 35337,
+            "name": "Executioner Discipline Rk. II",
+            "item_id": 137337
+          }
+        ],
+        [
+          {
+            "spell_id": 35300,
+            "name": "Incursion Rk. II",
+            "item_id": 137300
+          }
+        ],
+        [
+          {
+            "spell_id": 35313,
+            "name": "Smokecloud Rk. II",
+            "item_id": 137313
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35434,
+            "name": "Blood of Sanera Rk. II",
+            "item_id": 137434
+          },
+          {
+            "spell_id": 35440,
+            "name": "Pack of Kriegas Rk. II",
+            "item_id": 137440
+          }
+        ],
+        [
+          {
+            "spell_id": 35455,
+            "name": "Phase Spider Blood Rk. II",
+            "item_id": 137455
+          },
+          {
+            "spell_id": 35461,
+            "name": "Ward of Rejuvenation Rk. II",
+            "item_id": 137461
+          }
+        ],
+        [
+          {
+            "spell_id": 35458,
+            "name": "Talisman of the Courageous Rk. II",
+            "item_id": 137458
+          },
+          {
+            "spell_id": 35446,
+            "name": "Wisp of Renewal Rk. II",
+            "item_id": 137446
+          }
+        ],
+        [
+          {
+            "spell_id": 35497,
+            "name": "Enalam's Curse Rk. II",
+            "item_id": 137497
+          }
+        ],
+        [
+          {
+            "spell_id": 35437,
+            "name": "Frigid Gift Rk. II",
+            "item_id": 137437
+          }
+        ],
+        [
+          {
+            "spell_id": 35449,
+            "name": "Reckless Restoration Rk. II",
+            "item_id": 137449
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35641,
+            "name": "Halstor's Command Rk. II",
+            "item_id": 137641
+          },
+          {
+            "spell_id": 35644,
+            "name": "Binaesa Venom Rk. II",
+            "item_id": 137644
+          }
+        ],
+        [
+          {
+            "spell_id": 35650,
+            "name": "Call Skeleton Throng Rk. II",
+            "item_id": 137650
+          },
+          {
+            "spell_id": 35665,
+            "name": "Itkari's Swift Lifedraw Rk. II",
+            "item_id": 137665
+          }
+        ],
+        [
+          {
+            "spell_id": 35653,
+            "name": "Impel for Blood Rk. II",
+            "item_id": 137653
+          },
+          {
+            "spell_id": 35659,
+            "name": "Sanction Ally Rk. II",
+            "item_id": 137659
+          }
+        ],
+        [
+          {
+            "spell_id": 35672,
+            "name": "Scintillate Bones Rk. II",
+            "item_id": 137672
+          },
+          {
+            "spell_id": 35675,
+            "name": "Pernicious Wounds Rk. II",
+            "item_id": 137675
+          }
+        ],
+        [
+          {
+            "spell_id": 35705,
+            "name": "Binding of Itkari Rk. II",
+            "item_id": 137705
+          }
+        ],
+        [
+          {
+            "spell_id": 35647,
+            "name": "Coruscating Shadow Rk. II",
+            "item_id": 137647
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35849,
+            "name": "Tamagrist Torrent Rk. II",
+            "item_id": 137849
+          },
+          {
+            "spell_id": 35864,
+            "name": "Telanaga Rk. II",
+            "item_id": 137864
+          }
+        ],
+        [
+          {
+            "spell_id": 35858,
+            "name": "Self-Destruction Rk. II",
+            "item_id": 137858
+          },
+          {
+            "spell_id": 35867,
+            "name": "Thricewoven Mana Rk. II",
+            "item_id": 137867
+          }
+        ],
+        [
+          {
+            "spell_id": 35893,
+            "name": "Hoarfrost Vortex Rk. II",
+            "item_id": 137893
+          },
+          {
+            "spell_id": 35897,
+            "name": "Ethereal Weave Rk. II",
+            "item_id": 137897
+          }
+        ],
+        [
+          {
+            "spell_id": 35846,
+            "name": "Claw of the Icewing Rk. II",
+            "item_id": 137846
+          }
+        ],
+        [
+          {
+            "spell_id": 35843,
+            "name": "Ethereal Incandescence Rk. II",
+            "item_id": 137843
+          }
+        ],
+        [
+          {
+            "spell_id": 35852,
+            "name": "Gosik's Fire Rk. II",
+            "item_id": 137852
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 36010,
+            "name": "Fickle Magma Rk. II",
+            "item_id": 138010
+          },
+          {
+            "spell_id": 36016,
+            "name": "Mass Phantasmal Transvergence Rk. II",
+            "item_id": 138016
+          }
+        ],
+        [
+          {
+            "spell_id": 36013,
+            "name": "Gather Magnitude Rk. II",
+            "item_id": 138013
+          },
+          {
+            "spell_id": 36044,
+            "name": "Groundswell Bodyguard Rk. II",
+            "item_id": 138044
+          }
+        ],
+        [
+          {
+            "spell_id": 36026,
+            "name": "Phantasmal Symbiosis Rk. II",
+            "item_id": 138026
+          },
+          {
+            "spell_id": 36032,
+            "name": "Summon Imperious Minion Rk. II",
+            "item_id": 138032
+          }
+        ],
+        [
+          {
+            "spell_id": 36068,
+            "name": "Blistersteel Malosenia Rk. II",
+            "item_id": 138068
+          },
+          {
+            "spell_id": 36071,
+            "name": "Surge of Shadow Rk. II",
+            "item_id": 138071
+          }
+        ],
+        [
+          {
+            "spell_id": 36020,
+            "name": "Relentless Servant Rk. II",
+            "item_id": 138020
+          }
+        ],
+        [
+          {
+            "spell_id": 36023,
+            "name": "Spear of Blistersteel Rk. II",
+            "item_id": 138023
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36226,
+            "name": "Mana Reverberation Aura Rk. II",
+            "item_id": 138226
+          },
+          {
+            "spell_id": 36241,
+            "name": "Mesmerizing Stare Rk. II",
+            "item_id": 138241
+          },
+          {
+            "spell_id": 36275,
+            "name": "Issuance of Mana Reverberation Rk. II",
+            "item_id": 138275
+          }
+        ],
+        [
+          {
+            "spell_id": 36245,
+            "name": "Polyiridescent Rune Rk. II",
+            "item_id": 138245
+          },
+          {
+            "spell_id": 36251,
+            "name": "Phantasmal Unity Rk. II",
+            "item_id": 138251
+          },
+          {
+            "spell_id": 36263,
+            "name": "Tears of Syrkl Rk. II",
+            "item_id": 138263
+          }
+        ],
+        [
+          {
+            "spell_id": 36222,
+            "name": "Hastening of Sviir Rk. II",
+            "item_id": 138222
+          },
+          {
+            "spell_id": 36269,
+            "name": "Ward of the Mastermind Rk. II",
+            "item_id": 138269
+          }
+        ],
+        [
+          {
+            "spell_id": 36266,
+            "name": "Voice of Foresight Rk. II",
+            "item_id": 138266
+          },
+          {
+            "spell_id": 36232,
+            "name": "Mind Squall Rk. II",
+            "item_id": 138232
+          }
+        ],
+        [
+          {
+            "spell_id": 36238,
+            "name": "Mindcleave Rk. II",
+            "item_id": 138238
+          },
+          {
+            "spell_id": 36254,
+            "name": "Impose Rk. II",
+            "item_id": 138254
+          }
+        ],
+        [
+          {
+            "spell_id": 36305,
+            "name": "Perilous Disorientation Rk. II",
+            "item_id": 138305
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36451,
+            "name": "Reflexive Rending Rk. II",
+            "item_id": 138451
+          },
+          {
+            "spell_id": 36475,
+            "name": "Nak's Maelstrom Rk. II",
+            "item_id": 138475
+          }
+        ],
+        [
+          {
+            "spell_id": 36442,
+            "name": "Kesar's Feralgia Rk. II",
+            "item_id": 138442
+          }
+        ],
+        [
+          {
+            "spell_id": 36426,
+            "name": "Pummel Rk. II",
+            "item_id": 138426
+          }
+        ],
+        [
+          {
+            "spell_id": 36423,
+            "name": "Shared Merciless Ferocity Rk. II",
+            "item_id": 138423
+          }
+        ],
+        [
+          {
+            "spell_id": 36436,
+            "name": "Spellbreaker's Ward Rk. II",
+            "item_id": 138436
+          }
+        ],
+        [
+          {
+            "spell_id": 36429,
+            "name": "Yell at the Moon Rk. II",
+            "item_id": 138429
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36569,
+            "name": "Axe of Zurel Rk. II",
+            "item_id": 138569
+          }
+        ],
+        [
+          {
+            "spell_id": 36530,
+            "name": "Brutal Discipline Rk. II",
+            "item_id": 138530
+          }
+        ],
+        [
+          {
+            "spell_id": 36533,
+            "name": "Fearless Frenzy Rk. II",
+            "item_id": 138533
+          }
+        ],
+        [
+          {
+            "spell_id": 36542,
+            "name": "Shared Viciousness Rk. II",
+            "item_id": 138542
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": 920105,
+    "title": "Minor Terrormote",
+    "level": 96,
+    "rank": 10,
+    "rank_name": "III",
+    "mote": 76555,
+    "source": "https://everquest.allakhazam.com/db/quest/6009",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34011,
+            "name": "Armor of Stalwart Runes Rk. III",
+            "item_id": 136011
+          }
+        ],
+        [
+          {
+            "spell_id": 34017,
+            "name": "Krondal's Roar Rk. III",
+            "item_id": 136017
+          }
+        ],
+        [
+          {
+            "spell_id": 34002,
+            "name": "Rest Rk. III",
+            "item_id": 136002
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34074,
+            "name": "Abrogate the Undead Rk. III",
+            "item_id": 136074
+          },
+          {
+            "spell_id": 34105,
+            "name": "Graceful Remedy Rk. III",
+            "item_id": 136105
+          }
+        ],
+        [
+          {
+            "spell_id": 34090,
+            "name": "Aweclash Rk. III",
+            "item_id": 136090
+          },
+          {
+            "spell_id": 34129,
+            "name": "Yaulp XIII Rk. III",
+            "item_id": 136129
+          }
+        ],
+        [
+          {
+            "spell_id": 34096,
+            "name": "Soothing Glow Rk. III",
+            "item_id": 136096
+          },
+          {
+            "spell_id": 34111,
+            "name": "Unity of Gezat Rk. III",
+            "item_id": 136111
+          }
+        ],
+        [
+          {
+            "spell_id": 34102,
+            "name": "Acquittal Rk. III",
+            "item_id": 136102
+          },
+          {
+            "spell_id": 34123,
+            "name": "Word of Renewal Rk. III",
+            "item_id": 136123
+          }
+        ],
+        [
+          {
+            "spell_id": 34270,
+            "name": "Infusion of the Graceful Rk. III",
+            "item_id": 136270
+          }
+        ],
+        [
+          {
+            "spell_id": 34114,
+            "name": "Vow of Vitality Rk. III",
+            "item_id": 136114
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34325,
+            "name": "Expurgate Rk. III",
+            "item_id": 136325
+          },
+          {
+            "spell_id": 34334,
+            "name": "Reverent Force Rk. III",
+            "item_id": 136334
+          }
+        ],
+        [
+          {
+            "spell_id": 34328,
+            "name": "Reverent Purity Rk. III",
+            "item_id": 136328
+          },
+          {
+            "spell_id": 34346,
+            "name": "Reconcile Rk. III",
+            "item_id": 136346
+          }
+        ],
+        [
+          {
+            "spell_id": 34331,
+            "name": "Reverent Touch Rk. III",
+            "item_id": 136331
+          },
+          {
+            "spell_id": 34078,
+            "name": "Shackle Rk. III",
+            "item_id": 136078
+          }
+        ],
+        [
+          {
+            "spell_id": 34337,
+            "name": "Laudation Rk. III",
+            "item_id": 136337
+          },
+          {
+            "spell_id": 34343,
+            "name": "Mark of Olsif Rk. III",
+            "item_id": 136343
+          }
+        ],
+        [
+          {
+            "spell_id": 34002,
+            "name": "Rest Rk. III",
+            "item_id": 136002
+          },
+          {
+            "spell_id": 34074,
+            "name": "Abrogate the Undead Rk. III",
+            "item_id": 136074
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34502,
+            "name": "Drifting Shadow Rk. III",
+            "item_id": 136502
+          },
+          {
+            "spell_id": 34002,
+            "name": "Rest Rk. III",
+            "item_id": 136002
+          }
+        ],
+        [
+          {
+            "spell_id": 34511,
+            "name": "Arbor Veil Rk. III",
+            "item_id": 136511
+          },
+          {
+            "spell_id": 34523,
+            "name": "Shield of Nettlespines Rk. III",
+            "item_id": 136523
+          }
+        ],
+        [
+          {
+            "spell_id": 34517,
+            "name": "Cloudburst Rk. III",
+            "item_id": 136517
+          }
+        ],
+        [
+          {
+            "spell_id": 34520,
+            "name": "Dreadbeetle Swarm Rk. III",
+            "item_id": 136520
+          }
+        ],
+        [
+          {
+            "spell_id": 34499,
+            "name": "Forecasted Shots Rk. III",
+            "item_id": 136499
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34674,
+            "name": "Zombie Skin Rk. III",
+            "item_id": 136674
+          },
+          {
+            "spell_id": 34677,
+            "name": "Bond of Ralstok Rk. III",
+            "item_id": 136677
+          }
+        ],
+        [
+          {
+            "spell_id": 34665,
+            "name": "Grelleth's Horror Rk. III",
+            "item_id": 136665
+          }
+        ],
+        [
+          {
+            "spell_id": 34683,
+            "name": "Ralstok's Bite Rk. III",
+            "item_id": 136683
+          }
+        ],
+        [
+          {
+            "spell_id": 34002,
+            "name": "Rest Rk. III",
+            "item_id": 136002
+          }
+        ],
+        [
+          {
+            "spell_id": 34689,
+            "name": "Terror of Poira Rk. III",
+            "item_id": 136689
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34836,
+            "name": "Spirit of the Steadfast Rk. III",
+            "item_id": 136836
+          },
+          {
+            "spell_id": 34855,
+            "name": "Hailstorm Rk. III",
+            "item_id": 136855
+          }
+        ],
+        [
+          {
+            "spell_id": 34852,
+            "name": "Beast's Bespelling Rk. III",
+            "item_id": 136852
+          },
+          {
+            "spell_id": 34874,
+            "name": "Whirlwind of the Stormborn Rk. III",
+            "item_id": 136874
+          }
+        ],
+        [
+          {
+            "spell_id": 34858,
+            "name": "Heliacal Fire Rk. III",
+            "item_id": 136858
+          },
+          {
+            "spell_id": 34861,
+            "name": "Bosquetender's Breeze Rk. III",
+            "item_id": 136861
+          }
+        ],
+        [
+          {
+            "spell_id": 34864,
+            "name": "Nature's Repose Rk. III",
+            "item_id": 136864
+          },
+          {
+            "spell_id": 34867,
+            "name": "Stemfang Rk. III",
+            "item_id": 136867
+          }
+        ],
+        [
+          {
+            "spell_id": 35021,
+            "name": "Clutch of Ro Rk. III",
+            "item_id": 137021
+          }
+        ],
+        [
+          {
+            "spell_id": 34871,
+            "name": "Incinerating Sunray Rk. III",
+            "item_id": 136871
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35091,
+            "name": "Earthforce Discipline Rk. III",
+            "item_id": 137091
+          }
+        ],
+        [
+          {
+            "spell_id": 34002,
+            "name": "Rest Rk. III",
+            "item_id": 136002
+          }
+        ],
+        [
+          {
+            "spell_id": 35049,
+            "name": "Shaded Apparition Rk. III",
+            "item_id": 137049
+          }
+        ],
+        [
+          {
+            "spell_id": 35045,
+            "name": "Shadewalker's Synergy Rk. III",
+            "item_id": 137045
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35112,
+            "name": "Aria of Absolution Rk. III",
+            "item_id": 137112
+          },
+          {
+            "spell_id": 35130,
+            "name": "Siavonn's Chant of Disease Rk. III",
+            "item_id": 137130
+          }
+        ],
+        [
+          {
+            "spell_id": 35124,
+            "name": "Resounding Barrier Rk. III",
+            "item_id": 137124
+          },
+          {
+            "spell_id": 35133,
+            "name": "Silence of the Forsaken Rk. III",
+            "item_id": 137133
+          }
+        ],
+        [
+          {
+            "spell_id": 35115,
+            "name": "Aria of Va'Ker Rk. III",
+            "item_id": 137115
+          }
+        ],
+        [
+          {
+            "spell_id": 35118,
+            "name": "Lullaby of the Forsaken Rk. III",
+            "item_id": 137118
+          }
+        ],
+        [
+          {
+            "spell_id": 35121,
+            "name": "Pulse of Salarra Rk. III",
+            "item_id": 137121
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35253,
+            "name": "Beset Rk. III",
+            "item_id": 137253
+          }
+        ],
+        [
+          {
+            "spell_id": 35256,
+            "name": "Blinding Blaze Rk. III",
+            "item_id": 137256
+          }
+        ],
+        [
+          {
+            "spell_id": 35259,
+            "name": "Gullible Mark Rk. III",
+            "item_id": 137259
+          }
+        ],
+        [
+          {
+            "spell_id": 34002,
+            "name": "Rest Rk. III",
+            "item_id": 136002
+          }
+        ],
+        [
+          {
+            "spell_id": 35320,
+            "name": "Venomous Spike Trap Rk. III",
+            "item_id": 137320
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35347,
+            "name": "Breath of Natigo Rk. III",
+            "item_id": 137347
+          },
+          {
+            "spell_id": 35350,
+            "name": "Slaunk's Spear of Venom Rk. III",
+            "item_id": 137350
+          }
+        ],
+        [
+          {
+            "spell_id": 35468,
+            "name": "Curse of Insects Rk. III",
+            "item_id": 137468
+          }
+        ],
+        [
+          {
+            "spell_id": 34839,
+            "name": "Rampant Growth Rk. III",
+            "item_id": 136839
+          }
+        ],
+        [
+          {
+            "spell_id": 34836,
+            "name": "Spirit of the Steadfast Rk. III",
+            "item_id": 136836
+          }
+        ],
+        [
+          {
+            "spell_id": 35353,
+            "name": "Talisman of the Snow Leopard Rk. III",
+            "item_id": 137353
+          }
+        ],
+        [
+          {
+            "spell_id": 35359,
+            "name": "Unity of the Courageous Rk. III",
+            "item_id": 137359
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35510,
+            "name": "Shield of the Dauntless Rk. III",
+            "item_id": 137510
+          },
+          {
+            "spell_id": 35527,
+            "name": "Grip of Zalikor Rk. III",
+            "item_id": 137527
+          }
+        ],
+        [
+          {
+            "spell_id": 35516,
+            "name": "Plunder Essence Rk. III",
+            "item_id": 137516
+          },
+          {
+            "spell_id": 35519,
+            "name": "Vollmondnacht Orb Rk. III",
+            "item_id": 137519
+          }
+        ],
+        [
+          {
+            "spell_id": 35682,
+            "name": "Crippling Incapacity Rk. III",
+            "item_id": 137682
+          }
+        ],
+        [
+          {
+            "spell_id": 35513,
+            "name": "Dissolving Venin Rk. III",
+            "item_id": 137513
+          }
+        ],
+        [
+          {
+            "spell_id": 35530,
+            "name": "Slaunk's Swift Venom Rk. III",
+            "item_id": 137530
+          }
+        ],
+        [
+          {
+            "spell_id": 35524,
+            "name": "Wuran's Decay Rk. III",
+            "item_id": 137524
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35510,
+            "name": "Shield of the Dauntless Rk. III",
+            "item_id": 137510
+          },
+          {
+            "spell_id": 35740,
+            "name": "Concussive Salvo Rk. III",
+            "item_id": 137740
+          }
+        ],
+        [
+          {
+            "spell_id": 35718,
+            "name": "Aegis of Velishan Rk. III",
+            "item_id": 137718
+          },
+          {
+            "spell_id": 35721,
+            "name": "Claw of the Ashwing Rk. III",
+            "item_id": 137721
+          }
+        ],
+        [
+          {
+            "spell_id": 35749,
+            "name": "Incinerating Beam Rk. III",
+            "item_id": 137749
+          },
+          {
+            "spell_id": 35754,
+            "name": "Lure of the Wastes Rk. III",
+            "item_id": 137754
+          }
+        ],
+        [
+          {
+            "spell_id": 35757,
+            "name": "Tears of Gosik Rk. III",
+            "item_id": 137757
+          },
+          {
+            "spell_id": 35760,
+            "name": "Katelanaka Rk. III",
+            "item_id": 137760
+          }
+        ],
+        [
+          {
+            "spell_id": 35874,
+            "name": "Incandescent Vortex Rk. III",
+            "item_id": 137874
+          }
+        ],
+        [
+          {
+            "spell_id": 35763,
+            "name": "Wildether Barrage Rk. III",
+            "item_id": 137763
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 36051,
+            "name": "Blast of Sand Rk. III",
+            "item_id": 138051
+          },
+          {
+            "spell_id": 36054,
+            "name": "Auspice of Shadows Rk. III",
+            "item_id": 138054
+          }
+        ],
+        [
+          {
+            "spell_id": 35919,
+            "name": "Bolt of Molten Magma Rk. III",
+            "item_id": 137919
+          }
+        ],
+        [
+          {
+            "spell_id": 35922,
+            "name": "Burnout XI Rk. III",
+            "item_id": 137922
+          }
+        ],
+        [
+          {
+            "spell_id": 35926,
+            "name": "Flameskin Rk. III",
+            "item_id": 137926
+          }
+        ],
+        [
+          {
+            "spell_id": 35344,
+            "name": "Malosenia Rk. III",
+            "item_id": 137344
+          }
+        ],
+        [
+          {
+            "spell_id": 35510,
+            "name": "Shield of the Dauntless Rk. III",
+            "item_id": 137510
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36088,
+            "name": "Xorlex's Animation Rk. III",
+            "item_id": 138088
+          },
+          {
+            "spell_id": 35510,
+            "name": "Shield of the Dauntless Rk. III",
+            "item_id": 137510
+          }
+        ],
+        [
+          {
+            "spell_id": 36091,
+            "name": "Rune of Xolok Rk. III",
+            "item_id": 138091
+          },
+          {
+            "spell_id": 36094,
+            "name": "Mastermind's Rune Rk. III",
+            "item_id": 138094
+          }
+        ],
+        [
+          {
+            "spell_id": 36279,
+            "name": "Chromatic Percussion Rk. III",
+            "item_id": 138279
+          }
+        ],
+        [
+          {
+            "spell_id": 36085,
+            "name": "Confound Rk. III",
+            "item_id": 138085
+          }
+        ],
+        [
+          {
+            "spell_id": 36100,
+            "name": "Demolished Consciousness Rk. III",
+            "item_id": 138100
+          }
+        ],
+        [
+          {
+            "spell_id": 36097,
+            "name": "Speed of Sviir Rk. III",
+            "item_id": 138097
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36339,
+            "name": "Salve of Blezon Rk. III",
+            "item_id": 138339
+          },
+          {
+            "spell_id": 36342,
+            "name": "Asp Blood Rk. III",
+            "item_id": 138342
+          }
+        ],
+        [
+          {
+            "spell_id": 36333,
+            "name": "Plakt's Aggression Rk. III",
+            "item_id": 138333
+          },
+          {
+            "spell_id": 36336,
+            "name": "Plakt's Protection Rk. III",
+            "item_id": 138336
+          }
+        ],
+        [
+          {
+            "spell_id": 36458,
+            "name": "Natural Cooperation Rk. III",
+            "item_id": 138458
+          },
+          {
+            "spell_id": 36054,
+            "name": "Auspice of Shadows Rk. III",
+            "item_id": 138054
+          }
+        ],
+        [
+          {
+            "spell_id": 36321,
+            "name": "Bestial Evulsing Rk. III",
+            "item_id": 138321
+          }
+        ],
+        [
+          {
+            "spell_id": 36330,
+            "name": "Focus of Sanera Rk. III",
+            "item_id": 138330
+          }
+        ],
+        [
+          {
+            "spell_id": 34002,
+            "name": "Rest Rk. III",
+            "item_id": 136002
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36498,
+            "name": "Advanced Retaliation Rk. III",
+            "item_id": 138498
+          }
+        ],
+        [
+          {
+            "spell_id": 36549,
+            "name": "Capricious Rage Discipline Rk. III",
+            "item_id": 138549
+          }
+        ],
+        [
+          {
+            "spell_id": 34002,
+            "name": "Rest Rk. III",
+            "item_id": 136002
+          }
+        ],
+        [
+          {
+            "spell_id": 36507,
+            "name": "Tendon Gash Rk. III",
+            "item_id": 138507
+          }
+        ],
+        [
+          {
+            "spell_id": 36504,
+            "name": "Vanquishing Frenzy Rk. III",
+            "item_id": 138504
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": 920106,
+    "title": "Lesser Terrormote",
+    "level": 97,
+    "rank": 10,
+    "rank_name": "III",
+    "mote": 76556,
+    "source": "https://everquest.allakhazam.com/db/quest/6010",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34047,
+            "name": "Offensive Discipline Rk. III",
+            "item_id": 136047
+          }
+        ],
+        [
+          {
+            "spell_id": 34005,
+            "name": "Seventh Wind Rk. III",
+            "item_id": 136005
+          }
+        ],
+        [
+          {
+            "spell_id": 34020,
+            "name": "Unbroken Attention Rk. III",
+            "item_id": 136020
+          }
+        ],
+        [
+          {
+            "spell_id": 34008,
+            "name": "Weapon Covenant Rk. III",
+            "item_id": 136008
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34078,
+            "name": "Shackle Rk. III",
+            "item_id": 136078
+          },
+          {
+            "spell_id": 34156,
+            "name": "Unified Certitude Rk. III",
+            "item_id": 136156
+          }
+        ],
+        [
+          {
+            "spell_id": 34135,
+            "name": "Divine Haven Rk. III",
+            "item_id": 136135
+          },
+          {
+            "spell_id": 34150,
+            "name": "Castigation Rk. III",
+            "item_id": 136150
+          }
+        ],
+        [
+          {
+            "spell_id": 34138,
+            "name": "Divine Interposition Rk. III",
+            "item_id": 136138
+          },
+          {
+            "spell_id": 34153,
+            "name": "Fifteenth Emblem Rk. III",
+            "item_id": 136153
+          }
+        ],
+        [
+          {
+            "spell_id": 34141,
+            "name": "Reverent Elixir Rk. III",
+            "item_id": 136141
+          },
+          {
+            "spell_id": 34159,
+            "name": "Ward of Indictment Rk. III",
+            "item_id": 136159
+          }
+        ],
+        [
+          {
+            "spell_id": 34144,
+            "name": "Mark of Tohan Rk. III",
+            "item_id": 136144
+          }
+        ],
+        [
+          {
+            "spell_id": 34276,
+            "name": "Ward of Certitude Rk. III",
+            "item_id": 136276
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34349,
+            "name": "Pledged Keeper Rk. III",
+            "item_id": 136349
+          },
+          {
+            "spell_id": 34376,
+            "name": "Devout Audacity Rk. III",
+            "item_id": 136376
+          }
+        ],
+        [
+          {
+            "spell_id": 34361,
+            "name": "Ostracize Rk. III",
+            "item_id": 136361
+          },
+          {
+            "spell_id": 34373,
+            "name": "Symbol of Burim Rk. III",
+            "item_id": 136373
+          }
+        ],
+        [
+          {
+            "spell_id": 34367,
+            "name": "Dazzling Light Rk. III",
+            "item_id": 136367
+          },
+          {
+            "spell_id": 34370,
+            "name": "Lesson of Sorrow Rk. III",
+            "item_id": 136370
+          }
+        ],
+        [
+          {
+            "spell_id": 34358,
+            "name": "Crush of the Iceclad Rk. III",
+            "item_id": 136358
+          }
+        ],
+        [
+          {
+            "spell_id": 34352,
+            "name": "Demand for Honor Rk. III",
+            "item_id": 136352
+          }
+        ],
+        [
+          {
+            "spell_id": 34481,
+            "name": "Holy Guardian Discipline Rk. III",
+            "item_id": 136481
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34529,
+            "name": "Enraging Heel Kicks Rk. III",
+            "item_id": 136529
+          },
+          {
+            "spell_id": 34532,
+            "name": "Jolting Heel Kicks Rk. III",
+            "item_id": 136532
+          }
+        ],
+        [
+          {
+            "spell_id": 34544,
+            "name": "Bitter Wind Rk. III",
+            "item_id": 136544
+          }
+        ],
+        [
+          {
+            "spell_id": 34526,
+            "name": "Cloak of Spurs Rk. III",
+            "item_id": 136526
+          }
+        ],
+        [
+          {
+            "spell_id": 34535,
+            "name": "Jolting Shock Rk. III",
+            "item_id": 136535
+          }
+        ],
+        [
+          {
+            "spell_id": 34541,
+            "name": "Strength of the Bosquestalker Rk. III",
+            "item_id": 136541
+          }
+        ],
+        [
+          {
+            "spell_id": 34647,
+            "name": "Windblast Boon Rk. III",
+            "item_id": 136647
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34701,
+            "name": "Smoldering Darkness Rk. III",
+            "item_id": 136701
+          },
+          {
+            "spell_id": 34716,
+            "name": "Gashing Blade Rk. III",
+            "item_id": 136716
+          }
+        ],
+        [
+          {
+            "spell_id": 34695,
+            "name": "Demand for Power Rk. III",
+            "item_id": 136695
+          },
+          {
+            "spell_id": 34704,
+            "name": "Duplicitous Audacity Rk. III",
+            "item_id": 136704
+          }
+        ],
+        [
+          {
+            "spell_id": 34692,
+            "name": "Blood of Ralstok Rk. III",
+            "item_id": 136692
+          }
+        ],
+        [
+          {
+            "spell_id": 34707,
+            "name": "Plague of Klonda Rk. III",
+            "item_id": 136707
+          }
+        ],
+        [
+          {
+            "spell_id": 34710,
+            "name": "Shroud of the Darksworn Rk. III",
+            "item_id": 136710
+          }
+        ],
+        [
+          {
+            "spell_id": 34818,
+            "name": "Unholy Guardian Discipline Rk. III",
+            "item_id": 136818
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34839,
+            "name": "Rampant Growth Rk. III",
+            "item_id": 136839
+          },
+          {
+            "spell_id": 34904,
+            "name": "Wildspark Aura Rk. III",
+            "item_id": 136904
+          }
+        ],
+        [
+          {
+            "spell_id": 34877,
+            "name": "Frosthowl Breath Rk. III",
+            "item_id": 136877
+          },
+          {
+            "spell_id": 34889,
+            "name": "Sterivida Rk. III",
+            "item_id": 136889
+          }
+        ],
+        [
+          {
+            "spell_id": 34883,
+            "name": "Spikethistle Bulwark Rk. III",
+            "item_id": 136883
+          },
+          {
+            "spell_id": 34892,
+            "name": "Frosthowl Chill Rk. III",
+            "item_id": 136892
+          }
+        ],
+        [
+          {
+            "spell_id": 34886,
+            "name": "Granitebark Skin Rk. III",
+            "item_id": 136886
+          },
+          {
+            "spell_id": 34898,
+            "name": "Promised Recovery Rk. III",
+            "item_id": 136898
+          }
+        ],
+        [
+          {
+            "spell_id": 34895,
+            "name": "Beastsnag Guard Rk. III",
+            "item_id": 136895
+          },
+          {
+            "spell_id": 34577,
+            "name": "Vinelash Assault Rk. III",
+            "item_id": 136577
+          }
+        ],
+        [
+          {
+            "spell_id": 35027,
+            "name": "Thornmaw Vines Rk. III",
+            "item_id": 137027
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35052,
+            "name": "Eagle's Balance Rk. III",
+            "item_id": 137052
+          }
+        ],
+        [
+          {
+            "spell_id": 34005,
+            "name": "Seventh Wind Rk. III",
+            "item_id": 136005
+          }
+        ],
+        [
+          {
+            "spell_id": 35061,
+            "name": "Shaded Step Rk. III",
+            "item_id": 137061
+          }
+        ],
+        [
+          {
+            "spell_id": 35094,
+            "name": "Swift Reflexes Rk. III",
+            "item_id": 137094
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35136,
+            "name": "Aura of Salarra Rk. III",
+            "item_id": 137136
+          }
+        ],
+        [
+          {
+            "spell_id": 35142,
+            "name": "Echo of Salarra Rk. III",
+            "item_id": 137142
+          }
+        ],
+        [
+          {
+            "spell_id": 35151,
+            "name": "Edoth's Chant of Frost Rk. III",
+            "item_id": 137151
+          }
+        ],
+        [
+          {
+            "spell_id": 35148,
+            "name": "Fatesong of Protan Rk. III",
+            "item_id": 137148
+          }
+        ],
+        [
+          {
+            "spell_id": 35241,
+            "name": "Harmony of Tone Rk. III",
+            "item_id": 137241
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35268,
+            "name": "Indiscernible Discipline Rk. III",
+            "item_id": 137268
+          }
+        ],
+        [
+          {
+            "spell_id": 35265,
+            "name": "Jugular Lacerate Rk. III",
+            "item_id": 137265
+          }
+        ],
+        [
+          {
+            "spell_id": 34005,
+            "name": "Seventh Wind Rk. III",
+            "item_id": 136005
+          }
+        ],
+        [
+          {
+            "spell_id": 35326,
+            "name": "Spell Evasion Discipline Rk. III",
+            "item_id": 137326
+          }
+        ],
+        [
+          {
+            "spell_id": 34008,
+            "name": "Weapon Covenant Rk. III",
+            "item_id": 136008
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35344,
+            "name": "Malosenia Rk. III",
+            "item_id": 137344
+          },
+          {
+            "spell_id": 35384,
+            "name": "Falhotep's Affliction Rk. III",
+            "item_id": 137384
+          }
+        ],
+        [
+          {
+            "spell_id": 35381,
+            "name": "Elsrop's Malady Rk. III",
+            "item_id": 137381
+          },
+          {
+            "spell_id": 34078,
+            "name": "Shackle Rk. III",
+            "item_id": 136078
+          }
+        ],
+        [
+          {
+            "spell_id": 35390,
+            "name": "Enalam's Drowse Rk. III",
+            "item_id": 137390
+          },
+          {
+            "spell_id": 35396,
+            "name": "Kriegas' Faithful Rk. III",
+            "item_id": 137396
+          }
+        ],
+        [
+          {
+            "spell_id": 35471,
+            "name": "Blezon's Recourse Rk. III",
+            "item_id": 137471
+          }
+        ],
+        [
+          {
+            "spell_id": 35371,
+            "name": "Fatigue Rk. III",
+            "item_id": 137371
+          }
+        ],
+        [
+          {
+            "spell_id": 35368,
+            "name": "Feralisenia Rk. III",
+            "item_id": 137368
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35533,
+            "name": "Halstor's Grasp Rk. III",
+            "item_id": 137533
+          },
+          {
+            "spell_id": 35558,
+            "name": "Sigil of the Sundered Rk. III",
+            "item_id": 137558
+          }
+        ],
+        [
+          {
+            "spell_id": 35540,
+            "name": "Bonefuse Fetish Rk. III",
+            "item_id": 137540
+          },
+          {
+            "spell_id": 35555,
+            "name": "Scent of Dread Rk. III",
+            "item_id": 137555
+          }
+        ],
+        [
+          {
+            "spell_id": 35685,
+            "name": "Cascading Boneshield Rk. III",
+            "item_id": 137685
+          }
+        ],
+        [
+          {
+            "spell_id": 35549,
+            "name": "Dissolution Rk. III",
+            "item_id": 137549
+          }
+        ],
+        [
+          {
+            "spell_id": 35552,
+            "name": "Itkari's Swift Deconstruction Rk. III",
+            "item_id": 137552
+          }
+        ],
+        [
+          {
+            "spell_id": 35546,
+            "name": "Termination Rk. III",
+            "item_id": 137546
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35773,
+            "name": "Icebound Pillar Rk. III",
+            "item_id": 137773
+          },
+          {
+            "spell_id": 35779,
+            "name": "Circle of Flame Rk. III",
+            "item_id": 137779
+          }
+        ],
+        [
+          {
+            "spell_id": 35782,
+            "name": "Bucolic Harvest Rk. III",
+            "item_id": 137782
+          }
+        ],
+        [
+          {
+            "spell_id": 35878,
+            "name": "Cloudburst Thunderbolt Rk. III",
+            "item_id": 137878
+          }
+        ],
+        [
+          {
+            "spell_id": 35770,
+            "name": "Ethereal Salvo Rk. III",
+            "item_id": 137770
+          }
+        ],
+        [
+          {
+            "spell_id": 35776,
+            "name": "Leap of Static Sparks Rk. III",
+            "item_id": 137776
+          }
+        ],
+        [
+          {
+            "spell_id": 35766,
+            "name": "Skullfreeze Rk. III",
+            "item_id": 137766
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 35933,
+            "name": "Beam of Brimstone Rk. III",
+            "item_id": 137933
+          }
+        ],
+        [
+          {
+            "spell_id": 35940,
+            "name": "Phantasmal Guardian Rk. III",
+            "item_id": 137940
+          }
+        ],
+        [
+          {
+            "spell_id": 36057,
+            "name": "Rain of Blistersteel Rk. III",
+            "item_id": 138057
+          }
+        ],
+        [
+          {
+            "spell_id": 35937,
+            "name": "Salvo of Many Rk. III",
+            "item_id": 137937
+          }
+        ],
+        [
+          {
+            "spell_id": 35944,
+            "name": "Shock of Blistersteel Rk. III",
+            "item_id": 137944
+          }
+        ],
+        [
+          {
+            "spell_id": 35947,
+            "name": "Wand of Phantasmal Modulation Rk. III",
+            "item_id": 137947
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36103,
+            "name": "Confounding Flash Rk. III",
+            "item_id": 138103
+          },
+          {
+            "spell_id": 36127,
+            "name": "Enunciation of Tashan Rk. III",
+            "item_id": 138127
+          }
+        ],
+        [
+          {
+            "spell_id": 36106,
+            "name": "Mastermind's Aura Rk. III",
+            "item_id": 138106
+          },
+          {
+            "spell_id": 36112,
+            "name": "Mastermind's Echo Rk. III",
+            "item_id": 138112
+          }
+        ],
+        [
+          {
+            "spell_id": 36118,
+            "name": "Quiescent Mind Rk. III",
+            "item_id": 138118
+          },
+          {
+            "spell_id": 36121,
+            "name": "Remote Color Confluence Rk. III",
+            "item_id": 138121
+          }
+        ],
+        [
+          {
+            "spell_id": 36124,
+            "name": "Chromaclash Rk. III",
+            "item_id": 138124
+          },
+          {
+            "spell_id": 36133,
+            "name": "Tempting Aura Rk. III",
+            "item_id": 138133
+          }
+        ],
+        [
+          {
+            "spell_id": 36285,
+            "name": "Runic Radiance Aura Rk. III",
+            "item_id": 138285
+          }
+        ],
+        [
+          {
+            "spell_id": 36130,
+            "name": "Temptation Rk. III",
+            "item_id": 138130
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36360,
+            "name": "Huaene's Melioration Rk. III",
+            "item_id": 138360
+          },
+          {
+            "spell_id": 36348,
+            "name": "Clamor of Claws Rk. III",
+            "item_id": 138348
+          }
+        ],
+        [
+          {
+            "spell_id": 36351,
+            "name": "Jaerol's Mending Rk. III",
+            "item_id": 138351
+          }
+        ],
+        [
+          {
+            "spell_id": 36345,
+            "name": "Merciless Ferocity Rk. III",
+            "item_id": 138345
+          }
+        ],
+        [
+          {
+            "spell_id": 36354,
+            "name": "Natigo's Endemic Rk. III",
+            "item_id": 138354
+          }
+        ],
+        [
+          {
+            "spell_id": 36357,
+            "name": "Spiritual Vindication Rk. III",
+            "item_id": 138357
+          }
+        ],
+        [
+          {
+            "spell_id": 36467,
+            "name": "Withering Bite Rk. III",
+            "item_id": 138467
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36510,
+            "name": "Punch in the Throat Rk. III",
+            "item_id": 138510
+          }
+        ],
+        [
+          {
+            "spell_id": 34005,
+            "name": "Seventh Wind Rk. III",
+            "item_id": 136005
+          }
+        ],
+        [
+          {
+            "spell_id": 36555,
+            "name": "Vicious Spiral Rk. III",
+            "item_id": 138555
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": 920107,
+    "title": "Median Terrormote",
+    "level": 98,
+    "rank": 10,
+    "rank_name": "III",
+    "mote": 76557,
+    "source": "https://everquest.allakhazam.com/db/quest/6011",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34050,
+            "name": "Harassing Shout Rk. III",
+            "item_id": 136050
+          }
+        ],
+        [
+          {
+            "spell_id": 34029,
+            "name": "Ridicule Rk. III",
+            "item_id": 136029
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34081,
+            "name": "Thwart Corruption Rk. III",
+            "item_id": 136081
+          },
+          {
+            "spell_id": 34186,
+            "name": "Promised Reformation Rk. III",
+            "item_id": 136186
+          }
+        ],
+        [
+          {
+            "spell_id": 34180,
+            "name": "Bastion of Vie Rk. III",
+            "item_id": 136180
+          },
+          {
+            "spell_id": 34165,
+            "name": "Reverent Light Rk. III",
+            "item_id": 136165
+          }
+        ],
+        [
+          {
+            "spell_id": 34192,
+            "name": "Sermon of Rebuke Rk. III",
+            "item_id": 136192
+          },
+          {
+            "spell_id": 34168,
+            "name": "Virtuous Intervention Rk. III",
+            "item_id": 136168
+          }
+        ],
+        [
+          {
+            "spell_id": 34174,
+            "name": "Issuance of Grace Rk. III",
+            "item_id": 136174
+          },
+          {
+            "spell_id": 34198,
+            "name": "Vow of Vehemence Rk. III",
+            "item_id": 136198
+          }
+        ],
+        [
+          {
+            "spell_id": 34282,
+            "name": "Glorified Ground Rk. III",
+            "item_id": 136282
+          }
+        ],
+        [
+          {
+            "spell_id": 34195,
+            "name": "Sound of Plangency Rk. III",
+            "item_id": 136195
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34316,
+            "name": "Reprove Rk. III",
+            "item_id": 136316
+          },
+          {
+            "spell_id": 34394,
+            "name": "Reverent Cleansing Rk. III",
+            "item_id": 136394
+          }
+        ],
+        [
+          {
+            "spell_id": 34379,
+            "name": "Armor of Reverence Rk. III",
+            "item_id": 136379
+          },
+          {
+            "spell_id": 34397,
+            "name": "Brightwing Mantle Rk. III",
+            "item_id": 136397
+          }
+        ],
+        [
+          {
+            "spell_id": 34391,
+            "name": "Burst of Sunrise Rk. III",
+            "item_id": 136391
+          },
+          {
+            "spell_id": 34403,
+            "name": "Righteous Umbrage Rk. III",
+            "item_id": 136403
+          }
+        ],
+        [
+          {
+            "spell_id": 34388,
+            "name": "Armor of Formidable Grace Rk. III",
+            "item_id": 136388
+          }
+        ],
+        [
+          {
+            "spell_id": 34412,
+            "name": "Splash of Cleansing Rk. III",
+            "item_id": 136412
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34547,
+            "name": "Swarm of Vespines Rk. III",
+            "item_id": 136547
+          },
+          {
+            "spell_id": 34556,
+            "name": "Herbal Balm Rk. III",
+            "item_id": 136556
+          }
+        ],
+        [
+          {
+            "spell_id": 34559,
+            "name": "Vileoak Ash Rk. III",
+            "item_id": 136559
+          },
+          {
+            "spell_id": 34577,
+            "name": "Vinelash Assault Rk. III",
+            "item_id": 136577
+          }
+        ],
+        [
+          {
+            "spell_id": 34562,
+            "name": "Heartspike Rk. III",
+            "item_id": 136562
+          },
+          {
+            "spell_id": 34574,
+            "name": "Bosquestalker's Vigor Rk. III",
+            "item_id": 136574
+          }
+        ],
+        [
+          {
+            "spell_id": 34565,
+            "name": "Lingering Shadow Rk. III",
+            "item_id": 136565
+          },
+          {
+            "spell_id": 34568,
+            "name": "Shout of the Predator Rk. III",
+            "item_id": 136568
+          }
+        ],
+        [
+          {
+            "spell_id": 34651,
+            "name": "Ashcloud Boon Rk. III",
+            "item_id": 136651
+          }
+        ],
+        [
+          {
+            "spell_id": 34571,
+            "name": "Spurcoat Rk. III",
+            "item_id": 136571
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34719,
+            "name": "Gift of Falsin Rk. III",
+            "item_id": 136719
+          },
+          {
+            "spell_id": 34738,
+            "name": "Minion of Grelleth Rk. III",
+            "item_id": 136738
+          }
+        ],
+        [
+          {
+            "spell_id": 34732,
+            "name": "Bonebrood Mantle Rk. III",
+            "item_id": 136732
+          }
+        ],
+        [
+          {
+            "spell_id": 34722,
+            "name": "Falhotep's Covenant Rk. III",
+            "item_id": 136722
+          }
+        ],
+        [
+          {
+            "spell_id": 34726,
+            "name": "Grelleth's Carapace Rk. III",
+            "item_id": 136726
+          }
+        ],
+        [
+          {
+            "spell_id": 34316,
+            "name": "Reprove Rk. III",
+            "item_id": 136316
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34842,
+            "name": "Exterminate the Unnatural Rk. III",
+            "item_id": 136842
+          },
+          {
+            "spell_id": 34937,
+            "name": "Survival of the Fortuitous Rk. III",
+            "item_id": 136937
+          }
+        ],
+        [
+          {
+            "spell_id": 34913,
+            "name": "Horde of Mutillids Rk. III",
+            "item_id": 136913
+          },
+          {
+            "spell_id": 34081,
+            "name": "Thwart Corruption Rk. III",
+            "item_id": 136081
+          }
+        ],
+        [
+          {
+            "spell_id": 34916,
+            "name": "Spikethistle Coat Rk. III",
+            "item_id": 136916
+          },
+          {
+            "spell_id": 34928,
+            "name": "Remote Sunfire Rk. III",
+            "item_id": 136928
+          }
+        ],
+        [
+          {
+            "spell_id": 34919,
+            "name": "Frostone Aura Rk. III",
+            "item_id": 136919
+          },
+          {
+            "spell_id": 34940,
+            "name": "Winter's Wildfire Rk. III",
+            "item_id": 136940
+          }
+        ],
+        [
+          {
+            "spell_id": 35030,
+            "name": "Katabatic Roar Rk. III",
+            "item_id": 137030
+          }
+        ],
+        [
+          {
+            "spell_id": 34934,
+            "name": "Skin to Seedlings Rk. III",
+            "item_id": 136934
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35067,
+            "name": "Echo of Prevarication Rk. III",
+            "item_id": 137067
+          }
+        ],
+        [
+          {
+            "spell_id": 35064,
+            "name": "Eye of the Storm Rk. III",
+            "item_id": 137064
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35154,
+            "name": "Ameliorating Accelerando Rk. III",
+            "item_id": 137154
+          },
+          {
+            "spell_id": 35178,
+            "name": "Slaunk's Chant of Poison Rk. III",
+            "item_id": 137178
+          }
+        ],
+        [
+          {
+            "spell_id": 35163,
+            "name": "Ruaabri's Reckless Renewal Rk. III",
+            "item_id": 137163
+          },
+          {
+            "spell_id": 35175,
+            "name": "Gosik's Aria Rk. III",
+            "item_id": 137175
+          }
+        ],
+        [
+          {
+            "spell_id": 35157,
+            "name": "Chorus of Salarra Rk. III",
+            "item_id": 137157
+          }
+        ],
+        [
+          {
+            "spell_id": 35172,
+            "name": "Doben's Spry Sonata Rk. III",
+            "item_id": 137172
+          }
+        ],
+        [
+          {
+            "spell_id": 35160,
+            "name": "Siavonn's Psalm of Potency Rk. III",
+            "item_id": 137160
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35274,
+            "name": "Asp Blade Rk. III",
+            "item_id": 137274
+          }
+        ],
+        [
+          {
+            "spell_id": 35283,
+            "name": "Energetic Dagger-Throw Rk. III",
+            "item_id": 137283
+          }
+        ],
+        [
+          {
+            "spell_id": 35329,
+            "name": "Fatal Aim Discipline Rk. III",
+            "item_id": 137329
+          }
+        ],
+        [
+          {
+            "spell_id": 35286,
+            "name": "Gash Rk. III",
+            "item_id": 137286
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35408,
+            "name": "Halcyon Shear Rk. III",
+            "item_id": 137408
+          },
+          {
+            "spell_id": 35411,
+            "name": "Vilefeaster's Pandemic Rk. III",
+            "item_id": 137411
+          }
+        ],
+        [
+          {
+            "spell_id": 35399,
+            "name": "Ancestral Pact Rk. III",
+            "item_id": 137399
+          }
+        ],
+        [
+          {
+            "spell_id": 35402,
+            "name": "Antecessor's Intervention Rk. III",
+            "item_id": 137402
+          }
+        ],
+        [
+          {
+            "spell_id": 35414,
+            "name": "Blezon's Mending Rk. III",
+            "item_id": 137414
+          }
+        ],
+        [
+          {
+            "spell_id": 35486,
+            "name": "Restoring Counterbias Rk. III",
+            "item_id": 137486
+          }
+        ],
+        [
+          {
+            "spell_id": 35405,
+            "name": "Seedspitter's Bite Rk. III",
+            "item_id": 137405
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35561,
+            "name": "Bestow Mortality Rk. III",
+            "item_id": 137561
+          },
+          {
+            "spell_id": 35588,
+            "name": "Osalur's Flashblaze Rk. III",
+            "item_id": 137588
+          }
+        ],
+        [
+          {
+            "spell_id": 35567,
+            "name": "Chaotic Corruption Rk. III",
+            "item_id": 137567
+          },
+          {
+            "spell_id": 35579,
+            "name": "Algid Mending Rk. III",
+            "item_id": 137579
+          }
+        ],
+        [
+          {
+            "spell_id": 35576,
+            "name": "Foreboding Rk. III",
+            "item_id": 137576
+          },
+          {
+            "spell_id": 35594,
+            "name": "Sphere of Dissolution Rk. III",
+            "item_id": 137594
+          }
+        ],
+        [
+          {
+            "spell_id": 35591,
+            "name": "Pyre of the Forsaken Rk. III",
+            "item_id": 137591
+          },
+          {
+            "spell_id": 34078,
+            "name": "Shackle Rk. III",
+            "item_id": 136078
+          }
+        ],
+        [
+          {
+            "spell_id": 35582,
+            "name": "Zombieskin Rk. III",
+            "item_id": 137582
+          },
+          {
+            "spell_id": 35585,
+            "name": "Deathclutch Manacles Rk. III",
+            "item_id": 137585
+          }
+        ],
+        [
+          {
+            "spell_id": 35700,
+            "name": "Phantasmal Ward Rk. III",
+            "item_id": 137700
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35785,
+            "name": "Armor of the Stonescale Rk. III",
+            "item_id": 137785
+          },
+          {
+            "spell_id": 35811,
+            "name": "Barbed Lightning Rk. III",
+            "item_id": 137811
+          }
+        ],
+        [
+          {
+            "spell_id": 35788,
+            "name": "Frigid Beam Rk. III",
+            "item_id": 137788
+          },
+          {
+            "spell_id": 35799,
+            "name": "Flashfreeze Rk. III",
+            "item_id": 137799
+          }
+        ],
+        [
+          {
+            "spell_id": 35883,
+            "name": "Ether Vortex Rk. III",
+            "item_id": 137883
+          },
+          {
+            "spell_id": 35887,
+            "name": "Bleakmist Guard Rk. III",
+            "item_id": 137887
+          }
+        ],
+        [
+          {
+            "spell_id": 35796,
+            "name": "Claw of the Flamewing Rk. III",
+            "item_id": 137796
+          }
+        ],
+        [
+          {
+            "spell_id": 35808,
+            "name": "Lightning Squall Rk. III",
+            "item_id": 137808
+          }
+        ],
+        [
+          {
+            "spell_id": 35793,
+            "name": "Magmalure Rk. III",
+            "item_id": 137793
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 35951,
+            "name": "Broiling Sands Rk. III",
+            "item_id": 137951
+          },
+          {
+            "spell_id": 35965,
+            "name": "Renewal of Hererra Rk. III",
+            "item_id": 137965
+          }
+        ],
+        [
+          {
+            "spell_id": 35954,
+            "name": "Infernal Skin Rk. III",
+            "item_id": 137954
+          },
+          {
+            "spell_id": 34842,
+            "name": "Exterminate the Unnatural Rk. III",
+            "item_id": 136842
+          }
+        ],
+        [
+          {
+            "spell_id": 36060,
+            "name": "Beam of Scythes Rk. III",
+            "item_id": 138060
+          }
+        ],
+        [
+          {
+            "spell_id": 35980,
+            "name": "Groundswell Stance Rk. III",
+            "item_id": 137980
+          }
+        ],
+        [
+          {
+            "spell_id": 35913,
+            "name": "Promised Amelioration Rk. III",
+            "item_id": 137913
+          }
+        ],
+        [
+          {
+            "spell_id": 35968,
+            "name": "Summon Imperious Servant Rk. III",
+            "item_id": 137968
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36139,
+            "name": "Aegis of Xorbb Rk. III",
+            "item_id": 138139
+          },
+          {
+            "spell_id": 36186,
+            "name": "Phantasmal Assault Rk. III",
+            "item_id": 138186
+          }
+        ],
+        [
+          {
+            "spell_id": 36142,
+            "name": "Quiescent Issuance Rk. III",
+            "item_id": 138142
+          },
+          {
+            "spell_id": 36158,
+            "name": "Foresight Rk. III",
+            "item_id": 138158
+          }
+        ],
+        [
+          {
+            "spell_id": 36148,
+            "name": "Chaotic Confounding Rk. III",
+            "item_id": 138148
+          },
+          {
+            "spell_id": 36162,
+            "name": "Mana Reverberation Rk. III",
+            "item_id": 138162
+          }
+        ],
+        [
+          {
+            "spell_id": 36152,
+            "name": "Stifle Rk. III",
+            "item_id": 138152
+          },
+          {
+            "spell_id": 36189,
+            "name": "Terrifying Rune Rk. III",
+            "item_id": 138189
+          }
+        ],
+        [
+          {
+            "spell_id": 36155,
+            "name": "Diminishing Helix Rk. III",
+            "item_id": 138155
+          },
+          {
+            "spell_id": 36180,
+            "name": "Disorientation Rk. III",
+            "item_id": 138180
+          }
+        ],
+        [
+          {
+            "spell_id": 36291,
+            "name": "Amplifying Aura Rk. III",
+            "item_id": 138291
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36366,
+            "name": "Invigorating Warder Rk. III",
+            "item_id": 138366
+          }
+        ],
+        [
+          {
+            "spell_id": 36381,
+            "name": "Poantaar's Bite Rk. III",
+            "item_id": 138381
+          }
+        ],
+        [
+          {
+            "spell_id": 35913,
+            "name": "Promised Amelioration Rk. III",
+            "item_id": 137913
+          }
+        ],
+        [
+          {
+            "spell_id": 36378,
+            "name": "Ruaabri's Fury Rk. III",
+            "item_id": 138378
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36513,
+            "name": "Blood Brand Rk. III",
+            "item_id": 138513
+          }
+        ],
+        [
+          {
+            "spell_id": 36519,
+            "name": "Brutal Axe Throw Rk. III",
+            "item_id": 138519
+          }
+        ],
+        [
+          {
+            "spell_id": 36558,
+            "name": "Cry Carnage Rk. III",
+            "item_id": 138558
+          }
+        ],
+        [
+          {
+            "spell_id": 36522,
+            "name": "Temple Crush Rk. III",
+            "item_id": 138522
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": 920108,
+    "title": "Greater Terrormote",
+    "level": 99,
+    "rank": 10,
+    "rank_name": "III",
+    "mote": 76558,
+    "source": "https://everquest.allakhazam.com/db/quest/6012",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34035,
+            "name": "Stormwheel Blades Rk. III",
+            "item_id": 136035
+          }
+        ],
+        [
+          {
+            "spell_id": 34056,
+            "name": "Warrior's Auspice Rk. III",
+            "item_id": 136056
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34084,
+            "name": "Cleansed Blood Rk. III",
+            "item_id": 136084
+          },
+          {
+            "spell_id": 34222,
+            "name": "Silent Order Rk. III",
+            "item_id": 136222
+          }
+        ],
+        [
+          {
+            "spell_id": 34207,
+            "name": "Chromacrush Rk. III",
+            "item_id": 136207
+          },
+          {
+            "spell_id": 34216,
+            "name": "Abrogate Corruption Rk. III",
+            "item_id": 136216
+          }
+        ],
+        [
+          {
+            "spell_id": 34213,
+            "name": "Infallible Hammer of Reverence Rk. III",
+            "item_id": 136213
+          },
+          {
+            "spell_id": 34219,
+            "name": "Glorious Rebuke Rk. III",
+            "item_id": 136219
+          }
+        ],
+        [
+          {
+            "spell_id": 34289,
+            "name": "Shining Bastion Rk. III",
+            "item_id": 136289
+          },
+          {
+            "spell_id": 34298,
+            "name": "Hand of Graceful Infusion Rk. III",
+            "item_id": 136298
+          }
+        ],
+        [
+          {
+            "spell_id": 34210,
+            "name": "Mark of the Zealot Rk. III",
+            "item_id": 136210
+          }
+        ],
+        [
+          {
+            "spell_id": 34087,
+            "name": "Tectonic Temblor Rk. III",
+            "item_id": 136087
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34322,
+            "name": "Steadfast Stance Rk. III",
+            "item_id": 136322
+          },
+          {
+            "spell_id": 34427,
+            "name": "Sorrow Rk. III",
+            "item_id": 136427
+          }
+        ],
+        [
+          {
+            "spell_id": 34418,
+            "name": "Mark of the Exemplar Rk. III",
+            "item_id": 136418
+          },
+          {
+            "spell_id": 34421,
+            "name": "Reinvigorating Steel Rk. III",
+            "item_id": 136421
+          }
+        ],
+        [
+          {
+            "spell_id": 34415,
+            "name": "Brell's Steadfast Bulwark Rk. III",
+            "item_id": 136415
+          }
+        ],
+        [
+          {
+            "spell_id": 34475,
+            "name": "Force of Reverence Rk. III",
+            "item_id": 136475
+          }
+        ],
+        [
+          {
+            "spell_id": 34430,
+            "name": "Unbroken Affirmation Rk. III",
+            "item_id": 136430
+          }
+        ],
+        [
+          {
+            "spell_id": 34439,
+            "name": "Wave of Sorrow Rk. III",
+            "item_id": 136439
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34581,
+            "name": "Desperate Drenching Rk. III",
+            "item_id": 136581
+          },
+          {
+            "spell_id": 34599,
+            "name": "Shadowscale Rk. III",
+            "item_id": 136599
+          }
+        ],
+        [
+          {
+            "spell_id": 34590,
+            "name": "Eyes of the Howler Rk. III",
+            "item_id": 136590
+          },
+          {
+            "spell_id": 34602,
+            "name": "Summer's Gale Rk. III",
+            "item_id": 136602
+          }
+        ],
+        [
+          {
+            "spell_id": 34584,
+            "name": "Devastating Impact Rk. III",
+            "item_id": 136584
+          }
+        ],
+        [
+          {
+            "spell_id": 34596,
+            "name": "Shared Cloak of Spurs Rk. III",
+            "item_id": 136596
+          }
+        ],
+        [
+          {
+            "spell_id": 34593,
+            "name": "Squall of Arrows Rk. III",
+            "item_id": 136593
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34741,
+            "name": "Call of Gloomhaze Rk. III",
+            "item_id": 136741
+          },
+          {
+            "spell_id": 34750,
+            "name": "Surreptitious Blight Rk. III",
+            "item_id": 136750
+          }
+        ],
+        [
+          {
+            "spell_id": 34744,
+            "name": "Drape of the Fallen Rk. III",
+            "item_id": 136744
+          },
+          {
+            "spell_id": 34747,
+            "name": "Spear of Grelleth Rk. III",
+            "item_id": 136747
+          }
+        ],
+        [
+          {
+            "spell_id": 34753,
+            "name": "Repugnance Rk. III",
+            "item_id": 136753
+          }
+        ],
+        [
+          {
+            "spell_id": 34807,
+            "name": "Repugnant Bargain Rk. III",
+            "item_id": 136807
+          }
+        ],
+        [
+          {
+            "spell_id": 34322,
+            "name": "Steadfast Stance Rk. III",
+            "item_id": 136322
+          }
+        ],
+        [
+          {
+            "spell_id": 34756,
+            "name": "Unbroken Acrimony Rk. III",
+            "item_id": 136756
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34846,
+            "name": "Chant of Jaerol Rk. III",
+            "item_id": 136846
+          },
+          {
+            "spell_id": 34955,
+            "name": "Frigid Moonbeam Rk. III",
+            "item_id": 136955
+          },
+          {
+            "spell_id": 34087,
+            "name": "Tectonic Temblor Rk. III",
+            "item_id": 136087
+          }
+        ],
+        [
+          {
+            "spell_id": 34849,
+            "name": "Talisman of the Steadfast Rk. III",
+            "item_id": 136849
+          },
+          {
+            "spell_id": 34958,
+            "name": "Sporali Assault Rk. III",
+            "item_id": 136958
+          }
+        ],
+        [
+          {
+            "spell_id": 34949,
+            "name": "Lustrous Frost Rk. III",
+            "item_id": 136949
+          },
+          {
+            "spell_id": 34979,
+            "name": "Sunblaze Rk. III",
+            "item_id": 136979
+          }
+        ],
+        [
+          {
+            "spell_id": 34964,
+            "name": "Husk of the Reptile Rk. III",
+            "item_id": 136964
+          },
+          {
+            "spell_id": 34084,
+            "name": "Cleansed Blood Rk. III",
+            "item_id": 136084
+          }
+        ],
+        [
+          {
+            "spell_id": 34973,
+            "name": "Sunbeam Blessing Rk. III",
+            "item_id": 136973
+          },
+          {
+            "spell_id": 34982,
+            "name": "Summer Suncrest Rk. III",
+            "item_id": 136982
+          }
+        ],
+        [
+          {
+            "spell_id": 35033,
+            "name": "Frigid Thornmaw Rk. III",
+            "item_id": 137033
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35076,
+            "name": "Eight-Step Pattern Rk. III",
+            "item_id": 137076
+          }
+        ],
+        [
+          {
+            "spell_id": 35073,
+            "name": "Terrorpalm Discipline Rk. III",
+            "item_id": 137073
+          }
+        ],
+        [
+          {
+            "spell_id": 35103,
+            "name": "Zalikor's Fang Rk. III",
+            "item_id": 137103
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35181,
+            "name": "Dirge of Salubra Rk. III",
+            "item_id": 137181
+          }
+        ],
+        [
+          {
+            "spell_id": 35166,
+            "name": "Kaficus' Song of Suffering Rk. III",
+            "item_id": 137166
+          }
+        ],
+        [
+          {
+            "spell_id": 35244,
+            "name": "Protan's Melodic Binding Rk. III",
+            "item_id": 137244
+          }
+        ],
+        [
+          {
+            "spell_id": 35184,
+            "name": "Slumber of Motlak Rk. III",
+            "item_id": 137184
+          }
+        ],
+        [
+          {
+            "spell_id": 35187,
+            "name": "Voice of Motlak Rk. III",
+            "item_id": 137187
+          }
+        ],
+        [
+          {
+            "spell_id": 35190,
+            "name": "War March of Protan Rk. III",
+            "item_id": 137190
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35289,
+            "name": "Agile-Footed Discipline Rk. III",
+            "item_id": 137289
+          }
+        ],
+        [
+          {
+            "spell_id": 35335,
+            "name": "Aspbleeder Discipline Rk. III",
+            "item_id": 137335
+          }
+        ],
+        [
+          {
+            "spell_id": 35292,
+            "name": "Deceit Rk. III",
+            "item_id": 137292
+          }
+        ],
+        [
+          {
+            "spell_id": 35298,
+            "name": "Pinpoint Deficiencies Rk. III",
+            "item_id": 137298
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35417,
+            "name": "Falhotep's Rain of Venom Rk. III",
+            "item_id": 137417
+          },
+          {
+            "spell_id": 34846,
+            "name": "Chant of Jaerol Rk. III",
+            "item_id": 136846
+          }
+        ],
+        [
+          {
+            "spell_id": 35423,
+            "name": "Ice Burst Rk. III",
+            "item_id": 137423
+          },
+          {
+            "spell_id": 35432,
+            "name": "Banescale's Venom Rk. III",
+            "item_id": 137432
+          }
+        ],
+        [
+          {
+            "spell_id": 35495,
+            "name": "Falhotep's Malosenia Rk. III",
+            "item_id": 137495
+          }
+        ],
+        [
+          {
+            "spell_id": 35420,
+            "name": "Naganaga Rk. III",
+            "item_id": 137420
+          }
+        ],
+        [
+          {
+            "spell_id": 35426,
+            "name": "Nectar of Anguish Rk. III",
+            "item_id": 137426
+          }
+        ],
+        [
+          {
+            "spell_id": 34849,
+            "name": "Talisman of the Steadfast Rk. III",
+            "item_id": 136849
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35600,
+            "name": "Halstor's Pallid Haze Rk. III",
+            "item_id": 137600
+          },
+          {
+            "spell_id": 35603,
+            "name": "Forsakenside Rk. III",
+            "item_id": 137603
+          }
+        ],
+        [
+          {
+            "spell_id": 35606,
+            "name": "Necrotic Cysts Rk. III",
+            "item_id": 137606
+          },
+          {
+            "spell_id": 35615,
+            "name": "Bora's Swift Sickness Rk. III",
+            "item_id": 137615
+          }
+        ],
+        [
+          {
+            "spell_id": 35618,
+            "name": "Conscripted Sacrifice Rk. III",
+            "item_id": 137618
+          },
+          {
+            "spell_id": 35633,
+            "name": "Ignite Thoughts Rk. III",
+            "item_id": 137633
+          }
+        ],
+        [
+          {
+            "spell_id": 35630,
+            "name": "Clutching Darkness Rk. III",
+            "item_id": 137630
+          },
+          {
+            "spell_id": 35636,
+            "name": "Mind Strip Rk. III",
+            "item_id": 137636
+          }
+        ],
+        [
+          {
+            "spell_id": 35703,
+            "name": "Aegis of Nefori Rk. III",
+            "item_id": 137703
+          }
+        ],
+        [
+          {
+            "spell_id": 35612,
+            "name": "Pyre of Marnek Rk. III",
+            "item_id": 137612
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35814,
+            "name": "Flamelocked Pillar Rk. III",
+            "item_id": 137814
+          },
+          {
+            "spell_id": 35820,
+            "name": "Stonescale Husk Rk. III",
+            "item_id": 137820
+          }
+        ],
+        [
+          {
+            "spell_id": 35817,
+            "name": "Chaos Incandescence Rk. III",
+            "item_id": 137817
+          },
+          {
+            "spell_id": 35838,
+            "name": "Mul's Pyroblade Rk. III",
+            "item_id": 137838
+          }
+        ],
+        [
+          {
+            "spell_id": 35826,
+            "name": "Flashsear Rk. III",
+            "item_id": 137826
+          },
+          {
+            "spell_id": 35835,
+            "name": "Hoarfrost Cascade Rk. III",
+            "item_id": 137835
+          }
+        ],
+        [
+          {
+            "spell_id": 35823,
+            "name": "Ethereal Hoarfrost Rk. III",
+            "item_id": 137823
+          }
+        ],
+        [
+          {
+            "spell_id": 35891,
+            "name": "Ice Slab Rk. III",
+            "item_id": 137891
+          }
+        ],
+        [
+          {
+            "spell_id": 35841,
+            "name": "Magmatic Vent Rk. III",
+            "item_id": 137841
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 35984,
+            "name": "Magmatic Veil Rk. III",
+            "item_id": 137984
+          },
+          {
+            "spell_id": 35999,
+            "name": "Grant Icebound Paradox Rk. III",
+            "item_id": 137999
+          }
+        ],
+        [
+          {
+            "spell_id": 36063,
+            "name": "Chaotic Benevolence Rk. III",
+            "item_id": 138063
+          },
+          {
+            "spell_id": 35703,
+            "name": "Aegis of Nefori Rk. III",
+            "item_id": 137703
+          }
+        ],
+        [
+          {
+            "spell_id": 36008,
+            "name": "Broiling Blast Rk. III",
+            "item_id": 138008
+          }
+        ],
+        [
+          {
+            "spell_id": 35990,
+            "name": "Circle of Flameskin Rk. III",
+            "item_id": 137990
+          }
+        ],
+        [
+          {
+            "spell_id": 35993,
+            "name": "Iceflame Eminence Rk. III",
+            "item_id": 137993
+          }
+        ],
+        [
+          {
+            "spell_id": 36005,
+            "name": "Rain of Scythes Rk. III",
+            "item_id": 138005
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36193,
+            "name": "Confounding Constriction Rk. III",
+            "item_id": 138193
+          },
+          {
+            "spell_id": 36217,
+            "name": "Umbral Rune Rk. III",
+            "item_id": 138217
+          }
+        ],
+        [
+          {
+            "spell_id": 36196,
+            "name": "Brimstone Eminence Rk. III",
+            "item_id": 138196
+          },
+          {
+            "spell_id": 36202,
+            "name": "Dizzying Squall Rk. III",
+            "item_id": 138202
+          }
+        ],
+        [
+          {
+            "spell_id": 36205,
+            "name": "Echo of Temptation Rk. III",
+            "item_id": 138205
+          },
+          {
+            "spell_id": 36211,
+            "name": "Legion of Xolok Rk. III",
+            "item_id": 138211
+          }
+        ],
+        [
+          {
+            "spell_id": 36199,
+            "name": "Color Confluence Rk. III",
+            "item_id": 138199
+          }
+        ],
+        [
+          {
+            "spell_id": 36214,
+            "name": "Slackening Wave Rk. III",
+            "item_id": 138214
+          }
+        ],
+        [
+          {
+            "spell_id": 36297,
+            "name": "Umbral Auspice Rk. III",
+            "item_id": 138297
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36388,
+            "name": "Savage Rage Rk. III",
+            "item_id": 138388
+          },
+          {
+            "spell_id": 36406,
+            "name": "Kromrif Roar Rk. III",
+            "item_id": 138406
+          }
+        ],
+        [
+          {
+            "spell_id": 36394,
+            "name": "Frozen Carbomate Rk. III",
+            "item_id": 138394
+          },
+          {
+            "spell_id": 36403,
+            "name": "Kromrif Lance Rk. III",
+            "item_id": 138403
+          }
+        ],
+        [
+          {
+            "spell_id": 36473,
+            "name": "Edoth's Chill Rk. III",
+            "item_id": 138473
+          },
+          {
+            "spell_id": 35703,
+            "name": "Aegis of Nefori Rk. III",
+            "item_id": 137703
+          }
+        ],
+        [
+          {
+            "spell_id": 36409,
+            "name": "Growl of the Snow Leopard Rk. III",
+            "item_id": 138409
+          }
+        ],
+        [
+          {
+            "spell_id": 36415,
+            "name": "Spirit of Nak Rk. III",
+            "item_id": 138415
+          }
+        ],
+        [
+          {
+            "spell_id": 36421,
+            "name": "Spiritual Evolution Rk. III",
+            "item_id": 138421
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36561,
+            "name": "Augmented Frenzy Rk. III",
+            "item_id": 138561
+          }
+        ],
+        [
+          {
+            "spell_id": 36525,
+            "name": "Brutal Volley Rk. III",
+            "item_id": 138525
+          }
+        ],
+        [
+          {
+            "spell_id": 36528,
+            "name": "Jarring Crush Rk. III",
+            "item_id": 138528
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "id": 920109,
+    "title": "Glowing Terrormote",
+    "level": 100,
+    "rank": 10,
+    "rank_name": "III",
+    "mote": 76559,
+    "source": "https://everquest.allakhazam.com/db/quest/6013",
+    "classes": {
+      "1": [
+        [
+          {
+            "spell_id": 34038,
+            "name": "Field Guardian Rk. III",
+            "item_id": 136038
+          }
+        ],
+        [
+          {
+            "spell_id": 34044,
+            "name": "Steadfast Defense Rk. III",
+            "item_id": 136044
+          }
+        ],
+        [
+          {
+            "spell_id": 34062,
+            "name": "Tempestuous Defense Discipline Rk. III",
+            "item_id": 136062
+          }
+        ]
+      ],
+      "2": [
+        [
+          {
+            "spell_id": 34225,
+            "name": "Armor of the Reverent Rk. III",
+            "item_id": 136225
+          },
+          {
+            "spell_id": 34231,
+            "name": "Olsif's Retort Rk. III",
+            "item_id": 136231
+          }
+        ],
+        [
+          {
+            "spell_id": 34228,
+            "name": "Unified Hand of Gezat Rk. III",
+            "item_id": 136228
+          },
+          {
+            "spell_id": 34258,
+            "name": "Elixir of the Acquittal Rk. III",
+            "item_id": 136258
+          }
+        ],
+        [
+          {
+            "spell_id": 34243,
+            "name": "Fraught Renewal Rk. III",
+            "item_id": 136243
+          },
+          {
+            "spell_id": 34246,
+            "name": "Unified Hand of Certitude Rk. III",
+            "item_id": 136246
+          }
+        ],
+        [
+          {
+            "spell_id": 34240,
+            "name": "Reforming Splash Rk. III",
+            "item_id": 136240
+          },
+          {
+            "spell_id": 34264,
+            "name": "Rallied Bastion of Vie Rk. III",
+            "item_id": 136264
+          }
+        ],
+        [
+          {
+            "spell_id": 34249,
+            "name": "Virtuous Contravention Rk. III",
+            "item_id": 136249
+          },
+          {
+            "spell_id": 34267,
+            "name": "Word of Reformation Rk. III",
+            "item_id": 136267
+          }
+        ],
+        [
+          {
+            "spell_id": 34301,
+            "name": "Aura of the Reverent Rk. III",
+            "item_id": 136301
+          }
+        ]
+      ],
+      "3": [
+        [
+          {
+            "spell_id": 34442,
+            "name": "Aurora of Sunrise Rk. III",
+            "item_id": 136442
+          },
+          {
+            "spell_id": 34460,
+            "name": "Hand of the Pledged Keeper Rk. III",
+            "item_id": 136460
+          }
+        ],
+        [
+          {
+            "spell_id": 34448,
+            "name": "Reverent Fury Rk. III",
+            "item_id": 136448
+          },
+          {
+            "spell_id": 34463,
+            "name": "Preservation of the Iceclad Rk. III",
+            "item_id": 136463
+          }
+        ],
+        [
+          {
+            "spell_id": 34457,
+            "name": "Glorious Expurgation Rk. III",
+            "item_id": 136457
+          },
+          {
+            "spell_id": 34469,
+            "name": "Protective Allegiance Rk. III",
+            "item_id": 136469
+          }
+        ],
+        [
+          {
+            "spell_id": 34445,
+            "name": "Crush of Tarew Rk. III",
+            "item_id": 136445
+          }
+        ],
+        [
+          {
+            "spell_id": 34454,
+            "name": "Force of the Iceclad Rk. III",
+            "item_id": 136454
+          }
+        ],
+        [
+          {
+            "spell_id": 34490,
+            "name": "Reflexive Righteousness Rk. III",
+            "item_id": 136490
+          }
+        ]
+      ],
+      "4": [
+        [
+          {
+            "spell_id": 34611,
+            "name": "Deafening Weapons Rk. III",
+            "item_id": 136611
+          },
+          {
+            "spell_id": 34626,
+            "name": "Angering Shot Rk. III",
+            "item_id": 136626
+          }
+        ],
+        [
+          {
+            "spell_id": 34620,
+            "name": "Heartcarve Rk. III",
+            "item_id": 136620
+          },
+          {
+            "spell_id": 34629,
+            "name": "Inspired by the Hunt Rk. III",
+            "item_id": 136629
+          }
+        ],
+        [
+          {
+            "spell_id": 34617,
+            "name": "Bosquestalker's Discipline Rk. III",
+            "item_id": 136617
+          },
+          {
+            "spell_id": 34641,
+            "name": "Reflexive Bladespurs Rk. III",
+            "item_id": 136641
+          }
+        ],
+        [
+          {
+            "spell_id": 34638,
+            "name": "Focused Rain of Arrows Rk. III",
+            "item_id": 136638
+          }
+        ],
+        [
+          {
+            "spell_id": 34623,
+            "name": "Protection of the Bosque Rk. III",
+            "item_id": 136623
+          }
+        ],
+        [
+          {
+            "spell_id": 34635,
+            "name": "Rain of Arrows Rk. III",
+            "item_id": 136635
+          }
+        ]
+      ],
+      "5": [
+        [
+          {
+            "spell_id": 34765,
+            "name": "Dire Insinuation Rk. III",
+            "item_id": 136765
+          },
+          {
+            "spell_id": 34786,
+            "name": "Scarlet Blade Rk. III",
+            "item_id": 136786
+          }
+        ],
+        [
+          {
+            "spell_id": 34768,
+            "name": "Dire Stricture Rk. III",
+            "item_id": 136768
+          },
+          {
+            "spell_id": 34777,
+            "name": "Terminal Breath Rk. III",
+            "item_id": 136777
+          }
+        ],
+        [
+          {
+            "spell_id": 34771,
+            "name": "Grelleth's Skin Rk. III",
+            "item_id": 136771
+          }
+        ],
+        [
+          {
+            "spell_id": 34801,
+            "name": "Reflexive Rancor Rk. III",
+            "item_id": 136801
+          }
+        ],
+        [
+          {
+            "spell_id": 34792,
+            "name": "Touch of Falsin Rk. III",
+            "item_id": 136792
+          }
+        ],
+        [
+          {
+            "spell_id": 34795,
+            "name": "Touch of Klonda Rk. III",
+            "item_id": 136795
+          }
+        ]
+      ],
+      "6": [
+        [
+          {
+            "spell_id": 34985,
+            "name": "Legacy of Spikethistles Rk. III",
+            "item_id": 136985
+          },
+          {
+            "spell_id": 35006,
+            "name": "Chill of the Visionary Rk. III",
+            "item_id": 137006
+          }
+        ],
+        [
+          {
+            "spell_id": 34988,
+            "name": "Granitebark Blessing Rk. III",
+            "item_id": 136988
+          },
+          {
+            "spell_id": 35015,
+            "name": "Nature's Withering Wrath Rk. III",
+            "item_id": 137015
+          }
+        ],
+        [
+          {
+            "spell_id": 34991,
+            "name": "Gelid Crystals Rk. III",
+            "item_id": 136991
+          },
+          {
+            "spell_id": 35003,
+            "name": "Lunassuage Rk. III",
+            "item_id": 137003
+          }
+        ],
+        [
+          {
+            "spell_id": 34994,
+            "name": "Mask of the Bosquetender Rk. III",
+            "item_id": 136994
+          },
+          {
+            "spell_id": 35012,
+            "name": "Vivification Rk. III",
+            "item_id": 137012
+          }
+        ],
+        [
+          {
+            "spell_id": 34997,
+            "name": "Adrenaline Rush Rk. III",
+            "item_id": 136997
+          }
+        ],
+        [
+          {
+            "spell_id": 35036,
+            "name": "Stemfang Rush Rk. III",
+            "item_id": 137036
+          }
+        ]
+      ],
+      "7": [
+        [
+          {
+            "spell_id": 35079,
+            "name": "Forestall Death Rk. III",
+            "item_id": 137079
+          }
+        ],
+        [
+          {
+            "spell_id": 35088,
+            "name": "Heel of Zagali Rk. III",
+            "item_id": 137088
+          }
+        ],
+        [
+          {
+            "spell_id": 35106,
+            "name": "Protection of the Shadewalker Rk. III",
+            "item_id": 137106
+          }
+        ],
+        [
+          {
+            "spell_id": 35085,
+            "name": "Seven Breaths Rk. III",
+            "item_id": 137085
+          }
+        ]
+      ],
+      "8": [
+        [
+          {
+            "spell_id": 35193,
+            "name": "Arcane Hymn Rk. III",
+            "item_id": 137193
+          },
+          {
+            "spell_id": 35232,
+            "name": "Wave of Quietude Rk. III",
+            "item_id": 137232
+          }
+        ],
+        [
+          {
+            "spell_id": 35202,
+            "name": "Aura of Va'Ker Rk. III",
+            "item_id": 137202
+          },
+          {
+            "spell_id": 35208,
+            "name": "Echo of Va'Ker Rk. III",
+            "item_id": 137208
+          }
+        ],
+        [
+          {
+            "spell_id": 35217,
+            "name": "Kaficus' Spiteful Lyric Rk. III",
+            "item_id": 137217
+          },
+          {
+            "spell_id": 35223,
+            "name": "Motlak's Lively Crescendo Rk. III",
+            "item_id": 137223
+          }
+        ],
+        [
+          {
+            "spell_id": 35229,
+            "name": "Gosik's Chant of Flame Rk. III",
+            "item_id": 137229
+          }
+        ],
+        [
+          {
+            "spell_id": 35214,
+            "name": "Kaficus' Insult Rk. III",
+            "item_id": 137214
+          }
+        ],
+        [
+          {
+            "spell_id": 35235,
+            "name": "Reflexive Retort Rk. III",
+            "item_id": 137235
+          }
+        ]
+      ],
+      "9": [
+        [
+          {
+            "spell_id": 35307,
+            "name": "Daggerthrust Rk. III",
+            "item_id": 137307
+          }
+        ],
+        [
+          {
+            "spell_id": 35310,
+            "name": "Daring Escape Rk. III",
+            "item_id": 137310
+          }
+        ],
+        [
+          {
+            "spell_id": 35338,
+            "name": "Executioner Discipline Rk. III",
+            "item_id": 137338
+          }
+        ],
+        [
+          {
+            "spell_id": 35301,
+            "name": "Incursion Rk. III",
+            "item_id": 137301
+          }
+        ],
+        [
+          {
+            "spell_id": 35314,
+            "name": "Smokecloud Rk. III",
+            "item_id": 137314
+          }
+        ]
+      ],
+      "10": [
+        [
+          {
+            "spell_id": 35435,
+            "name": "Blood of Sanera Rk. III",
+            "item_id": 137435
+          },
+          {
+            "spell_id": 35441,
+            "name": "Pack of Kriegas Rk. III",
+            "item_id": 137441
+          }
+        ],
+        [
+          {
+            "spell_id": 35456,
+            "name": "Phase Spider Blood Rk. III",
+            "item_id": 137456
+          },
+          {
+            "spell_id": 35462,
+            "name": "Ward of Rejuvenation Rk. III",
+            "item_id": 137462
+          }
+        ],
+        [
+          {
+            "spell_id": 35459,
+            "name": "Talisman of the Courageous Rk. III",
+            "item_id": 137459
+          },
+          {
+            "spell_id": 35447,
+            "name": "Wisp of Renewal Rk. III",
+            "item_id": 137447
+          }
+        ],
+        [
+          {
+            "spell_id": 35498,
+            "name": "Enalam's Curse Rk. III",
+            "item_id": 137498
+          }
+        ],
+        [
+          {
+            "spell_id": 35438,
+            "name": "Frigid Gift Rk. III",
+            "item_id": 137438
+          }
+        ],
+        [
+          {
+            "spell_id": 35450,
+            "name": "Reckless Restoration Rk. III",
+            "item_id": 137450
+          }
+        ]
+      ],
+      "11": [
+        [
+          {
+            "spell_id": 35642,
+            "name": "Halstor's Command Rk. III",
+            "item_id": 137642
+          },
+          {
+            "spell_id": 35645,
+            "name": "Binaesa Venom Rk. III",
+            "item_id": 137645
+          }
+        ],
+        [
+          {
+            "spell_id": 35651,
+            "name": "Call Skeleton Throng Rk. III",
+            "item_id": 137651
+          },
+          {
+            "spell_id": 35666,
+            "name": "Itkari's Swift Lifedraw Rk. III",
+            "item_id": 137666
+          }
+        ],
+        [
+          {
+            "spell_id": 35654,
+            "name": "Impel for Blood Rk. III",
+            "item_id": 137654
+          },
+          {
+            "spell_id": 35660,
+            "name": "Sanction Ally Rk. III",
+            "item_id": 137660
+          }
+        ],
+        [
+          {
+            "spell_id": 35673,
+            "name": "Scintillate Bones Rk. III",
+            "item_id": 137673
+          },
+          {
+            "spell_id": 35676,
+            "name": "Pernicious Wounds Rk. III",
+            "item_id": 137676
+          }
+        ],
+        [
+          {
+            "spell_id": 35706,
+            "name": "Binding of Itkari Rk. III",
+            "item_id": 137706
+          }
+        ],
+        [
+          {
+            "spell_id": 35648,
+            "name": "Coruscating Shadow Rk. III",
+            "item_id": 137648
+          }
+        ]
+      ],
+      "12": [
+        [
+          {
+            "spell_id": 35850,
+            "name": "Tamagrist Torrent Rk. III",
+            "item_id": 137850
+          },
+          {
+            "spell_id": 35865,
+            "name": "Telanaga Rk. III",
+            "item_id": 137865
+          }
+        ],
+        [
+          {
+            "spell_id": 35859,
+            "name": "Self-Destruction Rk. III",
+            "item_id": 137859
+          },
+          {
+            "spell_id": 35868,
+            "name": "Thricewoven Mana Rk. III",
+            "item_id": 137868
+          }
+        ],
+        [
+          {
+            "spell_id": 35894,
+            "name": "Hoarfrost Vortex Rk. III",
+            "item_id": 137894
+          },
+          {
+            "spell_id": 35898,
+            "name": "Ethereal Weave Rk. III",
+            "item_id": 137898
+          }
+        ],
+        [
+          {
+            "spell_id": 35847,
+            "name": "Claw of the Icewing Rk. III",
+            "item_id": 137847
+          }
+        ],
+        [
+          {
+            "spell_id": 35844,
+            "name": "Ethereal Incandescence Rk. III",
+            "item_id": 137844
+          }
+        ],
+        [
+          {
+            "spell_id": 35853,
+            "name": "Gosik's Fire Rk. III",
+            "item_id": 137853
+          }
+        ]
+      ],
+      "13": [
+        [
+          {
+            "spell_id": 36011,
+            "name": "Fickle Magma Rk. III",
+            "item_id": 138011
+          },
+          {
+            "spell_id": 36017,
+            "name": "Mass Phantasmal Transvergence Rk. III",
+            "item_id": 138017
+          }
+        ],
+        [
+          {
+            "spell_id": 36014,
+            "name": "Gather Magnitude Rk. III",
+            "item_id": 138014
+          },
+          {
+            "spell_id": 36045,
+            "name": "Groundswell Bodyguard Rk. III",
+            "item_id": 138045
+          }
+        ],
+        [
+          {
+            "spell_id": 36027,
+            "name": "Phantasmal Symbiosis Rk. III",
+            "item_id": 138027
+          },
+          {
+            "spell_id": 36033,
+            "name": "Summon Imperious Minion Rk. III",
+            "item_id": 138033
+          }
+        ],
+        [
+          {
+            "spell_id": 36069,
+            "name": "Blistersteel Malosenia Rk. III",
+            "item_id": 138069
+          },
+          {
+            "spell_id": 36072,
+            "name": "Surge of Shadow Rk. III",
+            "item_id": 138072
+          }
+        ],
+        [
+          {
+            "spell_id": 36021,
+            "name": "Relentless Servant Rk. III",
+            "item_id": 138021
+          }
+        ],
+        [
+          {
+            "spell_id": 36024,
+            "name": "Spear of Blistersteel Rk. III",
+            "item_id": 138024
+          }
+        ]
+      ],
+      "14": [
+        [
+          {
+            "spell_id": 36227,
+            "name": "Mana Reverberation Aura Rk. III",
+            "item_id": 138227
+          },
+          {
+            "spell_id": 36242,
+            "name": "Mesmerizing Stare Rk. III",
+            "item_id": 138242
+          },
+          {
+            "spell_id": 36276,
+            "name": "Issuance of Mana Reverberation Rk. III",
+            "item_id": 138276
+          }
+        ],
+        [
+          {
+            "spell_id": 36246,
+            "name": "Polyiridescent Rune Rk. III",
+            "item_id": 138246
+          },
+          {
+            "spell_id": 36252,
+            "name": "Phantasmal Unity Rk. III",
+            "item_id": 138252
+          },
+          {
+            "spell_id": 36264,
+            "name": "Tears of Syrkl Rk. III",
+            "item_id": 138264
+          }
+        ],
+        [
+          {
+            "spell_id": 36223,
+            "name": "Hastening of Sviir Rk. III",
+            "item_id": 138223
+          },
+          {
+            "spell_id": 36270,
+            "name": "Ward of the Mastermind Rk. III",
+            "item_id": 138270
+          }
+        ],
+        [
+          {
+            "spell_id": 36267,
+            "name": "Voice of Foresight Rk. III",
+            "item_id": 138267
+          },
+          {
+            "spell_id": 36233,
+            "name": "Mind Squall Rk. III",
+            "item_id": 138233
+          }
+        ],
+        [
+          {
+            "spell_id": 36239,
+            "name": "Mindcleave Rk. III",
+            "item_id": 138239
+          },
+          {
+            "spell_id": 36255,
+            "name": "Impose Rk. III",
+            "item_id": 138255
+          }
+        ],
+        [
+          {
+            "spell_id": 36306,
+            "name": "Perilous Disorientation Rk. III",
+            "item_id": 138306
+          }
+        ]
+      ],
+      "15": [
+        [
+          {
+            "spell_id": 36452,
+            "name": "Reflexive Rending Rk. III",
+            "item_id": 138452
+          },
+          {
+            "spell_id": 36476,
+            "name": "Nak's Maelstrom Rk. III",
+            "item_id": 138476
+          }
+        ],
+        [
+          {
+            "spell_id": 36443,
+            "name": "Kesar's Feralgia Rk. III",
+            "item_id": 138443
+          }
+        ],
+        [
+          {
+            "spell_id": 36427,
+            "name": "Pummel Rk. III",
+            "item_id": 138427
+          }
+        ],
+        [
+          {
+            "spell_id": 36424,
+            "name": "Shared Merciless Ferocity Rk. III",
+            "item_id": 138424
+          }
+        ],
+        [
+          {
+            "spell_id": 36437,
+            "name": "Spellbreaker's Ward Rk. III",
+            "item_id": 138437
+          }
+        ],
+        [
+          {
+            "spell_id": 36430,
+            "name": "Yell at the Moon Rk. III",
+            "item_id": 138430
+          }
+        ]
+      ],
+      "16": [
+        [
+          {
+            "spell_id": 36570,
+            "name": "Axe of Zurel Rk. III",
+            "item_id": 138570
+          }
+        ],
+        [
+          {
+            "spell_id": 36531,
+            "name": "Brutal Discipline Rk. III",
+            "item_id": 138531
+          }
+        ],
+        [
+          {
+            "spell_id": 36534,
+            "name": "Fearless Frenzy Rk. III",
+            "item_id": 138534
+          }
+        ],
+        [
+          {
+            "spell_id": 36543,
+            "name": "Shared Viciousness Rk. III",
+            "item_id": 138543
+          }
+        ]
+      ]
+    }
+  }
+]

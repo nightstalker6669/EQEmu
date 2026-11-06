@@ -1,0 +1,43 @@
+{
+  "period_page_source": {
+    "archive_url": "https://web.archive.org/web/20130315173244id_/http://everquest.allakhazam.com/db/quest.html?quest=3630",
+    "capture_utc": "20130315173244",
+    "sha256": "4e7be368ed3e5d1f9caeb2263d084dd3b3fed8ace9854264b6e61a673dd06a85",
+    "facts": "Changing grove groundspawn positions, five dated location reports; not a fixed single spawn."
+  },
+  "static_resource": {
+    "client_archive": "steppes.eqg",
+    "sha256": "a3afb36b252d02205b032b18d8175677c515c96fa65a960174a98cbcaafea960",
+    "member": "obj_druid_ring_a.mod",
+    "member_sha256": "e8ba8d7534c9fe114af3f7e70597659a7a3ba1a6880fedd9f3fddb5b8524c012",
+    "model_parse_exact_length": true,
+    "one_placed_ring": true,
+    "connected_components": 16,
+    "central_rune_component_triangles": 210,
+    "rune_material_triangles": 96,
+    "rune_material": "stone_symbol",
+    "rune_overlay_texture": "stonehenge_symbol_ov.dds"
+  },
+  "map_label": {
+    "file": "maps/steppes_1.txt",
+    "sha256": "ef1f133aaca6cd955f98a9f287dab8b5a3d40fa7a2b5522d0bdccb13859dd438",
+    "label": "Druid_Ring",
+    "raw_map_xyz": [
+      1099.3678,
+      -657.452,
+      150.488
+    ],
+    "server_xyz": [
+      -1099.3678,
+      657.452,
+      150.488
+    ]
+  },
+  "core_semantics": {
+    "file": "zone/object.cpp",
+    "sha256": "cd10eeaf19d4295fc910d639d56982304404f06826c1c15d5aa6708ad68e5f24",
+    "facts": "Constructor and Object::RandomSpawn were read. RandomSpawn changes XY on every respawn, but only computes missing Z once and does not call FixZ. Constructor invokes FixZ only for fix_z0. Thus a sloping random rectangle with one Z can float/bury on subsequent respawns; bounded fixed points with fix_z1 preserve each selected explicit floor."
+  },
+  "REA": "Reused retained unsupported-EQG evidence and pinned EQEmu zone-utilities-derived parser; no shared target/session opened. CRC/inflate lengths, full terrain cursor and full static mesh cursor validated.",
+  "privacy": "No proprietary member bytes or images copied into a public package; all expanded inventory/geometry stays private."
+}

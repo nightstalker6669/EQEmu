@@ -1,0 +1,18 @@
+[
+  {
+    "path": "lua_modules/achievement_native_delivery_handin.lua",
+    "sha256": "e44ccaec14deacf834f3e88e296afaf8ad8c2561f89fb7b988bd3496c7a854b7"
+  },
+  {
+    "path": "lua_modules/achievement_quest_gearing_up.lua",
+    "sha256": "1d637922248789a3376b33122f4d679e745536078e4da225ec92cd5f69eb1d21"
+  },
+  {
+    "path": "lua_modules/achievement_quest_gearing_up_policy.lua",
+    "sha256": "096c568688e3d8c6d1f9b61ab7b328ebf9a1f97f8b76fa3247829d0511fbdcb4"
+  },
+  {
+    "path": "mechanotus/436006.lua",
+    "sha256": "82a39e44e9ea1a6303f867dadbbd094cb60652db741b207299d8fd9096806fd8"
+  }
+]

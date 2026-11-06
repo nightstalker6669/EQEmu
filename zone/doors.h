@@ -1,3 +1,4 @@
+#include <memory>
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -20,13 +21,21 @@
 #include "common/repositories/doors_repository.h"
 #include "zone/mob.h"
 
+#include <string>
+
 class Client;
 class Mob;
+namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
 class NPC;
 struct Door;
 
 class Doors : public Entity
 {
+ friend class FireRunActionSource::RunUseWitness;
+ friend class FireRunActionSource::NativeRunDoorSource;
+ friend class FireRunActionSource::PublishedRunActionSink;
+ friend class FireRunActionSource::NativeRunHelperSource;
+ std::shared_ptr<FireRunActionSource::RunDoorLifetime> m_fire_run_action_lifetime;
 public:
 	~Doors();
 
@@ -97,6 +106,10 @@ public:
 	const char* GetDoorZone() const { return m_zone_name; }
 
 private:
+	friend class EntityList;
+	// Only EntityList's transient factory can set these; DB constructors leave them empty.
+	std::string m_transient_owner;
+	std::string m_transient_token;
 	bool GetIsDoorBlacklisted();
 
 	bool      m_has_destination_zone = false;

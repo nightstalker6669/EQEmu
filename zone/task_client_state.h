@@ -1,3 +1,4 @@
+#include "fungal_item_operation_source.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -18,6 +19,7 @@
 #pragma once
 
 #include "common/types.h"
+#include "zone/reward_selection.h"
 #include "zone/tasks.h"
 
 #include <algorithm>
@@ -47,7 +49,17 @@ struct TaskUpdateFilter
 	TaskMethodType method = TaskMethodType::METHODSINGLEID;
 };
 
+namespace FirePersonalOccurrenceSource { class NativeItemCustody; class PublishedNativeUseSink; class OriginalConstructDeathQueue; class OriginalConstructNativeHail;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
 class ClientTaskState {
+ friend class FungalItemSource::NativeEvents;
+ friend class FirePersonalOccurrenceSource::NativeItemCustody;
+ friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
+ friend class FirePersonalOccurrenceSource::PreparedConstructPlan;
+ friend class FirePersonalOccurrenceSource::NativeConstructParticipants;
+ friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
+ friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
+ friend class FirePersonalOccurrenceSource::OriginalConstructNativeHail;
+
 
 public:
 	ClientTaskState();
@@ -84,7 +96,14 @@ public:
 	bool TaskOutOfTime(TaskType task_type, int index);
 	void TaskPeriodicChecks(Client *client);
 	void SendTaskHistory(Client *client, int task_index);
-	void RewardTask(Client* c, const TaskInformation* ti, ClientTaskInformation& client_task);
+	bool RewardTask(Client* c, const TaskInformation* ti, ClientTaskInformation& client_task);
+	void RetryCompletedSelectableRewards(Client *client, bool force = false);
+	void SendRewardSelection(Client *client, uint32_t task_id);
+	void RestorePendingRewardSelection(Client *client);
+	RewardSelectionDeliveryResult ClaimRewardSelection(
+		Client *client,
+		const ResolvedRewardSelectionClaim &claim
+	);
 	void EnableTask(int character_id, int task_count, int *task_list);
 	void DisableTask(int character_id, int task_count, int *task_list);
 	bool IsTaskEnabled(int task_id);
@@ -188,6 +207,7 @@ private:
 	int                                   m_last_completed_task_loaded;
 	std::vector<TaskOffer>                m_last_offers;
 	bool                                  m_has_explore_task = false;
+	Timer                                 m_reward_retry_timer;
 
 	static void ShowClientTaskInfoMessage(ClientTaskInformation *task, Client *c);
 
@@ -199,4 +219,5 @@ private:
 		uint32 done_count
 	);
 	bool HasActiveTasks();
+	void UpdateTasksOnCollect(Client *client);
 };

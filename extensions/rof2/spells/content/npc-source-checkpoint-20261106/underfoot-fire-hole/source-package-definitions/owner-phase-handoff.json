@@ -1,0 +1,409 @@
+{
+  "status": "RESERVED_DISABLED_DEFINITION_SOURCE_PHYSICAL_TERMINAL_HELD",
+  "source": "https://everquest.allakhazam.com/db/quest/4992",
+  "guide": "https://www.raspersrealm.com/Everquest/Underfoot/missionBrellsTemple.html",
+  "period_comments": "https://everquest.allakhazam.com/forums/comments/quest/4992?page=2",
+  "native_zone": 490,
+  "zone_shortname": "brellstemple",
+  "native_giver": 490061,
+  "native_task_id": 920170,
+  "instance_version": 1,
+  "request": "yes",
+  "entry": "ready",
+  "requester_prerequisites": [
+    4989,
+    4990,
+    4991
+  ],
+  "goals": [
+    {
+      "activity": 0,
+      "kind": "loot",
+      "target": "Jagged Shard",
+      "item_id": 47748,
+      "count": 1,
+      "native_npc_type_ids": [
+        490900
+      ]
+    },
+    {
+      "activity": 1,
+      "kind": "loot",
+      "target": "Pulsing Sphere",
+      "item_id": 47749,
+      "count": 1,
+      "native_npc_type_ids": [
+        490901
+      ]
+    },
+    {
+      "activity": 2,
+      "kind": "loot",
+      "target": "Chipped Claw",
+      "item_id": 47750,
+      "count": 1,
+      "native_npc_type_ids": [
+        490902
+      ]
+    },
+    {
+      "activity": 3,
+      "kind": "actual_door_click_three_items",
+      "target": "inner vault door",
+      "item_id": null,
+      "count": 1,
+      "native_npc_type_ids": []
+    },
+    {
+      "activity": 4,
+      "kind": "loot",
+      "target": "Vial of Purified Water",
+      "item_id": 47761,
+      "count": 1,
+      "native_npc_type_ids": [
+        490903
+      ]
+    },
+    {
+      "activity": 5,
+      "kind": "loot",
+      "target": "Unstable Glob of Clay",
+      "item_id": 47760,
+      "count": 1,
+      "native_npc_type_ids": [
+        490904
+      ]
+    },
+    {
+      "activity": 6,
+      "kind": "actual_two_to_one_item_click",
+      "target": "Unstable Mass of Clay",
+      "item_id": 47762,
+      "count": 1,
+      "native_npc_type_ids": []
+    },
+    {
+      "activity": 7,
+      "kind": "actual_door_click_original_clay",
+      "target": "worshipping area door",
+      "item_id": 47762,
+      "count": 1,
+      "native_npc_type_ids": []
+    },
+    {
+      "activity": 8,
+      "kind": "loot",
+      "target": "Crumbling Head",
+      "item_id": 47751,
+      "count": 1,
+      "native_npc_type_ids": [
+        490905
+      ]
+    },
+    {
+      "activity": 9,
+      "kind": "loot",
+      "target": "Broken Torso",
+      "item_id": 47752,
+      "count": 1,
+      "native_npc_type_ids": [
+        490906
+      ]
+    },
+    {
+      "activity": 10,
+      "kind": "loot",
+      "target": "Cracking Legs",
+      "item_id": 47753,
+      "count": 1,
+      "native_npc_type_ids": [
+        490907
+      ]
+    },
+    {
+      "activity": 11,
+      "kind": "loot",
+      "target": "Worn Arms",
+      "item_id": 47754,
+      "count": 1,
+      "native_npc_type_ids": [
+        490908
+      ]
+    },
+    {
+      "activity": 12,
+      "kind": "loot",
+      "target": "Eroding Feet",
+      "item_id": 47755,
+      "count": 1,
+      "native_npc_type_ids": [
+        490909
+      ]
+    },
+    {
+      "activity": 13,
+      "kind": "actual_five_to_one_item_click",
+      "target": "Destructive Golem",
+      "item_id": 47756,
+      "count": 1,
+      "native_npc_type_ids": []
+    },
+    {
+      "activity": 14,
+      "kind": "actual_click_owned_golem_door_action",
+      "target": "garden or pool hall",
+      "item_id": 47756,
+      "count": 1,
+      "native_npc_type_ids": [
+        490913
+      ]
+    },
+    {
+      "activity": 15,
+      "kind": "loot",
+      "target": "Vault Key",
+      "item_id": 47757,
+      "count": 1,
+      "native_npc_type_ids": [
+        490910
+      ]
+    },
+    {
+      "activity": 16,
+      "kind": "owned_kill",
+      "target": "Vault Guardian",
+      "item_id": null,
+      "count": 1,
+      "native_npc_type_ids": [
+        490911
+      ]
+    },
+    {
+      "activity": 17,
+      "kind": "loot",
+      "target": "Keystone Mold",
+      "item_id": 47758,
+      "count": 1,
+      "native_npc_type_ids": [
+        490911
+      ]
+    },
+    {
+      "activity": 18,
+      "kind": "deliver_original_mold",
+      "target": "Gotonur",
+      "item_id": 47758,
+      "count": 1,
+      "native_npc_type_ids": []
+    }
+  ],
+  "goal_count": 19,
+  "parallel_candidates": [
+    [
+      0,
+      1,
+      2
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      8,
+      9,
+      10,
+      11,
+      12
+    ]
+  ],
+  "lock_activity_id_candidate": 17,
+  "lock_source": "Feb1,2010#1265009315117559105 actualVaultGuardiandeath locks; nativeMoldLoot17becomesactive, notfinaldelivery/completion",
+  "physical": {
+    "first_door_items": [
+      47748,
+      47749,
+      47750
+    ],
+    "one_holder_all_three": true,
+    "water_candidates": [
+      4499,
+      47761
+    ],
+    "water_identity_ready": true,
+    "water_qualification": "NativeexactsameName/lore duplicates; noadjacentIDinference. RequirepositiveProtectorPurityoriginaldrop/itemsource tie.",
+    "clay_input": 47760,
+    "mass_output": 47762,
+    "construct_parts": [
+      47751,
+      47752,
+      47753,
+      47754,
+      47755
+    ],
+    "clicked_torso": 47752,
+    "golem_item": 47756,
+    "vault_key": 47757,
+    "mold": 47758,
+    "keystone": 47759,
+    "shared_generic_click_spell": 7651,
+    "one_holder_percombine": true,
+    "door_identity": "ActualnativeclickeddoorID/zone/instance/custody, notSQLrowIDguess orNPCname. DoNOTdirectlyopenlockeddoors/providefakekeys.",
+    "selected_water_item": 47761
+  },
+  "keystone_reward": {
+    "item": 47759,
+    "amount": 1,
+    "scope": "Allnativeacceptedsharedtaskparticipants, includinglegitimateelsewhere members",
+    "period": "Sep22,2010#128519700730082785 explicitlyguildhallmemberreceivedKeystone; nozoneradius/group-onlineonlyloop",
+    "qualification": "Useactualnativecompletion/rewardowner exactoccurrence; missinginventorycapacity/unknowncommit cannot blindregrant. Itemkey/staticFontChamber access integrationseparate; nofakeglobalzoneflag."
+  },
+  "terminal": "ActualMoldreturntoGotonur\u2192physicalKeystoneeachmember/nativepersonalrewards andonechest. ExactpostApril2010chest-opencompletionconsumer notpositivelylisted; no fabricated20goal/earlynativecompletion beforeoriginalterminaldisposition.",
+  "chest_era": "Apr11,2010#1270967460252962037 notyetLive;Apr17#1271542191125752927+Apr19#1271703545228533162 positivechest+80tokens. Mar29Testserver#126990923966028978 notblindLiveproof.",
+  "rewards": {
+    "cash_pp": 210,
+    "cash_qualified_current": true,
+    "currency_id": 21,
+    "tokens": 80,
+    "period_tokens": "May5,2010#1273083976119837729/Apr19#1271703545228533162",
+    "XP": "nativefieldnumericaldefaultnotobservedAAformula",
+    "spells": [
+      {
+        "spell_id": 22506,
+        "name": "Shared Bloodlust",
+        "items": [
+          119688
+        ],
+        "levels": {
+          "16": 85
+        },
+        "rank1_mission": "Fire In The Hole",
+        "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+        "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+      },
+      {
+        "spell_id": 22528,
+        "name": "Call Skeleton Swarm",
+        "items": [
+          119706
+        ],
+        "levels": {
+          "11": 85
+        },
+        "rank1_mission": "Fire In The Hole",
+        "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+        "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+      },
+      {
+        "spell_id": 22559,
+        "name": "Splash of Brimstone",
+        "items": [
+          119727
+        ],
+        "levels": {
+          "12": 85
+        },
+        "rank1_mission": "Fire In The Hole",
+        "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+        "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+      },
+      {
+        "spell_id": 22628,
+        "name": "Holy Contravention",
+        "items": [
+          119691
+        ],
+        "levels": {
+          "2": 85
+        },
+        "rank1_mission": "Fire In The Hole",
+        "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+        "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+      }
+    ],
+    "period_classes": {
+      "NEC": "Jan5,2010#1262731541159492016 explicit22528",
+      "WIZ": "Jan17,2010#126374579056898539",
+      "CLR": "Feb1,2010#1265009315117559105",
+      "BER": "Mar12,2010#1268377923124982783"
+    }
+  },
+  "gear": {
+    "guide_magelo_keys_not_blind_native_ids": [
+      110240,
+      110231,
+      110244,
+      110296,
+      110232,
+      110272,
+      110285,
+      110286,
+      110271,
+      110259
+    ],
+    "additional_positive_name": "Orb of Suspension",
+    "additional_period": "Aug19,2010#1282193012206252898 actualchestdrop; maincompiled11poolversusRasper10; doNOTdiscardpositiveextra",
+    "selected_native_item_ids": [
+      110240,
+      110231,
+      110244,
+      110296,
+      110232,
+      110272,
+      110285,
+      110286,
+      110271,
+      110259,
+      110297
+    ]
+  },
+  "profiles": "Sep22,2010#128519700730082785 specifictrashmezableonlymischievous/cunning, alltrashsnare/rootable, namedrampage;Guardianpermaroot. Sourcefullbytes/AIcasttimers/nativegeometrynotverified.",
+  "doors_and_goals_ready": false,
+  "NPC_intake": "Originalthreeearlydroppers/twoprotectors/fiveConstructs/Keymaster/Guardian/Gotonurinstance/physicalDestructiveGolemtransient/chest+ordinarytrashselectedfinitepopulation; no guessedstaticcounts.",
+  "runtime_actions": 0,
+  "tests": 0,
+  "enabled": false,
+  "source_only": true,
+  "water_identity_ready": true,
+  "role_drop_map": {
+    "ancient_gigyn_colossus": 47748,
+    "timeworn_channeler": 47749,
+    "cunning_fiend": 47750,
+    "protector_of_purity": 47761,
+    "protector_of_clay": 47760,
+    "crumbling_construct": 47751,
+    "broken_construct": 47752,
+    "cracking_construct": 47753,
+    "worn_construct": 47754,
+    "eroding_construct": 47755,
+    "keymaster": 47757,
+    "vault_guardian": 47758
+  },
+  "terminal_consumer_ready": false,
+  "Keystone_scope": "Allnativeacceptedsharedtaskparticipantsincludingelsewherezones, actualnativecompletion/commitreceiptownerpolicy; no nearby/currentgroupfilter.",
+  "native_door_bindings_ready": false,
+  "new_displayed_goals": 0,
+  "dynamic_zone_template_id": 920170,
+  "native_lock_activity_id": 17,
+  "native_activity_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "task_reward_DZ_rows_emitted": 0
+}

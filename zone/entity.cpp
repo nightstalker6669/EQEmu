@@ -1,3 +1,7 @@
+#include "fungal_item_operation_source.h"
+#include "fire_run_terminal_scene.h"
+#include "fire_material_loot_source.h"
+#include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -15,11 +19,15 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "inventory_session_owner.h"
+#include "housing_service_npcs.h"
+
 #include "entity.h"
 
 #include "common/data_verification.h"
 #include "common/features.h"
 #include "common/guilds.h"
+#include "zone/achievement_manager.h"
 #include "zone/bot.h"
 #include "zone/dialogue_window.h"
 #include "zone/dynamic_zone.h"
@@ -31,7 +39,17 @@
 #include "zone/string_ids.h"
 #include "zone/water_map.h"
 #include "zone/worldserver.h"
+#include "fire_original_construct_producer.h"
+#include "fire_original_construct_death.h"
+#include "fire_gotonur_say_queue.h"
 
+#include "common/strings.h"
+#include "common/util/uuid.h"
+#include "zone/doors.h"
+
+#include <array>
+#include <cmath>
+#include <memory>
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
@@ -426,8 +444,7 @@ void EntityList::ObjectProcess()
 	auto it = object_list.begin();
 	while (it != object_list.end()) {
 		if (!it->second->Process()) {
-			safe_delete(it->second);
-			free_ids.push(it->first);
+			RetireObject(it->first, it->second);
 			it = object_list.erase(it);
 		} else {
 			++it;
@@ -567,6 +584,11 @@ void EntityList::MobProcess()
 			entity_list.RemoveMob(id);
 		}
 	}
+	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Drain();
+	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Drain();
+	FungalItemSource::NativeEvents::Drain();
+	FireRunActionSource::NativeRunHelperSource::DrainCompletions();
+	FireRunActionSource::NativeRunTerminalSource::DrainCompletions();
 }
 
 void EntityList::BeaconProcess()
@@ -661,6 +683,8 @@ void EntityList::AddCorpse(Corpse *corpse, uint32 in_id)
 
 	corpse->CalcCorpseName();
 	corpse_list.emplace(std::pair<uint16, Corpse *>(corpse->GetID(), corpse));
+	FireRunActionSource::OriginalMissionMaterialDeath::ObserveActualCorpseRegistered(*corpse);
+ FireRunActionSource::OriginalTerminalDeath::ObserveActualCorpseRegistered(*corpse);
 
 	if (!corpse_timer.Enabled())
 		corpse_timer.Start();
@@ -682,14 +706,17 @@ void EntityList::AddNPC(NPC *npc, bool send_spawn_packet, bool dont_queue)
 	npc_list.emplace(std::pair<uint16, NPC *>(npc->GetID(), npc));
 	mob_list.emplace(std::pair<uint16, Mob *>(npc->GetID(), npc));
 
+	FirePersonalOccurrenceSource::CaptureConstructBeforeOriginalSpawnCallbacks(npc);
+	FireRunActionSource::NativeRunHelperSource::ObserveActualRegistration(npc);
+	FireRunActionSource::NativeRunTerminalSource::ObserveActualRegistration(npc);
 	entity_list.ScanCloseMobs(npc);
 
-	if (parse->HasQuestSub(npc->GetNPCTypeID(), EVENT_SPAWN)) {
+	if (!BoundDestructibles::IsRuins(npc) && parse->HasQuestSub(npc->GetNPCTypeID(), EVENT_SPAWN)) {
 		parse->EventNPC(EVENT_SPAWN, npc, nullptr, "", 0);
 	}
 
 	const uint32 emote_id = npc->GetEmoteID();
-	if (emote_id) {
+	if (emote_id && !BoundDestructibles::IsRuins(npc)) {
 		npc->DoNPCEmote(EQ::constants::EmoteEventTypes::OnSpawn, emote_id);
 	}
 
@@ -701,7 +728,9 @@ void EntityList::AddNPC(NPC *npc, bool send_spawn_packet, bool dont_queue)
 			npc->CreateSpawnPacket(app, npc);
 			QueueClients(npc, app);
 			npc->SendArmorAppearance();
-			npc->SetAppearance(npc->GetGuardPointAnim(), false);
+			if (!BoundDestructibles::IsRuins(npc)) {
+				npc->SetAppearance(npc->GetGuardPointAnim(), false);
+			}
 
 			if (!npc->IsTargetable()) {
 				npc->SendTargetable(false);
@@ -723,11 +752,11 @@ void EntityList::AddNPC(NPC *npc, bool send_spawn_packet, bool dont_queue)
 
 	npc->SendPositionToClients();
 
-	if (parse->HasQuestSub(ZONE_CONTROLLER_NPC_ID, EVENT_SPAWN_ZONE)) {
+	if (!BoundDestructibles::IsRuins(npc) && parse->HasQuestSub(ZONE_CONTROLLER_NPC_ID, EVENT_SPAWN_ZONE)) {
 		npc->DispatchZoneControllerEvent(EVENT_SPAWN_ZONE, npc, "", 0, nullptr);
 	}
 
-	if (parse->ZoneHasQuestSub(EVENT_SPAWN_ZONE)) {
+	if (!BoundDestructibles::IsRuins(npc) && parse->ZoneHasQuestSub(EVENT_SPAWN_ZONE)) {
 		std::vector<std::any> args = { npc };
 		parse->EventZone(EVENT_SPAWN_ZONE, zone, "", 0, &args);
 	}
@@ -1153,7 +1182,10 @@ Mob *EntityList::GetMob(uint16 get_id)
 	if (get_id == 0)
 		return nullptr;
 
-	if ((ent = entity_list.GetEntityMob(get_id)))
+	// A hovering client's map key still names its former spawn, but its
+ // current ID is zero (or a new spawn after respawn). That stale entry
+ // must not hide the corpse which legitimately retained the requested ID.
+ if ((ent = entity_list.GetEntityMob(get_id)) && ent->GetID() == get_id)
 		return ent->CastToMob();
 	else if ((ent = entity_list.GetEntityCorpse(get_id)))
 		return ent->CastToMob();
@@ -1469,6 +1501,7 @@ void EntityList::SendZoneObjects(Client *client)
 {
 	auto it = object_list.begin();
 	while (it != object_list.end()) {
+  if(it->second->IsHousingRecipe301()){++it;continue;}
 		auto app = new EQApplicationPacket;
 		it->second->CreateSpawnPacket(app);
 		client->FastQueuePacket(&app);
@@ -2640,7 +2673,9 @@ void EntityList::RemoveAllMobs()
 			++it;
 			continue;
 		}
+		auto inventory_ticket = it->second->IsClient() ? it->second->CastToClient()->InventorySessionReleaseTicket() : nullptr;
 		safe_delete(it->second);
+		if (inventory_ticket) inventory_ticket->ReleaseAfterCompleteDelete();
 		free_ids.push(it->first);
 		it = mob_list.erase(it);
 	}
@@ -2717,8 +2752,11 @@ void EntityList::RespawnAllDoors()
 	while (it != client_list.end()) {
 		if (it->second) {
 			auto outapp = new EQApplicationPacket();
-			MakeDoorSpawnPacket(outapp, it->second);
-			it->second->FastQueuePacket(&outapp, true, Client::CLIENT_CONNECTED);
+			if (MakeDoorSpawnPacket(outapp, it->second)) {
+				it->second->FastQueuePacket(&outapp, true, Client::CLIENT_CONNECTED);
+			} else {
+				safe_delete(outapp);
+			}
 		}
 		++it;
 	}
@@ -2738,8 +2776,7 @@ void EntityList::RemoveAllObjects()
 {
 	auto it = object_list.begin();
 	while (it != object_list.end()) {
-		safe_delete(it->second);
-		free_ids.push(it->first);
+		RetireObject(it->first, it->second);
 		it = object_list.erase(it);
 	}
 }
@@ -2786,7 +2823,9 @@ bool EntityList::RemoveMob(uint16 delete_id)
 		else if (client_list.count(delete_id)) {
 			entity_list.RemoveClient(delete_id);
 		}
+		auto inventory_ticket = it->second->IsClient() ? it->second->CastToClient()->InventorySessionReleaseTicket() : nullptr;
 		safe_delete(it->second);
+		if (inventory_ticket) inventory_ticket->ReleaseAfterCompleteDelete();
 		if (!corpse_list.count(delete_id)) {
 			free_ids.push(it->first);
 		}
@@ -2982,12 +3021,55 @@ bool EntityList::RemoveClient(Client *delete_client)
 	return false;
 }
 
+EntityList::ObjectClickScope::~ObjectClickScope()
+{
+	if (owner_) {
+		owner_->EndObjectClick(object_);
+	}
+}
+
+EntityList::ObjectClickScope EntityList::PinObjectForClick(uint16 entity_id)
+{
+	auto object = GetObjectByID(entity_id);
+	if (!object) {
+		return {};
+	}
+	++object_click_depth[object];
+	return ObjectClickScope(this, object);
+}
+
+void EntityList::EndObjectClick(Object *object)
+{
+	auto depth = object_click_depth.find(object);
+	if (depth == object_click_depth.end() || --depth->second != 0) {
+		return;
+	}
+	object_click_depth.erase(depth);
+	auto retired = deferred_click_objects.find(object);
+	if (retired != deferred_click_objects.end()) {
+		const auto entity_id = retired->second;
+		deferred_click_objects.erase(retired);
+		delete object;
+		free_ids.push(entity_id);
+	}
+}
+
+void EntityList::RetireObject(uint16 entity_id, Object *object)
+{
+	if (object_click_depth.find(object) != object_click_depth.end()) {
+		// Keep both the instance and its ID out of reuse until click callbacks finish.
+		deferred_click_objects.emplace(object, entity_id);
+		return;
+	}
+	delete object;
+	free_ids.push(entity_id);
+}
+
 bool EntityList::RemoveObject(uint16 delete_id)
 {
 	auto it = object_list.find(delete_id);
 	if (it != object_list.end()) {
-		safe_delete(it->second);
-		free_ids.push(it->first);
+		RetireObject(it->first, it->second);
 		object_list.erase(it);
 		return true;
 	}
@@ -4193,6 +4275,51 @@ void EntityList::ReloadAllClientsTaskState(int task_id)
 	}
 }
 
+bool EntityList::ReloadAchievements(uint32 &failed_client_count)
+{
+	failed_client_count = 0;
+	if (!AchievementManager::Instance().Reload()) {
+		return false;
+	}
+
+	size_t attempted = 0;
+	size_t reloaded = 0;
+	for (const auto &[entity_id, client] : client_list) {
+		(void) entity_id;
+		if (!client || !client->ClientDataLoaded()) {
+			continue;
+		}
+
+		++attempted;
+		if (client->ReloadAchievements()) {
+			++reloaded;
+			continue;
+		}
+
+		++failed_client_count;
+		LogError(
+			"Failed to rebuild achievement state for character [{}] [{}] after "
+			"the achievement content reload; achievement state was disabled for "
+			"this client",
+			client->CharacterID(),
+			client->GetName()
+		);
+	}
+
+	LogInfo(
+		"Rebuilt achievement state for [{}] of [{}] loaded clients after content "
+		"reload; [{}] client rebuilds failed",
+		reloaded,
+		attempted,
+		failed_client_count
+	);
+
+	// The manager swap has already succeeded. An individual client load failure
+	// cannot roll it back and is reported above without making the transport
+	// claim that the previous content snapshot remains active.
+	return true;
+}
+
 bool EntityList::IsMobInZone(Mob *who)
 {
 	//We don't use mob_list.find(who) because this code needs to be able to handle dangling pointers for the quest code.
@@ -4657,6 +4784,7 @@ uint16 EntityList::CreateGroundObject(uint32 item_id, const glm::vec4& position,
 	}
 
 	auto object = new Object(inst, position.x, position.y, position.z, position.w, decay_time);
+	object->SetQuestGroundSpawn();
 
 	entity_list.AddObject(object, true);
 
@@ -4684,6 +4812,146 @@ uint16 EntityList::CreateGroundObjectFromModel(const char *model, const glm::vec
 	}
 
 	return object->GetID();
+}
+
+std::pair<uint16, std::string> EntityList::CreateTransientClickObject(
+	const std::string &owner, const char *model, const glm::vec4 &position)
+{
+	if (!zone || owner.empty() || !model ||
+		!std::isfinite(position.x) || !std::isfinite(position.y) ||
+		!std::isfinite(position.z) || !std::isfinite(position.w)) {
+		return {};
+	}
+	const auto model_length = std::strlen(model);
+	if (model_length < 4 || model_length >= 32 || free_ids.empty() ||
+		free_ids.front() == 0 || GetID(free_ids.front()) != nullptr) {
+		return {};
+	}
+	const auto token = EQ::Util::UUID::Generate().ToString();
+	if (token.empty()) {
+		return {};
+	}
+	// This constructor has no item/world-container instance and preserves authored Z.
+	auto object = std::make_unique<Object>(
+		static_cast<const EQ::ItemInstance *>(nullptr), position.x, position.y,
+		position.z, position.w, 0, true);
+	strn0cpy(object->m_data.object_name, model, sizeof(object->m_data.object_name));
+	object->m_click_only = true;
+	object->m_click_owner = owner;
+	object->m_click_token = token;
+	AddObject(object.get(), true);
+	const auto entity_id = object->GetID();
+	object.release(); // object_list owns it, as for other AddObject callers.
+	return {entity_id, token};
+}
+
+bool EntityList::RemoveTransientClickObject(
+	const std::string &owner, uint16 entity_id, const std::string &token)
+{
+	auto object = GetObjectByID(entity_id);
+	if (!object || entity_id == 0 || owner.empty() || token.empty() ||
+		!object->m_click_only || object->m_id != 0 || object->m_inst != nullptr ||
+		object->m_ground_spawn || object->m_quest_ground_spawn ||
+		object->m_click_owner != owner || object->m_click_token != token) {
+		return false;
+	}
+	object->Depop();
+	return true;
+}
+
+std::pair<uint16, std::string> EntityList::CreateTransientDoor(
+	const std::string &owner, const char *model, const glm::vec4 &position, uint8 type, uint16 size
+)
+{
+	if (!zone || owner.empty() || !model || size == 0 ||
+		!std::isfinite(position.x) || !std::isfinite(position.y) ||
+		!std::isfinite(position.z) || !std::isfinite(position.w)) {
+		return {};
+	}
+	const auto model_length = std::strlen(model);
+	if (model_length < 4 || model_length >= 32 || door_list.size() >= 500 ||
+		free_ids.empty() || free_ids.front() == 0 || GetID(free_ids.front()) != nullptr) {
+		return {};
+	}
+
+	// Reserve DB IDs even when a door is not currently visible through content filtering.
+	const auto query = fmt::format(
+		"SELECT doorid FROM doors WHERE zone = '{}' AND (version = {} OR version = -1)",
+		Strings::Escape(zone->GetShortName()), zone->GetInstanceVersion()
+	);
+	auto results = content_db.QueryDatabase(query);
+	if (!results.Success()) {
+		return {};
+	}
+	std::array<bool, 256> used{};
+	used[0] = true;
+	for (auto row = results.begin(); row != results.end(); ++row) {
+		if (!row[0]) {
+			return {};
+		}
+		const int id = Strings::ToInt(row[0]);
+		if (id > 0 && id < static_cast<int>(used.size())) {
+			used[id] = true;
+		}
+	}
+	for (const auto &entry : door_list) {
+		used[entry.second->GetDoorID()] = true;
+	}
+	uint16 client_id = 1;
+	while (client_id < used.size() && used[client_id]) {
+		++client_id;
+	}
+	if (client_id == used.size()) {
+		return {};
+	}
+
+	auto record = DoorsRepository::NewEntity();
+	record.id = 0;
+	record.doorid = client_id;
+	record.zone = zone->GetShortName();
+	record.version = zone->GetInstanceVersion();
+	record.name = model;
+	record.pos_x = position.x;
+	record.pos_y = position.y;
+	record.pos_z = position.z;
+	record.heading = position.w;
+	record.opentype = type;
+	record.size = size;
+	auto door = std::make_unique<Doors>(record);
+	door->m_transient_owner = owner;
+	door->m_transient_token = EQ::Util::UUID::Generate().ToString();
+	if (door->m_transient_token.empty()) {
+		return {};
+	}
+	const auto token = door->m_transient_token;
+	AddDoor(door.get());
+	const auto entity_id = static_cast<uint16>(door->GetEntityID());
+	door.release(); // door_list now owns the instance, as for ordinary AddDoor callers.
+
+	// Rebuild client lists only: existing server Doors instances and state are retained.
+	DespawnAllDoors();
+	RespawnAllDoors();
+	return {entity_id, token};
+}
+
+bool EntityList::RemoveTransientDoor(const std::string &owner, uint16 entity_id, const std::string &token)
+{
+	const auto it = door_list.find(entity_id);
+	if (entity_id == 0 || owner.empty() || token.empty() || it == door_list.end()) {
+		return false;
+	}
+	const auto door = it->second;
+	if (door->GetDoorDBID() != 0 || door->m_transient_owner.empty() ||
+		door->m_transient_token.empty() || door->m_transient_owner != owner ||
+		door->m_transient_token != token) {
+		return false;
+	}
+	if (!RemoveDoor(entity_id)) {
+		return false;
+	}
+	DespawnAllDoors();
+	RespawnAllDoors();
+	return true;
 }
 
 uint16 EntityList::CreateDoor(const char *model, const glm::vec4& position, uint8 opentype, uint16 size)
@@ -5479,7 +5747,7 @@ NPC *EntityList::GetClosestBanker(Mob *sender, uint32 &distance)
 
 	auto it = npc_list.begin();
 	while (it != npc_list.end()) {
-		if (it->second->GetClass() == Class::Banker) {
+		if (it->second->GetClass() == Class::Banker && (!Housing::ServiceNpcs::Managed(it->second) || (sender->IsClient() && Housing::ServiceNpcs::Allows(*sender->CastToClient(),it->second,Housing::ServiceNpcs::Service::Banker)))) {
 			uint32 nd = ((it->second->GetY() - sender->GetY()) * (it->second->GetY() - sender->GetY())) +
 				((it->second->GetX() - sender->GetX()) * (it->second->GetX() - sender->GetX()));
 			if (nd < distance){

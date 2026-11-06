@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-03T19:42:08.782459+00:00",
+  "era_cutoff": "2013-05-31",
+  "runtime_scope": {
+    "zones": [
+      725,
+      726,
+      730,
+      731
+    ],
+    "achievement_definitions": [
+      1972500,
+      1972600,
+      1973000,
+      1973100
+    ],
+    "existing_criteria": [
+      7612,
+      7613,
+      7670,
+      7671
+    ],
+    "no_new_criterion_rows": true,
+    "held_zones": [
+      732,
+      733
+    ],
+    "explorer_parent_1900050_unchanged": true,
+    "held_sepulcher_definition": 1973300
+  },
+  "readiness": {
+    "1973000": "native ordinary entry, required credit and one normalrelog accepted",
+    "1973100": "configured/enabled; native entry and return pending safe lift approach",
+    "1973300": "held; gateway not verified",
+    "1972500": "configured/enabled; ordinary route, native entry and persistence unverified",
+    "1972600": "ordinary native spell entry and required completion accepted; relog persistence unverified"
+  },
+  "native_acceptance": {
+    "admin": 0,
+    "gm": false,
+    "spell_precondition": "temporary QA preowned spell; not FirstPilgrimage completion or normal spell acquisition",
+    "Pillars_progress_count": 1,
+    "Pillars_parent_count": 1,
+    "timestamps_and_versions_unchanged_after_relog": true,
+    "required_component_satisfied": true,
+    "client_numeric_component_counter": "unsupported; count1 verified separately in SQL",
+    "Windsong_entry_return_accepted": false,
+    "no_GM_transport_or_manual_achievement_credit": true,
+    "Pillars_spell_id": 29842,
+    "Sarith": {
+      "spell_id": 29839,
+      "preowned_QA_spell_not_normal_scroll_acquisition": true,
+      "single_ordinary_cast": true,
+      "admin": 0,
+      "gm": false,
+      "required_credit_count": 1,
+      "completion_record_count": 1,
+      "pending_updates": 0,
+      "relog_attempts": 0,
+      "persistence_accepted": false,
+      "Valley_route_attempted": false
+    },
+    "Valley_entry_accepted": false
+  },
+  "cache_maintenance": {
+    "world_zone_fix_deployed_locally": true,
+    "actual_world_zone_cache_refreshes": 1,
+    "zone_process_refreshes": 6,
+    "all_zone_refreshes_once": true,
+    "startup_auto_database_updates_held_then_original_configuration_restored": true,
+    "DB_schema_version_unchanged": 9338,
+    "protected_player_and_housing_state_preserved": true,
+    "new_source_behavior": [
+      "world includes idle zones in ZoneData broadcast and reloads its own ZoneStore",
+      "zone reloads ZoneStore even when idle and loads ZoneCFG only with a loaded zone"
+    ],
+    "actual_achievement_counts": [
+      30,
+      262,
+      1058
+    ],
+    "count_explanation": "Four traveler definitions admitted their four preexisting criteria; the first batch exposed existing category1902. No category or criterion row was inserted.",
+    "first_batch_idle_zone_processes_at_refresh": 5,
+    "first_batch_loaded_zone_processes_at_refresh": 1
+  },
+  "cleanup": {
+    "temporary_spell_staff_GM_position_and_owned_QA_credit_restored": true,
+    "current_inventory_GUIDs_and_legitimate_session_epochs_retained": true,
+    "assigned_clients_closed_and_managed_Lua_copies_clean": true,
+    "other_client_not_controlled": true
+  },
+  "limitations": [
+    "Not complete VoAExplorer parent/mission/raid support",
+    "Windsong and Valley native entry remain unverified; Sarith relog persistence unverified",
+    "Sepulcher and City of Bronze remain outside this package",
+    "No FirstPilgrimage quest or normal port-scroll acquisition acceptance",
+    "No new wire opcode or structure introduced by these metadata batches"
+  ],
+  "second_batch": {
+    "world_zone_data_reload_count": 1,
+    "all6_zone_data_reloads_once": true,
+    "all6_achievement_reloads_once": true,
+    "client_rebuild_failures": 0,
+    "catalogue_preservation": "All8tables checked: only two approved achievement.enabled bits changed; seven other hashes exact",
+    "QA_setup_restored": true,
+    "native_test_consumables_purchased": 1,
+    "unused_QA_consumable_natively_removed": true,
+    "inventory_SQL_used": false,
+    "bank_other_currency_preserved": true,
+    "full_preservation_closeout": "Closed debt-free; 127/128 hashes identical, remaining own legitimate session bookkeeping fully attributed; all other keyed leases exact",
+    "nine_server_processes_unchanged": true,
+    "assigned_clients_closed_managed_runtime_copies_empty": true
+  }
+}

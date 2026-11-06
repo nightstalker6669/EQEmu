@@ -1,0 +1,55 @@
+{
+  "recipe_id": 3040485,
+  "reservation": "Coordinator provisional, repeat fresh collision check before apply",
+  "enabled": false,
+  "name": "Hollowflesh Golem",
+  "output": {
+    "item": 68484,
+    "count": 1
+  },
+  "container": {
+    "item": 68480,
+    "name": "Runed Coffin",
+    "bagtype": 13,
+    "slots": 10
+  },
+  "components": [
+    {
+      "item": 68482,
+      "count": 3
+    },
+    {
+      "item": 68481,
+      "count": 1
+    },
+    {
+      "item": 68483,
+      "count": 3
+    },
+    {
+      "item": 68485,
+      "count": 3
+    }
+  ],
+  "source": "https://rof.eqresource.com/plansgoneawry.php",
+  "historical_scope": "Nov2012 original topic, mutable walkthrough; formula researched, not original database export",
+  "proposed_defaults": {
+    "skill_needed": 0,
+    "trivial": 0,
+    "nofail": 1,
+    "replace_container": 0,
+    "qualification": "Configurable emulator behavior where original exact failure/container-consumption rules are unverified",
+    "tradeskill": 75,
+    "quest": 0,
+    "must_learn": 0,
+    "min_expansion": 19,
+    "max_expansion": -1
+  },
+  "native_container_role_review": "Source compatibility reviewed: exact68480container/10ingredientunits, native quest0output/progress ownership. No native acceptance claimed; detailed private receipts retained outside payload.",
+  "no_inventory_bypass": true,
+  "no_runtime_writes": true,
+  "required_engine_ownership": {
+    "quest": 0,
+    "why": "Native TradeskillExecute only supplies onsuccess item and TradeSkill task credit when spec->quest is false. No scripted output/progress owner is used. This engine contract is not evidence of the historical Live database flag."
+  }
+}

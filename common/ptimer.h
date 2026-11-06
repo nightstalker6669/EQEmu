@@ -111,6 +111,10 @@ public:
 	PTimerList(uint32 char_id = 0);
 
 	~PTimerList();
+	void Swap(PTimerList& other) noexcept {
+		std::swap(_char_id,other._char_id);_list.swap(other._list);
+	}
+
 
 	bool Load(Database *db);
 	bool Store(Database *db);

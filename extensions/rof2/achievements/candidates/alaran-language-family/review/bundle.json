@@ -1,0 +1,36 @@
+{
+  "status": "accepted disabled source compatibility only; no installation approval",
+  "files": [
+    {
+      "target": "quests/lua_modules/achievement_alaran_master.lua",
+      "candidate": "quests/lua_modules/achievement_alaran_master.lua",
+      "candidate_sha256": "366004c063d11bf4d45bb57fc5ef52eaa7183f89b7dfa1b34c906713bb9819c5",
+      "preimage": {
+        "exists": false
+      },
+      "intended_mode": "0o664"
+    },
+    {
+      "target": "quests/lua_modules/achievement_alaran_master_data.lua",
+      "candidate": "quests/lua_modules/achievement_alaran_master_data.lua",
+      "candidate_sha256": "07cb9074739895b17eab6f78ed8cdae926265afbe8724a8020fbc8ea973d3773",
+      "preimage": {
+        "exists": false
+      },
+      "intended_mode": "0o664"
+    },
+    {
+      "target": "quests/lua_modules/shards_partisan.lua",
+      "candidate": "review/words-language-family.patch",
+      "candidate_sha256": "1e9caf2603aabf168843d96aab7f5e209ed450387647e9bbad62f6eef0a389e7",
+      "preimage": {
+        "exists": true,
+        "sha256": "af08d3a2c5400a9edce8a4ed560db75dfaf646ac5742058b960665bba00a4430",
+        "mode": "0o664"
+      },
+      "intended_mode": "0o664"
+    }
+  ],
+  "caller_kind": "External runtime preimage proposal; no matching public repository preimage or remote applicability claimed.",
+  "dependency": "Coherent3file replacement of earlier Master helper/data/caller proposals, not a competing second caller. All flags remain false; never caller alone. Fresh affected-zone Lua VM required for any future separately approved deployment/rollback."
+}

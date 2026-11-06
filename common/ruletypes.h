@@ -38,6 +38,9 @@
 
 
 RULE_CATEGORY(Character)
+RULE_BOOL(Character, NativeSpiritShroudTransitions, false, "Use checked native in-place RoF2 shroud transitions; unsupported destination states retain the reload fallback")
+RULE_BOOL(Character, EnableSpiritShrouds, false, "Enable transactional RoF2 Spirit Shrouds after applying shroud migrations")
+RULE_BOOL(Character, AllowTestSpiritShrouds, true, "Allow the separately marked starter Spirit Shroud catalog while Live content research is incomplete")
 RULE_INT(Character, MaxLevel, 65, "Sets the highest level for players that can be reached through experience")
 RULE_BOOL(Character, PerCharacterQglobalMaxLevel, false, "Check for qglobal 'CharMaxLevel' character qglobal (Type 5, \"\"), if player tries to level beyond that point, it will not go beyond that level")
 RULE_BOOL(Character, PerCharacterBucketMaxLevel, false, "Check for data bucket 'CharMaxLevel', if player tries to level beyond that point, it will not go beyond that level")
@@ -241,9 +244,12 @@ RULE_INT(Character, SecondsBeforeAFKNonCombatZone, 600, "Seconds before a player
 RULE_CATEGORY_END()
 
 RULE_CATEGORY(Mercs)
+RULE_INT(Mercs, MaxMercenaries, 1, "Available owned mercenary slots, clamped to compiled roster capacity; one active at a time. Server policy, not a marketplace entitlement.")
+RULE_BOOL(Mercs, ScaleAboveContentLevel, true, "Scale the highest lower-level mercenary stats when exact owner-level content is missing. Explicit emulator policy, not recovered Live values.")
 RULE_INT(Mercs, SuspendIntervalMS, 10000, "Time interval for merc suspend (milliseconds)")
 RULE_INT(Mercs, UpkeepIntervalMS, 180000, "Time interval for merc upkeep (milliseconds)")
 RULE_INT(Mercs, SuspendIntervalS, 10, "Time interval for merc suspend command (seconds)")
+RULE_INT(Mercs, ReviveIntervalS, 300, "Mercenary death restoration delay (seconds)")
 RULE_BOOL(Mercs, AllowMercs, false, "Allow the use of mercs")
 RULE_BOOL(Mercs, ChargeMercPurchaseCost, false, "Turns Mercenary purchase costs on or off")
 RULE_BOOL(Mercs, ChargeMercUpkeepCost, false, "Turns Mercenary upkeep costs on or off")
@@ -751,6 +757,17 @@ RULE_BOOL(TaskSystem, UpdateOneElementPerTask, true, "If true (live-like) task u
 RULE_INT(TaskSystem, MaxUpdateMessages, 50, "Maximum update messages for non-GiveCash activity types in IncrementDoneCount")
 RULE_CATEGORY_END()
 
+RULE_CATEGORY(Achievements)
+RULE_BOOL(Achievements, EnableAchievements, true, "Enable the server-side achievement system")
+RULE_BOOL(Achievements, GrantRewards, true, "Grant configured achievement rewards when an achievement is completed")
+RULE_BOOL(Achievements, GuildMemberNotifications, true, "Notify guild members when a player completes an achievement")
+RULE_BOOL(Achievements, NearbyPlayerNotifications, true, "Notify nearby players in the same zone when a player completes an achievement")
+RULE_INT(Achievements, NearbyPlayerNotificationDistance, 200, "Maximum distance for nearby achievement completion notifications; set to 0 to disable")
+RULE_INT(Achievements, CompletionNotificationIntervalMS, 750, "Minimum milliseconds between achievement completion notifications; notifications earned during login reconciliation are queued and delivered in order")
+RULE_INT(Achievements, RewardGrantsPerTick, 8, "Maximum completed achievements whose automatic rewards are processed for one client per process tick")
+RULE_INT(Achievements, OwnershipReconcileIntervalMS, 30000, "Interval in milliseconds for authoritative owned-item reconciliation; set to 0 to disable periodic reconciliation")
+RULE_CATEGORY_END()
+
 RULE_CATEGORY(Range)
 RULE_INT(Range, Say, 15, "The range that is required before /say or hail messages will work to an NPC")
 RULE_INT(Range, Emote, 135, "The packet range in which emote messages are sent'")
@@ -1177,6 +1194,14 @@ RULE_REAL(EvolvingItems, PercentOfGroupExperience, 0.1, "Percentage of group exp
 RULE_REAL(EvolvingItems, PercentOfRaidExperience, 0.1, "Percentage of raid experience allocated to evolving items that require experience.")
 RULE_INT(EvolvingItems, DelayUponEquipping, 30000, "Delay in ms before an evolving item will earn rewards after equipping.  Default is 30000ms or 30s.")
 RULE_BOOL(EvolvingItems, DestroyAugmentsOnEvolve, false, "If this is enabled, any augments in an item will be destroyed when the item evolves. Otherwise, send augments to the player via the parcel system (requires that the Parcel System be enabled).")
+RULE_CATEGORY_END()
+
+RULE_CATEGORY(Housing)
+RULE_BOOL(Housing, EnablePlayerHousing, false, "Enable experimental native RoF2 housing; requires the optional housing schema and verified content.")
+RULE_BOOL(Housing, EnableNativeHouseSwap, false, "Enable reviewed native house storage and same-plot house swaps; requires the house-storage and swap journal schemas. Old house enters plot storage.")
+RULE_BOOL(Housing, EnableNativeFurniturePlacement, false, "Enable native RoF2 furniture mutation handlers after inventory-session and placement validation; requires player housing and optional placement schema.")
+RULE_BOOL(Housing, EnableNativeEscrowTransfers, false, "Enable native RoF2 cursor coin deposit and withdrawal after live currency-session validation; requires player housing and optional escrow schema.")
+RULE_INT(Housing, ReviewedPersonalTransferLimit, 0, "Explicit reviewed personal plot ownership transfer limit (1 to 3); zero disables transfer until policy is reviewed. Not a recovered historical limit.")
 RULE_CATEGORY_END()
 
 #undef RULE_CATEGORY

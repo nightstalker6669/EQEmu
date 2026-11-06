@@ -1,0 +1,47 @@
+{
+  "scope": "Reverified original native model registry and supported asset metadata, not original quest-NPC binding",
+  "client_sha256": "2a8702ad9f722704f01355c0750be7d6f164a8b9c9128ba0cf286ea32b405b0e",
+  "constructor_start": "0x50a5f0",
+  "constructor_last_instruction": "0x50ef27",
+  "model_registrations_recovered": 859,
+  "unresolved_registrations": 0,
+  "orb_models": [
+    {
+      "race": 422,
+      "gender": 2,
+      "prefix": "ROB",
+      "registration_call": "0x50d1dc",
+      "material": "Runed Orb"
+    },
+    {
+      "race": 616,
+      "gender": 2,
+      "prefix": "CRY",
+      "registration_call": "0x50e424"
+    },
+    {
+      "race": 730,
+      "gender": 2,
+      "prefix": "ORB",
+      "registration_call": "0x50eea1"
+    }
+  ],
+  "selected_candidate": 422,
+  "original_npc_model_binding_verified": false,
+  "open_immunity_policy": {
+    "flag": 53,
+    "scope": "Block /open shortcut for the combat-only orb",
+    "original_flag_list_recovered": false
+  },
+  "native_client_or_server_control": false,
+  "binary_or_texture_assets_included": false,
+  "combat_class_policy": {
+    "class": 1,
+    "historical_class_recovered": false,
+    "reason": "Class1 plus DisableMelee39 retains actual player damage attribution. Chest class62 and AggroImmunity24/25 prevented native killer ownership. No synthetic task updates.",
+    "special_abilities": "39,1^53,1",
+    "aggroradius": 0,
+    "assistradius": 0,
+    "runspeed": 0
+  }
+}

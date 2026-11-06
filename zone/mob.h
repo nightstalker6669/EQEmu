@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "xorbb_binding_cast_context.h"
 
 #include "common/data_bucket.h"
 #include "common/emu_constants.h"
@@ -381,7 +382,7 @@ public:
 	virtual bool DoCastSpell(int32 spell_id, uint16 target_id, EQ::spells::CastingSlot slot = EQ::spells::CastingSlot::Item, int32 casttime = -1,
 		int32 mana_cost = -1, uint32* oSpellWillFinish = 0, uint32 item_slot = 0xFFFFFFFF,
 		uint32 timer = 0xFFFFFFFF, uint32 timer_duration = 0, int16 resist_adjust = 0,
-		uint32 aa_id = 0);
+		uint32 aa_id = 0, const XorbbBinding::ItemCastContext* binding_context = nullptr);
 	void CastedSpellFinished(int32 spell_id, uint32 target_id, EQ::spells::CastingSlot slot, int mana_used,
 		uint32 inventory_slot = 0xFFFFFFFF, int16 resist_adjust = 0);
 	bool SpellFinished(int32 spell_id, Mob *target, EQ::spells::CastingSlot slot = EQ::spells::CastingSlot::Item, int mana_used = 0,
@@ -403,9 +404,10 @@ public:
 		CastAction_type &CastAction, EQ::spells::CastingSlot slot, bool isproc = false);
 	bool DoCastingChecksOnCaster(int32 spell_id, EQ::spells::CastingSlot slot);
 	bool DoCastingChecksZoneRestrictions(bool check_on_casting, int32 spell_id);
-	bool DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob* spell_target);
+	bool DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob* spell_target, uint32 aa_context = 0,
+		const XorbbBinding::ItemCastContext* binding_context = nullptr, bool* binding_restriction_failed = nullptr);
 	virtual bool CheckFizzle(int32 spell_id);
-	virtual bool CheckSpellLevelRestriction(Mob *caster, int32 spell_id);
+	virtual bool CheckSpellLevelRestriction(Mob *caster, int32 spell_id, uint32 aa_context = 0);
 	virtual bool IsImmuneToSpell(int32 spell_id, Mob *caster);
 
 	virtual float GetAOERange(int32 spell_id);
@@ -1066,6 +1068,14 @@ public:
 	inline uint8 GetActiveLightType() { return m_Light.Type[EQ::lightsource::LightActive]; }
 	bool UpdateActiveLight(); // returns true if change, false if no change
 	uint32 GetNpcTintId() { return m_npc_tint_id; }
+	// Bind an actual service spawn to its durable housing item. Call before
+	// announcing the spawn; item authorization remains with the housing service.
+	bool SetHousingItemBinding(const std::string& guid, uint32 estate_id, uint32 item_id);
+	void ClearHousingItemBinding();
+	const std::string& GetHousingItemGuid() const { return m_housing_item_guid; }
+	uint32 GetHousingEstateId() const { return m_housing_estate_id; }
+	uint32 GetHousingItemId() const { return m_housing_item_id; }
+
 
 	EQ::LightSourceProfile* GetLightProfile() { return &m_Light; }
 
@@ -1599,6 +1609,10 @@ protected:
 	int32 heroic_strikethrough;
 	bool keeps_sold_items;
 	uint32 m_npc_tint_id;
+	std::string m_housing_item_guid;
+	uint32 m_housing_estate_id = 0xffffffff;
+	uint32 m_housing_item_id = 0xffffffff;
+
 
 	uint32 m_PlayerState;
 	uint32 GetPlayerState() { return m_PlayerState; }
@@ -1931,6 +1945,13 @@ protected:
 	uint16 m_merchant_session_entity_id;
 
 private:
+	XorbbBinding::ItemCastContext binding_item_cast_context_{};
+	// Only the normal authenticated single-target completion supplies context.
+	// Public/raw/proc SpellOnTarget calls continue through the null-context path.
+	bool SpellOnTargetWithBindingContext(int32 spell_id, Mob* target, int reflect_effectiveness,
+		bool use_resist_adjust, int16 resist_adjust, bool isproc, int level_override,
+		int duration_override, bool disable_buff_overwrite,
+		const XorbbBinding::ItemCastContext* binding_context, bool* binding_restriction_failed);
 	Mob* target;
 	EQ::InventoryProfile m_inv;
 	std::shared_ptr<HealRotation> m_target_of_heal_rotation;

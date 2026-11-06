@@ -68,6 +68,8 @@ public:
 	uint32 GetOpenType();
 	void SetDisableTimer(bool flag);
 	bool GetDisableTimer();
+	bool IsDoorOpen();
+	void SetOpenState(bool open);
 	void SetLockPick(uint32 pick);
 	uint32 GetLockPick();
 	void SetKeyItem(uint32 key);

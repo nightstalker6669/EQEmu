@@ -1,3 +1,4 @@
+namespace TrophyCertificate55 {class Custody;}
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -16,6 +17,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "housing_recipe301.h"
 
 // Object Class:
 // Represents Zone Objects (forges, ovens, brew barrels, items dropped to ground, etc)
@@ -132,7 +134,11 @@ enum ObjectTypes {
 
 class Object: public Entity
 {
+ friend class TrophyCertificate55::Custody;
 public:
+ static bool OpenHousingRecipe301(Client&,const HousingRecipe301::Binding&,const EQ::ItemInstance&);
+ bool IsHousingRecipe301()const {return bool(m_recipe301);}
+ const HousingRecipe301::Binding* HousingRecipe301Origin()const {return m_recipe301.get();}
 	// Loading object from database
 	Object(uint32 id, uint32 type, uint32 icon, const Object_Struct& data, const EQ::ItemInstance* inst = nullptr, bool fix_z = true);
 	Object(const EQ::ItemInstance* inst, const std::string& name, float max_x, float min_x, float max_y, float min_y, float z, float heading, uint32 respawn_timer, bool fix_z);
@@ -145,6 +151,7 @@ public:
 	~Object();
 	bool Process();
 	bool IsGroundSpawn() { return m_ground_spawn; }
+	void SetQuestGroundSpawn() { m_quest_ground_spawn = true; }
 	// Event handlers
 	bool HandleClick(Client* sender, const ClickObject_Struct* click_object);
 	void Close();
@@ -221,6 +228,12 @@ public:
 	bool EntityVariableExists(std::string variable_name);
 
 protected:
+	friend class EntityList;
+	bool m_click_only = false;
+ std::unique_ptr<HousingRecipe301::Binding> m_recipe301;
+ Timer m_recipe301_timer{1000};
+	std::string m_click_owner;
+	std::string m_click_token;
 	void	ResetState();	// Set state back to original
 	void	RandomSpawn(bool send_packet = false);		//spawn this ground spawn at a random place
 
@@ -234,6 +247,8 @@ protected:
 	float  m_min_x;
 	float  m_min_y;
 	bool   m_ground_spawn;
+	bool   m_quest_ground_spawn = false;
+	bool   m_random_ground_z = false; // Recurring spawn uses the map-height sentinel.
 	char   m_display_name[64];
 	bool   m_fix_z;
 protected:

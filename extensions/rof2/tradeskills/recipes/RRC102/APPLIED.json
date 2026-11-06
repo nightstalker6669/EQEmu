@@ -1,0 +1,37 @@
+{
+  "batch": "RRC102",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "bd2ff196351b6c82f4fd9e0bfb0080f0f73c55df",
+  "source_sha256": "03e68b1b4b88438ea4a25afbd33c2e89004004a73c011d07c995b2e95320b791",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "historical_qualification": "LABELLED_RECONSTRUCTION: maintained GreenGill/ThunderSalmon/NightmareCichlid Dart23578 routes; July2003 post supports Nightmare family and five-dart context, not every formula field/kit. Learning0/minimum0/expansion-1 new records only. Tool23577 success/failure return1/salvage0; ordinary17910/17762/17189only. Surefall/furniture held; old7311/7312/7544 and24entries unchanged.",
+  "recipes": 3,
+  "entries": 18,
+  "ids": [
+    3094019,
+    3094021
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC102",
+    "0",
+    "25842",
+    "25845",
+    "194889",
+    "194907",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25845,
+    "entries": 194907
+  },
+  "affected_postimages_exact": true,
+  "unchanged_prototype_recipes": 3,
+  "unchanged_prototype_entries": 24,
+  "old_prototypes_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

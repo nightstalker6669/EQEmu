@@ -1,0 +1,746 @@
+--- a/common/CMakeLists.txt
++++ b/common/CMakeLists.txt
+@@ -16,6 +16,11 @@
+     database/database_dump_service.cpp
+     database.cpp
+     database_instances.cpp
++    fellowship/campsite_catalogue.cpp
++    fellowship/campsite_materials.cpp
++    fellowship/service.cpp
++    fellowship/vitality.cpp
++    fellowship/journal.cpp
+     housing/persistence_service.cpp
+     housing/escrow_service.cpp
+     housing/item_service.cpp
+--- a/common/database.cpp
++++ b/common/database.cpp
+@@ -26,6 +26,8 @@
+ #include <algorithm>
+ #include <mysqld_error.h>
+ #include "housing/admission_guard.h"
++#include "fellowship/service.h"
++#include "fellowship/vitality.h"
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+@@ -379,6 +381,20 @@
+ 		LogError("Character [{}] deletion withheld: housing requires an atomic maintenance/archive adapter", e.id);
+ 		return false;
+ 	}
++
++    // Fellowship membership must not retain a deleted leader or consume a slot.
++    // The service promotes a surviving member or removes an empty fellowship.
++    Fellowship::Service fellowships(*this);
++    if (!fellowships.CharacterDeleted(e.id, static_cast<uint64_t>(std::time(nullptr)))) {
++        LogError("Character [{}] deletion withheld: fellowship cleanup failed", e.id);
++        return false;
++    }
++
++    Fellowship::VitalityService vitality(*this);
++    if (!vitality.Clear(e.id)) {
++        LogError("Character [{}] deletion withheld: fellowship vitality cleanup failed", e.id);
++        return false;
++    }
+ 
+ 	std::string delete_type = "hard-deleted";
+ 	if (RuleB(Character, SoftDeletes)) {
+--- a/common/dbcore.cpp
++++ b/common/dbcore.cpp
+@@ -11,6 +11,7 @@
+ 
+ #include <fstream>
+ #include <iostream>
++#include <new>
+ #include <mysqld_error.h>
+ #include <string.h>
+ #include "strings.h"
+@@ -35,7 +36,8 @@
+ 
+ DBcore::DBcore()
+ {
+-	mysql      = mysql_init(nullptr);
++	mysql      = new (std::nothrow) MYSQL{};
++	if (mysql && !mysql_init(mysql)) { mysql_close(mysql); delete mysql; mysql = nullptr; }
+ 	mysqlOwner = true;
+ 	pHost      = nullptr;
+ 	pUser      = nullptr;
+@@ -54,8 +56,9 @@
+ 	 * are re-using the default database connection pointer when we dont have an
+ 	 * external configuration setup ex: (content_database)
+ 	 */
+-	if (mysqlOwner) {
++	if (mysqlOwner && mysql) {
+ 		mysql_close(mysql);
++		delete mysql;
+ 	}
+ 
+ 	safe_delete_array(pHost);
+@@ -71,7 +74,7 @@
+ 		// well, if's it's locked, someone's using it. If someone's using it, it doesnt need a keepalive
+ 		return;
+ 	}
+-	mysql_ping(mysql);
++	if (mysql) mysql_ping(mysql);
+ 	m_mutex->unlock();
+ }
+ 
+@@ -96,8 +99,12 @@
+ 	LockMutex lock(m_mutex);
+ 
+ 	// Reconnect if we are not connected before hand.
+-	if (pStatus != Connected) {
+-		Open();
++	if ((mysqlOwner && pStatus != Connected && !Open()) || !mysql ||
++		(!mysqlOwner && mysql_thread_id(mysql) == 0)) {
++		pStatus = Error;
++		auto errorBuffer = new char[MYSQL_ERRMSG_SIZE];
++		snprintf(errorBuffer, MYSQL_ERRMSG_SIZE, "Database connection could not be opened");
++		return MySQLRequestResult(nullptr, 0, 0, 0, 0, CR_SERVER_GONE_ERROR, errorBuffer);
+ 	}
+ 
+ 	// request query. != 0 indicates some kind of error.
+@@ -143,6 +150,8 @@
+ 
+ 		return MySQLRequestResult(nullptr, 0, 0, 0, 0, mysql_errno(mysql), errorBuffer);
+ 	}
++
++	pStatus = Connected;
+ 
+ 	// successful query. get results.
+ 	MYSQL_RES *res     = mysql_store_result(mysql);
+@@ -242,10 +251,29 @@
+ 	if (GetStatus() == Connected) {
+ 		return true;
+ 	}
+-	if (GetStatus() == Error) {
++	if (GetStatus() == Error && mysqlOwner && mysql) {
++		// This MYSQL storage belongs to DBcore, not the connector. Closing it
++		// releases connection resources but preserves addresses borrowed through
++		// SetMySQL (for example content_db). Reinitialize that stable storage.
+ 		mysql_close(mysql);
+-		mysql_init(mysql);        // Initialize structure again
+-	}
++		memset(mysql, 0, sizeof(*mysql));
++		if (!mysql_init(mysql)) {
++			if (errnum) *errnum = CR_SERVER_GONE_ERROR;
++			if (errbuf) snprintf(errbuf, MYSQL_ERRMSG_SIZE, "Unable to initialize database connection");
++			return false;
++		}
++	}
++	if (!mysql) {
++		mysql = new (std::nothrow) MYSQL{};
++		if (!mysql || !mysql_init(mysql)) {
++			if (mysql) { mysql_close(mysql); delete mysql; mysql = nullptr; }
++			pStatus = Error;
++			if (errnum) *errnum = CR_SERVER_GONE_ERROR;
++			if (errbuf) snprintf(errbuf, MYSQL_ERRMSG_SIZE, "Unable to initialize database connection");
++			return false;
++		}
++	}
++
+ 	if (!pHost) {
+ 		return false;
+ 	}
+--- a/common/dbcore.h
++++ b/common/dbcore.h
+@@ -45,8 +45,11 @@
+ 
+ 	void SetMySQL(const DBcore &o)
+ 	{
++		if (this == &o) return;
++		if (mysqlOwner && mysql) { mysql_close(mysql); delete mysql; }
+ 		mysql      = o.mysql;
+ 		mysqlOwner = false;
++		pStatus    = o.pStatus;
+ 	}
+ 	void SetMutex(Mutex *mutex);
+ 
+--- a/common/emu_oplist.h
++++ b/common/emu_oplist.h
+@@ -170,6 +170,11 @@
+ N(OP_Feedback),
+ N(OP_FeignDeath),
+ N(OP_FellowshipUpdate),
++N(OP_FellowshipAction),
++N(OP_FellowshipInvite),
++N(OP_FellowshipCampRequest),
++N(OP_FellowshipCampList),
++N(OP_FellowshipVitality),
+ N(OP_FindPersonReply),
+ N(OP_FindPersonRequest),
+ N(OP_FinishTrade),
+--- a/common/housing/current_estate_access.cpp
++++ b/common/housing/current_estate_access.cpp
+@@ -1,3 +1,4 @@
++#include "fellowship_membership.h"
+ #include "current_estate_access.h"
+ #include "rent_state_db.h"
+ #include "../database.h"
+@@ -36,6 +37,7 @@
+   if(membership.RowCount()){trusted.guild_id=Number(membership.begin()[0]);auto rank=AccessPolicy::NativeGuildRankFromServer(Number(membership.begin()[1]));if(!rank||!AccessPolicy::PositiveIdentity(trusted.guild_id))throw Failure{Error::Unauthorized};trusted.guild_rank=*rank;auto guild=Query(db,"SELECT leader FROM guilds WHERE id="+std::to_string(trusted.guild_id)+" FOR UPDATE");if(guild.RowCount()!=1||(trusted.guild_rank==1&&Number(guild.begin()[0])!=actor.character_id))throw Failure{Error::Unauthorized};}
+   AccessPolicy::ResolvedPlot resolved;resolved.estate_id=native;resolved.type=kind==1?AccessPolicy::PlotType::Personal:AccessPolicy::PlotType::Guild;
+   if(kind==1){resolved.owner_character_id=owner;Character(db,owner);}else{resolved.guild_id=owner;auto guild=Query(db,"SELECT id FROM guilds WHERE id="+std::to_string(owner)+" FOR UPDATE");if(guild.RowCount()!=1)throw Failure{Error::Unauthorized};}
++  auto fellowship_error=FellowshipMembership::PopulateUnderTransaction(db,trusted,resolved);if(fellowship_error!=Error::None)throw Failure{fellowship_error};
+   CurrentEstateAccess out;out.owner_kind=OwnerKind(kind);out.owner_id=owner;out.plot_id=plot;auto acl=Acl(db,estate,out.acl_revision);auto access=AccessPolicy::Resolve(resolved,trusted,&acl);if(!access)throw Failure{Error::Unauthorized};out.effective=*access;RentState::Restrict(db,estate,native,out.effective);return {out,Error::None};
+  }catch(const Failure& f){return {{},f.error};}catch(...){return {{},Error::DatabaseFailure};}
+ }
+--- a/common/housing/live_escrow_service.cpp
++++ b/common/housing/live_escrow_service.cpp
+@@ -351,33 +351,13 @@
+             if(request.wire.action==uint32_t(EscrowWire::Action::Deposit)||request.wire.action==3||request.wire.action==4)throw Failure{
+                 Error::Unauthorized
+             };
+-            auto state=Query(db,"SELECT revision FROM housing_acl_state WHERE estate_id="+std::to_string(request.estate_id)+" FOR UPDATE");
+-            std::array<uint32_t,7> masks=AccessPolicy::NativeDefaults;
+-            if(state.RowCount()>1||(state.RowCount()&&!std::stoull(state.begin()[0])))throw Failure{
+-                Error::DatabaseFailure
+-            };
+-            auto groups=Query(db,"SELECT group_id,capabilities FROM housing_acl_groups WHERE estate_id="+std::to_string(request.estate_id)+" ORDER BY group_id FOR UPDATE");
+-            if(groups.RowCount()!=(state.RowCount()?7:0))throw Failure{
+-                Error::DatabaseFailure
+-            };
+-            uint32_t expected=0;
+-            for(auto row=groups.begin();row.operator!=(groups.end());++row){
+-                const auto group=Number(row[0]),mask=Number(row[1]);
+-                if(group!=expected++||group>6||(mask&~AccessPolicy::KnownCapabilities)||(group==6&&mask))throw Failure{
+-                    Error::DatabaseFailure
+-                };
+-                masks[group]=mask;
+-            }
+-            auto named=Query(db,"SELECT group_id FROM housing_acl_members WHERE estate_id="+std::to_string(request.estate_id)+" AND character_id="+std::to_string(request.lease.actor.character_id)+" FOR UPDATE");
+-            if(named.RowCount()>1)throw Failure{
+-                Error::DatabaseFailure
+-            };
+-            const auto group=named.RowCount()?Number(named.begin()[0]):0;
+-            if(group>5||!(masks[group]&(uint32_t(1)<<uint8_t(AccessPolicy::Capability::WithdrawUpkeep))))throw Failure{
+-                Error::Unauthorized
+-            };
+-            // Personal guild/fellowship association remains unresolved, so no special grant
+-            // can elevate this narrowly supported personal cursor withdrawal.
++            // The same current typed ACL resolver authorizes ordinary item and
++            // scene operations. Keep personal deposit/refund restrictions above;
++            // only the WithdrawUpkeep capability may elevate this withdrawal.
++            auto access=LoadCurrentEstateAccessUnderTransaction(db,request.estate_id,request.wire.estate_id,request.lease.actor);
++            if(!access)throw Failure{access.error==Housing::Error::DatabaseFailure?Error::DatabaseFailure:Error::Unauthorized};
++            if(access.value.owner_kind!=OwnerKind::Character||access.value.owner_id!=owner||
++               !access.value.effective.Allows(AccessPolicy::Capability::WithdrawUpkeep))throw Failure{Error::Unauthorized};
+         }
+         Bytes Binding(const Request& request){
+             Bytes out;
+--- a/common/housing/native_access_service.cpp
++++ b/common/housing/native_access_service.cpp
+@@ -1,3 +1,4 @@
++#include "fellowship_membership.h"
+ #include "runtime_activation_db.h"
+ #include "native_access_service.h"
+ #include "catalog_service.h"
+@@ -305,6 +306,8 @@
+                 auto current_guild=Query(db,"SELECT leader FROM guilds WHERE id="+std::to_string(out.actor.guild_id)+" FOR UPDATE");
+                 if(current_guild.RowCount()!=1||(out.actor.guild_rank==1&&Number(current_guild.begin()[0])!=lease.actor.character_id))throw Failure{Error::Unauthorized};
+             }
++            const auto fellowship_error=FellowshipMembership::PopulateUnderTransaction(db,out.actor,out.plot);
++            if(fellowship_error!=Housing::Error::None)throw Failure{fellowship_error==Housing::Error::DatabaseFailure?Error::DatabaseFailure:Error::Unauthorized};
+             return out;
+         }
+         using SubjectKey=std::pair<uint8_t,uint32_t>;
+--- a/common/housing/scene_service.cpp
++++ b/common/housing/scene_service.cpp
+@@ -1,3 +1,4 @@
++#include "fellowship_membership.h"
+ #include "runtime_activation_db.h"
+ #include "npc_exit_collision.h"
+ #include "npc_native_frame_db.h"
+@@ -408,6 +409,7 @@
+  }else if(!anchor_custody&&!fence.PlacementContextMatches(estate,out.native_plot_id,out.route.instance_id))throw Failure{Error::UnheldFence};
+  AccessPolicy::TrustedActor trusted;trusted.character_id=l.actor.character_id;trusted.authenticated=trusted.feature_allowed=true;auto membership=Q(db,"SELECT guild_id,`rank` FROM guild_members WHERE char_id="+std::to_string(l.actor.character_id)+" FOR UPDATE");if(membership.RowCount()>1)throw Failure{Error::DatabaseFailure};if(membership.RowCount()){trusted.guild_id=Number(membership.begin()[0]);auto rank=AccessPolicy::NativeGuildRankFromServer(Number(membership.begin()[1]));if(!rank)throw Failure{Error::Unauthorized};trusted.guild_rank=*rank;auto current_guild=Q(db,"SELECT leader FROM guilds WHERE id="+std::to_string(trusted.guild_id)+" FOR UPDATE");if(current_guild.RowCount()!=1||(trusted.guild_rank==1&&Number(current_guild.begin()[0])!=l.actor.character_id))throw Failure{Error::Unauthorized};}
+  AccessPolicy::ResolvedPlot resolved;resolved.estate_id=out.native_plot_id;resolved.type=owner_kind==1?AccessPolicy::PlotType::Personal:AccessPolicy::PlotType::Guild;std::string owner_name;if(owner_kind==1){resolved.owner_character_id=owner;owner_name=Character(db,owner);}else{resolved.guild_id=owner;auto guild=Q(db,"SELECT name FROM guilds WHERE id="+std::to_string(owner)+" FOR UPDATE");if(guild.RowCount()!=1||!guild.begin()[0])throw Failure{Error::Unauthorized};owner_name=guild.begin()[0];}
++ auto fellowship_error=FellowshipMembership::PopulateUnderTransaction(db,trusted,resolved);if(fellowship_error!=Housing::Error::None)throw Failure{fellowship_error==Housing::Error::DatabaseFailure?Error::DatabaseFailure:Error::Unauthorized};
+  auto acl=Acl(db,estate,out.acl_revision);auto access=AccessPolicy::Resolve(resolved,trusted,&acl);if(!access||!access->Allows(AccessPolicy::Capability::Enter))throw Failure{Error::Unauthorized};out.access=*access;RentState::Restrict(db,estate,out.native_plot_id,out.access);
+  const RegionWire::Region* region=nullptr;for(const auto& r:bundle.regions)if(r.id==definition.area_id)region=&r;if(!region)throw Failure{Error::UnsupportedItem};out.definition=definition;out.region=*region;
+  auto pending=Q(db,"SELECT l.character_id FROM housing_live_item_leases l JOIN housing_live_item_custody c ON c.owner_character_id=l.character_id WHERE c.estate_id="+std::to_string(estate)+" AND l.pending_key IS NOT NULL LIMIT 1 FOR UPDATE");if(pending.RowCount())throw Failure{Error::PendingApplication};
+--- a/common/servertalk.h
++++ b/common/servertalk.h
+@@ -274,6 +274,9 @@
+ 
+ // player events
+ #define ServerOP_QSSendQuery 0x5000
++#define ServerOP_FellowshipChat 0x5126
++#define ServerOP_FellowshipChatDeliver 0x5127
++#define ServerOP_FellowshipRefresh 0x5125 // authenticated world/zone invalidation; zero payload
+ #define ServerOP_HousingUpkeepRefresh 0x5124 // new internal world/zone invalidation; zero payload
+ #define ServerOP_HousingTrophyRefresh 0x5120 // new internal world/zone invalidation; zero payload
+ #define ServerOP_PlayerEvent 0x5100
+@@ -1791,4 +1794,20 @@
+ 
+ #define ServerOP_HousingGuildTrophyMember 0x5123
+ 
++// Fellowship messages carry only authenticated server identities. Client input
++// supplies text; the originating zone supplies actor_id, world supplies all
++// recipient/group/name fields after reloading current membership.
++struct FellowshipChatRequest {
++    uint32 actor_id;
++    char message[1024];
++};
++struct FellowshipChatDelivery {
++    uint32 actor_id;
++    uint32 recipient_id;
++    uint32 fellowship_id;
++    char sender[64];
++    char message[1024];
++};
++
++
+ #endif
+--- a/utils/patches/patch_RoF2.conf
++++ b/utils/patches/patch_RoF2.conf
+@@ -823,3 +823,11 @@
+ 
+ # Original RoF2 housing spawn-to-item binding; canonical32 consumed-byte profile.
+ OP_RealEstateBindSpawn=0x21ea
++
++# Native May 10 2013 fellowship protocol, recovered from the matching client.
++OP_FellowshipUpdate=0x6e4d
++OP_FellowshipAction=0x7121
++OP_FellowshipInvite=0x62ab
++OP_FellowshipCampRequest=0x0c12
++OP_FellowshipCampList=0x074d
++OP_FellowshipVitality=0x2cc6
+--- a/world/zoneserver.cpp
++++ b/world/zoneserver.cpp
+@@ -18,6 +18,9 @@
+ */
+ #include "../common/global_define.h"
+ #include "../common/housing/upkeep_refresh_wire.h"
++#include "../common/fellowship/service.h"
++#include <cstring>
++#include <ctime>
+ #include "zoneserver.h"
+ #include "clientlist.h"
+ #include "login_server.h"
+@@ -183,6 +186,61 @@
+ 	auto pack = &tpack;
+ 
+ 	switch (opcode) {
++        case ServerOP_FellowshipChat: {
++            if (pack->size != sizeof(FellowshipChatRequest)) {
++                break;
++            }
++            const auto* request = reinterpret_cast<const FellowshipChatRequest*>(pack->pBuffer);
++            if (!request->message[0] || !std::memchr(request->message, 0, sizeof(request->message))) {
++                break;
++            }
++            auto* actor = ClientList::Instance()->FindCLEByCharacterID(request->actor_id);
++            if (!actor || actor->Server() != this || actor->Online() != CLE_Status::InZone) {
++                break;
++            }
++            Fellowship::Service fellowships(database);
++            const auto group = fellowships.GetByCharacter(actor->CharID(), static_cast<uint64_t>(std::time(nullptr)));
++            if (!group || !group.value.id) {
++                break;
++            }
++            const Fellowship::Member* sender = nullptr;
++            for (const auto& member : group.value.members) {
++                if (member.character_id == actor->CharID()) {
++                    sender = &member;
++                    break;
++                }
++            }
++            if (!sender) {
++                break;
++            }
++            for (const auto& member : group.value.members) {
++                // RoF2 already echoes the sender's own /fsay locally.
++                if (member.character_id == actor->CharID()) {
++                    continue;
++                }
++                auto* recipient = ClientList::Instance()->FindCLEByCharacterID(member.character_id);
++                if (!recipient || recipient->Online() != CLE_Status::InZone) {
++                    continue;
++                }
++                ServerPacket delivery(ServerOP_FellowshipChatDeliver, sizeof(FellowshipChatDelivery));
++                auto* payload = reinterpret_cast<FellowshipChatDelivery*>(delivery.pBuffer);
++                payload->actor_id = actor->CharID();
++                payload->recipient_id = member.character_id;
++                payload->fellowship_id = group.value.id;
++                strn0cpy(payload->sender, sender->name.c_str(), sizeof(payload->sender));
++                strn0cpy(payload->message, request->message, sizeof(payload->message));
++                ClientList::Instance()->SendPacket(member.name.c_str(), &delivery);
++            }
++            break;
++        }
++        case ServerOP_FellowshipRefresh: {
++            // This handler is reached through the authenticated zone connection.
++            // Never forward packet-declared membership or client wire bytes.
++            if (pack->size == 0) {
++                ZSList::Instance()->SendPacket(pack);
++            }
++            break;
++        }
+ 		case ServerOP_HousingGuildTrophyRequest: {
+         if(pack->size!=sizeof(HousingGuildTrophyRequest))break;auto* request=reinterpret_cast<const HousingGuildTrophyRequest*>(pack->pBuffer);auto* actor=ClientList::Instance()->FindCLEByCharacterID(request->character_id);if(!actor||actor->Server()!=this||actor->Online()!=CLE_Status::InZone||request->action>2)break;guild_mgr.GuildTrophyRequest(actor->CharID(),actor->AccountID(),request->action,request->target_id);break;
+     }
+--- a/zone/CMakeLists.txt
++++ b/zone/CMakeLists.txt
+@@ -17,6 +17,12 @@
+     cheat_manager.cpp
+     client.cpp
+     client_evolving_items.cpp
++    fellowship_campfire.cpp
++    fellowship_campsite_bonuses.cpp
++    fellowship_campsite_materials.cpp
++    client_fellowship.cpp
++    client_fellowship_vitality.cpp
++    fellowship_chat.cpp
+     client_bot.cpp
+     client_mods.cpp
+     client_packet.cpp
+--- a/zone/client.cpp
++++ b/zone/client.cpp
+@@ -1011,6 +1011,7 @@
+ 
+ bool Client::SaveAA()
+ {
++	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
+ 	std::vector<CharacterAlternateAbilitiesRepository::CharacterAlternateAbilities> v;
+ 
+ 	uint32 aa_points_spent = 0;
+@@ -1062,6 +1063,7 @@
+ }
+ 
+ bool Client::Save(uint8 iCommitNow) {
++	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
+ 	if (m_inventory_session_rejected ||
+ 		(RuleB(Housing, EnablePlayerHousing) && !HasInventorySessionReservation())) return false;
+ 
+@@ -1447,6 +1449,10 @@
+ 		}
+ 		break;
+ 	}
++    case 21: { // RoF2 /fsay, confirmed in matching client at 0x5243e7.
++        SendFellowshipChat(message);
++        break;
++    }
+ 	case ChatChannel_Group: { /* Group Chat */
+ 		Raid* raid = entity_list.GetRaidByClient(this);
+ 		if(raid) {
+--- a/zone/client.h
++++ b/zone/client.h
+@@ -270,6 +270,22 @@
+ 
+ 	Client(EQStreamInterface * ieqs);
+ 	Client(); // mocking / testing
++	void RefreshFellowship();
++	void ProcessFellowship();
++	void SendFellowshipChat(const char* message);
++	void RefreshFellowshipVitality();
++	bool ProcessFellowshipCombatExperience(ExpSource source, uint64 experience_total, uint64 aa_total, NPC* npc);
++	bool m_fellowship_xp_persistence_failed = false;
++	bool m_fellowship_xp_transaction_active = false;
++	std::vector<uint8> m_fellowship_vitality_snapshot;
++	bool TryFellowshipCalling();
++	uint32 FellowshipID() const { return m_fellowship_id; }
++	uint32 m_fellowship_id = 0;
++	uint64 m_fellowship_refresh_at = 0;
++	uint64 m_fellowship_action_at = 0;
++	uint64 m_fellowship_invite_expires = 0;
++	uint32 m_fellowship_inviter = 0;
++	std::vector<uint8> m_fellowship_snapshot;
+ 	bool m_housing_gate_open = false;
+ 	Housing::InventoryBridge::Bridge* GetHousingInventoryBridge();
+ 	bool ClaimInventorySessionReservation();
+--- a/zone/client_housing.cpp
++++ b/zone/client_housing.cpp
+@@ -153,6 +153,12 @@
+  if(!QueryView(*db,"SET TRANSACTION ISOLATION LEVEL REPEATABLE READ").Success() ||
+     !QueryView(*db,"START TRANSACTION WITH CONSISTENT SNAPSHOT, READ ONLY").Success())return std::nullopt;
+  auto rollback=[&](){QueryView(*db,"ROLLBACK");};
++ // Native estate metadata is display-only and uses this consistent read-only
++ // snapshot. Authorization independently rereads membership under its guard.
++ auto fellowship_tables=QueryView(*db,"SELECT table_name,engine FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('fellowships','fellowship_members')");
++ if(!fellowship_tables.Success()||(fellowship_tables.RowCount()!=0&&fellowship_tables.RowCount()!=2)){rollback();return std::nullopt;}
++ const bool fellowship_display=fellowship_tables.RowCount()==2;
++ for(auto row=fellowship_tables.begin();row.operator!=(fellowship_tables.end());++row)if(!row[1]||std::string(row[1])!="InnoDB"){rollback();return std::nullopt;}
+  auto revision=QueryView(*db,"SELECT revision FROM housing_catalogs WHERE catalog_key='"+Strings::Escape(key)+"'");
+  if(!revision.Success()||revision.RowCount()!=1||std::stoull(revision.begin()[0])!=view.data.catalog.revision){rollback();return std::nullopt;}
+  for(const auto& n:view.data.catalog.nodes){
+@@ -176,7 +182,14 @@
+    auto owner=QueryView(*db,"SELECT e.owner_kind,e.owner_id,c.name,g.name FROM housing_current_estates e LEFT JOIN character_data c ON e.owner_kind=1 AND c.id=e.owner_id LEFT JOIN guilds g ON e.owner_kind=3 AND g.id=e.owner_id WHERE e.id="+std::to_string(n.ownership_estate_id));
+    if(!owner.Success()||owner.RowCount()!=1){rollback();return std::nullopt;}
+    auto o=owner.begin();auto kind=Strings::ToUnsignedInt(o[0]);auto id=Strings::ToUnsignedInt(o[1]);
+-   if(kind==1&&o[2])state.owner_name=state.owner_handle=o[2];
++   if(kind==1&&o[2]){
++    state.owner_name=state.owner_handle=o[2];
++    if(fellowship_display){
++     auto fellowship=QueryView(*db,"SELECT m.fellowship_id FROM fellowship_members m JOIN fellowships f ON f.id=m.fellowship_id JOIN fellowship_members leader ON leader.character_id=f.leader_id AND leader.fellowship_id=f.id JOIN character_data c ON c.id=m.character_id AND c.deleted_at IS NULL JOIN account a ON a.id=c.account_id WHERE m.character_id="+std::to_string(id));
++     if(!fellowship.Success()||fellowship.RowCount()>1){rollback();return std::nullopt;}
++     if(fellowship.RowCount()){if(!fellowship.begin()[0]){rollback();return std::nullopt;}state.fellowship_id=Strings::ToUnsignedInt(fellowship.begin()[0]);if(!state.fellowship_id||state.fellowship_id==UINT32_MAX){rollback();return std::nullopt;}}
++    }
++   }
+    else if(kind==3&&o[3]){state.guild_id=id;state.owner_name=state.owner_handle=o[3];}
+    else {rollback();return std::nullopt;}
+    auto preference=QueryView(*db,"SELECT voting_opted_out FROM housing_estate_preferences WHERE estate_id="+std::to_string(n.ownership_estate_id));
+@@ -230,7 +243,7 @@
+   auto state=view.states.find(native),owner=view.states.find(parent);auto permissions=view.permissions.find(parent);
+   auto current=QueryView(*db,"SELECT h.revision,h.pending_request_key,l.location_kind,l.custody_id FROM housing_house_instances h JOIN housing_house_locations l ON l.house_id=h.house_id WHERE h.house_id="+std::to_string(house.house_id));
+   if(state==view.states.end()||owner==view.states.end()||permissions==view.permissions.end()||state->second.parent_id!=parent||state->second.definition_id!=house.interior->definition_id||!current.Success()||current.RowCount()!=1||std::stoull(current.begin()[0])!=house.revision||current.begin()[1]||Strings::ToUnsignedInt(current.begin()[2])!=2||std::stoull(current.begin()[3])!=house.location.custody_id){rollback();return {};}
+-  state->second.owner_name=owner->second.owner_name;state->second.owner_handle=owner->second.owner_handle;state->second.guild_id=owner->second.guild_id;
++  state->second.owner_name=owner->second.owner_name;state->second.owner_handle=owner->second.owner_handle;state->second.guild_id=owner->second.guild_id;state->second.fellowship_id=owner->second.fellowship_id;
+   auto inherited=permissions->second;inherited.estate_id=native;view.permissions.emplace(native,std::move(inherited));view.acl_revisions[native]=view.acl_revisions.at(parent);
+   if(std::find(view.owned.begin(),view.owned.end(),parent)!=view.owned.end()&&std::find(view.owned.begin(),view.owned.end(),native)==view.owned.end())view.owned.push_back(native);
+   view.root=native;
+@@ -239,7 +252,7 @@
+  if(interior){if(interior->room_profile&&!Housing::InteriorNativeView::Apply(view.data,*interior->room_profile,view.root,&interior->contents))return {};
+   for(const auto& child:view.data.catalog.nodes)if(child.parent_key=="house:"+std::to_string(interior->house->house_id)){
+    auto parent=view.states.find(view.root);auto acl=view.permissions.find(view.root);if(parent==view.states.end()||acl==view.permissions.end())return {};
+-   if(!view.states.count(child.native_id.value)){Housing::EstateWire::EstateSnapshot state;state.estate_id=child.native_id.value;state.parent_id=view.root;state.definition_id=child.definition_id;state.owner_name=parent->second.owner_name;state.owner_handle=parent->second.owner_handle;state.guild_id=parent->second.guild_id;view.states.emplace(state.estate_id,std::move(state));}
++   if(!view.states.count(child.native_id.value)){Housing::EstateWire::EstateSnapshot state;state.estate_id=child.native_id.value;state.parent_id=view.root;state.definition_id=child.definition_id;state.owner_name=parent->second.owner_name;state.owner_handle=parent->second.owner_handle;state.guild_id=parent->second.guild_id;state.fellowship_id=parent->second.fellowship_id;view.states.emplace(state.estate_id,std::move(state));}
+    if(std::find(parent->second.children.begin(),parent->second.children.end(),child.native_id.value)==parent->second.children.end())parent->second.children.push_back(child.native_id.value);
+    auto inherited=acl->second;inherited.estate_id=child.native_id.value;view.permissions[child.native_id.value]=std::move(inherited);view.acl_revisions[child.native_id.value]=view.acl_revisions.at(view.root);view.ids[child.key]=child.native_id.value;
+   }
+@@ -1270,7 +1283,7 @@
+     auto parent_state=room_state->second;std::vector<std::pair<EmuOpcode,Bytes>> room_packets;
+     room_packets.emplace_back(OP_RealEstateDefinitions,projected.definition_payload);
+     for(const auto& child:projected.catalog.nodes)if(child.parent_key=="house:"+std::to_string(attached.value.house->house_id)){
+-     Housing::EstateWire::EstateSnapshot state;state.estate_id=child.native_id.value;state.parent_id=parent_state.estate_id;state.definition_id=child.definition_id;state.owner_name=parent_state.owner_name;state.owner_handle=parent_state.owner_handle;state.guild_id=parent_state.guild_id;
++     Housing::EstateWire::EstateSnapshot state;state.estate_id=child.native_id.value;state.parent_id=parent_state.estate_id;state.definition_id=child.definition_id;state.owner_name=parent_state.owner_name;state.owner_handle=parent_state.owner_handle;state.guild_id=parent_state.guild_id;state.fellowship_id=parent_state.fellowship_id;
+      if(std::find(parent_state.children.begin(),parent_state.children.end(),state.estate_id)==parent_state.children.end())parent_state.children.push_back(state.estate_id);
+      room_packets.emplace_back(OP_RealEstateSnapshot,Housing::EstateWire::EncodeEstateSnapshot(state));
+      auto acl=owner_acl->second;acl.estate_id=state.estate_id;room_packets.emplace_back(OP_RealEstateAccess,Housing::PermissionWire::EncodeSnapshot(acl));
+--- a/zone/client_packet.cpp
++++ b/zone/client_packet.cpp
+@@ -138,6 +138,8 @@
+ 	ConnectedOpcodes[OP_AdventureMerchantSell] = &Client::Handle_OP_AdventureMerchantSell;
+ 	ConnectedOpcodes[OP_AdventureRequest] = &Client::Handle_OP_AdventureRequest;
+ 	ConnectedOpcodes[OP_RealEstateNeighborhood] = &Client::Handle_OP_RealEstateNeighborhood;
++	ConnectedOpcodes[OP_FellowshipAction] = &Client::Handle_OP_FellowshipAction;
++	ConnectedOpcodes[OP_FellowshipCampRequest] = &Client::Handle_OP_FellowshipCampRequest;
+ 	ConnectedOpcodes[OP_GuildTrophyToggle]=&Client::Handle_OP_GuildTrophyToggle;
+     ConnectedOpcodes[OP_GuildTrophySave]=&Client::Handle_OP_GuildTrophySave;
+     ConnectedOpcodes[OP_GuildTrophyModify]=&Client::Handle_OP_GuildTrophyModify;
+--- a/zone/client_packet.h
++++ b/zone/client_packet.h
+@@ -1,4 +1,6 @@
+ 	/* Connecting OpCode Handlers */
++	void Handle_OP_FellowshipAction(const EQApplicationPacket *app);
++	void Handle_OP_FellowshipCampRequest(const EQApplicationPacket *app);
+ 	void Handle_OP_RealEstateNeighborhood(const EQApplicationPacket *app);
+ 	void Handle_OP_RealEstateTrophyOpen(const EQApplicationPacket *app);
+ 	void Handle_OP_RealEstateTrophy(const EQApplicationPacket *app);
+--- a/zone/client_process.cpp
++++ b/zone/client_process.cpp
+@@ -517,6 +517,7 @@
+ 		}
+ 
+ 		ProcessHousingTrophyBenefits();
++		ProcessFellowship();
+         ProcessHousingGuildTrophyBenefits();
+         Housing::GuildPortalRuntime::Process(*this);
+ 		SpellProcess();
+--- a/zone/exp.cpp
++++ b/zone/exp.cpp
+@@ -581,6 +581,7 @@
+ 	uint64 total_add_exp = set_exp + set_aaxp;
+ 
+ #ifdef LUA_EQEMU
++	if (!m_fellowship_xp_transaction_active) {
+ 	uint64 lua_ret = 0;
+ 	bool ignore_default = false;
+ 	lua_ret = LuaParser::Instance()->SetEXP(this, exp_source, current_exp, set_exp, isrezzexp, ignore_default);
+@@ -595,6 +596,7 @@
+ 		set_aaxp = lua_ret;
+ 	}
+ 	total_add_exp = set_exp + set_aaxp;
++	}
+ #endif
+ 
+ 	LogDebug("Attempting to Set Exp for [{}] (XP: [{}], AAXP: [{}], Rez: [{}])", GetCleanName(), set_exp, set_aaxp, isrezzexp ? "true" : "false");
+@@ -604,6 +606,9 @@
+ 		Message(Chat::Red, "Error in Client::SetEXP. EXP not set.");
+ 		return; // Must be invalid class/race
+ 	}
++
++	if (!isrezzexp && exp_source == ExpSource::Kill && npc &&
++		ProcessFellowshipCombatExperience(exp_source, set_exp, set_aaxp, npc)) return;
+ 
+ 	uint32 i = 0;
+ 	uint32 membercount = 0;
+--- a/zone/spell_effects.cpp
++++ b/zone/spell_effects.cpp
+@@ -1,3 +1,4 @@
++#include "fellowship_campsite_bonuses.h"
+ /*	EQEMu: Everquest Server Emulator
+ 	Copyright (C) 2001-2004 EQEMu Development Team (http://eqemu.org)
+ 
+@@ -58,6 +59,13 @@
+ 
+ 	if(!IsValidSpell(spell_id))
+ 		return false;
++	// The RoF2 registration insignia uses a placeholder stat effect in PEQ.
++	// Its authenticated item cast is completed by the fellowship destination
++	// service instead of applying that placeholder to the player.
++	if (spell_id == 7618 && IsClient()) {
++		if (caster != this) return false;
++		return CastToClient()->TryFellowshipCalling();
++	}
+ 
+ 	const SPDat_Spell_Struct &spell = spells[spell_id];
+ 
+@@ -6895,6 +6903,10 @@
+ 		worneffect_bonus = itembonuses.FocusEffectsWorn[type];
+ 	}
+ 
++	// Campsite focus competes with the existing spell-focus contribution. It
++	// never applies twice or adds another independent item/AA focus source.
++	if (IsClient()) realTotal2 = MergeFellowshipCampsiteFocus(realTotal2, GetFellowshipCampsiteFocus(*CastToClient(), type, spell_id));
++
+ 	return realTotal + realTotal2 + realTotal3 + worneffect_bonus;
+ }
+ 
+--- a/zone/worldserver.cpp
++++ b/zone/worldserver.cpp
+@@ -19,6 +19,10 @@
+ 
+ #include "../common/global_define.h"
+ #include "../common/housing/upkeep_refresh_wire.h"
++#include "../common/fellowship/service.h"
++#include "fellowship_campfire.h"
++#include <cstring>
++#include <ctime>
+ #include <iostream>
+ #include <string.h>
+ #include <stdio.h>
+@@ -214,6 +218,68 @@
+ 	ServerPacket *pack = &tpack;
+ 
+ 	switch (opcode) {
++    case ServerOP_FellowshipChatDeliver: {
++        if (pack->size != sizeof(FellowshipChatDelivery)) {
++            break;
++        }
++        const auto* message = reinterpret_cast<const FellowshipChatDelivery*>(pack->pBuffer);
++        if (!message->message[0] || !std::memchr(message->message, 0, sizeof(message->message)) ||
++            !std::memchr(message->sender, 0, sizeof(message->sender))) {
++            break;
++        }
++        Client* recipient = nullptr;
++        for (const auto& entry : entity_list.GetClientList()) {
++            if (entry.second->CharacterID() == message->recipient_id) {
++                recipient = entry.second;
++                break;
++            }
++        }
++        if (!recipient) {
++            break;
++        }
++        Fellowship::Service fellowships(database);
++        const auto group = fellowships.GetByCharacter(recipient->CharacterID(), static_cast<uint64_t>(std::time(nullptr)));
++        if (!group || !group.value.id || group.value.id != message->fellowship_id) {
++            break;
++        }
++        bool sender_is_member = false;
++        for (const auto& member : group.value.members) {
++            if (member.character_id == message->actor_id && member.name == message->sender) {
++                sender_is_member = true;
++                break;
++            }
++        }
++        if (!sender_is_member) {
++            break;
++        }
++        if (recipient->ClientVersion() == EQ::versions::ClientVersion::RoF2) {
++            recipient->ChannelMessageSend(message->sender, nullptr, 21, Language::CommonTongue,
++                Language::MaxValue, "%s", message->message);
++        } else {
++            recipient->Message(Chat::Group, "%s tells the fellowship, '%s'", message->sender, message->message);
++        }
++        break;
++    }
++    case ServerOP_FellowshipRefresh: {
++        if (pack->size != 0) {
++            break;
++        }
++        InvalidateFellowshipCampsites();
++        ProcessFellowshipCampfires();
++        for (const auto& entry : entity_list.GetClientList()) {
++            // Reload authoritative membership and pending invitation state.
++            auto* client = entry.second;
++            client->RefreshFellowship();
++            if (client->Connected() && client->ClientDataLoaded()) {
++                // A remote owner/member change can invalidate this viewer's
++                // estate fellowship projection and current scene admission.
++                // Both methods retain their own housing eligibility checks.
++                client->SendHousingZoneCatalog();
++                client->SendHousingPlacedScene();
++            }
++        }
++        break;
++    }
+ 	case ServerOP_HousingGuildTrophyRefresh: {if(pack->size!=sizeof(uint32))break;uint32 guild=0;std::memcpy(&guild,pack->pBuffer,sizeof guild);for(const auto& entry:entity_list.GetClientList()){auto* client=entry.second;if(client->GuildID()==guild||client->m_housing_guild_trophy_guild==guild)client->InvalidateHousingGuildTrophyBenefits();}break;}
+     case ServerOP_HousingGuildTrophyMember: {if(pack->size!=sizeof(GuildTributeOptInOutReply_Struct))break;const auto* member=reinterpret_cast<const GuildTributeOptInOutReply_Struct*>(pack->pBuffer);for(const auto& entry:entity_list.GetClientList()){auto* client=entry.second;if(client->GuildID()==member->guild_id&&client->ClientVersion()==EQ::versions::ClientVersion::RoF2){EQApplicationPacket packet(OP_GuildOptInOut,pack->size);std::memcpy(packet.pBuffer,pack->pBuffer,pack->size);client->QueuePacket(&packet);}}break;}
+ 	case ServerOP_HousingUpkeepRefresh: {
+--- a/zone/zone.cpp
++++ b/zone/zone.cpp
+@@ -1,3 +1,4 @@
++#include "fellowship_campfire.h"
+ #include "housing_guild_portal.h"
+ #include "housing_service_npcs.h"
+ #include "housing_service_authority.h"
+@@ -1110,6 +1111,7 @@
+ }
+ 
+ Zone::~Zone() {
++	ClearFellowshipCampfires();
+  Housing::ServiceAuthority::Clear();
+ 	LogInfo("Zone destructor called for zone [{}]", short_name);
+ 
+@@ -1540,6 +1542,7 @@
+ }
+ 
+ bool Zone::Process() {
++	ProcessFellowshipCampfires();
+ 	spawn_conditions.Process();
+ 
+ 	if (spawn2_timer.Check()) {
+--- a/zone/zonedb.cpp
++++ b/zone/zonedb.cpp
+@@ -1,3 +1,4 @@
++#include "fellowship_campsite_bonuses.h"
+ 
+ #include "../common/eqemu_logsys.h"
+ #include "../common/extprofile.h"
+@@ -1056,6 +1057,8 @@
+ 	if (c->AccountID() <= 0) {
+ 		return false;
+ 	}
++
++	if (c->m_fellowship_xp_persistence_failed || c->m_fellowship_xp_transaction_active) return false;
+ 
+ 	clock_t t = std::clock(); /* Function timer start */
+ 
+@@ -2904,6 +2907,9 @@
+ 	uint32 character_buff_count = 0;
+ 
+ 	for (int slot_id = 0; slot_id < max_buff_slots; slot_id++) {
++		// Campsite support buffs are renewable location leases, not saved buffs.
++		// Ordinary Faerune/DMF from another caster retain normal persistence.
++		if (IsFellowshipCampsiteAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
+ 		if (!IsValidSpell(buffs[slot_id].spellid)) {
+ 			continue;
+ 		}
+@@ -2914,6 +2920,7 @@
+ 	v.reserve(character_buff_count);
+ 
+ 	for (int slot_id = 0; slot_id < max_buff_slots; slot_id++) {
++		if (IsFellowshipCampsiteAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
+ 		if (!IsValidSpell(buffs[slot_id].spellid)) {
+ 			continue;
+ 		}
+@@ -2966,6 +2973,8 @@
+ 	}
+ 
+ 	for (const auto& e : l) {
++		// Discard a legacy saved campsite lease before caster-name normalization.
++		if (IsFellowshipCampsiteAuraBuff(e.spell_id, e.caster_name.data(), e.caster_name.size())) continue;
+ 		if (e.slot_id >= max_buff_slots) {
+ 			continue;
+ 		}

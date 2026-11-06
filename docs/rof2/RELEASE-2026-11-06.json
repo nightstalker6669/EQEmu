@@ -1,0 +1,67 @@
+{
+  "status": "SOURCE_INTEGRATED_BUILD_PENDING",
+  "upstream_develop": "c9c8747ac949deddb140d196d241fa4e777500c7",
+  "inputs": {
+    "rof2-shared-core": "2b5facb8d99c46a8998feeefdfdd77fec8545b10",
+    "rof2-housing": "561b49c248ddf17d98e3bbbb7cd2cd13df5a5854",
+    "rof2-fellowship": "512b061077dc4001facbb16960b23264d61413f4",
+    "rof2-spirit-shrouds": "e7cb5dc2279bd1badde768e370463e447a9fcdf3",
+    "rof2-mercenaries": "a53a99c675c21f5417b67caadac86e98c7ba1a1a",
+    "rof2-aa": "bede28f9e97b95f73df9d31af567179f861f0a40",
+    "rof2-achievements": "3a1f34a6ce436f72692e37b33ecfd59883b9a35a",
+    "rof2-spells": "41fdf2628b3e4ba2e4b48cf421171cff800faa0f",
+    "rof2-tradeskills": "b7a6fa157220b2951f992be9f62e9e9fcca1a866",
+    "rof2-integration": "b10fe81d40578f6af65fa4113b3650225db3f79a"
+  },
+  "historical_combined_input": "rof2-integration",
+  "database_repository": "nightstalker6669/EQEmu-Database",
+  "database_commit": "3ff6a35237717a5c4362f31c45f4e6d1652315da",
+  "native_postimages": {
+    "files": 2515,
+    "inventory_sha256": "1f322ef1d9ecbb1df5e6a12e7a00bcd5023152cc8fa809acacff7c2727137767",
+    "archive_sha256": "9bd39a5a7fdc89366a9b6b22438861f466596838e405e0770b69c05d119c470f",
+    "owner_handoff_sha256": "214b913aac5501ee4ffae33374d6b218a7a703bc7e76adbc879b7e99fed3230a",
+    "basis": "Exact previously compiled serving source reconciled against completed branch deltas.",
+    "additional_completed_deltas": [
+      {
+        "commit": "ad511694",
+        "path": "common/database.cpp",
+        "change": "Preserve SQL NULL during character copy."
+      },
+      {
+        "commit": "ea2f6bb5",
+        "path": "common/database.cpp",
+        "change": "Guard destination journal identities when registered."
+      },
+      {
+        "commit": "c2e17cdd",
+        "paths": [
+          "zone/client_packet.cpp",
+          "zone/client_process.cpp"
+        ],
+        "change": "Recheck selected merchant faction and reserve hidden permanent slots."
+      }
+    ],
+    "tracked_native_files": 2309,
+    "submodule_inputs": {
+      "path": "submodules/websocketpp",
+      "gitlink": "b9aeec6eaf3d5610503439b4fae3581d9aff08e8",
+      "native_inventory_entries": 206,
+      "verification": "All 206 expanded build input blob identities exactly match the pinned upstream submodule tree. Retain the gitlink; no vendored submodule files are added."
+    }
+  },
+  "held": [
+    "RRC310 recharge actor remains archived, unbuilt and unapplied.",
+    "Fungal10 Source completion remains archived and disabled; Fungal9 native hooks retained without enabling disabled tasks.",
+    "Mercenary earned-capacity five-file proposal a53a99c6 remains unapplied; archive patch preserved.",
+    "Unfinished Xorbb Gems/Chrom bindings are not registered; header retained as disabled release artifact.",
+    "Unfinished achievement/AA/NPC proposals retain their documented inactive status.",
+    "Shroud QA content remains excluded; AllowTestSpiritShrouds stays false."
+  ],
+  "qualifications": [
+    "Native gameplay acceptance is limited to each original owner receipt.",
+    "Historical patches remain provenance artifacts, not instructions to replay over integrated source.",
+    "No build, server deployment, database write or release asset upload is performed by this source integration.",
+    "Full SQL release dump is fresh-install-only; no universal player-preserving upgrade path is promised."
+  ]
+}

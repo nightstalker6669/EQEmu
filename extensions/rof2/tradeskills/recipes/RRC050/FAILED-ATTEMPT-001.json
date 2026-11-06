@@ -1,0 +1,17 @@
+{
+  "batch": "RRC050",
+  "status": "STOPPED_BEFORE_BLOCK_TRANSACTION_UPDATE",
+  "attempt": 1,
+  "published_commit": "0d778c1dc490b7f24c1769459cf54dcb48db56ed",
+  "source_sha256": "a954835db0d80ba4e755db14cad413e6fb29cea8eeab12f18f3aad74cdf66f47",
+  "SQL_invocations": 1,
+  "error": "MariaDBCLI1064atfirstDECLARE; missingDELIMITERwrapper.",
+  "target_readback": {
+    "recipes": 16,
+    "entries": 142,
+    "exact_saved_preimage_unchanged": true,
+    "corrections_applied": 0
+  },
+  "automatic_retry": false,
+  "native_actions": false
+}

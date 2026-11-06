@@ -1,0 +1,16 @@
+{
+  "batch": "RRC040",
+  "status": "STOPPED_BEFORE_INSERT_TARGET_RANGE_CONFIRMED_EMPTY",
+  "attempt": 1,
+  "published_commit": "fdb05687528b387d4fa3425170f945f0c7af6266",
+  "source_sha256": "8b5325a101fd70055b5a0e7458711f0a9e73ce545cf888e9bfa9bb5e66c18ff2",
+  "SQL_invocations": 1,
+  "error": "Existing output recipe collision: Fish Bones24497has existing Fishing55producers.",
+  "target_readback": {
+    "recipes": 0,
+    "entries": 0,
+    "learned": 0
+  },
+  "automatic_retry": false,
+  "native_actions": false
+}

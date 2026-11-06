@@ -1,0 +1,18 @@
+diff --git a/zone/client_achievements.cpp b/zone/client_achievements.cpp
+--- a/zone/client_achievements.cpp
++++ b/zone/client_achievements.cpp
+@@ -1900,6 +1900,14 @@
+ 
+ 	size_t required_components = 0;
+ 	bool all_required_satisfied = true;
++	// A partially authored catalogue must not complete after satisfying only
++	// its mapped subset. Every unbound completion component remains a barrier.
++	for (const auto &component : definition.components[1]) {
++		if (!component_behaviors.contains(std::make_pair(uint8_t{1}, component.component_id))) {
++			++required_components;
++			all_required_satisfied = false;
++		}
++	}
+ 	bool hidden = false;
+ 	bool locked = false;
+ 	for (const auto &[component_key, behavior] : component_behaviors) {

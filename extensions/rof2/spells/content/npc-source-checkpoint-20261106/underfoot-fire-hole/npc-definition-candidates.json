@@ -1,0 +1,521 @@
+{
+  "enabled": false,
+  "actors": [
+    {
+      "role": "ancient_gigyn_colossus",
+      "name": "an ancient gigyn colossus",
+      "npc_type_id": null,
+      "external_ZAM_key": 34949,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 16,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47748,
+      "loot_symbol": "drop_ancient_gigyn_colossus",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "timeworn_channeler",
+      "name": "a timeworn channeler",
+      "npc_type_id": null,
+      "external_ZAM_key": 34950,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 653,
+        "npc_class": 12,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47749,
+      "loot_symbol": "drop_timeworn_channeler",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "cunning_fiend",
+      "name": "a cunning fiend",
+      "npc_type_id": null,
+      "external_ZAM_key": 34948,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 607,
+        "npc_class": 14,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47750,
+      "loot_symbol": "drop_cunning_fiend",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "protector_of_purity",
+      "name": "Protector of Purity",
+      "npc_type_id": null,
+      "external_ZAM_key": 34957,
+      "category": "named",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 608,
+        "npc_class": 1,
+        "level": 88,
+        "hp": 500000,
+        "mindmg": 900,
+        "maxdmg": 12000,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47761,
+      "loot_symbol": "drop_protector_of_purity",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "protector_of_clay",
+      "name": "Protector of Clay",
+      "npc_type_id": null,
+      "external_ZAM_key": 34958,
+      "category": "named",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 608,
+        "npc_class": 1,
+        "level": 88,
+        "hp": 500000,
+        "mindmg": 900,
+        "maxdmg": 12000,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47760,
+      "loot_symbol": "drop_protector_of_clay",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "crumbling_construct",
+      "name": "Crumbling Construct",
+      "npc_type_id": null,
+      "external_ZAM_key": 34963,
+      "category": "named",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 1,
+        "level": 88,
+        "hp": 500000,
+        "mindmg": 900,
+        "maxdmg": 14000,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47751,
+      "loot_symbol": "drop_crumbling_construct",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "broken_construct",
+      "name": "Broken Construct",
+      "npc_type_id": null,
+      "external_ZAM_key": 34961,
+      "category": "named",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 1,
+        "level": 88,
+        "hp": 500000,
+        "mindmg": 900,
+        "maxdmg": 14000,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47752,
+      "loot_symbol": "drop_broken_construct",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "cracking_construct",
+      "name": "Cracking Construct",
+      "npc_type_id": null,
+      "external_ZAM_key": 34962,
+      "category": "named",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 1,
+        "level": 88,
+        "hp": 500000,
+        "mindmg": 900,
+        "maxdmg": 14000,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47753,
+      "loot_symbol": "drop_cracking_construct",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "worn_construct",
+      "name": "Worn Construct",
+      "npc_type_id": null,
+      "external_ZAM_key": 34959,
+      "category": "named",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 1,
+        "level": 88,
+        "hp": 500000,
+        "mindmg": 900,
+        "maxdmg": 14000,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47754,
+      "loot_symbol": "drop_worn_construct",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "eroding_construct",
+      "name": "Eroding Construct",
+      "npc_type_id": null,
+      "external_ZAM_key": 34960,
+      "category": "named",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 1,
+        "level": 88,
+        "hp": 500000,
+        "mindmg": 900,
+        "maxdmg": 14000,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47755,
+      "loot_symbol": "drop_eroding_construct",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "keymaster",
+      "name": "The Keymaster",
+      "npc_type_id": null,
+      "external_ZAM_key": 34964,
+      "category": "named",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 653,
+        "npc_class": 1,
+        "level": 88,
+        "hp": 500000,
+        "mindmg": 900,
+        "maxdmg": 14000,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47757,
+      "loot_symbol": "drop_keymaster",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "vault_guardian",
+      "name": "The Vault Guardian",
+      "npc_type_id": null,
+      "external_ZAM_key": 34965,
+      "category": "named",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 653,
+        "npc_class": 1,
+        "level": 88,
+        "hp": 500000,
+        "mindmg": 900,
+        "maxdmg": 14000,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "quest_item": 47758,
+      "loot_symbol": "drop_vault_guardian",
+      "qualification": "LOCALmodel/class/level/HP/rawdamage/defaults, notoriginalNPCbytes. Currentmaxhits/lowHPperiodqualificationsretained, actualcasts/rampage/CC/Guardianpermaroot/mechanismownerheld."
+    },
+    {
+      "role": "gotonur_instance",
+      "name": "Gotonur",
+      "npc_type_id": null,
+      "category": "friendly",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 653,
+        "npc_class": 12,
+        "level": 85,
+        "hp": 300000,
+        "mindmg": 0,
+        "maxdmg": 0,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "Proposedseparateinstanceactorfromintake, notworld490061edit; exactterminalworldversusinstancehandoffscopeheld."
+    },
+    {
+      "role": "destructive_golem",
+      "name": "Destructive Golem",
+      "npc_type_id": null,
+      "external_ZAM_key": 34966,
+      "category": "mission_transient",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 1,
+        "level": 85,
+        "hp": 300000,
+        "mindmg": 0,
+        "maxdmg": 0,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "NonKOSphysicalhelper, notcombatkillobjective/teleportdoorbypass; originalactivation\u2192realwalk\u2192doorbarrieraction\u2192dustclosure source. LOCALprofileonly, physicalroute/doorbindingheld."
+    },
+    {
+      "role": "stone_chest",
+      "name": "a stone chest",
+      "npc_type_id": null,
+      "external_ZAM_key": 35357,
+      "category": "chest",
+      "occurrences": 1,
+      "profile_candidate": {
+        "race": 378,
+        "npc_class": 62,
+        "level": 1,
+        "hp": 1,
+        "mindmg": 0,
+        "maxdmg": 0,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "gear",
+      "qualification": "LOCALmodel/defaults; Apr2010Livechestpositive andpriorabsence/Testsourcequalified, terminalcompletion/openboundaryheld."
+    },
+    {
+      "role": "coldain_champion",
+      "name": "a coldain champion",
+      "npc_type_id": null,
+      "external_ZAM_key": 35109,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 8,
+        "npc_class": 3,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "Currentcomplete726rosterpositive; LOCALtwoeach/profile/model/geometry, nooriginaldensityproof. Ordinaryquestlootnone nothistoricalabsenceofallloot."
+    },
+    {
+      "role": "gnomish_enigma",
+      "name": "a gnomish enigma",
+      "npc_type_id": null,
+      "external_ZAM_key": 34953,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 12,
+        "npc_class": 14,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "Currentcomplete726rosterpositive; LOCALtwoeach/profile/model/geometry, nooriginaldensityproof. Ordinaryquestlootnone nothistoricalabsenceofallloot."
+    },
+    {
+      "role": "mischievous_construct",
+      "name": "a mischievous construct",
+      "npc_type_id": null,
+      "external_ZAM_key": 34952,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 524,
+        "npc_class": 14,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "Currentcomplete726rosterpositive; LOCALtwoeach/profile/model/geometry, nooriginaldensityproof. Ordinaryquestlootnone nothistoricalabsenceofallloot."
+    },
+    {
+      "role": "roaming_automaton",
+      "name": "a roaming automaton",
+      "npc_type_id": null,
+      "external_ZAM_key": 34951,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 457,
+        "npc_class": 1,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "Currentcomplete726rosterpositive; LOCALtwoeach/profile/model/geometry, nooriginaldensityproof. Ordinaryquestlootnone nothistoricalabsenceofallloot."
+    },
+    {
+      "role": "telmiran_allurist",
+      "name": "a telmiran allurist",
+      "npc_type_id": null,
+      "external_ZAM_key": 34954,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 653,
+        "npc_class": 14,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "Currentcomplete726rosterpositive; LOCALtwoeach/profile/model/geometry, nooriginaldensityproof. Ordinaryquestlootnone nothistoricalabsenceofallloot."
+    },
+    {
+      "role": "timeworn_archmagus",
+      "name": "a timeworn archmagus",
+      "npc_type_id": null,
+      "external_ZAM_key": 34956,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 653,
+        "npc_class": 12,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "Currentcomplete726rosterpositive; LOCALtwoeach/profile/model/geometry, nooriginaldensityproof. Ordinaryquestlootnone nothistoricalabsenceofallloot."
+    },
+    {
+      "role": "ancient_automaton",
+      "name": "an ancient automaton",
+      "npc_type_id": null,
+      "external_ZAM_key": 34955,
+      "category": "trash",
+      "occurrences": 2,
+      "profile_candidate": {
+        "race": 457,
+        "npc_class": 1,
+        "level": 85,
+        "hp": 350000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "Currentcomplete726rosterpositive; LOCALtwoeach/profile/model/geometry, nooriginaldensityproof. Ordinaryquestlootnone nothistoricalabsenceofallloot."
+    },
+    {
+      "role": "corporeal_construct",
+      "name": "Corporeal Construct",
+      "npc_type_id": null,
+      "category": "personal_transient",
+      "occurrences": 1,
+      "zone_id": 487,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 1,
+        "level": 85,
+        "hp": 400000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "LOCALprofilemodel/defaults; actualoriginalinactiveitemactivation/ownedactor/deathreceipt not genericAPI or directprogress. Eligible4991grouponepopkillpersonalbindingheld, no forcedfightperperson."
+    },
+    {
+      "role": "incorporeal_construct",
+      "name": "Incorporeal Construct",
+      "npc_type_id": null,
+      "category": "personal_transient",
+      "occurrences": 1,
+      "zone_id": 481,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 1,
+        "level": 85,
+        "hp": 400000,
+        "mindmg": 900,
+        "maxdmg": 8500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "LOCALprofilemodel/defaults; actualoriginalinactiveitemactivation/ownedactor/deathreceipt not genericAPI or directprogress. Eligible4991grouponepopkillpersonalbindingheld, no forcedfightperperson."
+    },
+    {
+      "role": "twisted_homunculus",
+      "name": "Twisted Homunculus",
+      "npc_type_id": null,
+      "category": "personal_transient",
+      "occurrences": 1,
+      "zone_id": 490,
+      "profile_candidate": {
+        "race": 649,
+        "npc_class": 1,
+        "level": 85,
+        "hp": 400000,
+        "mindmg": 900,
+        "maxdmg": 9500,
+        "npc_spells_id": 0,
+        "faction": 0
+      },
+      "loot_symbol": "none",
+      "qualification": "LOCALprofilemodel/defaults; actualoriginalinactiveitemactivation/ownedactor/deathreceipt not genericAPI or directprogress. Eligible4991grouponepopkillpersonalbindingheld, no forcedfightperperson."
+    }
+  ],
+  "new_candidates": 25,
+  "new_mission_definitions": 22,
+  "new_personal_definitions": 3,
+  "existing_world_edits": 0,
+  "LOCALtrash_per_type": 2
+}

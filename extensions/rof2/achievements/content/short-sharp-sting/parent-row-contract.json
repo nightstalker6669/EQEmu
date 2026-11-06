@@ -1,0 +1,134 @@
+{
+  "reward_sets": {
+    "rows": [
+      {
+        "reward_set_id": 3050303,
+        "title": "Short Sharp Sting (36-45)",
+        "enabled": 0
+      }
+    ],
+    "scope": "reward_set_id=3050303"
+  },
+  "reward_sources": {
+    "rows": [
+      {
+        "source_type": 1,
+        "source_id": 500030300,
+        "reward_set_id": 3050303,
+        "enabled": 0
+      }
+    ],
+    "scope": "(source_type=1 AND source_id=500030300) OR reward_set_id=3050303"
+  },
+  "reward_options": {
+    "rows": [
+      {
+        "reward_set_id": 3050303,
+        "option_id": 1,
+        "sequence": 1,
+        "label": "Ornate Consigned Plate Gauntlets",
+        "common_to_all": 0,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 151
+      },
+      {
+        "reward_set_id": 3050303,
+        "option_id": 2,
+        "sequence": 2,
+        "label": "Ornate Consigned Chain Gauntlets",
+        "common_to_all": 0,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 33544
+      },
+      {
+        "reward_set_id": 3050303,
+        "option_id": 3,
+        "sequence": 3,
+        "label": "Ornate Consigned Leather Gloves",
+        "common_to_all": 0,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 16480
+      },
+      {
+        "reward_set_id": 3050303,
+        "option_id": 4,
+        "sequence": 4,
+        "label": "Ornate Consigned Cloth Gloves",
+        "common_to_all": 0,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 15360
+      }
+    ],
+    "scope": "reward_set_id=3050303"
+  },
+  "reward_option_entries": {
+    "rows": [
+      {
+        "reward_set_id": 3050303,
+        "option_id": 1,
+        "sequence": 0,
+        "reward_id": 305030301
+      },
+      {
+        "reward_set_id": 3050303,
+        "option_id": 2,
+        "sequence": 0,
+        "reward_id": 305030302
+      },
+      {
+        "reward_set_id": 3050303,
+        "option_id": 3,
+        "sequence": 0,
+        "reward_id": 305030303
+      },
+      {
+        "reward_set_id": 3050303,
+        "option_id": 4,
+        "sequence": 0,
+        "reward_id": 305030304
+      }
+    ],
+    "scope": "reward_set_id=3050303 OR reward_id BETWEEN 305030301 AND 305030304"
+  },
+  "rewards": {
+    "rows": [
+      {
+        "reward_id": 305030301,
+        "reward_type": 0,
+        "reward_data_id": 108090,
+        "amount": 1,
+        "description": "Short Sharp Sting: Ornate Consigned Plate Gauntlets",
+        "enabled": 0
+      },
+      {
+        "reward_id": 305030302,
+        "reward_type": 0,
+        "reward_data_id": 108097,
+        "amount": 1,
+        "description": "Short Sharp Sting: Ornate Consigned Chain Gauntlets",
+        "enabled": 0
+      },
+      {
+        "reward_id": 305030303,
+        "reward_type": 0,
+        "reward_data_id": 108104,
+        "amount": 1,
+        "description": "Short Sharp Sting: Ornate Consigned Leather Gloves",
+        "enabled": 0
+      },
+      {
+        "reward_id": 305030304,
+        "reward_type": 0,
+        "reward_data_id": 108111,
+        "amount": 1,
+        "description": "Short Sharp Sting: Ornate Consigned Cloth Gloves",
+        "enabled": 0
+      }
+    ],
+    "scope": "reward_id BETWEEN 305030301 AND 305030304"
+  }
+}

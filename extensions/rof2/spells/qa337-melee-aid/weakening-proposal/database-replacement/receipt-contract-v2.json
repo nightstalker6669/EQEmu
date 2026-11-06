@@ -1,0 +1,143 @@
+{
+  "format_version": 2,
+  "status": "SOURCE_ONLY_LOGGED_OUT_MODE_AMENDMENT_NOT_APPLIED",
+  "identity": "temporary-QA39999-serialized-profile-replacement",
+  "spell_id": 39999,
+  "character_id": 337,
+  "table": "spells_new",
+  "physical_columns": 237,
+  "changed_fields": {
+    "cast_on_you": {
+      "before": "QA337 kill-objective aid is active.",
+      "after": "QA337 temporary melee aid is active."
+    },
+    "spell_fades": {
+      "before": "QA337 kill-objective aid has ended.",
+      "after": "QA337 temporary melee aid has ended."
+    },
+    "effect_base_value12": {
+      "before": 2000000,
+      "after": 100000
+    }
+  },
+  "apply_sql_sha256": "407068a5f875ad4c7ad263a3eee72f070b58e78045f658915a6f0331909e759d",
+  "inverse_sql_sha256": "9e35a350cee678e46f7d601fcf5082e057435d67c9a23c4c7429e110dc64a588",
+  "before_row_sha256": "3c98fedd9e9f89df79d22b2855264607b9ce8f43f5ee9e04f846ea394ac5108e",
+  "after_row_sha256": "7b36b86f2be8771e8adca2cc9d58ce2c3ba36d03f7a21291442dc27be872ce06",
+  "retained_applied_evidence": {
+    "source_commit": "d7b941b2723c1d6af681c71889ed74c75bc51aaf",
+    "receipt_sha256": "558a83c995c9a0039eb821da09e93a27041217c6712727b53bc8dc5726980609",
+    "proposal_before_equals_retained_applied_row": true,
+    "current_live_row_not_read_for_source_preparation": true,
+    "independent_full_row_receipt_id": "QA39999-original-2M-independent-full-row-readback-verify-002",
+    "receipt_location": "Operator-private evidence; identified by receipt_id and exact receipt_sha256."
+  },
+  "proposal_pins": {
+    "proposal_json_sha256": "7db4152a0edd7880b6528543b2e90f171a2b4e5debf13d76d6e7807febdbede8",
+    "proposal_manifest_sha256": "404039615bb7d370b06aee6914ff585a56242f7d9a0b0c5d6fdbef358fb5136f"
+  },
+  "required_external_gates": {
+    "one_complete_mode_required": true,
+    "online_native_mode": {
+      "tester_native_receipt": "Coordinator must pin actual tester receipt path and SHA before either transition; a proposal/template is insufficient.",
+      "receipt_semantics": {
+        "character_id": 337,
+        "spell_id": 39999,
+        "attack_off": true,
+        "aid_absent": true
+      },
+      "native_evidence": "Actual current native attack-stop and exact39999 buff absence required; no stale cached/manual assertion substitutes.",
+      "root_authorization": "Exact published commit, SQL SHA, direction, receipt pin and one application GO required.",
+      "both_apply_and_inverse_require_fresh_gates": true
+    },
+    "clean_logged_out_mode": {
+      "native_pre_camp_receipt": "Exact owner-pinned actual337 attack-off and39999-absent native observation before normal camp; retain its real observation time, never relabel it fresh/current native.",
+      "normal_camp_chain": "Pin tester normal-camp and owned client termination evidence; no intervening39999 recast/restore/relogin after the absence observation. Unexpected or ambiguous chain stops this mode.",
+      "current_quiescence": "Pin current owner evidence client remains closed, input custody inactive, and affected server remains stopped. Hold these states through DB transition and coordinated cache/client installation.",
+      "fresh_persisted_absence": {
+        "connection": "Authoritative character/runtime database, fresh read-only connection immediately before the one authorized UPDATE.",
+        "SQL": "SELECT COUNT(*) AS n FROM character_buffs WHERE character_id=337 AND spell_id=39999",
+        "expected_count": 0,
+        "evidence": "Record exact query, schema/server identity, UTC time and zero count in private application receipt. This is persisted absence, not fresh native observation.",
+        "failure": "Any nonzero count, unavailable/mismatched schema, identity uncertainty or intervening client/server start stops; no automatic buff deletion/fade/launch/repair."
+      },
+      "no_new_native_episode": "No old-server/client launch to manufacture a fresh absence observation. Existing earned state and prior episode remain untouched.",
+      "same_safety_property": "Known actual native absence before clean save/exit, fresh absence in the persisted buff store used at login, and no live process able to recast or retain an active instance during replacement.",
+      "root_authorization": "Exact published revised contract pin, original SQL SHA/direction, all evidence receipt pins and one explicit coordinator application GO still required.",
+      "not_automatic_cleanup_authorization": true
+    },
+    "both_apply_and_inverse_require_current_mode_evidence": true,
+    "mode_switch": "Select and record one mode explicitly; do not silently waive original online-current-native requirement."
+  },
+  "execution_contract": {
+    "durable_full_current_preimage_backup_required": true,
+    "expected_full_current_row": "Exact retained2M before apply; exact100k before inverse.",
+    "single_complete_anonymous_block_invocations": 1,
+    "no_nested_transaction": true,
+    "CLI_delimiter_wrapper": "MariaDB client handles DELIMITER, or operator strips only wrappers and invokes complete BEGIN NOT ATOMIC block once.",
+    "row_lock_and_full_nullsafe_guards": true,
+    "string_guards": "BINARY comparison against UTF8 byte hex literals.",
+    "affected_rows": 1,
+    "only_UPDATE_fields": [
+      "cast_on_you",
+      "spell_fades",
+      "effect_base_value12"
+    ],
+    "independent_postcommit_readback": "New independent connection SELECT * FROM spells_new WHERE id=39999; compare all237 fields against exact target JSON, save receipt.",
+    "uncertain_execution": "STOP; report and reconcile read-only. Never automatically retry or apply inverse.",
+    "rollback_is_separate_authorized_operation": true
+  },
+  "required_application_receipt_fields": [
+    "status",
+    "published_commit",
+    "SQL_sha256",
+    "direction",
+    "tester_receipt_path",
+    "tester_receipt_sha256",
+    "coordinator_GO_pin",
+    "database_identity",
+    "durable_backup_path",
+    "durable_backup_sha256",
+    "SQL_invocations",
+    "terminal_SQL_result",
+    "affected_rows",
+    "full_independent_postimage_path",
+    "full_independent_postimage_sha256",
+    "full237_fields_exact",
+    "player_rows_written",
+    "runtime_actions",
+    "finished_utc",
+    "evidence_mode",
+    "revised_contract_commit_and_sha256",
+    "native_pre_camp_receipt_path_and_sha256_if_logged_out",
+    "normal_camp_receipt_path_and_sha256_if_logged_out",
+    "current_quiescence_receipt_path_and_sha256_if_logged_out",
+    "persisted_buff_absence_query_identity_UTC_count_if_logged_out"
+  ],
+  "terminal_results": {
+    "apply": "QA39999_100K_COMMITTED_EXACT237",
+    "inverse": "QA39999_2M_RESTORED_EXACT237"
+  },
+  "scope_limits": {
+    "no_INSERT_or_DELETE": true,
+    "player_rows_written": 0,
+    "runtime_actions": 0,
+    "tests": 0,
+    "database_queries_during_preparation": 0,
+    "production_Database_repository_export": false,
+    "original_INSERT_helper_not_replacement": true,
+    "cleanup_debt_unchanged": true,
+    "inverse_does_not_remove_temporary_spell": true,
+    "cache_and_client_freshness": "Build/client owners in one combined coordinator window; SQL/readback does not prove cached/native profile.",
+    "online_original_contract_not_satisfied_by_closed_client": true,
+    "new_live_reads_or_runtime_actions_during_amendment_preparation": 0
+  },
+  "supersedes_contract_sha256": "5b6dcff2104475e91f3362b0b20d59c0ba41cfc3d02e96ebf162a591f855f8e9",
+  "parent_published_commit_prefix": "09262f97",
+  "source_basis_for_logged_out_mode": {
+    "zone/zonedb.cpp": "SaveBuffs writes character_buffs for CharacterID; LoadBuffs restores that table filtered by character_id.",
+    "common/repositories/base/base_character_buffs_repository.h": "Columns character_id and spell_id identify the bounded saved buff check.",
+    "zone/client.cpp": "Client save calls SaveBuffs.",
+    "source_inspection_is_not_runtime_proof": true
+  }
+}

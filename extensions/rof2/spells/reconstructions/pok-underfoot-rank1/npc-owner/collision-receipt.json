@@ -1,0 +1,13 @@
+{
+  "observed_date": "2026-11-04",
+  "target": "peq_housing_test",
+  "tool": "read-only EQEmu connector",
+  "scope": "only coordinator proposed ranges/namespaces",
+  "main_query_result": "Query returned 0 rows.",
+  "temporary_merchant_query_result": "Query returned 0 rows.",
+  "spawn_state_reference_query_result": "Query returned 0 rows.",
+  "occupied": [],
+  "replacement_required": false,
+  "writes": 0,
+  "limit": "point-in-time namespace evidence only; future installer must refuse intervening collision"
+}

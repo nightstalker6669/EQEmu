@@ -1,0 +1,545 @@
+{
+  "byte_order": "little",
+  "float_format": "IEEE754 binary32",
+  "offset_origin": "payload start, excludes2-byte opcode",
+  "packing": "explicit byte codec; no implicit ABI padding",
+  "client_build": "RoF2 May 10 2013",
+  "layouts": {
+    "OP_FellowshipAction": {
+      "size": 1076,
+      "fields": [
+        {
+          "offset": 0,
+          "offset_hex": "0x0",
+          "bytes": 4,
+          "type": "u32",
+          "name": "action",
+          "meaning": "Native action1..12",
+          "evidence": "observed"
+        },
+        {
+          "offset": 4,
+          "offset_hex": "0x4",
+          "bytes": 4,
+          "type": "u32",
+          "name": "target_id",
+          "meaning": "Spawn entity for invite; character ID for remove/promote/toggle",
+          "evidence": "observed"
+        },
+        {
+          "offset": 8,
+          "offset_hex": "0x8",
+          "bytes": 4,
+          "type": "bytes",
+          "name": "reserved_08",
+          "meaning": "Zero emitted; semantics unresolved",
+          "evidence": "unresolved"
+        },
+        {
+          "offset": 12,
+          "offset_hex": "0xc",
+          "bytes": 4,
+          "type": "u32",
+          "name": "inviter_spawn_id",
+          "meaning": "Read by incoming invite UI; not used as actor authority for client actions",
+          "evidence": "observed"
+        },
+        {
+          "offset": 16,
+          "offset_hex": "0x10",
+          "bytes": 4,
+          "type": "u32",
+          "name": "fellowship_hint",
+          "meaning": "Native XP action copies player field; semantic meaning unresolved; ignored for authority",
+          "evidence": "unresolved"
+        },
+        {
+          "offset": 20,
+          "offset_hex": "0x14",
+          "bytes": 1024,
+          "type": "char[1024]",
+          "name": "motd",
+          "meaning": "Action2 requires NUL within1024; maximum1023 content bytes",
+          "evidence": "observed"
+        },
+        {
+          "offset": 1044,
+          "offset_hex": "0x414",
+          "bytes": 20,
+          "type": "bytes",
+          "name": "reserved_414",
+          "meaning": "Zero emitted; semantics unresolved",
+          "evidence": "unresolved"
+        },
+        {
+          "offset": 1064,
+          "offset_hex": "0x428",
+          "bytes": 4,
+          "type": "u32",
+          "name": "campsite_id",
+          "meaning": "Action8 selected catalogue ID",
+          "evidence": "observed"
+        },
+        {
+          "offset": 1068,
+          "offset_hex": "0x42c",
+          "bytes": 8,
+          "type": "bytes",
+          "name": "reserved_42c",
+          "meaning": "Zero emitted; semantics unresolved",
+          "evidence": "unresolved"
+        }
+      ],
+      "actions": [
+        {
+          "value": 1,
+          "name": "Create",
+          "argument": "none"
+        },
+        {
+          "value": 2,
+          "name": "SetMOTD",
+          "argument": "motd at0x14"
+        },
+        {
+          "value": 3,
+          "name": "Accept",
+          "argument": "server binds to delivered inviter+expiry"
+        },
+        {
+          "value": 4,
+          "name": "Decline",
+          "argument": "server binds to delivered inviter+expiry"
+        },
+        {
+          "value": 5,
+          "name": "Invite",
+          "argument": "target_id is actual selected spawn entity"
+        },
+        {
+          "value": 6,
+          "name": "Remove",
+          "argument": "target_id is member character ID"
+        },
+        {
+          "value": 7,
+          "name": "TransferLeader",
+          "argument": "target_id is member character ID"
+        },
+        {
+          "value": 8,
+          "name": "CreateCamp",
+          "argument": "campsite_id at0x428"
+        },
+        {
+          "value": 9,
+          "name": "DestroyCamp",
+          "argument": "none"
+        },
+        {
+          "value": 10,
+          "name": "Leave",
+          "argument": "leader must transfer or disband"
+        },
+        {
+          "value": 11,
+          "name": "Disband",
+          "argument": "leader authority"
+        },
+        {
+          "value": 12,
+          "name": "ToggleXP",
+          "argument": "target_id is member character ID; hint+0x10 untrusted"
+        }
+      ]
+    },
+    "Member": {
+      "size": 84,
+      "fields": [
+        {
+          "offset": 0,
+          "offset_hex": "0x0",
+          "bytes": 4,
+          "type": "u32",
+          "name": "character_id",
+          "meaning": "Persistent character identity, not zone spawn ID",
+          "evidence": "observed"
+        },
+        {
+          "offset": 4,
+          "offset_hex": "0x4",
+          "bytes": 64,
+          "type": "char[64]",
+          "name": "name",
+          "meaning": "NUL-terminated bounded member name",
+          "evidence": "observed"
+        },
+        {
+          "offset": 68,
+          "offset_hex": "0x44",
+          "bytes": 4,
+          "type": "u32",
+          "name": "zone_id",
+          "meaning": "Current known zone",
+          "evidence": "observed"
+        },
+        {
+          "offset": 72,
+          "offset_hex": "0x48",
+          "bytes": 4,
+          "type": "u32",
+          "name": "level",
+          "meaning": "Current known level",
+          "evidence": "observed"
+        },
+        {
+          "offset": 76,
+          "offset_hex": "0x4c",
+          "bytes": 4,
+          "type": "u32",
+          "name": "class_id",
+          "meaning": "Class",
+          "evidence": "observed"
+        },
+        {
+          "offset": 80,
+          "offset_hex": "0x50",
+          "bytes": 4,
+          "type": "u32",
+          "name": "last_on",
+          "meaning": "Server observed last login value; zero for connected local members",
+          "evidence": "observed"
+        }
+      ]
+    },
+    "OP_FellowshipUpdate": {
+      "emitted_size": 2564,
+      "fields": [
+        {
+          "offset": 0,
+          "offset_hex": "0x0",
+          "bytes": 4,
+          "type": "u32",
+          "name": "version",
+          "meaning": "Native constructor5; server5",
+          "evidence": "observed"
+        },
+        {
+          "offset": 4,
+          "offset_hex": "0x4",
+          "bytes": 4,
+          "type": "u32",
+          "name": "fellowship_id",
+          "meaning": "Current or previous ID for clearing update",
+          "evidence": "observed"
+        },
+        {
+          "offset": 8,
+          "offset_hex": "0x8",
+          "bytes": 64,
+          "type": "char[64]",
+          "name": "fellowship_name",
+          "meaning": "Not synthesized; zero emitted",
+          "evidence": "source_correspondence_unimplemented"
+        },
+        {
+          "offset": 72,
+          "offset_hex": "0x48",
+          "bytes": 1024,
+          "type": "char[1024]",
+          "name": "motd",
+          "meaning": "NUL-terminated",
+          "evidence": "observed"
+        },
+        {
+          "offset": 1096,
+          "offset_hex": "0x448",
+          "bytes": 4,
+          "type": "u32",
+          "name": "member_count",
+          "meaning": "0..12",
+          "evidence": "observed"
+        },
+        {
+          "offset": 1100,
+          "offset_hex": "0x44c",
+          "bytes": 1008,
+          "type": "Member[12]",
+          "name": "members",
+          "meaning": "Stride84; leader first",
+          "evidence": "observed"
+        },
+        {
+          "offset": 2108,
+          "offset_hex": "0x83c",
+          "bytes": 4,
+          "type": "u32",
+          "name": "sync",
+          "meaning": "Constructor default1; server1; revision is not wire Sync",
+          "evidence": "constructor_default"
+        },
+        {
+          "offset": 2112,
+          "offset_hex": "0x840",
+          "bytes": 384,
+          "type": "bytes[12][32]",
+          "name": "player_handles",
+          "meaning": "Zero emitted; not fabricated",
+          "evidence": "source_correspondence_unimplemented"
+        },
+        {
+          "offset": 2496,
+          "offset_hex": "0x9c0",
+          "bytes": 12,
+          "type": "u8[12]",
+          "name": "sharing",
+          "meaning": "Per-member Boolean in roster order",
+          "evidence": "observed"
+        },
+        {
+          "offset": 2508,
+          "offset_hex": "0x9cc",
+          "bytes": 12,
+          "type": "u8[12]",
+          "name": "capped",
+          "meaning": "Per-member authoritative bank-cap admission flag",
+          "evidence": "observed"
+        },
+        {
+          "offset": 2520,
+          "offset_hex": "0x9d8",
+          "bytes": 12,
+          "type": "u8[12]",
+          "name": "offline_mode",
+          "meaning": "Zero emitted; last-on/zone still supplied",
+          "evidence": "source_correspondence_unimplemented"
+        },
+        {
+          "offset": 2532,
+          "offset_hex": "0x9e4",
+          "bytes": 4,
+          "type": "f32",
+          "name": "camp_y",
+          "meaning": "Native Y before X",
+          "evidence": "observed"
+        },
+        {
+          "offset": 2536,
+          "offset_hex": "0x9e8",
+          "bytes": 4,
+          "type": "f32",
+          "name": "camp_x",
+          "meaning": "Native X",
+          "evidence": "observed"
+        },
+        {
+          "offset": 2540,
+          "offset_hex": "0x9ec",
+          "bytes": 4,
+          "type": "f32",
+          "name": "camp_z",
+          "meaning": "Native Z",
+          "evidence": "observed"
+        },
+        {
+          "offset": 2544,
+          "offset_hex": "0x9f0",
+          "bytes": 4,
+          "type": "u32",
+          "name": "camp_zone",
+          "meaning": "Native UI zone resolver input",
+          "evidence": "observed"
+        },
+        {
+          "offset": 2548,
+          "offset_hex": "0x9f4",
+          "bytes": 4,
+          "type": "u32",
+          "name": "camp_timestamp",
+          "meaning": "Nonzero presence; server uses persisted epoch expiry; native clock origin unproven",
+          "evidence": "observed_presence_policy_value"
+        },
+        {
+          "offset": 2552,
+          "offset_hex": "0x9f8",
+          "bytes": 4,
+          "type": "u32",
+          "name": "camp_second_timestamp",
+          "meaning": "Zero emitted; semantics unresolved",
+          "evidence": "unresolved"
+        },
+        {
+          "offset": 2556,
+          "offset_hex": "0x9fc",
+          "bytes": 4,
+          "type": "u32",
+          "name": "camp_type",
+          "meaning": "Type label from exact-build source correspondence",
+          "evidence": "source_correspondence"
+        },
+        {
+          "offset": 2560,
+          "offset_hex": "0xa00",
+          "bytes": 1,
+          "type": "u8",
+          "name": "camp_present",
+          "meaning": "1 for active camp",
+          "evidence": "source_correspondence"
+        },
+        {
+          "offset": 2561,
+          "offset_hex": "0xa01",
+          "bytes": 3,
+          "type": "bytes",
+          "name": "camp_padding",
+          "meaning": "Zero emitted",
+          "evidence": "reserved"
+        }
+      ]
+    },
+    "OP_FellowshipInvite": {
+      "emitted_size": 1076,
+      "shared_envelope": "OP_FellowshipAction",
+      "known_field_offset": 12,
+      "unknown_bytes": "zero emitted"
+    },
+    "OP_FellowshipCampRequest": {
+      "size": 8,
+      "fields": [
+        {
+          "offset": 0,
+          "offset_hex": "0x0",
+          "bytes": 4,
+          "type": "u32",
+          "name": "usable_only",
+          "meaning": "0 show all;1 usable only; inverse of ShowAll flag",
+          "evidence": "observed"
+        },
+        {
+          "offset": 4,
+          "offset_hex": "0x4",
+          "bytes": 4,
+          "type": "u32",
+          "name": "category_mask",
+          "meaning": "0xffffffff all, otherwise1<<category_id",
+          "evidence": "observed"
+        }
+      ]
+    },
+    "OP_FellowshipCampList": {
+      "prefix": [
+        {
+          "offset": 0,
+          "offset_hex": "0x0",
+          "bytes": 4,
+          "type": "u32",
+          "name": "count",
+          "meaning": "Number of records",
+          "evidence": "observed"
+        }
+      ],
+      "records": "CampsiteRecord[count]",
+      "size_formula": "4 + sum(10 + encoded_name_bytes)"
+    },
+    "CampsiteRecord": {
+      "minimum_size": 10,
+      "fields": [
+        {
+          "offset": 0,
+          "offset_hex": "0x0",
+          "bytes": 1,
+          "type": "u8",
+          "name": "usable",
+          "meaning": "0 gray/unavailable;1 usable",
+          "evidence": "observed"
+        },
+        {
+          "offset": 1,
+          "offset_hex": "0x1",
+          "bytes": 4,
+          "type": "u32",
+          "name": "campsite_id",
+          "meaning": "Selection key sent by action8",
+          "evidence": "observed"
+        },
+        {
+          "offset": 5,
+          "offset_hex": "0x5",
+          "bytes": 4,
+          "type": "u32",
+          "name": "description_id",
+          "meaning": "Native description-string ID",
+          "evidence": "observed"
+        },
+        {
+          "offset": 9,
+          "offset_hex": "0x9",
+          "bytes": null,
+          "type": "cstring",
+          "name": "name",
+          "meaning": "NUL-terminated variable length; record size10+name byte length",
+          "evidence": "observed"
+        }
+      ]
+    },
+    "OP_FellowshipVitality": {
+      "emitted_size": 32,
+      "fields": [
+        {
+          "offset": 0,
+          "offset_hex": "0x0",
+          "bytes": 8,
+          "type": "u64",
+          "name": "normal_pool",
+          "meaning": "Native64-bit read",
+          "evidence": "observed"
+        },
+        {
+          "offset": 8,
+          "offset_hex": "0x8",
+          "bytes": 8,
+          "type": "u64",
+          "name": "normal_cap",
+          "meaning": "Native64-bit read",
+          "evidence": "observed"
+        },
+        {
+          "offset": 16,
+          "offset_hex": "0x10",
+          "bytes": 4,
+          "type": "u32",
+          "name": "aa_pool",
+          "meaning": "Native low32-bit read",
+          "evidence": "observed"
+        },
+        {
+          "offset": 20,
+          "offset_hex": "0x14",
+          "bytes": 4,
+          "type": "u32",
+          "name": "aa_pool_high",
+          "meaning": "Zero emitted; native consumer does not read this word",
+          "evidence": "unresolved"
+        },
+        {
+          "offset": 24,
+          "offset_hex": "0x18",
+          "bytes": 4,
+          "type": "u32",
+          "name": "aa_cap",
+          "meaning": "Native low32-bit read",
+          "evidence": "observed"
+        },
+        {
+          "offset": 28,
+          "offset_hex": "0x1c",
+          "bytes": 4,
+          "type": "u32",
+          "name": "aa_cap_high",
+          "meaning": "Zero emitted; native consumer does not read this word",
+          "evidence": "unresolved"
+        }
+      ]
+    }
+  }
+}

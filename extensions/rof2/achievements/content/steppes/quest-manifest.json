@@ -1,0 +1,87 @@
+[
+  {
+    "path": "crescent/394153.lua",
+    "mode": "append",
+    "source": "quests/crescent/394153.lua"
+  },
+  {
+    "path": "crescent/394191.lua",
+    "mode": "append",
+    "source": "quests/crescent/394191.lua"
+  },
+  {
+    "path": "crescent/394200.lua",
+    "mode": "append",
+    "source": "quests/crescent/394200.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_steppes.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/achievement_quest_steppes.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_steppes_data.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/achievement_quest_steppes_data.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_steppes_encounters.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/achievement_quest_steppes_encounters.lua"
+  },
+  {
+    "path": "lua_modules/steppes_encounter_config.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/steppes_encounter_config.lua"
+  },
+  {
+    "path": "lua_modules/steppes_encounter_native.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/steppes_encounter_native.lua"
+  },
+  {
+    "path": "lua_modules/steppes_encounter_state.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/steppes_encounter_state.lua"
+  },
+  {
+    "path": "lua_modules/steppes_portal_repair.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/steppes_portal_repair.lua"
+  },
+  {
+    "path": "steppes/399032.lua",
+    "mode": "append",
+    "source": "quests/steppes/399032.lua"
+  },
+  {
+    "path": "steppes/399070.lua",
+    "mode": "append",
+    "source": "quests/steppes/399070.lua"
+  },
+  {
+    "path": "steppes/399073.lua",
+    "mode": "append",
+    "source": "quests/steppes/399073.lua"
+  },
+  {
+    "path": "steppes/399100.lua",
+    "mode": "append",
+    "source": "quests/steppes/399100.lua"
+  },
+  {
+    "path": "steppes/399139.lua",
+    "mode": "append",
+    "source": "quests/steppes/399139.lua"
+  },
+  {
+    "path": "global/global_player.lua",
+    "mode": "append",
+    "source": "hooks/global_player.lua.append"
+  },
+  {
+    "path": "global/global_npc.lua",
+    "mode": "append",
+    "source": "hooks/global_npc.lua.append"
+  }
+]

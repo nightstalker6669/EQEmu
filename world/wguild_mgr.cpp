@@ -15,7 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-#include "wguild_mgr.h"
+#include "world/wguild_mgr.h"
 
 #include "common/eqemu_logsys.h"
 #include "common/repositories/guild_bank_repository.h"
@@ -32,6 +32,7 @@
 #include "world/clientlist.h"
 #include "world/zonelist.h"
 #include "world/zoneserver.h"
+#include <cstring>
 
 std::map<uint32, TributeData> tribute_list;
 
@@ -98,6 +99,7 @@ void WorldGuildManager::ProcessZonePacket(ServerPacket *pack) {
 		LogGuilds("Received and broadcasting guild member refresh for char [{}] to all zones with members of guild [{}]", s->char_id, s->guild_id);
 
 		RefreshGuild(s->guild_id);
+		InvalidateGuildTrophies();
 		//preform the local update
 		ClientList::Instance()->UpdateClientGuild(s->char_id, s->guild_id);
 
@@ -231,6 +233,45 @@ void WorldGuildManager::ProcessZonePacket(ServerPacket *pack) {
 		ZSList::Instance()->SendPacketToZonesWithGuild(in->guild_id, pack);
 		break;
 	}
+	case ServerOP_GuildAchievement:
+	{
+		if (
+			pack->size <= sizeof(ServerGuildAchievement_Struct) ||
+			pack->size >
+				sizeof(ServerGuildAchievement_Struct) + ServerGuildAchievementMaxLinkDataLength + 1
+		) {
+			LogGuilds(
+				"Received ServerOP_GuildAchievement of invalid size [{}]",
+				pack->size
+			);
+			return;
+		}
+
+		const auto in = reinterpret_cast<const ServerGuildAchievement_Struct *>(pack->pBuffer);
+		const auto link_data_size = pack->size - sizeof(ServerGuildAchievement_Struct);
+		if (
+			in->guild_id == 0 ||
+			in->guild_id == GUILD_NONE ||
+			in->achievement_id == 0 ||
+			in->player_name[0] == '\0' ||
+			in->player_name[sizeof(in->player_name) - 1] != '\0' ||
+			link_data_size < 2 ||
+			in->achievement_link_data[0] == '\0' ||
+			in->achievement_link_data[link_data_size - 1] != '\0' ||
+			in->achievement_link_data[link_data_size - 2] != '^' ||
+			std::memchr(in->achievement_link_data, '\0', link_data_size - 1) != nullptr
+		) {
+			LogGuilds(
+				"Received invalid ServerOP_GuildAchievement for guild [{}], achievement [{}]",
+				in->guild_id,
+				in->achievement_id
+			);
+			return;
+		}
+
+		ZSList::Instance()->SendPacketToZonesWithGuild(in->guild_id, pack);
+		break;
+	}
     case ServerOP_GuildMemberAdd:
 	{
         auto in    = (ServerOP_GuildMessage_Struct *)pack->pBuffer;
@@ -256,6 +297,7 @@ void WorldGuildManager::ProcessZonePacket(ServerPacket *pack) {
 
 void WorldGuildManager::Process()
 {
+ ProcessGuildTrophies();
 	for (auto &g: m_guilds) {
 		if (!g.second->tribute.enabled) {
 			continue;
@@ -269,10 +311,11 @@ void WorldGuildManager::Process()
 			);
 		}
 		else if (g.second->tribute.enabled && g.second->tribute.timer.Check()) {
-			g.second->tribute.favor         -= GetGuildTributeCost(g.first);
+			auto spent=AdjustDbGuildFavor(g.first,-int64(GetGuildTributeCost(g.first)));
+			if(!spent){g.second->tribute.enabled=false;g.second->tribute.timer.Disable();UpdateDbGuildTributeEnabled(g.first,0);SendGuildTributeFavorAndTimer(g.first);continue;}
+			g.second->tribute.favor=*spent;
 			g.second->tribute.time_remaining = RuleI(Guild, TributeTime);
 			g.second->tribute.timer.Start(RuleI(Guild, TributeTime));
-			guild_mgr.UpdateDbGuildFavor(g.first, g.second->tribute.favor);
 			guild_mgr.UpdateDbTributeTimeRemaining(g.first, RuleI(Guild, TributeTime));
 			SendGuildTributeFavorAndTimer(g.first, g.second->tribute.favor, g.second->tribute.timer.GetRemainingTime());
 		}
@@ -443,14 +486,22 @@ bool WorldGuildManager::RefreshGuild(uint32 guild_id)
 	return true;
 }
 
+void WorldGuildManager::SendGuildTributeFavorAndTimer(uint32 guild_id)
+{
+	const auto* guild = GetGuildByGuildID(guild_id);
+	if (!guild) { return; }
+	SendGuildTributeFavorAndTimer(guild_id, guild->tribute.favor, GetGuildTributeTimeRemaining(guild_id));
+}
+
 void WorldGuildManager::SendGuildTributeFavorAndTimer(uint32 guild_id, uint32 favor, uint32 time)
 {
+ auto current=ReadDbGuildFavor(guild_id);if(!current)return;favor=*current;if(auto* guild=GetGuildByGuildID(guild_id))guild->tribute.favor=favor;
 	auto sp   = new ServerPacket(ServerOP_GuildTributeFavAndTimer, sizeof(GuildTributeFavorTimer_Struct));
 	auto data = (GuildTributeFavorTimer_Struct *)sp->pBuffer;
 	data->guild_id      = guild_id;
 	data->guild_favor   = favor;
 	data->tribute_timer = time;
-	data->trophy_timer  = 0;
+	data->trophy_timer  = GuildTrophyRemaining(guild_id);
 
 	ZSList::Instance()->SendPacketToZonesWithGuild(guild_id, sp);
 	safe_delete(sp)

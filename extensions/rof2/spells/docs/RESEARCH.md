@@ -1,0 +1,80 @@
+# Research and limits
+
+The initial audit compared the local RoF2 spell data and database with Allakhazam expansion/class lists and Raidloot class lists. Allakhazam/Lucy and historical guides were inspected through Chrome. Modern Live differences were treated as review candidates, not automatic corrections to historical spells.
+
+- The database contained 40,722 spells, maximum ID 42,602. The RoF2 source limit is 45,000, so no spell IDs were remapped. The reported 50,000 concern did not require content changes.
+- The initial expansion reference had 11,341 distinct entries. Its two missing entries were later 2014 additions and were excluded. This generic list was not exhaustive: the actual Greater mote quest lists documented Mark of the Exemplar II/III despite omission from the generic list, so both are included in the reward catalogue.
+- 114 class-level differences against current sites were reviewed. Later Live changes and non-scribable helper/click records account for them. Spirit Salve gained Beastlord 48 in 2016; that later addition was not applied to the RoF baseline. This package changes no `spells_new` levels or effects.
+- A large current-Live numeric effect comparison found differences requiring historical interpretation. They were not indiscriminately patched. Database dependency repair is not proof that every C++ spell effect has original Live behavior.
+- Existing zone spell blocks and expansion boundaries were preserved. Later Ethernere teleport content was excluded.
+
+## Acquisition and scroll items
+
+[Rasper's RoF spell guide](https://www.raspersrealm.com/Everquest/RoF/miscSpells.html) supplies the class-vendor assignments, Magus Burlshin faction requirement, Kerkaz keywords and physical turn-in flow.
+
+[Allakhazam quests 6004–6008](https://everquest.allakhazam.com/db/quest/6004) document the five Dreadmote tiers; [6009–6013](https://everquest.allakhazam.com/db/quest/6009) document Terrormotes. The lists include original 2012–2013 player reports. The package includes the RoF Shadow of Fear additions present in the local client. Source spelling mistakes were matched to the existing spells; the level-98 Shadow Knight bundle follows the source correction of Gift of Falsin plus Minion of Grelleth, not Falhotep's Covenant.
+
+[Glorious Expurgation III](https://everquest.allakhazam.com/db/item/106830) and [Daring Escape III](https://everquest.allakhazam.com/db/item/109629) are documented Glowing Terrormote rewards with 2013/2012 collector dates. Missing item records were reconstructed from existing rank-II siblings with the correct rank-III effect, name and Lore/NoTrade properties; other template fields were inherited and were not all independently recovered. Their lore display labels match rank III.
+
+[Almar's guide](https://almarsguides.com/eq/quests/rof/rkiiandrkiiispellrunes/) provides reward-window/return-mote evidence. Modern trade-down options were not imported because their original-era availability was not established.
+
+The three Exigent summoned items use existing sibling templates and [Lucy item 64981](https://lucy.allakhazam.com/itemraw.html?id=64981), [64983](https://lucy.allakhazam.com/itemraw.html?id=64983), and [64984](https://lucy.allakhazam.com/itemraw.html?id=64984) evidence. These are item dependency repairs; the underlying spell records were preserved.
+
+## Pet and aura reconstruction
+
+[Measured magician pet statistics](https://www.eqprogression.com/magician-pet-stats/) provide selected TSS-era HP, maximum hit, level and focus anchors. [Archived Magician's Tower research](https://www.eqmagetower.com/forums/viewtopic.php?p=26442) was also reviewed. Complete verified RoF-era values were not found. The published model labels level/stat scaling, focus extrapolation and secondary values as estimates. It does not claim that these are original Live NPC records.
+
+Aura parent-to-child links were checked against [Raidloot](https://www.raidloot.com/spells) and existing local effect spell IDs. Recipient/movement roles use existing native aura modes; range, timing, duration and visuals include estimates. Native ground-target placement and other C++ behavior remain limitations that this database-only repair does not solve. Existing 26 aura records were not replaced.
+
+The pet payload creates no world spawns, merchants, faction assignments or loot. Its 3,084 NPC templates are referenced by the reconstructed pets/focus variants. This is functional reconstruction content, not a complete historical-balance recovery.
+
+## Continued acquisition review (2026-11-01)
+
+A fresh database source scan found stock/loot/recipe/task-reward rows for all 1,678 initial direct RoF acquisition candidates after the earlier repairs. This proves database references, not gameplay reachability. Another 2,814 older scroll-backed spell candidates lacked those source rows before the staged VoA repair. Quest scripts and progression requirements still require expansion-by-expansion review.
+
+The [VoA guide](https://www.raspersrealm.com/Everquest/VoA/miscSpells.html), inspected in Chrome with all class tables expanded, supplies Argath merchant names and Alaran thresholds. The [row provenance](../provenance/voa-merchants.json) records each confirmed mapping. Stage 005 adds 182 rows and gates 159 existing rows, covering 336 distinct spells. Of the original 180 missing VoA rank I acquisition candidates, 177 are covered by this staged repair. Existing merchant pricing, currency, faction, class and expansion policies are preserved. It does not alter spell levels or effects.
+
+Perfected Blood and Tectonic Tremor have conflicting 25/50 requirements between class tables. Five guide names (Tendon Smash, Aura/Echo of the Order, Scalding Burst and Flashfires) do not match the dated database scope. Those entries are held pending independent evidence. Gouging Blade is another missing rank I acquisition candidate absent from the guide. No aliases or guessed thresholds are applied for these cases.
+
+Mark of the Exemplar rank I has no scroll in this database. A December 2012 comment on its [spell page](https://everquest.allakhazam.com/db/spell/34416) reports it missing from the vendor, so a new rank I scroll was not inferred. Its documented rank II/III options remain in Kerkaz's catalogue.
+
+The [HoT guide](https://www.raspersrealm.com/Everquest/HoT/miscSpells.html) also identifies Dream Mote and fragment acquisition with faction/progression restrictions. Rotharran currently has other zero-cost entries and no alternate-currency binding, so simply enabling Dream Motes would expose free stock. That repair and authentic fragment/VoA rank II/III turn-ins remain open research, separate from the completed RoF Kerkaz content.
+
+## VoA task restoration and unresolved data
+
+[Original task catalogues 5402–5411](https://everquest.allakhazam.com/db/quest/5402) supply class-specific bundles, original-item refund choices, physical delivery and learned-ability hiding. Exact source links and every omitted choice appear in `provenance/voa-tasks.json`; verified item identities/templates appear in `provenance/voa-scrolls.json`. Reward level/rank/class guards use the dated spell database. Shared scrolls may serve several classes at different learning levels; the spell data remains authoritative.
+
+RankII Alaran thresholds for levels91–95 are 0/25/25/50/25. The level95 task has a September22,2012 report of success at skill27, supporting25; the level94 task has a January9,2013 report confirming50. RankIII thresholds are25/50/50/75/75 from their individual task descriptions. The broad launch guide's level95II threshold50 and raid-AA skill71 threshold were not substituted for these task-specific requirements.
+
+The task page's recommended spell level/expansion level cap is not treated as proof of a maximum character level for acquisition. Tasks retain the existing spell-exchange min/max0 convention; exact lower-level task admission remains unverified. Spell learning levels are unchanged. This acquisition-boundary limitation must be considered during native acceptance.
+
+The 20 unverified rankIII item identities were absent from the official Lucy bulk catalogue and the independent EQResource search. Historical PEQ item data did not resolve them. Their spell records alone do not prove a released scroll. The level95III shadowknight page explicitly asks which spells are paired; rankII bundles were not copied into it. Magelo item pages required login and supplied no independent identity evidence.
+
+The inherited Scavenger Hunt Letter at132477 predates the current achievements content. Its relocation is withheld pending an offline dependency/origin audit. The original spell item ID is reserved in the research record, and no alternate ID has been invented.
+
+HoT source review found a December17,2012 trade/stack change in [Six-Step Pattern II item history](https://lucy.allakhazam.com/itemhistory.html?id=125616), predating the RoF2 client. Later comments reporting tradable scrolls do not by themselves date the change. Individual item histories also show later prices/appearance changes; current collection values are not proof of every 2013 item field.
+
+## HoT fragment exchange batch
+
+Stage 008 restores 287 independently verified original scroll identities and eight physical fragment tasks. Contemporary task catalogues supply each rank’s bundles independently. Dream Delvers faction 680 and existing racial/base modifiers are preserved; only the two existing teachers receive a dedicated NPC faction-group binding. Rank III level 87/88 admission is disputed and those tasks remain withheld. Three rank III scroll identities are unresolved; no IDs or partial bundles are invented. Additional level 90 paladin pairing information remains unverified. Raw current Lucy fields are not proof of every 2013 item field; the provenance records this limit and the historical overrides.
+
+Rotharran’s original shop also requires HoT progression. The baseline lacks the relevant mission definitions. No substitute flags, free unlocks or unrestricted stock changes were installed. SoD’s Plane of Time rune NPC, Underfoot mission/gem routes and older acquisition remain separate unresolved work. Publication is not deployment or native gameplay acceptance.
+
+## Legacy route continuation
+
+TSS quest3629 supplies143 class/reward entries. Its2009 shaman correction supplies Wishka's Favor; the contemporary2008 paladin correction places Brell seventh and Wave eighth. A conflicting December2013 report is outside the target cutoff. Underfoot gems use fixed name-matched rewards rather than learned-spell ordering.
+
+SoD quest4659 supplies the independent rune catalogue. The December2010 paladin correction reverses the last two Glowing rewards. The original bard Whirring and Glowing orders remain disputed; beastlord Glowing contains two scrolls without verified item identities. Those entire class/rune sequences remain inactive. The primary NPC31121 wiki incorrectly shares Ashengate-coordinate text with NPC22817; it was not used for the Plane of Time position. Independent installed Good's/Brewall's map labels agree on the restored location. Position/secondary NPC fields remain reconstruction evidence, not native RoF-era observation.
+
+
+## SoF standard faction merchant continuation (stage011)
+
+All381 class rows in [the SoF guide](https://www.raspersrealm.com/Everquest/SoF/miscSpells.html) resolve to747 rankI/rankII class entries, including unranked spells. The five ordinary vendors already carry their mapped stock. This check does not resolve the previously withheld rankIII bard scroll or prove every drop route.
+
+Stage011 covers only Ak`Anon Strike Force V(1190), Ladies of the Light(1185), Fang Breakers(1191), and Brownie Rebels(1189). Four original NPCs receive dedicated faction-group bindings;52 merchant rows receive original item/threshold repairs. Existing faction bases, racial/class/deity modifiers, prices and nonspell stock remain unchanged. The stage requires an existing enabled repeatable faction-reward task or a spawned positive kill-faction entry for each faction. This static guard detects absent gain routes; native accessibility and grind/rate parity remain unverified. Existing achievement-owned progression is a content dependency, not copied or modified by this package.
+
+Contemporary November14,2008 comments on [War March of Meldrath II](https://everquest.allakhazam.com/db/spell/14079#msg1226692863277805966) and [Erradien's Psalm of Potency II](https://everquest.allakhazam.com/db/spell/14058#msg1226692684280575176) confirm Kindly, overriding conflicting generic class-table entries. [Seridyn's dated vendor reports](https://everquest.allakhazam.com/db/npc/26835) from2007–2011 establish its13 original scrolls and their Kindly/Ally division. Wheel of Fists II requires Ally in both2007 and2011 reports; the conflicting current vendor row is not used.
+
+Seridyn's baseline70 scrolls duplicate Ellymil Cogswin's ordinary rankI stock. The stage replaces13 rows and removes57 leftovers, using exact full-row/inventory preimages. All70 ordinary scrolls remain available from Ellymil. Merchant442104 has one baseline consumer, Seridyn; additional consumers or customized stock cause refusal. The original/new item identities are enumerated in `provenance/sof-faction-merchants.json`.
+
+Bertoxxulous' Chosen(1183), Camp Valor(1184), and Crusaders of Veeshan(1188) remain outside the deployable stage: no existing reachable gain route was established. Their29 distinct standard-vendor spells, missing stock and unrestricted baseline rows remain recorded as incomplete; no substitute faction rewards, flags or unrestricted vendors are introduced. Elite rankIII vendors and their mission/raid prerequisites remain separate unfinished work.

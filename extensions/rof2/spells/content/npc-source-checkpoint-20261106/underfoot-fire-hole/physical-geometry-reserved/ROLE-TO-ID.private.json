@@ -1,0 +1,632 @@
+{
+  "identity": "underfoot-fire-hole-physical-geometry",
+  "status": "LOGICALLY_RESERVED_ONLY_NOT_INSERTED_NOT_SERVING_AUTHORITY",
+  "source_packet": "WORKSPACE_SOURCE/npc-work/underfoot-fire-hole/physical-geometry/MANIFEST.private.json",
+  "source_packet_sha256": "e2ea34e16242c6e6dfa93ce4871354c01ea7a8ceb1b63c1a477d646f6768b486",
+  "mission_gates_sha256": "36f30937da081bb03ce467a5addb0276eaf64d6957a0f771ab3a86760497f130",
+  "scene_placements_sha256": "b4e7d0b47126dc5dcbb95e75694d3947f4bd52fac0489c98a57c2116336e014b",
+  "zone_id": 490,
+  "zone": "brellstemple",
+  "version": 1,
+  "doors": [
+    {
+      "role": "inner_vault",
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "SQL_row_id": 304062000,
+      "native_door_id": 1
+    },
+    {
+      "role": "worship_left",
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "SQL_row_id": 304062001,
+      "native_door_id": 2
+    },
+    {
+      "role": "worship_right",
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "SQL_row_id": 304062002,
+      "native_door_id": 3
+    },
+    {
+      "role": "keymaster_pool",
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "SQL_row_id": 304062003,
+      "native_door_id": 4
+    },
+    {
+      "role": "keymaster_garden",
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "SQL_row_id": 304062004,
+      "native_door_id": 5
+    },
+    {
+      "role": "vault_guardian",
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "SQL_row_id": 304062005,
+      "native_door_id": 6
+    }
+  ],
+  "scene": [
+    {
+      "symbolic_slot": "ancient_gigyn_colossus_01",
+      "role": "ancient_gigyn_colossus",
+      "npc_type_id": 490900,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062000,
+      "spawngroup_id": 304062000,
+      "spawnentry_key": {
+        "spawngroupID": 304062000,
+        "npcID": 490900
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "ancient_gigyn_colossus_02",
+      "role": "ancient_gigyn_colossus",
+      "npc_type_id": 490900,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062001,
+      "spawngroup_id": 304062001,
+      "spawnentry_key": {
+        "spawngroupID": 304062001,
+        "npcID": 490900
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "timeworn_channeler_01",
+      "role": "timeworn_channeler",
+      "npc_type_id": 490901,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062002,
+      "spawngroup_id": 304062002,
+      "spawnentry_key": {
+        "spawngroupID": 304062002,
+        "npcID": 490901
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "timeworn_channeler_02",
+      "role": "timeworn_channeler",
+      "npc_type_id": 490901,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062003,
+      "spawngroup_id": 304062003,
+      "spawnentry_key": {
+        "spawngroupID": 304062003,
+        "npcID": 490901
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "cunning_fiend_01",
+      "role": "cunning_fiend",
+      "npc_type_id": 490902,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062004,
+      "spawngroup_id": 304062004,
+      "spawnentry_key": {
+        "spawngroupID": 304062004,
+        "npcID": 490902
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "cunning_fiend_02",
+      "role": "cunning_fiend",
+      "npc_type_id": 490902,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062005,
+      "spawngroup_id": 304062005,
+      "spawnentry_key": {
+        "spawngroupID": 304062005,
+        "npcID": 490902
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "protector_of_purity_01",
+      "role": "protector_of_purity",
+      "npc_type_id": 490903,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062006,
+      "spawngroup_id": 304062006,
+      "spawnentry_key": {
+        "spawngroupID": 304062006,
+        "npcID": 490903
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "protector_of_clay_01",
+      "role": "protector_of_clay",
+      "npc_type_id": 490904,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062007,
+      "spawngroup_id": 304062007,
+      "spawnentry_key": {
+        "spawngroupID": 304062007,
+        "npcID": 490904
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "crumbling_construct_01",
+      "role": "crumbling_construct",
+      "npc_type_id": 490905,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062008,
+      "spawngroup_id": 304062008,
+      "spawnentry_key": {
+        "spawngroupID": 304062008,
+        "npcID": 490905
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "broken_construct_01",
+      "role": "broken_construct",
+      "npc_type_id": 490906,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062009,
+      "spawngroup_id": 304062009,
+      "spawnentry_key": {
+        "spawngroupID": 304062009,
+        "npcID": 490906
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "cracking_construct_01",
+      "role": "cracking_construct",
+      "npc_type_id": 490907,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062010,
+      "spawngroup_id": 304062010,
+      "spawnentry_key": {
+        "spawngroupID": 304062010,
+        "npcID": 490907
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "worn_construct_01",
+      "role": "worn_construct",
+      "npc_type_id": 490908,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062011,
+      "spawngroup_id": 304062011,
+      "spawnentry_key": {
+        "spawngroupID": 304062011,
+        "npcID": 490908
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "eroding_construct_01",
+      "role": "eroding_construct",
+      "npc_type_id": 490909,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062012,
+      "spawngroup_id": 304062012,
+      "spawnentry_key": {
+        "spawngroupID": 304062012,
+        "npcID": 490909
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "keymaster_01",
+      "role": "keymaster",
+      "npc_type_id": 490910,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062013,
+      "spawngroup_id": 304062013,
+      "spawnentry_key": {
+        "spawngroupID": 304062013,
+        "npcID": 490910
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "vault_guardian_01",
+      "role": "vault_guardian",
+      "npc_type_id": 490911,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062014,
+      "spawngroup_id": 304062014,
+      "spawnentry_key": {
+        "spawngroupID": 304062014,
+        "npcID": 490911
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "gotonur_instance_01",
+      "role": "gotonur_instance",
+      "npc_type_id": 490912,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062015,
+      "spawngroup_id": 304062015,
+      "spawnentry_key": {
+        "spawngroupID": 304062015,
+        "npcID": 490912
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "stone_chest_01",
+      "role": "stone_chest",
+      "npc_type_id": 490914,
+      "zone": 490,
+      "version": 1,
+      "initially_present": false,
+      "mechanism": "Terminalownedconditionalchestplacementonly",
+      "spawn2_id": null,
+      "spawngroup_id": null,
+      "spawnentry_key": null,
+      "condition_id": null,
+      "ID_disposition": "EXISTING_NPC_TYPE_REUSED_CONDITIONAL_ANCHOR_ONLY",
+      "reason": "Terminal-owned conditional chest anchor; packet specifies no persistent spawn or spawn_condition consumer. No speculative extra IDs allocated."
+    },
+    {
+      "symbolic_slot": "coldain_champion_01",
+      "role": "coldain_champion",
+      "npc_type_id": 490915,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062016,
+      "spawngroup_id": 304062016,
+      "spawnentry_key": {
+        "spawngroupID": 304062016,
+        "npcID": 490915
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "coldain_champion_02",
+      "role": "coldain_champion",
+      "npc_type_id": 490915,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062017,
+      "spawngroup_id": 304062017,
+      "spawnentry_key": {
+        "spawngroupID": 304062017,
+        "npcID": 490915
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "gnomish_enigma_01",
+      "role": "gnomish_enigma",
+      "npc_type_id": 490916,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062018,
+      "spawngroup_id": 304062018,
+      "spawnentry_key": {
+        "spawngroupID": 304062018,
+        "npcID": 490916
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "gnomish_enigma_02",
+      "role": "gnomish_enigma",
+      "npc_type_id": 490916,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062019,
+      "spawngroup_id": 304062019,
+      "spawnentry_key": {
+        "spawngroupID": 304062019,
+        "npcID": 490916
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "mischievous_construct_01",
+      "role": "mischievous_construct",
+      "npc_type_id": 490917,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062020,
+      "spawngroup_id": 304062020,
+      "spawnentry_key": {
+        "spawngroupID": 304062020,
+        "npcID": 490917
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "mischievous_construct_02",
+      "role": "mischievous_construct",
+      "npc_type_id": 490917,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062021,
+      "spawngroup_id": 304062021,
+      "spawnentry_key": {
+        "spawngroupID": 304062021,
+        "npcID": 490917
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "roaming_automaton_01",
+      "role": "roaming_automaton",
+      "npc_type_id": 490918,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062022,
+      "spawngroup_id": 304062022,
+      "spawnentry_key": {
+        "spawngroupID": 304062022,
+        "npcID": 490918
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "roaming_automaton_02",
+      "role": "roaming_automaton",
+      "npc_type_id": 490918,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062023,
+      "spawngroup_id": 304062023,
+      "spawnentry_key": {
+        "spawngroupID": 304062023,
+        "npcID": 490918
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "telmiran_allurist_01",
+      "role": "telmiran_allurist",
+      "npc_type_id": 490919,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062024,
+      "spawngroup_id": 304062024,
+      "spawnentry_key": {
+        "spawngroupID": 304062024,
+        "npcID": 490919
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "telmiran_allurist_02",
+      "role": "telmiran_allurist",
+      "npc_type_id": 490919,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062025,
+      "spawngroup_id": 304062025,
+      "spawnentry_key": {
+        "spawngroupID": 304062025,
+        "npcID": 490919
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "timeworn_archmagus_01",
+      "role": "timeworn_archmagus",
+      "npc_type_id": 490920,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062026,
+      "spawngroup_id": 304062026,
+      "spawnentry_key": {
+        "spawngroupID": 304062026,
+        "npcID": 490920
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "timeworn_archmagus_02",
+      "role": "timeworn_archmagus",
+      "npc_type_id": 490920,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062027,
+      "spawngroup_id": 304062027,
+      "spawnentry_key": {
+        "spawngroupID": 304062027,
+        "npcID": 490920
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "ancient_automaton_01",
+      "role": "ancient_automaton",
+      "npc_type_id": 490921,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062028,
+      "spawngroup_id": 304062028,
+      "spawnentry_key": {
+        "spawngroupID": 304062028,
+        "npcID": 490921
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "ancient_automaton_02",
+      "role": "ancient_automaton",
+      "npc_type_id": 490921,
+      "zone": 490,
+      "version": 1,
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "spawn2_id": 304062029,
+      "spawngroup_id": 304062029,
+      "spawnentry_key": {
+        "spawngroupID": 304062029,
+        "npcID": 490921
+      },
+      "condition_id": null,
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    }
+  ],
+  "ranges": {
+    "spawn2": [
+      304062000,
+      304062029
+    ],
+    "spawngroup": [
+      304062000,
+      304062029
+    ],
+    "doors": [
+      304062000,
+      304062005
+    ]
+  },
+  "counts": {
+    "global_door_rows": 6,
+    "native_door_ids": 6,
+    "spawn2": 30,
+    "spawngroup": 30,
+    "spawnentry_composite_keys": 30,
+    "new_NPC_types": 0,
+    "new_conditions": 0,
+    "conditional_anchor_only": 1
+  },
+  "ID_semantics": {
+    "doors.id": "Global SQL primary key, signed int; distinct namespace from native door ID.",
+    "doors.doorid": "Zone/version-scoped native packet door identifier; values1..6 fit uint8. Wildcard version-1 checked, world version0 unchanged.",
+    "spawnentry": "Composite primary key(spawngroupID,npcID); no independent row ID.",
+    "conditions": "No condition consumer selected by packet; null means unallocated, not a newly defined condition.",
+    "conditional_chest": "Reuse reserved490914 type only; no static spawn/condition allocation, no serving activation.",
+    "existing_scene_reservations": "None found for this packet in current ledger; all existing25NPC/13LT/13LD definitions reused, no duplicate ranges."
+  },
+  "limits": [
+    "All coordinates/model/heading/size remain LOCAL reconstruction; no historical/native animation/collision/gameplay claim.",
+    "No world7/12 clone/mutation; no extra helper/world-transient/pathgrid/ground/object/loot IDs allocated.",
+    "Geometry and ID reservation do not release original custody/terminal/owner lifetime/passage consumers or installation authority.",
+    "Future exact SQL owner must recheck IDs and preimages before insertion; logical reservation does not lock database."
+  ],
+  "reserved_utc": "2026-11-06T06:23:46.920489+00:00",
+  "DBwrites": 0,
+  "runtime_actions": 0,
+  "builds": 0,
+  "client_tests": 0,
+  "schema_and_collision_receipt": "WORKSPACE_SOURCE/database-release/operations/fire170-physical-reservation-v1/reservation-receipt.private.json"
+}

@@ -1,3 +1,4 @@
+#include "fire_run_action_scene.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -147,6 +148,7 @@ public:
 
 	virtual bool Process(MobMovementManager *mob_movement_manager, Mob *mob)
 	{
+		const auto fire_native_before=glm::vec3(mob->GetPosition());
 		if (!mob->IsAIControlled()) {
 			return true;
 		}
@@ -226,6 +228,8 @@ public:
 			}
 
 			mob->SetPosition(m_move_to_x, m_move_to_y, m_move_to_z);
+			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
+			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
 
 			if (RuleB(Map, FixZWhenPathing)) {
 				mob->FixZ();
@@ -245,6 +249,8 @@ public:
 			}
 
 			mob->SetPosition(npos.x, npos.y, z_at_pos);
+			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
+			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
 
 
 			if (RuleB(Map, FixZWhenPathing)) {
@@ -301,6 +307,7 @@ public:
 
 	virtual bool Process(MobMovementManager *mob_movement_manager, Mob *mob)
 	{
+		const auto fire_native_before=glm::vec3(mob->GetPosition());
 		if (!mob->IsAIControlled()) {
 			return true;
 		}
@@ -370,6 +377,8 @@ public:
 			}
 
 			mob->SetPosition(m_move_to_x, m_move_to_y, m_move_to_z);
+			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
+			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
 
 			if (RuleB(Map, FixZWhenPathing)) {
 				mob->FixZ();
@@ -389,6 +398,8 @@ public:
 			}
 
 			mob->SetPosition(npos.x, npos.y, z_at_pos);
+			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
+			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
 		}
 
 		return false;
@@ -422,6 +433,7 @@ public:
 
 	virtual bool Process(MobMovementManager *mob_movement_manager, Mob *mob)
 	{
+		const auto fire_native_before=glm::vec3(mob->GetPosition());
 		if (!mob->IsAIControlled()) {
 			return true;
 		}
@@ -489,6 +501,8 @@ public:
 			}
 
 			mob->SetPosition(m_move_to_x, m_move_to_y, m_move_to_z);
+			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
+			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
 			return true;
 		}
 		else {
@@ -504,6 +518,8 @@ public:
 			}
 
 			mob->SetPosition(npos.x, npos.y, z_at_pos);
+			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
+			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
 		}
 
 		return false;
@@ -530,6 +546,8 @@ public:
 		if (!mob->IsAIControlled()) {
 			return true;
 		}
+
+		if(mob->IsNPC()&&FireRunActionSource::NativeRunHelperSource::RejectActualTeleport(*mob->CastToNPC()))return true;
 
 		if (mob->IsNPC()) {
 			entity_list.ProcessMove(mob->CastToNPC(), m_teleport_to_x, m_teleport_to_y, m_teleport_to_z);

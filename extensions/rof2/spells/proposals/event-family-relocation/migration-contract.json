@@ -1,0 +1,107 @@
+{
+  "format": 1,
+  "status": "HELD SOURCE PROPOSAL; no execution authority",
+  "coordinator_destination_reservation": {
+    "ids": [
+      900000,
+      900001,
+      900002,
+      900003,
+      900004,
+      900005,
+      900006,
+      900007,
+      900008
+    ],
+    "provisional": true,
+    "database_allocation_granted": false
+  },
+  "execution_scope": "Move nine inherited definitions; restore only the one verified native tome and its existing held reward choice.",
+  "no_assumption_all_neighbors_are_spells": true,
+  "unused_event_hypothesis": {
+    "verified": false,
+    "established": "Inherited numbered family in preserved PEQ archive; no typed current copies/providers or runtime literal event references in inspected scope.",
+    "remaining_risk": "Unknown creator/event, computed producers and reachable historical materialization must not be assumed absent."
+  },
+  "source_only_guards": {
+    "payload_registered_in_installer": false,
+    "apply_allowed": false,
+    "general_installer_enforces_this_contract": false
+  },
+  "fresh_preflight": {
+    "required_before_any_mutation": true,
+    "not_yet_authorized": [
+      "new Housing export/decode",
+      "runtime/session interruption",
+      "database/item/player mutation"
+    ],
+    "item_inputs": [
+      "Full current nine old rows exactly match archived preimages",
+      "All nine destination definitions and semantic active references absent",
+      "Exact items schema/engines and foreign-key census unchanged",
+      "30477 remains BER95/native rankIII and132476 template unchanged"
+    ],
+    "typed_and_script_inputs": [
+      "Repeat114-column census, conditional reward_type0/reward_data_id and task-list semantic checks",
+      "Repeat exact installed script/file preimages; do not remap unrelated900000timers or native132477provenance",
+      "No active producer, task, reward or recipe change unless its event-item semantics are proven"
+    ],
+    "housing_reuse": "Owner may reuse retained decoded semantic nodes only after exact current row-key set, payload hashes and relevant state match. Retained607-cell result alone is not current-state proof.",
+    "finite_recovery_domains": [
+      {
+        "field": "housing_layout_mixed_batches.binding_blob",
+        "historical_rows": 22,
+        "question": "Pair format-v1\u20135 binding with decoded outcome; prove applied/terminal and current lease/pending/restart read behavior. If materializable, validate original digest then map only at materialization."
+      },
+      {
+        "field": "housing_return_parcels.source_state",
+        "historical_rows": 2,
+        "question": "Determine source producer and whether witness only versus actual deliverable canonical/native row. Preserve original witness/digest; remap only actual authoritative pending delivery representation if matched."
+      },
+      {
+        "field": "housing_offline_return_items.state_before",
+        "historical_rows": 2,
+        "question": "Classify terminal history witness versus reachable replay input; preserve history bytes unless an active reader proves a materialization dependency."
+      },
+      {
+        "field": "housing_inventory_death_reconciliations.outcome_blob",
+        "historical_rows": 5,
+        "question": "Attribute pending_key, original digest and recovery linkage; compare current session/lease pending state before declaring terminal."
+      }
+    ],
+    "terminal_policy": "Preserve immutable terminal receipt bytes and digests. Record namespace ledger and archived template preimages; do not rewrite hash chains.",
+    "materialization_policy": "Prove reader terminal/unreachable, or use owner-reviewed adapter validating original digest before mapping a positively identified pre-cutover event item. Never blanket-map post-cutover132477 tomes.",
+    "arbitrary_customdata_policy": "Preserve generic quest customdata without proven item-ID encoding; not a blanket blocker."
+  },
+  "positive_match_branch": {
+    "default_definition_only_path": "STOP if any authoritative item/augment/bag/HEV1/scaling, active session or reachable recovery match exists.",
+    "preserve_existing_copies": "Do not delete, replace with tomes, discard or recreate GUIDs. Prepare a separate exact owner-codec migration for matched rows only, keeping GUID/serial, quantity/charges, owners, slots, bag structure, progress and NULL distinctions; update backing rows and derived hashes together.",
+    "authorization": "Source design only. This package grants no player mutation or automatic positive-match rewrite."
+  },
+  "transaction_plan": [
+    "Coordinator establishes exclusive maintenance/cache window and approved backups; freeze exact helper/contract revision.",
+    "Lock/recompare exact item rows, absent destinations and acquisition target preimages; verify fresh owner preflight receipt.",
+    "Relocate items primary keys132477\u2013132485 to900000\u2013900008, each expected affected row1, preserving every non-ID field in each287-column row.",
+    "Insert full native132477 tome, then exactly the three held acquisition rows; no other native item is guessed or inserted.",
+    "Verify all nine relocated full postimages, native tome, reward rows, old132478\u2013132485absence, total item count+1 and out-of-scope preservation; commit together.",
+    "Coordinate fresh item shared memory and relevant quest/task catalogue/cache activation. Disk/database readback is not native acceptance."
+  ],
+  "rollback": {
+    "before_commit": "Rollback entire transaction on any mismatch; never retry partial writes automatically.",
+    "after_commit": "Only exact receipt-owned postimages can be reversed under a new exclusive window and fresh semantic custody/reference/claim preflight. Remove only the three exact inserted acquisition rows, remove exact native132477 and return all nine event definitions to their old IDs.",
+    "new_copies_or_claims": "Any native tome custody/pending reward/consumptive claim or relocated-event reference makes definition-only rollback STOP. Preserve player state and prepare a reviewed forward repair or matched reverse migration; never restore stale inventories or turn a native tome into the old letter.",
+    "immutable_history": "Terminal history bytes/digests stay unchanged in both directions; ledger records any reversal."
+  },
+  "validation_required": [
+    "Offline complete-row preservation and namespace separation",
+    "Destination collision and any positive-match guard must stop",
+    "Transaction failpoints before every item/reward write and before commit on isolated clone only when authorized",
+    "Postimage and out-of-scope schema/definition/receipt checks",
+    "Assigned native tester: new event-item links/book display and Shared Savagery class/level/acquisition after coordinated activation"
+  ],
+  "remaining_completion_inputs": [
+    "Fresh finite authoritative/recovery classification receipt for exact18IDs",
+    "Accept149 inherited native-tome columns or source them;138columns already raw-source mapped",
+    "Review exact migration helper plus clone/failpoint checks and rollback before any deployment"
+  ]
+}

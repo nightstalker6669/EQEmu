@@ -1,0 +1,791 @@
+{
+  "status": "SOURCE_ONLY_SELECTED_LOCAL_CLASS_FALLBACK_NOT_ORIGINAL_CASTING_PROOF",
+  "database_writes": 0,
+  "native_acceptance": false,
+  "new_rows": {
+    "npc_spells": [
+      {
+        "id": 925000,
+        "name": "RoF2 Xorbb Wizard fallback",
+        "parent_list": 0,
+        "attack_proc": -1,
+        "proc_chance": 10,
+        "range_proc": -1,
+        "rproc_chance": 0,
+        "defensive_proc": -1,
+        "dproc_chance": 0,
+        "fail_recast": 0,
+        "engaged_no_sp_recast_min": 0,
+        "engaged_no_sp_recast_max": 0,
+        "engaged_b_self_chance": 0,
+        "engaged_b_other_chance": 0,
+        "engaged_d_chance": 0,
+        "pursue_no_sp_recast_min": 0,
+        "pursue_no_sp_recast_max": 0,
+        "pursue_d_chance": 0,
+        "idle_no_sp_recast_min": 0,
+        "idle_no_sp_recast_max": 0,
+        "idle_b_chance": 0
+      }
+    ],
+    "npc_spells_entries": [
+      {
+        "id": 925001,
+        "npc_spells_id": 925000,
+        "spellid": 2884,
+        "type": 1,
+        "minlevel": 60,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 22,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925002,
+        "npc_spells_id": 925000,
+        "spellid": 3335,
+        "type": 1,
+        "minlevel": 63,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 23,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925003,
+        "npc_spells_id": 925000,
+        "spellid": 3339,
+        "type": 1,
+        "minlevel": 65,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 24,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925004,
+        "npc_spells_id": 925000,
+        "spellid": 3332,
+        "type": 1,
+        "minlevel": 65,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925005,
+        "npc_spells_id": 925000,
+        "spellid": 1636,
+        "type": 1,
+        "minlevel": 59,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925006,
+        "npc_spells_id": 925000,
+        "spellid": 3333,
+        "type": 1,
+        "minlevel": 64,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925007,
+        "npc_spells_id": 925000,
+        "spellid": 3194,
+        "type": 4,
+        "minlevel": 61,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 5,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925008,
+        "npc_spells_id": 925000,
+        "spellid": 1526,
+        "type": 512,
+        "minlevel": 53,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925009,
+        "npc_spells_id": 925000,
+        "spellid": 3302,
+        "type": 8,
+        "minlevel": 64,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925010,
+        "npc_spells_id": 925000,
+        "spellid": 3301,
+        "type": 8,
+        "minlevel": 63,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925011,
+        "npc_spells_id": 925000,
+        "spellid": 1419,
+        "type": 8,
+        "minlevel": 34,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925012,
+        "npc_spells_id": 925000,
+        "spellid": 3191,
+        "type": 1,
+        "minlevel": 65,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 24,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925013,
+        "npc_spells_id": 925000,
+        "spellid": 3331,
+        "type": 1,
+        "minlevel": 62,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 23,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925014,
+        "npc_spells_id": 925000,
+        "spellid": 230,
+        "type": 4,
+        "minlevel": 4,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925015,
+        "npc_spells_id": 925000,
+        "spellid": 11839,
+        "type": 1,
+        "minlevel": 71,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925016,
+        "npc_spells_id": 925000,
+        "spellid": 10853,
+        "type": 8,
+        "minlevel": 71,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      },
+      {
+        "id": 925017,
+        "npc_spells_id": 925000,
+        "spellid": 10862,
+        "type": 8,
+        "minlevel": 73,
+        "maxlevel": 255,
+        "manacost": -1,
+        "recast_delay": -1,
+        "priority": 1,
+        "resist_adjust": null,
+        "min_hp": 0,
+        "max_hp": 0,
+        "min_expansion": -1,
+        "max_expansion": -1,
+        "content_flags": null,
+        "content_flags_disabled": null
+      }
+    ]
+  },
+  "actor_column_updates": [
+    {
+      "id": 753013,
+      "name": "a_deathraiser_goblin",
+      "class": 11,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753016,
+      "name": "a_corpsebinder_goblin",
+      "class": 11,
+      "level": 102,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753035,
+      "name": "a_deadfiend_goblin",
+      "class": 11,
+      "level": 102,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753049,
+      "name": "a_direflame_goblin",
+      "class": 12,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753054,
+      "name": "a_deathraiser_goblin",
+      "class": 11,
+      "level": 99,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753068,
+      "name": "a_deathraiser_goblin",
+      "class": 11,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753079,
+      "name": "an_evenflame_goblin",
+      "class": 12,
+      "level": 99,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753090,
+      "name": "a_deadfiend_goblin",
+      "class": 11,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 3,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753120,
+      "name": "a_woundhealer_goblin",
+      "class": 10,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753126,
+      "name": "an_evenflame_goblin",
+      "class": 12,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753128,
+      "name": "a_shamanic_goblin",
+      "class": 10,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753140,
+      "name": "a_woundhealer_goblin",
+      "class": 10,
+      "level": 102,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753150,
+      "name": "a_ritualtalker_goblin",
+      "class": 10,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753155,
+      "name": "a_shamanic_minotaur",
+      "class": 10,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753156,
+      "name": "an_evenflame_goblin",
+      "class": 12,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753165,
+      "name": "a_ritualtalker_goblin",
+      "class": 10,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753178,
+      "name": "a_shamanic_minotaur",
+      "class": 10,
+      "level": 99,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753189,
+      "name": "a_shamanic_goblin",
+      "class": 10,
+      "level": 99,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753197,
+      "name": "a_magician`s_eye",
+      "class": 13,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 4,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753210,
+      "name": "a_direflame_goblin",
+      "class": 12,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753286,
+      "name": "a_shamanic_minotaur",
+      "class": 10,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 6,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753309,
+      "name": "a_fleshburn_mephit",
+      "class": 12,
+      "level": 102,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753310,
+      "name": "a_fleshburn_mephit",
+      "class": 12,
+      "level": 100,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    },
+    {
+      "id": 753311,
+      "name": "a_fleshburn_mephit",
+      "class": 12,
+      "level": 101,
+      "before_npc_spells_id": 0,
+      "after_npc_spells_id": 925000,
+      "only_update_column": "npc_spells_id",
+      "all_other_actor_fields_owner": "NPC owner, preserve current full preimage at joint application"
+    }
+  ],
+  "new_table_rows": 18,
+  "actor_updates": 24,
+  "total_proposed_row_operations": 42,
+  "source_entry_map": [
+    {
+      "new_entry_id": 925001,
+      "source_entry_id": 120,
+      "spell_id": 2884,
+      "spell_name": "Garrison's Superior Sundering",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925002,
+      "source_entry_id": 121,
+      "spell_id": 3335,
+      "spell_name": "Agnarr's Thunder",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925003,
+      "source_entry_id": 122,
+      "spell_id": 3339,
+      "spell_name": "Strike of Solusek",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925004,
+      "source_entry_id": 137,
+      "spell_id": 3332,
+      "spell_name": "Tears of Marr",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925005,
+      "source_entry_id": 139,
+      "spell_id": 1636,
+      "spell_name": "Invert Gravity",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925006,
+      "source_entry_id": 144,
+      "spell_id": 3333,
+      "spell_name": "Telekin",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925007,
+      "source_entry_id": 150,
+      "spell_id": 3194,
+      "spell_name": "Greater Fetter",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925008,
+      "source_entry_id": 153,
+      "spell_id": 1526,
+      "spell_name": "Annul Magic",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925009,
+      "source_entry_id": 162,
+      "spell_id": 3302,
+      "spell_name": "Shield of Maelin",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925010,
+      "source_entry_id": 168,
+      "spell_id": 3301,
+      "spell_name": "Force Shield",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925011,
+      "source_entry_id": 3175,
+      "spell_id": 1419,
+      "spell_name": "O`Keil's Flickering Flame",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925012,
+      "source_entry_id": 6649,
+      "spell_id": 3191,
+      "spell_name": "Shock of Magic",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925013,
+      "source_entry_id": 6650,
+      "spell_id": 3331,
+      "spell_name": "Lure of Ro",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925014,
+      "source_entry_id": 7841,
+      "spell_id": 230,
+      "spell_name": "Root",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925015,
+      "source_entry_id": 20052,
+      "spell_id": 11839,
+      "spell_name": "Wildmagic Strike",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925016,
+      "source_entry_id": 20053,
+      "spell_id": 10853,
+      "spell_name": "Defense of Calrena",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    },
+    {
+      "new_entry_id": 925017,
+      "source_entry_id": 20054,
+      "spell_id": 10862,
+      "spell_name": "Tendrilmist Guard",
+      "only_changed_fields": [
+        "id",
+        "npc_spells_id"
+      ]
+    }
+  ],
+  "existing_default_lists_used_without_modification": [
+    3,
+    4,
+    6
+  ],
+  "shared_wizard_list2_modified": false,
+  "held_exceptions": [
+    {
+      "scope": "all24",
+      "hold": "exact original NPC spell membership/casting cadence/heal balance remains unverified; selected defaults are reconstruction"
+    },
+    {
+      "scope": "eightWizardactors",
+      "excluded_spell_ids": [
+        10840,
+        5460
+      ],
+      "reason": "default2Nuke tags cause repeat-summon attempt risk; Pet32idle retagging conflicts with native targetlock5combat target requirement; omit only these two from isolated fallback, no pet/engine rewrite"
+    }
+  ],
+  "reservation": "JARVIS provisionally reserved NPC AI list925000 and entries925001\u2013925017; exact namespace absence retained; future installer must refuse drift.",
+  "preserve": [
+    "all spell definitions/IDs and pet templates",
+    "all existing npc_spells and entries",
+    "NPC classes/levels/stats/mana/loot/faction/abilities/spawn/quest roles",
+    "Achievements solution augmentation and player state"
+  ],
+  "reuse_completed_compatibility": {
+    "active_unique_spells_resolved": 66,
+    "base_evidence_sha256": "1876e5c0b6f1313a565d4b05d01979c5b0b1c8a96d2c4475c7cc149f3bb7f7d7",
+    "native_definition_evidence_sha256": "f3eaa146f78db60a6e8fcb755451536516b37a7989a0a9934954616f94118965",
+    "pet_dependency_evidence_sha256": "feb61e39b4487fa6ffa647084be0755cba4c46d1e8e5b34b94eebff3855c2915"
+  },
+  "application_contract": "NPC owner through JARVIS integrates list18rows plus24npc_spells_id-only updates with exact current full actor/namespace/default-list dependency guards and durable recovery; source publication before any future authorized apply. No standalone installer/call/migration registered."
+}

@@ -1,0 +1,288 @@
+{
+  "status": "EXACT_RETAINED_DISABLED_DRAFT_NOT_NEW_ENABLEMENT",
+  "tables": {
+    "tasks": [
+      {
+        "id": 920170,
+        "type": 1,
+        "duration": 21600,
+        "duration_code": 0,
+        "title": "Fire in the Hole",
+        "description": "Follow the original Gotonur experiment and Brell Temple acquisition route.",
+        "reward_text": "XP, coin, Brellium Tokens; class spell where applicable",
+        "reward_id_list": "",
+        "cash_reward": 210000,
+        "exp_reward": -8501,
+        "reward_method": 3,
+        "reward_points": 0,
+        "reward_point_type": 0,
+        "min_level": 85,
+        "max_level": 0,
+        "level_spread": 0,
+        "min_players": 3,
+        "max_players": 6,
+        "repeatable": 1,
+        "faction_reward": 0,
+        "completion_emote": "",
+        "replay_timer_group": 920170,
+        "replay_timer_seconds": 21600,
+        "request_timer_group": 0,
+        "request_timer_seconds": 0,
+        "dz_template_id": 920170,
+        "lock_activity_id": 17,
+        "faction_amount": 0,
+        "enabled": 0
+      }
+    ],
+    "task_activities": [
+      {
+        "taskid": 920170,
+        "req_activity_id": -1,
+        "goalmethod": 2,
+        "goalcount": 1,
+        "item_list": "",
+        "dz_switch_id": 0,
+        "min_x": -9999999,
+        "min_y": -9999999,
+        "min_z": -9999999,
+        "max_x": 9999999,
+        "max_y": 9999999,
+        "max_z": 9999999,
+        "skill_list": "-1",
+        "spell_list": "0",
+        "zones": "490",
+        "zone_version": 1,
+        "optional": 0,
+        "list_group": 0,
+        "activityid": 16,
+        "activitytype": 2,
+        "npc_match_list": "490911",
+        "item_id_list": "",
+        "target_name": "Vault Guardian",
+        "description_override": "Vault Guardian",
+        "step": 9
+      },
+      {
+        "taskid": 920170,
+        "req_activity_id": -1,
+        "goalmethod": 0,
+        "goalcount": 1,
+        "item_list": "",
+        "dz_switch_id": 0,
+        "min_x": -9999999,
+        "min_y": -9999999,
+        "min_z": -9999999,
+        "max_x": 9999999,
+        "max_y": 9999999,
+        "max_z": 9999999,
+        "skill_list": "-1",
+        "spell_list": "0",
+        "zones": "490",
+        "zone_version": 1,
+        "optional": 0,
+        "list_group": 0,
+        "activityid": 17,
+        "activitytype": 3,
+        "npc_match_list": "",
+        "item_id_list": "47758",
+        "target_name": "Keystone Mold",
+        "description_override": "Keystone Mold",
+        "step": 10
+      },
+      {
+        "taskid": 920170,
+        "req_activity_id": -1,
+        "goalmethod": 2,
+        "goalcount": 1,
+        "item_list": "",
+        "dz_switch_id": 0,
+        "min_x": -9999999,
+        "min_y": -9999999,
+        "min_z": -9999999,
+        "max_x": 9999999,
+        "max_y": 9999999,
+        "max_z": 9999999,
+        "skill_list": "-1",
+        "spell_list": "0",
+        "zones": "490",
+        "zone_version": 1,
+        "optional": 0,
+        "list_group": 0,
+        "activityid": 18,
+        "activitytype": 1,
+        "npc_match_list": "490912",
+        "item_id_list": "47758",
+        "target_name": "Gotonur",
+        "description_override": "Gotonur",
+        "step": 11
+      }
+    ],
+    "dynamic_zone_templates": [],
+    "rewards": [
+      {
+        "reward_id": 3839201701,
+        "reward_type": 4,
+        "reward_data_id": 21,
+        "amount": 80,
+        "description": "80 Brellium Tokens",
+        "enabled": 0
+      },
+      {
+        "reward_id": 3839201702,
+        "reward_type": 1,
+        "reward_data_id": 119688,
+        "amount": 1,
+        "description": "Shared Bloodlust",
+        "enabled": 0
+      },
+      {
+        "reward_id": 3839201703,
+        "reward_type": 1,
+        "reward_data_id": 119706,
+        "amount": 1,
+        "description": "Call Skeleton Swarm",
+        "enabled": 0
+      },
+      {
+        "reward_id": 3839201704,
+        "reward_type": 1,
+        "reward_data_id": 119727,
+        "amount": 1,
+        "description": "Splash of Brimstone",
+        "enabled": 0
+      },
+      {
+        "reward_id": 3839201705,
+        "reward_type": 1,
+        "reward_data_id": 119691,
+        "amount": 1,
+        "description": "Holy Contravention",
+        "enabled": 0
+      },
+      {
+        "reward_id": 3839201706,
+        "reward_type": 1,
+        "reward_data_id": 47759,
+        "amount": 1,
+        "description": "Keystone - delivery held",
+        "enabled": 0
+      }
+    ],
+    "reward_sets": [
+      {
+        "reward_set_id": 920170,
+        "title": "Fire in the Hole",
+        "enabled": 0
+      }
+    ],
+    "reward_sources": [
+      {
+        "source_type": 2,
+        "source_id": 920170,
+        "reward_set_id": 920170,
+        "enabled": 0
+      }
+    ],
+    "reward_options": [
+      {
+        "reward_set_id": 920170,
+        "option_id": 1,
+        "sequence": 1,
+        "label": "80 Brellium Tokens",
+        "common_to_all": 1,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 65535
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 2,
+        "sequence": 2,
+        "label": "Shared Bloodlust",
+        "common_to_all": 1,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 32768
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 3,
+        "sequence": 3,
+        "label": "Call Skeleton Swarm",
+        "common_to_all": 1,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 1024
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 4,
+        "sequence": 4,
+        "label": "Splash of Brimstone",
+        "common_to_all": 1,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 2048
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 5,
+        "sequence": 5,
+        "label": "Holy Contravention",
+        "common_to_all": 1,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 2
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 6,
+        "sequence": 6,
+        "label": "Keystone - delivery held",
+        "common_to_all": 1,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 65535
+      }
+    ],
+    "reward_option_entries": [
+      {
+        "reward_set_id": 920170,
+        "option_id": 1,
+        "sequence": 1,
+        "reward_id": 3839201701
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 2,
+        "sequence": 1,
+        "reward_id": 3839201702
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 3,
+        "sequence": 1,
+        "reward_id": 3839201703
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 4,
+        "sequence": 1,
+        "reward_id": 3839201704
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 5,
+        "sequence": 1,
+        "reward_id": 3839201705
+      },
+      {
+        "reward_set_id": 920170,
+        "option_id": 6,
+        "sequence": 1,
+        "reward_id": 3839201706
+      }
+    ]
+  },
+  "warning": "Catalog row identity is not delivery authority. Keystone option remains disabled/held in retained draft."
+}

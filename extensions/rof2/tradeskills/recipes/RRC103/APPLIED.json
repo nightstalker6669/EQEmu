@@ -1,0 +1,37 @@
+{
+  "batch": "RRC103",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "a0293aa92112efc5bde8faadba37b964ffd5c8f7",
+  "source_sha256": "a3eefbedae0fd728a6c4a6c19e13626e173697b629b291eef2da04876d6494d2",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "historical_qualification": "LABELLED_RECONSTRUCTION: maintained TSS Fenuku quest guide Created2006/Modified2021 is not immutableMay2013 per-field authentication. New min_expansion12 and learning2 are explicit family policy, not recovered historical gates; manualexperiment allowed, automaticcombine needs learning, internalmadecount persists. Only ordinary17910/17762/17189; exact source outputs/consumedinputs/yield1/trivials31,54,38,46. No NPCteaching/supplier/taskdelivery/nativecombine acceptance or oldgate change.",
+  "recipes": 4,
+  "entries": 25,
+  "ids": [
+    3094022,
+    3094025
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC103",
+    "0",
+    "25845",
+    "25849",
+    "194907",
+    "194932",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25849,
+    "entries": 194932
+  },
+  "affected_postimages_exact": true,
+  "unchanged_prototype_recipes": 0,
+  "unchanged_prototype_entries": 0,
+  "old_prototypes_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

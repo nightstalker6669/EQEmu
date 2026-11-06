@@ -1,0 +1,393 @@
+{
+  "rows": [
+    {
+      "role": "norket",
+      "npc_type_id": 487900,
+      "source_profile": {
+        "race": 12,
+        "npc_class": 14,
+        "level": 87,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 8000,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "minion",
+      "npc_type_id": 487901,
+      "source_profile": {
+        "race": 12,
+        "npc_class": 12,
+        "level": 86,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 7000,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "zealous_golem",
+      "npc_type_id": 487902,
+      "source_profile": {
+        "race": 608,
+        "npc_class": 1,
+        "level": 86,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 7500,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "executioner",
+      "npc_type_id": 487903,
+      "source_profile": {
+        "race": 607,
+        "npc_class": 9,
+        "level": 86,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 7500,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "zwurek",
+      "npc_type_id": 487904,
+      "source_profile": {
+        "race": 607,
+        "npc_class": 9,
+        "level": 87,
+        "hp": 1400000,
+        "mindmg": null,
+        "maxdmg": 8500,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "fiddy_captive",
+      "npc_type_id": 487905,
+      "source_profile": {
+        "race": null,
+        "npc_class": 1,
+        "level": 85,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 0,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "race": null,
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "race": 0,
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "duerg_captive",
+      "npc_type_id": 487906,
+      "source_profile": {
+        "race": null,
+        "npc_class": 1,
+        "level": 85,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 0,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "race": null,
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "race": 0,
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "neerda_captive",
+      "npc_type_id": 487907,
+      "source_profile": {
+        "race": null,
+        "npc_class": 1,
+        "level": 85,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 0,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "race": null,
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "race": 0,
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "fiddy_rescued",
+      "npc_type_id": 487908,
+      "source_profile": {
+        "race": null,
+        "npc_class": 1,
+        "level": 85,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 0,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "race": null,
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "race": 0,
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "duerg_rescued",
+      "npc_type_id": 487909,
+      "source_profile": {
+        "race": null,
+        "npc_class": 1,
+        "level": 85,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 0,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "race": null,
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "race": 0,
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "neerda_rescued",
+      "npc_type_id": 487910,
+      "source_profile": {
+        "race": null,
+        "npc_class": 1,
+        "level": 85,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 0,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "race": null,
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "race": 0,
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "gweddon_instance",
+      "npc_type_id": 487911,
+      "source_profile": {
+        "race": 12,
+        "npc_class": 1,
+        "level": 86,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 0,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    },
+    {
+      "role": "singed_chest",
+      "npc_type_id": 487912,
+      "source_profile": {
+        "race": 378,
+        "npc_class": 62,
+        "level": 70,
+        "hp": null,
+        "mindmg": null,
+        "maxdmg": 0,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "unresolved_fields": {
+        "hp": null,
+        "mindmg": null,
+        "npc_spells_id": null,
+        "faction": null
+      },
+      "nonnullable_schema_default_scaffolding": {
+        "hp": 0,
+        "mindmg": 0,
+        "npc_spells_id": 0,
+        "npc_faction_id": 0
+      },
+      "scaffolding_is_profile_selection": false,
+      "profile_ready": false,
+      "qualification": "Levels/role/current reported hits from compiled roster/guide; model/class values are LOCAL donor/intake candidates, captive models and remaining HP/damage/AI held. Reported hits are not unmitigated original DB maxdmg proof. No native profiles recovered."
+    }
+  ],
+  "source_unknowns_preserved": true,
+  "qualification": "Nonnullable schema defaults are SQL scaffolding only, not recovered/selected functional profiles. All profile holds remain. No deployment/readiness claim. Optional population/type/pet unknowns stay NULL and have no rows."
+}

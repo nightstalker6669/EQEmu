@@ -1,0 +1,37 @@
+{
+  "batch": "RRC101",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "1dc346ddf74211846dc7b35de3850aea57c7408a",
+  "source_sha256": "3f90d067416af415f4ee50897f53866dfc8cb3ccf8e52665c504ca6ccacef76b",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "historical_qualification": "LABELLED_RECONSTRUCTION: Chum33648 current formula lacks individual cutoff authentication; ArtisanPrize annotation and oldTBSfish do not date it. New expansion13 is configured ingredient-family policy, not introduction proof. Native32057 is BarrenCroaker INPUT. Explicit17048/17163only; six inputs/yield11/trivial75 with knife success/failure return. Three absentSparklingoutputs held; Soggy147 untouched.",
+  "recipes": 1,
+  "entries": 9,
+  "ids": [
+    3094018,
+    3094018
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC101",
+    "0",
+    "25841",
+    "25842",
+    "194880",
+    "194889",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25842,
+    "entries": 194889
+  },
+  "affected_postimages_exact": true,
+  "unchanged_prototype_recipes": 0,
+  "unchanged_prototype_entries": 0,
+  "old_prototypes_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

@@ -1,0 +1,52 @@
+
+-- Complete disabled Steppes task/scene routes; preserve existing player handlers.
+local steppes_previous_task_accepted=event_task_accepted
+function event_task_accepted(e)
+ if steppes_previous_task_accepted then local r=steppes_previous_task_accepted(e);if r and r~=0 then return r end end
+ return require('achievement_quest_steppes').accepted(e)
+end
+local steppes_previous_task_complete=event_task_complete
+function event_task_complete(e)
+ if steppes_previous_task_complete then local r=steppes_previous_task_complete(e);if r and r~=0 then return r end end
+ return require('achievement_quest_steppes').complete(e)
+end
+local steppes_previous_task_update=event_task_update
+function event_task_update(e)
+ if steppes_previous_task_update then local r=steppes_previous_task_update(e);if r and r~=0 then return r end end
+ return require('achievement_quest_steppes').update(e)
+end
+local steppes_previous_task_stage_complete=event_task_stage_complete
+function event_task_stage_complete(e)
+ if steppes_previous_task_stage_complete then local r=steppes_previous_task_stage_complete(e);if r and r~=0 then return r end end
+ return require('achievement_quest_steppes').stage(e)
+end
+local steppes_previous_enter_zone=event_enter_zone
+function event_enter_zone(e)
+ if steppes_previous_enter_zone then local r=steppes_previous_enter_zone(e);if r and r~=0 then return r end end
+ return require('achievement_quest_steppes').resume(e)
+end
+local steppes_previous_task_fail=event_task_fail
+function event_task_fail(e)
+ if steppes_previous_task_fail then local r=steppes_previous_task_fail(e);if r and r~=0 then return r end end
+ return require('achievement_quest_steppes').task_fail(e)
+end
+local steppes_previous_cast=event_cast
+function event_cast(e)
+ if steppes_previous_cast then local r=steppes_previous_cast(e);if r and r~=0 then return r end end
+ return require('achievement_quest_steppes').cast(e)
+end
+local steppes_previous_click_door=event_click_door
+function event_click_door(e)
+ if steppes_previous_click_door then local r=steppes_previous_click_door(e);if r and r~=0 then return r end end
+ return require('achievement_quest_steppes').click_door(e)
+end
+local steppes_previous_timer=event_timer
+function event_timer(e)
+ if require('achievement_quest_steppes').timer(e)then return end
+ if steppes_previous_timer then return steppes_previous_timer(e)end
+end
+local steppes_previous_before_update=event_task_before_update
+function event_task_before_update(e)
+ if steppes_previous_before_update then local r=steppes_previous_before_update(e);if r and r~=0 then return r end end
+ return require('achievement_quest_steppes').before_update(e)
+end

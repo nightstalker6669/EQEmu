@@ -1,0 +1,174 @@
+[
+  {
+    "path": "PROTOCOL.md",
+    "sha256": "919b6b3f5c0e6872474d4670a6760083848a4527aa2ad73ca26d91cdb37ab619"
+  },
+  {
+    "path": "README.md",
+    "sha256": "3a99c2de58dbdcd2c298b707a433d5ceb59c834edb739778af7157aec2ca0342"
+  },
+  {
+    "path": "apply_quests.py",
+    "sha256": "069f54867e09da50b8d5c2a349fc4f4ad66728fe6e59c579299acf0ef7774c7c"
+  },
+  {
+    "path": "hooks/global_npc.lua.append",
+    "sha256": "3182bb28412516dafa08bcbcb97eca2db71e10152de0f565c6484f552139bd13"
+  },
+  {
+    "path": "hooks/global_player.lua.append",
+    "sha256": "2fbd3607994e3a8a79524b7e7b8d6c9e2a8a0113114088f03efbf23d8da2eeca"
+  },
+  {
+    "path": "install.py",
+    "sha256": "052773d2b05c1be569c729e91860ffd7ef2b16dee84c4a9266c10a733a08f3fd"
+  },
+  {
+    "path": "package-config.json",
+    "sha256": "c9c22d19d9c120c37b3bd2c35b6a1a0a3800dff76708946f8fe53a996540d15b"
+  },
+  {
+    "path": "preflight.py",
+    "sha256": "fab03070f6cefa5b763d2f1a4a3da26377c49ea5c995e47dfb3ec87c0cd8a43b"
+  },
+  {
+    "path": "provenance/approved-defaults.json",
+    "sha256": "250698be942e3a8e0516fd4efcc74637401c45eecff2050ad55bbc51383604da"
+  },
+  {
+    "path": "provenance/archive-reward-and-bait-review.json",
+    "sha256": "02bf6ecabd3f1858ff5c30f3db2ecfe223864d38d53315fdcd53c2e04208164a"
+  },
+  {
+    "path": "provenance/baseline-identities.json",
+    "sha256": "9608c9e2fd6ea77865808a1c0a49f4718e95988112fb7dcfa7a8ecaf43db39cd"
+  },
+  {
+    "path": "provenance/installation-readiness.json",
+    "sha256": "bf4050bf2a028aafd022fcff9682fe49b0d0a639d35512dc17edba37474f263d"
+  },
+  {
+    "path": "provenance/model-evidence.json",
+    "sha256": "cc9aa99ac2fc062ed121a1e25fd6cb5ab5026c521b85d5a95a91922ea8a6d03a"
+  },
+  {
+    "path": "provenance/native-coverage.json",
+    "sha256": "36280240da973d2cb016d5ec738d6fe7c29b9c10e9a2ce8979e4cb04d9f371c2"
+  },
+  {
+    "path": "provenance/orb-guardian-settings.json",
+    "sha256": "ddabb33e060f21fb0834d31d01cfb808410e6bc6d4522b8c0ca79b1e208e905f"
+  },
+  {
+    "path": "provenance/previous-module-sha256.json",
+    "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+  },
+  {
+    "path": "provenance/quest-decisions.json",
+    "sha256": "ad716947dd35e70f9280f9573f3fd51e3335b1309795c01308ca4100c5d5d523"
+  },
+  {
+    "path": "provenance/scene-geometry-settings.json",
+    "sha256": "61641a04b76d861ebe5c06835fd5e9a1eb60761f5e7354b5071622268e5f25c9"
+  },
+  {
+    "path": "provenance/world-policy.json",
+    "sha256": "167f04348034662ab8423c3f9538bdd51ddba2647c1bfd1cbb6522f64521e201"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "31a5c48b7dace3911a71053faa62bc79b68e731a8e0019bce20b4c205e18540a"
+  },
+  {
+    "path": "quests/direwind/405150.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_vergalid.lua",
+    "sha256": "1da5174cbe0da33ca486dc51c414af9bff908b4196b0f38dd428af11cdc11b2c"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_vergalid_data.lua",
+    "sha256": "6809b274d1d4af11d1d22c09d9be707d0864f2e166271e9bab99ca7938c9a975"
+  },
+  {
+    "path": "quests/lua_modules/vergalid_inner_access.lua",
+    "sha256": "6b5620e30aa2098c3b7aa0de6bcd31e70090931524de6aaa7e66ba7758be0af4"
+  },
+  {
+    "path": "quests/lua_modules/vergalid_orb_guardians.lua",
+    "sha256": "e6cae4ed19ee6290a3537d1879dd4bbd752028820daf2e2066b5739fbd610dbb"
+  },
+  {
+    "path": "quests/lua_modules/vergalid_scene_native.lua",
+    "sha256": "6ea56aae9ad381a7039d3e82b76a10d8ea95550bb2c108a925c79d07526aaae0"
+  },
+  {
+    "path": "quests/lua_modules/vergalid_scene_rules.lua",
+    "sha256": "94cb13ebad68c95e9b33786b118fd59d48524065e3e0cba2a3d4f727cd914824"
+  },
+  {
+    "path": "quests/mesa/397176.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/steppes/399120.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/steppes/399123.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/steppes/399135.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/steppes/399146.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/sunderock/403027.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/sunderock/403029.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/sunderock/403065.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/sunderock/403070.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/sunderock/403086.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/sunderock/403089.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "quests/sunderock/403100.lua",
+    "sha256": "f8d011553d0b525080877fc7c5b87431c6e27ce37ce05efd43215fd25846f993"
+  },
+  {
+    "path": "sql/020-journal-rewards.disabled.sql",
+    "sha256": "1176fd5a517c47ee3ea8de40482be0ca5ac9fa623d938af7ab42bce7fcca74b1"
+  },
+  {
+    "path": "sql/030-world-chest.review-required.sql",
+    "sha256": "14b35b09b7b5041aba638af6bc3b857fb1ee15a15b51874e61705b55810914b3"
+  },
+  {
+    "path": "sql/040-world-actors.review-required.sql",
+    "sha256": "5f463a99f86a389a675d84d93f6f468468d94ac0e71bc7e62079095e15113e76"
+  },
+  {
+    "path": "sql/090-enable-whole-batch.sql",
+    "sha256": "d53345f65d179862853dbef395608b4e7a44073fb32f1d39f6b0795b1bc2383e"
+  }
+]

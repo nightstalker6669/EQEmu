@@ -1,0 +1,74 @@
+[
+  {
+    "path": "dragonscale/442010.lua",
+    "source": "quests/dragonscale/442010.lua"
+  },
+  {
+    "path": "dragonscale/442013.lua",
+    "source": "quests/dragonscale/442013.lua"
+  },
+  {
+    "path": "dragonscale/442014.lua",
+    "source": "quests/dragonscale/442014.lua"
+  },
+  {
+    "path": "dragonscale/442015.lua",
+    "source": "quests/dragonscale/442015.lua"
+  },
+  {
+    "path": "dragonscale/442017.lua",
+    "source": "quests/dragonscale/442017.lua"
+  },
+  {
+    "path": "dragonscale/442018.lua",
+    "source": "quests/dragonscale/442018.lua"
+  },
+  {
+    "path": "dragonscale/442041.lua",
+    "source": "quests/dragonscale/442041.lua"
+  },
+  {
+    "path": "dragonscale/442047.lua",
+    "source": "quests/dragonscale/442047.lua"
+  },
+  {
+    "path": "dragonscale/442086.lua",
+    "source": "quests/dragonscale/442086.lua"
+  },
+  {
+    "path": "dragonscale/442099.lua",
+    "source": "quests/dragonscale/442099.lua"
+  },
+  {
+    "path": "dragonscale/442100.lua",
+    "source": "quests/dragonscale/442100.lua"
+  },
+  {
+    "path": "dragonscale/442105.lua",
+    "source": "quests/dragonscale/442105.lua"
+  },
+  {
+    "path": "dragonscale/442182.lua",
+    "source": "quests/dragonscale/442182.lua"
+  },
+  {
+    "path": "dragonscale/442900.lua",
+    "source": "quests/dragonscale/442900.lua"
+  },
+  {
+    "path": "lopingplains/443900.lua",
+    "source": "quests/lopingplains/443900.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_dragonscale.lua",
+    "source": "quests/lua_modules/achievement_quest_dragonscale.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_dragonscale_data.lua",
+    "source": "quests/lua_modules/achievement_quest_dragonscale_data.lua"
+  },
+  {
+    "path": "global/global_player.lua",
+    "source": "hooks/global-player.fragment.lua"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "installed_additions": {
+    "batches": 18,
+    "recipes": 503,
+    "entries": 2842
+  },
+  "current_database_counts": {
+    "recipes": 23326,
+    "entries": 180461
+  },
+  "new_batches": "RRC018/019 additive, exact affected-row readbacks and committed deltas; no new rehearsals or repeated global old-row diffs.",
+  "missing_Horse_output_rows_held": 10,
+  "RRC014": "58 cultural container entries still held for actor validation",
+  "all_recipe_completeness": false,
+  "native_combine": false
+}

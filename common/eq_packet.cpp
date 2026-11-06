@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <cstring>
 #include "eq_packet.h"
 
 #include "common/misc.h"

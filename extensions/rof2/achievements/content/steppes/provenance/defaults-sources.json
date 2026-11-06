@@ -1,0 +1,36 @@
+{
+  "scope": "New labelled default proposal, not historical exact tuning or active installation",
+  "authorization": "Parent relayed explicit user approval 2026-10-30 for missing Steppes NPC combat defaults and geometry-checked placements.",
+  "historical_evidence": {
+    "actor_evidence_sha256": "2530f97802e0263672bf02b2966ce850c9216508ecab914718b2b9659dcd50be",
+    "period_quest_map_sha256": "37bc673c885c9d1554e7bc5792f267ace7aaa073cd45bece4e93612f3658aed8",
+    "acquisition_candidates_sha256": "dcb253a05eca9abfbf9bf7310fead42cac8e7bc7a7c06cccb581de46a4868dd1",
+    "original_native_audit_sha256": "5f023eb8b5825d1f5fc55e206c9c90eb860600bb85e15cd77545030c3685b5d2"
+  },
+  "input_contracts": {
+    "existing_config_sha256": "19172b9d622e03d8bd61fc1f17bd7f400092ee8e7dade865fe8da4a854467797",
+    "existing_executor_sha256": "850cff81012eab85a99f95d3699d3765d8b605eb6abda286240f6a61ffd98401"
+  },
+  "additional_period_facts": [
+    {
+      "quest": 3714,
+      "fact": "Period task text explicitly describes Prophet Spirit as a giant."
+    },
+    {
+      "quest": 3630,
+      "fact": "Archived comments give first-page locations including Y-100/X1135; original spawn distribution is random across the grove."
+    },
+    {
+      "quest": 3631,
+      "fact": "Food and water reappear quickly on the mound, but no exact numeric respawn is established."
+    }
+  ],
+  "not_proven": [
+    "Every original event numeric race/texture/size",
+    "Exact original combat/HP/rates other than supported approximate observations",
+    "Exact rune-stone location",
+    "Walkability/client clickability/new NPC appearance at proposed placements",
+    "Full proposed SQL import; only read-only predicates executed by this worker"
+  ],
+  "private_evidence_exclusion": "No client/map mesh assets, screenshots, raw archived HTML or runtime/player data belong in a public package. Derived numeric candidates and concise provenance may be reviewed for release separately."
+}

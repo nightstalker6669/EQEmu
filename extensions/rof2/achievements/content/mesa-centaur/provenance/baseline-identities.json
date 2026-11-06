@@ -1,0 +1,28 @@
+{
+  "accepted_previous_scripts": {
+    "mesa/397007.lua": [
+      "d03add4f805a736847b445470038186d89a80d3143d692722395143b5db32e36",
+      "e1ee4403102166186aa58e48c6b8a338d1853d1dffa0d8a9dd0b4e327ab08bf2"
+    ]
+  },
+  "npc_types": {
+    "397007": "Scout_Madu",
+    "397149": "Klassr",
+    "397196": "#shade_of_corruption",
+    "10": "zone_controller"
+  },
+  "callback_npc_ids": {
+    "mesa/zone_controller.lua": 10
+  },
+  "known_lower_priority_callbacks": [
+    {
+      "path": "crescent/#Librarian_Hemfar.pl",
+      "sha256": "89a7cfb46660804cfc6a609ed80fc1e9ecad7d2c3985700030b8a081f0494e80",
+      "reason": "Existing numeric callback already takes precedence; fallback remains untouched"
+    }
+  ],
+  "external_modules": [
+    "achievement_quest_mesa",
+    "achievement_quest_mesa_remaining"
+  ]
+}

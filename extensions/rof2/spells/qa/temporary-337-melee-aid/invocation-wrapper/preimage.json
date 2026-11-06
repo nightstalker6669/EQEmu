@@ -1,0 +1,15 @@
+{
+  "runtime_relative_path": "quests/xorbb/player.lua",
+  "exists": false,
+  "is_symlink": false,
+  "before_sha256": null,
+  "preimage_scope": "Only exact Xorbb-local player.lua inspected; no directory/global callback scan.",
+  "base_publication": "c94890a8583ebc6eca213b95f65306bd7b9a67b6",
+  "required_unchanged_module_sha256": "3648a87763d6683807c0ea82b025a79824e3c119ceca152358f7cdeee278db65",
+  "invocation": [
+    "#aidapply",
+    "#aidremove"
+  ],
+  "commands_have_no_arguments": true,
+  "runtime_actions": false
+}

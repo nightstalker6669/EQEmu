@@ -1,3 +1,5 @@
+#include "fire_run_terminal_scene.h"
+#include <memory>
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -25,6 +27,8 @@
 
 class EQApplicationPacket;
 class Group;
+namespace FireRunActionSource {class NativeRunTerminalSource;class PreparedTerminalChestPlan;class PublishedTerminalReturnSink;class OriginalTerminalDeath;class RunTerminalAttempt;class OriginalTerminalDeathProof;}
+namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
 class NPC;
 class Raid;
 
@@ -38,6 +42,16 @@ namespace EQ {
 #define MAX_LOOTERS 72
 
 class Corpse : public Mob {
+ friend class FireRunActionSource::RunUseWitness;
+ friend class FireRunActionSource::NativeRunTerminalSource;
+ friend class FireRunActionSource::PreparedTerminalChestPlan;
+ friend class FireRunActionSource::PublishedTerminalReturnSink;
+ friend class FireRunActionSource::OriginalTerminalDeath;
+ friend class FireRunActionSource::OriginalMissionMaterialDeath;
+ friend class FireRunActionSource::NativeRunLootSource;
+ std::shared_ptr<FireRunActionSource::RunCorpseLifetime> m_fire_run_action_lifetime;
+ std::shared_ptr<FireRunActionSource::MissionMaterialCorpseOrigin> m_fire_material_origin;
+ std::shared_ptr<FireRunActionSource::OriginalTerminalDeathProof::State> m_fire_terminal_death_origin;
 public:
 
 	static void SendEndLootErrorPacket(Client *client);

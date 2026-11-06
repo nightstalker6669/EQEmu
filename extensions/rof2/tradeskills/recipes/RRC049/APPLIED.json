@@ -1,0 +1,38 @@
+{
+  "batch": "RRC049",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "e87f7539e0cbd4b5752dba42ce6d07b5c8586067",
+  "source_sha256": "aa15311b8e6eeb36304c7c7d02c29fb79db9c1a63d31e053b8b2c208a68b1404",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes": 31,
+  "entries": 165,
+  "ids": [
+    3092933,
+    3092963
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC049",
+    "0",
+    "24755",
+    "24786",
+    "187706",
+    "187871",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 24786,
+    "entries": 187871
+  },
+  "affected_postimages_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "existing_producer_guards": {
+    "recipes": 1,
+    "full_entry_rows": 4,
+    "scope": "Exact existingTinkeringShinyWire3092776guarded before/after; sourcealternateNoSkillkit route only."
+  }
+}

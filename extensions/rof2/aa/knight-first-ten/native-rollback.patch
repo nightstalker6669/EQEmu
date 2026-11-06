@@ -1,0 +1,201 @@
+--- a/zone/aa.cpp
++++ b/zone/aa.cpp
+@@ -17,7 +17,6 @@
+ */
+ 
+ #include "../common/classes.h"
+-#include "../common/eqemu_config.h"
+ #include "../common/shroud/aa_preview.h"
+ #include "../common/global_define.h"
+ #include "../common/eqemu_logsys.h"
+@@ -1210,130 +1209,6 @@
+ 	FinishAlternateAdvancementPurchase(rank, false, true);
+ }
+ 
+-// Only the ten level-earned, zero-cost HT/LoH ranks. No paid-rank purchase.
+-bool Client::ReconcileKnightInnateAARanks()
+-{
+-    if (!zone || !Connected() || !CharacterID() || !AccountID() ||
+-        !(ClientVersionBit() & EQ::versions::maskSoFAndLater) ||
+-        IsSpiritShrouded() || m_spirit_shroud_transition ||
+-        m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active ||
+-        m_knight_innate_aa_persistence_uncertain) return false;
+-
+-    const bool harm_touch = GetClass() == Class::ShadowKnight;
+-    if (!harm_touch && GetClass() != Class::Paladin) return false;
+-    const uint32 ability_id = harm_touch ? 6000 : 6001;
+-    const uint32 rank_ids[2][10] = {
+-        {7800,7801,7802,7803,7804,7805,7806,7807,7808,7809},
+-        {7850,7851,7852,7853,7854,7855,7856,7857,7858,7859}
+-    };
+-    const uint32 spell_ids[2][10] = {
+-        {13531,13532,13533,13534,13535,13536,13537,13538,13539,13540},
+-        {13546,13547,13548,13549,13550,13551,13552,13553,13554,13555}
+-    };
+-    const uint32 levels[10] = {1,6,11,16,21,26,31,36,41,46};
+-    const unsigned line = harm_touch ? 0 : 1;
+-    const uint32 root = rank_ids[line][0];
+-    uint32 desired = 0;
+-    for (unsigned i = 0; i < 10 && levels[i] <= GetLevel(); ++i) desired = i + 1;
+-    uint32 charges = 0;
+-    const uint32 prior_value = GetAA(root, &charges);
+-    // Includes all paid/higher ownership and delevelled free-rank owners.
+-    if (!desired || charges || prior_value >= desired) return false;
+-
+-    auto* ability = zone->GetAlternateAdvancementAbility(ability_id);
+-    if (!ability || ability->id != ability_id || ability->first_rank_id != root || ability->charges != 0) return false;
+-    AA::Rank* selected = nullptr;
+-    AA::Rank* previous = nullptr;
+-    for (unsigned i = 0; i < 10; ++i) {
+-        auto* rank = zone->GetAlternateAdvancementRank(rank_ids[line][i]);
+-        if (!rank || rank->id != rank_ids[line][i] || rank->base_ability != ability ||
+-            rank->current_value != int(i + 1) ||
+-            rank->prev != previous || (i == 0 && ability->first != rank) ||
+-            rank->cost != 0 || rank->total_cost != 0 || rank->level_req != int(levels[i]) ||
+-            rank->spell != int(spell_ids[line][i]) || rank->spell_type != 39 ||
+-            rank->recast_time != 4320 || !rank->prereqs.empty() ||
+-            !CanUseAlternateAdvancementRank(rank) ||
+-            (previous && previous->next != rank)) return false;
+-        if (i + 1 == desired) selected = rank;
+-        previous = rank;
+-    }
+-    // Authenticate the known free/paid boundary, but never traverse or grant it.
+-    auto* paid = zone->GetAlternateAdvancementRank(harm_touch ? 7810 : 7860);
+-    if (!paid || previous->next != paid || paid->prev != previous ||
+-        paid->base_ability != ability || paid->current_value != 11 ||
+-        paid->cost != 3 || paid->level_req != 51 ||
+-        !selected || !CanPurchaseAlternateAdvancementRank(selected, false, false)) return false;
+-
+-    const auto* config = EQEmuConfig::get();
+-    if (!config) return false;
+-    Database knight_db;
+-    if (!knight_db.Connect(config->DatabaseHost, config->DatabaseUsername,
+-        config->DatabasePassword, config->DatabaseDB, config->DatabasePort,
+-        "knight-innate-aa")) return false;
+-    auto mode = knight_db.QueryDatabase(std::string("SELECT @@autocommit, @@in_transaction"), false);
+-    if (!mode.Success() || mode.RowCount() != 1 || !mode.begin()[0] || !mode.begin()[1] ||
+-        std::string(mode.begin()[0]) != "1" || std::string(mode.begin()[1]) != "0") return false;
+-
+-    const auto read_sql = fmt::format(
+-        "SELECT aa_value, charges, @@autocommit, @@in_transaction "
+-        "FROM character_alternate_abilities WHERE id = {} AND aa_id = {}", CharacterID(), root);
+-    auto owned = knight_db.QueryDatabase(read_sql, false);
+-    if (!owned.Success() || owned.RowCount() > 1) return false;
+-    if (owned.RowCount() == 0 && prior_value != 0) {
+-        // Positive loaded ownership without its durable row is not permission
+-        // to recreate it. Hold this session's stale AA writers without a DML.
+-        m_knight_innate_aa_persistence_uncertain = true;
+-        Disconnect();
+-        return false;
+-    }
+-    if (owned.RowCount() == 1) {
+-        const auto row = owned.begin();
+-        if (!row[0] || !row[1] || std::string(row[0]) != std::to_string(prior_value) ||
+-            std::string(row[1]) != "0") {
+-            // Never let stale positive memory later overwrite a different durable row.
+-            m_knight_innate_aa_persistence_uncertain = true;
+-            Disconnect();
+-            return false;
+-        }
+-    }
+-
+-    // Unlike Origin0->1, a lost acknowledgement here could leave stale positive
+-    // memory. Latch before DML; SaveAA and direct AA-row deletion stay blocked
+-    // until exact committed readback AND memory publication. Failure is client-local.
+-    m_knight_innate_aa_persistence_uncertain = true;
+-    const bool exists = owned.RowCount() == 1;
+-    const auto write_sql = exists ? fmt::format(
+-        "UPDATE character_alternate_abilities SET aa_value = {} "
+-        "WHERE id = {} AND aa_id = {} AND aa_value = {} AND charges = 0",
+-        desired, CharacterID(), root, prior_value) : fmt::format(
+-        "INSERT INTO character_alternate_abilities (id, aa_id, aa_value, charges) "
+-        "VALUES ({}, {}, {}, 0)", CharacterID(), root, desired);
+-    auto written = knight_db.QueryDatabase(write_sql, false);
+-    if (!written.Success() || written.RowsAffected() != 1) {
+-        Disconnect();
+-        return false;
+-    }
+-    auto confirmed = knight_db.QueryDatabase(read_sql, false);
+-    if (!confirmed.Success() || confirmed.RowCount() != 1) {
+-        Disconnect();
+-        return false;
+-    }
+-    const auto row = confirmed.begin();
+-    if (!row[0] || !row[1] || !row[2] || !row[3] ||
+-        std::string(row[0]) != std::to_string(desired) || std::string(row[1]) != "0" ||
+-        std::string(row[2]) != "1" || std::string(row[3]) != "0" ||
+-        !Connected() || !CanPurchaseAlternateAdvancementRank(selected, false, false) ||
+-        !SetAA(root, desired, 0) || GetAA(root) != desired) {
+-        Disconnect();
+-        return false;
+-    }
+-    m_knight_innate_aa_persistence_uncertain = false;
+-    SendAlternateAdvancementPoints();
+-    SendAlternateAdvancementStats();
+-    if (selected->next) SendAlternateAdvancementRank(ability_id, selected->next->current_value);
+-    return true;
+-}
+-
+ bool Client::GrantAlternateAdvancementAbility(int aa_id, int points, bool ignore_cost) {
+ 	if (IsSpiritShrouded()) return false;
+ 
+--- a/zone/client.cpp
++++ b/zone/client.cpp
+@@ -1021,7 +1021,6 @@
+ 
+ bool Client::SaveAA()
+ {
+-	if (m_knight_innate_aa_persistence_uncertain) return false;
+  if(m_spirit_shroud_transition)return false;
+ 	if (m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) return false;
+ 	std::vector<CharacterAlternateAbilitiesRepository::CharacterAlternateAbilities> v;
+@@ -1064,7 +1063,6 @@
+ 
+ void Client::RemoveExpendedAA(int aa_id)
+ {
+-	if (m_knight_innate_aa_persistence_uncertain) return;
+ 	CharacterAlternateAbilitiesRepository::DeleteWhere(
+ 		database,
+ 		fmt::format(
+--- a/zone/client.h
++++ b/zone/client.h
+@@ -577,9 +577,6 @@
+ 	/* New PP Save Functions */
+ 	bool SaveCurrency(){ return !m_spirit_shroud_transition && !m_mercenary_persistence_failed && !m_inventory_session_rejected && database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
+ 	bool SaveAA();
+-private:
+-	bool m_knight_innate_aa_persistence_uncertain = false;
+-public:
+ 	void RemoveExpendedAA(int aa_id);
+ 
+ 	inline bool ClientDataLoaded() const { return client_data_loaded; }
+@@ -1152,7 +1149,6 @@
+ 	void SendAlternateAdvancementTable();
+ 	void SendAlternateAdvancementStats();
+ 	void PurchaseAlternateAdvancementRank(int rank_id);
+-	bool ReconcileKnightInnateAARanks(); // Only ten zero-cost HT/LoH ranks; durable receipt.
+ 	bool GrantAlternateAdvancementAbility(int aa_id, int points, bool ignore_cost = false);
+ 	void IncrementAlternateAdvancementRank(int rank_id);
+ 	void ActivateAlternateAdvancementAbility(int rank_id, int target_id);
+--- a/zone/client_packet.cpp
++++ b/zone/client_packet.cpp
+@@ -1148,8 +1148,6 @@
+ 
+ 	RecordStats();
+ 	AutoGrantAAPoints();
+-	ReconcileKnightInnateAARanks();
+-	if (m_knight_innate_aa_persistence_uncertain) return;
+ 
+ 	// set initial position for mob tracking
+ 	m_last_seen_mob_position.reserve(entity_list.GetMobList().size());
+--- a/zone/exp.cpp
++++ b/zone/exp.cpp
+@@ -1002,8 +1002,6 @@
+ 
+ 	QueuePacket(outapp);
+ 	safe_delete(outapp);
+-	ReconcileKnightInnateAARanks();
+-	if (m_knight_innate_aa_persistence_uncertain) return;
+ 	SendAppearancePacket(AppearanceType::WhoLevel, set_level); // who level change
+ 
+ 	LogInfo("Setting Level for [{}] to [{}]", GetName(), set_level);

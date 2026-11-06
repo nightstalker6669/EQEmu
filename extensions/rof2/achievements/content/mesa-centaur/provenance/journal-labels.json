@@ -1,0 +1,37 @@
+{
+  "reason": "Give players explicit creature names/counts instead of five identical generic kill descriptions; no producer/count/reward changes",
+  "required_forward": "sql/090-journal-labels.sql",
+  "rollback_first": "sql/100-rollback-journal-labels.sql",
+  "rows": [
+    {
+      "task_id": 3040461,
+      "activity_id": 2,
+      "target_name": "a mesa widow",
+      "description": "Kill 4 mesa widows"
+    },
+    {
+      "task_id": 3040461,
+      "activity_id": 3,
+      "target_name": "a highland snake",
+      "description": "Kill 8 highland snakes"
+    },
+    {
+      "task_id": 3040461,
+      "activity_id": 4,
+      "target_name": "harpies",
+      "description": "Kill 2 harpies"
+    },
+    {
+      "task_id": 3040462,
+      "activity_id": 0,
+      "target_name": "centaur thugs",
+      "description": "Reduce the Thug Menace"
+    },
+    {
+      "task_id": 3040464,
+      "activity_id": 0,
+      "target_name": "shade of corruption",
+      "description": "Destroy the source of the corruption"
+    }
+  ]
+}

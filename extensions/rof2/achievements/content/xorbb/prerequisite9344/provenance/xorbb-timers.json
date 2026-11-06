@@ -1,0 +1,14 @@
+{
+  "replay_timer_seconds": 21600,
+  "request_timer_seconds": 0,
+  "replay_timer_group": 0,
+  "request_timer_group": 0,
+  "provenance": "Current EQResource quest headers document six-hour lockout and unlimited task duration. Original request-versus-completion timer behavior remains unverified. Completion-based independent native replay timers and no request delay are approved configurable server defaults, not recovered original timing.",
+  "sources": [
+    "https://rof.eqresource.com/thehalflingtrail.php",
+    "https://rof.eqresource.com/wehavetogodeeper.php",
+    "https://rof.eqresource.com/escapefromtheprisonofxorbb.php"
+  ],
+  "native_source_contract": "ClientTaskState::AddReplayTimer uses completiontime+seconds; AcceptNewTask rejects active per-task/group timers. Group0 keeps three different chain quests independent. No scripted/global clock or injected completed history.",
+  "status": "Source only; tasks remain disabled and SQL not executed"
+}

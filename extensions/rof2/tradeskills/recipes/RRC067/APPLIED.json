@@ -1,0 +1,49 @@
+{
+  "batch": "RRC067",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "023f78374c49822e1dd5fd317e004ac8f53fc2cb",
+  "source_sha256": "ae4b1dce1d21137e1172a9faf9b678795a5c459f93c0e2ea5318a07dde6d15e0",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes": 3,
+  "entries": 20,
+  "ids": [
+    3093611,
+    3093613
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC067",
+    "0",
+    "25433",
+    "25436",
+    "191701",
+    "191721",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25436,
+    "entries": 191721
+  },
+  "affected_postimages_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "old_producer_guards": {
+    "recipe_ids": [
+      304,
+      305,
+      1872
+    ],
+    "full_entries": 17,
+    "before_after_exact": true
+  },
+  "learning_and_kit_data": {
+    "must_learn2_recipes": 2,
+    "Acrylia_native_bagtype": 30,
+    "exact_source_kit_links": true,
+    "physical_paper_componentcount": 1,
+    "native_execution_tested": false
+  }
+}

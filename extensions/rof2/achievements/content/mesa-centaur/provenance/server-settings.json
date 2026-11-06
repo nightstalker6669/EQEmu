@@ -1,0 +1,45 @@
+{
+  "historical_cutoff": "2013-05-31",
+  "status": "Server reconstruction with researched mechanics and labelled defaults",
+  "source_profile_enabled_after_complete_install": true,
+  "shade": {
+    "npc_type": 397196,
+    "original_spawn": 112270,
+    "level": 55,
+    "class": "Necromancer",
+    "hp": {
+      "value": 22200,
+      "basis": "Existing PEQ named55 default, original HP unverified"
+    },
+    "min_damage": {
+      "value": 61,
+      "basis": "Existing named55/Necromancer scaled minimum, not original raw DB proof"
+    },
+    "max_damage": {
+      "value": 377,
+      "basis": "Proxy using Oct17,2006 observed hit; reconstructed cap, not recovered unmitigated original"
+    },
+    "see_invisible_level": {
+      "value": 1,
+      "basis": "Dec2007 firsthand sees-invis report; ordinary invisibility only"
+    },
+    "respawn_seconds": 2550,
+    "respawn_variance_seconds": 300,
+    "respawn_basis": "Mar12,2013 reports40\u201345min; native variance is plus/minus half, distribution reconstructed",
+    "summon_defaults": "Existing core97percentHP/6sec scheduling, not recovered original timing",
+    "corruption_aura": {
+      "spell": 9147,
+      "radius": 200,
+      "tick_seconds": 6,
+      "basis": "Radius reuses installed spell range; environmental extent unverified; tick follows period every-game-tick report; native spell/resist path"
+    }
+  },
+  "quest_targets": {
+    "types": 19,
+    "basis": "Apr2012 any generic centaur outside friendlyfive-personcamp; exact original spawn/type inventory supplies IDs; named and friendlyguards excluded",
+    "limits": "Broad report plus documented archetypes, not original Live NPC-ID list"
+  },
+  "faction": "Synthetic KOS/indifferent reaction profiles; personal historical faction standings and unknown quest-award amounts remain unimplemented; no fake amounts granted",
+  "admission": "No invented minimum-level requirement; min_level0 is deliberate unrestricted server policy while exact historical minimum remains unverified",
+  "xp": "Configured1000 PEQ-style default at completion; native server modifiers/caps apply; no duplicate XP on item claim"
+}

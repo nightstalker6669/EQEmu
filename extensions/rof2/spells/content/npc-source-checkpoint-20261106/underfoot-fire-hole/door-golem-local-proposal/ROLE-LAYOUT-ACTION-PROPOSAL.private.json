@@ -1,0 +1,296 @@
+{
+  "status": "BOUNDED_LOCAL_SOURCE_PROPOSAL_FOR_COORDINATOR_SELECTION",
+  "enabled": false,
+  "selected": false,
+  "task": 920170,
+  "zone": 490,
+  "mission_version": 1,
+  "world_version": 0,
+  "SQL_emitted": false,
+  "native_ID_allocations": 0,
+  "source_proof": {
+    "retained_receipts": [
+      "door-identity-and-action-contract.json",
+      "physical-components-and-click-contract.json",
+      "owner-phase-handoff.json",
+      "gotonur-static-spawn-receipt.json"
+    ],
+    "current_compilation": {
+      "url": "https://everquest.allakhazam.com/db/quest/4992",
+      "qualified_summary": "Three items held together open northern inner door. Clay/water creates mass used at either worship entrance. Five parts form a helper; activation in garden/pool yields nonKOS golem, barrier destruction and crumbling to dust. Keymaster key opens Guardian door; Mold yields worldFontKeystone.",
+      "qualification": "Compiledwalkthrough is not a dated fullscript or native geometry record."
+    },
+    "guide": {
+      "url": "https://www.raspersrealm.com/Everquest/Underfoot/missionBrellsTemple.html",
+      "qualified_summary": "Central entrance leads Brell room with side protectors; side northern worship routes lead construct areas, then northern locked doors approach Keymaster. VaultKey returns access to north door in Brell room. This supplies topology, no nativeIDs/XYZ/timings."
+    },
+    "period": [
+      {
+        "url": "https://everquest.allakhazam.com/db/quest/4992#msg1284372945644385",
+        "date": "2010-09-13",
+        "finding": "Earlier-run clickies/out-of-order actions can break progress; Guardian can aggro through stilllockeddoor nearGotonurramp."
+      },
+      {
+        "url": "https://everquest.allakhazam.com/db/quest/4992#msg128519700730082785",
+        "date": "2010-09-22",
+        "finding": "Keystone enables staticFontdoor; acceptedoffzonemember receivedit."
+      }
+    ],
+    "unsupported_original_fields": [
+      "PhysicaldoorIDs/count/XYZ/headings/model/opentype/thresholdgeometry",
+      "Exact helperwalkpath/speed/arrivalradius/timeout",
+      "Itemdebit/reusability/keyringpolicy",
+      "Door auto-close/relock timing or whether both branchesunlocktogether"
+    ]
+  },
+  "semantic_correction": {
+    "phrase": "golem dust closure",
+    "meaning": "End/closure of owned helper lifecycle after barrier action, NOT proof the door closes.",
+    "required_result": "Source says path toKeymaster remains open. Do not close/relock barrier merely because helpercrumbles.",
+    "owned_walk": "Retainedownercontract requires actualownedwalk before arrival/barrierreceipt; compiledtext confirms standingatdoor, not numericwaypoints. Preserve genuinewalk implementation requirement as reconstruction, not recoveredtimings."
+  },
+  "proposed_layout": {
+    "classification": "LOCALtopological reconstruction, nothistorical sixdoorclaim",
+    "mission_gate_count": 6,
+    "world_role_count": 1,
+    "actual_original_gate_count": null,
+    "new_mission_static_door_rows_if_selected": 6,
+    "doors": [
+      {
+        "role": "inner_vault",
+        "namespace": "mission",
+        "from_region": "entry_collection_hall",
+        "to_region": "brell_central_hall",
+        "initial": "closed_locked",
+        "activity": 3,
+        "SQL_row_id": null,
+        "native_door_id": null,
+        "XYZ": null,
+        "geometry_selected": false
+      },
+      {
+        "role": "worship_left",
+        "namespace": "mission",
+        "from_region": "purity_side_room",
+        "to_region": "left_worship_construct_loop",
+        "initial": "closed_locked",
+        "activity": 7,
+        "SQL_row_id": null,
+        "native_door_id": null,
+        "XYZ": null,
+        "geometry_selected": false
+      },
+      {
+        "role": "worship_right",
+        "namespace": "mission",
+        "from_region": "clay_side_room",
+        "to_region": "right_worship_construct_loop",
+        "initial": "closed_locked",
+        "activity": 7,
+        "SQL_row_id": null,
+        "native_door_id": null,
+        "XYZ": null,
+        "geometry_selected": false
+      },
+      {
+        "role": "keymaster_garden",
+        "namespace": "mission",
+        "from_region": "left_garden_approach",
+        "to_region": "common_keymaster_chamber",
+        "initial": "closed_barrier",
+        "activity": 14,
+        "SQL_row_id": null,
+        "native_door_id": null,
+        "XYZ": null,
+        "geometry_selected": false
+      },
+      {
+        "role": "keymaster_pool",
+        "namespace": "mission",
+        "from_region": "right_pool_approach",
+        "to_region": "common_keymaster_chamber",
+        "initial": "closed_barrier",
+        "activity": 14,
+        "SQL_row_id": null,
+        "native_door_id": null,
+        "XYZ": null,
+        "geometry_selected": false
+      },
+      {
+        "role": "vault_guardian",
+        "namespace": "mission",
+        "from_region": "brell_central_hall_north_ramp",
+        "to_region": "guardian_vault",
+        "initial": "closed_locked",
+        "activity": null,
+        "SQL_row_id": null,
+        "native_door_id": null,
+        "XYZ": null,
+        "geometry_selected": false
+      }
+    ],
+    "connectors": [
+      "Leftandrightworshipareas join in a traversable constructloop containingallfivepartnamedactors; thisensures oneclay operation doesnot strand requiredparts.",
+      "Bothgarden/poolapproaches reachable fromthatloop; either reaches theSAMEKeymaster chamber afteronehelperaction.",
+      "Return route fromKeymaster through opened chosenbarrier/constructloop tocentralhall remainswalkable; Guardianvault is a distinctgate,notKeymasterdoor.",
+      "Guardianvault containsrootedGuardian490911/Mold47758. WorldFontchamber is separate frommissionGuardian despite similarposition."
+    ],
+    "numeric_geometry": {
+      "SQL_row_ids": null,
+      "native_door_ids": null,
+      "XYZ": null,
+      "heading": null,
+      "models": null,
+      "opentypes": null,
+      "qualification": "No numericallocation or invented historicalgeometry. These aresourceenumroles andscene graph; futurephysical packetmustbindsixgates/routewaypointsasLOCALgeometry withclearances, not copyworld11objects."
+    },
+    "world_Font_LOCAL_candidate": {
+      "proposal": "Assign existingworld retained35650/native7 asLOCALFontgate only if coordinatorselectsthis explicitreconstruction; the proposal is not originalidentityauthentication.",
+      "SQL_row_id": 35650,
+      "native_door_id": 7,
+      "model": "OBJ_DOOR_BRELLS",
+      "XYZ": [
+        0.06667,
+        711.594,
+        22.77
+      ],
+      "heading": 384,
+      "opentype": 77,
+      "reason": "Retainedanchor liesnorthofGotonur/centralhall andsouthofFontobjectsaroundY820\u2013828; topologicalcompatibilityonly, no originalroleproof.",
+      "world_change_authorized": false,
+      "alternative": "Ifcoordinatordeclines thisLOCALroleassignment, leaveFontphysicalbindingunselected; do not assertnative7historicalFontidentity. Worldnative12/frontdoorisnotusedasmissionrole."
+    }
+  },
+  "local_item_and_gate_policy": {
+    "selected": false,
+    "inner_vault": {
+      "input_units": {
+        "47748": 1,
+        "47749": 1,
+        "47750": 1
+      },
+      "one_actual_holder": true,
+      "proposal": "DebitexactthreeoriginalGUIDs once oncommittedfirstunlock/openreceipt; no seconddebitforreclick/reentry. Persistrununlock and keepopendoorforrun.",
+      "historical_debit_proof": false
+    },
+    "clay_transform": {
+      "clicked": 47760,
+      "input_units": {
+        "47760": 1,
+        "47761": 1
+      },
+      "output": 47762,
+      "count": 1,
+      "proposal": "Actualclicktransform debitsbothoriginalinputs exactlyonce andcommitsoneoriginaloutput; conserveexcess/capacity/occurrence."
+    },
+    "worship_pair": {
+      "input": 47762,
+      "count": 1,
+      "proposal": "FirstvalidclickonEITHERleaf consumesoneoriginalmass andlatchesBOTHleavesasrun-unlocked. Only clickedleaf physicallyopens onthisevent; otherleaf stillneedsrealnativeclick butnoadditionalmass. Completedactivity7neverincrementstwice. Bothopenedleavesremainopenforrun.",
+      "historical_pair_unlock_and_debit_proof": false,
+      "reason": "Onephysicalmass sufficeswithbothbranchchoices/allfivepartsaccessible, noextraProtectorfarm orduplicateclayfactory."
+    },
+    "golem_transform": {
+      "clicked": 47752,
+      "input_units": {
+        "47751": 1,
+        "47752": 1,
+        "47753": 1,
+        "47754": 1,
+        "47755": 1
+      },
+      "output": 47756,
+      "count": 1,
+      "proposal": "Oneactualholder clicksoriginaltorso;fiveoriginalGUIDdebits/oneoutputcommit; no tradeskillcontainer/newitems."
+    },
+    "helper_activation": {
+      "input": 47756,
+      "count": 1,
+      "actor": 490913,
+      "proposal": "Debitoneoriginalgolemitem onlywithcommittedoneownedhelpercreation underactualcurrentrun/activity14andselectedgardenORpoolroute. No secondhelper/oppositegate/retryfactory. Keepownedrunlineage throughactualmovement/barrier/despawn.",
+      "historical_debit_proof": false
+    },
+    "vault_key": {
+      "item": 47757,
+      "proposal": "RETAINphysicalVaultKey onsuccessfulactualnativekeyclick. Missiongate permitscurrentrunoriginalkeyholder; no keyringpersistence/no loot15factory. Firstvalidopeninglatchesmissiongateopenforrun, permittingpartyphysicalpassage. No extra displayedobjective.",
+      "consume": false,
+      "allow_keyring": false,
+      "historical_consume_or_keyring_proof": false
+    },
+    "world_keystone": {
+      "item": 47759,
+      "proposal": "Reusablephysicalkey forLOCALworldFontgate; no globalprogressionflag,consume or keyringwrite. Openinggivesordinaryphysicalpassage,notmissioncredit. Everyacceptedmemberdeliveryremains theEXISTINGsinglecompletionroute, neversecondgrantfromdoorclick.",
+      "consume": false,
+      "allow_keyring": false,
+      "world_open_seconds_LOCAL": 30,
+      "relock_after_close": true,
+      "historical_timer_or_keyring_proof": false
+    }
+  },
+  "helper_walk_barrier_lifecycle": {
+    "classification": "ExplicitLOCALimplementationcontract maintainingretainedsourceordering",
+    "route_selection": "Actualoriginal47756click inexactselectedgarden/poolactivationvolume choosesonecorrespondinggate. NPC/item/spellIDs cannotselectroutewithoutactualnativezone/instance/occurrence/position.",
+    "states": [
+      "CAPTURE_ORIGINAL_ITEM_AND_ROUTE",
+      "COMMIT_INPUT_DEBIT_AND_ONE_OWNED_HELPER",
+      "WALK_NATIVE_WAYPOINTS",
+      "ARRIVE_AT_BOUND_GATE",
+      "COMMIT_BARRIER_ACTION",
+      "ACK_GATE_OPEN_AND_PASSAGE",
+      "CRUMBLE_AND_RETIRE_HELPER",
+      "ACK_ACTIVITY14_ONCE"
+    ],
+    "path_contract": "Minimumthreeorderedphysicalanchors perroute: actualspawninsideapproach, approachwalkwaybend, stopbeforegate; directwarp/teleport or timeelapsedalone notarrival. Actualgateidentity,collision/passage andownedactorlifetime muststillmatchatarrival.",
+    "LOCAL_numbers": {
+      "activation_max_distance_from_spawn_anchor": 35,
+      "arrival_distance_to_stop_anchor": 5,
+      "arrival_max_Z_delta": 6,
+      "walk_timeout_seconds": 90,
+      "dust_visual_seconds": 2
+    },
+    "numbers_are": "LOCALboundedmechanismchoices, notperiodnumericfacts; allanchorsunknownuntilphysicalgeometrypacket.",
+    "open_policy": "OnlytargetedgardenORpoolgate barrier isremoved andgateleftopenforrun; oppositebarrierremainsclosed. Do not ForceClose onhelperdespawn. Helpermustnotwanderintooppositebranch or openotherdoors.",
+    "failure_policy": "No immediateactivityack forspawn/click/hail. Routeblocked/actorlost/gateretired/timeout/ambiguouscommit terminallyholdthatoperation withitsdebit/actorreceipt. No blindrefund/regrant/respawn/retry; a separatelyownerreviewed recoverycanreuseknownownedlineage, notanotherpersonitem.",
+    "concurrency": "Oneinflighthelperoperation peractualsharedrun; groupmembersclickingconcurrently cannotspendmultipleitems or createcross-runhelpers. Successisidempotentforrun/gate/action; noextraGoal20."
+  },
+  "native_source_limits": {
+    "loader": "Doorsconstructor storesdatabaseIDseparatelyfromuint8packetdoorID; allactualbindingsmustincludezone/version/instance/objectlifetime, neitherSQLIDnornamealone.",
+    "keypath": "Currentdoors.cpp realphysicalkeybranch addskeyringunlessdisabled anddoesnotconsumeitem inthatbranch. Keyringfallbackstillchecks existingkeyring evenifadddisabled; proposednokeyringalone cannotproveoriginalphysicalcustody. A scopedsourceconsumer mustrequireselectedoriginalkeyGUID/run for missionpolicy, withno broadkeyringclears.",
+    "doorstate": "CurrentForceOpen(defaultalt_mode=false) can changealreadyopenm_is_open backfalse whileemittingopenpacket; ForceClosealsodependsstate/altmode. Neitherfunctioncallaloneisacommittedpassagepostimage. Useexactscopeddoorconsumer/freshstate+nativepublishedopen/passagereceipt; disablegenericautocloseformissionlatchedgates explicitly.",
+    "no_new_native_API_claim": "Theseareactioncontractrequirements, not inventedimplementedfunctions orpermissiontobypassnativeclick/custody."
+  },
+  "decision_packet": {
+    "ready_for_coordinator_source_selection": true,
+    "select_together": [
+      "Sixmissiongate/localtopologicalgraph",
+      "One-timeinner/clay/golemphysicaldebitrules; pairedworshipunlock",
+      "Oneownedhelpernativewalk,targetbarrierstaysopen,dustendshelperonly",
+      "ReusablephysicalVaultKey/no keyring/runlatch",
+      "OptionalexplicitLOCALworldFont35650/7roleassignment+30sphysicalopening"
+    ],
+    "unresolved_after_selection": [
+      "PhysicalsixmissiongateXYZ/headings/models/opentypes/nativeIDs+eachrouteanchors andactivationvolumes; no suchrowscurrentlyexist. Thisisgeometriccomposition, notanotherhistoricalresearchcampaign.",
+      "Actualscopeddoor/custody/passage/lifetimeconsumers andsingleterminaldeliverypath retainpreviousholds."
+    ],
+    "historical_source_status": "Retained+selectedprimarypages exhausted for numericIDs/geometry/debit/timing; packageproposesfiniteLOCALchoicesratherthanclaimingthoseasoriginal.",
+    "serving_release": false
+  },
+  "inputs": {
+    "WORKSPACE_SOURCE/npc-work/underfoot-fire-hole/door-identity-and-action-contract.json": "a07b05d89639061612627be7e50e8bec6e294e150c003e84898e27914674047b",
+    "WORKSPACE_SOURCE/npc-work/underfoot-fire-hole/physical-components-and-click-contract.json": "a74aff26f20b9f492b2be171c7944506a06d4768d53542624670390a7d161637",
+    "WORKSPACE_SOURCE/npc-work/underfoot-fire-hole/owner-phase-handoff.json": "884cb62dc5ddcae2b7638dfb7568ea57ecc2707d7f0934f864ed0515159b550f",
+    "WORKSPACE_SOURCE/npc-work/underfoot-fire-hole/gotonur-static-spawn-receipt.json": "1a9b95313d3587fb77b731a194ac83e36ed810b0b0112e7a8ad80e6ddc3d85ba",
+    "WORKSPACE_SOURCE/eqemu-local/akk-stack/code/EQEmu/zone/doors.cpp": "5418608fe17922f44d41ddc995831539d1714517eb8e4e1003ae14c4ee7a7752",
+    "WORKSPACE_SOURCE/eqemu-local/akk-stack/code/EQEmu/zone/doors.h": "56f79cd4d0928594d84b74d8c96123c1342592067a1154b9491cd01ae2d74110"
+  },
+  "composition_sha256": "26ccc8200d058a4d5774d2a9667603f71fa2f24f4edb37a29fb8dd32097d89d5",
+  "actions": {
+    "DBqueries": 0,
+    "DBwrites": 0,
+    "SQL": 0,
+    "runtime": 0,
+    "clienttests": 0,
+    "new_tests": 0,
+    "ownedtabclosed": true
+  }
+}

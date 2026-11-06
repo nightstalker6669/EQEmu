@@ -1,0 +1,67 @@
+{
+  "status": "DATABASE_APPLIED_INDEPENDENT_READBACK_PASS_FRESH_BOOT_READY",
+  "native_validation": false,
+  "database_writes": 102,
+  "new_stock_rows": 43,
+  "existing_original_stock_rows": 9,
+  "existing_tome_stock_rows": 2,
+  "total_stock_rows": 54,
+  "new_actor_rows": 48,
+  "new_route_min_expansion": 18,
+  "research_method": "Chrome, one site tab, paced3seconds between source navigation batches; no premium bypass",
+  "historical_membership_qualification": "Current named stock plus dated 2012 provider roles/global rollout is cross-era membership inference, not independently dated each-item stock proof. Prices are not imported.",
+  "original_rollout": "https://www.redguides.com/community/threads/big-everquest-patch-march-16-2012.24356/post-195066",
+  "numeric_policy": "Preserve native positive item prices. Ordinary local merchant cohort standing/status/class policy and NPC stats/models/timers are labelled defaults, not exact period numeric proof.",
+  "original_missions_preserved": true,
+  "npc_source_owner": "NPC owner; portable source component in npc-owner/",
+  "publication_owner": "JARVIS/GitHub",
+  "runtime_owner": "Build via JARVIS",
+  "identity_corrections": {
+    "source_only": true,
+    "actor_rows_unchanged": true,
+    "original_NPC_metadata_superseded_only_for_stock_counts": true,
+    "new_stock_rows": 43,
+    "existing_original_stock_rows": 9,
+    "existing_tome_stock_rows": 2,
+    "corrections": [
+      {
+        "item": 119709,
+        "new_actual_merchant": 202161,
+        "new_actual_name": "Ulin_Velnik"
+      },
+      {
+        "item": 119633,
+        "new_actual_merchant": 202308,
+        "new_actual_name": "Zhao_V`karin"
+      }
+    ]
+  },
+  "deployment": {
+    "source_commit": "3b223c05f2447f7278411346e006124fab0bbf9a",
+    "helper_sha256": "d5b8dc40d5061fccee4611f7752b9d9723104c6d8244ce5eb45c4a019ed3796b",
+    "components": {
+      "existing9": "COMMITTED_AND_INDEPENDENT_READBACK_PASS",
+      "tomes2": "COMMITTED_AND_INDEPENDENT_READBACK_PASS",
+      "new91": "COMMITTED_AND_INDEPENDENT_READBACK_PASS"
+    },
+    "existing_stock_preserved": {
+      "original_three": 122,
+      "Ulin": 8,
+      "Zhao": 8
+    },
+    "player_tables_written": false,
+    "cache_freshness": "BUILD_CONFIRMED_NEXT_ORDINARY_FRESH_POK202_BOOT_READY",
+    "native_acceptance": false,
+    "prior_attempts": "001and002stoppedbeforepreparedorINSERT,rollback/noDBwrites",
+    "cache_receipt": "POK-VENDORS-CACHE-FRESHNESS-001",
+    "runtime_reload_restart_repop": false
+  },
+  "rogue_excluded_from_this_component": 3,
+  "separate_rogue_followup": {
+    "component": "pok-rogue-three",
+    "stock_rows": 3,
+    "source_commit": "71cc1fdae08ee8a0463f3f4c70e0f568b59e04e4",
+    "status": "APPLIED_INDEPENDENT_READBACK_PASS_INCREMENTAL_FRESH_BOOT_READY",
+    "original54_payload_unchanged": true
+  }
+}

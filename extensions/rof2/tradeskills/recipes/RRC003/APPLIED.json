@@ -1,0 +1,41 @@
+{
+  "status": "APPLIED_VERIFIED_EXACT64RECIPES_354ENTRIES",
+  "SQL_client_exit": 0,
+  "source_SQL_invocations": 1,
+  "actual_server_commit_count_receipt": [
+    "RRC003",
+    "0",
+    "22852",
+    "22916",
+    "177791",
+    "178145",
+    "0"
+  ],
+  "source_sha256": "d16076c8262676f5a7d7f6e33ff99ab96f0e45be062591b3486f49427d750700",
+  "published_commit": "e44b7b8ae113adfada7fa79b16ff86f8f8382f13",
+  "synthetic_fixture": false,
+  "actual_recipe_ids": [
+    3091030,
+    3091093
+  ],
+  "verified_recipe_count": 64,
+  "verified_logical_entries": 354,
+  "before_counts": {
+    "tradeskill_recipe": 22852,
+    "tradeskill_recipe_entries": 177791
+  },
+  "after_counts": {
+    "tradeskill_recipe": 22916,
+    "tradeskill_recipe_entries": 178145
+  },
+  "all_existing_recipe_entry_rows_exactly_preserved": true,
+  "dependency_item_fields_unchanged": true,
+  "schema_indexes_unchanged": true,
+  "independent_readonly_connection_readback": true,
+  "native_combine": false,
+  "build_restart_client_config_version_changes": false,
+  "rollback_executed": false,
+  "historical_all_recipe_completeness": false,
+  "credentials_persisted": false,
+  "scope": "Configured development server content database"
+}

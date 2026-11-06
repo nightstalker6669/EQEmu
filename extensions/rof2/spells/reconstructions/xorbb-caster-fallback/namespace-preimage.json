@@ -1,0 +1,29 @@
+{
+  "scope": "Proposed NPC AI list925000 and entries925001\u2013925017/direct consumers; exact source-preparation reads, no writes",
+  "results": {
+    "list_or_parent_consumers": [],
+    "actor_consumers": [],
+    "entry_or_list_consumers": [],
+    "list_id_schema": [
+      {
+        "Field": "id",
+        "Type": "int(11) unsigned",
+        "Null": "NO",
+        "Key": "PRI",
+        "Default": null,
+        "Extra": "auto_increment"
+      }
+    ],
+    "entry_id_schema": [
+      {
+        "Field": "id",
+        "Type": "int(11) unsigned",
+        "Null": "NO",
+        "Key": "PRI",
+        "Default": null,
+        "Extra": "auto_increment"
+      }
+    ],
+    "additional_entry925003_to925017": []
+  }
+}

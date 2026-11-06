@@ -1,0 +1,30 @@
+{
+  "tasks": {
+    "missing_payload_columns": [],
+    "unknown_payload_columns": []
+  },
+  "task_activities": {
+    "missing_payload_columns": [],
+    "unknown_payload_columns": []
+  },
+  "rewards": {
+    "missing_payload_columns": [],
+    "unknown_payload_columns": []
+  },
+  "reward_sets": {
+    "missing_payload_columns": [],
+    "unknown_payload_columns": []
+  },
+  "reward_sources": {
+    "missing_payload_columns": [],
+    "unknown_payload_columns": []
+  },
+  "reward_options": {
+    "missing_payload_columns": [],
+    "unknown_payload_columns": []
+  },
+  "reward_option_entries": {
+    "missing_payload_columns": [],
+    "unknown_payload_columns": []
+  }
+}

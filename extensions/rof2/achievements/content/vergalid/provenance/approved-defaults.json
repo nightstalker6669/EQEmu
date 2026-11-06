@@ -1,0 +1,24 @@
+{
+  "approval": "User selected labelled configurable defaults and authorized Live research on2026-10-31",
+  "scope": "Missing rare chances, numerical NPC combat fields and orb guardian timing",
+  "named_chances": {
+    "skullrend": 20,
+    "vuryn": 20
+  },
+  "orb_hp": 50000,
+  "guardian_replacement_seconds": 60,
+  "guardian_level": {
+    "value": 74,
+    "source": "https://everquest.allakhazam.com/db/quest/3710#msg1161846359243809714",
+    "date": "2006-10-26",
+    "observed_via": "Chrome rendered original quest comment"
+  },
+  "defaults_are_historical_facts": false,
+  "native_verification_pending": true,
+  "orb_idle_reset_seconds": 600,
+  "bile_return_window_seconds": 180,
+  "bile_minimum_level": {
+    "value": 65,
+    "basis": "Configured65 under the approved best-supported historical minimum policy. Chrome recovered a2013-11-01 archive whose page was last modified2012-08-29 and explicitly headed level65. This earlier metadata takes precedence over the conflicting2017 level66 refusal; the capture is after the cutoff and no exact May2013 level65 acceptance is claimed. Source https://web.archive.org/web/20131101090348/http://everquest.allakhazam.com/db/quest.html?quest=4610"
+  }
+}

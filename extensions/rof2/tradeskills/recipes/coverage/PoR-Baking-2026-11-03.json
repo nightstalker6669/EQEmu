@@ -1,0 +1,28 @@
+{
+  "scope": "Current maintained PoR Baking catalogue only",
+  "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=373&rsa=Baking&sub=por",
+  "source_rows": 293,
+  "implemented_source_rows": 282,
+  "implemented_canonical_recipes": 265,
+  "mirrored_white_yolk_rows_reconciled": 17,
+  "source_rows_held": 11,
+  "held": {
+    "absent_Horse_output_items": 10,
+    "Dragon_Mayonnaise_minimum_failure_mechanic": 1
+  },
+  "explicit_tool_return_estimates": 2,
+  "installed_batches": [
+    "RRC016",
+    "RRC017",
+    "RRC018",
+    "RRC019",
+    "RRC020",
+    "RRC021",
+    "RRC022",
+    "RRC023"
+  ],
+  "historical_cutoff": "2013-05-31 working scope",
+  "historical_denominator_certified": false,
+  "native_combine_acceptance": false,
+  "all_tradeskill_completeness": false
+}

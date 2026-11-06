@@ -1,0 +1,100 @@
+# Install spell content
+
+Use a supported current PEQ/MariaDB schema with the original spell/item/NPC content corresponding to this overlay. This is a targeted content repair, not a complete PEQ database or a replacement `spells_new` import. IDs are deliberately fixed and collision checks refuse customized rows rather than silently remapping them.
+
+The [pinned shared-core reward engine](../README.md#engine-ownership-and-dependency) is already integrated into this branch. Build this branch's matching world/zone binaries; no achievement branch, manager or quest content is required. Run the matching database updater through 9338 and review/apply the three original supplemental SQL files described below before installing spell content. Preserve their identities; do not create renamed duplicates.
+
+- `utils/sql/git/2026_10_27_achievement_reward_classes.sql`: generic option class masks; its historical filename is retained.
+- `utils/sql/git/2026_10_30_shared_task_reward_identity.sql`: durable shared occurrence ownership in the player database.
+- `utils/sql/git/2026_10_30_shared_task_admission_policies.sql`: optional admission policy in the content database.
+
+Follow the [shared reward schema compatibility guide](../../../../docs/rof2/SHARED-REWARDS.md), preserving state/content routing and reviewing existing deployments for matching schema before applying additive SQL. Updater 9331/9332 retains empty achievement table scaffolding as a compatibility envelope, not achievement gameplay. Apply no second copy of those migrations.
+
+Back up the database and quests, stop world and all zone writers through the normal service manager, and coordinate any shared test/runtime work. This installer never stops, starts, reloads or rebuilds services, replaces shared memory, or touches accounts/characters/inventories. It is intended for offline content installation.
+
+## Alaran merchant requirements
+
+Migration 9336 adds `merchantlist.language_required` (signed SMALLINT, default -1) and `language_skill_required` (unsigned TINYINT, default 0). Default rows remain unrestricted. Language 25 is Alaran. Stage 005 sets the sourced 25/50 skill requirements on Argath rank I stock. Both list and buy paths enforce the same requirement, including normal, alternate-currency and adventure merchants. Invalid language IDs or thresholds fail closed before indexing the character profile.
+
+Run the matching updater against the content database before starting the new binaries. The registered migration and `utils/sql/git/2026_11_01_merchant_language_requirements.sql` are the same upgrade: do not invent another migration ID. Its schema guard rejects incompatible existing columns. The content installer also refuses a missing schema or changed vendor identity. Old binaries ignore these new fields and would bypass the restriction, so binaries and schema must be deployed together. Merchant catalogues are zone-cached and need the normal coordinated activation.
+
+Stage 005 does not implement the separate Cantrip/Periapt turn-ins, change language learning, or infer thresholds for conflicting guide entries. Its rollback reverses content only. Keep the additive schema while any matching binary uses it.
+
+## Python environment and database connection
+
+Use Python 3.9 or later and PyMySQL in a private virtual environment. Keep connection configuration outside the checkout and restrict its permissions. The JSON object accepts `host`, `port`, `user`, `password`, `database` and optionally `unix_socket`. Supply the credentials normally used for administering the intended server database. No connection settings are bundled in this branch.
+
+From the repository root, plan first:
+
+```sh
+python3 extensions/rof2/spells/tools/install.py \
+  --db-config /private/spells-db.json \
+  --server /srv/eqemu/server
+```
+
+The plan selects stages 001, 002, 004, 005, 006 and 007. Add `--include-estimates` only when deliberately selecting the labelled pet/aura reconstruction too. The planner checks table/column availability, InnoDB transactions, row collisions, vendor identities/bindings, external item/NPC/AI/spell references, required task/hand-in rules, and the expected rank/class level of every Kerkaz reward. It does not change persistent content or quest files. Matching already-installed rows are a no-op; conflicting rows abort the plan.
+
+After reviewing the plan, apply with a new private backup directory:
+
+```sh
+python3 extensions/rof2/spells/tools/install.py \
+  --db-config /private/spells-db.json \
+  --server /srv/eqemu/server \
+  --backup /srv/backups/rof2-spells-01 \
+  --apply
+```
+
+Use the same estimate flag for plan and application. The backup records exactly the newly created rows, prior vendor field values, and the quest-file preimages. The installer refuses to overwrite different quest/module files or coexist with conflicting named Perl or numeric NPC scripts. Missing quest directories are created only during application. A failed transaction removes newly created, unchanged files and empty directories. Merge any existing script deliberately before installation; other Shard's Landing scripts and global handlers are not replaced.
+
+Native Windows: use `py -3` and native absolute paths. Akk-stack: run the installer in an appropriate one-off administrative Python environment with the checkout and server quest mounts, and database connectivity. Native Windows and Akk-stack execution of this installer have not been tested; the Python/MariaDB implementation was exercised on Linux.
+
+## Activation and acceptance
+
+Regenerate the normal item/spell shared-memory cohort where required by the server installation, including the six newly restored items. Deploy matching binaries/schema before starting services. Use the normal supported quest/task reload only if a coordinated live-content upgrade is chosen instead of the offline workflow. Idle zone processes also cache task definitions; reloading only one occupied zone does not update every process.
+
+Kerkaz intentionally has **no `event_trade`**. In the pinned engine, native `FinishTrade` first credits delivery, then the no-script trade branch removes the exact credited quantity with `RemoveTaskDeliveredItems`. `Items:AlwaysReturnHandins=true` returns wrong items and unused stack quantities. A generic scripted `return_items` callback would bypass that consumption branch and could return a mote already credited to a task. Keep the existing task engine authoritative; do not add manual reward summoning or currency conversion.
+
+With an independently assigned test character, verify both selectors, the five correctly named tasks per selector, one-mote consumption from a stack, wrong-item return, class filtering, documented multi-scroll bundles, single-claim delivery and repeatability. Test Glorious Expurgation III and Daring Escape III after their item records enter the cache. These native acceptance cases remain pending for this snapshot.
+
+## Rollback
+
+Keep the private installation backup. The scripts under `sql/rollback-*` reverse the original full content additions; they are not an automatic rollback for a partial/no-op installation. Restore only the rows/fields actually changed by your receipt, in reverse dependency order. Do not remove independently added or subsequently edited content.
+
+Before removing task reward definitions or items from a used server, account for pending native reward choices and owned/active content. This package does not delete character task history or reward ledgers. Remove newly installed quest scripts/modules only if their hashes still match the installed files; otherwise merge the rollback with later changes. Do not reset inventory leases, clear character inventories or replace a whole database to undo this content overlay.
+
+## Ordered rune exchanges
+
+Stage 006 checks the identities of Kalim`Kar (442026) and Dwekvard (480107), all six rune IDs, existing reward scroll effects, and every ordered reward’s dated class level, name and rank. The quest manifest installs scripts into `dragonscale` and `brellsrest` plus two `lua_modules` files. Existing conflicting quest logic requires an explicit merge. The original exchanges use one rune per hand-in, learning state for ordering, no invented experience/cash rewards, and native item return for extras. Test the next-unlearned choice, discipline handling, wrong/extra items and all-known return with a separate native client before declaring gameplay acceptance.
+
+## Stage 007 and durable reward identities
+
+Run the matching updater before content installation. Migration 9337 creates the content-only `task_spell_exchange_policies` table. Migration 9338 adds a default-disabled policy snapshot to existing task reward occurrences and creates the server-wide `reward_selection_wire_allocator`. Earlier migrations 9331–9336 retain their registrations and SQL.
+
+The installer checks the schema version and allocator row, then locks and validates incoming content identities. It verifies every offered VoA spell's dated name, rank and permanent class level. Install `quests/beastdomain/The_Sklyg.lua` from the manifest. Preserve any existing named Perl or numeric NPC script through an explicit merge. Native task delivery consumes one Cantrip/Periapt; the original input item remains a selectable refund. Each class's source bundle remains atomic. A bundle disappears from a new VoA reward list only when every spell/discipline in that bundle is learned. The language requirement is checked for task listing and acceptance, including direct client requests.
+
+The wire allocator is durable server state. Never truncate, reset or decrease it during content rollback, character reset/copy, backup restoration or deployments. Preserve the largest issued `last_id` when restoring older database snapshots. The independent allocator connection commits reservations separately from reward grants, so rolled-back grants cannot recycle published identities. ID exhaustion refuses new displays without wrapping. The content rollback does not alter this counter or player reward ledgers.
+
+Keep the shared server and clients parked during a coordinated deployment. Shared-core owner review and fresh native-client acceptance are still required for this offline batch. Verify Alaran boundary values, the original refund, whole bundles, learned spell/discipline filtering, relog restoration and a stale client selection after a list refresh. Do not deploy while another chat owns active native acceptance.
+
+Stage 008 requires faction 680 to retain its Dream Delvers identity and both existing HoT teacher bindings to match their recorded preimages. It creates a dedicated NPC faction group, preserving player faction and existing race/class/deity modifiers. Its rollback restores teacher bindings before removing that group. The two disputed rank III tasks and Rotharran’s progression-gated shop are deliberately absent.
+
+## Original legacy exchanges
+
+Stages 009/010 require the original input/reward item names, spell effects and dated class/rank/level identities. Stage 009 adds scripts only; stage 010 adds the separate original SoD NPC/spawn/merchant and four non-tradeskill rune downgrade recipes. No scroll IDs are invented. Install all manifest scripts/modules together. The existing rune module may upgrade only from the exact published predecessor SHA recorded in the manifest; other edits are refused. Its bytes are preserved in the private receipt and restored if database commit fails. This is a targeted upgrade, not permission to replace customized quest scripts.
+
+The stage 010 SQL rollback guards all overlay fields; FLOAT fields allow only database storage precision. It removes recipe entries before headers and spawn/merchant dependencies before the NPC. Prefer the private installation receipt when content predates this package or has been customized. Allocator state must never be reset during rollback.
+
+
+## Stage011 guarded faction merchant repair
+
+Use the Python installer for stage011. It requires schema9338, the existing content dependencies, original faction threshold rules(Kindly500/Ally1100), existing faction gain routes, exact merchant consumers and either the complete original or complete installed merchant inventories. It refuses customized rows, missing dependencies and incompatible rules before writing. Four new faction groups,56 row updates and57 guarded row removals are included; no item/spell, quest, engine, schema or faction-modifier changes are made. The three factions with unestablished gain routes are excluded.
+
+Retain the successful `--backup` directory. Its `changes.json` includes full deleted-row preimages; `receipt.json` binds the applied payload checksum. Stage011 has no unguarded raw-SQL deletion script. To plan rollback of only stage011, run:
+
+```sh
+python3 tools/rollback_sof_merchants.py --db-config /private/db.json --backup /private/successful-install-backup
+```
+
+Add `--apply` to execute that rollback in a separately coordinated maintenance window. Only changes actually owned by that receipt are restored; a no-op rerun receipt does not undo an earlier install. Rollback refuses altered inventories, altered installed rows, extra faction-group consumers or new kill/assist entries. Already-restored rows are a no-op. Older content stages and quest files are left in place. Retain a complete server/database backup as well; this targeted rollback is not a substitute for it.
+
+Replacing NPC faction bindings can change merchant refusal and faction con behavior, including the existing Ladies base of-300. Preserve all original faction modifiers. Existing zones require coordinated content/cache activation; the installer itself never restarts or reloads services. No native activation is implied by publication.

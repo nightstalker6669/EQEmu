@@ -1,0 +1,411 @@
+{
+  "enabled": false,
+  "native_items": [
+    {
+      "id": "4499",
+      "Name": "Vial of Purified Water",
+      "lore": "Vial of Purified Water",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47748",
+      "Name": "Jagged Shard",
+      "lore": "Jagged Shard",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47749",
+      "Name": "Pulsing Sphere",
+      "lore": "Pulsing Sphere",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47750",
+      "Name": "Chipped Claw",
+      "lore": "Chipped Claw",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47751",
+      "Name": "Crumbling Head",
+      "lore": "Crumbling Head",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47752",
+      "Name": "Broken Torso",
+      "lore": "Broken Torso",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "7651",
+      "clicktype": "3"
+    },
+    {
+      "id": "47753",
+      "Name": "Cracking Legs",
+      "lore": "Cracking Legs",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47754",
+      "Name": "Worn Arms",
+      "lore": "Worn Arms",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47755",
+      "Name": "Eroding Feet",
+      "lore": "Eroding Feet",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47756",
+      "Name": "Destructive Golem",
+      "lore": "Destructive Golem",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "7651",
+      "clicktype": "3"
+    },
+    {
+      "id": "47757",
+      "Name": "Vault Key",
+      "lore": "Vault Key",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47758",
+      "Name": "Keystone Mold",
+      "lore": "Keystone Mold",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47759",
+      "Name": "Keystone",
+      "lore": "Keystone",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47760",
+      "Name": "Unstable Glob of Clay",
+      "lore": "Unstable Glob of Clay",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "7651",
+      "clicktype": "3"
+    },
+    {
+      "id": "47761",
+      "Name": "Vial of Purified Water",
+      "lore": "Vial of Purified Water",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "47762",
+      "Name": "Unstable Mass of Clay",
+      "lore": "Unstable Mass of Clay",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "50744",
+      "Name": "Metal Essence Core",
+      "lore": "Metal Essence Core",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "1",
+      "stacksize": "10",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "50745",
+      "Name": "Ball of Dung",
+      "lore": "Ball of Dung",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "7651",
+      "clicktype": "3"
+    },
+    {
+      "id": "50746",
+      "Name": "Inactive Corporeal Golem",
+      "lore": "Inactive Corporeal Golem",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "7651",
+      "clicktype": "3"
+    },
+    {
+      "id": "50747",
+      "Name": "Synovium Membrane",
+      "lore": "Synovium Membrane",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "7651",
+      "clicktype": "3"
+    },
+    {
+      "id": "50748",
+      "Name": "Spark Essence",
+      "lore": "Spark Essence",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "1",
+      "stacksize": "10",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "50749",
+      "Name": "Inactive Incorporeal Golem",
+      "lore": "Inactive Incorporeal Golem",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "7651",
+      "clicktype": "3"
+    },
+    {
+      "id": "50750",
+      "Name": "Shard of Coherence",
+      "lore": "Shard of Coherence",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "7651",
+      "clicktype": "3"
+    },
+    {
+      "id": "50751",
+      "Name": "Spirit Orb",
+      "lore": "Spirit Orb",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "1",
+      "stacksize": "10",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "50752",
+      "Name": "Inactive Homunculus",
+      "lore": "Inactive Homunculus",
+      "itemtype": "11",
+      "bagtype": "",
+      "bagslots": "",
+      "bagsize": "",
+      "stackable": "",
+      "stacksize": "1",
+      "clickeffect": "7651",
+      "clicktype": "3"
+    }
+  ],
+  "water_selected": 47761,
+  "main_operations": [
+    {
+      "kind": "ActualDoorClick",
+      "inputs": [
+        47748,
+        47749,
+        47750
+      ],
+      "output": null,
+      "consumer": "inner_vault",
+      "one_holder": true
+    },
+    {
+      "kind": "GenuineItemClick",
+      "clicked_item": 47760,
+      "inputs": [
+        47760,
+        47761
+      ],
+      "output": 47762,
+      "one_holder": true
+    },
+    {
+      "kind": "ActualDoorClick",
+      "inputs": [
+        47762
+      ],
+      "consumer": "worship_branch",
+      "one_holder": true
+    },
+    {
+      "kind": "GenuineItemClick",
+      "clicked_item": 47752,
+      "inputs": [
+        47751,
+        47752,
+        47753,
+        47754,
+        47755
+      ],
+      "output": 47756,
+      "one_holder": true
+    },
+    {
+      "kind": "GenuineItemActivationWalkDoorClosure",
+      "clicked_item": 47756,
+      "consumer": "destructive_golem",
+      "exact_debit_boundary": "HELDreviewednativecreate/walk/doorreceiptcontract, no uncertainrefund/regrant"
+    },
+    {
+      "kind": "ActualKeyedDoorClick",
+      "inputs": [
+        47757
+      ],
+      "consumer": "vault_guardian",
+      "key_debit_or_keyring_policy": "HELDoriginalpolicy, notinventedconsume"
+    },
+    {
+      "kind": "PhysicalMoldReturn",
+      "inputs": [
+        47758
+      ],
+      "output": 47759,
+      "scope": "Allnativeacceptedsharedparticipantsincludinglegitimateelsewherezones; no nearby/currentphysicalgrouploop orblindmissingitemregrant"
+    }
+  ],
+  "container_disposition": {
+    "native_itemtype": 11,
+    "native_bagslots": 0,
+    "native_bagtype": 0,
+    "source": "Original4989/4990/4991explicitrightclickbaseiteminhandstoforminactiveitem; items are Misc/notcontainers. Tenresourceunitsstackto10.",
+    "eleven_units_not_eleven_inventory_slots": true,
+    "new_container_or_tradeskill": false,
+    "qualification": "Do not require11distinctfreeinventoryslots or fabricate11-slotbag; capacity/exactstackGUIDsplits/outputspace/nativeatomiccustody mustbevalidatedbyactualownerconsumer."
+  },
+  "shared_spell": 7651,
+  "shared_other_original_item": 46710,
+  "global_spell_or_item_edits": 0,
+  "bridge_implemented": false,
+  "custody": "ExactactualitemGUIDs/singleholder/actualacceptedoccurrence-stage/location/doororactoridentity; conserveinputsoutputs+excess. No genericAPI/SummonItemfactory/forcedLootcredit or earlier-runclickyskip. No nativecache/clickproof."
+}

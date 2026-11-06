@@ -1,0 +1,142 @@
+[
+  {
+    "path": "crescent/394060.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "crescent/394066.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "crescent/394083.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "crescent/394115.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "crescent/394146.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "crescent/394155.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "crescent/394168.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "crescent/394228.lua",
+    "sha256": "ba19f32b95f3fc4e2f3aa342ffda344d7967b80e4e749c12b08d3fe18c4a5c73"
+  },
+  {
+    "path": "global/items/CHRMGGSEofDragoste.lua",
+    "sha256": "d303b3500aca418b6da0902a0d962b6ea866d70e0ac59eec52e7ef1f9148a67d"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_crafting.lua",
+    "sha256": "75a78e5dcf6258f73d3ec3bcb662bad4750a0d8fec5c8ac93dcc6b7a4a797548"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_crafting_data.lua",
+    "sha256": "adb2bddece4f730f2bb7f963d7707e8a67b04e505205d01cbcdbabf9afaafe0f"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_defense.lua",
+    "sha256": "72844742e0042ffde47c69e7f33057bcb45f208f4581a00e248e832987100f76"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_defense_data.lua",
+    "sha256": "f51deff3d98a04bb6ee103916b83b0f4e084f657714c66949b1262548d92f47a"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_escort.lua",
+    "sha256": "70d7a3b7d3ebd7ff20110ae66551b5a35d3702bca562c5da21262be1f155c0c4"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_escort_data.lua",
+    "sha256": "3b1abc7989ef4830d3885cf2b42273a9f348b273afd532180947783a72531cd2"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_love.lua",
+    "sha256": "eb5bf23ac9b75854bd366212e9a1e01f91a4221b8a69b4c0a98f712b25047f69"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_love_data.lua",
+    "sha256": "142600720efc8157cd9de2a704ef7ed2a1dfd3cd43884fe508e4abed7e946424"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_observations.lua",
+    "sha256": "b6f1ea060480cd2edbf8a4864b7ea3e9b10926c1b318bb71c9786c04638e650c"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_observations_data.lua",
+    "sha256": "3379104645610dd8f4bd74f2d8641a62f4a33c4daed064b6181f09de75cf04cb"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_remaining.lua",
+    "sha256": "ec01989bfff6837d7306ec6a70264293376d0c3a0781684fc991995ef78fe4c1"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_remaining_data.lua",
+    "sha256": "c2e2876b79e77f7b1af53d9c12cf203587ea6cf2ed304205d14786379101f412"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_tudor.lua",
+    "sha256": "27315ef47416f7bb9b5dfc2d4bff7f0edad26a0c2cc33641292a43c3b2c62939"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_tudor_data.lua",
+    "sha256": "b36068b18dfd5cf09768e9bea054e31d740de4c88ef3f8de72335d95eab495d0"
+  },
+  {
+    "path": "mesa/397007.lua",
+    "sha256": "e1ee4403102166186aa58e48c6b8a338d1853d1dffa0d8a9dd0b4e327ab08bf2"
+  },
+  {
+    "path": "mesa/397043.lua",
+    "sha256": "6a284fb7cc814ed21e2ec0b4abe7f8ac4eb8d82671279c0bd5b592989edd2360"
+  },
+  {
+    "path": "mesa/397086.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "mesa/397093.lua",
+    "sha256": "0a2f46b444136b3e9350504a76c1595bb511551dea2e2b640bd8c70e5dd1d74c"
+  },
+  {
+    "path": "mesa/397096.lua",
+    "sha256": "6a284fb7cc814ed21e2ec0b4abe7f8ac4eb8d82671279c0bd5b592989edd2360"
+  },
+  {
+    "path": "mesa/397097.lua",
+    "sha256": "6a284fb7cc814ed21e2ec0b4abe7f8ac4eb8d82671279c0bd5b592989edd2360"
+  },
+  {
+    "path": "mesa/397100.lua",
+    "sha256": "0d63d83a54747d96f2048f3d9fe8670d7b7c5f3d2092de3d8421b34d933dcee0"
+  },
+  {
+    "path": "mesa/397118.lua",
+    "sha256": "b4c1b378b2c3e788ebe9b512a5852db2a74d93ddd7e2b564a11da8820c48f175"
+  },
+  {
+    "path": "mesa/397120.lua",
+    "sha256": "c3709ba98991a8b908e8765f4f86229944091b09bb6c2c2ec850d2d6ad6c90e8"
+  },
+  {
+    "path": "mesa/397901.lua",
+    "sha256": "a4385c9a785d6138f28fa114680801037cbeb5d013961b02d1a421eecba4ec77"
+  },
+  {
+    "path": "mesa/397902.lua",
+    "sha256": "a4385c9a785d6138f28fa114680801037cbeb5d013961b02d1a421eecba4ec77"
+  },
+  {
+    "path": "mesa/397903.lua",
+    "sha256": "7b1c4324706169e7f742a209144988d88f313af4700517abefcf137f811e66b5"
+  }
+]

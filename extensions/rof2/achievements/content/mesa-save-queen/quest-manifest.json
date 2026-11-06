@@ -1,0 +1,22 @@
+[
+  {
+    "path": "lua_modules/achievement_quest_mesa_queen.lua",
+    "sha256": "b7777dec40d6f8c89f1b30fac49ec22db2b310869a25080c27cabcf3184f87d2"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_queen_data.lua",
+    "sha256": "f88d0d63948880fd8a3f447745816397d66862c650ec8d8aa7a63f14e0e7133c"
+  },
+  {
+    "path": "mesa/397081.lua",
+    "sha256": "35b522938ecc5d23d25604f3104ddb2d3840652b92ef89e4c88dff3ca27e4dfe"
+  },
+  {
+    "path": "mesa/397105.lua",
+    "sha256": "23027bd887d685deeea2f07af3e82165bff8fb8a98f1cc42d1a440025fbae5d4"
+  },
+  {
+    "path": "mesa/397250.lua",
+    "sha256": "1dbbea8ba400d3816e775f3b99e3654485bf5878d4cb0d3d9fcfabc70db4a8bd"
+  }
+]

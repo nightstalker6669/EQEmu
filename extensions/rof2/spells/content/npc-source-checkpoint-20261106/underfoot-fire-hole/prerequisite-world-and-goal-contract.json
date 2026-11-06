@@ -1,0 +1,244 @@
+{
+  "status": "UNALLOCATED_DISABLED_SOURCE_ONLY",
+  "world_giver": 490061,
+  "tasks": [
+    {
+      "external": 4989,
+      "title": "The Laws of Physics",
+      "native_type": 2,
+      "request": "prove",
+      "goals": 4,
+      "layout": [
+        "LootoneBallDungFoundation",
+        "Loot10MetalEssenceCoreUnderquarry",
+        "Create\u2192activateactualCorporealConstruct\u2192deathLichenCreep",
+        "Gotonurfinalhail"
+      ],
+      "physical": {
+        "dung": 50745,
+        "cores": 50744,
+        "inactive": 50746,
+        "core_count": 10,
+        "actual_click_spell": 7651
+      },
+      "source_location_EQ_yxz": [
+        -1280,
+        900,
+        -100
+      ],
+      "location_qualification": "Jan17,2010#126374671415555431 correctspositive900X;Jan7#1262879241174063541 oppositeXsourceconflictheld;convertYXonly/noextentacceptance.",
+      "preloot": "Apr21,2010#1271894178201925466 noactualupdates; useactualLootnotCollect despitewordCollect.",
+      "tokens": 40,
+      "period_tokens": "Apr21,2010#1271894310254501382",
+      "cash_pp": 210,
+      "period_cash": "Apr5,2010#1270503103214173493",
+      "automatic_next": 4990,
+      "period_automatic_next": "Apr5,2010#1270503103214173493 exactcompleted\u2192reward\u2192nextassigned",
+      "native_task_id": null,
+      "goal_bindings": [
+        {
+          "activity": 0,
+          "kind": "ActualLoot",
+          "item_id": 50745,
+          "count": 1
+        },
+        {
+          "activity": 1,
+          "kind": "ActualLoot",
+          "item_id": 50744,
+          "count": 10
+        },
+        {
+          "activity": 2,
+          "kind": "OriginalCombineActivateOwnedActorDeath",
+          "actor_role": "corporeal_construct",
+          "count": 1
+        },
+        {
+          "activity": 3,
+          "kind": "HailOriginal",
+          "npc_id": 490061,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "external": 4990,
+      "title": "This Magic Moment",
+      "native_type": 2,
+      "request": "Automaticon4989completion/explicitoriginalhailsequenceheld",
+      "prerequisite": 4989,
+      "goals": 4,
+      "layout": [
+        "LootoneSynoviumMembraneArthicrex",
+        "Loot10SparkEssenceLichen",
+        "Create\u2192activateactualIncorporealConstruct\u2192deathFungalForest",
+        "Gotonurfinalhail"
+      ],
+      "physical": {
+        "membrane": 50747,
+        "essence": 50748,
+        "inactive": 50749,
+        "essence_count": 10,
+        "actual_click_spell": 7651
+      },
+      "native_spawn_zone": 481,
+      "EQ_loc_candidate_yxz": [
+        -560,
+        -560,
+        null
+      ],
+      "period_zone": "May15,2010#1273896917232097813 explicitlyFungalNOTLichen;Jan24#1264393043151145695 location. Z/extentsheld.",
+      "preloot": "May27,2010#12750175488344207 SparkNOTprelootable",
+      "tokens": 40,
+      "cash_pp": 210,
+      "period_rewards": "Aug4,2012#1344080422274481311 both40+210",
+      "automatic_next": 4991,
+      "period_automatic_next": "Apr6,2010#1270582764288536 actualcompletion\u2192nextassigned",
+      "native_task_id": null,
+      "goal_bindings": [
+        {
+          "activity": 0,
+          "kind": "ActualLoot",
+          "item_id": 50747,
+          "count": 1
+        },
+        {
+          "activity": 1,
+          "kind": "ActualLoot",
+          "item_id": 50748,
+          "count": 10
+        },
+        {
+          "activity": 2,
+          "kind": "OriginalCombineActivateOwnedActorDeath",
+          "actor_role": "incorporeal_construct",
+          "count": 1
+        },
+        {
+          "activity": 3,
+          "kind": "HailOriginal",
+          "npc_id": 490061,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "external": 4991,
+      "title": "Give my creation. . . Life!",
+      "native_type": 2,
+      "request": "desire/automaticafter4990",
+      "prerequisites": [
+        4989,
+        4990
+      ],
+      "goals": 4,
+      "layout": [
+        "LootoneShardCoherenceFungal",
+        "Loot10SpiritOrbUnderquarry",
+        "Create\u2192activateactualTwistedHomunculus\u2192deathBrellTemple",
+        "Gotonurfinalhail"
+      ],
+      "physical": {
+        "shard": 50750,
+        "orbs": 50751,
+        "inactive": 50752,
+        "orb_count": 10,
+        "actual_click_spell": 7651
+      },
+      "preloot": "Aug12,2010#1281641204297994298 explicitlynoneprelootable",
+      "group_credit": "SameAug2010positivepop+killcreditforallgroupatstage3; personalquestsNOTshared. Exacteligiblepersonaloccurrenceparticipantbindingneeded, notsourceradius/globalcredit. No mandatoryone-newfightperpersoninvented.",
+      "tokens": 20,
+      "cash_pp": 105,
+      "period_rewards": "Aug4,2012#1344081274289916656 both20+105",
+      "automatic_next_shared": 4992,
+      "period_automatic_next": "Apr6,2010#1270592309207432238 actualnextassignment; nativeWorldsharedtaskadmission/occurrenceackrequired, nogenericmanualgroupforeach/duplicateDZ",
+      "native_task_id": null,
+      "goal_bindings": [
+        {
+          "activity": 0,
+          "kind": "ActualLoot",
+          "item_id": 50750,
+          "count": 1
+        },
+        {
+          "activity": 1,
+          "kind": "ActualLoot",
+          "item_id": 50751,
+          "count": 10
+        },
+        {
+          "activity": 2,
+          "kind": "OriginalCombineActivateOwnedActorDeath",
+          "actor_role": "twisted_homunculus",
+          "count": 1
+        },
+        {
+          "activity": 3,
+          "kind": "HailOriginal",
+          "npc_id": 490061,
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "goal_total": 12,
+  "physical_warning": "All6inactive/ingredientclicksuseexisting7651alsoScryDevice46710. Dispatchactualoriginalitem/stage/location;noglobalspellrewrite/newitemfactory. Physicalmultiinputdebit/output+nativeownactor/deathprogressconsumersnotimplemented.",
+  "original_world_loot": "Oddlookingbeetle/MetalGolems/CliknarEucryptoid/LavaMephitWorker/CoherentGrowth/Genati mustpreserveexistingworlddefs/placeholder/dropways;Dung/Shardnotguaranteedperperiodreports.",
+  "runtime_actions": 0,
+  "tests": 0,
+  "enabled": false,
+  "native_task_rows_emitted": false,
+  "new_item_factories": false,
+  "actual_Loot_not_preloot": true,
+  "world_transient_bindings": [
+    {
+      "role": "corporeal_construct",
+      "npc_type_id": null,
+      "external_task": 4989,
+      "zone_id": 487,
+      "version": 0,
+      "spawn2_id": null,
+      "spawngroup_id": null,
+      "xyz": [
+        900,
+        -1280,
+        -100
+      ],
+      "activation_item": 50746,
+      "native_click_spell": 7651,
+      "qualification": "Originalactualpersonaloccurrence activation+owneddeath, notjustspawn/extraKillgoal. XYZsourcecandidate/extentnotaccepted. 4991eligiblepersonalgrouponepopkillbindingheld, notbroadpermemberloop orforcednewfightperperson."
+    },
+    {
+      "role": "incorporeal_construct",
+      "npc_type_id": null,
+      "external_task": 4990,
+      "zone_id": 481,
+      "version": 0,
+      "spawn2_id": null,
+      "spawngroup_id": null,
+      "xyz": [
+        -560,
+        -560,
+        null
+      ],
+      "activation_item": 50749,
+      "native_click_spell": 7651,
+      "qualification": "Originalactualpersonaloccurrence activation+owneddeath, notjustspawn/extraKillgoal. XYZsourcecandidate/extentnotaccepted. 4991eligiblepersonalgrouponepopkillbindingheld, notbroadpermemberloop orforcednewfightperperson."
+    },
+    {
+      "role": "twisted_homunculus",
+      "npc_type_id": null,
+      "external_task": 4991,
+      "zone_id": 490,
+      "version": 0,
+      "spawn2_id": null,
+      "spawngroup_id": null,
+      "xyz": null,
+      "activation_item": 50752,
+      "native_click_spell": 7651,
+      "qualification": "Originalactualpersonaloccurrence activation+owneddeath, notjustspawn/extraKillgoal. XYZsourcecandidate/extentnotaccepted. 4991eligiblepersonalgrouponepopkillbindingheld, notbroadpermemberloop orforcednewfightperperson."
+    }
+  ],
+  "automatic_next_policy": "Actualnativecompletion\u2192rewardreceipt\u2192nativeacceptednextassignment/taskoccurrence. Finalpersonal\u2192sharedadmission/DZackmustoneoriginalsharedrun, no manualforeachduplicateDZ orhistoryreplay."
+}

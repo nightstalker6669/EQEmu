@@ -1,0 +1,27 @@
+{
+  "status": "EXPLICIT_LOCAL_SELECTED_WORLD_ROLE_NOT_HISTORICALAUTHENTICATION",
+  "existing_SQL_row": 35650,
+  "native_door_id": 7,
+  "zone": 490,
+  "version": 0,
+  "model": "OBJ_DOOR_BRELLS",
+  "xyz": [
+    0.06667,
+    711.594,
+    22.77
+  ],
+  "heading": 384,
+  "opentype": 77,
+  "size": 100,
+  "policy": {
+    "keyitem": 47759,
+    "nokeyring": 1,
+    "lockpick": 32767,
+    "disable_timer": 0,
+    "close_timer_ms": 30000,
+    "key_consumed": false
+  },
+  "client_map_label": "brellstemple_1.txt line17 Locked_Door_(Keystone,_unpickable) atclient(0.6085,-709.1045,22.5693), additionalSTATIClabelsupportonly. No historicalnativeIDproof.",
+  "mutation_applied": false,
+  "global_flag_or_reward_added": false
+}

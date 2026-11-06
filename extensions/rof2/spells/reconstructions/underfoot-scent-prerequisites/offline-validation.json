@@ -1,0 +1,9 @@
+{
+  "status": "PASS_OFFLINE_SOURCE_CHECKS",
+  "python_ast": true,
+  "lua_5_4_parse_files": 5,
+  "lua_5_4_mock_event_regression": "Three distinct Reggundhails required; onecannotchainallthree; wrongprerequisitesdonotopenselector; completingtwoearliertaskspermitsAlternative selector",
+  "database_connected": false,
+  "native_lua_server_version_or_acceptance": false,
+  "limitations": "Lua5.4sourceparser/mock only; not actual server engine, delivery, persistence or player tests."
+}

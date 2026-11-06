@@ -1,0 +1,146 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "a69ee25013148fe2e6fcc1104905149071c20a57e1187870749e491c54ba3258"
+  },
+  {
+    "path": "apply_quests.py",
+    "sha256": "ca09b27fdf062b1e1c6052d66e259d38b839dbd65a510e747cfd564a877ccba3"
+  },
+  {
+    "path": "configure_factions.py",
+    "sha256": "4b5abd936bc85b1020c36d83b97354abf205ae232be2d7ad1c30f4771a1dbd37"
+  },
+  {
+    "path": "data/faction-restoration.json",
+    "sha256": "720bc9d811a810ab7c7d9a29c44f28e9682a14c2cb7c867dd970245c631ad972"
+  },
+  {
+    "path": "data/quest-contract.json",
+    "sha256": "a1eff1faf43a5adbf7a2ffce4e94a2fba81bf6c6b96c9319732032dface1bb4b"
+  },
+  {
+    "path": "data/world-restoration.json",
+    "sha256": "e6dc82364823d74a42d07183fddb39bcb5e48b582d0e26d06fe51195ffdbe61f"
+  },
+  {
+    "path": "hooks/global-player.fragment.lua",
+    "sha256": "d304c32cb0d79711bee171de74393d8e42db6ac5e9ef1276580f40b2522c837a"
+  },
+  {
+    "path": "install.py",
+    "sha256": "17951287f237b9a5c39c275b3252782d1e306320b3aac6fdb1cba6d81a3d9d4a"
+  },
+  {
+    "path": "package.json",
+    "sha256": "cf42af34235c0a6527d2dabdbdea9b873868744c980afe9f6e9ce8a7a433a2f6"
+  },
+  {
+    "path": "preflight.py",
+    "sha256": "dda2c5679c07fb2e6a39cb6c6e15eb749f63b7dd8a7f8f703c4a6665e1d7dcb8"
+  },
+  {
+    "path": "provenance/baseline-identities.json",
+    "sha256": "b05c4d71d79d4abdf7e61cff1223b896195722a56d83bd27bb0825fdc8f08c13"
+  },
+  {
+    "path": "provenance/previous-module-sha256.json",
+    "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+  },
+  {
+    "path": "provenance/research-decisions.json",
+    "sha256": "511f813cdc4afc2f78867d326f9a86f4433f3e416ebc7d7d7527ddf9ab0fef0a"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "c9a5af90eb069e4838bb1250d6ba8b35b4fb18d0875c0e3df557f310c65dda1e"
+  },
+  {
+    "path": "quests/dragonscale/442010.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442013.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442014.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442015.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442017.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442018.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442041.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442047.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442086.lua",
+    "sha256": "878dc9fcfaf86cc4eb6c9debddc0832bb327539717d586cdedb9f8f6d324eac8"
+  },
+  {
+    "path": "quests/dragonscale/442099.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442100.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442105.lua",
+    "sha256": "f48c3a93381edbab3049dd6a34ce321bf0b3386932bc16651002d5e0f5fbb1a4"
+  },
+  {
+    "path": "quests/dragonscale/442182.lua",
+    "sha256": "1906fb568586ea6ce3adff14d9a3de2570903f50d0e078539031d69e700f12ae"
+  },
+  {
+    "path": "quests/dragonscale/442900.lua",
+    "sha256": "df804e67787c225a34a3b93210493cfe33fb16a8fd145f6349734ee5ec3bf8e8"
+  },
+  {
+    "path": "quests/lopingplains/443900.lua",
+    "sha256": "878dc9fcfaf86cc4eb6c9debddc0832bb327539717d586cdedb9f8f6d324eac8"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_dragonscale.lua",
+    "sha256": "1f4a013f2c6376c0cb4ea9c10d168a6c893c17936df33578d84fe43639b067a7"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_dragonscale_data.lua",
+    "sha256": "85aef65f507e2ae225bac1b41c6a0be5bc4d473d21e978aa81b5f63274431835"
+  },
+  {
+    "path": "sql/010-journal.disabled.sql",
+    "sha256": "939f6efc20e28208a09ea48431fa9136db246362b5114be720acf85ebba51c11"
+  },
+  {
+    "path": "sql/020-groundspawn-bindings.sql",
+    "sha256": "77d190f54a89da0d699ab1d998ad64e800fc14ab363c90cb63f116c630bc8f6e"
+  },
+  {
+    "path": "sql/030-world-restoration.sql",
+    "sha256": "e22c5ac00d8c84e5f6678b12440960aed8d45a5cfb784951935d961894875d79"
+  },
+  {
+    "path": "sql/040-faction-restoration.sql",
+    "sha256": "8b8387b6850f93b8daaf00d832450f785440dc6dacc9b277e3fa71b6dc26e4a8"
+  },
+  {
+    "path": "sql/090-enable-whole-batch.sql",
+    "sha256": "96250aedc07a9b5fd31ac247cf70f5797cf597a9a57470ea0d3c594b31cf7043"
+  }
+]

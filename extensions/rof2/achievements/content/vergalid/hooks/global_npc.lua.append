@@ -1,0 +1,15 @@
+local vergalid_previous_actor_spawn=event_spawn
+function event_spawn(e)
+ if vergalid_previous_actor_spawn then local r=vergalid_previous_actor_spawn(e);if r and r~=0 then return r end end
+ require('vergalid_scene_native').actor_spawn(e)
+end
+local vergalid_previous_actor_timer=event_timer
+function event_timer(e)
+ if require('vergalid_scene_native').actor_timer(e)then return end
+ if vergalid_previous_actor_timer then return vergalid_previous_actor_timer(e)end
+end
+local vergalid_previous_death_complete=event_death_complete
+function event_death_complete(e)
+ if vergalid_previous_death_complete then local r=vergalid_previous_death_complete(e);if r and r~=0 then return r end end
+ return require('vergalid_scene_native').death(e)
+end

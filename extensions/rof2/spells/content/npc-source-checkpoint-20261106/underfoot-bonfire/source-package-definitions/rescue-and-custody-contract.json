@@ -1,0 +1,161 @@
+{
+  "enabled": false,
+  "native_items": [
+    {
+      "id": "111900",
+      "Name": "Autarchian Execution Blade",
+      "lore": "A quasi-infernal blade which brings death swiftly",
+      "itemtype": "11",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "111901",
+      "Name": "Wand of Metacrystalline Teleportation",
+      "lore": "This wand seems to slightly shift its position in your hand",
+      "itemtype": "11",
+      "clickeffect": "17824",
+      "clicktype": "1"
+    },
+    {
+      "id": "111902",
+      "Name": "Gweddon's Warning",
+      "lore": "A scroll made of strange leather, inscribed in ichor",
+      "itemtype": "11",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "111903",
+      "Name": "Tronten's Protocrystalline Orb",
+      "lore": "A smoky orb of crystal, imbued with an inner blue sparkle",
+      "itemtype": "11",
+      "clickeffect": "-1",
+      "clicktype": ""
+    }
+  ],
+  "native_spells": [
+    {
+      "id": "17823",
+      "name": "Zwurek`s Sputum",
+      "targettype": "8",
+      "range": "110",
+      "aoerange": "35",
+      "cast_time": "250",
+      "recast_time": "18000",
+      "buffduration": "",
+      "effectid1": "",
+      "effect_base_value1": "-6500",
+      "effectid2": "254",
+      "effect_base_value2": ""
+    },
+    {
+      "id": "17824",
+      "name": "Metacrystalline Polyphase",
+      "targettype": "5",
+      "range": "200",
+      "aoerange": "",
+      "cast_time": "",
+      "recast_time": "",
+      "buffduration": "",
+      "effectid1": "",
+      "effect_base_value1": "10",
+      "effectid2": "254",
+      "effect_base_value2": ""
+    }
+  ],
+  "wand_grant": {
+    "actor": 487046,
+    "request": "sign",
+    "requester_only_replacement": true,
+    "recipients": "Actualacceptedtaskmembersinthesameworldzoneasoriginalrequester; no offzonegrant",
+    "inventory_commit_receipt_ready": false
+  },
+  "rescues": [
+    {
+      "activity": 2,
+      "captive_role": "fiddy_captive",
+      "rescued_role": "fiddy_rescued",
+      "requires_actual_deaths": [
+        "norket",
+        "minion x10"
+      ],
+      "required_actual_click": {
+        "item": 111901,
+        "spell": 17824
+      },
+      "destination": "nearinstanceGweddon",
+      "destination_xyz": null,
+      "mechanism_selection": "SOURCEcandidatephasedreplacement supported by distinct grateful/thankful/relievednames; not yet runtimeownerselected",
+      "same_occurrence_lineage": true,
+      "no_simultaneous_duplicate": true,
+      "actual_relocation_receipt_required": true
+    },
+    {
+      "activity": 6,
+      "captive_role": "duerg_captive",
+      "rescued_role": "duerg_rescued",
+      "requires_actual_deaths": [
+        "zealous_golem x10"
+      ],
+      "required_actual_click": {
+        "item": 111901,
+        "spell": 17824
+      },
+      "destination": "nearinstanceGweddon",
+      "destination_xyz": null,
+      "mechanism_selection": "SOURCEcandidatephasedreplacement supported by distinct grateful/thankful/relievednames; not yet runtimeownerselected",
+      "same_occurrence_lineage": true,
+      "no_simultaneous_duplicate": true,
+      "actual_relocation_receipt_required": true
+    },
+    {
+      "activity": 12,
+      "captive_role": "neerda_captive",
+      "rescued_role": "neerda_rescued",
+      "requires_actual_deaths": [
+        "executioner x6",
+        "zwurek"
+      ],
+      "required_actual_click": {
+        "item": 111901,
+        "spell": 17824
+      },
+      "destination": "nearinstanceGweddon",
+      "destination_xyz": null,
+      "mechanism_selection": "SOURCEcandidatephasedreplacement supported by distinct grateful/thankful/relievednames; not yet runtimeownerselected",
+      "same_occurrence_lineage": true,
+      "no_simultaneous_duplicate": true,
+      "actual_relocation_receipt_required": true
+    }
+  ],
+  "native_bridge": {
+    "spell17824": "Targettype5/range200/instant; effect0base10 is HP effect, notnativeNPCteleport implementation. No spell/item edit selected.",
+    "source": [
+      "zone/spell_effects.cpp:197-209 EVENT_SPELL_EFFECT_NPC includes targetNPC/casterentityID",
+      "zone/spells.cpp:4046 EVENT_CAST_ON includes spell/casterlevel/targetIDs",
+      "zone/embparser.cpp:1735-1748 exports spell_id/caster_id/caster_level/target_id",
+      "zone/client_packet.cpp:4944-4951 itemclickcast path carries originalitem/inventoryslot"
+    ],
+    "qualification": "Observednativehooksare candidates only. SpellID/actorentityalone does not prove original itemGUID/acceptedoccurrence/custody/killack; bridgeheld, no fabricatedAPI."
+  },
+  "terminal": {
+    "activity16": "ActualinstanceGweddonhail afterblades6andoriginalwandreturn producesWarning111902",
+    "activity17": "ActualWarningtoWORLDTronten488036 consumesoriginal andexchangesOrb111903",
+    "activity18": "ActualOrbtoWORLDGweddon487046; instancegiveriswrongrecipient",
+    "activity19": "ActualWORLDGweddonhail completesnative20goal task andcreatesONEworldsingedchestboundtoacceptedoccurrence",
+    "chest_zone": 487,
+    "chest_version": 0,
+    "chest_eligibility": "Originalacceptedtaskparticipant/remainINtask; nativecompletion/membershiplifecycleandcorpseconsumerintegrationheld",
+    "additional_chest_open_goal": false,
+    "world_chest_xyz": null,
+    "payout_and_chest_deduplication_ready": false
+  },
+  "travel": {
+    "instance_phrase": "Tronten",
+    "world_Tronten_phrase": "Gweddon",
+    "eligible_scope": "Actualeligibleacceptedmembers atcorrectphase, notonlyhandinperson; no arbitraryteleports",
+    "destinations": "ExistingworldTronten/Gweddonanchors retained only; exactsafegeometry/runtimeunlockheld"
+  },
+  "native_custody_ready": false
+}

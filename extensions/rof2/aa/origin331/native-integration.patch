@@ -1,0 +1,143 @@
+--- a/zone/aa.cpp
++++ b/zone/aa.cpp
+@@ -17,6 +17,7 @@
+ */
+ 
+ #include "../common/classes.h"
++#include "../common/eqemu_config.h"
+ #include "../common/shroud/aa_preview.h"
+ #include "../common/global_define.h"
+ #include "../common/eqemu_logsys.h"
+@@ -1209,6 +1210,90 @@
+ 	FinishAlternateAdvancementPurchase(rank, false, true);
+ }
+ 
++// Universal Origin entitlement only. A true result acknowledges committed
++// single-row ownership and its subsequent in-memory publication, not SaveAA().
++bool Client::ReconcileOriginEntitlement()
++{
++    constexpr uint32 ability_id = 331;
++    constexpr uint32 first_rank_id = 1000;
++    if (!zone || !Connected() || !CharacterID() || !AccountID() || GetLevel() < 5 ||
++        IsSpiritShrouded() || m_spirit_shroud_transition ||
++        m_fellowship_xp_persistence_failed || m_fellowship_xp_transaction_active) {
++        return false;
++    }
++
++    // An existing owner is never upgraded, debited, overwritten or re-announced.
++    if (GetAAByAAID(ability_id) != 0) return false;
++    auto* ability = zone->GetAlternateAdvancementAbility(ability_id);
++    auto* rank = zone->GetAlternateAdvancementRank(first_rank_id);
++    if (!ability || !rank || ability->first_rank_id != first_rank_id ||
++        ability->first != rank || rank->base_ability != ability ||
++        rank->id != first_rank_id || rank->current_value != 1 ||
++        rank->prev || rank->next || ability->charges != 0 ||
++        rank->cost != 0 || rank->level_req != 5 || rank->spell != 5824 ||
++        rank->recast_time != 1080 || !CanPurchaseAlternateAdvancementRank(rank, false, false)) {
++        return false;
++    }
++
++    // A private ordinary connection keeps this one-row write out of any
++    // unrelated transaction on the zone's shared database connection.
++    const auto* config = EQEmuConfig::get();
++    if (!config) return false;
++    Database origin_db;
++    if (!origin_db.Connect(config->DatabaseHost, config->DatabaseUsername,
++        config->DatabasePassword, config->DatabaseDB, config->DatabasePort,
++        "origin-entitlement")) return false;
++    auto mode = origin_db.QueryDatabase(std::string("SELECT @@autocommit, @@in_transaction"), false);
++    if (!mode.Success() || mode.RowCount() != 1 || !mode.begin()[0] || !mode.begin()[1] ||
++        std::string(mode.begin()[0]) != "1" || std::string(mode.begin()[1]) != "0") return false;
++
++    const auto read_sql = fmt::format(
++        "SELECT aa_value, charges, @@autocommit, @@in_transaction "
++        "FROM character_alternate_abilities WHERE id = {} AND aa_id = {}",
++        CharacterID(), first_rank_id);
++    auto owned = origin_db.QueryDatabase(read_sql, false);
++    if (!owned.Success() || owned.RowCount() > 1) return false;
++    if (owned.RowCount() == 1) {
++        const auto prior = owned.begin();
++        if (!prior[0] || !prior[1] || std::string(prior[1]) != "0") return false;
++        if (std::string(prior[0]) == "0") {
++            // A retained zero-value row is unowned. Change only that exact
++            // unowned Origin tuple; never overwrite an owned rank or charges.
++            auto updated = origin_db.QueryDatabase(fmt::format(
++                "UPDATE character_alternate_abilities SET aa_value = 1 "
++                "WHERE id = {} AND aa_id = {} AND aa_value = 0 AND charges = 0",
++                CharacterID(), first_rank_id), false);
++            if (!updated.Success() || updated.RowsAffected() != 1) return false;
++        } else if (std::string(prior[0]) != "1") {
++            return false;
++        }
++    } else {
++        // Primary key (id,aa_id) prevents a concurrent duplicate. No REPLACE,
++        // DELETE, whole-AA save, currency change or query replay.
++        auto inserted = origin_db.QueryDatabase(fmt::format(
++            "INSERT INTO character_alternate_abilities (id, aa_id, aa_value, charges) "
++            "VALUES ({}, {}, 1, 0)", CharacterID(), first_rank_id), false);
++        if (!inserted.Success() || inserted.RowsAffected() != 1) return false;
++    }
++
++    // Under verified autocommit this is a post-commit readback, including the
++    // case where a previous event lost its acknowledgement after insertion.
++    auto confirmed = origin_db.QueryDatabase(read_sql, false);
++    if (!confirmed.Success() || confirmed.RowCount() != 1) return false;
++    const auto row = confirmed.begin();
++    if (!row[0] || !row[1] || !row[2] || !row[3] ||
++        std::string(row[0]) != "1" || std::string(row[1]) != "0" ||
++        std::string(row[2]) != "1" || std::string(row[3]) != "0") return false;
++
++    // No memory or success packet precedes durable confirmation. An abnormal
++    // publication failure keeps the durable row for a later eligible event.
++    if (!Connected() || !CanPurchaseAlternateAdvancementRank(rank, false, false) ||
++        !SetAA(first_rank_id, 1, 0) || GetAA(first_rank_id) != 1) return false;
++    SendAlternateAdvancementPoints();
++    SendAlternateAdvancementStats();
++    return true;
++}
++
+ bool Client::GrantAlternateAdvancementAbility(int aa_id, int points, bool ignore_cost) {
+ 	if (IsSpiritShrouded()) return false;
+ 
+--- a/zone/client.h
++++ b/zone/client.h
+@@ -1149,6 +1149,7 @@
+ 	void SendAlternateAdvancementTable();
+ 	void SendAlternateAdvancementStats();
+ 	void PurchaseAlternateAdvancementRank(int rank_id);
++	bool ReconcileOriginEntitlement(); // Origin331/rank1000 only; true after durable readback.
+ 	bool GrantAlternateAdvancementAbility(int aa_id, int points, bool ignore_cost = false);
+ 	void IncrementAlternateAdvancementRank(int rank_id);
+ 	void ActivateAlternateAdvancementAbility(int rank_id, int target_id);
+--- a/zone/lua_client.cpp
++++ b/zone/lua_client.cpp
+@@ -1325,6 +1325,11 @@
+ void Lua_Client::IncrementAA(int aa) {
+ 	Lua_Safe_Call_Void();
+ 	self->IncrementAlternateAdvancementRank(aa);
++}
++
++bool Lua_Client::ReconcileOriginEntitlement() {
++    Lua_Safe_Call_Bool();
++    return self->ReconcileOriginEntitlement();
+ }
+ 
+ bool Lua_Client::GrantAlternateAdvancementAbility(int aa_id, int points) {
+@@ -4074,6 +4079,7 @@
+ 	.def("GrantAllAAPoints", (void(Lua_Client::*)(void))&Lua_Client::GrantAllAAPoints)
+ 	.def("GrantAllAAPoints", (void(Lua_Client::*)(uint8))&Lua_Client::GrantAllAAPoints)
+ 	.def("GrantAllAAPoints", (void(Lua_Client::*)(uint8,bool))&Lua_Client::GrantAllAAPoints)
++	.def("ReconcileOriginEntitlement", &Lua_Client::ReconcileOriginEntitlement)
+ 	.def("GrantAlternateAdvancementAbility", (bool(Lua_Client::*)(int, int))&Lua_Client::GrantAlternateAdvancementAbility)
+ 	.def("GrantAlternateAdvancementAbility", (bool(Lua_Client::*)(int, int, bool))&Lua_Client::GrantAlternateAdvancementAbility)
+ 	.def("GrantNameChange", &Lua_Client::GrantNameChange)
+--- a/zone/lua_client.h
++++ b/zone/lua_client.h
+@@ -342,6 +342,7 @@
+ 	void AddLevelBasedExp(int exp_pct, int max_level);
+ 	void AddLevelBasedExp(int exp_pct, int max_level, bool ignore_mods);
+ 	void IncrementAA(int aa);
++	bool ReconcileOriginEntitlement();
+ 	bool GrantAlternateAdvancementAbility(int aa_id, int points);
+ 	bool GrantAlternateAdvancementAbility(int aa_id, int points, bool ignore_cost);
+ 	void ResetAlternateAdvancementRank(int aa_id);

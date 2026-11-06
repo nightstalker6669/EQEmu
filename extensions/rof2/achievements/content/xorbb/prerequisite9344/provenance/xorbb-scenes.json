@@ -1,0 +1,129 @@
+{
+  "status": "Disabled implementation; not installed or native accepted",
+  "cutoff": "2013-05-31",
+  "bat_nest": {
+    "npc_id": 753900,
+    "spawn_count": 4,
+    "required_native_kills": 3,
+    "period_sources": [
+      {
+        "url": "https://everquest.allakhazam.com/db/quest/6106",
+        "report_date": "2012-12-06",
+        "supports": [
+          "four spawned bats",
+          "three required kills",
+          "linked aggression"
+        ]
+      },
+      {
+        "url": "https://everquest.allakhazam.com/db/quest/6106",
+        "report_date": "2013-05-22",
+        "supports": [
+          "four bats",
+          "AE rampage",
+          "mez immunity",
+          "low HP relative to standard mobs"
+        ]
+      }
+    ],
+    "current_corroboration": {
+      "url": "https://everquest.allakhazam.com/db/npc/42441",
+      "level": 96,
+      "last_updated": "2023-04-23",
+      "qualification": "Not an immutable original stat export."
+    },
+    "configurable_defaults": {
+      "lifetime_seconds": 600,
+      "poll_seconds": 2,
+      "activation_xy": 80,
+      "activation_z": 40
+    },
+    "unfinished": [
+      "NPC combat/visual profile",
+      "verified spawn anchor near the real elevated-note pickup",
+      "native combat/kill attribution and recovery"
+    ],
+    "social_behavior": {
+      "evidence": "Dec6,2012 report on Allakhazam6106: whirlwinds socially assist, bears/snakes do not",
+      "source": "https://everquest.allakhazam.com/db/quest/6106",
+      "implementation": "Existing eight whirlwind NPC types only, within configured60XY/30Z and nativeLOS; normal hate addition after complete4bat wave. No summons, ownership tags, task credit or social-actor cleanup.",
+      "qualification": "Range defaults labelled; source check only, native behavior pending."
+    }
+  },
+  "crystals": {
+    "npc_id": 753253,
+    "aura_npc_id": 753901,
+    "sources": [
+      {
+        "url": "https://rof.eqresource.com/wehavetogodeeper.php",
+        "original_topic_date": "2012-11-20",
+        "supports": [
+          "totem placement",
+          "roaming crystals reveal inside aura and hide after aura loss",
+          "Triphobic Discharge and linked Triphobia"
+        ],
+        "qualification": "Current mutable walkthrough; origin date is not proof every current value is original."
+      },
+      {
+        "url": "https://everquest.allakhazam.com/db/quest/6107",
+        "supports": [
+          "stationary aura",
+          "overlapping auras",
+          "visible and attackable inside aura",
+          "1\u20133 facets per kill"
+        ],
+        "qualification": "Current mutable guide; equal drop probabilities are emulator defaults."
+      },
+      {
+        "url": "https://everquest.allakhazam.com/db/quest/6107",
+        "report_date": "2013-03-01",
+        "supports": [
+          "belly casting rather than complete spell immunity"
+        ]
+      }
+    ],
+    "configurable_defaults": {
+      "radius_xy": 60,
+      "radius_z": 30,
+      "lifetime_seconds": 120,
+      "poll_seconds": 1,
+      "maximum_auras_per_character": 4,
+      "head_phase_seconds": 5,
+      "facet_count_uniform_range": [
+        1,
+        3
+      ]
+    },
+    "visual_candidate": {
+      "race_id": 615,
+      "status": "Unverified HydraCrystal candidate; readiness remains false."
+    },
+    "unfinished": [
+      "actual totem visual and NPC profile",
+      "verified mine bounds",
+      "complete existing crystal roaming paths",
+      "combat profile and native aura/damage/corpse acceptance"
+    ]
+  },
+  "ladder": {
+    "descent": "Retained after note pickup and throughout the bat fight; cleanup on task closure, zoning or disconnect. Not removed under the climbing player.",
+    "unfinished": [
+      "actual branch note and ladder pose",
+      "native collision/climb route",
+      "compiled owned-door binding deployment"
+    ],
+    "configured_tree": {
+      "native_door_id": 1,
+      "model": "OBJ_CAMP_TREE_A",
+      "x": -1198.07,
+      "y": 703.542,
+      "z": 235.9,
+      "heading": 472,
+      "size": 25,
+      "open_type": 55,
+      "scope": "Current configured reference, not native climb or original2012 note-position proof."
+    },
+    "interaction": "Explicit ground interaction anchor separate from elevated/off-centre ladder model pivot; existing dynamic tree identity/pose is verified read-only. Neither ladder nor note geometry is enabled."
+  },
+  "protocol": "Uses existing native item-click, completed-cast, task, combat and corpse paths. No new opcode recovered or claimed by this source batch."
+}

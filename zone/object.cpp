@@ -1,3 +1,4 @@
+#include "trophy_certificate55.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -116,6 +117,7 @@ decay_timer(300000)
 	m_icon         = 0;
 	m_fix_z        = fix_z;
 	m_ground_spawn = true;
+	m_random_ground_z = z == BEST_Z_INVALID;
 
 	decay_timer.Disable();
 	// Set as much struct data as we can
@@ -339,6 +341,22 @@ decay_timer(decay_time)
 	safe_delete(inst);
 }
 
+
+bool Object::OpenHousingRecipe301(Client& actor,const HousingRecipe301::Binding& binding,const EQ::ItemInstance& actual) {
+ if(actual.GetID()!=54250 || !actual.IsClassBag() || !actual.GetContents()->empty() ||
+  !actual.GetItem() || actual.GetItem()->BagType!=20 || actual.GetItem()->BagSlots!=10 || actual.GetItem()->BagSize!=4 ||
+  !actor.ValidateHousingRecipe301(binding))return false;
+ if(auto* previous=actor.GetTradeskillObject())previous->Close();
+ Object_Struct data{};data.x=actor.GetX();data.y=actor.GetY();data.z=actor.GetZ();data.zone_id=zone->GetZoneID();
+ auto station=std::make_unique<Object>(0,20,actual.GetItem()->Icon,data,&actual,false);
+ station->m_recipe301=std::make_unique<HousingRecipe301::Binding>(binding);
+ strn0cpy(station->m_display_name,actual.GetItem()->Name,sizeof(station->m_display_name));
+ auto* live=station.release();entity_list.AddObject(live,false);
+ ClickObject_Struct click{};click.drop_id=live->GetID();click.player_id=actor.GetID();
+ live->HandleClick(&actor,&click);
+ return actor.GetTradeskillObject()==live;
+}
+
 Object::~Object()
 {
 	safe_delete(m_inst);
@@ -350,6 +368,7 @@ Object::~Object()
 
 void Object::SetID(uint16 set_id)
 {
+	if (m_click_only && GetID() != 0) { return; }
 	// Invoke base class
 	Entity::SetID(set_id);
 
@@ -373,6 +392,7 @@ void Object::ResetState()
 
 bool Object::Save()
 {
+	if (m_click_only || IsHousingRecipe301()) { return false; }
 	if (m_id) { // Update existing
 		content_db.UpdateObject(m_id, m_type, m_icon, m_data, m_inst);
 	} else { // Doesn't yet exist, add now
@@ -384,6 +404,7 @@ bool Object::Save()
 
 uint16 Object::VarSave()
 {
+	if (m_click_only || IsHousingRecipe301()) { return 0; }
 	if (m_id) { // Update existing
 		content_db.UpdateObject(m_id, m_type, m_icon, m_data, m_inst);
 	} else { // Doesn't yet exist, add now
@@ -396,6 +417,7 @@ uint16 Object::VarSave()
 // Remove object from database
 void Object::Delete(bool reset_state)
 {
+	if (m_click_only || IsHousingRecipe301()) { Close(); Depop(); return; }
 	if (m_id != 0) {
 		content_db.DeleteObject(m_id);
 	}
@@ -406,7 +428,7 @@ void Object::Delete(bool reset_state)
 }
 
 const EQ::ItemInstance* Object::GetItem(uint8 index) {
-	if (index < EQ::invtype::WORLD_SIZE) {
+	if (m_inst && index < EQ::invtype::WORLD_SIZE) {
 		return m_inst->GetItem(index);
 	}
 
@@ -416,6 +438,7 @@ const EQ::ItemInstance* Object::GetItem(uint8 index) {
 // Add item to object (only logical for world tradeskill containers
 void Object::PutItem(uint8 index, const EQ::ItemInstance* inst)
 {
+ if(IsHousingRecipe301())return;
 	if (index > 9) {
 		LogError("Invalid index specified ([{}])", index);
 		return;
@@ -464,6 +487,7 @@ void Object::Close() {
 // Remove item from container
 void Object::DeleteItem(uint8 index)
 {
+ if(IsHousingRecipe301())return;
 	if (m_inst && m_inst->IsType(EQ::item::ItemClassBag)) {
 		m_inst->DeleteItem(index);
 
@@ -475,6 +499,7 @@ void Object::DeleteItem(uint8 index)
 // Pop item out of container
 EQ::ItemInstance* Object::PopItem(uint8 index)
 {
+ if(IsHousingRecipe301())return nullptr;
 	EQ::ItemInstance* inst = nullptr;
 
 	if (m_inst && m_inst->IsType(EQ::item::ItemClassBag)) {
@@ -517,6 +542,13 @@ void Object::CreateDeSpawnPacket(EQApplicationPacket* app)
 }
 
 bool Object::Process(){
+ if(IsHousingRecipe301()) {
+  auto* owner=entity_list.GetClientByCharID(m_recipe301->actor);
+  if(!owner || owner!=user || owner->GetTradeskillObject()!=this) {user=nullptr;return false;}
+  if(m_recipe301_timer.Check()&&!owner->ValidateHousingRecipe301(*m_recipe301)){Close();return false;}
+  return true;
+ }
+
 	if (m_type == ObjectTypes::Temporary && decay_timer.Enabled() && decay_timer.Check()) {
 		// Send click to all clients (removes entity on client)
 		auto outapp = new EQApplicationPacket(OP_ClickObject, sizeof(ClickObject_Struct));
@@ -553,6 +585,13 @@ void Object::RandomSpawn(bool send_packet) {
 	m_data.x = zone->random.Real(m_min_x, m_max_x);
 	m_data.y = zone->random.Real(m_min_y, m_max_y);
 
+	// Random XY changes on every respawn. Reusing the previous location's
+	// resolved height leaves pages floating or underground on sloping terrain.
+	// Preserve authored explicit-Z spawns and resolve only sentinel-based ones.
+	if (m_random_ground_z) {
+		m_data.z = BEST_Z_INVALID;
+	}
+
 	if (m_data.z == BEST_Z_INVALID && zone->HasMap()) {
 		glm::vec3 me;
 
@@ -581,6 +620,22 @@ void Object::RandomSpawn(bool send_packet) {
 
 bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 {
+ if(IsHousingRecipe301() && (!sender || sender->CharacterID()!=m_recipe301->actor || !sender->ValidateHousingRecipe301(*m_recipe301)))return false;
+ if(zone&&!TrophyCertificate55::Custody::WorldAllowed(zone->GetZoneID(),GetDBID()))return false;
+	if (m_click_only) {
+		if (!sender || !click_object) {
+			return false;
+		}
+		// Existing pickup-veto acknowledgement: no item and no container window.
+		EQApplicationPacket ack(OP_ClickObject, sizeof(ClickObject_Struct));
+		auto *reply = reinterpret_cast<ClickObject_Struct *>(ack.pBuffer);
+		*reply = *click_object;
+		reply->drop_id = 0;
+		reply->player_id = sender->GetID();
+		sender->QueuePacket(&ack);
+		return true;
+	}
+
 	if (m_ground_spawn) {//This is a Cool Groundspawn
 		respawn_timer.Start();
 	}
@@ -589,7 +644,7 @@ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 		bool cursor_delete  = false;
 		bool duplicate_lore = false;
 
-		if (m_inst && sender) {
+		if (m_inst && sender && m_inst->GetItem()) {
 			// if there is a lore conflict, delete the offending item from the server inventory
 			// the client updates itself and takes care of sending "duplicate lore item" messages
 			auto item = m_inst->GetItem();
@@ -679,13 +734,23 @@ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 			}
 
 			// Transfer item to client
-			sender->PutItemInInventory(EQ::invslot::slotCursor, *m_inst, false);
+			const uint32 pickup_item_id = m_inst->GetID();
+			const int pickup_count = m_inst->IsStackable() ? std::max<int>(1, m_inst->GetCharges()) : 1;
+			const bool pickup_placed = sender->PutItemInInventory(EQ::invslot::slotCursor, *m_inst, false);
 			sender->SendItemPacket(EQ::invslot::slotCursor, m_inst, ItemPacketTrade);
 
 			sender->CheckItemDiscoverability(m_inst->GetID());
 
 			if (cursor_delete) {    // delete the item if it's a duplicate lore. We have to do this because the client expects the item packet
 				sender->DeleteItemInInventory(EQ::invslot::slotCursor, 1, true);
+			}
+
+			// Pickup callbacks above may veto; duplicate lore is removed before this point.
+			// Both recurring and quest-created spawns are fresh acquisitions. The
+			// quest flag does not change one-shot decay/respawn behavior. Player
+			// drops retain neither flag, so repeated drop/pickup cannot earn credit.
+			if ((m_ground_spawn || m_quest_ground_spawn) && pickup_placed && !cursor_delete && RuleB(TaskSystem, EnableTaskSystem)) {
+				sender->UpdateTasksForItem(TaskActivityType::Loot, pickup_item_id, pickup_count);
 			}
 
 			if (!m_ground_spawn) {
@@ -884,10 +949,11 @@ GroundSpawns* ZoneDatabase::LoadGroundSpawns(
 	const auto& l = GroundSpawnsRepository::GetWhere(
 		*this,
 		fmt::format(
-			"`zoneid` = {} AND (`version` = {} OR `version` = -1) {} LIMIT 50",
+			"`zoneid` = {} AND (`version` = {} OR `version` = -1) {} LIMIT {}",
 			zone_id,
 			instance_version,
-			ContentFilterCriteria::apply()
+			ContentFilterCriteria::apply(),
+			GroundSpawns::kMaxSpawns
 		)
 	);
 
@@ -937,6 +1003,7 @@ uint32 Object::GetType()
 
 void Object::SetType(uint32 type)
 {
+	if (m_click_only) { return; }
 	m_type = type;
 	m_data.object_type = type;
 }
@@ -1153,6 +1220,7 @@ uint32 Object::GetItemID()
 
 void Object::SetItemID(uint32 itemid)
 {
+	if (m_click_only) { return; }
 	safe_delete(m_inst);
 
 	if (itemid)

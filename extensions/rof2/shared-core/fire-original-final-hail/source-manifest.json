@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "package": "fire-original-final-hail",
+  "status": "INTEGRATION_SOURCE_ONLY_UNCOMPILED_NOT_APPLIED_UNREGISTERED",
+  "predecessor": {
+    "commit": "c2955cd37a7d38f130f743d95437eec06e3f5458",
+    "package_path": "extensions/rof2/shared-core/fire-personal-acceptance-r2",
+    "patch_sha256": "b71dc874870e6c0ab0ac78f85536c75913da594089ae4a18b3aa9e7cdd976764",
+    "required_postimage_sha256": {
+      "zone/task_client_state.cpp": "7788256d13297bda707f27149b8a08cd6067ff2c6217f890c3bc76e27f06cbcd",
+      "zone/fire_personal_occurrence.h": "78b77ca30ade7ee624c10b89d33d9c1f5f7ce09490e44b9ce68e195c5cd59fb0",
+      "zone/fire_personal_after_reward_r2.h": "558f7de1b0f4f695f58c6cdd12766659b78f8e350bf8c3aa35bc4ace9bd8e91b",
+      "zone/fire_personal_successor_dispatch.h": "41e3c01c08b52289760a05406059085f23124a3ed77d0a9ce7fff9ab10c9c4b1"
+    },
+    "published_artifact_is_not_native_installation": true
+  },
+  "target_files": {
+    "zone/task_client_state.cpp": {
+      "preimage_sha256": "7788256d13297bda707f27149b8a08cd6067ff2c6217f890c3bc76e27f06cbcd",
+      "postimage_sha256": "cd0d8fb409b37e6d0b7bf8f985b5fce229358108a64b6b0492d2253337cb5ba8"
+    },
+    "zone/fire_original_final_hail_frame.h": {
+      "preimage_sha256": null,
+      "expected_absent": true,
+      "postimage_sha256": "ef70a379091c30d644a6a7b974e824d225e1fc98d741e7ca2e79d8b418893168"
+    }
+  },
+  "artifact_sha256": {
+    "native-integration.patch": "8035f9a1eb43f0d4742b3ebadca52265e6a144a7a296ef78458c29c5cfb8cdc1",
+    "native-rollback.patch": "510a3b5b51e7fe5ccbbc012f1e7f15fc2a1db01cbdd0901bc1e6e5bb19291178",
+    "INTEGRATION.md": "2eccce89579bbb2a7fed8f996e4766de24e373888840b7f0e35004e59e28f237"
+  },
+  "focused_review": {
+    "status": "FINITE_ADDITIVE_SOURCE_REVIEW_COMPLETE_INTEGRATION_READY_WITH_NATIVE_OWNER_HOLDS",
+    "new_concrete_defects": [],
+    "native_owner_holds": [
+      "Genuine original Gotonur final-hail callback registration plus authentic construct/death commit ownership remains unimplemented here.",
+      "Actual event owner must guarantee client lifetime and prohibit same-frame NPC entity-ID/address reuse, or leave entry unregistered; pointer equality is not a durable generation token.",
+      "Initial167 acceptance and shared169\u2192170 admission are outside this additive delta.",
+      "Source review does not prove compilation, deployment, native gameplay or whole Fire readiness."
+    ],
+    "source_apply_parser_compile_runtime_executed": false
+  },
+  "limits": {
+    "registered": false,
+    "compiled": false,
+    "installed": false,
+    "whole_fire_activation": false,
+    "sql_writes": 0,
+    "tests": false,
+    "runtime_actions": false,
+    "predecessor_revision_modified": false,
+    "raw_branch_native_files_modified": false
+  }
+}

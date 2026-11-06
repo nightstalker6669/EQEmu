@@ -1,0 +1,1010 @@
+{
+  "schema_version": 1,
+  "scope": "Inactive source using exact coordinator-reserved identities. Required actor/encounter/geometry/loot and final guarded SQL remain incomplete; no installation.",
+  "cutoff": "2013-05-31",
+  "enabled": false,
+  "hero": {
+    "achievement_id": 2075330,
+    "enabled": false,
+    "missions": [
+      {
+        "key": "battle_for_rivervale",
+        "component_id": 2075330
+      },
+      {
+        "key": "return_of_king_xorbb",
+        "component_id": 2075331
+      },
+      {
+        "key": "find_the_gems",
+        "component_id": 2075332
+      }
+    ]
+  },
+  "missions": [
+    {
+      "key": "battle_for_rivervale",
+      "title": "The Battle for Rivervale",
+      "task_id": 3040488,
+      "zone_id": 753,
+      "zone_version": 1,
+      "enabled": false,
+      "giver": {
+        "npc_type_id": 753036,
+        "name": "Thistlebrush",
+        "request": "battle",
+        "zone_in": "go",
+        "qualification": "Retained giver candidate; current application binding not proven"
+      },
+      "prerequisites": [
+        "The Halfling Trail",
+        "We Have to Go Deeper",
+        "Escape From the Prison of Xorbb"
+      ],
+      "task_lock": {
+        "after_activity": 4
+      },
+      "settings": {
+        "min_level": 85,
+        "min_players": 3,
+        "max_players": 6,
+        "duration_seconds": 21600,
+        "replay_seconds": 21600,
+        "provenance": "Current mutable guide; exact original admission/lockout semantics unverified"
+      },
+      "activities": [
+        {
+          "kind": "speak",
+          "target": "Thistlebrush",
+          "count": 1,
+          "start": "ready",
+          "reset": "try again",
+          "activity_id": 0,
+          "producer": "Native exact-stage NPC dialogue",
+          "implementation_ready": false
+        },
+        {
+          "kind": "kill",
+          "target": "enemy soldiers",
+          "count": 40,
+          "activity_id": 1,
+          "producer": "Native registered instance actor kill/merit",
+          "implementation_ready": false
+        },
+        {
+          "kind": "kill",
+          "target": "enemy commanders",
+          "count": 6,
+          "activity_id": 2,
+          "producer": "Native registered instance actor kill/merit",
+          "implementation_ready": false
+        },
+        {
+          "kind": "destroy",
+          "target": "minotaur shelter tents",
+          "count": 12,
+          "activity_id": 3,
+          "producer": "Native registered destructible actor death",
+          "implementation_ready": false
+        },
+        {
+          "kind": "destroy",
+          "target": "catapults/ballistae",
+          "count": 4,
+          "locks_task": true,
+          "activity_id": 4,
+          "producer": "Native registered destructible actor death",
+          "implementation_ready": false
+        },
+        {
+          "kind": "kill",
+          "target": "powershard golems",
+          "count": 2,
+          "activity_id": 5,
+          "producer": "Native registered instance actor kill/merit",
+          "implementation_ready": false
+        },
+        {
+          "kind": "speak",
+          "target": "Thistlebrush",
+          "count": 1,
+          "activity_id": 6,
+          "producer": "Native exact-stage NPC dialogue",
+          "implementation_ready": false
+        },
+        {
+          "kind": "open",
+          "target": "reward chest",
+          "count": 1,
+          "activity_id": 7,
+          "producer": "Actual registered reward chest opening",
+          "implementation_ready": false
+        }
+      ],
+      "completion_rewards": [
+        {
+          "kind": "normal_xp",
+          "amount": 1000,
+          "provenance": "Approved configurable PEQ-style default, not original recovered XP"
+        },
+        {
+          "kind": "AA_points",
+          "amount": 3,
+          "provenance": "Current guide; AA points, not ability grant"
+        },
+        {
+          "kind": "copper",
+          "amount": 225000,
+          "provenance": "Current guide225platinum, original amount unverified"
+        }
+      ],
+      "reward_chest": {
+        "items": [
+          {
+            "item_id": 132919,
+            "name": "Helping Hand"
+          },
+          {
+            "item_id": 133080,
+            "name": "Hoop of the Ritualist"
+          },
+          {
+            "item_id": 135613,
+            "name": "Ixyl's Diabolical Pact"
+          },
+          {
+            "item_id": 132910,
+            "name": "Lysergic Powder"
+          },
+          {
+            "item_id": 132929,
+            "name": "Rorce's Spike of Frenzied Swings"
+          },
+          {
+            "item_id": 132932,
+            "name": "Strength of Legions"
+          },
+          {
+            "item_id": 133133,
+            "name": "Tainted Loam"
+          }
+        ],
+        "enabled": false,
+        "count": 1,
+        "probabilities": {
+          "132919": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133080": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "135613": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "132910": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "132929": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "132932": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133133": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          }
+        },
+        "provenance": "Exact existing item identities/guide membership; drop count/weights still need labelled defaults or research",
+        "pool_selection_status": "SELECTED_RETAINED_EQRESOURCE_INTERFACE; conflicting modern additions remain excluded pending corroboration",
+        "conflicting_guide": {
+          "rasper_additions": [
+            133124
+          ],
+          "rasper_omits_from_EQResource": [
+            133080,
+            132929
+          ]
+        },
+        "category_lead": {
+          "equipment_count_candidate": 1,
+          "separate_spell_mote_candidate": "randomlevel97-100",
+          "qualification": "Current guide category lead; selected local default separately labelled, native76551..54 corroborated currentchests, two dated Battle co-occurrences retained."
+        },
+        "selected_policy": {
+          "status": "SELECTED_CONFIGURABLE_EMULATOR_DEFAULT",
+          "approval": "Coordinator source-policy approval2026-11-04; standing user defaults permission",
+          "qualification": "One equipment item plus one uniformly selected97-100 Dreadmote is a local configurable default. Neither universal quantity nor probabilities were recovered from original Live. Two dated Battle reports establish co-occurrence in those runs only.",
+          "equipment_quantity": 1,
+          "equipment_weights": "Equal weight1 for each retained per-mission interface entry, explicitly configurable emulator weights. Conflicting guide additions held.",
+          "mote_quantity": 1,
+          "motes": [
+            {
+              "item_id": 76551,
+              "weight": 1
+            },
+            {
+              "item_id": 76552,
+              "weight": 1
+            },
+            {
+              "item_id": 76553,
+              "weight": 1
+            },
+            {
+              "item_id": 76554,
+              "weight": 1
+            }
+          ],
+          "enabled": false,
+          "native_accepted": false
+        }
+      },
+      "challenges": [
+        2075370,
+        2075371,
+        2075372,
+        2075373,
+        2075374
+      ],
+      "source": "https://rof.eqresource.com/thebattleforrivervale.php",
+      "native_accepted": false,
+      "activity_phases": {
+        "groups": [
+          [
+            0
+          ],
+          [
+            1,
+            2,
+            3,
+            4
+          ],
+          [
+            5
+          ],
+          [
+            6
+          ],
+          [
+            7
+          ]
+        ],
+        "qualification": "Explicit implementation proposal, not recovered task step metadata. Battle main objectives permit siege-first strategy; exact gems cross-loot/delivery activation needs corroboration before native acceptance."
+      },
+      "dynamic_zone_template_id": 3040488,
+      "reward_set_id": 3040488,
+      "instance_creation": "Native world tasks.dz_template_id; never an additional quest-created expedition or pending journal"
+    },
+    {
+      "key": "return_of_king_xorbb",
+      "title": "The Return of King Xorbb",
+      "task_id": 3040489,
+      "zone_id": 753,
+      "zone_version": 2,
+      "enabled": false,
+      "giver": {
+        "npc_type_id": 753036,
+        "name": "Thistlebrush",
+        "request": "small",
+        "zone_in": "enter",
+        "qualification": "Retained giver candidate; current application binding not proven"
+      },
+      "prerequisites": [
+        "The Halfling Trail",
+        "We Have to Go Deeper",
+        "Escape From the Prison of Xorbb",
+        "The Battle for Rivervale"
+      ],
+      "task_lock": "request",
+      "settings": {
+        "min_level": 85,
+        "min_players": 3,
+        "max_players": 6,
+        "duration_seconds": 21600,
+        "replay_seconds": 21600,
+        "provenance": "Current mutable guide; exact original admission/lockout semantics unverified"
+      },
+      "activities": [
+        {
+          "kind": "speak",
+          "target": "Barleyburr",
+          "count": 1,
+          "phrase": "destroy",
+          "activity_id": 0,
+          "producer": "Native exact-stage NPC dialogue",
+          "implementation_ready": false
+        },
+        {
+          "kind": "speak",
+          "target": "Lupex",
+          "count": 1,
+          "phrase": "kill",
+          "activity_id": 1,
+          "producer": "Native exact-stage NPC dialogue",
+          "implementation_ready": false
+        },
+        {
+          "kind": "speak",
+          "target": "King Xorbb",
+          "count": 1,
+          "phrase": "escape",
+          "activity_id": 2,
+          "producer": "Native exact-stage NPC dialogue",
+          "implementation_ready": false
+        },
+        {
+          "kind": "kill",
+          "target": "King Xorbb",
+          "count": 1,
+          "activity_id": 3,
+          "producer": "Native registered instance actor kill/merit",
+          "implementation_ready": false
+        },
+        {
+          "kind": "open",
+          "target": "reward chest",
+          "count": 1,
+          "activity_id": 4,
+          "producer": "Actual registered reward chest opening",
+          "implementation_ready": false
+        }
+      ],
+      "completion_rewards": [
+        {
+          "kind": "normal_xp",
+          "amount": 1000,
+          "provenance": "Approved configurable PEQ-style default, not original recovered XP"
+        },
+        {
+          "kind": "AA_points",
+          "amount": 3,
+          "provenance": "Current guide; AA points, not ability grant"
+        },
+        {
+          "kind": "copper",
+          "amount": 225000,
+          "provenance": "Current guide225platinum, original amount unverified"
+        }
+      ],
+      "reward_chest": {
+        "items": [
+          {
+            "item_id": 133881,
+            "name": "Icy Grasp"
+          },
+          {
+            "item_id": 133101,
+            "name": "Periodic Spaulders"
+          },
+          {
+            "item_id": 132906,
+            "name": "Shield-Like Remains"
+          },
+          {
+            "item_id": 133115,
+            "name": "Tail of Corpsehide"
+          },
+          {
+            "item_id": 135610,
+            "name": "Tumified Victim's Face"
+          }
+        ],
+        "enabled": false,
+        "count": 1,
+        "probabilities": {
+          "133881": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133101": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "132906": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133115": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "135610": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          }
+        },
+        "provenance": "Exact existing item identities/guide membership; drop count/weights still need labelled defaults or research",
+        "pool_selection_status": "SELECTED_RETAINED_EQRESOURCE_INTERFACE; conflicting modern additions remain excluded pending corroboration",
+        "conflicting_guide": {
+          "rasper_additions": [
+            132933,
+            133107,
+            133116
+          ],
+          "rasper_omits_from_EQResource": [
+            133881,
+            133101
+          ],
+          "suspicious_crosslink": "EV_1"
+        },
+        "category_lead": {
+          "equipment_count_candidate": 1,
+          "separate_spell_mote_candidate": "randomlevel97-100",
+          "qualification": "Current guide category lead; selected local default separately labelled, native76551..54 corroborated currentchests, two dated Battle co-occurrences retained."
+        },
+        "selected_policy": {
+          "status": "SELECTED_CONFIGURABLE_EMULATOR_DEFAULT",
+          "approval": "Coordinator source-policy approval2026-11-04; standing user defaults permission",
+          "qualification": "One equipment item plus one uniformly selected97-100 Dreadmote is a local configurable default. Neither universal quantity nor probabilities were recovered from original Live. Two dated Battle reports establish co-occurrence in those runs only.",
+          "equipment_quantity": 1,
+          "equipment_weights": "Equal weight1 for each retained per-mission interface entry, explicitly configurable emulator weights. Conflicting guide additions held.",
+          "mote_quantity": 1,
+          "motes": [
+            {
+              "item_id": 76551,
+              "weight": 1
+            },
+            {
+              "item_id": 76552,
+              "weight": 1
+            },
+            {
+              "item_id": 76553,
+              "weight": 1
+            },
+            {
+              "item_id": 76554,
+              "weight": 1
+            }
+          ],
+          "enabled": false,
+          "native_accepted": false
+        }
+      },
+      "challenges": [
+        2075375,
+        2075376,
+        2075377
+      ],
+      "source": "https://rof.eqresource.com/thereturnofkingxorbb.php",
+      "native_accepted": false,
+      "activity_phases": {
+        "groups": [
+          [
+            0
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ]
+        ],
+        "qualification": "Explicit implementation proposal, not recovered task step metadata. Battle main objectives permit siege-first strategy; exact gems cross-loot/delivery activation needs corroboration before native acceptance."
+      },
+      "dynamic_zone_template_id": 3040489,
+      "reward_set_id": 3040489,
+      "instance_creation": "Native world tasks.dz_template_id; never an additional quest-created expedition or pending journal"
+    },
+    {
+      "key": "find_the_gems",
+      "title": "Find the Gems... Or Die!",
+      "task_id": 3040490,
+      "zone_id": 753,
+      "zone_version": 3,
+      "enabled": false,
+      "giver": {
+        "npc_type_id": 753191,
+        "name": "Shimsham Ratlobber",
+        "request": "help",
+        "zone_in": "ready",
+        "qualification": "Retained giver candidate; current application binding not proven"
+      },
+      "prerequisites": [],
+      "task_lock": {
+        "after_activity": 0
+      },
+      "settings": {
+        "min_level": 85,
+        "min_players": 3,
+        "max_players": 6,
+        "duration_seconds": 21600,
+        "replay_seconds": 21600,
+        "provenance": "Current mutable guide; exact original admission/lockout semantics unverified"
+      },
+      "activities": [
+        {
+          "kind": "speak",
+          "target": "Griznab Finkledink",
+          "count": 1,
+          "locks_task": true,
+          "activity_id": 0,
+          "producer": "Native exact-stage NPC dialogue",
+          "implementation_ready": false
+        },
+        {
+          "kind": "loot",
+          "target": "radiant diamond",
+          "count": 1,
+          "activity_id": 1,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "implementation_ready": false,
+          "item_id": 69990
+        },
+        {
+          "kind": "loot",
+          "target": "blue sapphire",
+          "count": 1,
+          "activity_id": 2,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "implementation_ready": false,
+          "item_id": 69991
+        },
+        {
+          "kind": "loot",
+          "target": "deep green emerald",
+          "count": 1,
+          "activity_id": 3,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "implementation_ready": false,
+          "item_id": 69992
+        },
+        {
+          "kind": "loot",
+          "target": "red ruby",
+          "count": 1,
+          "activity_id": 4,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "implementation_ready": false,
+          "item_id": 69993
+        },
+        {
+          "kind": "loot",
+          "target": "purple amethyst",
+          "count": 1,
+          "activity_id": 5,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "implementation_ready": false,
+          "item_id": 69994
+        },
+        {
+          "kind": "loot",
+          "target": "pitch black onyx",
+          "count": 1,
+          "activity_id": 6,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "implementation_ready": false,
+          "item_id": 69995
+        },
+        {
+          "kind": "deliver",
+          "target": "Chrom treasure chest",
+          "item_name": "radiant diamond",
+          "count": 1,
+          "activity_id": 7,
+          "producer": "Native physical hand-in custody",
+          "implementation_ready": false,
+          "item_id": 69990
+        },
+        {
+          "kind": "deliver",
+          "target": "Chrom treasure chest",
+          "item_name": "blue sapphire",
+          "count": 1,
+          "activity_id": 8,
+          "producer": "Native physical hand-in custody",
+          "implementation_ready": false,
+          "item_id": 69991
+        },
+        {
+          "kind": "deliver",
+          "target": "Chrom treasure chest",
+          "item_name": "deep green emerald",
+          "count": 1,
+          "activity_id": 9,
+          "producer": "Native physical hand-in custody",
+          "implementation_ready": false,
+          "item_id": 69992
+        },
+        {
+          "kind": "deliver",
+          "target": "Chrom treasure chest",
+          "item_name": "red ruby",
+          "count": 1,
+          "activity_id": 10,
+          "producer": "Native physical hand-in custody",
+          "implementation_ready": false,
+          "item_id": 69993
+        },
+        {
+          "kind": "deliver",
+          "target": "Chrom treasure chest",
+          "item_name": "purple amethyst",
+          "count": 1,
+          "activity_id": 11,
+          "producer": "Native physical hand-in custody",
+          "implementation_ready": false,
+          "item_id": 69994
+        },
+        {
+          "kind": "deliver",
+          "target": "Chrom treasure chest",
+          "item_name": "pitch black onyx",
+          "count": 1,
+          "activity_id": 12,
+          "producer": "Native physical hand-in custody",
+          "implementation_ready": false,
+          "item_id": 69995
+        },
+        {
+          "kind": "kill",
+          "target": "Chrom",
+          "count": 1,
+          "activity_id": 13,
+          "producer": "Native registered instance actor kill/merit",
+          "implementation_ready": false
+        },
+        {
+          "kind": "loot",
+          "target": "Chrom Hardened Heart",
+          "count": 1,
+          "activity_id": 14,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "implementation_ready": false,
+          "item_id": 69996
+        },
+        {
+          "kind": "deliver",
+          "target": "Belmoore Bigdigger",
+          "item_name": "Chrom Hardened Heart",
+          "count": 1,
+          "activity_id": 15,
+          "producer": "Native physical hand-in custody",
+          "implementation_ready": false,
+          "item_id": 69996
+        },
+        {
+          "kind": "speak",
+          "target": "Belmoore Bigdigger",
+          "count": 1,
+          "activity_id": 16,
+          "producer": "Native exact-stage NPC dialogue",
+          "implementation_ready": false
+        },
+        {
+          "kind": "open",
+          "target": "reward chest",
+          "count": 1,
+          "activity_id": 17,
+          "producer": "Actual registered reward chest opening",
+          "implementation_ready": false
+        }
+      ],
+      "completion_rewards": [
+        {
+          "kind": "normal_xp",
+          "amount": 1000,
+          "provenance": "Approved configurable PEQ-style default, not original recovered XP"
+        },
+        {
+          "kind": "AA_points",
+          "amount": 3,
+          "provenance": "Current guide; AA points, not ability grant"
+        },
+        {
+          "kind": "copper",
+          "amount": 225000,
+          "provenance": "Current guide225platinum, original amount unverified"
+        }
+      ],
+      "reward_chest": {
+        "items": [
+          {
+            "item_id": 133087,
+            "name": "Ear Pendant of the Pauper"
+          },
+          {
+            "item_id": 133880,
+            "name": "Gorget of the Bosque Defender"
+          },
+          {
+            "item_id": 133128,
+            "name": "Gruden's Bone Girdle"
+          },
+          {
+            "item_id": 133106,
+            "name": "Rooting Weight"
+          },
+          {
+            "item_id": 132922,
+            "name": "Sapping Sliver"
+          },
+          {
+            "item_id": 133131,
+            "name": "Sash of Seeping Awareness"
+          },
+          {
+            "item_id": 132916,
+            "name": "Sights Unseen"
+          },
+          {
+            "item_id": 133107,
+            "name": "Slitherskin Mantle"
+          },
+          {
+            "item_id": 132953,
+            "name": "Sunbeam Bow"
+          },
+          {
+            "item_id": 133168,
+            "name": "Xorlex's Towering Prosperity"
+          }
+        ],
+        "enabled": false,
+        "count": 1,
+        "probabilities": {
+          "133087": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133880": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133128": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133106": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "132922": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133131": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "132916": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133107": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "132953": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          },
+          "133168": {
+            "weight": 1,
+            "qualification": "Configurable emulator default, not recovered drop odds"
+          }
+        },
+        "provenance": "Exact existing item identities/guide membership; drop count/weights still need labelled defaults or research",
+        "pool_selection_status": "SELECTED_RETAINED_EQRESOURCE_INTERFACE; conflicting modern additions remain excluded pending corroboration",
+        "conflicting_guide": {
+          "rasper_additions": [
+            133881,
+            132944
+          ],
+          "rasper_omits_from_EQResource": [
+            133107,
+            133168
+          ]
+        },
+        "category_lead": {
+          "equipment_count_candidate": 1,
+          "separate_spell_mote_candidate": "randomlevel97-100",
+          "qualification": "Current guide category lead; selected local default separately labelled, native76551..54 corroborated currentchests, two dated Battle co-occurrences retained."
+        },
+        "selected_policy": {
+          "status": "SELECTED_CONFIGURABLE_EMULATOR_DEFAULT",
+          "approval": "Coordinator source-policy approval2026-11-04; standing user defaults permission",
+          "qualification": "One equipment item plus one uniformly selected97-100 Dreadmote is a local configurable default. Neither universal quantity nor probabilities were recovered from original Live. Two dated Battle reports establish co-occurrence in those runs only.",
+          "equipment_quantity": 1,
+          "equipment_weights": "Equal weight1 for each retained per-mission interface entry, explicitly configurable emulator weights. Conflicting guide additions held.",
+          "mote_quantity": 1,
+          "motes": [
+            {
+              "item_id": 76551,
+              "weight": 1
+            },
+            {
+              "item_id": 76552,
+              "weight": 1
+            },
+            {
+              "item_id": 76553,
+              "weight": 1
+            },
+            {
+              "item_id": 76554,
+              "weight": 1
+            }
+          ],
+          "enabled": false,
+          "native_accepted": false
+        }
+      },
+      "challenges": [
+        2075378,
+        2075379,
+        2075380
+      ],
+      "source": "https://rof.eqresource.com/findthegemsordie.php",
+      "native_accepted": false,
+      "activity_phases": {
+        "groups": [
+          [
+            0
+          ],
+          [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12
+          ],
+          [
+            13
+          ],
+          [
+            14
+          ],
+          [
+            15
+          ],
+          [
+            16
+          ],
+          [
+            17
+          ]
+        ],
+        "qualification": "Explicit implementation proposal, not recovered task step metadata. Battle main objectives permit siege-first strategy; exact gems cross-loot/delivery activation needs corroboration before native acceptance."
+      },
+      "dynamic_zone_template_id": 3040490,
+      "reward_set_id": 3040490,
+      "instance_creation": "Native world tasks.dz_template_id; never an additional quest-created expedition or pending journal"
+    }
+  ],
+  "challenges": [
+    {
+      "achievement_id": 2075370,
+      "component_type": 1,
+      "component_id": 2075370,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "battle_for_rivervale",
+      "predicate": "Defeat an actual Lordly trooper or commander",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075371,
+      "component_type": 1,
+      "component_id": 2075371,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "battle_for_rivervale",
+      "predicate": "Defeat an actual Continent Subjugator trooper or commander",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075372,
+      "component_type": 1,
+      "component_id": 2075372,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "battle_for_rivervale",
+      "predicate": "Defeat an actual Dimensional Conqueror trooper or commander",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075373,
+      "component_type": 1,
+      "component_id": 2075373,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "battle_for_rivervale",
+      "predicate": "Defeat an actual Supreme God Killer trooper or commander",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075374,
+      "component_type": 1,
+      "component_id": 2075374,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "battle_for_rivervale",
+      "predicate": "Defeat an actual Supreme God Killer powershard golem",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075375,
+      "component_type": 1,
+      "component_id": 2075375,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "return_of_king_xorbb",
+      "predicate": "Defeat Xorbb with no participant gaze failure",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075376,
+      "component_type": 1,
+      "component_id": 2075376,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "return_of_king_xorbb",
+      "predicate": "Reflect every beam and break defenses each time",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075377,
+      "component_type": 1,
+      "component_id": 2075377,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "return_of_king_xorbb",
+      "predicate": "Witness three greater minions simultaneously alive before defeating Xorbb",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075378,
+      "component_type": 1,
+      "component_id": 2075378,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "find_the_gems",
+      "predicate": "Never kill a failed contestant",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075379,
+      "component_type": 1,
+      "component_id": 2075379,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "find_the_gems",
+      "predicate": "Complete without a qualifying participant death",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    },
+    {
+      "achievement_id": 2075380,
+      "component_type": 1,
+      "component_id": 2075380,
+      "required_count": 1,
+      "enabled": false,
+      "mission": "find_the_gems",
+      "predicate": "Never open a trapped chest",
+      "predicate_source": "Retained original catalogue; detailed native-event semantics in private production contract"
+    }
+  ],
+  "protocol": "Reuse existing shared task/dynamic zone/achievement progression and reward interfaces; no opcode recovered here."
+}

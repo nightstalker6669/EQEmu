@@ -1,0 +1,8 @@
+{
+  "quests/mechanotus/436006.lua": {
+    "reviewed_predecessor_sha256": "6ad880a593759043f1fa1228dd3df0b3baafac2ce8243f1d39c300057740d5ba",
+    "predecessor_kind": "separate Oculus-only adapter candidate; not verified active runtime",
+    "rule": "replace only exact reviewed predecessor and ensure one physical owner; never append",
+    "external_dependency": "achievement_quest_oculus, not included/activated"
+  }
+}

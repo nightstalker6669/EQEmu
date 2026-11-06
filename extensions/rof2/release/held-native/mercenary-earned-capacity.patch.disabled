@@ -1,0 +1,132 @@
+diff --git a/common/ruletypes.h b/common/ruletypes.h
+index 10128e71..0979e9f3 100644
+--- a/common/ruletypes.h
++++ b/common/ruletypes.h
+@@ -241,7 +241,8 @@ RULE_INT(Character, SecondsBeforeAFKNonCombatZone, 600, "Seconds before a player
+ RULE_CATEGORY_END()
+ 
+ RULE_CATEGORY(Mercs)
+-RULE_INT(Mercs, MaxMercenaries, 1, "Available owned mercenary slots, clamped to compiled roster capacity; one active at a time. Server policy, not a marketplace entitlement.")
++RULE_BOOL(Mercs, UseRoF2EarnedCapacity, false, "RoF2 capacity: one base slot plus authenticated Hero Barracks AA bonus; no marketplace grant. Legacy total-capacity policy remains unchanged when disabled.")
++RULE_INT(Mercs, MaxMercenaries, 1, "Legacy RoF2 total capacity, clamped 1..3; unused by explicit earned mode. One active mercenary at a time; no marketplace entitlement.")
+ RULE_BOOL(Mercs, ScaleAboveContentLevel, true, "Scale the highest lower-level mercenary stats when exact owner-level content is missing. Explicit emulator policy, not recovered Live values.")
+ RULE_INT(Mercs, SuspendIntervalMS, 10000, "Time interval for merc suspend (milliseconds)")
+ RULE_INT(Mercs, UpkeepIntervalMS, 180000, "Time interval for merc upkeep (milliseconds)")
+diff --git a/zone/client.cpp b/zone/client.cpp
+index 735cf8e7..6a8d0453 100644
+--- a/zone/client.cpp
++++ b/zone/client.cpp
+@@ -61,6 +61,7 @@
+ #include "common/spdat.h"
+ #include "common/strings.h"
+ #include "common/zone_store.h"
++#include "zone/aa_ability.h"
+ #include "zone/bot_command.h"
+ #include "zone/cheat_manager.h"
+ #include "zone/client_version.h"
+@@ -8187,11 +8188,58 @@ void Client::SetMercenaryAutoAssist(bool enabled)
+ 	SetBucket("eqemu.mercenary.auto_assist", enabled ? "1" : "0");
+ }
+ 
+-uint8 Client::GetMercenaryCapacity() const
++uint8 Client::GetAuthenticatedHeroBarracksBonus()
+ {
+-	const int configured = RuleI(Mercs, MaxMercenaries);
+-	const int capacity = std::max(1, std::min(configured, MAXMERCS));
+-	return ClientVersion() == EQ::versions::ClientVersion::RoF2 ? capacity : 1;
++	// Only ability 704's first rank is authenticated. GetRankByPointsSpent
++	// saturates at the last loaded rank, so unsupported owned counts must not
++	// resolve to a smaller known rank or produce a free capacity grant.
++	constexpr uint32 ability_id = 704;
++	constexpr uint32 first_rank_id = 14367;
++	if (!zone) {
++		return 0;
++	}
++	uint32 charges = 0;
++	const auto owned = GetAAByAAID(ability_id, &charges);
++	if (owned != 1 || charges != 0) {
++		return 0;
++	}
++	auto* ability = zone->GetAlternateAdvancementAbility(ability_id);
++	if (!ability || ability->id != ability_id ||
++		ability->first_rank_id != first_rank_id || !ability->first ||
++		ability->charges != 0 || !ability->grant_only) {
++		return 0;
++	}
++	auto* rank = ability->GetRankByPointsSpent(owned);
++	if (!rank || rank != ability->first || rank->id != first_rank_id ||
++		rank->current_value != owned || rank->base_ability != ability ||
++		GetLevel() < rank->level_req || !CanUseAlternateAdvancementRank(rank) ||
++		rank->effects.size() != 1) {
++		return 0;
++	}
++	const auto& effect = rank->effects.front();
++	if (effect.slot != 1 || effect.effect_id != SpellEffect::AddMercSlot ||
++		effect.base_value != 1 || effect.limit_value != 0) {
++		return 0;
++	}
++	// AA-only effect, counted once. This is not a spell/item bonus or proof
++	// of durable quest/achievement delivery. Unknown higher ranks return zero.
++	return static_cast<uint8>(effect.base_value);
++}
++
++uint8 Client::GetMercenaryCapacity()
++{
++	if (ClientVersion() != EQ::versions::ClientVersion::RoF2) {
++		return 1;
++	}
++	if (RuleB(Mercs, UseRoF2EarnedCapacity)) {
++		// One ordinary base slot; no supplied purchased entitlement. Storage
++		// supports base + four future authenticated ranks, but only rank one
++		// is currently authenticated by the helper above.
++		return std::min(1 + GetAuthenticatedHeroBarracksBonus(), MAXMERCS);
++	}
++	// Increasing storage must not expand legacy configured capacity.
++	constexpr int legacy_maximum = 3;
++	return std::max(1, std::min(RuleI(Mercs, MaxMercenaries), legacy_maximum));
+ }
+ 
+ void Client::PersistMercenarySelection()
+diff --git a/zone/client.h b/zone/client.h
+index eb87d1ad..d83bc7b9 100644
+--- a/zone/client.h
++++ b/zone/client.h
+@@ -1831,7 +1831,8 @@ public:
+ 	void SendMercenaryUpkeep(bool alternate);
+ 	void SendMercenaryCostUpdate();
+ 	bool HasMercenaryPersistenceFailure() const { return m_mercenary_persistence_failed; }
+-	uint8 GetMercenaryCapacity() const;
++	uint8 GetAuthenticatedHeroBarracksBonus();
++	uint8 GetMercenaryCapacity();
+ 	void PersistMercenarySelection();
+ 	bool GetMercenaryAutoAssist();
+ 	void SetMercenaryAutoAssist(bool enabled);
+diff --git a/zone/client_packet.cpp b/zone/client_packet.cpp
+index b47b36da..8412d7eb 100644
+--- a/zone/client_packet.cpp
++++ b/zone/client_packet.cpp
+@@ -10617,7 +10617,10 @@ void Client::Handle_OP_MercenarySwitch(const EQApplicationPacket *app)
+ 		memcpy(outapp->pBuffer, data, sizeof(data));
+ 		FastQueuePacket(&outapp);
+ 	};
+-	if (slot == MAXMERCS || slot >= GetMercenaryCapacity()) {
++	// Packed rows are resolved only from this character's loaded owned roster
++	// and a valid template. Entitlement limits new hires/transfer-in, not the
++	// selection of an existing contract after a rule or AA eligibility change.
++	if (slot >= MAXMERCS) {
+ 		reply(3);
+ 		return;
+ 	}
+diff --git a/zone/merc.h b/zone/merc.h
+index 0f534c3c..08750472 100644
+--- a/zone/merc.h
++++ b/zone/merc.h
+@@ -35,7 +35,7 @@ namespace EQ
+ 	struct ItemData;
+ }
+ 
+-#define MAXMERCS 3
++#define MAXMERCS 5
+ #define TANK 1
+ #define HEALER 2
+ #define MELEEDPS 9

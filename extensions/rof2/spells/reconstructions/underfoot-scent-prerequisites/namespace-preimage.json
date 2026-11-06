@@ -1,0 +1,52 @@
+{
+  "target": "peq_housing_test",
+  "read_only": true,
+  "reserved_task_and_set_ids": [
+    920132,
+    920133,
+    920134,
+    920135
+  ],
+  "proposed_reward_entry_ids_require_coordinator_reservation": [
+    3839201321,
+    3839201341
+  ],
+  "checks": {
+    "tasks": {
+      "query": "SELECT * FROM tasks WHERE id IN (920132,920133,920134,920135) OR replay_timer_group IN (920132,920133,920134,920135) OR request_timer_group IN (920132,920133,920134,920135) OR title IN ('Unrest in the Metal Mines','Chaos in the Stonequarry','An Alternative Explanation','Overheated Production')",
+      "rows": []
+    },
+    "task_activities": {
+      "query": "SELECT * FROM task_activities WHERE taskid IN (920132,920133,920134,920135)",
+      "rows": []
+    },
+    "tasksets": {
+      "query": "SELECT * FROM tasksets WHERE taskid IN (920132,920133,920134,920135)",
+      "rows": []
+    },
+    "reward_sets": {
+      "query": "SELECT * FROM reward_sets WHERE reward_set_id IN (920132,920133,920134,920135)",
+      "rows": []
+    },
+    "reward_options": {
+      "query": "SELECT * FROM reward_options WHERE reward_set_id IN (920132,920133,920134,920135)",
+      "rows": []
+    },
+    "reward_option_entries": {
+      "query": "SELECT * FROM reward_option_entries WHERE reward_set_id IN (920132,920133,920134,920135) OR reward_id IN (3839201321,3839201341)",
+      "rows": []
+    },
+    "reward_sources": {
+      "query": "SELECT * FROM reward_sources WHERE reward_set_id IN (920132,920133,920134,920135) OR (source_type=2 AND source_id IN (920132,920133,920134,920135))",
+      "rows": []
+    },
+    "reward_source_entries": {
+      "query": "SELECT * FROM reward_source_entries WHERE (source_type=2 AND source_id IN (920132,920133,920134,920135)) OR reward_id IN (3839201321,3839201341)",
+      "rows": []
+    },
+    "rewards": {
+      "query": "SELECT * FROM rewards WHERE reward_id IN (3839201321,3839201341)",
+      "rows": []
+    }
+  }
+}

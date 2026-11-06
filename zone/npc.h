@@ -1,3 +1,4 @@
+#include "fungal_item_operation_source.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -31,6 +32,11 @@
 
 #include <deque>
 #include <list>
+#include <memory>
+namespace FireRunActionSource {class NativeRunTerminalSource;class PreparedTerminalChestPlan;class PublishedTerminalReturnSink;class OriginalTerminalDeath;class RunTerminalAttempt;class OriginalTerminalDeathProof;}
+namespace FireRunActionSource {class RunHelperAttempt;class PreparedRunHelperPlan;}
+namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
+namespace FirePersonalOccurrenceSource { class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
 
 struct NPCProximity {
 	float	min_x;
@@ -565,6 +571,8 @@ public:
 		uint32           count              = 0;
 		EQ::ItemInstance *item              = nullptr;
 		bool             is_multiquest_item = false; // state
+		uint32           original_count     = 0;
+		uint32           task_delivered_count = 0;
 	};
 
 	struct HandinMoney {
@@ -575,7 +583,7 @@ public:
 	};
 
 	struct Handin {
-		std::vector<HandinEntry> original_items = {}; // this is what the player originally handed in, never modified
+		std::vector<HandinEntry> original_items = {}; // owns cloned items; active entries are aliases
 		std::vector<HandinEntry> items          = {}; // items can be removed from this set as successful handins are made
 		HandinMoney              original_money = {}; // this is what the player originally handed in, never modified
 		HandinMoney              money          = {}; // money can be removed from this set as successful handins are made
@@ -795,6 +803,27 @@ public:
 	const Handin GetHandin() { return m_hand_in; }
 
 private:
+	friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
+ friend class FirePersonalOccurrenceSource::PreparedConstructPlan;
+ friend class FirePersonalOccurrenceSource::NativeConstructParticipants;
+ friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
+	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
+	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_original_construct;
+ friend class FungalItemSource::NativeEvents;
+ std::shared_ptr<FungalItemSource::Lifetime> m_fungal_source_life;
+	friend class FirePersonalOccurrenceSource::OriginalGotonurSayQueue;
+ friend class FireRunActionSource::RunUseWitness;
+ friend class FireRunActionSource::NativeRunTerminalSource;
+ friend class FireRunActionSource::PreparedTerminalChestPlan;
+ friend class FireRunActionSource::PublishedTerminalReturnSink;
+ friend class FireRunActionSource::OriginalTerminalDeath;
+ friend class FireRunActionSource::NativeRunHelperSource;
+ friend class FireRunActionSource::PreparedRunHelperPlan;
+ std::shared_ptr<FireRunActionSource::RunHelperAttempt> m_fire_run_helper_attempt;
+ std::shared_ptr<FireRunActionSource::RunTerminalAttempt> m_fire_run_terminal_attempt;
+	std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> m_fire_gotonur_say_lifetime;
+	void ReconcileHandinTaskDeliveries();
+
 	uint32              m_loottable_id;
 	bool                m_skip_global_loot;
 	bool                m_skip_auto_scale;

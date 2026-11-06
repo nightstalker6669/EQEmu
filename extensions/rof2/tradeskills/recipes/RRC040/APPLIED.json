@@ -1,0 +1,41 @@
+{
+  "batch": "RRC040",
+  "attempt": 2,
+  "prior_failed_attempt": "RRC040-production-apply-001",
+  "total_SQL_attempts": 2,
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "1b54bba1444ef31fc70abe65d21e3df2735feb39",
+  "source_sha256": "5c0913914fb27af1525bb46ddcf12b530a5527c64e25088736e73a516730d677",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes": 131,
+  "entries": 716,
+  "ids": [
+    3092479,
+    3092609
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC040",
+    "0",
+    "24301",
+    "24432",
+    "185114",
+    "185830",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 24432,
+    "entries": 185830
+  },
+  "affected_postimages_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "existing_producer_guards": {
+    "recipes": 67,
+    "full_entry_rows": 535,
+    "scope": "Exact source-defined SQL checks before/after insertion; no old row updates/deletes or global diff."
+  }
+}

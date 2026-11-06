@@ -1,0 +1,1 @@
+Nineteen Fungal original hail objectives use native SpeakWith4. The two replacement source views retain their98/323row scopes, original genuine explores, goalmethod2 and all disabled flags. They are not additional rows or installation/activation authority. Other physical deliveries and complete mission hooks remain unfinished.

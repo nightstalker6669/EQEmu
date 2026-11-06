@@ -1,0 +1,611 @@
+{
+  "status": "PARTIAL_AUDIT_CHECKPOINT_NOT_HISTORICAL_COMPLETENESS",
+  "updated_utc": "2026-11-04T14:28:04.222162+00:00",
+  "database_counts_at_RRC068": {
+    "recipes": 25436,
+    "entries": 191725
+  },
+  "installed_additions": {
+    "new_recipe_batches": 62,
+    "recipes": 2613,
+    "entries": 14106,
+    "container_extension_batches": 3
+  },
+  "existing_corrections": {
+    "ingredient_item_ids": 16,
+    "failure_salvage_pairs": 8
+  },
+  "categories": [
+    {
+      "name": "Basic Alchemy distillates ranks I-X",
+      "source_formulas": 50,
+      "existing_exact": 50,
+      "entries_reviewed": 490,
+      "new_recipes": 0,
+      "qualification": "Together with previous70 PoK-index basic distillates,120 formulas represented. PoK vendor index is not an expansion date.",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=360&rsa=Alchemy&sub=distillate"
+    },
+    {
+      "name": "Poison dyes",
+      "source_formulas": 11,
+      "existing_formulas": 11,
+      "resolution": "RRC064 adds10 explicit MarbleMortar links and corrects2 BlackVial failure/salvage pairs. RussetDye295 has no explicit MarbleMortar source link and is preserved.",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=290&rsa=Make+Poison&sub=fpdye"
+    },
+    {
+      "name": "Poison Other",
+      "source_formulas": 18,
+      "ordinary_producers_present": 13,
+      "equipped_trophy_holds": 5,
+      "numeric_or_minimum_discrepancy_rows_held": 8,
+      "resolution": "RRC065 adds one CoffinPoisonBottle link to CrushedWindstone232; no new recipe. Existing source numeric/minimum discrepancies retained for separate evidence.",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=187&rsa=Make+Poison&sub=other"
+    },
+    {
+      "name": "OoW Poison",
+      "source_formulas": 18,
+      "existing_role_numeric_matches": 9,
+      "existing_quantity_or_salvage_discrepancies_held": 6,
+      "new_recipes": "RRC066: BitterFeedback, FreezingFeedback, VascularInferno;3 recipes/18 entries. Existing BiteofIkaav minimum120 preserved because source omission does not authorize removing it.",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=262&rc=ROG&rsa=Make+Poison&sub=OoW"
+    },
+    {
+      "name": "GoD Poison",
+      "source_formulas": 6,
+      "ordinary_exact_existing": 4,
+      "entries_reviewed": 24,
+      "progressive_quest_yield_holds": 2,
+      "existing_must_learn2_preserved": true,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=233&rsa=Make+Poison&sub=GoD"
+    },
+    {
+      "name": "Quest Poison",
+      "source_formulas": 9,
+      "ordinary_rows": 8,
+      "unconfirmed_unknown_trivial_hold": 1,
+      "resolution": "RRC067 adds ElfEssence MakePoison route and2 SimpleSaltywater variants (3 recipes/20 entries). RRC068 adds4 explicit MarbleMortar links to302-305, preserving must_learn2/manual discovery and all old fields. Existing EnchantedVeliumPowder trivial0 versus source15NoFail held.",
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=383&rsa=Make+Poison&sub=quest"
+    },
+    {
+      "name": "Charged Poison",
+      "source_formulas": 63,
+      "existing_role_charge_container_nofail_matches": 40,
+      "unrepresented_charged_output_producers_held": 23,
+      "new_recipes": 0,
+      "sql_generated": false,
+      "encoding": "Source Yield1 means one nonstackable5/10charge bottle. Native successcount is passed to SummonItem as charges, so existing successcount5/10 is correct, not a yield discrepancy.",
+      "preserved": "Existing trivial0, nofail1, replace_container1 retained. Current maintained source says no fail without numeric trivial. Missing23 require numeric convention, consumed-container, learning and exact era review before SQL.",
+      "rows": [
+        {
+          "name": "10 Dose Anemone Feedback",
+          "output_item_id": 65501,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Anger of Incapacitation",
+          "output_item_id": 11466,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            158
+          ]
+        },
+        {
+          "name": "10 Dose Bite of the Shissar",
+          "output_item_id": 11453,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            159
+          ]
+        },
+        {
+          "name": "10 Dose Bitter Feedback",
+          "output_item_id": 72630,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Bixie Sting",
+          "output_item_id": 11468,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            160
+          ]
+        },
+        {
+          "name": "10 Dose Bloodpyre",
+          "output_item_id": 72622,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Confusing Whisper",
+          "output_item_id": 11472,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            161
+          ]
+        },
+        {
+          "name": "10 Dose Crushed Vein",
+          "output_item_id": 11470,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            162
+          ]
+        },
+        {
+          "name": "10 Dose Dreams of Drusella",
+          "output_item_id": 11473,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            163
+          ]
+        },
+        {
+          "name": "10 Dose Flesh Rot",
+          "output_item_id": 72625,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Heart Blaze",
+          "output_item_id": 72623,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Itching Madness",
+          "output_item_id": 11462,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Mangled Tendon",
+          "output_item_id": 11471,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            164
+          ]
+        },
+        {
+          "name": "10 Dose Mayong's Bane",
+          "output_item_id": 11461,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            165
+          ]
+        },
+        {
+          "name": "10 Dose Mental Burn",
+          "output_item_id": 11454,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Mental Implosion",
+          "output_item_id": 11455,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            166
+          ]
+        },
+        {
+          "name": "10 Dose Mind Shock",
+          "output_item_id": 72629,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Minor Irritation",
+          "output_item_id": 11458,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            167
+          ]
+        },
+        {
+          "name": "10 Dose Oozing Irritation",
+          "output_item_id": 11459,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            168
+          ]
+        },
+        {
+          "name": "10 Dose Rage of Incapacitation",
+          "output_item_id": 11467,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            169
+          ]
+        },
+        {
+          "name": "10 Dose Scoriae Bite",
+          "output_item_id": 11469,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            170
+          ]
+        },
+        {
+          "name": "10 Dose Scratching Madness",
+          "output_item_id": 11463,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            171
+          ]
+        },
+        {
+          "name": "10 Dose Spinal Disorientation",
+          "output_item_id": 72621,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Spine Bruiser",
+          "output_item_id": 11464,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            172
+          ]
+        },
+        {
+          "name": "10 Dose Spine Rend",
+          "output_item_id": 11465,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            173
+          ]
+        },
+        {
+          "name": "10 Dose Spinning Confusion",
+          "output_item_id": 72620,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Sting of the Shissar",
+          "output_item_id": 11452,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            174
+          ]
+        },
+        {
+          "name": "10 Dose Systemic Destruction",
+          "output_item_id": 72627,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Vascular Inferno",
+          "output_item_id": 72626,
+          "maxcharges": 10,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "10 Dose Wasted Flesh",
+          "output_item_id": 11457,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            175
+          ]
+        },
+        {
+          "name": "10 Dose Withering Flesh",
+          "output_item_id": 11456,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            176
+          ]
+        },
+        {
+          "name": "10 Dose Zombie Bane",
+          "output_item_id": 11460,
+          "maxcharges": 10,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            177
+          ]
+        },
+        {
+          "name": "5 Dose Anemone Feedback",
+          "output_item_id": 65500,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Anger of Incapacitation",
+          "output_item_id": 22791,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Bite of the Shissar",
+          "output_item_id": 22778,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            178
+          ]
+        },
+        {
+          "name": "5 Dose Bitter Feedback",
+          "output_item_id": 72644,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Bixie Sting",
+          "output_item_id": 22793,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            179
+          ]
+        },
+        {
+          "name": "5 Dose Bloodpyre",
+          "output_item_id": 72636,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Confusing Whisper",
+          "output_item_id": 22797,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            180
+          ]
+        },
+        {
+          "name": "5 Dose Crushed Vein",
+          "output_item_id": 22795,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            181
+          ]
+        },
+        {
+          "name": "5 Dose Dreams of Drusella",
+          "output_item_id": 22798,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            182
+          ]
+        },
+        {
+          "name": "5 Dose Flesh Rot",
+          "output_item_id": 72639,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Heart Blaze",
+          "output_item_id": 72637,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Itching Madness",
+          "output_item_id": 22787,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Mangled Tendon",
+          "output_item_id": 22796,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            183
+          ]
+        },
+        {
+          "name": "5 Dose Mayong's Bane",
+          "output_item_id": 22786,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            184
+          ]
+        },
+        {
+          "name": "5 Dose Mental Burn",
+          "output_item_id": 22779,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            185
+          ]
+        },
+        {
+          "name": "5 Dose Mental Implosion",
+          "output_item_id": 22780,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            186
+          ]
+        },
+        {
+          "name": "5 Dose Mind Shock",
+          "output_item_id": 72643,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Minor Irritation",
+          "output_item_id": 22783,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            187
+          ]
+        },
+        {
+          "name": "5 Dose Oozing Irritation",
+          "output_item_id": 22784,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            188
+          ]
+        },
+        {
+          "name": "5 Dose Rage of Incapacitation",
+          "output_item_id": 22792,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            189
+          ]
+        },
+        {
+          "name": "5 Dose Scoriae Bite",
+          "output_item_id": 22794,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            190
+          ]
+        },
+        {
+          "name": "5 Dose Scratching Madness",
+          "output_item_id": 22788,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            191
+          ]
+        },
+        {
+          "name": "5 Dose Spine Bruiser",
+          "output_item_id": 22789,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            192
+          ]
+        },
+        {
+          "name": "5 Dose Spine Rend",
+          "output_item_id": 22790,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            193
+          ]
+        },
+        {
+          "name": "5 Dose Spinning Confusion",
+          "output_item_id": 72634,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Sting of the Shissar",
+          "output_item_id": 22777,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            194
+          ]
+        },
+        {
+          "name": "5 Dose Systemic Destruction",
+          "output_item_id": 72641,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Vascular Inferno",
+          "output_item_id": 72640,
+          "maxcharges": 5,
+          "state": "NO_EXISTING_CHARGED_OUTPUT_PRODUCER",
+          "matching_recipe_ids": []
+        },
+        {
+          "name": "5 Dose Wasted Flesh",
+          "output_item_id": 22782,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            195
+          ]
+        },
+        {
+          "name": "5 Dose Withering Flesh",
+          "output_item_id": 22781,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            196
+          ]
+        },
+        {
+          "name": "5 Dose Zombie Bane",
+          "output_item_id": 22785,
+          "maxcharges": 5,
+          "state": "EXISTING_ROLE_CHARGE_CONTAINER_NOFAIL_MATCH",
+          "matching_recipe_ids": [
+            197
+          ]
+        }
+      ],
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=52&rsa=Make+Poison&sub=chargedpotion"
+    }
+  ],
+  "limits": [
+    "Current maintained source is not an immutable per-formula May2013 capture or native execution receipt.",
+    "Category row counts are not the historical total recipe denominator.",
+    "TLP-only legacy, trophy equipment, progressive per-player yields, Eron environment/learning, and other previously recorded holds remain unresolved."
+  ],
+  "native_actions": 0,
+  "player_item_writes": false
+}

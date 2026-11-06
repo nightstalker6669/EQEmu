@@ -1,0 +1,269 @@
+{
+  "upstream_repository": "https://github.com/EQEmu/EQEmu",
+  "upstream_commit": "8175ae61874cbf20d7b05102821f6f8a4f4d1c39",
+  "housing_repository": "https://github.com/nightstalker6669/eqemu-rof2-housing",
+  "housing_commit": "9aad4cc0857bdd14677dd45ab24f3eafe20d489b",
+  "publication_date": "2026-10-23",
+  "scope": "Production fellowship extension, required DBcore fix, housing fellowship integration, SQL, quest, install tooling and protocol documentation. No suites, fixtures, generated reports, logs, client assets, credentials or personal runtime data.",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 56,
+      "sha256": "1775e6c2d1445657e83349bf1effbf7ecd1a2cb048567eb96a609d5efe48b0be"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 40,
+      "sha256": "8bc8d3c836921f3449869d3cded2d16e0b2ccc3505301ed55d642fe59f34fd1d"
+    },
+    {
+      "path": "FORK-INTEGRATION.md",
+      "bytes": 728,
+      "sha256": "c70dcf1b445082c8fda0e8a476cbcceaaa262be74a9280666cf10eaafb1200f8"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 35149,
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+    },
+    {
+      "path": "NOTICE",
+      "bytes": 605,
+      "sha256": "8c83db3809d18d6d2625f962b5efe91540fcfdeec17e22244f5b79652fe8c3ee"
+    },
+    {
+      "path": "README.md",
+      "bytes": 6088,
+      "sha256": "4078bf7e7801ad0cade3639d8bdaae99a3c2baffd351e58a3a9688e0f1067083"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "bytes": 4020,
+      "sha256": "4ced1c1477844352eab8e29fcbc991917a35524a448614c5cca4da4629d33d39"
+    },
+    {
+      "path": "docs/DATABASE.md",
+      "bytes": 4251,
+      "sha256": "fbf2e8537eec2489c1685ee7a713bc19570f01a9db127422df15fd2973670e14"
+    },
+    {
+      "path": "docs/GAMEPLAY-POLICIES.md",
+      "bytes": 4410,
+      "sha256": "63516f715841421eddd818bfe2efa30643e871401c52fb8a9f5e55b0be7162d3"
+    },
+    {
+      "path": "docs/INSTALL.md",
+      "bytes": 7344,
+      "sha256": "f725c1d43bb0912e1efd5341f62fc9ec4e36827125b9185382027df43ce35e47"
+    },
+    {
+      "path": "docs/KNOWN-GAPS.md",
+      "bytes": 2581,
+      "sha256": "4bbb37aec51f7aba2e7f357c4b959cdb2cbdfc90a51bf5437ac87fc9142109c6"
+    },
+    {
+      "path": "docs/STATUS.md",
+      "bytes": 3264,
+      "sha256": "55d7f43fc0dc7ec24840151ff2a0c28442a810f0fabc30e503b312bf253002f3"
+    },
+    {
+      "path": "overlay/common/fellowship/README.md",
+      "bytes": 9770,
+      "sha256": "46a7562675bf5301aac89f1ba571f0b1a98454b6ae97ce40c3a5582089e6190d"
+    },
+    {
+      "path": "overlay/common/fellowship/campsite_catalogue.cpp",
+      "bytes": 3986,
+      "sha256": "9964eef46dcce355c5394618dc00a8edba3dce640154f3a5b19e9abf2a1ba09f"
+    },
+    {
+      "path": "overlay/common/fellowship/campsite_catalogue.h",
+      "bytes": 2321,
+      "sha256": "1fa857fa977bc75a69c4735f1ad25586fc4e1c277f5e7bb7741d33896ee0bf7c"
+    },
+    {
+      "path": "overlay/common/fellowship/campsite_catalogue_data.inc",
+      "bytes": 65002,
+      "sha256": "16da24e60f81f155adbba1dd8549e8b551355d505328c77ab58ccc779e0a1391"
+    },
+    {
+      "path": "overlay/common/fellowship/campsite_evidence.md",
+      "bytes": 8687,
+      "sha256": "73765b83450d4b319218305f6103a80b5fe459987d2247ca2900c1bae1b1d1de"
+    },
+    {
+      "path": "overlay/common/fellowship/campsite_materials.cpp",
+      "bytes": 5219,
+      "sha256": "52f8976e74fa812e129404dd58e73060f40e4e0a69c3924fb9965995897a1efa"
+    },
+    {
+      "path": "overlay/common/fellowship/campsite_materials.h",
+      "bytes": 722,
+      "sha256": "ec18fba370e6f52f154c290d0f5c916277c28346ba75efcaa700c9334943ba86"
+    },
+    {
+      "path": "overlay/common/fellowship/campsite_native_templates.inc",
+      "bytes": 1877,
+      "sha256": "afd0d69147b0394c3a62d1b250e7dddbf1b7caf3ea2475a5c80f6033c3f291a3"
+    },
+    {
+      "path": "overlay/common/fellowship/journal.cpp",
+      "bytes": 1944,
+      "sha256": "cf070d574ea813ff103fc82fb954a89f14d22f9edfbebf4557c30b199df44223"
+    },
+    {
+      "path": "overlay/common/fellowship/journal.h",
+      "bytes": 710,
+      "sha256": "144ef9f50e6eb6eb2d353054121f40a3335394d36dccaaf658febb7ef149c3e9"
+    },
+    {
+      "path": "overlay/common/fellowship/rof2_wire.h",
+      "bytes": 4740,
+      "sha256": "e36b85675c8bb8481bc654e050be02d66bbacce7754e0099fa45dc33ee9d3621"
+    },
+    {
+      "path": "overlay/common/fellowship/service.cpp",
+      "bytes": 17819,
+      "sha256": "017c2ff670f0feb89c7a261e25be5b3998e534680e51aebf5339b39c5fc46720"
+    },
+    {
+      "path": "overlay/common/fellowship/service.h",
+      "bytes": 3420,
+      "sha256": "3582ec6f351d1a618671f2c9d232b4170a9480c59cc47ffa585c7b9190e13111"
+    },
+    {
+      "path": "overlay/common/fellowship/vitality.cpp",
+      "bytes": 8447,
+      "sha256": "1604c8ac04a1b7181b038b7d4bd7a6fa642ee9c6a81049c5066edd06b1d0a104"
+    },
+    {
+      "path": "overlay/common/fellowship/vitality.h",
+      "bytes": 2127,
+      "sha256": "11f7a1e95ce8176ac735c47ea9e2e4f09cf9df0e07c9e0f066b4657c009cee1c"
+    },
+    {
+      "path": "overlay/common/housing/fellowship_membership.h",
+      "bytes": 4732,
+      "sha256": "6d0994870c9289f041bcff23c4ffe080b36cc7550419a03e2a0938bdfde669d5"
+    },
+    {
+      "path": "overlay/utils/sql/fellowship/001_fellowships.sql",
+      "bytes": 1774,
+      "sha256": "cdab8dff251b5dc1c374f805a4be39487e82a459b8cf2b7df814ae3ae0b81985"
+    },
+    {
+      "path": "overlay/utils/sql/fellowship/002_vitality.sql",
+      "bytes": 552,
+      "sha256": "c7a4ca3fbc913c1e5bb387281d904f73a86038a238fb9ef4317b8734413b35cf"
+    },
+    {
+      "path": "overlay/utils/sql/fellowship/003_xp_commits.sql",
+      "bytes": 721,
+      "sha256": "5e0d5c54679ca508fa6a5361735299f6feac9493b67b98d21fdc4c75546e27a1"
+    },
+    {
+      "path": "overlay/utils/sql/fellowship/004_campsite_catalogue.sql",
+      "bytes": 332970,
+      "sha256": "f91dfe397ec07b4cf2acf72d45e8f49db3fc57ff04749c9f783b3038ac3246f4"
+    },
+    {
+      "path": "overlay/zone/client_fellowship.cpp",
+      "bytes": 13989,
+      "sha256": "af617b562aadb13e040e2c86bc230d2d5437fff8a28614b3cf47a961fe6b1c27"
+    },
+    {
+      "path": "overlay/zone/client_fellowship_vitality.cpp",
+      "bytes": 7767,
+      "sha256": "21adffc9827f42075f5c1ce46dd6526755708971751897f3dbcdc20329e72daf"
+    },
+    {
+      "path": "overlay/zone/fellowship_campfire.cpp",
+      "bytes": 8178,
+      "sha256": "1d040515fc112bb23f720d400e654f3afe016029b2f2f4bfc54f6d8583ec2d85"
+    },
+    {
+      "path": "overlay/zone/fellowship_campfire.h",
+      "bytes": 492,
+      "sha256": "6db800bf1d98909d5764ccbfbd2a6eda35cb3acddb3a9a9cd8b20b8e27bc5eae"
+    },
+    {
+      "path": "overlay/zone/fellowship_campsite_bonuses.cpp",
+      "bytes": 9348,
+      "sha256": "512f07c0316998fc8a7e36ee69d3792d2e947d09f536e02cd7d2b18fa31c8079"
+    },
+    {
+      "path": "overlay/zone/fellowship_campsite_bonuses.h",
+      "bytes": 728,
+      "sha256": "8000f28661788e756b920f61cfd057022839dc71472e0fed1023f6302691c5bd"
+    },
+    {
+      "path": "overlay/zone/fellowship_campsite_materials.cpp",
+      "bytes": 4286,
+      "sha256": "a5e5bbf79bd558727205f974b8fdab4970408a85463d9d63027563e74415fdd2"
+    },
+    {
+      "path": "overlay/zone/fellowship_campsite_materials.h",
+      "bytes": 526,
+      "sha256": "1b350bb0c3c6d19a2278d406f29b2603dbbc522f554b2f2c0ae09371096755e9"
+    },
+    {
+      "path": "overlay/zone/fellowship_chat.cpp",
+      "bytes": 1173,
+      "sha256": "4170deb2dee8ca40221c43892301d44bdaef128803676a9cc35eb040a6856217"
+    },
+    {
+      "path": "patches/base-manifest.json",
+      "bytes": 58274,
+      "sha256": "d427e30add6e49f9bb576f8ec36dd21cdbcc78e4d2777d9ff72ff0df5a9a3764"
+    },
+    {
+      "path": "patches/eqemu-fellowship.patch",
+      "bytes": 38111,
+      "sha256": "c4f448c0e8fc09e51dd264a1897d159b8f86da918b5487512874a93e20e64f09"
+    },
+    {
+      "path": "protocol/EVIDENCE.md",
+      "bytes": 3732,
+      "sha256": "ee283b1767cb860417af755bc93f30732cdaf9c36964d4907fb7594f55ad9edc"
+    },
+    {
+      "path": "protocol/INTERNAL.md",
+      "bytes": 1858,
+      "sha256": "f2c81ed7eec843de0e61a8fd8d9145a9f78defe2499cef601f5ea857b9552886"
+    },
+    {
+      "path": "protocol/OPCODES.md",
+      "bytes": 2408,
+      "sha256": "4c04503baccb7fac7b877920b3d7aff835afbcaa0fe57d45723912cdee68635a"
+    },
+    {
+      "path": "protocol/STRUCTS.md",
+      "bytes": 9323,
+      "sha256": "e7eb72428c387b61ef44146ae6f832ffb25aee08a823256f0f84543e7ced33e8"
+    },
+    {
+      "path": "protocol/opcodes.json",
+      "bytes": 2939,
+      "sha256": "287912077d152208f26da7750f4b32a42c5ca5da57b28e7b9a38ec87dafe0575"
+    },
+    {
+      "path": "protocol/recovered-layouts.json",
+      "bytes": 14767,
+      "sha256": "5d512850fb74d31d5a3687e29c03c631cef154f1faac465df5931816e42d4ae4"
+    },
+    {
+      "path": "quests/poknowledge/Randall_of_the_Fellows.lua",
+      "bytes": 1423,
+      "sha256": "1ceb78944a1ebd4170a1ccbd44ff1ecfca83dd49ad3564b6e1468c2a298ec5bd"
+    },
+    {
+      "path": "tools/apply_overlay.py",
+      "bytes": 3464,
+      "sha256": "b9e6343253f162e58144a70136c62b656a3cea932d8e28e5c5d1b013f3a527a8"
+    }
+  ],
+  "integration_source": {
+    "repository": "nightstalker6669/eqemu-rof2-fellowship",
+    "commit": "9382453264f4f84ac7e83a9ee5c9c9a1391c6017"
+  }
+}

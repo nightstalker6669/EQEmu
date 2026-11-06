@@ -1,0 +1,1855 @@
+{
+  "format": 1,
+  "item_wire_proof": {
+    "item_body_id": "uint32",
+    "saylink_item_id_bits": 20,
+    "maximum_safe_link_id": 1048575,
+    "destination_ids_fit": true,
+    "item_ids_are_not_spell_ids": true,
+    "native_runtime_acceptance": false,
+    "offset_array_growth_bytes_if_full_range_used": 3010052,
+    "memory_limit": "Additional item definitions and alignment not included; source formula only, no shared-memory rebuild."
+  },
+  "source_file_sha256": {
+    "common/patches/rof2.cpp": "0dcec5229c41e9acef3b041b8df5f84d34ab465d3ab72916eb4d1ac4269e7a6b",
+    "common/patches/rof2_structs.h": "a41a75a2416647df15910e1aaf248efd84816a44bba47e2aeb3e549c7ec512ed",
+    "common/say_link.cpp": "fd23dad98f0a88bb3726ba6f3eeca0b5f76197a2d67d47dbd49b67df80f5bc10",
+    "common/say_link.h": "08573fc8f9202678206e6b0449d618de5d909bfe2d3e214cb79363df4bb8672e",
+    "common/fixed_memory_hash_set.h": "8a386785ebe28985213969957ac3189ffb5131da1a931643be7459cff363cc97",
+    "shared_memory/items.cpp": "d351372ca39c8d15917add2fea91cb60fec3db1743c812bfd2926cb45858d8f9"
+  },
+  "typed_census": {
+    "captured_at": "2026-11-03T22:29:06.789348+00:00",
+    "summary": {
+      "scalar_columns_checked": 114,
+      "scalar_matching_column_groups": 0,
+      "physical_item_reward_matches": 0,
+      "task_list_matching_fields": 0,
+      "old_definition_rows": 9,
+      "new_definition_rows": 0
+    },
+    "file_sha256": "42385945a0cff5e83c3e8a41583c0b458072209086dfad2ced0db8ce23659e4d",
+    "foreign_keys_to_items": []
+  },
+  "script_census": {
+    "runtime_quests": {
+      "root": "quests",
+      "matches": [
+        {
+          "path": "quests/oot/#Kaiaren.lua",
+          "line": 84,
+          "text": "        eq.set_timer(\"reset\", 900000); -- 15 mins",
+          "file_sha256": "c49ca4622e0273de6c6b1b59ce3095074c09d7a1b4058a42df5f9d30e068d055",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/crescent/394930.lua",
+          "line": 3,
+          "text": "function event_spawn(e)eq.set_timer(\"expire\",900000)end",
+          "file_sha256": "fb05d1ae5dc66c289f6b46278c84261b5cff693e8680efd2f5bff3a819802596",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/dranik/#Lhranc.lua",
+          "line": 17,
+          "text": "        eq.set_timer(\"reset\", 900000); -- 15 mins",
+          "file_sha256": "75df9590f652b9fb92ac2624bfb8f146afa85f9b8720b90b275e79eee3d4a290",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/necropolis/#Spirit_of_Garzicor_.lua",
+          "line": 3,
+          "text": "\teq.set_timer(\"depop\",900000);",
+          "file_sha256": "1fb1f0a791db37ee03793e86daf339b55260fe20472e1a5a14fcbfbcc619dc1c",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/paw/v1/#Tidemaster_Aquinius.lua",
+          "line": 2,
+          "text": "\teq.set_timer(\"depop\",900000);",
+          "file_sha256": "200b3030576c6ca94b29c2f3810f832c460d8fb16b4dc4029b8aca88e1e73107",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/paw/v1/#Blazemaster_Arnab.lua",
+          "line": 2,
+          "text": "\teq.set_timer(\"depop\",900000);",
+          "file_sha256": "200b3030576c6ca94b29c2f3810f832c460d8fb16b4dc4029b8aca88e1e73107",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/necropolis/#Spirit_of_Garzicor.lua",
+          "line": 3,
+          "text": "\teq.set_timer(\"depop\",900000);",
+          "file_sha256": "7e46d1c4a507da4a269bdef5be07e27c70c22633be8d6139def5483a335d557f",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/paw/v1/#Windlord_Brizoris.lua",
+          "line": 2,
+          "text": "\teq.set_timer(\"depop\",900000);",
+          "file_sha256": "200b3030576c6ca94b29c2f3810f832c460d8fb16b4dc4029b8aca88e1e73107",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/paw/v1/#Earthmaster_Grundag.lua",
+          "line": 2,
+          "text": "\teq.set_timer(\"depop\",900000);",
+          "file_sha256": "200b3030576c6ca94b29c2f3810f832c460d8fb16b4dc4029b8aca88e1e73107",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/frontiermtns/encounters/druid_1_5.lua",
+          "line": 149,
+          "text": "\t\te.self:MoveTo(-3224.879883,1345.630005,2.900000, math.random(0,230),true);",
+          "file_sha256": "e53924fd24ca4706602106048f99320f6b051c28011b34c48097af2f4bc25eb0",
+          "classification": "unrelated_coordinate",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/oceanoftears/Kaiaren.lua",
+          "line": 84,
+          "text": "        eq.set_timer(\"reset\", 900000); -- 15 mins",
+          "file_sha256": "c49ca4622e0273de6c6b1b59ce3095074c09d7a1b4058a42df5f9d30e068d055",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/pojustice/201435.lua",
+          "line": 16,
+          "text": "local eject_timer       = 900000;",
+          "file_sha256": "22c170a55c521960dc52058c804de489ac29cbc82bf48a32552469395b5990e8",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/pojustice/201438.lua",
+          "line": 12,
+          "text": "local eject_timer    = 900000;",
+          "file_sha256": "4647405cde4d7a10ac58b3f6b02cf86b5228c288701feabc85cda9b00434f24f",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/pojustice/201436.lua",
+          "line": 17,
+          "text": "local eject_timer         =  900000;",
+          "file_sha256": "0b9b6d12a38ef3eefa784df8a2de6b2d6cb2ce626830ac937d7989f640871be8",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "quests/pojustice/201437.lua",
+          "line": 16,
+          "text": "local eject_timer       = 900000;",
+          "file_sha256": "de2f77108c321aa16bbe981f627379885c21174614a93fc533e1e1022c50dabb",
+          "classification": "timer_duration_milliseconds",
+          "rewrite_allowed": false
+        }
+      ],
+      "classification_required": "Exact literals/names only; native spell catalogue132477 and task-ID900000 are distinct namespaces/semantics, not automatic event references."
+    },
+    "spells_package": {
+      "root": "extensions/rof2/spells",
+      "matches": [
+        {
+          "path": "extensions/rof2/spells/provenance/voa-scrolls.json",
+          "line": 14021,
+          "text": "    \"item_id\": 132477,",
+          "file_sha256": "e068530da1497afc1e81ce369e1e4138608126a7a1a48ed0e0eb96ffbe8ee110",
+          "classification": "native_Shared_Savagery_restoration_provenance",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "extensions/rof2/spells/provenance/voa-scrolls.json",
+          "line": 14022,
+          "text": "    \"source\": \"https://lucy.allakhazam.com/itemraw.html?id=132477\",",
+          "file_sha256": "e068530da1497afc1e81ce369e1e4138608126a7a1a48ed0e0eb96ffbe8ee110",
+          "classification": "native_Shared_Savagery_restoration_provenance",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "extensions/rof2/spells/provenance/voa-tasks.json",
+          "line": 8961,
+          "text": "          \"item_id\": 132477,",
+          "file_sha256": "32981c65331164948893d34c427974055c6982f4aba75ea00b48f47664b3221e",
+          "classification": "native_Shared_Savagery_restoration_provenance",
+          "rewrite_allowed": false
+        },
+        {
+          "path": "extensions/rof2/spells/provenance/voa-tasks.json",
+          "line": 8965,
+          "text": "      \"reason\": \"Original item132477 conflicts with inherited Scavenger Hunt Letter; ownership audit pending\"",
+          "file_sha256": "32981c65331164948893d34c427974055c6982f4aba75ea00b48f47664b3221e",
+          "classification": "native_Shared_Savagery_restoration_provenance",
+          "rewrite_allowed": false
+        }
+      ],
+      "classification_required": "Exact literals/names only; native spell catalogue132477 and task-ID900000 are distinct namespaces/semantics, not automatic event references."
+    },
+    "conclusion": "No event item literal/name reference found in searched runtime quest files. All15numeric matches are unrelated timers/one coordinate; all4package hits describe the native132477 restoration and must remain132477. Dynamic grants and nonsearched sources remain outside this literal result."
+  },
+  "native_field_review": {
+    "item_id": 132477,
+    "source": "2012-03-12 22:49:33",
+    "source_url": "https://lucy.allakhazam.com/itemraw.html?id=132477",
+    "source_raw_fields": 305,
+    "mappings": [
+      {
+        "source": "id",
+        "column": "id",
+        "source_value": "132477",
+        "value": 132477
+      },
+      {
+        "source": "name",
+        "column": "Name",
+        "source_value": "Tome of Shared Savagery Rk. III",
+        "value": "Tome of Shared Savagery Rk. III"
+      },
+      {
+        "source": "lore",
+        "column": "lore",
+        "source_value": "Tome of Shared Savagery Rk. III",
+        "value": "Tome of Shared Savagery Rk. III"
+      },
+      {
+        "source": "classes",
+        "column": "classes",
+        "source_value": "32768",
+        "value": 32768
+      },
+      {
+        "source": "races",
+        "column": "races",
+        "source_value": "65535",
+        "value": 65535
+      },
+      {
+        "source": "cost",
+        "column": "price",
+        "source_value": "1234182",
+        "value": 1234182
+      },
+      {
+        "source": "nodrop",
+        "column": "nodrop",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "norent",
+        "column": "norent",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "loreitem",
+        "column": "loregroup",
+        "source_value": "-1",
+        "value": -1
+      },
+      {
+        "source": "itemtype",
+        "column": "itemtype",
+        "source_value": "20",
+        "value": 20
+      },
+      {
+        "source": "itemclass",
+        "column": "itemclass",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "icon",
+        "column": "icon",
+        "source_value": "778",
+        "value": 778
+      },
+      {
+        "source": "weight",
+        "column": "weight",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "size",
+        "column": "size",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "magic",
+        "column": "magic",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "reclevel",
+        "column": "reclevel",
+        "source_value": "95",
+        "value": 95
+      },
+      {
+        "source": "reqlevel",
+        "column": "reqlevel",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "spellid4",
+        "column": "scrolleffect",
+        "source_value": "30477",
+        "value": 30477
+      },
+      {
+        "source": "effecttype4",
+        "column": "scrolltype",
+        "source_value": "7",
+        "value": 7
+      },
+      {
+        "source": "level4",
+        "column": "scrolllevel",
+        "source_value": "95",
+        "value": 95
+      },
+      {
+        "source": "efflevel4",
+        "column": "scrolllevel2",
+        "source_value": "95",
+        "value": 95
+      },
+      {
+        "source": "stacksize",
+        "column": "stacksize",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "idfile",
+        "column": "idfile",
+        "source_value": "IT98",
+        "value": "IT98"
+      },
+      {
+        "source": "aagi",
+        "column": "aagi",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "ac",
+        "column": "ac",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "accuracy",
+        "column": "accuracy",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "acha",
+        "column": "acha",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "adex",
+        "column": "adex",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aint",
+        "column": "aint",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "asta",
+        "column": "asta",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "astr",
+        "column": "astr",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "attack",
+        "column": "attack",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "attuneable",
+        "column": "attuneable",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "avoidance",
+        "column": "avoidance",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "awis",
+        "column": "awis",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "backstabdmg",
+        "column": "backstabdmg",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "bagsize",
+        "column": "bagsize",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "bagslots",
+        "column": "bagslots",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "bagtype",
+        "column": "bagtype",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "bagwr",
+        "column": "bagwr",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "banedmgamt",
+        "column": "banedmgamt",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "banedmgbody",
+        "column": "banedmgbody",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "banedmgrace",
+        "column": "banedmgrace",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "bardtype",
+        "column": "bardtype",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "bardvalue",
+        "column": "bardvalue",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "booktype",
+        "column": "booktype",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "casttime",
+        "column": "casttime",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "clairvoyance",
+        "column": "clairvoyance",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "color",
+        "column": "color",
+        "source_value": "4278190080",
+        "value": 4278190080
+      },
+      {
+        "source": "combateffects",
+        "column": "combateffects",
+        "source_value": "0",
+        "value": "0"
+      },
+      {
+        "source": "cr",
+        "column": "cr",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "damage",
+        "column": "damage",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "damageshield",
+        "column": "damageshield",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "deity",
+        "column": "deity",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "delay",
+        "column": "delay",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "dotshielding",
+        "column": "dotshielding",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "dr",
+        "column": "dr",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "dsmitigation",
+        "column": "dsmitigation",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "elemdmgamt",
+        "column": "elemdmgamt",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "elemdmgtype",
+        "column": "elemdmgtype",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "endur",
+        "column": "endur",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "evoid",
+        "column": "evoid",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "evomax",
+        "column": "evomax",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "factionamt1",
+        "column": "factionamt1",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "factionamt2",
+        "column": "factionamt2",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "factionamt3",
+        "column": "factionamt3",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "factionamt4",
+        "column": "factionamt4",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "factionmod1",
+        "column": "factionmod1",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "factionmod2",
+        "column": "factionmod2",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "factionmod3",
+        "column": "factionmod3",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "factionmod4",
+        "column": "factionmod4",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "fr",
+        "column": "fr",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "guildfavor",
+        "column": "guildfavor",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "haste",
+        "column": "haste",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "healamt",
+        "column": "healamt",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "heirloom",
+        "column": "heirloom",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "heroic_agi",
+        "column": "heroic_agi",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "heroic_cha",
+        "column": "heroic_cha",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "heroic_dex",
+        "column": "heroic_dex",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "heroic_int",
+        "column": "heroic_int",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "heroic_sta",
+        "column": "heroic_sta",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "heroic_str",
+        "column": "heroic_str",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "heroic_wis",
+        "column": "heroic_wis",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "hp",
+        "column": "hp",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "ldonprice",
+        "column": "ldonprice",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "ldonsold",
+        "column": "ldonsold",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "ldontheme",
+        "column": "ldontheme",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "light",
+        "column": "light",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "mana",
+        "column": "mana",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "manaregen",
+        "column": "manaregen",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "material",
+        "column": "material",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "mr",
+        "column": "mr",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "nopet",
+        "column": "nopet",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "notransfer",
+        "column": "notransfer",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "placeable",
+        "column": "placeable",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "potionbelt",
+        "column": "potionbelt",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "potionbeltslots",
+        "column": "potionbeltslots",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "pr",
+        "column": "pr",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "purity",
+        "column": "purity",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "range",
+        "column": "range",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "recastdelay",
+        "column": "recastdelay",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "recasttype",
+        "column": "recasttype",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "recskill",
+        "column": "recskill",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "regen",
+        "column": "regen",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "shielding",
+        "column": "shielding",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "skillmodmax",
+        "column": "skillmodmax",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "skillmodtype",
+        "column": "skillmodtype",
+        "source_value": "-1",
+        "value": -1
+      },
+      {
+        "source": "skillmodvalue",
+        "column": "skillmodvalue",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "slots",
+        "column": "slots",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "spelldmg",
+        "column": "spelldmg",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "spellshield",
+        "column": "spellshield",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "strikethrough",
+        "column": "strikethrough",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "stunresist",
+        "column": "stunresist",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "tradeskills",
+        "column": "tradeskills",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "artifact",
+        "column": "artifactflag",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "augdistill",
+        "column": "augdistiller",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "augres",
+        "column": "augrestrict",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "augvalue",
+        "column": "augtype",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "dmgplusamnt",
+        "column": "extradmgamt",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "dmgplustype",
+        "column": "extradmgskill",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "endurregen",
+        "column": "enduranceregen",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "crr",
+        "column": "svcorruption",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "benefit",
+        "column": "benefitflag",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug1type",
+        "column": "augslot1type",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug1vis",
+        "column": "augslot1visible",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "aug1unk2",
+        "column": "augslot1unk2",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug2type",
+        "column": "augslot2type",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug2vis",
+        "column": "augslot2visible",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "aug2unk2",
+        "column": "augslot2unk2",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug3type",
+        "column": "augslot3type",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug3vis",
+        "column": "augslot3visible",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "aug3unk2",
+        "column": "augslot3unk2",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug4type",
+        "column": "augslot4type",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug4vis",
+        "column": "augslot4visible",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "aug4unk2",
+        "column": "augslot4unk2",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug5type",
+        "column": "augslot5type",
+        "source_value": "0",
+        "value": 0
+      },
+      {
+        "source": "aug5vis",
+        "column": "augslot5visible",
+        "source_value": "1",
+        "value": 1
+      },
+      {
+        "source": "aug5unk2",
+        "column": "augslot5unk2",
+        "source_value": "0",
+        "value": 0
+      }
+    ],
+    "verified_column_count": 138,
+    "candidate_changes": [],
+    "candidate_after": {
+      "id": 132477,
+      "minstatus": 0,
+      "Name": "Tome of Shared Savagery Rk. III",
+      "aagi": 0,
+      "ac": 0,
+      "accuracy": 0,
+      "acha": 0,
+      "adex": 0,
+      "aint": 0,
+      "artifactflag": 0,
+      "asta": 0,
+      "astr": 0,
+      "attack": 0,
+      "augrestrict": 0,
+      "augslot1type": 0,
+      "augslot1visible": 1,
+      "augslot2type": 0,
+      "augslot2visible": 1,
+      "augslot3type": 0,
+      "augslot3visible": 1,
+      "augslot4type": 0,
+      "augslot4visible": 1,
+      "augslot5type": 0,
+      "augslot5visible": 1,
+      "augslot6type": 0,
+      "augslot6visible": 1,
+      "augtype": 0,
+      "avoidance": 0,
+      "awis": 0,
+      "bagsize": 0,
+      "bagslots": 0,
+      "bagtype": 0,
+      "bagwr": 0,
+      "banedmgamt": 0,
+      "banedmgraceamt": 0,
+      "banedmgbody": 0,
+      "banedmgrace": 0,
+      "bardtype": 0,
+      "bardvalue": 0,
+      "book": 0,
+      "casttime": 0,
+      "casttime_": 0,
+      "charmfile": "",
+      "charmfileid": "0",
+      "classes": 32768,
+      "color": 4278190080,
+      "combateffects": "0",
+      "extradmgskill": 0,
+      "extradmgamt": 0,
+      "price": 1234182,
+      "cr": 0,
+      "damage": 0,
+      "damageshield": 0,
+      "deity": 0,
+      "delay": 0,
+      "augdistiller": 0,
+      "dotshielding": 0,
+      "dr": 0,
+      "clicktype": 0,
+      "clicklevel2": 0,
+      "elemdmgtype": 0,
+      "elemdmgamt": 0,
+      "endur": 0,
+      "factionamt1": 0,
+      "factionamt2": 0,
+      "factionamt3": 0,
+      "factionamt4": 0,
+      "factionmod1": 0,
+      "factionmod2": 0,
+      "factionmod3": 0,
+      "factionmod4": 0,
+      "filename": "",
+      "focuseffect": -1,
+      "fr": 0,
+      "fvnodrop": 0,
+      "haste": 0,
+      "clicklevel": 0,
+      "hp": 0,
+      "regen": 0,
+      "icon": 778,
+      "idfile": "IT98",
+      "itemclass": 0,
+      "itemtype": 20,
+      "ldonprice": 0,
+      "ldontheme": 0,
+      "ldonsold": 0,
+      "light": 0,
+      "lore": "Tome of Shared Savagery Rk. III",
+      "loregroup": -1,
+      "magic": 1,
+      "mana": 0,
+      "manaregen": 0,
+      "enduranceregen": 0,
+      "material": 0,
+      "herosforgemodel": 0,
+      "maxcharges": 0,
+      "mr": 0,
+      "nodrop": 0,
+      "norent": 1,
+      "pendingloreflag": 0,
+      "pr": 0,
+      "procrate": 0,
+      "races": 65535,
+      "range": 0,
+      "reclevel": 95,
+      "recskill": 0,
+      "reqlevel": 0,
+      "sellrate": 10.0,
+      "shielding": 0,
+      "size": 1,
+      "skillmodtype": -1,
+      "skillmodvalue": 0,
+      "slots": 0,
+      "clickeffect": -1,
+      "spellshield": 0,
+      "strikethrough": 0,
+      "stunresist": 0,
+      "summonedflag": 0,
+      "tradeskills": 0,
+      "favor": 0,
+      "weight": 1,
+      "UNK012": 0,
+      "UNK013": 1,
+      "benefitflag": 0,
+      "UNK054": 0,
+      "UNK059": 0,
+      "booktype": 0,
+      "recastdelay": 0,
+      "recasttype": 0,
+      "guildfavor": 0,
+      "UNK123": 0,
+      "UNK124": 0,
+      "attuneable": 0,
+      "nopet": 0,
+      "updated": "2015-12-12 15:07:27",
+      "comment": "",
+      "UNK127": 0,
+      "pointtype": 0,
+      "potionbelt": 0,
+      "potionbeltslots": 0,
+      "stacksize": 1,
+      "notransfer": 0,
+      "stackable": 0,
+      "UNK134": "",
+      "UNK137": 0,
+      "proceffect": -1,
+      "proctype": 0,
+      "proclevel2": 0,
+      "proclevel": 0,
+      "UNK142": 0,
+      "worneffect": -1,
+      "worntype": 0,
+      "wornlevel2": 0,
+      "wornlevel": 0,
+      "UNK147": 0,
+      "focustype": 0,
+      "focuslevel2": 0,
+      "focuslevel": 0,
+      "UNK152": 0,
+      "scrolleffect": 30477,
+      "scrolltype": 7,
+      "scrolllevel2": 95,
+      "scrolllevel": 95,
+      "UNK157": 0,
+      "serialized": null,
+      "verified": "2016-01-06 19:17:23",
+      "serialization": null,
+      "source": "13THFLOOR",
+      "UNK033": 0,
+      "lorefile": "",
+      "UNK014": 0,
+      "svcorruption": 0,
+      "skillmodmax": 0,
+      "UNK060": 0,
+      "augslot1unk2": 0,
+      "augslot2unk2": 0,
+      "augslot3unk2": 0,
+      "augslot4unk2": 0,
+      "augslot5unk2": 0,
+      "augslot6unk2": 0,
+      "UNK120": -1,
+      "UNK121": 0,
+      "questitemflag": 0,
+      "UNK132": "00000000000000000000",
+      "clickunk5": 0,
+      "clickunk6": "",
+      "clickunk7": -1,
+      "procunk1": 0,
+      "procunk2": 0,
+      "procunk3": 0,
+      "procunk4": 0,
+      "procunk6": "",
+      "procunk7": -1,
+      "wornunk1": 0,
+      "wornunk2": 0,
+      "wornunk3": 0,
+      "wornunk4": 0,
+      "wornunk5": 0,
+      "wornunk6": "",
+      "wornunk7": -1,
+      "focusunk1": 0,
+      "focusunk2": 0,
+      "focusunk3": 0,
+      "focusunk4": 0,
+      "focusunk5": 0,
+      "focusunk6": "",
+      "focusunk7": -1,
+      "scrollunk1": 0,
+      "scrollunk2": 0,
+      "scrollunk3": 0,
+      "scrollunk4": 0,
+      "scrollunk5": 0,
+      "scrollunk6": "",
+      "scrollunk7": 0,
+      "UNK193": 0,
+      "purity": 0,
+      "evoitem": 0,
+      "evoid": 0,
+      "evolvinglevel": 0,
+      "evomax": 0,
+      "clickname": "",
+      "procname": "",
+      "wornname": "",
+      "focusname": "",
+      "scrollname": "",
+      "dsmitigation": 0,
+      "heroic_str": 0,
+      "heroic_int": 0,
+      "heroic_wis": 0,
+      "heroic_agi": 0,
+      "heroic_dex": 0,
+      "heroic_sta": 0,
+      "heroic_cha": 0,
+      "heroic_pr": 0,
+      "heroic_dr": 0,
+      "heroic_fr": 0,
+      "heroic_cr": 0,
+      "heroic_mr": 0,
+      "heroic_svcorrup": 0,
+      "healamt": 0,
+      "spelldmg": 0,
+      "clairvoyance": 0,
+      "backstabdmg": 0,
+      "created": "2015-12-12 07:15:51",
+      "elitematerial": 0,
+      "ldonsellbackrate": 70,
+      "scriptfileid": 32767,
+      "expendablearrow": 0,
+      "powersourcecapacity": 0,
+      "bardeffect": -1,
+      "bardeffecttype": 0,
+      "bardlevel2": 0,
+      "bardlevel": 0,
+      "bardunk1": 0,
+      "bardunk2": 0,
+      "bardunk3": 0,
+      "bardunk4": 0,
+      "bardunk5": 0,
+      "bardname": "",
+      "bardunk7": -1,
+      "UNK214": 0,
+      "subtype": 0,
+      "UNK220": 0,
+      "UNK221": 0,
+      "heirloom": 0,
+      "UNK223": 0,
+      "UNK224": 0,
+      "UNK225": 0,
+      "UNK226": 0,
+      "UNK227": 0,
+      "UNK228": 0,
+      "UNK229": 0,
+      "UNK230": 0,
+      "UNK231": 0,
+      "UNK232": 0,
+      "UNK233": 0,
+      "UNK234": 0,
+      "placeable": 0,
+      "UNK236": 0,
+      "UNK237": 0,
+      "UNK238": 0,
+      "UNK239": 0,
+      "UNK240": 0,
+      "UNK241": 0,
+      "epicitem": 0,
+      "housing_disable_rotation": null,
+      "housing_disable_free_placement": null
+    },
+    "remaining_unverified_columns": [
+      "UNK012",
+      "UNK013",
+      "UNK014",
+      "UNK033",
+      "UNK054",
+      "UNK059",
+      "UNK060",
+      "UNK120",
+      "UNK121",
+      "UNK123",
+      "UNK124",
+      "UNK127",
+      "UNK132",
+      "UNK134",
+      "UNK137",
+      "UNK142",
+      "UNK147",
+      "UNK152",
+      "UNK157",
+      "UNK193",
+      "UNK214",
+      "UNK220",
+      "UNK221",
+      "UNK223",
+      "UNK224",
+      "UNK225",
+      "UNK226",
+      "UNK227",
+      "UNK228",
+      "UNK229",
+      "UNK230",
+      "UNK231",
+      "UNK232",
+      "UNK233",
+      "UNK234",
+      "UNK236",
+      "UNK237",
+      "UNK238",
+      "UNK239",
+      "UNK240",
+      "UNK241",
+      "augslot6type",
+      "augslot6unk2",
+      "augslot6visible",
+      "banedmgraceamt",
+      "bardeffect",
+      "bardeffecttype",
+      "bardlevel",
+      "bardlevel2",
+      "bardname",
+      "bardunk1",
+      "bardunk2",
+      "bardunk3",
+      "bardunk4",
+      "bardunk5",
+      "bardunk7",
+      "book",
+      "casttime_",
+      "charmfile",
+      "charmfileid",
+      "clickeffect",
+      "clicklevel",
+      "clicklevel2",
+      "clickname",
+      "clicktype",
+      "clickunk5",
+      "clickunk6",
+      "clickunk7",
+      "comment",
+      "created",
+      "elitematerial",
+      "epicitem",
+      "evoitem",
+      "evolvinglevel",
+      "expendablearrow",
+      "favor",
+      "filename",
+      "focuseffect",
+      "focuslevel",
+      "focuslevel2",
+      "focusname",
+      "focustype",
+      "focusunk1",
+      "focusunk2",
+      "focusunk3",
+      "focusunk4",
+      "focusunk5",
+      "focusunk6",
+      "focusunk7",
+      "fvnodrop",
+      "heroic_cr",
+      "heroic_dr",
+      "heroic_fr",
+      "heroic_mr",
+      "heroic_pr",
+      "heroic_svcorrup",
+      "herosforgemodel",
+      "housing_disable_free_placement",
+      "housing_disable_rotation",
+      "ldonsellbackrate",
+      "lorefile",
+      "maxcharges",
+      "minstatus",
+      "pendingloreflag",
+      "pointtype",
+      "powersourcecapacity",
+      "proceffect",
+      "proclevel",
+      "proclevel2",
+      "procname",
+      "procrate",
+      "proctype",
+      "procunk1",
+      "procunk2",
+      "procunk3",
+      "procunk4",
+      "procunk6",
+      "procunk7",
+      "questitemflag",
+      "scriptfileid",
+      "scrollname",
+      "scrollunk1",
+      "scrollunk2",
+      "scrollunk3",
+      "scrollunk4",
+      "scrollunk5",
+      "scrollunk6",
+      "scrollunk7",
+      "sellrate",
+      "serialization",
+      "serialized",
+      "source",
+      "stackable",
+      "subtype",
+      "summonedflag",
+      "updated",
+      "verified",
+      "worneffect",
+      "wornlevel",
+      "wornlevel2",
+      "wornname",
+      "worntype",
+      "wornunk1",
+      "wornunk2",
+      "wornunk3",
+      "wornunk4",
+      "wornunk5",
+      "wornunk6",
+      "wornunk7"
+    ],
+    "inherited_field_policy_accepted": false,
+    "blank_source_values_not_defaulted": [
+      "aug6type",
+      "aug6unk2",
+      "aug6vis",
+      "banedmgraceamt",
+      "casttime6",
+      "casttime7",
+      "casttime8",
+      "charges6",
+      "charges7",
+      "charges8",
+      "charmfile",
+      "collectible",
+      "convertible",
+      "convertibletype",
+      "convertidnbr",
+      "effecttype",
+      "effecttype6",
+      "effecttype7",
+      "effecttype8",
+      "efflevel6",
+      "efflevel7",
+      "efflevel8",
+      "epicitem",
+      "expendablearrow",
+      "filename",
+      "focusid",
+      "freestorage",
+      "fvnodrop2",
+      "level",
+      "level6",
+      "level7",
+      "level8",
+      "lorefile",
+      "luck",
+      "madeby",
+      "marketplace",
+      "maxcharges",
+      "maxluck",
+      "minluck",
+      "nodestroy",
+      "noground",
+      "nonpc",
+      "nozone",
+      "pendinglore",
+      "placeable2",
+      "pointtype",
+      "powersourcecapacity",
+      "procrate6",
+      "procrate7",
+      "procrate8",
+      "procratemod",
+      "scriptfileid",
+      "spellid",
+      "spellid6",
+      "spellid7",
+      "spellid8",
+      "ss0",
+      "ss1",
+      "ss2",
+      "ss3",
+      "ss4",
+      "ss5",
+      "ss6",
+      "ss7",
+      "ss8",
+      "stackable",
+      "summoned",
+      "time2",
+      "unknown01",
+      "unknown52",
+      "unknown53",
+      "unknown54",
+      "unknown55",
+      "unknown56",
+      "unknown57",
+      "unknown58",
+      "unknown59",
+      "unknown60",
+      "unknown61",
+      "unknown62",
+      "unknown63",
+      "unknown64",
+      "unknown65",
+      "unknown66",
+      "unknown67",
+      "unknown68",
+      "unknown69",
+      "zeros"
+    ],
+    "after_sha256": "2464c0804db0f3fd6faef77a761ac3aa9a5bc8c4d02e64061c633da6339bbb0d"
+  },
+  "housing_finite_assessment": {
+    "reported_by": "JARVIS relaying Housing finite assessment",
+    "fresh_export_or_decode_granted": false,
+    "targets": [
+      132477,
+      132478,
+      132479,
+      132480,
+      132481,
+      132482,
+      132483,
+      132484,
+      132485,
+      900000,
+      900001,
+      900002,
+      900003,
+      900004,
+      900005,
+      900006,
+      900007,
+      900008
+    ],
+    "retained_evidence": {
+      "cells": 607,
+      "decoded_cells": 603,
+      "unknown_cells": 4,
+      "typed_reference_occurrences": 6072,
+      "each_target_matches": 0,
+      "hashes_verified_by_owner": true,
+      "historical_snapshot_only": true,
+      "original33column_audit_extendable_to_all18ids": false
+    },
+    "remaining_meaningful_domains": [
+      {
+        "field": "housing_layout_mixed_batches.binding_blob",
+        "historical_rows": 22,
+        "question": "Pair format-v1\u20135 binding with decoded outcome; prove applied/terminal and current lease/pending/restart read behavior. If materializable, validate original digest then map only at materialization."
+      },
+      {
+        "field": "housing_return_parcels.source_state",
+        "historical_rows": 2,
+        "question": "Determine source producer and whether witness only versus actual deliverable canonical/native row. Preserve original witness/digest; remap only actual authoritative pending delivery representation if matched."
+      },
+      {
+        "field": "housing_offline_return_items.state_before",
+        "historical_rows": 2,
+        "question": "Classify terminal history witness versus reachable replay input; preserve history bytes unless an active reader proves a materialization dependency."
+      },
+      {
+        "field": "housing_inventory_death_reconciliations.outcome_blob",
+        "historical_rows": 5,
+        "question": "Attribute pending_key, original digest and recovery linkage; compare current session/lease pending state before declaring terminal."
+      }
+    ],
+    "preserve_not_blanket_blockers": [
+      "Generic quest customdata five occurrences/four cells has no proven item-ID encoding; preserve unchanged.",
+      "Other30unexported columns are predominantly estate/lease/currency/geometry/hash metadata; do not treat them as equal item migration blockers."
+    ],
+    "allowed_adapter_contract": "Validate original bytes and digest first; source-aware materialization maps only confirmed old event identity. Never rewrite arbitrary blobs or repair hash chains.",
+    "authoritative_positive_match_contract": "Owning codec must preserve GUID/serial, ownership, progress, NULLs and recursive bag structure while coherently updating backing typed rows and affected hashes. Nonzero match blocks the definition-only path until such plan is reviewed.",
+    "terminal_receipts": "Byte/digest-identical; archive namespace ledger retains original template meanings."
+  },
+  "origin": {
+    "status": "UPSTREAM IMPORT ARTIFACT MATCH; creator/event unknown",
+    "artifact": "retained PEQ download evidence/database/peq-dump/create_tables_content.sql",
+    "artifact_sha256": "7f5c2fd53c79c804f743cd57ca3a6161254cb74394f64714797e98b65e431290",
+    "download_manifest": "retained PEQ download evidence/manifest.json",
+    "download_manifest_sha256": "7f79de15a9ff1557188cee6a2f2e7ed6ffc9c609a8d10aa3ccf33b1a48bea7c2",
+    "database_download_record": {
+      "url": "https://gitlab.com/TheGrandLibrary/db.projecteq.net-dumps/-/package_files/232952944/download",
+      "sha256": "ac8649f23d2c3aea2cade138dfe10d46d1b21ad1a80d08ca95f5434fab7f218d",
+      "published_sha256": null,
+      "bytes": 32150987
+    },
+    "archive_origin_qualification": "Preserved download archive hash matches the local download manifest; its content SQL member exactly matches the retained import SQL. Package URL is provenance recorded locally, not a fresh authenticated publisher history or creator attribution.",
+    "rows": [
+      {
+        "byte_offset": 132954920,
+        "raw_sql_tuple_sha256": "9ace11b0a03d7fcda4a6f68f1af9bea6375ab081167899e576afce2d8e609375",
+        "selected_sql_literals": {
+          "id": "132477",
+          "Name": "'Scavenger Hunt Letter'",
+          "filename": "'VSP2VindLetter'",
+          "lore": "'ITEM #1'",
+          "updated": "'0000-00-00 00:00:00'",
+          "comment": "''",
+          "verified": "'0000-00-00 00:00:00'",
+          "source": "''",
+          "created": "''"
+        }
+      },
+      {
+        "byte_offset": 132955671,
+        "raw_sql_tuple_sha256": "c55262a31cf8abb7ca9dd049219dd4152f457288511883f8db03095dda2c06be",
+        "selected_sql_literals": {
+          "id": "132478",
+          "Name": "'Cowl of Scavenging'",
+          "filename": "''",
+          "lore": "'ITEM #2'",
+          "updated": "'2015-10-09 18:42:31'",
+          "comment": "''",
+          "verified": "'2011-12-23 01:10:16'",
+          "source": "'13THFLOOR'",
+          "created": "'2003-10-16 11:35:40'"
+        }
+      },
+      {
+        "byte_offset": 132956450,
+        "raw_sql_tuple_sha256": "942382975d1b1d1d78eb1d185c15690e3a355231f1526c9884238619840dcb5d",
+        "selected_sql_literals": {
+          "id": "132479",
+          "Name": "'Fisherman\\'s Challenge Emblem'",
+          "filename": "''",
+          "lore": "'ITEM #3'",
+          "updated": "'2015-10-09 18:55:41'",
+          "comment": "''",
+          "verified": "'2012-05-13 06:06:26'",
+          "source": "'13THFLOOR'",
+          "created": "'2003-10-12 01:52:08'"
+        }
+      },
+      {
+        "byte_offset": 132957228,
+        "raw_sql_tuple_sha256": "469734f31e77e2e8308ae5f81b4c3aab9dce7f954a50efadaeb5db85400a898c",
+        "selected_sql_literals": {
+          "id": "132480",
+          "Name": "'Augmenter\\'s Challenge Emblem'",
+          "filename": "''",
+          "lore": "'ITEM #5'",
+          "updated": "'2015-10-09 18:55:57'",
+          "comment": "''",
+          "verified": "'0000-00-00 00:00:00'",
+          "source": "''",
+          "created": "''"
+        }
+      },
+      {
+        "byte_offset": 132957978,
+        "raw_sql_tuple_sha256": "aebccee891504fd5a7e19923c74b917fe40050a883a426682b501bec4d188316",
+        "selected_sql_literals": {
+          "id": "132481",
+          "Name": "'Keymaster\\'s Challenge Emblem'",
+          "filename": "''",
+          "lore": "'ITEM #7'",
+          "updated": "'2015-10-09 18:56:28'",
+          "comment": "''",
+          "verified": "'0000-00-00 00:00:00'",
+          "source": "''",
+          "created": "''"
+        }
+      },
+      {
+        "byte_offset": 132958729,
+        "raw_sql_tuple_sha256": "6a3bc19dfccefe199dc2a0ba78065dc002fed6344f1d4a09a70cd71ec7f60cb3",
+        "selected_sql_literals": {
+          "id": "132482",
+          "Name": "'Questmaster\\'s Challenge Emblem'",
+          "filename": "''",
+          "lore": "'ITEM #9'",
+          "updated": "'2015-10-09 18:56:47'",
+          "comment": "''",
+          "verified": "'0000-00-00 00:00:00'",
+          "source": "''",
+          "created": "''"
+        }
+      },
+      {
+        "byte_offset": 132959481,
+        "raw_sql_tuple_sha256": "f36d39ced45d3cdf3724203d8e793ac507f43bcbb74bf77af3c277a5f2d12d5a",
+        "selected_sql_literals": {
+          "id": "132483",
+          "Name": "'Brooch of Scavenging'",
+          "filename": "''",
+          "lore": "'ITEM #4'",
+          "updated": "'2015-10-09 18:58:48'",
+          "comment": "''",
+          "verified": "'2012-01-10 17:24:30'",
+          "source": "'13THFLOOR'",
+          "created": "'2008-03-16 13:12:20'"
+        }
+      },
+      {
+        "byte_offset": 132960252,
+        "raw_sql_tuple_sha256": "88c0cf9d4a421b685fc7f7f0521111db3e347127b4a296dff7bb7a4d1353d44d",
+        "selected_sql_literals": {
+          "id": "132484",
+          "Name": "'Mask of Scavenging'",
+          "filename": "''",
+          "lore": "'ITEM #6'",
+          "updated": "'2015-10-09 19:00:59'",
+          "comment": "''",
+          "verified": "'2010-11-09 09:45:24'",
+          "source": "'13THFLOOR'",
+          "created": "'2003-10-17 21:24:40'"
+        }
+      },
+      {
+        "byte_offset": 132961019,
+        "raw_sql_tuple_sha256": "8e4b61f4a6cc85240a660a95bea6c53a74185465cf188dc6cdd6ce1dbf6fea75",
+        "selected_sql_literals": {
+          "id": "132485",
+          "Name": "'Crown of Scavenging'",
+          "filename": "''",
+          "lore": "'ITEM #8'",
+          "updated": "'2015-10-09 19:02:39'",
+          "comment": "''",
+          "verified": "'2012-05-13 06:01:18'",
+          "source": "'13THFLOOR'",
+          "created": "'2003-10-09 14:09:12'"
+        }
+      }
+    ],
+    "root_report": {
+      "pre_housing_backup_already_contains_letter": true,
+      "filename_reused_by_secret_letter69345": true,
+      "book_story_not_creator_proof": true,
+      "current_quest_name_id_lookup_negative": true,
+      "current_merchant_loot_references": 0
+    },
+    "conclusions": [
+      "Letter predates Housing and exists in retained imported content SQL.",
+      "Adjacent numbered challenge-item block is also present in that same import artifact.",
+      "Original creator, event and first upstream introduction remain unproven.",
+      "This finding does not clear current serialized custody or authorize item132477 replacement.",
+      "Exact letter/challenge block is in the preserved downloaded database archive, not only a later local SQL copy."
+    ],
+    "read_only": true,
+    "mutation": false,
+    "archive_verification": {
+      "archive_path": "retained PEQ download evidence/database.zip",
+      "archive_sha256": "ac8649f23d2c3aea2cade138dfe10d46d1b21ad1a80d08ca95f5434fab7f218d",
+      "matches_recorded_download_manifest": true,
+      "content_sql_member": "peq-dump/create_tables_content.sql",
+      "member_sha256": "7f5c2fd53c79c804f743cd57ca3a6161254cb74394f64714797e98b65e431290",
+      "matches_retained_import_sql": true,
+      "read_only_no_extraction": true
+    },
+    "adjacent_timestamp_qualification": "Rows132478\u2013132485 have updated metadata on2015-10-09. Their earlier created/verified/source values may be inherited templates; they do not establish event creation date or author. Letter132477 itself has empty/zero provenance metadata.",
+    "external_family_lead": {
+      "reported_by": "JARVIS coordinator, Chrome research",
+      "independently_reopened_by_spells": false,
+      "verified_by_coordinator": {
+        "url": "https://mqemulator.net/item.php?id=132479",
+        "item_id": 132479,
+        "name": "Fisherman's Challenge Emblem",
+        "database_source_date": "2022-01-17",
+        "quest_source_date": "2022-05-28",
+        "provider_counts": {
+          "dropped_by": 0,
+          "foraged": 0,
+          "used_in_recipe": 0,
+          "recipe_result": 0,
+          "sold_by": 0,
+          "ground_spawn": 0,
+          "quest_files": 0
+        },
+        "listing_same_named_ids": [
+          132479,
+          132480,
+          132481,
+          132482
+        ]
+      },
+      "scope": "Independent external database contains matching ID/name family; its zero provider counts are bounded to its own data and dates.",
+      "unsupported_claim_rejected": "Google AI Lazarus custom-origin attribution was not verified: referenced Lazarus page1574 and site Challenge Emblem search were empty.",
+      "remaining_unknown": [
+        "Original event",
+        "Original creator",
+        "First upstream introduction"
+      ],
+      "custody_clearance": false
+    }
+  },
+  "book_dependency": {
+    "unchanged_filename": "VSP2VindLetter",
+    "existing_shared_item_id": 69345,
+    "rule": "Keep book/text and all unrelated consumers unchanged; shared filename does not identify event creator or provider."
+  },
+  "negative_scope_limits": [
+    "Only132477native collision proven; catalogue/no-entry results do not prove other IDs were never released.",
+    "No typed/literal matches is bounded evidence, not proof that every dynamic producer is absent.",
+    "Retained Housing evidence is historical and does not authorize current-state mutation."
+  ]
+}

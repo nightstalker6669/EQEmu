@@ -1,0 +1,51 @@
+{
+  "batch": "RRC059",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "9a5a78f3eaa6f44faca494c7ddda4b77b6cc8433",
+  "source_sha256": "a6238e6f771bb19b733abd966fabb055b8d4eee4e9a1b014ba7a1a5ae1f0743a",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes": 42,
+  "entries": 400,
+  "ids": [
+    3093533,
+    3093574
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC059",
+    "0",
+    "25355",
+    "25397",
+    "191101",
+    "191501",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25397,
+    "entries": 191501
+  },
+  "affected_postimages_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "native_book_guards": {
+    "existing_books": 8,
+    "mandatory_learning_links": 32,
+    "exact_filename_name_textsha_language_before_after": true,
+    "unique_native_name_lookup": true,
+    "no_book_writes": true
+  },
+  "existing_producer_guards": {
+    "recipe_id": 3093107,
+    "full_entries": 3,
+    "before_after_exact": true
+  },
+  "attempt_history": {
+    "attempt001": "STOPPED_ROLLED_BACK_TARGET_EMPTY",
+    "attempt002": "APPLIED_VERIFIED",
+    "total_SQL_invocations": 2,
+    "committed_transactions": 1
+  }
+}

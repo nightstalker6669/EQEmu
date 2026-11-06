@@ -1,0 +1,171 @@
+{
+  "status": "ONE_GUARDIAN_TERMINAL_CONTENT_SOURCE_NOT_INSTALLED",
+  "task": 920170,
+  "zone": 490,
+  "version": 1,
+  "goals": 19,
+  "guardian": {
+    "count": 1,
+    "npc_type_id": 490911,
+    "spawn2_id": 304062014,
+    "spawngroup_id": 304062014,
+    "spawnentry_key": {
+      "spawngroupID": 304062014,
+      "npcID": 490911
+    },
+    "loot_table": 304062011,
+    "loot_drop": 304062011,
+    "placement": {
+      "symbolic_slot": "vault_guardian_01",
+      "role": "vault_guardian",
+      "npc_type_id": 490911,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062014,
+      "spawngroup_id": 304062014,
+      "condition_id": null,
+      "xyz": [
+        0,
+        775,
+        30.08
+      ],
+      "heading": 256,
+      "floor_Z": 23.0,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        23.0,
+        97.9556
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062014,
+        "npcID": 490911
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    "four_guardians": "OBSOLETE_UNSUPPORTED. No four-death requirement in retained mission goals, one-slot reservation, Guardian source module or narrative. No prerequisite provenance inferred. R15 material-exception wording is superseded only for this count.",
+    "death_lock": "Genuine owned Guardian death qualifies goal16 count1. Native acknowledged transition activates mold-loot17, whose lock_activity_id17 locks the task at boss death; mold pickup or final return is not the death-lock trigger.",
+    "native_identity": "Bind the actual registered entity/lifetime, original spawn304062014 and exact accepted shared run/zone-instance. SQL definition/spawn IDs alone cannot prove a death. Duplicate/replacement/premature deaths cannot be reconstructed from counts/history.",
+    "qualifications": "Original one-Guardian kill and death-lock supported by retained period contract. Model/race/class/HP/raw damage are LOCAL. Retained SQL blank special_abilities and runspeed0 do not implement or prove native permaroot/rampage. Killer-or-owned-pet eligibility in old disabled Lua is expressly LOCAL, not universal group-assistance policy."
+  },
+  "mold": {
+    "item_id": 47758,
+    "name": "Keystone Mold",
+    "amount": 1,
+    "actual_loot": "Guardian original corpse -> actual native pickup -> goal17. Retained LT/LD304062011 emits one charged unit at100percent with multiplier1/mindrop1/droplimit1. This is a LOCAL guaranteed-drop policy, not recovered period odds; effective GlobalLootMultiplier1 qualification remains.",
+    "return_route": "Actual original mold handed to Gotonur -> committed one-unit disposition -> native goal18 count1. Do not summon mold at death, synthesize pickup, use hail/count alone, or both native auto and custom-submit the same return.",
+    "original_custody": "Native route must retain actual corpse/item GUID/run provenance through pickup and hand-in and acknowledge committed removal before terminal disposition. Unknown commit is held, never blind regrant.",
+    "recipient": {
+      "selected_disabled_draft": 490912,
+      "reserved_instance_placement": {
+        "symbolic_slot": "gotonur_instance_01",
+        "role": "gotonur_instance",
+        "npc_type_id": 490912,
+        "zone": 490,
+        "version": 1,
+        "spawn2_id": 304062015,
+        "spawngroup_id": 304062015,
+        "condition_id": null,
+        "xyz": [
+          -12,
+          666,
+          25.0801
+        ],
+        "heading": 0,
+        "floor_Z": 18.0001,
+        "native_default_size": 6.0,
+        "native_Z_offset": 7.08,
+        "vertical_collision_intersections": [
+          18.0001,
+          125.7851
+        ],
+        "initially_present": true,
+        "mechanism": "LOCALmissionstaticplacementcandidate",
+        "historical_placement": false,
+        "spawnentry_key": {
+          "spawngroupID": 304062015,
+          "npcID": 490912
+        },
+        "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+      },
+      "world_giver": 490061,
+      "world_receipt": "WORKSPACE_SOURCE/npc-work/underfoot-fire-hole/gotonur-static-spawn-receipt.json",
+      "qualification": "Draft goal18 explicitly matches490912/zone490version1. This is selected LOCAL instance-return binding; original world-versus-instance return is not historically authenticated. World490061 stays unchanged."
+    }
+  },
+  "chest": {
+    "npc_type_id": 490914,
+    "conditional_anchor": {
+      "symbolic_slot": "stone_chest_01",
+      "role": "stone_chest",
+      "npc_type_id": 490914,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": null,
+      "spawngroup_id": null,
+      "condition_id": null,
+      "xyz": [
+        -35,
+        650,
+        19.875
+      ],
+      "heading": 0,
+      "floor_Z": 18.0,
+      "native_default_size": 3.0,
+      "native_Z_offset": 1.875,
+      "vertical_collision_intersections": [
+        18.0,
+        107.4759
+      ],
+      "initially_present": false,
+      "mechanism": "Terminalownedconditionalchestplacementonly",
+      "historical_placement": false,
+      "spawnentry_key": null,
+      "ID_disposition": "EXISTING_NPC_TYPE_REUSED_CONDITIONAL_ANCHOR_ONLY"
+    },
+    "loot_table": 304062012,
+    "loot_drop": 304062012,
+    "static_spawn": false,
+    "new_condition": false,
+    "content": "Eleven retained gear choices, including positive period Orb of Suspension110297. Exactly one equal-weight gear draw is LOCAL; no Keystone47759/token80/class scroll in chest loot.",
+    "lifecycle": "Mold-return terminal disposition creates at most one owned chest for the exact run at its conditional anchor; bind actual entity/lifetime. Preserve original loot/corpse access lifecycle and hold uncertain creation/loot commits instead of duplicating. No static respawn row or invented condition/objective.",
+    "unresolved": "Exact chest-open versus task-completion order and corpse decay/expiry/quit/access policy are not specified by retained positive historical evidence. No numeric decay timer or cross-feature membership policy selected here. Existing chest SQL class62/race378/HP1/abilities19,1^20,1 are LOCAL defaults, not demonstrated native open/loot behavior.",
+    "era": "Apr11,2010#1270967460252962037 notyetLive;Apr17#1271542191125752927+Apr19#1271703545228533162 positivechest+80tokens. Mar29Testserver#126990923966028978 notblindLiveproof."
+  },
+  "completion": {
+    "single_existing_route": "Existing native METHODSELECT common-only reward catalog -> per-character exact shared-run source occurrence -> existing per-entry ClaimRewardSelection ledger. Recommended retained source route for Spells composition, not a new direct grant or serving enablement.",
+    "scope": {
+      "item": 47759,
+      "amount": 1,
+      "scope": "Allnativeacceptedsharedtaskparticipants, includinglegitimateelsewhere members",
+      "period": "Sep22,2010#128519700730082785 explicitlyguildhallmemberreceivedKeystone; nozoneradius/group-onlineonlyloop",
+      "qualification": "Useactualnativecompletion/rewardowner exactoccurrence; missinginventorycapacity/unknowncommit cannot blindregrant. Itemkey/staticFontChamber access integrationseparate; nofakeglobalzoneflag."
+    },
+    "keystone_reward_identity": 3839201706,
+    "keystone_amount": 1,
+    "keystone_delivery": "If native catalog route is selected, enable/use its one Keystone row only through authentic terminal completion. Gotonur callback must not additionally SummonItem/directgrant Keystone. Retained draft currently delivery-held.",
+    "rewards": "80currency21 per member; fixed class spell item for BER119688/NEC119706/WIZ119727/CLR119691; Keystone47759 each.210000copper current-qualified, exp_reward-8501 numeric draft default not recovered historical XP formula. Gear remains the single shared chest, not personal catalog loot.",
+    "elsewhere": "Retained native-source receipt describes world progress routing to actual members across zones; native RewardTask checks local accepted identity and exact shared occurrence. Common-only auto-claim waits for loaded client data. Offline catchup is conditional on native persisted active task/reconnect state, not unlimited history grants after expiry/quit.",
+    "retries": "Existing pending-selection/per-entry ledger skips delivered entries, retries explicit ledger-safe failures, quarantines interrupted in-flight ambiguity. Do not impose nearby/currentgroup filters on accepted members or silently add direct offzone/offline reward loops.",
+    "boundary": "Do not complete at boss death or mold pickup. Preserve actual mold return and required terminal chest disposition. Exact chest-open/completion boundary remains an implementation policy to select explicitly; no20th displayed goal."
+  },
+  "concrete_dependencies": [
+    "Spells: actual Guardian entity/death -> correlated native goal16 acknowledgment/activation17 lock; old disabled Lua count observation is not an originating-run commit receipt.",
+    "Spells: extend actual original-corpse mold pickup and actual Gotonur490912 hand-in custody/removal receipts, with goal17/18 exactly once and selected LOCAL recipient qualification.",
+    "Spells: choose explicit native terminal/chest-open completion boundary, one owned chest lifetime and actual open/loot/corpse behavior; retained content supplies no decay/access timing policy.",
+    "Reward owner: select the existing common-only catalog as sole physical Keystone route (or keep it disabled if another authentic route is selected); bind exact accepted member occurrences including elsewhere and retain ambiguous-delivery holds.",
+    "NPC/native behavior owner: retained Guardian blank abilities do not implement period permaroot/rampage; retained chest abilities/profile are source defaults requiring native consumer qualification."
+  ],
+  "authenticated_scope": "Retained period assertions/evidence reused, no new website verification. Source definitions/reservations are authored LOCAL candidates, not observed serving content.",
+  "no_new_objectives": true,
+  "R15_unchanged": true,
+  "DBqueries": 0,
+  "DBwrites": 0,
+  "runtime_actions": 0,
+  "tests": 0,
+  "builds": 0,
+  "allocations": 0
+}

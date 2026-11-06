@@ -1,0 +1,78 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "6b6bb49538ac864ba674db923a07ed6857d79387dbab73103ac498bf7da0ed48"
+  },
+  {
+    "path": "package.json",
+    "sha256": "f179c4c08fc19475ca79e393989fd7be9bb75704a50c8af949e67a21f3b90c1d"
+  },
+  {
+    "path": "protocol/README.md",
+    "sha256": "d6088baa5fcb94924c94568bc7ea08c6eb26c781e02c03987c01101ff12dd551"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "ac8ac1193dfea010b9ca984c741edf66ec749ba4419348353595646d0384b956"
+  },
+  {
+    "path": "quests/arelis/725026.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "quests/argath/724031.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "quests/beastdomain/728104.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "quests/cityofbronze/732006.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "quests/items/script_20970.lua",
+    "sha256": "74bebde1045fe467815cef98402eb929b739f824f23817cef14891f31db080c8"
+  },
+  {
+    "path": "quests/lua_modules/achievement_god_learner.lua",
+    "sha256": "3d457d3d2da27a03e63880687eace5268f7a7980eb5296615192a3aa77eae8e3"
+  },
+  {
+    "path": "quests/lua_modules/achievement_god_learner_books.lua",
+    "sha256": "6d48c01ba53c07dafd9b7dccd7f6d03f64e527c8cfd2f6f004a18c7624516af3"
+  },
+  {
+    "path": "quests/lua_modules/achievement_god_learner_data.lua",
+    "sha256": "0a31076d31c99114eed267979042d3d6834df9f036ea74a2482de4bf2f3d722d"
+  },
+  {
+    "path": "quests/pillarsalra/730226.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "quests/resplendent/729055.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "quests/sarithcity/726049.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "quests/sepulcher/733012.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "quests/windsong/731031.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "review/updater-entry.proposed.txt",
+    "sha256": "0e5e7b694ddac4a1256ca462e7e9b76a4ff23f6ba1c2128e69c8e81a804687d7"
+  },
+  {
+    "path": "sql/2026_11_03_god_learner_achievement.disabled.sql",
+    "sha256": "eab85e2cf47c7d2c9f0f5876b0ade5be26b0ea0b9ef56e52461399443b1e3477"
+  }
+]

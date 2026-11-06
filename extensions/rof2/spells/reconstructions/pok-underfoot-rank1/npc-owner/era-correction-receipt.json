@@ -1,0 +1,59 @@
+{
+  "scope": "source-only era correction; no database query/write",
+  "authority": "coordinator relays Spells route introduction min_expansion18 (March2012/VoA)",
+  "before_spawn2": [
+    {
+      "id": 304050000,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050001,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050002,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050003,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050004,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050005,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050006,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050007,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050008,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050009,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050010,
+      "min_expansion": -1
+    },
+    {
+      "id": 304050011,
+      "min_expansion": -1
+    }
+  ],
+  "old_payload_sha256": "b4dda2814b2da97bd212f603a7b3474ce64b23f7529d23ac4d2bcc57bd4823f7",
+  "old_sql_sha256": "9509d7ee4043cbedb78df970f147dda7ee705764657e3fdf24f4fea388ae244b",
+  "new_min_expansion": 18,
+  "existing_actor_or_spawn_changes": 0,
+  "stock_owner": "Spells:54newstockrows gate18; existing stock retained"
+}

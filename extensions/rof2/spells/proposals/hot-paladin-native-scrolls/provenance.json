@@ -1,0 +1,5638 @@
+{
+  "status": "APPLIED two native definitions; item cache confirmed; original reward grouping unresolved",
+  "apply_allowed": true,
+  "items": [
+    {
+      "item_id": 125060,
+      "source": "https://lucy.allakhazam.com/itemraw.html?id=125060",
+      "history": "https://lucy.allakhazam.com/itemhistory.html?id=125060",
+      "initial_entry": "2010-10-13 15:48",
+      "mapped_columns": 138,
+      "source_mapping": [
+        {
+          "source": "id",
+          "column": "id",
+          "source_value": "125060",
+          "old_candidate": 125060,
+          "value": 125060
+        },
+        {
+          "source": "name",
+          "column": "Name",
+          "source_value": "Spell: Earnest Fury Rk. III",
+          "old_candidate": "Spell: Earnest Fury Rk. III",
+          "value": "Spell: Earnest Fury Rk. III"
+        },
+        {
+          "source": "lore",
+          "column": "lore",
+          "source_value": "Spell: Earnest Fury Rk. III",
+          "old_candidate": "Spell: Earnest Fury Rk. III",
+          "value": "Spell: Earnest Fury Rk. III"
+        },
+        {
+          "source": "classes",
+          "column": "classes",
+          "source_value": "4",
+          "old_candidate": 4,
+          "value": 4
+        },
+        {
+          "source": "races",
+          "column": "races",
+          "source_value": "65535",
+          "old_candidate": 65535,
+          "value": 65535
+        },
+        {
+          "source": "cost",
+          "column": "price",
+          "source_value": "1469000",
+          "old_candidate": 1469000,
+          "value": 1469000
+        },
+        {
+          "source": "nodrop",
+          "column": "nodrop",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "norent",
+          "column": "norent",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "loreitem",
+          "column": "loregroup",
+          "source_value": "-1",
+          "old_candidate": -1,
+          "value": -1
+        },
+        {
+          "source": "itemtype",
+          "column": "itemtype",
+          "source_value": "20",
+          "old_candidate": 20,
+          "value": 20
+        },
+        {
+          "source": "itemclass",
+          "column": "itemclass",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "icon",
+          "column": "icon",
+          "source_value": "504",
+          "old_candidate": 504,
+          "value": 504
+        },
+        {
+          "source": "weight",
+          "column": "weight",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "size",
+          "column": "size",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "magic",
+          "column": "magic",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "reclevel",
+          "column": "reclevel",
+          "source_value": "90",
+          "old_candidate": 90,
+          "value": 90
+        },
+        {
+          "source": "reqlevel",
+          "column": "reqlevel",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "spellid4",
+          "column": "scrolleffect",
+          "source_value": "25371",
+          "old_candidate": 25371,
+          "value": 25371
+        },
+        {
+          "source": "effecttype4",
+          "column": "scrolltype",
+          "source_value": "7",
+          "old_candidate": 7,
+          "value": 7
+        },
+        {
+          "source": "level4",
+          "column": "scrolllevel",
+          "source_value": "90",
+          "old_candidate": 90,
+          "value": 90
+        },
+        {
+          "source": "efflevel4",
+          "column": "scrolllevel2",
+          "source_value": "90",
+          "old_candidate": 90,
+          "value": 90
+        },
+        {
+          "source": "stacksize",
+          "column": "stacksize",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "idfile",
+          "column": "idfile",
+          "source_value": "IT98",
+          "old_candidate": "IT98",
+          "value": "IT98"
+        },
+        {
+          "source": "aagi",
+          "column": "aagi",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "ac",
+          "column": "ac",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "accuracy",
+          "column": "accuracy",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "acha",
+          "column": "acha",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "adex",
+          "column": "adex",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aint",
+          "column": "aint",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "asta",
+          "column": "asta",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "astr",
+          "column": "astr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "attack",
+          "column": "attack",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "attuneable",
+          "column": "attuneable",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "avoidance",
+          "column": "avoidance",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "awis",
+          "column": "awis",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "backstabdmg",
+          "column": "backstabdmg",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bagsize",
+          "column": "bagsize",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bagslots",
+          "column": "bagslots",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bagtype",
+          "column": "bagtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bagwr",
+          "column": "bagwr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "banedmgamt",
+          "column": "banedmgamt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "banedmgbody",
+          "column": "banedmgbody",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "banedmgrace",
+          "column": "banedmgrace",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bardtype",
+          "column": "bardtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bardvalue",
+          "column": "bardvalue",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "booktype",
+          "column": "booktype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "casttime",
+          "column": "casttime",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "clairvoyance",
+          "column": "clairvoyance",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "color",
+          "column": "color",
+          "source_value": "4278190080",
+          "old_candidate": 4278190080,
+          "value": 4278190080
+        },
+        {
+          "source": "combateffects",
+          "column": "combateffects",
+          "source_value": "0",
+          "old_candidate": "0",
+          "value": "0"
+        },
+        {
+          "source": "cr",
+          "column": "cr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "damage",
+          "column": "damage",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "damageshield",
+          "column": "damageshield",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "deity",
+          "column": "deity",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "delay",
+          "column": "delay",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dotshielding",
+          "column": "dotshielding",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dr",
+          "column": "dr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dsmitigation",
+          "column": "dsmitigation",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "elemdmgamt",
+          "column": "elemdmgamt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "elemdmgtype",
+          "column": "elemdmgtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "endur",
+          "column": "endur",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "evoid",
+          "column": "evoid",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "evomax",
+          "column": "evomax",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionamt1",
+          "column": "factionamt1",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionamt2",
+          "column": "factionamt2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionamt3",
+          "column": "factionamt3",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionamt4",
+          "column": "factionamt4",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionmod1",
+          "column": "factionmod1",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionmod2",
+          "column": "factionmod2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionmod3",
+          "column": "factionmod3",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionmod4",
+          "column": "factionmod4",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "fr",
+          "column": "fr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "guildfavor",
+          "column": "guildfavor",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "haste",
+          "column": "haste",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "healamt",
+          "column": "healamt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heirloom",
+          "column": "heirloom",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_agi",
+          "column": "heroic_agi",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_cha",
+          "column": "heroic_cha",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_dex",
+          "column": "heroic_dex",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_int",
+          "column": "heroic_int",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_sta",
+          "column": "heroic_sta",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_str",
+          "column": "heroic_str",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_wis",
+          "column": "heroic_wis",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "hp",
+          "column": "hp",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "ldonprice",
+          "column": "ldonprice",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "ldonsold",
+          "column": "ldonsold",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "ldontheme",
+          "column": "ldontheme",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "light",
+          "column": "light",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "mana",
+          "column": "mana",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "manaregen",
+          "column": "manaregen",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "material",
+          "column": "material",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "mr",
+          "column": "mr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "nopet",
+          "column": "nopet",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "notransfer",
+          "column": "notransfer",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "placeable",
+          "column": "placeable",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "potionbelt",
+          "column": "potionbelt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "potionbeltslots",
+          "column": "potionbeltslots",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "pr",
+          "column": "pr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "purity",
+          "column": "purity",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "range",
+          "column": "range",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "recastdelay",
+          "column": "recastdelay",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "recasttype",
+          "column": "recasttype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "recskill",
+          "column": "recskill",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "regen",
+          "column": "regen",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "shielding",
+          "column": "shielding",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "skillmodmax",
+          "column": "skillmodmax",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "skillmodtype",
+          "column": "skillmodtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "skillmodvalue",
+          "column": "skillmodvalue",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "slots",
+          "column": "slots",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "spelldmg",
+          "column": "spelldmg",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "spellshield",
+          "column": "spellshield",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "strikethrough",
+          "column": "strikethrough",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "stunresist",
+          "column": "stunresist",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "tradeskills",
+          "column": "tradeskills",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "artifact",
+          "column": "artifactflag",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "augdistill",
+          "column": "augdistiller",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "augres",
+          "column": "augrestrict",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "augvalue",
+          "column": "augtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dmgplusamnt",
+          "column": "extradmgamt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dmgplustype",
+          "column": "extradmgskill",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "endurregen",
+          "column": "enduranceregen",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "crr",
+          "column": "svcorruption",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "benefit",
+          "column": "benefitflag",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug1type",
+          "column": "augslot1type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug1vis",
+          "column": "augslot1visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug1unk2",
+          "column": "augslot1unk2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug2type",
+          "column": "augslot2type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug2vis",
+          "column": "augslot2visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug2unk2",
+          "column": "augslot2unk2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug3type",
+          "column": "augslot3type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug3vis",
+          "column": "augslot3visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug3unk2",
+          "column": "augslot3unk2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug4type",
+          "column": "augslot4type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug4vis",
+          "column": "augslot4visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug4unk2",
+          "column": "augslot4unk2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug5type",
+          "column": "augslot5type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug5vis",
+          "column": "augslot5visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug5unk2",
+          "column": "augslot5unk2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        }
+      ],
+      "unverified_inherited_columns": [
+        "UNK012",
+        "UNK013",
+        "UNK014",
+        "UNK033",
+        "UNK054",
+        "UNK059",
+        "UNK060",
+        "UNK120",
+        "UNK121",
+        "UNK123",
+        "UNK124",
+        "UNK127",
+        "UNK132",
+        "UNK134",
+        "UNK137",
+        "UNK142",
+        "UNK147",
+        "UNK152",
+        "UNK157",
+        "UNK193",
+        "UNK214",
+        "UNK220",
+        "UNK221",
+        "UNK223",
+        "UNK224",
+        "UNK225",
+        "UNK226",
+        "UNK227",
+        "UNK228",
+        "UNK229",
+        "UNK230",
+        "UNK231",
+        "UNK232",
+        "UNK233",
+        "UNK234",
+        "UNK236",
+        "UNK237",
+        "UNK238",
+        "UNK239",
+        "UNK240",
+        "UNK241",
+        "augslot6type",
+        "augslot6unk2",
+        "augslot6visible",
+        "banedmgraceamt",
+        "bardeffect",
+        "bardeffecttype",
+        "bardlevel",
+        "bardlevel2",
+        "bardname",
+        "bardunk1",
+        "bardunk2",
+        "bardunk3",
+        "bardunk4",
+        "bardunk5",
+        "bardunk7",
+        "book",
+        "casttime_",
+        "charmfile",
+        "charmfileid",
+        "clickeffect",
+        "clicklevel",
+        "clicklevel2",
+        "clickname",
+        "clicktype",
+        "clickunk5",
+        "clickunk6",
+        "clickunk7",
+        "comment",
+        "created",
+        "elitematerial",
+        "epicitem",
+        "evoitem",
+        "evolvinglevel",
+        "expendablearrow",
+        "favor",
+        "filename",
+        "focuseffect",
+        "focuslevel",
+        "focuslevel2",
+        "focusname",
+        "focustype",
+        "focusunk1",
+        "focusunk2",
+        "focusunk3",
+        "focusunk4",
+        "focusunk5",
+        "focusunk6",
+        "focusunk7",
+        "fvnodrop",
+        "heroic_cr",
+        "heroic_dr",
+        "heroic_fr",
+        "heroic_mr",
+        "heroic_pr",
+        "heroic_svcorrup",
+        "herosforgemodel",
+        "housing_disable_free_placement",
+        "housing_disable_rotation",
+        "ldonsellbackrate",
+        "lorefile",
+        "maxcharges",
+        "minstatus",
+        "pendingloreflag",
+        "pointtype",
+        "powersourcecapacity",
+        "proceffect",
+        "proclevel",
+        "proclevel2",
+        "procname",
+        "procrate",
+        "proctype",
+        "procunk1",
+        "procunk2",
+        "procunk3",
+        "procunk4",
+        "procunk6",
+        "procunk7",
+        "questitemflag",
+        "scriptfileid",
+        "scrollname",
+        "scrollunk1",
+        "scrollunk2",
+        "scrollunk3",
+        "scrollunk4",
+        "scrollunk5",
+        "scrollunk6",
+        "scrollunk7",
+        "sellrate",
+        "serialization",
+        "serialized",
+        "source",
+        "stackable",
+        "subtype",
+        "summonedflag",
+        "updated",
+        "verified",
+        "worneffect",
+        "wornlevel",
+        "wornlevel2",
+        "wornname",
+        "worntype",
+        "wornunk1",
+        "wornunk2",
+        "wornunk3",
+        "wornunk4",
+        "wornunk5",
+        "wornunk6",
+        "wornunk7"
+      ],
+      "blank_fields_not_interpreted_as_zero": [
+        "aug6type",
+        "aug6unk2",
+        "aug6vis",
+        "banedmgraceamt",
+        "casttime6",
+        "casttime7",
+        "casttime8",
+        "charges6",
+        "charges7",
+        "charges8",
+        "charmfile",
+        "collectible",
+        "convertible",
+        "convertibletype",
+        "convertidnbr",
+        "effecttype",
+        "effecttype6",
+        "effecttype7",
+        "effecttype8",
+        "efflevel6",
+        "efflevel7",
+        "efflevel8",
+        "epicitem",
+        "expendablearrow",
+        "filename",
+        "focusid",
+        "freestorage",
+        "fvnodrop2",
+        "level",
+        "level6",
+        "level7",
+        "level8",
+        "lorefile",
+        "luck",
+        "madeby",
+        "marketplace",
+        "maxcharges",
+        "maxluck",
+        "minluck",
+        "nodestroy",
+        "noground",
+        "nonpc",
+        "nozone",
+        "pendinglore",
+        "placeable2",
+        "pointtype",
+        "powersourcecapacity",
+        "procrate6",
+        "procrate7",
+        "procrate8",
+        "procratemod",
+        "scriptfileid",
+        "spellid",
+        "spellid6",
+        "spellid7",
+        "spellid8",
+        "ss0",
+        "ss1",
+        "ss2",
+        "ss3",
+        "ss4",
+        "ss5",
+        "ss6",
+        "ss7",
+        "ss8",
+        "stackable",
+        "summoned",
+        "time2",
+        "unknown01",
+        "unknown52",
+        "unknown53",
+        "unknown54",
+        "unknown55",
+        "unknown56",
+        "unknown57",
+        "unknown58",
+        "unknown59",
+        "unknown60",
+        "unknown61",
+        "unknown62",
+        "unknown63",
+        "unknown64",
+        "unknown65",
+        "unknown66",
+        "unknown67",
+        "unknown68",
+        "unknown69",
+        "updated",
+        "zeros"
+      ],
+      "changes_from_earlier_candidate": [],
+      "earlier_candidate_sha256": "d0aa78f53fe5a1a9219339fc83c5a7d817fc7e9d800b6afedb97739d4d43f7d0",
+      "new_candidate_sha256": "d0aa78f53fe5a1a9219339fc83c5a7d817fc7e9d800b6afedb97739d4d43f7d0",
+      "template_id": 125059,
+      "historical_limit": "Currentnative rawwithretainedperiodhistory; blank/unknown/unmapped fieldsremain siblingderived, not claimed original recoveredvalues."
+    },
+    {
+      "item_id": 125066,
+      "source": "https://lucy.allakhazam.com/itemraw.html?id=125066",
+      "history": "https://lucy.allakhazam.com/itemhistory.html?id=125066",
+      "initial_entry": "2010-10-13 15:48",
+      "mapped_columns": 137,
+      "source_mapping": [
+        {
+          "source": "id",
+          "column": "id",
+          "source_value": "125066",
+          "old_candidate": 125066,
+          "value": 125066
+        },
+        {
+          "source": "name",
+          "column": "Name",
+          "source_value": "Spell: Force of Marr Rk. III",
+          "old_candidate": "Spell: Force of Marr Rk. III",
+          "value": "Spell: Force of Marr Rk. III"
+        },
+        {
+          "source": "lore",
+          "column": "lore",
+          "source_value": "Spell: Force of Marr Rk. III",
+          "old_candidate": "Spell: Force of Marr Rk. III",
+          "value": "Spell: Force of Marr Rk. III"
+        },
+        {
+          "source": "classes",
+          "column": "classes",
+          "source_value": "4",
+          "old_candidate": 4,
+          "value": 4
+        },
+        {
+          "source": "races",
+          "column": "races",
+          "source_value": "65535",
+          "old_candidate": 65535,
+          "value": 65535
+        },
+        {
+          "source": "cost",
+          "column": "price",
+          "source_value": "1440000",
+          "old_candidate": 1440000,
+          "value": 1440000
+        },
+        {
+          "source": "nodrop",
+          "column": "nodrop",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "norent",
+          "column": "norent",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "loreitem",
+          "column": "loregroup",
+          "source_value": "-1",
+          "old_candidate": -1,
+          "value": -1
+        },
+        {
+          "source": "itemtype",
+          "column": "itemtype",
+          "source_value": "20",
+          "old_candidate": 20,
+          "value": 20
+        },
+        {
+          "source": "itemclass",
+          "column": "itemclass",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "icon",
+          "column": "icon",
+          "source_value": "504",
+          "old_candidate": 504,
+          "value": 504
+        },
+        {
+          "source": "weight",
+          "column": "weight",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "size",
+          "column": "size",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "magic",
+          "column": "magic",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "reclevel",
+          "column": "reclevel",
+          "source_value": "90",
+          "old_candidate": 90,
+          "value": 90
+        },
+        {
+          "source": "reqlevel",
+          "column": "reqlevel",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "spellid4",
+          "column": "scrolleffect",
+          "source_value": "25377",
+          "old_candidate": 25377,
+          "value": 25377
+        },
+        {
+          "source": "effecttype4",
+          "column": "scrolltype",
+          "source_value": "7",
+          "old_candidate": 7,
+          "value": 7
+        },
+        {
+          "source": "level4",
+          "column": "scrolllevel",
+          "source_value": "90",
+          "old_candidate": 90,
+          "value": 90
+        },
+        {
+          "source": "efflevel4",
+          "column": "scrolllevel2",
+          "source_value": "90",
+          "old_candidate": 90,
+          "value": 90
+        },
+        {
+          "source": "stacksize",
+          "column": "stacksize",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "idfile",
+          "column": "idfile",
+          "source_value": "IT98",
+          "old_candidate": "IT98",
+          "value": "IT98"
+        },
+        {
+          "source": "aagi",
+          "column": "aagi",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "ac",
+          "column": "ac",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "accuracy",
+          "column": "accuracy",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "acha",
+          "column": "acha",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "adex",
+          "column": "adex",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aint",
+          "column": "aint",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "asta",
+          "column": "asta",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "astr",
+          "column": "astr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "attack",
+          "column": "attack",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "attuneable",
+          "column": "attuneable",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "avoidance",
+          "column": "avoidance",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "awis",
+          "column": "awis",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "backstabdmg",
+          "column": "backstabdmg",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bagsize",
+          "column": "bagsize",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bagslots",
+          "column": "bagslots",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bagtype",
+          "column": "bagtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bagwr",
+          "column": "bagwr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "banedmgamt",
+          "column": "banedmgamt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "banedmgbody",
+          "column": "banedmgbody",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "banedmgrace",
+          "column": "banedmgrace",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bardtype",
+          "column": "bardtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "bardvalue",
+          "column": "bardvalue",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "booktype",
+          "column": "booktype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "casttime",
+          "column": "casttime",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "clairvoyance",
+          "column": "clairvoyance",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "color",
+          "column": "color",
+          "source_value": "4278190080",
+          "old_candidate": 4278190080,
+          "value": 4278190080
+        },
+        {
+          "source": "combateffects",
+          "column": "combateffects",
+          "source_value": "0",
+          "old_candidate": "0",
+          "value": "0"
+        },
+        {
+          "source": "cr",
+          "column": "cr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "damage",
+          "column": "damage",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "damageshield",
+          "column": "damageshield",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "deity",
+          "column": "deity",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "delay",
+          "column": "delay",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dotshielding",
+          "column": "dotshielding",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dr",
+          "column": "dr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dsmitigation",
+          "column": "dsmitigation",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "elemdmgamt",
+          "column": "elemdmgamt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "elemdmgtype",
+          "column": "elemdmgtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "endur",
+          "column": "endur",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "evoid",
+          "column": "evoid",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "evomax",
+          "column": "evomax",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionamt1",
+          "column": "factionamt1",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionamt2",
+          "column": "factionamt2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionamt3",
+          "column": "factionamt3",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionamt4",
+          "column": "factionamt4",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionmod1",
+          "column": "factionmod1",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionmod2",
+          "column": "factionmod2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionmod3",
+          "column": "factionmod3",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "factionmod4",
+          "column": "factionmod4",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "fr",
+          "column": "fr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "guildfavor",
+          "column": "guildfavor",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "haste",
+          "column": "haste",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "healamt",
+          "column": "healamt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heirloom",
+          "column": "heirloom",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_agi",
+          "column": "heroic_agi",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_cha",
+          "column": "heroic_cha",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_dex",
+          "column": "heroic_dex",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_int",
+          "column": "heroic_int",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_sta",
+          "column": "heroic_sta",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_str",
+          "column": "heroic_str",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "heroic_wis",
+          "column": "heroic_wis",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "hp",
+          "column": "hp",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "ldonprice",
+          "column": "ldonprice",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "ldonsold",
+          "column": "ldonsold",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "ldontheme",
+          "column": "ldontheme",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "light",
+          "column": "light",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "mana",
+          "column": "mana",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "manaregen",
+          "column": "manaregen",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "material",
+          "column": "material",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "mr",
+          "column": "mr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "nopet",
+          "column": "nopet",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "notransfer",
+          "column": "notransfer",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "potionbelt",
+          "column": "potionbelt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "potionbeltslots",
+          "column": "potionbeltslots",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "pr",
+          "column": "pr",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "purity",
+          "column": "purity",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "range",
+          "column": "range",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "recastdelay",
+          "column": "recastdelay",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "recasttype",
+          "column": "recasttype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "recskill",
+          "column": "recskill",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "regen",
+          "column": "regen",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "shielding",
+          "column": "shielding",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "skillmodmax",
+          "column": "skillmodmax",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "skillmodtype",
+          "column": "skillmodtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "skillmodvalue",
+          "column": "skillmodvalue",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "slots",
+          "column": "slots",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "spelldmg",
+          "column": "spelldmg",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "spellshield",
+          "column": "spellshield",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "strikethrough",
+          "column": "strikethrough",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "stunresist",
+          "column": "stunresist",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "tradeskills",
+          "column": "tradeskills",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "artifact",
+          "column": "artifactflag",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "augdistill",
+          "column": "augdistiller",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "augres",
+          "column": "augrestrict",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "augvalue",
+          "column": "augtype",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dmgplusamnt",
+          "column": "extradmgamt",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "dmgplustype",
+          "column": "extradmgskill",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "endurregen",
+          "column": "enduranceregen",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "crr",
+          "column": "svcorruption",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "benefit",
+          "column": "benefitflag",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug1type",
+          "column": "augslot1type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug1vis",
+          "column": "augslot1visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug1unk2",
+          "column": "augslot1unk2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug2type",
+          "column": "augslot2type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug2vis",
+          "column": "augslot2visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug2unk2",
+          "column": "augslot2unk2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug3type",
+          "column": "augslot3type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug3vis",
+          "column": "augslot3visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug3unk2",
+          "column": "augslot3unk2",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug4type",
+          "column": "augslot4type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug4vis",
+          "column": "augslot4visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug4unk2",
+          "column": "augslot4unk2",
+          "source_value": "1",
+          "old_candidate": 0,
+          "value": 1
+        },
+        {
+          "source": "aug5type",
+          "column": "augslot5type",
+          "source_value": "0",
+          "old_candidate": 0,
+          "value": 0
+        },
+        {
+          "source": "aug5vis",
+          "column": "augslot5visible",
+          "source_value": "1",
+          "old_candidate": 1,
+          "value": 1
+        },
+        {
+          "source": "aug5unk2",
+          "column": "augslot5unk2",
+          "source_value": "1",
+          "old_candidate": 0,
+          "value": 1
+        }
+      ],
+      "unverified_inherited_columns": [
+        "UNK012",
+        "UNK013",
+        "UNK014",
+        "UNK033",
+        "UNK054",
+        "UNK059",
+        "UNK060",
+        "UNK120",
+        "UNK121",
+        "UNK123",
+        "UNK124",
+        "UNK127",
+        "UNK132",
+        "UNK134",
+        "UNK137",
+        "UNK142",
+        "UNK147",
+        "UNK152",
+        "UNK157",
+        "UNK193",
+        "UNK214",
+        "UNK220",
+        "UNK221",
+        "UNK223",
+        "UNK224",
+        "UNK225",
+        "UNK226",
+        "UNK227",
+        "UNK228",
+        "UNK229",
+        "UNK230",
+        "UNK231",
+        "UNK232",
+        "UNK233",
+        "UNK234",
+        "UNK236",
+        "UNK237",
+        "UNK238",
+        "UNK239",
+        "UNK240",
+        "UNK241",
+        "augslot6type",
+        "augslot6unk2",
+        "augslot6visible",
+        "banedmgraceamt",
+        "bardeffect",
+        "bardeffecttype",
+        "bardlevel",
+        "bardlevel2",
+        "bardname",
+        "bardunk1",
+        "bardunk2",
+        "bardunk3",
+        "bardunk4",
+        "bardunk5",
+        "bardunk7",
+        "book",
+        "casttime_",
+        "charmfile",
+        "charmfileid",
+        "clickeffect",
+        "clicklevel",
+        "clicklevel2",
+        "clickname",
+        "clicktype",
+        "clickunk5",
+        "clickunk6",
+        "clickunk7",
+        "comment",
+        "created",
+        "elitematerial",
+        "epicitem",
+        "evoitem",
+        "evolvinglevel",
+        "expendablearrow",
+        "favor",
+        "filename",
+        "focuseffect",
+        "focuslevel",
+        "focuslevel2",
+        "focusname",
+        "focustype",
+        "focusunk1",
+        "focusunk2",
+        "focusunk3",
+        "focusunk4",
+        "focusunk5",
+        "focusunk6",
+        "focusunk7",
+        "fvnodrop",
+        "heroic_cr",
+        "heroic_dr",
+        "heroic_fr",
+        "heroic_mr",
+        "heroic_pr",
+        "heroic_svcorrup",
+        "herosforgemodel",
+        "housing_disable_free_placement",
+        "housing_disable_rotation",
+        "ldonsellbackrate",
+        "lorefile",
+        "maxcharges",
+        "minstatus",
+        "pendingloreflag",
+        "placeable",
+        "pointtype",
+        "powersourcecapacity",
+        "proceffect",
+        "proclevel",
+        "proclevel2",
+        "procname",
+        "procrate",
+        "proctype",
+        "procunk1",
+        "procunk2",
+        "procunk3",
+        "procunk4",
+        "procunk6",
+        "procunk7",
+        "questitemflag",
+        "scriptfileid",
+        "scrollname",
+        "scrollunk1",
+        "scrollunk2",
+        "scrollunk3",
+        "scrollunk4",
+        "scrollunk5",
+        "scrollunk6",
+        "scrollunk7",
+        "sellrate",
+        "serialization",
+        "serialized",
+        "source",
+        "stackable",
+        "subtype",
+        "summonedflag",
+        "updated",
+        "verified",
+        "worneffect",
+        "wornlevel",
+        "wornlevel2",
+        "wornname",
+        "worntype",
+        "wornunk1",
+        "wornunk2",
+        "wornunk3",
+        "wornunk4",
+        "wornunk5",
+        "wornunk6",
+        "wornunk7"
+      ],
+      "blank_fields_not_interpreted_as_zero": [
+        "aug6type",
+        "aug6unk2",
+        "aug6vis",
+        "banedmgraceamt",
+        "casttime6",
+        "casttime7",
+        "casttime8",
+        "charges6",
+        "charges7",
+        "charges8",
+        "charmfile",
+        "collectible",
+        "convertible",
+        "convertibletype",
+        "convertidnbr",
+        "effecttype",
+        "effecttype6",
+        "effecttype7",
+        "effecttype8",
+        "efflevel6",
+        "efflevel7",
+        "efflevel8",
+        "epicitem",
+        "expendablearrow",
+        "filename",
+        "focusid",
+        "freestorage",
+        "fvnodrop2",
+        "level",
+        "level6",
+        "level7",
+        "level8",
+        "lorefile",
+        "luck",
+        "madeby",
+        "marketplace",
+        "maxcharges",
+        "maxluck",
+        "minluck",
+        "nodestroy",
+        "noground",
+        "nonpc",
+        "nozone",
+        "pendinglore",
+        "placeable",
+        "placeable2",
+        "pointtype",
+        "powersourcecapacity",
+        "procrate6",
+        "procrate7",
+        "procrate8",
+        "procratemod",
+        "scriptfileid",
+        "spellid",
+        "spellid6",
+        "spellid7",
+        "spellid8",
+        "ss0",
+        "ss1",
+        "ss2",
+        "ss3",
+        "ss4",
+        "ss5",
+        "ss6",
+        "ss7",
+        "ss8",
+        "stackable",
+        "summoned",
+        "time2",
+        "unknown01",
+        "unknown02",
+        "unknown52",
+        "unknown53",
+        "unknown54",
+        "unknown55",
+        "unknown56",
+        "unknown57",
+        "unknown58",
+        "unknown59",
+        "unknown60",
+        "unknown61",
+        "unknown62",
+        "unknown63",
+        "unknown64",
+        "unknown65",
+        "unknown66",
+        "unknown67",
+        "unknown68",
+        "unknown69",
+        "updated",
+        "zeros"
+      ],
+      "changes_from_earlier_candidate": [
+        {
+          "source": "aug4unk2",
+          "column": "augslot4unk2",
+          "before": 0,
+          "after": 1
+        },
+        {
+          "source": "aug5unk2",
+          "column": "augslot5unk2",
+          "before": 0,
+          "after": 1
+        }
+      ],
+      "earlier_candidate_sha256": "497f92a94dbefc2ced529d9341463c9251d5bc128df2294a19b53cf1b4707932",
+      "new_candidate_sha256": "c406b2abf301524684908bf4bc136c9727733c54a9596bb2078df323abc2dd5b",
+      "template_id": 125065,
+      "historical_limit": "Currentnative rawwithretainedperiodhistory; blank/unknown/unmapped fieldsremain siblingderived, not claimed original recoveredvalues."
+    }
+  ],
+  "schema": [
+    {
+      "Field": "id",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "minstatus",
+      "Type": "smallint(5)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "Name",
+      "Type": "varchar(64)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "aagi",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "ac",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "accuracy",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "acha",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "adex",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "aint",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "artifactflag",
+      "Type": "tinyint(3) unsigned",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "asta",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "astr",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "attack",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augrestrict",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot1type",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot1visible",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot2type",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot2visible",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot3type",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot3visible",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot4type",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot4visible",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot5type",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot5visible",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot6type",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot6visible",
+      "Type": "tinyint(3)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augtype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "avoidance",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "awis",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bagsize",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bagslots",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bagtype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bagwr",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "banedmgamt",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "banedmgraceamt",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "banedmgbody",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "banedmgrace",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardtype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardvalue",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "book",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "casttime",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "casttime_",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "charmfile",
+      "Type": "varchar(32)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "charmfileid",
+      "Type": "varchar(32)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "classes",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "color",
+      "Type": "int(10) unsigned",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "combateffects",
+      "Type": "varchar(10)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "extradmgskill",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "extradmgamt",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "price",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "cr",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "damage",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "damageshield",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "deity",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "delay",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augdistiller",
+      "Type": "int(11) unsigned",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "dotshielding",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "dr",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "clicktype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "clicklevel2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "elemdmgtype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "elemdmgamt",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "endur",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "factionamt1",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "factionamt2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "factionamt3",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "factionamt4",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "factionmod1",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "factionmod2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "factionmod3",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "factionmod4",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "filename",
+      "Type": "varchar(32)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focuseffect",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "fr",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "fvnodrop",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "haste",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "clicklevel",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "hp",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "regen",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "icon",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "idfile",
+      "Type": "varchar(30)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "itemclass",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "itemtype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "ldonprice",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "ldontheme",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "ldonsold",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "light",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "lore",
+      "Type": "varchar(80)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "loregroup",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "magic",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "mana",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "manaregen",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "enduranceregen",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "material",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "herosforgemodel",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "maxcharges",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "mr",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "nodrop",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "norent",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "pendingloreflag",
+      "Type": "tinyint(3) unsigned",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "pr",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "procrate",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "races",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "range",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "reclevel",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "recskill",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "reqlevel",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "sellrate",
+      "Type": "float",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "shielding",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "size",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "skillmodtype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "skillmodvalue",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "slots",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "MUL",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "clickeffect",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "spellshield",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "strikethrough",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "stunresist",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "summonedflag",
+      "Type": "tinyint(3) unsigned",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "tradeskills",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "favor",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "weight",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK012",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK013",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "benefitflag",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK054",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK059",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "booktype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "recastdelay",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "recasttype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "guildfavor",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK123",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK124",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "attuneable",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "nopet",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "updated",
+      "Type": "datetime",
+      "Collation": null,
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "comment",
+      "Type": "varchar(255)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK127",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "pointtype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "potionbelt",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "potionbeltslots",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "stacksize",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "notransfer",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "stackable",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK134",
+      "Type": "varchar(255)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK137",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "proceffect",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "proctype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "proclevel2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "proclevel",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK142",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "worneffect",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "worntype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornlevel2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornlevel",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK147",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focustype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focuslevel2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focuslevel",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK152",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrolleffect",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrolltype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrolllevel2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrolllevel",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK157",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "serialized",
+      "Type": "datetime",
+      "Collation": null,
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "verified",
+      "Type": "datetime",
+      "Collation": null,
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "serialization",
+      "Type": "text",
+      "Collation": "latin1_swedish_ci",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "source",
+      "Type": "varchar(20)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK033",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "lorefile",
+      "Type": "varchar(32)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK014",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "svcorruption",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "skillmodmax",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK060",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot1unk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot2unk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot3unk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot4unk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot5unk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "augslot6unk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK120",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK121",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "questitemflag",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK132",
+      "Type": "text",
+      "Collation": "utf8mb3_general_ci",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "clickunk5",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "clickunk6",
+      "Type": "varchar(32)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "clickunk7",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "procunk1",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "procunk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "procunk3",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "procunk4",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "procunk6",
+      "Type": "varchar(32)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "procunk7",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornunk1",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornunk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornunk3",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornunk4",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornunk5",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornunk6",
+      "Type": "varchar(32)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornunk7",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focusunk1",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focusunk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focusunk3",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focusunk4",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focusunk5",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focusunk6",
+      "Type": "varchar(32)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focusunk7",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrollunk1",
+      "Type": "int(11) unsigned",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrollunk2",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrollunk3",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrollunk4",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrollunk5",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrollunk6",
+      "Type": "varchar(32)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrollunk7",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK193",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "purity",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "evoitem",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "evoid",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "evolvinglevel",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "evomax",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "clickname",
+      "Type": "varchar(64)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "procname",
+      "Type": "varchar(64)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "wornname",
+      "Type": "varchar(64)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "focusname",
+      "Type": "varchar(64)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scrollname",
+      "Type": "varchar(64)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "dsmitigation",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_str",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_int",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_wis",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_agi",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_dex",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_sta",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_cha",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_pr",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_dr",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_fr",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_cr",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_mr",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heroic_svcorrup",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "healamt",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "spelldmg",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "clairvoyance",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "backstabdmg",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "created",
+      "Type": "varchar(64)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "elitematerial",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "ldonsellbackrate",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "scriptfileid",
+      "Type": "mediumint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "expendablearrow",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "powersourcecapacity",
+      "Type": "mediumint(7)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardeffect",
+      "Type": "mediumint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardeffecttype",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardlevel2",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardlevel",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardunk1",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardunk2",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardunk3",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardunk4",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardunk5",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardname",
+      "Type": "varchar(64)",
+      "Collation": "latin1_swedish_ci",
+      "Null": "NO",
+      "Key": "",
+      "Default": "",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "bardunk7",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK214",
+      "Type": "smallint(6)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "subtype",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK220",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK221",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "heirloom",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK223",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK224",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK225",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK226",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK227",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK228",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK229",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK230",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK231",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK232",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK233",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK234",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "placeable",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK236",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK237",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK238",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK239",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK240",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "UNK241",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "epicitem",
+      "Type": "int(11)",
+      "Collation": null,
+      "Null": "NO",
+      "Key": "",
+      "Default": "0",
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "housing_disable_rotation",
+      "Type": "tinyint(3) unsigned",
+      "Collation": null,
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    },
+    {
+      "Field": "housing_disable_free_placement",
+      "Type": "tinyint(3) unsigned",
+      "Collation": null,
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": "",
+      "Privileges": "select,insert,update,references",
+      "Comment": ""
+    }
+  ],
+  "schema_engine": "InnoDB",
+  "grouping": "UNRESOLVED: no task920129 reward changes; norankIIpairingcopy",
+  "no_live_changes": false,
+  "definition_insert_policy": "Native IDs absent: insert original definitions without replacing rows or rewriting stored references. Exact target, sibling, spell and schema checks plus transaction, durable backup and readback. No blanket serialized absence requirement.",
+  "inherited_field_policy": "149/150 sibling-derived ordinary defaults accepted as labelled estimates; not exact recovered historical fields.",
+  "execution_helper": "insert_scrolls.py; separate coordinated item cache refresh after successful apply",
+  "applied": {
+    "date": "2026-11-04",
+    "database": "peq_housing_test",
+    "inserted_item_ids": [
+      125060,
+      125066
+    ],
+    "item_definition_readback": "Exact full canonical row hashes and independent item/spell/level join passed",
+    "item_cache": "Build PAL90-BATCH-MAINTENANCE-001 confirms actual world and six zone maps hold125060->25371 and125066->25377",
+    "reward_or_task_changes": false,
+    "native_exchange_acceptance": false,
+    "player_inventory_or_lease_writes": false,
+    "source_helper": "Canonical default=str row comparison; corrected helper verified through GitHub connector"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "npc_types": {
+    "442010": "#Scribe_Choone",
+    "442013": "Mamenil",
+    "442014": "Nanzie",
+    "442015": "Bobbenpin",
+    "442017": "Sigglik",
+    "442018": "Brislebum",
+    "442041": "#Darwin",
+    "442047": "Gubble_Gumshoe",
+    "442086": "Falrazim",
+    "442099": "#Qandieal",
+    "442100": "#Erradien",
+    "442105": "#Kaerra_of_the_Light",
+    "442182": "Agilica",
+    "442900": "a_Darkvine_guard",
+    "443900": "#Lelluran"
+  },
+  "new_npc_ids": [
+    442900,
+    443900
+  ],
+  "external_modules": [
+    "json"
+  ]
+}

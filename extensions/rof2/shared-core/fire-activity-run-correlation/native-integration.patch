@@ -1,0 +1,156 @@
+--- a/zone/task_client_state.cpp
++++ b/zone/task_client_state.cpp
+@@ -40,6 +40,7 @@
+ #include "fire_personal_successor_dispatch.h"
+ #include "fire_original_final_hail_frame.h"
+ #include "fire_shared_successor_native.h"
++#include "common/fire_shared_activity_origin.h"
+ 
+ #include <cstdlib>
+ #include <limits>
+@@ -1250,8 +1251,17 @@
+ 	// intercept and pass to world first before processing normally
+ 	if (!client->m_shared_task_update && task_data->type == TaskType::Shared) {
+ 
+-		// struct
+-		auto pack = new ServerPacket(ServerOP_SharedTaskUpdate, sizeof(ServerSharedTaskActivityUpdate_Struct));
++		uint64_t fire_activity_run=0;
++		if(info->task_id==FireSharedActivityOrigin::Task) {
++			const auto actual=TaskSharedRewardIdentity::ReadRun(database,client->CharacterID(),info->task_id);
++			if(!actual || client->GetSharedTaskId()<=0 ||
++			 actual->id!=static_cast<uint64_t>(client->GetSharedTaskId()) ||
++			 actual->accepted_time!=static_cast<uint32_t>(info->accepted_time)) return 0;
++			fire_activity_run=actual->id;
++		}
++		// Same one native update; stamp before optimistic local count synchronization/send.
++		auto pack = new ServerPacket(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+
++			(fire_activity_run?sizeof(FireSharedActivityOrigin::Trailer):0));
+ 		auto *r   = (ServerSharedTaskActivityUpdate_Struct *) pack->pBuffer;
+ 
+ 		// fill
+@@ -1260,6 +1270,7 @@
+ 		r->activity_id         = activity_id;
+ 		r->done_count          = info->activity[activity_id].done_count + count;
+ 		r->ignore_quest_update = ignore_quest_update;
++		if(fire_activity_run) FireSharedActivityOrigin::Write(pack->pBuffer,fire_activity_run);
+ 
+ 		LogTasksDetail(
+ 			"shared_task sending client [{}] task_id [{}] activity_id [{}] count [{}] ignore_quest_update [{}]",
+--- a/zone/shared_task_zone_messaging.cpp
++++ b/zone/shared_task_zone_messaging.cpp
+@@ -21,11 +21,13 @@
+ #include "common/shared_tasks.h"
+ #include "zone/client.h"
+ #include "fire_shared_successor_native.h"
++#include "common/fire_shared_activity_origin.h"
+ #include "zone/task_client_state.h"
+ #include "zone/task_manager.h"
+ #include "zone/npc.h"
+ #include "zone/dynamic_zone.h"
+ #include "zone/zonedb.h"
++#include "task_shared_reward_identity.h"
+ 
+ #include <memory>
+ #include <vector>
+@@ -193,11 +195,22 @@
+ 			break;
+ 		}
+ 		case ServerOP_SharedTaskUpdate: {
++			if(pack->size<sizeof(ServerSharedTaskActivityUpdate_Struct)) break;
+ 			auto p = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(pack->pBuffer);
++			uint64_t original_run=0;
++			if(!FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,p->task_id,original_run)) break;
+ 			auto c = entity_list.GetClientByCharID(p->source_character_id);
+ 			if (c) {
+ 				LogTasks("[ServerOP_SharedTaskUpdate] We're back in zone and I found [{}]", c->GetCleanName());
+ 
++				if(p->task_id==FireSharedActivityOrigin::Task) {
++					auto* state=c->GetTaskState();
++					if(!state || state->GetActiveSharedTask().task_id!=static_cast<int>(p->task_id) ||
++					 c->GetSharedTaskId()<=0 || static_cast<uint64_t>(c->GetSharedTaskId())!=original_run) break;
++					const auto actual=TaskSharedRewardIdentity::ReadRun(database,c->CharacterID(),p->task_id);
++					if(!actual || actual->id!=original_run || actual->accepted_time!=
++					 static_cast<uint32_t>(state->GetActiveSharedTask().accepted_time)) break;
++				}
+ 				c->m_shared_task_update = true;
+ 				c->GetTaskState()->SharedTaskIncrementDoneCount(
+ 					c,
+--- a/world/shared_task_world_messaging.cpp
++++ b/world/shared_task_world_messaging.cpp
+@@ -23,6 +23,7 @@
+ #include "common/repositories/tasks_repository.h"
+ #include "common/shared_tasks.h"
+ #include "common/fire_shared_correlation.h"
++#include "common/fire_shared_activity_origin.h"
+ #include "common/tasks.h"
+ #include "world/cliententry.h"
+ #include "world/cliententry.h"
+@@ -99,7 +100,15 @@
+ 			break;
+ 		}
+ 		case ServerOP_SharedTaskUpdate: {
++			if(pack->size<sizeof(ServerSharedTaskActivityUpdate_Struct)) break;
+ 			auto *r = (ServerSharedTaskActivityUpdate_Struct *) pack->pBuffer;
++			uint64_t original_run=0;
++			if(!FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,r->task_id,original_run)) break;
++			if(r->task_id==FireSharedActivityOrigin::Task) {
++				auto* actual=SharedTaskManager::Instance()->FindSharedTaskByTaskIdAndCharacterId(
++				 r->task_id,r->source_character_id);
++				if(!actual || static_cast<uint64_t>(actual->GetDbSharedTask().id)!=original_run) break;
++			}
+ 
+ 			LogTasksDetail(
+ 				"[ServerOP_SharedTaskUpdate] Received request from character [{}] task_id [{}] activity_id [{}] donecount [{}] ignore_quest_update [{}]",
+--- a/world/shared_task_manager.cpp
++++ b/world/shared_task_manager.cpp
+@@ -27,6 +27,7 @@
+ #include "common/repositories/shared_task_activity_state_repository.h"
+ #include "common/repositories/shared_task_dynamic_zones_repository.h"
+ #include "common/fire_shared_correlation.h"
++#include "common/fire_shared_activity_origin.h"
+ #include "common/repositories/shared_task_members_repository.h"
+ #include "common/rulesys.h"
+ #include "common/shared_task_completion.h"
+@@ -1825,13 +1826,18 @@
+ void SharedTaskManager::SendActivityUpdate(SharedTask *s, uint32_t activity_id, uint32_t done_count, bool ignore_quest_update)
+ {
+ 	for (const auto &m : s->GetMembers()) {
+-		auto p = std::make_unique<ServerPacket>(ServerOP_SharedTaskUpdate, sizeof(ServerSharedTaskActivityUpdate_Struct));
++		const bool fire=s->GetTaskData().id==FireSharedActivityOrigin::Task;
++		const uint64_t original_run=s->GetDbSharedTask().id;
++		if(fire && !original_run) return;
++		auto p = std::make_unique<ServerPacket>(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+
++		 (fire?sizeof(FireSharedActivityOrigin::Trailer):0));
+ 		auto d = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(p->pBuffer);
+ 		d->source_character_id = m.character_id;
+ 		d->task_id = s->GetTaskData().id;
+ 		d->activity_id = activity_id;
+ 		d->done_count = done_count;
+ 		d->ignore_quest_update = ignore_quest_update;
++		if(fire) FireSharedActivityOrigin::Write(p->pBuffer,original_run);
+ 		auto c = ClientList::Instance()->FindCLEByCharacterID(m.character_id);
+ 		if (c && c->Server()) {
+ 			c->Server()->SendPacket(p.get());
+--- /dev/null
++++ b/common/fire_shared_activity_origin.h
+@@ -0,0 +1,20 @@
++// OFFLINE SOURCE PROPOSAL ONLY. Fire170, matched World/Zone peers, no activation.
++#pragma once
++#include "fire_shared_correlation.h"
++namespace FireSharedActivityOrigin {
++constexpr uint32_t Task=920170,Magic=0x46495241,Version=1;
++struct Trailer { uint32_t magic=Magic,version=Version;uint64_t run=0; };
++inline bool Read(const unsigned char* bytes,uint32_t size,uint32_t task,uint64_t& run) {
++ run=0;
++ if(task!=Task) return size==sizeof(ServerSharedTaskActivityUpdate_Struct);
++ if(size!=sizeof(ServerSharedTaskActivityUpdate_Struct)+sizeof(Trailer)) return false;
++ Trailer t;
++ std::memcpy(&t,bytes+sizeof(ServerSharedTaskActivityUpdate_Struct),sizeof(t));
++ if(t.magic!=Magic || t.version!=Version || !t.run) return false;
++ run=t.run;return true;
++}
++inline void Write(unsigned char* bytes,uint64_t run) {
++ Trailer t;t.run=run;
++ std::memcpy(bytes+sizeof(ServerSharedTaskActivityUpdate_Struct),&t,sizeof(t));
++}
++} // namespace FireSharedActivityOrigin

@@ -1,0 +1,531 @@
+{
+  "SQL_columns_not_read_by_this_loader": [
+    "exclude",
+    "fixed",
+    "isbot",
+    "npcspecialattks",
+    "peqid",
+    "unique_",
+    "version",
+    "walkspeed"
+  ],
+  "field_mapping": {
+    "AC": {
+      "column": "AC",
+      "transform": "direct"
+    },
+    "AGI": {
+      "column": "AGI",
+      "transform": "direct"
+    },
+    "ATK": {
+      "column": "ATK",
+      "transform": "direct"
+    },
+    "CHA": {
+      "column": "CHA",
+      "transform": "direct"
+    },
+    "CR": {
+      "column": "CR",
+      "transform": "direct"
+    },
+    "Corrup": {
+      "column": "Corrup",
+      "transform": "direct"
+    },
+    "DEX": {
+      "column": "DEX",
+      "transform": "direct"
+    },
+    "DR": {
+      "column": "DR",
+      "transform": "direct"
+    },
+    "FR": {
+      "column": "FR",
+      "transform": "direct"
+    },
+    "INT": {
+      "column": "_INT",
+      "transform": "direct"
+    },
+    "MR": {
+      "column": "MR",
+      "transform": "direct"
+    },
+    "Mana": {
+      "column": "mana",
+      "transform": "direct"
+    },
+    "PR": {
+      "column": "PR",
+      "transform": "direct"
+    },
+    "PhR": {
+      "column": "PhR",
+      "transform": "direct"
+    },
+    "STA": {
+      "column": "STA",
+      "transform": "direct"
+    },
+    "STR": {
+      "column": "STR",
+      "transform": "direct"
+    },
+    "WIS": {
+      "column": "WIS",
+      "transform": "direct"
+    },
+    "accuracy_rating": {
+      "column": "Accuracy",
+      "transform": "direct"
+    },
+    "adventure_template": {
+      "column": "adventure_template_id",
+      "transform": "direct"
+    },
+    "aggroradius": {
+      "column": "aggroradius",
+      "transform": "nonpositive70"
+    },
+    "alt_currency_type": {
+      "column": "alt_currency_id",
+      "transform": "direct"
+    },
+    "always_aggro": {
+      "column": "always_aggro",
+      "transform": "bool_nonzero"
+    },
+    "ammo_idfile": {
+      "capacity": 30,
+      "column": "ammo_idfile",
+      "transform": "zeroed_char_array_strn0cpy"
+    },
+    "armor_tint": {
+      "columns": [
+        "armortint_id",
+        "armortint_red",
+        "armortint_green",
+        "armortint_blue"
+      ],
+      "transform": "zero_tint_no_aux_lookup_for_selected_all_zero"
+    },
+    "armtexture": {
+      "column": "armtexture",
+      "transform": "direct"
+    },
+    "assistradius": {
+      "column": "assistradius",
+      "transform": "nonpositive_aggroradius"
+    },
+    "attack_count": {
+      "column": "attack_count",
+      "transform": "direct"
+    },
+    "attack_delay": {
+      "column": "attack_delay",
+      "transform": "multiply100"
+    },
+    "attack_speed": {
+      "column": "attack_speed",
+      "transform": "direct"
+    },
+    "avoidance_rating": {
+      "column": "Avoidance",
+      "transform": "direct"
+    },
+    "beard": {
+      "column": "luclin_beard",
+      "transform": "direct"
+    },
+    "beardcolor": {
+      "column": "luclin_beardcolor",
+      "transform": "direct"
+    },
+    "bodytype": {
+      "column": "bodytype",
+      "transform": "positive_else_zero"
+    },
+    "bracertexture": {
+      "column": "bracertexture",
+      "transform": "direct"
+    },
+    "charm_ac": {
+      "column": "charm_ac",
+      "transform": "direct"
+    },
+    "charm_accuracy_rating": {
+      "column": "charm_accuracy_rating",
+      "transform": "direct"
+    },
+    "charm_atk": {
+      "column": "charm_atk",
+      "transform": "direct"
+    },
+    "charm_attack_delay": {
+      "column": "charm_attack_delay",
+      "transform": "multiply100"
+    },
+    "charm_avoidance_rating": {
+      "column": "charm_avoidance_rating",
+      "transform": "direct"
+    },
+    "charm_max_dmg": {
+      "column": "charm_max_dmg",
+      "transform": "direct"
+    },
+    "charm_min_dmg": {
+      "column": "charm_min_dmg",
+      "transform": "direct"
+    },
+    "class_": {
+      "column": "class",
+      "transform": "direct"
+    },
+    "current_hp": {
+      "column": "hp",
+      "transform": "direct"
+    },
+    "d_melee_texture1": {
+      "column": "d_melee_texture1",
+      "transform": "direct"
+    },
+    "d_melee_texture2": {
+      "column": "d_melee_texture2",
+      "transform": "direct"
+    },
+    "drakkin_details": {
+      "column": "drakkin_details",
+      "transform": "direct"
+    },
+    "drakkin_heritage": {
+      "column": "drakkin_heritage",
+      "transform": "direct"
+    },
+    "drakkin_tattoo": {
+      "column": "drakkin_tattoo",
+      "transform": "direct"
+    },
+    "emoteid": {
+      "column": "emoteid",
+      "transform": "direct"
+    },
+    "exp_mod": {
+      "column": "exp_mod",
+      "transform": "direct"
+    },
+    "eyecolor1": {
+      "column": "luclin_eyecolor",
+      "transform": "direct"
+    },
+    "eyecolor2": {
+      "column": "luclin_eyecolor2",
+      "transform": "direct"
+    },
+    "faction_amount": {
+      "column": "faction_amount",
+      "transform": "direct"
+    },
+    "feettexture": {
+      "column": "feettexture",
+      "transform": "direct"
+    },
+    "findable": {
+      "column": "findable",
+      "transform": "bool_nonzero"
+    },
+    "flymode": {
+      "column": "flymode",
+      "transform": "direct"
+    },
+    "gender": {
+      "column": "gender",
+      "transform": "direct"
+    },
+    "greed": {
+      "column": "greed",
+      "transform": "direct"
+    },
+    "haircolor": {
+      "column": "luclin_haircolor",
+      "transform": "direct"
+    },
+    "hairstyle": {
+      "column": "luclin_hairstyle",
+      "transform": "direct"
+    },
+    "handtexture": {
+      "column": "handtexture",
+      "transform": "direct"
+    },
+    "healscale": {
+      "column": "healscale",
+      "transform": "direct"
+    },
+    "helmtexture": {
+      "column": "helmtexture",
+      "transform": "direct"
+    },
+    "heroic_strikethrough": {
+      "column": "heroic_strikethrough",
+      "transform": "direct"
+    },
+    "herosforgemodel": {
+      "column": "herosforgemodel",
+      "transform": "direct"
+    },
+    "hp_regen": {
+      "column": "hp_regen_rate",
+      "transform": "direct"
+    },
+    "hp_regen_per_second": {
+      "column": "hp_regen_per_second",
+      "transform": "direct"
+    },
+    "ignore_despawn": {
+      "column": "ignore_despawn",
+      "transform": "bool_nonzero"
+    },
+    "is_parcel_merchant": {
+      "column": "is_parcel_merchant",
+      "transform": "bool_nonzero"
+    },
+    "is_quest_npc": {
+      "column": "isquest",
+      "transform": "bool_nonzero"
+    },
+    "keeps_sold_items": {
+      "column": "keeps_sold_items",
+      "transform": "direct"
+    },
+    "lastname": {
+      "capacity": 64,
+      "column": "lastname",
+      "transform": "zeroed_char_array_strn0cpy"
+    },
+    "legtexture": {
+      "column": "legtexture",
+      "transform": "direct"
+    },
+    "level": {
+      "column": "level",
+      "transform": "direct"
+    },
+    "light": {
+      "column": "light",
+      "transform": "low4bits"
+    },
+    "loottable_id": {
+      "column": "loottable_id",
+      "transform": "direct"
+    },
+    "luclinface": {
+      "column": "face",
+      "transform": "direct"
+    },
+    "m_npc_tint_id": {
+      "column": "npc_tint_id",
+      "transform": "direct"
+    },
+    "mana_regen": {
+      "column": "mana_regen_rate",
+      "transform": "direct"
+    },
+    "max_dmg": {
+      "column": "maxdmg",
+      "transform": "direct"
+    },
+    "max_hp": {
+      "column": "hp",
+      "transform": "direct"
+    },
+    "maxlevel": {
+      "column": "maxlevel",
+      "transform": "direct"
+    },
+    "merchanttype": {
+      "column": "merchant_id",
+      "transform": "direct"
+    },
+    "min_dmg": {
+      "column": "mindmg",
+      "transform": "direct"
+    },
+    "multiquest_enabled": {
+      "column": "multiquest_enabled",
+      "transform": "bool_nonzero"
+    },
+    "name": {
+      "capacity": 50,
+      "column": "name",
+      "transform": "zeroed_char_array_strn0cpy"
+    },
+    "no_target_hotkey": {
+      "column": "no_target_hotkey",
+      "transform": "bool_nonzero"
+    },
+    "npc_aggro": {
+      "column": "npc_aggro",
+      "transform": "bool_nonzero"
+    },
+    "npc_faction_id": {
+      "column": "npc_faction_id",
+      "transform": "direct"
+    },
+    "npc_id": {
+      "column": "id",
+      "transform": "direct"
+    },
+    "npc_spells_effects_id": {
+      "column": "npc_spells_effects_id",
+      "transform": "direct"
+    },
+    "npc_spells_id": {
+      "column": "npc_spells_id",
+      "transform": "direct"
+    },
+    "prim_melee_type": {
+      "column": "prim_melee_type",
+      "transform": "direct"
+    },
+    "private_corpse": {
+      "column": "private_corpse",
+      "transform": "bool_nonzero"
+    },
+    "qglobal": {
+      "column": "qglobal",
+      "transform": "bool_nonzero"
+    },
+    "race": {
+      "column": "race",
+      "transform": "direct"
+    },
+    "raid_target": {
+      "column": "raid_target",
+      "transform": "bool_nonzero"
+    },
+    "ranged_type": {
+      "column": "ranged_type",
+      "transform": "direct"
+    },
+    "rare_spawn": {
+      "column": "rare_spawn",
+      "transform": "bool_nonzero"
+    },
+    "runspeed": {
+      "column": "runspeed",
+      "transform": "direct"
+    },
+    "scalerate": {
+      "column": "scalerate",
+      "transform": "direct"
+    },
+    "sec_melee_type": {
+      "column": "sec_melee_type",
+      "transform": "direct"
+    },
+    "see_hide": {
+      "column": "see_hide",
+      "transform": "bool_nonzero"
+    },
+    "see_improved_hide": {
+      "column": "see_improved_hide",
+      "transform": "bool_nonzero"
+    },
+    "see_invis": {
+      "column": "see_invis",
+      "transform": "direct"
+    },
+    "see_invis_undead": {
+      "column": "see_invis_undead",
+      "transform": "bool_nonzero"
+    },
+    "show_name": {
+      "column": "show_name",
+      "transform": "bool_nonzero"
+    },
+    "size": {
+      "column": "size",
+      "transform": "direct"
+    },
+    "skip_auto_scale": {
+      "transform": "hardcoded_false"
+    },
+    "skip_global_loot": {
+      "column": "skip_global_loot",
+      "transform": "bool_nonzero"
+    },
+    "slow_mitigation": {
+      "column": "slow_mitigation",
+      "transform": "direct"
+    },
+    "spawn_limit": {
+      "column": "spawn_limit",
+      "transform": "direct"
+    },
+    "special_abilities": {
+      "capacity": 512,
+      "column": "special_abilities",
+      "transform": "zeroed_char_array_strn0cpy"
+    },
+    "spellscale": {
+      "column": "spellscale",
+      "transform": "direct"
+    },
+    "stuck_behavior": {
+      "column": "stuck_behavior",
+      "transform": "direct"
+    },
+    "texture": {
+      "column": "texture",
+      "transform": "direct"
+    },
+    "trackable": {
+      "column": "trackable",
+      "transform": "bool_nonzero"
+    },
+    "trap_template": {
+      "column": "trap_template",
+      "transform": "direct"
+    },
+    "underwater": {
+      "column": "underwater",
+      "transform": "bool_nonzero"
+    },
+    "unique_spawn_by_name": {
+      "column": "unique_spawn_by_name",
+      "transform": "bool_nonzero"
+    },
+    "untargetable": {
+      "column": "untargetable",
+      "transform": "bool_nonzero"
+    },
+    "use_model": {
+      "column": "model",
+      "transform": "direct"
+    }
+  },
+  "material_unresolved": "Final actor effective bonuses/scaling/rules/geometry/custody remain servingheld; none blocks the nowselected deterministic expectedloaderNPCType sourcegate.",
+  "memset_zero_unassigned_fields": [
+    "deity",
+    "mount_color"
+  ],
+  "qualifications": [
+    "EntireNPCTypezeroed before assignments; namecopy50into64; fixedchararraysretainzerotails; lastnameempty makesDisableLastNamesruleirrelevant.",
+    "SelectedarmortintID/RGBall0 means noauxnpc_types_tintlookup andall9Slot.Colorzero.",
+    "aggroradiusSQL0 resolves70; assistradiusSQL0 resolves70; zero never proves noaggro/noassist.",
+    "SQLattack_delay30 maps3000ms; charm0 maps0. Blankabilities empty; spells/effects/faction/loot0 retained; noauxspell/faction/lootselection.",
+    "sizeSQL0 remains0 inNPCType; NPCconstructor resolvesactorheight fromrace649/gender0. NoDBrevisionnecessary.",
+    "npc_idlookup iscontent_db idonly; npc_types.version isnotreadintothisNPCType andnotworldinstanceauthority.",
+    "Loaderfirstreturns zone npctable cache entry; sourcegate comparescachedornewpointerbyentireexpectedbytes; neverassumeDBrowproofmeanscachematch."
+  ],
+  "runtime_derivation": [
+    "NPCconstructor takesNPCTypedata constpointer; actorGiveNPCTypeData onlysetsowneddeletepointer. Actualactor mustreference the sameownedcopy whosecompleteprofile passedgate; thisartifactdoesnotimplementownership.",
+    "NPCconstructor uses max/min8500/900 or9500/900 toderivebase_damage round((max-min)/1.9) andmin_damage min-round(base/10), notliteralallhitvalues; maxlevel0preventsLevelScalecondition.",
+    "runspeed1.25 becomesbase_run50/base_walk18/base_fear39 undercurrentMobintegerformulas; constructor/cast/buff/pathingcontextcanlaterchangespeed.",
+    "NPCconstructor callsCalcBonuses andScaleNPC. is_auto_scaled=false becauseHP400000/statsnonzero; AC0/Corrup0/PhR0 remain0 undernormalauto branch. Ifmatchingglobal_npc_scale dataexists, Accuracy0/slowmitigation0/ATK0/MR/CR/FR/PR/DR0 maybederivedevenwhenis_auto_scaledfalse. Theseactor-effectivestatsarenotfieldsrewrittenintheownedNPCType.",
+    "NPCTypegatequalifiestemplateonly, notactualfinalcombatstatistics or AI/hate/loot/task/nativeacceptance. No serving/scaling/ruleslookupperformed."
+  ]
+}

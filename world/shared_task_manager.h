@@ -22,6 +22,10 @@
 #include "common/shared_tasks.h"
 #include "common/timer.h"
 
+#include <optional>
+#include <set>
+
+namespace FireSharedCorrelation { struct Trailer; }
 class DynamicZone;
 
 namespace EQ {
@@ -53,7 +57,7 @@ public:
 	std::vector<TaskActivitiesRepository::TaskActivities> GetSharedTaskActivityDataByTaskId(uint32 task_id);
 
 	// client attempting to create a shared task
-	void AttemptSharedTaskCreation(uint32 requested_task_id, uint32 requested_character_id, uint32 npc_type_id);
+	void AttemptSharedTaskCreation(uint32 requested_task_id, uint32 requested_character_id, uint32 npc_type_id, const FireSharedCorrelation::Trailer* fire_origin=nullptr);
 
 	// shared task activity update middleware
 	void SharedTaskActivityUpdate(
@@ -141,7 +145,10 @@ protected:
 
 	Timer m_process_timer;
 
-	std::vector<CharacterTaskTimersRepository::CharacterTaskTimers> GetCharacterTimers(
+	// Only successful archive commits enter this transient cache; reload revalidates.
+	std::set<int64_t> m_archived_shared_tasks;
+
+	std::optional<std::vector<CharacterTaskTimersRepository::CharacterTaskTimers>> GetCharacterTimers(
 		const std::vector<uint32_t>& character_ids, const TasksRepository::Tasks& task);
 
 	void AddReplayTimers(SharedTask *s);
@@ -149,14 +156,16 @@ protected:
 	bool CanRequestSharedTask(uint32_t task_id, const SharedTaskRequest& request);
 	void ChooseNewLeader(SharedTask *s);
 	bool HandleCompletedActivities(SharedTask* s);
-	void HandleCompletedTask(SharedTask* s);
+	bool HandleCompletedTask(SharedTask* s);
+	bool EnsureCompletionArchived(SharedTask *s);
+	void SendActivityUpdate(SharedTask *s, uint32_t activity_id, uint32_t done_count, bool ignore_quest_update);
 	void LoadDynamicZoneTemplate(SharedTask* s);
 	void SendSharedTaskMemberListToAllMembers(SharedTask *s);
 	void SendSharedTaskMemberAddedToAllMembers(SharedTask *s, const std::string &player_name);
 	void SendSharedTaskMemberRemovedToAllMembers(SharedTask *s, const std::string &player_name);
 	void SaveMembers(SharedTask *s, std::vector<SharedTaskMember> members);
 	void SendSharedTaskInvitePacket(SharedTask *s, int64 invited_character_id);
-	void RecordSharedTaskCompletion(SharedTask *s);
+	std::optional<int64_t> RecordSharedTaskCompletion(SharedTask *s, int64_t completion_time);
 	void RemoveAllMembersFromDynamicZones(SharedTask *s);
 	void StartTerminateTimer(SharedTask* s);
 

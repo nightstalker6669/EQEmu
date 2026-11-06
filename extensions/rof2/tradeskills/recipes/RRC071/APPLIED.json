@@ -1,0 +1,36 @@
+{
+  "batch": "RRC071",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "493d05e549034baf7cfecbec63e61465d6b00892",
+  "source_sha256": "840489109d8c2b3633431b71ab01a5f23f8a409f9e6eebc65193ff4b72a268cf",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 8,
+  "entries_updated": 0,
+  "recipe_ids": [
+    12240,
+    12244
+  ],
+  "recipe_definitions_preserved": 2,
+  "full_existing_entries_guarded": 10,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "historical_qualification": "Maintained explicit five-kit ink formulas support qualified alternative-kit context, not immutable May2013 per-kit proof. Existing learning2, quantities, failure/salvage roles and all other fields preserved.",
+  "after_counts": {
+    "recipes": 25440,
+    "entries": 191773
+  },
+  "commit_receipt": [
+    "RRC071",
+    "8",
+    "25440",
+    "25440",
+    "191765",
+    "191773",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

@@ -1,0 +1,122 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "0bf3f1debaa125dc3d3e5bce8d7db8007e62c6e30f6da551ca5931cf8c373312"
+  },
+  {
+    "path": "avellone-row-contract.json",
+    "sha256": "cb119a1d69b189d478d71f49889200826f3005cc3c09778289a230673d2eea4e"
+  },
+  {
+    "path": "baseline.json",
+    "sha256": "865295c4ce382b94e6a4153b161ed1fb8e9fe065bcb9bef3c09cb7b2a45e2e1f"
+  },
+  {
+    "path": "configure_factions.py",
+    "sha256": "eadd801b0e918a84f34f854d84560d3c85c8b9353bde137202271a4bae886ae6"
+  },
+  {
+    "path": "faction-policy.json",
+    "sha256": "09eef3a799600f9bb57f76ba80d57a48eeef0ca2eca1efb2d5eb1c6a17284499"
+  },
+  {
+    "path": "faction-routes.json",
+    "sha256": "8a1e389ebaedd274c8427a015c0e1176110a9c9187a633a3035b53ba8ff24c86"
+  },
+  {
+    "path": "faction-row-contract.json",
+    "sha256": "7d90665c9a5c5095d15123737ded95629859df87bd00f4d3eeb7e5c2f0ba1506"
+  },
+  {
+    "path": "family-provenance.json",
+    "sha256": "f4ed8afabe1db00208a43a8ee3ce97243af67009c50a25a44d32e46b25660615"
+  },
+  {
+    "path": "hooks/global-player-bixie-journal.fragment.lua",
+    "sha256": "a0a65c62fada1f11fe28cba3cf97ba16f066c73b4e24ca5b8b7528a9f2cdc50e"
+  },
+  {
+    "path": "hooks/global-player-sting.fragment.lua",
+    "sha256": "e67ccd9bb5ba67cc67f368863a1defc56d0758b88bfa6e273cb92871b51b6156"
+  },
+  {
+    "path": "install.py",
+    "sha256": "ab227892fcc2705630e50dd2bed265cc6976218349b8e8cb82028b66e021b769"
+  },
+  {
+    "path": "journal-provenance.json",
+    "sha256": "c0466b57b48be1951c1a111d2841c966d33fe685e69a7be02443973b52abf705"
+  },
+  {
+    "path": "journal-row-contract.json",
+    "sha256": "44c0243338409a4021371537b7a635bef3d8fafc50ab747f45d796b57a5aea78"
+  },
+  {
+    "path": "package.json",
+    "sha256": "9b17f5e84ef7c04424647a3471722b9983e25001dfc7eafd8bfed9e94ad37354"
+  },
+  {
+    "path": "package_tools.py",
+    "sha256": "db91b2840dfd05faaab02d55a3685457e222913f44520f703996b5ebfd229eb1"
+  },
+  {
+    "path": "parent-row-contract.json",
+    "sha256": "8f792d96b49be84fb0935aba35dcfcd0a6ac1770ba5d386d46cc88995bdf00b6"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "50aa16d6fd1dddbd45375f2537feacb4a97659a655ec27081288b3c1dfb781b8"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_bixie_journal.lua",
+    "sha256": "8e0b369db54ed96c48623251abaeb4bcb142ddd5f7430f461dc00587357316c3"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_sting.lua",
+    "sha256": "d2a7be4b546e76093d912d78b99392ec372bfa172d893f0cced4ca219d08129c"
+  },
+  {
+    "path": "quests/lua_modules/achievement_quest_sting_settings.lua",
+    "sha256": "1d92e9060c6f2439b9693f2babb4eb4eee89256505257c7bf50460c880ea75e2"
+  },
+  {
+    "path": "quests/moors/395209.lua",
+    "sha256": "c607d32393831bc7f0586a0aa8de6ad307bf631eba04e46cd81ece9e9c035162"
+  },
+  {
+    "path": "quests/stonehive/396222.lua",
+    "sha256": "9af0ad5ad4dfe1abcd1f5c35742ca60a28e54b90cd7cafd4ca759e25dd81492c"
+  },
+  {
+    "path": "quests/stonehive/396232.lua",
+    "sha256": "07496b8588c8d8e2f77a135ddc9c6867f14850b3a0fc435ba391d2f43d721b1c"
+  },
+  {
+    "path": "quests/stonehive/396233.lua",
+    "sha256": "f6649683286d8cbb11ecbd5ea7eb2fd35054e5859f1976025b850e0c3000574e"
+  },
+  {
+    "path": "review.json",
+    "sha256": "73e1bb2dc590e60396e75a62da59b4822c0814abd26b7503bdc3b9b7a1e859d4"
+  },
+  {
+    "path": "sql/010-factions.sql",
+    "sha256": "0795ea7b48b7f9a520c8fe11bb876861e15c701aeeab844558bf22b9ee988248"
+  },
+  {
+    "path": "sql/020-journal.sql",
+    "sha256": "50b3212cf09a5caf31bef2df6a6538381b9a007774d87c26241744d5617cef04"
+  },
+  {
+    "path": "sql/030-avellone.sql",
+    "sha256": "27ebaf83dbd41c546bbee9f8df44e727a16b83473189457a439ea807e79388f4"
+  },
+  {
+    "path": "sql/040-parent-rewards.sql",
+    "sha256": "0e88a8567376fab4ffdd6c47b6ec8f5dfdb54f86f9c39d9789616e8e469cbb6a"
+  },
+  {
+    "path": "sql/090-activate.sql",
+    "sha256": "f286523ea35b50ac69b74d0116b0a6ba0d5de6fba47f941eb5cfbe35e17d8b85"
+  }
+]

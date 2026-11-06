@@ -1,0 +1,384 @@
+{
+  "status": "UNALLOCATED_DISABLED_SHARED_PREREQUISITE_SOURCE",
+  "native_giver": 487053,
+  "giver_external_key_not_native": 34911,
+  "all_native_type": 1,
+  "shared_task_not_personal": "5002Jan16,2010#1263697510178851326 explicitlygroup;5003Feb10,2010#1265863657302423913group +Mar2,2011#1299079257299768755 exactsharedfolder/1requester6h. Primaryallthree shared despiteSoloheader.",
+  "tasks": [
+    {
+      "external": 5001,
+      "title": "The Grand Experiment",
+      "request": "help",
+      "goals": 6,
+      "layout": [
+        "DeliverRoyalProclamationFormCreation\u2192SecretaryKilkin",
+        "DeliverFormG99492T\u2192AssistantJergis",
+        "DeliverFormF093834\u2192AssistantHuanir",
+        "DeliverFormH994996\u2192BookkeeperBlanch",
+        "DeliverCreationSealApproval\u2192InventorBiddlebokk",
+        "Deliver10MephitTongue\u2192InventorBiddlebokk"
+      ],
+      "physical": "Originalinitialformgrant and sequentialfourcityformexchanges\u2192seal; no hail-onlycredit or lostcustodygrant. Actual10tonguesdelivery, no Lootgoal.",
+      "preloot": "Tonguesprelootpositive Apr7,2010#127062329522984747/compiled.",
+      "cash_copper": 315000,
+      "period_cash": "Jan11,2010#126323678785851985",
+      "tokens": 60,
+      "period_tokens": "Apr21,2010#1271894508206686280",
+      "source": "https://everquest.allakhazam.com/db/quest/5001"
+    },
+    {
+      "external": 5002,
+      "title": "The Experiment Begins",
+      "request": "find",
+      "prerequisite": 5001,
+      "goals": 5,
+      "layout": [
+        "Bubhail\u2192originalResearchNotes",
+        "DeliverResearchNotes\u2192Biddlebokk",
+        "Deliver4LavaTubeSpore\u2192Biddlebokk",
+        "Deliver6PartiallyDigestedRock\u2192Biddlebokk",
+        "Deliver5LavaSample\u2192Biddlebokk"
+      ],
+      "preloot": "Allingredientsprelootperprimary; originaldeliverynotnewLootobjectives.",
+      "cash_copper_candidate": 367500,
+      "cash_conflict": "Jan11,2010#1263237450155567632 actual367pp5gp vscompiled365pp5gp; selectactualperiodcandidate.",
+      "tokens": 70,
+      "period_tokens": "Apr21,2010#1271896303274929799",
+      "source": "https://everquest.allakhazam.com/db/quest/5002"
+    },
+    {
+      "external": 5003,
+      "title": "What Could Go Wrong?",
+      "request": "harvest",
+      "prerequisites": [
+        5001,
+        5002
+      ],
+      "goals": 6,
+      "layout": [
+        "Deliver10LichenSample\u2192Biddlebokk",
+        "DeliverBiddlebokkTools\u2192Biddlebokk\u2192originalUndulatingMixture",
+        "DeliverMixture\u2192FalrornBorlakio\u2192FailedExperiment",
+        "DeliverFailedExperiment\u2192CleanerBot\u2192EmptyMold",
+        "DeliverEmptyMold\u2192BookkeeperBlanch\u2192Reprimand",
+        "DeliverReprimand\u2192BiddlebokkWORLDLichen"
+      ],
+      "physical": "Actualoriginalforms in native custody each exchange, nottask-onlyupdates/delete-summonworkarounds. LastlocationMar22,2010#1269282879307934656 correctedLichen notKernagir.",
+      "cash_copper": 315000,
+      "period_cash": "Apr2,2010#1270227884125629207",
+      "tokens": 60,
+      "period_tokens": "Apr27,2010#1272400907253403160",
+      "source": "https://everquest.allakhazam.com/db/quest/5003"
+    }
+  ],
+  "goal_total": 17,
+  "main_goal_total": 20,
+  "combined_total": 37,
+  "new_collect_or_loot_goals": 0,
+  "world_dropways": "Preserveoriginalmephitworkers/guards tongues/tools/spores, hungry sessiloidsdigestedrock, lava/magmagolem samples, cliknarscout/gathererslichen. Nativeidentity/sourcefiniteownerneeded.",
+  "native_item_ids": null,
+  "runtime_actions": 0,
+  "tests": 0,
+  "native_giver_zone": 487,
+  "city_zone_id": 484,
+  "city_shortname": "shiningcity",
+  "native_task_ids": null,
+  "forms_and_ingredients": [
+    {
+      "id": "17614",
+      "Name": "Royal Proclamation Form of Creation",
+      "lore": "Royal Proclamation Form of Creation",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17615",
+      "Name": "Form G-99492-T",
+      "lore": "Form G-99492-T",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17616",
+      "Name": "Form F-09383-4",
+      "lore": "Form F-09383-4",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17617",
+      "Name": "Form H-99499-6",
+      "lore": "H-99499-6",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17618",
+      "Name": "Creation Seal of Approval",
+      "lore": "Creation Seal of Approval",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17619",
+      "Name": "Mephit Tongue",
+      "lore": "Hot, slimy, and totally disgusting!",
+      "itemtype": "17",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17620",
+      "Name": "Lava Tube Spore",
+      "lore": "Lava Tube Spore",
+      "itemtype": "17",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17621",
+      "Name": "Partially Digested Rock",
+      "lore": "Partially Digested Rock",
+      "itemtype": "17",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17622",
+      "Name": "Lava Sample",
+      "lore": "A sample of lava taken from the lava golems in Lichen Creep.",
+      "itemtype": "17",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17623",
+      "Name": "Research Notes",
+      "lore": "Notes written by Bub. They are covered in oil.",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17624",
+      "Name": "Lichen Sample",
+      "lore": "Lichen Sample",
+      "itemtype": "17",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17635",
+      "Name": "Biddlebokk's Tools",
+      "lore": "Inventor Biddlebokk's Tools",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17636",
+      "Name": "Undulating Mixture",
+      "lore": "A brown, foul smelling mixture that appears to be moving",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17637",
+      "Name": "Failed Experiment",
+      "lore": "This mold appears to be covered in a very toxic substance",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17638",
+      "Name": "Empty Mold",
+      "lore": "Empty Mold",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "17639",
+      "Name": "Reprimand",
+      "lore": "Brell's not going to be happy with Biddlebokk!",
+      "itemtype": "32",
+      "clickeffect": "-1",
+      "clicktype": ""
+    }
+  ],
+  "exchanges": [
+    {
+      "external_task": 5001,
+      "activity": 0,
+      "input_item": 17614,
+      "count": 1,
+      "recipient_npc_id": 484028,
+      "output_item": 17615,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5001,
+      "activity": 1,
+      "input_item": 17615,
+      "count": 1,
+      "recipient_npc_id": 484387,
+      "output_item": 17616,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5001,
+      "activity": 2,
+      "input_item": 17616,
+      "count": 1,
+      "recipient_npc_id": 484020,
+      "output_item": 17617,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5001,
+      "activity": 3,
+      "input_item": 17617,
+      "count": 1,
+      "recipient_npc_id": 484379,
+      "output_item": 17618,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5001,
+      "activity": 4,
+      "input_item": 17618,
+      "count": 1,
+      "recipient_npc_id": 487053,
+      "output_item": null,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5001,
+      "activity": 5,
+      "input_item": 17619,
+      "count": 10,
+      "recipient_npc_id": 487053,
+      "output_item": null,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5002,
+      "activity": 1,
+      "input_item": 17623,
+      "count": 1,
+      "recipient_npc_id": 487053,
+      "output_item": null,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5002,
+      "activity": 2,
+      "input_item": 17620,
+      "count": 4,
+      "recipient_npc_id": 487053,
+      "output_item": null,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5002,
+      "activity": 3,
+      "input_item": 17621,
+      "count": 6,
+      "recipient_npc_id": 487053,
+      "output_item": null,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5002,
+      "activity": 4,
+      "input_item": 17622,
+      "count": 5,
+      "recipient_npc_id": 487053,
+      "output_item": null,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5003,
+      "activity": 0,
+      "input_item": 17624,
+      "count": 10,
+      "recipient_npc_id": 487053,
+      "output_item": null,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5003,
+      "activity": 1,
+      "input_item": 17635,
+      "count": 1,
+      "recipient_npc_id": 487053,
+      "output_item": 17636,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5003,
+      "activity": 2,
+      "input_item": 17636,
+      "count": 1,
+      "recipient_npc_id": 484110,
+      "output_item": 17637,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5003,
+      "activity": 3,
+      "input_item": 17637,
+      "count": 1,
+      "recipient_npc_id": 484121,
+      "output_item": 17638,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5003,
+      "activity": 4,
+      "input_item": 17638,
+      "count": 1,
+      "recipient_npc_id": 484379,
+      "output_item": 17639,
+      "committed_original_custody_required": true
+    },
+    {
+      "external_task": 5003,
+      "activity": 5,
+      "input_item": 17639,
+      "count": 1,
+      "recipient_npc_id": 487053,
+      "output_item": null,
+      "committed_original_custody_required": true
+    }
+  ],
+  "grants": [
+    {
+      "external_task": 5001,
+      "event": "actual accepted request",
+      "item": 17614,
+      "count": 1,
+      "actor": 487053,
+      "recipient_policy": "Exactrecipient/duplicate/capacity/persistencereceipt ownerheld; notunconditionalhail/login factory"
+    },
+    {
+      "external_task": 5002,
+      "activity": 0,
+      "event": "actualBubhail",
+      "item": 17623,
+      "count": 1,
+      "actor": 484358,
+      "recipient_policy": "Acceptedsharedtaskbound nativehail/source receipt; nottaskonlyprogress"
+    }
+  ],
+  "world_edits": 0,
+  "installed_callbacks_found": false,
+  "installed_lookup_limit": "No named/numericNPC/item/spell paths found in bounded file inventory, no lichencreep/shiningcity quest directories. Dynamic/global dispatch notexcluded."
+}

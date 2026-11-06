@@ -1,0 +1,112 @@
+{
+  "status": "Period-confirmed parent reward identities and class masks; configured through the existing durable reward service",
+  "parents": [
+    {
+      "achievement": 500040400,
+      "reward_set": 3050404,
+      "source": "https://everquest.allakhazam.com/db/quest/5566",
+      "historical_source": {
+        "url": "https://web.archive.org/web/20130315080058id_/http://everquest.allakhazam.com/db/quest.html?quest=5566",
+        "capture_utc": "20130315080058",
+        "sha256": "2793ef2d156cbf55cb1fadec55769d883643bacbdfd4ee6d6677d99cb9745071"
+      },
+      "items": [
+        {
+          "id": 108123,
+          "name": "Flawed Consigned Breastplate",
+          "class_mask": 151
+        },
+        {
+          "id": 108130,
+          "name": "Flawed Consigned Chain Tunic",
+          "class_mask": 33544
+        },
+        {
+          "id": 108137,
+          "name": "Flawed Consigned Leather Tunic",
+          "class_mask": 16480
+        },
+        {
+          "id": 108144,
+          "name": "Flawed Consigned Silk Robe",
+          "class_mask": 15360
+        }
+      ],
+      "gates": "Native equipment class masks; no additional achievement minimum-level gate inferred from equipment required/recommended levels",
+      "unconfirmed_rewards": "No extra XP,AA,cash,faction or duplicate quest rewards invented"
+    },
+    {
+      "achievement": 500040500,
+      "reward_set": 3050405,
+      "source": "https://everquest.allakhazam.com/db/quest/5601",
+      "historical_source": {
+        "url": "https://web.archive.org/web/20130315234255id_/http://everquest.allakhazam.com/db/quest.html?quest=5601",
+        "capture_utc": "20130315234255",
+        "sha256": "b23d7e3aae96194546a7be8e792bef07c270da8f3e48e7370088e38c7e47b610"
+      },
+      "items": [
+        {
+          "id": 108385,
+          "name": "Flawed Soldier's Cloak",
+          "class_mask": 49629
+        },
+        {
+          "id": 108395,
+          "name": "Flawed Scryer's Cape",
+          "class_mask": 15906
+        }
+      ],
+      "gates": "Native equipment class masks; no additional achievement minimum-level gate inferred from equipment required/recommended levels",
+      "unconfirmed_rewards": "No extra XP,AA,cash,faction or duplicate quest rewards invented"
+    },
+    {
+      "achievement": 500040600,
+      "reward_set": 3050406,
+      "source": "https://everquest.allakhazam.com/db/quest/5602",
+      "historical_source": {
+        "url": "https://web.archive.org/web/20130315232659id_/http://everquest.allakhazam.com/db/quest.html?quest=5602",
+        "capture_utc": "20130315232659",
+        "sha256": "322b899d8d3088e12becb413fe8cef7dc7ad75f153fd9fa744260510447492e0"
+      },
+      "items": [
+        {
+          "id": 108384,
+          "name": "Flawed Soldier's Pauldrons",
+          "class_mask": 49629
+        },
+        {
+          "id": 108394,
+          "name": "Flawed Scryer's Shoulderpads",
+          "class_mask": 15906
+        }
+      ],
+      "gates": "Native equipment class masks; no additional achievement minimum-level gate inferred from equipment required/recommended levels",
+      "unconfirmed_rewards": "No extra XP,AA,cash,faction or duplicate quest rewards invented"
+    },
+    {
+      "achievement": 500040700,
+      "reward_set": 3050407,
+      "source": "https://everquest.allakhazam.com/db/quest/5603",
+      "historical_source": {
+        "url": "https://web.archive.org/web/20130315235753id_/http://everquest.allakhazam.com/db/quest.html?quest=5603",
+        "capture_utc": "20130315235753",
+        "sha256": "48d7d5bac8a4f749e515de08b2389b646dc86f57e94f702f7daef185b784310d"
+      },
+      "items": [
+        {
+          "id": 108382,
+          "name": "Flawed Soldier's Eyepatch",
+          "class_mask": 49629
+        },
+        {
+          "id": 108392,
+          "name": "Flawed Scryer's Facemask",
+          "class_mask": 15906
+        }
+      ],
+      "gates": "Native equipment class masks; no additional achievement minimum-level gate inferred from equipment required/recommended levels",
+      "unconfirmed_rewards": "No extra XP,AA,cash,faction or duplicate quest rewards invented"
+    }
+  ],
+  "claim_persistence": "Existing durable reward service; native claim/relog acceptance pending"
+}

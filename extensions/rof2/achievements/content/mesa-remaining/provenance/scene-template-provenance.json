@@ -1,0 +1,141 @@
+{
+  "status": "Production specification; see native-status.json for exact runtime coverage and limitations",
+  "npc_ids": [
+    397901,
+    397902,
+    397903,
+    397904
+  ],
+  "historical": [
+    {
+      "npc_id": 397901,
+      "source": "https://everquest.allakhazam.com/db/npc/24170",
+      "facts": [
+        "Tuffein thug level45",
+        "Entrancing Song8639"
+      ]
+    },
+    {
+      "npc_id": 397902,
+      "source": "https://everquest.allakhazam.com/db/npc/40603",
+      "facts": [
+        "Tuffein grabber level40",
+        "Note from Razvan on original scene final corpse; owned script adds97238"
+      ]
+    },
+    {
+      "npc_id": 397903,
+      "source": "https://everquest.allakhazam.com/db/npc/23778",
+      "facts": [
+        "Tuffein raider catalogue level45"
+      ],
+      "conflict": "Quest3768 estimates50\u201352; no dated corroborating comment. Select NPC identity page45 with provenance, not claim exact original."
+    },
+    {
+      "npc_id": 397904,
+      "source": "https://everquest.allakhazam.com/db/npc/23289",
+      "facts": [
+        "level45",
+        "2006-10-15 reports approximate6000HP",
+        "2006-11-20 reports normal25\u201350/bites124+",
+        "2006-10-13 procTendonRip8712",
+        "2007/2008 any Mesa wolf placeholder, both riverbanks"
+      ],
+      "unrecovered": [
+        "bite attack implementation/magnitude",
+        "original rare probability",
+        "gear drop probabilities",
+        "exact pelt drop probability"
+      ]
+    }
+  ],
+  "configurable_sql_settings": {
+    "thug_hp": {
+      "default": 3500,
+      "min": 1,
+      "max": 1000000
+    },
+    "thug_min_hit": {
+      "default": 20,
+      "min": 0,
+      "max": 10000
+    },
+    "thug_max_hit": {
+      "default": 80,
+      "min": 1,
+      "max": 10000
+    },
+    "grabber_hp": {
+      "default": 3000,
+      "min": 1,
+      "max": 1000000
+    },
+    "grabber_min_hit": {
+      "default": 15,
+      "min": 0,
+      "max": 10000
+    },
+    "grabber_max_hit": {
+      "default": 65,
+      "min": 1,
+      "max": 10000
+    },
+    "raider_hp": {
+      "default": 4000,
+      "min": 1,
+      "max": 1000000
+    },
+    "raider_min_hit": {
+      "default": 25,
+      "min": 0,
+      "max": 10000
+    },
+    "raider_max_hit": {
+      "default": 100,
+      "min": 1,
+      "max": 10000
+    },
+    "fantoma_hp": {
+      "default": 6000,
+      "min": 1,
+      "max": 1000000
+    },
+    "fantoma_min_hit": {
+      "default": 25,
+      "min": 0,
+      "max": 10000
+    },
+    "fantoma_max_hit": {
+      "default": 50,
+      "min": 1,
+      "max": 10000
+    },
+    "thug_proc_chance": {
+      "default": 3,
+      "min": 0,
+      "max": 127
+    },
+    "fantoma_proc_chance": {
+      "default": 3,
+      "min": 0,
+      "max": 127
+    }
+  },
+  "labelled_template_defaults": {
+    "397901": "Native397011 Tuffein guard appearance/stats; reconstructed HP3500/normal20\u201380, SQL session configurable",
+    "397902": "Native397026 Tuffein medic appearance/stats/class6; reconstructed HP3000/normal15\u201365, SQL session configurable; spell profile not invented",
+    "397903": "Native397011 Tuffein guard appearance/stats; reconstructed HP4000/normal25\u2013100, SQL session configurable",
+    "397904": "Native397035 wolf model/stats/size except historically supported level/approxHP/normaldamage; proc_chance schema default3 remains unverified"
+  },
+  "safety": [
+    "All target row values must match on repeat; collision aborts before writes",
+    "No original NPC/spawn/loot/character/housing rows changed",
+    "No automatic persistent spawns for scene-owned actors",
+    "Fantoma acquisition supplied by separately guarded ordinary-wolf rare replacement SQL"
+  ],
+  "remaining": [
+    "Native batch acceptance for approved labelled settings",
+    "Compare Live sightings when supplied; do not mistake observed samples for exact rates"
+  ],
+  "authorization": "Explicit user approval for labelled configurable emulator spawn/drop/combat defaults received via root"
+}

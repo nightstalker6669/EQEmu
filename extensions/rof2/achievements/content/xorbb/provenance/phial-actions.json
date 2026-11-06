@@ -1,0 +1,43 @@
+{
+  "source": "https://rof.eqresource.com/aneyeforaneye.php",
+  "source_qualification": "Nov2012 original topic; mutable current walkthrough",
+  "task": 3040484,
+  "actions": {
+    "68576": {
+      "activity": 0,
+      "spell": 33979,
+      "targets": [
+        753133
+      ]
+    },
+    "68577": {
+      "activity": 7,
+      "spell": 33980,
+      "targets": [
+        753053,
+        753060,
+        753071,
+        753072,
+        753214,
+        753216,
+        753290
+      ]
+    },
+    "68578": {
+      "activity": 14,
+      "spell": 33981,
+      "targets": [
+        753148,
+        753172,
+        753184,
+        753185,
+        753208,
+        753247
+      ]
+    }
+  },
+  "range160": "Original existing spells33979,33980,33981 database readback",
+  "native_acceptance": false,
+  "shared_NPC_mutations": "Only transient duplicate-callback guard; no damage/depop/race/stat/loot edits",
+  "other_objectives": "Not implemented by this phial-only producer"
+}

@@ -65,12 +65,15 @@
 	and not SpellFinished().
 */
 
+#include "quest_item_target_permissions.h"
 #include "mob.h"
+#include "../common/shroud/ability_cast.h"
 
 #include "common/bodytypes.h"
 #include "common/classes.h"
 #include "common/data_bucket.h"
 #include "common/data_verification.h"
+#include "common/ground_aura_position.h"
 #include "common/eqemu_logsys.h"
 #include "common/events/player_event_logs.h"
 #include "common/item_instance.h"
@@ -82,6 +85,7 @@
 #include "common/strings.h"
 #include "zone/bot.h"
 #include "zone/client.h"
+#include "fire_native_item_custody.h"
 #include "zone/client_version.h"
 #include "zone/fastmath.h"
 #include "zone/lua_parser.h"
@@ -94,6 +98,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <array>
+#include <cmath>
+#include <limits>
 
 #include "common/links.h"
 
@@ -104,6 +111,127 @@ extern FastMath      g_Math;
 extern QueryServ    *QServ;
 
 using EQ::spells::CastingSlot;
+
+namespace {
+// This is a quest-specific compatibility predicate, not a meaning for generic
+// restriction 846. Keep the reviewed Lua roster and four-step owner policy.
+constexpr std::array<uint32, 14> BindingWorldEyes = {
+	753153, 753169, 753174, 753179, 753182, 753190, 753197,
+	753205, 753209, 753215, 753220, 753222, 753223, 753312
+};
+
+bool BindingParticipant(Client &client, Mob *member)
+{
+	for (int depth = 0; depth < 4; ++depth) {
+		if (!member) { return false; }
+		if (member == &client) { return true; }
+		if (member->IsClient()) {
+			auto *group = client.GetGroup();
+			return group && group->IsGroupMember(member);
+		}
+		if (!member->GetOwnerID()) { return false; }
+		member = member->GetOwner();
+	}
+	return false;
+}
+
+bool BindingItemMatches(Client &client, const XorbbBinding::ItemCastContext &context)
+{
+	if (!context.item_serial || !context.character_id || context.character_id != client.CharacterID() ||
+		context.inventory_slot > static_cast<uint32>(std::numeric_limits<int16>::max()) ||
+		(context.casting_slot != static_cast<int32>(CastingSlot::Item) &&
+		 context.casting_slot != static_cast<int32>(CastingSlot::PotionBelt))) {
+		return false;
+	}
+	auto &inventory = client.GetInv();
+	const auto slot = static_cast<int16>(context.inventory_slot);
+	const auto *item = inventory.GetItem(slot);
+	if (!item || !item->IsClassCommon() || item->GetID() != 17750 ||
+		item->GetCharges() <= 0 || item->GetSerialNumber() != context.item_serial ||
+		item->GetItem()->Click.Effect != 37147) {
+		return false;
+	}
+	const auto click_type = item->GetItem()->Click.Type;
+	if (click_type != EQ::item::ItemEffectClick && click_type != EQ::item::ItemEffectExpendable &&
+		click_type != EQ::item::ItemEffectEquipClick && click_type != EQ::item::ItemEffectClick2) {
+		return false;
+	}
+	// Use the same supported-slot admission as native item verification. The
+	// PotionBelt route does not turn a bank/trade/invalid slot into a click slot.
+	return inventory.SupportsClickCasting(slot) ||
+		(context.casting_slot == static_cast<int32>(CastingSlot::PotionBelt) &&
+		 (item->GetItem()->ItemType == EQ::item::ItemTypePotion || item->GetItem()->PotionBelt) &&
+		 inventory.SupportsPotionBeltCasting(slot));
+}
+
+XorbbBinding::ItemCastContext MakeBindingItemContext(
+	Mob &caster, int32 spell_id, Mob *target, CastingSlot slot, uint32 inventory_slot)
+{
+	XorbbBinding::ItemCastContext context;
+	if (spell_id != 37147 || !caster.IsClient() || !target || !target->IsNPC()) {
+		return context;
+	}
+	context.character_id = caster.CastToClient()->CharacterID();
+	context.inventory_slot = inventory_slot;
+	context.casting_slot = static_cast<int32>(slot);
+	if (inventory_slot <= static_cast<uint32>(std::numeric_limits<int16>::max())) {
+		const auto *item = caster.CastToClient()->GetInv().GetItem(static_cast<int16>(inventory_slot));
+		if (item) { context.item_serial = item->GetSerialNumber(); }
+	}
+	context.target_id = target->GetID();
+	context.target_type = target->GetNPCTypeID();
+	context.spawn_point_id = target->CastToNPC()->GetSpawnPointID();
+	context.target_object = target;
+	if (!BindingItemMatches(*caster.CastToClient(), context)) { return {}; }
+	return context;
+}
+
+bool AllowsBindingRestriction846(
+	Mob &caster, int32 spell_id, Mob *target, const XorbbBinding::ItemCastContext *context)
+{
+	if (!context || !context->item_serial || spell_id != 37147 || !caster.IsClient() ||
+		!zone || zone->GetZoneID() != 753 || !target || !target->IsNPC() ||
+		context->target_object != target || !target->GetID() || context->target_id != target->GetID()) {
+		return false;
+	}
+	const auto &spell = spells[spell_id];
+	if (spell.cast_restriction != 846 || spell.caster_requirement_id != 0 ||
+		spell.good_effect != 0 || spell.target_type != ST_Target || spell.pcnpc_only_flag != 0 ||
+		spell.effect_id[0] != SpellEffect::CHA || spell.base_value[0] != 1 || spell.range != 200) {
+		return false;
+	}
+	for (int effect = 1; effect < EFFECT_COUNT; ++effect) {
+		if (spell.effect_id[effect] != SpellEffect::Blank) { return false; }
+	}
+	auto &client = *caster.CastToClient();
+	auto &npc = *target->CastToNPC();
+	const auto *task = TaskManager::Instance()->GetTaskData(3040487);
+	if (!task || task->type == TaskType::Shared ||
+		!BindingItemMatches(client, *context) || !client.IsTaskActive(3040487) ||
+		!client.IsTaskActivityActive(3040487, 8) || target->IsPet() || target->GetOwnerID() ||
+		npc.GetSwarmInfo() || !npc.GetSpawnPointID() ||
+		context->spawn_point_id != npc.GetSpawnPointID() || context->target_type != npc.GetNPCTypeID() ||
+		std::find(BindingWorldEyes.begin(), BindingWorldEyes.end(), npc.GetNPCTypeID()) == BindingWorldEyes.end() ||
+		!target->GetEntityVariable("rof2.xorbb.world_eye.v1.lock").empty() ||
+		!target->GetEntityVariable("rof2.xorbb.binding.v1.state").empty()) {
+		return false;
+	}
+	const auto hp = target->GetHPRatio();
+	const auto dx = client.GetX() - target->GetX();
+	const auto dy = client.GetY() - target->GetY();
+	const auto dz = client.GetZ() - target->GetZ();
+	const auto distance_squared = dx * dx + dy * dy + dz * dz;
+	if (target->GetHP() <= 0 || !std::isfinite(hp) || hp <= 0 || hp > 30 ||
+		!std::isfinite(distance_squared) || distance_squared > 40000 ||
+		!client.CheckLosFN(target) || !client.IsAttackAllowed(target, true)) {
+		return false;
+	}
+	for (const auto *hate : target->GetHateList()) {
+		if (!hate || !BindingParticipant(client, hate->entity_on_hatelist)) { return false; }
+	}
+	return true;
+}
+} // namespace
 
 // this is run constantly for every mob
 void Mob::SpellProcess()
@@ -183,7 +311,8 @@ bool Mob::CastSpell(int32 spell_id, uint16 target_id, CastingSlot slot,
 				if ((IsBeneficialSpell(spell_id) && (!(spell_target->IsOfClientBot() || (spell_target->HasOwner() && spell_target->GetOwner()->IsOfClientBot()))))
 					|| (IsDetrimentalSpell(spell_id) && (spell_target->IsOfClientBot() || (spell_target->HasOwner() && spell_target->GetOwner()->IsOfClientBot())))) {
 					//Check if the target's target is a valid target; we can use DoCastingChecksOnTarget() here because we can let it handle the failure as vanilla would
-					if (DoCastingChecksOnTarget(true, spell_id, targets_target)) {
+					const auto implied_binding_context = MakeBindingItemContext(*this, spell_id, targets_target, slot, item_slot);
+					if (DoCastingChecksOnTarget(true, spell_id, targets_target, slot == CastingSlot::AltAbility ? aa_id : 0, &implied_binding_context)) {
 						target_id = targets_target->GetID();
 					}
 					else {
@@ -196,9 +325,10 @@ bool Mob::CastSpell(int32 spell_id, uint16 target_id, CastingSlot slot,
 		}
 	}
 
+	const auto binding_cast_context = MakeBindingItemContext(*this, spell_id, entity_list.GetMobID(target_id), slot, item_slot);
 	if (!DoCastingChecksOnCaster(spell_id, slot) ||
 		!DoCastingChecksZoneRestrictions(true, spell_id) ||
-		!DoCastingChecksOnTarget(true, spell_id, entity_list.GetMobID(target_id))) {
+		!DoCastingChecksOnTarget(true, spell_id, entity_list.GetMobID(target_id), slot == CastingSlot::AltAbility ? aa_id : 0, &binding_cast_context)) {
 		StopCastSpell(spell_id, send_spellbar_enable);
 		return false;
 	}
@@ -275,11 +405,11 @@ bool Mob::CastSpell(int32 spell_id, uint16 target_id, CastingSlot slot,
 
 	if(resist_adjust)
 	{
-		return(DoCastSpell(spell_id, target_id, slot, cast_time, mana_cost, oSpellWillFinish, item_slot, timer, timer_duration, *resist_adjust, aa_id));
+		return(DoCastSpell(spell_id, target_id, slot, cast_time, mana_cost, oSpellWillFinish, item_slot, timer, timer_duration, *resist_adjust, aa_id, &binding_cast_context));
 	}
 	else
 	{
-		return(DoCastSpell(spell_id, target_id, slot, cast_time, mana_cost, oSpellWillFinish, item_slot, timer, timer_duration, spells[spell_id].resist_difficulty, aa_id));
+		return(DoCastSpell(spell_id, target_id, slot, cast_time, mana_cost, oSpellWillFinish, item_slot, timer, timer_duration, spells[spell_id].resist_difficulty, aa_id, &binding_cast_context));
 	}
 }
 
@@ -294,7 +424,7 @@ bool Mob::CastSpell(int32 spell_id, uint16 target_id, CastingSlot slot,
 bool Mob::DoCastSpell(int32 spell_id, uint16 target_id, CastingSlot slot,
 					int32 cast_time, int32 mana_cost, uint32* oSpellWillFinish,
 					uint32 item_slot, uint32 timer, uint32 timer_duration,
-					int16 resist_adjust, uint32 aa_id)
+					int16 resist_adjust, uint32 aa_id, const XorbbBinding::ItemCastContext *binding_context)
 {
 	Mob* pMob = nullptr;
 	int32 orgcasttime;
@@ -309,9 +439,13 @@ bool Mob::DoCastSpell(int32 spell_id, uint16 target_id, CastingSlot slot,
 	LogSpells("DoCastSpell called for spell [{}] ([{}]) on entity [{}], slot [{}], time [{}], mana [{}], from item [{}]",
 		spell.name, spell_id, target_id, static_cast<int>(slot), cast_time, mana_cost, item_slot==0xFFFFFFFF?999:item_slot);
 
+	if (IsClient() && (slot == CastingSlot::Item || slot == CastingSlot::PotionBelt) &&
+		!FirePersonalOccurrenceSource::NativeItemCustody::Start(*CastToClient(),
+			static_cast<int16>(item_slot),spell_id,target_id)) {InterruptSpell();return false;}
 	casting_spell_id = spell_id;
 	casting_spell_slot = slot;
 	casting_spell_inventory_slot = item_slot;
+	binding_item_cast_context_ = binding_context ? *binding_context : XorbbBinding::ItemCastContext{};
 	if (casting_spell_timer != 0xFFFFFFFF) {
 		casting_spell_timer = timer;
 		casting_spell_timer_duration = timer_duration;
@@ -737,7 +871,8 @@ bool Mob::DoCastingChecksZoneRestrictions(bool check_on_casting, int32 spell_id)
 }
 
 
-bool Mob::DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob *spell_target) {
+bool Mob::DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob *spell_target, uint32 aa_context,
+ const XorbbBinding::ItemCastContext *binding_context, bool *binding_restriction_failed) {
 
 	/*
 		These are casting requirements or TARGETS that will cancel a spell before spell finishes casting or prevent spell from casting.
@@ -756,6 +891,21 @@ bool Mob::DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob *sp
 	bool ignore_on_casting = false;
 
 	if (check_on_casting) {
+		if (spells[spell_id].target_type == ST_Ring &&
+		    IsEffectInSpell(spell_id, SpellEffect::PersistentEffect)) {
+			if (!EQ::GroundAura::InRange(
+				GetX(), GetY(), GetZ(), GetTargetRingX(), GetTargetRingY(), GetTargetRingZ(),
+				GetActSpellRange(spell_id, spells[spell_id].range), spells[spell_id].min_range
+			)) {
+				MessageString(Chat::Red, TARGET_OUT_OF_RANGE);
+				return false;
+			}
+			if (IsDetrimentalSpell(spell_id) && !spells[spell_id].npc_no_los &&
+			    !CheckLosFN(GetTargetRingX(), GetTargetRingY(), GetTargetRingZ(), GetSize())) {
+				MessageString(Chat::Red, CANT_SEE_TARGET);
+				return false;
+			}
+		}
 		if (spells[spell_id].target_type == ST_AEClientV1 ||
 			spells[spell_id].target_type == ST_AECaster ||
 			spells[spell_id].target_type == ST_Ring ||
@@ -784,7 +934,11 @@ bool Mob::DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob *sp
 		Spells that use caster_restriction field which requires specific conditions on target to be met before casting.
 		[Insufficient mana first]
 	*/
-	if (spells[spell_id].cast_restriction && !spell_target->PassCastRestriction(spells[spell_id].cast_restriction)) {
+	if (spells[spell_id].cast_restriction && !spell_target->PassCastRestriction(spells[spell_id].cast_restriction) &&
+		!(spells[spell_id].cast_restriction == 846 && AllowsBindingRestriction846(*this, spell_id, spell_target, binding_context))) {
+		if (binding_restriction_failed && binding_context && spell_id == 37147 && spells[spell_id].cast_restriction == 846) {
+			*binding_restriction_failed = true;
+		}
 		SendCastRestrictionMessage(spells[spell_id].cast_restriction, true, IsDiscipline(spell_id));
 		LogSpells("Spell casting canceled [{}] : target requirement id [{}] not met.", spell_id, spells[spell_id].caster_requirement_id);
 		return false;
@@ -818,7 +972,7 @@ bool Mob::DoCastingChecksOnTarget(bool check_on_casting, int32 spell_id, Mob *sp
 		Prevent buffs from being cast on targets who don't meet level restriction
 	*/
 
-	if (!spell_target->CheckSpellLevelRestriction(this, spell_id)) {
+	if (!spell_target->CheckSpellLevelRestriction(this, spell_id, aa_context)) {
 		return false;
 	}
 	/*
@@ -1201,6 +1355,7 @@ bool Client::CheckFizzle(int32 spell_id)
 
 void Mob::ZeroCastingVars()
 {
+	if(IsClient())FirePersonalOccurrenceSource::NativeItemCustody::Cancel(*CastToClient());
 	// zero out the state keeping vars
 	attacked_count = 0;
 	spellend_timer.Disable();
@@ -1209,6 +1364,7 @@ void Mob::ZeroCastingVars()
 	casting_spell_slot = CastingSlot::Gem1;
 	casting_spell_mana = 0;
 	casting_spell_inventory_slot = 0;
+	binding_item_cast_context_ = {};
 	casting_spell_timer = 0;
 	casting_spell_timer_duration = 0;
 	casting_spell_resist_adjust = 0;
@@ -1728,8 +1884,22 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 	{
 		DeleteChargeFromSlot = GetItemSlotToConsumeCharge(spell_id, inventory_slot);
 	}
+	// Expose completed native item-click custody without retaining an item pointer.
+	const uint32 completed_cast_item_id =
+		IsClient() && IsFromItem && item && item->GetItem()->Click.Effect == spell_id
+			? item->GetID() : 0;
+	const int32 completed_cast_item_slot = completed_cast_item_id
+		? static_cast<int32>(inventory_slot) : -1;
+
+	FirePersonalOccurrenceSource::NativeItemCustody::FinishTicket fire_finish;
+	if(IsClient() && IsFromItem && !FirePersonalOccurrenceSource::NativeItemCustody::FinishEntry(
+		*CastToClient(),static_cast<int16>(inventory_slot),spell_id,DeleteChargeFromSlot,fire_finish)) {
+		StopCasting();return;
+	}
 	// we're done casting, now try to apply the spell
-	if(!SpellFinished(spell_id, spell_target, slot, mana_used, inventory_slot, resist_adjust, false,-1, 0xFFFFFFFF, 0, true))
+	const bool fire_spell_success=SpellFinished(spell_id, spell_target, slot, mana_used, inventory_slot, resist_adjust, false,-1, 0xFFFFFFFF, 0, true);
+	if(fire_finish.Selected() && !FirePersonalOccurrenceSource::NativeItemCustody::Finished(fire_finish,fire_spell_success))return;
+	if(!fire_spell_success)
 	{
 		LogSpells("Casting of [{}] canceled: SpellFinished returned false", spell_id);
 		// most of the cases we return false have a message already or are logic errors that shouldn't happen
@@ -1741,13 +1911,31 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 	if(IsOfClientBotMerc()) {
 		TrySympatheticProc(target, spell_id);
 	}
+	if(fire_finish.Selected() && !FirePersonalOccurrenceSource::NativeItemCustody::StillLive(fire_finish))return;
 
 	TryTwincast(this, target, spell_id);
+	if(fire_finish.Selected() && !FirePersonalOccurrenceSource::NativeItemCustody::StillLive(fire_finish))return;
 
 	TryTriggerOnCastFocusEffect(focusTriggerOnCast, spell_id);
+	if(fire_finish.Selected() && !FirePersonalOccurrenceSource::NativeItemCustody::StillLive(fire_finish))return;
 
+	// Selected receipt delivery is the final mutable callback. The SAME original
+	// charge invocation dispatches before live mutation and never falls through
+	// to the legacy boolean observer or any later Client/item dereference.
+	if(fire_finish.Selected()) {
+		FirePersonalOccurrenceSource::NativeItemCustody::DeleteScope fire_debit(fire_finish);
+		CastToClient()->DeleteItemInInventory(DeleteChargeFromSlot,1,true);
+		return;
+	}
+	bool completed_cast_charge_consumed = false;
 	if (IsClient() && DeleteChargeFromSlot >= 0) {
+		const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+		const uint32 before_id = before ? before->GetID() : 0;
+		const int16 before_charges = before ? before->GetCharges() : 0;
 		CastToClient()->DeleteItemInInventory(DeleteChargeFromSlot, 1, true);
+		const auto after = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+		completed_cast_charge_consumed = completed_cast_item_id == before_id && before_charges > 0 &&
+			(!after || after->GetID() != before_id || after->GetCharges() == before_charges - 1);
 	}
 	else if (IsBot() && DeleteChargeFromSlot >= 0) {
 		EQ::ItemInstance* inst = CastToBot()->GetBotItem(DeleteChargeFromSlot);
@@ -1768,11 +1956,14 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 
 	parse->EventMob(EVENT_CAST, this, nullptr, [&]() {
 		return fmt::format(
-			"{} {} {} {}",
+			"{} {} {} {} {} {} {}",
 			spell_id,
 			GetID(),
 			GetCasterLevel(spell_id),
-			target_id
+			target_id,
+			completed_cast_item_id,
+			completed_cast_item_slot,
+			completed_cast_charge_consumed ? 1 : 0
 		);
 	}, 0, &args);
 
@@ -2437,13 +2628,28 @@ bool Mob::SpellFinished(int32 spell_id, Mob *spell_target, CastingSlot slot, int
 		return(false);
 	}
 
+	const auto *binding_context = from_casted_spell && !isproc && spell_id == 37147 &&
+		casting_spell_id == spell_id && casting_spell_slot == slot &&
+		casting_spell_inventory_slot == inventory_slot &&
+		binding_item_cast_context_.inventory_slot == inventory_slot &&
+		binding_item_cast_context_.casting_slot == static_cast<int32>(slot)
+		? &binding_item_cast_context_ : nullptr;
+	// Revalidate the same held ring/target at native completion. Raw/proc calls
+	// cannot borrow the preceding cast's context by reading cached slot members.
+	if (spell_id == 37147 && spells[spell_id].cast_restriction == 846 &&
+		!AllowsBindingRestriction846(*this, spell_id, spell_target, binding_context)) {
+		SendCastRestrictionMessage(846, true, false);
+		return false;
+	}
+
 	//If spell was casted then we already checked these so skip, otherwise check here if being called directly from spell finished.
 	if (!from_casted_spell) {
 		if (!DoCastingChecksZoneRestrictions(true, spell_id)) {
 			LogSpells("Spell [{}]: Zone restriction failure.", spell_id);
 			return false;
 		}
-		if (!DoCastingChecksOnTarget(true, spell_id, spell_target)) {
+		if (!DoCastingChecksOnTarget(true, spell_id, spell_target,
+   slot == CastingSlot::AltAbility && !isproc ? aa_id : 0)) {
 			LogSpells("Spell [{}]: Casting checks on Target failure.", spell_id);
 			return false;
 		}
@@ -2575,7 +2781,14 @@ bool Mob::SpellFinished(int32 spell_id, Mob *spell_target, CastingSlot slot, int
 						return false;
 				}
 
-				else if(!SpellOnTarget(spell_id, spell_target, 0, true, resist_adjust, false, level_override)) {
+				else if (bool binding_restriction_failed = false;
+					!(binding_context
+						? SpellOnTargetWithBindingContext(spell_id, spell_target, 0, true, resist_adjust, false,
+							level_override, 0, false, binding_context, &binding_restriction_failed)
+						: SpellOnTarget(spell_id, spell_target, 0, true, resist_adjust, false, level_override))) {
+					// Detrimental non-buff failures normally continue. Propagate only a
+					// rejected contextual846 gate before native charge/completion events.
+					if (binding_restriction_failed) { return false; }
 					if(IsBuffSpell(spell_id) && IsBeneficialSpell(spell_id)) {
 						return false;
 					}
@@ -2724,7 +2937,14 @@ bool Mob::SpellFinished(int32 spell_id, Mob *spell_target, CastingSlot slot, int
 
 		case TargetRing:
 		{
-			entity_list.AESpell(this, nullptr, spell_id, false, resist_adjust);
+			if (IsEffectInSpell(spell_id, SpellEffect::PersistentEffect)) {
+				// The caster owns one persistent entity at the selected point.
+				// Applying this through AESpell would require a recipient inside
+				// the parent radius and create a separate aura on each recipient.
+				MakeAura(spell_id);
+			} else {
+				entity_list.AESpell(this, nullptr, spell_id, false, resist_adjust);
+			}
 			break;
 		}
 	}
@@ -3411,7 +3631,7 @@ int Mob::CheckStackConflict(int32 spellid1, int caster_level1, int32 spellid2, i
 // spells 1-50: no restrictons
 // 51-65: SpellLevel/2+15
 // 66+ Group Spells 62, Single Target 61
-bool Mob::CheckSpellLevelRestriction(Mob *caster, int32 spell_id)
+bool Mob::CheckSpellLevelRestriction(Mob *caster, int32 spell_id, uint32 aa_context)
 {
 	if (spells[spell_id].target_type == ST_Self) {
 		LogSpells("[CheckSpellLevelRestriction] Self Only spell - no restrictions");
@@ -3451,6 +3671,11 @@ bool Mob::CheckSpellLevelRestriction(Mob *caster, int32 spell_id)
 
 	if (check_for_restrictions) {
 		int spell_level = GetSpellMinimumLevel(spell_id);
+  // Only unlearnable Monster spell placeholders use the authenticated AA minimum.
+  if(spell_level == 255 && aa_context && caster->IsClient()) {
+   if(auto minimum=caster->CastToClient()->SpiritShroudAbilityMinimumLevel(spell_id,aa_context))
+    spell_level=int(SpiritShroud::BuffMinimumLevel(uint32_t(spell_level),minimum));
+  }
 
 		// Only check for beneficial buffs
 		if (IsBuffSpell(spell_id) && IsBeneficialSpell(spell_id)) {
@@ -3863,6 +4088,17 @@ bool Mob::SpellOnTarget(
 	int duration_override,
 	bool disable_buff_overwrite
 ) {
+	return SpellOnTargetWithBindingContext(spell_id, spelltar, reflect_effectiveness,
+		use_resist_adjust, resist_adjust, isproc, level_override, duration_override,
+		disable_buff_overwrite, nullptr, nullptr);
+}
+
+bool Mob::SpellOnTargetWithBindingContext(
+	int32 spell_id, Mob *spelltar, int reflect_effectiveness, bool use_resist_adjust,
+	int16 resist_adjust, bool isproc, int level_override, int duration_override,
+	bool disable_buff_overwrite, const XorbbBinding::ItemCastContext *binding_context,
+	bool *binding_restriction_failed)
+{
 	auto spellOwner = GetOwnerOrSelf();
 
 	// well we can't cast a spell on target without a target
@@ -4003,7 +4239,10 @@ bool Mob::SpellOnTarget(
 		0, &args
 	);
 
-	if (!DoCastingChecksOnTarget(false, spell_id, spelltar)) {
+	const uint32 aa_context = !isproc && casting_spell_slot == CastingSlot::AltAbility &&
+  casting_spell_id == spell_id ? casting_spell_aa_id : 0;
+ if (!DoCastingChecksOnTarget(false, spell_id, spelltar, aa_context,
+  isproc ? nullptr : binding_context, binding_restriction_failed)) {
 		safe_delete(action_packet);
 		return false;
 	}
@@ -4183,8 +4422,64 @@ bool Mob::SpellOnTarget(
 
 				}
 
+                // These dummy item spells implement specific NPC quest interactions,
+                // not general buffs. Keep all native cast/target checks and exempt only
+                // this beneficial-to-NPC permission decision for the exact quest context.
+                const bool quest_item_target_allowed = [&]() {
+                    if ((spell_id != 33562 && spell_id != 33564 && spell_id != 9255 && spell_id != 9181) ||
+                        isproc || casting_spell_id != spell_id ||
+                        (casting_spell_slot != CastingSlot::Item && casting_spell_slot != CastingSlot::PotionBelt)) {
+                        return false;
+                    }
+                    const auto *item = CastToClient()->GetInv().GetItem(casting_spell_inventory_slot);
+                    if (!item || !item->IsClassCommon() || !item->GetItem()) {
+                        return false;
+                    }
+                    QuestItemTargetPermissions::Context context;
+                    context.spell_id = spell_id;
+                    context.zone_id = zone->GetZoneID();
+                    context.item_id = item->GetID();
+                    context.item_click_spell_id = item->GetItem()->Click.Effect;
+                    context.authentic_item_cast = true;
+                    context.expected_spell_shape =
+                        spells[spell_id].good_effect == BENEFICIAL_EFFECT &&
+                        spells[spell_id].target_type == ST_Target &&
+                        spells[spell_id].pcnpc_only_flag == ((spell_id == 9255 || spell_id == 9181) ? 0 : PCNPCOnlyFlagType::NPC) &&
+                        spells[spell_id].effect_id[0] == (spell_id == 9181 ? SpellEffect::Blank : SpellEffect::CHA) &&
+                        spells[spell_id].base_value[0] == (spell_id == 9181 ? 0 : 1);
+                    for (int effect = 1; effect < EFFECT_COUNT; ++effect) {
+                        if (spells[spell_id].effect_id[effect] != SpellEffect::Blank ||
+                            (spell_id == 9181 && spells[spell_id].base_value[effect] != 0)) {
+                            context.expected_spell_shape = false;
+                        }
+                    }
+                    context.correct_task_activity_active = CastToClient()->IsTaskActivityActive(
+                        spell_id == 9255 ? 3040105 : 910023, spell_id == 9255 ? 1 : (spell_id == 33562 ? 5 : 14)
+                    );
+                    if (spell_id == 9181) {
+                        context.correct_task_activity_active = false;
+                        if (spelltar->IsNPC()) {
+                            for (size_t activity = 0; activity < QuestItemTargetPermissions::Moorwalkers.size(); ++activity) {
+                                if (spelltar->GetNPCTypeID() == QuestItemTargetPermissions::Moorwalkers[activity]) {
+                                    context.correct_task_activity_active = CastToClient()->IsTaskActivityActive(3040208, activity);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    context.target_is_npc = spelltar->IsNPC();
+                    if (context.target_is_npc) {
+                        context.target_npc_type_id = spelltar->GetNPCTypeID();
+                        context.target_race = spelltar->GetRace();
+                        context.target_is_owned = spelltar->GetOwnerID() != 0 || spelltar->CastToNPC()->GetSwarmOwner() != 0;
+                        context.target_hp_ratio = spelltar->GetHPRatio();
+                        context.target_attackable = spell_id == 33564 && IsAttackAllowed(spelltar, true);
+                    }
+                    return QuestItemTargetPermissions::Allows(context);
+                }();
+
 				if (
-					(!IsAllianceSpell(spell_id) && !IsBeneficialAllowed(spelltar)) ||
+					(!IsAllianceSpell(spell_id) && !IsBeneficialAllowed(spelltar) && !quest_item_target_allowed) ||
 					(IsGroupOnlySpell(spell_id) &&
 						!(
 							(
@@ -4554,7 +4849,7 @@ bool Mob::SpellOnTarget(
 	}
 
 	// make sure spelltar is high enough level for the buff
-	if (!spelltar->CheckSpellLevelRestriction(this, spell_id)) {
+	if (!spelltar->CheckSpellLevelRestriction(this, spell_id, aa_context)) {
 		safe_delete(action_packet);
 		return false;
 	}
@@ -7053,9 +7348,35 @@ void Mob::DoBardCastingFromItemClick(bool is_casting_bard_song, uint32 cast_time
 	//Instant cast items do not stop bard songs or interrupt casting.
 	else if (CheckItemRaceClassDietyRestrictionsOnCast(item_slot) && DoCastingChecksOnCaster(spell_id, CastingSlot::Item)) {
 		int16 DeleteChargeFromSlot = GetItemSlotToConsumeCharge(spell_id, item_slot);
-		if (SpellFinished(spell_id, entity_list.GetMob(target_id), CastingSlot::Item, 0, item_slot)) {
+		const auto completed_item = IsClient() ? CastToClient()->GetInv().GetItem(item_slot) : nullptr;
+		const uint32 completed_item_id = completed_item && completed_item->GetItem()->Click.Effect == spell_id
+			? completed_item->GetID() : 0;
+		bool completed_charge_consumed = false;
+		FirePersonalOccurrenceSource::NativeItemCustody::FinishTicket fire_finish;
+		if(IsClient() && (!FirePersonalOccurrenceSource::NativeItemCustody::Start(
+			*CastToClient(),static_cast<int16>(item_slot),spell_id,target_id) ||
+			!FirePersonalOccurrenceSource::NativeItemCustody::FinishEntry(
+				*CastToClient(),static_cast<int16>(item_slot),spell_id,DeleteChargeFromSlot,fire_finish))) {
+			CastToClient()->SendSpellBarEnable(spell_id);return;
+		}
+		const bool fire_native_cast_finished = SpellFinished(spell_id, entity_list.GetMob(target_id), CastingSlot::Item, 0, item_slot);
+        if(fire_finish.Selected()) {
+         if(!FirePersonalOccurrenceSource::NativeItemCustody::Finished(fire_finish,fire_native_cast_finished))return;
+         if(fire_native_cast_finished) {
+          FirePersonalOccurrenceSource::NativeItemCustody::DeleteScope fire_debit(fire_finish);
+          CastToClient()->DeleteItemInInventory(DeleteChargeFromSlot,1,true);
+         }else CastToClient()->SendSpellBarEnable(spell_id);
+         return;
+        }
+		if (fire_native_cast_finished) {
 			if (IsClient() && DeleteChargeFromSlot >= 0) {
+				const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+				const uint32 before_id = before ? before->GetID() : 0;
+				const int16 before_charges = before ? before->GetCharges() : 0;
 				CastToClient()->DeleteItemInInventory(DeleteChargeFromSlot, 1, true);
+				const auto after = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+				completed_charge_consumed = completed_item_id == before_id && before_charges > 0 &&
+					(!after || after->GetID() != before_id || after->GetCharges() == before_charges - 1);
 			}
 			else if (IsBot() && DeleteChargeFromSlot >= 0) {
 				EQ::ItemInstance* inst = CastToBot()->GetBotItem(DeleteChargeFromSlot);
@@ -7070,6 +7391,16 @@ void Mob::DoBardCastingFromItemClick(bool is_casting_bard_song, uint32 cast_time
 					GetOwner()->Message(Chat::Red, "%s says, 'Failed to update item charges.", GetCleanName());
 					LogError("Failed to update item charges for {}.", GetCleanName());
 				}
+			}
+			if (IsClient() && completed_item_id &&
+				(spell_id == 7230 || spell_id == 9483 || spell_id == 9484 || spell_id == 9485 ||
+				 (spell_id == 9486 && completed_item_id == 87222 && zone && zone->GetZoneID() == 404))) {
+				std::vector<std::any> args = { entity_list.GetMob(target_id) };
+				parse->EventMob(EVENT_CAST, this, nullptr, [&]() {
+					return fmt::format("{} {} {} {} {} {} {}", spell_id, GetID(),
+						GetCasterLevel(spell_id), target_id, completed_item_id, item_slot,
+						completed_charge_consumed ? 1 : 0);
+				}, 0, &args);
 			}
 		}
 		else {

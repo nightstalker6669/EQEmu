@@ -1,0 +1,50 @@
+[
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/README.md",
+    "sha256": "634e636ce60399df2a711859a255de4c0fdc3da9768e4636b562ae44bbe882fd"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/package.json",
+    "sha256": "211b1468958848a9c2553e48b4925ed82404a8c86eb06cde50bdd3fe046aa0e7"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/payload-manifest.json",
+    "sha256": "4bdc197c25f3cfd946dc019df908a0083ff7fbdbb992ba6370b2e413d097c2a7"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/provenance/period-sources.json",
+    "sha256": "abd8fc12d3b24d17b0fac787f6a7af7f84bb41f5c229f15ff56af362bf008dce"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/quest-manifest.json",
+    "sha256": "36890adf2eac7321d0ac43e2cf11e8e18c97d665d0934d76766cf90fb0f714f4"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/quests/lua_modules/achievement_alaran_master.lua",
+    "sha256": "366004c063d11bf4d45bb57fc5ef52eaa7183f89b7dfa1b34c906713bb9819c5"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/quests/lua_modules/achievement_alaran_master_data.lua",
+    "sha256": "07cb9074739895b17eab6f78ed8cdae926265afbe8724a8020fbc8ea973d3773"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/review/bundle.json",
+    "sha256": "bd84195d8c8300c88280f5e000d620b1b925d2e04c6ba8ebbf85ce5b0566df69"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/review/updater-entry.proposed.txt",
+    "sha256": "46f5730abfd2bc019f01d8f85f9c575238fb6dd58456219e2796a92d41a6e747"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/review/words-language-family.patch",
+    "sha256": "2b5cd2b9a9e580eee768ba45cc1734dec53d656590c0360d954bc018acb1829a"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-language-family/sql/2026_11_03_alaran_language_family.disabled.sql",
+    "sha256": "128253db17e7e5737b9dcd2494f2faea1bdb2a6a8078ea4ec4f1003128227ef4"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/checkpoint-20261103-language-family/README.md",
+    "sha256": "2fde757eea89de20a571f9ae36383f819bfb4819525128aaf092f40b58d24ee4"
+  }
+]

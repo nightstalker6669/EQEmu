@@ -1,3 +1,5 @@
+namespace TrophyCertificate55 {class Custody;}
+#include "fire_native_inventory_fence.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -61,11 +63,13 @@ class SharedDatabase;
 //	Base class for an instance of an item
 //	An item instance encapsulates item data + data specific
 //	to an item instance (includes dye, augments, charges, etc)
+namespace FirePersonalOccurrenceSource { class OriginalItemSnapshot; }
 namespace EQ
 {
 	class InventoryProfile;
 
 	class ItemInstance {
+		friend class TrophyCertificate55::Custody;
 	public:
 		/////////////////////////
 		// Methods
@@ -79,6 +83,7 @@ namespace EQ
 		ItemInstance(ItemInstTypes use_type);
 
 		ItemInstance(const ItemInstance& copy);
+		ItemInstance& operator=(const ItemInstance&)=delete; // never shallow-copy owned native trees
 
 		~ItemInstance();
 
@@ -126,7 +131,7 @@ namespace EQ
 		uint8 FirstOpenSlot() const;
 		uint8 GetTotalItemCount() const;
 		bool IsNoneEmptyContainer();
-		std::map<uint8, ItemInstance*>* GetContents() { return &m_contents; }
+		const std::map<uint8, ItemInstance*>* GetContents() const { return &m_contents; }
 
 		//
 		// Augments
@@ -158,26 +163,26 @@ namespace EQ
 		const uint8 GetItemType() const { return m_item ? m_item->ItemType : 255; } // Return 255 so you know there's no valid item
 
 		int16 GetCharges() const				{ return m_charges; }
-		void SetCharges(int16 charges)			{ m_charges = charges; }
+		void SetCharges(int16 charges)			{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_charges = charges; }
 
 		uint32 GetPrice() const					{ return m_price; }
-		void SetPrice(uint32 price)				{ m_price = price; }
+		void SetPrice(uint32 price)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_price = price; }
 
-		void SetColor(uint32 color)				{ m_color = color; }
+		void SetColor(uint32 color)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_color = color; }
 		uint32 GetColor() const					{ return m_color; }
 
 		uint32 GetMerchantSlot() const			{ return m_merchantslot; }
-		void SetMerchantSlot(uint32 slot)		{ m_merchantslot = slot; }
+		void SetMerchantSlot(uint32 slot)		{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_merchantslot = slot; }
 
 		int32 GetMerchantCount() const			{ return m_merchantcount; }
-		void SetMerchantCount(int32 count)		{ m_merchantcount = count; }
+		void SetMerchantCount(int32 count)		{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_merchantcount = count; }
 
 		int16 GetCurrentSlot() const			{ return m_currentslot; }
-		void SetCurrentSlot(int16 curr_slot)	{ m_currentslot = curr_slot; }
+		void SetCurrentSlot(int16 curr_slot)	{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_currentslot = curr_slot; }
 
 		// Is this item already attuned?
 		bool IsAttuned() const					{ return m_attuned; }
-		void SetAttuned(bool flag)				{ m_attuned = flag; }
+		void SetAttuned(bool flag)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_attuned = flag; }
 
 		std::string GetCustomDataString() const;
 		std::string GetCustomData(const std::string &identifier);
@@ -204,19 +209,19 @@ namespace EQ
 
 		bool IsScaling() const				{ return m_scaling; }
 		uint32 GetExp() const				{ return m_exp; }
-		void SetExp(uint32 exp)				{ m_exp = exp; }
-		void AddExp(uint32 exp)				{ m_exp += exp; }
-		void SetScaling(bool v)				{ m_scaling = v; }
+		void SetExp(uint32 exp)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_exp = exp; }
+		void AddExp(uint32 exp)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_exp += exp; }
+		void SetScaling(bool v)				{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_scaling = v; }
 		uint32 GetOrnamentationIcon() const							{ return m_ornamenticon; }
-		void SetOrnamentIcon(uint32 ornament_icon)					{ m_ornamenticon = ornament_icon; }
+		void SetOrnamentIcon(uint32 ornament_icon)					{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_ornamenticon = ornament_icon; }
 		uint32 GetOrnamentationIDFile() const						{ return m_ornamentidfile; }
-		void SetOrnamentationIDFile(uint32 ornament_idfile)			{ m_ornamentidfile = ornament_idfile; }
+		void SetOrnamentationIDFile(uint32 ornament_idfile)			{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_ornamentidfile = ornament_idfile; }
 		uint32 GetNewIDFile() const						            { return m_new_id_file; }
-		void SetNewIDFile(uint32 new_id_file)			            { m_new_id_file = new_id_file; }
+		void SetNewIDFile(uint32 new_id_file)			            { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_new_id_file = new_id_file; }
 		uint32 GetOrnamentHeroModel(int32 material_slot = -1) const;
-		void SetOrnamentHeroModel(uint32 ornament_hero_model)		{ m_ornament_hero_model = ornament_hero_model; }
+		void SetOrnamentHeroModel(uint32 ornament_hero_model)		{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_ornament_hero_model = ornament_hero_model; }
 		uint32 GetRecastTimestamp() const							{ return m_recast_timestamp; }
-		void SetRecastTimestamp(uint32 in)							{ m_recast_timestamp = in; }
+		void SetRecastTimestamp(uint32 in)							{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_recast_timestamp = in; }
 
 		void Initialize(SharedDatabase *db = nullptr);
 		void ScaleItem();
@@ -224,17 +229,66 @@ namespace EQ
 		std::string Serialize(int16 slot_id) const { InternalSerializedItem_Struct s; s.slot_id = slot_id; s.inst = (const void*)this; std::string ser; ser.assign((char*)&s, sizeof(InternalSerializedItem_Struct)); return ser; }
 		void Serialize(OutBuffer& ob, int16 slot_id) const { InternalSerializedItem_Struct isi; isi.slot_id = slot_id; isi.inst = (const void*)this; ob.write((const char*)&isi, sizeof(isi)); }
 
+		// Explicit split-instance copy. Ordinary Clone retains its historic serial.
+		ItemInstance* CloneWithNewSerial() const;
 		inline int32 GetSerialNumber() const { return m_SerialNumber; }
-		inline void SetSerialNumber(int32 id) { m_SerialNumber = id; }
+		inline void SetSerialNumber(int32 id) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_SerialNumber = id; }
 
-		std::map<std::string, ::Timer>& GetTimers() const { return m_timers; }
+		// Independent server ledger identity, including houses with no interior
+		// allocated yet. This is never a client wire field or a generated GUID.
+		// Only checked ledger reconstruction/acquisition may assign it. Copying
+		// preserves identity for relocation, not permission to mint another row.
+		uint64 GetHousingHouseID() const { return m_housing_house_id; }
+		bool SetHousingHouseID(uint64 id) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false; 
+			if (!id) { m_housing_house_id = 0; return true; }
+			const auto* item = GetItem();
+			if (m_housing_crate_id || !item || !item->HousingDefinitionID || item->HousingDefinitionID == UINT32_MAX)
+				return false;
+			m_housing_house_id = id;
+			return true;
+		}
+		// Independent crate ledger identity. Only checked custody/reload adapters
+		// may assign it; this is not a GUID, HouseID or native wire field.
+		uint64 GetHousingCrateID() const { return m_housing_crate_id; }
+		bool SetHousingCrateID(uint64 id) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false; 
+			if (!id) { m_housing_crate_id = 0; return true; }
+			const auto* item = GetItem();
+			if (m_housing_house_id || !item || !item->HousingDefinitionID || item->HousingDefinitionID == UINT32_MAX)
+				return false;
+			m_housing_crate_id = id;
+			return true;
+		}
+
+		// Server-resolved per-instance child estate, not the item template's
+		// HousingDefinitionID or a transient placed-object/serial identity.
+		// Durable housing admission/reconstruction must assign this explicitly;
+		// never populate it from client fields or unvalidated custom data.
+		uint32 GetHousingEstateID() const { return m_housing_estate_id; }
+		bool SetHousingEstateID(uint32 id) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false; 
+			if (id == UINT32_MAX) { m_housing_estate_id = id; return true; }
+			const auto* item = GetItem();
+			if (!id || !item || !item->HousingDefinitionID || item->HousingDefinitionID == UINT32_MAX)
+				return false;
+			m_housing_estate_id = id;
+			return true;
+		}
+
+		const std::map<std::string, ::Timer>& GetTimers() const { return m_timers; }
+        bool CheckTimer(const std::string& name,bool reset=true) const {
+         if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false;
+         const auto it=m_timers.find(name);return it!=m_timers.end()&&it->second.Check(reset);
+        }
+        bool SetEvolvingDetails(const CharacterEvolvingItemsRepository::CharacterEvolvingItems& value) {
+         if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false;
+         m_evolving_details=value;return true;
+        }
 		void SetTimer(std::string name, uint32 time);
 		void SetTimer(std::string name, uint32 time) const;
 		void StopTimer(std::string name);
 		void ClearTimers();
 
 		int GetTaskDeliveredCount() const { return m_task_delivered_count; }
-		void SetTaskDeliveredCount(int count) { m_task_delivered_count = count; }
+		void SetTaskDeliveredCount(int count) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_task_delivered_count = count; }
 		// This function should only be used by trade return apis
 		// Removes delivered task items from stack count and returns remaining count
 		// Return value should be used to determine if an item still exists (for stackable and non-stackable)
@@ -306,7 +360,7 @@ namespace EQ
 		static void ClearGUIDMap();
 
 		// evolving items stuff
-		CharacterEvolvingItemsRepository::CharacterEvolvingItems &GetEvolvingDetails() const { return m_evolving_details; }
+		const CharacterEvolvingItemsRepository::CharacterEvolvingItems &GetEvolvingDetails() const { return m_evolving_details; }
 
 		int8             GetEvolveLvl() const { if (GetItem()) { return GetItem()->EvolvingLevel; } return false; }
 		bool             IsEvolving() const { if (GetItem()) { return GetItem()->EvolvingItem; } return false; }
@@ -322,27 +376,29 @@ namespace EQ
 		uint32           GetEvolveFinalItemID() const { return m_evolving_details.final_item_id; }
 		uint32           GetAugmentEvolveUniqueID(uint8 augment_index) const;
 		void             SetEvolveEquipped(const bool in) const;
-		void             SetEvolveActivated(const bool in) const { m_evolving_details.activated = in; }
-		void             SetEvolveProgression(const double in) const { m_evolving_details.progression = in; }
-		void             SetEvolveUniqueID(const uint64 in) const { m_evolving_details.id = in; }
-		void             SetEvolveCharID(const uint32 in) const { m_evolving_details.character_id = in; }
-		void             SetEvolveItemID(const uint32 in) const { m_evolving_details.item_id = in; }
-		void             SetEvolveCurrentAmount(const uint64 in) const { m_evolving_details.current_amount = in; }
-		void             SetEvolveAddToCurrentAmount(const uint64 in) const { m_evolving_details.current_amount += in; }
-		void             SetEvolveFinalItemID(const uint32 in) const { m_evolving_details.final_item_id = in; }
+		void             SetEvolveActivated(const bool in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.activated = in; }
+		void             SetEvolveProgression(const double in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.progression = in; }
+		void             SetEvolveUniqueID(const uint64 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.id = in; }
+		void             SetEvolveCharID(const uint32 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.character_id = in; }
+		void             SetEvolveItemID(const uint32 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.item_id = in; }
+		void             SetEvolveCurrentAmount(const uint64 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.current_amount = in; }
+		void             SetEvolveAddToCurrentAmount(const uint64 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.current_amount += in; }
+		void             SetEvolveFinalItemID(const uint32 in) const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.final_item_id = in; }
 		bool             TransferOwnership(Database& db, const uint32 to_char_id) const;
-		void             CalculateEvolveProgression() const { m_evolving_details.progression = EvolvingItemsManager::Instance()->CalculateProgression(GetEvolveCurrentAmount(), GetID()); }
+		void             CalculateEvolveProgression() const { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_evolving_details.progression = EvolvingItemsManager::Instance()->CalculateProgression(GetEvolveCurrentAmount(), GetID()); }
 
 	protected:
 		//////////////////////////
 		// Protected Members
 		//////////////////////////
 		friend class InventoryProfile;
+		friend class FirePersonalOccurrenceSource::OriginalItemSnapshot;
+		friend class FirePersonalOccurrenceSource::NativeItemCustody;
 
 		std::map<uint8, ItemInstance*>::const_iterator _cbegin() { return m_contents.cbegin(); }
 		std::map<uint8, ItemInstance*>::const_iterator _cend() { return m_contents.cend(); }
 
-		void _PutItem(uint8 index, ItemInstance* inst) { m_contents[index] = inst; }
+		void _PutItem(uint8 index, ItemInstance* inst) { if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_contents[index] = inst; }
 
 		ItemInstTypes    m_use_type{ItemInstNormal};// Usage type for item
 		const ItemData * m_item{nullptr};           // Ptr to item data
@@ -363,6 +419,9 @@ namespace EQ
 		uint32           m_new_id_file{0};
 		uint32           m_ornament_hero_model{0};
 		uint32           m_recast_timestamp{0};
+		uint32           m_housing_estate_id{UINT32_MAX};
+		uint64           m_housing_house_id{0};
+		uint64           m_housing_crate_id{0};
 		int              m_task_delivered_count{0};
 		mutable CharacterEvolvingItemsRepository::CharacterEvolvingItems  m_evolving_details{};
 

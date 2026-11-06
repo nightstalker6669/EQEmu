@@ -1,0 +1,44 @@
+{
+  "sources": [
+    {
+      "url": "https://lucy.allakhazam.com/item.html?id=47761",
+      "supports": "Canonical47761\u2192ZAM86935\u2192ProtectorPurityoriginaldrop, resolvesduplicatedName/lore4499"
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4992#msg1282193012206252898",
+      "supports": "PositiveAug2010OrbSuspensionchestdrop; native110297exactName/lore/clickeffect"
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npclist?zone=726",
+      "supports": "Completecurrent21creatureroster:10ordinarytrash+9requirednamed+helper+chest; separateGotonurintakecandidate"
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4989",
+      "supports": "Realrightclickdung+tencores\u2192inactive\u2192activate/death, no container/11slotsassumption"
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4990",
+      "supports": "Realsynoviumclick+tenessence\u2192inactive\u2192Fungalactor/death; nextnativeassignment"
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4991",
+      "supports": "Realshard+tenorbs\u2192inactive\u2192homunculus/death; groupbindingqualificationheld"
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4992#msg128519700730082785",
+      "supports": "Keystoneallacceptedmembersincludingguildhall andspecificCC/snareLOCAL_ROOT_REFERENCE/rampage/Guardianrootqualifications"
+    }
+  ],
+  "door_source": {
+    "header": "WORKSPACE_SOURCE/eqemu-local/akk-stack/code/EQEmu/zone/doors.h",
+    "GetDoorID_line": 30,
+    "GetDoorDBID_line": 39,
+    "constructor": "WORKSPACE_SOURCE/eqemu-local/akk-stack/code/EQEmu/zone/doors.cpp:67",
+    "nativeacceptance": false
+  },
+  "SQL_emitted": false,
+  "DB_writes": 0,
+  "runtime_actions": 0,
+  "tests": 0,
+  "allocations": 0
+}

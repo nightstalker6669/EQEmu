@@ -1,0 +1,9 @@
+EQEmu RoF2 Fellowship
+
+Production fellowship extension for EQEmu, targeting the May 10, 2013 RoF2 client.
+EQEmu upstream copyright and GPLv3 notices are preserved; see LICENSE.
+Requires the separately published EQEmu RoF2 Housing integration described in docs/INSTALL.md.
+An independent community project, not affiliated with Daybreak Games. EverQuest
+and related names are trademarks of their respective owners. No client executable,
+DLL, archive, texture, map, packet capture or personal database is distributed.
+Protocol documentation records observed binary interfaces and explicit emulator policies.

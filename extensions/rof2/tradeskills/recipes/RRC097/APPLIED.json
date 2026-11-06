@@ -1,0 +1,39 @@
+{
+  "batch": "RRC097",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "90ba77b64aa2e5836a11686c20c3ae3298224e5c",
+  "source_sha256": "1e6d95ea6f07003fb5626950615aa3603b9cc2e86e361032c180e71ae8b98ebf",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "historical_qualification": "LABELLED_RECONSTRUCTION: dated 2008 Hide-family support, not individually authenticated May2013 formulas or physical outputs; uncertainty retained. 18 absent exact source outputs and 3 class-mask differences excluded; legacy650/857 preserved.",
+  "recipes": 23,
+  "entries": 170,
+  "ids": [
+    3093970,
+    3093992
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC097",
+    "0",
+    "25793",
+    "25816",
+    "194540",
+    "194710",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25816,
+    "entries": 194710
+  },
+  "affected_postimages_exact": true,
+  "unchanged_prototype_recipes": 2,
+  "unchanged_prototype_entries": 14,
+  "old_prototypes_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "legacy_learned_references_unchanged": true,
+  "target_learned_references_unchanged": true
+}

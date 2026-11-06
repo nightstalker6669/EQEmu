@@ -1,0 +1,29 @@
+{
+  "status": "SOURCE_PREPARED_NOT_APPLIED",
+  "source_contracts": [
+    "extensions/rof2/spells/research/underfoot-scent/CONTRACT.md",
+    "extensions/rof2/spells/research/underfoot-scent/PREREQUISITES.md",
+    "extensions/rof2/spells/research/underfoot-scent/prerequisite-contract.json"
+  ],
+  "source_pin_for_mission_research": "f93ec72010582ba1682d1ed30480c6da28f0ca66",
+  "reserved_tasks_and_sets": [
+    920132,
+    920133,
+    920134,
+    920135
+  ],
+  "source_only_schema_shaped": true,
+  "native_acceptance": false,
+  "database_applied": false,
+  "runtime_installed": false,
+  "cache_refreshed": false,
+  "numeric_and_unrest_graph_defaults": "Explicit in README/data.json; not recovered original fields",
+  "state_preservation": "No playerproperty/history/QA/import/globalhooks/NPC/loot/item/spawn mutation",
+  "guarded_helper_sha256": "9553e13462d3170d8c32874f5ae153edab84a4b99a76c38ed2061b5e88247c6d",
+  "data_sha256": "f446aaccd1edf0d7cb8e2e6cf5faa5f1f7deaeed4fa71001df80a09e5ff3807a",
+  "reserved_reward_entries": [
+    3839201321,
+    3839201341
+  ],
+  "reservation_source": "JARVIS coordinator explicit reservation,2026-11-04; no native allocation/apply by Spells"
+}

@@ -1,0 +1,208 @@
+{
+  "status": "Five-quest source reconstruction; not installed or native accepted",
+  "achievement": 500040900,
+  "components": [
+    50166,
+    50167,
+    50168,
+    50169,
+    50170
+  ],
+  "givers": {
+    "Ekaterina": 397105,
+    "Ramona": 397081,
+    "Queen Nhyalea": 397250
+  },
+  "items": {
+    "Fresh Water Sample": 87180,
+    "Puma Paw": 92816,
+    "Mountain Recluse Venom Sac": 87177,
+    "Snake Fang": 13067,
+    "Potent Antidote": 87175,
+    "Flowing Watersilk Robe": 53572
+  },
+  "quests": [
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3789",
+      "entered": "2006-10-30",
+      "title": "Ekaterina's Lament",
+      "keyword": "help",
+      "objectives": [
+        "Gather water near waterfall; physical arrival creates one real Fresh Water Sample on cursor",
+        "Deliver sample to Ekaterina"
+      ],
+      "period_evidence": [
+        "2007-01-29 waterfall EQloc1750,170",
+        "2007-02-05 confirms item name",
+        "2008-06-18 confirms exact two journal objectives"
+      ],
+      "reward": "XP; original amount unknown"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3790",
+      "entered": "2006-10-30",
+      "title": "It Can't Be the Queen",
+      "keyword": "further",
+      "objectives": [
+        "Explore Minohten camp",
+        "Explore dryad sanctuary",
+        "Explore Sunderock passage",
+        "Speak Ekaterina"
+      ],
+      "period_anchors_eq_loc": [
+        {
+          "y": -817.23,
+          "x": 1245.95,
+          "z": 86.79,
+          "date": "2007-02-05",
+          "place": "Minohten"
+        },
+        {
+          "y": -567,
+          "x": 32,
+          "date": "2007-07-09",
+          "place": "dryad sanctuary"
+        },
+        {
+          "y": 1632.74,
+          "x": -1048.86,
+          "z": 75.22,
+          "date": "2006-11-08",
+          "place": "Sunderock passage"
+        }
+      ],
+      "reward": "XP; unknown amount"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3791",
+      "entered": "2006-10-30",
+      "title": "Find the Cure",
+      "keyword": "stand a chance",
+      "objectives": [
+        "Kill2dark widows",
+        "Kill4murkwater oozes",
+        "Kill4ring snakes",
+        "Speak Ekaterina"
+      ],
+      "period_evidence": [
+        "2007-07-28 reports approximately10percentAA atlevel66; observation not exact raw XP"
+      ],
+      "reward": "XP; use approved labelled default instead of reverse-solving imprecise AA observation"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3792",
+      "entered": "2006-10-30",
+      "title": "Parts For a Cure",
+      "keyword": "go see Ramona",
+      "objectives": [
+        "Speak Ramona",
+        "Loot1PumaPaw inBlackfeatherRoost",
+        "Loot1MountainRecluseVenomSac inRoost",
+        "Loot1SnakeFang inRoost",
+        "Deliver three ingredients toRamona",
+        "SpeakRamona, receive realPotentAntidote",
+        "Return toEkaterina withcure"
+      ],
+      "period_evidence": [
+        "2007-02-05 Ramona EQloc-543,+59.47,+179.48",
+        "2007-07-01 aMesa SnakeFang didnotupdate Roostloot objective",
+        "2012-08-01 trueSnakeFang drop rare, PearlescentFang doesnotcount"
+      ],
+      "later_conflict": "2014claims poisonoussnakes do notdropFang,2015corrects theydo; existingPEQdrop supports both and willstay unchanged"
+    },
+    {
+      "source": "https://everquest.allakhazam.com/db/quest/3793",
+      "entered": "2006-10-30",
+      "title": "Tunare Save the Queen",
+      "keyword": "deliver",
+      "objectives": [
+        "DeliverPotentAntidote toQueenNhyalea",
+        "Queenrejectscure andattacks; killQueen",
+        "SpeakEkaterina"
+      ],
+      "reward_item": 53572,
+      "period_evidence": [
+        "2006-10-30 Queen withhostileadds atnorthwaterfall; fullchain soloed by70Beastlord",
+        "2009-07-02 protectors canCompleteHealQueen"
+      ],
+      "historical_limits": [
+        "Current2026walkthrough minimum60 is not original admission proof",
+        "Faction+20/+20/-20 onlydated2022confirmation, not period numeric proof",
+        "2019mezz/charm multi-player handin advice is later corroboration",
+        "Do not replacequeen globally or resetotherplayers' encounters"
+      ]
+    }
+  ],
+  "existing_native_loot": {
+    "PumaPaw": {
+      "npc_ids": [
+        398000,
+        398002,
+        398003,
+        398010,
+        398019,
+        398092,
+        398094
+      ],
+      "chance_percent_range": [
+        44.087,
+        47.76
+      ]
+    },
+    "VenomSac": {
+      "npc_ids": [
+        398008,
+        398089,
+        398090
+      ],
+      "chance_percent": 20.731
+    },
+    "SnakeFang": {
+      "npc_ids": [
+        398014,
+        398097,
+        398021
+      ],
+      "chance_percent": [
+        9.918,
+        8.864
+      ]
+    },
+    "policy": "Keep existing drops and tables; native loot objective must enforce zone398, not inventory polling or freequest-item grant"
+  },
+  "native_target_variants": {
+    "dark_widow": [
+      397199,
+      397213,
+      397214
+    ],
+    "murkwater_ooze": [
+      397162,
+      397201,
+      397202,
+      397219,
+      397246
+    ],
+    "ring_snake": [
+      397150,
+      397158,
+      397224
+    ]
+  },
+  "implementation_notes": [
+    "Include all existing level variants of each named creature",
+    "Keep original NPC placements and creature loot",
+    "Coordinate Ramona say/trade with other content; numericcallback absent at bounded audit",
+    "Preserve owned antidote between finaltwoquests; recover lost quest supply without duplicating custody",
+    "Use actual handin and native kill producers for Queen; no timer-completion shortcut",
+    "Original XP amounts and faction award amounts unresolved; label XPdefault, omit unverified faction numbers"
+  ],
+  "id_request": {
+    "range": [
+      3040469,
+      3040473
+    ],
+    "fresh_collision_query": "empty",
+    "reservation": "Coordinator reserved"
+  }
+}

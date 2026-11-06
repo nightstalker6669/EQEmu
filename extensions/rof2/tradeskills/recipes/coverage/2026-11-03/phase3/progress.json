@@ -1,0 +1,62 @@
+{
+  "installed_batches": 9,
+  "added_recipes": 249,
+  "added_logical_entries": 1413,
+  "current_recipe_rows": 23072,
+  "current_entry_rows": 179032,
+  "current_item_rows": 118692,
+  "broad_source_corpus": {
+    "verified_initial_pages": 536,
+    "formula_catalogues": 499,
+    "raw_rows": 37579,
+    "additional_article_indexes_captured": 9,
+    "source_native_reference_ids_verified": 288,
+    "historical_denominator": null,
+    "graph_closed": false
+  },
+  "broad_role_audit": {
+    "snapshot_stage": "AfterRRC007,beforeRRC008/RRC009",
+    "comparable_source_role_maps": 13038,
+    "container_learning_race_salvage_era_accepted": false
+  },
+  "installed_source_crosscheck": {
+    "recipes": 249,
+    "entries": 1413,
+    "postimage_and_ingredient_return_quantities_yield_trivial_exact": true,
+    "native_acceptance": false,
+    "new_historical_numeric_proof": false
+  },
+  "period_corroboration": {
+    "source": "https://mboards.eqtraders.com/eq/forum/tradeskills/tradeskill-guides-and-ui-mods/36211-the-ultimate-eq-tradeskill-guide",
+    "post_date": "2012-05-14",
+    "edit_date": "2012-06-16",
+    "recipe_names": [
+      "Alaran Juice",
+      "Alaran Medicinal Tonic",
+      "Alaran Nostrum"
+    ],
+    "scope": "These3ingredient maps/trivials match dated primary player post; current rendering, not immutable2012capture; other metadata/7recipes unproven."
+  },
+  "material_access": {
+    "Al_Metes64418_lootdrop_rows": 226,
+    "Essence64546_lootdrop_rows": 569,
+    "positive_static_spawn_zone_names_per_material": 11,
+    "native_access_or_drop_verified": false,
+    "Planar_Goo_Shard_static_acquisition_refs": 0,
+    "rates_or_loot_DML_added": false
+  },
+  "held_dependencies": {
+    "previous_RoF_output_item_definition_gaps": 19,
+    "additional_current_source_omelet_item_ids_absent": [
+      64419,
+      64420
+    ],
+    "ornament_form_conflict": {
+      "source_native_id": 152977,
+      "local_same_name_container_id": 76797,
+      "historical_identity_resolved": false
+    }
+  },
+  "full_historical_audit_complete": false,
+  "completion_percentage": null
+}

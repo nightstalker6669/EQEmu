@@ -1,0 +1,39 @@
+{
+  "batch": "RRC099",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "a043fc28ecdcdff86c227c23f8cbec245ece90f0",
+  "source_sha256": "31a74cff6f4dee331661bcd02ae97b5192d9f4abd306387cd496bc93b697cb03",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "historical_qualification": "LABELLED_RECONSTRUCTION: ten maintained input routes lack individual cutoff authentication; FishFungus dated2005 success/body/CollapsibleBox/manual behavior supported, current68/failure/regularBox reconstructed. Learning48 suppresses message/search but internalmadecount persists. Explicit17048/17163only;126oldproducers967entries unchanged, Dragon15/102 held.",
+  "recipes": 11,
+  "entries": 86,
+  "ids": [
+    3093995,
+    3094005
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC099",
+    "0",
+    "25818",
+    "25829",
+    "194722",
+    "194808",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25829,
+    "entries": 194808
+  },
+  "affected_postimages_exact": true,
+  "unchanged_prototype_recipes": 126,
+  "unchanged_prototype_entries": 967,
+  "old_prototypes_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "legacy_learned_references_unchanged": true,
+  "target_learned_references_unchanged": true
+}

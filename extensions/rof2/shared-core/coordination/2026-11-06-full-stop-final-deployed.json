@@ -1,0 +1,26 @@
+{
+  "status": "PAUSED_BY_USER_FINAL_DEPLOYMENT_COMPLETE",
+  "date": "2026-11-06",
+  "instruction": "All project work paused; explicit user resume required.",
+  "completed_final_deployment": [
+    "RRC307 and RRC309 native actors",
+    "Targeted item cache containing added item23382, all older records unchanged",
+    "Seven recipe inserts, independently verified and committed"
+  ],
+  "actual_recipes": 34445,
+  "actual_recipe_entries": 261140,
+  "remaining_paused_recipe_groups": 51,
+  "server": "Same matched server running; normal admission restored.",
+  "deployed_binaries": {
+    "world_sha256_prefix": "93334f15",
+    "zone_sha256_prefix": "3ca4f457"
+  },
+  "unfinished_drafts": "RRC310 recharge writer, Fungal ten-delivery work, and other archival drafts remain disabled and paused.",
+  "identity_qualifications": [
+    "Earnest Force recipe uses qualified LOCAL existing124972 variant; primary127972 identity remains unresolved and no127972 item was created.",
+    "Item23382 source-visible identity with explicitly reconstructed hidden fields is applied.",
+    "Recipe source reconstruction and installed code do not imply native gameplay acceptance."
+  ],
+  "final_release_receipt_sha256": "be8b9fc474e72fca209fd73eb8220dfb610dc23aa766b671849edb8555d236f4",
+  "supersedes_checkpoint": "2026-11-06-full-stop.json records pre-final-deployment state; this document records subsequent user-authorized completed deployment."
+}

@@ -1,0 +1,289 @@
+{
+  "status": "SOURCE_ONLY_DISABLED_REPLACEMENT_VIEWS_NOT_INSTALLABLE",
+  "unique_hail_type_corrections": 19,
+  "views": [
+    {
+      "path": "task-reward-data.draft.json",
+      "sha256": "9a2d2d5ca069bccacdfe7fb5365c30d281023b464c86a1173a57ae49fd3704a7",
+      "original_sha256": "fe86aa46d92bc82aa458c672c2f1767d7e18b92e348bb7f499a2e581010ef184",
+      "changes": [
+        {
+          "taskid": 920141,
+          "activityid": 1,
+          "before": 5,
+          "after": 4,
+          "target": "Autoros"
+        },
+        {
+          "taskid": 920141,
+          "activityid": 3,
+          "before": 5,
+          "after": 4,
+          "target": "Eulyris"
+        },
+        {
+          "taskid": 920141,
+          "activityid": 5,
+          "before": 5,
+          "after": 4,
+          "target": "Excrug Shrivstem"
+        },
+        {
+          "taskid": 920141,
+          "activityid": 7,
+          "before": 5,
+          "after": 4,
+          "target": "Deagus the Fungrotect"
+        },
+        {
+          "taskid": 920141,
+          "activityid": 9,
+          "before": 5,
+          "after": 4,
+          "target": "Adeenas"
+        },
+        {
+          "taskid": 920142,
+          "activityid": 8,
+          "before": 5,
+          "after": 4,
+          "target": "Adeenas"
+        },
+        {
+          "taskid": 920142,
+          "activityid": 9,
+          "before": 5,
+          "after": 4,
+          "target": "Orgus Shrivstem"
+        },
+        {
+          "taskid": 920143,
+          "activityid": 0,
+          "before": 5,
+          "after": 4,
+          "target": "Rakkirin Shrivstem"
+        },
+        {
+          "taskid": 920143,
+          "activityid": 1,
+          "before": 5,
+          "after": 4,
+          "target": "Deagus the Fungrotect"
+        },
+        {
+          "taskid": 920143,
+          "activityid": 6,
+          "before": 5,
+          "after": 4,
+          "target": "Deagus the Fungrotect"
+        },
+        {
+          "taskid": 920143,
+          "activityid": 10,
+          "before": 5,
+          "after": 4,
+          "target": "Rakkirin Shrivstem"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 0,
+          "before": 5,
+          "after": 4,
+          "target": "Sage Autoros"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 1,
+          "before": 5,
+          "after": 4,
+          "target": "Sage Eulyris"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 2,
+          "before": 5,
+          "after": 4,
+          "target": "Sage Vaelani"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 3,
+          "before": 5,
+          "after": 4,
+          "target": "Knave Toltan"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 4,
+          "before": 5,
+          "after": 4,
+          "target": "Knave Garusk"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 5,
+          "before": 5,
+          "after": 4,
+          "target": "Adeenas"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 17,
+          "before": 5,
+          "after": 4,
+          "target": "Rakkirin Shrivstem"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 18,
+          "before": 5,
+          "after": 4,
+          "target": "Adeenas"
+        }
+      ]
+    },
+    {
+      "path": "combined-data.draft.json",
+      "sha256": "93da396fdc17617b182a69cdb694511a6376e07c389f6a8117e814fe8d0f0f67",
+      "original_sha256": "090b8c8f7b6439a2fd40690764c1761ed0bf8bff8b06a27bf0b8129ab4db103e",
+      "changes": [
+        {
+          "taskid": 920141,
+          "activityid": 1,
+          "before": 5,
+          "after": 4,
+          "target": "Autoros"
+        },
+        {
+          "taskid": 920141,
+          "activityid": 3,
+          "before": 5,
+          "after": 4,
+          "target": "Eulyris"
+        },
+        {
+          "taskid": 920141,
+          "activityid": 5,
+          "before": 5,
+          "after": 4,
+          "target": "Excrug Shrivstem"
+        },
+        {
+          "taskid": 920141,
+          "activityid": 7,
+          "before": 5,
+          "after": 4,
+          "target": "Deagus the Fungrotect"
+        },
+        {
+          "taskid": 920141,
+          "activityid": 9,
+          "before": 5,
+          "after": 4,
+          "target": "Adeenas"
+        },
+        {
+          "taskid": 920142,
+          "activityid": 8,
+          "before": 5,
+          "after": 4,
+          "target": "Adeenas"
+        },
+        {
+          "taskid": 920142,
+          "activityid": 9,
+          "before": 5,
+          "after": 4,
+          "target": "Orgus Shrivstem"
+        },
+        {
+          "taskid": 920143,
+          "activityid": 0,
+          "before": 5,
+          "after": 4,
+          "target": "Rakkirin Shrivstem"
+        },
+        {
+          "taskid": 920143,
+          "activityid": 1,
+          "before": 5,
+          "after": 4,
+          "target": "Deagus the Fungrotect"
+        },
+        {
+          "taskid": 920143,
+          "activityid": 6,
+          "before": 5,
+          "after": 4,
+          "target": "Deagus the Fungrotect"
+        },
+        {
+          "taskid": 920143,
+          "activityid": 10,
+          "before": 5,
+          "after": 4,
+          "target": "Rakkirin Shrivstem"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 0,
+          "before": 5,
+          "after": 4,
+          "target": "Sage Autoros"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 1,
+          "before": 5,
+          "after": 4,
+          "target": "Sage Eulyris"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 2,
+          "before": 5,
+          "after": 4,
+          "target": "Sage Vaelani"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 3,
+          "before": 5,
+          "after": 4,
+          "target": "Knave Toltan"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 4,
+          "before": 5,
+          "after": 4,
+          "target": "Knave Garusk"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 5,
+          "before": 5,
+          "after": 4,
+          "target": "Adeenas"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 17,
+          "before": 5,
+          "after": 4,
+          "target": "Rakkirin Shrivstem"
+        },
+        {
+          "taskid": 920144,
+          "activityid": 18,
+          "before": 5,
+          "after": 4,
+          "target": "Adeenas"
+        }
+      ]
+    }
+  ],
+  "meaning": "NativeSpeakWith4 replaces incorrectly encoded Explore5 for exact known hail objectives only. Actual FateExplore0/2/4/6 remains5,goalmethod2 andallother content/flags unchanged. Replace old views, do not insert extra rows.",
+  "native_companion": "rof2-shared-core extensions/rof2/shared-core/fungal-native-item-operations, nine originalhails plus existingthreephysicaloperations; finiteDDLunchanged.",
+  "activation": "All retained task/reward flags remain0; no application/enable/native acceptance follows from source publication. Physical deliveries and full mission remain incomplete."
+}

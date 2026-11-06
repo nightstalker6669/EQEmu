@@ -1,0 +1,606 @@
+{
+  "revision": "xorbb-profiles-r1",
+  "status": "Authored source only; no SQL executed, readiness remains false",
+  "authorization": "Standing user approval for clearly labelled configurable defaults unless research provides better evidence",
+  "cutoff": "2013-05-31",
+  "existing": [
+    {
+      "id": 753124,
+      "name": "a_minotaur_cook",
+      "set": {
+        "hp": 3000000,
+        "mindmg": 2000,
+        "maxdmg": 40000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "4,1^10,1"
+      },
+      "provenance": [
+        "Dec18,2012 observation reaches40k; mutable guide reports modern14k. Use period upper observation as a configured cap, not a recovered premitigation value. AE rampage is documented."
+      ]
+    },
+    {
+      "id": 753147,
+      "name": "#Gerbril_the_Cook",
+      "set": {
+        "hp": 3800000,
+        "mindmg": 4000,
+        "maxdmg": 33000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "3,1^10,1"
+      },
+      "provenance": [
+        "Dec6,2012 player combat parse reports about3.8millionHP, dual33k/30k hits against level100SK and rampage. Use3.8millionHP and33k configured cap from period evidence rather than prior2million/14k defaults. Raw damage before player mitigation remains unknown; minhit/AC/ATK/resists are labelled emulator defaults."
+      ]
+    },
+    {
+      "id": 753162,
+      "name": "a_scholarly_minotaur",
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing identity/level/model preserved. Combat values are approved configurable RoF-tier emulator defaults."
+      ]
+    },
+    {
+      "id": 753273,
+      "name": "a_minotaur_architect",
+      "set": {
+        "hp": 2000000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing identity/level/model preserved. Combat values are approved configurable RoF-tier emulator defaults."
+      ]
+    },
+    {
+      "id": 753246,
+      "name": "#Lord_Sviir",
+      "set": {
+        "hp": 3500000,
+        "mindmg": 4000,
+        "maxdmg": 30000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "3,1^5,1^10,1^26,1"
+      },
+      "provenance": [
+        "Current quest guide supports approximate30k maximum, rampage, flurry and belly casting; exact numericHP/AC/ATK/resists are server defaults."
+      ]
+    },
+    {
+      "id": 753051,
+      "name": "#Lord_Syrkl",
+      "set": {
+        "hp": 3500000,
+        "mindmg": 4000,
+        "maxdmg": 30000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "3,1^5,1^10,1^26,1"
+      },
+      "provenance": [
+        "Current quest guide supports approximate30k maximum, rampage, flurry and belly casting; exact numericHP/AC/ATK/resists are server defaults."
+      ]
+    },
+    {
+      "id": 753081,
+      "name": "a_waterbrigade_goblin",
+      "set": {
+        "hp": 500000,
+        "mindmg": 1000,
+        "maxdmg": 6500,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Mutable guide reports approximate6.5k maximum and lowHP; numericHP default."
+      ]
+    },
+    {
+      "id": 753253,
+      "name": "a_multiphasic_crystal",
+      "set": {
+        "hp": 1500000,
+        "mindmg": 1000,
+        "maxdmg": 7000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "5,1^10,1^26,1"
+      },
+      "provenance": [
+        "Current guide supports approximate7k maximum, flurry and belly casting. Race remains127 at spawn; aura script selects615 candidate when visible."
+      ]
+    },
+    {
+      "id": 753086,
+      "name": "a_minotaur_shelter",
+      "set": {
+        "hp": 6000000,
+        "mindmg": 0,
+        "maxdmg": 0,
+        "attack_count": 0,
+        "runspeed": 0,
+        "hp_regen_rate": 0,
+        "exp_mod": 0
+      },
+      "provenance": [
+        "Stationary existing object identity/level/model preserved. Six-million HP is a configurable emulator default, allowing real33531 torch ticks/native33532focus to matter; not original HP."
+      ]
+    },
+    {
+      "id": 753010,
+      "name": "a_gravelcrush_whirlwind",
+      "set": {
+        "hp": 1500000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing whirlwind type explicitly participates in periodDec6,2012 bat social-assistance report. Its current placeholdermaxdamage4 is not a functional RoF encounter. Combat values are configurable server defaults; retain identity/level/race/placement/faction/loot. No claim of recovered original NPC stats."
+      ]
+    },
+    {
+      "id": 753014,
+      "name": "a_stonegrind_whirlwind",
+      "set": {
+        "hp": 1500000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing whirlwind type explicitly participates in periodDec6,2012 bat social-assistance report. Its current placeholdermaxdamage4 is not a functional RoF encounter. Combat values are configurable server defaults; retain identity/level/race/placement/faction/loot. No claim of recovered original NPC stats."
+      ]
+    },
+    {
+      "id": 753015,
+      "name": "a_stormrage_whirlwind",
+      "set": {
+        "hp": 1500000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing whirlwind type explicitly participates in periodDec6,2012 bat social-assistance report. Its current placeholdermaxdamage4 is not a functional RoF encounter. Combat values are configurable server defaults; retain identity/level/race/placement/faction/loot. No claim of recovered original NPC stats."
+      ]
+    },
+    {
+      "id": 753022,
+      "name": "a_stonegrind_whirlwind",
+      "set": {
+        "hp": 1500000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing whirlwind type explicitly participates in periodDec6,2012 bat social-assistance report. Its current placeholdermaxdamage4 is not a functional RoF encounter. Combat values are configurable server defaults; retain identity/level/race/placement/faction/loot. No claim of recovered original NPC stats."
+      ]
+    },
+    {
+      "id": 753106,
+      "name": "a_cloudburst_whirlwind",
+      "set": {
+        "hp": 1500000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing whirlwind type explicitly participates in periodDec6,2012 bat social-assistance report. Its current placeholdermaxdamage4 is not a functional RoF encounter. Combat values are configurable server defaults; retain identity/level/race/placement/faction/loot. No claim of recovered original NPC stats."
+      ]
+    },
+    {
+      "id": 753130,
+      "name": "a_stormrage_whirlwind",
+      "set": {
+        "hp": 1500000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing whirlwind type explicitly participates in periodDec6,2012 bat social-assistance report. Its current placeholdermaxdamage4 is not a functional RoF encounter. Combat values are configurable server defaults; retain identity/level/race/placement/faction/loot. No claim of recovered original NPC stats."
+      ]
+    },
+    {
+      "id": 753160,
+      "name": "a_cloudburst_whirlwind",
+      "set": {
+        "hp": 1500000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing whirlwind type explicitly participates in periodDec6,2012 bat social-assistance report. Its current placeholdermaxdamage4 is not a functional RoF encounter. Combat values are configurable server defaults; retain identity/level/race/placement/faction/loot. No claim of recovered original NPC stats."
+      ]
+    },
+    {
+      "id": 753234,
+      "name": "a_stormrage_whirlwind",
+      "set": {
+        "hp": 1500000,
+        "mindmg": 2000,
+        "maxdmg": 14000,
+        "AC": 1800,
+        "ATK": 1600,
+        "attack_count": 2,
+        "attack_delay": 30,
+        "MR": 150,
+        "CR": 150,
+        "DR": 150,
+        "FR": 150,
+        "PR": 150,
+        "Corrup": 100,
+        "slow_mitigation": 25,
+        "hp_regen_rate": 100,
+        "special_abilities": "10,1"
+      },
+      "provenance": [
+        "Existing whirlwind type explicitly participates in periodDec6,2012 bat social-assistance report. Its current placeholdermaxdamage4 is not a functional RoF encounter. Combat values are configurable server defaults; retain identity/level/race/placement/faction/loot. No claim of recovered original NPC stats."
+      ]
+    }
+  ],
+  "new": [
+    {
+      "class": 1,
+      "gender": 2,
+      "texture": 0,
+      "bodytype": 21,
+      "size": 3,
+      "runspeed": 1.25,
+      "walkspeed": 0.7,
+      "hp": 500000,
+      "mindmg": 1000,
+      "maxdmg": 7000,
+      "AC": 1600,
+      "ATK": 1400,
+      "attack_count": 2,
+      "attack_delay": 30,
+      "MR": 100,
+      "CR": 100,
+      "DR": 100,
+      "FR": 100,
+      "PR": 100,
+      "Corrup": 75,
+      "npc_spells_id": 0,
+      "npc_faction_id": 0,
+      "loottable_id": 0,
+      "merchant_id": 0,
+      "trackable": 1,
+      "exp_mod": 100,
+      "skip_global_loot": 1,
+      "level": 96,
+      "race": 34,
+      "special_abilities": "4,1^10,1^13,1",
+      "id": 753900,
+      "name": "a_disturbed_bat"
+    },
+    {
+      "class": 1,
+      "gender": 2,
+      "texture": 0,
+      "bodytype": 1,
+      "size": 2,
+      "runspeed": 0,
+      "walkspeed": 0,
+      "hp": 1,
+      "mindmg": 0,
+      "maxdmg": 0,
+      "AC": 1600,
+      "ATK": 1400,
+      "attack_count": 0,
+      "attack_delay": 30,
+      "MR": 100,
+      "CR": 100,
+      "DR": 100,
+      "FR": 100,
+      "PR": 100,
+      "Corrup": 75,
+      "npc_spells_id": 0,
+      "npc_faction_id": 0,
+      "loottable_id": 0,
+      "merchant_id": 0,
+      "trackable": 0,
+      "exp_mod": 0,
+      "skip_global_loot": 1,
+      "level": 1,
+      "race": 173,
+      "untargetable": 1,
+      "special_abilities": "19,1^20,1^24,1^25,1^35,1",
+      "id": 753901,
+      "name": "a_visibility_totem"
+    },
+    {
+      "class": 1,
+      "gender": 2,
+      "texture": 0,
+      "bodytype": 3,
+      "size": 3,
+      "runspeed": 1.25,
+      "walkspeed": 0.7,
+      "hp": 300000,
+      "mindmg": 500,
+      "maxdmg": 3500,
+      "AC": 1600,
+      "ATK": 1400,
+      "attack_count": 2,
+      "attack_delay": 30,
+      "MR": 100,
+      "CR": 100,
+      "DR": 100,
+      "FR": 100,
+      "PR": 100,
+      "Corrup": 75,
+      "npc_spells_id": 0,
+      "npc_faction_id": 0,
+      "loottable_id": 0,
+      "merchant_id": 0,
+      "trackable": 1,
+      "exp_mod": 100,
+      "skip_global_loot": 1,
+      "level": 98,
+      "race": 512,
+      "special_abilities": "10,1",
+      "id": 753902,
+      "name": "a_skullcluster"
+    },
+    {
+      "class": 1,
+      "gender": 2,
+      "texture": 0,
+      "bodytype": 1,
+      "size": 4,
+      "runspeed": 1.25,
+      "walkspeed": 0.7,
+      "hp": 100000,
+      "mindmg": 0,
+      "maxdmg": 0,
+      "AC": 1600,
+      "ATK": 1400,
+      "attack_count": 0,
+      "attack_delay": 30,
+      "MR": 100,
+      "CR": 100,
+      "DR": 100,
+      "FR": 100,
+      "PR": 100,
+      "Corrup": 75,
+      "npc_spells_id": 0,
+      "npc_faction_id": 0,
+      "loottable_id": 0,
+      "merchant_id": 0,
+      "trackable": 1,
+      "exp_mod": 0,
+      "skip_global_loot": 1,
+      "level": 94,
+      "race": 483,
+      "special_abilities": "19,1^20,1^24,1^25,1^35,1",
+      "id": 753903,
+      "name": "a_lupine_spirit"
+    }
+  ],
+  "qualification": "NPC levels96/98/94 and observed combat mechanics from current Allakhazam pages, with period reports separately labelled; current page added dates do not prove all values original. New model/race/size selections are configurable visual candidates requiring native acceptance. Approximate postmitigation hit reports are not exact raw NPC database values. No loot, NPC identities, spawn locations, existing levels/races/factions or unrelated zone actors changed.",
+  "sources": [
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/6107",
+      "facts": "Current approximate cook14k, brigade6.5k, crystal7k; Dec18,2012 cook40k report; native spell mechanics."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/6108",
+      "facts": "Current approximate named30k/skull3.5k, rampage/flurry/belly casting."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/42441",
+      "facts": "Current level96; added2012-12-13, updated2023; not original stat export."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/42619",
+      "facts": "Current level98 and undead, added2013-01-11, updated2019."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/42618",
+      "facts": "Current level94 quest NPC, added2013-01-11, updated2019."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/6106",
+      "report_date": "2012-12-06",
+      "facts": "Gerbril observed about3.8millionHP, dual33k/30k hits and rampage; direct Chrome reread2026-11-04. Approximate player parse is not a raw server stat export."
+    }
+  ],
+  "pending": [
+    "Required combined migration and rollback",
+    "Physical scene/model acceptance",
+    "Native combat, corpse supply, player conservation and persistence"
+  ],
+  "shelter_healing": {
+    "implementation": "Owned waterbrigade uses native HealDamage on its original live shelter with matching wave token and proximity; no SetHP/progress injection",
+    "defaults": {
+      "heal_amount": 200000,
+      "interval_seconds": 12,
+      "range_xy": 40,
+      "range_z": 20
+    },
+    "historical_qualification": "Current quest guide supports attempted shelter healing; exact amount/timing/original spell not recovered. Scripted native heal is a labelled reconstruction, not recovered original spell."
+  }
+}

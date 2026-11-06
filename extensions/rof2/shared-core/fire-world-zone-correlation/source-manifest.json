@@ -1,0 +1,66 @@
+{
+  "status": "REVIEWED_SOURCE_INTEGRATION_ARTIFACT_NOT_APPLIED_OR_BUILT",
+  "scope": "Fire169 original finish to actual World shared170 run/roster/MissionDZ plus actual local acceptance save; unregistered.",
+  "native_files": {
+    "zone/client.h": {
+      "preimage_sha256": "397a40f7b034895fc2229c54c8397469f8d44e0a4b2e70d57073b038753e9f6e",
+      "postimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3"
+    },
+    "zone/client.cpp": {
+      "preimage_sha256": "1f8f40a61686d5571211476dbf5ee3f8ab355b4878d0a21b2a003d0a03444e64",
+      "postimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336"
+    },
+    "zone/shared_task_zone_messaging.cpp": {
+      "preimage_sha256": "ff8bf0a0aa0b12f4360368e00677eefaa5bef5b1e40ac5f3bb4eccac0600b63d",
+      "postimage_sha256": "d76a867970e7ea6c4b583f96f3df1827fc57a28a27b3b7788effd9b3a8e0b0c0"
+    },
+    "zone/task_client_state.cpp": {
+      "preimage_sha256": "cd0d8fb409b37e6d0b7bf8f985b5fce229358108a64b6b0492d2253337cb5ba8",
+      "postimage_sha256": "f0b8073585dc839d943b936bb06b20732b20d4cfce238f0c5b71ec4819fcbd21"
+    },
+    "world/shared_task_manager.h": {
+      "preimage_sha256": "c2c594a59092f7b83c47181efd4206f5a69a0811af72b5b5136d0e87e2aee874",
+      "postimage_sha256": "0d4782221abc4a6ae75e0a8dfaa7c92d7e4877e018bf10a6134b9536ebffe5a4"
+    },
+    "world/shared_task_manager.cpp": {
+      "preimage_sha256": "a6b1e8c6db53c33ebe006d784c89a1613457f90abc60018e07bf798575933798",
+      "postimage_sha256": "4d522a2183e46b9e9d469e42ef654041debdd0a82aada3c301f565974639cb2e"
+    },
+    "world/shared_task_world_messaging.cpp": {
+      "preimage_sha256": "6f46ce4640c0ffc97369550b2602b32f7bd0fea79a1e250d0fd3e8a30b2fc033",
+      "postimage_sha256": "1ed943fd1b6efd8793a7169d19d56f88dd98886baa516bce0c97c5c202712ed1"
+    },
+    "common/fire_shared_correlation.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "1659b403c3c01d16a8197f6b480138e0dbbebb11ba5352fa3de7d7a2ad49fa84"
+    },
+    "zone/fire_shared_successor_native.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "6cf98c470f6e3034e300a49484d1f1c7c8d0d9dc994fa93908c2c9a32922eda1"
+    }
+  },
+  "dependencies": {
+    "acceptance_r2_commit": "c2955cd37a7d38f130f743d95437eec06e3f5458",
+    "final_hail_commit": "83538da0f157744c0eb26b9bde677d34268508d0",
+    "task_client_state_base": "Composed reviewed final-hail postimage, not raw public branch source",
+    "task_client_state_base_sha256": "cd0d8fb409b37e6d0b7bf8f985b5fce229358108a64b6b0492d2253337cb5ba8"
+  },
+  "source_review": "SOURCE_SEAM_COMPATIBLE_NO_TRADESKILLS_OWNER_DEFECT_FOUND; nine exact postimages",
+  "ordinary_packet_prefix_changed": false,
+  "optional_fire_trailer_requires_matched_peers": true,
+  "no_new_schema_or_generic_framework": true,
+  "native_creation_path": "Existing native admission/mission path once; no duplicate create/save/request retry",
+  "source_holds": [
+    "Entry169 unregistered",
+    "Actual inventory writer, initial167 and activation placement remain separate",
+    "Native object lifetimes and no same-frame identity reuse",
+    "Original personal participant cohort169",
+    "No durable replay/recovery or history-derived origin"
+  ],
+  "patch_sha256": "6f221c1b4d4aef8a7a1b237945143321d18b8a8324479b13ed7459d259dcccb1",
+  "rollback_sha256": "2eef574353e1967acb2f2c5067126484b9609b09cdb186861d8da4e220b0c37a",
+  "compiled": false,
+  "deployed": false,
+  "runtime_activated": false,
+  "tests": 0
+}

@@ -1,0 +1,9 @@
+{
+  "status": "ADDITIVE_SOURCE_UNEXECUTED_UNPARSED_NOT_INSTALLED",
+  "files": {
+    "quests/xorbb/player.lua": "e79479ee6161f83822508e33d40a2f7b726dccaa143e39c96d1a04c9f0d5bf62",
+    "CONTRACT.md": "b4686f0de738476875ac1138c2c47c1081ee82e377f8dc7327e74ef4dc550bb8",
+    "preimage.json": "b66532911f070c3177cff35fb92c3d1c1a2090f8b66123c8a0a46f482535d3c9"
+  },
+  "prior_ten_files_modified": false
+}

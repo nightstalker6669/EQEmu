@@ -1,0 +1,55 @@
+{
+  "scope": "Source composition now authored in hook-fragments and19standalone NPC adapters. Not installed; verify predecessor/empty-slot guards before full package.",
+  "zone": 753,
+  "givers": [
+    753001,
+    753012,
+    753030,
+    753034,
+    753041,
+    753046,
+    753080,
+    753114,
+    753284
+  ],
+  "npc_say": "mercenary.say composes golem.say/gronk.say before research dialogue/supplies/selector; preserve previous NPC callbacks",
+  "npc_task_accepted": "mercenary.accepted verifies actual task/giver and initializes persistent monotonic run epoch before supplies; compose existing callbacks",
+  "global_player_event_cast": [
+    "solution.cast",
+    "phials.cast",
+    "binding.cast",
+    "lightning.cast (capture; demonstration handled separately by golem.cast)",
+    "eyes.cast",
+    "eyes.capture",
+    "golem.cast"
+  ],
+  "global_player_before_task_update": "bridge.before_update -> mercenary readiness/Goblin witness veto, then krystuls click witness veto; preserve any previous refusal",
+  "global_npc_event_killed_merit": [
+    "mercenary.merit",
+    "solution.merit",
+    "eyes.merit",
+    "gronk.merit",
+    "corpse.merit"
+  ],
+  "global_npc_event_timer": [
+    "solution.timer",
+    "eyes.timer",
+    "golem.timer",
+    "gronk.giver_timer",
+    "gronk.timer",
+    "krystuls.timer (owned world-node cleanup only; no automatic creation retries)"
+  ],
+  "global_npc_event_death_complete": [
+    "solution.death",
+    "corpse.death; exact native corpse/killed_entity_id, ordinary world source, once-only shared corpse rolls"
+  ],
+  "native_craft": "task3040485/activity8 uses TradeSkill6, item68484, no NPC match; ordinary native successful crafted output owns progress",
+  "custody": "Compose existing achievement_native_delivery_handin for exact deliver requests after all scripts/producers ready; no custom inventory deletion or rewards",
+  "status": "All disabled; no server hooks installed",
+  "global_player_task_closed": "Actual event_task_complete/event_task_fail call bridge.closed; manual cancel may emit neither, so ownscene timers also remove inactive-task actors. Persistent run epochs retained.",
+  "global_player_event_enter_zone": "gronk.player_enter and krystuls.enter (reuse tagged shared objects, no duplicate creation)",
+  "bridge": "achievement_quest_xorbb_mercenary_hooks.lua",
+  "global_player_event_click_object": "bridge.click -> krystuls.click exact ingress/object/lease, range/LOS/current task+run, scoped witness; no item/cursor/loot",
+  "global_npc_event_spawn": "bridge.spawn -> krystuls.init for original world Gronk only, all readiness flags required",
+  "global_player_event_combine_validate": "bridge.validate -> mercenary_dialogue.validate on exact owned recipe3040485; current active assembly/current run coffin permission, before native ingredient consumption"
+}

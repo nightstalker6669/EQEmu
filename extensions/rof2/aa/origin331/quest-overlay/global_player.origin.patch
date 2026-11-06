@@ -1,0 +1,39 @@
+--- a/global/global_player.lua
++++ b/global/global_player.lua
+@@ -393,9 +393,7 @@
+     end
+   end
+ 
+-  if e.self:GetLevel() == 5 then
+-    eq.popup("", "<c \"#F0F000\">Welcome to level 5.</c><br><br>You have just been granted a new ability called '<c \"#F0F000\">Origin</c>' which allows you to teleport back to your starting city.<br><br>Open the Alternate Advancement window by pressing the '<c \"#F0F000\">V</c>' key, look in the '<c \"#F0F000\">General' tab</c>, and find the '<c \"#F0F000\">Origin</c>' ability and select it.<br><br>Now press the '<c \"#F0F000\">Hotkey</c>' button to create a hotkey you can place on your hot bar.");
+-  end
++  -- Origin entitlement and success notification are reconciled by the appended hook.
+ 
+   if e.self:GetLevel() == 10 and eq.is_dragons_of_norrath_enabled() then
+     eq.popup("", "<c \"#F0F000\">Welcome to level 10.</c><br><br>You are now able to begin the new player armor and weapon quests.  Speak with Castlen and Barrenzin or V`Lynn Renloe in the <c \"#66CCFF\">Plane of Knowledge</c> to begin.  One additional quest will become available to you at each level past level 10, so be sure to check back with these NPCs as you continue to gain experience.");
+@@ -1296,3 +1294,25 @@
+  return old
+ end
+ -- END ROF2 XORBB MERCENARY global_player
++
++
++-- BEGIN ROF2 ORIGIN UNIVERSAL ENTITLEMENT
++-- Requires the reviewed native Origin-only durable receipt binding.
++local origin_entitlement = require("aa_origin_entitlement")
++local origin_previous_connect = event_connect
++function event_connect(e)
++    local result
++    if origin_previous_connect then result = origin_previous_connect(e) end
++    if result and result ~= 0 then return result end
++    origin_entitlement.reconcile(e.self)
++    return result
++end
++local origin_previous_level_up = event_level_up
++function event_level_up(e)
++    local result
++    if origin_previous_level_up then result = origin_previous_level_up(e) end
++    if result and result ~= 0 then return result end
++    origin_entitlement.reconcile(e.self)
++    return result
++end
++-- END ROF2 ORIGIN UNIVERSAL ENTITLEMENT
