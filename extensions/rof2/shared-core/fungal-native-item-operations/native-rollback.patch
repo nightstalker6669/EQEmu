@@ -33,7 +33,7 @@
     std::find(f->roots_.begin(),f->roots_.end(),Root(slot))!=f->roots_.end();
 --- a/common/fungal_item_custody_sql.h
 +++ /dev/null
-@@ -1,27 +0,0 @@
+@@ -1,28 +0,0 @@
 -#pragma once
 -#include "database.h"
 -#include <map>
@@ -44,8 +44,9 @@
 -inline auto Query(Database& db,const std::string& sql){if(db.GetStatus()!=DBcore::Connected)throw std::runtime_error("Fungal disconnected");auto r=db.QueryDatabase(sql,false);if(!r.Success())throw std::runtime_error("Fungal strict query failed");return r;}
 -struct Activity {int count=0;uint64_t updated=0,completed=0;};
 -inline std::map<int,Activity> LockShared(Database& db,uint64_t run,uint32_t accepted,uint32_t member,uint32_t activity,bool allow_complete) {
-- if(!run||!accepted||!member||(activity!=5&&activity!=10))throw std::runtime_error("Fungal unsupported run");
-- auto engines=Query(db,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()AND engine='InnoDB'AND table_name IN('shared_tasks','shared_task_members','shared_task_activity_state','fungal_item_operations')");if(engines.RowCount()!=1||Number(engines.begin()[0])!=4)throw std::runtime_error("Fungal shared foundation differs");
+- const bool pure=activity==0||activity==1||activity==6;
+- if(!run||!accepted||!member||(!pure&&activity!=5&&activity!=10))throw std::runtime_error("Fungal unsupported run");
+- auto engines=Query(db,pure?"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()AND engine='InnoDB'AND table_name IN('shared_tasks','shared_task_members','shared_task_activity_state')":"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()AND engine='InnoDB'AND table_name IN('shared_tasks','shared_task_members','shared_task_activity_state','fungal_item_operations')");if(engines.RowCount()!=1||Number(engines.begin()[0])!=(pure?3u:4u))throw std::runtime_error("Fungal shared foundation differs");
 - auto task=Query(db,"SELECT id FROM shared_tasks WHERE id="+std::to_string(run)+" AND task_id=920143 AND accepted_time=FROM_UNIXTIME("+std::to_string(accepted)+") AND completion_time IS NULL AND(expire_time IS NULL OR expire_time>NOW()) FOR UPDATE");if(task.RowCount()!=1)throw std::runtime_error("Fungal native run changed");
 - auto membership=Query(db,"SELECT character_id FROM shared_task_members WHERE shared_task_id="+std::to_string(run)+" AND character_id="+std::to_string(member)+" FOR UPDATE");if(membership.RowCount()!=1)throw std::runtime_error("Fungal native member changed");
 - auto rows=Query(db,"SELECT activity_id,done_count,COALESCE(UNIX_TIMESTAMP(updated_time),0),COALESCE(UNIX_TIMESTAMP(completed_time),0) FROM shared_task_activity_state WHERE shared_task_id="+std::to_string(run)+" ORDER BY activity_id FOR UPDATE");std::map<int,Activity> snapshot;
@@ -63,7 +64,7 @@
 -}
 --- a/common/fungal_item_operation_wire.h
 +++ /dev/null
-@@ -1,23 +0,0 @@
+@@ -1,32 +0,0 @@
 -#pragma once
 -#include <cstdint>
 -#include <cstring>
@@ -78,10 +79,19 @@
 -inline bool Selected(uint32_t task,uint32_t activity)noexcept {
 - return task==Task&&(activity==5||activity==10);
 -}
--inline bool Read(const void* bytes,uint32_t size,uint32_t prefix,Trailer& out)noexcept {
+-inline bool PureHail(uint32_t task,uint32_t activity)noexcept {
+- return task==Task&&(activity==0||activity==1||activity==6);
+-}
+-inline bool Correlated(uint32_t task,uint32_t activity)noexcept {
+- return Selected(task,activity)||PureHail(task,activity);
+-}
+-inline bool ReadHeader(const void* bytes,uint32_t size,uint32_t prefix,Trailer& out)noexcept {
 - if(size!=prefix+sizeof(Trailer))return false;
 - std::memcpy(&out,static_cast<const unsigned char*>(bytes)+prefix,sizeof(out));
-- return out.magic==Magic&&out.version==1&&out.run&&out.outcome&&out.accepted&&out.recipient;
+- return out.magic==Magic&&out.version==1&&out.run&&out.accepted&&out.recipient;
+-}
+-inline bool Read(const void* bytes,uint32_t size,uint32_t prefix,Trailer& out)noexcept {
+- return ReadHeader(bytes,size,prefix,out)&&out.outcome;
 -}
 -inline void Write(void* bytes,uint32_t prefix,const Trailer& value)noexcept {
 - std::memcpy(static_cast<unsigned char*>(bytes)+prefix,&value,sizeof(value));
@@ -276,7 +286,7 @@
 -}
 --- a/world/fungal_item_world_source_impl.inc
 +++ /dev/null
-@@ -1,62 +0,0 @@
+@@ -1,65 +0,0 @@
 -// Included once by shared_task_manager.cpp. Actual native state, not a shadow
 -// task implementation, supplies the snapshot committed by the inventory owner.
 -#include "fungal_item_world_source.h"
@@ -287,15 +297,18 @@
 - current_=this;
 - if(packet.opcode!=ServerOP_SharedTaskUpdate||packet.size<sizeof(ServerSharedTaskActivityUpdate_Struct))return;
 - const auto* p=reinterpret_cast<const ServerSharedTaskActivityUpdate_Struct*>(packet.pBuffer);
-- selected_=FungalItemWire::Selected(p->task_id,p->activity_id);if(!selected_)return;
+- selected_=FungalItemWire::Correlated(p->task_id,p->activity_id);if(!selected_)return;
 - character_=p->source_character_id;activity_=p->activity_id;count_=p->done_count;
-- valid_=FungalItemWire::Read(packet.pBuffer,packet.size,sizeof(*p),original_)&&
+- const bool pure=FungalItemWire::PureHail(p->task_id,p->activity_id);
+- valid_=(pure?FungalItemWire::ReadHeader(packet.pBuffer,packet.size,sizeof(*p),original_):
+-  FungalItemWire::Read(packet.pBuffer,packet.size,sizeof(*p),original_))&&
+-  (pure?!original_.outcome:bool(original_.outcome))&&
 -  original_.recipient==character_&&count_==(activity_==5?2u:1u)&&!p->ignore_quest_update;
 -}
 -PacketScope::~PacketScope(){current_=previous_;}
 -NativeStage::NativeStage(Database& db,SharedTask* actual,uint32_t character,uint32_t task,
 - uint32_t activity,uint32_t count):previous_(current_) {
-- current_=this;selected_=FungalItemWire::Selected(task,activity);if(!selected_)return;
+- current_=this;selected_=FungalItemWire::Correlated(task,activity);if(!selected_)return;
 - const auto* packet=PacketScope::current_;
 - if(!packet||!packet->selected_||!packet->valid_||packet->character_!=character||
 -  packet->activity_!=activity||packet->count_!=count||!actual||actual->GetTaskData().id!=920143||
@@ -341,12 +354,13 @@
 -} // namespace FungalItemWorldSource
 --- a/world/fungal_native_world_custody.cpp
 +++ /dev/null
-@@ -1,76 +0,0 @@
+@@ -1,87 +0,0 @@
 -#include "fungal_item_world_source.h"
 -#include "../common/fungal_item_custody_sql.h"
 -#include "../common/fungal_world_hold.h"
 -#include "../common/shared_tasks.h"
 -#include <map>
+-#include <algorithm>
 -#include <memory>
 -#include <stdexcept>
 -namespace FungalInventory {
@@ -357,7 +371,7 @@
 - Database* db=nullptr;
 - const FungalItemWorldSource::OriginalWorldUpdate* original=nullptr;
 - uint64_t connection=0,run=0,outcome=0;
-- bool active=false,known_commit=false,commit_attempted=false,already_ack=false;
+- bool active=false,known_commit=false,commit_attempted=false,already_ack=false,pure=false;
 - std::map<int,Activity> before;
 - std::unique_ptr<WorldHold> unknown;
 - ~Transaction(){if(active&&db)db->TransactionRollbackStrict();}
@@ -366,26 +380,36 @@
 -}
 -std::unique_ptr<WorldTransaction> WorldCustody::Prepare(Database& db,const FungalItemWorldSource::OriginalWorldUpdate& original) {
 - const auto& f=original.original_;auto* actual=original.actual_;
-- if(!FungalItemWire::Selected(920143,original.activity_)||original.count_!=(original.activity_==5?2u:1u)||!actual||!WorldHold::Allows(f.run))return nullptr;
+- const bool pure=(original.activity_==0||original.activity_==1||original.activity_==6)&&f.outcome==0;
+- if((!pure&&!FungalItemWire::Selected(920143,original.activity_))||original.count_!=(pure?1u:(original.activity_==5?2u:1u))||!actual||!WorldHold::Allows(f.run))return nullptr;
 - const auto& current=actual->GetDbSharedTask();
-- if(current.id<=0||uint64_t(current.id)!=f.run||current.task_id!=920143||current.accepted_time!=f.accepted||current.completion_time||!f.outcome||!f.recipient)return nullptr;
-- auto t=std::make_unique<Transaction>();t->db=&db;t->original=&original;t->run=f.run;t->outcome=f.outcome;t->unknown=std::unique_ptr<WorldHold>(new WorldHold(f.run));
+- if(current.id<=0||uint64_t(current.id)!=f.run||current.task_id!=920143||current.accepted_time!=f.accepted||current.completion_time||(!pure&&!f.outcome)||!f.recipient)return nullptr;
+- auto t=std::make_unique<Transaction>();t->db=&db;t->original=&original;t->run=f.run;t->outcome=f.outcome;t->pure=pure;t->unknown=std::unique_ptr<WorldHold>(new WorldHold(f.run));
 - try {
 -  auto connection=Query(db,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
 -  if(connection.RowCount()!=1||Number(connection.begin()[1])||Number(connection.begin()[2])!=1)return nullptr;t->connection=Number(connection.begin()[0]);
 -  if(!db.TransactionBeginStrict().Success())return nullptr;t->active=true;
 -  t->before=LockShared(db,f.run,f.accepted,f.recipient,original.activity_,true);
+-  const uint32_t goal=pure?1:(original.activity_==5?2:1);
+-  if(!pure){
 -  auto outcome=Query(db,"SELECT native_ack,output_item,output_quantity FROM fungal_item_operations WHERE outcome_id="+std::to_string(f.outcome)+" AND scope=2 AND task_id=920143 AND native_occurrence="+std::to_string(f.run)+" AND activity_id="+std::to_string(original.activity_)+" AND accepted_time="+std::to_string(f.accepted)+" AND recipient_character="+std::to_string(f.recipient)+" FOR UPDATE");
 -  if(outcome.RowCount()!=1)return nullptr;
--  auto row=outcome.begin();const uint32_t goal=original.activity_==5?2:1;
+-  auto row=outcome.begin();
 -  if(Number(row[1])!=(original.activity_==5?43586:43587)||Number(row[2])!=goal)return nullptr;
 -  t->already_ack=Number(row[0])==1;
+-  }
 -  const auto& stage=t->before.at(original.activity_);
--  if((!t->already_ack&&(stage.count||stage.completed))||(t->already_ack&&(stage.count!=int(goal)||!stage.completed)))return nullptr;
+-  if((pure&&(stage.count||stage.completed))||(!pure&&((!t->already_ack&&(stage.count||stage.completed))||(t->already_ack&&(stage.count!=int(goal)||!stage.completed)))))return nullptr;
 -  // DB locks are held BEFORE Source mutates this very native SharedTask vector.
 -  const auto native=actual->GetActivityState();
 -  if(native.size()!=t->before.size())return nullptr;
--  for(const auto& a:native){auto at=t->before.find(a.activity_id);if(at==t->before.end()||a.done_count!=uint32_t(at->second.count)||a.updated_time!=at->second.updated||a.completed_time!=at->second.completed)return nullptr;}
+-  if(pure){
+-   if(native.size()!=12)return nullptr;
+-   const auto active=Tasks::GetActiveElements(native,native,native.size());
+-   const auto at=std::find_if(native.begin(),native.end(),[&](const auto& a){return a.activity_id==original.activity_;});
+-   if(at==native.end()||active.is_task_complete||std::find(active.active.begin(),active.active.end(),int(at-native.begin()))==active.active.end())return nullptr;
+-  }
+-  for(const auto& a:native){if(pure&&a.activity_id==original.activity_&&a.max_done_count!=1)return nullptr;auto at=t->before.find(a.activity_id);if(at==t->before.end()||a.done_count!=uint32_t(at->second.count)||a.updated_time!=at->second.updated||a.completed_time!=at->second.completed)return nullptr;}
 -  return t;
 - }catch(...){return nullptr;}
 -}
@@ -410,7 +434,7 @@
 -  auto removed=Query(db,"DELETE FROM shared_task_activity_state WHERE shared_task_id="+std::to_string(f.run));
 -  if(removed.RowsAffected()!=rows.size())throw std::runtime_error("Fungal original activity universe drift");
 -  for(const auto& a:rows){auto inserted=Query(db,"INSERT INTO shared_task_activity_state(shared_task_id,activity_id,done_count,updated_time,completed_time)VALUES("+std::to_string(a.shared_task_id)+","+std::to_string(a.activity_id)+","+std::to_string(a.done_count)+","+Time(a.updated_time)+","+Time(a.completed_time)+")");if(inserted.RowsAffected()!=1)throw std::runtime_error("Fungal actual snapshot save failed");}
--  if(!t->already_ack){auto acked=Query(db,"UPDATE fungal_item_operations SET native_ack=1 WHERE outcome_id="+std::to_string(f.outcome)+" AND native_ack=0");if(acked.RowsAffected()!=1)throw std::runtime_error("Fungal exact outcome ACK drift");}
+-  if(!t->pure&&!t->already_ack){auto acked=Query(db,"UPDATE fungal_item_operations SET native_ack=1 WHERE outcome_id="+std::to_string(f.outcome)+" AND native_ack=0");if(acked.RowsAffected()!=1)throw std::runtime_error("Fungal exact outcome ACK drift");}
 -  state=Query(db,"SELECT CONNECTION_ID(),@@in_transaction");if(state.RowCount()!=1||Number(state.begin()[0])!=t->connection||Number(state.begin()[1])!=1||db.TransactionStrictFailed())throw std::runtime_error("Fungal World session changed before COMMIT");
 -  t->commit_attempted=true;auto commit=db.TransactionCommitStrict();t->active=false;
 -  if(!commit.Success())throw std::runtime_error("Fungal World COMMIT unknown");t->known_commit=true;
@@ -466,7 +490,7 @@
  void SharedTaskManager::SendActivityUpdate(SharedTask *s, uint32_t activity_id, uint32_t done_count, bool ignore_quest_update)
  {
  	for (const auto &m : s->GetMembers()) {
--		const bool fungal=FungalItemWire::Selected(s->GetTaskData().id,activity_id);
+-		const bool fungal=FungalItemWire::Correlated(s->GetTaskData().id,activity_id);
 -		FungalItemWire::Trailer fungal_ack;
 -		if(fungal&&!FungalItemWorldSource::NativeStage::StampActualAck(s->GetDbSharedTask().id,activity_id,fungal_ack))return;
  		const bool fire=s->GetTaskData().id==FireSharedActivityOrigin::Task;
@@ -505,7 +529,7 @@
  			auto *r = (ServerSharedTaskActivityUpdate_Struct *) pack->pBuffer;
 -			FungalItemWorldSource::PacketScope fungal_packet(*pack);
  			uint64_t original_run=0;
--			if(!FungalItemWire::Selected(r->task_id,r->activity_id)&&
+-			if(!FungalItemWire::Correlated(r->task_id,r->activity_id)&&
 -			 !FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,r->task_id,original_run)) break;
 +			if(!FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,r->task_id,original_run)) break;
  			if(r->task_id==FireSharedActivityOrigin::Task) {
@@ -728,11 +752,20 @@
 -}
 --- a/zone/fungal_item_source_impl.inc
 +++ /dev/null
-@@ -1,265 +0,0 @@
+@@ -1,352 +0,0 @@
 -// Included once by client.cpp, after native Client/NPC/task definitions.
 -#include "fungal_item_operation_source.h"
 -#include "../common/fungal_item_operation_wire.h"
 -namespace FungalItemSource {
+-namespace {
+-thread_local const OriginalOperation* original_personal_hail=nullptr;
+-thread_local const Client* original_personal_hail_client=nullptr;
+-thread_local bool original_personal_hail_claimed=false;
+-bool PurePersonalHail(uint32_t task,uint32_t activity)noexcept {
+- return (task==920141&&(activity==1||activity==3||activity==5||activity==9))||
+-  (task==920142&&(activity==8||activity==9));
+-}
+-}
 -struct NativeEvents::Pending {
 - std::unique_ptr<OriginalOperation> original;
 - Pending* next=nullptr;
@@ -788,22 +821,57 @@
 -  !c.CharacterID()||!c.GetID()||!n.GetID()||n.GetDepop()||n.IsEngaged()||!c.task_state)return {};
 - const bool deagus=n.GetNPCTypeID()==481093&&n.GetSpawnPointID()==150084;
 - const bool rakkirin=n.GetNPCTypeID()==481052&&n.GetSpawnPointID()==149898;
-- if(!deagus&&!rakkirin)return {};
+- const bool autoros=n.GetNPCTypeID()==481118&&n.GetSpawnPointID()==150223;
+- const bool eulyris=n.GetNPCTypeID()==481115&&n.GetSpawnPointID()==150205;
+- const bool excrug=n.GetNPCTypeID()==481109&&n.GetSpawnPointID()==150152;
+- const bool orgus=n.GetNPCTypeID()==481120&&n.GetSpawnPointID()==150231;
+- // Native normal-world Adeenas role; no exact static spawn was authenticated
+- // by the retained source. Require a real static spawn of this original type,
+- // not a transient/GM-created actor or a mission-instance namesake.
+- const bool adeenas=n.GetNPCTypeID()==481071&&n.GetSpawnPointID()!=0;
+- if(!deagus&&!rakkirin&&!autoros&&!eulyris&&!excrug&&!orgus&&!adeenas)return {};
 - if(!trade&&(c.GetTarget()!=&n||c.IsInvisible(&n)||
 -  DistanceNoZ(c.GetPosition(),n.GetPosition())>RuleI(Range,Say)))return {};
 - auto out=std::unique_ptr<OriginalOperation>(new OriginalOperation);
 - auto& f=out->facts_;
 - f.character=c.CharacterID();f.client_entity=c.GetID();f.npc_entity=n.GetID();
 - f.npc_type=n.GetNPCTypeID();f.npc_spawn=n.GetSpawnPointID();
-- if(deagus&&!trade&&c.m_fungal_fate&&CurrentPersonal(c,*c.m_fungal_fate,false)) {
--  const auto& b=*c.m_fungal_fate;const auto& t=c.task_state->m_active_quests[b.slot];
--  if(t.activity[7].activity_state!=ActivityActive||t.activity[7].done_count!=0)return {};
--  f.scope=1;f.task=920141;f.activity=7;f.occurrence=b.occurrence;f.accepted=b.accepted;
--  f.personal_slot=b.slot;f.output_item=40997;f.output_quantity=1;
-- } else {
+- int fate_activity=-1;
+- if(!trade&&c.m_fungal_fate&&CurrentPersonal(c,*c.m_fungal_fate,false)) {
+-  const auto& current=c.task_state->m_active_quests[c.m_fungal_fate->slot];
+-  const int candidate=autoros?1:eulyris?3:excrug?5:deagus?7:adeenas?9:-1;
+-  if(candidate>=0&&current.activity[candidate].activity_state==ActivityActive&&
+-   current.activity[candidate].done_count==0)fate_activity=candidate;
+- }
+- if(fate_activity>=0) {
+-  const auto& b=*c.m_fungal_fate;
+-  f.scope=1;f.task=920141;f.activity=fate_activity;f.occurrence=b.occurrence;f.accepted=b.accepted;
+-  f.personal_slot=b.slot;
+-  if(fate_activity==7){f.output_item=40997;f.output_quantity=1;}
+- }
+- if(!f.scope&&!trade&&(adeenas||orgus)) {
+-  const int activity=adeenas?8:9;
+-  for(const auto& t:c.task_state->m_active_quests) {
+-   if(t.task_id!=920142||t.was_rewarded||t.accepted_time<=0||
+-    t.activity[activity].activity_state!=ActivityActive||t.activity[activity].done_count!=0)continue;
+-   auto q=database.QueryDatabase(fmt::format(
+-    "SELECT r.occurrence_id FROM character_task_reward_instances r JOIN character_tasks ct "
+-    "ON ct.charid=r.character_id AND ct.taskid=r.task_id AND ct.acceptedtime=r.accepted_time "
+-    "WHERE r.character_id={} AND r.task_id=920142 AND r.accepted_time={} "
+-    "AND ct.type=2 AND ct.slot={} AND ct.was_rewarded=0",c.CharacterID(),t.accepted_time,t.slot),false);
+-   if(!q.Success()||q.RowCount()!=1||!q.begin()[0])return {};
+-   const auto occurrence=TaskSharedRewardIdentity::Number(q.begin()[0]);if(!occurrence)return {};
+-   f.scope=1;f.task=920142;f.activity=activity;f.occurrence=occurrence;
+-   f.accepted=uint32_t(t.accepted_time);f.personal_slot=t.slot;break;
+-  }
+- }
+- if(!f.scope) {
 -  auto& t=c.task_state->m_active_shared_task;
--  const uint32_t activity=trade?5:10;
--  if((trade&&!deagus)||(!trade&&!rakkirin)||t.task_id!=920143||t.was_rewarded||t.accepted_time<=0||
+-  int selected=trade&&deagus?5:-1;
+-  if(!trade&&rakkirin){for(int a:{0,10})if(t.activity[a].activity_state==ActivityActive&&t.activity[a].done_count==0){selected=a;break;}}
+-  if(!trade&&deagus){for(int a:{1,6})if(t.activity[a].activity_state==ActivityActive&&t.activity[a].done_count==0){selected=a;break;}}
+-  if(selected<0)return {};const uint32_t activity=uint32_t(selected);
+-  if(t.task_id!=920143||t.was_rewarded||t.accepted_time<=0||
 -   t.activity[activity].activity_state!=ActivityActive||t.activity[activity].done_count!=0)return {};
 -  const auto run=TaskSharedRewardIdentity::ReadRun(database,c.CharacterID(),920143);
 -  if(!run||c.GetSharedTaskId()<=0||run->id!=uint64_t(c.GetSharedTaskId())||
@@ -814,7 +882,7 @@
 -   "AND (s.expire_time IS NULL OR s.expire_time>NOW()) AND UNIX_TIMESTAMP(s.accepted_time)={}",
 -   run->id,c.CharacterID(),run->accepted_time),false);
 -  if(!q.Success()||q.RowCount()!=1)return {};
--  if(!trade) {
+-  if(activity==10) {
 -   auto deliveries=database.QueryDatabase(fmt::format(
 -    "SELECT activity_id,done_count,completed_time IS NOT NULL FROM shared_task_activity_state "
 -    "WHERE shared_task_id={} AND activity_id BETWEEN 7 AND 9 ORDER BY activity_id",run->id),false);
@@ -828,14 +896,16 @@
 -   }
 -  }
 -  f.scope=2;f.task=920143;f.activity=activity;f.occurrence=run->id;f.accepted=run->accepted_time;
--  f.output_item=trade?43586:43587;f.output_quantity=trade?2:1;
+-  if(trade){f.output_item=43586;f.output_quantity=2;}
+-  else if(activity==10){f.output_item=43587;f.output_quantity=1;}
 -  if(trade){f.input_item=43585;f.input_quantity=2;}
 - }
 - const auto* task=TaskManager::Instance()->GetTaskData(f.task);
 - if(!task||task->type!=(f.scope==1?TaskType::Quest:TaskType::Shared)||
 -  task->reward_method!=METHODSELECT||!task->has_reward_selection||
--  task->activity_count!=(f.scope==1?10:12)||
--  task->activity_information[f.activity].goal_count!=(f.activity==5?2:1))return {};
+-  task->activity_count!=(f.task==920142?10:f.scope==1?10:12)||
+-  task->activity_information[f.activity].goal_count!=(f.scope==2&&f.activity==5?2:1)||
+-  task->activity_information[f.activity].activity_type!=(trade?TaskActivityType::Deliver:TaskActivityType::SpeakWith))return {};
 - static uint64_t sequence=0;if(sequence==UINT64_MAX)return {};f.source_sequence=++sequence;
 - if(!c.m_fungal_source_life)c.m_fungal_source_life=std::shared_ptr<Lifetime>(new Lifetime);
 - if(!n.m_fungal_source_life)n.m_fungal_source_life=std::shared_ptr<Lifetime>(new Lifetime);
@@ -861,7 +931,7 @@
 -   sizeof(ServerSharedTaskActivityUpdate_Struct)+sizeof(FungalItemWire::Trailer));
 -  auto* p=reinterpret_cast<ServerSharedTaskActivityUpdate_Struct*>(out->progress_->pBuffer);
 -  p->source_character_id=f.character;p->task_id=f.task;p->activity_id=f.activity;
--  p->done_count=f.activity==5?2:1;p->ignore_quest_update=false;
+-  p->done_count=f.scope==2&&f.activity==5?2:1;p->ignore_quest_update=false;
 - }
 - return out;
 -}
@@ -952,6 +1022,16 @@
 - c.UpdateTaskActivity(920141,7,1);
 -}
 -bool NativeEvents::AllowPersonalProgress(const Client* c,uint32_t task,uint32_t activity) {
+- if(PurePersonalHail(task,activity)) {
+-  const auto* proof=original_personal_hail;
+-  if(!proof||!c||c!=original_personal_hail_client||c!=proof->client_||
+-   original_personal_hail_claimed||proof->facts_.scope!=1||proof->facts_.task!=task||
+-   proof->facts_.activity!=activity||proof->facts_.input_item||proof->facts_.output_item||
+-   !proof->client_life_||!proof->client_life_->active_||
+-   !proof->npc_life_||!proof->npc_life_->active_||!proof->zone_life_||!proof->zone_life_->active_||
+-   !Revalidate(*proof->client_,*proof))return false;
+-  original_personal_hail_claimed=true;return true;
+- }
 - if(task!=920141||activity!=7)return true;
 - if(!personal_progress_||!personal_progress_->published_||!c||c!=personal_client_||personal_claimed_)return false;
 - personal_claimed_=true;return true;
@@ -964,15 +1044,25 @@
 -}
 -bool NativeEvents::AcceptWorldEcho(Client& c,const void* bytes,uint32_t size,
 - uint32_t task,uint32_t activity,uint32_t count) {
-- if(!FungalItemWire::Selected(task,activity))return true;
+- if(!FungalItemWire::Correlated(task,activity))return true;
 - FungalItemWire::Trailer t;
-- if(!FungalItemWire::Read(bytes,size,sizeof(ServerSharedTaskActivityUpdate_Struct),t)||
+- const bool pure=FungalItemWire::PureHail(task,activity);
+- const bool decoded=pure?FungalItemWire::ReadHeader(bytes,size,sizeof(ServerSharedTaskActivityUpdate_Struct),t):
+-  FungalItemWire::Read(bytes,size,sizeof(ServerSharedTaskActivityUpdate_Struct),t);
+- if(!decoded||(pure&&t.outcome)||
 -  !c.task_state||c.task_state->m_active_shared_task.task_id!=920143||c.GetSharedTaskId()<=0||
 -  uint64_t(c.GetSharedTaskId())!=t.run||uint32_t(c.task_state->m_active_shared_task.accepted_time)!=t.accepted||
 -  count!=(activity==5?2u:1u))return false;
 - const auto run=TaskSharedRewardIdentity::ReadRun(database,c.CharacterID(),920143);
-- return run&&run->id==t.run&&run->accepted_time==t.accepted&&
--  FungalInventory::NativeCustody::KnownWorldStage(database,t.run,t.outcome,t.accepted,t.recipient,activity,count);
+- if(!run||run->id!=t.run||run->accepted_time!=t.accepted)return false;
+- if(!pure)return FungalInventory::NativeCustody::KnownWorldStage(database,t.run,t.outcome,t.accepted,t.recipient,activity,count);
+- // This path handles an actual trusted World echo, never creates an item or
+- // a progress request from history. Only the World known-COMMIT scope stamps it.
+- auto q=database.QueryDatabase(fmt::format(
+-  "SELECT done_count,completed_time IS NOT NULL FROM shared_task_activity_state "
+-  "WHERE shared_task_id={} AND activity_id={}",t.run,activity),false);
+- return q.Success()&&q.RowCount()==1&&TaskSharedRewardIdentity::Number(q.begin()[0])==1&&
+-  q.begin()[1]&&std::string(q.begin()[1])=="1";
 -}
 -void NativeEvents::Drain() {
 - auto* pending=head_;head_=tail_=nullptr;
@@ -982,6 +1072,27 @@
 -  if(!o.client_life_||!o.client_life_->active_||!o.zone_life_||!o.zone_life_->active_)continue;
 -  auto* c=entity_list.GetClientByCharID(o.facts_.character);
 -  if(!c||c!=o.client_||!Revalidate(*c,o))continue;
+-  if(!o.facts_.input_item&&!o.facts_.output_item) {
+-   const auto f=o.facts_;
+-   if(f.scope==1&&PurePersonalHail(f.task,f.activity)) {
+-    const auto* old=original_personal_hail;const auto* old_client=original_personal_hail_client;
+-    const bool old_claimed=original_personal_hail_claimed;
+-    original_personal_hail=&o;original_personal_hail_client=c;original_personal_hail_claimed=false;
+-    struct RestorePure {
+-     const OriginalOperation*& operation;const OriginalOperation* old;
+-     const Client*& client;const Client* old_client;bool& claimed;bool old_claimed;
+-     ~RestorePure(){operation=old;client=old_client;claimed=old_claimed;}
+-    } restore{original_personal_hail,old,original_personal_hail_client,old_client,
+-     original_personal_hail_claimed,old_claimed};
+-    c->UpdateTaskActivity(f.task,f.activity,1);continue; // No actor access after callbacks.
+-   }
+-   if(f.scope==2&&FungalItemWire::PureHail(f.task,f.activity)&&o.progress_) {
+-    FungalItemWire::Trailer t;t.run=f.occurrence;t.accepted=f.accepted;t.recipient=f.character;t.outcome=0;
+-    FungalItemWire::Write(o.progress_->pBuffer,sizeof(ServerSharedTaskActivityUpdate_Struct),t);
+-    worldserver.SendPacket(o.progress_.get());
+-   }
+-   continue;
+-  }
 -  auto committed=FungalInventory::NativeCustody::Execute(*c,std::move(event->original));
 -  if(committed)Publish(*c,std::move(committed));
 -  // No actor access after native progress/callback publication.
@@ -1236,7 +1347,7 @@
  			if(pack->size<sizeof(ServerSharedTaskActivityUpdate_Struct)) break;
  			auto p = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(pack->pBuffer);
  			uint64_t original_run=0;
--			if(!FungalItemWire::Selected(p->task_id,p->activity_id)&&
+-			if(!FungalItemWire::Correlated(p->task_id,p->activity_id)&&
 -			 !FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,p->task_id,original_run)) break;
 +			if(!FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,p->task_id,original_run)) break;
  			auto c = entity_list.GetClientByCharID(p->source_character_id);
@@ -1263,7 +1374,7 @@
  	}
  
 -	if(!FungalItemSource::NativeEvents::AllowPersonalProgress(client,info->task_id,activity_id))return 0;
--	if(!client->m_shared_task_update&&FungalItemWire::Selected(info->task_id,activity_id))return 0;
+-	if(!client->m_shared_task_update&&FungalItemWire::Correlated(info->task_id,activity_id))return 0;
  	auto* const fire_construct_death_update = FirePersonalOccurrenceSource::ClaimOriginalConstructDeathUpdate(
  		client, task_data->type, *info, activity_id, count
  	);

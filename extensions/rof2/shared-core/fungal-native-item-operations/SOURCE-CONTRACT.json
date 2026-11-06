@@ -10,12 +10,12 @@
     {
       "path": "common/fungal_item_custody_sql.h",
       "preimage_sha256": null,
-      "postimage_sha256": "cb63071dc5fa94cfe2ce07ed1e9c57dc436727f0749ecf47d6ff31882061a82b"
+      "postimage_sha256": "dfd097f2d7ddcae9b7249b3e5c7f41a7d128f82eafc226ba99e17d599a0dd9be"
     },
     {
       "path": "common/fungal_item_operation_wire.h",
       "preimage_sha256": null,
-      "postimage_sha256": "153e1be65a13ade20e083ec37185deaa7f6ee901929f01c290fafb98d6c24cb3"
+      "postimage_sha256": "5415cd2053df28e3c5941bb06ebb60505b16906a230197491c3c3675627c8914"
     },
     {
       "path": "common/fungal_unknown_inventory.h",
@@ -50,22 +50,22 @@
     {
       "path": "world/fungal_item_world_source_impl.inc",
       "preimage_sha256": null,
-      "postimage_sha256": "aed849a06bcfb0486bed0a6a3fd4ec1e74496e28a8d3bed6c5e05808e7b10bfa"
+      "postimage_sha256": "0d25b8b3b9d005707c80b5da71cdf5a459d79c123d4c1c1b33b24e85fdcaee72"
     },
     {
       "path": "world/fungal_native_world_custody.cpp",
       "preimage_sha256": null,
-      "postimage_sha256": "442c49d9ce62088d3d0c592ca92cfd993616fb5a54dbb047942fe0dc8745d951"
+      "postimage_sha256": "2241203d55eddddc6252a26ac67bbf8800a71c5a0f5ae5016acf6aa8bf9112b3"
     },
     {
       "path": "world/shared_task_manager.cpp",
       "preimage_sha256": "11c65535fbe526a38fc1e38d030d63d575d6aed49da8eaa35f6227deb1f28d93",
-      "postimage_sha256": "4ec3ca625d519bc5a0161348d111b2e1ebf0e1fb91a25e84a5db5471c20ab2f7"
+      "postimage_sha256": "a79b2e6a52087febea89dc38fa9cc350e676f36d3f3c90209a44a563112b333f"
     },
     {
       "path": "world/shared_task_world_messaging.cpp",
       "preimage_sha256": "f7f3c85677b3541ce4f91954f8c3656ee111f8768794137462cd60ae001ff082",
-      "postimage_sha256": "a52fb4aa61aca9b1a7800733c2f15fb68de013525ca8831c9049c2888ddb6b92"
+      "postimage_sha256": "0657bf8bd0f0d79c1b97fb4ca6e12e1fe31826ff8636250be2c866e5df68ca03"
     },
     {
       "path": "zone/CMakeLists.txt",
@@ -100,7 +100,7 @@
     {
       "path": "zone/fungal_item_source_impl.inc",
       "preimage_sha256": null,
-      "postimage_sha256": "df452c4e912b42e925f7f631046ab54c7ddb8e037094a5053e9da45e1fe0f3a3"
+      "postimage_sha256": "5adadbf2cf0db7eef2af1c14717f42b60affd7a72e0f2135f2e80ac7ce70e2d5"
     },
     {
       "path": "zone/fungal_native_inventory_custody.cpp",
@@ -125,12 +125,12 @@
     {
       "path": "zone/shared_task_zone_messaging.cpp",
       "preimage_sha256": "e1255d1e11b4cd7b5984b5c768b0eac47ff4b6c88e6ec193537f0663addf5536",
-      "postimage_sha256": "681741d45b447b1696d55e330c3e197063d76842a19f4ce97b916fdef48d6fd3"
+      "postimage_sha256": "32963468d0b3fc3a6871443058b7d8dddcfc474293a3e7ab94357fd5430661a7"
     },
     {
       "path": "zone/task_client_state.cpp",
       "preimage_sha256": "970c04e2d666237a9de02cc5b19ead685ca63f5c6d48a54e6bff2b3a7ea698f8",
-      "postimage_sha256": "afae7055a51f3ffaeb9717916324d95da3b9a664ddb944140462b9f08ca04fe0"
+      "postimage_sha256": "3298229af534db52258a4eeef7d3936bffa45a1cab222fe4c70e006a346fe159"
     },
     {
       "path": "zone/task_client_state.h",
@@ -198,5 +198,26 @@
     "All retained Fungal task/reward flags remain disabled; no enable or runtime authority accompanies this source package."
   ],
   "preservation": "Apply only against exact native preimages, composing current Fire plus serving recipe/bot actor deltas; preserve later 291 work. Never overwrite a dirty shared source tree or replay Fire deployment.",
-  "compile_access_correction": "Explicitly qualify the two intended global native World handler friends; all authority-issuing constructors remain private."
+  "compile_access_correction": "Explicitly qualify the two intended global native World handler friends; all authority-issuing constructors remain private.",
+  "pure_original_hails": {
+    "personal920141": [
+      1,
+      3,
+      5,
+      9
+    ],
+    "personal920142": [
+      8,
+      9
+    ],
+    "shared920143": [
+      0,
+      1,
+      6
+    ]
+  },
+  "pure_progress_authority": "Actual original say, same retained actor/client/Zone lifetimes, current native accepted personal occurrence or sharedrun/stage; no inventory or item outcome is created. Personal hails use native progress/completion/sole reward ledger. Shared pure hails use outcome0 ONLY0/1/6, actual strict native World fullsnapshot save then private KnownStageAck0 and exact run-bound echo. Physical5/10 still require nonzero finite outcome.",
+  "actor_qualification": "Adeenas pure-hail role uses original NPCtype481071 plus actual positive staticworld spawn; one exact static spawn was not independently authenticated. All finite physical-operation actor anchors remain unchanged.",
+  "companion_data": "rof2-spells extensions/rof2/spells/fungal-original-hails-source-data contains exact19hail activitytype5\u21924 replacements in98/323disabled source views; genuine explores5,goalmethod2,all other fields/flags remain unchanged.",
+  "pure_personal_authority": "Fate1/3/5/9 andGather8/9 require the private consumed-once retained OriginalOperation/currentClient scope established only in actual native hail Drain. Ordinary SpeakWith/quest UpdateTaskActivity cannot advance them outside that scope. Same original actor/lifetime/accepted occurrence is revalidated at the native increment."
 }
