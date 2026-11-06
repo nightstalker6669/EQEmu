@@ -1,8 +1,8 @@
 {
   "status": "REVIEWED_DISABLED_COMBINED_NATIVE_SOURCE_NOT_INSTALLED",
-  "source_revision": "writerR3 plus reviewed deferred actual-death delivery and typed persisted receipt",
-  "review_status": "PASS_FOCUSED_LIFETIME_REPAIR_AND_COMBINED_WRITER_SEAMS_SOURCE_ONLY",
-  "review_receipt_sha256": "ee4d0cdb7de0e4fd7ccd3c2aa5bab4d0c1787666bc9c64d2d56e106995821c33",
+  "source_revision": "Exact compiled-parent rebase plus owner ordinary-slot reuse correction",
+  "review_status": "Focused lifetime PASS; five-path retained-parent rebase PASS; exact owner correction composed per coordinator",
+  "review_receipt_sha256": "efeee8cc108a68a3f40f9cc1407ed7068f92ff87e5715d5acc307030cd972fa1",
   "native_files": {
     "common/CMakeLists.txt": {
       "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
@@ -65,8 +65,8 @@
       "postimage_sha256": "1aab37bc2672ef8811a411b8d00a551944ef8f77e5394923dba97305edfd5a5e"
     },
     "zone/client_packet.cpp": {
-      "preimage_sha256": "d9b74da6ccef54df2e8c8f736a19a0fa1a2701d07ae20496039c354ca00a8871",
-      "postimage_sha256": "2c274242593c1bcd46be25fa3b89a3af3b2c979a1e6c4ffd1a194407a3d78bff"
+      "preimage_sha256": "3efb2eae4077223212beb03e5c48b74fbcb09bfd236f6b1e8c7caa89e4db4a5a",
+      "postimage_sha256": "b8f1a9a4a4c29460e1f63424978f0c7f3954940ba190904c5a2564945c880957"
     },
     "zone/client_spirit_shroud.cpp": {
       "preimage_sha256": "153900d357a1fe13e7edc9baaf6406ed5b6a2a57efc79acce9bd358d67997785",
@@ -77,8 +77,8 @@
       "postimage_sha256": "aac1e27bcdd7597c6d13c34bcfb9e65740c5b37ecc565c248ca567ea98f76e82"
     },
     "zone/entity.cpp": {
-      "preimage_sha256": "112b1a3121f7664b26ae2815a391007eb03fedc1e3888a7fc28954e26470acc3",
-      "postimage_sha256": "966701c00b25645274ed39da315b4744d26b48a0f2f436da5797c4aa367266a1"
+      "preimage_sha256": "8c82cf775575fbc94448940911f168440da7d9b45453085df7aea257d83c4ad2",
+      "postimage_sha256": "f25156ca38a96c60820a47cea740260583d9d82dd4a0dcf346ce968be066a773"
     },
     "zone/fire_construct_death_receipt.h": {
       "preimage_sha256": null,
@@ -86,7 +86,7 @@
     },
     "zone/fire_native_item_custody.cpp": {
       "preimage_sha256": null,
-      "postimage_sha256": "ccc71b84b95331a79dc339980be85505cf513b6ceaceda9f862c17fbe7355cfc"
+      "postimage_sha256": "018b500845af365cc16c3cc529ab7ec6cae138fe5b98ed7a5400a787e52df51c"
     },
     "zone/fire_native_item_custody.h": {
       "preimage_sha256": null,
@@ -129,12 +129,12 @@
       "postimage_sha256": "a67890b2fe79b420d5418adcb5e357cb9838ffb6e1beb89c8bbf8249058f4d68"
     },
     "zone/npc.h": {
-      "preimage_sha256": "1f7fdf0cb82b6f7999c4622fb7f8dafe15877df09c56f659d5f19a48ef6a85b7",
-      "postimage_sha256": "63590dee53313765b9bad4e39e3e618457dde2f8f8328fd84c96309717f2b35b"
+      "preimage_sha256": "5da70d799dbe23fa2bc4b204555ffcec45026b6c23ad09b8c9efd532479c14ce",
+      "postimage_sha256": "0ea1915c43eab4079adfbb481c9f21fc426014497b1e3fe813b1a5e7535be013"
     },
     "zone/spells.cpp": {
-      "preimage_sha256": "e1ba4e4815384990dd37c3884e0fc3bbf3687ce494cca4c773110d637db93853",
-      "postimage_sha256": "575d3e833b8bcf1afb16baa172d24985b75db61234b9cbf6da221b205f28f6c8"
+      "preimage_sha256": "1ec2757560d4ce279d60461d7606933b672e3b660e5ed8bef5667d1315d78a10",
+      "postimage_sha256": "f3539499a8cd9525d3006bc967462d98bd76516fdb2327195f6ba2d4f5ebc2af"
     },
     "zone/task_client_state.cpp": {
       "preimage_sha256": "8e1328f7152fc7f226e5099be6099fcb3ad112b32172ccf80d2d5118d3d2adfe",
@@ -149,11 +149,11 @@
       "postimage_sha256": "d49c60a7d34cf096692c7bf23b6b2107112f39ee3c05182011acdecf7e5a24e9"
     },
     "zone/zone.cpp": {
-      "preimage_sha256": "1e9fc96fd833e02649c9744d70927225f833d91484e4d6490aab080481a97054",
-      "postimage_sha256": "a23d4dba58ea724001351ae0ecb78c76345a34f60090bc51c54394081efef674"
+      "preimage_sha256": "3c17cac8d75ab720a8a47e1fa60b2a7148473f38eb488019a9a320514decefb4",
+      "postimage_sha256": "a8661011fede0d7f702e3fdabc0e4cf813372829c2c0065d15d7fa6034c5d821"
     }
   },
-  "native_patch_sha256": "56e79c7769c3b35908cfe12e131dce1d17f3928eb0d0b3c657da5a5c0355c0e4",
+  "native_patch_sha256": "30e3a2aefc5943a6a60097692711950c9a6beee29c4fcf0994d589f6b270a388",
   "schema": {
     "path": "001_fire_construct_death_receipts.sql.disabled",
     "sha256": "ec487b9955095e5bbdccc02f003b7849b4258e6bed505d35ccffcb030458e9b9",
@@ -196,5 +196,27 @@
     "Known claim crash gaps/unknown writes held with no replay/retry/refund",
     "No serving migration/runtime/integration/build yet"
   ],
-  "native_rollback": "Source inverse artifact only; not authority for a serving rollback or dropping earned receipts."
+  "native_rollback": "Source inverse artifact only; not authority for a serving rollback or dropping earned receipts.",
+  "prior_lifetime_review_sha256": "ee4d0cdb7de0e4fd7ccd3c2aa5bab4d0c1787666bc9c64d2d56e106995821c33",
+  "owner_correction_manifest_sha256": "750d049f75cc523e256e51693f134c245733f22449cea87792d7938c5ab5a342",
+  "retained_parent_rebase": {
+    "changed_paths": [
+      "zone/client_packet.cpp",
+      "zone/entity.cpp",
+      "zone/npc.h",
+      "zone/spells.cpp",
+      "zone/zone.cpp"
+    ],
+    "unchanged_paths": 32,
+    "merge": "Three-way merge: prior Fire postimage, actual original preimage, exact compiled retained parent. One npc.h declaration conflict resolved by retaining BOTH private feature state and ReconcileHandinTaskDeliveries.",
+    "preserved": [
+      "PinObjectForClick actual lifetime/id scope",
+      "Retired object/click and door publication",
+      "original_count/task_delivered_count and ReconcileHandinTaskDeliveries",
+      "Full Binding846R3 contexts/limits/native path",
+      "GroundSpawns::kMaxSpawns"
+    ]
+  },
+  "additional_compatibility_fix": "Completed/rejected Fire state cannot intercept ordinary casts in a reused slot; active selected custody still rejects changed/missing originals. No ordinary writer authority.",
+  "unchanged_from_published_R3": 31
 }

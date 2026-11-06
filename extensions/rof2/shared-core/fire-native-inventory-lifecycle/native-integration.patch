@@ -1265,7 +1265,7 @@
  							CastSpell(item->Click.Effect, castspell->target_id, slot, item->CastTime, 0, 0, castspell->inventoryslot);
  						}
  						else {
-@@ -10055,6 +10070,11 @@
+@@ -10060,6 +10075,11 @@
  
  	if (m_inv.SupportsClickCasting(slot_id) || ((item->ItemType == EQ::item::ItemTypePotion || item->PotionBelt) && m_inv.SupportsPotionBeltCasting(slot_id))) // sanity check
  	{
@@ -1277,7 +1277,7 @@
  		auto* p_inst = (EQ::ItemInstance*) inst;
  
  		if (parse->ItemHasQuestSub(p_inst, EVENT_ITEM_CLICK)) {
-@@ -10192,6 +10212,8 @@
+@@ -10197,6 +10217,8 @@
  						return;
  					}
  					if (i == 0) {
@@ -1315,9 +1315,9 @@
 +#include "fire_original_construct_producer.h"
 +#include "fire_original_construct_death.h"
  
- #include <cstdarg>
- #include <cstdio>
-@@ -572,6 +574,7 @@
+ #include "common/strings.h"
+ #include "common/util/uuid.h"
+@@ -578,6 +580,7 @@
  			entity_list.RemoveMob(id);
  		}
  	}
@@ -1325,7 +1325,7 @@
  }
  
  void EntityList::BeaconProcess()
-@@ -687,6 +690,7 @@
+@@ -693,6 +696,7 @@
  	npc_list.emplace(std::pair<uint16, NPC *>(npc->GetID(), npc));
  	mob_list.emplace(std::pair<uint16, Mob *>(npc->GetID(), npc));
  
@@ -1369,7 +1369,7 @@
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
 +++ b/zone/fire_native_item_custody.cpp
-@@ -0,0 +1,566 @@
+@@ -0,0 +1,585 @@
 +// Native selected writer and custody source proposal. Not installed/built or
 +// activation-ready; retained placement/actor/initial167/169 holds still apply.
 +#include "client.h"
@@ -1666,6 +1666,15 @@
 +bool NativeItemCustody::Start(Client& c,int16_t slot,int32_t spell,uint32_t target) {
 + const auto* actual=c.m_inv.GetItem(slot);
 + auto* owner=Owned(c);
++ // An old completed/rejected Fire click must not claim a later ordinary item
++ // in the reused slot (including Binding846). Active selected custody still
++ // rejects a changed/missing original; ordinary paths never borrow its ticket.
++ if(!actual||!OriginalClickItem(actual->GetID())) {
++  const auto* selected=owner?owner->state_->click.get():nullptr;
++  return !selected||selected->slot!=slot||selected->phase==State::Phase::Committed||
++   selected->phase==State::Phase::Rejected;
++ }
++
 + if(!owner||!owner->state_->click||owner->state_->click->slot!=slot)
 +  return !actual||!OriginalClickItem(actual->GetID());
 + auto& f=*owner->state_->click;
@@ -1674,9 +1683,19 @@
 +}
 +bool NativeItemCustody::FinishEntry(Client& c,int16_t slot,int32_t spell,int16_t debit,FinishTicket& ticket) {
 + if(ticket.Selected())return false;
++ const auto* actual=c.m_inv.GetItem(slot);
 + auto* owner=Owned(c);
++ // An old completed/rejected Fire click must not claim a later ordinary item
++ // in the reused slot (including Binding846). Active selected custody still
++ // rejects a changed/missing original; ordinary paths never borrow its ticket.
++ if(!actual||!OriginalClickItem(actual->GetID())) {
++  const auto* selected=owner?owner->state_->click.get():nullptr;
++  return !selected||selected->slot!=slot||selected->phase==State::Phase::Committed||
++   selected->phase==State::Phase::Rejected;
++ }
++
 + if(!owner||!owner->state_->click||owner->state_->click->slot!=slot) {
-+  const auto* actual=c.m_inv.GetItem(slot);return !actual||!OriginalClickItem(actual->GetID());
++  return false;
 + }
 + auto& f=*owner->state_->click;
 + if(f.slot!=slot||spell!=7651||f.phase!=State::Phase::Casting||debit!=f.slot||!owner->Revalidate(c))return false;
@@ -2519,16 +2538,16 @@
  
  struct NPCProximity {
  	float	min_x;
-@@ -795,6 +797,9 @@
+@@ -797,6 +799,9 @@
  	const Handin GetHandin() { return m_hand_in; }
  
  private:
 +	friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
 +	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
 +	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_original_construct;
+ 	void ReconcileHandinTaskDeliveries();
+ 
  	uint32              m_loottable_id;
- 	bool                m_skip_global_loot;
- 	bool                m_skip_auto_scale;
 --- a/zone/spells.cpp
 +++ b/zone/spells.cpp
 @@ -85,6 +85,7 @@
@@ -2539,7 +2558,7 @@
  #include "zone/client_version.h"
  #include "zone/fastmath.h"
  #include "zone/lua_parser.h"
-@@ -312,6 +313,9 @@
+@@ -438,6 +439,9 @@
  	LogSpells("DoCastSpell called for spell [{}] ([{}]) on entity [{}], slot [{}], time [{}], mana [{}], from item [{}]",
  		spell.name, spell_id, target_id, static_cast<int>(slot), cast_time, mana_cost, item_slot==0xFFFFFFFF?999:item_slot);
  
@@ -2549,7 +2568,7 @@
  	casting_spell_id = spell_id;
  	casting_spell_slot = slot;
  	casting_spell_inventory_slot = item_slot;
-@@ -1219,6 +1223,7 @@
+@@ -1351,6 +1355,7 @@
  
  void Mob::ZeroCastingVars()
  {
@@ -2557,7 +2576,7 @@
  	// zero out the state keeping vars
  	attacked_count = 0;
  	spellend_timer.Disable();
-@@ -1753,8 +1758,15 @@
+@@ -1886,8 +1891,15 @@
  	const int32 completed_cast_item_slot = completed_cast_item_id
  		? static_cast<int32>(inventory_slot) : -1;
  
@@ -2574,7 +2593,7 @@
  	{
  		LogSpells("Casting of [{}] canceled: SpellFinished returned false", spell_id);
  		// most of the cases we return false have a message already or are logic errors that shouldn't happen
-@@ -1766,11 +1778,22 @@
+@@ -1899,11 +1911,22 @@
  	if(IsOfClientBotMerc()) {
  		TrySympatheticProc(target, spell_id);
  	}
@@ -2598,7 +2617,7 @@
  	bool completed_cast_charge_consumed = false;
  	if (IsClient() && DeleteChargeFromSlot >= 0) {
  		const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
-@@ -7163,7 +7186,23 @@
+@@ -7329,7 +7352,23 @@
  		const uint32 completed_item_id = completed_item && completed_item->GetItem()->Click.Effect == spell_id
  			? completed_item->GetID() : 0;
  		bool completed_charge_consumed = false;
