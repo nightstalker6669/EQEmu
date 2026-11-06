@@ -35,7 +35,7 @@ namespace EQ
 	struct ItemData;
 }
 
-#define MAXMERCS 3
+#define MAXMERCS 5
 #define TANK 1
 #define HEALER 2
 #define MELEEDPS 9

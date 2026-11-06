@@ -10617,7 +10617,10 @@ void Client::Handle_OP_MercenarySwitch(const EQApplicationPacket *app)
 		memcpy(outapp->pBuffer, data, sizeof(data));
 		FastQueuePacket(&outapp);
 	};
-	if (slot == MAXMERCS || slot >= GetMercenaryCapacity()) {
+	// Packed rows are resolved only from this character's loaded owned roster
+	// and a valid template. Entitlement limits new hires/transfer-in, not the
+	// selection of an existing contract after a rule or AA eligibility change.
+	if (slot >= MAXMERCS) {
 		reply(3);
 		return;
 	}

@@ -241,7 +241,8 @@ RULE_INT(Character, SecondsBeforeAFKNonCombatZone, 600, "Seconds before a player
 RULE_CATEGORY_END()
 
 RULE_CATEGORY(Mercs)
-RULE_INT(Mercs, MaxMercenaries, 1, "Available owned mercenary slots, clamped to compiled roster capacity; one active at a time. Server policy, not a marketplace entitlement.")
+RULE_BOOL(Mercs, UseRoF2EarnedCapacity, false, "RoF2 capacity: one base slot plus authenticated Hero Barracks AA bonus; no marketplace grant. Legacy total-capacity policy remains unchanged when disabled.")
+RULE_INT(Mercs, MaxMercenaries, 1, "Legacy RoF2 total capacity, clamped 1..3; unused by explicit earned mode. One active mercenary at a time; no marketplace entitlement.")
 RULE_BOOL(Mercs, ScaleAboveContentLevel, true, "Scale the highest lower-level mercenary stats when exact owner-level content is missing. Explicit emulator policy, not recovered Live values.")
 RULE_INT(Mercs, SuspendIntervalMS, 10000, "Time interval for merc suspend (milliseconds)")
 RULE_INT(Mercs, UpkeepIntervalMS, 180000, "Time interval for merc upkeep (milliseconds)")

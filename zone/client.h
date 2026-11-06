@@ -1831,7 +1831,8 @@ public:
 	void SendMercenaryUpkeep(bool alternate);
 	void SendMercenaryCostUpdate();
 	bool HasMercenaryPersistenceFailure() const { return m_mercenary_persistence_failed; }
-	uint8 GetMercenaryCapacity() const;
+	uint8 GetAuthenticatedHeroBarracksBonus();
+	uint8 GetMercenaryCapacity();
 	void PersistMercenarySelection();
 	bool GetMercenaryAutoAssist();
 	void SetMercenaryAutoAssist(bool enabled);

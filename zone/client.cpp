@@ -61,6 +61,7 @@
 #include "common/spdat.h"
 #include "common/strings.h"
 #include "common/zone_store.h"
+#include "zone/aa_ability.h"
 #include "zone/bot_command.h"
 #include "zone/cheat_manager.h"
 #include "zone/client_version.h"
@@ -8187,11 +8188,58 @@ void Client::SetMercenaryAutoAssist(bool enabled)
 	SetBucket("eqemu.mercenary.auto_assist", enabled ? "1" : "0");
 }
 
-uint8 Client::GetMercenaryCapacity() const
+uint8 Client::GetAuthenticatedHeroBarracksBonus()
 {
-	const int configured = RuleI(Mercs, MaxMercenaries);
-	const int capacity = std::max(1, std::min(configured, MAXMERCS));
-	return ClientVersion() == EQ::versions::ClientVersion::RoF2 ? capacity : 1;
+	// Only ability 704's first rank is authenticated. GetRankByPointsSpent
+	// saturates at the last loaded rank, so unsupported owned counts must not
+	// resolve to a smaller known rank or produce a free capacity grant.
+	constexpr uint32 ability_id = 704;
+	constexpr uint32 first_rank_id = 14367;
+	if (!zone) {
+		return 0;
+	}
+	uint32 charges = 0;
+	const auto owned = GetAAByAAID(ability_id, &charges);
+	if (owned != 1 || charges != 0) {
+		return 0;
+	}
+	auto* ability = zone->GetAlternateAdvancementAbility(ability_id);
+	if (!ability || ability->id != ability_id ||
+		ability->first_rank_id != first_rank_id || !ability->first ||
+		ability->charges != 0 || !ability->grant_only) {
+		return 0;
+	}
+	auto* rank = ability->GetRankByPointsSpent(owned);
+	if (!rank || rank != ability->first || rank->id != first_rank_id ||
+		rank->current_value != owned || rank->base_ability != ability ||
+		GetLevel() < rank->level_req || !CanUseAlternateAdvancementRank(rank) ||
+		rank->effects.size() != 1) {
+		return 0;
+	}
+	const auto& effect = rank->effects.front();
+	if (effect.slot != 1 || effect.effect_id != SpellEffect::AddMercSlot ||
+		effect.base_value != 1 || effect.limit_value != 0) {
+		return 0;
+	}
+	// AA-only effect, counted once. This is not a spell/item bonus or proof
+	// of durable quest/achievement delivery. Unknown higher ranks return zero.
+	return static_cast<uint8>(effect.base_value);
+}
+
+uint8 Client::GetMercenaryCapacity()
+{
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2) {
+		return 1;
+	}
+	if (RuleB(Mercs, UseRoF2EarnedCapacity)) {
+		// One ordinary base slot; no supplied purchased entitlement. Storage
+		// supports base + four future authenticated ranks, but only rank one
+		// is currently authenticated by the helper above.
+		return std::min(1 + GetAuthenticatedHeroBarracksBonus(), MAXMERCS);
+	}
+	// Increasing storage must not expand legacy configured capacity.
+	constexpr int legacy_maximum = 3;
+	return std::max(1, std::min(RuleI(Mercs, MaxMercenaries), legacy_maximum));
 }
 
 void Client::PersistMercenarySelection()
