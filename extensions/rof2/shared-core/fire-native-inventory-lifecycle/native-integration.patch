@@ -2883,7 +2883,7 @@
 + // source authorization additionally requires SAME current run membership.
 + std::fill(std::begin(corpse->m_allowed_looters),std::end(corpse->m_allowed_looters),0);
 + for(size_t i=0;i<a.members.size();++i)corpse->m_allowed_looters[i]=a.members[i].character;
-+ corpse.SetDecayTimer(std::min(corpse->GetDecayTime(),OriginalTerminalLeaseRemaining(a.original)));
++ corpse->SetDecayTimer(std::min(corpse->GetDecayTime(),OriginalTerminalLeaseRemaining(a.original)));
 + a.opened=true;return true;
 +}
 +bool NativeRunTerminalSource::AuthorizeActualCorpse(Client& c,Corpse& corpse) {

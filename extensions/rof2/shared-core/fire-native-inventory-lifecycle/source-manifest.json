@@ -1,6 +1,6 @@
 {
-  "status": "ACTUAL_NATIVE_TERMINAL_COMPOSITION_READY_FOCUSED_REVIEW",
-  "source_revision": "R16",
+  "status": "ACTUAL_COMPILER_SYMBOL_FAILURE_CORRECTED_READY_INCREMENTAL_RESUME",
+  "source_revision": "R16-r3",
   "native_files": {
     "common/CMakeLists.txt": {
       "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
@@ -52,7 +52,7 @@
     },
     "zone/client.cpp": {
       "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
-      "postimage_sha256": "943adaa38582da19db1655e581bf03bdf5f8053d5e50c43aec25749f08283c13"
+      "postimage_sha256": "c0b2d1b816d984fa6215519293c069f239d003c3337d729ebd960bef40cd4e8a"
     },
     "zone/client.h": {
       "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
@@ -300,7 +300,7 @@
     "zone/zone.cpp"
   ],
   "unchanged_from_compiled_R15r3": 46,
-  "patch_sha256": "e17aeef2b913ea9ff0319449c84307c33f0a220b63c534f8dfb72e17d5bfec71",
+  "patch_sha256": "3fd599d47873c49304b217e5d3cac22c0ed5f76caae14679fa25be0125c3c230",
   "private_interface_sha256": "217470eda544a2f35af754ff7cdfebdbc36110205b156055afb656efd86fbc57",
   "source_revision_alignment": "Core authored against frozen217470ed private interface, unchanged. Final Spells r2 body adds terminalACK-before-loot, exact retained whole LootItem, full actual Guardian NPCTypedata/receiver-depop checks and unauthorized current-looter unlock. Final body also enforces saved original absolute expiry plus native timer cap in opening/processing/corpse access, so a later instance extension does not extend this chest. No Core API change. Final source overlay fa54cfbf supersedes Core pinned cd452517 only for this final original-deadline refinement; its unchanged217470ed interface and all Core native postimages remain exact. Original79991e74 Source-only postimages are also superseded.",
   "material_exceptions": [
@@ -324,5 +324,14 @@
     "status": "MATCHED_R15R3_WORLD_ZONE_COMPILE_LINK_PASS_63PINS_4WARNINGS_ZEROERRORS"
   },
   "core_manifest_sha256": "ba5daa6b47f00588c7c6d7d1a6125e8517de467ae2ed22ecc9aa810143b83c0c",
-  "spells_native_manifest_sha256": "fa54cfbfc68cca3d966c0635f13ce6fde6e1198b74e6182d3c2ec9e87689a37f"
+  "spells_native_manifest_sha256": "fa54cfbfc68cca3d966c0635f13ce6fde6e1198b74e6182d3c2ec9e87689a37f",
+  "compile_correction": {
+    "changed_from_failed_R16_R2": [
+      "zone/client.cpp"
+    ],
+    "unchanged_pins": 67,
+    "native_pointer": "SealOriginalChestCorpse has a freshly resolved Corpse*; use corpse->SetDecayTimer rather than dot. Sole pointer syntax correction, no lifetime/access/decay/transaction behavior change.",
+    "failure_sha256": "b30e8b7c615f45022c323bd08236ddb5019d4bc125d0e52b2703f6618a8c3762",
+    "resume": "Reuse actual failed R16-r2 compiled cache and already-built World, update one client.cpp and verify all68 pins; resume matched incremental Zone+World link. No new scope/tests/serving."
+  }
 }
