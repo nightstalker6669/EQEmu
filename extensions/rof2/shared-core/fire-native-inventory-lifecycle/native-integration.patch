@@ -8,8 +8,9 @@
  	fellowship/service.cpp
 --- /dev/null
 +++ b/common/fire_native_inventory_fence.cpp
-@@ -0,0 +1,52 @@
+@@ -0,0 +1,53 @@
 +#include "fire_native_inventory_fence.h"
++#include "data_verification.h"
 +#include "inventory_profile.h"
 +#include <algorithm>
 +namespace FirePersonalOccurrenceSource {
@@ -1369,7 +1370,7 @@
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
 +++ b/zone/fire_native_item_custody.cpp
-@@ -0,0 +1,585 @@
+@@ -0,0 +1,583 @@
 +// Native selected writer and custody source proposal. Not installed/built or
 +// activation-ready; retained placement/actor/initial167/169 holds still apply.
 +#include "client.h"
@@ -1671,8 +1672,7 @@
 + // rejects a changed/missing original; ordinary paths never borrow its ticket.
 + if(!actual||!OriginalClickItem(actual->GetID())) {
 +  const auto* selected=owner?owner->state_->click.get():nullptr;
-+  return !selected||selected->slot!=slot||selected->phase==State::Phase::Committed||
-+   selected->phase==State::Phase::Rejected;
++  return !selected||selected->slot!=slot||!selected->fence.Active();
 + }
 +
 + if(!owner||!owner->state_->click||owner->state_->click->slot!=slot)
@@ -1690,8 +1690,7 @@
 + // rejects a changed/missing original; ordinary paths never borrow its ticket.
 + if(!actual||!OriginalClickItem(actual->GetID())) {
 +  const auto* selected=owner?owner->state_->click.get():nullptr;
-+  return !selected||selected->slot!=slot||selected->phase==State::Phase::Committed||
-+   selected->phase==State::Phase::Rejected;
++  return !selected||selected->slot!=slot||!selected->fence.Active();
 + }
 +
 + if(!owner||!owner->state_->click||owner->state_->click->slot!=slot) {

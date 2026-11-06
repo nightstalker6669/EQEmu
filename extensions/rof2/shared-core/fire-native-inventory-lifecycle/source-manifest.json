@@ -1,6 +1,6 @@
 {
   "status": "REVIEWED_DISABLED_COMBINED_NATIVE_SOURCE_NOT_INSTALLED",
-  "source_revision": "Exact compiled-parent rebase plus owner ordinary-slot reuse correction",
+  "source_revision": "Retained-parent rebase with minimal two-path owner declaration/active-fence correction",
   "review_status": "Focused lifetime PASS; five-path retained-parent rebase PASS; exact owner correction composed per coordinator",
   "review_receipt_sha256": "efeee8cc108a68a3f40f9cc1407ed7068f92ff87e5715d5acc307030cd972fa1",
   "native_files": {
@@ -10,7 +10,7 @@
     },
     "common/fire_native_inventory_fence.cpp": {
       "preimage_sha256": null,
-      "postimage_sha256": "5f6c3fb607d988b6f0e859bcfb2538df7dcf621c968c4baa1b9868f6555fee7a"
+      "postimage_sha256": "d9ca12a4a0cdccd706530007d1c81a186e81dc4867e54fcb3138bb41030bc50c"
     },
     "common/fire_native_inventory_fence.h": {
       "preimage_sha256": null,
@@ -86,7 +86,7 @@
     },
     "zone/fire_native_item_custody.cpp": {
       "preimage_sha256": null,
-      "postimage_sha256": "018b500845af365cc16c3cc529ab7ec6cae138fe5b98ed7a5400a787e52df51c"
+      "postimage_sha256": "9e3d42b3789c081187b1cb2ccf7c4a0fcc24927c22822bf5a92a649f1dcb9bc4"
     },
     "zone/fire_native_item_custody.h": {
       "preimage_sha256": null,
@@ -153,7 +153,7 @@
       "postimage_sha256": "a8661011fede0d7f702e3fdabc0e4cf813372829c2c0065d15d7fa6034c5d821"
     }
   },
-  "native_patch_sha256": "30e3a2aefc5943a6a60097692711950c9a6beee29c4fcf0994d589f6b270a388",
+  "native_patch_sha256": "2697f2c75de5e31981cff45109881b007863efc680054875b769fb07753ee1cf",
   "schema": {
     "path": "001_fire_construct_death_receipts.sql.disabled",
     "sha256": "ec487b9955095e5bbdccc02f003b7849b4258e6bed505d35ccffcb030458e9b9",
@@ -198,7 +198,7 @@
   ],
   "native_rollback": "Source inverse artifact only; not authority for a serving rollback or dropping earned receipts.",
   "prior_lifetime_review_sha256": "ee4d0cdb7de0e4fd7ccd3c2aa5bab4d0c1787666bc9c64d2d56e106995821c33",
-  "owner_correction_manifest_sha256": "750d049f75cc523e256e51693f134c245733f22449cea87792d7938c5ab5a342",
+  "owner_correction_manifest_sha256": "7be2865ea5989ac4965090dfa64cf80b057e84235ad36f52d8ea8fa013c98518",
   "retained_parent_rebase": {
     "changed_paths": [
       "zone/client_packet.cpp",
@@ -218,5 +218,11 @@
     ]
   },
   "additional_compatibility_fix": "Completed/rejected Fire state cannot intercept ordinary casts in a reused slot; active selected custody still rejects changed/missing originals. No ordinary writer authority.",
-  "unchanged_from_published_R3": 31
+  "unchanged_from_published_R3": 31,
+  "minimal_compiler_correction": [
+    "Include existing data_verification.h declaring EQ::ValueWithin, no predicate behavior change or numeric bounds rewrite.",
+    "Use actual private selected fence Active() in ordinary-item Start/FinishEntry. Inactive completed/rejected or returned-unlaunched captures cannot intercept later ordinary same-slot item use; active original mismatch still rejects, no ordinary Fire ticket/writer authority."
+  ],
+  "other35_postpins_unchanged": true,
+  "this_combined_build_status": "PENDING_ACTUAL_COMPILE; previous R5 failed ValueWithin declaration before link"
 }
