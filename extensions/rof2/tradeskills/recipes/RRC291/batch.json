@@ -7,8 +7,8 @@
     3102585
   ],
   "counts": {
-    "recipes": 43,
-    "entries": 301,
+    "recipes": 42,
+    "entries": 296,
     "item_dependencies": 95,
     "unchanged_prototype_recipes": 2141,
     "unchanged_prototype_entries": 16672
@@ -182,24 +182,6 @@
       "tradeskill": 63,
       "skillneeded": 0,
       "trivial": 40,
-      "nofail": 0,
-      "replace_container": 0,
-      "notes": "Maintained-primary Smithing;literal roles and owned Tanaan forge restriction where required;labelled era floor reconstruction;RRC291.",
-      "must_learn": 0,
-      "learned_by_item_id": 0,
-      "quest": 0,
-      "enabled": 1,
-      "min_expansion": 0,
-      "max_expansion": -1,
-      "content_flags": null,
-      "content_flags_disabled": null
-    },
-    {
-      "id": 3102553,
-      "name": "Small Piece of High Quality Ore",
-      "tradeskill": 63,
-      "skillneeded": 0,
-      "trivial": 21,
       "nofail": 0,
       "replace_container": 0,
       "notes": "Maintained-primary Smithing;literal roles and owned Tanaan forge restriction where required;labelled era floor reconstruction;RRC291.",
@@ -1260,51 +1242,6 @@
     },
     {
       "recipe_id": 3102552,
-      "item_id": 17,
-      "successcount": 0,
-      "failcount": 0,
-      "componentcount": 0,
-      "salvagecount": 0,
-      "iscontainer": 1
-    },
-    {
-      "recipe_id": 3102553,
-      "item_id": 6934,
-      "successcount": 0,
-      "failcount": 0,
-      "componentcount": 1,
-      "salvagecount": 1,
-      "iscontainer": 0
-    },
-    {
-      "recipe_id": 3102553,
-      "item_id": 10468,
-      "successcount": 1,
-      "failcount": 0,
-      "componentcount": 0,
-      "salvagecount": 0,
-      "iscontainer": 0
-    },
-    {
-      "recipe_id": 3102553,
-      "item_id": 13006,
-      "successcount": 0,
-      "failcount": 0,
-      "componentcount": 1,
-      "salvagecount": 1,
-      "iscontainer": 0
-    },
-    {
-      "recipe_id": 3102553,
-      "item_id": 22229,
-      "successcount": 2,
-      "failcount": 0,
-      "componentcount": 0,
-      "salvagecount": 0,
-      "iscontainer": 0
-    },
-    {
-      "recipe_id": 3102553,
       "item_id": 17,
       "successcount": 0,
       "failcount": 0,
@@ -209690,7 +209627,7 @@
       "May2013_exact_fields_verified": false
     },
     {
-      "recipe_id": 3102553,
+      "recipe_id": 3102545,
       "source_view_id": 23598,
       "source_name": "Small Piece of High Quality Ore",
       "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=126&rsa=Smithing&sub=conversion",
@@ -209738,7 +209675,9 @@
       "learning_origin": "OMITTED_LEARNING_ORDINARY0_POLICY",
       "min_expansion": 0,
       "era_origin": "THROUGH_ROF_SOURCE_CATALOGUE_FAMILY_CONTEXT_LOCAL_FLOOR_NOT_IMMUTABLE_DATE",
-      "May2013_exact_fields_verified": false
+      "May2013_exact_fields_verified": false,
+      "source_alias_kind": "SAME_COMPLETE_PHYSICAL_BODY_BYPRODUCT_CATALOGUE_VIEW",
+      "previous_proposed_duplicate_id": 3102553
     },
     {
       "recipe_id": 3102554,
@@ -215890,12 +215829,13 @@
     }
   ],
   "restriction_review": {
-    "scope": "Whole88 remaining Smithing groups/89source views reviewed.43new source-literal recipes and46held views.185primary targets152retained+33fresh.95full18native dependencies,2141peer recipes16672entries preserved;zero fullinput matches.",
+    "scope": "Whole88remaining Smithing groups/89source views:42new physical recipes represented by43source views,46held. Two catalogue views23559/23598 describe SAME full body6934x1+13006x1 yielding10468x1+22229x2;one recipe3102545 retains both facts. No alternative output selected.95full18native dependencies,2141peerheaders16672entries preserved;zero external fullinput matches at capture.",
     "stations": "28recipes list only TanaanForge. Exact28-ID actor requires actual owned open native world object103175/103185/103186/103190 inzone202/version0/type17/item0. All four native objects approximately match the four source stationary profile locators. No numeric source EQ itemID fabricated; no object mutation/native gameplay acceptance.15other routes use source-positive ordinary Forge17.",
     "fields": "Exact primary IDs, literal numeric trivials, minima, NoFail flags, yields and tool returns preserved. Native outputs MaxCharges0. Omitted learning ordinary0/book0/minimum0, quest0 and salvage conventions are labelled reconstruction. No creator race inferred from wearer masks.",
     "era": "Source catalogue family floors are explicit reconstruction, not immutable May2013 recipe dates.46held views:26explicit creator/book gates,14modern Artisan/Compendium variants,5trophies,1nonnumeric trivial. No later material substitution or guessed trivial.",
     "preservation": "All exact existing same-collation name peers are finitely exempted only after full peer preimages. Different input bodies remain unchanged; shared name is not evidence that old variants are wrong. Full18native fields/producer universe/objects/newIDrange/learned/count guards.",
-    "execution": "Source only. Compose actor delta onto actual Fire+284+290 serving parent; never replace whole serving CPP with standalone reference. SQL HOLD until owner compatible installed receipt and separate exact one-use SQLGO. No own tests/build/runtime/SQL."
+    "execution": "Source only. Compose actor delta onto actual Fire+284+290 serving parent; never replace whole serving CPP with standalone reference. SQL HOLD until owner compatible installed receipt and separate exact one-use SQLGO. No own tests/build/runtime/SQL.",
+    "revision2": "Failed001 strictfullinputguard caught duplicate source-view insertion;independent exact readback proved allpreimages/playerlearned unchanged,new0/transaction0. R2 removes ONLY duplicate recipe3102553 andits5identicalbodyentries;retains everyother originalID,including all28exact installedTanaan actor selectors.3102553leftunassigned,notreused. Originalsourceviews preserved,strictcollisionguardnotweakened. Fresh publication and explicit attempt002GO required;no automaticretry/inverse."
   },
   "source_urls": [
     "https://www.eqtraders.com/items/show_item.php?item=11910",
@@ -216303,5 +216243,7 @@
       "error_type": "AssertionError",
       "line": 33
     }
-  ]
+  ],
+  "source_revision": 2,
+  "proposed_unassigned_duplicate_id": 3102553
 }

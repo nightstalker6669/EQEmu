@@ -1,6 +1,6 @@
-# RRC291 Smithing
+# RRC291 Smithing revision 2
 
-Whole88 remaining Smithing groups/89source views reviewed.43new source-literal recipes and46held views.185primary targets152retained+33fresh.95full18native dependencies,2141peer recipes16672entries preserved;zero fullinput matches.
+Whole88remaining Smithing groups/89source views:42new physical recipes represented by43source views,46held. Two catalogue views23559/23598 describe SAME full body6934x1+13006x1 yielding10468x1+22229x2;one recipe3102545 retains both facts. No alternative output selected.95full18native dependencies,2141peerheaders16672entries preserved;zero external fullinput matches at capture.
 
 28recipes list only TanaanForge. Exact28-ID actor requires actual owned open native world object103175/103185/103186/103190 inzone202/version0/type17/item0. All four native objects approximately match the four source stationary profile locators. No numeric source EQ itemID fabricated; no object mutation/native gameplay acceptance.15other routes use source-positive ordinary Forge17.
 
@@ -12,4 +12,4 @@ All exact existing same-collation name peers are finitely exempted only after fu
 
 Source only. Compose actor delta onto actual Fire+284+290 serving parent; never replace whole serving CPP with standalone reference. SQL HOLD until owner compatible installed receipt and separate exact one-use SQLGO. No own tests/build/runtime/SQL.
 
-Context: https://www.eqtraders.com/items/show_item.php?item=5499
+Failed001 strictfullinputguard caught duplicate source-view insertion;independent exact readback proved allpreimages/playerlearned unchanged,new0/transaction0. R2 removes ONLY duplicate recipe3102553 andits5identicalbodyentries;retains everyother originalID,including all28exact installedTanaan actor selectors.3102553leftunassigned,notreused. Originalsourceviews preserved,strictcollisionguardnotweakened. Fresh publication and explicit attempt002GO required;no automaticretry/inverse.
