@@ -1174,7 +1174,7 @@
  				if (parse->ItemHasQuestSub(a_inst, EVENT_TIMER)) {
  					parse->EventItem(EVENT_TIMER, this, a_inst, nullptr, it_iter->first, 0);
  				}
-@@ -13667,3 +13706,1721 @@
+@@ -13667,3 +13706,1736 @@
  
  	return task_state->UncompleteTask(task_id);
  }
@@ -1938,6 +1938,7 @@
 +  auto run=CaptureRun(*s.owner,o->original_.activity,true);
 +  if(!run||run->run!=o->scene_.run||run->accepted_time!=o->scene_.accepted||
 +   run->dynamic_zone!=o->scene_.dynamic_zone||run->instance!=o->scene_.instance)return false;
++  if(o->original_.item==47758&&!NativeRunTerminalSource::AuthorizeAcknowledgedGuardianCorpse(*s.corpse,*run,o->death_sequence_))return false;
 +  o->claimed_loot_slots_.insert(actual_slot); // this SAME actual corpse slot gets one attempt, no unknown retry
 +  auto u=std::make_shared<OriginalRunLootUse::State>();u->origin=o;u->client_and_corpse=s.witness;
 +  static uint64_t actual_loot_sequence=0;if(actual_loot_sequence==UINT64_MAX)return false;
@@ -2573,7 +2574,7 @@
 + std::shared_ptr<RunTerminalAttempt> chest;
 + TerminalDeathFacts original;
 + std::unique_ptr<ServerPacket> progress;
-+ bool registered=false,positive_return=false,queued=false;
++ bool registered=false,positive_return=false,guardian_acknowledged=false,queued=false;
 + std::shared_ptr<State> next;
 +};
 +struct OriginalTerminalDeath::State {
@@ -2679,9 +2680,23 @@
 +  }else acknowledged=NativeRunTerminalCustody::AcknowledgeOriginalDeath(proof);
 +  if(!acknowledged)continue;
 +  if(p->chest)p->chest->terminal_acknowledged=true;
++  else p->guardian_acknowledged=true;
 +  worldserver.SendPacket(p->progress.get());
 +  // Native send is not a positive durable World save acknowledgment.
 + }
++}
++bool NativeRunTerminalSource::AuthorizeAcknowledgedGuardianCorpse(Corpse& corpse,const MissionRunFacts& run,uint64_t death_sequence) {
++ const auto p=corpse.m_fire_terminal_death_origin;
++ if(!p||!p->guardian_acknowledged||!p->positive_return||!p->registered||p->chest||
++  !p->corpse_owner||p->corpse_owner->LiveCorpse(p->original.corpse_entity)!=&corpse)return false;
++ const auto& actual=p->original;const auto& original=actual.mission;
++ // Numeric actor/corpse IDs and process-local death counters can repeat after
++ // restart. ONLY this same opaque live corpse node's known original Guardian
++ // acknowledgment is authority; an older database row cannot set this bit.
++ // Different accepted looters keep their own occurrence; compare mission scene.
++ return actual.npc_type==490911&&actual.original_spawn==304062014&&
++  actual.native_sequence==death_sequence&&original.run==run.run&&original.accepted_time==run.accepted_time&&
++  original.zone==run.zone&&original.version==run.version&&original.instance==run.instance&&original.dynamic_zone==run.dynamic_zone;
 +}
 +void NativeRunTerminalSource::DiscardCompletions()noexcept {
 + NativeRunTerminalSource::death_head_.reset();NativeRunTerminalSource::death_tail_.reset();
@@ -6864,7 +6879,7 @@
 +} // namespace FireRunActionSource
 --- /dev/null
 +++ b/zone/fire_run_terminal_scene.h
-@@ -0,0 +1,155 @@
+@@ -0,0 +1,157 @@
 +#pragma once
 +#include "fire_run_action_scene.h"
 +#include <vector>
@@ -7002,6 +7017,8 @@
 + friend class PreparedTerminalChestPlan;
 + friend class PublishedTerminalReturnSink;
 + friend class OriginalTerminalDeath;
++ friend class NativeRunLootSource;
++ static bool AuthorizeAcknowledgedGuardianCorpse(Corpse&,const MissionRunFacts&,uint64_t original_death_sequence);
 + static bool HandleOriginalAccept(Client&,NPC&); // before original finish/state/reset
 + static bool RejectUnissuedFinishTrade(Client&,NPC&);
 + static bool RevalidateOriginalReturn(Client&,const OriginalMoldTrade&);

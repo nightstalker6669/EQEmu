@@ -1,6 +1,6 @@
 {
-  "status": "ACTUAL_COMPILER_SYMBOL_FAILURE_CORRECTED_READY_INCREMENTAL_RESUME",
-  "source_revision": "R16-r4",
+  "status": "ACTUAL_R17_SAME_CORPSE_GUARDIAN_ACK_CLOSURE_READY_FOCUSED_REVIEW",
+  "source_revision": "R17",
   "native_files": {
     "common/CMakeLists.txt": {
       "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
@@ -52,7 +52,7 @@
     },
     "zone/client.cpp": {
       "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
-      "postimage_sha256": "c0b2d1b816d984fa6215519293c069f239d003c3337d729ebd960bef40cd4e8a"
+      "postimage_sha256": "47da09611533ba7cd233b15b593883a8af2e72e930799f8b0cef6a553d27b5e7"
     },
     "zone/client.h": {
       "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
@@ -204,7 +204,7 @@
     },
     "zone/fire_run_terminal_scene.h": {
       "preimage_sha256": null,
-      "postimage_sha256": "217470eda544a2f35af754ff7cdfebdbc36110205b156055afb656efd86fbc57"
+      "postimage_sha256": "81e5c4ede3318a2faf7ebea5e4104f9651b6ac8e6902e7f962b9f912569688cd"
     },
     "zone/fire_shared_transform_published.h": {
       "preimage_sha256": null,
@@ -276,33 +276,13 @@
     }
   },
   "incremental_changed_paths": [
-    "zone/attack.cpp",
     "zone/client.cpp",
-    "zone/client.h",
-    "zone/client_packet.cpp",
-    "zone/corpse.cpp",
-    "zone/corpse.h",
-    "zone/entity.cpp",
-    "zone/fire_native_item_custody.cpp",
-    "zone/fire_native_item_custody.h",
-    "zone/fire_run_action_custody_impl.inc",
-    "zone/fire_run_action_geometry.h",
-    "zone/fire_run_item_origin_impl.inc",
-    "zone/fire_run_terminal_custody.h",
-    "zone/fire_run_terminal_custody_impl.inc",
-    "zone/fire_run_terminal_scene.h",
-    "zone/fire_terminal_local_profiles.h",
-    "zone/npc.cpp",
-    "zone/npc.h",
-    "zone/task_client_state.cpp",
-    "zone/task_manager.cpp",
-    "zone/trading.cpp",
-    "zone/zone.cpp"
+    "zone/fire_run_terminal_scene.h"
   ],
   "unchanged_from_compiled_R15r3": 46,
-  "patch_sha256": "21bdc60a8db2963f1f15c66858d6776326669c83926db91574b5bfd2eafe8c13",
-  "private_interface_sha256": "217470eda544a2f35af754ff7cdfebdbc36110205b156055afb656efd86fbc57",
-  "source_revision_alignment": "Core authored against frozen217470ed private interface, unchanged. Final Spells r2 body adds terminalACK-before-loot, exact retained whole LootItem, full actual Guardian NPCTypedata/receiver-depop checks and unauthorized current-looter unlock. Final body also enforces saved original absolute expiry plus native timer cap in opening/processing/corpse access, so a later instance extension does not extend this chest. No Core API change. Final source overlay fa54cfbf supersedes Core pinned cd452517 only for this final original-deadline refinement; its unchanged217470ed interface and all Core native postimages remain exact. Original79991e74 Source-only postimages are also superseded.",
+  "patch_sha256": "b1b54d27b6947458a4a069fdcafc33baa319d4bb239f53269d24931868503832",
+  "private_interface_sha256": "81e5c4ede3318a2faf7ebea5e4104f9651b6ac8e6902e7f962b9f912569688cd",
+  "source_revision_alignment": "R17 header adds only a private Source raw-loot friend and actual same-corpse acknowledgment method. Core original trade/receipt/facts interfaces remain unchanged; all Core postimages retain compiled R16-r4 hashes. New final header pin supersedes217470ed only for these private Source hooks.",
   "material_exceptions": [
     "Selected LOCAL reconstruction includes instance return recipient, geometry/models/pose, baseline NPC profiles, helper timing, chest boundary/access/decay cap and one equal11gear draw. These are not authenticated retail bytes or native gameplay acceptance.",
     "Canonical mission has19 activities0..18 and one Guardian490911/spawn304062014. Actual16 acknowledges original death, activating17/native configured lock17. Mold17 uses actual same original corpse/save/removal. LOCAL final18 acknowledgment is delayed until committed mold return plus actual owned chest native opening/successful death/same corpse after stack, with no20th displayed objective.",
@@ -319,9 +299,9 @@
   "SQL_writes": 0,
   "runtime_actions": 0,
   "compiled_parent": {
-    "source_commit": "86dd514a80a57813616c7407056e8db86b496b50",
-    "sha256": "58c8e61bb0f04a470ec88d8b3ecec649b0af1a7ad09f78491d62a5a19f7a3b45",
-    "status": "MATCHED_R15R3_WORLD_ZONE_COMPILE_LINK_PASS_63PINS_4WARNINGS_ZEROERRORS"
+    "source_commit": "d6a20894cc775fd84475a9dd107c3d5e11c8ace4",
+    "sha256": "ef11c2a444bdb807f19f6d440ec244a78cfaaebde1febbf7135a2dfec5d52d17",
+    "status": "MATCHED_R16R4_WORLD_ZONE_COMPILE_LINK_PASS_68PINS_4WARNINGS_ZEROERRORS"
   },
   "core_manifest_sha256": "ba5daa6b47f00588c7c6d7d1a6125e8517de467ae2ed22ecc9aa810143b83c0c",
   "spells_native_manifest_sha256": "fa54cfbfc68cca3d966c0635f13ce6fde6e1198b74e6182d3c2ec9e87689a37f",
@@ -334,5 +314,20 @@
     "core_fix_sha256": "2b6668e0a5326c075913f905d4f87bba769951939cf70be42e793e65c578d35e",
     "failure_sha256": "c57eaed1e622d23318e0089783eabd52e864b9a52e36fd329d2ae0b76284911b",
     "resume": "Reuse actual failed R16-r3 compiled cache and already-built World, update one fire_native_item_custody.cpp and verify all68 pins; resume matched incremental Zone+World link. No new scope/tests/serving."
+  },
+  "restart_corpse_closure": {
+    "status": "ACTUAL_SOURCE_RESTART_ID_REUSE_GAP_CLOSED_PENDING_FOCUSED_REVIEW",
+    "trigger": "A same-run instance process restarts with prior Guardian kind6 custody and native16 already completed. Reloaded static Guardian can yield a fresh actual material corpse whose runtime IDs/death counter repeat; it has no new eligible16 capture/known Guardian acknowledgment, while old numeric custody could match.",
+    "fix": "Set private same-corpse guardian_acknowledged only AFTER known positive Core AcknowledgeOriginalDeath; before native16 send. Raw47758 preparation additionally requires that actual current corpse opaque node, positive original return/registration, exact live witness and known acknowledgment plus original scene/death sequence. No lookup/history/numeric tuple can set the bit.",
+    "recovery": "New/reloaded/unacknowledged corpora reject. Previously genuine published47758 inventory items still return after relog via existing UUID/run origin; their hand-in does not require retaining the corpse. Current accepted different looters compare shared scene, not creator character/occurrence.",
+    "changed_native_paths": [
+      "zone/client.cpp",
+      "zone/fire_run_terminal_scene.h"
+    ],
+    "unchanged_pins": 66,
+    "no_new_Core_API_or_DDL_or_objectives": true,
+    "tests": 0,
+    "SQL_writes": 0,
+    "runtime_actions": 0
   }
 }
