@@ -204,7 +204,7 @@
 -namespace FungalItemWorldSource {
 -class NativeStage;
 -class PacketScope final {
-- friend class SharedTaskWorldMessaging;
+- friend class ::SharedTaskWorldMessaging;
 - friend class NativeStage;
 - PacketScope* previous_=nullptr;
 - static thread_local PacketScope* current_;
@@ -240,7 +240,7 @@
 - KnownStageAck& operator=(const KnownStageAck&)=delete;
 -};
 -class NativeStage final {
-- friend class SharedTaskManager;
+- friend class ::SharedTaskManager;
 - static thread_local NativeStage* current_;
 - NativeStage* previous_=nullptr;
 - bool selected_=false;

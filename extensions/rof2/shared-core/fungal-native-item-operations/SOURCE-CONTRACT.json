@@ -45,7 +45,7 @@
     {
       "path": "world/fungal_item_world_source.h",
       "preimage_sha256": null,
-      "postimage_sha256": "7bbe4085c6a4163ec6fdc9a444246500551411930818568ec939dad7a67e1fbb"
+      "postimage_sha256": "d6fe69490e85113af352ad4e6bba1a265c82ab5aec7bb321c4e087c2b2d82cb0"
     },
     {
       "path": "world/fungal_item_world_source_impl.inc",
@@ -197,5 +197,6 @@
     "Complete Fungal task/mission physical delivery, phase, geometry, source and native acceptance work is not supplied by these three operations.",
     "All retained Fungal task/reward flags remain disabled; no enable or runtime authority accompanies this source package."
   ],
-  "preservation": "Apply only against exact native preimages, composing current Fire plus serving recipe/bot actor deltas; preserve later 291 work. Never overwrite a dirty shared source tree or replay Fire deployment."
+  "preservation": "Apply only against exact native preimages, composing current Fire plus serving recipe/bot actor deltas; preserve later 291 work. Never overwrite a dirty shared source tree or replay Fire deployment.",
+  "compile_access_correction": "Explicitly qualify the two intended global native World handler friends; all authority-issuing constructors remain private."
 }
