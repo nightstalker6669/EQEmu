@@ -19,3 +19,8 @@ Omittedlearning0 and enabled1/quest0 ordinary new-row defaults labelled; sourceC
 SOURCE_ONLY SQLHOLD: coordinator source-policy selection + GitHub exact publication + actual compatible finite14actor installation + separately authorized exact Brelltable mutation/reload prerequisite. No tests/rehearsal/build/SQL/runtime/nativeacceptance.
 
 Source: https://www.eqtraders.com/articles/article_page.php?article=q260&menustr=120000000000
+
+
+R4 SQL guard correction: Only wrap the expected literal in CAST(... AS FLOAT) for each of95 actual schema-FLOAT fields across seven native Font doors and four selected stations, in apply and rollback. Every original expected value, full row field, identity and other predicate remains unchanged. No epsilon, position edit, guard removal or new staging/mutation.
+
+Source only pending publication and new exact SQL GO for fresh002. Installed aggregate55 actor is compatible; no builds/tests/runtime/start/admission/station or book replay.

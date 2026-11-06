@@ -1,7 +1,7 @@
 {
   "batch": "RRC300",
   "branch": "rof2-tradeskills",
-  "status": "SOURCE_SQL_HOLD_FINITE14_ACTOR_AND_SEPARATE_EXACT_STATION",
+  "status": "SOURCE_ONLY_RRC300_R4_SCHEMA_FLOAT_GUARD_CORRECTION_SQL_HOLD",
   "proposed_ids": [
     3102753,
     3102766
@@ -17755,5 +17755,15 @@
       "name": "Imbued Northman Kite Shield",
       "reason": "('Imbued Northman Kite Shield', 'ID_DRIFT')"
     }
-  ]
+  ],
+  "source_revision": 4,
+  "SQL_guard_revision": {
+    "revision": "R4_SCHEMA_FLOAT_NATIVE_FONT_STATION_GUARDS_ONLY",
+    "problem": "Twenty original decimal literal predicates disagree with unchanged native FLOAT rows. Example door35652 pos_y native binary32 widened to828.281005859375 while driver prints828.281; comparison with decimal828.281 rejects the row.",
+    "change": "Only wrap the expected literal in CAST(... AS FLOAT) for each of95 actual schema-FLOAT fields across seven native Font doors and four selected stations, in apply and rollback. Every original expected value, full row field, identity and other predicate remains unchanged. No epsilon, position edit, guard removal or new staging/mutation.",
+    "diagnosis": "One necessary bounded read identified exact failing predicates using the actual schema and verified every typed predicate plus binary32 value widened AS DOUBLE against the retained preimage. All95 agreed;20 untyped comparisons failed. Not a combine/test campaign.",
+    "diagnosis_sha256": "dbf6109ad7877f014d3207853733bc420eaaf30e87c3936866c2ae7f97957d20",
+    "preserved": "All14recipes71entries/sourcepolicies/214peerheaders1198entries/native actorR3 patch/station actualtype20/book/playerstate unchanged. Existing failed001 is retained and not replayed.",
+    "execution": "Source only pending publication and new exact SQL GO for fresh002. Installed aggregate55 actor is compatible; no builds/tests/runtime/start/admission/station or book replay."
+  }
 }
