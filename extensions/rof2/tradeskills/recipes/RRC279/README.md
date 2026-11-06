@@ -14,9 +14,9 @@ Only positively listed ordinary Forge17 selected, all source input totals<=10. E
 
 Osmium Fill8802 explicitly warns current experimentation produces wrong output and consumes hammer, so no blind insertion from declared body. Brell Heart Silver Filigree10226 explicitly requires Brell Temple forge; actor/spatial gate not qualified. Both retained, no guessed workaround or default.
 
-69 full18 dependencies/1750 peer headers/13700 entries guarded unchanged. Exact fullinput collision/name peer primarykey exclusions/fullpostimages/count deltas/learned-reference rollback refusal retained.
+69 full18 dependencies/1848 peer headers/14680 entries guarded unchanged. Exact fullinput collision/name peer primarykey exclusions/fullpostimages/count deltas/learned-reference rollback refusal retained.
 
-Source only pending Coordinator reconstruction disposition/publication and separate exact one-use SQL GO. No book/item/player/quest/core mutation, build/rehearsal/runtime/native acceptance.
+R2 source only after consumed failed attempt001; full affected preimages unchanged, zero new IDs, transaction0 verified. Added only known exact applied RRC27898peer headers980entries. Fresh revision publication and separate attempt002 GO required; no existing authority reused. Source only pending Coordinator reconstruction disposition/publication and separate exact one-use SQL GO. No book/item/player/quest/core mutation, build/rehearsal/runtime/native acceptance.
 
 Source: https://www.eqtraders.com/recipes/recipe_page.php?article=408&rsa=Smithing&sub=sof
 Source: https://www.eqtraders.com/recipes/recipe_page.php?article=429&rsa=Smithing&sub=HOT
