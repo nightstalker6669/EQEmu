@@ -1,0 +1,81 @@
+{
+  "scope": "Individual September2012 presence/threshold/no-extra-reward evidence, not original server callback or native progress proof",
+  "rows": [
+    {
+      "achievement_id": 1900045,
+      "name": "Alaran Language Aware",
+      "required_component_id": 1900045,
+      "required_component_type": 1,
+      "required_component_sequence": 1,
+      "threshold": 25,
+      "points": 10,
+      "source_url": "https://everquest.allakhazam.com/db/quest/5838",
+      "entered_utc": "2012-09-03T06:00:42Z",
+      "period_report": {
+        "author": "Amio",
+        "date": "2012-09-05",
+        "displayed_time": "14:19",
+        "basis": "individual dated achievement-information comment repeats exact threshold and no-reward statement"
+      },
+      "confirmed_extra_reward": "none reported by period comment",
+      "limits": "Currentmutableheader updated2024, Level95 not accepted as admission requirement; 2015Wordscomment postcutoff and not triggerproof. Datedcomments establish individualpresence/threshold/noextrareward, not callback/persistence or raw numericcounter."
+    },
+    {
+      "achievement_id": 1900046,
+      "name": "Alaran Language Novice",
+      "required_component_id": 1900046,
+      "required_component_type": 1,
+      "required_component_sequence": 1,
+      "threshold": 50,
+      "points": 10,
+      "source_url": "https://everquest.allakhazam.com/db/quest/5839",
+      "entered_utc": "2012-09-03T06:01:21Z",
+      "period_report": {
+        "author": "Amio",
+        "date": "2012-09-05",
+        "displayed_time": "14:19",
+        "basis": "individual dated achievement-information comment repeats exact threshold and no-reward statement"
+      },
+      "confirmed_extra_reward": "none reported by period comment",
+      "limits": "Currentmutableheader updated2024, Level95 not accepted as admission requirement; 2015Wordscomment postcutoff and not triggerproof. Datedcomments establish individualpresence/threshold/noextrareward, not callback/persistence or raw numericcounter."
+    },
+    {
+      "achievement_id": 1900047,
+      "name": "Alaran Language Fluent",
+      "required_component_id": 1900047,
+      "required_component_type": 1,
+      "required_component_sequence": 1,
+      "threshold": 71,
+      "points": 10,
+      "source_url": "https://everquest.allakhazam.com/db/quest/5840",
+      "entered_utc": "2012-09-03T06:01:52Z",
+      "period_report": {
+        "author": "Amio",
+        "date": "2012-09-05",
+        "displayed_time": "14:20",
+        "basis": "individual dated achievement-information comment repeats exact threshold and no-reward statement"
+      },
+      "confirmed_extra_reward": "none reported by period comment",
+      "limits": "Currentmutableheader updated2024, Level95 not accepted as admission requirement; 2015Wordscomment postcutoff and not triggerproof. Datedcomments establish individualpresence/threshold/noextrareward, not callback/persistence or raw numericcounter."
+    },
+    {
+      "achievement_id": 1900048,
+      "name": "Alaran Language Expert",
+      "required_component_id": 1900048,
+      "required_component_type": 1,
+      "required_component_sequence": 1,
+      "threshold": 90,
+      "points": 10,
+      "source_url": "https://everquest.allakhazam.com/db/quest/5841",
+      "entered_utc": "2012-09-03T06:02:19Z",
+      "period_report": {
+        "author": "Amio",
+        "date": "2012-09-05",
+        "displayed_time": "14:21",
+        "basis": "individual dated achievement-information comment repeats exact threshold and no-reward statement"
+      },
+      "confirmed_extra_reward": "none reported by period comment",
+      "limits": "Currentmutableheader updated2024, Level95 not accepted as admission requirement; 2015Wordscomment postcutoff and not triggerproof. Datedcomments establish individualpresence/threshold/noextrareward, not callback/persistence or raw numericcounter."
+    }
+  ]
+}

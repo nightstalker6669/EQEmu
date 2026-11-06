@@ -1,0 +1,65 @@
+{
+  "status": "DISABLED_SOURCE_CORRECTIONS_ONLY_NOT_APPLIED_OR_INSTALLABLE",
+  "native_enum": "common/reward_selection.h Item0 Experience1; original Fire loader failure exposed wrong item-type encoding.",
+  "unique_reward_rows": 8,
+  "views": [
+    {
+      "mission": "underfoot-silent-schism",
+      "view": "task-reward-data.draft.json",
+      "corrected_file": "silent-schism-task-reward-data.json",
+      "original_sha256": "51846874600f023e4b6ee9d901802b612e70a89b5289c0d3721d38bf50efa6e4",
+      "corrected_sha256": "32f6960fec1e15c074086e605456bc8b2dde420ea2b653102e54962210e8b0a8",
+      "reward_ids": [
+        3839201622,
+        3839201623,
+        3839201624,
+        3839201625
+      ],
+      "only_change": "reward_type1to0; nativeItem0/Experience1; enabled0 unchanged"
+    },
+    {
+      "mission": "underfoot-silent-schism",
+      "view": "combined-data.json",
+      "corrected_file": "silent-schism-combined-data.json",
+      "original_sha256": "c7f87a57e7f1a96be486067d2d253e6abade154318d3e165ffabf3820f0c4079",
+      "corrected_sha256": "892a6246e29ba74776e2ad195118641c7a31487db67b4cdc9a4a3809c560d0e0",
+      "reward_ids": [
+        3839201622,
+        3839201623,
+        3839201624,
+        3839201625
+      ],
+      "only_change": "reward_type1to0; nativeItem0/Experience1; enabled0 unchanged"
+    },
+    {
+      "mission": "underfoot-bonfire",
+      "view": "task-reward-data.draft.json",
+      "corrected_file": "bonfire-task-reward-data.json",
+      "original_sha256": "1cae96deffc632c77b06f1947d4bdb6fb49864a4276ddffc8aa0430bc00cc25a",
+      "corrected_sha256": "706352c73ecd4faa9c61ba5c78f3d348006af4dcbeda4a3b0fe47f4cf2142a04",
+      "reward_ids": [
+        3839201742,
+        3839201743,
+        3839201744,
+        3839201745
+      ],
+      "only_change": "reward_type1to0; nativeItem0/Experience1; enabled0 unchanged"
+    },
+    {
+      "mission": "underfoot-bonfire",
+      "view": "combined-data.json",
+      "corrected_file": "bonfire-combined-data.json",
+      "original_sha256": "a04f0b8adc1612ef3807b3cfc35fc42c6f798aab3032797a60ad7e01fe6e223b",
+      "corrected_sha256": "8267376abb6edd4136bb225d9b751e5c20a81bd1aead095b0fe0984ff4533133",
+      "reward_ids": [
+        3839201742,
+        3839201743,
+        3839201744,
+        3839201745
+      ],
+      "only_change": "reward_type1to0; nativeItem0/Experience1; enabled0 unchanged"
+    }
+  ],
+  "retained_scope": "Both original task-only and combined source views corrected consistently; all other rows/fields/flags/qualifications preserved. Original150Schism/106Bonfire candidate row counts unchanged. Original source drafts/indexes immutable; private replacement indexes pinned.",
+  "activation": "No task enable, SQL migration, installation, native scene, reward delivery, or build authority. Complete mission consumers/placements and original unresolved behavior remain incomplete. Future complete candidates must use these replacement views, never add duplicate reward rows."
+}

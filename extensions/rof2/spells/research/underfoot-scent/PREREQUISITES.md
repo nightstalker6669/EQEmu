@@ -1,0 +1,25 @@
+# Scent prerequisite acquisition component
+
+Source-only continuation of the original4945mission; four unallocated native tasks with42proposed goals, nine existing quest items and their already configured13loot paths. No SQL/helper/runtime installation. This is enough to prepare content with current actors while the separate mission instance awaits NPC definitions, without duplicating item drops or changing combat profiles.
+
+The required dependency chain is (Unrest4936 AND Chaos4937) -> Alternative4938 -> Overheated4939 -> Scent4945. Modern A Clean Mine4942 is not substituted. Clontik482192 is the existing requester. Reggund482144, Kronidar482005, Drenkar482244, LordRagarrh482268, Protauris482257 and Keolyx482262 all have existing target Underquarry version0 placements. Only this target zone is selected; same-name surly genati484331/484394 belong elsewhere and are excluded. NPCowner retains stat/AI/loot/spawn ownership.
+
+## Period checks and corrections
+
+[Chaos4937](https://everquest.allakhazam.com/db/quest/4937): Dec19,2009 report explicitly specifies5engineers+5foremen; current main text displays a misleading0/1 after wording Kill5. Preserve5each, not1. Feb8,2010 lists explore/kill5/kill5/finalClontikhail. July15,2011 gives exploration /loc-337,-151,-290. These are reported points; any region radius is an explicit configurable approximation, not a recovered native explore box.
+
+[Alternative4938](https://everquest.allakhazam.com/db/quest/4938): Jan1,2010 comment confirms the first two tasks are required; Feb5,2010 dialogue confirms requestphrase deeper; Feb12,2010 enumerates11steps including THREE separate Reggund hails. March3/June12,2010 reports confirm prelooted items can satisfy Collect using normal possession/trade-return behavior. Do not compress three native dialogue activities into one click or require fresh item drops as an invented gate.
+
+[Overheated4939, Dec31,2009](https://everquest.allakhazam.com/db/quest/4939#msg1262311091189473367) gives the full20-goal stage order and confirms prelooted items. Initial Kronidarhail unlocks kill10burynai+collect5wheelsticks+collect5crystals; then deliver5each; collect4slats; deliver4slats; hailKronidar; hailDrenkar; kill3genati+collect3maps+collect3satchels; deliver3each; collect4pegs; deliver4pegs; hailDrenkar; hailKronidarAGAIN; finalClontikhail. Rasper abbreviated overview omits that second final Kronidarhail, so use the dated detailed report. [March31,2010 logged completion](https://everquest.allakhazam.com/db/quest/4939#msg1270045787148842631) corroborates that handoff and315pp payout; caster level/XP reward-setting is not recovered as a numeric formula.
+
+Unrest4936 has seven documented goals: three investigate/leader-kill pairs plus finalClontikhail. Feb19,2010 comment supplies three exploration /locpoints. Exact original branch activation order is not recovered by the ordered guide text alone; no forced global order is claimed. The three existing named actors/normal spawns remain unchanged.
+
+## Native representation and preserved property
+
+Native task completion history supplies prerequisite entitlement after real task completion, with no free flags, achievement edits or ad-hoc qglobal replacement. Allocate native IDs through coordinator after source review, checking only their actual namespaces/consumers. New content must preserve legitimate prior progress if equivalent tasks are later discovered; bounded exact-title negatives do not prove all aliases absent.
+
+Each three-Reggund or repeated-Kronidar/Drenkar interaction needs one pre-event selected current stage and one native update, with explicit METHODQUEST where ordinary automatic SpeakWith could bypass stage rejection. Do not iterate and satisfy newly unlocked dialogue stages during the same hail; the earlier Destroyer native event-order finding applies. This is content control through existing task APIs, not a new manual reward engine.
+
+Retained source zone/task_client_state.cpp2847–2940 already implements UpdateTasksOnCollect for SOLO tasks/quests from carried possessions/bags, with exact accepted-time identity and callback revalidation; periodic checks call it at2965/2987. Shared tasks are explicitly excluded. This can support the required solo preloot behavior without forcing the player to trade-cancel, granting artificial loot, or consuming an item twice. Retained source is not proof the deployed Build descendant includes it: confirm the relevant capability once with Build at actual implementation/deployment, not a new compatibility scan now. The shared Scent mission uses its own original loot/deliver objectives; do not silently extend solo Collect into group custody.
+
+Parts/wood boxes482001/482019 are existing class62 loot containers with configured pegs/slats. Preserve normal /open path and existing placements. All nine prerequisite item IDs40492–40499/40996 already have target loot paths; no newdrops/itemcopies/rates/borrowed NPC profiles are needed for this component. Actual kill-type sets and exploration regions remain finite source-mapping choices to review before apply. No player inventory/currency/history queries or writes occurred.

@@ -1,0 +1,38 @@
+{
+  "batch": "RRC054",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "214e29b9de19b29d5dca7314d1fd287ba3450a3a",
+  "source_sha256": "7113edca7e40932341ff44ab43e8bf1efc741870d9d1bc6cdeb521f6c3230e2a",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes": 28,
+  "entries": 218,
+  "ids": [
+    3093225,
+    3093252
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC054",
+    "0",
+    "25047",
+    "25075",
+    "189282",
+    "189500",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25075,
+    "entries": 189500
+  },
+  "affected_postimages_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "existing_producer_guards": {
+    "recipes": 19,
+    "full_entry_rows": 127,
+    "scope": "Exact oldBottleproducerdefs/fullentries sourceSQLguarded before/after; nativeCarryallLore/capacityguard passed."
+  }
+}

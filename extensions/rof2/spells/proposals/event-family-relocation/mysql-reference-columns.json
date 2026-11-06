@@ -1,0 +1,325 @@
+{
+  "scope": "Current non-Housing item copies and actionable provider/configuration references; terminal histories excluded. Current Housing semantics are supplied by the coordinated52-row check.",
+  "columns": [
+    {
+      "table": "alternate_currency",
+      "column": "item_id"
+    },
+    {
+      "table": "buyer_buy_lines",
+      "column": "item_id"
+    },
+    {
+      "table": "buyer_trade_items",
+      "column": "item_id"
+    },
+    {
+      "table": "character_bandolier",
+      "column": "item_id"
+    },
+    {
+      "table": "character_corpse_items",
+      "column": "item_id"
+    },
+    {
+      "table": "character_evolving_items",
+      "column": "item_id"
+    },
+    {
+      "table": "character_evolving_items",
+      "column": "final_item_id"
+    },
+    {
+      "table": "character_parcels",
+      "column": "item_id"
+    },
+    {
+      "table": "character_parcels_containers",
+      "column": "item_id"
+    },
+    {
+      "table": "character_pet_inventory",
+      "column": "item_id"
+    },
+    {
+      "table": "character_potionbelt",
+      "column": "item_id"
+    },
+    {
+      "table": "fellowship_campsite_catalogue",
+      "column": "kit_item_id"
+    },
+    {
+      "table": "fellowship_campsite_catalogue",
+      "column": "lumber_item_id"
+    },
+    {
+      "table": "fishing",
+      "column": "Itemid"
+    },
+    {
+      "table": "forage",
+      "column": "Itemid"
+    },
+    {
+      "table": "ground_spawns",
+      "column": "item"
+    },
+    {
+      "table": "guild_bank",
+      "column": "item_id"
+    },
+    {
+      "table": "inventory",
+      "column": "item_id"
+    },
+    {
+      "table": "inventory",
+      "column": "augment_one"
+    },
+    {
+      "table": "inventory",
+      "column": "augment_two"
+    },
+    {
+      "table": "inventory",
+      "column": "augment_three"
+    },
+    {
+      "table": "inventory",
+      "column": "augment_four"
+    },
+    {
+      "table": "inventory",
+      "column": "augment_five"
+    },
+    {
+      "table": "inventory",
+      "column": "augment_six"
+    },
+    {
+      "table": "items_evolving_details",
+      "column": "item_id"
+    },
+    {
+      "table": "keyring",
+      "column": "item_id"
+    },
+    {
+      "table": "lootdrop_entries",
+      "column": "item_id"
+    },
+    {
+      "table": "merchantlist",
+      "column": "item"
+    },
+    {
+      "table": "merchantlist_temp",
+      "column": "itemid"
+    },
+    {
+      "table": "merc_inventory",
+      "column": "item_id"
+    },
+    {
+      "table": "object",
+      "column": "itemid"
+    },
+    {
+      "table": "object_contents",
+      "column": "itemid"
+    },
+    {
+      "table": "object_contents",
+      "column": "augslot1"
+    },
+    {
+      "table": "object_contents",
+      "column": "augslot2"
+    },
+    {
+      "table": "object_contents",
+      "column": "augslot3"
+    },
+    {
+      "table": "object_contents",
+      "column": "augslot4"
+    },
+    {
+      "table": "object_contents",
+      "column": "augslot5"
+    },
+    {
+      "table": "object_contents",
+      "column": "augslot6"
+    },
+    {
+      "table": "pets_equipmentset_entries",
+      "column": "item_id"
+    },
+    {
+      "table": "sharedbank",
+      "column": "item_id"
+    },
+    {
+      "table": "sharedbank",
+      "column": "augment_one"
+    },
+    {
+      "table": "sharedbank",
+      "column": "augment_two"
+    },
+    {
+      "table": "sharedbank",
+      "column": "augment_three"
+    },
+    {
+      "table": "sharedbank",
+      "column": "augment_four"
+    },
+    {
+      "table": "sharedbank",
+      "column": "augment_five"
+    },
+    {
+      "table": "sharedbank",
+      "column": "augment_six"
+    },
+    {
+      "table": "shroud_original_character_bandolier",
+      "column": "item_id"
+    },
+    {
+      "table": "shroud_original_character_pet_inventory",
+      "column": "item_id"
+    },
+    {
+      "table": "shroud_original_character_potionbelt",
+      "column": "item_id"
+    },
+    {
+      "table": "shroud_original_inventory",
+      "column": "item_id"
+    },
+    {
+      "table": "shroud_original_inventory",
+      "column": "augment_one"
+    },
+    {
+      "table": "shroud_original_inventory",
+      "column": "augment_two"
+    },
+    {
+      "table": "shroud_original_inventory",
+      "column": "augment_three"
+    },
+    {
+      "table": "shroud_original_inventory",
+      "column": "augment_four"
+    },
+    {
+      "table": "shroud_original_inventory",
+      "column": "augment_five"
+    },
+    {
+      "table": "shroud_original_inventory",
+      "column": "augment_six"
+    },
+    {
+      "table": "spirit_shroud_bank_inventory",
+      "column": "item_id"
+    },
+    {
+      "table": "spirit_shroud_bank_inventory",
+      "column": "augment_one"
+    },
+    {
+      "table": "spirit_shroud_bank_inventory",
+      "column": "augment_two"
+    },
+    {
+      "table": "spirit_shroud_bank_inventory",
+      "column": "augment_three"
+    },
+    {
+      "table": "spirit_shroud_bank_inventory",
+      "column": "augment_four"
+    },
+    {
+      "table": "spirit_shroud_bank_inventory",
+      "column": "augment_five"
+    },
+    {
+      "table": "spirit_shroud_bank_inventory",
+      "column": "augment_six"
+    },
+    {
+      "table": "spirit_shroud_starter_equipment",
+      "column": "item_id"
+    },
+    {
+      "table": "spirit_shroud_starter_provenance",
+      "column": "item_id"
+    },
+    {
+      "table": "starting_items",
+      "column": "item_id"
+    },
+    {
+      "table": "starting_items",
+      "column": "augment_one"
+    },
+    {
+      "table": "starting_items",
+      "column": "augment_two"
+    },
+    {
+      "table": "starting_items",
+      "column": "augment_three"
+    },
+    {
+      "table": "starting_items",
+      "column": "augment_four"
+    },
+    {
+      "table": "starting_items",
+      "column": "augment_five"
+    },
+    {
+      "table": "starting_items",
+      "column": "augment_six"
+    },
+    {
+      "table": "task_spell_exchange_policies",
+      "column": "return_item_id"
+    },
+    {
+      "table": "titles",
+      "column": "item_id"
+    },
+    {
+      "table": "tool_gearup_armor_sets",
+      "column": "item_id"
+    },
+    {
+      "table": "trader",
+      "column": "item_id"
+    },
+    {
+      "table": "tradeskill_recipe",
+      "column": "learned_by_item_id"
+    },
+    {
+      "table": "tradeskill_recipe_entries",
+      "column": "item_id"
+    },
+    {
+      "table": "tribute_levels",
+      "column": "item_id"
+    },
+    {
+      "table": "veteran_reward_templates",
+      "column": "item_id"
+    }
+  ]
+}

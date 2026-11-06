@@ -25,6 +25,7 @@
 #include <optional>
 #include <set>
 
+namespace FireSharedCorrelation { struct Trailer; }
 class DynamicZone;
 
 namespace EQ {
@@ -56,7 +57,7 @@ public:
 	std::vector<TaskActivitiesRepository::TaskActivities> GetSharedTaskActivityDataByTaskId(uint32 task_id);
 
 	// client attempting to create a shared task
-	void AttemptSharedTaskCreation(uint32 requested_task_id, uint32 requested_character_id, uint32 npc_type_id);
+	void AttemptSharedTaskCreation(uint32 requested_task_id, uint32 requested_character_id, uint32 npc_type_id, const FireSharedCorrelation::Trailer* fire_origin=nullptr);
 
 	// shared task activity update middleware
 	void SharedTaskActivityUpdate(

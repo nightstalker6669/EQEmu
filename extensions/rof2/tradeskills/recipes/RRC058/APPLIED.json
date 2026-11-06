@@ -1,0 +1,38 @@
+{
+  "batch": "RRC058",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "83b4c4e6a127f3bf507f9b455b3ff9a5cd406995",
+  "source_sha256": "f4f3759030c90091399c92aa34cf9fad85f1085593856c7cb450dce85b677211",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes": 3,
+  "entries": 12,
+  "ids": [
+    3093530,
+    3093532
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC058",
+    "0",
+    "25352",
+    "25355",
+    "191089",
+    "191101",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25355,
+    "entries": 191101
+  },
+  "affected_postimages_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "existing_producer_guards": {
+    "recipes": 1,
+    "full_entry_rows": 4,
+    "scope": "Exact existingBrewSatchel3093251sourceSQLbefore/after; nativeBaker/BrewerLore/capacityguards passed."
+  }
+}

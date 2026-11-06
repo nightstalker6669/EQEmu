@@ -1,0 +1,27 @@
+{
+  "status": "SOURCE_REVIEW_NOT_NATIVE_VALIDATION",
+  "source_hashes": {
+    "diagnosis": "5d4313202c0f75e5e1cea00adbffca16f71bfcc5c0f9877186250f054c3a1827",
+    "deployed_attack": "41e7429480265cb6b81092214cd26d069c2132da25b5071a170e453cfbaaa5de",
+    "deployed_bonuses": "38806c849f236ca31353f9a10623c2f27759b16445a3a0c2b52adb92ad4deea0"
+  },
+  "semantics": {
+    "effect": 220,
+    "flat_amount": 2000000,
+    "skill_limit": 0,
+    "constant_formula": 100,
+    "self_target": 6,
+    "effect_slot": 12,
+    "target_character": 337
+  },
+  "existing_safe_aid": "No exact suitable existing aid supplied/identified; no broad production spell search. New singleQAdefinitionproposed.",
+  "source_paths": {
+    "SkillDamageAmount": "zone/bonuses.cpp:2923 (deployed Build snapshot)",
+    "damage_order": "zone/attack.cpp:6497,6510 (deployed Build snapshot)",
+    "buff_stack_refusal": "zone/spells.cpp:3807 retainedsource",
+    "full_beneficial_slot_refusal": "zone/spells.cpp:3708 retainedsource",
+    "shared_loader": "shared_memory/spells.cpp:26; shared_memory/main.cpp:189 retainedsource",
+    "hotfix_count_refusal": "zone/command.cpp:637; common/shareddb.cpp:1982 retainedsource"
+  },
+  "remaining": "Publication, coordinatedcontentapply, actualspellssegment+zone/client/helperfreshness, existingkilltestandexplicitremoval; no standalone testmatrix."
+}

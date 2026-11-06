@@ -1,0 +1,54 @@
+[
+  {
+    "path": "arelis/725026.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "argath/724031.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "beastdomain/728104.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "cityofbronze/732006.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "items/script_20970.lua",
+    "sha256": "74bebde1045fe467815cef98402eb929b739f824f23817cef14891f31db080c8"
+  },
+  {
+    "path": "lua_modules/achievement_god_learner.lua",
+    "sha256": "3d457d3d2da27a03e63880687eace5268f7a7980eb5296615192a3aa77eae8e3"
+  },
+  {
+    "path": "lua_modules/achievement_god_learner_books.lua",
+    "sha256": "6d48c01ba53c07dafd9b7dccd7f6d03f64e527c8cfd2f6f004a18c7624516af3"
+  },
+  {
+    "path": "lua_modules/achievement_god_learner_data.lua",
+    "sha256": "0a31076d31c99114eed267979042d3d6834df9f036ea74a2482de4bf2f3d722d"
+  },
+  {
+    "path": "pillarsalra/730226.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "resplendent/729055.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "sarithcity/726049.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "sepulcher/733012.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "windsong/731031.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  }
+]

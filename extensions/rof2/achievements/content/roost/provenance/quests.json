@@ -1,0 +1,1402 @@
+{
+  "cutoff": "2013-05-31",
+  "quests": [
+    {
+      "id": 3040501,
+      "title": "Blackfeather Roost, The Ledge",
+      "source_quest_id": 3606,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3606",
+      "giver": 398018,
+      "achievement_id": 500050200,
+      "component_id": 50175,
+      "min_level": 50,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            28674
+          ],
+          "npc_ids": [
+            398020
+          ],
+          "step": 1,
+          "zone": 398,
+          "anchor": {
+            "npc_id": 398020,
+            "x": -1017,
+            "y": 2292,
+            "z": -302.5
+          },
+          "activityid": 0
+        },
+        {
+          "kind": "speak",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398018
+          ],
+          "step": 2,
+          "zone": 398,
+          "activityid": 1
+        }
+      ],
+      "rewards": [],
+      "configured_xp": 0,
+      "xp_provenance": "No unambiguous XP reward inferred",
+      "accept_items": [
+        {
+          "item_id": 13624,
+          "quantity": 1
+        }
+      ],
+      "prerequisites": [],
+      "access_stage": 1,
+      "period_captures": [
+        {
+          "timestamp_utc": "20120607234426",
+          "url": "https://web.archive.org/web/20120607234426id_/http://everquest.allakhazam.com:80/db/quest.html?quest=3606",
+          "digest": "F7IXT6Q6KK3L7STGKC5URK6VVET5G76K",
+          "sha256": "2f681af40066a74971c7379149c9cbf9227bf6e3950942bf8aafb118a9010ed2"
+        }
+      ]
+    },
+    {
+      "id": 3040502,
+      "title": "Blackfeather Roost, The Grove",
+      "source_quest_id": 3632,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3632",
+      "giver": 398018,
+      "achievement_id": 500050200,
+      "component_id": 50176,
+      "min_level": 50,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            28675
+          ],
+          "npc_ids": [
+            398020
+          ],
+          "step": 1,
+          "zone": 398,
+          "anchor": {
+            "npc_id": 398020,
+            "x": -144,
+            "y": 3251,
+            "z": -186.75
+          },
+          "activityid": 0
+        }
+      ],
+      "rewards": [],
+      "configured_xp": 0,
+      "xp_provenance": "No unambiguous XP reward inferred",
+      "accept_items": [
+        {
+          "item_id": 13624,
+          "quantity": 1
+        }
+      ],
+      "prerequisites": [
+        3040501
+      ],
+      "access_stage": 2,
+      "period_captures": [
+        {
+          "timestamp_utc": "20120607012451",
+          "url": "https://web.archive.org/web/20120607012451id_/http://everquest.allakhazam.com:80/db/quest.html?quest=3632",
+          "digest": "RFPY2LTL3FZEO47CRNVNKFR5WRGV4PID",
+          "sha256": "bf6f3154a72e993282ac3ebaf36aa3e8ea1b90262078ef3bc549034ad2526d73"
+        }
+      ],
+      "xp_conflict": "Walkthrough states XP; dated Aug2008 comment explicitly reports none. No amount invented."
+    },
+    {
+      "id": 3040503,
+      "title": "Blackfeather Roost, The Cliffs",
+      "source_quest_id": 3672,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3672",
+      "giver": 398029,
+      "achievement_id": 500050200,
+      "component_id": 50177,
+      "min_level": 50,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "kill",
+          "goalcount": 2,
+          "item_ids": [],
+          "npc_ids": [
+            398040,
+            398048,
+            398055
+          ],
+          "step": 1,
+          "zone": 398,
+          "activityid": 0
+        },
+        {
+          "kind": "speak",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398029
+          ],
+          "step": 2,
+          "zone": 398,
+          "grant_item": 28676,
+          "activityid": 1
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            28676
+          ],
+          "npc_ids": [
+            398045
+          ],
+          "step": 3,
+          "zone": 398,
+          "anchor": {
+            "npc_id": 398045,
+            "x": 535,
+            "y": 3661,
+            "z": -72.5
+          },
+          "activityid": 2
+        }
+      ],
+      "rewards": [],
+      "configured_xp": 0,
+      "xp_provenance": "No unambiguous XP reward inferred",
+      "prerequisites": [
+        3040502
+      ],
+      "access_stage": 3,
+      "period_captures": [
+        {
+          "timestamp_utc": "20120607004119",
+          "url": "https://web.archive.org/web/20120607004119id_/http://everquest.allakhazam.com:80/db/quest.html?quest=3672",
+          "digest": "K3SQDK7J776U4IIHGETGDBLXTJER54IG",
+          "sha256": "b4bd13aa02508476b2d194fb32bc4066eb5512de2ec7808c2a4fb44d0d9b4d6b"
+        }
+      ],
+      "count_conflict": "Dialogue explicitly requires two nobles; printed0/1 line contradicts its own wording. Verify journal count before enabling."
+    },
+    {
+      "id": 3040504,
+      "title": "Blackfeather Roost, The Mesa",
+      "source_quest_id": 3696,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3696",
+      "giver": 398047,
+      "achievement_id": 500050200,
+      "component_id": 50178,
+      "min_level": 50,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "kill",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398068
+          ],
+          "step": 1,
+          "zone": 398,
+          "activityid": 0
+        },
+        {
+          "kind": "speak",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398047
+          ],
+          "step": 2,
+          "zone": 398,
+          "grant_item": 28677,
+          "activityid": 1
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            28677
+          ],
+          "npc_ids": [
+            398020
+          ],
+          "step": 3,
+          "zone": 398,
+          "anchor": {
+            "npc_id": 398020,
+            "x": 198,
+            "y": 5100,
+            "z": -127.625
+          },
+          "activityid": 2
+        }
+      ],
+      "rewards": [],
+      "configured_xp": 0,
+      "xp_provenance": "No unambiguous XP reward inferred",
+      "prerequisites": [
+        3040503
+      ],
+      "access_stage": 4,
+      "period_captures": [
+        {
+          "timestamp_utc": "20120607004124",
+          "url": "https://web.archive.org/web/20120607004124id_/http://everquest.allakhazam.com:80/db/quest.html?quest=3696",
+          "digest": "SZGHCBSGAJRJZM63K362MXLY4VIKMEOU",
+          "sha256": "3965d28dca14c67e98cf477fe359dcd955a22145e55270900f865dbf6766af5e"
+        }
+      ],
+      "repeat_conflict": "Selected repeatable from period Queen quest explicit whole-arc repetition; conflicting task header retained as weaker metadata."
+    },
+    {
+      "id": 3040505,
+      "title": "Reach the Royal Throne",
+      "source_quest_id": 3695,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3695",
+      "giver": 398070,
+      "achievement_id": 500050200,
+      "component_id": 50179,
+      "min_level": 55,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "kill",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398081
+          ],
+          "step": 1,
+          "zone": 398,
+          "activityid": 0
+        },
+        {
+          "kind": "kill",
+          "goalcount": 5,
+          "item_ids": [],
+          "npc_ids": [
+            398077,
+            398080,
+            398082
+          ],
+          "step": 1,
+          "zone": 398,
+          "activityid": 1
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            28672
+          ],
+          "npc_ids": [
+            398070
+          ],
+          "step": 2,
+          "zone": 398,
+          "activityid": 2
+        }
+      ],
+      "rewards": [],
+      "configured_xp": 0,
+      "xp_provenance": "No unambiguous XP reward inferred",
+      "prerequisites": [
+        3040504
+      ],
+      "access_stage": 5,
+      "period_captures": [
+        {
+          "timestamp_utc": "20120607012455",
+          "url": "https://web.archive.org/web/20120607012455id_/http://everquest.allakhazam.com:80/db/quest.html?quest=3695",
+          "digest": "UBJQLVGQRKU5NXKGV6DG2AGG2WXJ4SMK",
+          "sha256": "31753e6702a3948026b073ff53d309c5a6fd93b7f7e113146e792cbf02107191"
+        }
+      ],
+      "duration_seconds": 28800,
+      "level_conflict": "20120607012455 archive explicitly level55; selected over modern level1 header."
+    },
+    {
+      "id": 3040506,
+      "title": "Kill the Queen of the Harpies!",
+      "source_quest_id": 3694,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3694",
+      "giver": 398070,
+      "achievement_id": 500050200,
+      "component_id": 50180,
+      "min_level": 55,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "loot",
+          "goalcount": 1,
+          "item_ids": [
+            28673
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 398,
+          "activityid": 0
+        }
+      ],
+      "rewards": [
+        {
+          "item_id": 53601,
+          "quantity": 1,
+          "name": "Blackfeather Ablestone"
+        },
+        {
+          "item_id": 53600,
+          "quantity": 1,
+          "name": "Blackfeather Focus Stone"
+        },
+        {
+          "item_id": 53597,
+          "quantity": 1,
+          "name": "Blackfeather Healthstone"
+        },
+        {
+          "item_id": 53598,
+          "quantity": 1,
+          "name": "Blackfeather Powerstone"
+        },
+        {
+          "item_id": 53599,
+          "quantity": 1,
+          "name": "Blackfeather Shockstone"
+        }
+      ],
+      "configured_xp": 0,
+      "xp_provenance": "No unambiguous XP reward inferred",
+      "prerequisites": [
+        3040505
+      ],
+      "period_captures": [
+        {
+          "timestamp_utc": "20120211075839",
+          "url": "https://web.archive.org/web/20120211075839id_/http://everquest.allakhazam.com/db/quest.html?quest=3694",
+          "digest": "ILL6D5UDVFXXI5HBDUWM3VNOYSRX45LA",
+          "sha256": "a66eafd7edd197751b2da1dc92b3a14cd56f8fac18b6e64a914747fa2178b109"
+        }
+      ],
+      "duration_seconds": 28800,
+      "reward_names": [
+        "Blackfeather Healthstone",
+        "Blackfeather Powerstone",
+        "Blackfeather Shockstone",
+        "Blackfeather Focus Stone",
+        "Blackfeather Ablestone"
+      ],
+      "completion_conflict": "20120211075839 archive lists only the emblem retrieval objective. Selected that single objective; no invented Emblem delivery stage.",
+      "repeat_cycle": "Entire transport quest arc must be repeatable after completion; preserve historical access and claim state separately."
+    },
+    {
+      "id": 3040507,
+      "title": "Strike a Blow - Kill Harpies and Griffons!",
+      "source_quest_id": 5777,
+      "source_url": "https://everquest.allakhazam.com/db/quest/5777",
+      "giver": 398023,
+      "achievement_id": 500050300,
+      "component_id": 50181,
+      "min_level": 55,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "kill",
+          "goalcount": 25,
+          "item_ids": [],
+          "npc_ids": [
+            398026,
+            398028,
+            398030,
+            398031,
+            398035,
+            398036,
+            398038,
+            398040,
+            398041,
+            398043,
+            398044,
+            398046,
+            398048,
+            398051,
+            398052,
+            398053,
+            398055,
+            398056,
+            398057,
+            398059,
+            398060,
+            398061,
+            398062,
+            398064,
+            398065,
+            398068,
+            398069,
+            398073,
+            398074,
+            398075,
+            398077,
+            398078,
+            398079,
+            398080,
+            398081,
+            398082,
+            398083,
+            398084,
+            398085,
+            398086,
+            398087,
+            398088
+          ],
+          "step": 1,
+          "zone": 398,
+          "activityid": 0
+        },
+        {
+          "kind": "kill",
+          "goalcount": 5,
+          "item_ids": [],
+          "npc_ids": [
+            398037,
+            398058,
+            398063,
+            398066,
+            398071,
+            398072
+          ],
+          "step": 1,
+          "zone": 398,
+          "activityid": 1
+        },
+        {
+          "kind": "speak",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398023
+          ],
+          "step": 2,
+          "zone": 398,
+          "activityid": 2
+        }
+      ],
+      "rewards": [
+        {
+          "item_id": 53607,
+          "quantity": 1,
+          "name": "Satyr Hunter's Draught"
+        }
+      ],
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; exact original amount unrecovered",
+      "period_captures": [
+        {
+          "timestamp_utc": "20120510122440",
+          "url": "https://web.archive.org/web/20120510122440id_/http://everquest.allakhazam.com/db/quest.html?quest=5777",
+          "digest": "WAZKTIWHEAS3GASAN5Z4RE67X46TC52B",
+          "sha256": "8b28addb6e9f71e1873dcdd5d54c0f777456a3219a00eecbba8111090c9a83ed"
+        }
+      ],
+      "matcher_provenance": "Harpies by original local race527 excluding quest actors; blackfeather griffons by exact native name. Named harpy credit needs review."
+    },
+    {
+      "id": 3040508,
+      "title": "Destroy! Knock the nests down!",
+      "source_quest_id": 5377,
+      "source_url": "https://everquest.allakhazam.com/db/quest/5377",
+      "giver": 398023,
+      "achievement_id": 500050300,
+      "component_id": 50182,
+      "min_level": 60,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "kill",
+          "goalcount": 2,
+          "item_ids": [],
+          "npc_ids": [
+            398025
+          ],
+          "step": 1,
+          "zone": 398,
+          "nest_region": "ledge small",
+          "activityid": 0
+        },
+        {
+          "kind": "kill",
+          "goalcount": 3,
+          "item_ids": [],
+          "npc_ids": [
+            398033
+          ],
+          "step": 1,
+          "zone": 398,
+          "nest_region": "ledge large",
+          "activityid": 1
+        },
+        {
+          "kind": "kill",
+          "goalcount": 2,
+          "item_ids": [],
+          "npc_ids": [
+            398032
+          ],
+          "step": 1,
+          "zone": 398,
+          "nest_region": "grove small",
+          "activityid": 2
+        },
+        {
+          "kind": "kill",
+          "goalcount": 3,
+          "item_ids": [],
+          "npc_ids": [
+            398027
+          ],
+          "step": 1,
+          "zone": 398,
+          "nest_region": "grove large",
+          "activityid": 3
+        },
+        {
+          "kind": "kill",
+          "goalcount": 2,
+          "item_ids": [],
+          "npc_ids": [
+            398049
+          ],
+          "step": 1,
+          "zone": 398,
+          "nest_region": "cliffs small",
+          "activityid": 4
+        },
+        {
+          "kind": "kill",
+          "goalcount": 3,
+          "item_ids": [],
+          "npc_ids": [
+            398042
+          ],
+          "step": 1,
+          "zone": 398,
+          "nest_region": "cliffs large",
+          "activityid": 5
+        },
+        {
+          "kind": "kill",
+          "goalcount": 5,
+          "item_ids": [],
+          "npc_ids": [
+            398067
+          ],
+          "step": 1,
+          "zone": 398,
+          "nest_region": "mesa large",
+          "activityid": 6
+        },
+        {
+          "kind": "speak",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398023
+          ],
+          "step": 2,
+          "zone": 398,
+          "activityid": 7
+        }
+      ],
+      "rewards": [
+        {
+          "item_id": 53610,
+          "quantity": 1,
+          "name": "Griffonbane Hammer"
+        }
+      ],
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; exact original amount unrecovered",
+      "period_captures": [
+        {
+          "timestamp_utc": "20130531043822",
+          "url": "https://web.archive.org/web/20130531043822id_/http://everquest.allakhazam.com:80/db/quest.html?quest=5377",
+          "digest": "BZCXTGFTKV22AV573HDYRQJS4MR4KV5F",
+          "sha256": "2b9bbb26305e3551925c7d0021ba0d27ff68c2a9f30d4afe3421cc32de50f48b"
+        }
+      ],
+      "restrictions_conflict": "2011page lists only six weapon-eligible classes and max90. These are not proof of task restrictions; do not impose equipment eligibility as task gate."
+    },
+    {
+      "id": 3040509,
+      "title": "Cause some mayhem - Kill Gayatri!",
+      "source_quest_id": 4726,
+      "source_url": "https://everquest.allakhazam.com/db/quest/4726",
+      "giver": 398023,
+      "achievement_id": 500050300,
+      "component_id": 50183,
+      "min_level": 50,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "kill",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398065
+          ],
+          "step": 1,
+          "zone": 398,
+          "activityid": 0
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            13617
+          ],
+          "npc_ids": [
+            398023
+          ],
+          "step": 2,
+          "zone": 398,
+          "activityid": 1
+        }
+      ],
+      "rewards": [
+        {
+          "item_id": 53609,
+          "quantity": 1,
+          "name": "Gayatri's Shawl"
+        }
+      ],
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; exact original amount unrecovered",
+      "period_captures": [
+        {
+          "timestamp_utc": "20120511230811",
+          "url": "https://web.archive.org/web/20120511230811id_/http://everquest.allakhazam.com:80/db/quest.html?quest=4726",
+          "digest": "4A3HBCQLG47F7OTYQTBREFKSBG67ZU3P",
+          "sha256": "38c3640240970bbf46c0687fbbc2c107221c94a330087cc7050e5604b02e7d0c"
+        }
+      ]
+    },
+    {
+      "id": 3040510,
+      "title": "Find My Son",
+      "source_quest_id": 3811,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3811",
+      "giver": 397102,
+      "achievement_id": 500050400,
+      "component_id": 50184,
+      "min_level": 50,
+      "repeatable": false,
+      "activities": [
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 397,
+          "source_zone_points": [
+            {
+              "id": 1609,
+              "zone": "mesa",
+              "version": 0,
+              "number": 20,
+              "y": 0,
+              "x": 0,
+              "z": 0,
+              "heading": 0,
+              "target_y": 78,
+              "target_x": -17,
+              "target_z": -42,
+              "target_heading": 458,
+              "zoneinst": 0,
+              "target_zone_id": 398,
+              "target_instance": 0,
+              "buffer": 0,
+              "client_version_mask": 4294967295,
+              "min_expansion": -1,
+              "max_expansion": -1,
+              "content_flags": null,
+              "content_flags_disabled": null,
+              "is_virtual": 0,
+              "height": 0,
+              "width": 0
+            }
+          ],
+          "activityid": 0,
+          "point": {
+            "x": 3507,
+            "y": 1232,
+            "z": 254
+          },
+          "bounds": {
+            "min_x": 3447,
+            "max_x": 3567,
+            "min_y": 1172,
+            "max_y": 1292,
+            "min_z": 224,
+            "max_z": 284
+          },
+          "geometry_status": "Original reverse zone-point 1593 Mesa destination; configurable entrance vicinity, native acceptance pending",
+          "entrance_source_zone_point": 1593
+        },
+        {
+          "kind": "speak",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398022
+          ],
+          "step": 2,
+          "zone": 398,
+          "activityid": 1
+        },
+        {
+          "kind": "speak",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            397102
+          ],
+          "step": 3,
+          "zone": 397,
+          "activityid": 2
+        }
+      ],
+      "rewards": [],
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; exact original amount unrecovered",
+      "period_captures": [
+        {
+          "timestamp_utc": "20121103094816",
+          "url": "https://web.archive.org/web/20121103094816id_/http://everquest.allakhazam.com/db/quest.html?quest=3811",
+          "digest": "3ZRZNLHH4JF3ZXRY2DR5CGP2FJHPJ5HK",
+          "sha256": "d92b3222edb2e4fd7d4ec73cc375e18de06e032061f6a3ab8a1109be55669b76"
+        }
+      ],
+      "level_conflict": "Selected level50 from May2007 first-hand acceptance report and April2009 rejection of header45; best-supported historical value, not exact journal proof."
+    },
+    {
+      "id": 3040511,
+      "title": "Explore the Roost!",
+      "source_quest_id": 4627,
+      "source_url": "https://everquest.allakhazam.com/db/quest/4627",
+      "giver": 398022,
+      "achievement_id": 500050400,
+      "component_id": 50185,
+      "min_level": 55,
+      "repeatable": false,
+      "activities": [
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 398,
+          "point": {
+            "label": "Ledge nest",
+            "y": 3210,
+            "x": -925,
+            "z": -125.305
+          },
+          "geometry_status": "Collision surface nearest original local non-destructible NPC elevation; candidate until native placement",
+          "activityid": 0,
+          "bounds": {
+            "min_x": -955,
+            "max_x": -895,
+            "min_y": 3180,
+            "max_y": 3240,
+            "min_z": -140.305,
+            "max_z": -100.305
+          }
+        },
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 398,
+          "point": {
+            "label": "Harpy Grove",
+            "y": 3750,
+            "x": 1100,
+            "z": -113.301
+          },
+          "geometry_status": "Collision surface nearest original local non-destructible NPC elevation; candidate until native placement",
+          "activityid": 1,
+          "bounds": {
+            "min_x": 1070,
+            "max_x": 1130,
+            "min_y": 3720,
+            "max_y": 3780,
+            "min_z": -128.301,
+            "max_z": -88.301
+          }
+        },
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 398,
+          "point": {
+            "label": "Cliffs",
+            "y": 4755,
+            "x": -2951,
+            "z": -237.201
+          },
+          "geometry_status": "Collision surface nearest original local non-destructible NPC elevation; candidate until native placement",
+          "activityid": 2,
+          "bounds": {
+            "min_x": -2981,
+            "max_x": -2921,
+            "min_y": 4725,
+            "max_y": 4785,
+            "min_z": -252.201,
+            "max_z": -212.201
+          }
+        },
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 398,
+          "point": {
+            "label": "Harpy Mesa",
+            "y": 5950,
+            "x": 935,
+            "z": -30.818
+          },
+          "geometry_status": "Collision surface nearest original local non-destructible NPC elevation; candidate until native placement",
+          "activityid": 3,
+          "bounds": {
+            "min_x": 905,
+            "max_x": 965,
+            "min_y": 5920,
+            "max_y": 5980,
+            "min_z": -45.818,
+            "max_z": -5.818000000000001
+          }
+        },
+        {
+          "kind": "speak",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398022
+          ],
+          "step": 2,
+          "zone": 398,
+          "activityid": 4
+        }
+      ],
+      "rewards": [],
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; exact original amount unrecovered",
+      "period_captures": [
+        {
+          "timestamp_utc": "20121103141005",
+          "url": "https://web.archive.org/web/20121103141005id_/http://everquest.allakhazam.com/db/quest.html?quest=4627",
+          "digest": "JDK7NSWDYZAQ5VX3OAL3UH7PZQVRAPDZ",
+          "sha256": "6635c7aa1397bc03608ccc0a6d276b0059133bbeb8c3599d66712610aabfcba0"
+        }
+      ]
+    },
+    {
+      "id": 3040512,
+      "title": "Harass the Harpies!",
+      "source_quest_id": 4628,
+      "source_url": "https://everquest.allakhazam.com/db/quest/4628",
+      "giver": 398022,
+      "achievement_id": 500050400,
+      "component_id": 50186,
+      "min_level": 55,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "kill",
+          "goalcount": 10,
+          "item_ids": [],
+          "npc_ids": [
+            398037,
+            398058,
+            398063,
+            398066,
+            398071,
+            398072
+          ],
+          "step": 1,
+          "zone": 398,
+          "activityid": 0
+        },
+        {
+          "kind": "speak",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [
+            398022
+          ],
+          "step": 2,
+          "zone": 398,
+          "activityid": 1
+        }
+      ],
+      "rewards": [
+        {
+          "item_id": 53608,
+          "quantity": 1,
+          "name": "Satyr Draught of Insight"
+        }
+      ],
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; exact original amount unrecovered",
+      "period_captures": [
+        {
+          "timestamp_utc": "20121103141001",
+          "url": "https://web.archive.org/web/20121103141001id_/http://everquest.allakhazam.com/db/quest.html?quest=4628",
+          "digest": "A2ZHJUO4UMLZY7RI5UO44FS6ICKRGS6L",
+          "sha256": "bc211b8f5d53100342dfda9e0d58e337b8981a8f0355312ff30faeb390387285"
+        }
+      ]
+    },
+    {
+      "id": 3040513,
+      "title": "Griffon Feathers",
+      "source_quest_id": 3763,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3763",
+      "giver": 394097,
+      "achievement_id": 500050500,
+      "component_id": 50187,
+      "min_level": 40,
+      "repeatable": false,
+      "activities": [
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 398,
+          "point": {
+            "x": -200,
+            "y": 1590,
+            "z": -307.767
+          },
+          "geometry_status": "Collision surface nearest original local non-destructible NPC elevation; candidate until native placement",
+          "activityid": 0,
+          "bounds": {
+            "min_x": -230,
+            "max_x": -170,
+            "min_y": 1560,
+            "max_y": 1620,
+            "min_z": -322.767,
+            "max_z": -282.767
+          }
+        },
+        {
+          "kind": "collect_inventory",
+          "goalcount": 1,
+          "item_ids": [
+            54655
+          ],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 398,
+          "preloot_allowed": true,
+          "activityid": 1
+        },
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 2,
+          "zone": 398,
+          "point": {
+            "x": -1290,
+            "y": 3550,
+            "z": -115.41
+          },
+          "geometry_status": "Collision surface nearest original local non-destructible NPC elevation; candidate until native placement",
+          "activityid": 2,
+          "bounds": {
+            "min_x": -1320,
+            "max_x": -1260,
+            "min_y": 3520,
+            "max_y": 3580,
+            "min_z": -130.41,
+            "max_z": -90.41
+          }
+        },
+        {
+          "kind": "collect_inventory",
+          "goalcount": 1,
+          "item_ids": [
+            54663
+          ],
+          "npc_ids": [],
+          "step": 2,
+          "zone": 398,
+          "preloot_allowed": true,
+          "activityid": 3
+        },
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 3,
+          "zone": 398,
+          "point": {
+            "x": 1150,
+            "y": 3700,
+            "z": -122.545
+          },
+          "geometry_status": "Collision surface nearest original local non-destructible NPC elevation; candidate until native placement",
+          "activityid": 4,
+          "bounds": {
+            "min_x": 1120,
+            "max_x": 1180,
+            "min_y": 3670,
+            "max_y": 3730,
+            "min_z": -137.54500000000002,
+            "max_z": -97.545
+          }
+        },
+        {
+          "kind": "collect_inventory",
+          "goalcount": 1,
+          "item_ids": [
+            54664
+          ],
+          "npc_ids": [],
+          "step": 3,
+          "zone": 398,
+          "preloot_allowed": true,
+          "activityid": 5
+        },
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 4,
+          "zone": 398,
+          "point": {
+            "x": -500,
+            "y": 4810,
+            "z": -56.228
+          },
+          "geometry_status": "Collision surface nearest original local non-destructible NPC elevation; candidate until native placement",
+          "activityid": 6,
+          "bounds": {
+            "min_x": -530,
+            "max_x": -470,
+            "min_y": 4780,
+            "max_y": 4840,
+            "min_z": -71.22800000000001,
+            "max_z": -31.228
+          }
+        },
+        {
+          "kind": "collect_inventory",
+          "goalcount": 1,
+          "item_ids": [
+            54665
+          ],
+          "npc_ids": [],
+          "step": 4,
+          "zone": 398,
+          "preloot_allowed": true,
+          "activityid": 7
+        },
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 5,
+          "zone": 398,
+          "point": {
+            "x": 1080,
+            "y": 6370,
+            "z": 16.252
+          },
+          "geometry_status": "Collision surface nearest original local non-destructible NPC elevation; candidate until native placement",
+          "activityid": 8,
+          "bounds": {
+            "min_x": 1050,
+            "max_x": 1110,
+            "min_y": 6340,
+            "max_y": 6400,
+            "min_z": 1.251999999999999,
+            "max_z": 41.251999999999995
+          }
+        },
+        {
+          "kind": "collect_inventory",
+          "goalcount": 1,
+          "item_ids": [
+            54666
+          ],
+          "npc_ids": [],
+          "step": 5,
+          "zone": 398,
+          "preloot_allowed": true,
+          "activityid": 9
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            54655
+          ],
+          "npc_ids": [
+            394097
+          ],
+          "step": 6,
+          "zone": 394,
+          "activityid": 10
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            54663
+          ],
+          "npc_ids": [
+            394097
+          ],
+          "step": 6,
+          "zone": 394,
+          "activityid": 11
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            54664
+          ],
+          "npc_ids": [
+            394097
+          ],
+          "step": 6,
+          "zone": 394,
+          "activityid": 12
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            54665
+          ],
+          "npc_ids": [
+            394097
+          ],
+          "step": 6,
+          "zone": 394,
+          "activityid": 13
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            54666
+          ],
+          "npc_ids": [
+            394097
+          ],
+          "step": 6,
+          "zone": 394,
+          "activityid": 14
+        }
+      ],
+      "rewards": [
+        {
+          "item_id": 53606,
+          "quantity": 1,
+          "name": "Griffon Feather Cap"
+        }
+      ],
+      "configured_xp": 1000,
+      "xp_provenance": "Approved configurable PEQ-style default; exact original amount unrecovered",
+      "period_captures": [
+        {
+          "timestamp_utc": "20121103062244",
+          "url": "https://web.archive.org/web/20121103062244id_/http://everquest.allakhazam.com/db/quest.html?quest=3763",
+          "digest": "K3WYUP4PKEIHP3ALW2IO4ZPPRGNSRQIT",
+          "sha256": "eb4947359207d2810d9ba0450579ca191d24d828632da0b256f4897549f9b6d7"
+        }
+      ],
+      "cash_copper": 45000,
+      "ground_items": [
+        {
+          "item_id": 54655,
+          "name": "Red Griffon Feather",
+          "x": -200,
+          "y": 1590
+        },
+        {
+          "item_id": 54663,
+          "name": "Brown Griffon Feather",
+          "x": -1290,
+          "y": 3550
+        },
+        {
+          "item_id": 54664,
+          "name": "Golden Griffon Feather",
+          "x": 1150,
+          "y": 3700
+        },
+        {
+          "item_id": 54665,
+          "name": "Black Griffon Feather",
+          "x": -500,
+          "y": 4810
+        },
+        {
+          "item_id": 54666,
+          "name": "White Griffon Feather",
+          "x": 1080,
+          "y": 6370
+        }
+      ],
+      "cash_provenance": "20121103062244 archive explicitly45platinum."
+    },
+    {
+      "id": 3040514,
+      "title": "Help poor Fenith!",
+      "source_quest_id": 3667,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3667",
+      "giver": 398018,
+      "achievement_id": 500050500,
+      "component_id": 50188,
+      "min_level": 50,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "kill",
+          "goalcount": 20,
+          "item_ids": [],
+          "npc_ids": [
+            398000,
+            398002,
+            398003,
+            398010,
+            398019,
+            398092,
+            398094
+          ],
+          "step": 1,
+          "zone": 398,
+          "activityid": 0
+        }
+      ],
+      "rewards": [
+        {
+          "item_id": 53611,
+          "quantity": 5,
+          "name": "Fenith's Lunchbox"
+        }
+      ],
+      "configured_xp": 0,
+      "xp_provenance": "No unambiguous XP reward inferred",
+      "period_captures": [
+        {
+          "timestamp_utc": "20121103140619",
+          "url": "https://web.archive.org/web/20121103140619id_/http://everquest.allakhazam.com/db/quest.html?quest=3667",
+          "sha256": "bfc32123502cb6439b50cb7e9f68c482246d15c5f4637fb6b62d36ba848c40d9"
+        }
+      ]
+    },
+    {
+      "id": 3040515,
+      "title": "A Small Wager",
+      "source_quest_id": 3827,
+      "source_url": "https://everquest.allakhazam.com/db/quest/3827",
+      "giver": 398039,
+      "achievement_id": 500050500,
+      "component_id": 50189,
+      "min_level": 50,
+      "repeatable": true,
+      "activities": [
+        {
+          "kind": "explore",
+          "goalcount": 1,
+          "item_ids": [],
+          "npc_ids": [],
+          "step": 1,
+          "zone": 398,
+          "queen_room": true,
+          "point": {
+            "x": -200,
+            "y": 6384,
+            "z": 255
+          },
+          "source": "Original collector groundspawn369 and published queen-room trinket location",
+          "activityid": 0,
+          "bounds": {
+            "min_x": -230,
+            "max_x": -170,
+            "min_y": 6354,
+            "max_y": 6414,
+            "min_z": 240,
+            "max_z": 280
+          },
+          "geometry_status": "Original collected groundspawn369 and source queen room Z; preserved"
+        },
+        {
+          "kind": "deliver",
+          "goalcount": 1,
+          "item_ids": [
+            28678
+          ],
+          "npc_ids": [
+            398039
+          ],
+          "step": 2,
+          "zone": 398,
+          "activityid": 1
+        }
+      ],
+      "rewards": [
+        {
+          "item_id": 53612,
+          "quantity": 1,
+          "name": "Dorinda's Golden Mask"
+        }
+      ],
+      "configured_xp": 0,
+      "xp_provenance": "No unambiguous XP reward inferred",
+      "period_captures": [
+        {
+          "timestamp_utc": "20120610205751",
+          "url": "https://web.archive.org/web/20120610205751id_/http://everquest.allakhazam.com:80/db/quest.html?quest=3827",
+          "digest": "KMSZCG6PFSYJ5QNW5IV7JPNCYYQFWEFC",
+          "sha256": "36debf440cab9bd3d146f4b1922fc3ea29b0280ecf622aefb2c61bd5eab16741"
+        }
+      ]
+    }
+  ],
+  "interpretation": "Historically sourced mechanics with original native identities; configurable XP/handin tolerances are emulator settings, not recovered historical values."
+}

@@ -1,0 +1,206 @@
+{
+  "cutoff": "2013-05-31",
+  "review_state": "Whole15-quest release: installed, native completion and fresh-login persistence verified.",
+  "sources": {
+    "primary_walkthrough_family": "https://everquest.allakhazam.com/db/quest/",
+    "ids": [
+      4393,
+      4395,
+      4394,
+      4343,
+      4426,
+      4378,
+      4567,
+      4430,
+      4754,
+      4345,
+      4334,
+      4332,
+      4333,
+      4410,
+      4403
+    ],
+    "cross_check": "https://www.raspersrealm.com/Everquest/SoF/openDragonscale.html?Tab=Tasks",
+    "additional_gear_conflict": "https://www.bonzz.com/oculus.htm",
+    "method": "Read visible Allakhazam pages through connected Chrome. Distinguish dated pre-cutoff comments from modern headers. Rasper and Bonzz corroborate mechanics but current pages alone do not establish an original date. Paraphrased findings only; no walkthrough text redistributed."
+  },
+  "confirmed_native_gaps": [
+    "All eleven giver definitions and static spawns exist, but no direct/alternate/global name-or-ID quest script owns these fifteen tasks. Existing global_npc callbacks only concern prior families and must be preserved.",
+    "Seven native Dragonscale crystal-looking groundspawns482-488 currently give item1001 Cloth Cap, not Levitation Crystal36639.",
+    "Seven native Loping canvas-looking groundspawns491-497 currently give item1001 Cloth Cap, not Piece of Canvas36638. Preserve original geometry; one current coordinate set has seven points while period guides list six.",
+    "Falrazim442086 exists at level78 but has no loot table, so Tongue36637 is not obtainable from him.",
+    "No Lelluran NPC definition exists anywhere in current npc_types. Native nightmare variants exist but no Bridle36652 route exists on them. Need a labelled reconstructed rare entry on researched nightmare spawn groups, not a summoned quest shortcut.",
+    "Agilica442182 and Queen442180 exist, but no specific Darkvine guard encounter template or trigger script exists. Existing similarly named guardians are ordinary trash, not proof of the ambush.",
+    "Place Banner spell13260 is a ten-second self-target blank effect254. Banner36679 already has consumable click type3, minimum70 and that spell, but no quest owner handles the successful cast.",
+    "Task IDs3041001-3041015 are currently unused. Native faction IDs: Ladies1185, AkAnon1190, Fang Breakers1191, Darkvine1196."
+  ],
+  "period_evidence": [
+    {
+      "quests": [
+        4393,
+        4394,
+        4395
+      ],
+      "dates": [
+        "2007-12-11",
+        "2008-05-13"
+      ],
+      "finding": "Farm targets12 crows,20doombugs,10scarecrows then giver hail. Early direct report requires all3concurrent tasks for gear; later Oculus summary says any1. Rasper corroborates all3. Retain contradiction when selecting best-supported reconstruction."
+    },
+    {
+      "quests": [
+        4343
+      ],
+      "dates": [
+        "2007-11-19",
+        "2007-11-23",
+        "2008-01-13",
+        "2008-10-15"
+      ],
+      "finding": "Minimum65; fresh watch/handkerchief loot then delivery; AkAnon faction rather than Ladies; reward pinion79765 is retained as a later combine tool."
+    },
+    {
+      "quests": [
+        4426
+      ],
+      "dates": [
+        "2008-02-26",
+        "2008-06-07",
+        "2008-10-15",
+        "2008-12-31"
+      ],
+      "finding": "Repeatable at65; fresh Lelluran bridle loot in Loping, delivery in Dragonscale; Fang Breakers faction. Reported /loc2175.09,-2022.60,345.84 near nightmare stables; exact placeholder set conflicts."
+    },
+    {
+      "quests": [
+        4378,
+        4567
+      ],
+      "dates": [
+        "2007-12-18",
+        "2007-12-25",
+        "2008-01-08",
+        "2008-04-21",
+        "2008-10-14",
+        "2009-01-25"
+      ],
+      "finding": "First task5overseers, repeat10; flag then giver hail. First accepted below70 but click requires70. Original location /loc3400,2510; later Rise source says3402,2545. First gives79762; repeat gives XP/faction, no gear."
+    },
+    {
+      "quests": [
+        4430
+      ],
+      "dates": [
+        "2008-02-02",
+        "2008-04-07",
+        "2009-08-20",
+        "2012-04-15"
+      ],
+      "finding": "Reward79761confirmed. Actual objective list10nymphwings,8crowwings,5straw; dialogue says10crow and Rasper says6straw, so prefer the actual task objective list. Historical accepted70, exact65 lower boundary is only current header evidence."
+    },
+    {
+      "quests": [
+        4754
+      ],
+      "dates": [
+        "2008-11-29",
+        "2008-12-24",
+        "2009-01-05",
+        "2010-02-28",
+        "2011-08-03"
+      ],
+      "finding": "Ten minotaurs, kill Higoren, freshly loot tail, deliver; reward37999. Do not add quest faction or XP without evidence. Min75 best-supported; Higoren mine /loc-998.08,3263.91,-242.46, period respawn about5minutes."
+    },
+    {
+      "quests": [
+        4345
+      ],
+      "dates": [
+        "2007-11-20",
+        "2007-12-14",
+        "2009-06-27"
+      ],
+      "finding": "Level78Falrazim, one tongue, fast respawn; quest nonrepeatable, positive AkAnon and XP. No item reward proven despite dialogue promising one."
+    },
+    {
+      "quests": [
+        4334
+      ],
+      "dates": [
+        "2007-12-08",
+        "2007-12-16",
+        "2007-12-22",
+        "2007-12-25",
+        "2008-02-16",
+        "2010-05-14",
+        "2011-11-27"
+      ],
+      "finding": "Nonrepeatable, minimum75;6canvas and8crystals, then delivery; reward79763. Period sources disagree on preloot. Native groundspawn coordinates corroborate original map-sign-converted sites; do not copy map coordinates as serverXY."
+    },
+    {
+      "quests": [
+        4332
+      ],
+      "dates": [
+        "2007-11-17",
+        "2007-11-18",
+        "2008-09-08",
+        "2009-08-23",
+        "2009-10-01",
+        "2011-04-27"
+      ],
+      "finding": "Fresh collar, then delivery; repeatable, minimum75 best-supported despite group-level anecdotes. XP and positive Ladies confirmed; reported AA percentages are observations, not a fixed raw XP amount."
+    },
+    {
+      "quests": [
+        4333
+      ],
+      "dates": [
+        "2007-11-14",
+        "2007-11-15",
+        "2008-01-21",
+        "2008-04-11",
+        "2008-09-08"
+      ],
+      "finding": "20brownies then giver hail, repeatable without lockout, minimum75 best-supported. Do not impose an invented prior-task gate; reported faction eligibility differs."
+    },
+    {
+      "quests": [
+        4410
+      ],
+      "dates": [
+        "2007-12-19",
+        "2007-12-20",
+        "2007-12-27",
+        "2008-05-18"
+      ],
+      "finding": "Fivebrownies then Agilica hail triggers2guards; pre-hail guard kills do not credit, guards also qualify as ordinary brownies. Kindly success reported. Preserve exact Agilica native site near /loc-2572.08,2618.61,303.22.2017invisibility bug corroborates visibility handling but is not period proof."
+    },
+    {
+      "quests": [
+        4403
+      ],
+      "dates": [
+        "2007-12-13",
+        "2008-06-03",
+        "2008-08-07",
+        "2009-02-04",
+        "2011-04-12",
+        "2012-11-01"
+      ],
+      "finding": "Queen kill, XP/faction; rootable/no summon historical. Warmly gate best-supported despite high-kindly conflicting reports. Accepted76 contradicts current min80. Do not insert a return-hail objective from Rasper when Allakhazam actual task lists only the kill without further evidence."
+    }
+  ],
+  "faction_policy": "Modern Allakhazam headers are not raw historical faction values. Rasper offers plausible raw values: farm35, Nanzie10, horse50, firstbanner25, repeatbanner20, flight100, Falrazim5, Darwin25, Moonfire25, Mash25, Rescue25, Queen15. Label their temporal provenance and any selected defaults; never claim observed heroic-modified hits are base amounts.",
+  "remaining_actions": [
+    "Resolve best-supported gear/repeatable-lore and fresh-loot policies with explicit provenance, then generate all15 tasks,43objectives,15criterion bindings and delivery/reward rules as one batch.",
+    "Guard exact placeholder groundspawn corrections; do not change unrelated1001rows.",
+    "Build missing Lelluran acquisition and Agilica encounter using existing zone geometry and user-approved labelled defaults where unrecovered.",
+    "Compose callbacks without replacing prior global/housing quest owners, use native kill/loot/delivery where applicable, successful-cast banner handling and owned ambush credit.",
+    "Inspect/install whole package with rollback snapshot, then native batch acceptance and one persistence check; do not rerun already accepted Buried Sea content.",
+    "Publish complete milestone to current achievements branch7cfe5d18, keeping source core adoption separate from actual runtime upgrade9338."
+  ],
+  "faction_gate_implementation": "Resolve kindly/warmly using engine Faction rules; stock thresholds500/750. Existing character faction rows are preserved. Missing NPC links and four starting-base profiles use explicitly labelled faction-restoration policy; exact period raw values remain unverified.",
+  "selected_farm_policy": "Three concurrent accepted farm tasks, complete all3 in a persistent cycle. Based on direct Dec2007 test and Rasper; May2008 one-task summary conflict remains explicit.",
+  "selected_darwin_policy": "Fresh loot required, based on May2010 direct report; Dec2007 preloot and later2014 contradictory reports retained."
+}

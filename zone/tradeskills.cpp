@@ -1,3 +1,6 @@
+#include "final_recipe302.h"
+#include "housing_recipe301.h"
+#include "trophy_certificate55.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -16,6 +19,15 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "client.h"
+#include "charged_recipe32.h"
+#include "final_recipe300.h"
+#include "doors.h"
+#include "tanaan_forge28_actor.h"
+#include "world_loom13_actor.h"
+#include "gnomish_tailoring35_actor.h"
+#include "cultural_armor_bulk_actor.h"
+#include "research_tablet335_actor.h"
+#include "cultural_tailoring_bulk_actor.h"
 
 #include "common/events/player_event_logs.h"
 #include "common/repositories/char_recipe_list_repository.h"
@@ -32,9 +44,155 @@
 
 #include <algorithm>
 #include <list>
+#include <array>
+#include <vector>
+#include <stdexcept>
+#include "inventory_session_owner.h"
 
 extern QueryServ* QServ;
 extern WorldServer worldserver;
+
+
+namespace {
+
+
+struct Final300InputTree {
+ struct Node {const EQ::ItemInstance* original;uint32_t id;int32_t serial;int16_t charges;std::vector<std::pair<uint8_t,Node>> children;};
+ Node root;
+ static Node Capture(const EQ::ItemInstance& item) {
+  Node n{&item,item.GetID(),item.GetSerialNumber(),item.GetCharges(),{}};
+  for(const auto& child:*item.GetContents()) {
+   if(!child.second)throw std::runtime_error("Missing finite recipe ingredient");
+   n.children.emplace_back(child.first,Capture(*child.second));
+  }
+  return n;
+ }
+ static bool Same(const Node& n,const EQ::ItemInstance* item) {
+  if(!item || item!=n.original || item->GetID()!=n.id || item->GetSerialNumber()!=n.serial ||
+   item->GetCharges()!=n.charges || item->GetContents()->size()!=n.children.size())return false;
+  for(const auto& child:n.children) {
+   auto at=item->GetContents()->find(child.first);
+   if(at==item->GetContents()->end() || !Same(child.second,at->second))return false;
+  }
+  return true;
+ }
+};
+
+
+bool Final302Output(const DBTradeskillRecipe_Struct& spec,const FinalRecipe302::Requirement& r) {
+ return uint32_t(spec.tradeskill)==r.skill&&!spec.quest&&!spec.replace_container&&spec.onsuccess.size()==1&&spec.onsuccess.begin()->first==r.output&&spec.onsuccess.begin()->second==r.yield;
+}
+bool Final302Kit(Client& user,const FinalRecipe302::Requirement& r,int16_t slot,const EQ::ItemInstance* expected) {
+ if(!EQ::ValueWithin(slot,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END))return false;
+ const auto* kit=user.GetInv().GetItem(slot);const auto* data=kit&&kit->IsClassBag()?kit->GetItem():nullptr;
+ return kit==expected&&data&&data->ID==r.kit&&data->BagType==r.type&&data->BagSlots==r.slots&&data->BagSize==r.size;
+}
+
+bool Final300OutputValid(const DBTradeskillRecipe_Struct& spec) {
+ if (!FinalRecipe300::Selected(spec.recipe_id)) return true;
+ if (uint32_t(spec.tradeskill)!=FinalRecipe300::Skill(spec.recipe_id) || spec.quest) return false;
+ if (spec.recipe_id == 3102882) {
+  const auto* item=database.GetItem(23382);
+  if(!item || item->ItemClass!=0 || item->ItemType!=8 || item->MaxCharges!=0 ||
+   spec.nofail || spec.must_learn || spec.replace_container || spec.skill_needed || spec.trivial!=115)return false;
+  const auto has=[](const auto& items,uint32_t id,uint32_t count) {
+   for(const auto& p:items)if(p.first==id)return p.second==count;
+   return false;
+  };
+  return spec.onsuccess.size()==2 && has(spec.onsuccess,23382,1) && has(spec.onsuccess,10489,1) &&
+   spec.onfail.size()==1 && has(spec.onfail,10489,1);
+ }
+ if (spec.recipe_id == 3102867 || spec.recipe_id == 3102868) {
+  if (spec.nofail || spec.must_learn || spec.replace_container) return false;
+  const auto has=[](const auto& items,uint32_t id,uint32_t count) {
+   for(const auto& p:items) if(p.first==id) return p.second==count;
+   return false;
+  };
+  if(spec.recipe_id==3102867) return spec.trivial==43 &&
+   spec.onsuccess.size()==1 && has(spec.onsuccess,3444,1) &&
+   spec.onfail.size()==1 && has(spec.onfail,3474,1);
+  return spec.trivial==153 && spec.onsuccess.size()==3 &&
+   has(spec.onsuccess,2074,1) && has(spec.onsuccess,6027,1) && has(spec.onsuccess,7052,1) &&
+   spec.onfail.size()==2 && has(spec.onfail,6027,1) && has(spec.onfail,7052,1);
+ }
+ if (spec.recipe_id!=3102766) return true;
+ const auto* item=database.GetItem(75815);
+ if (!item || item->ItemClass!=0 || item->Stackable || item->MaxCharges!=8) return false;
+ unsigned found=0;
+ for (const auto& pair:spec.onsuccess) if(pair.first==75815) { if(pair.second!=1)return false; ++found; }
+ return found==1;
+}
+bool Final300Font(Client& user,uint32_t recipe) {
+ if(zone->GetZoneID()!=490 || zone->GetInstanceVersion()!=0)return false;
+ const auto p=FinalRecipe300::Position(recipe);
+ auto* door=entity_list.FindDoor(p.door);
+ return door && door->GetDoorID()==p.door && FinalRecipe300::InsideFont(p,door->GetDoorName(),
+  door->GetX(),door->GetY(),door->GetZ(),user.GetX(),user.GetY(),user.GetZ());
+}
+bool Final300Kit(Client& user,int16_t slot,const EQ::ItemInstance* expected) {
+ if(!EQ::ValueWithin(slot,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END))return false;
+ const auto* kit=user.GetInv().GetItem(slot);
+ const auto* data=kit&&kit->IsType(EQ::item::ItemClassBag)?kit->GetItem():nullptr;
+ return kit==expected && data && data->ID==17187 && data->BagType==20 && data->BagSlots==6 && data->BagSize==3;
+}
+
+struct ChargedPacking32Plan {
+ struct Take {int16_t slot=INVALID_INDEX;const EQ::ItemInstance* original=nullptr;int32_t serial=0;};
+ int16_t kit_slot=INVALID_INDEX;const EQ::ItemInstance* kit=nullptr;int32_t kit_serial=0;
+ std::array<Take,10> takes{};size_t count=0;
+};
+bool Charged32OutputValid(const DBTradeskillRecipe_Struct& spec) {
+ const auto* r=ChargedRecipe32::Find(spec.recipe_id);if(!r)return true;
+ if(uint32_t(spec.tradeskill)!=r->skill||spec.quest)return false;
+ const auto* output=database.GetItem(r->output);
+ if(!output||output->ItemClass!=0||output->Stackable||output->MaxCharges!=int(r->charges))return false;
+ unsigned found=0;for(const auto& pair:spec.onsuccess)if(pair.first==r->output){if(pair.second!=1)return false;++found;}
+ return found==1&&(!r->units||(spec.nofail&&spec.trivial==0&&spec.skill_needed==0&&spec.replace_container));
+}
+bool Charged32SinglePoison(const EQ::ItemInstance* item,uint32_t id) {
+ const auto* d=item?item->GetItem():nullptr;
+ return d&&d->ID==id&&d->ItemClass==0&&!item->IsStackable()&&d->MaxCharges==1&&item->GetCharges()==1&&item->GetContents()->empty();
+}
+bool Charged32Kit(Client& user,const ChargedRecipe32::Requirement& r,int16_t slot,const EQ::ItemInstance* expected) {
+ const auto* inst=user.GetInv().GetItem(slot);const auto* d=inst&&inst->IsType(EQ::item::ItemClassBag)?inst->GetItem():nullptr;
+ return inst==expected&&d&&d->ID==r.kit&&d->BagType==12&&d->BagSlots==10&&d->BagSize==2;
+}
+bool Charged32PreparePacking(Client& user,const ChargedRecipe32::Requirement& r,int16_t slot,bool manual,ChargedPacking32Plan& plan) {
+ if(!r.units||user.GetClass()!=Class::Rogue||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user.GetInv()))return false;
+ auto& inv=user.GetInv();const auto* kit=inv.GetItem(slot);
+ if(!Charged32Kit(user,r,slot,kit))return false;
+ plan.kit_slot=slot;plan.kit=kit;plan.kit_serial=kit->GetSerialNumber();
+ const auto add=[&](int16_t at,const EQ::ItemInstance* item){
+  if(!Charged32SinglePoison(item,r.input)||plan.count>=r.units)return false;
+  for(size_t n=0;n<plan.count;++n)if(plan.takes[n].original==item||plan.takes[n].slot==at)return false;
+  plan.takes[plan.count++]={at,item,item->GetSerialNumber()};return true;
+ };
+ // Bottle contents have priority, so no selected contents can be left behind
+ // when the guaranteed no-fail one-use bottle is removed.
+ for(const auto& child:*kit->GetContents())if(child.second){
+  if(child.first>=10||!add(EQ::InventoryProfile::CalcSlotId(slot,child.first),child.second))return false;
+ }
+ if(manual)return plan.count==r.units;
+ if(!EQ::ValueWithin(slot,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END))return false;
+ for(int16_t root=EQ::invslot::GENERAL_BEGIN;root<=EQ::invslot::GENERAL_END&&plan.count<r.units;++root) {
+  if(root==slot||!inv.GetLookup()||!((uint64_t(1)<<root)&inv.GetLookup()->PossessionsBitmask))continue;
+  const auto* item=inv.GetItem(root);if(!item)continue;
+  if(Charged32SinglePoison(item,r.input)){if(!add(root,item))return false;continue;}
+  const auto* data=item->GetItem();if(!data||!item->IsClassBag())continue;
+  for(uint8_t index=0;index<data->BagSlots&&index<EQ::invbag::SLOT_COUNT&&plan.count<r.units;++index){
+   const auto* child=item->GetItem(index);if(Charged32SinglePoison(child,r.input)&&!add(EQ::InventoryProfile::CalcSlotId(root,index),child))return false;
+  }
+ }
+ return plan.count==r.units;
+}
+bool Charged32PackingStillOriginal(Client& user,const ChargedRecipe32::Requirement& r,const ChargedPacking32Plan& plan) {
+ if(user.GetClass()!=Class::Rogue||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user.GetInv())||
+  !Charged32Kit(user,r,plan.kit_slot,plan.kit)||plan.kit->GetSerialNumber()!=plan.kit_serial||plan.count!=r.units)return false;
+ for(size_t n=0;n<plan.count;++n){const auto& take=plan.takes[n];const auto* item=user.GetInv().GetItem(take.slot);if(item!=take.original||!Charged32SinglePoison(item,r.input)||item->GetSerialNumber()!=take.serial)return false;}
+ for(const auto& child:*plan.kit->GetContents())if(child.second){bool selected=false;for(size_t n=0;n<plan.count;++n)if(plan.takes[n].slot==EQ::InventoryProfile::CalcSlotId(plan.kit_slot,child.first)&&plan.takes[n].original==child.second)selected=true;if(!selected)return false;}
+ return true;
+}
+}
 
 static const EQ::skills::SkillType TradeskillUnknown = EQ::skills::Skill1HBlunt; /* an arbitrary non-tradeskill */
 
@@ -255,6 +413,10 @@ void Object::HandleAugmentation(Client* user, const AugmentItem_Struct* in_augme
 // Perform tradeskill combine
 void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Object *worldo)
 {
+ if(user && user->GetTradeskillObject() && user->GetTradeskillObject()->IsHousingRecipe301()) {
+  user->Message(Chat::Red,"Keep ingredients in your inventory and use the recipe list at this table.");auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;
+ }
+
 	if (!user || !in_combine) {
 		LogError("Client or NewCombine_Struct not set in Object::HandleCombine");
 		auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
@@ -412,6 +574,201 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
 		return;
 	}
 
+	// Finite pre-2016 research path: actual actor and actual opened native kit.
+	if (ResearchTablet335::Selected(spec.recipe_id)) {
+		const auto* kit = !worldcontainer && container->IsType(EQ::item::ItemClassBag)
+			? container->GetItem() : nullptr;
+		if (!kit || !ResearchTablet335::Allows(spec.recipe_id, spec.tradeskill,
+			user->GetClass(), kit->ID, kit->BagType, kit->BagSlots, kit->BagSize)) {
+			user->Message(Chat::Red, "Your class and research kit must match this recipe.");
+			auto* denied = new EQApplicationPacket(OP_TradeSkillCombine, 0);
+			user->QueuePacket(denied);
+			safe_delete(denied);
+			return;
+		}
+	}
+
+	// Native actor restriction for the exact RRC169 source-qualified formulas.
+	// Container identity comes from the actual opened native bag, not a packet.
+	if (!GnomishTailoring35::Allows(spec.recipe_id, spec.tradeskill, c_type,
+		container->GetItem() ? container->GetItem()->ID : 0, user->GetPP().race)) {
+		user->Message(Chat::Red, "Only gnomes can make this cultural armor.");
+		auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
+		user->QueuePacket(outapp);
+		safe_delete(outapp);
+		return;
+	}
+
+	// Exact cultural recipe actor and actual owned world station, before consumption.
+	if (const auto* requirement = CulturalArmorBulk::Find(spec.recipe_id)) {
+		auto* station = worldcontainer ? worldo : nullptr;
+		const auto* item = station && station->m_inst ? station->m_inst->GetItem() : nullptr;
+		if (!station || station != user->GetTradeskillObject() || station->user != user ||
+			!station->m_inst || !station->m_inst->IsType(EQ::item::ItemClassBag) ||
+			!CulturalArmorBulk::Allows(*requirement, spec.tradeskill, user->GetPP().race,
+				zone->GetZoneID(), station->GetDBID(), station->GetType(),
+				item ? item->ID : 0, EQ::invtype::WORLD_SIZE)) {
+			user->Message(Chat::Red, "This cultural armor requires the correct race and forge.");
+			auto* denied = new EQApplicationPacket(OP_TradeSkillCombine, 0);
+			user->QueuePacket(denied);
+			safe_delete(denied);
+			return;
+		}
+	}
+
+	if (const auto* requirement = CulturalTailoringBulk::Find(spec.recipe_id)) {
+		const auto* kit = !worldcontainer && container ? container->GetItem() : nullptr;
+		if (!kit || !CulturalTailoringBulk::Allows(*requirement, spec.tradeskill,
+			user->GetPP().race, kit->ID, kit->BagType, kit->BagSlots, kit->BagSize)) {
+			user->Message(Chat::Red, "This cultural armor requires the correct race and sewing kit.");
+			auto* denied = new EQApplicationPacket(OP_TradeSkillCombine, 0);
+			user->QueuePacket(denied);
+			safe_delete(denied);
+			return;
+		}
+	}
+
+	// Exact source world-only loom routes: an inventory bag is not authority.
+	if (const auto* requirement = WorldLoom13::Find(spec.recipe_id)) {
+		auto* station = worldcontainer ? worldo : nullptr;
+		const auto* item = station && station->m_inst ? station->m_inst->GetItem() : nullptr;
+		if (!station || station != user->GetTradeskillObject() || station->user != user ||
+			!station->m_inst || !station->m_inst->IsType(EQ::item::ItemClassBag) ||
+			!WorldLoom13::Allows(*requirement, spec.tradeskill, zone->GetZoneID(),
+				zone->GetInstanceVersion(), station->GetDBID(), station->GetType(),
+				item ? item->ID : 0, EQ::invtype::WORLD_SIZE)) {
+			user->Message(Chat::Red, "This recipe requires the loom in the Plane of Knowledge.");
+			auto* denied = new EQApplicationPacket(OP_TradeSkillCombine, 0);
+			user->QueuePacket(denied);
+			safe_delete(denied);
+			return;
+		}
+	}
+
+	// Exact source Tanaan Forge routes: an inventory bag is not authority.
+	if (const auto* requirement = TanaanForge28::Find(spec.recipe_id)) {
+		auto* station = worldcontainer ? worldo : nullptr;
+		const auto* item = station && station->m_inst ? station->m_inst->GetItem() : nullptr;
+		if (!station || station != user->GetTradeskillObject() || station->user != user ||
+			!station->m_inst || !station->m_inst->IsType(EQ::item::ItemClassBag) ||
+			!TanaanForge28::Allows(*requirement, spec.tradeskill, zone->GetZoneID(),
+				zone->GetInstanceVersion(), station->GetDBID(), station->GetType(),
+				item ? item->ID : 0, EQ::invtype::WORLD_SIZE)) {
+			user->Message(Chat::Red, "This recipe requires a Tanaan forge in the Plane of Knowledge.");
+			auto* denied = new EQApplicationPacket(OP_TradeSkillCombine, 0);
+			user->QueuePacket(denied);
+			safe_delete(denied);
+			return;
+		}
+	}
+
+
+
+ if(HousingRecipe301::Selected(spec.recipe_id)) {
+  user->Message(Chat::Red,"This recipe needs a placed Jewelry Making Table and its recipe list.");auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;
+ }
+ // Capture the actual matched physical input tree before mutable validation hooks.
+ // No clone/replacement/consumption; compare identities and all nested charges/slots.
+ // Keep the original finite307/309 selector bound across mutable validation.
+ const auto final307_recipe=(spec.recipe_id==3102867 || spec.recipe_id==3102868 || spec.recipe_id==3102882)?spec.recipe_id:0;
+ std::unique_ptr<Final300InputTree> final300_inputs;
+ const auto final300_owner=user->InventorySessionReleaseTicket();
+ const auto final300_character=user->CharacterID();
+ const auto final300_account=user->AccountID();
+ auto* const final300_world=worldcontainer?worldo:nullptr;
+ const auto final300_world_id=final300_world?final300_world->GetDBID():0;
+ if(FinalRecipe300::Selected(spec.recipe_id)) {
+  if(!container || !final300_owner || !final300_owner->HeldFor(*user)) {
+   auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;
+  }
+  try { final300_inputs=std::make_unique<Final300InputTree>(Final300InputTree{Final300InputTree::Capture(*container)}); }
+  catch(...) {auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+ }
+
+ const bool ogre303_selected=spec.recipe_id>=3102788&&spec.recipe_id<=3102794;
+ std::unique_ptr<Final300InputTree> ogre303_inputs;
+ if(ogre303_selected) {
+  if(!container||!final300_owner||!final300_owner->HeldFor(*user)){auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+  try{ogre303_inputs=std::make_unique<Final300InputTree>(Final300InputTree{Final300InputTree::Capture(*container)});}
+  catch(...){auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+ }
+ const auto ogre303_valid=[&](){
+  if(!ogre303_selected)return true;
+  if(worldcontainer||!ogre303_inputs||!final300_owner||!final300_owner->HeldFor(*user)||user->CharacterID()!=final300_character||user->AccountID()!=final300_account||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv()))return false;
+  const auto* requirement=CulturalTailoringBulk::Find(spec.recipe_id);
+  const auto* current=user->GetInv().GetItem(in_combine->container_slot);
+  const auto* data=current&&current->IsClassBag()?current->GetItem():nullptr;
+  if(!requirement||!data||current!=container||!EQ::ValueWithin(in_combine->container_slot,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END)||!CulturalTailoringBulk::Allows(*requirement,spec.tradeskill,user->GetPP().race,data->ID,data->BagType,data->BagSlots,data->BagSize))return false;
+  return Final300InputTree::Same(ogre303_inputs->root,current);
+ };
+ if(!ogre303_valid()){auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+ const auto* final302_requirement=FinalRecipe302::Find(spec.recipe_id);
+ std::unique_ptr<Final300InputTree> final302_inputs;
+ if(final302_requirement) {
+  if(!container||!final300_owner||!final300_owner->HeldFor(*user)){auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+  try{final302_inputs=std::make_unique<Final300InputTree>(Final300InputTree{Final300InputTree::Capture(*container)});}
+  catch(...){auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+ }
+ const auto final302_valid=[&](){
+  if(!final302_requirement)return true;
+  const auto& r=*final302_requirement;
+  if(!final302_inputs||!final300_owner||!final300_owner->HeldFor(*user)||user->CharacterID()!=final300_character||user->AccountID()!=final300_account||!Final302Output(spec,r)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv()))return false;
+  const EQ::ItemInstance* current=nullptr;
+  if(r.kit>100) {
+   if(worldcontainer||!Final302Kit(*user,r,in_combine->container_slot,container))return false;
+   current=user->GetInv().GetItem(in_combine->container_slot);
+  }else {
+   auto* station=user->GetTradeskillObject();
+   if(!worldcontainer||!station||station!=worldo||station!=final300_world||station->user!=user||!station->GetDBID()||station->GetDBID()!=final300_world_id||station->GetType()!=18||!station->m_inst||station->m_inst!=container||!station->m_inst->IsClassBag()||station->GetItemID()!=0)return false;
+   current=station->m_inst;
+  }
+  return Final300InputTree::Same(final302_inputs->root,current);
+ };
+ if(!final302_valid()){user->Message(Chat::Red,"This recipe requires its correct container and original ingredients.");auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+ const auto final300_valid=[&](){
+  if(final307_recipe && spec.recipe_id!=final307_recipe)return false;
+  if(!FinalRecipe300::Selected(spec.recipe_id))return true;
+  if(!final300_inputs || !final300_owner || !final300_owner->HeldFor(*user) ||
+   user->CharacterID()!=final300_character || user->AccountID()!=final300_account)return false;
+  if(!Final300OutputValid(spec)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv())||
+   !FinalRecipe300::RaceAllowed(spec.recipe_id,user->GetPP().race))return false;
+  // Resolve current native custody before touching the retained original pointer.
+  const EQ::ItemInstance* current=nullptr;
+  if(FinalRecipe300::Font(spec.recipe_id)) {
+   if(worldcontainer || !Final300Kit(*user,in_combine->container_slot,container) || !Final300Font(*user,spec.recipe_id))return false;
+   current=user->GetInv().GetItem(in_combine->container_slot);
+  }else if(spec.recipe_id==3102867) {
+   if(worldcontainer || !EQ::ValueWithin(in_combine->container_slot,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END))return false;
+   current=user->GetInv().GetItem(in_combine->container_slot);
+   const auto* data=current&&current->IsClassBag()?current->GetItem():nullptr;
+   if(current!=container || !data || data->ID!=17910 || data->BagType!=18 || data->BagSlots!=8 || data->BagSize!=3)return false;
+  }else {
+   auto* station=user->GetTradeskillObject();
+   if(!worldcontainer || !station || station!=worldo || station!=final300_world ||
+    station->user!=user || station->GetDBID()!=final300_world_id || !station->m_inst ||
+    station->m_inst!=container || !station->m_inst->IsType(EQ::item::ItemClassBag))return false;
+   const auto* data=station->m_inst->GetItem();
+   if(!data || !FinalRecipe300::WorldAllowed(spec.recipe_id,zone->GetZoneID(),zone->GetInstanceVersion(),station->GetDBID(),station->GetType(),data->ID))return false;
+   current=station->m_inst;
+  }
+  return Final300InputTree::Same(final300_inputs->root,current);
+ };
+
+ if(!final300_valid()){user->Message(Chat::Red,"This recipe requires its correct station, location, and maker.");auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+ const auto* charged_requirement=ChargedRecipe32::Find(spec.recipe_id);
+ ChargedPacking32Plan charged_packing;
+ const auto charged_station_valid=[&](){
+  if(!charged_requirement)return true;
+  if(!Charged32OutputValid(spec)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv()))return false;
+  if(charged_requirement->units)return !worldcontainer&&user->GetInv().GetItem(in_combine->container_slot)==container;
+  if(charged_requirement->kit==17){auto* actual=user->GetTradeskillObject();return worldcontainer&&actual&&actual==worldo&&actual->user==user&&actual->GetType()==17&&actual->m_inst&&actual->m_inst==container;}
+  const auto* actual=user->GetInv().GetItem(in_combine->container_slot);const auto* data=actual&&actual->IsType(EQ::item::ItemClassBag)?actual->GetItem():nullptr;
+  return !worldcontainer&&actual==container&&data&&data->ID==charged_requirement->kit&&data->BagType==10&&data->BagSlots>=charged_requirement->cells&&data->BagSize>=charged_requirement->maxsize&&user->GetPP().race==Race::Gnome;
+ };
+ if(!charged_station_valid()||(charged_requirement&&charged_requirement->units&&!Charged32PreparePacking(*user,*charged_requirement,in_combine->container_slot,true,charged_packing))){
+  user->Message(Chat::Red,"This recipe needs its correct container and ingredients.");auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;
+ }
+
 	// Character hasn't learnt the recipe yet.
 	// must_learn:
 	// bit 1 (0x01): recipe can't be experimented
@@ -479,7 +836,7 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
 	}
 
 	// Check if Combine would result in Lore conflict
-	if (user->CheckTradeskillLoreConflict(spec.recipe_id)) {
+	if (!TrophyCertificate55::Find(spec.recipe_id) && user->CheckTradeskillLoreConflict(spec.recipe_id)) {
 		auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
 		user->QueuePacket(outapp);
 		safe_delete(outapp);
@@ -500,11 +857,19 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
 		}
 	}
 
+
+ if(!ogre303_valid()||!final302_valid()||!final300_valid()||!charged_station_valid()||(charged_requirement&&charged_requirement->units&&!Charged32PackingStillOriginal(*user,*charged_requirement,charged_packing))){auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
 	// Send acknowledgement packets to client
 	auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
 	user->QueuePacket(outapp);
 	safe_delete(outapp);
 
+ std::unique_ptr<TrophyCertificate55::Proof> trophy_proof;
+ if(TrophyCertificate55::Find(spec.recipe_id)) {
+  trophy_proof=TrophyCertificate55::Custody::Manual(*user,spec,worldcontainer?worldo:nullptr,container,in_combine->container_slot);
+  if(!trophy_proof)return;
+ }
+ if(!trophy_proof){
 	//now clean out the containers.
 	if(worldcontainer){
 		container->Clear();
@@ -524,7 +889,16 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
 		container->Clear();
 	}
 	//do the check and send results...
-	bool success = user->TradeskillExecute(&spec);
+
+ if(charged_requirement&&charged_requirement->units){
+  // Inputs are already gone. Remove this exact emptied no-fail bottle BEFORE
+  // output/task callbacks, and suppress the stock delayed second removal.
+  if(user->GetInv().GetItem(charged_packing.kit_slot)!=charged_packing.kit||!charged_packing.kit->GetContents()->empty())return;
+  user->DeleteItemInInventory(charged_packing.kit_slot,0,true);spec.replace_container=false;
+ }
+ }
+ if(trophy_proof)user->CalcBonuses();
+ bool success=trophy_proof?TrophyCertificate55::Custody::Complete(*user,std::move(trophy_proof),spec):user->TradeskillExecute(&spec);
 
 	// Learn new recipe message
 	// Update Made count
@@ -592,6 +966,8 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 	outp->reply_code = 0xFFFFFFF5;	//default fail.
 
 
+ if(auto* station=user->GetTradeskillObject();station&&station->IsHousingRecipe301()&&!HousingRecipe301::Selected(rac->recipe_id)){user->QueuePacket(outapp);safe_delete(outapp);return;}
+
 	//ask the database for the recipe to make sure it exists...
 	DBTradeskillRecipe_Struct spec;
 	if (!content_db.GetTradeRecipe(rac->recipe_id, rac->object_type, rac->some_id, user, &spec)) {
@@ -600,6 +976,176 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 		safe_delete(outapp);
 		return;
 	}
+
+	if (ResearchTablet335::Selected(spec.recipe_id)) {
+		// Packet recipe/container identifiers confer no ownership or maker-class authority.
+		const auto kit_slot = user->GetInv().HasItem(ResearchTablet335::RequiredKit(spec.recipe_id), 1, invWherePersonal);
+		const auto* native_kit = user->GetInv().GetItem(kit_slot);
+		const auto* kit = native_kit && native_kit->IsType(EQ::item::ItemClassBag)
+			? native_kit->GetItem() : nullptr;
+		if (!kit || rac->some_id != kit->ID || rac->object_type != kit->BagType ||
+			!ResearchTablet335::Allows(spec.recipe_id, spec.tradeskill, user->GetClass(),
+				kit->ID, kit->BagType, kit->BagSlots, kit->BagSize)) {
+			user->Message(Chat::Red, "Your class and research kit must match this recipe.");
+			user->QueuePacket(outapp);
+			safe_delete(outapp);
+			return;
+		}
+	}
+
+	if (GnomishTailoring35::Selected(spec.recipe_id)) {
+		// The auto request names an item ID. Require the actual matching kit in
+		// this actor's native personal inventory before trusting that request.
+		const auto kit_slot = user->GetInv().HasItem(92877, 1, invWherePersonal);
+		const auto* kit = user->GetInv().GetItem(kit_slot);
+		const auto* kit_data = kit && kit->IsType(EQ::item::ItemClassBag) ? kit->GetItem() : nullptr;
+		if (!kit_data || rac->some_id != kit_data->ID || rac->object_type != kit_data->BagType ||
+			!GnomishTailoring35::Allows(spec.recipe_id, spec.tradeskill, kit_data->BagType,
+				kit_data->ID, user->GetPP().race)) {
+			user->Message(Chat::Red, "Only gnomes with a Clockwork Sewing Kit can make this cultural armor.");
+			user->QueuePacket(outapp);
+			safe_delete(outapp);
+			return;
+		}
+	}
+
+	if (const auto* requirement = CulturalArmorBulk::Find(spec.recipe_id)) {
+		// Packet IDs confer no forge authority: use this client's owned open object.
+		auto* station = user->GetTradeskillObject();
+		const auto* item = station && station->m_inst ? station->m_inst->GetItem() : nullptr;
+		if (!station || station->user != user || !station->m_inst ||
+			!station->m_inst->IsType(EQ::item::ItemClassBag) ||
+			rac->object_type != station->GetType() ||
+			!CulturalArmorBulk::Allows(*requirement, spec.tradeskill, user->GetPP().race,
+				zone->GetZoneID(), station->GetDBID(), station->GetType(),
+				item ? item->ID : 0, EQ::invtype::WORLD_SIZE)) {
+			user->Message(Chat::Red, "This cultural armor requires the correct race and forge.");
+			user->QueuePacket(outapp);
+			safe_delete(outapp);
+			return;
+		}
+	}
+
+	if (const auto* requirement = CulturalTailoringBulk::Find(spec.recipe_id)) {
+		// Packet item IDs are insufficient: require the actual native personal kit.
+		const auto slot = user->GetInv().HasItem(requirement->kit_id, 1, invWherePersonal);
+		const auto* instance = user->GetInv().GetItem(slot);
+		const auto* kit = instance && instance->IsType(EQ::item::ItemClassBag) ? instance->GetItem() : nullptr;
+		if (!kit || rac->some_id != kit->ID || rac->object_type != kit->BagType ||
+			!CulturalTailoringBulk::Allows(*requirement, spec.tradeskill,
+				user->GetPP().race, kit->ID, kit->BagType, kit->BagSlots, kit->BagSize)) {
+			user->Message(Chat::Red, "This cultural armor requires the correct race and sewing kit.");
+			user->QueuePacket(outapp);
+			safe_delete(outapp);
+			return;
+		}
+	}
+
+	if (const auto* requirement = WorldLoom13::Find(spec.recipe_id)) {
+		// Use the actual owned open native world object, never packet IDs alone.
+		auto* station = user->GetTradeskillObject();
+		const auto* item = station && station->m_inst ? station->m_inst->GetItem() : nullptr;
+		if (!station || station->user != user || !station->m_inst ||
+			!station->m_inst->IsType(EQ::item::ItemClassBag) ||
+			rac->object_type != station->GetType() ||
+			!WorldLoom13::Allows(*requirement, spec.tradeskill, zone->GetZoneID(),
+				zone->GetInstanceVersion(), station->GetDBID(), station->GetType(),
+				item ? item->ID : 0, EQ::invtype::WORLD_SIZE)) {
+			user->Message(Chat::Red, "This recipe requires the loom in the Plane of Knowledge.");
+			user->QueuePacket(outapp);
+			safe_delete(outapp);
+			return;
+		}
+	}
+
+	if (const auto* requirement = TanaanForge28::Find(spec.recipe_id)) {
+		// Use the actual owned open native world object, never packet IDs alone.
+		auto* station = user->GetTradeskillObject();
+		const auto* item = station && station->m_inst ? station->m_inst->GetItem() : nullptr;
+		if (!station || station->user != user || !station->m_inst ||
+			!station->m_inst->IsType(EQ::item::ItemClassBag) ||
+			rac->object_type != station->GetType() ||
+			!TanaanForge28::Allows(*requirement, spec.tradeskill, zone->GetZoneID(),
+				zone->GetInstanceVersion(), station->GetDBID(), station->GetType(),
+				item ? item->ID : 0, EQ::invtype::WORLD_SIZE)) {
+			user->Message(Chat::Red, "This recipe requires a Tanaan forge in the Plane of Knowledge.");
+			user->QueuePacket(outapp);
+			safe_delete(outapp);
+			return;
+		}
+	}
+
+
+
+ const bool ogre303_selected=spec.recipe_id>=3102788&&spec.recipe_id<=3102794;
+ const auto ogre303_valid=[&](){
+  if(!ogre303_selected)return true;
+  auto ticket=user->InventorySessionReleaseTicket();if(!ticket||!ticket->HeldFor(*user)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv()))return false;
+  const auto* requirement=CulturalTailoringBulk::Find(spec.recipe_id);
+  const auto slot=user->GetInv().HasItem(92880,1,invWherePersonal);const auto* current=user->GetInv().GetItem(slot);const auto* data=current&&current->IsClassBag()?current->GetItem():nullptr;
+  return requirement&&data&&EQ::ValueWithin(slot,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END)&&rac->some_id==92880&&rac->object_type==16&&CulturalTailoringBulk::Allows(*requirement,spec.tradeskill,user->GetPP().race,data->ID,data->BagType,data->BagSlots,data->BagSize);
+ };
+ if(!ogre303_valid()){user->QueuePacket(outapp);safe_delete(outapp);return;}
+ const auto* final302_requirement=FinalRecipe302::Find(spec.recipe_id);
+ const auto final302_valid=[&](){
+  if(!final302_requirement)return true;
+  const auto& r=*final302_requirement;
+  if(!Final302Output(spec,r)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv()))return false;
+  auto ticket=user->InventorySessionReleaseTicket();if(!ticket||!ticket->HeldFor(*user))return false;
+  if(r.kit>100) {
+   const auto slot=user->GetInv().HasItem(r.kit,1,invWherePersonal);
+   return rac->some_id==r.kit&&rac->object_type==r.type&&Final302Kit(*user,r,slot,user->GetInv().GetItem(slot));
+  }
+  auto* station=user->GetTradeskillObject();
+  return station&&station->user==user&&station->GetDBID()&&station->GetType()==18&&rac->object_type==18&&station->m_inst&&station->m_inst->IsClassBag()&&station->GetItemID()==0;
+ };
+ if(!final302_valid()){user->Message(Chat::Red,"This recipe requires its correct container.");user->QueuePacket(outapp);safe_delete(outapp);return;}
+ // Bind only the new Northman309 route to its original source/session before callbacks.
+ const auto final309_recipe=spec.recipe_id==3102882?spec.recipe_id:0;
+ const auto final309_owner=user->InventorySessionReleaseTicket();
+ const auto final309_character=user->CharacterID();
+ const auto final309_account=user->AccountID();
+ auto* const final309_world=user->GetTradeskillObject();
+ const auto final309_world_id=final309_world?final309_world->GetDBID():0;
+ const auto* const final309_container=final309_world?final309_world->m_inst:nullptr;
+ const auto final309_serial=final309_container?final309_container->GetSerialNumber():0;
+ const auto final300_valid=[&](){
+  if(spec.recipe_id==3102882 || final309_recipe) {
+   if(!final309_recipe || spec.recipe_id!=final309_recipe || !final309_owner ||
+    !final309_owner->HeldFor(*user) || user->CharacterID()!=final309_character || user->AccountID()!=final309_account)return false;
+   auto* current=user->GetTradeskillObject();
+   if(!current || current!=final309_world || current->GetDBID()!=final309_world_id || current->user!=user ||
+    !current->m_inst || current->m_inst!=final309_container || current->m_inst->GetSerialNumber()!=final309_serial)return false;
+  }
+  if(!FinalRecipe300::Selected(spec.recipe_id))return true;
+  if(!Final300OutputValid(spec)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv())||
+   !FinalRecipe300::RaceAllowed(spec.recipe_id,user->GetPP().race))return false;
+  if(FinalRecipe300::NeverLearn(spec.recipe_id))return false;
+  if(FinalRecipe300::Font(spec.recipe_id)) {
+   const auto slot=user->GetInv().HasItem(17187,1,invWherePersonal);
+   return rac->some_id==17187 && rac->object_type==20 && Final300Kit(*user,slot,user->GetInv().GetItem(slot)) && Final300Font(*user,spec.recipe_id);
+  }
+  auto* station=user->GetTradeskillObject();
+  const auto* data=station&&station->m_inst?station->m_inst->GetItem():nullptr;
+  return station && station->user==user && station->m_inst && station->m_inst->IsType(EQ::item::ItemClassBag) && data &&
+   rac->object_type==station->GetType() &&
+   FinalRecipe300::WorldAllowed(spec.recipe_id,zone->GetZoneID(),zone->GetInstanceVersion(),station->GetDBID(),station->GetType(),data->ID);
+ };
+ if(!final300_valid()){user->Message(Chat::Red,"This recipe requires its correct station, location, and maker.");user->QueuePacket(outapp);safe_delete(outapp);return;}
+ const auto* charged_requirement=ChargedRecipe32::Find(spec.recipe_id);
+ ChargedPacking32Plan charged_packing;
+ const auto charged_station_valid=[&](){
+  if(!charged_requirement)return true;
+  if(!Charged32OutputValid(spec)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv()))return false;
+  if(charged_requirement->units)return true;
+  if(charged_requirement->kit==17){auto* station=user->GetTradeskillObject();return station&&station->user==user&&station->m_inst&&station->m_inst->IsType(EQ::item::ItemClassBag)&&station->GetType()==17&&rac->object_type==17;}
+  const auto slot=user->GetInv().HasItem(charged_requirement->kit,1,invWherePersonal);const auto* native=user->GetInv().GetItem(slot);const auto* data=native&&native->IsType(EQ::item::ItemClassBag)?native->GetItem():nullptr;
+  return data&&data->ID==charged_requirement->kit&&data->BagType==10&&data->BagSlots>=charged_requirement->cells&&data->BagSize>=charged_requirement->maxsize&&rac->some_id==data->ID&&rac->object_type==data->BagType&&user->GetPP().race==Race::Gnome;
+ };
+ if(!charged_station_valid()||(charged_requirement&&charged_requirement->units&&
+  (rac->some_id!=17149||rac->object_type!=12||!Charged32PreparePacking(*user,*charged_requirement,user->GetInv().HasItem(17149,1,invWherePersonal),false,charged_packing)))){
+  user->Message(Chat::Red,"This recipe needs its correct container and ingredients.");user->QueuePacket(outapp);safe_delete(outapp);return;
+ }
 
 	// Character hasn't learnt the recipe yet.
 	// This shouldn't happen.
@@ -637,7 +1183,7 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 		}
 	}
 	else if (spec.tradeskill == EQ::skills::SkillTinkering) {
-		if (user->GetRace() != Race::Gnome) {
+		if (user->GetPP().race != Race::Gnome) {
 			user->Message(Chat::Red, "Only gnomes can tinker.");
 			auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
 			user->QueuePacket(outapp);
@@ -733,14 +1279,36 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 	}
 
 	// Check if Combine would result in Lore conflict
-	if (user->CheckTradeskillLoreConflict(rac->recipe_id)) {
+	if (!TrophyCertificate55::Find(spec.recipe_id) && user->CheckTradeskillLoreConflict(rac->recipe_id)) {
 		user->QueuePacket(outapp);
 		safe_delete(outapp);
 		return;
 	}
 
+
+ if(!ogre303_valid()||!final302_valid()||!final300_valid()||!charged_station_valid()||(charged_requirement&&charged_requirement->units&&(results.RowCount()!=1||items[0]!=charged_requirement->input||counts[0]!=charged_requirement->units||!Charged32PackingStillOriginal(*user,*charged_requirement,charged_packing)))){user->QueuePacket(outapp);safe_delete(outapp);return;}
+ std::unique_ptr<HousingRecipe301::Use> housing301_use;
+ if(HousingRecipe301::Selected(spec.recipe_id)) {
+  auto* station=user->GetTradeskillObject();const auto* origin=station?station->HousingRecipe301Origin():nullptr;
+  if(!station||!origin||station->user!=user||station->GetType()!=20||rac->object_type!=20||
+   !station->m_inst||!station->m_inst->IsClassBag()||station->m_inst->GetID()!=54250||!station->m_inst->GetContents()->empty()||
+   uint32_t(spec.tradeskill)!=68||spec.quest||spec.replace_container||spec.onsuccess.size()!=1||
+   spec.onsuccess.begin()->first!=HousingRecipe301::Output(spec.recipe_id)||spec.onsuccess.begin()->second!=1||
+   !(housing301_use=HousingRecipe301::Use::Acquire(*user,*origin))) {user->QueuePacket(outapp);safe_delete(outapp);return;}
+ }
+
 	//now we know they have everything...
 
+ std::unique_ptr<TrophyCertificate55::Proof> trophy_proof;
+ if(TrophyCertificate55::Find(spec.recipe_id)) {
+  trophy_proof=TrophyCertificate55::Custody::Auto(*user,spec,rac->object_type,rac->some_id);
+  if(!trophy_proof){user->QueuePacket(outapp);safe_delete(outapp);return;}
+ }
+ if(!trophy_proof){
+ // Admit this exact source-validated combine once, before any ingredient debit.
+ // An authority failure here consumes nothing. After admission, finish the
+ // ordinary native combine even if the separate READ connection is lost.
+ if(housing301_use&&!housing301_use->AdmitDebit()){user->QueuePacket(outapp);safe_delete(outapp);return;}
 	//remove all the items from the players inventory, with updates...
 	int16 slot;
 	for(uint8 r = 0; r < results.RowCount(); r++) {
@@ -749,7 +1317,10 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 
 		//we have to loop here to delete 1 at a time in case its in multiple stacks.
 		for(uint8 k = 0; k < counts[r]; k++) {
-			slot = user_inv.HasItem(items[r], 1, invWherePersonal);
+			if(charged_requirement&&charged_requirement->units){
+    if(r!=0||k>=charged_packing.count||items[r]!=charged_requirement->input){user->QueuePacket(outapp);safe_delete(outapp);return;}
+    slot=charged_packing.takes[k].slot;
+   }else slot = user_inv.HasItem(items[r], 1, invWherePersonal);
 			if (slot == INVALID_INDEX) {
 				//WTF... I just checked this above, but just to be sure...
 				//we cant undo the previous deletes without a lot of work.
@@ -768,6 +1339,13 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 		}
 	}
 
+
+ if(charged_requirement&&charged_requirement->units){
+  if(user_inv.GetItem(charged_packing.kit_slot)!=charged_packing.kit||!charged_packing.kit->GetContents()->empty()){user->QueuePacket(outapp);safe_delete(outapp);return;}
+  user->DeleteItemInInventory(charged_packing.kit_slot,0,true);spec.replace_container=false;
+ }
+ }
+ housing301_use.reset(); // release source-only locks before output/task/quest hooks
 	//otherwise, we found it all...
 	outp->reply_code = 0x00000000;	//success for finding it...
 	user->QueuePacket(outapp);
@@ -776,7 +1354,8 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 
 	//now actually try to make something...
 
-	bool success = user->TradeskillExecute(&spec);
+ if(trophy_proof)user->CalcBonuses();
+ bool success=trophy_proof?TrophyCertificate55::Custody::Complete(*user,std::move(trophy_proof),spec):user->TradeskillExecute(&spec);
 
 	if (success) {
 		if (!spec.has_learnt && ((spec.must_learn & 0x10) != 0x10)) {
@@ -1003,6 +1582,8 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 		return false;
 	}
 
+ const bool trophy_selected=TrophyCertificate55::Find(spec->recipe_id)!=nullptr;
+ if(trophy_selected&&!TrophyCertificate55::Custody::Claim(*this,*spec))return false;
 	uint16 user_skill = GetSkill(spec->tradeskill);
 
 	if (RuleI(Skills, TradeSkillClamp) != 0 && user_skill > RuleI(Skills, TradeSkillClamp)) {
@@ -1161,7 +1742,7 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 			item = database.GetItem(itr->first);
 			if (item) {
 				CheckItemDiscoverability(itr->first);
-				SummonItem(itr->first, itr->second);
+				if(!trophy_selected) SummonItem(itr->first, FinalRecipe300::SummonCount(spec->recipe_id, itr->first, ChargedRecipe32::SummonCount(spec->recipe_id, itr->first, itr->second)));
 				if (GetGroup()) {
 					entity_list.MessageGroup(this, true, Chat::Skills, "%s has successfully fashioned %s!", GetName(), item->Name);
 				}
@@ -1190,6 +1771,7 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 
 			++itr;
 		}
+		UpdateAchievementForTradeskill(spec->recipe_id);
 		return(true);
 	}
 	/* Tradeskill Fail */
@@ -1675,6 +2257,7 @@ bool ZoneDatabase::GetTradeRecipe(
 
 void ZoneDatabase::UpdateRecipeMadecount(uint32 recipe_id, uint32 char_id, uint32 madeCount)
 {
+ if(FinalRecipe300::NeverLearn(recipe_id))return;
 	std::string query = StringFormat("INSERT INTO char_recipe_list "
                                     "SET recipe_id = %u, char_id = %u, madecount = %u "
                                     "ON DUPLICATE KEY UPDATE madecount = %u;",
@@ -1684,6 +2267,7 @@ void ZoneDatabase::UpdateRecipeMadecount(uint32 recipe_id, uint32 char_id, uint3
 
 void Client::LearnRecipe(uint32 recipe_id)
 {
+ if(FinalRecipe300::NeverLearn(recipe_id))return;
 	std::string query = fmt::format(
 		SQL(
 			select

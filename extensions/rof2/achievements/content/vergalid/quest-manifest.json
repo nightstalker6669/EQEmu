@@ -1,0 +1,107 @@
+[
+  {
+    "path": "lua_modules/achievement_quest_vergalid.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/achievement_quest_vergalid.lua"
+  },
+  {
+    "path": "lua_modules/achievement_quest_vergalid_data.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/achievement_quest_vergalid_data.lua"
+  },
+  {
+    "path": "lua_modules/vergalid_scene_rules.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/vergalid_scene_rules.lua"
+  },
+  {
+    "path": "lua_modules/vergalid_inner_access.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/vergalid_inner_access.lua"
+  },
+  {
+    "path": "lua_modules/vergalid_scene_native.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/vergalid_scene_native.lua"
+  },
+  {
+    "path": "lua_modules/vergalid_orb_guardians.lua",
+    "mode": "module",
+    "source": "quests/lua_modules/vergalid_orb_guardians.lua"
+  },
+  {
+    "path": "sunderock/403100.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403100.lua"
+  },
+  {
+    "path": "sunderock/403027.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403027.lua"
+  },
+  {
+    "path": "sunderock/403086.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403086.lua"
+  },
+  {
+    "path": "sunderock/403029.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403029.lua"
+  },
+  {
+    "path": "direwind/405150.lua",
+    "mode": "append",
+    "source": "quests/direwind/405150.lua"
+  },
+  {
+    "path": "steppes/399135.lua",
+    "mode": "append",
+    "source": "quests/steppes/399135.lua"
+  },
+  {
+    "path": "steppes/399146.lua",
+    "mode": "append",
+    "source": "quests/steppes/399146.lua"
+  },
+  {
+    "path": "steppes/399123.lua",
+    "mode": "append",
+    "source": "quests/steppes/399123.lua"
+  },
+  {
+    "path": "mesa/397176.lua",
+    "mode": "append",
+    "source": "quests/mesa/397176.lua"
+  },
+  {
+    "path": "sunderock/403065.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403065.lua"
+  },
+  {
+    "path": "sunderock/403070.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403070.lua"
+  },
+  {
+    "path": "sunderock/403089.lua",
+    "mode": "append",
+    "source": "quests/sunderock/403089.lua"
+  },
+  {
+    "path": "steppes/399120.lua",
+    "mode": "append",
+    "source": "quests/steppes/399120.lua"
+  },
+  {
+    "path": "global/global_player.lua",
+    "mode": "append",
+    "source": "hooks/global_player.lua.append"
+  },
+  {
+    "path": "global/global_npc.lua",
+    "mode": "append",
+    "source": "hooks/global_npc.lua.append"
+  }
+]

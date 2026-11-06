@@ -1,0 +1,46 @@
+{
+  "batch": "RRC064",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "5e892dc14396bf781d3507f89621dc365b3f3ce1",
+  "source_sha256": "669ea1b10645950136d692a57554fdf5882861e7b4fac459e1fb9bfa5afbcce2",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 10,
+  "entries_updated": 2,
+  "recipe_ids": [
+    214,
+    215,
+    216,
+    217,
+    218,
+    243,
+    255,
+    282,
+    290,
+    295,
+    296
+  ],
+  "recipe_definitions_preserved": 11,
+  "full_existing_entries_guarded": 66,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "historical_qualification": "Maintained MakePoison primary formulas support these narrow return/container discrepancies; exactMay2013behavior not independently established. No inference from Alchemy counterpart.",
+  "after_counts": {
+    "recipes": 25430,
+    "entries": 191682
+  },
+  "commit_receipt": [
+    "RRC064",
+    "2",
+    "10",
+    "25430",
+    "25430",
+    "191672",
+    "191682",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

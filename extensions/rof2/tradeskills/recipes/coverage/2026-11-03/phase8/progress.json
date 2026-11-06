@@ -1,0 +1,17 @@
+{
+  "status": "AUDIT_AND_IMPLEMENTATION_CONTINUE",
+  "installed_additions": {
+    "batches": 15,
+    "recipes": 306,
+    "logical_entries": 1735
+  },
+  "current_database_counts": {
+    "recipes": 23129,
+    "entries": 179354
+  },
+  "all_installed_source_postimages_exact": true,
+  "RRC014": "58 proposed entries held for actor validation; not installed or counted",
+  "next": "RRC017 source-only34Taelosian/dough formulas, current54dependencies and five producer postimages exact; proposed14case rehearsal. No RRC017 SQL yet.",
+  "all_recipe_completeness": false,
+  "native_combine_campaign": false
+}

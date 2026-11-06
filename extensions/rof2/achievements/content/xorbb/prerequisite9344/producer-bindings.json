@@ -1,0 +1,438 @@
+{
+  "enabled": false,
+  "status": "INCOMPLETE DISABLED SOURCE; not installable gameplay",
+  "bindings": [
+    {
+      "task": 3040474,
+      "activity": 0,
+      "kind": "speak",
+      "key": "reyalie",
+      "npc_id": 753057,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 1,
+      "kind": "door_click",
+      "key": "crater_rock",
+      "npc_id": null,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 2,
+      "kind": "kill",
+      "key": "scholarly_minotaur",
+      "npc_id": 753162,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 3,
+      "kind": "loot",
+      "key": "crater_note",
+      "npc_id": null,
+      "item_id": 66504,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 4,
+      "kind": "explore",
+      "key": "forest_tree",
+      "npc_id": null,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 5,
+      "kind": "kill",
+      "key": "architect",
+      "npc_id": 753273,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 6,
+      "kind": "door_click",
+      "key": "ladder_pickup",
+      "npc_id": null,
+      "item_id": 66508,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 7,
+      "kind": "item_use_then_ground_pickup",
+      "key": "ladder_tree_note",
+      "npc_id": null,
+      "item_id": 66505,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 8,
+      "kind": "kill",
+      "key": "disturbed_bats",
+      "npc_id": 753900,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 9,
+      "kind": "ground_pickup",
+      "key": "waterfall_note",
+      "npc_id": null,
+      "item_id": 66506,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 10,
+      "kind": "ground_pickup",
+      "key": "filthy_ham",
+      "npc_id": null,
+      "item_id": 66509,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 11,
+      "kind": "ground_pickup",
+      "key": "dirty_ham",
+      "npc_id": null,
+      "item_id": 66510,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 12,
+      "kind": "ground_pickup",
+      "key": "dusty_ham",
+      "npc_id": null,
+      "item_id": 66511,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 13,
+      "kind": "ground_pickup",
+      "key": "fresh_ham",
+      "npc_id": null,
+      "item_id": 66512,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 14,
+      "kind": "speak",
+      "key": "gerbril",
+      "npc_id": 753147,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 15,
+      "kind": "kill",
+      "key": "gerbril",
+      "npc_id": 753147,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 16,
+      "kind": "door_click",
+      "key": "kitchen_stew",
+      "npc_id": null,
+      "item_id": 66507,
+      "producer_ready": false
+    },
+    {
+      "task": 3040474,
+      "activity": 17,
+      "kind": "speak",
+      "key": "feltwine",
+      "npc_id": 753102,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 0,
+      "kind": "kill",
+      "key": "minotaur_shelter",
+      "npc_id": 753086,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 1,
+      "kind": "speak",
+      "key": "thistlebrush",
+      "npc_id": 753036,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 2,
+      "kind": "kill",
+      "key": "minotaur_cook",
+      "npc_id": 753124,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 3,
+      "kind": "object_click",
+      "key": "spit_ham",
+      "npc_id": null,
+      "item_id": 66514,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 4,
+      "kind": "speak",
+      "key": "brantun",
+      "npc_id": 753095,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 5,
+      "kind": "deliver",
+      "key": "barleyburr_ham",
+      "npc_id": 753091,
+      "item_id": 66514,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 6,
+      "kind": "deliver",
+      "key": "brantun_poultice",
+      "npc_id": 753095,
+      "item_id": 66515,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 7,
+      "kind": "speak",
+      "key": "brantun",
+      "npc_id": 753095,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 8,
+      "kind": "speak",
+      "key": "thistlebrush",
+      "npc_id": 753036,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 9,
+      "kind": "loot",
+      "key": "multiphasic_facets",
+      "npc_id": null,
+      "item_id": 66516,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 10,
+      "kind": "speak",
+      "key": "thistlebrush",
+      "npc_id": 753036,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 11,
+      "kind": "deliver",
+      "key": "brantun_ring",
+      "npc_id": 753095,
+      "item_id": 66517,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 12,
+      "kind": "deliver",
+      "key": "barleyburr_ring",
+      "npc_id": 753091,
+      "item_id": 66517,
+      "producer_ready": false
+    },
+    {
+      "task": 3040475,
+      "activity": 13,
+      "kind": "speak",
+      "key": "brantun",
+      "npc_id": 753095,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 0,
+      "kind": "speak",
+      "key": "thoribald",
+      "npc_id": 753204,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 1,
+      "kind": "speak",
+      "key": "thorndig",
+      "npc_id": 753203,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 2,
+      "kind": "speak",
+      "key": "threshrock",
+      "npc_id": 753243,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 3,
+      "kind": "speak",
+      "key": "lord_sviir",
+      "npc_id": 753246,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 4,
+      "kind": "kill",
+      "key": "lord_sviir",
+      "npc_id": 753246,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 5,
+      "kind": "follow_and_explore",
+      "key": "lupine_spirit_jail",
+      "npc_id": null,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 6,
+      "kind": "speak",
+      "key": "brantun_prison",
+      "npc_id": 753095,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 7,
+      "kind": "speak",
+      "key": "barleyburr_prison",
+      "npc_id": 753091,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 8,
+      "kind": "loot",
+      "key": "vitreous_lens",
+      "npc_id": null,
+      "item_id": 66521,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 9,
+      "kind": "speak",
+      "key": "lord_syrkl",
+      "npc_id": 753051,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 10,
+      "kind": "kill",
+      "key": "lord_syrkl",
+      "npc_id": 753051,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 11,
+      "kind": "explore",
+      "key": "prison_cells",
+      "npc_id": null,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 12,
+      "kind": "speak",
+      "key": "barleyburr_prison",
+      "npc_id": 753091,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 13,
+      "kind": "speak",
+      "key": "brantun_prison",
+      "npc_id": 753095,
+      "item_id": null,
+      "producer_ready": false
+    },
+    {
+      "task": 3040476,
+      "activity": 14,
+      "kind": "speak",
+      "key": "thistlebrush",
+      "npc_id": 753036,
+      "item_id": null,
+      "producer_ready": false
+    }
+  ],
+  "unresolved": [
+    "Actual elevated forest-note anchor, ladder pose/heading and native climb/descent route",
+    "Bat, totem, skull and lupine NPC profiles/visuals and verified scene geometry",
+    "Existing shared crystal visible model, missing roaming grids and verified mining bounds",
+    "Native shelter torch-focus/contribution, waterbrigade placement/ColdWater and combat-profile acceptance",
+    "Native original-item cast target/charge/lethality, corpse pickups, ring/key custody/recovery, doors and persistence",
+    "Six-hour task lockout request/replay semantics need corroboration",
+    "Complete required migration9344 installation/rollback and combined native milestone"
+  ]
+}

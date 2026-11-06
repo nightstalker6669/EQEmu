@@ -1,0 +1,162 @@
+{
+  "achievement": 500040800,
+  "tasks": [
+    {
+      "id": 3040465,
+      "title": "A Bad Dream",
+      "component": 50162,
+      "type": 1,
+      "giver": 397040,
+      "keywords": [
+        "help",
+        "dreams"
+      ],
+      "prerequisite": null,
+      "activities": [
+        {
+          "kind": "speak",
+          "npc": 397102,
+          "count": 1,
+          "label": "Speak with Elder Vasile"
+        },
+        {
+          "kind": "loot",
+          "item": 21490,
+          "count": 5,
+          "label": "Loot 5 Tuffein Trinkets"
+        },
+        {
+          "kind": "deliver",
+          "npc": 397102,
+          "item": 21490,
+          "count": 5,
+          "label": "Deliver 5 Tuffein Trinkets to Elder Vasile"
+        },
+        {
+          "kind": "speak",
+          "npc": 397102,
+          "count": 1,
+          "label": "Speak with Elder Vasile"
+        },
+        {
+          "kind": "speak",
+          "npc": 397040,
+          "count": 1,
+          "label": "Speak with Hanook"
+        }
+      ]
+    },
+    {
+      "id": 3040466,
+      "title": "Oh No!",
+      "component": 50163,
+      "type": 1,
+      "giver": 397040,
+      "keywords": [
+        "what more can i do"
+      ],
+      "prerequisite": 3040465,
+      "encounter": "glasson",
+      "activities": [
+        {
+          "kind": "explore",
+          "label": "Explore the Tuffein encampment"
+        },
+        {
+          "kind": "kill",
+          "role": "Glasson",
+          "label": "Kill Glasson"
+        },
+        {
+          "kind": "loot",
+          "item": 21491,
+          "count": 1,
+          "label": "Loot the Tuffein Raider Orders"
+        },
+        {
+          "kind": "deliver",
+          "npc": 397040,
+          "item": 21491,
+          "count": 1,
+          "label": "Deliver the orders to Hanook"
+        }
+      ]
+    },
+    {
+      "id": 3040467,
+      "title": "Stand With Us",
+      "component": 50164,
+      "type": 2,
+      "giver": 397040,
+      "keywords": [
+        "stand"
+      ],
+      "prerequisite": 3040466,
+      "reward_item": 53563,
+      "encounter": "tree_defense",
+      "activities": [
+        {
+          "kind": "explore",
+          "label": "Move to the entrance to the top of the mesa"
+        },
+        {
+          "kind": "scene",
+          "label": "Do not let the treekillers close to the tree"
+        },
+        {
+          "kind": "speak",
+          "npc": 397040,
+          "label": "Speak with Hanook"
+        }
+      ]
+    },
+    {
+      "id": 3040468,
+      "title": "They are Coming!",
+      "component": 50165,
+      "type": 1,
+      "giver": 397092,
+      "keywords": [
+        "help"
+      ],
+      "prerequisite": null,
+      "reward_item": 53552,
+      "encounter": "raiders",
+      "activities": [
+        {
+          "kind": "explore",
+          "label": "Confront the raiders as they come from the lowlands"
+        },
+        {
+          "kind": "kill",
+          "role": "raider_captain",
+          "label": "Slay the raiders\u2019 captain"
+        },
+        {
+          "kind": "speak",
+          "npc": 397092,
+          "label": "Return to Peretaenu with news of your victory"
+        }
+      ]
+    }
+  ],
+  "defaults": {
+    "xp": {
+      "value": 1000,
+      "provenance": "Approved configurable PEQ-style default, not recovered original XP"
+    },
+    "admission_minimum": {
+      "value": 0,
+      "provenance": "Unrestricted emulator policy until original minimum verified; recommendations are not admission minima"
+    },
+    "shared_task_duration": {
+      "value": 21600,
+      "provenance": "Reconstructed six-hour shared duration:2013firstquest report confirms an expiring timer,2014report specifies6hours; currentraider page lists6hours. Exact original record not recovered."
+    }
+  },
+  "unfinished": [
+    "Native encounter traversal and completion acceptance",
+    "Historical task3 shared/solo record remains unverified; solo policy is labelled",
+    "Unrecovered original combat, timer, drop and faction numeric values retained as explicit limitations"
+  ]
+}

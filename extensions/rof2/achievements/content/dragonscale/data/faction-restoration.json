@@ -1,0 +1,369 @@
+{
+  "cutoff": "2013-05-31",
+  "groups": [
+    {
+      "id": 3041010,
+      "name": "RoF2 Dragonscale Darkvine",
+      "primaryfaction": 1196,
+      "hits": [
+        {
+          "faction_id": 1196,
+          "value": -10
+        },
+        {
+          "faction_id": 1185,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": 3041011,
+      "name": "RoF2 Dragonscale Darkvine runners",
+      "primaryfaction": 1196,
+      "hits": [
+        {
+          "faction_id": 1196,
+          "value": -10
+        },
+        {
+          "faction_id": 1185,
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": 3041012,
+      "name": "RoF2 Dragonscale Wind Nymphs",
+      "primaryfaction": 1197,
+      "hits": [
+        {
+          "faction_id": 1197,
+          "value": -10
+        },
+        {
+          "faction_id": 1185,
+          "value": 1
+        }
+      ]
+    },
+    {
+      "id": 3041013,
+      "name": "RoF2 Dragonscale Ladies quest givers",
+      "primaryfaction": 1185,
+      "hits": []
+    },
+    {
+      "id": 3041014,
+      "name": "RoF2 Dragonscale Kaerra",
+      "primaryfaction": 1185,
+      "hits": [
+        {
+          "faction_id": 1185,
+          "value": -1
+        }
+      ]
+    },
+    {
+      "id": 3041015,
+      "name": "RoF2 Dragonscale Higoren",
+      "primaryfaction": 1194,
+      "hits": [
+        {
+          "faction_id": 1194,
+          "value": -10
+        },
+        {
+          "faction_id": 1189,
+          "value": 1
+        }
+      ]
+    }
+  ],
+  "npc_bindings": [
+    {
+      "id": 442087,
+      "name": "a_wind_nymph",
+      "before": 0,
+      "after": 3041012
+    },
+    {
+      "id": 442099,
+      "name": "#Qandieal",
+      "before": 0,
+      "after": 3041013
+    },
+    {
+      "id": 442100,
+      "name": "#Erradien",
+      "before": 0,
+      "after": 3041013
+    },
+    {
+      "id": 442105,
+      "name": "#Kaerra_of_the_Light",
+      "before": 0,
+      "after": 3041014
+    },
+    {
+      "id": 442151,
+      "name": "#Higoren",
+      "before": 0,
+      "after": 3041015
+    },
+    {
+      "id": 442152,
+      "name": "a_Darkvine_guardian",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442154,
+      "name": "a_Darkvine_tangler",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442155,
+      "name": "#Gillipuzz",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442156,
+      "name": "a_Darkvine_guardian",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442157,
+      "name": "a_Darkvine_entrancer",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442158,
+      "name": "a_Darkvine_guardian",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442159,
+      "name": "a_Darkvine_thistle",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442160,
+      "name": "a_Darkvine_guardian",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442161,
+      "name": "a_Darkvine_tangler",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442162,
+      "name": "a_Darkvine_thistle",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442163,
+      "name": "a_Darkvine_nightcreeper",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442164,
+      "name": "a_Darkvine_thistle",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442165,
+      "name": "a_Darkvine_thistle",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442166,
+      "name": "a_Darkvine_nightcreeper",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442167,
+      "name": "a_Darkvine_runner",
+      "before": 0,
+      "after": 3041011
+    },
+    {
+      "id": 442168,
+      "name": "#Tangler_Timbleton",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442169,
+      "name": "a_Darkvine_guardian",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442170,
+      "name": "a_Darkvine_soother",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442172,
+      "name": "a_Darkvine_entrancer",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442174,
+      "name": "a_Darkvine_runner",
+      "before": 0,
+      "after": 3041011
+    },
+    {
+      "id": 442175,
+      "name": "a_Darkvine_shadereaper",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442176,
+      "name": "a_Darkvine_flamereaver",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442177,
+      "name": "a_Darkvine_champion",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442178,
+      "name": "a_Darkvine_champion",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442179,
+      "name": "a_Darkvine_champion",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442180,
+      "name": "#Queen_Veneneu",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442181,
+      "name": "a_Darkvine_soother",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442183,
+      "name": "a_Darkvine_guardian",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442184,
+      "name": "a_Darkvine_tangler",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442185,
+      "name": "a_Darkvine_thistle",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442186,
+      "name": "a_Darkvine_patroller",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442187,
+      "name": "a_Darkvine_tangler",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442188,
+      "name": "a_Darkvine_tangler",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442189,
+      "name": "a_Darkvine_nightcreeper",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442190,
+      "name": "#Leafrot",
+      "before": 0,
+      "after": 3041010
+    },
+    {
+      "id": 442900,
+      "name": "a_Darkvine_guard",
+      "before": 3041010,
+      "after": 3041010
+    }
+  ],
+  "bases": [
+    {
+      "id": 1185,
+      "name": "Ladies of the Light",
+      "before": 0,
+      "after": -300
+    },
+    {
+      "id": 1194,
+      "name": "Minions of Meldrath",
+      "before": 0,
+      "after": -1000
+    },
+    {
+      "id": 1196,
+      "name": "Darkvine Villagers",
+      "before": 0,
+      "after": -1000
+    },
+    {
+      "id": 1197,
+      "name": "Wind Nymphs",
+      "before": 0,
+      "after": -1000
+    }
+  ],
+  "provenance": {
+    "directions": "Period Nov2007 wind-nymph report confirms Wind Nymphs loss/Ladies gain and initial KoS; Dec2007 Rescue and Nov2008 Higoren logs confirm their kill directions. Current primary faction lists corroborate Darkvine named/ordinary members.",
+    "researched_current_amounts": "Current primary wind-nymph26834 lists Ladies+1/WindNymphs-10; faction519 lists Darkvine runner+2. Their exact May2013 raw numeric continuity is not independently proved.",
+    "labelled_defaults": "Other ordinary Darkvine+1/-10, Higoren+1/-10 and Kaerra-1 are configurable PEQ-style kill-hit defaults in the confirmed directions, not recovered period amounts.",
+    "starting_standings": "Ladies-300 is a labelled reconstruction consistent with Sep2011 initial dubious and8-10tasks to apprehensive. Hostile faction base-1000 is a labelled scowling/KOS default. Exact period base values are unknown.",
+    "npc_scope": "Only exact native names/IDs associated with these quests are changed. No character faction row is inserted, reset or edited.",
+    "sources": [
+      "https://everquest.allakhazam.com/db/npc/26834",
+      "https://everquest.allakhazam.com/db/npc/27708",
+      "https://everquest.allakhazam.com/db/faction/519",
+      "https://everquest.allakhazam.com/db/quest/4754"
+    ]
+  }
+}

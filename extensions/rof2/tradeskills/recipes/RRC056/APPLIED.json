@@ -1,0 +1,33 @@
+{
+  "batch": "RRC056",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "51c608ce0b18e37b7d615d94f8cc5f3fcb96ed15",
+  "source_sha256": "d5a94cb997a12752806d87bd71558a80366f1c7bd30f4dcbde58a8b03ba2aff1",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes": 96,
+  "entries": 553,
+  "ids": [
+    3093345,
+    3093440
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC056",
+    "0",
+    "25167",
+    "25263",
+    "190034",
+    "190587",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25263,
+    "entries": 190587
+  },
+  "affected_postimages_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

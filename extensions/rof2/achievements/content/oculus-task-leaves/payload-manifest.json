@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "files": {
+    "extensions/rof2/achievements/content/oculus-task-leaves/README.md": {
+      "sha256": "fd3855f9156aa1578082d653d40a73b1d1745e5657ae06feeea5d80c3c2bf7c3",
+      "bytes": 5308
+    },
+    "extensions/rof2/achievements/content/oculus-task-leaves/bindings.json": {
+      "sha256": "2716bd6f4598e6cc92d057b272c68ae300c3169fc3b7873f6f3c1ea37683b6bb",
+      "bytes": 2662
+    },
+    "extensions/rof2/achievements/content/oculus-task-leaves/sql/010-seven-existing-task-leaves.sql": {
+      "sha256": "a9d510047d6c0bc4ef0f46aad308753fa4b3813ba19cb9c15110bd7c452a7ce2",
+      "bytes": 29047
+    },
+    "extensions/rof2/achievements/content/oculus-task-leaves/sql/020-rollback-seven-leaves.sql": {
+      "sha256": "90c8d9bfe2b7bdf9ae9b8ac24b2e74d285552dccc868458736e79aebed43c971",
+      "bytes": 28761
+    },
+    "extensions/rof2/achievements/content/oculus-task-leaves/status.json": {
+      "sha256": "aa6fe22ce845c3f269784f92a1ebf4b1754b5baa6859755583cbfcb2212d0331",
+      "bytes": 2649
+    }
+  }
+}

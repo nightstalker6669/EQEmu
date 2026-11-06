@@ -16,6 +16,16 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cstring>
+#include "../shroud/native_stats.h"
+
+#include "../mercenary/rof2_wire.h"
+
+#include "../housing/plot_find_wire.h"
+#include "../housing/npc_item_metadata.h"
+#include "../housing/trophy_stat_item.h"
+#include "../housing/item_wire.h"
+#include <cmath>
+
 #include "rof2.h"
 #include "rof2_structs.h"
 
@@ -36,6 +46,7 @@
 #include "common/strings.h"
 
 #include <cassert>
+#include <set>
 #include <cinttypes>
 #include <iostream>
 #include <numeric>
@@ -49,6 +60,129 @@ namespace RoF2
 	static Strategy struct_strategy;
 
 	void SerializeItem(EQ::OutBuffer& ob, const EQ::ItemInstance *inst, int16 slot_id, uint8 depth, ItemPacketType packet_type);
+
+	namespace {
+		bool HousingItemTreeValid(const EQ::ItemInstance &instance, size_t depth, size_t &nodes)
+		{
+			if (depth > HousingItemMaximumDepth || ++nodes > HousingItemMaximumNodes ||
+				!instance.GetUnscaledItem() || instance.GetMerchantSlot()) return false;
+			for (uint8_t index = EQ::invbag::SLOT_BEGIN; index <= EQ::invbag::SLOT_END; ++index) {
+				const auto *child = instance.GetItem(index);
+				if (child && !HousingItemTreeValid(*child, depth + 1, nodes)) return false;
+			}
+			return true;
+		}
+	}
+
+ namespace {
+ class ShroudEncodingSink final : public EQStreamInterface {
+ public:
+  std::vector<std::vector<uint8_t>> packets;
+  void QueuePacket(const EQApplicationPacket* p,bool=true) override {if(p)packets.emplace_back(p->pBuffer,p->pBuffer+p->size);}
+  void FastQueuePacket(EQApplicationPacket** p,bool ack=true) override {if(p&&*p){QueuePacket(*p,ack);delete *p;*p=nullptr;}}
+  EQApplicationPacket* PopPacket() override {return nullptr;}
+  void Close() override {} void ReleaseFromUse() override {} void RemoveData() override {}
+  std::string GetRemoteAddr() const override {return {};}
+  uint32 GetRemoteIP() const override {return 0;} uint16 GetRemotePort() const override {return 0;}
+  bool CheckState(EQStreamState) override {return false;} std::string Describe() const override {return "RoF2 prepared encoding";}
+  EQStreamState GetState() override {return CLOSED;}
+  void SetOpcodeManager(OpcodeManager**) override {} OpcodeManager* GetOpcodeManager() const override {return nullptr;}
+  Stats GetStats() const override {return {};}
+  void ResetStats() override {} EQStreamManagerInterface* GetManager() const override {return nullptr;}
+ };
+ std::optional<std::vector<uint8_t>> ShroudEncode(EmuOpcode opcode,const void* data,size_t size) {
+  if(!data||!size||size>16*1024*1024)return std::nullopt;
+  auto sink=std::make_shared<ShroudEncodingSink>();auto* packet=new EQApplicationPacket(opcode,size);
+  std::memcpy(packet->pBuffer,data,size);struct_strategy.Encode(&packet,sink,false);delete packet;
+  if(sink->packets.size()!=1||sink->packets.front().empty())return std::nullopt;
+  return std::move(sink->packets.front());
+ }
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudSpawn(const Spawn_Struct& spawn) {
+  return ShroudEncode(OP_ZoneSpawns,&spawn,sizeof(spawn));
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudNormalProfile(const PlayerProfile_Struct& profile) {
+  return ShroudEncode(OP_PlayerProfile,&profile,sizeof(profile));
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudInventory(const std::vector<std::pair<int16_t,const EQ::ItemInstance*>>& roots) {
+  if(roots.size()>4096)return std::nullopt;EQ::OutBuffer out;
+  uint32_t count=roots.size();out.write(reinterpret_cast<const char*>(&count),sizeof(count));
+  size_t nodes=0;std::set<int16_t> slots;
+  const auto valid_tree=[&](const auto& self,const EQ::ItemInstance& item,size_t depth)->bool {
+   if(depth>8 || ++nodes>4096 || !item.GetUnscaledItem() || item.GetMerchantSlot())return false;
+   for(uint8_t slot=EQ::invbag::SLOT_BEGIN;slot<=EQ::invbag::SLOT_END;++slot)
+    if(const auto* child=item.GetItem(slot);child && !self(self,*child,depth+1))return false;
+   return true;
+  };
+  for(const auto& root:roots){
+   if(!root.second||!slots.insert(root.first).second||!valid_tree(valid_tree,*root.second,0))return std::nullopt;
+   const auto previous=out.tellp();SerializeItem(out,root.second,root.first,0,ItemPacketCharInventory);
+   if(out.tellp()<=previous||out.size()>16*1024*1024)return std::nullopt;
+  }
+  const auto size=out.size();auto* bytes=out.detach();std::vector<uint8_t> result(bytes,bytes+size);delete[] bytes;return result;
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudBankItem(const EQ::ItemInstance& item,int16_t slot) {
+  if(slot<EQ::invslot::GENERAL_BEGIN || slot>EQ::invslot::GENERAL_END)return std::nullopt;
+  size_t nodes=0;
+  const auto valid=[&](const auto& self,const EQ::ItemInstance& value,size_t depth)->bool {
+   if(depth>8 || ++nodes>4096 || !value.GetUnscaledItem() || value.GetMerchantSlot())return false;
+   for(uint8_t i=EQ::invbag::SLOT_BEGIN;i<=EQ::invbag::SLOT_END;++i)
+    if(const auto* child=value.GetItem(i);child && !self(self,*child,depth+1))return false;
+   return true;
+  };
+  if(!valid(valid,item,0))return std::nullopt;
+  const auto serialized=item.Serialize(slot);std::vector<uint8_t> input(4+serialized.size());
+  const uint32_t type=ItemPacketTrade;std::memcpy(input.data(),&type,4);
+  std::memcpy(input.data()+4,serialized.data(),serialized.size());
+  auto bytes=ShroudEncode(OP_ItemPacket,input.data(),input.size());
+  if(!bytes || bytes->size()<=4 || bytes->size()>16*1024*1024)return std::nullopt;
+  return bytes;
+ }
+ std::optional<std::vector<uint8_t>> SerializeShroudPreviewItem(const EQ::ItemInstance &instance)
+ {
+  if(!instance.GetUnscaledItem() || instance.GetMerchantSlot())return std::nullopt;
+  std::unique_ptr<EQ::ItemInstance> root(instance.Clone());
+  if(!root)return std::nullopt;
+  if(root->IsClassBag())root->Clear();
+  EQ::OutBuffer buffer;
+  SerializeItem(buffer,root.get(),EQ::invslot::slotCursor,0,ItemPacketViewLink);
+  if(!buffer.good() || !buffer.size() || buffer.size()>65535)return std::nullopt;
+  const auto bytes=buffer.str();return std::vector<uint8_t>(bytes.begin(),bytes.end());
+ }
+
+	std::optional<std::vector<uint8_t>> SerializeHousingItem(
+		const EQ::ItemInstance &instance, int16_t server_slot)
+	{
+		if (!RuleB(Housing, EnablePlayerHousing) || server_slot == EQ::invslot::SLOT_INVALID)
+			return std::nullopt;
+		size_t nodes = 0;
+		if (!HousingItemTreeValid(instance, 0, nodes)) return std::nullopt;
+		EQ::OutBuffer buffer;
+		SerializeItem(buffer, &instance, server_slot, 0, ItemPacketTrade);
+		if (!buffer.good() || buffer.size() == 0 || buffer.size() > HousingItemMaximumInventoryBytes)
+			return std::nullopt;
+		const auto bytes = buffer.str();
+		return std::vector<uint8_t>(bytes.begin(), bytes.end());
+	}
+
+
+	std::optional<std::vector<uint8_t>> SerializeHousingItemListEntry(
+		const EQ::ItemInstance &instance, int16_t server_slot)
+	{
+		size_t nodes = 0;
+		if (!HousingItemTreeValid(instance, 0, nodes)) return std::nullopt;
+		std::unique_ptr<EQ::ItemInstance> root;
+		const auto* view = &instance;
+		if (instance.IsClassBag()) {
+			root.reset(instance.Clone());
+			if (!root) return std::nullopt;
+			root->Clear();
+			view = root.get();
+		}
+		auto bytes = SerializeHousingItem(*view, server_slot);
+		if (!bytes || bytes->size() > HousingItemMaximumBytes) return std::nullopt;
+		return bytes;
+	}
 
 	// server to client inventory location converters
 	static inline structs::InventorySlot_Struct ServerToRoF2Slot(uint32 server_slot);
@@ -217,6 +351,49 @@ namespace RoF2
 
 	// RoF2 Specific Encodes End
 
+
+	ENCODE(OP_PetitionUpdate)
+	{
+		ENCODE_LENGTH_EXACT(PetitionUpdate_Struct);
+		SETUP_DIRECT_ENCODE(PetitionUpdate_Struct, structs::PetitionUpdate_Struct);
+
+		OUT(petnumber);
+		OUT(color);
+		OUT(status);
+		eq->senttime = static_cast<uint32>(emu->senttime);
+		strn0cpy(eq->accountid, emu->accountid, sizeof(eq->accountid));
+		strn0cpy(eq->gmsenttoo, emu->gmsenttoo, sizeof(eq->gmsenttoo));
+		OUT(quetotal);
+		strn0cpy(eq->charname, emu->charname, sizeof(eq->charname));
+		eq->sorttime = eq->senttime;
+
+		FINISH_ENCODE();
+	}
+
+	ENCODE(OP_PetitionCheckout)
+	{
+		ENCODE_LENGTH_EXACT(Petition_Struct);
+		SETUP_DIRECT_ENCODE(Petition_Struct, structs::Petition_Struct);
+
+		OUT(petnumber);
+		OUT(urgency);
+		strn0cpy(eq->accountid, emu->accountid, sizeof(eq->accountid));
+		strn0cpy(eq->lastgm, emu->lastgm, sizeof(eq->lastgm));
+		OUT(zone);
+		strn0cpy(eq->charname, emu->charname, sizeof(eq->charname));
+		OUT(charlevel);
+		OUT(charclass);
+		OUT(charrace);
+		OUT(unknown);
+		OUT(checkouts);
+		OUT(unavail);
+		eq->senttime = static_cast<uint32>(emu->senttime);
+		OUT(unknown2);
+		strn0cpy(eq->petitiontext, emu->petitiontext, sizeof(eq->petitiontext));
+		strn0cpy(eq->gmtext, emu->gmtext, sizeof(eq->gmtext));
+
+		FINISH_ENCODE();
+	}
 
 	ENCODE(OP_Action)
 	{
@@ -681,7 +858,9 @@ namespace RoF2
 		OUT(buff.z);
 		OUT(slotid);
 		// TODO: implement slot_data stuff
-		if (emu->bufffade == 1)
+		if (emu->bufffade == 3)
+			eq->bufffade = 3; // Explicit native alternate-profile slot reconstruction.
+		else if (emu->bufffade == 1)
 			eq->bufffade = 1;
 		else
 			eq->bufffade = 2;
@@ -1745,8 +1924,8 @@ namespace RoF2
 		*buffer = '\0';
 		buffer++;
 
-		// Guild ID
-		//*((uint32*)buffer) = htonl(2);
+		// Native guild identity drives trophy eligibility and guild permissions.
+		*((uint32*)buffer) = htonl(emu->guild_id);
 		buffer += sizeof(uint32);
 
 		//add member count.
@@ -1788,7 +1967,7 @@ namespace RoF2
 				PutFieldN(rank);
 				PutFieldN(time_last_on);
 				PutFieldN(tribute_enable);
-				e->unknown01 = 0;
+				e->unknown01 = htonl(emu_e->trophy_enable); // Native persisted trophy opt-in.
 				PutFieldN(total_tribute);
 				PutFieldN(last_tribute);
 				e->unknown_one = htonl(1);
@@ -1891,6 +2070,25 @@ namespace RoF2
 		OUT(cur_hp);
 		OUT(max_hp);
 
+		FINISH_ENCODE();
+	}
+
+	// RoF2 uses the same spawn/current/maximum layout for all three resources.
+	ENCODE(OP_ManaUpdate)
+	{
+		SETUP_DIRECT_ENCODE(ManaUpdate_Struct, structs::SpawnHPUpdate_Struct);
+		eq->spawn_id = emu->spawn_id;
+		eq->cur_hp = emu->cur_mana;
+		eq->max_hp = emu->max_mana;
+		FINISH_ENCODE();
+	}
+
+	ENCODE(OP_EnduranceUpdate)
+	{
+		SETUP_DIRECT_ENCODE(EnduranceUpdate_Struct, structs::SpawnHPUpdate_Struct);
+		eq->spawn_id = emu->spawn_id;
+		eq->cur_hp = emu->cur_end;
+		eq->max_hp = emu->max_end;
 		FINISH_ENCODE();
 	}
 
@@ -2123,7 +2321,8 @@ namespace RoF2
                 EQ::OutBuffer           ob;
                 EQ::OutBuffer::pos_type last_pos = ob.tellp();
 
-                ob.write((const char *)__emu_buffer, 4);
+                const uint32 wire_type=(old_item_pkt->PacketType==Housing::TrophyStatItem::PersonalPacket||old_item_pkt->PacketType==Housing::TrophyStatItem::GuildPacket)?uint32(ItemPacketTributeItem):uint32(old_item_pkt->PacketType);
+                ob.write((const char *)&wire_type, 4);
 
                 SerializeItem(ob, (const EQ::ItemInstance *)int_struct->inst, int_struct->slot_id, 0,
                               old_item_pkt->PacketType);
@@ -2241,150 +2440,54 @@ namespace RoF2
 		FINISH_ENCODE();
 	}
 
+	namespace {
+	template<class T> bool MercenaryNativeRow(const T& source, Mercenary::RoF2::Row& row) {
+		if (source.StanceCount > MAX_MERC_STANCES) return false;
+		const auto* end=static_cast<const char*>(std::memchr(source.MercName,0,sizeof(source.MercName)));
+		if (!end) return false;
+		row.values={{source.MercID,source.MercType,source.MercSubType,source.PurchaseCost,source.UpkeepCost,
+			source.Status,source.AltCurrencyCost,source.AltCurrencyUpkeep,source.AltCurrencyType}};
+		row.unknown36=source.MercUnk01;row.time_left=source.TimeLeft;
+		row.command=source.MerchantSlot;row.selected_stance=source.MercUnk02;
+		row.unknown53=source.MercUnk03;row.unknown57=source.MercUnk04;
+		row.name.assign(source.MercName,end);
+		for(uint32_t i=0;i<source.StanceCount;++i)row.stances.push_back({source.Stances[i].StanceIndex,source.Stances[i].Stance});
+		return true;
+	}
+	void QueueMercenaryNative(EQApplicationPacket* input,const std::optional<Mercenary::RoF2::Bytes>& bytes,
+		EQStreamInterface* destination,bool acknowledgement) {
+		if(bytes){auto* output=new EQApplicationPacket(input->GetOpcode(),bytes->size());
+			std::memcpy(output->pBuffer,bytes->data(),bytes->size());destination->FastQueuePacket(&output,acknowledgement);}
+		delete input;
+	}
+	}
+
 	ENCODE(OP_MercenaryDataResponse)
 	{
-		//consume the packet
-		EQApplicationPacket *in = *p;
-		*p = nullptr;
-
-		//store away the emu struct
-		unsigned char *__emu_buffer = in->pBuffer;
-		MercenaryMerchantList_Struct *emu = (MercenaryMerchantList_Struct *)__emu_buffer;
-
-		char *Buffer = (char *)in->pBuffer;
-
-		uint32 PacketSize = sizeof(structs::MercenaryMerchantList_Struct) - 4 + emu->MercTypeCount * 4;
-		PacketSize += (sizeof(structs::MercenaryListEntry_Struct) - sizeof(structs::MercenaryStance_Struct)) * emu->MercCount;
-
-		uint32 r;
-		uint32 k;
-		for (r = 0; r < emu->MercCount; r++)
-		{
-			PacketSize += sizeof(structs::MercenaryStance_Struct) * emu->Mercs[r].StanceCount;
-		}
-
-		auto outapp = new EQApplicationPacket(OP_MercenaryDataResponse, PacketSize);
-		Buffer = (char *)outapp->pBuffer;
-
-		VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercTypeCount);
-
-		for (r = 0; r < emu->MercTypeCount; r++)
-		{
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercGrades[r]);
-		}
-
-		VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercCount);
-
-		for (r = 0; r < emu->MercCount; r++)
-		{
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercID);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercType);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercSubType);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].PurchaseCost);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].UpkeepCost);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].Status);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].AltCurrencyCost);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].AltCurrencyUpkeep);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].AltCurrencyType);
-			VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->Mercs[r].MercUnk01);
-			VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->Mercs[r].TimeLeft);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MerchantSlot);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercUnk02);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].StanceCount);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].MercUnk03);
-			VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->Mercs[r].MercUnk04);
-			VARSTRUCT_ENCODE_TYPE(uint8, Buffer, 0);	// MercName
-			for (k = 0; k < emu->Mercs[r].StanceCount; k++)
-			{
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].Stances[k].StanceIndex);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->Mercs[r].Stances[k].Stance);
-			}
-		}
-
-		dest->FastQueuePacket(&outapp, ack_req);
-		delete in;
+		auto* input=*p;*p=nullptr;
+		if(input->size<offsetof(MercenaryMerchantList_Struct,Mercs)){delete input;return;}
+		const auto* source=reinterpret_cast<const MercenaryMerchantList_Struct*>(input->pBuffer);
+		if(source->MercTypeCount>MAX_MERC_GRADES || source->MercCount>MAX_MERC ||
+			input->size<offsetof(MercenaryMerchantList_Struct,Mercs)+source->MercCount*sizeof(MercenaryListEntry_Struct)){delete input;return;}
+		std::vector<Mercenary::RoF2::Row> rows(source->MercCount);
+		for(uint32_t i=0;i<source->MercCount;++i)if(!MercenaryNativeRow(source->Mercs[i],rows[i])){delete input;return;}
+		std::vector<uint32_t> grades(source->MercGrades,source->MercGrades+source->MercTypeCount);
+		QueueMercenaryNative(input,Mercenary::RoF2::Offers(grades,rows),dest.get(),ack_req);
 	}
 
 	ENCODE(OP_MercenaryDataUpdate)
 	{
-		//consume the packet
-		EQApplicationPacket *in = *p;
-		*p = nullptr;
-
-		//store away the emu struct
-		unsigned char *__emu_buffer = in->pBuffer;
-		MercenaryDataUpdate_Struct *emu = (MercenaryDataUpdate_Struct *)__emu_buffer;
-
-		char *Buffer = (char *)in->pBuffer;
-
-		EQApplicationPacket *outapp;
-
-		uint32 PacketSize = 0;
-
-		// There are 2 different sized versions of this packet depending if a merc is hired or not
-		if (emu->MercStatus >= 0)
-		{
-			// Per-merc size: base struct minus Stances[1] and MercUnk05,
-			// then add back actual stances and name length per merc.
-			// MercUnk05 is a single trailing field after all mercs.
-			PacketSize += sizeof(structs::MercenaryDataUpdate_Struct);
-			uint32 r;
-			uint32 k;
-			for (r = 0; r < emu->MercCount; r++)
-			{
-				PacketSize += sizeof(structs::MercenaryData_Struct) - sizeof(structs::MercenaryStance_Struct) - sizeof(uint32); // subtract Stances[1] and MercUnk05
-				PacketSize += sizeof(structs::MercenaryStance_Struct) * emu->MercData[r].StanceCount;
-				PacketSize += strlen(emu->MercData[r].MercName);	// Null Terminator size already accounted for in the struct
-			}
-			PacketSize += sizeof(uint32); // MercUnk05 - trailing field after all mercs
-
-			outapp = new EQApplicationPacket(OP_MercenaryDataUpdate, PacketSize);
-			Buffer = (char *)outapp->pBuffer;
-
-			VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->MercStatus);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercCount);
-
-			for (r = 0; r < emu->MercCount; r++)
-			{
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MercID);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MercType);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MercSubType);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].PurchaseCost);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].UpkeepCost);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].Status);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].AltCurrencyCost);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].AltCurrencyUpkeep);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].AltCurrencyType);
-				VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->MercData[r].MercUnk01);
-				VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->MercData[r].TimeLeft);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MerchantSlot);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].MercUnk02);
-				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].StanceCount);
-				VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->MercData[r].MercUnk03);
-				VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->MercData[r].MercUnk04);
-				VARSTRUCT_ENCODE_STRING(Buffer, emu->MercData[r].MercName);
-				for (k = 0; k < emu->MercData[r].StanceCount; k++)
-				{
-					VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].Stances[k].StanceIndex);
-					VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[r].Stances[k].Stance);
-				}
-			}
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercData[0].MercUnk05);	// MercUnk05 - trailing field (unlocked slot count)
-		}
-		else
-		{
-			PacketSize += sizeof(structs::NoMercenaryHired_Struct);
-
-			outapp = new EQApplicationPacket(OP_MercenaryDataUpdate, PacketSize);
-			Buffer = (char *)outapp->pBuffer;
-
-			VARSTRUCT_ENCODE_TYPE(int32, Buffer, emu->MercStatus);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, emu->MercCount);
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 1);
-		}
-
-		dest->FastQueuePacket(&outapp, ack_req);
-		delete in;
+		auto* input=*p;*p=nullptr;
+		if(input->size<8){delete input;return;}
+		const auto* source=reinterpret_cast<const MercenaryDataUpdate_Struct*>(input->pBuffer);
+		if(source->MercCount>MAX_MERC ||
+			input->size<offsetof(MercenaryDataUpdate_Struct,MercData)+source->MercCount*sizeof(MercenaryData_Struct)){delete input;return;}
+		std::vector<Mercenary::RoF2::Row> rows(source->MercCount);
+		for(uint32_t i=0;i<source->MercCount;++i)if(!MercenaryNativeRow(source->MercData[i],rows[i])){delete input;return;}
+		uint32_t capacity=1;
+		if(source->MercCount)capacity=source->MercData[0].MercUnk05;
+		else if(input->size>=sizeof(NoMercenaryHired_Struct))capacity=reinterpret_cast<const NoMercenaryHired_Struct*>(input->pBuffer)->MercID;
+		QueueMercenaryNative(input,Mercenary::RoF2::Roster(source->MercStatus,rows,capacity),dest.get(),ack_req);
 	}
 
 	ENCODE(OP_MoveItem)
@@ -2525,8 +2628,8 @@ namespace RoF2
 		outapp->WriteUInt32(0);		// Checksum, we will update this later
 		outapp->WriteUInt32(0);		// Checksum size, we will update this later
 
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
+		outapp->WriteUInt32(emu->unknown0112 ? 1 : 0); // Main=0, Alt shroud=1
+		outapp->WriteUInt32(emu->unknown0112); // Spirit Shroud template ID
 
 
 		outapp->WriteUInt8(emu->gender);	// Gender
@@ -2899,30 +3002,36 @@ namespace RoF2
 		}
 
 		outapp->WriteSInt32(-1);	// Unknown;
-		outapp->WriteSInt32(123);	// HP Total ?
-		outapp->WriteSInt32(234);	// Endurance Total ?
-		outapp->WriteSInt32(345);	// Mana Total ?
+		if (emu->unknown0112 && emu->shroud_native_resources_valid) {
+			for (auto value : SpiritShroud::NativeStatTail(emu->shroud_native_stats)) {
+				outapp->WriteUInt32(value);
+			}
+		} else {
+			outapp->WriteSInt32(123);	// HP Total ?
+			outapp->WriteSInt32(234);	// Endurance Total ?
+			outapp->WriteSInt32(345);	// Mana Total ?
 
-		// these are needed to fix display bugs
-		outapp->WriteUInt32(0x19);		// base CR
-		outapp->WriteUInt32(0x19);		// base FR
-		outapp->WriteUInt32(0x19);		// base MR
-		outapp->WriteUInt32(0xf);		// base DR
-		outapp->WriteUInt32(0xf);		// base PR
-		outapp->WriteUInt32(0xf);		// base PhR?
-		outapp->WriteUInt32(0xf);		// base Corrup
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
+			// these are needed to fix display bugs
+			outapp->WriteUInt32(0x19);		// base CR
+			outapp->WriteUInt32(0x19);		// base FR
+			outapp->WriteUInt32(0x19);		// base MR
+			outapp->WriteUInt32(0xf);		// base DR
+			outapp->WriteUInt32(0xf);		// base PR
+			outapp->WriteUInt32(0xf);		// base PhR?
+			outapp->WriteUInt32(0xf);		// base Corrup
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
 
-		outapp->WriteUInt32(20);	// Unknown - Expansion count ?
+			outapp->WriteUInt32(20);	// Unknown - Expansion count ?
 
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
-		outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+			outapp->WriteUInt32(0);		// Unknown
+		}
 		outapp->WriteUInt32(emu->endurance);
 		outapp->WriteUInt32(0);		// Unknown - Observed 0x7cde - This is also seen in guild packets sent to this character.
 		outapp->WriteUInt32(0);		// Unknown - Observed 0x64
@@ -3519,7 +3628,7 @@ namespace RoF2
 		outapp->WriteUInt32(emu->charges);
 		outapp->WriteSInt32(emu->expansion);
 		outapp->WriteSInt32(emu->category);
-		outapp->WriteUInt8(0); // shroud
+		outapp->WriteUInt8(emu->category == 3 || emu->category == 4); // native shroud ability flag
 		outapp->WriteUInt8(0); // unknown109
 		outapp->WriteUInt8(0); // loh
 		outapp->WriteUInt8(0); // unknown111
@@ -4707,6 +4816,9 @@ namespace RoF2
 			{
 				VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 0x1d600000);
 				Buffer = Buffer - 4;
+				// The legacy destructible flags also encode invisibility 2048.
+				// Retain the spawn's actual visibility so RoF2 can render and target it.
+				Bitfields->invis = emu->invis;
 			}
 
 			// Not currently found
@@ -4729,7 +4841,10 @@ namespace RoF2
 				OtherData = OtherData | 32;
 			}
 			if (emu->DestructibleObject) {
-				OtherData = OtherData | 0xe1;	// Live has 0xe1 for OtherData
+				// Bit 0x20 announces a suffix string later in this packet.
+				// Preserve the computed suffix bit above; forcing it without
+				// suffix bytes shifts the RoF2 mercenary/real-estate tail.
+				OtherData = OtherData | 0xc1;
 			}
 			if (emu->buyer) {
 				OtherData = OtherData | 0x01;
@@ -4931,9 +5046,16 @@ namespace RoF2
 			// SplineID -- no idea
 			Buffer += 8;
 			VARSTRUCT_ENCODE_TYPE(uint8, Buffer, emu->IsMercenary);
-			VARSTRUCT_ENCODE_STRING(Buffer, "0000000000000000"); // RealEstateItemGuid
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 0xffffffff); // RealEstateID
-			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, 0xffffffff); // RealEstateItemID
+			// The original spawn tail binds ordinary interactive NPCs to housing
+			// custody. Keep the canonical 16-character GUID width used in PacketSize.
+			const bool housing_bound = emu->housing_item_guid[16] == '\0' &&
+				std::strlen(emu->housing_item_guid) == 16 &&
+				std::strspn(emu->housing_item_guid, "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz+-") == 16 &&
+				emu->housing_estate_id && emu->housing_estate_id != 0xffffffff &&
+				emu->housing_item_id && emu->housing_item_id != 0xffffffff;
+			VARSTRUCT_ENCODE_STRING(Buffer, housing_bound ? emu->housing_item_guid : "0000000000000000"); // RealEstateItemGuid
+			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, housing_bound ? emu->housing_estate_id : 0xffffffff); // RealEstateID
+			VARSTRUCT_ENCODE_TYPE(uint32, Buffer, housing_bound ? emu->housing_item_id : 0xffffffff); // RealEstateItemID
 			// 29 zero bytes follow
 			// PhysicsEffects follow here ... unsure what they are but it's a count followed by a struct like {spellid, casterid, effectid, baseeffect}
 			Buffer += 29;
@@ -4963,6 +5085,57 @@ namespace RoF2
 	}
 
 // DECODE methods
+
+	DECODE(OP_PetitionDelete)
+	{
+		DECODE_LENGTH_EXACT(structs::PetitionDelete_Struct);
+		// Legacy zone handlers accept a full canonical queue row, but ROF2 sends only an id.
+		SETUP_DIRECT_DECODE(PetitionUpdate_Struct, structs::PetitionDelete_Struct);
+		IN(petnumber);
+		FINISH_DIRECT_DECODE();
+	}
+
+	DECODE(OP_PetitionResolve) { DECODE_FORWARD(OP_PetitionDelete); }
+
+	DECODE(OP_PetitionCheckIn)
+	{
+		constexpr size_t gm_offset = offsetof(structs::Petition_Struct, gmtext);
+		// The native sender copies the fixed prefix and GM text, followed by three bytes.
+		// Accept bounded optional padding without requiring a full fixed wire structure.
+		if (__packet->size < gm_offset + 1 || __packet->size > sizeof(structs::Petition_Struct) + 3) {
+			__packet->SetOpcode(OP_Unknown);
+			return;
+		}
+		const auto *gm_text = reinterpret_cast<const char *>(__packet->pBuffer + gm_offset);
+		const size_t available = __packet->size - gm_offset;
+		const size_t text_bound = std::min(available, sizeof(structs::Petition_Struct::gmtext));
+		const auto *terminator = static_cast<const char *>(std::memchr(gm_text, '\0', text_bound));
+		if (!terminator) {
+			__packet->SetOpcode(OP_Unknown);
+			return;
+		}
+		const size_t text_length = terminator - gm_text;
+		SETUP_DIRECT_DECODE(Petition_Struct, structs::Petition_Struct);
+
+		IN(petnumber);
+		IN(urgency);
+		strn0cpy(emu->accountid, eq->accountid, sizeof(emu->accountid));
+		strn0cpy(emu->lastgm, eq->lastgm, sizeof(emu->lastgm));
+		IN(zone);
+		strn0cpy(emu->charname, eq->charname, sizeof(emu->charname));
+		IN(charlevel);
+		IN(charclass);
+		IN(charrace);
+		IN(unknown);
+		IN(checkouts);
+		IN(unavail);
+		emu->senttime = static_cast<time_t>(eq->senttime);
+		IN(unknown2);
+		strn0cpy(emu->petitiontext, eq->petitiontext, sizeof(emu->petitiontext));
+		std::memcpy(emu->gmtext, gm_text, text_length);
+		// SETUP_DIRECT_DECODE zero-initializes the canonical destination, including its terminator.
+		FINISH_DIRECT_DECODE();
+	}
 
 	DECODE(OP_AdventureMerchantSell)
 	{
@@ -5610,6 +5783,10 @@ namespace RoF2
 
 	DECODE(OP_FindPersonRequest)
 	{
+		// Native housing Find mode4 carries an estate at8, not an NPC at4.
+		// Preserve this exact existing wire body for the RoF2-only zone adapter;
+		// every other Find mode retains the existing NPC translation below.
+		if (Housing::PlotFindWire::IsPlot(__packet->pBuffer,__packet->size)) return;
 		DECODE_LENGTH_EXACT(structs::FindPersonRequest_Struct);
 		SETUP_DIRECT_DECODE(FindPersonRequest_Struct, structs::FindPersonRequest_Struct);
 
@@ -5919,6 +6096,21 @@ namespace RoF2
 		}
 		IN(link_hash);
 		IN(icon);
+
+		FINISH_DIRECT_DECODE();
+	}
+
+	DECODE(OP_OpenContainer)
+	{
+		// Original May 2013 sender 0x65cae0: opcode 0x06c8 followed by the
+		// three DWORDs of the global item index (12 bytes, no item ID).
+		DECODE_LENGTH_EXACT(structs::InventorySlot_Struct);
+		SETUP_DIRECT_DECODE(OpenContainer_Struct, structs::InventorySlot_Struct);
+
+		emu->slot = EQ::invslot::SLOT_INVALID;
+		if (eq->SubIndex == invbag::SLOT_INVALID && eq->AugIndex == invaug::SOCKET_INVALID) {
+			emu->slot = RoF2ToServerSlot(*eq);
+		}
 
 		FINISH_DIRECT_DECODE();
 	}
@@ -6475,6 +6667,12 @@ namespace RoF2
 
 		structs::InventorySlot_Struct slot_id{};
 		switch (packet_type) {
+        case Housing::TrophyStatItem::PersonalPacket:
+        case Housing::TrophyStatItem::GuildPacket:
+            if(slot_id_in<0||slot_id_in>=(packet_type==Housing::TrophyStatItem::PersonalPacket?10:4))return;
+            slot_id.Type=packet_type==Housing::TrophyStatItem::PersonalPacket?invtype::typeTrophyTribute:invtype::typeGuildTrophyTribute;
+            slot_id.Slot=slot_id_in;slot_id.SubIndex=0xffff;slot_id.AugIndex=0xffff;
+            break;
 		case ItemPacketLoot:
 			slot_id = ServerToRoF2CorpseSlot(slot_id_in);
 			break;
@@ -6555,7 +6753,9 @@ namespace RoF2
 		hdrf.ornamentHeroModel = hero_model;
 		hdrf.unknown063 = 0;
 		hdrf.Copied = 0;
-		hdrf.unknowna4 = 0xffffffff;
+		// Original reader 0x555703 stores this in ItemInstance+0x7c.
+		// House template/placed-item IDs cannot substitute for this identity.
+		hdrf.unknowna4 = RuleB(Housing, EnablePlayerHousing) ? inst->GetHousingEstateID() : 0xffffffff;
 		hdrf.unknowna5 = 0;
 		hdrf.ItemClass = item->ItemClass;
 
@@ -6891,7 +7091,7 @@ namespace RoF2
 		//evolve_string; // Some String, but being evolution related is just a guess
 
 		iqbs.Heirloom = 0;
-		iqbs.Placeable = 0;
+		iqbs.Placeable = 0; // Legacy path; native housing metadata is serialized below.
 		iqbs.unknown28 = -1;
 		iqbs.unknown29 = packet_type == ItemPacketInvalid ? 0xFF : 0;
 		iqbs.unknown30 = -1;
@@ -6901,7 +7101,29 @@ namespace RoF2
 		iqbs.unknown38 = 0;
 		iqbs.unknown39 = packet_type == ItemPacketInvalid ? 0 : 1;;
 
-		ob.write((const char*)&iqbs, sizeof(RoF2::structs::ItemQuaternaryBodyStruct));
+		if (RuleB(Housing, EnablePlayerHousing)) {
+			static_assert(offsetof(RoF2::structs::ItemQuaternaryBodyStruct, Placeable) == 96,
+				"Native quaternary metadata begins at byte 96");
+			Housing::ItemWire::Metadata metadata;
+			metadata.placeable = item->Placeable;
+			metadata.ignore_collisions = item->HousingIgnoreCollisions != 0;
+			metadata.placement_type = item->HousingPlacementType;
+			metadata.disable_rotation = item->HousingDisableRotation != 0;
+			metadata.disable_free_placement = item->HousingDisableFreePlacement != 0;
+			metadata.definition_id = item->HousingDefinitionID;
+			metadata.scale_min = std::isfinite(item->HousingMinimumScale) ? item->HousingMinimumScale : 0;
+			metadata.scale_max = std::isfinite(item->HousingMaximumScale) ? item->HousingMaximumScale : 0;
+			metadata.upkeep_id = item->HousingUpkeepID;
+			metadata.max_per_estate = item->HousingMaxPerEstate;
+			Housing::NpcItemMetadata::ToWire(metadata, *item);
+			metadata.trophy_benefit_id = item->HousingTrophyBenefitID;
+			metadata.instance_placeable = packet_type != ItemPacketInvalid;
+			auto tail = Housing::ItemWire::EncodeTail(metadata);
+			ob.write(reinterpret_cast<const char*>(&iqbs), 96);
+			ob.write(reinterpret_cast<const char*>(tail.data()), tail.size());
+		} else {
+			ob.write((const char*)&iqbs, sizeof(RoF2::structs::ItemQuaternaryBodyStruct));
+		}
 
 		EQ::OutBuffer::pos_type count_pos = ob.tellp();
 		uint32 subitem_count = 0;

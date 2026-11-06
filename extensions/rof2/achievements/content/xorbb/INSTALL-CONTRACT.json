@@ -1,0 +1,27 @@
+{
+  "scope": "Portable review-stage preparation only; not a working installation/activation path yet. All components required, no optional quest/NPC omissions.",
+  "ready_to_apply": false,
+  "canonical_sql": "utils/sql/git/2026_11_04_xorbb_mercenary_required.sql",
+  "quest_source_roots": [
+    "prerequisite9344/quests",
+    "quests"
+  ],
+  "global_fragments": {
+    "global/global_player.lua": [
+      "prerequisite9344/hooks/global-player.lua",
+      "hook-fragments/global_player.append.lua"
+    ],
+    "global/global_npc.lua": [
+      "prerequisite9344/hooks/global-npc.lua",
+      "hook-fragments/global_npc.append.lua"
+    ]
+  },
+  "engine_dependencies": [
+    "Native successful item-cast/death/delivery interfaces",
+    "64-entry ground-spawn loader",
+    "Owned itemless click-object creation/removal plus lifetime pin and numeric object ingress"
+  ],
+  "deployment_qualification": "Installed by Build on the local host, native ACK/render/pickup unaccepted; other servers need their own matching deployment proof.",
+  "database_boundary": "Current SQL candidate supports only authoritative same-server/same-schema connections. Names alone or an empty copied object_contents table are insufficient. Unsupported split deployments refuse.",
+  "activation": "All source flags remain off; no registry/version or client/server control belongs to prepare_install.py."
+}

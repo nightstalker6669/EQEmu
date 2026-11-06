@@ -1,0 +1,636 @@
+{
+  "format": 1,
+  "status": "SOURCE SQL PLAN ONLY; NOT EXECUTABLE AUTHORIZATION",
+  "apply_allowed": false,
+  "acquisition_enabled": false,
+  "activation": "Enable the two new option/reward rows only after coordinated item-cache refresh.",
+  "mapping": [
+    {
+      "old_id": 132477,
+      "new_id": 900000,
+      "name": "Scavenger Hunt Letter",
+      "old_row_sha256": "8fe9f0321fe78e916646b2cdbb7a9172c8af08799a7b06cb52125e517d235742",
+      "new_row_sha256": "66ded41bf31bb99be64c9f048da9658ca9e3632e24502176eaa12c512ba2c9bd",
+      "confirmed_native_counterpart": 30477,
+      "counterpart_kind": "spell taught by native tome"
+    },
+    {
+      "old_id": 132478,
+      "new_id": 900001,
+      "name": "Cowl of Scavenging",
+      "old_row_sha256": "2f4c618bd34ca231123d3ea7da773b24431511ee09b324da18086318b8b5c2a1",
+      "new_row_sha256": "8a8a7fac5f55b2256f3628c0034b272e54e0db3e755a0e87ff438bcf4e22b90a",
+      "confirmed_native_counterpart": null,
+      "counterpart_kind": "not established"
+    },
+    {
+      "old_id": 132479,
+      "new_id": 900002,
+      "name": "Fisherman's Challenge Emblem",
+      "old_row_sha256": "8aa545b6842cf37a828452c010cbff2f3ae115b229ffd2f239dd06ff3f1c1f99",
+      "new_row_sha256": "36b2171edcd3d84fe2682a71f722d312c64cd4c7e6ea0fd75c95d42028069844",
+      "confirmed_native_counterpart": null,
+      "counterpart_kind": "not established"
+    },
+    {
+      "old_id": 132480,
+      "new_id": 900003,
+      "name": "Augmenter's Challenge Emblem",
+      "old_row_sha256": "5b6437b7398dd7d4ffe31b6da1c14003693880b6e045b1af7d4827f1f8f4e615",
+      "new_row_sha256": "7d0263f15a22d5fedf95077f6bf911b5e906ceae828a191ac57b93be2724dd0e",
+      "confirmed_native_counterpart": null,
+      "counterpart_kind": "not established"
+    },
+    {
+      "old_id": 132481,
+      "new_id": 900004,
+      "name": "Keymaster's Challenge Emblem",
+      "old_row_sha256": "babd46db93e83821faeac38c586daf85ffc70225b7a2ec3d468ad3400a818057",
+      "new_row_sha256": "2574ba2d91bdebc9a614138555201c2dd614e8e00c06c53c342cba051c4671f7",
+      "confirmed_native_counterpart": null,
+      "counterpart_kind": "not established"
+    },
+    {
+      "old_id": 132482,
+      "new_id": 900005,
+      "name": "Questmaster's Challenge Emblem",
+      "old_row_sha256": "4caa0c0ff001293621e6e9aced0a0bafe7fa6db93f9c0dc8302129cddd44eaee",
+      "new_row_sha256": "22c88e0050fb51660c4cf7b28b21b90a56a957c8b281e4a779fea28273026f6e",
+      "confirmed_native_counterpart": null,
+      "counterpart_kind": "not established"
+    },
+    {
+      "old_id": 132483,
+      "new_id": 900006,
+      "name": "Brooch of Scavenging",
+      "old_row_sha256": "4a22163f551850ec5c7ab60968774eb17b33596ee44e25940724bbb581b42e82",
+      "new_row_sha256": "f04df8a8c4a98e60de52f11ae4ab62844e5d66b300e62e4e26918237f657594a",
+      "confirmed_native_counterpart": null,
+      "counterpart_kind": "not established"
+    },
+    {
+      "old_id": 132484,
+      "new_id": 900007,
+      "name": "Mask of Scavenging",
+      "old_row_sha256": "661a072a1316d500e3db9315badccdfb1f3a0364c3a52de82aaa56e80a64b748",
+      "new_row_sha256": "6807f79dbd4e7d83456c93afbc9d47130a7915d85438162ee95bffd7da6b6cd4",
+      "confirmed_native_counterpart": null,
+      "counterpart_kind": "not established"
+    },
+    {
+      "old_id": 132485,
+      "new_id": 900008,
+      "name": "Crown of Scavenging",
+      "old_row_sha256": "daa048e9eb277532bb17459e87fa7d1dc42b2d346220f93f2b2c5ff07c099de3",
+      "new_row_sha256": "9d54d6815bd8a194cc69c74af3b19a97ae74d06cbcef9aad82e484211eff79ff",
+      "confirmed_native_counterpart": null,
+      "counterpart_kind": "not established"
+    }
+  ],
+  "binding_sha256": "939583a9335390d5062993b83094e331d4b900f0b1ca18e4990fb28eac9c5853",
+  "transaction": {
+    "begin": "START TRANSACTION",
+    "failure": "ROLLBACK",
+    "success": "COMMIT only after all reviewed preflight/postimage checks"
+  },
+  "locked_definition_preimage_query": {
+    "sql": "SELECT * FROM `items` WHERE `id` IN (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) ORDER BY `id` FOR UPDATE",
+    "parameters": [
+      132477,
+      132478,
+      132479,
+      132480,
+      132481,
+      132482,
+      132483,
+      132484,
+      132485,
+      900000,
+      900001,
+      900002,
+      900003,
+      900004,
+      900005,
+      900006,
+      900007,
+      900008
+    ]
+  },
+  "forward": [
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        900000,
+        132477
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        900001,
+        132478
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        900002,
+        132479
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        900003,
+        132480
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        900004,
+        132481
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        900005,
+        132482
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        900006,
+        132483
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        900007,
+        132484
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        900008,
+        132485
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "INSERT INTO `items`(`id`,`minstatus`,`Name`,`aagi`,`ac`,`accuracy`,`acha`,`adex`,`aint`,`artifactflag`,`asta`,`astr`,`attack`,`augrestrict`,`augslot1type`,`augslot1visible`,`augslot2type`,`augslot2visible`,`augslot3type`,`augslot3visible`,`augslot4type`,`augslot4visible`,`augslot5type`,`augslot5visible`,`augslot6type`,`augslot6visible`,`augtype`,`avoidance`,`awis`,`bagsize`,`bagslots`,`bagtype`,`bagwr`,`banedmgamt`,`banedmgraceamt`,`banedmgbody`,`banedmgrace`,`bardtype`,`bardvalue`,`book`,`casttime`,`casttime_`,`charmfile`,`charmfileid`,`classes`,`color`,`combateffects`,`extradmgskill`,`extradmgamt`,`price`,`cr`,`damage`,`damageshield`,`deity`,`delay`,`augdistiller`,`dotshielding`,`dr`,`clicktype`,`clicklevel2`,`elemdmgtype`,`elemdmgamt`,`endur`,`factionamt1`,`factionamt2`,`factionamt3`,`factionamt4`,`factionmod1`,`factionmod2`,`factionmod3`,`factionmod4`,`filename`,`focuseffect`,`fr`,`fvnodrop`,`haste`,`clicklevel`,`hp`,`regen`,`icon`,`idfile`,`itemclass`,`itemtype`,`ldonprice`,`ldontheme`,`ldonsold`,`light`,`lore`,`loregroup`,`magic`,`mana`,`manaregen`,`enduranceregen`,`material`,`herosforgemodel`,`maxcharges`,`mr`,`nodrop`,`norent`,`pendingloreflag`,`pr`,`procrate`,`races`,`range`,`reclevel`,`recskill`,`reqlevel`,`sellrate`,`shielding`,`size`,`skillmodtype`,`skillmodvalue`,`slots`,`clickeffect`,`spellshield`,`strikethrough`,`stunresist`,`summonedflag`,`tradeskills`,`favor`,`weight`,`UNK012`,`UNK013`,`benefitflag`,`UNK054`,`UNK059`,`booktype`,`recastdelay`,`recasttype`,`guildfavor`,`UNK123`,`UNK124`,`attuneable`,`nopet`,`updated`,`comment`,`UNK127`,`pointtype`,`potionbelt`,`potionbeltslots`,`stacksize`,`notransfer`,`stackable`,`UNK134`,`UNK137`,`proceffect`,`proctype`,`proclevel2`,`proclevel`,`UNK142`,`worneffect`,`worntype`,`wornlevel2`,`wornlevel`,`UNK147`,`focustype`,`focuslevel2`,`focuslevel`,`UNK152`,`scrolleffect`,`scrolltype`,`scrolllevel2`,`scrolllevel`,`UNK157`,`serialized`,`verified`,`serialization`,`source`,`UNK033`,`lorefile`,`UNK014`,`svcorruption`,`skillmodmax`,`UNK060`,`augslot1unk2`,`augslot2unk2`,`augslot3unk2`,`augslot4unk2`,`augslot5unk2`,`augslot6unk2`,`UNK120`,`UNK121`,`questitemflag`,`UNK132`,`clickunk5`,`clickunk6`,`clickunk7`,`procunk1`,`procunk2`,`procunk3`,`procunk4`,`procunk6`,`procunk7`,`wornunk1`,`wornunk2`,`wornunk3`,`wornunk4`,`wornunk5`,`wornunk6`,`wornunk7`,`focusunk1`,`focusunk2`,`focusunk3`,`focusunk4`,`focusunk5`,`focusunk6`,`focusunk7`,`scrollunk1`,`scrollunk2`,`scrollunk3`,`scrollunk4`,`scrollunk5`,`scrollunk6`,`scrollunk7`,`UNK193`,`purity`,`evoitem`,`evoid`,`evolvinglevel`,`evomax`,`clickname`,`procname`,`wornname`,`focusname`,`scrollname`,`dsmitigation`,`heroic_str`,`heroic_int`,`heroic_wis`,`heroic_agi`,`heroic_dex`,`heroic_sta`,`heroic_cha`,`heroic_pr`,`heroic_dr`,`heroic_fr`,`heroic_cr`,`heroic_mr`,`heroic_svcorrup`,`healamt`,`spelldmg`,`clairvoyance`,`backstabdmg`,`created`,`elitematerial`,`ldonsellbackrate`,`scriptfileid`,`expendablearrow`,`powersourcecapacity`,`bardeffect`,`bardeffecttype`,`bardlevel2`,`bardlevel`,`bardunk1`,`bardunk2`,`bardunk3`,`bardunk4`,`bardunk5`,`bardname`,`bardunk7`,`UNK214`,`subtype`,`UNK220`,`UNK221`,`heirloom`,`UNK223`,`UNK224`,`UNK225`,`UNK226`,`UNK227`,`UNK228`,`UNK229`,`UNK230`,`UNK231`,`UNK232`,`UNK233`,`UNK234`,`placeable`,`UNK236`,`UNK237`,`UNK238`,`UNK239`,`UNK240`,`UNK241`,`epicitem`,`housing_disable_rotation`,`housing_disable_free_placement`) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+      "parameters": [
+        132477,
+        0,
+        "Tome of Shared Savagery Rk. III",
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "",
+        "0",
+        32768,
+        4278190080,
+        "0",
+        0,
+        0,
+        1234182,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "",
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        778,
+        "IT98",
+        0,
+        20,
+        0,
+        0,
+        0,
+        0,
+        "Tome of Shared Savagery Rk. III",
+        -1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        65535,
+        0,
+        95,
+        0,
+        0,
+        10.0,
+        0,
+        1,
+        -1,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "2015-12-12 15:07:27",
+        "",
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        "",
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        30477,
+        7,
+        95,
+        95,
+        0,
+        null,
+        "2016-01-06 19:17:23",
+        null,
+        "13THFLOOR",
+        0,
+        "",
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        "00000000000000000000",
+        0,
+        "",
+        -1,
+        0,
+        0,
+        0,
+        0,
+        "",
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "",
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "",
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "",
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "2015-12-12 07:15:51",
+        0,
+        70,
+        32767,
+        0,
+        0,
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        "",
+        -1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        null,
+        null
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "INSERT INTO `reward_options`(`reward_set_id`,`option_id`,`sequence`,`label`,`common_to_all`,`flags`,`enabled`,`class_mask`) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",
+      "parameters": [
+        920119,
+        1048578,
+        1603,
+        "Shared Savagery Rk. III",
+        0,
+        0,
+        0,
+        32768
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "INSERT INTO `rewards`(`reward_id`,`reward_type`,`reward_data_id`,`amount`,`description`,`enabled`) VALUES(%s,%s,%s,%s,%s,%s)",
+      "parameters": [
+        3810916021,
+        0,
+        132477,
+        1,
+        "Shared Savagery Rk. III",
+        0
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "INSERT INTO `reward_option_entries`(`reward_set_id`,`option_id`,`sequence`,`reward_id`) VALUES(%s,%s,%s,%s)",
+      "parameters": [
+        920119,
+        1048578,
+        1,
+        3810916021
+      ],
+      "expected_affected_rows": 1
+    }
+  ],
+  "reverse": [
+    {
+      "sql": "DELETE FROM `reward_option_entries` WHERE `reward_set_id`=%s AND `option_id`=%s AND `sequence`=%s",
+      "parameters": [
+        920119,
+        1048578,
+        1
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "DELETE FROM `rewards` WHERE `reward_id`=%s",
+      "parameters": [
+        3810916021
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "DELETE FROM `reward_options` WHERE `reward_set_id`=%s AND `option_id`=%s",
+      "parameters": [
+        920119,
+        1048578
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "DELETE FROM `items` WHERE `id`=%s",
+      "parameters": [
+        132477
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        132477,
+        900000
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        132478,
+        900001
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        132479,
+        900002
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        132480,
+        900003
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        132481,
+        900004
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        132482,
+        900005
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        132483,
+        900006
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        132484,
+        900007
+      ],
+      "expected_affected_rows": 1
+    },
+    {
+      "sql": "UPDATE `items` SET `id`=%s WHERE `id`=%s",
+      "parameters": [
+        132485,
+        900008
+      ],
+      "expected_affected_rows": 1
+    }
+  ],
+  "runner_requirements": [
+    "Current owner52canonical semantics and reused historical fingerprints must cover the exact targets; unrelated active sessions are not a gate",
+    "Fresh exact schema/engines/FK,114-column reference/task/physical-reward and full old/new/template/spell/task/policy/neighbor checks",
+    "Durable reviewed preimages and namespace ledger before first mutation; exact reviewed helper/contract/payload hashes",
+    "Every affected-row count must be1; every error stops with transaction rollback; never retry partial operations",
+    "Full postimages, item-count delta and out-of-scope immutable-receipt preservation before commit",
+    "Reverse only after receipt ownership/current postimages and no new copies, consumed/pending claims or affected recovery state",
+    "SQLite proof does not establish MySQL locking; actual apply uses target/copy locks, recoverable backup, one transaction and exact readback"
+  ]
+}

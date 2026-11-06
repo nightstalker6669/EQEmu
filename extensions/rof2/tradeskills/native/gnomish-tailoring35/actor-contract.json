@@ -1,0 +1,1185 @@
+{
+  "status": "OFFLINE_NATIVE_ACTOR_SOURCE_PROPOSAL_SQL_HOLD_UNTIL_COMPATIBLE_CODE_INSTALLED",
+  "batch": "RRC169",
+  "recipe_ids": [
+    3095953,
+    3095954,
+    3095955,
+    3095956,
+    3095957,
+    3095958,
+    3095959,
+    3095960,
+    3095961,
+    3095962,
+    3095963,
+    3095964,
+    3095965,
+    3095966,
+    3095967,
+    3095968,
+    3095969,
+    3095970,
+    3095971,
+    3095972,
+    3095973,
+    3095974,
+    3095975,
+    3095976,
+    3095977,
+    3095978,
+    3095979,
+    3095980,
+    3095981,
+    3095982,
+    3095983,
+    3095984,
+    3095985,
+    3095986,
+    3095987
+  ],
+  "recipes": [
+    {
+      "recipe_id": 3095953,
+      "source_view_id": 12787,
+      "source_name": "Elegant Metalofiber Robes",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=408&rsa=Tailoring&sub=sof",
+      "source_catalogue_sha256": "ee57b55422a531d3ede2fafac76246896c0ddec10bd456fc6e0a77cf46d872dc",
+      "source_formula": "Components: Clockwork Needle, Exquisite Silk Robe Template, Exquisite Spinneret Fluid, Mythical Filament, Ossified Fortified Bronze Thread, Pattern for Gnomish Tunics, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Elegant Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any Elegant cultural armor.",
+      "output_item_id": 37065,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34319": 1,
+          "34494": 1,
+          "34709": 1,
+          "34913": 1,
+          "38800": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "37065": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 35982
+    },
+    {
+      "recipe_id": 3095954,
+      "source_view_id": 12784,
+      "source_name": "Elegant Metalofiber Breeches",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=408&rsa=Tailoring&sub=sof",
+      "source_catalogue_sha256": "ee57b55422a531d3ede2fafac76246896c0ddec10bd456fc6e0a77cf46d872dc",
+      "source_formula": "Components: Clockwork Needle, Exquisite Silk Pant Template, Exquisite Spinneret Fluid, Mythical Filament, Ossified Fortified Bronze Thread, Pattern for Gnomish Leggings, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Elegant Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any Elegant cultural armor.",
+      "output_item_id": 37109,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34319": 1,
+          "34494": 1,
+          "34716": 1,
+          "34913": 1,
+          "38801": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "37109": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 35982
+    },
+    {
+      "recipe_id": 3095955,
+      "source_view_id": 12783,
+      "source_name": "Elegant Metalofiber Boots",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=408&rsa=Tailoring&sub=sof",
+      "source_catalogue_sha256": "ee57b55422a531d3ede2fafac76246896c0ddec10bd456fc6e0a77cf46d872dc",
+      "source_formula": "Components: Clockwork Needle, Exquisite Silk Boot Template, Exquisite Spinneret Fluid, Mythical Filament, Ossified Fortified Bronze Thread, Pattern for Gnomish Boots, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Elegant Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any Elegant cultural armor.",
+      "output_item_id": 37153,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34319": 1,
+          "34494": 1,
+          "34717": 1,
+          "34913": 1,
+          "38798": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "37153": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 35982
+    },
+    {
+      "recipe_id": 3095956,
+      "source_view_id": 12788,
+      "source_name": "Elegant Metalofiber Sleeves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=408&rsa=Tailoring&sub=sof",
+      "source_catalogue_sha256": "ee57b55422a531d3ede2fafac76246896c0ddec10bd456fc6e0a77cf46d872dc",
+      "source_formula": "Components: Clockwork Needle, Exquisite Silk Sleeve Template, Exquisite Spinneret Fluid, Mythical Filament, Ossified Fortified Bronze Thread, Pattern for Gnomish Sleeves, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Elegant Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any Elegant cultural armor.",
+      "output_item_id": 37197,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34319": 1,
+          "34494": 1,
+          "34713": 1,
+          "34913": 1,
+          "38796": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "37197": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 35982
+    },
+    {
+      "recipe_id": 3095957,
+      "source_view_id": 12782,
+      "source_name": "Elegant Metalofiber Armband",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=408&rsa=Tailoring&sub=sof",
+      "source_catalogue_sha256": "ee57b55422a531d3ede2fafac76246896c0ddec10bd456fc6e0a77cf46d872dc",
+      "source_formula": "Components: Clockwork Needle, Exquisite Silk Wristband Template, Exquisite Spinneret Fluid, Mythical Filament, Ossified Fortified Bronze Thread, Pattern for Gnomish Wristguards, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Elegant Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any Elegant cultural armor.",
+      "output_item_id": 37241,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34319": 1,
+          "34494": 1,
+          "34714": 1,
+          "34913": 1,
+          "38795": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "37241": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 35982
+    },
+    {
+      "recipe_id": 3095958,
+      "source_view_id": 12786,
+      "source_name": "Elegant Metalofiber Gloves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=408&rsa=Tailoring&sub=sof",
+      "source_catalogue_sha256": "ee57b55422a531d3ede2fafac76246896c0ddec10bd456fc6e0a77cf46d872dc",
+      "source_formula": "Components: Clockwork Needle, Exquisite Silk Glove Template, Exquisite Spinneret Fluid, Mythical Filament, Ossified Fortified Bronze Thread, Pattern for Gnomish Gloves, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Elegant Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any Elegant cultural armor.",
+      "output_item_id": 37285,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34319": 1,
+          "34494": 1,
+          "34715": 1,
+          "34913": 1,
+          "38797": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "37285": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 35982
+    },
+    {
+      "recipe_id": 3095959,
+      "source_view_id": 12785,
+      "source_name": "Elegant Metalofiber Cap",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=408&rsa=Tailoring&sub=sof",
+      "source_catalogue_sha256": "ee57b55422a531d3ede2fafac76246896c0ddec10bd456fc6e0a77cf46d872dc",
+      "source_formula": "Components: Clockwork Needle, Exquisite Silk Cap Template, Exquisite Spinneret Fluid, Mythical Filament, Ossified Fortified Bronze Thread, Pattern for Gnomish Helms, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Elegant Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any Elegant cultural armor.",
+      "output_item_id": 37329,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34319": 1,
+          "34494": 1,
+          "34705": 1,
+          "34913": 1,
+          "38799": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "37329": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 35982
+    },
+    {
+      "recipe_id": 3095960,
+      "source_view_id": 11229,
+      "source_name": "Stalwart Metalofiber Robes",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=441&rsa=Tailoring&sub=UF",
+      "source_catalogue_sha256": "10f8a15810a3ce2cf18cfd45114ce3d41680822e066247200ce38a5340611087",
+      "source_formula": "Components: Clockwork Needle, Faysilk Filament, Immaculate Silk Robe Template, Immaculate Spinneret Fluid, Pattern for Gnomish Tunics, Steely Fortified Bronze Thread, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe the 'Stalwart Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any stalwart cultural armor.",
+      "output_item_id": 49215,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34495": 1,
+          "38800": 1,
+          "48908": 1,
+          "49850": 1,
+          "49904": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "49215": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 50673
+    },
+    {
+      "recipe_id": 3095961,
+      "source_view_id": 11226,
+      "source_name": "Stalwart Metalofiber Breeches",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=441&rsa=Tailoring&sub=UF",
+      "source_catalogue_sha256": "10f8a15810a3ce2cf18cfd45114ce3d41680822e066247200ce38a5340611087",
+      "source_formula": "Components: Clockwork Needle, Faysilk Filament, Immaculate Silk Pant Template, Immaculate Spinneret Fluid, Pattern for Gnomish Leggings, Steely Fortified Bronze Thread, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe the 'Stalwart Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any stalwart cultural armor.",
+      "output_item_id": 49259,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34495": 1,
+          "38801": 1,
+          "48908": 1,
+          "49857": 1,
+          "49904": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "49259": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 50673
+    },
+    {
+      "recipe_id": 3095962,
+      "source_view_id": 11225,
+      "source_name": "Stalwart Metalofiber Boots",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=441&rsa=Tailoring&sub=UF",
+      "source_catalogue_sha256": "10f8a15810a3ce2cf18cfd45114ce3d41680822e066247200ce38a5340611087",
+      "source_formula": "Components: Clockwork Needle, Faysilk Filament, Immaculate Silk Boot Template, Immaculate Spinneret Fluid, Pattern for Gnomish Boots, Steely Fortified Bronze Thread, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe the 'Stalwart Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any stalwart cultural armor.",
+      "output_item_id": 49303,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34495": 1,
+          "38798": 1,
+          "48908": 1,
+          "49858": 1,
+          "49904": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "49303": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 50673
+    },
+    {
+      "recipe_id": 3095963,
+      "source_view_id": 11230,
+      "source_name": "Stalwart Metalofiber Sleeves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=441&rsa=Tailoring&sub=UF",
+      "source_catalogue_sha256": "10f8a15810a3ce2cf18cfd45114ce3d41680822e066247200ce38a5340611087",
+      "source_formula": "Components: Clockwork Needle, Faysilk Filament, Immaculate Silk Sleeve Template, Immaculate Spinneret Fluid, Pattern for Gnomish Sleeves, Steely Fortified Bronze Thread, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe the 'Stalwart Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any stalwart cultural armor.",
+      "output_item_id": 49347,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34495": 1,
+          "38796": 1,
+          "48908": 1,
+          "49854": 1,
+          "49904": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "49347": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 50673
+    },
+    {
+      "recipe_id": 3095964,
+      "source_view_id": 11224,
+      "source_name": "Stalwart Metalofiber Armband",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=441&rsa=Tailoring&sub=UF",
+      "source_catalogue_sha256": "10f8a15810a3ce2cf18cfd45114ce3d41680822e066247200ce38a5340611087",
+      "source_formula": "Components: Clockwork Needle, Faysilk Filament, Immaculate Silk Wristband Template, Immaculate Spinneret Fluid, Pattern for Gnomish Wristguards, Steely Fortified Bronze Thread, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe the 'Stalwart Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any stalwart cultural armor.",
+      "output_item_id": 49391,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34495": 1,
+          "38795": 1,
+          "48908": 1,
+          "49855": 1,
+          "49904": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "49391": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 50673
+    },
+    {
+      "recipe_id": 3095965,
+      "source_view_id": 11228,
+      "source_name": "Stalwart Metalofiber Gloves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=441&rsa=Tailoring&sub=UF",
+      "source_catalogue_sha256": "10f8a15810a3ce2cf18cfd45114ce3d41680822e066247200ce38a5340611087",
+      "source_formula": "Components: Clockwork Needle, Faysilk Filament, Immaculate Silk Glove Template, Immaculate Spinneret Fluid, Pattern for Gnomish Gloves, Steely Fortified Bronze Thread, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe the 'Stalwart Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any stalwart cultural armor.",
+      "output_item_id": 49435,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34495": 1,
+          "38797": 1,
+          "48908": 1,
+          "49856": 1,
+          "49904": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "49435": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 50673
+    },
+    {
+      "recipe_id": 3095966,
+      "source_view_id": 11227,
+      "source_name": "Stalwart Metalofiber Cap",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=441&rsa=Tailoring&sub=UF",
+      "source_catalogue_sha256": "10f8a15810a3ce2cf18cfd45114ce3d41680822e066247200ce38a5340611087",
+      "source_formula": "Components: Clockwork Needle, Faysilk Filament, Immaculate Silk Cap Template, Immaculate Spinneret Fluid, Pattern for Gnomish Helms, Steely Fortified Bronze Thread, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe the 'Stalwart Gnomish Cultural Tailoring' scroll from a cultural discoveries historian at -145,723,3 outside the Library Entrance in the Plane of Knowledge in order to make any stalwart cultural armor.",
+      "output_item_id": 49479,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34495": 1,
+          "38799": 1,
+          "48908": 1,
+          "49846": 1,
+          "49904": 1,
+          "65189": 1
+        },
+        "successcount": {
+          "49479": 1,
+          "65189": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 50673
+    },
+    {
+      "recipe_id": 3095967,
+      "source_view_id": 3546,
+      "source_name": "Glorious Metalofiber Robes",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=552&rsa=Tailoring&sub=VoA",
+      "source_catalogue_sha256": "9532574e73d9ef4597afe51c687ff83a0ef31a16fd6ecc8feff2e3c02762b56d",
+      "source_formula": "Components: Clockwork Needle, Exotic Silk Robe Template, Exotic Spinneret Fluid, Glossy Fortified Bronze Thread, Pattern for Gnomish Tunics, Plated Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Glorious Gnomish Tailoring in order to perform this combine.",
+      "output_item_id": 111949,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38800": 1,
+          "65189": 1,
+          "111913": 1,
+          "112449": 1,
+          "112607": 1,
+          "113373": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "111949": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 112589
+    },
+    {
+      "recipe_id": 3095968,
+      "source_view_id": 3543,
+      "source_name": "Glorious Metalofiber Breeches",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=552&rsa=Tailoring&sub=VoA",
+      "source_catalogue_sha256": "9532574e73d9ef4597afe51c687ff83a0ef31a16fd6ecc8feff2e3c02762b56d",
+      "source_formula": "Components: Clockwork Needle, Exotic Silk Pant Template, Exotic Spinneret Fluid, Glossy Fortified Bronze Thread, Pattern for Gnomish Leggings, Plated Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Glorious Gnomish Tailoring in order to perform this combine.",
+      "output_item_id": 111993,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38801": 1,
+          "65189": 1,
+          "111913": 1,
+          "112456": 1,
+          "112607": 1,
+          "113373": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "111993": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 112589
+    },
+    {
+      "recipe_id": 3095969,
+      "source_view_id": 3542,
+      "source_name": "Glorious Metalofiber Boots",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=552&rsa=Tailoring&sub=VoA",
+      "source_catalogue_sha256": "9532574e73d9ef4597afe51c687ff83a0ef31a16fd6ecc8feff2e3c02762b56d",
+      "source_formula": "Components: Clockwork Needle, Exotic Silk Boot Template, Exotic Spinneret Fluid, Glossy Fortified Bronze Thread, Pattern for Gnomish Boots, Plated Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Glorious Gnomish Tailoring in order to perform this combine.",
+      "output_item_id": 112037,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38798": 1,
+          "65189": 1,
+          "111913": 1,
+          "112457": 1,
+          "112607": 1,
+          "113373": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "112037": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 112589
+    },
+    {
+      "recipe_id": 3095970,
+      "source_view_id": 3547,
+      "source_name": "Glorious Metalofiber Sleeves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=552&rsa=Tailoring&sub=VoA",
+      "source_catalogue_sha256": "9532574e73d9ef4597afe51c687ff83a0ef31a16fd6ecc8feff2e3c02762b56d",
+      "source_formula": "Components: Clockwork Needle, Exotic Silk Sleeve Template, Exotic Spinneret Fluid, Glossy Fortified Bronze Thread, Pattern for Gnomish Sleeves, Plated Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Glorious Gnomish Tailoring in order to perform this combine.",
+      "output_item_id": 112081,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38796": 1,
+          "65189": 1,
+          "111913": 1,
+          "112453": 1,
+          "112607": 1,
+          "113373": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "112081": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 112589
+    },
+    {
+      "recipe_id": 3095971,
+      "source_view_id": 3541,
+      "source_name": "Glorious Metalofiber Armband",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=552&rsa=Tailoring&sub=VoA",
+      "source_catalogue_sha256": "9532574e73d9ef4597afe51c687ff83a0ef31a16fd6ecc8feff2e3c02762b56d",
+      "source_formula": "Components: Clockwork Needle, Exotic Silk Wristband Template, Exotic Spinneret Fluid, Glossy Fortified Bronze Thread, Pattern for Gnomish Wristguards, Plated Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Glorious Gnomish Tailoring in order to perform this combine.",
+      "output_item_id": 112125,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38795": 1,
+          "65189": 1,
+          "111913": 1,
+          "112454": 1,
+          "112607": 1,
+          "113373": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "112125": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 112589
+    },
+    {
+      "recipe_id": 3095972,
+      "source_view_id": 3545,
+      "source_name": "Glorious Metalofiber Gloves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=552&rsa=Tailoring&sub=VoA",
+      "source_catalogue_sha256": "9532574e73d9ef4597afe51c687ff83a0ef31a16fd6ecc8feff2e3c02762b56d",
+      "source_formula": "Components: Clockwork Needle, Exotic Silk Glove Template, Exotic Spinneret Fluid, Glossy Fortified Bronze Thread, Pattern for Gnomish Gloves, Plated Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Glorious Gnomish Tailoring in order to perform this combine.",
+      "output_item_id": 112169,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38797": 1,
+          "65189": 1,
+          "111913": 1,
+          "112455": 1,
+          "112607": 1,
+          "113373": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "112169": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 112589
+    },
+    {
+      "recipe_id": 3095973,
+      "source_view_id": 3544,
+      "source_name": "Glorious Metalofiber Cap",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=552&rsa=Tailoring&sub=VoA",
+      "source_catalogue_sha256": "9532574e73d9ef4597afe51c687ff83a0ef31a16fd6ecc8feff2e3c02762b56d",
+      "source_formula": "Components: Clockwork Needle, Exotic Silk Cap Template, Exotic Spinneret Fluid, Glossy Fortified Bronze Thread, Pattern for Gnomish Helms, Plated Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Glorious Gnomish Tailoring in order to perform this combine.",
+      "output_item_id": 112213,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38799": 1,
+          "65189": 1,
+          "111913": 1,
+          "112445": 1,
+          "112607": 1,
+          "113373": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "112213": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 112589
+    },
+    {
+      "recipe_id": 3095974,
+      "source_view_id": 9513,
+      "source_name": "Extravagant Metalofiber Robes",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=523&rsa=Tailoring&sub=HOT",
+      "source_catalogue_sha256": "8733c6f7f065eff373a08eaa09d7be966bdd9b534fa377e9bf8edee731170697",
+      "source_formula": "Components: Clockwork Needle, Fantastic Silk Robe Template, Fantastic Spinneret Fluid, Indurate Fortified Bronze Thread, Pattern for Gnomish Tunics, Reinforced Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Extravagant Gnomish Cultural Tailoring' in order to complete this combine.",
+      "output_item_id": 122814,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34334": 1,
+          "34496": 1,
+          "38800": 1,
+          "65189": 1,
+          "123314": 1,
+          "123504": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "122814": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 0,
+      "must_learn": 1,
+      "learned_by_item_id": 123455
+    },
+    {
+      "recipe_id": 3095975,
+      "source_view_id": 9510,
+      "source_name": "Extravagant Metalofiber Breeches",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=523&rsa=Tailoring&sub=HOT",
+      "source_catalogue_sha256": "8733c6f7f065eff373a08eaa09d7be966bdd9b534fa377e9bf8edee731170697",
+      "source_formula": "Components: Clockwork Needle, Fantastic Silk Pant Template, Fantastic Spinneret Fluid, Indurate Fortified Bronze Thread, Pattern for Gnomish Leggings, Reinforced Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Extravagant Gnomish Cultural Tailoring' in order to complete this combine.",
+      "output_item_id": 122858,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34334": 1,
+          "34496": 1,
+          "38801": 1,
+          "65189": 1,
+          "123321": 1,
+          "123504": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "122858": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 0,
+      "must_learn": 1,
+      "learned_by_item_id": 123455
+    },
+    {
+      "recipe_id": 3095976,
+      "source_view_id": 9509,
+      "source_name": "Extravagant Metalofiber Boots",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=523&rsa=Tailoring&sub=HOT",
+      "source_catalogue_sha256": "8733c6f7f065eff373a08eaa09d7be966bdd9b534fa377e9bf8edee731170697",
+      "source_formula": "Components: Clockwork Needle, Fantastic Silk Boot Template, Fantastic Spinneret Fluid, Indurate Fortified Bronze Thread, Pattern for Gnomish Boots, Reinforced Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Extravagant Gnomish Cultural Tailoring' in order to complete this combine.",
+      "output_item_id": 122902,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34334": 1,
+          "34496": 1,
+          "38798": 1,
+          "65189": 1,
+          "123322": 1,
+          "123504": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "122902": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 0,
+      "must_learn": 1,
+      "learned_by_item_id": 123455
+    },
+    {
+      "recipe_id": 3095977,
+      "source_view_id": 9514,
+      "source_name": "Extravagant Metalofiber Sleeves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=523&rsa=Tailoring&sub=HOT",
+      "source_catalogue_sha256": "8733c6f7f065eff373a08eaa09d7be966bdd9b534fa377e9bf8edee731170697",
+      "source_formula": "Components: Clockwork Needle, Fantastic Silk Sleeve Template, Fantastic Spinneret Fluid, Indurate Fortified Bronze Thread, Pattern for Gnomish Sleeves, Reinforced Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Extravagant Gnomish Cultural Tailoring' in order to complete this combine.",
+      "output_item_id": 122946,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34334": 1,
+          "34496": 1,
+          "38796": 1,
+          "65189": 1,
+          "123318": 1,
+          "123504": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "122946": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 0,
+      "must_learn": 1,
+      "learned_by_item_id": 123455
+    },
+    {
+      "recipe_id": 3095978,
+      "source_view_id": 9508,
+      "source_name": "Extravagant Metalofiber Armband",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=523&rsa=Tailoring&sub=HOT",
+      "source_catalogue_sha256": "8733c6f7f065eff373a08eaa09d7be966bdd9b534fa377e9bf8edee731170697",
+      "source_formula": "Components: Clockwork Needle, Fantastic Silk Wristband Template, Fantastic Spinneret Fluid, Indurate Fortified Bronze Thread, Pattern for Gnomish Wristguards, Reinforced Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Extravagant Gnomish Cultural Tailoring' in order to complete this combine.",
+      "output_item_id": 122990,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34334": 1,
+          "34496": 1,
+          "38795": 1,
+          "65189": 1,
+          "123319": 1,
+          "123504": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "122990": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 0,
+      "must_learn": 1,
+      "learned_by_item_id": 123455
+    },
+    {
+      "recipe_id": 3095979,
+      "source_view_id": 9512,
+      "source_name": "Extravagant Metalofiber Gloves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=523&rsa=Tailoring&sub=HOT",
+      "source_catalogue_sha256": "8733c6f7f065eff373a08eaa09d7be966bdd9b534fa377e9bf8edee731170697",
+      "source_formula": "Components: Clockwork Needle, Fantastic Silk Glove Template, Fantastic Spinneret Fluid, Indurate Fortified Bronze Thread, Pattern for Gnomish Gloves, Reinforced Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Extravagant Gnomish Cultural Tailoring' in order to complete this combine.",
+      "output_item_id": 123034,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34334": 1,
+          "34496": 1,
+          "38797": 1,
+          "65189": 1,
+          "123320": 1,
+          "123504": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "123034": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 0,
+      "must_learn": 1,
+      "learned_by_item_id": 123455
+    },
+    {
+      "recipe_id": 3095980,
+      "source_view_id": 9511,
+      "source_name": "Extravagant Metalofiber Cap",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=523&rsa=Tailoring&sub=HOT",
+      "source_catalogue_sha256": "8733c6f7f065eff373a08eaa09d7be966bdd9b534fa377e9bf8edee731170697",
+      "source_formula": "Components: Clockwork Needle, Fantastic Silk Cap Template, Fantastic Spinneret Fluid, Indurate Fortified Bronze Thread, Pattern for Gnomish Helms, Reinforced Filament, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe 'Extravagant Gnomish Cultural Tailoring' in order to complete this combine.",
+      "output_item_id": 123078,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "34334": 1,
+          "34496": 1,
+          "38799": 1,
+          "65189": 1,
+          "123310": 1,
+          "123504": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "123078": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 0,
+      "must_learn": 1,
+      "learned_by_item_id": 123455
+    },
+    {
+      "recipe_id": 3095981,
+      "source_view_id": 1770,
+      "source_name": "Regal Metalofiber Robes",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=565&rsa=Tailoring&sub=ROF",
+      "source_catalogue_sha256": "570bb406e562f7b3fe02b1fba90509fb89b2b5d4158ec40abd1d7cc2d3b21839",
+      "source_formula": "Components: Befouled Silk Robe Template, Befouled Spinneret Fluid, Calcified Filament, Clockwork Needle, Luminescent Fortified Bronze Thread, Pattern for Gnomish Tunics, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Regal Gnomish Cultural Tailoring in order to perform this combine.",
+      "output_item_id": 133998,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38800": 1,
+          "65189": 1,
+          "133962": 1,
+          "134498": 1,
+          "134656": 1,
+          "135310": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "133998": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 134638
+    },
+    {
+      "recipe_id": 3095982,
+      "source_view_id": 1767,
+      "source_name": "Regal Metalofiber Breeches",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=565&rsa=Tailoring&sub=ROF",
+      "source_catalogue_sha256": "570bb406e562f7b3fe02b1fba90509fb89b2b5d4158ec40abd1d7cc2d3b21839",
+      "source_formula": "Components: Befouled Silk Pant Template, Befouled Spinneret Fluid, Calcified Filament, Clockwork Needle, Luminescent Fortified Bronze Thread, Pattern for Gnomish Leggings, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Regal Gnomish Cultural Tailoring in order to perform this combine.",
+      "output_item_id": 134042,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38801": 1,
+          "65189": 1,
+          "133962": 1,
+          "134505": 1,
+          "134656": 1,
+          "135310": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "134042": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 134638
+    },
+    {
+      "recipe_id": 3095983,
+      "source_view_id": 1766,
+      "source_name": "Regal Metalofiber Boots",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=565&rsa=Tailoring&sub=ROF",
+      "source_catalogue_sha256": "570bb406e562f7b3fe02b1fba90509fb89b2b5d4158ec40abd1d7cc2d3b21839",
+      "source_formula": "Components: Befouled Silk Boot Template, Befouled Spinneret Fluid, Calcified Filament, Clockwork Needle, Luminescent Fortified Bronze Thread, Pattern for Gnomish Boots, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Regal Gnomish Cultural Tailoring in order to perform this combine.",
+      "output_item_id": 134086,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38798": 1,
+          "65189": 1,
+          "133962": 1,
+          "134506": 1,
+          "134656": 1,
+          "135310": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "134086": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 134638
+    },
+    {
+      "recipe_id": 3095984,
+      "source_view_id": 1771,
+      "source_name": "Regal Metalofiber Sleeves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=565&rsa=Tailoring&sub=ROF",
+      "source_catalogue_sha256": "570bb406e562f7b3fe02b1fba90509fb89b2b5d4158ec40abd1d7cc2d3b21839",
+      "source_formula": "Components: Befouled Silk Sleeve Template, Befouled Spinneret Fluid, Calcified Filament, Clockwork Needle, Luminescent Fortified Bronze Thread, Pattern for Gnomish Sleeves, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Regal Gnomish Cultural Tailoring in order to perform this combine.",
+      "output_item_id": 134130,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38796": 1,
+          "65189": 1,
+          "133962": 1,
+          "134502": 1,
+          "134656": 1,
+          "135310": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "134130": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 134638
+    },
+    {
+      "recipe_id": 3095985,
+      "source_view_id": 1765,
+      "source_name": "Regal Metalofiber Armband",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=565&rsa=Tailoring&sub=ROF",
+      "source_catalogue_sha256": "570bb406e562f7b3fe02b1fba90509fb89b2b5d4158ec40abd1d7cc2d3b21839",
+      "source_formula": "Components: Befouled Silk Wristband Template, Befouled Spinneret Fluid, Calcified Filament, Clockwork Needle, Luminescent Fortified Bronze Thread, Pattern for Gnomish Wristguards, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Regal Gnomish Cultural Tailoring in order to perform this combine.",
+      "output_item_id": 134174,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38795": 1,
+          "65189": 1,
+          "133962": 1,
+          "134503": 1,
+          "134656": 1,
+          "135310": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "134174": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 134638
+    },
+    {
+      "recipe_id": 3095986,
+      "source_view_id": 1769,
+      "source_name": "Regal Metalofiber Gloves",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=565&rsa=Tailoring&sub=ROF",
+      "source_catalogue_sha256": "570bb406e562f7b3fe02b1fba90509fb89b2b5d4158ec40abd1d7cc2d3b21839",
+      "source_formula": "Components: Befouled Silk Glove Template, Befouled Spinneret Fluid, Calcified Filament, Clockwork Needle, Luminescent Fortified Bronze Thread, Pattern for Gnomish Gloves, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Regal Gnomish Cultural Tailoring in order to perform this combine.",
+      "output_item_id": 134218,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38797": 1,
+          "65189": 1,
+          "133962": 1,
+          "134504": 1,
+          "134656": 1,
+          "135310": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "134218": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 134638
+    },
+    {
+      "recipe_id": 3095987,
+      "source_view_id": 1768,
+      "source_name": "Regal Metalofiber Cap",
+      "tradeskill": 61,
+      "container_item_id": 92877,
+      "source_url": "https://www.eqtraders.com/recipes/recipe_page.php?article=565&rsa=Tailoring&sub=ROF",
+      "source_catalogue_sha256": "570bb406e562f7b3fe02b1fba90509fb89b2b5d4158ec40abd1d7cc2d3b21839",
+      "source_formula": "Components: Befouled Silk Cap Template, Befouled Spinneret Fluid, Calcified Filament, Clockwork Needle, Luminescent Fortified Bronze Thread, Pattern for Gnomish Helms, Water Flask\nIn: Clockwork Sewing Kit\nYield: 1\nAlso Returns: Clockwork Needle(1)\nOn Failure Returns: Clockwork Needle(1)\nRequired Skill Level: 300\nThis combine may only be made by Gnomes\nNotes: You must purchase and scribe Regal Gnomish Cultural Tailoring in order to perform this combine.",
+      "output_item_id": 134262,
+      "roles": {
+        "componentcount": {
+          "13006": 1,
+          "38799": 1,
+          "65189": 1,
+          "133962": 1,
+          "134494": 1,
+          "134656": 1,
+          "135310": 1
+        },
+        "successcount": {
+          "65189": 1,
+          "134262": 1
+        },
+        "failcount": {
+          "65189": 1
+        }
+      },
+      "skillneeded": 300,
+      "must_learn": 1,
+      "learned_by_item_id": 134638
+    }
+  ],
+  "actor": "Actual native Client player-profile race Race::Gnome, consistently in manual and auto; visual illusion race and learned knowledge do not authorize craft.",
+  "manual": "After actual GetTradeRecipe match, before existing minimum/book/lore/roll/component/output paths. Validate actual opened native container ID92877 and bagtype16.",
+  "auto": "After actual GetTradeRecipe match, before existing minimum/book/component lookup/consumption/roll/output; validate real personal-inventory ItemInstance92877 against request IDs and actual native profile race.",
+  "preserved": "Every other recipe ID returns through existing logic unchanged. Only35 exact new IDs/skillTailoring/ClockworkKit; no allTailor gate, schema, namestring rule, item/race-mask rewrite or acquisition fiction.",
+  "book_title_qualification": "VoA source abbreviates Glorious Gnomish Tailoring. Unique native112589GloriousGnomishCulturalTailoring/TSCultTailoringGNM95 authored content describes exact exotictemplate/glossyfortifiedbronze/platedfilament/gnomishneedle. Primary Argath trade supplies lists full title. Other four source/native book titles exact.",
+  "code_dependencies": {
+    "zone/tradeskills.cpp": {
+      "pre_sha256": "5a8b658f0c0238b353b72f4aa91d7fa64a5743d1b2d214084f6a49f0723f0950",
+      "post_sha256": "3d04e62d41706afad1b0aeeacc827fe7ad5355b92f7189bc235f1cdcc8a8ae41"
+    },
+    "zone/gnomish_tailoring35_actor.h": {
+      "pre_sha256": null,
+      "post_sha256": "7c19d6cb016ac1a6e203e22c7f3957111198c2182f4e179f36b0581df355abe3"
+    }
+  },
+  "patch_sha256": "3fdd2cad4033723a52b6e0ee33ae961fbce1bd6f852e56cde9e31ad96f422578",
+  "verification": "Finite source inspection only: exact35allowlist equals source-contract IDs; both callers follow known recipe match and precede component consumption; existing nonselected paths retained. No compile/test/runtime proof claimed.",
+  "shared_checkout_modified": false,
+  "builds": 0,
+  "tests": 0,
+  "runtime_actions": 0,
+  "SQL_writes": 0
+}

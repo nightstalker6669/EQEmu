@@ -1,0 +1,86 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "7fe65894c3fad3b0166218749faceb4622ce3cf746918ff4537a04fd9777f003"
+  },
+  {
+    "path": "apply_quests.py",
+    "sha256": "82f15afdf7184fcc9cf38b696b42a89d1c4a4d6ca977e9e7d52acb9ca5189760"
+  },
+  {
+    "path": "configuration/reconstruction-policy.json",
+    "sha256": "e2fd45694239bb047115a38885d8e3097943407f02e975083d48324797a92287"
+  },
+  {
+    "path": "configure.py",
+    "sha256": "3ff19d8d71e086e504bc712a322f695b9b96c4e04b340735ecb9a6336d07f37b"
+  },
+  {
+    "path": "obsolete-aliases.json",
+    "sha256": "c99ec2cfafa31a7fae9c8752d8b612cf3d707b75b4768238f7cddb8ed7500015"
+  },
+  {
+    "path": "patches/quest-hooks.patch",
+    "sha256": "45e4c91daa466ace147d67b5231028b30ec1adf0f71528da10cfcfdf1a8050dd"
+  },
+  {
+    "path": "preflight.py",
+    "sha256": "bdecd6030d8b51b7bc29bc540c9a1cdf4d4d24b02d37c97eca0ccffd370047f2"
+  },
+  {
+    "path": "provenance/alaran-language-validation.json",
+    "sha256": "42df91b28a33153ac547c9fb917a1212033a4356686c0cf404629f08e55df44b"
+  },
+  {
+    "path": "provenance/baseline-identities.json",
+    "sha256": "eb5cc7520761f22ed21391858135497b49e7e4c942b63429b5894aa86aca5761"
+  },
+  {
+    "path": "provenance/identity-provenance.json",
+    "sha256": "f664810948c9f9a6d781d14b19ace67ccc98a67c1655b4b80e36f01de2946ff4"
+  },
+  {
+    "path": "provenance/native-status.json",
+    "sha256": "1447da1bee472363cffe007aff0b66ba2b901d288546b849acf5231a1773b2ff"
+  },
+  {
+    "path": "provenance/quest-provenance.json",
+    "sha256": "acbad6122e299c2778698469c27fff13b4df033318f7d9b55a981556a7b59d51"
+  },
+  {
+    "path": "quest-manifest.json",
+    "sha256": "5d42c7d4fc91a66a65ecf2cfb3b848359418914aee4df9236ab9266fba0751f4"
+  },
+  {
+    "path": "quests/lua_modules/achievement_alaran_master.lua",
+    "sha256": "366004c063d11bf4d45bb57fc5ef52eaa7183f89b7dfa1b34c906713bb9819c5"
+  },
+  {
+    "path": "quests/lua_modules/achievement_alaran_master_data.lua",
+    "sha256": "0a7d4ef5cb4df67a89715f1e9720fa72a7ee0d21af7f40105fbb9cf0a8ecac94"
+  },
+  {
+    "path": "quests/lua_modules/shards_partisan.lua",
+    "sha256": "1e9caf2603aabf168843d96aab7f5e209ed450387647e9bbad62f6eef0a389e7"
+  },
+  {
+    "path": "quests/lua_modules/shards_partisan_config.lua",
+    "sha256": "86f8a2691f6d6faa6a81a7bddf47e2e4d28e63f1a2601c6798d351421cdc3697"
+  },
+  {
+    "path": "sql/010-shards-catalogue.sql",
+    "sha256": "5cb821f887e4d8ad07aa582cbec92e8ebc586aa0a131cf1021387da3f0be17f1"
+  },
+  {
+    "path": "sql/015-welcome-prerequisite.sql",
+    "sha256": "a56f17f5214a05e0814d6b4924d90d3e9b1c330abad1bd38c8a3b2002f68c055"
+  },
+  {
+    "path": "sql/020-shards-partisan.sql",
+    "sha256": "0ffbd645b82e337140c5da2f8b184689acd2617d1c5952c5912c7a5e3e85e458"
+  },
+  {
+    "path": "sql/030-alaran-language-achievements.sql",
+    "sha256": "9a44eacc66701aed6574571ed61e9abd617433059ba3d1ba1647d0474337dfb9"
+  }
+]

@@ -1,0 +1,96 @@
+{
+  "install_sql": [
+    "sql/010-save-queen.sql",
+    "sql/030-enable-save-queen.sql"
+  ],
+  "rollback_sql": [
+    "sql/040-disable-save-queen.sql",
+    "sql/020-rollback-staged.sql"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "3f01659d2ec90c9dc504b78a1ef5e1fba2acdfd0e4d939a8654f389d7e257c17"
+    },
+    {
+      "path": "apply_quests.py",
+      "sha256": "6f78fece7bbe29ae2f84a6b70649a13209472d718cfd1ee825df8bf10c0aea13"
+    },
+    {
+      "path": "hooks/global-npc.lua",
+      "sha256": "a963e2914e5cf464ddcde87d3cc23e0787baf20ccf729f1f08fde75abba7698f"
+    },
+    {
+      "path": "hooks/global-player.lua",
+      "sha256": "4462d8ef6ffca54564daad366aabf71e64d1530c47839b92c11c0ad43f5e8a15"
+    },
+    {
+      "path": "install.py",
+      "sha256": "2483e63546e6aa47fde6716387025af28a33e3522734c724e29fd7f5feaf5e1f"
+    },
+    {
+      "path": "provenance/baseline-identities.json",
+      "sha256": "abf7a4a41515b58a7a76dad00ba9afff47fa6276814f0020739970fb506d570c"
+    },
+    {
+      "path": "provenance/research.json",
+      "sha256": "c07bd059993f7ed0e0acdf5aa614112c98b6aaf2ee8b2ec4e440e49c6bee9835"
+    },
+    {
+      "path": "provenance/server-defaults.json",
+      "sha256": "3eb405135e8fa39241fcd4d47b509101ce39172b0ecfb8a2696b3d107a4136ee"
+    },
+    {
+      "path": "quest-data.json",
+      "sha256": "1933f44de5e72eb28e883417b51a795d7ba342207a51a3dc2d25f6461e997821"
+    },
+    {
+      "path": "quest-manifest.json",
+      "sha256": "f89a3fb6c08adb5fe673062cf556e1463a5c1e13c676ec849ceedde9e7dfc510"
+    },
+    {
+      "path": "quest-specification.json",
+      "sha256": "27a092819ff6612352c895eac578a508156e51fcf41ba2751319337ff3a782ce"
+    },
+    {
+      "path": "quests/lua_modules/achievement_quest_mesa_queen.lua",
+      "sha256": "b7777dec40d6f8c89f1b30fac49ec22db2b310869a25080c27cabcf3184f87d2"
+    },
+    {
+      "path": "quests/lua_modules/achievement_quest_mesa_queen_data.lua",
+      "sha256": "f88d0d63948880fd8a3f447745816397d66862c650ec8d8aa7a63f14e0e7133c"
+    },
+    {
+      "path": "quests/mesa/397081.lua",
+      "sha256": "35b522938ecc5d23d25604f3104ddb2d3840652b92ef89e4c88dff3ca27e4dfe"
+    },
+    {
+      "path": "quests/mesa/397105.lua",
+      "sha256": "23027bd887d685deeea2f07af3e82165bff8fb8a98f1cc42d1a440025fbae5d4"
+    },
+    {
+      "path": "quests/mesa/397250.lua",
+      "sha256": "1dbbea8ba400d3816e775f3b99e3654485bf5878d4cb0d3d9fcfabc70db4a8bd"
+    },
+    {
+      "path": "sql/010-save-queen.sql",
+      "sha256": "200e011b121fc82170f68e74e8427b0fbacde1802bd581daeeae388ab4de293b"
+    },
+    {
+      "path": "sql/020-rollback-staged.sql",
+      "sha256": "fbe524186fc85ea3c908f8129240d074886deee4faf6fe4c420d0dd259524893"
+    },
+    {
+      "path": "sql/030-enable-save-queen.sql",
+      "sha256": "6efb0853cdb5c3e6fef3aa2d2ace30710ef33477b404e1c115aab5fc982a3656"
+    },
+    {
+      "path": "sql/040-disable-save-queen.sql",
+      "sha256": "f48edf17f9587644f8f316e6d7d3c0b0e2c511f5cf1a18ed41d362d3c7995c26"
+    },
+    {
+      "path": "status.json",
+      "sha256": "df9c4a37400fb59067d8fe7b9429237836ac6cd74fe5e6b7f6ac3b1542d3f618"
+    }
+  ]
+}

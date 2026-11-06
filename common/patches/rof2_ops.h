@@ -17,9 +17,9 @@
 */
 // out-going packets that require an ENCODE translation:
 // Begin RoF2 Encodes
+
 E(OP_AchievementReward)
 E(OP_RewardSelection)
-
 E(OP_SendMembershipDetails)
 E(OP_TraderShop)
 E(OP_TraderDelItem)
@@ -85,6 +85,8 @@ E(OP_GuildMemberUpdate)
 E(OP_GuildsList)
 E(OP_GuildTributeDonateItem)
 E(OP_HPUpdate)
+E(OP_ManaUpdate)
+E(OP_EnduranceUpdate)
 E(OP_Illusion)
 E(OP_InspectBuffs)
 E(OP_InspectRequest)
@@ -191,6 +193,7 @@ D(OP_ItemVerifyRequest)
 D(OP_LoadSpellSet)
 D(OP_LootItem)
 D(OP_MoveItem)
+D(OP_OpenContainer)
 D(OP_PetCommands)
 D(OP_RaidInvite)
 D(OP_ReadBook)
@@ -211,6 +214,13 @@ D(OP_WhoAllRequest)
 D(OP_ZoneChange)
 D(OP_ZoneEntry)
 // End RoF Encodes/Decodes
+
+// Reviewed native RoF2 petition queue/detail codecs.
+E(OP_PetitionUpdate)
+E(OP_PetitionCheckout)
+D(OP_PetitionDelete)
+D(OP_PetitionResolve)
+D(OP_PetitionCheckIn)
 
 #undef E
 #undef D

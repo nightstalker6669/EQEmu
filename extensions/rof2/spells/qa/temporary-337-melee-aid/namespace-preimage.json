@@ -1,0 +1,65 @@
+{
+  "target": "peq_housing_test",
+  "candidate": 39999,
+  "reservation": "JARVIS_PROVISIONAL",
+  "client_exact_row_absent": true,
+  "checks": {
+    "definition": {
+      "query": "SELECT * FROM spells_new WHERE id=39999 OR name='QA337 Temporary Blunt Damage'",
+      "rows": []
+    },
+    "item_bindings": {
+      "query": "SELECT id FROM items WHERE clickeffect=39999 OR proceffect=39999 OR worneffect=39999 OR focuseffect=39999 OR scrolleffect=39999 OR bardeffect=39999",
+      "rows": []
+    },
+    "npc_casts": {
+      "query": "SELECT id FROM npc_spells_entries WHERE spellid=39999",
+      "rows": []
+    },
+    "character_buffs": {
+      "query": "SELECT COUNT(*) AS references_found FROM character_buffs WHERE spell_id=39999",
+      "rows": [
+        {
+          "references_found": 0
+        }
+      ]
+    },
+    "character_spells": {
+      "query": "SELECT COUNT(*) AS references_found FROM character_spells WHERE spell_id=39999",
+      "rows": [
+        {
+          "references_found": 0
+        }
+      ]
+    },
+    "character_memmed_spells": {
+      "query": "SELECT COUNT(*) AS references_found FROM character_memmed_spells WHERE spell_id=39999",
+      "rows": [
+        {
+          "references_found": 0
+        }
+      ]
+    },
+    "merc_casts": {
+      "query": "SELECT COUNT(*) AS references_found FROM merc_spell_list_entries WHERE spell_id=39999",
+      "rows": [
+        {
+          "references_found": 0
+        }
+      ]
+    },
+    "aa_casts": {
+      "query": "SELECT COUNT(*) AS references_found FROM aa_ranks WHERE spell=39999",
+      "rows": [
+        {
+          "references_found": 0
+        }
+      ]
+    },
+    "spell_trigger_fields": {
+      "query": "SELECT id FROM spells_new WHERE RecourseLink=39999 OR effect_base_value1=39999 OR effect_limit_value1=39999 OR effect_base_value2=39999 OR effect_limit_value2=39999 OR effect_base_value3=39999 OR effect_limit_value3=39999 OR effect_base_value4=39999 OR effect_limit_value4=39999 OR effect_base_value5=39999 OR effect_limit_value5=39999 OR effect_base_value6=39999 OR effect_limit_value6=39999 OR effect_base_value7=39999 OR effect_limit_value7=39999 OR effect_base_value8=39999 OR effect_limit_value8=39999 OR effect_base_value9=39999 OR effect_limit_value9=39999 OR effect_base_value10=39999 OR effect_limit_value10=39999 OR effect_base_value11=39999 OR effect_limit_value11=39999 OR effect_base_value12=39999 OR effect_limit_value12=39999",
+      "rows": []
+    }
+  },
+  "status": "FINITE_DEFINITION_REFERENCES_CLEAR_NO_APPLY"
+}

@@ -619,11 +619,11 @@ bool ZoneDatabase::GetBasePetItems(int32 equipmentset, uint32 *items) {
 	return true;
 }
 
-bool Pet::CheckSpellLevelRestriction(Mob *caster, int32 spell_id)
+bool Pet::CheckSpellLevelRestriction(Mob *caster, int32 spell_id, uint32 aa_context)
 {
 	auto owner = GetOwner();
 	if (owner)
-		return owner->CheckSpellLevelRestriction(caster, spell_id);
+		return owner->CheckSpellLevelRestriction(caster, spell_id, aa_context);
 	return true;
 }
 

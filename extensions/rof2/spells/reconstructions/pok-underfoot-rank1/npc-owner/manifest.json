@@ -1,0 +1,60 @@
+{
+  "source_only": true,
+  "target_database": "peq_housing_test",
+  "row_counts": {
+    "npc_types": 12,
+    "spawngroup": 12,
+    "spawnentry": 12,
+    "spawn2": 12
+  },
+  "stock_rows_owned_here": 0,
+  "new_stock_rows_expected_from_Spells": 43,
+  "existing_stock_only_rows_expected_separately": 9,
+  "rogue_stock_held": 3,
+  "inputs": {
+    "selected15-provider-preimages.json": "4bd4ae98cf1cd56388f314db1c0b219aa3b33659205f834210984ee6e9234c69",
+    "providers.json": "0a8efa03052da83c6c9ed0e2928577911f34e081fc6d8f02afe2a9c9d7e12e9b"
+  },
+  "outputs_sha256": {
+    "payload.json": "dae53ffb0963503b531cce7d15b0895e394eb52da2cbc5c6433a4912542c2fda",
+    "providers.sql.disabled": "628618b02a18821519bfe647bc12aab62611a7a46f642da26a842551fa73db8b",
+    "BINDINGS.md": "7ebc763847bb079f98f059527f8978f18c69058868516865b2e30945bd2b656f",
+    "collision-check.sql": "c915cdc2150ccaa6083afb8f1d34f02e6651eaae96a4967b9bd581482fd609c8",
+    "collision-receipt.json": "334844331f1d5a2fa9fb8ec639eafd63409c6fec75a539f011990a74495fa95f",
+    "README.md": "6475afb1041fb5689d3d077495685d3690a9438ca17a60628ca688eda17f5a3d",
+    "prepare_payload.py": "e57acd6d63bec370b48d76553062c2439f049f1495115f5ea3c6322333c08ff7",
+    "era-correction-receipt.json": "e8d3fce44b2fe5b6f81092f99becda13b3ba93b25c6ef3cdae9f91d36b6485c3"
+  },
+  "native_validation": false,
+  "writes": 0,
+  "era_gate": {
+    "new_spawn2_min_expansion": 18,
+    "source": "March2012/VoA route introduction relayed by coordinator/Spells",
+    "existing_3_spawns_changed": false,
+    "all_54_new_stock_era_gate_owner": "Spells"
+  },
+  "new_stock_count_qualification": "final Spells named inventory reconciliation",
+  "existing_tome_additions_expected_separately": 2,
+  "stock_only_redirects": [
+    {
+      "item_id": 119709,
+      "spell_id": 22665,
+      "npc_id": 202161,
+      "merchant_id": 202161,
+      "name": "Ulin Velnik",
+      "owner": "Spells",
+      "external_npc_key": 26168,
+      "basis": "coordinator relays public spell22665SoldBy/NPC26168; no new actor"
+    },
+    {
+      "item_id": 119633,
+      "spell_id": 22662,
+      "npc_id": null,
+      "merchant_id": null,
+      "name": "Zhao V`karin",
+      "owner": "Spells",
+      "external_npc_key": 13960,
+      "basis": "final named-stock reconciliation, public spell22662SoldBy/NPC13960; exact native preimage pending from Spells"
+    }
+  ]
+}

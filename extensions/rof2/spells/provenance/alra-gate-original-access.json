@@ -1,0 +1,128 @@
+{
+  "created_utc": "2026-11-03T16:36:46.973417+00:00",
+  "status": "HELD additive original-task restoration design, not an enabled content patch",
+  "apply_allowed": false,
+  "original_quest_id": 5481,
+  "original_title": "The First Pilgrimage",
+  "native_task_id": null,
+  "new_ids_allocated": false,
+  "era_cutoff": "2013-05-31",
+  "start": {
+    "zone_id": 730,
+    "zone_short_name": "pillarsalra",
+    "mechanism": "Automatic assignment when approaching Shrine of Alra/statue",
+    "minimum_alaran": 81,
+    "minimum_alaran_period_sources": [
+      "https://everquest.allakhazam.com/forums/comments/quest/5481?page=2#msg1334122121183278622",
+      "https://everquest.allakhazam.com/forums/comments/quest/5481?page=2#msg1347594292246024490"
+    ],
+    "exact_trigger_geometry": null,
+    "request_min_level": null,
+    "period_accepted_level_upper_bound_for_minimum": 93,
+    "other_task_prerequisites_period_verified": null,
+    "replay_timer_seconds": null
+  },
+  "existing_quest_npcs": [
+    {
+      "id": 730092,
+      "name": "#Wrakt_of_Fal`Kaa",
+      "npc_faction_id": 0,
+      "class": 1
+    },
+    {
+      "id": 730182,
+      "name": "#Il`Rator_of_Anriella",
+      "npc_faction_id": 0,
+      "class": 1
+    },
+    {
+      "id": 730255,
+      "name": "#Selulian_of_Melretia",
+      "npc_faction_id": 0,
+      "class": 1
+    },
+    {
+      "id": 730279,
+      "name": "#Il`Nendale_of_Erion",
+      "npc_faction_id": 0,
+      "class": 1
+    }
+  ],
+  "class_port_reward_bundles": [
+    {
+      "class_id": 12,
+      "entries": [
+        {
+          "item_id": 131842,
+          "spell_id": 29842,
+          "quantity": 1,
+          "learning_level": 92
+        },
+        {
+          "item_id": 131843,
+          "spell_id": 29843,
+          "quantity": 1,
+          "learning_level": 92
+        },
+        {
+          "item_id": 131844,
+          "spell_id": 29844,
+          "quantity": 1,
+          "learning_level": 92
+        }
+      ],
+      "source_status": "Current original-task guide class-port-set reward; periodWizard/Druid reports corroborate port acquisition, not independent per-item bundle collector capture"
+    },
+    {
+      "class_id": 6,
+      "entries": [
+        {
+          "item_id": 130999,
+          "spell_id": 28999,
+          "quantity": 1,
+          "learning_level": 92
+        },
+        {
+          "item_id": 131000,
+          "spell_id": 29000,
+          "quantity": 1,
+          "learning_level": 92
+        },
+        {
+          "item_id": 131001,
+          "spell_id": 29001,
+          "quantity": 1,
+          "learning_level": 92
+        }
+      ],
+      "source_status": "Current original-task guide class-port-set reward; periodWizard/Druid reports corroborate port acquisition, not independent per-item bundle collector capture"
+    }
+  ],
+  "other_original_rewards": {
+    "very_small_stone_tear_item_id": null,
+    "eltarki_diary_item_id": null,
+    "coin_xp_scaling": null,
+    "faction_choice_amounts": null,
+    "status": "Must recover and preserve complete original quest rewards, not replace quest with port-only shortcut"
+  },
+  "no_item_or_spell_definition_changes": true,
+  "excluded_postcutoff_vendor": {
+    "name": "Grelulden",
+    "website_npc_id": 59986,
+    "added_date": "2024-10-16",
+    "introduced_by": "October2024persona-repurchase patch per primary NPCdescription",
+    "source": "https://everquest.allakhazam.com/db/npc/59986",
+    "native_npc_insert_allowed": false,
+    "merchant_row_insert_allowed": false,
+    "modern_access": "First Pilgrimage completion, not a new language-only free purchase"
+  },
+  "remaining_implementation_contract": [
+    "Recover original task activity ordering/counts and exact autoassignment/region/path geometry",
+    "Original four NPC dialogue/stone custody, material awards, four combines and twelve-path equipment credit need native mappings; coordinate recipe/custody owners",
+    "Preserve original choice-dependent faction semantics without inventing local faction bindings or amounts",
+    "Durable complete task/class-port-set award and original other rewards; no earlier hail or fake flag shortcut",
+    "Verify original request/replay and per-class bundle semantics; current max125/metadata95 not period proof"
+  ],
+  "normal_first_entry_limit": "These original ports require a quest inside Pillars, so cannot bootstrap a first visit; use separately verified normal overland/another player port route, not GMteleport/free scroll",
+  "mutations_performed": 0
+}

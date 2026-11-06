@@ -1,0 +1,37 @@
+{
+  "status": "review-only complete3file TRAINING-ONLY proposal; disabled source compatibility accepted, no install approval",
+  "files": [
+    {
+      "target": "quests/lua_modules/achievement_alaran_master.lua",
+      "candidate": "quests/lua_modules/achievement_alaran_master.lua",
+      "candidate_sha256": "9dcec35f47a42adebfcdb3a4a461ad2f7f937baf43e15f3a6e42feda56cbd251",
+      "mode": "0o664",
+      "preimage": {
+        "exists": false
+      }
+    },
+    {
+      "target": "quests/lua_modules/achievement_alaran_master_data.lua",
+      "candidate": "quests/lua_modules/achievement_alaran_master_data.lua",
+      "candidate_sha256": "8fb1188d93f37b064a189cdf3a3dbd5be6e30f1be733b36c7ab135218cfe0851",
+      "mode": "0o664",
+      "preimage": {
+        "exists": false
+      }
+    },
+    {
+      "target": "quests/lua_modules/shards_partisan.lua",
+      "candidate": "review/words-language-caller.patch",
+      "candidate_sha256": "e3e2910ade9060a84ec865e579153d76e5e216a302d4cedfe68abbda333c2d89",
+      "mode": "0o664",
+      "preimage": {
+        "exists": true,
+        "sha256": "af08d3a2c5400a9edce8a4ed560db75dfaf646ac5742058b960665bba00a4430",
+        "mode": "0o664"
+      }
+    }
+  ],
+  "caller_candidate_kind": "apply exact patch to the pinned predecessor; no full shared caller published",
+  "caller_patch_sha256": "3715989439c634911848f3b5f41988ee309bb19d884efe50ffbe8c9cae2a2d06",
+  "qualification_scope": "CurrentLive newlearning to100 observed; already100 branch unchanged/no credit. No original2012callback/nativeRoF2persistence proof."
+}

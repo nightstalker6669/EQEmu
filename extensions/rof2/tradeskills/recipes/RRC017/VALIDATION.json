@@ -1,0 +1,33 @@
+{
+  "rehearsal": {
+    "status": "PASS_FINITE_CONTENT_SQL_REHEARSAL",
+    "cases": 14,
+    "actual_refusals": 13,
+    "all_before_after_equal": true,
+    "owned_container_network_secrets_absent_independent": true,
+    "frozen_source_inputs_unchanged": true,
+    "published_exact": {
+      "commit": "487f02e13fd033acb91882c3fb37c754559fc38b",
+      "four_files_exact": true,
+      "sha256": {
+        "README.md": "f76e54e0c7829d92464d4f9f003e4422c3cfffede5efdabcbe617388c023d875",
+        "apply.sql": "81c519ccc4505875722abde698e0bb9136ae96d18fb007de2509b686902604e9",
+        "rollback.sql": "17567d9e76113f28c8dc6b703076672133f7cf54ee4f53dcd12a06bf620bc432",
+        "batch.json": "a545198894df169bf9c3d9bfea9e2d4d570bcc707498f155a77b0f01c292e874"
+      }
+    },
+    "failed001_preserved": true,
+    "production_SQL_executions": 0,
+    "native_actions": 0
+  },
+  "failed001": {
+    "status": "Stopped on invalid no-op missing-item fixture, not a product guard failure; preserved and independently cleaned.",
+    "correction": "Reviewed002 deletes required present Butter29742 and asserts each fault changes its immediate snapshot; explicit new one-run coordinator grant before execution.",
+    "product_apply_SQL_unchanged": true,
+    "production_retry": false
+  },
+  "five_existing_producers_preserved": true,
+  "source_yield_exceptions_preserved": true,
+  "native_combine": false,
+  "historical_all_recipe_completeness": false
+}

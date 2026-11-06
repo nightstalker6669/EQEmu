@@ -15,6 +15,14 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/housing/curved_mount_support.h"
+#include <mutex>
+#include <tuple>
+#include <memory>
+#include "../common/housing/mount_surface_patch.h"
+#include "../common/housing/planar_mount_patch.h"
+#include "../common/housing/exterior_exit_geometry.h"
+
 #include "raycast_mesh.h"
 
 #include "common/eqemu_logsys.h"
@@ -663,6 +671,22 @@ public:
 		}
 
 
+ bool overlapsBox(const Housing::ExteriorExit::Box& box,const RmReal *vertices,RmUint32 vcount,const RmUint32 *indices,RmUint32 tcount,const TriVector& leaf,RmUint32 ignore_a=TRI_EOF,RmUint32 ignore_b=TRI_EOF,const std::vector<RmUint32>* source_list=nullptr) const {
+  for(unsigned i=0;i<3;++i)if(mBounds.mMax[i]<box.minimum[i]||mBounds.mMin[i]>box.maximum[i])return false;
+  if(mLeafTriangleIndex!=TRI_EOF){if(mLeafTriangleIndex>=leaf.size())return true;auto count=leaf[mLeafTriangleIndex];if(count>leaf.size()-mLeafTriangleIndex-1)return true;
+   for(RmUint32 j=0;j<count;++j){auto tri=leaf[mLeafTriangleIndex+1+j];if(tri>=tcount)return true;if(tri==ignore_a||tri==ignore_b||(source_list&&std::binary_search(source_list->begin(),source_list->end(),tri)))continue;std::array<Housing::ExteriorExit::Point,3> points;for(unsigned k=0;k<3;++k){auto index=indices[3*tri+k];if(index>=vcount)return true;for(unsigned i=0;i<3;++i)points[k][i]=vertices[3*index+i];}if(Housing::ExteriorExit::TriangleOverlap(box,points))return true;}return false;
+  }
+  return (mLeft&&mLeft->overlapsBox(box,vertices,vcount,indices,tcount,leaf,ignore_a,ignore_b,source_list))||(mRight&&mRight->overlapsBox(box,vertices,vcount,indices,tcount,leaf,ignore_a,ignore_b,source_list));
+ }
+
+ bool overlapsVolume(const Housing::OrientedMount::Volume&volume,const Housing::ExteriorExit::Box&box,const RmReal *vertices,RmUint32 vcount,const RmUint32 *indices,RmUint32 tcount,const TriVector&leaf,const std::vector<RmUint32>&sources) const {
+  for(unsigned i=0;i<3;++i)if(mBounds.mMax[i]<box.minimum[i]||mBounds.mMin[i]>box.maximum[i])return false;
+  if(mLeafTriangleIndex!=TRI_EOF){if(mLeafTriangleIndex>=leaf.size())return true;auto count=leaf[mLeafTriangleIndex];if(count>leaf.size()-mLeafTriangleIndex-1)return true;
+   for(RmUint32 j=0;j<count;++j){auto tri=leaf[mLeafTriangleIndex+1+j];if(tri>=tcount)return true;if(std::binary_search(sources.begin(),sources.end(),tri))continue;std::array<std::array<float,3>,3>points;for(unsigned k=0;k<3;++k){auto index=indices[3*tri+k];if(index>=vcount)return true;for(unsigned i=0;i<3;++i)points[k][i]=vertices[3*index+i];}if(Housing::OrientedMount::TriangleOverlap(volume,points))return true;}return false;
+  }
+  return (mLeft&&mLeft->overlapsVolume(volume,box,vertices,vcount,indices,tcount,leaf,sources))||(mRight&&mRight->overlapsVolume(volume,box,vertices,vcount,indices,tcount,leaf,sources));
+ }
+
 		virtual void raycast(bool &hit,
 							const RmReal *from,
 							const RmReal *to,
@@ -677,7 +701,8 @@ public:
 							RmUint32 *raycastTriangles,
 							RmUint32 raycastFrame,
 							const TriVector &leafTriangles,
-							RmUint32 &nearestTriIndex)
+							RmUint32 &nearestTriIndex,
+							RmUint32 ignoreBegin = 0, RmUint32 ignoreEnd = 0)
 		{
 			RmReal sect[3];
 			RmReal nd = nearestDistance;
@@ -692,6 +717,9 @@ public:
 				for (RmUint32 i=0; i<count; i++)
 				{
 					RmUint32 tri = *scan++;
+					if (tri >= ignoreBegin && tri < ignoreEnd) {
+						continue;
+					}
 					if ( raycastTriangles[tri] != raycastFrame )
 					{
 						raycastTriangles[tri] = raycastFrame;
@@ -739,11 +767,11 @@ public:
 			{
 				if ( mLeft )
 				{
-					mLeft->raycast(hit,from,to,dir,hitLocation,hitNormal,hitDistance,vertices,indices,nearestDistance,callback,raycastTriangles,raycastFrame,leafTriangles,nearestTriIndex);
+					mLeft->raycast(hit,from,to,dir,hitLocation,hitNormal,hitDistance,vertices,indices,nearestDistance,callback,raycastTriangles,raycastFrame,leafTriangles,nearestTriIndex, ignoreBegin, ignoreEnd);
 				}
 				if ( mRight )
 				{
-					mRight->raycast(hit,from,to,dir,hitLocation,hitNormal,hitDistance,vertices,indices,nearestDistance,callback,raycastTriangles,raycastFrame,leafTriangles,nearestTriIndex);
+					mRight->raycast(hit,from,to,dir,hitLocation,hitNormal,hitDistance,vertices,indices,nearestDistance,callback,raycastTriangles,raycastFrame,leafTriangles,nearestTriIndex, ignoreBegin, ignoreEnd);
 				}
 			}
 		}
@@ -756,7 +784,89 @@ public:
 
 class MyRaycastMesh : public RaycastMesh, public NodeInterface
 {
+ // Source geometry is immutable for this mesh's lifetime. Cache only source
+ // topology; never cache a pose/contact/coverage/collision/authorization result.
+ struct MountTopology {std::vector<Housing::MountSurfacePatch::Triangle> triangles;std::vector<RmUint32> ids;};
+ using MountKey=std::tuple<RmUint32,RmUint32,RmUint32,std::vector<RmUint32>>;
+ mutable std::mutex mMountMutex;
+ mutable std::map<MountKey,std::shared_ptr<const MountTopology>> mMountTopology;
+ // Store one whitelist per inventory and share each immutable component across
+ // all its seeds. A many-triangle wall must not duplicate the whole whitelist
+ // and its topology once per clicked triangle. Pose coverage remains uncached.
+ using PlanarSeeds=std::map<RmUint32,std::shared_ptr<const MountTopology>>;
+ mutable std::map<std::vector<RmUint32>,PlanarSeeds> mPlanarTopology;
 public:
+
+ bool overlapsBox(const RmReal *minimum,const RmReal *maximum) const override {
+  Housing::ExteriorExit::Box box;for(unsigned i=0;i<3;++i){box.minimum[i]=minimum[i];box.maximum[i]=maximum[i];if(!std::isfinite(minimum[i])||!std::isfinite(maximum[i])||minimum[i]>maximum[i])return true;}
+  return !mRoot||mRoot->overlapsBox(box,mVertices,mVcount,mIndices,mTcount,mLeafTriangles);
+ }
+
+ bool overlapsBoxExceptTriangles(const RmReal *minimum,const RmReal *maximum,RmUint32 source_a,RmUint32 source_b) const override {
+  if(source_a==source_b||source_a>=mTcount||source_b>=mTcount)return true;
+  Housing::ExteriorExit::Box box;for(unsigned i=0;i<3;++i){box.minimum[i]=minimum[i];box.maximum[i]=maximum[i];if(!std::isfinite(minimum[i])||!std::isfinite(maximum[i])||minimum[i]>maximum[i])return true;}
+  return !mRoot||mRoot->overlapsBox(box,mVertices,mVcount,mIndices,mTcount,mLeafTriangles,source_a,source_b);
+ }
+
+ std::shared_ptr<const MountTopology> mountTopology(RmUint32 axis,RmUint32 a,RmUint32 b,const std::vector<RmUint32>&candidates) const {
+  if(!mRoot||axis>2||candidates.empty()||!std::is_sorted(candidates.begin(),candidates.end())||std::adjacent_find(candidates.begin(),candidates.end())!=candidates.end())return {};
+   MountKey key{axis,a,b,candidates};std::shared_ptr<const MountTopology> prepared;
+   {std::lock_guard<std::mutex> lock(mMountMutex);auto found=mMountTopology.find(key);
+    if(found!=mMountTopology.end())prepared=found->second;
+    else{auto entry=std::make_shared<MountTopology>();std::vector<Housing::MountSurfacePatch::Triangle> triangles;triangles.reserve(candidates.size());
+     for(auto id:candidates){if(id>=mTcount)return {};Housing::MountSurfacePatch::Triangle t;t.id=id;for(unsigned j=0;j<3;++j){auto index=mIndices[3*id+j];if(index>=mVcount)return {};for(unsigned k=0;k<3;++k)t.vertices[j][k]=mVertices[3*index+k];}triangles.push_back(t);}
+     entry->ids=Housing::MountSurfacePatch::Connected(triangles,axis,a,b);for(const auto&t:triangles)if(std::binary_search(entry->ids.begin(),entry->ids.end(),t.id))entry->triangles.push_back(t);
+     prepared=entry;mMountTopology.emplace(std::move(key),std::move(entry));
+    }
+   }
+  return prepared;
+ }
+ std::vector<RmUint32> sourceMountPatch(const RmReal *minimum,const RmReal *maximum,RmUint32 axis,RmUint32 a,RmUint32 b,const std::vector<RmUint32>& candidates) const override {
+  if(!mRoot||axis>2||candidates.empty()||!std::is_sorted(candidates.begin(),candidates.end())||std::adjacent_find(candidates.begin(),candidates.end())!=candidates.end())return {};
+  try{
+   for(unsigned k=0;k<3;++k)if(!std::isfinite(minimum[k])||!std::isfinite(maximum[k])||minimum[k]>=maximum[k])return {};
+   auto prepared=mountTopology(axis,a,b,candidates);
+   if(!prepared||prepared->ids.empty())return {};std::vector<const Housing::MountSurfacePatch::Triangle*> patch;for(const auto&t:prepared->triangles)patch.push_back(&t);
+   return Housing::MountSurfacePatch::Covered(patch,axis,{minimum[0],minimum[1],minimum[2]},{maximum[0],maximum[1],maximum[2]})?prepared->ids:std::vector<RmUint32>{};
+  }catch(...){return {};}
+ }
+ bool overlapsBoxExceptTriangleList(const RmReal *minimum,const RmReal *maximum,const std::vector<RmUint32>& sources) const override {
+  if(sources.empty()||!std::is_sorted(sources.begin(),sources.end())||std::adjacent_find(sources.begin(),sources.end())!=sources.end()||sources.back()>=mTcount)return true;
+  Housing::ExteriorExit::Box box;for(unsigned i=0;i<3;++i){box.minimum[i]=minimum[i];box.maximum[i]=maximum[i];if(!std::isfinite(minimum[i])||!std::isfinite(maximum[i])||minimum[i]>maximum[i])return true;}
+  return !mRoot||mRoot->overlapsBox(box,mVertices,mVcount,mIndices,mTcount,mLeafTriangles,TRI_EOF,TRI_EOF,&sources);
+ }
+
+ std::vector<RmUint32> sourceMountPatch(const Housing::OrientedMount::Volume&volume,RmUint32 axis,RmUint32 a,RmUint32 b,const std::vector<RmUint32>&candidates) const override {
+  try{if(!Housing::OrientedMount::Valid(volume))return {};auto prepared=mountTopology(axis,a,b,candidates);if(!prepared||prepared->ids.empty())return {};std::vector<const Housing::MountSurfacePatch::Triangle*>patch;for(const auto&t:prepared->triangles)patch.push_back(&t);return Housing::MountSurfacePatch::Covered(patch,axis,volume)?prepared->ids:std::vector<RmUint32>{};}catch(...){return {};}
+ }
+ bool overlapsVolumeExceptTriangleList(const Housing::OrientedMount::Volume&volume,const std::vector<RmUint32>&sources) const override {
+  try{if(!mRoot||!Housing::OrientedMount::Valid(volume)||sources.empty()||!std::is_sorted(sources.begin(),sources.end())||std::adjacent_find(sources.begin(),sources.end())!=sources.end()||sources.back()>=mTcount)return true;auto bounds=Housing::OrientedMount::Bounds(volume);Housing::ExteriorExit::Box box;for(unsigned k=0;k<3;++k){box.minimum[k]=bounds.first[k];box.maximum[k]=bounds.second[k];}return mRoot->overlapsVolume(volume,box,mVertices,mVcount,mIndices,mTcount,mLeafTriangles,sources);}catch(...){return true;}
+ }
+
+ RmUint32 sourceTriangleCount() const override {return mTcount;}
+ Housing::CurvedMount::Proof sourceCurvedMountPatch(const Housing::OrientedMount::Volume&volume,const Housing::PlanarMount::SurfaceSeed&seed,const std::vector<Housing::CurvedMount::Entry>&entries,Housing::CurvedMount::Limits limits) const override {
+  try{if(!mRoot||!Housing::OrientedMount::Valid(volume)||!std::isfinite(limits.search_margin)||limits.search_margin<=0||limits.search_margin>8||entries.empty()||entries.size()>limits.source||entries.size()>65536)return {};const auto bounds=Housing::OrientedMount::Bounds(volume);std::vector<Housing::CurvedMount::Source>sources;sources.reserve(entries.size());uint32_t prior=0;bool first=true;
+   for(const auto&e:entries){if((!first&&e.id<=prior)||e.id>=mTcount||!e.side_mask||e.side_mask>3||!e.native_mode_mask||(e.native_mode_mask&~3))return {};first=false;prior=e.id;Housing::CurvedMount::Source source;source.geometry.id=e.id;source.side_mask=e.side_mask;source.native_mode_mask=e.native_mode_mask;for(unsigned j=0;j<3;++j){auto index=mIndices[3*e.id+j];if(index>=mVcount)return {};for(unsigned k=0;k<3;++k)source.geometry.vertices[j][k]=mVertices[3*index+k];}bool local=true;for(unsigned k=0;k<3;++k){float lo=source.geometry.vertices[0][k],hi=lo;for(unsigned j=1;j<3;++j){lo=std::min(lo,source.geometry.vertices[j][k]);hi=std::max(hi,source.geometry.vertices[j][k]);}if(double(hi)<double(bounds.first[k])-limits.search_margin||double(lo)>double(bounds.second[k])+limits.search_margin)local=false;}if(local){if(sources.size()>=limits.component)return {};sources.push_back(source);}}
+   // Bounded uncached candidate: no planar component sharing across curved seeds.
+   return Housing::CurvedMount::Select(sources,seed,Housing::CurvedMount::Mode::Wall,volume,limits);
+  }catch(...){return {};}
+ }
+ std::vector<RmUint32> sourcePlanarMountPatch(const Housing::OrientedMount::Volume&volume,const Housing::PlanarMount::SurfaceSeed&seed,const std::vector<RmUint32>&candidates) const override {
+  try{if(!mRoot||!Housing::OrientedMount::Valid(volume)||(seed.side!=1&&seed.side!=-1)||seed.triangle_id>=mTcount||candidates.empty()||!std::is_sorted(candidates.begin(),candidates.end())||std::adjacent_find(candidates.begin(),candidates.end())!=candidates.end()||candidates.back()>=mTcount||!std::binary_search(candidates.begin(),candidates.end(),seed.triangle_id))return {};
+   std::shared_ptr<const MountTopology>prepared;
+   {std::lock_guard<std::mutex>lock(mMountMutex);auto&seeds=mPlanarTopology[candidates];auto prior=seeds.find(seed.triangle_id);if(prior!=seeds.end())prepared=prior->second;else{
+    std::vector<Housing::MountSurfacePatch::Triangle>source;source.reserve(candidates.size());for(auto id:candidates){Housing::MountSurfacePatch::Triangle triangle;triangle.id=id;for(unsigned j=0;j<3;++j){const auto index=mIndices[3*id+j];if(index>=mVcount)return {};for(unsigned k=0;k<3;++k)triangle.vertices[j][k]=mVertices[3*index+k];}source.push_back(triangle);}
+    auto entry=std::make_shared<MountTopology>();entry->ids=Housing::PlanarMount::Connected(source,seed.triangle_id);for(const auto&triangle:source)if(std::binary_search(entry->ids.begin(),entry->ids.end(),triangle.id))entry->triangles.push_back(triangle);prepared=entry;for(auto id:entry->ids)seeds.emplace(id,entry);
+   }}
+   return prepared&&!prepared->ids.empty()&&Housing::PlanarMount::Covered(prepared->triangles,prepared->ids,seed.triangle_id,volume)?prepared->ids:std::vector<RmUint32>{};
+  }catch(...){return {};}
+ }
+ bool raycastSurface(const RmReal *from,const RmReal *to,RmReal *hitLocation,RmReal *hitNormal,RmReal *hitDistance,Housing::PlanarMount::SurfaceSeed&seed) override {
+  seed={};try{if(!mRoot)return false;for(unsigned k=0;k<3;++k)if(!std::isfinite(from[k])||!std::isfinite(to[k]))return false;RmReal dir[3];for(unsigned k=0;k<3;++k)dir[k]=to[k]-from[k];RmReal distance=sqrtf(dir[0]*dir[0]+dir[1]*dir[1]+dir[2]*dir[2]);if(!std::isfinite(distance)||distance<.0000000001f)return false;const RmReal inverse=1.f/distance;for(auto&v:dir)v*=inverse;mRaycastFrame++;RmUint32 nearest=TRI_EOF;bool hit=false;
+   mRoot->raycast(hit,from,to,dir,hitLocation,hitNormal,hitDistance,mVertices,mIndices,distance,this,mRaycastTriangles,mRaycastFrame,mLeafTriangles,nearest);if(!hit||nearest>=mTcount)return false;
+   Housing::MountSurfacePatch::Triangle triangle;triangle.id=nearest;for(unsigned j=0;j<3;++j){const auto index=mIndices[3*nearest+j];if(index>=mVcount)return false;for(unsigned k=0;k<3;++k)triangle.vertices[j][k]=mVertices[3*index+k];}const auto frame=Housing::PlanarMount::Basis(triangle);Housing::PlanarMount::Vector origin;for(unsigned k=0;k<3;++k)origin[k]=Housing::OrientedMount::Exact(double(from[k]));const auto facing=Housing::OrientedMount::Dot(frame.normal,Housing::PlanarMount::Minus(origin,frame.origin));if(facing==0)return false;seed={nearest,facing>0?1:-1};return true;
+  }catch(...){seed={};return false;}
+ }
 
 	MyRaycastMesh(RmUint32 vcount,const RmReal *vertices,RmUint32 tcount,const RmUint32 *indices,RmUint32 maxDepth,RmUint32 minLeafSize,RmReal minAxisSize)
 	{
@@ -831,6 +941,36 @@ public:
 		if (mFaceNormals) { free(mFaceNormals); }
 	}
 
+
+	bool raycastExceptSourceRange(const RmReal *from, const RmReal *to, RmUint32 begin, RmUint32 end) override
+	{
+		if (!mRoot || begin >= end || end > mTcount) {
+			return raycast(from, to, nullptr, nullptr, nullptr);
+		}
+		RmReal dir[3];
+		for (unsigned k = 0; k < 3; ++k) {
+			if (!std::isfinite(from[k]) || !std::isfinite(to[k])) {
+				return true;
+			}
+			dir[k] = to[k] - from[k];
+		}
+		RmReal distance = sqrtf(dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2]);
+		if (!std::isfinite(distance)) {
+			return true;
+		}
+		if (distance < .0000000001f) {
+			return false;
+		}
+		const RmReal inverse = 1.0f / distance;
+		for (auto &v : dir) {
+			v *= inverse;
+		}
+		++mRaycastFrame;
+		RmUint32 nearest = TRI_EOF;
+		bool hit = false;
+		mRoot->raycast(hit, from, to, dir, nullptr, nullptr, nullptr, mVertices, mIndices, distance, this, mRaycastTriangles, mRaycastFrame, mLeafTriangles, nearest, begin, end);
+		return hit;
+	}
 	virtual bool raycast(const RmReal *from,const RmReal *to,RmReal *hitLocation,RmReal *hitNormal,RmReal *hitDistance)
 	{
 		bool ret = false;

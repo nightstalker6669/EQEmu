@@ -1,0 +1,203 @@
+{
+  "scope": "Xorbb group mission candidate spell families, not cast assignments. Preserve original native definitions and complete trigger families. No spell/NPC/database mutation.",
+  "actor_assignment_ready": false,
+  "pairs": [
+    {
+      "name": "Reflective Lens",
+      "raid_guide_family": 33736,
+      "binding_status": "CURRENT_EXPLICIT_GROUP_ACTOR_ASSOCIATION; original RoF2 values retained; current website associations are not frozen May2013 cast proof",
+      "group_spell_id": 37199
+    },
+    {
+      "name": "Futile Resistance",
+      "raid_guide_family": 33737,
+      "binding_status": "CURRENT_EXPLICIT_GROUP_ACTOR_ASSOCIATION; original RoF2 values retained; current website associations are not frozen May2013 cast proof",
+      "group_spell_id": 37200
+    },
+    {
+      "name": "Crystal Drift",
+      "raid_guide_family": 33756,
+      "binding_status": "CURRENT_EXPLICIT_GROUP_ACTOR_ASSOCIATION; original RoF2 values retained; current website associations are not frozen May2013 cast proof",
+      "group_spell_id": 37219
+    },
+    {
+      "name": "Servant of the Eye",
+      "raid_guide_family": 33760,
+      "binding_status": "CURRENT_EXPLICIT_GROUP_ACTOR_ASSOCIATION; original RoF2 values retained; current website associations are not frozen May2013 cast proof",
+      "group_spell_id": 37223
+    },
+    {
+      "name": "Shard Injection",
+      "raid_guide_family": 33767,
+      "binding_status": "CURRENT_EXPLICIT_GROUP_ACTOR_ASSOCIATION; original RoF2 values retained; current website associations are not frozen May2013 cast proof",
+      "group_spell_id": 37230
+    },
+    {
+      "name": "Infernal Transformation",
+      "raid_guide_family": 33769,
+      "binding_status": "CURRENT_EXPLICIT_GROUP_ACTOR_ASSOCIATION; original RoF2 values retained; current website associations are not frozen May2013 cast proof",
+      "group_spell_id": 37232
+    },
+    {
+      "name": "Infernal Transformation",
+      "raid_guide_family": 33770,
+      "binding_status": "CURRENT_EXPLICIT_GROUP_ACTOR_ASSOCIATION; original RoF2 values retained; current website associations are not frozen May2013 cast proof",
+      "group_spell_id": 37233
+    }
+  ],
+  "trigger_families": [
+    {
+      "raid": {
+        "33760": [
+          33761
+        ]
+      },
+      "candidate": {
+        "37223": [
+          37224
+        ]
+      },
+      "note": "Keep triggered identity within its source family; not authorization to bind either parent."
+    },
+    {
+      "raid": {
+        "33769": [
+          33757,
+          33770
+        ],
+        "33770": [
+          33758
+        ]
+      },
+      "candidate": {
+        "37232": [
+          37220,
+          37233
+        ],
+        "37233": [
+          37221
+        ]
+      },
+      "note": "Preserve transformation trigger chains; a same-name parent swap is not a complete encounter implementation."
+    }
+  ],
+  "boundaries": {
+    "group_cast_proof": "Current explicit ZAM group actor associations established; original historical cast profiles and native encounter acceptance remain unproved.",
+    "raid_qualification": "Raid guide beganMay26,2013 but explicitly amendedJune12,2013; currentbody is not all unchangedcutoff evidence.",
+    "normal_zone_ai": "Ordinary deathraiser/woundhealer caster assignments remain separate; no mission spell imports.",
+    "chronology": "Lucy37200initial2012-11-23; originalRoF2clientfields retained instead of laterLivechanges."
+  },
+  "group_actor_sources": [
+    {
+      "website_npc_id": 42830,
+      "name": "King Xorbb",
+      "spell_ids": [
+        37199,
+        37200,
+        37201,
+        37207,
+        37213,
+        37214,
+        37226,
+        37227,
+        37228,
+        37229,
+        37230,
+        37231
+      ],
+      "emulator_npc_type_id": 753944,
+      "emulator_actor_role": "king_xorbb",
+      "assignment_status": "Reservedactorassociation only; not an installedcastlist ornativecastproof"
+    },
+    {
+      "website_npc_id": 42837,
+      "name": "weak-minded goblin",
+      "spell_ids": [
+        37206
+      ],
+      "emulator_npc_type_id": 753945,
+      "emulator_actor_role": "weakminded_goblin",
+      "assignment_status": "Reservedactorassociation only; not an installedcastlist ornativecastproof"
+    },
+    {
+      "website_npc_id": 42838,
+      "name": "flame nerv",
+      "spell_ids": [
+        37204
+      ],
+      "emulator_npc_type_id": 753946,
+      "emulator_actor_role": "flamenerve_goblin",
+      "assignment_status": "Reservedactorassociation only; not an installedcastlist ornativecastproof"
+    },
+    {
+      "website_npc_id": 42839,
+      "name": "hobble-footed fungus",
+      "spell_ids": [
+        37203
+      ],
+      "emulator_npc_type_id": 753947,
+      "emulator_actor_role": "hobblefooted_fungus",
+      "assignment_status": "Reservedactorassociation only; not an installedcastlist ornativecastproof"
+    },
+    {
+      "website_npc_id": 42840,
+      "name": "stalwart minotaur",
+      "spell_ids": [
+        37205
+      ],
+      "emulator_npc_type_id": 753948,
+      "emulator_actor_role": "stalwart_minotaur",
+      "assignment_status": "Reservedactorassociation only; not an installedcastlist ornativecastproof"
+    },
+    {
+      "website_npc_id": 42833,
+      "name": "Soul Gazer",
+      "spell_ids": [
+        37223
+      ],
+      "emulator_npc_type_id": 753949,
+      "emulator_actor_role": "soul_gazer",
+      "assignment_status": "Reservedactorassociation only; not an installedcastlist ornativecastproof"
+    },
+    {
+      "website_npc_id": 42834,
+      "name": "Proudheart",
+      "spell_ids": [
+        37219
+      ],
+      "emulator_npc_type_id": 753950,
+      "emulator_actor_role": "proudheart_shell",
+      "assignment_status": "Reservedactorassociation only; not an installedcastlist ornativecastproof"
+    },
+    {
+      "website_npc_id": 42835,
+      "name": "Soul Stealer",
+      "spell_ids": [
+        37225
+      ],
+      "emulator_npc_type_id": 753951,
+      "emulator_actor_role": "soul_stealer",
+      "assignment_status": "Reservedactorassociation only; not an installedcastlist ornativecastproof"
+    },
+    {
+      "website_npc_id": 42836,
+      "name": "Brantun",
+      "spell_ids": [
+        37219,
+        37220,
+        37232,
+        37233
+      ],
+      "emulator_npc_type_id": 753952,
+      "emulator_actor_role": "brantun_corrupted",
+      "assignment_status": "Reservedactorassociation only; not an installedcastlist ornativecastproof"
+    }
+  ],
+  "association_provenance": {
+    "provider": "NPC owner actual Chrome evidence routed by coordinator",
+    "website_group_zone_id": 898,
+    "website_group_quest_id": 6110,
+    "record_created": "2013-01-31",
+    "qualification": "Records updated2019/2023/2026; creation does not date every spell association. Website IDs are not emulator NPCtype IDs. No active caster assignments."
+  }
+}

@@ -1,3 +1,4 @@
+#include "fungal_item_world_source.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -26,6 +27,8 @@
 #include "common/repositories/completed_shared_tasks_repository.h"
 #include "common/repositories/shared_task_activity_state_repository.h"
 #include "common/repositories/shared_task_dynamic_zones_repository.h"
+#include "common/fire_shared_correlation.h"
+#include "common/fire_shared_activity_origin.h"
 #include "common/repositories/shared_task_members_repository.h"
 #include "common/rulesys.h"
 #include "common/shared_task_completion.h"
@@ -56,12 +59,63 @@ SharedTaskManager *SharedTaskManager::SetContentDatabase(Database *db)
 	return this;
 }
 
+namespace {
+void SendFireSharedResponse(uint32_t character,uint32_t giver,uint32_t accepted,
+ const FireSharedCorrelation::Trailer& trailer) {
+ ServerSharedTaskRequest_Struct base{};
+ base.requested_character_id=character;base.requested_task_id=920170;
+ base.requested_npc_entity_id=giver;base.accept_time=accepted;
+ ServerPacket packet(ServerOP_SharedTaskAcceptNewTask,sizeof(base)+sizeof(trailer));
+ std::memcpy(packet.pBuffer,&base,sizeof(base));
+ std::memcpy(packet.pBuffer+sizeof(base),&trailer,sizeof(trailer));
+ auto* cle=ClientList::Instance()->FindCLEByCharacterID(character);
+ if(cle && cle->Server()) cle->Server()->SendPacket(&packet);
+}
+std::optional<FireSharedCorrelation::Trailer> FireAdmissionOrigin(
+ const FireSharedCorrelation::Trailer* origin,SharedTask& actual,uint32_t requester) {
+ if(!origin) return std::nullopt;
+ auto t=*origin;t.phase=FireSharedCorrelation::Admitted;t.run=actual.GetDbSharedTask().id;
+ std::vector<uint32_t> ids;
+ for(const auto& m:actual.GetMembers()) ids.push_back(m.character_id);
+ std::sort(ids.begin(),ids.end());
+ if(ids.empty() || ids.size()>FireSharedCorrelation::MaxMembers ||
+  std::adjacent_find(ids.begin(),ids.end())!=ids.end() ||
+  !std::binary_search(ids.begin(),ids.end(),requester)) return std::nullopt;
+ t.count=static_cast<uint32_t>(ids.size());
+ std::copy(ids.begin(),ids.end(),std::begin(t.members));return t;
+}
+void SendFireMissionResult(Database& db,SharedTask& actual,uint32_t requester,uint32_t giver,
+ uint32_t accepted,FireSharedCorrelation::Trailer t) {
+ ServerSharedTaskRequest_Struct base{};base.requested_character_id=requester;
+ base.requested_task_id=920170;base.requested_npc_entity_id=giver;base.accept_time=accepted;
+ t.phase=FireSharedCorrelation::Held;
+ if(actual.dynamic_zone_ids.size()==1) {
+  auto it=dynamic_zone_manager.dynamic_zone_cache.find(actual.dynamic_zone_ids.front());
+  if(it!=dynamic_zone_manager.dynamic_zone_cache.end() && it->second) {
+   const auto& dz=*it->second;
+   t.dz=dz.GetID();t.instance=dz.GetInstanceID();
+   std::vector<uint32_t> dz_ids;
+   for(const auto& m:dz.GetMembers()) dz_ids.push_back(m.id);
+   std::sort(dz_ids.begin(),dz_ids.end());
+   auto admitted=FireSharedCorrelation::Roster(t,requester);
+   if(admitted && dz_ids==*admitted && dz.GetType()==DynamicZoneType::Mission &&
+    dz.GetZoneID()==490 && dz.GetZoneVersion()==1 && dz.IsValid() && !dz.IsExpired() &&
+    FireSharedCorrelation::PersistedMissionReady(db,base,t)) t.phase=FireSharedCorrelation::Ready;
+  }
+ }
+ SendFireSharedResponse(requester,giver,accepted,t);
+}
+} // namespace
+
 void SharedTaskManager::AttemptSharedTaskCreation(
 	uint32 requested_task_id,
 	uint32 requested_character_id,
-	uint32 npc_type_id
+	uint32 npc_type_id,
+	const FireSharedCorrelation::Trailer* fire_origin
 )
 {
+	if(fire_origin && (requested_task_id!=920170 || !FireSharedCorrelation::RequestShape(*fire_origin) ||
+	 !FireSharedCorrelation::DeliveredSource(*m_database,requested_character_id,*fire_origin))) return;
 	auto task = GetSharedTaskDataByTaskId(requested_task_id);
 	if (task.id != 0 && task.type == TASK_TYPE_SHARED) {
 		LogTasksDetail(
@@ -205,16 +259,27 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 	// add to shared tasks list
 	auto& inserted = m_shared_tasks.emplace_back(new_shared_task);
 
+	const auto fire_admission=FireAdmissionOrigin(fire_origin,inserted,requested_character_id);
 	// send accept to members
 	for (auto &m: request.members) {
 		// only requester (leader) receives back the npc context to trigger task accept event
 		uint32_t npc_context_id = m.character_id == requested_character_id ? npc_type_id : 0;
+		if(fire_origin && m.character_id==requested_character_id) {
+			auto reply=fire_admission ? *fire_admission : *fire_origin;
+			ServerSharedTaskRequest_Struct base{};base.requested_character_id=requested_character_id;
+			base.requested_task_id=920170;base.requested_npc_entity_id=npc_context_id;
+			base.accept_time=shared_task_entity.accepted_time;
+			if(!fire_admission || !FireSharedCorrelation::HeaderAndRoster(*m_database,base,reply))
+				reply.phase=FireSharedCorrelation::Held;
+			SendFireSharedResponse(m.character_id,npc_context_id,base.accept_time,reply);
+		} else {
 		SendAcceptNewSharedTaskPacket(
 			m.character_id,
 			requested_task_id,
 			npc_context_id,
 			shared_task_entity.accepted_time
 		);
+		}
 	}
 	SendSharedTaskMemberListToAllMembers(&new_shared_task);
 
@@ -222,6 +287,8 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 	HandleCompletedActivities(&inserted);
 
 	LoadDynamicZoneTemplate(&inserted);
+	if(fire_admission) SendFireMissionResult(*m_database,inserted,requested_character_id,
+		npc_type_id,shared_task_entity.accepted_time,*fire_admission);
 
 	LogTasks(
 		"shared_task_id [{}] created successfully | task_id [{}] member_count [{}] activity_count [{}] current tasks in state [{}]",
@@ -559,6 +626,10 @@ void SharedTaskManager::SharedTaskActivityUpdate(
 )
 {
 	auto shared_task = FindSharedTaskByTaskIdAndCharacterId(task_id, source_character_id);
+	if(shared_task&&!FungalInventory::WorldHold::Allows(shared_task->GetDbSharedTask().id))return;
+	FungalItemWorldSource::NativeStage fungal_stage(*m_database,shared_task,source_character_id,task_id,activity_id,done_count);
+	std::vector<SharedTaskActivityStateEntry> fungal_before;
+	if(fungal_stage.Selected()){if(!fungal_stage.Ready())return;fungal_before=shared_task->m_shared_task_activity_state;}
 	if (shared_task) {
 		LogTasksDetail(
 			"shared_task_id [{}] character_id [{}] task_id [{}] activity_id [{}] done_count [{}]",
@@ -618,6 +689,8 @@ void SharedTaskManager::SharedTaskActivityUpdate(
 					else {
 						SaveSharedTaskActivityState(shared_task->GetDbSharedTask().id,
 							shared_task->m_shared_task_activity_state);
+						if(fungal_stage.Selected()&&!fungal_stage.Committed()){
+						 shared_task->m_shared_task_activity_state=std::move(fungal_before);return;}
 					}
 
 					shared_task->SetSharedTaskActivityState(shared_task->m_shared_task_activity_state);
@@ -674,6 +747,7 @@ void SharedTaskManager::SaveSharedTaskActivityState(
 	std::vector<SharedTaskActivityStateEntry> activity_state
 )
 {
+	if(!FungalInventory::WorldHold::Allows(shared_task_id))return;
 	// transfer from memory to database
 	std::vector<SharedTaskActivityStateRepository::SharedTaskActivityState> shared_task_db_activities = {};
 	shared_task_db_activities.reserve(activity_state.size());
@@ -691,6 +765,8 @@ void SharedTaskManager::SaveSharedTaskActivityState(
 		shared_task_db_activities.emplace_back(e);
 	}
 
+	if(FungalItemWorldSource::NativeStage::SelectedSave(shared_task_id)){
+	 FungalItemWorldSource::NativeStage::CommitActualSave(*m_database,shared_task_id,shared_task_db_activities);return;}
 	SharedTaskActivityStateRepository::DeleteWhere(*m_database, fmt::format("shared_task_id = {}", shared_task_id));
 	SharedTaskActivityStateRepository::InsertMany(*m_database, shared_task_db_activities);
 }
@@ -1760,13 +1836,22 @@ std::optional<int64_t> SharedTaskManager::RecordSharedTaskCompletion(SharedTask 
 void SharedTaskManager::SendActivityUpdate(SharedTask *s, uint32_t activity_id, uint32_t done_count, bool ignore_quest_update)
 {
 	for (const auto &m : s->GetMembers()) {
-		auto p = std::make_unique<ServerPacket>(ServerOP_SharedTaskUpdate, sizeof(ServerSharedTaskActivityUpdate_Struct));
+		const bool fungal=FungalItemWire::Correlated(s->GetTaskData().id,activity_id);
+		FungalItemWire::Trailer fungal_ack;
+		if(fungal&&!FungalItemWorldSource::NativeStage::StampActualAck(s->GetDbSharedTask().id,activity_id,fungal_ack))return;
+		const bool fire=s->GetTaskData().id==FireSharedActivityOrigin::Task;
+		const uint64_t original_run=s->GetDbSharedTask().id;
+		if(fire && !original_run) return;
+		auto p = std::make_unique<ServerPacket>(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+
+		 (fire?sizeof(FireSharedActivityOrigin::Trailer):0)+(fungal?sizeof(FungalItemWire::Trailer):0));
 		auto d = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(p->pBuffer);
 		d->source_character_id = m.character_id;
 		d->task_id = s->GetTaskData().id;
 		d->activity_id = activity_id;
 		d->done_count = done_count;
 		d->ignore_quest_update = ignore_quest_update;
+		if(fire) FireSharedActivityOrigin::Write(p->pBuffer,original_run);
+		if(fungal)FungalItemWire::Write(p->pBuffer,sizeof(ServerSharedTaskActivityUpdate_Struct),fungal_ack);
 		auto c = ClientList::Instance()->FindCLEByCharacterID(m.character_id);
 		if (c && c->Server()) {
 			c->Server()->SendPacket(p.get());
@@ -2024,3 +2109,5 @@ void SharedTaskManager::Process()
 		DeleteSharedTask(shared_task_id);
 	}
 }
+
+#include "fungal_item_world_source_impl.inc"

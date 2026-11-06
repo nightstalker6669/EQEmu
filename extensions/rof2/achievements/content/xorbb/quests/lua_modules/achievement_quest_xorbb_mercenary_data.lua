@@ -1,0 +1,30 @@
+-- Generated from quest-graph.json; all content remains disabled.
+return {enabled=false,minimum_level=85,ready={},owned={
+ [3040477]=true,
+ [3040478]=true,
+ [3040479]=true,
+ [3040480]=true,
+ [3040481]=true,
+ [3040482]=true,
+ [3040483]=true,
+ [3040484]=true,
+ [3040485]=true,
+ [3040486]=true,
+ [3040487]=true,
+},tasks={
+ {id=3040477,giver=753012,phrase="convince"},
+ {id=3040478,giver=753012,phrase="convince"},
+ {id=3040479,giver=753012,phrase="convince"},
+ {id=3040480,giver=753046,phrase="shoo"},
+ {id=3040481,giver=753046,phrase="shoo"},
+ {id=3040482,giver=753080,phrase="sabotage"},
+ {id=3040483,giver=753001,phrase="do"},
+ {id=3040484,giver=753114,phrase="wisp"},
+ {id=3040485,giver=753041,phrase="carry out"},
+ {id=3040486,giver=753284,phrase="find"},
+ {id=3040487,giver=753034,phrase="find"},
+},autogrants={
+ {id=3040477,item=55794,npcs={[753006]=true,[753008]=true,[753103]=true,[753105]=true,[753124]=true,[753155]=true,[753162]=true,[753163]=true,[753166]=true,[753178]=true,[753186]=true,[753201]=true,[753206]=true,[753262]=true,[753273]=true,[753274]=true,[753275]=true,[753286]=true}},
+ {id=3040478,item=55795,npcs={[753002]=true,[753004]=true,[753005]=true,[753028]=true,[753029]=true,[753042]=true,[753094]=true,[753148]=true,[753172]=true,[753184]=true,[753185]=true,[753208]=true,[753238]=true,[753247]=true}},
+ {id=3040479,item=55763,npcs={[753010]=true,[753014]=true,[753015]=true,[753020]=true,[753021]=true,[753022]=true,[753023]=true,[753099]=true,[753106]=true,[753130]=true,[753136]=true,[753145]=true,[753158]=true,[753160]=true,[753218]=true,[753219]=true,[753234]=true,[753235]=true,[753236]=true,[753242]=true}},
+}}

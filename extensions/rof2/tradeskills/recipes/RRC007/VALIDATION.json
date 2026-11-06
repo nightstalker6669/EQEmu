@@ -1,0 +1,27 @@
+{
+  "batch": "RRC007",
+  "status": "PASS_FINITE_CONTENT_SQL_REHEARSAL",
+  "verified_recipes": 91,
+  "verified_logical_entries": 520,
+  "fresh_apply_exact_reapply_exact_rollback": true,
+  "refusal_cases": [
+    "ID collision",
+    "entry drift",
+    "missing dependency",
+    "forced entry failure after91recipes",
+    "rollback learned-reference refusal",
+    "different-name output collision",
+    "mixing-bowl category substitution",
+    "oven category substitution",
+    "utensil failure-return postimage drift"
+  ],
+  "actual_refusal_errno": 1644,
+  "actual_refusal_SQLSTATE": "45000",
+  "refusal_and_control_conservation": true,
+  "transactions_and_other_connections_after_stages": 0,
+  "owned_resources_credentials_removed": true,
+  "production_application_in_rehearsal": false,
+  "historical_formula_proof": false,
+  "all_recipes_covered": false,
+  "native_combine": false
+}

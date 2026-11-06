@@ -1,3 +1,4 @@
+#include "fungal_item_world_source.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -22,6 +23,8 @@
 #include "common/repositories/task_activities_repository.h"
 #include "common/repositories/tasks_repository.h"
 #include "common/shared_tasks.h"
+#include "common/fire_shared_correlation.h"
+#include "common/fire_shared_activity_origin.h"
 #include "common/tasks.h"
 #include "world/cliententry.h"
 #include "world/cliententry.h"
@@ -36,7 +39,12 @@ void SharedTaskWorldMessaging::HandleZoneMessage(ServerPacket *pack)
 {
 	switch (pack->opcode) {
 		case ServerOP_SharedTaskRequest: {
+			FireSharedCorrelation::Trailer origin;
+			const auto kind=FireSharedCorrelation::Decode(pack->pBuffer,pack->size,origin);
+			if(kind==FireSharedCorrelation::Kind::Invalid ||
+			 (kind==FireSharedCorrelation::Kind::Fire && !FireSharedCorrelation::RequestShape(origin))) break;
 			auto *r = (ServerSharedTaskRequest_Struct *) pack->pBuffer;
+			if(kind==FireSharedCorrelation::Kind::Fire && r->requested_task_id!=920170) break;
 			LogTasksDetail(
 				"[ServerOP_SharedTaskRequest] Received request from character [{}] task_id [{}] npc_entity_id [{}]",
 				r->requested_character_id,
@@ -47,7 +55,8 @@ void SharedTaskWorldMessaging::HandleZoneMessage(ServerPacket *pack)
 			SharedTaskManager::Instance()->AttemptSharedTaskCreation(
 				r->requested_task_id,
 				r->requested_character_id,
-				r->requested_npc_entity_id
+				r->requested_npc_entity_id,
+				kind==FireSharedCorrelation::Kind::Fire ? &origin : nullptr
 			);
 
 			break;
@@ -92,7 +101,17 @@ void SharedTaskWorldMessaging::HandleZoneMessage(ServerPacket *pack)
 			break;
 		}
 		case ServerOP_SharedTaskUpdate: {
+			if(pack->size<sizeof(ServerSharedTaskActivityUpdate_Struct)) break;
 			auto *r = (ServerSharedTaskActivityUpdate_Struct *) pack->pBuffer;
+			FungalItemWorldSource::PacketScope fungal_packet(*pack);
+			uint64_t original_run=0;
+			if(!FungalItemWire::Correlated(r->task_id,r->activity_id)&&
+			 !FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,r->task_id,original_run)) break;
+			if(r->task_id==FireSharedActivityOrigin::Task) {
+				auto* actual=SharedTaskManager::Instance()->FindSharedTaskByTaskIdAndCharacterId(
+				 r->task_id,r->source_character_id);
+				if(!actual || static_cast<uint64_t>(actual->GetDbSharedTask().id)!=original_run) break;
+			}
 
 			LogTasksDetail(
 				"[ServerOP_SharedTaskUpdate] Received request from character [{}] task_id [{}] activity_id [{}] donecount [{}] ignore_quest_update [{}]",

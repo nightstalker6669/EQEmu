@@ -1,0 +1,35 @@
+{
+  "batch": "RRC065",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "b365f62ce8ebdcbb5018bf5c2732668f453e1454",
+  "source_sha256": "8585c2f200f3b3d752e3fbe60c6ae15ee3d26b91a38f692149ec2dbeca4e5112",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 1,
+  "entries_updated": 0,
+  "recipe_ids": [
+    232
+  ],
+  "recipe_definitions_preserved": 1,
+  "full_existing_entries_guarded": 5,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "historical_qualification": "Maintained explicit alternative-container source; exactMay2013Coffin support not independently established. Existing recipe numeric/failure/class metadata unchanged.",
+  "after_counts": {
+    "recipes": 25430,
+    "entries": 191683
+  },
+  "commit_receipt": [
+    "RRC065",
+    "1",
+    "25430",
+    "25430",
+    "191682",
+    "191683",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

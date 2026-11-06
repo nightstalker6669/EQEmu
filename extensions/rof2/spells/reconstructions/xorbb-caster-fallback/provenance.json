@@ -1,0 +1,42 @@
+{
+  "status": "SOURCE_ONLY_SELECTED_FALLBACK_NOT_ORIGINAL_AI",
+  "database_writes": 0,
+  "native_acceptance": false,
+  "new_server_ai_list": 925000,
+  "new_entry_ids": [
+    925001,
+    925017
+  ],
+  "new_client_spell_ids": 0,
+  "new_table_rows": 18,
+  "selected_actor_bindings": 24,
+  "existing_defaults_actors": 16,
+  "isolated_wizard_actors": 8,
+  "original_historical_membership_verified": false,
+  "shared_lists_or_pet_templates_modified": false,
+  "reservation": "JARVIS provisional925000/925001\u2013925017; exact namespaces absent in retained point-in-time reads",
+  "evidence": {
+    "active_unique_spells_resolved": 66,
+    "base_evidence_sha256": "1876e5c0b6f1313a565d4b05d01979c5b0b1c8a96d2c4475c7cc149f3bb7f7d7",
+    "native_definition_evidence_sha256": "f3eaa146f78db60a6e8fcb755451536516b37a7989a0a9934954616f94118965",
+    "pet_dependency_evidence_sha256": "feb61e39b4487fa6ffa647084be0755cba4c46d1e8e5b34b94eebff3855c2915"
+  },
+  "source_notes": [
+    {
+      "path": "zone/mob_ai.cpp",
+      "sha256": "16da7197255533ea82e0667e85546aea7c883edd7637032810e9432aad0e3279",
+      "finding": "Nuke lacks pet ownership guard; Pet32idle guard differs from targetlocked combat summons; new snapshot list copies17nativeentries"
+    },
+    {
+      "path": "zone/pets.cpp",
+      "sha256": "d4f71541c5ca23358bf80ba50e741da9c4b9a3721b68018a8a993315d64199ed",
+      "finding": "MakePoweredPet setsPetID; targetlock5 requires active enemy target and otherwise unsummons"
+    },
+    {
+      "path": "zone/npc.cpp",
+      "sha256": "4f29df467cffe3f296a6e4d93ee24c7e5995a7e2d77b191047c25f7f5b3e4cef",
+      "finding": "mana0 uses class stat/level calculation and constructor restores pool"
+    }
+  ],
+  "source_provenance": "Retained local source, not proof of running Build descendant; no new native tests or runtime inspection."
+}

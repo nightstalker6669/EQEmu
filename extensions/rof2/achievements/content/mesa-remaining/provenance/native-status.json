@@ -1,0 +1,62 @@
+{
+  "status": "Source/package and distinct native acceptance completed; full36quest individual playthrough not claimed",
+  "source_coverage": {
+    "tasks": 36,
+    "activities": 277,
+    "recipes": 27,
+    "bindings": 36,
+    "quest_reward_sets": 8,
+    "class_armor_bindings": 112,
+    "parent_reward_sets": 4,
+    "parent_native_items": 10
+  },
+  "ordinary_native_completed": [
+    3040439,
+    3040440,
+    3040451,
+    3040452
+  ],
+  "private_assigned_native_completed": [
+    3040442,
+    3040445,
+    3040448
+  ],
+  "pending_native": [],
+  "limits": [
+    "No claim that all36 routes were individually played",
+    "Private scene task assignments bypass prerequisites but grant no objective counts",
+    "Solo geared fixture does not establish minimum-level balance or simultaneous-player gameplay",
+    "Portable Windows execution remains unverified",
+    "Original missing probabilities/combat/route values use explicit approved configurable defaults"
+  ],
+  "protocol": "Existing achievement/task/reward/item/door protocol; no new opcode or struct",
+  "route_acceptance_setup": "Opening hail, actual4pollen/4honey drops, Dorina materials and Simu honey handoff separately observed. Route-only rerun restores only those earlier prerequisites on QA character after native reconstructed-route defects; never escort/ambush/arrival/completion counts.",
+  "native_fixed_defects": [
+    "Native killed-entity ID survives corpse conversion through preserved owner-bound actor identity",
+    "Spawned Lua_Mob cast to Lua_NPC before corpse loot setup; failed setup cleans owned actor",
+    "Escort avoids original client zone-line volumes and compares arrival to exact server collision-corrected guard destination"
+  ],
+  "route_only_native_completed": [
+    3040456
+  ],
+  "route_only_result": "Original Simu physically walked complete corrected route, actual raider died, living Dorina arrival and final hail; saved task and component50142 confirmed. No NPC success teleport or escort/completion objective grant.",
+  "fresh_login_persistence": {
+    "status": "PASS",
+    "distinct_completed_tasks": 8,
+    "completed_components": [
+      50137,
+      50138,
+      50142,
+      50150,
+      50151,
+      50153,
+      50156,
+      50159
+    ],
+    "equipment_slots_preserved": 20,
+    "earring_scaling_preserved": 1500,
+    "unrelated_active_tasks_preserved": true,
+    "process_restarted": "Matching isolated RoF2 MacroQuest saved AutoLogin profile; new process, visible render and harmless echo verified"
+  },
+  "saved_reward_selection": "Dorina Lament reward offer persisted across fresh client process login; native Dryad Tender Bauble selection delivered one actual item."
+}

@@ -27,6 +27,7 @@ int gettimeofday (timeval *tp, ...);
 
 #include <chrono>
 
+namespace FirePersonalOccurrenceSource { class OriginalItemSnapshot; }
 class Timer
 {
 public:
@@ -46,7 +47,7 @@ public:
 	void Trigger();
 	void SetAtTrigger(uint32 set_at_trigger, bool iEnableIfDisabled = false, bool ChangeTimerTime = false);
 
-	inline bool Enabled() { return enabled; }
+	inline bool Enabled() const { return enabled; }
 	inline uint32 GetStartTime() { return(start_time); }
 	inline uint32 GetDuration() { return(timer_time); }
 
@@ -56,6 +57,7 @@ public:
 	static const uint32 GetTimeSeconds();
 
 private:
+	friend class FirePersonalOccurrenceSource::OriginalItemSnapshot;
 	uint32	start_time;
 	uint32	timer_time;
 	bool	enabled;

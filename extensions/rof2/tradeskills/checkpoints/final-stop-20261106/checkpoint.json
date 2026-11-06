@@ -1,0 +1,185 @@
+{
+  "status": "PAUSED_BY_USER_FULL_STOP",
+  "remaining_recipe_groups": 58,
+  "last_receipt_backed_database_counts": {
+    "recipes": 34438,
+    "entries": 261105,
+    "through": "RRC308 except RRC307 pending",
+    "fresh_database_read_on_stop": false
+  },
+  "pending_prepared": {
+    "RRC307": 5,
+    "RRC309": 2
+  },
+  "unfinished_recharge_writer": 8,
+  "unknown_trivials": [
+    {
+      "name": "Black Insanity (battlehammer)",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Black Insanity (knight's sword)",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Dark Courage",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Fine Xakra Runed Jar",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Vale Studded Leggings",
+      "source_trivial": "106<x<=108"
+    },
+    {
+      "name": "Rigid Steelweave Collar",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Rigid Steelweave Gauntlets",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Serene Woven Platinum Gloves",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Woven Platinum Choker",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Fearsome Skyiron Coif",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Blackened Darksplint Cape",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Acrylia-Bladed Wakizashi",
+      "source_trivial": ">222"
+    },
+    {
+      "name": "Balanced Zweihander",
+      "source_trivial": ">222"
+    },
+    {
+      "name": "Fearful Balanced Zweihander",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Fearful Glyphed Falchion",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Fearful Reshapen Sharkbone Hammer",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Hateful Acrylia-Bladed Wakizashi",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Hateful Balanced Zweihander",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Hateful Glyphed Falchion",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Hateful Polished Obsidian Shard",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Hateful Reshapen Sharkbone Hammer",
+      "source_trivial": ">244"
+    },
+    {
+      "name": "Hateful Varnished Wooden Crook",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Polished Obsidian Shard",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Varnished Wooden Crook",
+      "source_trivial": ">222"
+    },
+    {
+      "name": "Vengeful Acrylia-Bladed Wakizashi",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Vengeful Balanced Zweihander",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Vengeful Glyphed Falchion",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Vengeful Polished Obsidian Shard",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Vengeful Reshapen Sharkbone Hammer",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Vengeful Rigid Mistmoore Shield",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Vengeful Varnished Wooden Crook",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Brellium Platemail Gauntlets",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "Mischievous Platemail Gauntlets",
+      "source_trivial": ">250"
+    },
+    {
+      "name": "HEHE Meat",
+      "source_trivial": "unknown"
+    },
+    {
+      "name": "Grimling Dart Crafting Tool",
+      "source_trivial": "<=46"
+    },
+    {
+      "name": "Chronium Plate",
+      "source_trivial": "0<x<=188"
+    }
+  ],
+  "era_verification": [
+    "Distillate of Celestial Healing XVIII",
+    "Distillate of Clarity XVIII",
+    "Distillate of Divine Healing XVIII",
+    "Distillate of Health XVIII",
+    "Distillate of Replenishment XVIII",
+    "Distillate of Spirituality XVIII"
+  ],
+  "unconfirmed_recipe": "Grilled Darkhollow Basilisk Stew",
+  "RRC310": "Authored source only; disabled draft, no SQL package, no review/build/install/application/native acceptance. Proposed IDs3102883-3102890; do not execute patch.",
+  "dependency": "RRC310 patch requires exact pending RRC309 CPP 017e5b051202f1151a7b83ec6937451f34b27ed00caa5618473235ed20f4888d, retaining RRC307; other exact file pins in draft contract.",
+  "resume_requires": "Explicit user resume; publication is archival only and does not authorize applying any patch/SQL/build/install.",
+  "RRC309_actual_status": {
+    "source_published_commit": "57b84a026fe47de472f933d0fee4e3c680585e58",
+    "combined_RRC307_RRC309_compile": "PASS",
+    "compile_receipt_sha256": "3c562745fc638255ac4742ea9d11a52efeed4969eca8c09fc51b7932ae5e1587",
+    "item_23382_definition": "APPLIED",
+    "item_definition_receipt_sha256": "ddb34589e699042a8a004b4949b37e91a5cc5a552f01ae86f8d0e40b3679f74d",
+    "targeted_item_cache": "PENDING",
+    "actor_install": "PENDING",
+    "two_recipe_SQL": "PENDING",
+    "item_127972_definition": "NOT_CREATED",
+    "provenance": "Coordinator supplied actual status at full stop; no fresh query performed."
+  }
+}

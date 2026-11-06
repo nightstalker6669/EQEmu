@@ -15,6 +15,8 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "../common/housing/legacy_scaling_state.h"
+
 #include "common/classes.h"
 #include "common/data_verification.h"
 #include "common/item_instance.h"
@@ -174,6 +176,12 @@ void Mob::CalcItemBonuses(StatBonuses* b) {
 	}
 
 	if (IsClient()) {
+		// Grants are refreshed on authenticated source invalidation, never from CalcBonuses.
+		std::vector<uint32> trophy_stats=CastToClient()->HousingTrophyStatItems();const auto& guild_trophy_stats=CastToClient()->HousingGuildTrophyStatItems();trophy_stats.insert(trophy_stats.end(),guild_trophy_stats.begin(),guild_trophy_stats.end());
+        for(auto item_id:trophy_stats){
+			const auto* trophy=database.CreateItem(item_id);
+			if(trophy){AddItemBonuses(trophy,b,false,true);safe_delete(trophy);}
+		}
 		if (CastToClient()->GetPP().tribute_active) {
 			for (auto const &t: CastToClient()->GetPP().tributes) {
 				auto item_id = CastToClient()->LookupTributeItemID(t.tribute, t.tier);
@@ -260,7 +268,7 @@ void Mob::AddItemBonuses(const EQ::ItemInstance* inst, StatBonuses* b, bool is_a
 		return;
 	}
 
-	if (IsClient() && !is_tribute && !inst->IsEquipable(GetBaseRace(), GetClass())) {
+	if (IsClient() && !is_tribute && !inst->IsEquipable(GetBaseRace(), GetClass()) && !CastToClient()->IsSpiritShroudStarterItem(inst)) {
 		if (item->ItemType != EQ::item::ItemTypeFood && item->ItemType != EQ::item::ItemTypeDrink) {
 			return;
 		}
@@ -644,6 +652,15 @@ void Mob::ApplyAABonuses(const AA::Rank &rank, StatBonuses *newbon)
 		}
 
 		switch (effect) {
+		case SpellEffect::AttackSpeed:
+			// Captured Monster AA Attack Speed owns one cumulative raw factor.
+			// Keep this adapter out of every ordinary-character AA calculation.
+			if (IsClient() && CastToClient()->IsSpiritShrouded() &&
+				rank.base_ability && rank.base_ability->id == 49005 &&
+				limit_value == 0 && base_value >= 105 && base_value <= 140) {
+				newbon->haste += base_value;
+			}
+			break;
 		case SpellEffect::ACv2:
 		case SpellEffect::ArmorClass:
 			newbon->AC += base_value;
@@ -668,6 +685,15 @@ void Mob::ApplyAABonuses(const AA::Rank &rank, StatBonuses *newbon)
 			newbon->movementspeed += base_value; // should we let these stack?
 			/*if (base1 > newbon->movementspeed)	//or should we use a total value?
 				newbon->movementspeed = base1;*/
+			break;
+		case SpellEffect::AllStats:
+			newbon->STR += base_value;
+			newbon->STA += base_value;
+			newbon->DEX += base_value;
+			newbon->AGI += base_value;
+			newbon->INT += base_value;
+			newbon->WIS += base_value;
+			newbon->CHA += base_value;
 			break;
 		case SpellEffect::STR:
 			newbon->STR += base_value;
@@ -727,6 +753,10 @@ void Mob::ApplyAABonuses(const AA::Rank &rank, StatBonuses *newbon)
 		case SpellEffect::MaxHPChange:
 			newbon->PercentMaxHPChange += base_value;
 			break;
+		case SpellEffect::ExpandMaxActiveTrophyBen:
+			newbon->ExpandMaxActiveTrophyBenefits += base_value;
+			break;
+
 		case SpellEffect::Packrat:
 			newbon->Packrat += base_value;
 			break;
@@ -1111,6 +1141,9 @@ void Mob::ApplyAABonuses(const AA::Rank &rank, StatBonuses *newbon)
 			break;
 		}
 
+		case SpellEffect::TwoHandBluntBlock:
+			newbon->TwoHandBluntBlock += base_value;
+			break;
 		case SpellEffect::CriticalHitChance: {
 			// Bad data or unsupported new skill
 			if (limit_value > EQ::skills::HIGHEST_SKILL)
@@ -2968,6 +3001,10 @@ void Mob::ApplySpellsBonuses(int32 spell_id, uint8 casterlevel, StatBonuses *new
 				break;
 			}
 
+			case SpellEffect::ExpandMaxActiveTrophyBen:
+				new_bonus->ExpandMaxActiveTrophyBenefits += effect_value;
+				break;
+
 			case SpellEffect::NegateSpellEffect:
 				new_bonus->NegateEffects = true;
 				break;
@@ -3951,7 +3988,7 @@ bool Client::CalcItemScale(uint32 slot_x, uint32 slot_y) {
 		bool update_slot = false;
 		if(inst->IsScaling())
 		{
-			uint16 oldexp = inst->GetExp();
+			uint32 oldexp = inst->GetExp();
 
 			if (parse->ItemHasQuestSub(inst, EVENT_SCALE_CALC)) {
 				parse->EventItem(EVENT_SCALE_CALC, this, inst, nullptr, "", 0);
@@ -3973,7 +4010,7 @@ bool Client::CalcItemScale(uint32 slot_x, uint32 slot_y) {
 
 			if(a_inst->IsScaling())
 			{
-				uint16 oldexp = a_inst->GetExp();
+				uint32 oldexp = a_inst->GetExp();
 
 				if (parse->ItemHasQuestSub(a_inst, EVENT_SCALE_CALC)) {
 					parse->EventItem(EVENT_SCALE_CALC, this, a_inst, nullptr, "", 0);
@@ -3988,6 +4025,8 @@ bool Client::CalcItemScale(uint32 slot_x, uint32 slot_y) {
 			}
 		}
 
+        if (update_slot && !database.SaveInventory(CharacterID(),inst,int16_t(i)))
+            LogError("Could not persist recalculated legacy scaling item character [{}] slot [{}]",CharacterID(),i);
 		if(update_slot)
 		{
 			SendItemPacket(i, inst, ItemPacketCharmUpdate);
@@ -4043,7 +4082,7 @@ bool Client::DoItemEnterZone(uint32 slot_x, uint32 slot_y) {
 		bool update_slot = false;
 		if(inst->IsScaling())
 		{
-			uint16 oldexp = inst->GetExp();
+			uint32 oldexp = inst->GetExp();
 
 			if (parse->ItemHasQuestSub(inst, EVENT_ITEM_ENTER_ZONE)) {
 				parse->EventItem(EVENT_ITEM_ENTER_ZONE, this, inst, nullptr, "", 0);
@@ -4081,7 +4120,7 @@ bool Client::DoItemEnterZone(uint32 slot_x, uint32 slot_y) {
 
 			if(a_inst->IsScaling())
 			{
-				uint16 oldexp = a_inst->GetExp();
+				uint32 oldexp = a_inst->GetExp();
 
 				if (parse->ItemHasQuestSub(a_inst, EVENT_ITEM_ENTER_ZONE)) {
 					parse->EventItem(EVENT_ITEM_ENTER_ZONE, this, a_inst, nullptr, "", 0);
@@ -4100,6 +4139,8 @@ bool Client::DoItemEnterZone(uint32 slot_x, uint32 slot_y) {
 			}
 		}
 
+        if (!Housing::LegacyScaling::Current(*inst).empty() && !database.SaveInventory(CharacterID(),inst,int16_t(i)))
+            LogError("Could not persist zone-entry legacy scaling item character [{}] slot [{}]",CharacterID(),i);
 		if(update_slot)
 		{
 			SendItemPacket(i, inst, ItemPacketCharmUpdate);

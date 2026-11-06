@@ -1,0 +1,51 @@
+{
+  "cutoff": "2013-05-31",
+  "enabled": false,
+  "missing_choices_are_not_fabricated": true,
+  "ascending": {
+    "achievement_id": 500050200,
+    "quest_id": 5567,
+    "period_capture_urls": [
+      "https://web.archive.org/web/20121019062635id_/http://everquest.allakhazam.com/db/quest.html?quest=5567",
+      "https://web.archive.org/web/20130315234325id_/http://everquest.allakhazam.com/db/quest.html?quest=5567"
+    ],
+    "established": {
+      "tier": "Intricate Consigned",
+      "slot": "wrist",
+      "total_quantity": 2,
+      "2012_firsthand_comment": "March27 2012 reader explicitly calls them sub60 Defiant-equivalent bracers"
+    },
+    "not_established": [
+      "Which of the ten native wrist variants occur as reward choices",
+      "Whether one selection grants two identical items, two independent selections are presented, or a fixed two-variant bundle is granted",
+      "Whether every equipment-eligible wrist variant is selectable or a narrower class-specific subset is used"
+    ]
+  },
+  "raider": {
+    "achievement_id": 500050100,
+    "quest_id": 5651,
+    "period_capture_urls": [
+      "https://web.archive.org/web/20121018225130id_/http://everquest.allakhazam.com/db/quest.html?quest=5651",
+      "https://web.archive.org/web/20130315232558id_/http://everquest.allakhazam.com/db/quest.html?quest=5651"
+    ],
+    "established": {
+      "melee_family": [
+        "Intricate Consigned Gloves",
+        "Intricate Soldier's Cloak",
+        "Intricate Soldier's Orb"
+      ],
+      "caster_family": [
+        "Intricate Consigned Gloves",
+        "Intricate Scryer's Cloak",
+        "Intricate Scryer's Sphere"
+      ],
+      "prose_semantics": "Each family lists all three rewards; there is no text saying choose only one of the three. Interpret as glove+cloak+range bundle, not a three-way item choice.",
+      "quantity": "One glove item and one of each named accessory per family, as listed singularly; exact UI option/payload structure not archived."
+    },
+    "not_established": [
+      "Exact2013 reward option list and whether equipment class masks restrict visible choices",
+      "Generic Intricate Consigned Gloves has no linked exact item IDs in either period capture",
+      "Native glove candidates are unique per armor material, but this alone does not prove all four are offered or their exact bundle mapping"
+    ]
+  }
+}

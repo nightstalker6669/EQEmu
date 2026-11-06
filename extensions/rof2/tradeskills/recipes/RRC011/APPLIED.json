@@ -1,0 +1,45 @@
+{
+  "status": "APPLIED_VERIFIED_EXACT9RECIPES_60ENTRIES",
+  "SQL_client_exit": 0,
+  "source_SQL_invocations": 1,
+  "actual_server_commit_count_receipt": [
+    "RRC011",
+    "0",
+    "23080",
+    "23089",
+    "179073",
+    "179133",
+    "0"
+  ],
+  "source_sha256": "a3c52be77b721ced66705ec45deee0d24f0e4251ccabdffe47996a07b8887293",
+  "published_commit": "810723ffb403bebd97f9b93f27ec31c623663625",
+  "synthetic_fixture": false,
+  "actual_recipe_ids": [
+    3091258,
+    3091266
+  ],
+  "verified_recipe_count": 9,
+  "verified_logical_entries": 60,
+  "before_counts": {
+    "tradeskill_recipe": 23080,
+    "tradeskill_recipe_entries": 179073
+  },
+  "after_counts": {
+    "tradeskill_recipe": 23089,
+    "tradeskill_recipe_entries": 179133
+  },
+  "all_existing_recipe_entry_rows_exactly_preserved": true,
+  "dependency_item_fields_unchanged": true,
+  "schema_indexes_unchanged": true,
+  "independent_readonly_connection_readback": true,
+  "native_combine": false,
+  "build_restart_client_config_version_changes": false,
+  "rollback_executed": false,
+  "historical_all_recipe_completeness": false,
+  "credentials_persisted": false,
+  "existing_producer_recipe_ids_preserved": [
+    3091001,
+    3091058
+  ],
+  "scope": "Configured development server content database"
+}

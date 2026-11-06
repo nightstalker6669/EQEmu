@@ -1,0 +1,262 @@
+{
+  "status": "SOURCE_ONLY_NO_NATIVE_ALLOCATIONS_OR_APPLY",
+  "external_quest": 4945,
+  "native_task_id": null,
+  "task_title": "Scent of a Woman",
+  "quest_source": "https://everquest.allakhazam.com/db/quest/4945",
+  "guide": "https://www.raspersrealm.com/Everquest/Underfoot/missionUnderquarry.html",
+  "native_existing_actors": [
+    {
+      "id": 482012,
+      "name": "#Yolgund_Murkwader",
+      "level": 88,
+      "class": 1,
+      "race": 8,
+      "npc_spells_id": 0,
+      "loottable_id": 0
+    },
+    {
+      "id": 482184,
+      "name": "#Peramin_Longbottle",
+      "level": 88,
+      "class": 1,
+      "race": 12,
+      "npc_spells_id": 0,
+      "loottable_id": 0
+    },
+    {
+      "id": 482186,
+      "name": "#Tenkar_Everhot",
+      "level": 88,
+      "class": 1,
+      "race": 8,
+      "npc_spells_id": 0,
+      "loottable_id": 0
+    },
+    {
+      "id": 482189,
+      "name": "#Haeger_Stonecracker",
+      "level": 88,
+      "class": 1,
+      "race": 8,
+      "npc_spells_id": 0,
+      "loottable_id": 0
+    },
+    {
+      "id": 482192,
+      "name": "#Clontik_Beardburner",
+      "level": 88,
+      "class": 1,
+      "race": 8,
+      "npc_spells_id": 0,
+      "loottable_id": 0
+    }
+  ],
+  "native_existing_placements": [
+    {
+      "npcID": 482012,
+      "spawngroupID": 96232,
+      "id": 134655,
+      "zone": "underquarry",
+      "version": 0
+    },
+    {
+      "npcID": 482184,
+      "spawngroupID": 96493,
+      "id": 134916,
+      "zone": "underquarry",
+      "version": 0
+    },
+    {
+      "npcID": 482186,
+      "spawngroupID": 96499,
+      "id": 134922,
+      "zone": "underquarry",
+      "version": 0
+    },
+    {
+      "npcID": 482189,
+      "spawngroupID": 96504,
+      "id": 134927,
+      "zone": "underquarry",
+      "version": 0
+    },
+    {
+      "npcID": 482192,
+      "spawngroupID": 96508,
+      "id": 134931,
+      "zone": "underquarry",
+      "version": 0
+    }
+  ],
+  "quest_items": [
+    {
+      "native_item": 41974,
+      "external_item": 86654,
+      "owner": "Ptoleus",
+      "owner_external_npc": 34477,
+      "id": 41974,
+      "Name": "Counterrotating Flywheel Piston",
+      "itemtype": 11,
+      "lore": "A high-precision clockwork part.",
+      "stackable": 0,
+      "identity_evidence": "Chrome source item name and distinct lore match existing native row; website key is not native itemID"
+    },
+    {
+      "native_item": 41975,
+      "external_item": 86652,
+      "owner": "Trathon",
+      "owner_external_npc": 34475,
+      "id": 41975,
+      "Name": "Difference Machine Gearbox",
+      "itemtype": 11,
+      "lore": "An ornate box of intricate metalwork.",
+      "stackable": 0,
+      "identity_evidence": "Chrome source item name and distinct lore match existing native row; website key is not native itemID"
+    },
+    {
+      "native_item": 41976,
+      "external_item": 86659,
+      "owner": "Aurdred",
+      "owner_external_npc": 34474,
+      "id": 41976,
+      "Name": "Servogizmonic Manipulator",
+      "itemtype": 11,
+      "lore": "A sturdy clockwork part designed for lifting and tweaking.",
+      "stackable": 0,
+      "identity_evidence": "Chrome source item name and distinct lore match existing native row; website key is not native itemID"
+    },
+    {
+      "native_item": 41977,
+      "external_item": 86657,
+      "owner": "Gracho",
+      "owner_external_npc": 34476,
+      "id": 41977,
+      "Name": "Pellucinite Cylinder",
+      "itemtype": 11,
+      "lore": "A clockwork part which converts fuel into movement.",
+      "stackable": 0,
+      "identity_evidence": "Chrome source item name and distinct lore match existing native row; website key is not native itemID"
+    },
+    {
+      "native_item": 41978,
+      "external_item": 86661,
+      "owner": "Lady Envy",
+      "owner_external_npc": 34468,
+      "id": 41978,
+      "Name": "Instructions",
+      "itemtype": 11,
+      "lore": "A white scroll with over-deliberate blocky writing.",
+      "stackable": 0,
+      "identity_evidence": "Chrome source item name and distinct lore match existing native row; website key is not native itemID"
+    }
+  ],
+  "spell_rewards": [
+    {
+      "spell_id": 19723,
+      "name": "Venimor's Insult",
+      "items": [
+        119473
+      ],
+      "levels": {
+        "8": 85
+      },
+      "rank1_mission": "Scent of a Woman",
+      "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+      "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+    },
+    {
+      "spell_id": 19756,
+      "name": "Erud's Retort",
+      "items": [
+        119506
+      ],
+      "levels": {
+        "2": 85
+      },
+      "rank1_mission": "Scent of a Woman",
+      "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+      "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+    },
+    {
+      "spell_id": 19790,
+      "name": "Hypnotic Stare",
+      "items": [
+        119540
+      ],
+      "levels": {
+        "14": 85
+      },
+      "rank1_mission": "Scent of a Woman",
+      "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+      "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+    },
+    {
+      "spell_id": 19853,
+      "name": "Splash of Sanctification",
+      "items": [
+        119603
+      ],
+      "levels": {
+        "3": 83
+      },
+      "rank1_mission": "Scent of a Woman",
+      "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+      "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+    },
+    {
+      "spell_id": 19911,
+      "name": "Frost Gift",
+      "items": [
+        119661
+      ],
+      "levels": {
+        "10": 85
+      },
+      "rank1_mission": "Scent of a Woman",
+      "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+      "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+    }
+  ],
+  "missing_exact_named_mission_actors": {
+    "Lady Envy": 34468,
+    "an unfinished subordinate": 34469,
+    "a therium clockwork": 34470,
+    "a tantalum clockwork": 34471,
+    "a galvanite clockwork": 34472,
+    "a periluminum clockwork": 34473,
+    "Aurdred": 34474,
+    "Trathon": 34475,
+    "Gracho": 34476,
+    "Ptoleus": 34477
+  },
+  "chest_external_npc": 35292,
+  "instance_receiver_external_npc": 34479,
+  "identity_limit": "Existing Peramin482184 is version0; do not assume its placement is the mission instance receiver. Exact10combatactors absent under names checked; no broad alias absence claim. NPCowner owns templates/AI/loot/placements. No native IDs allocated.",
+  "period_gate_source": {
+    "url": "https://sugikiyo.blog.shinobi.jp/underfoot/%E3%80%90tier7%EF%BC%9Ascent%20of%20a%20woman%E3%80%91",
+    "article_date": "2010-06-20",
+    "prerequisites_external_quest_ids": [
+      4936,
+      4937,
+      4938,
+      4939
+    ],
+    "selection": "Period-dated article corroborates Rasper chain; modern4942substitution not selected",
+    "limits": "Not authenticated immutable2010revision; no native taskID allocation."
+  },
+  "period_reward_observation": {
+    "source": "https://sugikiyo.blog.shinobi.jp/underfoot/%E3%80%90tier7%EF%BC%9Ascent%20of%20a%20woman%E3%80%91",
+    "platinum": 105,
+    "brellium_tokens": 20,
+    "native_alternate_currency": 21,
+    "native_currency_item": 47900,
+    "limits": "Observed2010guide numbers suitable source-labelled defaults, not all-level formula or original representation proof; XP unknown."
+  },
+  "period_component_drop_observation": {
+    "source": "https://sugikiyo.blog.shinobi.jp/underfoot/%E3%80%90tier7%EF%BC%9Ascent%20of%20a%20woman%E3%80%91",
+    "copies_per_coordinator": 6,
+    "required_per_group": 1,
+    "limits": "Candidate for owned mission loot; no ordinary world/player edits."
+  }
+}

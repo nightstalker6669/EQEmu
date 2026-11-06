@@ -1,0 +1,88 @@
+-- SOURCE ONLY / DISABLED: no CALL, no migration registration, no live application.
+-- Coordinator reservation: NPC+merchant202900..202911, spawn+group304050000..304050011.
+-- Integrate Spells43new-provider merchant rows; two existing-tome additions separately in the SAME reviewed transaction; existing3/9rows separate.
+-- New12 spawn2 min_expansion18: March2012/VoA route, not UF spell identity era.
+-- Dedicated namespace guards below assume new stock has NOT yet been inserted.
+-- Do not execute as an actor-only live install. Never renumber or overwrite existing actors.
+DELIMITER $$
+CREATE PROCEDURE source_pok81_provider_component()
+BEGIN
+ DECLARE EXIT HANDLER FOR SQLEXCEPTION BEGIN ROLLBACK; RESIGNAL; END;
+ IF COALESCE(@coordinator_authorized_integrated_pok81,0)<>1 THEN
+  SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='PoK81 source component not authorized for integrated apply';
+ END IF;
+ IF (SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()
+     AND table_name IN ('npc_types','spawngroup','spawnentry','spawn2') AND engine='InnoDB')<>4 THEN
+  SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='PoK81 source component requires transactional tables';
+ END IF;
+ IF EXISTS(SELECT 1 FROM npc_types WHERE id BETWEEN 202900 AND 202911 OR merchant_id BETWEEN 202900 AND 202911)
+ OR EXISTS(SELECT 1 FROM merchantlist WHERE merchantid BETWEEN 202900 AND 202911)
+ OR EXISTS(SELECT 1 FROM merchantlist_temp WHERE npcid BETWEEN 202900 AND 202911)
+ OR EXISTS(SELECT 1 FROM spawngroup WHERE id BETWEEN 304050000 AND 304050011)
+ OR EXISTS(SELECT 1 FROM spawn2 WHERE id BETWEEN 304050000 AND 304050011 OR spawngroupID BETWEEN 304050000 AND 304050011)
+ OR EXISTS(SELECT 1 FROM spawnentry WHERE spawngroupID BETWEEN 304050000 AND 304050011 OR npcID BETWEEN 202900 AND 202911)
+ OR EXISTS(SELECT 1 FROM spawn2_disabled WHERE spawn2_id BETWEEN 304050000 AND 304050011)
+ OR EXISTS(SELECT 1 FROM respawn_times WHERE id BETWEEN 304050000 AND 304050011) THEN
+  SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='PoK81 exact reserved namespace collision';
+ END IF;
+ -- Caller owns the integrated transaction and must capture all48full postimages.
+ -- This procedure intentionally does not START/COMMIT independently of stock.
+ INSERT INTO `npc_types` (`id`, `name`, `lastname`, `level`, `race`, `class`, `bodytype`, `hp`, `mana`, `gender`, `texture`, `helmtexture`, `herosforgemodel`, `size`, `hp_regen_rate`, `hp_regen_per_second`, `mana_regen_rate`, `loottable_id`, `merchant_id`, `greed`, `alt_currency_id`, `npc_spells_id`, `npc_spells_effects_id`, `npc_faction_id`, `adventure_template_id`, `trap_template`, `mindmg`, `maxdmg`, `attack_count`, `npcspecialattks`, `special_abilities`, `aggroradius`, `assistradius`, `face`, `luclin_hairstyle`, `luclin_haircolor`, `luclin_eyecolor`, `luclin_eyecolor2`, `luclin_beardcolor`, `luclin_beard`, `drakkin_heritage`, `drakkin_tattoo`, `drakkin_details`, `armortint_id`, `armortint_red`, `armortint_green`, `armortint_blue`, `d_melee_texture1`, `d_melee_texture2`, `ammo_idfile`, `prim_melee_type`, `sec_melee_type`, `ranged_type`, `runspeed`, `MR`, `CR`, `DR`, `FR`, `PR`, `Corrup`, `PhR`, `see_invis`, `see_invis_undead`, `qglobal`, `AC`, `npc_aggro`, `spawn_limit`, `attack_speed`, `attack_delay`, `findable`, `STR`, `STA`, `DEX`, `AGI`, `_INT`, `WIS`, `CHA`, `see_hide`, `see_improved_hide`, `trackable`, `isbot`, `exclude`, `ATK`, `Accuracy`, `Avoidance`, `slow_mitigation`, `version`, `maxlevel`, `scalerate`, `private_corpse`, `unique_spawn_by_name`, `underwater`, `isquest`, `emoteid`, `spellscale`, `healscale`, `no_target_hotkey`, `raid_target`, `armtexture`, `bracertexture`, `handtexture`, `legtexture`, `feettexture`, `light`, `walkspeed`, `peqid`, `unique_`, `fixed`, `ignore_despawn`, `show_name`, `untargetable`, `charm_ac`, `charm_min_dmg`, `charm_max_dmg`, `charm_attack_delay`, `charm_accuracy_rating`, `charm_avoidance_rating`, `charm_atk`, `skip_global_loot`, `rare_spawn`, `stuck_behavior`, `model`, `flymode`, `always_aggro`, `exp_mod`, `heroic_strikethrough`, `faction_amount`, `keeps_sold_items`, `is_parcel_merchant`, `multiquest_enabled`, `npc_tint_id`) VALUES
+ (202900, 'Vicar_Feyl', 'Cleric Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202900, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202901, 'Cavalier_Tummings', 'Paladin Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202901, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202902, 'Pathfinder_Sweeneph', 'Ranger Spells 81+', 40, 156, 41, 1, 2600, 0, 2, 0, 0, 0, 6.0, 13, 0, 13, 0, 202902, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202903, 'Reaver_Enold', 'Shadowknight Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202903, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202904, 'Wanderer_Abel', 'Druid Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202904, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202905, 'Minstrel_Franchot', 'Bard Songs 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202905, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202906, 'Mystic_Voskovek', 'Shaman Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202906, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202907, 'Heretic_Lartman', 'Necromancer Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202907, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202908, 'Channeler_Larkord', 'Wizard Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202908, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202909, 'Elementalist_Bartbur', 'Magician Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202909, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202910, 'Illusionist_Phili', 'Enchanter Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202910, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0),
+ (202911, 'Primalist_Beal', 'Beastlord Spells 81+', 40, 1, 41, 1, 2600, 0, 0, 0, 0, 0, 6.0, 13, 0, 13, 0, 202911, 0, 0, 0, 0, 0, 0, 0, 32, 150, -1, 'UMCNIDABWO', '12,1^13,1^14,1^15,1^16,1^17,1^19,1^20,1^22,1^23,1', 70, 0, 0, 0, 0, 0, 0, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'IT10', 28, 28, 7, 1.25, 21, 21, 21, 21, 21, 33, 0, 0, 1, 1, 487, 0, 1, -15.0, 30, 1, 131, 131, 131, 131, 131, 131, 131, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 100.0, 100.0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 100, 0, 0, 1, 0, 0, 0);
+ IF ROW_COUNT()<>12 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='PoK81 npc_types row count'; END IF;
+ INSERT INTO `spawngroup` (`id`, `name`, `spawn_limit`, `dist`, `max_x`, `min_x`, `max_y`, `min_y`, `delay`, `mindelay`, `despawn`, `despawn_timer`, `wp_spawns`) VALUES
+ (304050000, 'pok81_202900', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050001, 'pok81_202901', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050002, 'pok81_202902', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050003, 'pok81_202903', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050004, 'pok81_202904', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050005, 'pok81_202905', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050006, 'pok81_202906', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050007, 'pok81_202907', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050008, 'pok81_202908', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050009, 'pok81_202909', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050010, 'pok81_202910', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0),
+ (304050011, 'pok81_202911', 1, 0, 0, 0, 0, 0, 45000, 15000, 0, 100, 0);
+ IF ROW_COUNT()<>12 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='PoK81 spawngroup row count'; END IF;
+ INSERT INTO `spawnentry` (`spawngroupID`, `npcID`, `chance`, `condition_value_filter`, `min_time`, `max_time`, `min_expansion`, `max_expansion`, `content_flags`, `content_flags_disabled`) VALUES
+ (304050000, 202900, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050001, 202901, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050002, 202902, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050003, 202903, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050004, 202904, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050005, 202905, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050006, 202906, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050007, 202907, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050008, 202908, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050009, 202909, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050010, 202910, 100, 1, 0, 0, -1, -1, NULL, NULL),
+ (304050011, 202911, 100, 1, 0, 0, -1, -1, NULL, NULL);
+ IF ROW_COUNT()<>12 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='PoK81 spawnentry row count'; END IF;
+ INSERT INTO `spawn2` (`id`, `spawngroupID`, `zone`, `version`, `x`, `y`, `z`, `heading`, `respawntime`, `variance`, `pathgrid`, `path_when_zone_idle`, `_condition`, `cond_value`, `animation`, `min_expansion`, `max_expansion`, `content_flags`, `content_flags_disabled`) VALUES
+ (304050000, 304050000, 'poknowledge', 0, 937, 113, -30, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050001, 304050001, 'poknowledge', 0, 1039, 88, 66, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050002, 304050002, 'poknowledge', 0, 922, 25, 69, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050003, 304050003, 'poknowledge', 0, 773, -71, -92, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050004, 304050004, 'poknowledge', 0, 1050, 7, 3, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050005, 304050005, 'poknowledge', 0, 830, 37, -60, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050006, 304050006, 'poknowledge', 0, 1000, 72, 3, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050007, 304050007, 'poknowledge', 0, 772, 82, -92, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050008, 304050008, 'poknowledge', 0, 985, -73, -60, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050009, 304050009, 'poknowledge', 0, 1110, 0, 33, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050010, 304050010, 'poknowledge', 0, 1056, 17, -60, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL),
+ (304050011, 304050011, 'poknowledge', 0, 1108, 56, 99, 0, 640, 0, 0, 0, 0, 1, 0, 18, -1, NULL, NULL);
+ IF ROW_COUNT()<>12 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT='PoK81 spawn2 row count'; END IF;
+END$$
+DELIMITER ;
+-- No CALL or COMMIT here. Integrated installer/publication remains owner-routed.

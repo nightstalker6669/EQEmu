@@ -1,0 +1,88 @@
+{
+  "status": "Source implementation only; no deployment/native acceptance",
+  "period_evidence": [
+    {
+      "url": "https://rof.eqresource.com/escapefromtheprisonofxorbb.php",
+      "report_date": "2012-12-07",
+      "supports": [
+        "skull wave sizes3,6,9",
+        "mez immunity",
+        "approximately2000 melee observed"
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/6108",
+      "report_date": "2013-01-07",
+      "supports": [
+        "Syrkl summons",
+        "danger of pit near original fight location",
+        "belly casting"
+      ]
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/6108",
+      "report_date": "2013-03-04",
+      "supports": [
+        "real skull spawns",
+        "caster pets can fight named while skulls do not engage at distance"
+      ]
+    }
+  ],
+  "mutable_guide_evidence": [
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/6108",
+      "qualification": "Entered2012-11-29; modified2023-12-05. Current body is not an immutable period snapshot.",
+      "supports": [
+        "Stasis Gaze random target/20s",
+        "Multiplicative Beam per surviving skull,5s warning",
+        "Lupex follows player and gives directions",
+        "arrival at prison updates follow stage",
+        "15 native-looted lenses; current1\u20134 drop range",
+        "everyone on Syrkl kill step receives two recovered rings and a key",
+        "one recovered ring returned on each final prisoner hail",
+        "cell key opens both cell doors"
+      ]
+    },
+    {
+      "url": "https://rof.eqresource.com/escapefromtheprisonofxorbb.php",
+      "qualification": "Original topic2012-11-20; mutable guide. Stasis Glaze is a typo resolved to actual native Stasis Gaze33703.",
+      "supports": [
+        "lens kills skull after real use",
+        "normal melee/spells also work",
+        "80/50/30 HP thresholds"
+      ]
+    }
+  ],
+  "defaults": [
+    "3s hail delay",
+    "1s encounter timer",
+    "30s beam cycle",
+    "600s owned actor lifetime",
+    "100XY/50Z lens bounds",
+    "20-unit guide follow distance",
+    "uniform1\u20134 lens roll"
+  ],
+  "remaining": [
+    "Complete profiles/visuals and geometry before readiness",
+    "Actual native lens target/consumption/lethality and owned-beam behavior",
+    "Native guide following on actual tunnel geometry",
+    "Actual cell locks, reward interruption/recovery, ring conservation and persistence",
+    "Complete updater transaction/rollback/native deployment"
+  ],
+  "native_bindings": {
+    "stasis_gaze": 33703,
+    "multiplicative_beam": 33699,
+    "lens": 66521,
+    "recovered_ring": 66519,
+    "cell_key": 66520,
+    "new_skull_npc": 753902,
+    "new_guide_npc": 753903
+  },
+  "source_contract_limits": {
+    "completed_cast": "CastedSpellFinished captures original clicked item, slot, caster and target, plus successful native charge consumption; EVENT_CAST comes after SpellFinished and charge deletion. Raw clicked target is retained; do not use current GetTarget after the cast.",
+    "lens_damage": "Native Damage remains attributed to the actual item user. CommonDamage applies magical mitigation/runes; actual configured-skull lethal result must be native-tested, not inferred from a mocked Damage call.",
+    "kill_order": "Native task Kill update/unlock occurs before KilledMerit, so follow/return stages5/11 are visible to the corresponding real kill callbacks.",
+    "global_npc": "QuestParserCollection dispatches local and global NPC events separately; lens producer fragment composes global predecessors and filters exact ordinary evil-eye IDs."
+  },
+  "lore_key": "Native item66520 is Lore. Repeat completion preserves the existing key instead of trying to summon a duplicate. An earned pending delivery can be settled with the retrieved banked key."
+}

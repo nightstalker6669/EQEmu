@@ -1,0 +1,60 @@
+{
+  "scope": "Static supplied-client asset color associations only, not quest-binding proof",
+  "archive": "sofequip.eqg",
+  "archive_sha256": "d0e5594d922afb1d38bbee6cb70e5b765be73d3e310403249b3ce446d867d949",
+  "candidates": {
+    "blue": [
+      "IT11157",
+      "IT11165"
+    ],
+    "yellow": [
+      "IT11158",
+      "IT11166"
+    ],
+    "red": [
+      "IT11156",
+      "IT11164"
+    ],
+    "green": [
+      "IT11155",
+      "IT11163"
+    ]
+  },
+  "method": "Parsed all triangle material references, then linked used diffuse texture. Shared string table alone contains unused colors and is insufficient.",
+  "guide": "https://rof.eqresource.com/krystulsforthekrystulking.php",
+  "guide_qualification": "Current mutable guide says clicking three per color updates objectives without actual loot; original Nov2012 thread establishes quest existence, not every unchanged field.",
+  "unresolved": [
+    "Exact quest model variant",
+    "Native actor orientation/scale/render",
+    "Exact node placements/respawn and original sharing semantics",
+    "Safe owned itemless click API deployment and native acknowledgement"
+  ],
+  "native_accepted": false,
+  "assets_redistributed": false,
+  "source_producer": {
+    "modules": [
+      "achievement_quest_xorbb_krystuls.lua",
+      "achievement_quest_xorbb_krystuls_data.lua"
+    ],
+    "API": "Published shared-core966b510 create/remove_transient_click_object exact lease + ingress e.object_id; deployment not assumed",
+    "configurable_reconstruction": {
+      "selected_variants": {
+        "blue": "IT11157",
+        "yellow": "IT11158",
+        "red": "IT11156",
+        "green": "IT11155"
+      },
+      "placement": "Provided map region centers transformed nativeX=-mapX,Y=-mapY; three nodes at offsets(-3,0),(0,3),(3,0), runtime floor resolution guarded",
+      "sharing": "12shared itemless nodes remain visible; each character can credit each node once per real monotonic task run",
+      "click_range": 20,
+      "floor_delta": 12,
+      "cluster_floor_delta": 3,
+      "manager_interval_seconds": 5,
+      "qualification": "Variant/layout/sharing/ranges/timers are labelled configurable reconstruction, not recovered May2013 fields"
+    },
+    "provenance": "Color associations proven only by supplied mesh faces/material references; guide supports3clicks/color without loot. No native/render binding proof.",
+    "persistence": "12bounded per-character node keys store epoch:pending/done; native objective counts retained across relog. Ambiguous update stays pending, never automatically replayed. Live Object tags restore node identity across quest-script reload.",
+    "activation": "D.enabled/taskready, runtime_capability, models_ready and geometry_ready all required; flags remain false",
+    "native_accepted": false
+  }
+}

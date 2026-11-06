@@ -16,6 +16,8 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cstring>
+#include "housing/legacy_scaling_state.h"
+
 #include "inventory_profile.h"
 
 #include "common/data_verification.h"
@@ -144,6 +146,9 @@ EQ::ItemInstance::ItemInstance(const ItemInstance& copy)
 	}
 
 	m_SerialNumber = copy.m_SerialNumber;
+	m_housing_estate_id = copy.m_housing_estate_id;
+	m_housing_house_id = copy.m_housing_house_id;
+	m_housing_crate_id = copy.m_housing_crate_id;
 	m_custom_data  = copy.m_custom_data;
 	m_timers       = copy.m_timers;
 
@@ -166,6 +171,15 @@ EQ::ItemInstance::ItemInstance(const ItemInstance& copy)
 }
 
 // Clean up container contents
+EQ::ItemInstance* EQ::ItemInstance::CloneWithNewSerial() const
+{
+	auto* copy = Clone();
+	if (copy) {
+		copy->m_SerialNumber = GetNextItemInstSerialNumber();
+	}
+	return copy;
+}
+
 EQ::ItemInstance::~ItemInstance()
 {
 	Clear();
@@ -360,6 +374,8 @@ uint32 EQ::ItemInstance::GetItemID(uint8 slot) const
 
 void EQ::ItemInstance::PutItem(uint8 index, const ItemInstance& inst)
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&inst))return;
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	// Clean up item already in slot (if exists)
 	DeleteItem(index);
 
@@ -370,6 +386,7 @@ void EQ::ItemInstance::PutItem(uint8 index, const ItemInstance& inst)
 // Remove item inside container
 void EQ::ItemInstance::DeleteItem(uint8 index)
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	ItemInstance* inst = PopItem(index);
 	safe_delete(inst);
 }
@@ -378,6 +395,7 @@ void EQ::ItemInstance::DeleteItem(uint8 index)
 // Hands over memory ownership to client of this function call
 EQ::ItemInstance* EQ::ItemInstance::PopItem(uint8 index)
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return nullptr;
 	auto iter = m_contents.find(index);
 	if (iter != m_contents.end()) {
 		ItemInstance* inst = iter->second;
@@ -391,6 +409,7 @@ EQ::ItemInstance* EQ::ItemInstance::PopItem(uint8 index)
 // Remove all items from container
 void EQ::ItemInstance::Clear()
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	// Destroy container contents
 	for (auto iter = m_contents.begin(); iter != m_contents.end(); ++iter) {
 		safe_delete(iter->second);
@@ -401,6 +420,7 @@ void EQ::ItemInstance::Clear()
 // Remove all items from container
 void EQ::ItemInstance::ClearByFlags(byFlagSetting is_nodrop, byFlagSetting is_norent)
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	// TODO: This needs work...
 
 	// Destroy container contents
@@ -584,6 +604,7 @@ uint32 EQ::ItemInstance::GetOrnamentHeroModel(int32 material_slot) const
 
 bool EQ::ItemInstance::UpdateOrnamentationInfo()
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false;
 	if (!m_item || !m_item->IsClassCommon()) {
 		return false;
 	}
@@ -673,6 +694,8 @@ uint32 EQ::ItemInstance::GetAugmentItemID(uint8 augment_index) const
 // Add an augment to the item
 void EQ::ItemInstance::PutAugment(uint8 slot, const ItemInstance& augment)
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(&augment))return;
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	if (!m_item || !m_item->IsClassCommon())
 		return;
 
@@ -681,6 +704,7 @@ void EQ::ItemInstance::PutAugment(uint8 slot, const ItemInstance& augment)
 
 void EQ::ItemInstance::PutAugment(SharedDatabase *db, uint8 slot, uint32 item_id)
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	if (item_id == 0) { return; }
 	if (db == nullptr) { return; /* TODO: add log message for nullptr */ }
 
@@ -694,6 +718,7 @@ void EQ::ItemInstance::PutAugment(SharedDatabase *db, uint8 slot, uint32 item_id
 // Remove augment from item and destroy it
 void EQ::ItemInstance::DeleteAugment(uint8 index)
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	if (!m_item || !m_item->IsClassCommon())
 		return;
 
@@ -703,6 +728,7 @@ void EQ::ItemInstance::DeleteAugment(uint8 index)
 // Remove augment from item and return it
 EQ::ItemInstance* EQ::ItemInstance::RemoveAugment(uint8 index)
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return nullptr;
 	if (!m_item || !m_item->IsClassCommon())
 		return nullptr;
 
@@ -809,15 +835,17 @@ const EQ::ItemData* EQ::ItemInstance::GetUnscaledItem() const
 }
 
 std::string EQ::ItemInstance::GetCustomDataString() const {
- return EQEmu::SharedCore::LegacyScaling::Write(*this,m_custom_data);
+ return Housing::LegacyScaling::Write(*this,m_custom_data);
 }
 
 void EQ::ItemInstance::SetCustomDataString(const std::string& str)
 {
-    if (auto fields=EQEmu::SharedCore::LegacyScaling::Fields(str)) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
+    if (auto fields=Housing::LegacyScaling::Fields(str)) {
         for (const auto& [key,value]:*fields) SetCustomData(key,value);
         return;
     }
+    // Preserve the historical fallback for unrelated malformed quest data.
 
 	auto components = Strings::Split(str, "^");
 	auto value_count = components.size() / 2;
@@ -840,11 +868,13 @@ std::string EQ::ItemInstance::GetCustomData(const std::string& identifier) {
 }
 
 void EQ::ItemInstance::SetCustomData(const std::string& identifier, const std::string& value) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	DeleteCustomData(identifier);
 	m_custom_data[identifier] = value;
 }
 
 void EQ::ItemInstance::SetCustomData(const std::string& identifier, int value) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	DeleteCustomData(identifier);
 	std::stringstream ss;
 	ss << value;
@@ -852,6 +882,7 @@ void EQ::ItemInstance::SetCustomData(const std::string& identifier, int value) {
 }
 
 void EQ::ItemInstance::SetCustomData(const std::string& identifier, float value) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	DeleteCustomData(identifier);
 	std::stringstream ss;
 	ss << value;
@@ -859,6 +890,7 @@ void EQ::ItemInstance::SetCustomData(const std::string& identifier, float value)
 }
 
 void EQ::ItemInstance::SetCustomData(const std::string& identifier, bool value) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	DeleteCustomData(identifier);
 	std::stringstream ss;
 	ss << value;
@@ -866,6 +898,7 @@ void EQ::ItemInstance::SetCustomData(const std::string& identifier, bool value) 
 }
 
 void EQ::ItemInstance::DeleteCustomData(const std::string& identifier) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	auto iter = m_custom_data.find(identifier);
 	if (iter != m_custom_data.end()) {
 		m_custom_data.erase(iter);
@@ -924,6 +957,7 @@ bool EQ::ItemInstance::IsDroppable(bool recurse) const
 }
 
 void EQ::ItemInstance::Initialize(SharedDatabase *db) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	// if there's no actual item, don't do anything
 	if (!m_item) {
 		return;
@@ -942,6 +976,7 @@ void EQ::ItemInstance::Initialize(SharedDatabase *db) {
 }
 
 void EQ::ItemInstance::ScaleItem() {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	if (!m_item)
 		return;
 
@@ -1026,12 +1061,14 @@ void EQ::ItemInstance::ScaleItem() {
 }
 
 void EQ::ItemInstance::SetTimer(std::string name, uint32 time) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	Timer t(time);
 	t.Start(time, false);
 	m_timers[name] = t;
 }
 
 void EQ::ItemInstance::StopTimer(std::string name) {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	auto iter = m_timers.find(name);
 	if(iter != m_timers.end()) {
 		m_timers.erase(iter);
@@ -1039,6 +1076,7 @@ void EQ::ItemInstance::StopTimer(std::string name) {
 }
 
 void EQ::ItemInstance::ClearTimers() {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	m_timers.clear();
 }
 
@@ -1747,6 +1785,7 @@ int EQ::ItemInstance::GetItemHaste(bool augments) const
 
 int EQ::ItemInstance::RemoveTaskDeliveredItems()
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return GetCharges();
 	int count = IsStackable() ? GetCharges() : 1;
 	count -= GetTaskDeliveredCount();
 	if (IsStackable())
@@ -1938,6 +1977,7 @@ void EQ::ItemInstance::ClearGUIDMap()
 
 bool EQ::ItemInstance::TransferOwnership(Database &db, const uint32 to_char_id) const
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return false;
 	if (!to_char_id || !IsEvolving()) {
 		return false;
 	}
@@ -1962,6 +2002,7 @@ uint32 EQ::ItemInstance::GetAugmentEvolveUniqueID(uint8 augment_index) const
 }
 
 void EQ::ItemInstance::SetTimer(std::string name, uint32 time) const{
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	Timer t(time);
 	t.Start(time, false);
 	m_timers[name] = t;
@@ -1969,6 +2010,7 @@ void EQ::ItemInstance::SetTimer(std::string name, uint32 time) const{
 
 void EQ::ItemInstance::SetEvolveEquipped(const bool in) const
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;
 	if (!IsEvolving()) {
 		return;
 	}
@@ -1980,9 +2022,9 @@ void EQ::ItemInstance::SetEvolveEquipped(const bool in) const
 	}
 
 	if (in) {
-		GetTimers().at("evolve").SetTimer(RuleI(EvolvingItems, DelayUponEquipping));
+		m_timers.at("evolve").SetTimer(RuleI(EvolvingItems, DelayUponEquipping));
 		return;
 	}
 
-	GetTimers().at("evolve").Disable();
+	m_timers.at("evolve").Disable();
 }

@@ -1,3 +1,7 @@
+#include "fungal_item_operation_source.h"
+#include "fire_run_terminal_scene.h"
+#include "fire_material_loot_source.h"
+#include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -15,11 +19,15 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "inventory_session_owner.h"
+#include "housing_service_npcs.h"
+
 #include "entity.h"
 
 #include "common/data_verification.h"
 #include "common/features.h"
 #include "common/guilds.h"
+#include "zone/achievement_manager.h"
 #include "zone/bot.h"
 #include "zone/dialogue_window.h"
 #include "zone/dynamic_zone.h"
@@ -31,6 +39,9 @@
 #include "zone/string_ids.h"
 #include "zone/water_map.h"
 #include "zone/worldserver.h"
+#include "fire_original_construct_producer.h"
+#include "fire_original_construct_death.h"
+#include "fire_gotonur_say_queue.h"
 
 #include "common/strings.h"
 #include "common/util/uuid.h"
@@ -573,6 +584,11 @@ void EntityList::MobProcess()
 			entity_list.RemoveMob(id);
 		}
 	}
+	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Drain();
+	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Drain();
+	FungalItemSource::NativeEvents::Drain();
+	FireRunActionSource::NativeRunHelperSource::DrainCompletions();
+	FireRunActionSource::NativeRunTerminalSource::DrainCompletions();
 }
 
 void EntityList::BeaconProcess()
@@ -667,6 +683,8 @@ void EntityList::AddCorpse(Corpse *corpse, uint32 in_id)
 
 	corpse->CalcCorpseName();
 	corpse_list.emplace(std::pair<uint16, Corpse *>(corpse->GetID(), corpse));
+	FireRunActionSource::OriginalMissionMaterialDeath::ObserveActualCorpseRegistered(*corpse);
+ FireRunActionSource::OriginalTerminalDeath::ObserveActualCorpseRegistered(*corpse);
 
 	if (!corpse_timer.Enabled())
 		corpse_timer.Start();
@@ -688,14 +706,17 @@ void EntityList::AddNPC(NPC *npc, bool send_spawn_packet, bool dont_queue)
 	npc_list.emplace(std::pair<uint16, NPC *>(npc->GetID(), npc));
 	mob_list.emplace(std::pair<uint16, Mob *>(npc->GetID(), npc));
 
+	FirePersonalOccurrenceSource::CaptureConstructBeforeOriginalSpawnCallbacks(npc);
+	FireRunActionSource::NativeRunHelperSource::ObserveActualRegistration(npc);
+	FireRunActionSource::NativeRunTerminalSource::ObserveActualRegistration(npc);
 	entity_list.ScanCloseMobs(npc);
 
-	if (parse->HasQuestSub(npc->GetNPCTypeID(), EVENT_SPAWN)) {
+	if (!BoundDestructibles::IsRuins(npc) && parse->HasQuestSub(npc->GetNPCTypeID(), EVENT_SPAWN)) {
 		parse->EventNPC(EVENT_SPAWN, npc, nullptr, "", 0);
 	}
 
 	const uint32 emote_id = npc->GetEmoteID();
-	if (emote_id) {
+	if (emote_id && !BoundDestructibles::IsRuins(npc)) {
 		npc->DoNPCEmote(EQ::constants::EmoteEventTypes::OnSpawn, emote_id);
 	}
 
@@ -707,7 +728,9 @@ void EntityList::AddNPC(NPC *npc, bool send_spawn_packet, bool dont_queue)
 			npc->CreateSpawnPacket(app, npc);
 			QueueClients(npc, app);
 			npc->SendArmorAppearance();
-			npc->SetAppearance(npc->GetGuardPointAnim(), false);
+			if (!BoundDestructibles::IsRuins(npc)) {
+				npc->SetAppearance(npc->GetGuardPointAnim(), false);
+			}
 
 			if (!npc->IsTargetable()) {
 				npc->SendTargetable(false);
@@ -729,11 +752,11 @@ void EntityList::AddNPC(NPC *npc, bool send_spawn_packet, bool dont_queue)
 
 	npc->SendPositionToClients();
 
-	if (parse->HasQuestSub(ZONE_CONTROLLER_NPC_ID, EVENT_SPAWN_ZONE)) {
+	if (!BoundDestructibles::IsRuins(npc) && parse->HasQuestSub(ZONE_CONTROLLER_NPC_ID, EVENT_SPAWN_ZONE)) {
 		npc->DispatchZoneControllerEvent(EVENT_SPAWN_ZONE, npc, "", 0, nullptr);
 	}
 
-	if (parse->ZoneHasQuestSub(EVENT_SPAWN_ZONE)) {
+	if (!BoundDestructibles::IsRuins(npc) && parse->ZoneHasQuestSub(EVENT_SPAWN_ZONE)) {
 		std::vector<std::any> args = { npc };
 		parse->EventZone(EVENT_SPAWN_ZONE, zone, "", 0, &args);
 	}
@@ -1159,7 +1182,10 @@ Mob *EntityList::GetMob(uint16 get_id)
 	if (get_id == 0)
 		return nullptr;
 
-	if ((ent = entity_list.GetEntityMob(get_id)))
+	// A hovering client's map key still names its former spawn, but its
+ // current ID is zero (or a new spawn after respawn). That stale entry
+ // must not hide the corpse which legitimately retained the requested ID.
+ if ((ent = entity_list.GetEntityMob(get_id)) && ent->GetID() == get_id)
 		return ent->CastToMob();
 	else if ((ent = entity_list.GetEntityCorpse(get_id)))
 		return ent->CastToMob();
@@ -1475,6 +1501,7 @@ void EntityList::SendZoneObjects(Client *client)
 {
 	auto it = object_list.begin();
 	while (it != object_list.end()) {
+  if(it->second->IsHousingRecipe301()){++it;continue;}
 		auto app = new EQApplicationPacket;
 		it->second->CreateSpawnPacket(app);
 		client->FastQueuePacket(&app);
@@ -2646,7 +2673,9 @@ void EntityList::RemoveAllMobs()
 			++it;
 			continue;
 		}
+		auto inventory_ticket = it->second->IsClient() ? it->second->CastToClient()->InventorySessionReleaseTicket() : nullptr;
 		safe_delete(it->second);
+		if (inventory_ticket) inventory_ticket->ReleaseAfterCompleteDelete();
 		free_ids.push(it->first);
 		it = mob_list.erase(it);
 	}
@@ -2794,7 +2823,9 @@ bool EntityList::RemoveMob(uint16 delete_id)
 		else if (client_list.count(delete_id)) {
 			entity_list.RemoveClient(delete_id);
 		}
+		auto inventory_ticket = it->second->IsClient() ? it->second->CastToClient()->InventorySessionReleaseTicket() : nullptr;
 		safe_delete(it->second);
+		if (inventory_ticket) inventory_ticket->ReleaseAfterCompleteDelete();
 		if (!corpse_list.count(delete_id)) {
 			free_ids.push(it->first);
 		}
@@ -4244,6 +4275,51 @@ void EntityList::ReloadAllClientsTaskState(int task_id)
 	}
 }
 
+bool EntityList::ReloadAchievements(uint32 &failed_client_count)
+{
+	failed_client_count = 0;
+	if (!AchievementManager::Instance().Reload()) {
+		return false;
+	}
+
+	size_t attempted = 0;
+	size_t reloaded = 0;
+	for (const auto &[entity_id, client] : client_list) {
+		(void) entity_id;
+		if (!client || !client->ClientDataLoaded()) {
+			continue;
+		}
+
+		++attempted;
+		if (client->ReloadAchievements()) {
+			++reloaded;
+			continue;
+		}
+
+		++failed_client_count;
+		LogError(
+			"Failed to rebuild achievement state for character [{}] [{}] after "
+			"the achievement content reload; achievement state was disabled for "
+			"this client",
+			client->CharacterID(),
+			client->GetName()
+		);
+	}
+
+	LogInfo(
+		"Rebuilt achievement state for [{}] of [{}] loaded clients after content "
+		"reload; [{}] client rebuilds failed",
+		reloaded,
+		attempted,
+		failed_client_count
+	);
+
+	// The manager swap has already succeeded. An individual client load failure
+	// cannot roll it back and is reported above without making the transport
+	// claim that the previous content snapshot remains active.
+	return true;
+}
+
 bool EntityList::IsMobInZone(Mob *who)
 {
 	//We don't use mob_list.find(who) because this code needs to be able to handle dangling pointers for the quest code.
@@ -4708,6 +4784,7 @@ uint16 EntityList::CreateGroundObject(uint32 item_id, const glm::vec4& position,
 	}
 
 	auto object = new Object(inst, position.x, position.y, position.z, position.w, decay_time);
+	object->SetQuestGroundSpawn();
 
 	entity_list.AddObject(object, true);
 
@@ -5670,7 +5747,7 @@ NPC *EntityList::GetClosestBanker(Mob *sender, uint32 &distance)
 
 	auto it = npc_list.begin();
 	while (it != npc_list.end()) {
-		if (it->second->GetClass() == Class::Banker) {
+		if (it->second->GetClass() == Class::Banker && (!Housing::ServiceNpcs::Managed(it->second) || (sender->IsClient() && Housing::ServiceNpcs::Allows(*sender->CastToClient(),it->second,Housing::ServiceNpcs::Service::Banker)))) {
 			uint32 nd = ((it->second->GetY() - sender->GetY()) * (it->second->GetY() - sender->GetY())) +
 				((it->second->GetX() - sender->GetX()) * (it->second->GetX() - sender->GetX()));
 			if (nd < distance){

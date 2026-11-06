@@ -1,0 +1,30 @@
+[
+  {
+    "path": "lua_modules/achievement_quest_mesa_centaur.lua",
+    "sha256": "4885e0d40a8c01dba95f0ab2b497f949449e780490a224344fc79ec7d4e9f005"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_corruption.lua",
+    "sha256": "77ebc93bc8516a5c1586ac2b87c276859b033822081a64d834c1ad57a64fbd31"
+  },
+  {
+    "path": "lua_modules/achievement_quest_mesa_corruption_data.lua",
+    "sha256": "c7896278b50a42901cc549d6267e403d8f28ae94dec56ced5e4832b8c347c750"
+  },
+  {
+    "path": "mesa/397007.lua",
+    "sha256": "5266444d633ef93c5560787542632f9c2e953f886ff61fbdc170d63ec0c3714f"
+  },
+  {
+    "path": "mesa/397149.lua",
+    "sha256": "92a8c909b962d3d880366babb675990a58300a584ccfce3b28c5b332cf1c8a4b"
+  },
+  {
+    "path": "mesa/397196.lua",
+    "sha256": "be7187ac027324218c7be94f50135295afd6f9c688c8daf806e943ca486c02c4"
+  },
+  {
+    "path": "mesa/zone_controller.lua",
+    "sha256": "397d79aaf31271b68d16770e85f73aa81da87f5735f7e8965cfc5d76c8b1e5b5"
+  }
+]

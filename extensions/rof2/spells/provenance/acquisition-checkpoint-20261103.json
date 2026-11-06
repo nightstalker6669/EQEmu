@@ -1,0 +1,297 @@
+{
+  "format": 1,
+  "checkpoint_date": "2026-11-03",
+  "base_package_commit": "5923597c67e3e3bd0228738fb76a78b9f5bc6344",
+  "status": "RESEARCH CHECKPOINT ONLY; no enabled content or installation stage",
+  "apply_allowed": false,
+  "runtime_mutation_in_this_checkpoint": false,
+  "recovered_held_scrolls": [
+    {
+      "native_item_id": 125060,
+      "spell_id": 25371,
+      "name": "Earnest Fury Rk. III",
+      "class_id": 3,
+      "level": 90,
+      "raw_source": "https://lucy.allakhazam.com/itemraw.html?id=125060",
+      "collector_initial_date": "2010-10-13",
+      "status": "HELD: missing item definition; candidate inherited fields and original reward grouping unverified"
+    },
+    {
+      "native_item_id": 125066,
+      "spell_id": 25377,
+      "name": "Force of Marr Rk. III",
+      "class_id": 3,
+      "level": 90,
+      "raw_source": "https://lucy.allakhazam.com/itemraw.html?id=125066",
+      "collector_initial_date": "2010-10-13",
+      "status": "HELD: missing item definition; candidate inherited fields and original reward grouping unverified"
+    },
+    {
+      "native_item_id": 132477,
+      "spell_id": 30477,
+      "name": "Shared Savagery Rk. III",
+      "class_id": 16,
+      "level": 95,
+      "raw_source": "https://lucy.allakhazam.com/itemraw.html?id=132477",
+      "status": "HELD: original ID occupied locally; complete owning custody/reference and field clearance required"
+    }
+  ],
+  "voa_unverified_scroll_identities": [
+    {
+      "spell_id": 28514,
+      "name": "Jolting Impact Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 28559,
+      "name": "Devastating Slashes Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 28568,
+      "name": "Swarm of Arrows Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 28662,
+      "name": "Blood of Korum Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 29284,
+      "name": "Hiqork's Spear of Venom Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 29305,
+      "name": "Feralisera Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 29318,
+      "name": "Giaborn's Malady Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 29321,
+      "name": "Yubai's Affliction Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 29342,
+      "name": "Matip's Drowse Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 29348,
+      "name": "Hilnaah's Faithful Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 29450,
+      "name": "Decaying Venin Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 29805,
+      "name": "Daevan's Fire Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 29917,
+      "name": "Renewal of Sirqo Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 30291,
+      "name": "Empowering Warder Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 30297,
+      "name": "Exceptional Velocity Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 30309,
+      "name": "Beastwood Rampart Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 30328,
+      "name": "Frostrift Lance Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 30331,
+      "name": "Frostrift Roar Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 30334,
+      "name": "Growl of the Lion Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    },
+    {
+      "spell_id": 30380,
+      "name": "Spellbreaker's Armor Rk. III",
+      "native_item_id": null,
+      "status": "unverified; no adjacent-ID guess"
+    }
+  ],
+  "voa_shadowknight95_rankIII_grouping": {
+    "unresolved_entries": 7,
+    "status": "HELD: rankII groups not copied"
+  },
+  "underfoot_fungal_bloom": {
+    "original_quest_id": 5000,
+    "mission_reward_rank": 1,
+    "local_task_id": null,
+    "status": "Original mission/prerequisites absent; existing item/spell rows need no inserts",
+    "class_rewards": [
+      {
+        "class_id": 8,
+        "class_name": "Bard",
+        "spell_id": 19717,
+        "item_id": 119467,
+        "learning_level": 85,
+        "quantity": 1
+      },
+      {
+        "class_id": 2,
+        "class_name": "Cleric",
+        "spell_id": 19768,
+        "item_id": 119518,
+        "learning_level": 83,
+        "quantity": 1
+      },
+      {
+        "class_id": 14,
+        "class_name": "Enchanter",
+        "spell_id": 19805,
+        "item_id": 119555,
+        "learning_level": 84,
+        "quantity": 1
+      },
+      {
+        "class_id": 13,
+        "class_name": "Mage",
+        "spell_id": 19956,
+        "item_id": 119573,
+        "learning_level": 83,
+        "quantity": 1
+      },
+      {
+        "class_id": 4,
+        "class_name": "Ranger",
+        "spell_id": 19862,
+        "item_id": 119612,
+        "learning_level": 83,
+        "quantity": 1
+      },
+      {
+        "class_id": 5,
+        "class_name": "Shadowknight",
+        "spell_id": 22662,
+        "item_id": 119633,
+        "learning_level": 83,
+        "quantity": 1
+      },
+      {
+        "class_id": 1,
+        "class_name": "Warrior",
+        "spell_id": 19914,
+        "item_id": 119664,
+        "learning_level": 83,
+        "quantity": 1
+      }
+    ],
+    "source": "https://everquest.allakhazam.com/db/quest/5000"
+  },
+  "cursed_cure_midtask": {
+    "original_quest_id": 5127,
+    "inputs": [
+      49191,
+      49192,
+      49193,
+      49194
+    ],
+    "output": 49195,
+    "output_quantity": 1,
+    "output_charges": 1,
+    "source": "https://everquest.allakhazam.com/db/quest/5127#msg1287247877156534560",
+    "original_partial_cumulative_excess_regrant_policy": null,
+    "status": "HELD: typed durable intermediate custody adapter and original semantics required; no consuming hook"
+  },
+  "dream_mote_binding": {
+    "item_id": 52149,
+    "existing_local_currency_id": 22,
+    "superseded_wrong_private_currency_id": 28,
+    "currency28_actual_item_id": 61999,
+    "deployed_wrong_binding": false
+  },
+  "unresolved_acquisition": [
+    {
+      "spell_id": 34416,
+      "name": "Mark of the Exemplar",
+      "rank": 1,
+      "native_item_id": null,
+      "source": "https://everquest.allakhazam.com/db/spell/34416",
+      "status": "Original scroll/provider unknown; no inferred136416"
+    },
+    {
+      "spell_id": 14074,
+      "name": "Tjudawos' Chant of Flame Rk. III",
+      "rank": 3,
+      "level": 80,
+      "native_item_id": null,
+      "source": "https://everquest.allakhazam.com/db/spell/14074",
+      "status": "Release status and scroll unknown; four known earlier Bard Glowing entries retained, fifth held"
+    }
+  ],
+  "spell_id_snapshot": {
+    "database_records": 40722,
+    "database_maximum_id": 42602,
+    "installed_client_maximum_id": 42526,
+    "inspected_rof2_source_maximum": 45000,
+    "records_over45000": 0,
+    "id_remapping_required_by_this_audit": false,
+    "server_helpers_above_client_max_without_ordinary_class_learning": 75,
+    "status": "Dated inspected state, not a guarantee for future imports"
+  },
+  "alaran_observation_limits": {
+    "native_internal_index": 25,
+    "mq_language_identifier": 26,
+    "identifier_is_proficiency": false,
+    "pre_welcome_proficiency": null,
+    "modern_live_training_observed": "0→100,36attempts,+5to80/+1thereafter; Master before final translation/hand-in",
+    "source_route": "https://rof.eqresource.com/wordsoftheunspoken.php",
+    "historical_2012_callback_proven": false,
+    "achievement_hook_installation_approved": false
+  },
+  "excluded": [
+    "Private account/player/GUID/lease/custody snapshots",
+    "Credentials/configuration secrets",
+    "Runtime/test fixture logs and raw third-party comment captures",
+    "Unreviewed apply scripts and incomplete live installers"
+  ]
+}

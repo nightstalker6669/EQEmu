@@ -1,0 +1,39 @@
+{
+  "batch": "RRC100",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "4b133b8fddc147c5a285dc97b94bde231b8fc4ba",
+  "source_sha256": "7919c5d9da5ca1724ba7d1bc4a4d850dcc1a17f4445bf07bcc3fb40be9ac912d",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "historical_qualification": "LABELLED_RECONSTRUCTION: twelve current Fishing routes lack individual cutoff authentication; existingTSSBakingfamily does not date Fishing. New min_expansion12 is a labelled configured family floor, not introduction proof. Explicit17048/17163only;85oldFilet/FishBonespeers639entries unchanged,including12Baking60entries. BlindCatfishFishingBones4 is a separate source variant; no oldBaking correction.",
+  "recipes": 12,
+  "entries": 72,
+  "ids": [
+    3094006,
+    3094017
+  ],
+  "database": "peq_housing_test",
+  "commit_receipt": [
+    "RRC100",
+    "0",
+    "25829",
+    "25841",
+    "194808",
+    "194880",
+    "0"
+  ],
+  "after_counts": {
+    "recipes": 25841,
+    "entries": 194880
+  },
+  "affected_postimages_exact": true,
+  "unchanged_prototype_recipes": 85,
+  "unchanged_prototype_entries": 639,
+  "old_prototypes_exact": true,
+  "existing_row_changes": "No UPDATE/DELETE of existing recipes; additive exact-ID inserts only. Global old-row diff was not repeated.",
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL",
+  "legacy_learned_references_unchanged": true,
+  "target_learned_references_unchanged": true
+}

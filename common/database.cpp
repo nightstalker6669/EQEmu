@@ -16,6 +16,11 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include <cstring>
+#include "fellowship/service.h"
+#include "fellowship/vitality.h"
+
+#include "housing/admission_guard.h"
+
 #include "common/data_verification.h"
 #include "common/database_schema.h"
 #include "common/database.h"
@@ -349,6 +354,26 @@ bool Database::DeleteCharacter(const std::string& name)
 	if (!e.id) {
 		return false;
 	}
+
+	if (Housing::CheckHousingCharacterDeletion(*this, e.id, RuleB(Housing, EnablePlayerHousing)) !=
+		Housing::InventoryAdmission::Allowed) {
+		LogError("Character [{}] deletion withheld: housing requires an atomic maintenance/archive adapter", e.id);
+		return false;
+	}
+
+    // Fellowship membership must not retain a deleted leader or consume a slot.
+    // The service promotes a surviving member or removes an empty fellowship.
+    Fellowship::Service fellowships(*this);
+    if (!fellowships.CharacterDeleted(e.id, static_cast<uint64_t>(std::time(nullptr)))) {
+        LogError("Character [{}] deletion withheld: fellowship cleanup failed", e.id);
+        return false;
+    }
+
+    Fellowship::VitalityService vitality(*this);
+    if (!vitality.Clear(e.id)) {
+        LogError("Character [{}] deletion withheld: fellowship vitality cleanup failed", e.id);
+        return false;
+    }
 
 	std::string delete_type = "hard-deleted";
 	if (RuleB(Character, SoftDeletes)) {

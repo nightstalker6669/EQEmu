@@ -1,0 +1,98 @@
+[
+  {
+    "quest_id": 5568,
+    "archive_file": "quest5568-20130315122317.html",
+    "reward_item_matches": [
+      {
+        "id": 108599,
+        "Name": "Intricate Consigned Hammered Buckler",
+        "classes": 16861,
+        "slots": 16384
+      },
+      {
+        "id": 108598,
+        "Name": "Intricate Consigned Bow",
+        "classes": 285,
+        "slots": 2048
+      },
+      {
+        "id": 108588,
+        "Name": "Intricate Consigned Hammer",
+        "classes": 16861,
+        "slots": 24576
+      },
+      {
+        "id": 108590,
+        "Name": "Intricate Consigned Katana",
+        "classes": 413,
+        "slots": 24576
+      },
+      {
+        "id": 108592,
+        "Name": "Intricate Consigned Sacrificial Dagger",
+        "classes": 16793,
+        "slots": 24576
+      },
+      {
+        "id": 108591,
+        "Name": "Intricate Consigned Scimitar",
+        "classes": 413,
+        "slots": 24576
+      },
+      {
+        "id": 108600,
+        "Name": "Intricate Consigned Targ Shield",
+        "classes": 15906,
+        "slots": 16384
+      },
+      {
+        "id": 108589,
+        "Name": "Intricate Consigned Mace",
+        "classes": 15906,
+        "slots": 8192
+      }
+    ],
+    "semantics": "Melee:commonHammeredBucklerplusoneofBow/Hammer/Katana/SacrificialDagger/Scimitar;Caster:TargShieldplusMace",
+    "limits": "Periodmelee/casterbundlewordingisverified;exactperweaponclasschoicefilterisnotprovenbyequipmentmasksandmustnotstrandBerserkers."
+  },
+  {
+    "quest_id": 5610,
+    "archive_file": "quest5610-20130315233214.html",
+    "reward_item_matches": [
+      {
+        "id": 108404,
+        "Name": "Intricate Soldier's Gorget",
+        "classes": 49629,
+        "slots": 32
+      },
+      {
+        "id": 108414,
+        "Name": "Intricate Scryer's Necklace",
+        "classes": 15906,
+        "slots": 32
+      }
+    ],
+    "semantics": "Oneclass-familyaccessory:Soldier for melees; Scryer for casters",
+    "limits": "Periodmelee/casterbundlewordingisverified;exactperweaponclasschoicefilterisnotprovenbyequipmentmasksandmustnotstrandBerserkers."
+  },
+  {
+    "quest_id": 5611,
+    "archive_file": "quest5611-20130315235331.html",
+    "reward_item_matches": [
+      {
+        "id": 108405,
+        "Name": "Intricate Soldier's Pauldrons",
+        "classes": 49629,
+        "slots": 64
+      },
+      {
+        "id": 108415,
+        "Name": "Intricate Scryer's Shoulderpads",
+        "classes": 15906,
+        "slots": 64
+      }
+    ],
+    "semantics": "Oneclass-familyaccessory:Soldier for melees; Scryer for casters",
+    "limits": "Periodmelee/casterbundlewordingisverified;exactperweaponclasschoicefilterisnotprovenbyequipmentmasksandmustnotstrandBerserkers."
+  }
+]

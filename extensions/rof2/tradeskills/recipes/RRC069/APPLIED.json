@@ -1,0 +1,38 @@
+{
+  "batch": "RRC069",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "7dce9537c1379b48b53e004846786929a9897168",
+  "source_sha256": "f25991dfdb682f35c3058e474039cbbf2ca2fa129f50d31185dc434f9c936149",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 16,
+  "entries_updated": 0,
+  "recipe_ids": [
+    12745,
+    12746,
+    12747,
+    12748
+  ],
+  "recipe_definitions_preserved": 4,
+  "full_existing_entries_guarded": 19,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "historical_qualification": "Current explicit five-kit formulas and TSS quest guide created2007/currentmodified2021 support qualified alternative-kit context, not immutable May2013 per-kit proof. Existing learning0, quantities, return roles and all other fields preserved.",
+  "after_counts": {
+    "recipes": 25436,
+    "entries": 191741
+  },
+  "commit_receipt": [
+    "RRC069",
+    "16",
+    "25436",
+    "25436",
+    "191725",
+    "191741",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

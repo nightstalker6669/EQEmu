@@ -1,0 +1,16 @@
+-- Preserve unrelated NPC callbacks; actors are scoped by exact spawn identity.
+local sunderock_previous_spawn=event_spawn
+function event_spawn(e)
+ if sunderock_previous_spawn then local r=sunderock_previous_spawn(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').actor_spawn(e)
+end
+local sunderock_previous_death_complete=event_death_complete
+function event_death_complete(e)
+ if sunderock_previous_death_complete then local r=sunderock_previous_death_complete(e);if r and r~=0 then return r end end
+ return require('achievement_quest_sunderock').pod_death(e)
+end
+local sunderock_previous_timer=event_timer
+function event_timer(e)
+ if require('achievement_quest_sunderock').actor_timer(e)then return end
+ if sunderock_previous_timer then return sunderock_previous_timer(e)end
+end

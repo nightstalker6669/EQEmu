@@ -1,0 +1,293 @@
+{
+  "cutoff": "2013-05-31",
+  "researched_utc": "2026-11-03T21:45:11.048686+00:00",
+  "achievement_id": 500041000,
+  "proposed_task_ids": [
+    3040461,
+    3040462,
+    3040463,
+    3040464
+  ],
+  "range_collision_check": "Coordinator reserved locally; fresh collision recheck required before publication/apply",
+  "tasks": [
+    {
+      "id": 3040461,
+      "component": 50171,
+      "title": "Prove Yourself",
+      "giver": 397007,
+      "repeatable_reported": true,
+      "duration_reported_seconds": 28800,
+      "objectives": [
+        {
+          "kind": "explore",
+          "y": 245,
+          "x": -555,
+          "period_alternative_y": 77,
+          "period_alternative_x": -513
+        },
+        {
+          "kind": "speak",
+          "npc": 397149
+        },
+        {
+          "kind": "kill",
+          "count": 4,
+          "npc_ids": [
+            397253,
+            397263,
+            397268,
+            397272
+          ]
+        },
+        {
+          "kind": "kill",
+          "count": 8,
+          "npc_ids": [
+            397172
+          ]
+        },
+        {
+          "kind": "kill",
+          "count": 2,
+          "npc_ids": [
+            397248,
+            397252,
+            397254,
+            397256,
+            397257,
+            397260,
+            397264,
+            397269,
+            397270,
+            397271,
+            397273,
+            397274
+          ]
+        },
+        {
+          "kind": "speak",
+          "npc": 397149
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/3751"
+    },
+    {
+      "id": 3040462,
+      "component": 50172,
+      "title": "Reduce the Thug Menace",
+      "giver": 397149,
+      "repeatable_reported": false,
+      "duration_reported_seconds": 28800,
+      "requires": 3040461,
+      "objectives": [
+        {
+          "kind": "kill",
+          "count": 8,
+          "npc_ids": [
+            397157,
+            397168,
+            397178,
+            397180,
+            397181,
+            397182,
+            397183,
+            397186,
+            397188,
+            397193,
+            397203,
+            397211,
+            397216,
+            397218,
+            397220,
+            397221,
+            397225,
+            397226,
+            397235
+          ],
+          "condition": "shade397196 alive in same zone; original friendly guards/citizens and named centaurs excluded; destrider disputed in edited walkthrough but positively reported July21,2010",
+          "target_policy": "Best-supported Apr2012 report: generic centaurs outside five-person friendly camp count while Shade alive. Original spawn/type inventory supplies19generictypes; named NPCs and friendlyguards excluded. Jul2011six-archetype list is treated as examples, not exhaustive."
+        },
+        {
+          "kind": "speak",
+          "npc": 397149
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/4396"
+    },
+    {
+      "id": 3040463,
+      "component": 50173,
+      "title": "Research the Centaur Malady",
+      "giver": 397149,
+      "repeatable_reported": false,
+      "duration_reported_seconds": 28800,
+      "requires": 3040462,
+      "objectives": [
+        {
+          "kind": "explore",
+          "y": 1086,
+          "x": -686,
+          "z": 82
+        },
+        {
+          "kind": "explore",
+          "y": 999.18,
+          "x": -808.47
+        },
+        {
+          "kind": "explore",
+          "y": 634.48,
+          "x": -900.48
+        },
+        {
+          "kind": "explore",
+          "y": 662.91,
+          "x": -648
+        },
+        {
+          "kind": "speak",
+          "npc": 397149
+        }
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/4397"
+    },
+    {
+      "id": 3040464,
+      "component": 50174,
+      "title": "Cure the Malady",
+      "giver": 397149,
+      "repeatable_reported": true,
+      "requires": 3040463,
+      "duration_reported_seconds": null,
+      "objectives": [
+        {
+          "kind": "kill",
+          "count": 1,
+          "npc_ids": [
+            397196
+          ]
+        },
+        {
+          "kind": "speak",
+          "npc": 397149
+        }
+      ],
+      "reward_choice": [
+        53565,
+        53566,
+        53567
+      ],
+      "source": "https://everquest.allakhazam.com/db/quest/4398"
+    }
+  ],
+  "period_evidence": [
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/23590",
+      "date": "2007-09-07",
+      "fact": "Three final reward item names; chain existed before cutoff."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/3751#msg1335386763215059623",
+      "date": "2012-04-25",
+      "fact": "Friendly-centaur trigger near y245 x-553 and Klassr near y242 x-556 z22."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/3751#msg1203248802231162898",
+      "date": "2008-02-17",
+      "fact": "Friendly-centaur update also reported at y77 x-513; these are trigger observations, not exact bounds."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4396",
+      "date": "2012-04-07 and 2012-09-04",
+      "fact": "Thug credit requires living Shade; nonhostile centaurs with Shade absent do not count."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4396",
+      "date": "2011-07-13",
+      "fact": "Shaman, charger, courser, archer, farshot and tracker explicitly count."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4397",
+      "date": "2009-04-01 and 2007-12-13",
+      "fact": "First exploration y1086 x-686 z82; latter three coordinates documented in period comments."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/quest/4398",
+      "date": "2013-01-20",
+      "fact": "Shade level55 and immune to root/snare; contradicts older level60/rootable reports."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/23662",
+      "date": "2006-10-17",
+      "fact": "Firsthand observed max hit377, summoning, small lifetap, Air of Corruption/Ignite Bones/Incinerate Bones/Insidious Retrogression/Paralyzing Earth spell names. Early rootable claim later contradicted."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/23662",
+      "date": "2006-11-17",
+      "fact": "Two same-day firsthand reports explicitly immune to root/snare/run-speed changes."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/23662",
+      "date": "2012-03-26",
+      "fact": "Dated firsthand cast line confirms Scream in Terror."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/23662",
+      "date": "2013-03-12",
+      "fact": "Reported40\u201345minute respawn range, not exact timer."
+    },
+    {
+      "url": "https://everquest.allakhazam.com/db/npc/23662",
+      "date": "2006-10-13 and 2011-01-06",
+      "fact": "Shade presence makes centaurs KOS; death depops/replaces centaurs with indifferent versions. Air of Corruption over camp reported per game tick, removes invisibility."
+    }
+  ],
+  "unknowns": {
+    "minimum_level": "Page Level50/55 fields do not prove original task admission minimum. Reward required38 is not task eligibility. Leave unasserted.",
+    "faction_amounts": "Positive Fieldstrider/Minohten/Nymph task rewards reported. +8 in2022 and +15 in2017 are later observations, not period numeric proof. No invented amount.",
+    "exploration_bounds": "Only successful sample locations recovered; exact trigger boxes unknown.",
+    "repeatability_and_timers": "Edited current metadata, no dated original minimum/timer screenshots yet; provenance distinct from period corroboration.",
+    "shade_encounter": "Current scoped data audited: HP3575,maxdmg4,faction0,no spells or explicit/legacy abilities. Treat as placeholder configuration, not original combat evidence. Historical summoning/immunity/spells/hostility recovered; exact HP, full combat table, spell timing/range/percentages and conditional population definitions remain unrecovered. Raw database max4 and radius0 must not be presented as effective native values: loader aggro70 and current scale/class rules predict damage61\u2013221; native readback pending.",
+    "parent_reward": "Separate research/hold; task item choice is not parent ring reward."
+  },
+  "implementation_status": "Complete source installation assembled, not yet deployed/native accepted. Existing task/reaction mechanisms rehearsed earlier. Changed target/default/profile data use proportional affected-row guards and readback; no additional rehearsal.",
+  "xp": {
+    "default": 1000,
+    "label": "User-approved configurable PEQ-style default, not historical amount"
+  },
+  "native_default_source_audit": {
+    "utc": "2026-11-03T22:22:26.691421+00:00",
+    "scope": "Source and current content/rule rows only; NOT native NPC cache readback",
+    "aggro": {
+      "raw_database": 0,
+      "loader_effective_default": 70,
+      "source": "zone/zonedb.cpp:1796-1804",
+      "correction": "Raw zero is not a non-aggression blocker; preserve native default unless an explicit historical profile is researched."
+    },
+    "damage": {
+      "raw_database_min": 0,
+      "raw_database_max": 4,
+      "named_level55_scale_min": 112,
+      "named_level55_scale_max": 406,
+      "class_mod_necromancer_level55": 120,
+      "divisor": 220,
+      "source_predicted_min": 61,
+      "source_predicted_max": 221,
+      "source": "zone/npc.cpp constructor; zone/npc_scale_manager.cpp zero-bound pair scaling and class multiplier",
+      "correction": "Do not claim active max damage4 from raw SQL. Native effective stats remain to be read back during coordinated acceptance."
+    },
+    "hp": {
+      "existing_database": 3575,
+      "scale_named55": 22200,
+      "behavior": "Existing nonzero HP does not use the zero-HP fallback; exact historical HP remains unknown."
+    },
+    "controller_rule": {
+      "ruleset1": "Zone:UseZoneController=true"
+    },
+    "historical_limit": "Observed377 hit and ~380 edited summary are not a recovered unmitigated NPC database max-damage field."
+  },
+  "reaction_profile_fidelity_limit": "Baseline synthetic hostile/indifferent reactions; personalized historical standings and unknown faction-award amounts remain omitted.",
+  "kill_target_fidelity_limit": "Known archetypes supplied; brute/citizen/mundunugu target eligibility remains unresolved. A broad period2012 comment is not treated as exact exhaustive NPC-ID proof.",
+  "kill_target_policy": "Apr2012 broad generic-centaur report supplies policy; original40spawn inventory yields19generictypes, friendlyfive-personcamp/named actors excluded. Not claimed as recovered original server NPC-ID list.",
+  "ordinary_defaults": "Documented in server-settings.json; original aura extent/HP/raw damage/frequency remain unverified."
+}

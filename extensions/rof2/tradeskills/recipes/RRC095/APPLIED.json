@@ -1,0 +1,40 @@
+{
+  "batch": "RRC095",
+  "attempt": 1,
+  "total_SQL_attempts": 1,
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "01c1c251a5520726f3a14696df6d08c6ec55cc92",
+  "source_sha256": "dd5f77cf4778438115be208476d0ed7ad7be84f53d05932f11fb6578c8b9e5f8",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 0,
+  "entries_updated": 4,
+  "recipe_ids": [
+    11329,
+    11330,
+    11331,
+    11334
+  ],
+  "recipe_definitions_preserved": 4,
+  "full_entries_guarded": 29,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "historical_qualification": "EachmaintainedprimarylinkedformulaexplicitlyrequiresPristineRoughHide97768. Independentcurrentitembinding,notneighborinference. Preserveallotherfields/output/quantities/trivials/learning/kits;notimmutableMay2013or nativecraftacceptance.",
+  "after_counts": {
+    "recipes": 25793,
+    "entries": 194540
+  },
+  "commit_receipt": [
+    "RRC095",
+    "4",
+    "25793",
+    "25793",
+    "194540",
+    "194540",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

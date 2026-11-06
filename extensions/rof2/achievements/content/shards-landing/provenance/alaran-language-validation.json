@@ -1,0 +1,80 @@
+{
+  "status": "native_normal_training_one_relog_and_permanent_local_deployment_verified",
+  "historical_cutoff": "2013-05-31",
+  "thresholds": [
+    25,
+    50,
+    71,
+    90,
+    100
+  ],
+  "ordinary_combines": 36,
+  "actual_language": {
+    "start": 0,
+    "finish": 100
+  },
+  "fluent_crossing": {
+    "before": 70,
+    "after": 75,
+    "threshold": 71
+  },
+  "paired_persisted_required_components_and_parents": 5,
+  "notes_and_quill_count": 1,
+  "returned_material_charges": 1,
+  "tome_count": 1,
+  "cursor_empty": true,
+  "original_nonGUID_inventory_preserved": true,
+  "relog_count": 1,
+  "temporary_setup_removed": true,
+  "synthetic_admission": "Earlier Words objective stages were supplied solely to reach the translation step; tested language/achievement awards came from ordinary combines, not fabricated completion.",
+  "limits": [
+    "Full earlier quest acquisition not replayed in this language batch.",
+    "No final translation, optional component completion or item reward granted by this feature.",
+    "No already100/login/history credit.",
+    "No SQL failure-injection/recovery acceptance.",
+    "Award flags/parents paired in persisted SQL; native task read language/materials, not direct achievement UI counters.",
+    "No independently captured before/after session epoch pair."
+  ],
+  "opcodes_and_structures": "Existing achievement state/progress/completion transport reused; no new opcode or structure discovery in this milestone.",
+  "production_installer_checks": {
+    "fresh_install": true,
+    "published_preimage_upgrade": true,
+    "idempotent_rerun": true,
+    "partial_install": true,
+    "custom_and_symlink_refusal": true
+  },
+  "production_SQL_protocol": {
+    "surface": "actualMariaDBCLI DELIMITER against isolated authentic-schema fixture",
+    "cases_passed": 13,
+    "fresh_five_enabled": true,
+    "disabled_candidate_upgrade": true,
+    "exact_rerun": true,
+    "identity_reward_count_engine_guards": true,
+    "late_insert_transaction_rollback": true,
+    "foreign_routine_not_overwritten": true,
+    "production_apply": false
+  },
+  "local_permanent_deployment": {
+    "implementation_commit": "370c81d22df713b5ec7f34416cc7d4634434bb42",
+    "date": "2026-11-03",
+    "three_file_bundle_installed": true,
+    "only_new030migration_applied": true,
+    "five_rules_and_definitions_enabled": true,
+    "all_six_existing_zone_definition_caches_refreshed": true,
+    "local_shards_landing_quest_reload_only": true,
+    "loaded_categories": 29,
+    "loaded_definitions": 258,
+    "loaded_evaluation_criteria": 1054,
+    "client_rebuild_failures": 0,
+    "new_quest_errors": 0,
+    "no_process_restart": true,
+    "native_five_identities_and_required_components_present": true,
+    "Master_indirect_component_export": "truncated_at64;requiredcompletioncomponentobserved;wholeoptionalcataloguenotclaimed",
+    "temporary_test_status_position_restored": true,
+    "original_item_payloads_and_current_native_GUIDs_preserved": true,
+    "other_players_inventory_achievements_and_property_data_preserved": true,
+    "only_own_normal_closed_session_bookkeeping_changed": true,
+    "no_player_progress_reset": true,
+    "training_replay_on_deployment": false
+  }
+}

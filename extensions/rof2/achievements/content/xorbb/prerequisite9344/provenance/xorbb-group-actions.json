@@ -1,0 +1,28 @@
+{
+  "status": "Disabled source implemented; native group acceptance pending",
+  "cutoff": "2013-05-31",
+  "evidence": {
+    "source": "https://everquest.allakhazam.com/db/quest/6106",
+    "report_date": "2013-05-22",
+    "supports": [
+      "One member ladder action can advance other group members",
+      "One member DustyHam pickup can advance other group members"
+    ],
+    "qualification": "Player report does not specify exact original radius, blocked-cursor behavior or whether every member received a physical ham. Those are not recovered facts."
+  },
+  "implementation": {
+    "ladder": "Only after exact original door interaction, verified native ladder supply and actor objective advance: same current-zone group members on that stage get a verified carried ladder before native activity credit. Existing ladder is reused; occupied-cursor supply refusal leaves member on ordinary pickup step, recoverable by normal ladder click.",
+    "dusty_ham": "Validated owned source pre-pickup records transient count/time/pose. Only subsequent actual native stage12 completion with increased carried66511 count shares task credit to eligible local members. Witness cleared first; no recursive group relay. Only physical looter gets actual ground ham, no extra item guessed.",
+    "boundaries": "No raids, remote/offline/bot/merc members, unrelated activities, manual kill credit, extra rewards, player moves or inventory SQL."
+  },
+  "configurable_defaults": {
+    "participation_xy": 100,
+    "participation_z": 40,
+    "witness_max_age_seconds": 10
+  },
+  "native_dependencies": "LuaClient:GetGroup, LuaGroup:GetMember0..5, zone entity-list lookup, native successful pickup/task stage callback; unchanged shared mesa inventory helper",
+  "remaining": [
+    "Actual two-client same-group physical action, item conservation and persistence acceptance",
+    "Original group radius/physical-item distribution remain unverified"
+  ]
+}

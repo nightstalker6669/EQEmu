@@ -1,0 +1,189 @@
+--- a/utils/scripts/import_achievement_resources.py
++++ b/utils/scripts/import_achievement_resources.py
+@@ -2707,6 +2707,161 @@
+             visit(achievement_id)
+ 
+ 
++# Reviewed VoA composite aliases only. These catalogue identities were matched
++# to individual 2012 achievement reports; they are not recovered packet IDs.
++# Selection remains the caller's historical/readiness policy. Never add IDs to it.
++# Key: (parent ID, required component type, component ID).
++# Value: (parent name, component sequence, component label, child ID, child name).
++REVIEWED_VOA_DEPENDENCY_ALIASES: dict[
++    Tuple[int, int, int], Tuple[str, int, str, int, str]
++] = {
++    (1900050, 1, 1900056): (
++        'Veil of Alaris Explorer',
++        7,
++        'Pillars of Alra Traveler',
++        1973000,
++        'The Pillars of Alra Traveler',
++    ),
++    (1900050, 1, 1900057): (
++        'Veil of Alaris Explorer',
++        8,
++        'Windsong Traveler',
++        1973100,
++        'The Windsong Sanctuary Traveler',
++    ),
++    (1900050, 1, 1900059): (
++        'Veil of Alaris Explorer',
++        10,
++        'Sepulcher of Order Traveler',
++        1973300,
++        'The Sepulcher of Order Traveler',
++    ),
++    (1900065, 1, 1900073): (
++        'Champion of Alaris',
++        9,
++        "Mercenary of The Beasts' Domain",
++        1972810,
++        "Mercenary of the Beasts' Domain",
++    ),
++    (1900065, 1, 1900074): (
++        'Champion of Alaris',
++        10,
++        "Partisan of The Beasts' Domain",
++        1972820,
++        "Partisan of the Beasts' Domain",
++    ),
++    (1900065, 1, 1900077): (
++        'Champion of Alaris',
++        13,
++        'Mercenary of The Pillars of Alra',
++        1973010,
++        'Mercenary of the Pillars of Alra',
++    ),
++    (1900065, 1, 1900078): (
++        'Champion of Alaris',
++        14,
++        'Partisan of The Pillars of Alra',
++        1973020,
++        'Partisan of the Pillars of Alra',
++    ),
++    (1900065, 1, 1900079): (
++        'Champion of Alaris',
++        15,
++        'Mercenary of Windsong Sanctuary',
++        1973110,
++        'Mercenary of the Windsong Sanctuary',
++    ),
++    (1900065, 1, 1900080): (
++        'Champion of Alaris',
++        16,
++        'Partisan of Windsong Sanctuary',
++        1973120,
++        'Partisan of the Windsong Sanctuary',
++    ),
++    (1900065, 1, 1900083): (
++        'Champion of Alaris',
++        19,
++        'Mercenary of Sepulcher of Order',
++        1973310,
++        'Mercenary of the Sepulcher of Order',
++    ),
++    (1900065, 1, 1900084): (
++        'Champion of Alaris',
++        20,
++        'Partisan of Sepulcher of Order',
++        1973320,
++        'Partisan of the Sepulcher of Order',
++    ),
++    (1900090, 1, 1900094): (
++        'Paragon of Alaris',
++        5,
++        "Hero of The Beasts' Domain",
++        1972830,
++        "Hero of the Beasts' Domain",
++    ),
++    (1900090, 1, 1900096): (
++        'Paragon of Alaris',
++        7,
++        'Hero of The Pillars of Alra',
++        1973030,
++        'Hero of the Pillars of Alra',
++    ),
++    (1900090, 1, 1900097): (
++        'Paragon of Alaris',
++        8,
++        'Hero of Windsong Sanctuary',
++        1973130,
++        'Hero of the Windsong Sanctuary',
++    ),
++    (1900090, 1, 1900099): (
++        'Paragon of Alaris',
++        10,
++        'Hero of Sepulcher of Order',
++        1973330,
++        'Hero of the Sepulcher of Order',
++    ),
++}
++
++
++def _reviewed_voa_dependency_targets(
++    resources: ResourceSet,
++    selected_ids: frozenset[int],
++    components_by_achievement: dict[int, List[Component]],
++    component_counts: dict[int, int],
++) -> dict[Tuple[int, int, int], int]:
++    targets: dict[Tuple[int, int, int], int] = {}
++    for key, identity in REVIEWED_VOA_DEPENDENCY_ALIASES.items():
++        parent_id, component_type, component_id = key
++        parent_name, sequence, component_name, child_id, child_name = identity
++        # Do not bypass historical exclusion or unresolved content admission.
++        if parent_id not in selected_ids or child_id not in selected_ids:
++            continue
++        parents = [row for row in resources.achievements
++                   if row.achievement_id == parent_id]
++        children = [row for row in resources.achievements
++                    if row.achievement_id == child_id]
++        named_children = [row for row in resources.achievements
++                          if row.achievement_id in selected_ids
++                          and row.name == child_name]
++        components = [row for row in components_by_achievement.get(parent_id, ())
++                      if row.component_id == component_id]
++        if (
++            len(parents) != 1 or parents[0].name != parent_name
++            or len(children) != 1 or children[0].name != child_name
++            or len(named_children) != 1
++            or len(components) != 1
++            or components[0] != Component(
++                parent_id, sequence, component_type, component_id, component_name
++            )
++            or component_counts.get(component_id) != 1
++        ):
++            raise ResourceError(
++                f"reviewed VoA dependency identity drift: {key} -> {child_id}"
++            )
++        targets[key] = child_id
++    return targets
++
++
+ def _achievement_dependency_criteria(
+     resources: ResourceSet,
+     selected_ids: frozenset[int],
+@@ -2722,6 +2877,9 @@
+     int,
+     int,
+ ]:
++    reviewed_targets = _reviewed_voa_dependency_targets(
++        resources, selected_ids, components_by_achievement, component_counts
++    )
+     names: dict[str, List[int]] = {}
+     for achievement in resources.achievements:
+         if achievement.achievement_id in selected_ids:
+@@ -2738,7 +2896,13 @@
+     rejected = 0
+     for achievement_id in sorted(selected_ids):
+         for component in components_by_achievement.get(achievement_id, ()):
+-            matches = names.get(component.name, ())
++            key = (achievement_id, component.component_type, component.component_id)
++            if key in REVIEWED_VOA_DEPENDENCY_ALIASES:
++                # An excluded or unready child must not fall back to name inference.
++                target = reviewed_targets.get(key)
++                matches = (target,) if target is not None else ()
++            else:
++                matches = names.get(component.name, ())
+             if not matches:
+                 continue
+             if len(matches) != 1:

@@ -1,3 +1,5 @@
+namespace TrophyCertificate55 {class Custody;}
+namespace FungalInventory {class NativeCustody;}
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -26,6 +28,8 @@
 #include "common/races.h"
 
 #include <list>
+#include "fire_native_inventory_fence.h"
+namespace FirePersonalOccurrenceSource {class NativeItemCustody;}
 #include <vector>
 
 
@@ -47,6 +51,7 @@ class ItemInstQueue
 {
 public:
 	~ItemInstQueue();
+	void Swap(ItemInstQueue& other) noexcept { m_list.swap(other.m_list); }
 	/////////////////////////
 	// Public Methods
 	/////////////////////////
@@ -81,6 +86,9 @@ namespace EQ
 	class InventoryProfile
 	{
 		friend class ItemInstance;
+		friend class FirePersonalOccurrenceSource::NativeItemCustody;
+		friend class FungalInventory::NativeCustody;
+		friend class TrophyCertificate55::Custody;
 	public:
 		///////////////////////////////
 		// Public Methods
@@ -92,6 +100,14 @@ namespace EQ
 			m_lookup = inventory::StaticLookup(versions::MobVersion::Unknown);
 		}
 		~InventoryProfile();
+		// Exchange only character-profile ownership. Shared-bank/account and
+		// trade buckets, lookup/version and GM policy remain with this Client.
+		void SwapProfileInventory(InventoryProfile& other) noexcept {
+			if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(this)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&other))return;
+			m_worn.swap(other.m_worn);m_inv.swap(other.m_inv);
+			m_bank.swap(other.m_bank);m_cursor.Swap(other.m_cursor);
+		}
+
 
 		void SetInventoryVersion(versions::MobVersion inventory_version);
 		void SetInventoryVersion(versions::ClientVersion client_version) { SetInventoryVersion(versions::ConvertClientVersionToMobVersion(client_version)); }
@@ -204,8 +220,8 @@ namespace EQ
 		std::string GetCustomItemData(int16 slot_id, const std::string& identifier);
 		static const int GetItemStatValue(uint32 item_id, const std::string& identifier);
 
-		std::map<int16, ItemInstance*>& GetWorn() { return m_worn; }
-		std::map<int16, ItemInstance*>& GetPersonal() { return m_inv; }
+		const std::map<int16, ItemInstance*>& GetWorn() { return m_worn; }
+		const std::map<int16, ItemInstance*>& GetPersonal() { return m_inv; }
 		int16 HasEvolvingItem(uint64 evolve_unique_id, uint8 quantity, uint8 where);
 
 		inline int16 PushItem(int16 slot_id, ItemInstance* inst) { return _PutItem(slot_id, inst); }

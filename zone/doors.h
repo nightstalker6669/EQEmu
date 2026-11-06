@@ -1,3 +1,4 @@
+#include <memory>
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -24,11 +25,17 @@
 
 class Client;
 class Mob;
+namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
 class NPC;
 struct Door;
 
 class Doors : public Entity
 {
+ friend class FireRunActionSource::RunUseWitness;
+ friend class FireRunActionSource::NativeRunDoorSource;
+ friend class FireRunActionSource::PublishedRunActionSink;
+ friend class FireRunActionSource::NativeRunHelperSource;
+ std::shared_ptr<FireRunActionSource::RunDoorLifetime> m_fire_run_action_lifetime;
 public:
 	~Doors();
 

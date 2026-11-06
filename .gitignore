@@ -70,5 +70,12 @@ compile_flags.txt
 cmake-build-relwithdebinfo/*
 skill-caps.diff
 
+# Generated Python artifacts
+__pycache__/
+*.py[cod]
 # Analysis files
 tob/packet_analysis
+
+# Generated Python artifacts
+__pycache__/
+*.py[cod]

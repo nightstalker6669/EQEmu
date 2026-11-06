@@ -1,0 +1,48 @@
+{
+  "npc_types": {
+    "394097": "Jenn_Stalbath",
+    "397102": "Elder_Vasile",
+    "398018": "Fenith",
+    "398022": "Adrian",
+    "398023": "Lucian",
+    "398025": "a_small_plain_harpy_nest",
+    "398027": "a_large_normal_harpy_nest",
+    "398029": "Coryn",
+    "398032": "a_small_normal_harpy_nest",
+    "398033": "a_large_plain_harpy_nest",
+    "398039": "Dorinda",
+    "398042": "a_large_sturdy_harpy_nest",
+    "398047": "Mestle",
+    "398049": "a_small_sturdy_harpy_nest",
+    "398067": "an_ornate_harpy_nest",
+    "398070": "Ashrana"
+  },
+  "accepted_previous_scripts": {
+    "roost/398025.lua": [
+      "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+    ],
+    "roost/398027.lua": [
+      "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+    ],
+    "roost/398032.lua": [
+      "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+    ],
+    "roost/398033.lua": [
+      "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+    ],
+    "roost/398042.lua": [
+      "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+    ],
+    "roost/398049.lua": [
+      "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+    ],
+    "roost/398067.lua": [
+      "ea0d0ff8075881ee4bf4fd098a1a552cc223a3366d5b884456e1c4d67a47817e"
+    ]
+  },
+  "external_modules": [
+    "achievement_quest_mesa_inventory",
+    "achievement_quest_blightfire"
+  ],
+  "known_lower_priority_callbacks": []
+}

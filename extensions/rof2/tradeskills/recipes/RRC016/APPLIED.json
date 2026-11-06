@@ -1,0 +1,42 @@
+{
+  "status": "APPLIED_VERIFIED_EXACT22RECIPES_116ENTRIES",
+  "failure": null,
+  "SQL_client_exit": 0,
+  "source_SQL_invocations": 1,
+  "actual_server_commit_count_receipt": [
+    "RRC016",
+    "0",
+    "23107",
+    "23129",
+    "179238",
+    "179354",
+    "0"
+  ],
+  "source_sha256": "ac7aa28ce536542e3192170142d7219795be743cf3ac87a077085c3757d464c1",
+  "published_commit": "0b1b1af1fdf5dd81c682f269ee08e539d52b2485",
+  "database": "peq_housing_test",
+  "synthetic_fixture": false,
+  "actual_recipe_ids": [
+    3091285,
+    3091306
+  ],
+  "verified_recipe_count": 22,
+  "verified_logical_entries": 116,
+  "before_counts": {
+    "tradeskill_recipe": 23107,
+    "tradeskill_recipe_entries": 179238
+  },
+  "after_counts": {
+    "tradeskill_recipe": 23129,
+    "tradeskill_recipe_entries": 179354
+  },
+  "all_existing_recipe_entry_rows_exactly_preserved": true,
+  "dependency_item_fields_unchanged": true,
+  "schema_indexes_unchanged": true,
+  "independent_readonly_connection_readback": true,
+  "native_combine": false,
+  "build_restart_client_config_version_changes": false,
+  "rollback_executed": false,
+  "historical_all_recipe_completeness": false,
+  "credentials_persisted": false
+}

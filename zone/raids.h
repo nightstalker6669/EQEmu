@@ -127,6 +127,9 @@ public:
 	bool	IsRaidMember(const char* name);
 	bool	IsRaidMember(Client *c);
 	void	UpdateLevel(const char *name, int newLevel);
+	// Called after a shroud transaction has committed the same member's class
+	// and level. Does not change membership, groups, leadership or loot roles.
+	bool RefreshMemberProfile(Client *member, uint8 class_id, uint8 level);
 	void	SetNewRaidLeader(uint32 i);
 	bool    IsAssister(const char* who);
 	bool    IsMarker(const char* who);

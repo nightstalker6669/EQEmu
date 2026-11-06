@@ -129,6 +129,7 @@
 #define ServerOP_GuildURL                         0x007D
 #define ServerOP_GuildSendGuildList				  0x007E
 #define ServerOP_GuildMembersList                 0x007F
+#define ServerOP_GuildAchievement                 0x0080
 
 #define ServerOP_ParcelDelivery                   0x0090
 #define ServerOP_ParcelPrune                      0x0091
@@ -278,6 +279,8 @@
 #define ServerOP_CZSpell 0x4507
 #define ServerOP_CZTaskUpdate 0x4508
 #define ServerOP_CZClientMessageString 0x4509
+#define ServerOP_CZAchievementStateUpdateRequest 0x450A
+#define ServerOP_CZAchievementStateUpdateWake 0x450B
 
 #define ServerOP_WWDialogueWindow 0x4750
 #define ServerOP_WWLDoNUpdate 0x4751
@@ -291,6 +294,11 @@
 
 // player events
 #define ServerOP_QSSendQuery 0x5000
+#define ServerOP_FellowshipChat 0x5126
+#define ServerOP_FellowshipChatDeliver 0x5127
+#define ServerOP_FellowshipRefresh 0x5125 // authenticated world/zone invalidation; zero payload
+#define ServerOP_HousingUpkeepRefresh 0x5124 // new internal world/zone invalidation; zero payload
+#define ServerOP_HousingTrophyRefresh 0x5120 // new internal world/zone invalidation; zero payload
 #define ServerOP_PlayerEvent 0x5100
 #define ServerOP_SendPlayerEventSettings 0x5101
 
@@ -1037,6 +1045,15 @@ struct ServerGuildMemberUpdate_Struct {
 	uint32 zone_id;
 	uint32 last_seen;
 };
+
+struct ServerGuildAchievement_Struct {
+	uint32 guild_id;
+	uint32 achievement_id;
+	char   player_name[64];
+	char   achievement_link_data[0];
+};
+
+inline constexpr uint32 ServerGuildAchievementMaxLinkDataLength = 4096;
 
 struct ServerGuildPermissionUpdate_Struct {
 	uint32 guild_id;
@@ -1795,3 +1812,31 @@ struct BazaarPurchaseMessaging_Struct {
 };
 
 #pragma pack(pop)
+
+
+
+// Internal server messages, not claimed original client opcodes.
+#define ServerOP_HousingGuildTrophyRequest 0x5121
+#define ServerOP_HousingGuildTrophyRefresh 0x5122
+struct HousingGuildTrophyRequest {uint32 character_id;uint32 action;uint32 target_id;};
+
+#define ServerOP_HousingGuildTrophyMember 0x5123
+
+
+// Fellowship messages carry only authenticated server identities. Client input
+// supplies text; the originating zone supplies actor_id, world supplies all
+// recipient/group/name fields after reloading current membership.
+struct FellowshipChatRequest {
+    uint32 actor_id;
+    char message[1024];
+};
+struct FellowshipChatDelivery {
+    uint32 actor_id;
+    uint32 recipient_id;
+    uint32 fellowship_id;
+    char sender[64];
+    char message[1024];
+};
+
+
+

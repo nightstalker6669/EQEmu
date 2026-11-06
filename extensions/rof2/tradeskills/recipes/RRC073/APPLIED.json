@@ -1,0 +1,37 @@
+{
+  "batch": "RRC073",
+  "status": "APPLIED_VERIFIED",
+  "SQL_invocations": 1,
+  "published_commit": "c1ca581dbbca51e02bb802e00d4e06a8b8f42180",
+  "source_sha256": "80b6ef74d7771eed56c32571302bfa304e99cce56ff68886620760e8fef23e81",
+  "native_actions": false,
+  "player_item_writes": false,
+  "new_rehearsal": false,
+  "recipes_added": 0,
+  "entries_added": 4,
+  "entries_updated": 0,
+  "recipe_ids": [
+    12233,
+    12239
+  ],
+  "recipe_definitions_preserved": 2,
+  "full_existing_entries_guarded": 30,
+  "exact_postimages": true,
+  "learned_references_unchanged": true,
+  "prior072_ten_recipe_137entry_postimages_exact": true,
+  "historical_qualification": "Current explicit EmptyVial1/DirtyEmptyVial2 success/failure source supports return correction; exactMay2013return behavior not independently established. Existing learning2, quantities, all30oldentries and acid/water salvage0 preserved.",
+  "after_counts": {
+    "recipes": 25450,
+    "entries": 191914
+  },
+  "commit_receipt": [
+    "RRC073",
+    "4",
+    "25450",
+    "25450",
+    "191910",
+    "191914",
+    "0"
+  ],
+  "backup": "BEFORE-AFFECTED-ROWS.private.json plus exact published rollback SQL"
+}

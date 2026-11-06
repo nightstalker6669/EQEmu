@@ -1,0 +1,35 @@
+{
+  "batch": "RRC014",
+  "status": "PRODUCTION_HELD_PENDING_REPRESENTATIVE_ACTOR_ACCESS",
+  "application_authorized": false,
+  "application_performed": false,
+  "native_actions_performed": 0,
+  "ingredient_encoded_permission_primary_proof_found": false,
+  "current_component_wear_masks_admit_both_actor_races": true,
+  "representative_plan": {
+    "case_families": [
+      "permitted actor",
+      "foreign actor"
+    ],
+    "source_forge_types": [
+      33,
+      36
+    ],
+    "existing_recipe_ids": [
+      5967,
+      3607
+    ],
+    "disposable_actor_base_races": [
+      "Ogre",
+      "Barbarian"
+    ],
+    "actor_class": "Warrior",
+    "actor_deity": "Rallos Zek",
+    "maximum_empty_open_attempts": 4,
+    "maximum_single_combine_attempts_if_separately_authorized": 4,
+    "automatic_retries": 0,
+    "requires_RRC014_application": false,
+    "assigned_tester_and_runtime_window": "Pending coordinator routing"
+  },
+  "limits": "A type33result does not establish type36behavior. Generic DNC/busy/missing observation is inconclusive; foreign ordinary crafting acceptance falsifies restriction and retains productionhold. No all58client campaign or core/enum change."
+}

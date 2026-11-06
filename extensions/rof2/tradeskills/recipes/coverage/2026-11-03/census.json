@@ -1,0 +1,331 @@
+{
+  "as_of": "2026-11-03",
+  "working_cutoff": "2013-05-31",
+  "objective": "Historically supported recipe coverage from Original through Rain of Fear, including class skills, cultural, quest and container combines.",
+  "overall_complete": false,
+  "historical_formula_approval_complete": false,
+  "global_source_universe_denominator": null,
+  "all_skill_expansion_cells": 260,
+  "cells_with_observed_source_links": 124,
+  "recipe_catalogue_links_identified": 145,
+  "general_cultural_indexes_identified": 13,
+  "observed_RoF_source_rows": 1759,
+  "source_row_total_is_not_logical_recipe_count": true,
+  "RoF_categories": [
+    {
+      "expansion_id": 19,
+      "expansion": "Rain of Fear",
+      "skill_id": 57,
+      "skill": "Tinkering",
+      "status": "MAINTAINED_CATEGORY159_FORMULAS_CAPTURED_ERA_AND_GATES_REVIEW_PENDING",
+      "source_denominator": 159,
+      "source_denominator_unit": "maintained catalogue formula/output rows; not frozen historical recipe universe",
+      "matched": 9,
+      "missing": 150,
+      "incomplete": null,
+      "duplicates": null,
+      "uncertain": 159,
+      "identity_unresolved_rows": 0,
+      "formula_capture_complete": true,
+      "source": "https://www.eqtraders.com/recipes/recipe_page.php?article=566&rsa=Tinkering&sub=ROF"
+    },
+    {
+      "expansion_id": 19,
+      "expansion": "Rain of Fear",
+      "skill_id": 60,
+      "skill": "Baking",
+      "status": "ONE_MAINTAINED_EXPANSION_PAGE_ENUMERATED_ERA_REVIEW_PENDING",
+      "source_denominator": 96,
+      "source_denominator_unit": "maintained catalogue formula/output rows; not frozen historical recipe universe",
+      "matched": 83,
+      "missing": 13,
+      "incomplete": 0,
+      "duplicates": 0,
+      "uncertain": 96,
+      "source": "https://www.eqtraders.com/recipes/recipe_page.php?article=560&rsa=Baking&sub=ROF"
+    },
+    {
+      "expansion_id": 19,
+      "expansion": "Rain of Fear",
+      "skill_id": 61,
+      "skill": "Tailoring",
+      "status": "MAINTAINED_CATEGORY557_ROWS_551_DISTINCT_FORMULAS_CAPTURED_ERA_GATES_PENDING",
+      "source_denominator": 557,
+      "source_denominator_unit": "maintained catalogue output/formula rows; may repeat a multioutput combine",
+      "matched": 0,
+      "missing": 539,
+      "incomplete": 18,
+      "duplicates": 2,
+      "uncertain": 557,
+      "identity_unresolved_rows": 0,
+      "distinct_exact_source_rows": 551,
+      "duplicate_excess_rows": 6,
+      "missing_output_item_rows": 11,
+      "disabled_source_formula_rows": 2,
+      "disabled_alternate_variant_rows": 5,
+      "formula_capture_complete": true,
+      "source": "https://www.eqtraders.com/recipes/recipe_page.php?article=565&rsa=Tailoring&sb=item&sub=ROF",
+      "comparison_limit": "557raw rows=539output-absent+11missing-item+7existing-disabled(2source-formula matches/5alternate variants). 6exact-duplicate excess rows overlap these statuses;551distinct formulas,533distinct output-absent. No enabled source match or historical/native acceptance asserted."
+    },
+    {
+      "expansion_id": 19,
+      "expansion": "Rain of Fear",
+      "skill_id": 63,
+      "skill": "Blacksmithing",
+      "status": "MAINTAINED_CATEGORY404_FULL_FORMULAS_CAPTURED_ERA_GATES_PENDING",
+      "source_denominator": 404,
+      "source_denominator_unit": "maintained catalogue output/formula rows; may repeat a multioutput combine",
+      "matched": 0,
+      "missing": 404,
+      "incomplete": 0,
+      "duplicates": 0,
+      "uncertain": 404,
+      "identity_unresolved_rows": 0,
+      "formula_capture_complete": true,
+      "source": "https://www.eqtraders.com/recipes/recipe_page.php?article=568&rsa=Smithing&sb=item&sub=ROF"
+    },
+    {
+      "expansion_id": 19,
+      "expansion": "Rain of Fear",
+      "skill_id": 64,
+      "skill": "Fletching",
+      "status": "MAINTAINED_CATEGORY44_FORMULAS_IDENTIFIED_ERA_AND_GATES_REVIEW_PENDING",
+      "source_denominator": 44,
+      "source_denominator_unit": "maintained catalogue formula/output rows; not frozen historical recipe universe",
+      "matched": 8,
+      "missing": 36,
+      "incomplete": null,
+      "duplicates": 0,
+      "uncertain": 44,
+      "source": "https://www.eqtraders.com/recipes/recipe_page.php?article=562&rsa=Fletching&sub=ROF"
+    },
+    {
+      "expansion_id": 19,
+      "expansion": "Rain of Fear",
+      "skill_id": 65,
+      "skill": "Brewing",
+      "status": "ONE_MAINTAINED_EXPANSION_PAGE_ENUMERATED_ERA_REVIEW_PENDING",
+      "source_denominator": 16,
+      "source_denominator_unit": "maintained catalogue formula/output rows; not frozen historical recipe universe",
+      "matched": 10,
+      "missing": 6,
+      "incomplete": null,
+      "duplicates": 0,
+      "uncertain": 16,
+      "source": "https://www.eqtraders.com/recipes/recipe_page.php?article=561&rsa=Brewing&sub=ROF"
+    },
+    {
+      "expansion_id": 19,
+      "expansion": "Rain of Fear",
+      "skill_id": 68,
+      "skill": "Jewelry Making",
+      "status": "MAINTAINED_PAGE118_ROWS_116_JEWELCRAFT_2_RESEARCH_CAPTURED_ERA_PENDING",
+      "source_denominator": 118,
+      "source_denominator_unit": "maintained catalogue output/formula rows; may repeat a multioutput combine",
+      "matched": 0,
+      "missing": 108,
+      "incomplete": 8,
+      "duplicates": null,
+      "uncertain": 118,
+      "identity_unresolved_rows": 0,
+      "actual_skill_formula_rows": 116,
+      "cross_skill_research_rows": 2,
+      "missing_output_item_rows": 8,
+      "formula_capture_complete": true,
+      "source": "https://www.eqtraders.com/recipes/recipe_page.php?article=563&rsa=Jewelcraft&sb=item&sub=ROF"
+    },
+    {
+      "expansion_id": 19,
+      "expansion": "Rain of Fear",
+      "skill_id": 69,
+      "skill": "Pottery",
+      "status": "MAINTAINED_CATEGORY253_FORMULA_ROWS_OBSERVED_ERA_GATES_MATCHING_PENDING",
+      "source_denominator": 253,
+      "source_denominator_unit": "maintained catalogue formula/output rows; not frozen historical recipe universe",
+      "matched": null,
+      "missing": 253,
+      "incomplete": null,
+      "duplicates": null,
+      "uncertain": 253,
+      "identity_unresolved_rows": 0,
+      "formula_capture_complete": true,
+      "source": "https://www.eqtraders.com/recipes/pottery_recipe_page.php?article=564&rsa=Pottery&sb=item&sub=ROF&menustr=080090000000"
+    },
+    {
+      "expansion_id": 19,
+      "expansion": "Rain of Fear",
+      "skill_id": 75,
+      "skill": "Quest/no-skill combine sentinel (numeric SkillRemoveTraps; engine excludes salvage)",
+      "status": "MAINTAINED_CATEGORY_ROWS_OBSERVED_FORMULA_ERA_GATES_MATCHING_PENDING",
+      "source_denominator": 112,
+      "source_denominator_unit": "maintained catalogue output/formula rows; may repeat a multioutput combine",
+      "matched": null,
+      "missing": null,
+      "incomplete": null,
+      "duplicates": null,
+      "uncertain": 112,
+      "unique_ingredient_container_signatures": 16,
+      "source_rows_per_signature": 7,
+      "formula_capture_complete": false,
+      "source": "https://www.eqtraders.com/recipes/recipe_page.php?article=564&rsa=No%20Skill&sb=item&sub=ROF"
+    }
+  ],
+  "cross_indexed_research_rows": {
+    "source": "https://www.eqtraders.com/recipes/recipe_page.php?article=563&rsa=Jewelcraft&sb=item&sub=ROF&menustr=080070000000",
+    "rows": 2,
+    "names": [
+      "Ability: Enchant Planar Alloy (x1)",
+      "Ability: Enchant Planar Alloy (x10)"
+    ],
+    "result_recipe_absent": true
+  },
+  "missing_output_item_dependencies": [
+    {
+      "name": "Planar Alloy Duo Bracelet",
+      "native_item_id": 76922,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=40887"
+    },
+    {
+      "name": "Planar Alloy Duo Earring",
+      "native_item_id": 76923,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=40888"
+    },
+    {
+      "name": "Planar Alloy Duo Pendant",
+      "native_item_id": 76924,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=40889"
+    },
+    {
+      "name": "Planar Alloy Duo Ring",
+      "native_item_id": 76925,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=40890"
+    },
+    {
+      "name": "Planar Alloy Duo Veil",
+      "native_item_id": 76926,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=40891"
+    },
+    {
+      "name": "Planar Alloy Solo Earring",
+      "native_item_id": 76928,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=40883"
+    },
+    {
+      "name": "Planar Alloy Solo Pendant",
+      "native_item_id": 76929,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=40884"
+    },
+    {
+      "name": "Planar Alloy Solo Ring",
+      "native_item_id": 76930,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=40885"
+    },
+    {
+      "name": "Heavy Tailored Flawless Black Backpack",
+      "native_item_id": 135734,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59427"
+    },
+    {
+      "name": "Heavy Tailored Flawless Black Pack",
+      "native_item_id": 135794,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59431"
+    },
+    {
+      "name": "Heavy Tailored Flawless Blue Backpack",
+      "native_item_id": 135716,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59435"
+    },
+    {
+      "name": "Heavy Tailored Flawless Green Backpack",
+      "native_item_id": 135710,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59439"
+    },
+    {
+      "name": "Heavy Tailored Flawless Orange Backpack",
+      "native_item_id": 135698,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59447"
+    },
+    {
+      "name": "Heavy Tailored Flawless Orange Pack",
+      "native_item_id": 135758,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59451"
+    },
+    {
+      "name": "Heavy Tailored Flawless Pink Backpack",
+      "native_item_id": 135728,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59456"
+    },
+    {
+      "name": "Heavy Tailored Flawless Pink Pack",
+      "native_item_id": 135788,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59459"
+    },
+    {
+      "name": "Heavy Tailored Flawless Purple Backpack",
+      "native_item_id": 135722,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59463"
+    },
+    {
+      "name": "Heavy Tailored Flawless White Backpack",
+      "native_item_id": 135740,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59485"
+    },
+    {
+      "name": "Heavy Tailored Flawless Yellow Backpack",
+      "native_item_id": 135704,
+      "source": "https://www.eqtraders.com/items/show_item.php?item=59491"
+    }
+  ],
+  "existing_tailoring_rows": {
+    "all_seven_disabled": true,
+    "two_source_formula_fields_match": true,
+    "five_alternate_ingredient_book_variants": true,
+    "existing_expansion_tag": 9,
+    "existing_rows_changed": false,
+    "alternate_variants_dated": false
+  },
+  "applied_batches": {
+    "RRC001": {
+      "recipes": 19,
+      "entries": 104
+    },
+    "RRC002": {
+      "recipes": 10,
+      "entries": 68
+    },
+    "RRC003": {
+      "recipes": 64,
+      "entries": 354
+    },
+    "RRC004": {
+      "recipes": 8,
+      "entries": 51
+    },
+    "RRC005": {
+      "recipes": 9,
+      "entries": 67
+    }
+  },
+  "total_added": {
+    "recipes": 110,
+    "entries": 644
+  },
+  "native_combines_verified": false,
+  "natural_material_access_complete": false,
+  "new_changes_in_this_checkpoint": "Documentation and completed RRC005 validation/application status only; no recipe, item, rule, code, schema or player changes.",
+  "next_work": [
+    "Resolve source-era, ingredient/container identities and learning gates before further SQL proposals.",
+    "Review nineteen missing output-item definitions with historical evidence; no copied or invented item stats.",
+    "Review sixteen cultural book/multioutput signatures, contradictory source yields and charged-book/backpack mechanics.",
+    "Traverse general/class/cultural subindexes and all earlier expansion catalogues; unknown counts remain null.",
+    "Resolve primary Planar Goo/Energy Shard acquisition using supported distribution evidence."
+  ],
+  "limits": [
+    "Maintained category labels and page-modified dates do not establish every formula existed by the cutoff.",
+    "Source output absence establishes a database gap for that source row, not historical eligibility.",
+    "Candidate output recipes are not exact formula matches; disabled formulas do not count as available.",
+    "Source duplicate rows overlap row-status counts; they are not additional logical recipes.",
+    "A category can contain recipes from another skill, and a multioutput combine can appear under several output labels.",
+    "No exhaustive native combine campaign or global completeness percentage is claimed."
+  ]
+}

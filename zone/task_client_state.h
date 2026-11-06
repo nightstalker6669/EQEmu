@@ -1,3 +1,4 @@
+#include "fungal_item_operation_source.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -48,7 +49,17 @@ struct TaskUpdateFilter
 	TaskMethodType method = TaskMethodType::METHODSINGLEID;
 };
 
+namespace FirePersonalOccurrenceSource { class NativeItemCustody; class PublishedNativeUseSink; class OriginalConstructDeathQueue; class OriginalConstructNativeHail;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
 class ClientTaskState {
+ friend class FungalItemSource::NativeEvents;
+ friend class FirePersonalOccurrenceSource::NativeItemCustody;
+ friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
+ friend class FirePersonalOccurrenceSource::PreparedConstructPlan;
+ friend class FirePersonalOccurrenceSource::NativeConstructParticipants;
+ friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
+ friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
+ friend class FirePersonalOccurrenceSource::OriginalConstructNativeHail;
+
 
 public:
 	ClientTaskState();

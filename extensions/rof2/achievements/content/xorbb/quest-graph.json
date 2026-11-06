@@ -1,0 +1,1114 @@
+{
+  "achievement": 2075310,
+  "enabled": false,
+  "reservation": "Coordinator provisional task3040477..3040487, fresh DB absence checked; no migration reservation/activation",
+  "scope": "Authored source graph; runtime and native acceptance incomplete",
+  "research_qualification": "Mutable EQResource guides with original Nov2012 topics. Current guide details are researched evidence, not immutable May2013 exports. Actual item IDs, native mechanics, exact XP and drop rates remain unverified. Zero AA means no AA shown, not evidence of zero original AA.",
+  "implementation_defaults": {
+    "normal_xp": 1000,
+    "normal_xp_label": "Approved configurable PEQ-style default",
+    "request_timer_seconds": 0,
+    "timer_semantics": "Reported duration mapped to completion replay; configurable emulator default, original timer origin unknown"
+  },
+  "tasks": [
+    {
+      "slug": "theseusjob",
+      "name": "Theseus' Job",
+      "giver": 753012,
+      "phrase": "convince",
+      "reported_lockout_hours": 6,
+      "reported_copper": 112500,
+      "reported_aa": 0,
+      "mechanics": "Kill10 surface minotaurs; each eligible kill automatically grants a Minotaur Horn; deliver10 horns.",
+      "url": "https://rof.eqresource.com/theseusjob.php",
+      "task": 3040477,
+      "component": 2075310,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "kill_autogrant",
+          "label": "Defeat surface minotaurs and collect horns",
+          "count": 10,
+          "item": 55794,
+          "npc": [
+            753006,
+            753008,
+            753103,
+            753105,
+            753124,
+            753155,
+            753162,
+            753163,
+            753166,
+            753178,
+            753186,
+            753201,
+            753206,
+            753262,
+            753273,
+            753274,
+            753275,
+            753286
+          ],
+          "step": 0,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Give the scout ten horns",
+          "count": 10,
+          "item": 55794,
+          "npc": 753012,
+          "step": 1,
+          "activity": 1,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "elementallyschooled",
+      "name": "Elementally Schooled",
+      "giver": 753012,
+      "phrase": "convince",
+      "reported_lockout_hours": 6,
+      "reported_copper": 112500,
+      "reported_aa": 0,
+      "mechanics": "Kill10 water/earth elementals; automatically obtain Natural Cores; deliver10.",
+      "url": "https://rof.eqresource.com/elementallyschooled.php",
+      "task": 3040478,
+      "component": 2075311,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "kill_autogrant",
+          "label": "Defeat water and earth elementals and collect cores",
+          "count": 10,
+          "item": 55795,
+          "npc": [
+            753002,
+            753004,
+            753005,
+            753028,
+            753029,
+            753042,
+            753094,
+            753148,
+            753172,
+            753184,
+            753185,
+            753208,
+            753238,
+            753247
+          ],
+          "step": 0,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Give the scout ten natural cores",
+          "count": 10,
+          "item": 55795,
+          "npc": 753012,
+          "step": 1,
+          "activity": 1,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "earthwindandyourfury",
+      "name": "Earth, Wind and your Fury",
+      "giver": 753012,
+      "phrase": "convince",
+      "reported_lockout_hours": 6,
+      "reported_copper": 112500,
+      "reported_aa": 0,
+      "mechanics": "Kill10 muddites/whirlwinds/cyclones; automatically obtain Elemental Cores; deliver10.",
+      "url": "https://rof.eqresource.com/earthwindandyourfury.php",
+      "task": 3040479,
+      "component": 2075312,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "kill_autogrant",
+          "label": "Defeat muddites and storm creatures and collect cores",
+          "count": 10,
+          "item": 55763,
+          "npc": [
+            753010,
+            753014,
+            753015,
+            753020,
+            753021,
+            753022,
+            753023,
+            753099,
+            753106,
+            753130,
+            753136,
+            753145,
+            753158,
+            753160,
+            753218,
+            753219,
+            753234,
+            753235,
+            753236,
+            753242
+          ],
+          "step": 0,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Give the scout ten elemental cores",
+          "count": 10,
+          "item": 55763,
+          "npc": 753012,
+          "step": 1,
+          "activity": 1,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "thebearnecessities",
+      "name": "The Bear Necessities",
+      "giver": 753046,
+      "phrase": "shoo",
+      "reported_lockout_hours": 1,
+      "reported_copper": 112500,
+      "reported_aa": 0,
+      "mechanics": "Kill10 forest bears then hail Oolab.",
+      "url": "https://rof.eqresource.com/thebearnecessities.php",
+      "task": 3040480,
+      "component": 2075313,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "kill",
+          "label": "Defeat forest bears",
+          "count": 10,
+          "item": null,
+          "npc": [
+            753104,
+            753221,
+            753227,
+            753231,
+            753244,
+            753248,
+            753249,
+            753279,
+            753285
+          ],
+          "step": 0,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Report to Oolab",
+          "count": 1,
+          "item": null,
+          "npc": 753046,
+          "step": 1,
+          "activity": 1,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "snakesinthegrass",
+      "name": "Snakes in the Grass",
+      "giver": 753046,
+      "phrase": "shoo",
+      "reported_lockout_hours": 1,
+      "reported_copper": 112500,
+      "reported_aa": 0,
+      "mechanics": "Kill10 forest snakes then hail Oolab.",
+      "url": "https://rof.eqresource.com/snakesinthegrass.php",
+      "task": 3040481,
+      "component": 2075314,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "kill",
+          "label": "Defeat forest snakes",
+          "count": 10,
+          "item": null,
+          "npc": [
+            753111,
+            753123,
+            753151,
+            753187,
+            753265
+          ],
+          "step": 0,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Report to Oolab",
+          "count": 1,
+          "item": null,
+          "npc": 753046,
+          "step": 1,
+          "activity": 1,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "schemingsaboteur",
+      "name": "Scheming Saboteur",
+      "giver": 753080,
+      "phrase": "sabotage",
+      "reported_lockout_hours": 6,
+      "reported_copper": 112500,
+      "reported_aa": 0,
+      "mechanics": "Kill10 underground goblins then hail Gavrilo.",
+      "url": "https://rof.eqresource.com/schemingsaboteur.php",
+      "task": 3040482,
+      "component": 2075315,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "kill",
+          "label": "Defeat underground goblins",
+          "count": 10,
+          "item": null,
+          "npc": [
+            753013,
+            753016,
+            753035,
+            753049,
+            753054,
+            753068,
+            753078,
+            753079,
+            753088,
+            753089,
+            753090,
+            753098,
+            753100,
+            753107,
+            753117,
+            753120,
+            753126,
+            753127,
+            753128,
+            753137,
+            753139,
+            753140,
+            753149,
+            753150,
+            753156,
+            753165,
+            753168,
+            753189,
+            753194,
+            753210,
+            753280,
+            753317
+          ],
+          "step": 0,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Report to Scout Gavrilo",
+          "count": 1,
+          "item": null,
+          "npc": 753080,
+          "step": 1,
+          "activity": 1,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "theminotaursmasher",
+      "name": "The Minotaur Smasher",
+      "giver": 753001,
+      "phrase": "do",
+      "reported_lockout_hours": 6,
+      "reported_copper": 225000,
+      "reported_aa": 3,
+      "mechanics": "Use supplied Animated Solution on eligible targets at30 percent HP or lower; kill and loot10 each Animated Clay, Crystal, Flesh. Deliver to Minotaur Smasher then hail Verken. Augmented targets gain Earth Drain, Crystal Gash, or Flesh Ripper respectively; drop chance unverified.",
+      "url": "https://rof.eqresource.com/theminotaursmasher.php",
+      "task": 3040483,
+      "component": 2075316,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "loot",
+          "label": "Recover animated clay",
+          "count": 10,
+          "item": 66522,
+          "npc": null,
+          "step": 0,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "loot",
+          "label": "Recover animated crystal",
+          "count": 10,
+          "item": 66523,
+          "npc": null,
+          "step": 0,
+          "activity": 1,
+          "producer_ready": false
+        },
+        {
+          "kind": "loot",
+          "label": "Recover animated flesh",
+          "count": 10,
+          "item": 66524,
+          "npc": null,
+          "step": 0,
+          "activity": 2,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Feed clay to the Smasher",
+          "count": 10,
+          "item": 66522,
+          "npc": 753000,
+          "step": 1,
+          "activity": 3,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Feed crystal to the Smasher",
+          "count": 10,
+          "item": 66523,
+          "npc": 753000,
+          "step": 1,
+          "activity": 4,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Feed flesh to the Smasher",
+          "count": 10,
+          "item": 66524,
+          "npc": 753000,
+          "step": 1,
+          "activity": 5,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Report to Crazy Verken",
+          "count": 1,
+          "item": null,
+          "npc": 753001,
+          "step": 2,
+          "activity": 6,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "aneyeforaneye",
+      "name": "An Eye for an Eye",
+      "giver": 753114,
+      "phrase": "wisp",
+      "reported_lockout_hours": 6,
+      "reported_copper": 225000,
+      "reported_aa": 3,
+      "mechanics": "20 steps: phial smoke; muddite mud; mephit blood; return/fun; blind an eye; kill Blackened Eye; return/waste; sewer spill fluid; kitchen pepper groundspawn; rat fur; return; burning agony eye; kill Irritated Eye; return; phial water elemental; ragweed groundspawn; return; tears eye; blanket Runny Eye; deliver Dozing Evil Eye.",
+      "url": "https://rof.eqresource.com/aneyeforaneye.php",
+      "task": 3040484,
+      "component": 2075317,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "item_use",
+          "label": "Siphon camp smoke",
+          "count": 1,
+          "item": 68576,
+          "npc": null,
+          "step": 0,
+          "spell": 33979,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "kill",
+          "label": "Collect muddite mud",
+          "count": 1,
+          "item": null,
+          "npc": [
+            753020,
+            753021,
+            753023,
+            753099,
+            753158,
+            753219,
+            753235,
+            753236,
+            753242
+          ],
+          "step": 1,
+          "activity": 1,
+          "producer_ready": false
+        },
+        {
+          "kind": "kill",
+          "label": "Collect mephit blood",
+          "count": 1,
+          "item": null,
+          "npc": [
+            753301,
+            753302,
+            753303,
+            753304,
+            753308,
+            753309,
+            753310,
+            753311
+          ],
+          "step": 2,
+          "activity": 2,
+          "producer_ready": false
+        },
+        {
+          "kind": "dialogue",
+          "label": "Discuss the first mixture",
+          "count": 1,
+          "item": null,
+          "npc": 753114,
+          "step": 3,
+          "phrase": "fun",
+          "activity": 3,
+          "producer_ready": false
+        },
+        {
+          "kind": "item_use",
+          "label": "Blind an evil eye",
+          "count": 1,
+          "item": 68573,
+          "npc": null,
+          "step": 4,
+          "spell": 33987,
+          "activity": 4,
+          "producer_ready": false
+        },
+        {
+          "kind": "kill",
+          "label": "Defeat the blackened eye",
+          "count": 1,
+          "item": null,
+          "npc": null,
+          "step": 5,
+          "activity": 5,
+          "producer_ready": false
+        },
+        {
+          "kind": "dialogue",
+          "label": "Discuss the result",
+          "count": 1,
+          "item": null,
+          "npc": 753114,
+          "step": 6,
+          "phrase": "waste",
+          "activity": 6,
+          "producer_ready": false
+        },
+        {
+          "kind": "item_use",
+          "label": "Siphon sewer fluid",
+          "count": 1,
+          "item": 68577,
+          "npc": null,
+          "step": 7,
+          "spell": 33980,
+          "activity": 7,
+          "producer_ready": false
+        },
+        {
+          "kind": "ground_pickup",
+          "label": "Collect kitchen pepper",
+          "count": 1,
+          "item": 68572,
+          "npc": null,
+          "step": 8,
+          "activity": 8,
+          "producer_ready": false
+        },
+        {
+          "kind": "kill",
+          "label": "Collect sewer rat fur",
+          "count": 1,
+          "item": null,
+          "npc": [
+            753009,
+            753154,
+            753188,
+            753252
+          ],
+          "step": 9,
+          "activity": 9,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Return to Lurr",
+          "count": 1,
+          "item": null,
+          "npc": 753114,
+          "step": 10,
+          "activity": 10,
+          "producer_ready": false
+        },
+        {
+          "kind": "item_use",
+          "label": "Apply burning agony to an eye",
+          "count": 1,
+          "item": 68574,
+          "npc": null,
+          "step": 11,
+          "spell": 33988,
+          "activity": 11,
+          "producer_ready": false
+        },
+        {
+          "kind": "kill",
+          "label": "Defeat the irritated eye",
+          "count": 1,
+          "item": null,
+          "npc": null,
+          "step": 12,
+          "activity": 12,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Report to Lurr",
+          "count": 1,
+          "item": null,
+          "npc": 753114,
+          "step": 13,
+          "activity": 13,
+          "producer_ready": false
+        },
+        {
+          "kind": "item_use",
+          "label": "Siphon elemental water",
+          "count": 1,
+          "item": 68578,
+          "npc": null,
+          "step": 14,
+          "spell": 33981,
+          "activity": 14,
+          "producer_ready": false
+        },
+        {
+          "kind": "ground_pickup",
+          "label": "Collect riverbank ragweed",
+          "count": 1,
+          "item": 68571,
+          "npc": null,
+          "step": 15,
+          "activity": 15,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Return to Lurr",
+          "count": 1,
+          "item": null,
+          "npc": 753114,
+          "step": 16,
+          "activity": 16,
+          "producer_ready": false
+        },
+        {
+          "kind": "item_use",
+          "label": "Apply the tear distillate",
+          "count": 1,
+          "item": 68575,
+          "npc": null,
+          "step": 17,
+          "spell": 33989,
+          "activity": 17,
+          "producer_ready": false
+        },
+        {
+          "kind": "item_use",
+          "label": "Capture the runny eye",
+          "count": 1,
+          "item": 68579,
+          "npc": null,
+          "step": 18,
+          "spell": 33990,
+          "activity": 18,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Return the dozing evil eye",
+          "count": 1,
+          "item": 68614,
+          "npc": 753114,
+          "step": 19,
+          "activity": 19,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "plansgoneawry",
+      "name": "Plans Gone Awry",
+      "giver": 753041,
+      "phrase": "carry out",
+      "reported_lockout_hours": 6,
+      "reported_copper": 225000,
+      "reported_aa": 0,
+      "mechanics": "14 steps: prisoner idea; Grolak Goblin-language lightning; box cloudburst lightning; loot3 heads/1 torso/3 limbs; gather3 pondweed; return Goblin language; sit and started for container; combine7 body parts+3 weeds; deliver Hollowflesh Golem; instructions; signal now lightning click golem; speak Grolak; report Dabbin.",
+      "url": "https://rof.eqresource.com/plansgoneawry.php",
+      "task": 3040485,
+      "component": 2075318,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "dialogue",
+          "label": "Ask an imprisoned halfling for an idea",
+          "count": 1,
+          "item": null,
+          "npc": [
+            753033,
+            753045,
+            753050,
+            753056,
+            753059,
+            753077,
+            753085,
+            753087
+          ],
+          "step": 0,
+          "phrase": "idea",
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "dialogue",
+          "label": "Discuss lightning in Goblin",
+          "count": 1,
+          "item": null,
+          "npc": 753030,
+          "step": 1,
+          "phrase": "lightning",
+          "language": "Goblin",
+          "activity": 1,
+          "producer_ready": false
+        },
+        {
+          "kind": "item_use",
+          "label": "Capture cloudburst lightning",
+          "count": 1,
+          "item": 68486,
+          "npc": null,
+          "step": 2,
+          "spell": 33704,
+          "activity": 2,
+          "producer_ready": false
+        },
+        {
+          "kind": "loot",
+          "label": "Collect minotaur heads",
+          "count": 3,
+          "item": 68482,
+          "npc": null,
+          "step": 3,
+          "activity": 3,
+          "producer_ready": false
+        },
+        {
+          "kind": "loot",
+          "label": "Collect a minotaur torso",
+          "count": 1,
+          "item": 68481,
+          "npc": null,
+          "step": 3,
+          "activity": 4,
+          "producer_ready": false
+        },
+        {
+          "kind": "loot",
+          "label": "Collect minotaur limbs",
+          "count": 3,
+          "item": 68483,
+          "npc": null,
+          "step": 3,
+          "activity": 5,
+          "producer_ready": false
+        },
+        {
+          "kind": "ground_pickup",
+          "label": "Gather pondweed",
+          "count": 3,
+          "item": 68485,
+          "npc": null,
+          "step": 3,
+          "activity": 6,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Return to Grolak in Goblin",
+          "count": 1,
+          "item": null,
+          "npc": 753030,
+          "step": 4,
+          "language": "Goblin",
+          "activity": 7,
+          "producer_ready": false
+        },
+        {
+          "kind": "combine",
+          "label": "Sit and assemble the golem",
+          "count": 1,
+          "item": 68484,
+          "npc": 753030,
+          "step": 5,
+          "phrase": "started",
+          "container": 68480,
+          "ingredients": {
+            "68482": 3,
+            "68481": 1,
+            "68483": 3,
+            "68485": 3
+          },
+          "activity": 8,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Give Grolak the golem",
+          "count": 1,
+          "item": 68484,
+          "npc": 753030,
+          "step": 6,
+          "activity": 9,
+          "producer_ready": false
+        },
+        {
+          "kind": "scene",
+          "label": "Listen to Grolak",
+          "count": 1,
+          "item": null,
+          "npc": 753030,
+          "step": 7,
+          "activity": 10,
+          "producer_ready": false
+        },
+        {
+          "kind": "item_use",
+          "label": "Energize the golem on the signal",
+          "count": 1,
+          "item": 68487,
+          "npc": null,
+          "step": 8,
+          "spell": 33705,
+          "activity": 11,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Speak to Grolak",
+          "count": 1,
+          "item": null,
+          "npc": 753030,
+          "step": 9,
+          "activity": 12,
+          "producer_ready": false
+        },
+        {
+          "kind": "speak",
+          "label": "Report to Dabbin",
+          "count": 1,
+          "item": null,
+          "npc": 753003,
+          "step": 10,
+          "activity": 13,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "krystulsforthekrystulking",
+      "name": "Krystuls for the Krystul King",
+      "giver": 753284,
+      "phrase": "find",
+      "reported_lockout_hours": 6,
+      "reported_copper": 225000,
+      "reported_aa": 3,
+      "mechanics": "Click3 each blue/yellow/red/green crystal objects without inventory loot; protect dialogue; kill3 crocodiles; robe dialogue; duck then army; kill3 spawned halflings; scared of heights dialogue.",
+      "url": "https://rof.eqresource.com/krystulsforthekrystulking.php",
+      "task": 3040486,
+      "component": 2075319,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "object_click",
+          "label": "Collect blue crystal energy",
+          "count": 3,
+          "item": null,
+          "npc": null,
+          "step": 0,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "object_click",
+          "label": "Collect yellow crystal energy",
+          "count": 3,
+          "item": null,
+          "npc": null,
+          "step": 0,
+          "activity": 1,
+          "producer_ready": false
+        },
+        {
+          "kind": "object_click",
+          "label": "Collect red crystal energy",
+          "count": 3,
+          "item": null,
+          "npc": null,
+          "step": 0,
+          "activity": 2,
+          "producer_ready": false
+        },
+        {
+          "kind": "object_click",
+          "label": "Collect green crystal energy",
+          "count": 3,
+          "item": null,
+          "npc": null,
+          "step": 0,
+          "activity": 3,
+          "producer_ready": false
+        },
+        {
+          "kind": "dialogue",
+          "label": "Ask Gronk about protection",
+          "count": 1,
+          "item": null,
+          "npc": 753284,
+          "step": 1,
+          "phrase": "protect",
+          "activity": 4,
+          "producer_ready": false
+        },
+        {
+          "kind": "kill",
+          "label": "Defeat sewer crocodiles",
+          "count": 3,
+          "item": null,
+          "npc": [
+            753018,
+            753019,
+            753026,
+            753135,
+            753195,
+            753207,
+            753237
+          ],
+          "step": 2,
+          "activity": 5,
+          "producer_ready": false
+        },
+        {
+          "kind": "dialogue",
+          "label": "Ask Gronk about the robe",
+          "count": 1,
+          "item": null,
+          "npc": 753284,
+          "step": 3,
+          "phrase": "robe",
+          "activity": 6,
+          "producer_ready": false
+        },
+        {
+          "kind": "posture_dialogue",
+          "label": "Duck and discuss the army",
+          "count": 1,
+          "item": null,
+          "npc": 753284,
+          "step": 4,
+          "phrase": "army",
+          "activity": 7,
+          "producer_ready": false
+        },
+        {
+          "kind": "kill",
+          "label": "Defeat the three taunted halflings",
+          "count": 3,
+          "item": null,
+          "npc": null,
+          "step": 5,
+          "activity": 8,
+          "producer_ready": false
+        },
+        {
+          "kind": "dialogue",
+          "label": "Interrogate Gronk",
+          "count": 1,
+          "item": null,
+          "npc": 753284,
+          "step": 6,
+          "phrase": "scared of heights",
+          "activity": 9,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": null
+    },
+    {
+      "slug": "aintnothinglikeanevilring",
+      "name": "Ain't No Thing Like an Evil Ring",
+      "giver": 753034,
+      "phrase": "find",
+      "reported_lockout_hours": 6,
+      "reported_copper": 225000,
+      "reported_aa": 3,
+      "mechanics": "Loot Binding Residue from cloudbursts, Osmium Ore from zone mobs, Purified Direflame from flame goblins, Ancient Text of Power from minotaurs/goblins; deliver all4; click supplied ring on weakened eye around30 percent HP to despawn/capture; deliver empowered ring; Ring of Watching Eyes reward item ID not yet verified.",
+      "url": "https://rof.eqresource.com/aintnothinglikeanevilring.php",
+      "task": 3040487,
+      "component": 2075320,
+      "enabled": false,
+      "objectives": [
+        {
+          "kind": "loot",
+          "label": "Collect binding residue",
+          "count": 1,
+          "item": 17749,
+          "npc": null,
+          "step": 0,
+          "activity": 0,
+          "producer_ready": false
+        },
+        {
+          "kind": "loot",
+          "label": "Collect osmium ore",
+          "count": 1,
+          "item": 123502,
+          "npc": null,
+          "step": 0,
+          "activity": 1,
+          "producer_ready": false
+        },
+        {
+          "kind": "loot",
+          "label": "Collect purified direflame",
+          "count": 1,
+          "item": 17747,
+          "npc": null,
+          "step": 0,
+          "activity": 2,
+          "producer_ready": false
+        },
+        {
+          "kind": "loot",
+          "label": "Collect ancient words",
+          "count": 1,
+          "item": 17748,
+          "npc": null,
+          "step": 0,
+          "activity": 3,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Give Zerkis the residue",
+          "count": 1,
+          "item": 17749,
+          "npc": 753034,
+          "step": 1,
+          "activity": 4,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Give Zerkis the ore",
+          "count": 1,
+          "item": 123502,
+          "npc": 753034,
+          "step": 1,
+          "activity": 5,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Give Zerkis the direflame",
+          "count": 1,
+          "item": 17747,
+          "npc": 753034,
+          "step": 1,
+          "activity": 6,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Give Zerkis the ancient text",
+          "count": 1,
+          "item": 17748,
+          "npc": 753034,
+          "step": 1,
+          "activity": 7,
+          "producer_ready": false
+        },
+        {
+          "kind": "item_use",
+          "label": "Bind a weakened evil eye",
+          "count": 1,
+          "item": 17750,
+          "npc": null,
+          "step": 2,
+          "spell": 37147,
+          "activity": 8,
+          "producer_ready": false
+        },
+        {
+          "kind": "deliver",
+          "label": "Return the empowered binding ring",
+          "count": 1,
+          "item": 17893,
+          "npc": 753034,
+          "step": 3,
+          "activity": 9,
+          "producer_ready": false
+        }
+      ],
+      "reward_item": 17892
+    }
+  ],
+  "unresolved": [
+    "Confirm NPC family filters against physical scene and period bestiary, especially forest/surface vs underground actors",
+    "All73 producers require native binding/acceptance; this graph grants no credit",
+    "Successful consumed-charge item-click and target/HP guards required",
+    "Missing Hollowflesh recipe must be installed with reviewed reserved ID, not bypassed",
+    "Original/current guide AA/rewards require historical qualification; absence of AA text is not proven zero",
+    "Ground/colored crystal models/locations and new owned encounters require research/geometry/profile implementation",
+    "Exact XP/drop chances/encounter rates remain labelled approved defaults where unavailable"
+  ]
+}

@@ -1,3 +1,7 @@
+#include "fungal_item_operation_source.h"
+#include "fire_run_terminal_scene.h"
+#include "fire_run_action_scene.h"
+#include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -16,6 +20,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "npc.h"
+#include "fire_gotonur_say_queue.h"
 
 #include "common/bodytypes.h"
 #include "common/classes.h"
@@ -504,6 +509,10 @@ uint32 NPC::GetRoamboxMinDelay() const
 
 NPC::~NPC()
 {
+ FungalItemSource::NativeEvents::Revoke(*this);
+	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
+ FireRunActionSource::NativeRunHelperSource::ObserveActualDestruction(*this);
+ FireRunActionSource::NativeRunTerminalSource::ObserveActualDestruction(*this);
 	AI_Stop();
 
 	if (proximity) {
@@ -585,6 +594,15 @@ bool NPC::Process()
 			petid = 0;
 		}
 		return false;
+	}
+
+	if(const auto fire_owned=FireRunActionSource::NativeRunHelperSource::ProcessActual(*this))return *fire_owned;
+	if(const auto fire_chest=FireRunActionSource::NativeRunTerminalSource::ProcessActualChest(*this))return *fire_chest;
+
+	// Keep the binding for current/entering clients, with no AI, ticks, spells,
+	// regeneration or second death processing while the original timer runs.
+	if (BoundDestructibles::IsBlocked(this)) {
+		return true;
 	}
 
 	if (IsStunned() && stunned_timer.Check()) {
@@ -844,6 +862,7 @@ void NPC::UpdateEquipmentLight()
 }
 
 void NPC::Depop(bool start_spawn_timer) {
+	BoundDestructibles::CancelTransition(this);
 	if (emoteid) {
 		DoNPCEmote(EQ::constants::EmoteEventTypes::OnDespawn, emoteid);
 	}

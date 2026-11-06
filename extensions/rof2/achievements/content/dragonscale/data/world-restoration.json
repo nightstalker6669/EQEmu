@@ -1,0 +1,53 @@
+{
+  "enabled": false,
+  "lelluran": {
+    "npc_id": 443900,
+    "template_npc": 443099,
+    "race": 519,
+    "level_min": 75,
+    "level_max": 77,
+    "spawn_percent": 5,
+    "quest_drop": 36652,
+    "quest_drop_count": 1,
+    "spells": [
+      6,
+      453,
+      3489,
+      5322
+    ],
+    "harm_touch": "Native shadowknight class attack; do not script an additional duplicate HT.",
+    "source": "https://everquest.allakhazam.com/db/npc/27530",
+    "period_evidence": [
+      "Dec2007:no summon,root/snare,kiteable",
+      "May2008:Harm Touch",
+      "Aug2008:level75-77 and named DOT/snare spells",
+      "Nov2012:several nightmare placeholders"
+    ],
+    "defaults": "5percent rare chance, existing PEQ nightmare combat baseline, inherited AI defaults and priority1/recast=-1 are configurable reconstruction, not recovered original server values.",
+    "geometry": "Existing nightmare spawn2 positions/grids/timers preserved; no teleporting or quest handout."
+  },
+  "guards": {
+    "npc_id": 442900,
+    "template_npc": 442152,
+    "level": 78,
+    "expires_seconds": 900,
+    "offset_x": 5,
+    "offset_y": 5,
+    "hail_radius": 35,
+    "hail_vertical": 15,
+    "source": "https://everquest.allakhazam.com/db/npc/27708",
+    "source_scope": "Current level78 corroboration; page added2007. Exact historical combat stats and loot probabilities not recovered; existing ordinary brownie combat/loot baseline retained.",
+    "defaults": "Native ordinary brownie combat baseline; \u00b15XY relative placement,35hailrange/15vertical and900sec expiry are configurable server defaults.",
+    "scope": "Only claimant-owned epoch actors credit the guard stage; ordinary brownie kill tasks also accept guards."
+  },
+  "banner": {
+    "item": 36679,
+    "spell": 13260,
+    "x": 2510,
+    "y": 3400,
+    "radius": 45,
+    "min_z": 90,
+    "max_z": 120,
+    "defaults": "45XY and90..120Z are configurable trigger allowances around the period /loc3400,2510. Native RoF2 standing surface measured near Z103.75; the consumed original banner and successful native item cast are required. Exact original server tolerances are unknown."
+  }
+}

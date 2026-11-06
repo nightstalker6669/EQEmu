@@ -1,0 +1,392 @@
+{
+  "historical_cutoff": "2013-05-31",
+  "parents": [
+    {
+      "id": 1900050,
+      "name": "Veil of Alaris Explorer",
+      "url": "https://everquest.allakhazam.com/db/quest/5808",
+      "entered": "2012-09-03",
+      "period_dependency_comment": "2012-09-05",
+      "basis": "datedcomment lists10travelers withdirectAllakhURLs,including5829/5830/5832"
+    },
+    {
+      "id": 1900065,
+      "name": "Champion of Alaris",
+      "url": "https://everquest.allakhazam.com/db/quest/5792",
+      "entered": "2012-08-04",
+      "period_dependency_comment": "2012-09-05",
+      "basis": "datedcommentlists20Mercenary/Partisan zoneachievements,includingall8auditedchildren"
+    },
+    {
+      "id": 1900090,
+      "name": "Paragon of Alaris",
+      "url": "https://everquest.allakhazam.com/db/quest/5793",
+      "entered": "2012-08-04",
+      "period_dependency_comment": "2012-09-05",
+      "basis": "datedcommentlists10zoneHeroachievements,includingall4auditedchildren"
+    }
+  ],
+  "identity_basis": "Explicit current catalogue row identities matched to dated 2012 reports; not recovered network IDs. Modern mutable page headers are not period proof.",
+  "edges": [
+    {
+      "parent_id": 1900050,
+      "parent_name": "Veil of Alaris Explorer",
+      "component_type": 1,
+      "component_sequence": 7,
+      "component_id": 1900056,
+      "component_label": "Pillars of Alra Traveler",
+      "child_id": 1973000,
+      "child_name": "The Pillars of Alra Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5829",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900050,
+      "parent_name": "Veil of Alaris Explorer",
+      "component_type": 1,
+      "component_sequence": 8,
+      "component_id": 1900057,
+      "component_label": "Windsong Traveler",
+      "child_id": 1973100,
+      "child_name": "The Windsong Sanctuary Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5830",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900050,
+      "parent_name": "Veil of Alaris Explorer",
+      "component_type": 1,
+      "component_sequence": 10,
+      "component_id": 1900059,
+      "component_label": "Sepulcher of Order Traveler",
+      "child_id": 1973300,
+      "child_name": "The Sepulcher of Order Traveler",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5832",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900065,
+      "parent_name": "Champion of Alaris",
+      "component_type": 1,
+      "component_sequence": 9,
+      "component_id": 1900073,
+      "component_label": "Mercenary of The Beasts' Domain",
+      "child_id": 1972810,
+      "child_name": "Mercenary of the Beasts' Domain",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5848",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "Noble arms ornament with cloth/leather/chain/platechoice; exactitemIDsnotrecoveredhere",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900065,
+      "parent_name": "Champion of Alaris",
+      "component_type": 1,
+      "component_sequence": 10,
+      "component_id": 1900074,
+      "component_label": "Partisan of The Beasts' Domain",
+      "child_id": 1972820,
+      "child_name": "Partisan of the Beasts' Domain",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5857",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900065,
+      "parent_name": "Champion of Alaris",
+      "component_type": 1,
+      "component_sequence": 13,
+      "component_id": 1900077,
+      "component_label": "Mercenary of The Pillars of Alra",
+      "child_id": 1973010,
+      "child_name": "Mercenary of the Pillars of Alra",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5850",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900065,
+      "parent_name": "Champion of Alaris",
+      "component_type": 1,
+      "component_sequence": 14,
+      "component_id": 1900078,
+      "component_label": "Partisan of The Pillars of Alra",
+      "child_id": 1973020,
+      "child_name": "Partisan of the Pillars of Alra",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5858",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900065,
+      "parent_name": "Champion of Alaris",
+      "component_type": 1,
+      "component_sequence": 15,
+      "component_id": 1900079,
+      "component_label": "Mercenary of Windsong Sanctuary",
+      "child_id": 1973110,
+      "child_name": "Mercenary of the Windsong Sanctuary",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5851",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900065,
+      "parent_name": "Champion of Alaris",
+      "component_type": 1,
+      "component_sequence": 16,
+      "component_id": 1900080,
+      "component_label": "Partisan of Windsong Sanctuary",
+      "child_id": 1973120,
+      "child_name": "Partisan of the Windsong Sanctuary",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5861",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900065,
+      "parent_name": "Champion of Alaris",
+      "component_type": 1,
+      "component_sequence": 19,
+      "component_id": 1900083,
+      "component_label": "Mercenary of Sepulcher of Order",
+      "child_id": 1973310,
+      "child_name": "Mercenary of the Sepulcher of Order",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5853",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900065,
+      "parent_name": "Champion of Alaris",
+      "component_type": 1,
+      "component_sequence": 20,
+      "component_id": 1900084,
+      "component_label": "Partisan of Sepulcher of Order",
+      "child_id": 1973320,
+      "child_name": "Partisan of the Sepulcher of Order",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5862",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900090,
+      "parent_name": "Paragon of Alaris",
+      "component_type": 1,
+      "component_sequence": 5,
+      "component_id": 1900094,
+      "component_label": "Hero of The Beasts' Domain",
+      "child_id": 1972830,
+      "child_name": "Hero of the Beasts' Domain",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5867",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900090,
+      "parent_name": "Paragon of Alaris",
+      "component_type": 1,
+      "component_sequence": 7,
+      "component_id": 1900096,
+      "component_label": "Hero of The Pillars of Alra",
+      "child_id": 1973030,
+      "child_name": "Hero of the Pillars of Alra",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5868",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900090,
+      "parent_name": "Paragon of Alaris",
+      "component_type": 1,
+      "component_sequence": 8,
+      "component_id": 1900097,
+      "component_label": "Hero of Windsong Sanctuary",
+      "child_id": 1973130,
+      "child_name": "Hero of the Windsong Sanctuary",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5869",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    },
+    {
+      "parent_id": 1900090,
+      "parent_name": "Paragon of Alaris",
+      "component_type": 1,
+      "component_sequence": 10,
+      "component_id": 1900099,
+      "component_label": "Hero of Sepulcher of Order",
+      "child_id": 1973330,
+      "child_name": "Hero of the Sepulcher of Order",
+      "source_url": "https://everquest.allakhazam.com/db/quest/5871",
+      "individual_period_presence": {
+        "entered": "2012-09-03",
+        "dated_comment": "2012-10-24",
+        "author": "Amio",
+        "basis": "individualAchievementInformationcomment confirms named achievement/visit orquest/missionrequirements",
+        "limits": "Mutablecurrentbodymodified2024/2025; periodpresence notentire unchangedmoderncomponent/rewardproof"
+      },
+      "period_reward_report": {
+        "date": "2012-10-24",
+        "basis": "individualAmioAchievementInformationcomment",
+        "reported": "No additional reward reported",
+        "limits": "Researchonly; no rewardbindingoritemIDfabrication. CurrentOldNoblerename nottreatedasoriginalnameproof."
+      }
+    }
+  ]
+}

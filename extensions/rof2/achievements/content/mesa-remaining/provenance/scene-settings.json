@@ -1,0 +1,96 @@
+{
+  "policy": "User-approved labelled configurable emulator defaults; not recovered exact historical values",
+  "sql_overrides": {
+    "thug_hp": {
+      "variable": "@mesa_thug_hp",
+      "default": 3500,
+      "min": 1,
+      "max": 1000000
+    },
+    "thug_min_hit": {
+      "variable": "@mesa_thug_min_hit",
+      "default": 20,
+      "min": 0,
+      "max": 10000
+    },
+    "thug_max_hit": {
+      "variable": "@mesa_thug_max_hit",
+      "default": 80,
+      "min": 1,
+      "max": 10000
+    },
+    "grabber_hp": {
+      "variable": "@mesa_grabber_hp",
+      "default": 3000,
+      "min": 1,
+      "max": 1000000
+    },
+    "grabber_min_hit": {
+      "variable": "@mesa_grabber_min_hit",
+      "default": 15,
+      "min": 0,
+      "max": 10000
+    },
+    "grabber_max_hit": {
+      "variable": "@mesa_grabber_max_hit",
+      "default": 65,
+      "min": 1,
+      "max": 10000
+    },
+    "raider_hp": {
+      "variable": "@mesa_raider_hp",
+      "default": 4000,
+      "min": 1,
+      "max": 1000000
+    },
+    "raider_min_hit": {
+      "variable": "@mesa_raider_min_hit",
+      "default": 25,
+      "min": 0,
+      "max": 10000
+    },
+    "raider_max_hit": {
+      "variable": "@mesa_raider_max_hit",
+      "default": 100,
+      "min": 1,
+      "max": 10000
+    },
+    "fantoma_hp": {
+      "variable": "@mesa_fantoma_hp",
+      "default": 6000,
+      "min": 1,
+      "max": 1000000
+    },
+    "fantoma_min_hit": {
+      "variable": "@mesa_fantoma_min_hit",
+      "default": 25,
+      "min": 0,
+      "max": 10000
+    },
+    "fantoma_max_hit": {
+      "variable": "@mesa_fantoma_max_hit",
+      "default": 50,
+      "min": 1,
+      "max": 10000
+    },
+    "thug_proc_chance": {
+      "variable": "@mesa_thug_proc_chance",
+      "default": 3,
+      "min": 0,
+      "max": 127
+    },
+    "fantoma_proc_chance": {
+      "variable": "@mesa_fantoma_proc_chance",
+      "default": 3,
+      "min": 0,
+      "max": 127
+    }
+  },
+  "instructions": "SET session variables before sourcing candidate SQL. Nonmatching existing managed row values abort rather than silently overwrite; deliberate configuration changes require reviewed migration.",
+  "escort_movement_contract": {
+    "destination": "Native NPC::MoveTo(saveguardspot=true) applies server GetFixedZ; Lua arrival uses exact GetGuardPointXYZ while requiring guarded XY to match the current waypoint.",
+    "movement": "Original Simu walks; elapsed time, a dead ambusher alone, or client proximity cannot grant arrival.",
+    "emergency_reset": "Failure/reload only; restores original guard spot and grants no objective credit.",
+    "route_origin": "Native Mesa navmesh corridor excluding zone-line flags and actual client zone-line volumes with labelled32XY/12Z clearance; not original historical escort grid."
+  }
+}

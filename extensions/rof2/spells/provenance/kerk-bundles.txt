@@ -1,0 +1,165 @@
+# Allakhazam quests 6004-6013, read in Chrome 2026-11-01.
+# level|class ID|spell base names in one selectable reward
+96|8|Aria of Absolution;Siavonn's Chant of Disease
+96|8|Resounding Barrier;Silence of the Forsaken
+96|15|Salve of Blezon;Asp Blood
+96|15|Plakt's Aggression;Plakt's Protection
+96|15|Natural Cooperation;Auspice of Shadows
+96|2|Abrogate the Undead;Graceful Remedy
+96|2|Aweclash;Yaulp XIII
+96|2|Soothing Glow;Unity of Gezat
+96|2|Acquittal;Word of Renewal
+96|6|Spirit of the Steadfast;Hailstorm
+96|6|Beast's Bespelling;Whirlwind of the Stormborn
+96|6|Heliacal Fire;Bosquetender's Breeze
+96|6|Nature's Repose;Stemfang
+96|14|Xorlex's Animation;Shield of the Dauntless
+96|14|Rune of Xolok;Mastermind's Rune
+96|13|Blast of Sand;Auspice of Shadows
+96|11|Shield of the Dauntless;Grip of Zalikor
+96|11|Plunder Essence;Vollmondnacht Orb
+96|3|Expurgate;Reverent Force
+96|3|Reverent Purity;Reconcile
+96|3|Reverent Touch;Shackle
+96|3|Laudation;Mark of Olsif
+96|3|Rest;Abrogate the Undead
+96|4|Drifting Shadow;Rest
+96|4|Arbor Veil;Shield of Nettlespines
+96|5|Zombie Skin;Bond of Ralstok
+96|10|Breath of Natigo;Slaunk's Spear of Venom
+96|12|Shield of the Dauntless;Concussive Salvo
+96|12|Aegis of Velishan;Claw of the Ashwing
+96|12|Incinerating Beam;Lure of the Wastes
+96|12|Tears of Gosik;Katelanaka
+97|15|Huaene's Melioration;Clamor of Claws
+97|2|Shackle;Unified Certitude
+97|2|Divine Haven;Castigation
+97|2|Divine Interposition;Fifteenth Emblem
+97|2|Reverent Elixir;Ward of Indictment
+97|6|Rampant Growth;Wildspark Aura
+97|6|Frosthowl Breath;Sterivida
+97|6|Spikethistle Bulwark;Frosthowl Chill
+97|6|Granitebark Skin;Promised Recovery
+97|6|Beastsnag Guard;Vinelash Assault
+97|14|Confounding Flash;Enunciation of Tashan
+97|14|Mastermind's Aura;Mastermind's Echo
+97|14|Quiescent Mind;Remote Color Confluence
+97|14|Chromaclash;Tempting Aura
+97|11|Halstor's Grasp;Sigil of the Sundered
+97|11|Bonefuse Fetish;Scent of Dread
+97|3|Pledged Keeper;Devout Audacity
+97|3|Ostracize;Symbol of Burim
+97|3|Dazzling Light;Lesson of Sorrow
+97|4|Enraging Heel Kicks;Jolting Heel Kicks
+97|5|Smoldering Darkness;Gashing Blade
+97|5|Demand for Power;Duplicitous Audacity
+97|10|Malosenia;Falhotep's Affliction
+97|10|Elsrop's Malady;Shackle
+97|10|Enalam's Drowse;Kriegas' Faithful
+97|12|Icebound Pillar;Circle of Flame
+98|8|Ameliorating Accelerando;Slaunk's Chant of Poison
+98|8|Ruaabri's Reckless Renewal;Gosik's Aria
+98|2|Thwart Corruption;Promised Reformation
+98|2|Bastion of Vie;Reverent Light
+98|2|Sermon of Rebuke;Virtuous Intervention
+98|2|Issuance of Grace;Vow of Vehemence
+98|6|Exterminate the Unnatural;Survival of the Fortuitous
+98|6|Horde of Mutillids;Thwart Corruption
+98|6|Spikethistle Coat;Remote Sunfire
+98|6|Frostone Aura;Winter's Wildfire
+98|14|Aegis of Xorbb;Phantasmal Assault
+98|14|Quiescent Issuance;Foresight
+98|14|Chaotic Confounding;Mana Reverberation
+98|14|Stifle;Terrifying Rune
+98|14|Diminishing Helix;Disorientation
+98|13|Broiling Sands;Renewal of Hererra
+98|13|Infernal Skin;Exterminate the Unnatural
+98|11|Bestow Mortality;Osalur's Flashblaze
+98|11|Chaotic Corruption;Algid Mending
+98|11|Foreboding;Sphere of Dissolution
+98|11|Pyre of the Forsaken;Shackle
+98|11|Zombieskin;Deathclutch Manacles
+98|3|Reprove;Reverent Cleansing
+98|3|Armor of Reverence;Brightwing Mantle
+98|3|Burst of Sunrise;Righteous Umbrage
+98|4|Swarm of Vespines;Herbal Balm
+98|4|Vileoak Ash;Vinelash Assault
+98|4|Heartspike;Bosquestalker's Vigor
+98|4|Lingering Shadow;Shout of the Predator
+98|5|Gift of Falsin;Minion of Grelleth
+98|10|Halcyon Shear;Vilefeaster's Pandemic
+98|12|Armor of the Stonescale;Barbed Lightning
+98|12|Frigid Beam;Flashfreeze
+98|12|Ether Vortex;Bleakmist Guard
+99|15|Savage Rage;Kromrif Roar
+99|15|Frozen Carbomate;Kromrif Lance
+99|15|Edoth's Chill;Aegis of Nefori
+99|2|Cleansed Blood;Silent Order
+99|2|Chromacrush;Abrogate Corruption
+99|2|Infallible Hammer of Reverence;Glorious Rebuke
+99|2|Shining Bastion;Hand of Graceful Infusion
+99|6|Chant of Jaerol;Frigid Moonbeam;Tectonic Temblor
+99|6|Talisman of the Steadfast;Sporali Assault
+99|6|Lustrous Frost;Sunblaze
+99|6|Husk of the Reptile;Cleansed Blood
+99|6|Sunbeam Blessing;Summer Suncrest
+99|14|Confounding Constriction;Umbral Rune
+99|14|Brimstone Eminence;Dizzying Squall
+99|14|Echo of Temptation;Legion of Xolok
+99|13|Magmatic Veil;Grant Icebound Paradox
+99|13|Chaotic Benevolence;Aegis of Nefori
+99|11|Halstor's Pallid Haze;Forsakenside
+99|11|Necrotic Cysts;Bora's Swift Sickness
+99|11|Conscripted Sacrifice;Ignite Thoughts
+99|11|Clutching Darkness;Mind Strip
+99|3|Steadfast Stance;Sorrow
+99|3|Mark of the Exemplar;Reinvigorating Steel
+99|4|Desperate Drenching;Shadowscale
+99|4|Eyes of the Howler;Summer's Gale
+99|5|Call of Gloomhaze;Surreptitious Blight
+99|5|Drape of the Fallen;Spear of Grelleth
+99|10|Falhotep's Rain of Venom;Chant of Jaerol
+99|10|Ice Burst;Banescale's Venom
+99|12|Flamelocked Pillar;Stonescale Husk
+99|12|Chaos Incandescence;Mul's Pyroblade
+99|12|Flashsear;Hoarfrost Cascade
+100|8|Arcane Hymn;Wave of Quietude
+100|8|Aura of Va'Ker;Echo of Va'Ker
+100|8|Kaficus' Spiteful Lyric;Motlak's Lively Crescendo
+100|15|Reflexive Rending;Nak's Maelstrom
+100|2|Armor of the Reverent;Olsif's Retort
+100|2|Unified Hand of Gezat;Elixir of the Acquittal
+100|2|Fraught Renewal;Unified Hand of Certitude
+100|2|Reforming Splash;Rallied Bastion of Vie
+100|2|Virtuous Contravention;Word of Reformation
+100|6|Legacy of Spikethistles;Chill of the Visionary
+100|6|Granitebark Blessing;Nature's Withering Wrath
+100|6|Gelid Crystals;Lunassuage
+100|6|Mask of the Bosquetender;Vivification
+100|14|Mana Reverberation Aura;Mesmerizing Stare;Issuance of Mana Reverberation
+100|14|Polyiridescent Rune;Phantasmal Unity;Tears of Syrkl
+100|14|Hastening of Sviir;Ward of the Mastermind
+100|14|Voice of Foresight;Mind Squall
+100|14|Mindcleave;Impose
+100|13|Fickle Magma;Mass Phantasmal Transvergence
+100|13|Gather Magnitude;Groundswell Bodyguard
+100|13|Phantasmal Symbiosis;Summon Imperious Minion
+100|13|Blistersteel Malosenia;Surge of Shadow
+100|11|Halstor's Command;Binaesa Venom
+100|11|Call Skeleton Throng;Itkari's Swift Lifedraw
+100|11|Impel for Blood;Sanction Ally
+100|11|Scintillate Bones;Pernicious Wounds
+100|3|Aurora of Sunrise;Hand of the Pledged Keeper
+100|3|Reverent Fury;Preservation of the Iceclad
+100|3|Glorious Expurgation;Protective Allegiance
+100|4|Deafening Weapons;Angering Shot
+100|4|Heartcarve;Inspired by the Hunt
+100|4|Bosquestalker's Discipline;Reflexive Bladespurs
+100|5|Dire Insinuation;Scarlet Blade
+100|5|Dire Stricture;Terminal Breath
+100|10|Blood of Sanera;Pack of Kriegas
+100|10|Phase Spider Blood;Ward of Rejuvenation
+100|10|Talisman of the Courageous;Wisp of Renewal
+100|12|Tamagrist Torrent;Telanaga
+100|12|Self-Destruction;Thricewoven Mana
+100|12|Hoarfrost Vortex;Ethereal Weave

@@ -1,0 +1,22 @@
+[
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/010-zone-access.proposed.sql",
+    "sha256": "7aeeba5f273fa06c09075acda237ae0898858b7de1775b067b31e8872af80036"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/020-three-traveler-admission.proposed.sql",
+    "sha256": "449e3dab4f7abe7815ee47e53b25d03cbc266e2b3b3a3e13ce0d2d0e607cfca1"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/README.md",
+    "sha256": "1173291267ab52c1b3c8b09a854041a6a7476d9783eb3a55d13b30f330434d12"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/historical-admission.fragment.json",
+    "sha256": "f386a3078246b021f8ae593af9b5ecca79089910e55df60d9d88680be2b65031"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/provenance.json",
+    "sha256": "fe37377c4697b15c1ea21e535b8467a994b40f108525466a9aa0c6e1b2f265bc"
+  }
+]

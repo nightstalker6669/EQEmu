@@ -1,0 +1,217 @@
+{
+  "status": "Enabled installed content; all eight quests and parent passed one combined native completion/custody/reward/Admin0 persistence milestone",
+  "cutoff": "2013-05-31",
+  "achievement_id": 500120600,
+  "tasks": [
+    {
+      "part": "I",
+      "component_id": 50353,
+      "deliver": [
+        {
+          "name": "Class \"A\" Cog",
+          "count": 6,
+          "candidate_item_id": 36476
+        },
+        {
+          "name": "Large Coil Spring",
+          "count": 3,
+          "candidate_item_id": 36477
+        }
+      ],
+      "task_id": 3044001
+    },
+    {
+      "part": "II",
+      "component_id": 50354,
+      "deliver": [
+        {
+          "name": "Small Coil Spring",
+          "count": 5,
+          "candidate_item_id": 36478
+        },
+        {
+          "name": "Large Hex Bolt",
+          "count": 4,
+          "candidate_item_id": 36479
+        }
+      ],
+      "task_id": 3044002
+    },
+    {
+      "part": "III",
+      "component_id": 50355,
+      "deliver": [
+        {
+          "name": "Large Hex Bolt",
+          "count": 6,
+          "candidate_item_id": 36479
+        },
+        {
+          "name": "Steel Beam",
+          "count": 3,
+          "candidate_item_id": 36480
+        }
+      ],
+      "task_id": 3044003
+    },
+    {
+      "part": "IV",
+      "component_id": 50356,
+      "deliver": [
+        {
+          "name": "Small Coil Spring",
+          "count": 5,
+          "candidate_item_id": 36478
+        },
+        {
+          "name": "Micro-Cog",
+          "count": 4,
+          "candidate_item_id": 36481
+        }
+      ],
+      "task_id": 3044004
+    },
+    {
+      "part": "V",
+      "component_id": 50357,
+      "deliver": [
+        {
+          "name": "Sheet of Steel",
+          "count": 3,
+          "candidate_item_id": 36482
+        },
+        {
+          "name": "Hex Bolt",
+          "count": 6,
+          "candidate_item_id": 36483
+        }
+      ],
+      "task_id": 3044005
+    },
+    {
+      "part": "VI",
+      "component_id": 50358,
+      "deliver": [
+        {
+          "name": "Spool of Fine Wire",
+          "count": 1,
+          "candidate_item_id": 36484
+        },
+        {
+          "name": "Steel Wire",
+          "count": 8,
+          "candidate_item_id": 36485
+        }
+      ],
+      "task_id": 3044006
+    },
+    {
+      "part": "VII",
+      "component_id": 50359,
+      "deliver": [
+        {
+          "name": "Oil Can",
+          "count": 4,
+          "candidate_item_id": 36486
+        },
+        {
+          "name": "Grease Tin",
+          "count": 5,
+          "candidate_item_id": 36487
+        }
+      ],
+      "task_id": 3044007
+    },
+    {
+      "part": "VIII",
+      "component_id": 50360,
+      "deliver": [
+        {
+          "name": "Steamwork Powersource",
+          "count": 9,
+          "candidate_item_id": 36488
+        }
+      ],
+      "task_id": 3044008
+    }
+  ],
+  "historical_sources": {
+    "achievement": {
+      "source": "https://everquest.allakhazam.com/db/quest/5628",
+      "entered": "2012-03-14",
+      "basis": "Achievement requires all eight versions; parent reward listed none. Current mutable body is not a pristine historical snapshot."
+    },
+    "quest_family": {
+      "source": "https://everquest.allakhazam.com/db/quest/4399",
+      "entered": "2007-12-10",
+      "period_list": "2011-12-05 participant enumerates all eight named parts and delivery counts.",
+      "offer_rule": "2012-05-06 participant confirms player-choice popup and only one Gearing Up active at a time; do not reproduce earlier random offering or seven concurrent-task exploit.",
+      "trigger": "brave enough",
+      "reward": "XP and AkAnon faction confirmed; source Rasper reports10, current Allakh13 is backed by a2017comment. Neither13nor10 should silently be called verified May2013 base. RawXP unknown: approved labelled XP defaults available."
+    }
+  },
+  "required_core_commit": "94e5f72768635a504c9b13feed093ddcef81d82b",
+  "defaults": {
+    "xp": {
+      "value": 1000,
+      "provenance": "approved configurable PEQ-style default, not historical amount"
+    },
+    "minimum_level": {
+      "value": 75,
+      "provenance": "Labelled configurable server default, not recovered original minimum"
+    },
+    "base_faction": {
+      "faction_id": 1190,
+      "value": 10,
+      "provenance": "Labelled configurable base default; native reward modifiers apply"
+    }
+  },
+  "unresolved": [
+    "Original minimum level and raw XP/base faction amount remain unverified; approved configurable defaults labelled",
+    "Canonical migration registration after prerequisite shared9339 remains assigned source-owner integration",
+    "Original loot farming/drop-rate accuracy was not part of native acceptance; existing thirteen acquisition routes retained",
+    "Ordinary Mechanotus entry after its administrative gate correction/cache refresh has not been natively observed"
+  ],
+  "existing_data_policy": "Preserve NPC spawn, item definitions, loot tables, player data and housing. Required Mechanotus version0 minimum-admin-status80 is changed to0; unknown custom gates fail. All other zone fields retained. Native IDs are local bindings, not website IDs.",
+  "protocol": "Existing task and achievement messages; no new opcodes or structures",
+  "adapter_modes": {
+    "standalone": "with_oculus=false; current target has no Tabazin script or Oculus module",
+    "composed": "with_oculus=true only for exact reviewed Oculus predecessor; module required; existing Screw Loose callbacks preserved"
+  },
+  "configuration": {
+    "enabled": true,
+    "minimum_level": 75,
+    "faction_id": 1190,
+    "faction_amount": 10,
+    "xp": 1000,
+    "with_oculus": false,
+    "provenance": {
+      "authorization": "Direct user reply: always use labelled configurable defaults unless Chrome research establishes otherwise.",
+      "minimum_level": "Configurable server default, supported by current quest headers; exact original minimum is unverified. Ambiguous2007level70 report is not proof of75.",
+      "faction_amount": "Configurable base+10 server default informed by current Rasper family guide. Current7/13 reports conflict; not a claim of original raw value. Native modifiers can affect actual awarded faction.",
+      "faction_id": "Current local faction_list1190 Ak`Anon Strike Force V; original quest sources identify the strike-force faction.",
+      "xp": "Approved configurable PEQ-style1000default, not historical XP amount.",
+      "admission": "Native task appropriateness plus configured minimum and one-active-family policy; no invented faction threshold."
+    }
+  },
+  "supersedes": "Disabled r1/r2 policy and SQL placeholders",
+  "native_acceptance": {
+    "quests": 8,
+    "delivery_objectives": 15,
+    "achievement_components": 8,
+    "parent_complete": true,
+    "custody": "One integrated partial/excess/unrelated-item/coin path plus ordinary remaining deliveries, native returned cursor items accounted; original gear and full wallet preserved",
+    "persistence": "One ordinary Admin0 logout/login cycle retained histories, component/parent state, inventory semantics, wallet, earned XP and faction",
+    "limits": "Administrative zone gate caused the single Admin0 persistence arrival in Plane of Knowledge. This proves persistence, not normal Mechanotus entry. Gate corrected separately with exact-row readback and verified metadata in world/all six zones. No extra login or native entry proof claimed. Private player receipts and test scripts excluded."
+  },
+  "normal_player_access": {
+    "zone": "mechanotus",
+    "zone_id": 436,
+    "version": 0,
+    "minimum_status_before": 80,
+    "minimum_status_after": 0,
+    "actual_local_apply": "Exact full-preimage CAS and readback; all other zone fields unchanged",
+    "cache": "Verified minstatus0 in world and all six owned zone metadata caches after coordinated zero-client restart",
+    "native_entry": "Not proven after correction"
+  }
+}

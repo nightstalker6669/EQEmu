@@ -1,0 +1,174 @@
+[
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/README.md",
+    "sha256": "b07dbfadb9de91e94abc760c93b526d1ae5748c4c6f00c642d0fae53dbe9a50f"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/package.json",
+    "sha256": "f3b40afc2321b306de989093a9a2ae06d9740dc083de8e7f79dd84b56365727b"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/payload-manifest.json",
+    "sha256": "42f605b45a5a821f17edd042fd20c6e4a4e0489f46a345d25e270184c6576dc9"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/protocol/README.md",
+    "sha256": "2748af14486698db686f677a7b99945a47e739f1109dc4b848939a02d3422995"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/quest-manifest.json",
+    "sha256": "35739b1bc473bf61e5781c7f8cbaaf3fac6b280792857c31c3ee3b7b4f2a04fb"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/quests/lua_modules/achievement_alaran_master.lua",
+    "sha256": "9dcec35f47a42adebfcdb3a4a461ad2f7f937baf43e15f3a6e42feda56cbd251"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/quests/lua_modules/achievement_alaran_master_data.lua",
+    "sha256": "8fb1188d93f37b064a189cdf3a3dbd5be6e30f1be733b36c7ab135218cfe0851"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/review/bundle.json",
+    "sha256": "3d55ada6a49aff8e81e4b1abc77f5b02fcc4827fdbbbe6f40e08980ac976dea4"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/review/updater-entry.proposed.txt",
+    "sha256": "172832f68a2121835f751432072eac06c1274d88c0a1017c8913b3e74cc62381"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/review/words-language-caller.patch",
+    "sha256": "3715989439c634911848f3b5f41988ee309bb19d884efe50ffbe8c9cae2a2d06"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/alaran-master/sql/2026_11_03_alaran_language_master.disabled.sql",
+    "sha256": "2c93936ea7542f93e25ca8b933ccb8d1e30fe0130aa9d3c418df1618f0c62db4"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/checkpoint-20261103/README.md",
+    "sha256": "e649153153649d583f8d58434ed3951e531dbd6dbc38ae932186ad098fdeb502"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/README.md",
+    "sha256": "446da60028cb4249e75ad4fde36eb02e04262c7b293d07bb98674e3ea7d60e7c"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/package.json",
+    "sha256": "07a985acd5602c596efeb55bb108825d7ad746a275b56e7b613e3f3e7506d62c"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/payload-manifest.json",
+    "sha256": "0aa312c586538c72434b07a2aebd71f45ad22220f6957a9dd05cb7502ac943d8"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/quest-manifest.json",
+    "sha256": "439857b9878553ea36813a6f841078ff715a1c59c269c67942bda8aab6fe7881"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/quests/lua_modules/achievement_native_delivery_handin.lua",
+    "sha256": "e44ccaec14deacf834f3e88e296afaf8ad8c2561f89fb7b988bd3496c7a854b7"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/quests/lua_modules/achievement_quest_gearing_up.lua",
+    "sha256": "1d637922248789a3376b33122f4d679e745536078e4da225ec92cd5f69eb1d21"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/quests/lua_modules/achievement_quest_gearing_up_policy.lua",
+    "sha256": "096c568688e3d8c6d1f9b61ab7b328ebf9a1f97f8b76fa3247829d0511fbdcb4"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/quests/mechanotus/436006.lua",
+    "sha256": "82a39e44e9ea1a6303f867dadbbd094cb60652db741b207299d8fd9096806fd8"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/review/preimages.json",
+    "sha256": "ca0ff748aedb895a394797c4ffffe25e695f7dafd07ead12964c1c77c17394b9"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/review/updater-entry.proposed.txt",
+    "sha256": "9e75185531ad7c7502c3face5654fde7954c330b5e9c5a56c68ffc711191b2f1"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/gearing-up/sql/2026_11_03_gearing_up_achievement.disabled.sql",
+    "sha256": "327b3c482d25efe1f2271ba63899412784c474199c36fc8ade1580cb132da33a"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/README.md",
+    "sha256": "6b6bb49538ac864ba674db923a07ed6857d79387dbab73103ac498bf7da0ed48"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/package.json",
+    "sha256": "f179c4c08fc19475ca79e393989fd7be9bb75704a50c8af949e67a21f3b90c1d"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/payload-manifest.json",
+    "sha256": "3bd751dae3d9e55c2529a35a20d8f6807b8daed9b80b3d968b04542b74b6b20a"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/protocol/README.md",
+    "sha256": "d6088baa5fcb94924c94568bc7ea08c6eb26c781e02c03987c01101ff12dd551"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quest-manifest.json",
+    "sha256": "ac8ac1193dfea010b9ca984c741edf66ec749ba4419348353595646d0384b956"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/arelis/725026.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/argath/724031.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/beastdomain/728104.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/cityofbronze/732006.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/items/script_20970.lua",
+    "sha256": "74bebde1045fe467815cef98402eb929b739f824f23817cef14891f31db080c8"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/lua_modules/achievement_god_learner.lua",
+    "sha256": "3d457d3d2da27a03e63880687eace5268f7a7980eb5296615192a3aa77eae8e3"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/lua_modules/achievement_god_learner_books.lua",
+    "sha256": "6d48c01ba53c07dafd9b7dccd7f6d03f64e527c8cfd2f6f004a18c7624516af3"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/lua_modules/achievement_god_learner_data.lua",
+    "sha256": "0a31076d31c99114eed267979042d3d6834df9f036ea74a2482de4bf2f3d722d"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/pillarsalra/730226.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/resplendent/729055.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/sarithcity/726049.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/sepulcher/733012.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/quests/windsong/731031.lua",
+    "sha256": "1785e5ff054f6051cf8792e26231f79a43aa13e118420b19ba2995f9abbb8a40"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/review/updater-entry.proposed.txt",
+    "sha256": "0e5e7b694ddac4a1256ca462e7e9b76a4ff23f6ba1c2128e69c8e81a804687d7"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/god-learner/sql/2026_11_03_god_learner_achievement.disabled.sql",
+    "sha256": "eab85e2cf47c7d2c9f0f5876b0ade5be26b0ea0b9ef56e52461399443b1e3477"
+  }
+]

@@ -1,3 +1,6 @@
+#include "../common/fungal_item_operation_wire.h"
+#include "fungal_item_operation_source.h"
+#include "fire_shared_transform_use.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -30,12 +33,20 @@
 #include "common/rulesys.h"
 #include "common/shared_tasks.h"
 #include "zone/client.h"
+#include "zone/npc.h"
 #include "zone/dynamic_zone.h"
 #include "zone/queryserv.h"
 #include "zone/quest_parser_collection.h"
 #include "zone/string_ids.h"
 #include "zone/worldserver.h"
 #include "zone/zonedb.h"
+#include "fire_personal_successor_dispatch.h"
+#include "fire_original_final_hail_frame.h"
+#include "fire_original_construct_producer.h"
+#include "fire_initial_admission.h"
+#include "fire_native_item_custody.h"
+#include "fire_shared_successor_native.h"
+#include "common/fire_shared_activity_origin.h"
 
 #include <cstdlib>
 #include <limits>
@@ -45,6 +56,190 @@
 
 extern WorldServer worldserver;
 extern QueryServ   *QServ;
+
+namespace {
+
+// One synchronous native AssignTask call only. No client-owned pointer is
+// dereferenced after TASK_ACCEPTED, and no state survives this dispatch frame.
+enum class FirePersonalAdmissionOrigin { OriginalRewardSuccessor,ActualInitialProve };
+struct FirePersonalAcceptanceFrame {
+	Client* expected_client;
+	FirePersonalOccurrenceSource::Handoff* original_handoff;
+	uint32_t expected_character_id;
+	uint32_t expected_task_id;
+	int expected_giver_entity_id;
+	uint64_t native_reserved_occurrence_id = 0;
+	uint32_t native_reward_accepted_time = 0;
+	bool acceptance_entered = false;
+	bool completion_observed = false;
+	bool recorded_before_callbacks = false;
+	FirePersonalAdmissionOrigin origin=FirePersonalAdmissionOrigin::OriginalRewardSuccessor;
+};
+
+// This is a stack-scope pointer, not a retry/character/task registry.
+thread_local FirePersonalAcceptanceFrame* fire_personal_acceptance_frame = nullptr;
+
+class FirePersonalAcceptanceScope {
+public:
+	explicit FirePersonalAcceptanceScope(FirePersonalAcceptanceFrame& frame)
+		: previous_(fire_personal_acceptance_frame)
+	{
+		fire_personal_acceptance_frame = &frame;
+	}
+
+	~FirePersonalAcceptanceScope()
+	{
+		// Do not touch Client, ClientTaskState, NPC or the handoff after callbacks.
+		fire_personal_acceptance_frame = previous_;
+	}
+
+	FirePersonalAcceptanceScope(const FirePersonalAcceptanceScope&) = delete;
+	FirePersonalAcceptanceScope& operator=(const FirePersonalAcceptanceScope&) = delete;
+
+private:
+	FirePersonalAcceptanceFrame* previous_;
+};
+
+FirePersonalAcceptanceFrame* ClaimFirePersonalAcceptance(
+	Client* client,
+	int task_id,
+	int giver_entity_id
+)
+{
+	auto* frame = fire_personal_acceptance_frame;
+	if (!frame || frame->acceptance_entered || frame->expected_client != client ||
+		frame->expected_task_id != static_cast<uint32_t>(task_id) ||
+		frame->expected_giver_entity_id != giver_entity_id ||
+		frame->expected_character_id != client->CharacterID()) {
+		return nullptr;
+	}
+	// Only the actual direct acceptance invocation can own this receipt. A
+	// re-entrant acceptance, even for the same task, cannot replace it.
+	frame->acceptance_entered = true;
+	return frame;
+}
+
+void RecordFirePersonalAcceptanceBeforeCallbacks(
+	FirePersonalAcceptanceFrame* frame,
+	Client* client,
+	TaskType actual_type,
+	const ClientTaskInformation& active_slot,
+	bool actual_save_result
+)
+{
+	if (!frame || frame->completion_observed) {
+		return;
+	}
+	// Seal before the persisted-state read or any mutable task callbacks.
+	frame->completion_observed = true;
+	if (frame->expected_client != client || actual_type != TaskType::Quest ||
+		active_slot.task_id != static_cast<int>(frame->expected_task_id) ||
+		client->CharacterID() != frame->expected_character_id ||
+		!frame->native_reserved_occurrence_id ||
+		active_slot.accepted_time <= 0 ||
+		static_cast<uint32_t>(active_slot.accepted_time) != frame->native_reward_accepted_time) {
+		return;
+	}
+
+	const bool initial=frame->origin==FirePersonalAdmissionOrigin::ActualInitialProve;
+	if((initial && (frame->expected_task_id!=920167 || frame->original_handoff)) ||
+		(!initial && !frame->original_handoff)) return;
+	const auto binding = FirePersonalOccurrenceSource::BindAccepted(
+		database, client->CharacterID(), actual_type, active_slot,
+		frame->native_reserved_occurrence_id, actual_save_result
+	);
+	if (binding) {
+		// Initial origin has no preceding reward/handoff. Only this actual
+		// successful native reservation+save+initial stage Bind can qualify it.
+		frame->recorded_before_callbacks = initial ||
+			FirePersonalOccurrenceSource::RecordActualPersonalAcceptance(
+				*frame->original_handoff, *binding
+			);
+		if (frame->recorded_before_callbacks) {
+			FirePersonalOccurrenceSource::NativeItemCustody::Accepted(*client, *binding);
+		}
+	}
+}
+
+} // namespace
+
+namespace FirePersonalOccurrenceSource {
+
+PersonalDispatchResult DispatchActualOriginalPersonalSuccessorOnce(
+	Handoff& original_handoff,
+	const Binding& actual_original_finish,
+	Client& actual_client,
+	NPC& actual_gotonur,
+	uint32_t actual_zone,
+	uint32_t actual_instance,
+	uint32_t owner_selected_original_spawn
+)
+{
+	// Nested private dispatches are held before consuming another R2 handoff.
+	if (fire_personal_acceptance_frame ||
+		(actual_original_finish.task_id != 920167 && actual_original_finish.task_id != 920168) ||
+		actual_client.CharacterID() != actual_original_finish.character_id ||
+		actual_zone != 490 || actual_instance != 0 || actual_gotonur.GetNPCTypeID() != 490061 ||
+		!actual_gotonur.GetID() || !owner_selected_original_spawn ||
+		actual_gotonur.GetSpawnPointID() != owner_selected_original_spawn) {
+		return PersonalDispatchResult::Hold;
+	}
+	const uint32_t expected_next = NextTask(actual_original_finish.task_id);
+	const auto* next = TaskManager::Instance()->GetTaskData(expected_next);
+	if (!next || next->type != TaskType::Quest) {
+		return PersonalDispatchResult::Hold;
+	}
+	const auto intent = TakeOriginalHandoffOnce(original_handoff);
+	if (!intent || intent->next_type != TaskType::Quest || intent->next_task != expected_next ||
+		!intent->pending_reward_id ||
+		intent->finished.character_id != actual_original_finish.character_id ||
+		intent->finished.task_id != actual_original_finish.task_id ||
+		intent->finished.occurrence_id != actual_original_finish.occurrence_id ||
+		intent->finished.slot != actual_original_finish.slot ||
+		intent->finished.accepted_time != actual_original_finish.accepted_time) {
+		return PersonalDispatchResult::Hold;
+	}
+
+	FirePersonalAcceptanceFrame frame{
+		&actual_client, &original_handoff, intent->finished.character_id,
+		intent->next_task, actual_gotonur.GetID()
+	};
+	FirePersonalAcceptanceScope scope(frame);
+	actual_client.AssignTask(static_cast<int>(expected_next), frame.expected_giver_entity_id, true);
+	// Read only our stack result. The callbacks may have destroyed/replaced
+	// client-owned state, and neither its slot nor its mapping is queried here.
+	return frame.recorded_before_callbacks
+		? PersonalDispatchResult::AcceptedBeforeCallbacks
+		: PersonalDispatchResult::SubmittedNotAccepted;
+}
+
+InitialAdmissionResult InitialAdmissionNative::Request(Client& client,NPC& giver,
+ uint32_t actual_zone,uint32_t actual_instance,uint32_t selected_original_giver_spawn) {
+ // Keyword "prove" is sourced; full original admission/catalog selection is
+ // still an owner hold. No caller can turn this into a successful Boolean proof.
+ constexpr bool original_initial_admission_selected=true; // selected LOCAL source policy; no serving authorization
+ if(!original_initial_admission_selected || fire_personal_acceptance_frame ||
+  actual_zone!=490 || actual_instance!=0 || !selected_original_giver_spawn ||
+  !client.CharacterID() || client.GetTarget()!=&giver || !giver.GetID() ||
+  giver.GetNPCTypeID()!=490061 || giver.GetSpawnPointID()!=selected_original_giver_spawn)
+  return InitialAdmissionResult::Hold;
+ const auto* task=TaskManager::Instance()->GetTaskData(920167);
+ if(!task || task->type!=TaskType::Quest || task->reward_method!=METHODSELECT ||
+  !task->has_reward_selection || task->min_level!=85 || task->max_level!=0 ||
+  !task->repeatable || task->replay_timer_seconds!=21600 || task->request_timer_seconds!=0)
+  return InitialAdmissionResult::Hold;
+ FirePersonalAcceptanceFrame frame{&client,nullptr,client.CharacterID(),920167,giver.GetID()};
+ frame.origin=FirePersonalAdmissionOrigin::ActualInitialProve;
+ FirePersonalAcceptanceScope scope(frame);
+ // Native level, capacity, active-task, repeatability and replay/request timer
+ // admission remain authoritative. No custom task slot or occurrence is minted.
+ client.AssignTask(920167,frame.expected_giver_entity_id,true);
+ // Only stack receipt after TASK_ACCEPTED; no Client/NPC/slot access.
+ return frame.recorded_before_callbacks ? InitialAdmissionResult::AcceptedBeforeCallbacks :
+  InitialAdmissionResult::SubmittedNotAccepted;
+}
+
+} // namespace FirePersonalOccurrenceSource
 
 namespace
 {
@@ -1079,6 +1274,15 @@ int ClientTaskState::IncrementDoneCount(
 		return 0;
 	}
 
+	if(!FungalItemSource::NativeEvents::AllowPersonalProgress(client,info->task_id,activity_id))return 0;
+	if(!client->m_shared_task_update&&FungalItemWire::Correlated(info->task_id,activity_id))return 0;
+	auto* const fire_construct_death_update = FirePersonalOccurrenceSource::ClaimOriginalConstructDeathUpdate(
+		client, task_data->type, *info, activity_id, count
+	);
+	auto* const fire_final_update = FirePersonalOccurrenceSource::ClaimOriginalFinalUpdate(
+		client, task_data->type, *info, activity_id, count
+	);
+
 	LogTasks(
 		"client [{}] task_id [{}] activity_id [{}] count [{}]",
 		client->GetCleanName(),
@@ -1094,8 +1298,23 @@ int ClientTaskState::IncrementDoneCount(
 	// intercept and pass to world first before processing normally
 	if (!client->m_shared_task_update && task_data->type == TaskType::Shared) {
 
-		// struct
-		auto pack = new ServerPacket(ServerOP_SharedTaskUpdate, sizeof(ServerSharedTaskActivityUpdate_Struct));
+		// Original door/owned helper providers submit their own real run-stamped native packet.
+		if(info->task_id==920170&&(activity_id==3||activity_id==7||activity_id==14||activity_id==16||activity_id==17||activity_id==18))return 0;
+		uint64_t fire_activity_run=0;
+		if(info->task_id==FireSharedActivityOrigin::Task) {
+			const auto actual=TaskSharedRewardIdentity::ReadRun(database,client->CharacterID(),info->task_id);
+			if(!actual || client->GetSharedTaskId()<=0 ||
+			 actual->id!=static_cast<uint64_t>(client->GetSharedTaskId()) ||
+			 actual->accepted_time!=static_cast<uint32_t>(info->accepted_time)) return 0;
+			fire_activity_run=actual->id;
+		}
+		// Physical goal6/13 requires the SAME one-use post-COMMIT shared origin.
+		// World echo follows its ordinary m_shared_task_update path and skips this shim.
+		if(!FireSharedTransformSource::NativeSharedTransform::ClaimActualSubmission(
+		 *client,info->task_id,activity_id,fire_activity_run)) return 0;
+		// Same one native update; stamp before optimistic local count synchronization/send.
+		auto pack = new ServerPacket(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+
+			(fire_activity_run?sizeof(FireSharedActivityOrigin::Trailer):0));
 		auto *r   = (ServerSharedTaskActivityUpdate_Struct *) pack->pBuffer;
 
 		// fill
@@ -1104,6 +1323,7 @@ int ClientTaskState::IncrementDoneCount(
 		r->activity_id         = activity_id;
 		r->done_count          = info->activity[activity_id].done_count + count;
 		r->ignore_quest_update = ignore_quest_update;
+		if(fire_activity_run) FireSharedActivityOrigin::Write(pack->pBuffer,fire_activity_run);
 
 		LogTasksDetail(
 			"shared_task sending client [{}] task_id [{}] activity_id [{}] count [{}] ignore_quest_update [{}]",
@@ -1159,6 +1379,7 @@ int ClientTaskState::IncrementDoneCount(
 	}
 
 	info->activity[activity_id].updated = true;
+	uint32 achievement_task_id = 0;
 	// Have we reached the goal count for this activity_information ?
 	if (info->activity[activity_id].done_count >= task_data->activity_information[activity_id].goal_count) {
 		LogTasks("done_count [{}] goal_count [{}] activity_id [{}]",
@@ -1197,6 +1418,7 @@ int ClientTaskState::IncrementDoneCount(
 		// updated in UnlockActivities. Send the completed task list to the
 		// client. This is the same sequence the packets are sent on live.
 		if (task_complete) {
+			achievement_task_id = static_cast<uint32>(info->task_id);
 			// world adds timers for shared tasks
 			if (task_data->type != TaskType::Shared) {
 				AddReplayTimer(client, *info, *task_data);
@@ -1218,11 +1440,18 @@ int ClientTaskState::IncrementDoneCount(
 
 			// If Experience and/or cash rewards are set, reward them from the task even if reward_method is METHODQUEST
 			// do not reward client if EVENT_TASK_COMPLETE returns non-zero
+			FirePersonalOccurrenceSource::ActualOriginalRewardCall fire_original_reward_call;
 			bool reward_ready = true;
 			if (event_res == 0)
 			{
+				fire_original_reward_call.executed = true;
+				fire_original_reward_call.was_rewarded_before_call = info->was_rewarded;
 				reward_ready = RewardTask(client, task_data, *info);
+				fire_original_reward_call.result = reward_ready;
 			}
+			FirePersonalOccurrenceSource::ObserveOriginalRewardCall(
+				fire_final_update, database, client, task_data->type, *info, fire_original_reward_call
+			);
 			//RemoveTask(c, TaskIndex);
 
 			// shared tasks linger at the completion step and do not get removed from the task window unlike quests/task
@@ -1255,8 +1484,27 @@ int ClientTaskState::IncrementDoneCount(
 		}
 	}
 
-	TaskManager::Instance()->SaveClientState(client, this);
+	const bool fire_original_completion_saved = TaskManager::Instance()->SaveClientState(client, this);
+	FungalItemSource::NativeEvents::ActualPersonalSave(client,info->task_id,activity_id,fire_original_completion_saved);
+	FirePersonalOccurrenceSource::ObserveOriginalConstructDeathSave(
+		fire_construct_death_update, database, client, task_data->type, *info, fire_original_completion_saved
+	);
+	FirePersonalOccurrenceSource::ObserveOriginalCompletionSave(fire_final_update, fire_original_completion_saved);
+	if (
+		fire_original_completion_saved &&
+		achievement_task_id &&
+		client->IsTaskCompleted(static_cast<int>(achievement_task_id))
+	) {
+		client->UpdateAchievementForTask(achievement_task_id);
+	}
 
+	// After all original task/achievement uses; the direct UpdateTaskActivity caller only returns.
+	if (fire_final_update && fire_final_update->cleanup_ready && zone) {
+		auto* const actual_gotonur = entity_list.GetNPCByID(fire_final_update->actor_entity);
+		FirePersonalOccurrenceSource::DispatchAfterOriginalCompletion(
+			fire_final_update, client, actual_gotonur, zone->GetZoneID(), zone->GetInstanceID()
+		);
+	}
 	return count;
 }
 
@@ -3221,12 +3469,15 @@ void ClientTaskState::RemoveTask(Client *client, int sequence_number, TaskType t
 			break;
 	}
 
-	CharacterActivitiesRepository::DeleteWhere(
+	auto* const fire_removal = FirePersonalOccurrenceSource::ClaimOriginalRemoval(
+		client, task_id, sequence_number, task_type
+	);
+	const auto fire_activities_removed = CharacterActivitiesRepository::DeleteWhere(
 		database,
 		fmt::format("charid = {} AND taskid = {}", character_id, task_id)
 	);
 
-	CharacterTasksRepository::DeleteWhere(
+	const auto fire_tasks_removed = CharacterTasksRepository::DeleteWhere(
 		database,
 		fmt::format("charid = {} AND taskid = {} AND type = {}", character_id, task_id, static_cast<int>(task_type))
 	);
@@ -3234,13 +3485,15 @@ void ClientTaskState::RemoveTask(Client *client, int sequence_number, TaskType t
 	const auto removed_task = TaskManager::Instance()
 		? TaskManager::Instance()->GetTaskData(task_id)
 		: nullptr;
+	bool fire_pointer_removed = false;
 	if (removed_task && removed_task->reward_method == METHODSELECT) {
-		database.QueryDatabase(fmt::format(
+		const auto fire_pointer_result = database.QueryDatabase(fmt::format(
 			"DELETE FROM character_task_reward_instances "
 			"WHERE character_id = {} AND task_id = {}",
 			character_id,
 			task_id
 		));
+		fire_pointer_removed = fire_pointer_result.Success() && fire_pointer_result.RowsAffected() == 1;
 	}
 
 	switch (task_type) {
@@ -3257,6 +3510,11 @@ void ClientTaskState::RemoveTask(Client *client, int sequence_number, TaskType t
 		default:
 			break;
 	}
+	FirePersonalOccurrenceSource::ObserveOriginalRemoval(
+		fire_removal, fire_activities_removed, fire_tasks_removed, fire_pointer_removed,
+		fire_removal && task_type == TaskType::Quest && sequence_number >= 0 &&
+		sequence_number < MAXACTIVEQUESTS && m_active_quests[sequence_number].task_id == TASKSLOTEMPTY
+	);
 }
 
 void ClientTaskState::RemoveTaskByTaskID(Client *client, uint32 task_id)
@@ -3298,6 +3556,8 @@ void ClientTaskState::AcceptNewTask(
 	bool enforce_level_requirement
 )
 {
+	uint64_t fungal_actual_reserved_occurrence=0;
+	auto* const fire_acceptance = ClaimFirePersonalAcceptance(client, task_id, npc_entity_id);
 	if (task_id < 0) {
 		client->Message(Chat::Red, "Task system not functioning, or task_id %i out of range.", task_id);
 		return;
@@ -3344,18 +3604,17 @@ void ClientTaskState::AcceptNewTask(
 			client->GetCleanName()
 		);
 
-		// struct
-		auto pack = new ServerPacket(ServerOP_SharedTaskRequest, sizeof(ServerSharedTaskRequest_Struct));
-		auto *r   = (ServerSharedTaskRequest_Struct *) pack->pBuffer;
-
-		// fill
-		r->requested_character_id = client->CharacterID();
-		r->requested_task_id      = task_id;
-		r->requested_npc_entity_id  = npc_entity_id;
-
-		// send
-		worldserver.SendPacket(pack);
-		safe_delete(pack);
+		ServerSharedTaskRequest_Struct request{};
+		request.requested_character_id=client->CharacterID();
+		request.requested_task_id=task_id;
+		request.requested_npc_entity_id=npc_entity_id;
+		FireSharedCorrelation::Trailer fire_origin;
+		if (!FirePersonalOccurrenceSource::SharedSuccessorNative::Stamp(*client,request,fire_origin)) return;
+		const bool correlated=fire_origin.source_occurrence!=0;
+		ServerPacket packet(ServerOP_SharedTaskRequest,sizeof(request)+(correlated?sizeof(fire_origin):0));
+		std::memcpy(packet.pBuffer,&request,sizeof(request));
+		if(correlated) std::memcpy(packet.pBuffer+sizeof(request),&fire_origin,sizeof(fire_origin));
+		worldserver.SendPacket(&packet);
 
 		return;
 	}
@@ -3544,6 +3803,14 @@ void ClientTaskState::AcceptNewTask(
 			);
 			return;
 		}
+		if(task_id==920141&&task->type==TaskType::Quest)fungal_actual_reserved_occurrence=*occurrence_id;
+		if(task->type==TaskType::Shared) FirePersonalOccurrenceSource::SharedSuccessorNative::ObserveReservation(
+			*client,task_id,reward_accepted_time,*occurrence_id);
+		if (fire_acceptance && task->type == TaskType::Quest) {
+			// Retain this SAME native reservation, before its locals go out of scope.
+			fire_acceptance->native_reserved_occurrence_id = *occurrence_id;
+			fire_acceptance->native_reward_accepted_time = reward_accepted_time;
+		}
 	}
 
 	active_slot->task_id       = task_id;
@@ -3598,7 +3865,13 @@ void ClientTaskState::AcceptNewTask(
 	client->StartTaskRequestCooldownTimer();
 	client->MessageString(Chat::DefaultText, YOU_ASSIGNED_TASK, task->title.c_str());
 
-	TaskManager::Instance()->SaveClientState(client, this);
+	const bool acceptance_saved = TaskManager::Instance()->SaveClientState(client, this);
+	FungalItemSource::NativeEvents::Accepted(*client,fungal_actual_reserved_occurrence,acceptance_saved,*active_slot);
+	RecordFirePersonalAcceptanceBeforeCallbacks(
+		fire_acceptance, client, task->type, *active_slot, acceptance_saved
+	);
+	FirePersonalOccurrenceSource::SharedSuccessorNative::ObserveSave(
+		*client,task->type,*active_slot,acceptance_saved,task->activity_count);
 
 	NPC *npc = entity_list.GetNPCByID(npc_entity_id);
 	if (npc) {

@@ -1,0 +1,123 @@
+{
+  "status": "source-review-only",
+  "individual_travelers": [
+    {
+      "id": 1973000,
+      "source": "https://everquest.allakhazam.com/db/quest/5829",
+      "dated_comment": "2012-10-24",
+      "author": "Amio",
+      "requirement": "Visit corresponding zone once; no extra reward",
+      "basis": "FreshChromevisibleindividual2012comment; modernLevel95headernotusedasminimum"
+    },
+    {
+      "id": 1973100,
+      "source": "https://everquest.allakhazam.com/db/quest/5830",
+      "dated_comment": "2012-10-24",
+      "author": "Amio",
+      "requirement": "Visit corresponding zone once; no extra reward",
+      "basis": "FreshChromevisibleindividual2012comment; modernLevel95headernotusedasminimum"
+    },
+    {
+      "id": 1973300,
+      "source": "https://everquest.allakhazam.com/db/quest/5832",
+      "dated_comment": "2012-10-24",
+      "author": "Amio",
+      "requirement": "Visit corresponding zone once; no extra reward",
+      "basis": "FreshChromevisibleindividual2012comment; modernLevel95headernotusedasminimum"
+    }
+  ],
+  "normal_zone_access": {
+    "current_guide": "https://everquest.fanra.info/index.php?section=1&title=Veil_of_Alaris",
+    "current_guidance": "Open-world tiers do not require unlocking. Expansion ownership remains required. Raid requests/entries have distinct progression requirements.",
+    "period_limit": "Current mutable guide is corroboration, not a frozen2013rulesnapshot. Dated2012travelercomments establish playervisit objectives but not every access gate.",
+    "proposal": "Remove only emulator GMstatus80 guard after exactexistinggate checks; preserve expansion/level/flag/content policy and task/DZentrypaths. No raid/mission progression bypass.",
+    "current_db": "Allthreeversion0rows expansion18,bypass_expansion_check0,minlevel0,max255,flag_neededempty,minstatus80,ruleset1; no flags are cleared by proposal."
+  },
+  "route_limit": "Configured safe coordinates and map/nav presence only; no safe movement or ordinary-player arrival proof yet.",
+  "parent_hold": "1900050 untouched:7otherrequiredchildren disabled,3revieweddependencyaliases separate,has_reward1/no rewardrows conflict unresolved. No guessed reward.",
+  "instance_gate_review": {
+    "generic_core_checks_preserved": [
+      {
+        "path": "zone/zoning.cpp",
+        "lines": "150-185",
+        "mechanism": "Any nonzero targetinstance must pass VerifyInstanceAlive(character) and VerifyZoneInstance before entry; independent of laterminstatuscheck.",
+        "source_sha256": "36286819c0b93d8ffeb0edb2ecc9f4d054546e1df9c0c0340cf5322613aff8a3"
+      },
+      {
+        "path": "zone/zoning.cpp",
+        "lines": "330-370;1441-1507",
+        "mechanism": "CanEnterZone checks status/level/flag; expansionrouting separate. Proposal changes minstatusonly; no GM/ignore_restrictions caller changed.",
+        "source_sha256": "36286819c0b93d8ffeb0edb2ecc9f4d054546e1df9c0c0340cf5322613aff8a3"
+      },
+      {
+        "path": "zone/client_packet.cpp",
+        "lines": "6642-6672",
+        "mechanism": "Dynamiczonechooser response verifies liveinstance+character then requires matching clientdynamiczone before MovePC.",
+        "source_sha256": "d9b74da6ccef54df2e8c8f736a19a0fa1a2701d07ae20496039c354ca00a8871"
+      },
+      {
+        "path": "world/client.cpp",
+        "lines": "1513-1541",
+        "mechanism": "World routing independently rejects dead/nonmember/wrong-zoneinstances.",
+        "source_sha256": "14e2f18067a95b36cf414ae6fd73ee2bd69680acb46515f58ea12c69efda5d1f"
+      },
+      {
+        "path": "zone/zoning.cpp",
+        "lines": "657-675",
+        "mechanism": "Trustedserverquesthelper MoveZoneInstance may addmembership; must not be mistaken for playerauthorization or proof of periodquestprerequisites.",
+        "source_sha256": "36286819c0b93d8ffeb0edb2ecc9f4d054546e1df9c0c0340cf5322613aff8a3"
+      }
+    ],
+    "specific_VoA_mission_request_mechanics": "notimplemented/verified in the auditedcurrentquestroot; knownNPCspawnsarenot workingquests",
+    "exact_mission_task_title_candidates": 0,
+    "native_instance_rejection_tested": false,
+    "no_mission_raid_progression_claim": true,
+    "no_instance_membership_or_task_writes": true
+  },
+  "isolated_SQL_protocol": {
+    "status": "PASS16actualMariaDBCLI_source_proposal_cases",
+    "cases": [
+      "access3",
+      "admission3",
+      "exact_rerun",
+      "foreign_zone_policy",
+      "duplicate_zone_identity",
+      "foreign_definition",
+      "foreign_criterion",
+      "reward_source",
+      "reward_entry",
+      "access_missing",
+      "late_access_update_failure",
+      "late_admission_update_failure",
+      "wrong_zone_engine",
+      "wrong_catalogue_engine",
+      "foreign_access_routine",
+      "foreign_admission_routine"
+    ],
+    "actual_late_update_attempts": {
+      "access": 3,
+      "admission": 3
+    },
+    "authentic_schema_tables": 7,
+    "source_only_no_production_apply": true,
+    "parent_other7requiredchildren_and_Alaran_definitions_preserved": true,
+    "version1_gate_sentinels_preserved": true,
+    "foreign_routines_preserved": true,
+    "transaction_cleanup_and_all_owned_resources_removed": true
+  },
+  "zone_identity_guard": "AuthenticzoneDDLonlyhasidPK. Bothproposalsrequireexactly3totalversion0targetrows, plus3exactmatchingpolicies; anextraambiguousrowisrejected beforeUPDATE.",
+  "remaining_runtime_gates": {
+    "zone_data_cache": "Existingzone_datareload skipsidleprocesses and dereferencesloadedzone. A separate sharedcore correction is accepted for build; binary activation and verified allprocesscache coverage remainpending. Do notassumeSQLstatus0ornewzonebootrefresheseverycache. No restart/boot-all workaround authorized bythischeckpoint.",
+    "first_two_travelers": "EligibleWIZ92+ AlraGatespell29842canserve normalcastPillarsentry, thenexistingPillarspoint10\u2192Windsong. Futuretest mustAdmin0/GMfalse andvalidateactualgeometry/routebeforemovement.",
+    "AlraGate_acquisition": "Original2012FirstPilgrimagequest+Alaran81 route isnotimplementedlocally; no retainednormalacquisitionsource. Modern2024personavendor isnotRoFproof. AQApreownedspellmayonlybeaseparatelygrantedlabelledprecondition; normalcastacceptancedoesnotprovefullacquisition.",
+    "third_traveler_gateway": "ActualShardLandingpoint10 targetsCityofBronze732; CityBronzepoint10targetsSepulcher733. 732isoutside3proposal/remainsminstatus80. No inventedShard\u2192733route orendpoint isprovided. Review732accessindependently; do notholdfirsttwoonthisgate.",
+    "parent": "Explorer1900050andother7requiredchildren/rewardflagconflict remainseparate; no parentcompletiongranted.",
+    "native_verification": "Not performed for these3travelers; allsourceSQLcases were isolated."
+  },
+  "CityBronze_period_identity_only": {
+    "url": "https://everquest.allakhazam.com/db/quest/5831",
+    "dated_comment": "2012-10-24",
+    "requirement": "Visit Erillion, City of Bronze; no additionalreward",
+    "limit": "Supportsperiodtravelidentity, not everymission/raidaccessprerequisite. No732datachangedhere."
+  }
+}

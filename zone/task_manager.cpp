@@ -1,3 +1,4 @@
+#include "fire_run_terminal_scene.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -16,6 +17,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "task_manager.h"
+#include "fire_construct_participants.h"
 #include "task_shared_reward_identity.h"
 #include "common/shared_task_admission.h"
 #include "common/merchant_language.h"
@@ -2258,6 +2260,8 @@ void TaskManager::HandleUpdateTasksOnKill(Client* client, NPC* npc)
 
 		LogTasksDetail("Looping through client [{}]", c->GetCleanName());
 
+		FirePersonalOccurrenceSource::NativeConstructParticipants::ObserveActualTaskKillVisit(*c, *client, *npc);
+		FireRunActionSource::OriginalTerminalDeath::ObserveActualKillVisit(*c,*npc);
 		c->GetTaskState()->UpdateTasksOnKill(c, client, npc);
 	}
 }

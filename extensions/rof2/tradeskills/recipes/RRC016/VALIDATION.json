@@ -1,0 +1,25 @@
+{
+  "rehearsal": {
+    "status": "PASS_FINITE_CONTENT_SQL_REHEARSAL",
+    "cases": 11,
+    "actual_refusals": 10,
+    "all_before_after_equal": true,
+    "owned_container_network_secrets_absent_independent": true,
+    "frozen_source_inputs_unchanged": true,
+    "published_bytes_verified": true,
+    "production_SQL_executions": 0,
+    "native_actions": 0,
+    "published_exact": {
+      "commit": "0b1b1af1fdf5dd81c682f269ee08e539d52b2485",
+      "sha256": {
+        "README.md": "18d6aca48917f3775459d7835ad8352e5b9c94cd73bfe8f8c3255a0d45c4bda8",
+        "apply.sql": "ac7aa28ce536542e3192170142d7219795be743cf3ac87a077085c3757d464c1",
+        "rollback.sql": "533de754c30400c672f7019124d8fd20fd1c88d5273b13b3565c83fb790c5f3d",
+        "batch.json": "461cbf2f36c85b412a453a94f1f69217914aead5f8cf1ccc2fce399b345238fb"
+      }
+    }
+  },
+  "source_scope": "Exact source values and source15(No-Fail) metadata preserved; no native/no-fail historical certification.",
+  "crosscheck_harness": "Extended numeric-trivial comparator to explicitly validate source No-Fail suffix and nofail1; original numeric-only comparison stopped offline and retained. No recipe SQL change or retry.",
+  "native_combine": false
+}

@@ -1,0 +1,349 @@
+{
+  "task": 3040483,
+  "original_item": 66525,
+  "successful_spell": 23998,
+  "maximum_target_hp_percent": 30,
+  "range_xy": 10,
+  "range_z": 20,
+  "combat_interval_seconds": 12,
+  "drop_chance": 0.5,
+  "default_provenance": {
+    "range_xy": "existing Use Ability spell range10, native target context still requires acceptance",
+    "range_z": "labelled configurable emulator vertical tolerance",
+    "combat_interval_seconds": "labelled configurable emulator timing; original unknown",
+    "drop_chance": "labelled configurable emulator probability; guide confirms chance but omits amount"
+  },
+  "target_profiles": {
+    "753002": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_groundswell_elemental"
+    },
+    "753004": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_groundswell_elemental"
+    },
+    "753005": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "an_earthcrust_elemental"
+    },
+    "753020": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_creekbottom_muddite"
+    },
+    "753021": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_creekbottom_muddite"
+    },
+    "753023": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_sedimentary_muddite"
+    },
+    "753028": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_core_elemental"
+    },
+    "753029": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "an_earthcrust_elemental"
+    },
+    "753031": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_lifeshard_hydra"
+    },
+    "753042": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "an_earthcrust_elemental"
+    },
+    "753094": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_core_elemental"
+    },
+    "753099": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_sedimentary_muddite"
+    },
+    "753118": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_crystalfear_golem"
+    },
+    "753122": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_shardcraft_golem"
+    },
+    "753125": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_lifeshard_hydra"
+    },
+    "753153": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_vigilant_eye"
+    },
+    "753158": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_creekbottom_muddite"
+    },
+    "753169": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "an_evilgaze_eye"
+    },
+    "753170": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_vigilant_eye"
+    },
+    "753171": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_shardcraft_hydra"
+    },
+    "753174": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_focused_eye"
+    },
+    "753176": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_shardcraft_hydra"
+    },
+    "753179": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_clouded_eye"
+    },
+    "753182": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "an_omnifocus_eye"
+    },
+    "753190": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_farsighted_eye"
+    },
+    "753197": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_magician`s_eye"
+    },
+    "753205": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "an_omnifocus_eye"
+    },
+    "753209": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "an_omnifocus_eye"
+    },
+    "753215": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_clouded_eye"
+    },
+    "753219": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_clayborn_muddite"
+    },
+    "753220": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_farsighted_eye"
+    },
+    "753222": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_focused_eye"
+    },
+    "753223": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_vigilant_eye"
+    },
+    "753235": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "an_eskerdirt_muddite"
+    },
+    "753236": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "an_eskerdirt_muddite"
+    },
+    "753238": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_groundswell_elemental"
+    },
+    "753240": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_shardcraft_golem"
+    },
+    "753242": {
+      "activity": 0,
+      "item": 66522,
+      "spell": 33700,
+      "name": "a_sedimentary_muddite"
+    },
+    "753259": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_crystalfear_golem"
+    },
+    "753276": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_terror_golem"
+    },
+    "753277": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_terror_golem"
+    },
+    "753293": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_crystalfear_golem"
+    },
+    "753297": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_crystalfear_hydra"
+    },
+    "753298": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_multifacet_hydra"
+    },
+    "753300": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_multifacet_hydra"
+    },
+    "753301": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_nightfear_mephit"
+    },
+    "753302": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_nullmind_mephit"
+    },
+    "753303": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_geosplint_mephit"
+    },
+    "753304": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_nullmind_mephit"
+    },
+    "753308": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_nightfear_mephit"
+    },
+    "753309": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_fleshburn_mephit"
+    },
+    "753310": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_fleshburn_mephit"
+    },
+    "753311": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "a_fleshburn_mephit"
+    },
+    "753312": {
+      "activity": 2,
+      "item": 66524,
+      "spell": 33701,
+      "name": "an_evilgaze_eye"
+    },
+    "753313": {
+      "activity": 1,
+      "item": 66523,
+      "spell": 33702,
+      "name": "a_shardcraft_hydra"
+    }
+  },
+  "qualification": "Existing identities plus period-family guide description; exact family/scene membership and combat targeting not natively accepted. All content disabled."
+}

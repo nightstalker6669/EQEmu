@@ -1,0 +1,13 @@
+{
+  "source": "https://everquest.allakhazam.com/db/quest/3751",
+  "historical": "Quest entered2006;2007-04-14 report describes walkthrough as accurate. Objective8HighlandSnakes has no level restriction.",
+  "current_npc_catalogue": {
+    "397172": 46,
+    "397230": 47,
+    "397210": 48
+  },
+  "finding": "Native same-name level47/48 kills did not count because source list held only397172.",
+  "correction": "Include all three original highland_snake types; keep count8 and native kill producer.",
+  "scope": "One content field. Existing player counts retained; no retrospective credit invented.",
+  "native_correction_evidence": "After one local task reload, an ordinary level47HighlandSnake kill advanced the objective from1to2, preserving previously earned widow/harpy credit."
+}

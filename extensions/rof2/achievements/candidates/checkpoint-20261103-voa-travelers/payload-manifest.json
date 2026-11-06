@@ -1,0 +1,42 @@
+[
+  {
+    "path": "extensions/rof2/achievements/candidates/checkpoint-20261103-voa-travelers/README.md",
+    "sha256": "8075b5afa83e1aea7b8de6e3b8fa7fa05c9cea0666667bf092ecebb334461552"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/010-zone-access.proposed.sql",
+    "sha256": "7aeeba5f273fa06c09075acda237ae0898858b7de1775b067b31e8872af80036"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/020-three-traveler-admission.proposed.sql",
+    "sha256": "449e3dab4f7abe7815ee47e53b25d03cbc266e2b3b3a3e13ce0d2d0e607cfca1"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/README.md",
+    "sha256": "1173291267ab52c1b3c8b09a854041a6a7476d9783eb3a55d13b30f330434d12"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/historical-admission.fragment.json",
+    "sha256": "f386a3078246b021f8ae593af9b5ecca79089910e55df60d9d88680be2b65031"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/payload-manifest.json",
+    "sha256": "609dc08058c8cad3b36e6d33b55f730653fc3b0e5bc125a3ff2c67dc5390a5c9"
+  },
+  {
+    "path": "extensions/rof2/achievements/candidates/voa-three-travelers/provenance.json",
+    "sha256": "fe37377c4697b15c1ea21e535b8467a994b40f108525466a9aa0c6e1b2f265bc"
+  },
+  {
+    "path": "extensions/rof2/achievements/content/shards-landing/README.md",
+    "sha256": "7fe65894c3fad3b0166218749faceb4622ce3cf746918ff4537a04fd9777f003"
+  },
+  {
+    "path": "extensions/rof2/achievements/content/shards-landing/payload-manifest.json",
+    "sha256": "1bae792b8bf6a0610e17a20d857d2d2b19096f50bd9c3facd663a9bbe323bb78"
+  },
+  {
+    "path": "extensions/rof2/achievements/content/shards-landing/provenance/alaran-language-validation.json",
+    "sha256": "42df91b28a33153ac547c9fb917a1212033a4356686c0cf404629f08e55df44b"
+  }
+]

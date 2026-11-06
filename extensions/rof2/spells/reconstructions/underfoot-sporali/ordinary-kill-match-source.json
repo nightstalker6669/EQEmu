@@ -1,0 +1,67 @@
+{
+  "status": "BOUNDED_NORMAL_ZONE_IDENTITY_MATCH_SOURCE_NOT_ACTOR_MUTATION",
+  "groups": {
+    "burynai": [
+      482022,
+      482026,
+      482028,
+      482033,
+      482034,
+      482036,
+      482039,
+      482040,
+      482041,
+      482047,
+      482057,
+      482070,
+      482099,
+      482112,
+      482119,
+      482131,
+      482141,
+      482142,
+      482146,
+      482273
+    ],
+    "small_beetles": [
+      486000,
+      486002,
+      486010,
+      486013,
+      486020,
+      486021,
+      486024,
+      486028,
+      486035,
+      486040,
+      486041,
+      486042,
+      486044,
+      486048,
+      486052,
+      486057,
+      486059,
+      486073,
+      486074,
+      486075,
+      486076,
+      486090,
+      486115,
+      486121
+    ],
+    "large_beetles": [
+      486001
+    ],
+    "zombies": [
+      483012,
+      483013
+    ]
+  },
+  "excluded": {
+    "486029": "an_odd_looking_beetle notexplicit small/large name; sizeheuristicnotused"
+  },
+  "basis": "One scopednormal-v0sourceSELECT inUnderquarry/Foundation/CoolingChamber. Explicitnamegroupidentities, notallundead/allbeetles bybodytype/size.",
+  "native_match_semantics": "npc_match_list delimitedexact IDs, nativealsoacceptspartialnames; frozenfiniteIDsusedforthese4knownpopulations.",
+  "new_namespace_queries": 0,
+  "writes": 0
+}

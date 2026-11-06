@@ -1,0 +1,29 @@
+{
+  "revision": "r5",
+  "sha256": {
+    "APPLIED-STATUS.json": "4343764b635b518aa4e255568c05650b776e27f2398166ebd3dfbc76dd51ec1f",
+    "PROVENANCE.json": "1e56d6f7d30b940499a7052e55394dbe8e7af5480db2351e992b5ebdfd85f0fd",
+    "README.md": "493351a2c3b397a6a8bebdefa8f27c3315db75a965baad1d1666de8d0a13cecc",
+    "install.py": "e7e7bbed005d0a38426834108ce90d12b2bafc1ab4b1e0a2e7dec0b3e99b5f2f",
+    "quests/lua_modules/achievement_native_delivery_handin.lua": "85eeb3d426a98e70dd923e9e2bf87ff344c0bf24ecc54ab6d6edc84e924f71a9",
+    "quests/lua_modules/achievement_quest_gearing_up.lua": "e9c64868cbb154d24d39a5877032dfc943ad1471d1e5ff12144918c3eea1c96c",
+    "quests/lua_modules/achievement_quest_gearing_up_policy.lua": "3ee06b24eb171c497bb579220575b869acb364fca7e38cc3c216b510473f0551",
+    "quests/mechanotus/436006.lua": "7b7b9fdd4096407a45f5565aa50df58e709f8aa903c9b90b0c3793fe6fe717ac",
+    "settings.json": "55a52d1bcc35d5aee3fd5419ec7ed9c520913ceb4295a24c8f5271e2dc6d263e",
+    "sql/2026_11_03_gearing_up_achievement.sql": "77279463f0f85f3852c58c61c5e5880a46cf1f4683cb7830af65e939abcf766f"
+  },
+  "reviewed_previous_sha256": {
+    "quests/lua_modules/achievement_native_delivery_handin.lua": [
+      "85eeb3d426a98e70dd923e9e2bf87ff344c0bf24ecc54ab6d6edc84e924f71a9"
+    ],
+    "quests/lua_modules/achievement_quest_gearing_up.lua": [
+      "1d637922248789a3376b33122f4d679e745536078e4da225ec92cd5f69eb1d21"
+    ],
+    "quests/lua_modules/achievement_quest_gearing_up_policy.lua": [
+      "9036f7f7ade74d6504459ac7e628a40db41daf1a958c351cd9b63a6d9da24462"
+    ],
+    "quests/mechanotus/436006.lua": [
+      "7b7b9fdd4096407a45f5565aa50df58e709f8aa903c9b90b0c3793fe6fe717ac"
+    ]
+  }
+}

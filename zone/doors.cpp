@@ -1,3 +1,4 @@
+#include "fire_run_action_scene.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -133,6 +134,7 @@ Doors::Doors(const char *model, const glm::vec4 &position, uint8 open_type, uint
 
 Doors::~Doors()
 {
+ if(m_fire_run_action_lifetime)m_fire_run_action_lifetime->active_=false;
 }
 
 bool Doors::Process()
@@ -157,6 +159,7 @@ bool Doors::Process()
 
 void Doors::HandleClick(Client *sender, uint8 trigger)
 {
+ if(!FireRunActionSource::NativeRunDoorSource::AuthorizeActualHandle(sender,*this,trigger))return;
 	Log(Logs::Detail, Logs::Doors,
 		"%s clicked door %s (dbid %d, eqid %d) at %s",
 		sender->GetName(),

@@ -42,9 +42,6 @@
 #include "zone/questmgr.h"
 #include "zone/worldserver.h"
 #include "zone/zone.h"
-#include "zone/client.h"
-#include "zone/npc.h"
-#include "zone/xorbb_gems_state.h"
 
 #include "lua.hpp"
 #include "luabind/luabind.hpp"
@@ -1006,108 +1003,18 @@ std::string lua_get_rule(std::string rule_name) {
 	return rule_value;
 }
 
-static luabind::object xorbb_state_result(lua_State* L, const XorbbGemsState::Result& r)
-{
-	auto out = luabind::newtable(L);
-	out["ok"] = r.ok;
-	out["status"] = r.status;
-	// A committed operation is not a cross-zone event/terminal ordering receipt.
-	out["terminal_ready"] = false;
-	auto values = luabind::newtable(L);
-	for (const auto& entry : r.values) { values[entry.first] = entry.second; }
-	out["values"] = values;
-	return out;
-}
-
-static luabind::object lua_xorbb_gems_state(lua_State* L, Lua_Client client,
-	std::string identity, uint32 instance, std::string op, std::string field)
-{
-	XorbbGemsState::Result invalid;
-	int64_t occurrence = 0;
-	Client* c = client;
-	auto owner = quest_manager.GetOwner();
-	if (!XorbbGemsState::Positive(identity, occurrence) || instance > UINT16_MAX || !zone || !owner) {
-		return xorbb_state_result(L, invalid);
+int lua_shared_task_member_count(std::string identity) {
+	if (identity.empty() || identity.size() > 20 ||
+		identity.find_first_not_of("0123456789") != std::string::npos) {
+		return -1;
 	}
-	uint32 character = 0;
-	if (c) {
-		if (c->GetSharedTaskId() != occurrence) { return xorbb_state_result(L, invalid); }
-		character = c->CharacterID();
+	auto results = database.QueryDatabase(fmt::format(
+		"SELECT COUNT(*) FROM shared_task_members WHERE shared_task_id = {}", identity));
+	if (!results.Success() || results.RowCount() != 1) {
+		return -1;
 	}
-	if (op == "fail" && field == "participant_death") {
-		// Exact event character; never infer a later player's current occurrence.
-		if (!c || owner != c || !owner->IsClient()) { return xorbb_state_result(L, invalid); }
-	} else if (op == "fail") {
-		if (!owner->IsNPC() || zone->GetZoneID() != 753 || zone->GetInstanceVersion() != 3 ||
-			instance == 0 || instance != zone->GetInstanceID() ||
-			owner->GetEntityVariable("xorbb_gems_occurrence") != identity ||
-			owner->GetEntityVariable("xorbb_gems_instance") != std::to_string(instance)) {
-			return xorbb_state_result(L, invalid);
-		}
-		const auto npc = owner->CastToNPC();
-		const bool trapped = field == "trapped_open" && npc->GetNPCTypeID() == 753963 &&
-			owner->GetEntityVariable("xorbb_gems_role") == "trapped_treasure_chest";
-		const bool contestant = (field == "contestant_killed" || field == "contestant_attribution_unknown") &&
-			npc->GetNPCTypeID() == 753964 && owner->GetEntityVariable("xorbb_gems_role") == "failed_contestant";
-		if (!trapped && !contestant) { return xorbb_state_result(L, invalid); }
-	} else if (op == "initialize") {
-		if (!c || quest_manager.GetInitiator() != c || !owner->IsNPC() ||
-			owner->CastToNPC()->GetNPCTypeID() != 753191 || zone->GetZoneID() != 753 ||
-			zone->GetInstanceID() != 0 || instance != 0) { return xorbb_state_result(L, invalid); }
-	} else if (op == "bind" || op == "read") {
-		if (!c || zone->GetZoneID() != 753 || zone->GetInstanceVersion() != 3 ||
-			instance == 0 || instance != zone->GetInstanceID()) { return xorbb_state_result(L, invalid); }
-	} else { return xorbb_state_result(L, invalid); }
-	return xorbb_state_result(L, XorbbGemsState::Apply(database, occurrence, character,
-		static_cast<uint16_t>(instance), op, field, ""));
-}
-
-static luabind::object lua_xorbb_chrom_state(lua_State* L, Lua_Client client,
-	Lua_NPC chrom, std::string identity, uint32 instance, std::string op,
-	std::string field, std::string value)
-{
-	XorbbGemsState::Result invalid;
-	int64_t occurrence = 0;
-	Client* c = client;
-	NPC* n = chrom;
-	if (!XorbbGemsState::Positive(identity, occurrence) || !n || n->GetNPCTypeID() != 753966 ||
-		!zone || zone->GetZoneID() != 753 || zone->GetInstanceVersion() != 3 || instance == 0 ||
-		instance > UINT16_MAX || instance != zone->GetInstanceID() || op.compare(0, 6, "chrom_") != 0) {
-		return xorbb_state_result(L, invalid);
-	}
-	uint32 character = 0;
-	if (c) {
-		if (c->GetSharedTaskId() != occurrence) { return xorbb_state_result(L, invalid); }
-		character = c->CharacterID();
-	}
-	if (op == "chrom_initialize") {
-		if (!c || n->GetHPRatio() < 100 || !n->GetEntityVariable("xorbb_chrom_occurrence").empty() ||
-			!n->GetEntityVariable("xorbb_chrom_instance").empty()) { return xorbb_state_result(L, invalid); }
-	} else if (quest_manager.GetOwner() != n ||
-		n->GetEntityVariable("xorbb_chrom_occurrence") != identity ||
-		n->GetEntityVariable("xorbb_chrom_instance") != std::to_string(instance)) {
-		return xorbb_state_result(L, invalid);
-	}
-	if (op == "chrom_slot") {
-		int64_t entity = 0;
-		if (!XorbbGemsState::Positive(value, entity) || entity > UINT16_MAX) { return xorbb_state_result(L, invalid); }
-		auto add = entity_list.GetNPCByID(static_cast<uint16>(entity));
-		bool match = false;
-		for (size_t index = 0; index < XorbbGemsState::Waves.size(); ++index) {
-			const auto hp = std::to_string(XorbbGemsState::Waves[index]);
-			for (auto slot : {1, 2}) {
-				if (field == "wave" + hp + "_slot" + std::to_string(slot) && add &&
-					add->GetNPCTypeID() == 753973 + index &&
-					add->GetEntityVariable("xorbb_chrom_occurrence") == identity &&
-					add->GetEntityVariable("xorbb_chrom_instance") == std::to_string(instance) &&
-					add->GetEntityVariable("xorbb_chrom_wave") == hp &&
-					add->GetEntityVariable("xorbb_chrom_slot") == std::to_string(slot)) { match = true; }
-			}
-		}
-		if (!match) { return xorbb_state_result(L, invalid); }
-	}
-	return xorbb_state_result(L, XorbbGemsState::Apply(database, occurrence, character,
-		static_cast<uint16_t>(instance), op, field, value));
+	auto row = results.begin();
+	return Strings::ToInt(row[0]);
 }
 
 std::string lua_get_data(std::string bucket_key) {
@@ -6254,8 +6161,7 @@ luabind::scope lua_register_general() {
 		luabind::def("say_link", (std::string(*)(std::string,bool,std::string))&lua_say_link),
 		luabind::def("set_rule", (void(*)(std::string, std::string))&lua_set_rule),
 		luabind::def("get_rule", (std::string(*)(std::string))&lua_get_rule),
-		luabind::def("xorbb_gems_state", &lua_xorbb_gems_state),
-		luabind::def("xorbb_chrom_state", &lua_xorbb_chrom_state),
+		luabind::def("shared_task_member_count", &lua_shared_task_member_count),
 		luabind::def("get_data", (std::string(*)(std::string))&lua_get_data),
 		luabind::def("get_data_expires", (std::string(*)(std::string))&lua_get_data_expires),
 		luabind::def("set_data", (void(*)(std::string, std::string))&lua_set_data),

@@ -1,0 +1,42 @@
+{
+  "status": "AUDIT_AND_IMPLEMENTATION_CONTINUE",
+  "installed_additions": {
+    "batches": 13,
+    "recipes": 283,
+    "logical_entries": 1610
+  },
+  "current_database_counts": {
+    "recipes": 23106,
+    "entries": 179229
+  },
+  "all_installed_recipe16fields_entry7fields_exact": true,
+  "all_installed_source_ingredients_returns_quantities_yield_trivial_exact": true,
+  "historical_cutoff": "2013-05-31 working cutoff",
+  "source_corpus": {
+    "verified_pages": 536,
+    "formula_catalogues": 499,
+    "raw_rows_not_distinct_or_historical_denominator": 37579,
+    "graph_closed": false
+  },
+  "container_candidate_review": {
+    "candidate_pairs_not_recipes": 9072,
+    "states": {
+      "LISTED_GENERIC_OR_NATIVE_CONTAINER_CANDIDATE": 5809,
+      "SOURCE_LISTED_CANDIDATES_PRESENT_EXTRA_SAME_CLASS_KITS_UNREVIEWED": 2684,
+      "LISTED_SMALLER_CONTAINER_LIMITATION_WITH_ALTERNATIVE_CANDIDATES": 7,
+      "SOURCE_LISTED_CANDIDATES_PRESENT_EXTRA_CONTAINERS_UNREVIEWED": 255,
+      "CONTAINER_CANDIDATES_REQUIRE_IDENTITY_REVIEW": 316,
+      "NAMED_SPECIFIC_KIT_GENERALIZED_TO_CLASS_REVIEW": 1
+    },
+    "refinement": "Prior phase5scope-unknown cases are split into listed candidates with additional unreviewed containers versus unresolved identity. In2586distinctAlchemyrecipes the ordinary MedicineBag17901 and Foldable17770 are already DBallowed; reinforced17771/17811 are extra source-unlisted containers. No missing ordinary access or repair is implied.",
+    "race_class_salvage_era_native_acceptance": false
+  },
+  "pending": [
+    "Cultural world-container numeric mapping and historical/native identity; do not infer from conflicting enum labels.",
+    "RoF Baking quest/trophy/era3row intake; MerchantBook bolt yield, failure-return and Research kit review.",
+    "Earlier expansion source/formula coverage, missing-current-item identity drift and natural material access."
+  ],
+  "all_recipe_completeness": false,
+  "native_combine_campaign": false,
+  "limitations": "Current sources and SQL receipts are not immutable May2013 per-formula or native proof. Extra DB container entries omitted by maintained source lists are unreviewed scope, not missing source access or established defects."
+}

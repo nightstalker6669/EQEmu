@@ -1,3 +1,4 @@
+#include "fungal_item_operation_source.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -16,6 +17,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "tasks.h"
+#include "fire_native_item_custody.h"
 
 #include "common/misc_functions.h"
 #include "common/repositories/character_task_timers_repository.h"
@@ -31,6 +33,7 @@ extern QueryServ *QServ;
 
 void Client::LoadClientTaskState()
 {
+ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&m_inv))return;
 	if (m_reward_selection) {
 		m_reward_selection->ClearSource(RewardSelectionSource::Task);
 	}
@@ -44,6 +47,9 @@ void Client::LoadClientTaskState()
 			safe_delete(task_state);
 		}
 		else {
+            // Existing accepted occurrence ONLY, before any reload reward callbacks.
+            FungalItemSource::NativeEvents::ReloadAccepted(*this);
+            FirePersonalOccurrenceSource::NativeItemCustody::ReloadAccepted(*this);
 			task_state->RetryCompletedSelectableRewards(this, true);
 			TaskManager::Instance()->SendActiveTasksToClient(this);
 			TaskManager::Instance()->SendCompletedTasksToClient(this, task_state);
