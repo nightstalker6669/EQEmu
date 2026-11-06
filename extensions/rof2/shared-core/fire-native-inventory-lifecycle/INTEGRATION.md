@@ -1,4 +1,4 @@
-# Fire material custody and physical gates — source batch R15-r2
+# Fire material custody and physical gates — source batch R15-r3
 
 This coherent source batch joins the strict native inventory writer to the actual mission material producer, six mission gates, destructive helper and permanent world Font key. It preserves compiled R14 and all original personal/shared item transformations.
 
@@ -13,3 +13,5 @@ Geometry, model/pose, sizes, key/debit edges, helper timings and profile are exp
 The two finite Core latch/origin DDL files and prior construct receipt DDL are disabled source only. This packet executes no SQL, tests, server start, deployment, cache refresh or client actions. Review this actual integrated native delta, publish through the GitHub connector owner, then reuse the matched compiled R14 cache for one incremental World/Zone compile and link. No parent replay or extra test suite.
 
 Focused integration review found two blockers, corrected here: the actual mission contains19 objectives0..18; native capture now requires19. Origin rows remain published and locked through every selected inventory save/revalidation, then consume in the SAME strict transaction before COMMIT. Only three native paths differ from the reviewed R15 composition; its other60 native pins are preserved. The terminal proposal is not merged.
+
+Actual compile correction: use native door-open action byte0x02 for the selected invert_state0 profile; OPEN_DOOR is a private macro in doors.cpp. Only client.cpp changes; the other62 reviewed native pins stay identical. Reuse failed R15-r2 cache and already built World for one matched incremental resume. No terminal R16 merge.

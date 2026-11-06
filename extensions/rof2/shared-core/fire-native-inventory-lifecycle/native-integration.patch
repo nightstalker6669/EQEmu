@@ -1158,7 +1158,7 @@
  				if (parse->ItemHasQuestSub(a_inst, EVENT_TIMER)) {
  					parse->EventItem(EVENT_TIMER, this, a_inst, nullptr, it_iter->first, 0);
  				}
-@@ -13667,3 +13701,1224 @@
+@@ -13667,3 +13701,1225 @@
  
  	return task_state->UncompleteTask(task_id);
  }
@@ -1973,7 +1973,8 @@
 +}
 +std::unique_ptr<EQApplicationPacket> OpenPacket(uint8_t native_id) {
 + auto p=std::make_unique<EQApplicationPacket>(OP_MoveDoor,sizeof(MoveDoor_Struct));
-+ auto* d=reinterpret_cast<MoveDoor_Struct*>(p->pBuffer);d->doorid=native_id;d->action=OPEN_DOOR;return p;
++ auto* d=reinterpret_cast<MoveDoor_Struct*>(p->pBuffer);d->doorid=native_id;d->action=0x02; // native doors.cpp OPEN_DOOR, selected invert_state0
++return p;
 +}
 +}
 +struct OriginalDoorUse::State {std::shared_ptr<RunUseWitness> witness;const GateBinding* gate=nullptr;};

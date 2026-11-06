@@ -1,6 +1,6 @@
 {
-  "status": "R15_FOCUSED_REVIEW_TWO_CONCRETE_BLOCKERS_CORRECTED_READY_CLOSURE",
-  "source_revision": "R15-r2",
+  "status": "ACTUAL_COMPILER_SYMBOL_FAILURE_CORRECTED_READY_INCREMENTAL_RESUME",
+  "source_revision": "R15-r3",
   "native_files": {
     "common/CMakeLists.txt": {
       "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
@@ -52,7 +52,7 @@
     },
     "zone/client.cpp": {
       "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
-      "postimage_sha256": "6f32bbebca87d8a0e4694cd4c52f605e9dafc20db241cfc6f53ddb21ad1a8b7b"
+      "postimage_sha256": "ab0a17318ea53dc7a48e990df4000d3406568b1c0abc32d3d5a334cb68775213"
     },
     "zone/client.h": {
       "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
@@ -285,7 +285,7 @@
     "zone/zone.cpp"
   ],
   "unchanged_from_compiled_R14": 36,
-  "patch_sha256": "7357941088f10b3f248579f4ced5cda52962ca19c069e6b84377caa0162f5a00",
+  "patch_sha256": "5c71e8cb974b414dcb114b5e1223ed531d74ae72095fee414903983b3b82ec23",
   "final_spells_interface_pins": {
     "fire_run_action_scene.h": "15b0a71c930f64e0d6e18958b1547cbfc77459259d4423cc596feb82c80a9108",
     "fire_material_loot_source.h": "7af7f75173ece447b998affa0667ea34523883066a331598206afec45f762f04",
@@ -334,5 +334,14 @@
     "source_count": "Exact canonical19 activities0..18, configured lock17. No new objective.",
     "strict_order": "Published origin1 and FOR UPDATE remain through all native saves/revalidation; consume2 after all saves before SAME COMMIT. No relaxed origin reads.",
     "no_R16_merge": true
+  },
+  "compile_correction": {
+    "changed_from_failed_R15_R2": [
+      "zone/client.cpp"
+    ],
+    "unchanged_pins": 62,
+    "native_symbol": "doors.cpp private #define OPEN_DOOR 0x02; selected GateProfile requires invert_state0. Use same native MoveDoor action byte locally; no header/common API or behavior change.",
+    "failure_sha256": "1fb7ba14278753052c7c38f76ffa1d2589991343574e04283d38727043731c91",
+    "resume": "Reuse actual failed R15-r2 compiled cache and already-built World, update one client.cpp and verify all63 pins; resume matched incremental Zone+World link. No R16 merge/tests/serving."
   }
 }
