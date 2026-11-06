@@ -1,0 +1,201 @@
+{
+  "status": "SOURCE_ONLY_NATIVE_ORIGINAL_EVENT_AND_FINITE_ITEM_OPERATIONS_NOT_BUILT_OR_INSTALLED",
+  "loaded_task_gate": "Before issuing original operation authority, require current native TaskManager definition, exact Quest/Shared type, METHODSELECT with valid selection, expected10/12activity shape and selected goal1/2. Retained accepted records alone cannot authorize output.",
+  "native_postimage_pins": [
+    {
+      "path": "common/fire_native_inventory_fence.cpp",
+      "preimage_sha256": "d9ca12a4a0cdccd706530007d1c81a186e81dc4867e54fcb3138bb41030bc50c",
+      "postimage_sha256": "b705877a4710b1ae7c3a78881c68ed34c8455f507ba398ecd5099861aa5e847f"
+    },
+    {
+      "path": "common/fungal_item_custody_sql.h",
+      "preimage_sha256": null,
+      "postimage_sha256": "cb63071dc5fa94cfe2ce07ed1e9c57dc436727f0749ecf47d6ff31882061a82b"
+    },
+    {
+      "path": "common/fungal_item_operation_wire.h",
+      "preimage_sha256": null,
+      "postimage_sha256": "153e1be65a13ade20e083ec37185deaa7f6ee901929f01c290fafb98d6c24cb3"
+    },
+    {
+      "path": "common/fungal_unknown_inventory.h",
+      "preimage_sha256": null,
+      "postimage_sha256": "024fdab2328a303151eb30cc10218ec70682596d89409efc3de682906710b23e"
+    },
+    {
+      "path": "common/fungal_world_hold.h",
+      "preimage_sha256": null,
+      "postimage_sha256": "c74791511fbb24eaf230622b92a8c3c82d20b5465a39053be50111a775c43a40"
+    },
+    {
+      "path": "common/inventory_profile.cpp",
+      "preimage_sha256": "26d4b3cdb5ab9c135e3d041d14d4fa78d8e21984da4785ee55920e1f9af8f968",
+      "postimage_sha256": "9870f08fa04aa5c66e54d76a8fdacf9de57b54924c029be3982a1217325443af"
+    },
+    {
+      "path": "common/inventory_profile.h",
+      "preimage_sha256": "02a38cd8913fb90105915293eeac71753e9bac5771662981f5180c1e77c743f4",
+      "postimage_sha256": "d70ace597218b9c0e108e15d17977f8f5ce0b12f140d0e29a6c286131a459bc8"
+    },
+    {
+      "path": "world/CMakeLists.txt",
+      "preimage_sha256": "314db31f0a869f93c125bd44468421febdabb95b7dae5aedabc640c81b77da69",
+      "postimage_sha256": "530543d61398ccad4352a7005d2c860dd371bb2f2836282adebe3b67c7f5fe9a"
+    },
+    {
+      "path": "world/fungal_item_world_source.h",
+      "preimage_sha256": null,
+      "postimage_sha256": "7bbe4085c6a4163ec6fdc9a444246500551411930818568ec939dad7a67e1fbb"
+    },
+    {
+      "path": "world/fungal_item_world_source_impl.inc",
+      "preimage_sha256": null,
+      "postimage_sha256": "aed849a06bcfb0486bed0a6a3fd4ec1e74496e28a8d3bed6c5e05808e7b10bfa"
+    },
+    {
+      "path": "world/fungal_native_world_custody.cpp",
+      "preimage_sha256": null,
+      "postimage_sha256": "442c49d9ce62088d3d0c592ca92cfd993616fb5a54dbb047942fe0dc8745d951"
+    },
+    {
+      "path": "world/shared_task_manager.cpp",
+      "preimage_sha256": "11c65535fbe526a38fc1e38d030d63d575d6aed49da8eaa35f6227deb1f28d93",
+      "postimage_sha256": "4ec3ca625d519bc5a0161348d111b2e1ebf0e1fb91a25e84a5db5471c20ab2f7"
+    },
+    {
+      "path": "world/shared_task_world_messaging.cpp",
+      "preimage_sha256": "f7f3c85677b3541ce4f91954f8c3656ee111f8768794137462cd60ae001ff082",
+      "postimage_sha256": "a52fb4aa61aca9b1a7800733c2f15fb68de013525ca8831c9049c2888ddb6b92"
+    },
+    {
+      "path": "zone/CMakeLists.txt",
+      "preimage_sha256": "57589fdd617fa404d788c813f983002c6fd5a46ef5bb49d3806c07e4c47a6e9d",
+      "postimage_sha256": "ba3bf47beda2c361f1297bf5cc01bf9acfb6bfd7cfba37e605b5d96e2cefcd5f"
+    },
+    {
+      "path": "zone/client.cpp",
+      "preimage_sha256": "47da09611533ba7cd233b15b593883a8af2e72e930799f8b0cef6a553d27b5e7",
+      "postimage_sha256": "501a9cd5851151172d8be9351858257ae781a9bd60b2220dbf9bf40670b169ad"
+    },
+    {
+      "path": "zone/client.h",
+      "preimage_sha256": "780379f2dc32d2407abaaecb4ae267fcbfd9022efdfc67e21aebf29d17e20aaf",
+      "postimage_sha256": "9a06c84e81a094fdc692addb0d61915752914d6c589a0949f1438d34e7aad583"
+    },
+    {
+      "path": "zone/client_packet.cpp",
+      "preimage_sha256": "05da47fa52f75861f2d4b25a1c326cc6659eb9406f4ed6b7f111a7565cf485cb",
+      "postimage_sha256": "e3e550a7711cefa251987086749358291a39973e6f68201f82d0f424b4e4a350"
+    },
+    {
+      "path": "zone/entity.cpp",
+      "preimage_sha256": "53290568d661aeaec68f9c0fbfe83b18bae1002b86398eafcd861534f1c8492e",
+      "postimage_sha256": "f356404c57a55ddbcaeb0993dc1979a8f51fc07632deaa4e4c8c13b323cd008a"
+    },
+    {
+      "path": "zone/fungal_item_operation_source.h",
+      "preimage_sha256": null,
+      "postimage_sha256": "0bd68084e233d5b89068824e1c5b7f7bade78f8a8cb39ef247fdd4ad588a6c6f"
+    },
+    {
+      "path": "zone/fungal_item_source_impl.inc",
+      "preimage_sha256": null,
+      "postimage_sha256": "df452c4e912b42e925f7f631046ab54c7ddb8e037094a5053e9da45e1fe0f3a3"
+    },
+    {
+      "path": "zone/fungal_native_inventory_custody.cpp",
+      "preimage_sha256": null,
+      "postimage_sha256": "84ef9980ec1fee80bba6e59ab05e3a423060192a01b763739542e658e82c5fa6"
+    },
+    {
+      "path": "zone/inventory_session_owner.cpp",
+      "preimage_sha256": "ff376f81ebbf3d72c93cd869d8bc6ead85dfb3f0a867e0c83f3864f16c718a77",
+      "postimage_sha256": "718e06b1d1d8c972161183e32053794a493f1454afa6b541a46ce815c6ca785f"
+    },
+    {
+      "path": "zone/npc.cpp",
+      "preimage_sha256": "d9f57c4762112097720a32b31a002609fcaa82398768543f4d3c4a019c625160",
+      "postimage_sha256": "0566d224e6e140370a9abb4d0a87a7451550f09d12b25960a867438801b2ae7b"
+    },
+    {
+      "path": "zone/npc.h",
+      "preimage_sha256": "85d03caee9481c491befd65962130fc24ba8c26edacc43b4e953abb454d5b42e",
+      "postimage_sha256": "f9fd7dabca9c7e2bb7518b7764a0e98a51e3be5149da4b4383d2bba36d9f3ddd"
+    },
+    {
+      "path": "zone/shared_task_zone_messaging.cpp",
+      "preimage_sha256": "e1255d1e11b4cd7b5984b5c768b0eac47ff4b6c88e6ec193537f0663addf5536",
+      "postimage_sha256": "681741d45b447b1696d55e330c3e197063d76842a19f4ce97b916fdef48d6fd3"
+    },
+    {
+      "path": "zone/task_client_state.cpp",
+      "preimage_sha256": "970c04e2d666237a9de02cc5b19ead685ca63f5c6d48a54e6bff2b3a7ea698f8",
+      "postimage_sha256": "afae7055a51f3ffaeb9717916324d95da3b9a664ddb944140462b9f08ca04fe0"
+    },
+    {
+      "path": "zone/task_client_state.h",
+      "preimage_sha256": "a12ff9023f13f61bf0bf12cace0ca55cc1fd5ccda0eb4fac25a9d2e01bcb67f4",
+      "postimage_sha256": "7b972d66eaf1390d064da8edee36b76b775b7ab2e4b6f9c5fc6f6780fb39c6aa"
+    },
+    {
+      "path": "zone/tasks.cpp",
+      "preimage_sha256": "d49c60a7d34cf096692c7bf23b6b2107112f39ee3c05182011acdecf7e5a24e9",
+      "postimage_sha256": "f33f04640b365634629072c6b42fe5d1e85f5a5c0537a5f6026fe5a33bf2f558"
+    },
+    {
+      "path": "zone/zone.cpp",
+      "preimage_sha256": "6de1cb1489d6f531dc371c7469bb6371872a100680678ec47740b3af4dd2a22c",
+      "postimage_sha256": "41692e0742937446192f0d33e4bb4f87004d570cb438a0c651d00010684af81e"
+    }
+  ],
+  "operations": [
+    {
+      "scope": "personal",
+      "task": 920141,
+      "activity": 7,
+      "output": [
+        40997,
+        1
+      ]
+    },
+    {
+      "scope": "shared",
+      "task": 920143,
+      "activity": 5,
+      "input": [
+        43585,
+        2
+      ],
+      "output": [
+        43586,
+        2
+      ]
+    },
+    {
+      "scope": "shared",
+      "task": 920143,
+      "activity": 10,
+      "output": [
+        43587,
+        1
+      ],
+      "prior_native_deliveries": {
+        "7": 4,
+        "8": 3,
+        "9": 2
+      }
+    }
+  ],
+  "selected_LOCAL_spore_policy": "One complete pair from one original current-member offer to its actual trader. No cumulative/multiquest/member mixing or partial credit. Preserve incomplete/excess/other roots and cash; rejection never enters generic hand-in. Excess after a successful pair stays in the original native trade for cancellation.",
+  "placement": "Supported empty enabled native general root only; no merge/cursor fallback. Unsupported capacity rejects before persistence. This is bounded implementation coverage, not original placement authentication.",
+  "durability": "Same strict inventory transaction commits exact physical deltas and unique finite occurrence/stage/recipient outcome. Only known COMMIT plus allocation-free native publication creates the private receipt. Existing outcome never regrants/reissues a fresh proof; missing original ACK is unresolved, not history recovery.",
+  "personal_stage_ack": "Native original stage7 progress consumes one private committed receipt; its SAME native SaveClientState result is observed exactly once. Output/outcome durability precedes this separate native stage acknowledgment.",
+  "shared_stage_ack": "Actual native World run/member-resolved update obtains strict locked Core transaction before native state mutation. The ORIGINAL native fullactivity save snapshot and finite outcome ACK commit together; only its private matching KnownStageAck permits broadcast and exact run/outcome-validated Zone echo.",
+  "unknown_commit": "Original client mutation/profile/save holds persist to actual full Client deletion. WorldHold refuses native update and all fullactivity saves for an uncertain run; memory restoration alone is not recovery.",
+  "activation_blockers": [
+    "Disabled finite DDL requires Database-owned reservation/install authority.",
+    "Complete Fungal task/mission physical delivery, phase, geometry, source and native acceptance work is not supplied by these three operations.",
+    "All retained Fungal task/reward flags remain disabled; no enable or runtime authority accompanies this source package."
+  ],
+  "preservation": "Apply only against exact native preimages, composing current Fire plus serving recipe/bot actor deltas; preserve later 291 work. Never overwrite a dirty shared source tree or replay Fire deployment."
+}
