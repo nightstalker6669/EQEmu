@@ -4022,7 +4022,7 @@
 -  MoldPhase phase=MoldPhase::Captured;
 -  std::unique_ptr<FireRunActionSource::PublishedTerminalReturnReceipt::State> receipt;
 -  std::unique_ptr<OriginalItemSnapshot> mold;
--  const EQ::ItemInstance* original=nullptr;
+-  EQ::ItemInstance* original=nullptr;
 -  std::unique_ptr<EQ::ItemInstance> spent;
 -  std::string token;
 -  std::shared_ptr<Housing::InventorySessions::ZoneReservation> session;

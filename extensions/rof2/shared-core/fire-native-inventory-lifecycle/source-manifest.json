@@ -1,6 +1,6 @@
 {
   "status": "ACTUAL_COMPILER_SYMBOL_FAILURE_CORRECTED_READY_INCREMENTAL_RESUME",
-  "source_revision": "R16-r3",
+  "source_revision": "R16-r4",
   "native_files": {
     "common/CMakeLists.txt": {
       "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
@@ -120,7 +120,7 @@
     },
     "zone/fire_native_item_custody.cpp": {
       "preimage_sha256": null,
-      "postimage_sha256": "2e66056cf64e2d2147f952c76d90129513137f3aa1668bb9a7e150bdc3bb3955"
+      "postimage_sha256": "543ca93510d9289780078ff3306caf045cbdaa8a70df5892906a323f3ed66ca7"
     },
     "zone/fire_native_item_custody.h": {
       "preimage_sha256": null,
@@ -300,7 +300,7 @@
     "zone/zone.cpp"
   ],
   "unchanged_from_compiled_R15r3": 46,
-  "patch_sha256": "3fd599d47873c49304b217e5d3cac22c0ed5f76caae14679fa25be0125c3c230",
+  "patch_sha256": "21bdc60a8db2963f1f15c66858d6776326669c83926db91574b5bfd2eafe8c13",
   "private_interface_sha256": "217470eda544a2f35af754ff7cdfebdbc36110205b156055afb656efd86fbc57",
   "source_revision_alignment": "Core authored against frozen217470ed private interface, unchanged. Final Spells r2 body adds terminalACK-before-loot, exact retained whole LootItem, full actual Guardian NPCTypedata/receiver-depop checks and unauthorized current-looter unlock. Final body also enforces saved original absolute expiry plus native timer cap in opening/processing/corpse access, so a later instance extension does not extend this chest. No Core API change. Final source overlay fa54cfbf supersedes Core pinned cd452517 only for this final original-deadline refinement; its unchanged217470ed interface and all Core native postimages remain exact. Original79991e74 Source-only postimages are also superseded.",
   "material_exceptions": [
@@ -326,12 +326,13 @@
   "core_manifest_sha256": "ba5daa6b47f00588c7c6d7d1a6125e8517de467ae2ed22ecc9aa810143b83c0c",
   "spells_native_manifest_sha256": "fa54cfbfc68cca3d966c0635f13ce6fde6e1198b74e6182d3c2ec9e87689a37f",
   "compile_correction": {
-    "changed_from_failed_R16_R2": [
-      "zone/client.cpp"
+    "changed_from_failed_R16_R3": [
+      "zone/fire_native_item_custody.cpp"
     ],
     "unchanged_pins": 67,
-    "native_pointer": "SealOriginalChestCorpse has a freshly resolved Corpse*; use corpse->SetDecayTimer rather than dot. Sole pointer syntax correction, no lifetime/access/decay/transaction behavior change.",
-    "failure_sha256": "b30e8b7c615f45022c323bd08236ddb5019d4bc125d0e52b2703f6618a8c3762",
-    "resume": "Reuse actual failed R16-r2 compiled cache and already-built World, update one client.cpp and verify all68 pins; resume matched incremental Zone+World link. No new scope/tests/serving."
+    "native_pointer": "MoldReturnFrame retains native GetItem existing ItemInstance* rather than artificial const pointer; unchanged InventoryProjection::Matches now accepts original. No const_cast, common API or semantic change.",
+    "core_fix_sha256": "2b6668e0a5326c075913f905d4f87bba769951939cf70be42e793e65c578d35e",
+    "failure_sha256": "c57eaed1e622d23318e0089783eabd52e864b9a52e36fd329d2ae0b76284911b",
+    "resume": "Reuse actual failed R16-r3 compiled cache and already-built World, update one fire_native_item_custody.cpp and verify all68 pins; resume matched incremental Zone+World link. No new scope/tests/serving."
   }
 }
