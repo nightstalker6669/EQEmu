@@ -1,5 +1,6 @@
 {
-  "source_revision": "R14 original shared170 clay/golem-part native transforms with separate actual shared writer receipt",
+  "status": "R15_FOCUSED_REVIEW_TWO_CONCRETE_BLOCKERS_CORRECTED_READY_CLOSURE",
+  "source_revision": "R15-r2",
   "native_files": {
     "common/CMakeLists.txt": {
       "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
@@ -47,15 +48,15 @@
     },
     "zone/attack.cpp": {
       "preimage_sha256": "41e7429480265cb6b81092214cd26d069c2132da25b5071a170e453cfbaaa5de",
-      "postimage_sha256": "238f12e305734ec400709d33068ad59102be67d722821acdd7598c03e7138cef"
+      "postimage_sha256": "b13c1d11a93ae1421d78b8c20de861b9707b5eb8a8ae70176118c0cb685fc197"
     },
     "zone/client.cpp": {
       "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
-      "postimage_sha256": "e85d01f6cde567d985e5cc75a06d7f3ba0c3dbd21c21a2386e9527b7593e39b5"
+      "postimage_sha256": "6f32bbebca87d8a0e4694cd4c52f605e9dafc20db241cfc6f53ddb21ad1a8b7b"
     },
     "zone/client.h": {
       "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
-      "postimage_sha256": "70ad39555b2107082e04be86934d287b22ea6b7050c831729679f3fe90e638e5"
+      "postimage_sha256": "55613d646789e5d1b06b8335d7c04822c956bf9b7cd103422c701e33942a5ad4"
     },
     "zone/client_evolving_items.cpp": {
       "preimage_sha256": "9abfd986b2b0a851e685741c89c97085b6f8b8754aae58371cca030a396baeae",
@@ -63,7 +64,7 @@
     },
     "zone/client_packet.cpp": {
       "preimage_sha256": "3efb2eae4077223212beb03e5c48b74fbcb09bfd236f6b1e8c7caa89e4db4a5a",
-      "postimage_sha256": "b8f1a9a4a4c29460e1f63424978f0c7f3954940ba190904c5a2564945c880957"
+      "postimage_sha256": "a9a2b6ca83aa886e32d7b72528d99f764eb78bee8cc2b0ef2afce006ae3ca285"
     },
     "zone/client_spirit_shroud.cpp": {
       "preimage_sha256": "153900d357a1fe13e7edc9baaf6406ed5b6a2a57efc79acce9bd358d67997785",
@@ -73,9 +74,25 @@
       "preimage_sha256": "7454762e25b4db799f7f28d1f4f84b8bbb508a463b1db443e0fa6a5ab04c7073",
       "postimage_sha256": "aac1e27bcdd7597c6d13c34bcfb9e65740c5b37ecc565c248ca567ea98f76e82"
     },
+    "zone/corpse.cpp": {
+      "preimage_sha256": "70008903f349181c8389e694e075948ca4f42f38c33625dd3a1d0ebb7e7d8b72",
+      "postimage_sha256": "f47e79366474b8de0e93702081b10c2c2efe2a0c64e01ba966b73ee5c331327f"
+    },
+    "zone/corpse.h": {
+      "preimage_sha256": "913162429058a04bb9d2f2c51c0de13f7b842667dcb473baf6b6969600819257",
+      "postimage_sha256": "49710c8b90ef2d6efcd60565bbc1c39804d0a40a6c681a1848d651cc6e852202"
+    },
+    "zone/doors.cpp": {
+      "preimage_sha256": "c6d56df874b341bc83b9e941ec7649c16cd6155b519cfae2b17f1610d701a02f",
+      "postimage_sha256": "19c904a9c1eff53f39730d7c718efbd0d39ad52cc19e7ba4b54c6b20be7d3ccd"
+    },
+    "zone/doors.h": {
+      "preimage_sha256": "23471854e2c6d59344524a6ddff0643792821252d0a6cc3786abdac057b29116",
+      "postimage_sha256": "e91ac665a9fdea873535445aac5b207b0dd8d77655adc60b77fdcf13a7271a10"
+    },
     "zone/entity.cpp": {
       "preimage_sha256": "8c82cf775575fbc94448940911f168440da7d9b45453085df7aea257d83c4ad2",
-      "postimage_sha256": "25d65114a3235b5bc87053e9a35c170723389747bd2367bca5709cb9f0cfca4d"
+      "postimage_sha256": "552f969436c7666db0b61992080c8b53767b52ccad7d58221732ddd9ae6d53b2"
     },
     "zone/fire_construct_death_receipt.h": {
       "preimage_sha256": null,
@@ -91,19 +108,23 @@
     },
     "zone/fire_gotonur_say_queue.h": {
       "preimage_sha256": null,
-      "postimage_sha256": "439cecaf74378367a337c0340b91bb042cdf6d379776587b87e0cab74edcff26"
+      "postimage_sha256": "1906c7dc6bcee1792a46cdb99624c647fb8840b88b5b4564f39bf214193a1858"
     },
     "zone/fire_initial_admission.h": {
       "preimage_sha256": null,
       "postimage_sha256": "496dce0b63d97022cce74bb47214bfb365b2ea6abdc395fb297bf828cd67f8f5"
     },
+    "zone/fire_material_loot_source.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "7af7f75173ece447b998affa0667ea34523883066a331598206afec45f762f04"
+    },
     "zone/fire_native_item_custody.cpp": {
       "preimage_sha256": null,
-      "postimage_sha256": "1b2c7745c2522eab384f3532354189b0fbb058debd3513d2aa377ba7c5f91670"
+      "postimage_sha256": "50bed0d8ded749ffa4c375d6c036bb63425f1e0ba4c5c88d69ff85ac6e01c576"
     },
     "zone/fire_native_item_custody.h": {
       "preimage_sha256": null,
-      "postimage_sha256": "ca5aae16b609c89ff5f86ab3ea1e3453d741674085c1448035a16a9b6271d901"
+      "postimage_sha256": "af6647e52d987c6aded350e666f4e0ad390b9478aae7807ecde8b2bc355214df"
     },
     "zone/fire_native_published_use.h": {
       "preimage_sha256": null,
@@ -111,7 +132,7 @@
     },
     "zone/fire_original_construct_death.h": {
       "preimage_sha256": null,
-      "postimage_sha256": "70b914f9860ea68846f4618dd6126e294c3874ed2cc8b7a1506268f63b88e791"
+      "postimage_sha256": "6d9d361e8c767114aab36b2d9baccd270d601f4aa3961fa7ca92bad5c6a360a9"
     },
     "zone/fire_original_construct_hail.h": {
       "preimage_sha256": null,
@@ -145,6 +166,34 @@
       "preimage_sha256": null,
       "postimage_sha256": "52e92089e69e1c8b468aa994523515207785453ff118f9526e1e922bcee02395"
     },
+    "zone/fire_run_action_custody.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b8e8d166e1f96d201e331030340ef5b3fa593b5c711bb6e75da1f71b1bfe43ec"
+    },
+    "zone/fire_run_action_custody_impl.inc": {
+      "preimage_sha256": null,
+      "postimage_sha256": "8e7ea7cd57cfe252bcab9092abdd35a6ddaaa403b628e48329df467a9fce41d6"
+    },
+    "zone/fire_run_action_geometry.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "5cd83fcd2115c48fea24dfa98b50a31bf7e7e6d62be099c07973ab2c7661de07"
+    },
+    "zone/fire_run_action_scene.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "15b0a71c930f64e0d6e18958b1547cbfc77459259d4423cc596feb82c80a9108"
+    },
+    "zone/fire_run_helper_profile.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "899fea73d716c03a877235ffdb0755f239da872527227286cea1bc478677a232"
+    },
+    "zone/fire_run_item_origin.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "45d39e16a3b7a1ab84b5e967da30f10c8a6ebb13667e6f080982eddbe3af2c45"
+    },
+    "zone/fire_run_item_origin_impl.inc": {
+      "preimage_sha256": null,
+      "postimage_sha256": "2b96b86a1515574caae41e2555cd9218d38339531b7f35b785f129d90004c0e4"
+    },
     "zone/fire_shared_transform_published.h": {
       "preimage_sha256": null,
       "postimage_sha256": "af5578dec3c07d0983c137418ff3f8e478c43785965ff9d3264a41d0bc3b75da"
@@ -155,19 +204,23 @@
     },
     "zone/inventory.cpp": {
       "preimage_sha256": "5538219e5625b4baa51e7bd4182465be502a77796dd2ff41b70bcfc2a0f8b3ff",
-      "postimage_sha256": "a67890b2fe79b420d5418adcb5e357cb9838ffb6e1beb89c8bbf8249058f4d68"
+      "postimage_sha256": "a5c2c0a1862121a7d3d38f4007f647615f7dad9d08941b914d6e96bdb0ac47dd"
     },
     "zone/mob.cpp": {
       "preimage_sha256": "4b0590106b1482e66caf2781f4e3d65787a6d45988a1535308808c6b2419abfb",
       "postimage_sha256": "5428db734d17308c5f1ed5ee1af818075da6a039131743c547865b1485e90a6a"
     },
+    "zone/mob_movement_manager.cpp": {
+      "preimage_sha256": "a7e1cd87152c09d7aa53a6f1fdbc983b134c7aec6ada3efb098ffb32beb7e78a",
+      "postimage_sha256": "06d36d08289abc7078f81e61ac66f53a5472a397687e7177cf1c7a47e64b83f3"
+    },
     "zone/npc.cpp": {
       "preimage_sha256": "560e1c8b97d68dae802d702639506eba87e0c17f54cc64f45037d0b25164d363",
-      "postimage_sha256": "9261aebd8813e10b26c3f4d49e29e60384339ba4525d32556cc7fb5a6fc9e4be"
+      "postimage_sha256": "8d3a600c47608544dca057a8912af4eb0871bbfca3ad8c6b95d05f41b5c50c2d"
     },
     "zone/npc.h": {
       "preimage_sha256": "5da70d799dbe23fa2bc4b204555ffcec45026b6c23ad09b8c9efd532479c14ce",
-      "postimage_sha256": "917046f6a407081745a1beb851e2873f37ac84601f7b8d3d72058c48df9ef1a3"
+      "postimage_sha256": "049985fe86a4a94e7976b4882dd408bc6a0f3bc839357ede6338a63004fabf02"
     },
     "zone/parcels.cpp": {
       "preimage_sha256": "d0f540a70af8b058a6f8c3b4cf3d221cf065fb1ad0ab0d168cebaf6512d61353",
@@ -183,7 +236,7 @@
     },
     "zone/task_client_state.cpp": {
       "preimage_sha256": "8e1328f7152fc7f226e5099be6099fcb3ad112b32172ccf80d2d5118d3d2adfe",
-      "postimage_sha256": "f51242483b7e43351fad2da79811b3f156a0dbe522766b095355bf953c1c0191"
+      "postimage_sha256": "1f3419eb72d7a1d850650bec6acf703516dba8e41ee565df1e67be2b81c1143e"
     },
     "zone/task_client_state.h": {
       "preimage_sha256": "4556499e483da7785759f87c53c6f1704c217c288f2f892aa877ebd7abb1d428",
@@ -199,26 +252,47 @@
     },
     "zone/zone.cpp": {
       "preimage_sha256": "3c17cac8d75ab720a8a47e1fa60b2a7148473f38eb488019a9a320514decefb4",
-      "postimage_sha256": "45a2f930f6e57bce98f633e0fff4ee804a80f3a2e6452555cfe624ce383c0d29"
+      "postimage_sha256": "a94e6af339ea158153283a88b2158bff6e9d427e75e613ee20960f60611d3de2"
     }
   },
-  "native_patch_sha256": "b9230a44375d01bac19ee2f3065a41825d9d27c2f520fe2ed8ad418febff92ee",
   "incremental_changed_paths": [
+    "zone/attack.cpp",
     "zone/client.cpp",
+    "zone/client.h",
+    "zone/client_packet.cpp",
+    "zone/corpse.cpp",
+    "zone/corpse.h",
+    "zone/doors.cpp",
+    "zone/doors.h",
+    "zone/entity.cpp",
+    "zone/fire_gotonur_say_queue.h",
+    "zone/fire_material_loot_source.h",
     "zone/fire_native_item_custody.cpp",
-    "zone/fire_shared_transform_published.h",
-    "zone/fire_shared_transform_use.h",
-    "zone/task_client_state.cpp"
+    "zone/fire_native_item_custody.h",
+    "zone/fire_original_construct_death.h",
+    "zone/fire_run_action_custody.h",
+    "zone/fire_run_action_custody_impl.inc",
+    "zone/fire_run_action_geometry.h",
+    "zone/fire_run_action_scene.h",
+    "zone/fire_run_helper_profile.h",
+    "zone/fire_run_item_origin.h",
+    "zone/fire_run_item_origin_impl.inc",
+    "zone/inventory.cpp",
+    "zone/mob_movement_manager.cpp",
+    "zone/npc.cpp",
+    "zone/npc.h",
+    "zone/task_client_state.cpp",
+    "zone/zone.cpp"
   ],
-  "compiled_parent": {
-    "source_commit": "ef1a9ac78d3c32d153230b756f4148702b2a462d",
-    "sha256": "813f8bcdfb32bc61b292c50598fbdccb1f306dee832df12ba73f6dc8deef5fde",
-    "status": "MATCHED_R13_WORLD_ZONE_COMPILE_LINK_PASS_48PINS_16WARNINGS_ZEROERRORS"
+  "unchanged_from_compiled_R14": 36,
+  "patch_sha256": "7357941088f10b3f248579f4ced5cda52962ca19c069e6b84377caa0162f5a00",
+  "final_spells_interface_pins": {
+    "fire_run_action_scene.h": "15b0a71c930f64e0d6e18958b1547cbfc77459259d4423cc596feb82c80a9108",
+    "fire_material_loot_source.h": "7af7f75173ece447b998affa0667ea34523883066a331598206afec45f762f04",
+    "fire_run_action_geometry.h": "5cd83fcd2115c48fea24dfa98b50a31bf7e7e6d62be099c07973ab2c7661de07",
+    "fire_run_helper_profile.h": "899fea73d716c03a877235ffdb0755f239da872527227286cea1bc478677a232"
   },
-  "this_build": "PENDING_FOCUSED_REVIEW_PUBLICATION_ACTUAL_MATCHED_INCREMENTAL_COMPILE",
-  "core_writer_manifest_sha256": "88feb3458e9964f3325198be306d67e7ab32bc08f464d8333e58252937d25bfc",
-  "spells_capture_sink_manifest_sha256": "9071d45413c3e460e25d6fc9bc7a5a718ba4cd0b59d2c2db84950a4de14e8133",
-  "native_item_contract_sha256": "302083924a233d9c6177d754046b92b31bd02981750354e3a32ab0c711b56b14",
+  "interface_alignment": "Core WIP scene/material manifest pins are superseded by these final full-package pins. Scene Facts and prepared-plan types preserved; additive private hooks/friends and actual bodies completed. Loot interface unchanged. Narrow native const accessor fixed without changing common ItemInstance API. Review final composition, not obsolete Font-only draft.",
   "material_exceptions": [
     "SOURCE ONLY. Review/publication/matched World+Zone compile pending; no serving migration/install/deployment/activation/native gameplay acceptance.",
     "Admission85/repeatable/21600replay, horizontal radius100 at167/168, zoneonly169/casterpose/terrain and168169nonraidcohort timing are explicitly selected LOCAL reconstruction parameters, not authenticated retail edge rules.",
@@ -229,7 +303,36 @@
     "169 final uses original native Worldshared170 admission; current normal170 membership skips another request and is not a new Ready/origin receipt. No per-member create/DZ loop.",
     "Same strict writer knownCOMMIT+memorypublish and private Take receipt enter one actual native goal6/13 submission with original run before optimistic update/send. Native invocation/optimistic state is not durable World persistence proof. No automatic replay.",
     "Doors, destructive-helper movement/key use, mold allocation and terminal chest remain held. These two transforms supply no actor/door/chest factory.",
-    "Shared transforms use exact canonical charges:47762nonstack0,47756nonstack1. One physical output is not a fabricated one-charge default. Clicked source rows47760/47752 native7651/type3/Max1. Nonclicked ingredients carried-general only; clicked cursor protected by wholecursor fence."
+    "Shared transforms use exact canonical charges:47762nonstack0,47756nonstack1. One physical output is not a fabricated one-charge default. Clicked source rows47760/47752 native7651/type3/Max1. Nonclicked ingredients carried-general only; clicked cursor protected by wholecursor fence.",
+    "R15 supersedes the R14 door/helper unresolved branch only to the selected LOCAL source scope: six mission gates, helper native ordered walk/passage/dust/actual destruction, world permanent physical key. Single Guardian original-death, mold allocation and terminal single-delivery remain unresolved.",
+    "All new scene geometry, gate rules, helper profile/timing and admission defaults are selected LOCAL reconstruction, not authenticated retail behavior or native gameplay acceptance. Reserved IDs are logical reservations only.",
+    "13 mission materials require native custom_data UUID seal and finite same-run published origin, not process-local serial as durable identity. Existing tokenless/history/old-run items do not receive backfill. Real death/same corpse/actual successful inventory save and corpse removal supply raw origins; known strict transform COMMIT and memory publication supply outputs.",
+    "Unknown database/save/publication/actor lifecycle gaps remain held without retry/refund/regrant. Native World progress invocation is not durable World-save acknowledgment.",
+    "World Font existing35650/native7 selected future key47759/nokeyring1/lockpick32767/30-second relock; actual serving row remains unchanged. No key grant, mission credit or global open flag.",
+    "All receipt/origin/latch DDL, scene placements and selected profiles remain unapplied. No persistent chest spawn/condition exists in this packet. No serving migration/deploy/activation/cache refresh/client acceptance."
   ],
-  "build_instruction": "Reuse actual R13 compiled cache. Materialize five incremental native paths, verify all50 final pins, one matched World+Zone compile/link. No parent rehearsal/review/tests or serving migration/deployment/activation."
+  "tests": 0,
+  "builds": 0,
+  "SQL_writes": 0,
+  "runtime_actions": 0,
+  "compiled_parent": {
+    "source_commit": "bf94e54342a6c9a0b7a54fb8f6d56205a3c1f501",
+    "sha256": "9ad623dbc1dca5e110cd255566e03d82bbe322d828631c395ac894a4e0b5ace8",
+    "status": "MATCHED_R14_WORLD_ZONE_COMPILE_LINK_PASS_50PINS_ZERO_WARNINGS_ZERO_ERRORS"
+  },
+  "core_manifest_sha256": "a4e45a46555cf95dcfc503d0f4a01ae5eb98bbe67eb6bc59367dec08743285d8",
+  "geometry_manifest_sha256": "525b8955ca11e66a4151209ecf69a3395eed2e6f5c7e40b58fa7976ca6a2f525",
+  "focused_parent_review_sha256": "36321aa745373387aaf798ad35b6c0a07df3c6844d2dc056cd5c863a40645bf9",
+  "correction": {
+    "core_sha256": "c24b8526016e2d6f243d7677ad0e60407f62350fe101a9f676e1177ddd91b1ed",
+    "changed_from_reviewed_R15": [
+      "zone/client.cpp",
+      "zone/fire_native_item_custody.cpp",
+      "zone/fire_run_action_custody_impl.inc"
+    ],
+    "unchanged_reviewed_pins": 60,
+    "source_count": "Exact canonical19 activities0..18, configured lock17. No new objective.",
+    "strict_order": "Published origin1 and FOR UPDATE remain through all native saves/revalidation; consume2 after all saves before SAME COMMIT. No relaxed origin reads.",
+    "no_R16_merge": true
+  }
 }

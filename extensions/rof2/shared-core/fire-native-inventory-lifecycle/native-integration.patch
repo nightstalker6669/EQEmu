@@ -730,14 +730,15 @@
  	client_evolving_items.cpp
 --- a/zone/attack.cpp
 +++ b/zone/attack.cpp
-@@ -1,3 +1,6 @@
+@@ -1,3 +1,7 @@
++#include "fire_material_loot_source.h"
 +#include "fire_construct_participants.h"
 +#include "fire_gotonur_say_queue.h"
 +#include "groups.h"
  #include "bound_destructible_ruins.h"
  /*	EQEmu: EQEmulator
  
-@@ -32,6 +35,13 @@
+@@ -32,6 +36,13 @@
  #include "zone/lua_parser.h"
  #include "zone/mob.h"
  #include "zone/npc.h"
@@ -751,23 +752,25 @@
  #include "zone/queryserv.h"
  #include "zone/quest_parser_collection.h"
  #include "zone/string_ids.h"
-@@ -2481,6 +2491,7 @@
+@@ -2481,6 +2492,8 @@
  
  bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillType attack_skill, KilledByTypes killed_by, bool is_buff_tic)
  {
++	FireRunActionSource::OriginalMissionMaterialDeath fire_mission_material_death(*this);
 +	FirePersonalOccurrenceSource::OriginalConstructNativeDeath fire_original_death(*this);
  	if (BoundDestructibles::IsBlocked(this)) {
  		return false;
  	}
-@@ -3126,6 +3137,7 @@
+@@ -3126,6 +3139,8 @@
  		killer_mob->SetTarget(nullptr);
  	}
  
 +	fire_original_death.SealSuccess(*this, entity_id);
++	fire_mission_material_death.SealActualSuccess(*this, entity_id);
  	return true;
  }
  
-@@ -7116,3 +7128,292 @@
+@@ -7116,3 +7131,292 @@
  {
  	return 0; // not implemented
  }
@@ -1062,7 +1065,22 @@
 +} // namespace FirePersonalOccurrenceSource
 --- a/zone/client.cpp
 +++ b/zone/client.cpp
-@@ -1,3 +1,14 @@
+@@ -1,3 +1,29 @@
++#include "fire_run_action_scene.h"
++#include "fire_material_loot_source.h"
++#include "fire_run_item_origin.h"
++#include "fire_run_action_geometry.h"
++#include "fire_run_helper_profile.h"
++#include "doors.h"
++#include "corpse.h"
++#include "common/fire_shared_activity_origin.h"
++#include "worldserver.h"
++#include "task_manager.h"
++#include "map.h"
++#include "pathfinder_interface.h"
++#include "mob_movement_manager.h"
++#include "zonedump.h"
++#include <set>
 +#include "fire_shared_transform_use.h"
 +#include "fire_shared_transform_published.h"
 +#include "task_shared_reward_identity.h"
@@ -1077,7 +1095,7 @@
  /*	EQEmu: EQEmulator
  
  	Copyright (C) 2001-2026 EQEmu Development Team
-@@ -17,6 +28,11 @@
+@@ -17,6 +43,11 @@
  */
  #include "../common/mercenary/rof2_timer.h"
  #include "fire_shared_successor_native.h"
@@ -1089,7 +1107,7 @@
  
  #include "housing_guild_portal.h"
  #include "housing_actor_publication.h"
-@@ -34,6 +50,7 @@
+@@ -34,6 +65,7 @@
  #include <thread>
  
  #include "client.h"
@@ -1097,7 +1115,7 @@
  
  #include "common/data_bucket.h"
  #include "common/data_verification.h"
-@@ -754,6 +771,7 @@
+@@ -754,6 +786,7 @@
  }
  
  Client::~Client() {
@@ -1105,7 +1123,7 @@
   Housing::GuildPortalRuntime::Forget(*this);
  	struct PublicationCleanup {Client& client;~PublicationCleanup(){Housing::ActorPublication::Forget(client);}} publication_cleanup{*this};
  	// First lifecycle action: no quests, save, stream release or inventory
-@@ -1710,6 +1728,7 @@
+@@ -1710,6 +1743,7 @@
  			sender = GetPet();
  		}
  
@@ -1113,7 +1131,7 @@
  		if (!is_silent) {
  			entity_list.ChannelMessage(sender, chan_num, language, lang_skill, message);
  		}
-@@ -8962,7 +8981,7 @@
+@@ -8962,7 +8996,7 @@
  void Client::TryItemTimer(int slot)
  {
  	EQ::ItemInstance* inst = m_inv.GetItem(slot);
@@ -1122,7 +1140,7 @@
  		return;
  	}
  
-@@ -8984,14 +9003,14 @@
+@@ -8984,14 +9018,14 @@
  	for (int x = EQ::invaug::SOCKET_BEGIN; x <= EQ::invaug::SOCKET_END; ++x)
  	{
  		EQ::ItemInstance * a_inst = inst->GetAugment(x);
@@ -1140,7 +1158,7 @@
  				if (parse->ItemHasQuestSub(a_inst, EVENT_TIMER)) {
  					parse->EventItem(EVENT_TIMER, this, a_inst, nullptr, it_iter->first, 0);
  				}
-@@ -13667,3 +13686,448 @@
+@@ -13667,3 +13701,1224 @@
  
  	return task_state->UncompleteTask(task_id);
  }
@@ -1589,18 +1607,795 @@
 + // state, not a private physical-origin/save receipt or replay authority.
 +}
 +} // namespace FireSharedTransformSource
++
++namespace FireRunActionSource {
++namespace {
++constexpr uint32_t MissionTask=920170;
++// Native accessor is nonconst but implemented as map::find only; keep this
++// compatibility read local rather than changing the common ItemInstance API.
++std::string ReadRunOriginSeal(const EQ::ItemInstance& item){return const_cast<EQ::ItemInstance&>(item).GetCustomData(RunOriginSealKey);}
++std::optional<uint64_t> RunNumber(const char* p) {
++ if(!p || !*p)return {};uint64_t n=0;const auto end=p+std::strlen(p);
++ const auto r=std::from_chars(p,end,n);if(r.ec!=std::errc{} || r.ptr!=end)return {};return n;
++}
++bool Inside(const glm::vec3& p,const glm::vec3& lo,const glm::vec3& hi) {
++ return std::isfinite(p.x)&&std::isfinite(p.y)&&std::isfinite(p.z)&&
++  p.x>=lo.x&&p.y>=lo.y&&p.z>=lo.z&&p.x<=hi.x&&p.y<=hi.y&&p.z<=hi.z;
++}
++const GateBinding* GateFor(Doors& d) {
++ if(!zone || zone->GetZoneID()!=490)return nullptr;
++ for(const auto& b:BoundGates())
++  if(b.version==zone->GetInstanceVersion() && d.GetDoorDBID()==b.database_id &&
++   d.GetDoorID()==b.native_id && (b.version?zone->GetInstanceID()!=0:zone->GetInstanceID()==0))return &b;
++ return nullptr;
++}
++const GateBinding* GateForRole(GateRole role) {
++ for(const auto& b:BoundGates())if(b.role==role)return &b;return nullptr;
++}
++bool GateProfile(Doors& d,const GateBinding& b) {
++ const auto p=d.GetPosition();const auto q=b.pose;
++ return d.GetDoorDBID()==b.database_id && d.GetDoorID()==b.native_id &&
++  d.GetDoorName() && std::strcmp(d.GetDoorName(),"OBJ_DOOR_BRELLS")==0 &&
++  std::abs(p.x-q.x)<=0.02f&&std::abs(p.y-q.y)<=0.02f&&std::abs(p.z-q.z)<=0.02f&&std::abs(p.w-q.w)<=0.02f&&
++  d.GetOpenType()==77&&d.GetSize()==b.size&&d.GetLockpick()==b.lockpick&&d.GetKeyItem()==b.key&&
++  d.GetNoKeyring()==b.nokeyring&&d.GetDisableTimer()==b.disable_timer&&d.GetIncline()==0&&
++  d.GetInvertState()==0&&!d.IsLDoNDoor()&&d.GetDzSwitchID()==0&&d.GetGuildID()==0&&
++  d.GetTriggerDoorID()==0&&d.GetTriggerType()==0&&d.GetDestinationZoneName()=="NONE"&&d.GetDestinationInstanceID()==0;
++}
++bool NativeClickRange(Client& c,Doors& d) {
++ const auto p=c.GetPosition(),q=d.GetPosition();const double dx=double(p.x)-q.x,dy=double(p.y)-q.y;
++ const int r=RuleI(Range,MaxDistanceToClickDoors);
++ return r>0&&std::isfinite(dx)&&std::isfinite(dy)&&dx*dx+dy*dy<double(r)*r;
++}
++bool SameRun(const MissionRunFacts& a,const MissionRunFacts& b) {
++ return a.run==b.run&&a.local_occurrence==b.local_occurrence&&a.character==b.character&&
++  a.accepted_time==b.accepted_time&&a.zone==b.zone&&a.version==b.version&&
++  a.instance==b.instance&&a.dynamic_zone==b.dynamic_zone;
++}
++// Current native accepted context only. Never an item, death, open or cast proof.
++std::optional<MissionRunFacts> CaptureRun(Client& c,int goal,bool allow_completed) {
++ if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID()||
++  !c.ClientDataLoaded()||!c.HasTaskState()||!c.GetTaskState()||c.GetSharedTaskId()<=0)return {};
++ const auto* catalog=TaskManager::Instance()->GetTaskData(MissionTask);
++ if(!catalog||catalog->type!=TaskType::Shared||catalog->activity_count!=19)return {};
++ const auto& task=c.GetTaskState()->GetActiveSharedTask();
++ if(task.task_id!=int(MissionTask)||task.accepted_time<=0||task.was_rewarded)return {};
++ if(goal>=0 && (task.activity[goal].activity_state!=ActivityActive &&
++  (!allow_completed||task.activity[goal].activity_state!=ActivityCompleted)))return {};
++ auto q=database.QueryDatabase(fmt::format(
++  "SELECT s.id,h.occurrence_id,d.id FROM shared_task_members m JOIN shared_tasks s ON s.id=m.shared_task_id "
++  "JOIN character_shared_task_reward_instances h ON h.character_id=m.character_id AND h.shared_task_id=s.id AND h.task_id=s.task_id "
++  "JOIN character_task_reward_instances r ON r.character_id=h.character_id AND r.task_id=h.task_id AND r.occurrence_id=h.occurrence_id "
++  "JOIN shared_task_dynamic_zones link ON link.shared_task_id=s.id JOIN dynamic_zones d ON d.id=link.dynamic_zone_id "
++  "JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=d.id AND dm.character_id=m.character_id "
++  "JOIN instance_list i ON i.id=d.instance_id JOIN instance_list_player ip ON ip.id=i.id AND ip.charid=m.character_id "
++  "WHERE m.character_id={} AND s.id={} AND s.task_id={} AND UNIX_TIMESTAMP(s.accepted_time)={} "
++  "AND r.accepted_time={} AND s.completion_time IS NULL AND (s.expire_time IS NULL OR s.expire_time>NOW()) "
++  "AND d.instance_id={} AND d.type={} AND i.zone=490 AND i.version=1 "
++  "AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP()) "
++  "AND (SELECT COUNT(*) FROM shared_task_dynamic_zones WHERE shared_task_id=s.id)=1",
++  c.CharacterID(),uint64_t(c.GetSharedTaskId()),MissionTask,task.accepted_time,task.accepted_time,
++  zone->GetInstanceID(),int(DynamicZoneType::Mission)),false);
++ if(!q.Success()||q.RowCount()!=1)return {};
++ const auto run=RunNumber(q.begin()[0]),occ=RunNumber(q.begin()[1]),dz=RunNumber(q.begin()[2]);
++ if(!run||!*run||!occ||!*occ||!dz||!*dz||*dz>UINT32_MAX)return {};
++ if(goal>=0) {
++  if(catalog->activity_information[goal].goal_count!=1)return {};
++  auto activity=database.QueryDatabase(fmt::format("SELECT done_count,UNIX_TIMESTAMP(completed_time) "
++   "FROM shared_task_activity_state WHERE shared_task_id={} AND activity_id={}",*run,goal),false);
++  if(!activity.Success()||activity.RowCount()!=1)return {};
++  const auto done=RunNumber(activity.begin()[0]),completed=RunNumber(activity.begin()[1]);
++  const bool local_done=task.activity[goal].activity_state==ActivityCompleted;
++  if(!done||*done!=(local_done?1:0)||task.activity[goal].done_count!=int(*done)||
++   (local_done?(!completed||!*completed):(completed&&*completed)))return {};
++ }
++ return MissionRunFacts{*run,*occ,c.CharacterID(),uint32_t(task.accepted_time),490,1,zone->GetInstanceID(),uint32_t(*dz)};
++}
++bool RunStillActual(const MissionRunFacts& r) {
++ if(!zone||zone->GetZoneID()!=r.zone||zone->GetInstanceVersion()!=r.version||zone->GetInstanceID()!=r.instance)return false;
++ auto q=database.QueryDatabase(fmt::format(
++  "SELECT 1 FROM shared_tasks s JOIN shared_task_dynamic_zones l ON l.shared_task_id=s.id "
++  "JOIN dynamic_zones d ON d.id=l.dynamic_zone_id JOIN instance_list i ON i.id=d.instance_id "
++  "WHERE s.id={} AND s.task_id=920170 AND UNIX_TIMESTAMP(s.accepted_time)={} "
++  "AND s.completion_time IS NULL AND (s.expire_time IS NULL OR s.expire_time>NOW()) "
++  "AND d.id={} AND d.instance_id={} AND i.zone=490 AND i.version=1 "
++  "AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP())",r.run,r.accepted_time,r.dynamic_zone,r.instance),false);
++ return q.Success()&&q.RowCount()==1;
++}
++bool CarriedSlot(Client& c,int16_t slot) {
++ int16_t root=slot;
++ if(EQ::ValueWithin(slot,EQ::invbag::GENERAL_BAGS_BEGIN,EQ::invbag::GENERAL_BAGS_END))root=EQ::InventoryProfile::CalcSlotId(slot);
++ return slot==EQ::invslot::slotCursor || (EQ::ValueWithin(root,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END)&&
++  c.GetInv().GetLookup()&&((uint64_t(1)<<root)&c.GetInv().GetLookup()->PossessionsBitmask));
++}
++std::unique_ptr<ServerPacket> ProgressPacket(const MissionRunFacts& run,int goal) {
++ auto p=std::make_unique<ServerPacket>(ServerOP_SharedTaskUpdate,
++  sizeof(ServerSharedTaskActivityUpdate_Struct)+sizeof(FireSharedActivityOrigin::Trailer));
++ auto* a=reinterpret_cast<ServerSharedTaskActivityUpdate_Struct*>(p->pBuffer);
++ a->source_character_id=run.character;a->task_id=MissionTask;a->activity_id=goal;a->done_count=1;a->ignore_quest_update=false;
++ FireSharedActivityOrigin::Write(p->pBuffer,run.run);return p;
++}
++}
++// Closed feature witness, reusing actual Client/Zone private owners. A fresh
++// ID/address match alone never survives destructor/replacement callbacks.
++class RunUseWitness final {
++ friend class NativeRunDoorSource;
++ friend class PublishedRunActionSink;
++ friend class NativeRunHelperSource;
++ friend class PreparedRunDoorPlan;
++ friend class PreparedRunHelperPlan;
++ friend class OriginalMissionMaterialDeath;
++ friend class NativeRunLootSource;
++ std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Lifetime> zone_;
++ std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> client_,npc_;
++ std::shared_ptr<RunDoorLifetime> door_;
++ std::shared_ptr<RunCorpseLifetime> corpse_;
++ Client* original_client_=nullptr;Doors* original_door_=nullptr;Corpse* original_corpse_=nullptr;
++ uint32_t character_=0,client_entity_=0;uint8_t native_door_=0;
++ static std::shared_ptr<RunUseWitness> Capture(Client* c,Doors* d,Corpse* corpse) {
++  auto w=std::shared_ptr<RunUseWitness>(new RunUseWitness);
++  w->zone_=FirePersonalOccurrenceSource::OriginalConstructDeathQueue::ForActualZone(zone);
++  if(c) {
++   if(!c->m_fire_gotonur_say_lifetime)c->m_fire_gotonur_say_lifetime=
++    std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime>(new FirePersonalOccurrenceSource::OriginalGotonurSayLifetime);
++   w->client_=c->m_fire_gotonur_say_lifetime;w->original_client_=c;w->character_=c->CharacterID();w->client_entity_=c->GetID();
++  }
++  if(d) {
++   if(!d->m_fire_run_action_lifetime)d->m_fire_run_action_lifetime=std::shared_ptr<RunDoorLifetime>(new RunDoorLifetime);
++   w->door_=d->m_fire_run_action_lifetime;w->original_door_=d;w->native_door_=d->GetDoorID();
++  }
++  if(corpse) {
++   if(!corpse->m_fire_run_action_lifetime)corpse->m_fire_run_action_lifetime=std::shared_ptr<RunCorpseLifetime>(new RunCorpseLifetime);
++   w->corpse_=corpse->m_fire_run_action_lifetime;w->original_corpse_=corpse;
++  }
++  return w;
++ }
++ static std::shared_ptr<RunUseWitness> CaptureNPCScene(NPC& npc) {
++  auto w=Capture(nullptr,nullptr,nullptr);
++  if(!npc.m_fire_gotonur_say_lifetime)npc.m_fire_gotonur_say_lifetime=
++   std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime>(new FirePersonalOccurrenceSource::OriginalGotonurSayLifetime);
++  w->npc_=npc.m_fire_gotonur_say_lifetime;return w;
++ }
++ bool NPCStillAlive()const{return ZoneAlive()&&npc_&&npc_->active_;}
++ bool ZoneAlive()const{return zone_&&zone_->active&&zone&&zone_->owner==zone;}
++ Client* LiveClient()const {
++  if(!ZoneAlive()||!client_||!client_->active_)return nullptr;
++  auto* c=entity_list.GetClientByCharID(character_);
++  return c&&c==original_client_&&c->GetID()==client_entity_&&c->m_fire_gotonur_say_lifetime==client_?c:nullptr;
++ }
++ Doors* LiveDoor()const {
++  if(!ZoneAlive()||!door_||!door_->active_)return nullptr;
++  auto* d=entity_list.FindDoor(native_door_);
++  return d&&d==original_door_&&d->m_fire_run_action_lifetime==door_?d:nullptr;
++ }
++ Corpse* LiveCorpse(uint32_t actual_registered_entity)const {
++  if(!ZoneAlive()||!corpse_||!corpse_->active_||!actual_registered_entity)return nullptr;
++  auto* p=entity_list.GetCorpseByID(actual_registered_entity);
++  return p&&p==original_corpse_&&p->m_fire_run_action_lifetime==corpse_?p:nullptr;
++ }
++};
++struct NativeRunPublication::State {
++ NativeRunPublicationFacts actual;
++ std::shared_ptr<RunUseWitness> owner;
++ std::shared_ptr<RunHelperAttempt> helper;
++};
++NativeRunPublication::NativeRunPublication(std::unique_ptr<State> state)noexcept
++ :facts_(state->actual),state_(std::move(state)){}
++NativeRunPublication::~NativeRunPublication()=default;
++} // namespace FireRunActionSource
++
++namespace FireRunActionSource {
++namespace {
++struct MaterialSceneRun {uint64_t run=0;uint32_t accepted=0,dynamic_zone=0,instance=0;};
++std::optional<MaterialSceneRun> CaptureMaterialSceneRun() {
++ if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID())return {};
++ auto q=database.QueryDatabase(fmt::format(
++  "SELECT s.id,UNIX_TIMESTAMP(s.accepted_time),d.id FROM shared_tasks s "
++  "JOIN shared_task_dynamic_zones l ON l.shared_task_id=s.id JOIN dynamic_zones d ON d.id=l.dynamic_zone_id "
++  "JOIN instance_list i ON i.id=d.instance_id WHERE s.task_id=920170 AND d.instance_id={} "
++  "AND d.type={} AND i.zone=490 AND i.version=1 AND s.completion_time IS NULL "
++  "AND (s.expire_time IS NULL OR s.expire_time>NOW()) AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP()) "
++  "AND (SELECT COUNT(*) FROM shared_task_dynamic_zones WHERE shared_task_id=s.id)=1",
++  zone->GetInstanceID(),int(DynamicZoneType::Mission)),false);
++ if(!q.Success()||q.RowCount()!=1)return {};
++ const auto r=RunNumber(q.begin()[0]),a=RunNumber(q.begin()[1]),d=RunNumber(q.begin()[2]);
++ if(!r||!*r||!a||!*a||*a>UINT32_MAX||!d||!*d||*d>UINT32_MAX)return {};
++ return MaterialSceneRun{*r,uint32_t(*a),uint32_t(*d),zone->GetInstanceID()};
++}
++const MaterialSpawnBinding* MaterialSpawn(uint32_t spawn,uint32_t npc) {
++ for(const auto& b:BoundMaterialSpawns())if(b.spawn==spawn&&b.npc==npc)return &b;return nullptr;
++}
++}
++class MissionMaterialCorpseOrigin final {
++ friend class OriginalMissionMaterialDeath;
++ friend class NativeRunLootSource;
++ MaterialSceneRun scene_;
++ MaterialSpawnBinding original_{};
++ uint64_t death_sequence_=0;
++ uint32_t original_npc_entity_=0,corpse_entity_=0;
++ NPC* original_npc_=nullptr;
++ std::shared_ptr<RunUseWitness> corpse_witness_;
++ bool registered_=false,death_succeeded_=false;
++ std::set<uint16_t> claimed_loot_slots_;
++};
++struct OriginalMissionMaterialDeath::State {
++ NPC* original=nullptr;uint32_t native_entity=0;
++ MaterialSceneRun scene;MaterialSpawnBinding binding{};uint64_t sequence=0;
++ std::shared_ptr<RunUseWitness> actor_witness;
++ std::shared_ptr<MissionMaterialCorpseOrigin> corpse;
++};
++thread_local OriginalMissionMaterialDeath* OriginalMissionMaterialDeath::current_=nullptr;
++OriginalMissionMaterialDeath::OriginalMissionMaterialDeath(NPC& npc)noexcept:previous_(current_) {
++ current_=this;
++ try {
++  const auto* b=MaterialSpawn(npc.GetSpawnPointID(),npc.GetNPCTypeID());
++  if(!b)return;const auto scene=CaptureMaterialSceneRun();if(!scene)return;
++  static uint64_t actual_death_sequence=0;if(actual_death_sequence==UINT64_MAX)return;
++  state_=std::make_shared<State>();state_->original=&npc;state_->native_entity=npc.GetID();
++  state_->scene=*scene;state_->binding=*b;state_->sequence=++actual_death_sequence;
++  state_->actor_witness=RunUseWitness::CaptureNPCScene(npc);
++ }catch(...) {state_.reset();}
++}
++OriginalMissionMaterialDeath::~OriginalMissionMaterialDeath(){current_=previous_;}
++void OriginalMissionMaterialDeath::CaptureActualCorpse(Corpse& corpse,NPC& npc) {
++ auto* f=current_;
++ if(!f||!f->state_||f->state_->original!=&npc||f->state_->corpse||!f->state_->actor_witness->NPCStillAlive()||!corpse.IsNPCCorpse()||
++  corpse.GetNPCTypeID()!=f->state_->binding.npc)return;
++ try {
++  auto o=std::make_shared<MissionMaterialCorpseOrigin>();
++  o->scene_=f->state_->scene;o->original_=f->state_->binding;o->death_sequence_=f->state_->sequence;
++  o->original_npc_=&npc;o->original_npc_entity_=f->state_->native_entity;
++  o->corpse_witness_=RunUseWitness::Capture(nullptr,nullptr,&corpse);
++  corpse.m_fire_material_origin=o;f->state_->corpse=std::move(o);
++ }catch(...) {return;}
++}
++void OriginalMissionMaterialDeath::ObserveActualCorpseRegistered(Corpse& corpse) {
++ const auto o=corpse.m_fire_material_origin;
++ if(!o||o->registered_||!current_||!current_->state_||current_->state_->corpse!=o||
++  !corpse.GetID()||o->corpse_witness_->LiveCorpse(corpse.GetID())!=&corpse)return;
++ o->corpse_entity_=corpse.GetID();o->registered_=true;
++}
++void OriginalMissionMaterialDeath::SealActualSuccess(NPC& npc,uint32_t actual_killed_entity) {
++ if(!state_||state_->original!=&npc||state_->native_entity!=actual_killed_entity||
++  !state_->actor_witness->NPCStillAlive()||!state_->corpse||!state_->corpse->registered_||!state_->corpse->corpse_witness_->LiveCorpse(state_->corpse->corpse_entity_))return;
++ state_->corpse->death_succeeded_=true; // retained record only; never dereference departed corpse
++}
++struct OriginalRunLootUse::State {
++ std::shared_ptr<MissionMaterialCorpseOrigin> origin;
++ std::shared_ptr<RunUseWitness> client_and_corpse;
++};
++OriginalRunLootUse::OriginalRunLootUse(RunLootFacts f,std::shared_ptr<State> s)
++ :facts_(f),state_(std::move(s)){}
++OriginalRunLootUse::~OriginalRunLootUse()=default;
++struct NativeRunLootPublication::State {
++ RunLootFacts original;
++ std::shared_ptr<OriginalRunLootUse::State> use;
++};
++NativeRunLootPublication::NativeRunLootPublication(std::unique_ptr<PreparedRunLootSeal> seal,std::unique_ptr<State> s)noexcept
++ :facts_(s->original),seal_(std::move(seal)),state_(std::move(s)){}
++NativeRunLootPublication::~NativeRunLootPublication()=default;
++struct NativeRunLootSource::State {
++ Client* owner=nullptr;Corpse* corpse=nullptr;
++ std::shared_ptr<MissionMaterialCorpseOrigin> origin;
++ std::shared_ptr<RunUseWitness> witness;
++ std::unique_ptr<OriginalRunLootUse> use;
++ RunLootFacts original{};
++ std::unique_ptr<PreparedRunLootSeal> pending;
++ std::unique_ptr<NativeRunLootPublication::State> publication;
++ bool selected=false,armed=false,save_observed=false,saved=false,removal_seen=false;
++};
++thread_local NativeRunLootSource* NativeRunLootSource::current_=nullptr;
++NativeRunLootSource::NativeRunLootSource(Client& c,Corpse& corpse)noexcept:previous_(current_) {
++ current_=this;
++ try {
++  if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID()||!corpse.IsNPCCorpse())return;
++  bool tracked=false;for(const auto& b:BoundMaterialSpawns())if(b.npc==corpse.GetNPCTypeID())tracked=true;
++  if(!tracked)return;
++  scene_candidate_=true;source_npc_type_=corpse.GetNPCTypeID();
++  state_=std::make_shared<State>();state_->selected=true;state_->owner=&c;state_->corpse=&corpse;
++  state_->origin=corpse.m_fire_material_origin;
++  state_->witness=RunUseWitness::Capture(&c,nullptr,&corpse);
++ }catch(...) {state_.reset();}
++}
++NativeRunLootSource::~NativeRunLootSource(){current_=previous_;}
++bool NativeRunLootSource::PrepareActualItem(EQ::ItemInstance& item,uint16_t actual_slot) {
++ if(!scene_candidate_)return true;
++ // Other loot remains ordinary. A tracked material never falls back to a
++ // tokenless item/goal lookup when the actual death/corpse lineage is absent.
++ bool tracked=false;
++ for(const auto& b:BoundMaterialSpawns())if(b.npc==source_npc_type_&&b.item==item.GetID())tracked=true;
++ if(!tracked)return true;
++ if(!state_)return false;auto& s=*state_;const auto o=s.origin;
++ try {
++  if(!o||!o->registered_||!o->death_succeeded_||s.armed||!item.GetSerialNumber()||!item.GetItem()||!item.GetItem()->IsClassCommon()||
++   item.GetItem()->ItemType!=11||item.IsStackable()||
++   !s.witness->LiveClient()||s.witness->LiveCorpse(o->corpse_entity_)!=s.corpse||
++   o->original_.item!=item.GetID()||o->claimed_loot_slots_.count(actual_slot))return false;
++  auto* actual=s.corpse->GetItem(actual_slot);
++  if(!actual||actual->item_id!=item.GetID())return false;
++  auto run=CaptureRun(*s.owner,o->original_.activity,true);
++  if(!run||run->run!=o->scene_.run||run->accepted_time!=o->scene_.accepted||
++   run->dynamic_zone!=o->scene_.dynamic_zone||run->instance!=o->scene_.instance)return false;
++  o->claimed_loot_slots_.insert(actual_slot); // this SAME actual corpse slot gets one attempt, no unknown retry
++  auto u=std::make_shared<OriginalRunLootUse::State>();u->origin=o;u->client_and_corpse=s.witness;
++  static uint64_t actual_loot_sequence=0;if(actual_loot_sequence==UINT64_MAX)return false;
++  RunLootFacts f{*run,++actual_loot_sequence,o->death_sequence_,o->original_.npc,o->original_.spawn,o->corpse_entity_,
++   actual_slot,item.GetID(),item.GetSerialNumber(),item.GetCharges()};
++  s.original=f;
++  s.use=std::unique_ptr<OriginalRunLootUse>(new OriginalRunLootUse(f,u));
++  s.publication=std::make_unique<NativeRunLootPublication::State>();s.publication->original=f;s.publication->use=u;
++  s.pending=NativeRunItemOrigins::SealOriginalLoot(std::move(s.use),item);
++  if(!s.pending||s.pending->Token().empty()||ReadRunOriginSeal(item)!=s.pending->Token())return false;
++  s.armed=true;return true;
++ }catch(...) {return false;}
++}
++void NativeRunLootSource::ObserveActualInventorySave(Client& c,const EQ::ItemInstance& item,
++ int16_t slot,bool same_existing_save_result) {
++ auto* f=current_;if(!f||!f->state_)return;auto& s=*f->state_;
++ if(!s.armed||s.save_observed||s.owner!=&c||!s.pending||(item.GetID()!=s.original.item_id||item.GetSerialNumber()!=s.original.native_item_serial||ReadRunOriginSeal(item)!=s.pending->Token()))return;
++ s.save_observed=true;
++ if(!same_existing_save_result||s.witness->LiveClient()!=&c)return;
++ bool live_match=false;
++ if(slot==EQ::invslot::slotCursor) {
++  for(auto i=c.GetInv().cursor_cbegin();i!=c.GetInv().cursor_cend();++i)
++   if(*i&&(*i)->GetID()==s.original.item_id&&(*i)->GetSerialNumber()==s.original.native_item_serial&&ReadRunOriginSeal(**i)==s.pending->Token())live_match=true;
++ }else {const auto* actual=c.GetInv().GetItem(slot);live_match=actual&&actual->GetID()==s.original.item_id&&actual->GetSerialNumber()==s.original.native_item_serial&&ReadRunOriginSeal(*actual)==s.pending->Token();}
++ s.saved=live_match;
++ if(live_match){s.original.saved_slot=slot;s.publication->original.saved_slot=slot;}
++}
++void NativeRunLootSource::ObserveActualRemoval(Corpse& actual,uint16_t actual_removed_slot) {
++ if(!state_)return;auto& s=*state_;
++ if(!s.armed||s.removal_seen||!s.saved||!s.origin||s.original.source_loot_slot!=actual_removed_slot)return;
++ s.removal_seen=true;
++ if(s.witness->LiveCorpse(s.origin->corpse_entity_)!=&actual||actual.GetItem(actual_removed_slot))return;
++ // Positive proof is minted only from the SAME original successful inventory
++ // save plus actual corpse removal. Item ID/task history never calls this.
++ NativeRunLootPublication proof(std::move(s.pending),std::move(s.publication));
++ NativeRunItemOrigins::PublishOriginalLoot(proof);
++ // Core only persists typed provenance here. No grant, save, task increment or retry.
++}
++} // namespace FireRunActionSource
++
++namespace FireRunActionSource {
++namespace {
++RunActionKind KindFor(GateRole role) {
++ switch(role) {
++ case GateRole::InnerVault:return RunActionKind::InnerVault;
++ case GateRole::WorshipLeft:case GateRole::WorshipRight:return RunActionKind::WorshipPair;
++ case GateRole::GuardianVault:return RunActionKind::GuardianVaultKey;
++ case GateRole::KeymasterGarden:case GateRole::KeymasterPool:return RunActionKind::HelperActivation;
++ default:return RunActionKind::WorldFontKey;
++ }
++}
++int ObjectiveFor(RunActionKind kind) {
++ switch(kind){case RunActionKind::InnerVault:return 3;case RunActionKind::WorshipPair:return 7;
++ case RunActionKind::GuardianVaultKey:return 15;case RunActionKind::HelperActivation:return 14;default:return -1;}
++}
++std::unique_ptr<EQApplicationPacket> OpenPacket(uint8_t native_id) {
++ auto p=std::make_unique<EQApplicationPacket>(OP_MoveDoor,sizeof(MoveDoor_Struct));
++ auto* d=reinterpret_cast<MoveDoor_Struct*>(p->pBuffer);d->doorid=native_id;d->action=OPEN_DOOR;return p;
++}
++}
++struct OriginalDoorUse::State {std::shared_ptr<RunUseWitness> witness;const GateBinding* gate=nullptr;};
++OriginalDoorUse::OriginalDoorUse(DoorUseFacts f,std::shared_ptr<State> s):facts_(f),state_(std::move(s)){}
++OriginalDoorUse::~OriginalDoorUse()=default;
++struct PreparedRunDoorPlan::State {
++ const OriginalDoorUse* original=nullptr;
++ std::shared_ptr<RunUseWitness> witness;
++ const GateBinding* gate=nullptr;
++ std::unique_ptr<EQApplicationPacket> open;
++ std::unique_ptr<ServerPacket> progress;
++ std::unique_ptr<NativeRunPublication::State> native_publication;
++ bool submitted=false;
++};
++PreparedRunDoorPlan::PreparedRunDoorPlan(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
++PreparedRunDoorPlan::~PreparedRunDoorPlan()=default;
++bool NativeRunDoorSource::RevalidateOriginalUse(Client& c,const OriginalDoorUse& use) {
++ if(!use.state_||!use.state_->witness||use.state_->witness->LiveClient()!=&c)return false;
++ auto* door=use.state_->witness->LiveDoor();const auto* b=use.state_->gate;
++ const auto& f=use.facts_;
++ if(!door||!b||!GateProfile(*door,*b)||!NativeClickRange(c,*door)||
++  f.character!=c.CharacterID()||f.client_entity!=c.GetID()||!zone||f.zone!=zone->GetZoneID()||
++  f.version!=zone->GetInstanceVersion()||f.instance!=zone->GetInstanceID())return false;
++ if(f.mission) {
++  const auto run=CaptureRun(c,ObjectiveFor(f.kind),true);
++  if(!run||!SameRun(*run,*f.mission)||!Inside(glm::vec3(c.GetPosition()),b->low,b->high))return false;
++ }else if(f.kind!=RunActionKind::WorldFontKey||f.role!=GateRole::WorldFont)return false;
++ for(size_t i=0;i<f.physical_count;++i) {
++  const auto& p=f.physical_items[i];const auto* item=c.GetInv().GetItem(p.slot);
++  if(!item||!CarriedSlot(c,p.slot)||item->GetID()!=p.item_id||item->GetSerialNumber()!=p.serial||
++   item->GetCharges()!=p.charges)return false;
++  if(f.mission&&!NativeRunItemOrigins::HasActualPublishedOrigin(c,*item,p.slot,*f.mission))return false;
++ }
++ return true;
++}
++bool NativeRunDoorSource::HandleOriginalPacket(Client& c,Doors& door,uint8_t actual_packet_door) {
++ const auto* b=GateFor(door);if(!b)return false;
++ // ALL selected rejects return from the native packet. Generic lockpick,
++ // keyring and far client-controlled-door paths cannot substitute for this use.
++ try {
++  if(actual_packet_door!=b->native_id||!GateProfile(door,*b)||!NativeClickRange(c,door))return true;
++  static uint64_t native_sequence=0;if(native_sequence==UINT64_MAX)return true;
++  DoorUseFacts f;f.kind=KindFor(b->role);f.role=b->role;f.native_sequence=++native_sequence;
++  f.character=c.CharacterID();f.client_entity=c.GetID();f.zone=490;f.version=b->version;
++  f.instance=zone->GetInstanceID();f.door_database_id=b->database_id;f.native_door_id=b->native_id;
++  if(b->role!=GateRole::WorldFont) {
++   f.mission=CaptureRun(c,ObjectiveFor(f.kind),true);
++   if(!f.mission||!Inside(glm::vec3(c.GetPosition()),b->low,b->high))return true;
++  }
++  switch(f.kind) {
++  case RunActionKind::InnerVault:f.required_item_ids={{47748,47749,47750}};f.required_count=3;break;
++  case RunActionKind::WorshipPair:f.required_item_ids[0]=47762;f.required_count=1;break;
++  case RunActionKind::GuardianVaultKey:f.required_item_ids[0]=47757;f.required_count=1;break;
++  case RunActionKind::WorldFontKey:f.required_item_ids[0]=47759;f.required_count=1;break;
++  case RunActionKind::HelperActivation:break; // door event is published CHOSEN barrier only; never a new helper/debit
++  }
++  for(size_t i=0;i<f.required_count;++i) {
++   for(const auto slot:c.GetInventorySlots()) {
++    if(!CarriedSlot(c,slot))continue;const auto* item=c.GetInv().GetItem(slot);
++    if(!item||item->GetID()!=f.required_item_ids[i]||!item->GetSerialNumber()||item->IsStackable()||
++     !item->GetItem()||!item->GetItem()->IsClassCommon())continue;
++    if(f.mission&&!NativeRunItemOrigins::HasActualPublishedOrigin(c,*item,slot,*f.mission))continue;
++    f.physical_items[f.physical_count++]={item->GetID(),item->GetSerialNumber(),slot,item->GetCharges(),1};break;
++   }
++  }
++  if(f.kind==RunActionKind::WorldFontKey&&f.physical_count!=1)return true;
++  auto s=std::make_shared<OriginalDoorUse::State>();s->witness=RunUseWitness::Capture(&c,&door,nullptr);s->gate=b;
++  auto original=std::unique_ptr<OriginalDoorUse>(new OriginalDoorUse(f,s));
++  auto plan=PreparedRunDoorPlan::PrepareActual(c,*original);if(!plan)return true;
++  NativeRunActionCustody::ExecuteOriginalDoor(c,std::move(original),std::move(plan));
++  return true; // stack result only after mutable final sink; no Client/Door dereference
++ }catch(...) {return true;}
++}
++std::unique_ptr<PreparedRunDoorPlan> PreparedRunDoorPlan::PrepareActual(Client& c,const OriginalDoorUse& use) {
++ if(!NativeRunDoorSource::RevalidateOriginalUse(c,use))return {};
++ auto s=std::make_unique<State>();s->original=&use;s->witness=use.state_->witness;s->gate=use.state_->gate;
++ s->open=OpenPacket(use.facts_.native_door_id);
++ s->native_publication=std::make_unique<NativeRunPublication::State>();s->native_publication->owner=s->witness;
++ if(use.facts_.mission&&(use.facts_.kind==RunActionKind::InnerVault||use.facts_.kind==RunActionKind::WorshipPair))
++  s->progress=ProgressPacket(*use.facts_.mission,ObjectiveFor(use.facts_.kind));
++ return std::unique_ptr<PreparedRunDoorPlan>(new PreparedRunDoorPlan(std::move(s)));
++}
++bool PreparedRunDoorPlan::RevalidateBeforePersist(Client& c)const {
++ return state_&&state_->original&&!state_->submitted&&NativeRunDoorSource::RevalidateOriginalUse(c,*state_->original);
++}
++bool NativeRunDoorSource::AuthorizeActualHandle(Client*,Doors& d,uint8_t) {
++ return GateFor(d)==nullptr; // selected task/key gates open only through actual owned publication below
++}
++void NativeRunDoorSource::ObserveActualOpened(Doors&) {
++ // Generic HandleClick is intentionally never a positive source event for a
++ // selected gate. The original owned publisher sets/publishes its exact state.
++}
++void OnOriginalRunActionPublished(Client& c,PublishedRunActionReceipt& receipt) {
++ PublishedRunActionSink::Receive(c,receipt);
++}
++void PublishedRunActionSink::Receive(Client& c,PublishedRunActionReceipt& receipt) {
++ const auto published=receipt.Take(c); // FIRST: no query/allocation/callback before one-use seal
++ if(!published)return;
++ const auto v=*published;
++ if(v.helper_plan) {
++  // Actual helper transfer is defined alongside the owned movement producer.
++  NativeRunHelperSource::PublishActual(c,v);return;
++ }
++ if(!v.door_plan||!v.door_original||v.helper_original)return;
++ auto& p=*v.door_plan;auto* s=p.state_.get();const auto& use=*v.door_original;const auto& f=use.facts_;
++ if(!s||s->submitted||s->original!=&use||v.kind!=f.kind||v.native_sequence!=f.native_sequence||
++  (f.mission?(v.run_id!=f.mission->run||!v.run_action_id||v.boundary==RunActionBoundary::RetainedWorldPhysicalKey):
++   (v.run_id||v.run_action_id||v.boundary!=RunActionBoundary::RetainedWorldPhysicalKey)))return;
++ s->submitted=true;
++ auto* owner=s->witness->LiveClient();auto* door=s->witness->LiveDoor();
++ if(owner!=&c||!door||!GateProfile(*door,*s->gate)||!NativeClickRange(*owner,*door))return;
++ // Preserve original Player then Zone callback order. The plan/receipt owns
++ // copied intent; fresh private owners are required before EVERY later use.
++ int quest_return=0;
++ if(parse->PlayerHasQuestSub(EVENT_CLICK_DOOR)) {
++  std::vector<std::any> args={door};
++  quest_return=parse->EventPlayer(EVENT_CLICK_DOOR,owner,std::to_string(f.native_door_id),0,&args);
++ }
++ owner=s->witness->LiveClient();door=s->witness->LiveDoor();if(!owner||!door)return;
++ if(parse->ZoneHasQuestSub(EVENT_CLICK_DOOR)) {
++  std::vector<std::any> args={door,owner};
++  quest_return=parse->EventZone(EVENT_CLICK_DOOR,zone,std::to_string(f.native_door_id),0,&args);
++ }
++ owner=s->witness->LiveClient();door=s->witness->LiveDoor();
++ if(!owner||!door||quest_return||!GateProfile(*door,*s->gate)||!NativeClickRange(*owner,*door))return;
++ if(f.mission) {const auto run=CaptureRun(*owner,ObjectiveFor(f.kind),true);if(!run||!SameRun(*run,*f.mission))return;}
++ // Retained physical keys must STILL be the captured native instance after
++ // callbacks. Debited materials are already conserved by the committed writer.
++ if(f.kind==RunActionKind::WorldFontKey||
++  (f.kind==RunActionKind::GuardianVaultKey&&v.boundary==RunActionBoundary::CommittedFirstRunAction)) {
++  if(f.physical_count!=1)return;const auto& key=f.physical_items[0];const auto* now=owner->GetInv().GetItem(key.slot);
++  if(!now||now->GetID()!=key.item_id||now->GetSerialNumber()!=key.serial||now->GetCharges()!=key.charges)return;
++ }
++ // This is the scoped real native OP_MoveDoor publication, not ForceOpen or a
++ // caller-supplied open Boolean. Selected locked/no-keyring policy stays private.
++ const bool already_open=door->m_is_open;
++ door->m_is_open=true;
++ if(f.kind==RunActionKind::WorldFontKey) {if(!already_open)door->m_close_timer.Start(30000);}
++ else {door->m_disable_timer=true;door->m_close_timer.Disable();}
++ entity_list.QueueClients(nullptr,s->open.get(),false);
++ if(!door->m_is_open)return;
++ if(f.mission&&(v.boundary==RunActionBoundary::CommittedFirstRunAction||f.kind==RunActionKind::WorshipPair)) {
++  auto& proof=s->native_publication->actual;
++  proof={v.kind,f.role,v.run_action_id,v.run_id,v.native_sequence,f.character,490,f.instance,
++   f.door_database_id,0,f.native_door_id};
++  NativeRunPublication actual(std::move(s->native_publication));
++  if(!NativeRunActionCustody::AcknowledgeNativePublication(actual))return;
++  if(s->progress&&v.boundary==RunActionBoundary::CommittedFirstRunAction)worldserver.SendPacket(s->progress.get());
++  // One native correlated submission is not World durable-save acceptance.
++ }
++ // No Client/door/item access after the mutable original callbacks/publication.
++}
++} // namespace FireRunActionSource
++
++namespace FireRunActionSource {
++namespace {
++bool NearAnchor(const glm::vec3& p,const glm::vec3& q) {
++ const double dx=double(p.x)-q.x,dy=double(p.y)-q.y;
++ return std::isfinite(dx)&&std::isfinite(dy)&&std::isfinite(p.z)&&dx*dx+dy*dy<=25.0&&std::abs(p.z-q.z)<=6.0f;
++}
++const HelperRouteBinding* RouteAt(const glm::vec3& p) {
++ const HelperRouteBinding* found=nullptr;
++ for(const auto& r:BoundRoutes())if(Inside(p,r.low,r.high)) {
++  const auto d=p-r.anchors[0];if(glm::dot(d,d)>35.0f*35.0f)continue;
++  if(found)return nullptr;found=&r;
++ }
++ return found;
++}
++bool NativeRouteQualified(const HelperRouteBinding& r,NPC& actual) {
++ if(!zone||!zone->zonemap||!zone->pathing)return false;
++ for(const auto& p:r.anchors) {
++  glm::vec3 from=p;const auto z=zone->zonemap->FindBestZ(from,nullptr);
++  if(z==BEST_Z_INVALID||!std::isfinite(z)||std::abs((z+actual.GetZOffset())-p.z)>0.25f)return false;
++ }
++ for(size_t i=1;i<r.anchors.size();++i) {
++  bool partial=false,stuck=false;
++  const auto path=zone->pathing->FindRoute(r.anchors[i-1],r.anchors[i],partial,stuck,PathingNotDisabled&~PathingPortal);
++  if(path.empty()||partial||stuck)return false;
++  for(const auto& n:path)if(n.teleport)return false;
++ }
++ return true; // preflight is not actual walk/arrival/passage proof
++}
++}
++class RunHelperAttempt final {
++ friend class PreparedRunHelperPlan;
++ friend class NativeRunHelperSource;
++ friend class NativeRunDoorSource;
++ friend class PublishedRunActionSink;
++ enum class Step {AwaitRegistration,WalkAnchors,WalkPassage,Dust,AwaitDestruction,Held,Complete};
++ HelperUseFacts original;
++ const HelperRouteBinding* route=nullptr;
++ const GateBinding* gate=nullptr;
++ std::shared_ptr<RunUseWitness> witness,actor_lifetime;
++ NPC* original_object=nullptr;
++ uint64_t sequence=0,action_id=0;
++ uint32_t entity=0,started=0,dust_started=0;
++ Step step=Step::AwaitRegistration;
++ size_t anchor=0;
++ glm::vec3 last_walk{};double walked=0;bool expected_walk=false;
++ bool registered=false,commanded=false,stopped=false,barrier_opened=false,passage_completed=false,published=false,queued=false;
++ std::unique_ptr<EQApplicationPacket> gate_packet;
++ std::unique_ptr<ServerPacket> progress;
++ std::unique_ptr<NativeRunPublication::State> publication;
++ struct Completion {std::shared_ptr<RunHelperAttempt> actual;Completion* next=nullptr;};
++ std::unique_ptr<Completion> pending;
++ static Completion* head;
++ static Completion* tail;
++};
++RunHelperAttempt::Completion* RunHelperAttempt::head=nullptr;
++RunHelperAttempt::Completion* RunHelperAttempt::tail=nullptr;
++static thread_local RunHelperAttempt* actual_helper_registration=nullptr;
++struct OriginalHelperUse::State {std::shared_ptr<RunUseWitness> witness;const HelperRouteBinding* route=nullptr;const GateBinding* gate=nullptr;};
++OriginalHelperUse::OriginalHelperUse(HelperUseFacts f,std::shared_ptr<State> s):facts_(f),state_(std::move(s)){}
++OriginalHelperUse::~OriginalHelperUse()=default;
++struct PreparedRunHelperPlan::State {
++ const OriginalHelperUse* original=nullptr;
++ std::unique_ptr<NPCType> expected;
++ std::unique_ptr<NPC> actor;
++ std::shared_ptr<RunHelperAttempt> attempt;
++ Map* map=nullptr;IPathfinder* pathing=nullptr;
++};
++PreparedRunHelperPlan::PreparedRunHelperPlan(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
++PreparedRunHelperPlan::~PreparedRunHelperPlan()=default;
++std::unique_ptr<OriginalHelperUse> NativeRunHelperSource::CaptureActual(Client& c,const EQ::ItemInstance& item,
++ int16_t slot,bool supported,uint32_t target) {
++ if(!supported||!zone||!CarriedSlot(c,slot)||c.GetInv().GetItem(slot)!=&item||item.GetID()!=47756||
++  !item.GetSerialNumber()||!item.GetItem()||item.GetItem()->Click.Effect!=7651||item.GetItem()->Click.Type!=3||
++  item.GetItem()->MaxCharges!=1||item.GetCharges()!=1||item.IsStackable()||!item.IsExpendable())return {};
++ const auto run=CaptureRun(c,14,false);if(!run)return {};
++ const auto* route=RouteAt(glm::vec3(c.GetPosition()));if(!route)return {};
++ const auto* gate=GateForRole(route->target);if(!gate)return {};
++ auto* door=entity_list.FindDoor(gate->native_id);
++ if(!door||!GateProfile(*door,*gate)||!NativeRunItemOrigins::HasActualPublishedOrigin(c,item,slot,*run))return {};
++ const auto& task=c.GetTaskState()->GetActiveSharedTask();
++ if(task.activity[13].activity_state!=ActivityCompleted||task.activity[13].done_count!=1)return {};
++ auto s=std::make_shared<OriginalHelperUse::State>();s->witness=RunUseWitness::Capture(&c,door,nullptr);s->route=route;s->gate=gate;
++ HelperUseFacts f{*run,{item.GetID(),item.GetSerialNumber(),slot,item.GetCharges(),1},c.GetID(),target,route->target};
++ return std::unique_ptr<OriginalHelperUse>(new OriginalHelperUse(f,std::move(s)));
++}
++bool NativeRunHelperSource::RevalidateActual(Client& c,const OriginalHelperUse& use) {
++ const auto& f=use.facts_;
++ if(!use.state_||use.state_->witness->LiveClient()!=&c||f.caster_entity!=c.GetID()||f.mission.character!=c.CharacterID())return false;
++ const auto run=CaptureRun(c,14,false);if(!run||!SameRun(*run,f.mission))return false;
++ auto* door=use.state_->witness->LiveDoor();
++ if(!door||!GateProfile(*door,*use.state_->gate)||RouteAt(glm::vec3(c.GetPosition()))!=use.state_->route)return false;
++ const auto* item=c.GetInv().GetItem(f.clicked.slot);
++ return item&&item->GetID()==47756&&item->GetSerialNumber()==f.clicked.serial&&item->GetCharges()==1&&
++  item->GetItem()&&item->GetItem()->MaxCharges==1&&item->GetItem()->Click.Effect==7651&&item->GetItem()->Click.Type==3&&
++  NativeRunItemOrigins::HasActualPublishedOrigin(c,*item,f.clicked.slot,f.mission);
++}
++std::unique_ptr<PreparedRunHelperPlan> PreparedRunHelperPlan::PrepareActual(Client& c,const OriginalHelperUse& use,uint64_t sequence) {
++ if(!sequence||!NativeRunHelperSource::RevalidateActual(c,use))return {};
++ const auto* definition=content_db.LoadNPCTypesData(490913);
++ if(!definition||!FireHelperLocalSourceProfile::MatchesExpectedLoadedNPCType(*definition))return {};
++ auto s=std::make_unique<State>();s->original=&use;s->expected=std::make_unique<NPCType>();
++ std::memcpy(s->expected.get(),definition,sizeof(NPCType));s->map=zone->zonemap;s->pathing=zone->pathing;
++ auto type=std::make_unique<NPCType>();std::memcpy(type.get(),definition,sizeof(NPCType));
++ const auto& p=use.state_->route->anchors[0];
++ s->actor=std::make_unique<NPC>(type.get(),nullptr,glm::vec4(p.x,p.y,p.z,0),GravityBehavior::Water);
++ s->actor->GiveNPCTypeData(type.release());s->actor->SetCanOpenDoors(false);
++ if(s->actor->GetID()||!NativeRouteQualified(*use.state_->route,*s->actor))return {};
++ auto a=std::make_shared<RunHelperAttempt>();a->original=use.facts_;a->route=use.state_->route;a->gate=use.state_->gate;
++ a->witness=use.state_->witness;a->actor_lifetime=RunUseWitness::CaptureNPCScene(*s->actor);a->sequence=sequence;
++ a->original_object=s->actor.get();a->gate_packet=OpenPacket(a->gate->native_id);
++ a->progress=ProgressPacket(a->original.mission,14);a->publication=std::make_unique<NativeRunPublication::State>();
++ a->publication->owner=a->witness;a->pending=std::make_unique<RunHelperAttempt::Completion>();s->attempt=std::move(a);
++ auto plan=std::unique_ptr<PreparedRunHelperPlan>(new PreparedRunHelperPlan(std::move(s)));
++ if(!plan->RevalidateBeforePersist(c))return {};return plan;
++}
++bool PreparedRunHelperPlan::RevalidateBeforePersist(Client& c)const {
++ if(!state_||!state_->original||!state_->actor||!state_->expected||!zone||
++  state_->map!=zone->zonemap||state_->pathing!=zone->pathing||state_->actor->GetID()||
++  !NativeRunHelperSource::RevalidateActual(c,*state_->original))return false;
++ const auto* d=content_db.LoadNPCTypesData(490913);
++ return d&&FireHelperLocalSourceProfile::MatchesExpectedLoadedNPCType(*d)&&
++  std::memcmp(d,state_->expected.get(),sizeof(NPCType))==0&&NativeRouteQualified(*state_->attempt->route,*state_->actor);
++}
++void NativeRunHelperSource::PublishActual(Client&,const PublishedRunActionView& v) {
++ if(v.kind!=RunActionKind::HelperActivation||v.boundary!=RunActionBoundary::CommittedFirstRunAction||
++  !v.helper_original||!v.helper_plan||v.door_original||!v.run_action_id||!v.run_id||!v.native_sequence)return;
++ auto* s=v.helper_plan->state_.get();
++ if(!s||s->original!=v.helper_original||!s->actor||!s->attempt||
++  v.helper_original->facts_.mission.run!=v.run_id||s->attempt->sequence!=v.native_sequence||actual_helper_registration)return;
++ auto a=s->attempt;a->action_id=v.run_action_id;
++ auto* actor=s->actor.release();actor->m_fire_run_helper_attempt=a;
++ actual_helper_registration=a.get();
++ struct Restore {~Restore(){actual_helper_registration=nullptr;}} restore;
++ entity_list.AddNPC(actor,true,true);
++ // No actor/Client access after genuine spawn callbacks. Private actual AddNPC
++ // hook bound the same actor before those callbacks; later native Process owns it.
++}
++void NativeRunHelperSource::ObserveActualRegistration(NPC* actor) {
++ if(!actor||!actual_helper_registration||!actor->m_fire_run_helper_attempt)return;
++ auto& a=*actor->m_fire_run_helper_attempt;
++ if(&a!=actual_helper_registration||a.registered||a.original_object!=actor||!a.action_id||
++  !a.witness->ZoneAlive()||!actor->GetID()||actor->GetNPCTypeID()!=490913||
++  entity_list.GetNPCByID(actor->GetID())!=actor)return;
++ a.entity=actor->GetID();a.registered=true;a.started=Timer::GetCurrentTime();a.step=RunHelperAttempt::Step::WalkAnchors;
++}
++bool NativeRunDoorSource::PublishHelperBarrier(RunHelperAttempt& a) {
++ auto* door=a.witness->LiveDoor();
++ if(!door||a.barrier_opened||!a.registered||!GateProfile(*door,*a.gate)||!a.gate_packet||!RunStillActual(a.original.mission))return false;
++ // Only the same committed helper, after all actual route anchors, reaches
++ // this native scene publisher. No public ForceOpen/teleport/timer-only claim.
++ door->m_is_open=true;door->m_disable_timer=true;door->m_close_timer.Disable();
++ entity_list.QueueClients(nullptr,a.gate_packet.get(),false);
++ a.barrier_opened=door->m_is_open;return a.barrier_opened;
++}
++std::optional<bool> NativeRunHelperSource::ProcessActual(NPC& actor) {
++ const auto a=actor.m_fire_run_helper_attempt;if(!a)return {};
++ const auto hold=[&]() {a->step=RunHelperAttempt::Step::Held;};
++ if(!a->registered||a->original_object!=&actor||actor.GetID()!=a->entity||!a->actor_lifetime->NPCStillAlive())hold();
++ if(a->step==RunHelperAttempt::Step::Held) {
++  if(!a->stopped){a->stopped=true;actor.StopNavigation();}return true;
++ }
++ if(uint32_t(Timer::GetCurrentTime()-a->started)>90000&&a->step!=RunHelperAttempt::Step::Dust)hold();
++ auto* door=a->witness->LiveDoor();
++ if(!door||!GateProfile(*door,*a->gate)||!RunStillActual(a->original.mission))hold();
++ if(a->step==RunHelperAttempt::Step::Held)return true;
++ if(a->step==RunHelperAttempt::Step::WalkAnchors) {
++  if(NearAnchor(glm::vec3(actor.GetPosition()),a->route->anchors[a->anchor])) {
++   if(a->anchor>0) {
++    const auto delta=a->route->anchors[a->anchor]-a->route->anchors[a->anchor-1];
++    const auto at=glm::vec3(actor.GetPosition())-a->last_walk;
++    const double required=std::max(0.0,std::sqrt(double(delta.x)*delta.x+double(delta.y)*delta.y)-10.0);
++    if(!a->expected_walk||a->walked+0.01<required||double(at.x)*at.x+double(at.y)*at.y>0.0625){hold();return true;}
++   }
++   ++a->anchor;a->commanded=false;
++   if(a->anchor==a->route->anchors.size()) {
++    actor.StopNavigation();
++    if(!NativeRunDoorSource::PublishHelperBarrier(*a)){hold();return true;}
++    a->step=RunHelperAttempt::Step::WalkPassage;a->expected_walk=false;
++   }
++  }
++  if(a->step==RunHelperAttempt::Step::WalkAnchors&&!a->commanded) {
++   const auto& p=a->route->anchors[a->anchor];a->commanded=true;a->expected_walk=true;a->walked=0;a->last_walk=glm::vec3(actor.GetPosition());actor.WalkTo(p.x,p.y,p.z);return true;
++  }
++ }
++ if(a->step==RunHelperAttempt::Step::WalkPassage) {
++  if(!door->IsDoorOpen()){hold();return true;}
++  if(!NearAnchor(glm::vec3(actor.GetPosition()),a->route->passage)) {
++   if(!a->commanded){a->commanded=true;a->expected_walk=true;a->walked=0;a->last_walk=glm::vec3(actor.GetPosition());const auto p=a->route->passage;actor.WalkTo(p.x,p.y,p.z);}return true;
++  }
++  const auto span=a->route->passage-a->route->anchors.back();const auto at=glm::vec3(actor.GetPosition())-a->last_walk;
++  const double required=std::max(0.0,std::sqrt(double(span.x)*span.x+double(span.y)*span.y)-10.0);
++  if(!a->expected_walk||a->walked+0.01<required||double(at.x)*at.x+double(at.y)*at.y>0.0625){hold();return true;}
++  actor.StopNavigation();
++  auto& proof=a->publication->actual;
++  proof={RunActionKind::HelperActivation,a->gate->role,a->action_id,a->original.mission.run,a->sequence,
++   a->original.mission.character,490,a->original.mission.instance,a->gate->database_id,a->entity,a->gate->native_id};
++  a->passage_completed=true;
++  a->step=RunHelperAttempt::Step::Dust;a->dust_started=Timer::GetCurrentTime();
++  actor.Emote("crumbles into dust.");return true; // no actor access after mutable visual/native callbacks
++ }
++ if(a->step==RunHelperAttempt::Step::Dust&&uint32_t(Timer::GetCurrentTime()-a->dust_started)>=2000) {
++  a->step=RunHelperAttempt::Step::AwaitDestruction;
++  return false; // normal native MobProcess removal/destructor is the actual retirement, no respawn
++ }
++ return true; // only owned helper bypasses ordinary combat/quest waypoint AI
++}
++void NativeRunHelperSource::RecordActualWalkingStep(NPC& actor,const glm::vec3& before,const glm::vec3& after,int mode) {
++ const auto a=actor.m_fire_run_helper_attempt;
++ if(!a||!a->registered||a->original_object!=&actor)return;
++ if(a->step!=RunHelperAttempt::Step::WalkAnchors&&a->step!=RunHelperAttempt::Step::WalkPassage)return;
++ const auto gap=before-a->last_walk;const auto step=after-before;
++ if(!a->expected_walk||mode!=int(MovementWalking)||actor.GetDepop()||
++  !std::isfinite(step.x)||!std::isfinite(step.y)||double(gap.x)*gap.x+double(gap.y)*gap.y>0.0625) {
++  a->step=RunHelperAttempt::Step::Held;return;
++ }
++ a->walked+=std::sqrt(double(step.x)*step.x+double(step.y)*step.y);a->last_walk=after;
++}
++bool NativeRunHelperSource::RejectActualTeleport(NPC& actor) {
++ const auto a=actor.m_fire_run_helper_attempt;
++ if(!a||a->original_object!=&actor||!a->registered)return false;
++ a->step=RunHelperAttempt::Step::Held;return true; // native fallback never becomes arrival proof
++}
++void NativeRunHelperSource::ObserveActualDestruction(NPC& actor) {
++ const auto a=actor.m_fire_run_helper_attempt;
++ if(!a||a->queued||a->original_object!=&actor||!a->registered||!a->passage_completed||
++  a->step!=RunHelperAttempt::Step::AwaitDestruction||!a->witness->ZoneAlive()||!a->pending)return;
++ a->queued=true;a->step=RunHelperAttempt::Step::Complete;
++ a->pending->actual=a;auto* node=a->pending.release();
++ if(RunHelperAttempt::tail)RunHelperAttempt::tail->next=node;else RunHelperAttempt::head=node;
++ RunHelperAttempt::tail=node; // allocation-free; queue drains only AFTER actual destructor/stacks
++}
++void NativeRunHelperSource::DrainCompletions() {
++ auto* next=RunHelperAttempt::head;RunHelperAttempt::head=RunHelperAttempt::tail=nullptr;
++ while(next) {
++  std::unique_ptr<RunHelperAttempt::Completion> node(next);next=next->next;const auto a=node->actual;
++  if(!a||!a->queued||a->step!=RunHelperAttempt::Step::Complete||!a->witness->ZoneAlive()||
++   !RunStillActual(a->original.mission)||!a->progress)continue;
++  auto* door=a->witness->LiveDoor();
++  if(!door||!door->IsDoorOpen()||!GateProfile(*door,*a->gate)||!a->publication||!a->passage_completed)continue;
++  // Actual NPC destructor/retirement has now finished. Only this completed
++  // native lifecycle, not spawn/open/arrival alone, may seal terminal helper2.
++  a->publication->helper=a;
++  NativeRunPublication actual(std::move(a->publication));
++  if(!NativeRunActionCustody::AcknowledgeNativePublication(actual))continue;
++  a->published=true;
++  worldserver.SendPacket(a->progress.get());a->progress.reset();
++  // Actual original run-stamped native update only. No actor/Client/history
++  // access, replay, second helper/debit or claim of durable World save.
++ }
++}
++void NativeRunHelperSource::DiscardCompletions()noexcept {
++ auto* next=RunHelperAttempt::head;RunHelperAttempt::head=RunHelperAttempt::tail=nullptr;
++ while(next){auto* tail=next->next;delete next;next=tail;}
++}
++} // namespace FireRunActionSource
 --- a/zone/client.h
 +++ b/zone/client.h
-@@ -23,7 +23,7 @@
+@@ -23,7 +23,8 @@
  
  #include "../common/boat_passenger.h"
  
 -namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; }
++namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
 +namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalConstructNativeHail; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
  namespace SpiritShroud { struct Template; }
  class ZoneDatabase;
  struct SpiritShroudDestination;
-@@ -264,6 +264,7 @@
+@@ -264,6 +265,7 @@
  	std::string swap_name;
  };
  
@@ -1608,7 +2403,7 @@
  class Client : public Mob
  {
  public:
-@@ -2133,6 +2134,15 @@
+@@ -2133,6 +2135,16 @@
  private:
  	friend class FirePersonalOccurrenceSource::SharedSuccessorNative;
  	std::unique_ptr<FirePersonalOccurrenceSource::SharedSuccessorPending> m_fire_shared_successor;
@@ -1620,11 +2415,12 @@
 +	friend class FirePersonalOccurrenceSource::OriginalConstructNativeHail;
 +	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_published_construct;
 +	friend class FirePersonalOccurrenceSource::OriginalGotonurSayQueue;
++ friend class FireRunActionSource::RunUseWitness;
 +	std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> m_fire_gotonur_say_lifetime;
  	ExternalHandinMoneyReturned m_external_handin_money_returned = {};
  	std::vector<uint32_t>       m_external_handin_items_returned = {};
  public:
-@@ -2225,6 +2235,8 @@
+@@ -2225,6 +2237,8 @@
  
  	uint8 playeraction;
  
@@ -1646,7 +2442,12 @@
  				CharacterID(),
 --- a/zone/client_packet.cpp
 +++ b/zone/client_packet.cpp
-@@ -28,6 +28,7 @@
+@@ -1,3 +1,4 @@
++#include "fire_run_action_scene.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -28,6 +29,7 @@
  #include "housing_plot_marker.h"
  
  #include "client.h"
@@ -1654,7 +2455,7 @@
  
  #include "common/data_bucket.h"
  #include "common/data_verification.h"
-@@ -4925,6 +4926,12 @@
+@@ -4925,6 +4927,12 @@
  
  				if ((item->Click.Type == EQ::item::ItemEffectClick) || (item->Click.Type == EQ::item::ItemEffectExpendable) || (item->Click.Type == EQ::item::ItemEffectEquipClick) || (item->Click.Type == EQ::item::ItemEffectClick2))
  				{
@@ -1667,7 +2468,7 @@
  					if (item->Click.Level2 > 0)
  					{
  						if (GetLevel() >= item->Click.Level2)
-@@ -4943,7 +4950,11 @@
+@@ -4943,7 +4951,11 @@
  							}
  
  							if (i == 0) {
@@ -1680,7 +2481,7 @@
  							}
  							else {
  								InterruptSpell(castspell->spell_id);
-@@ -4975,6 +4986,10 @@
+@@ -4975,6 +4987,10 @@
  						}
  
  						if (i == 0) {
@@ -1691,7 +2492,15 @@
  							CastSpell(item->Click.Effect, castspell->target_id, slot, item->CastTime, 0, 0, castspell->inventoryslot);
  						}
  						else {
-@@ -10060,6 +10075,11 @@
+@@ -5209,6 +5225,7 @@
+ 		return;
+ 	}
+ 
++	if(FireRunActionSource::NativeRunDoorSource::HandleOriginalPacket(*this,*currentdoor,cd->doorid))return;
+ 	if (within_distance) {
+ 		int quest_return = 0;
+ 		if (parse->PlayerHasQuestSub(EVENT_CLICK_DOOR)) {
+@@ -10060,6 +10077,11 @@
  
  	if (m_inv.SupportsClickCasting(slot_id) || ((item->ItemType == EQ::item::ItemTypePotion || item->PotionBelt) && m_inv.SupportsPotionBeltCasting(slot_id))) // sanity check
  	{
@@ -1703,7 +2512,7 @@
  		auto* p_inst = (EQ::ItemInstance*) inst;
  
  		if (parse->ItemHasQuestSub(p_inst, EVENT_ITEM_CLICK)) {
-@@ -10197,6 +10217,8 @@
+@@ -10197,6 +10219,8 @@
  						return;
  					}
  					if (i == 0) {
@@ -1732,9 +2541,142 @@
   if(!m_spirit_shroud_transition || next.self_bytes.empty() || next.observer_bytes.empty() || next.buffs.size()!=size_t(GetMaxTotalSlots()) || !buffs)return false;
   // All authoritative state and ownership allocations were prepared before
   // COMMIT. No Save/Load, lease takeover, queue release or SQL occurs here.
+--- a/zone/corpse.cpp
++++ b/zone/corpse.cpp
+@@ -1,3 +1,4 @@
++#include "fire_material_loot_source.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -149,6 +150,7 @@
+ 	SetCash(npc->GetCopper(), npc->GetSilver(), npc->GetGold(), npc->GetPlatinum());
+ 
+ 	npctype_id = npc_type_id;
++	FireRunActionSource::OriginalMissionMaterialDeath::CaptureActualCorpse(*this,*npc);
+ 	SetPlayerKillItemID(0);
+ 	m_character_id        = 0;
+ 	m_corpse_db_id        = 0;
+@@ -634,6 +636,7 @@
+ 
+ Corpse::~Corpse()
+ {
++ if(m_fire_run_action_lifetime)m_fire_run_action_lifetime->active_=false;
+ 	if (m_is_player_corpse && !(m_player_corpse_depop && m_corpse_db_id == 0)) {
+ 		Save();
+ 	}
+@@ -1471,6 +1474,7 @@
+ 	if (!c) {
+ 		return;
+ 	}
++	FireRunActionSource::NativeRunLootSource fire_material_loot(*c,*this);
+ 
+ 	auto lootitem = (LootingItem_Struct *) app->pBuffer;
+ 
+@@ -1707,6 +1711,10 @@
+ 		}
+ 
+ 
++		// Genuine current-run material seal before the SAME original native grant.
++		if(!fire_material_loot.PrepareActualItem(*inst,lootitem->slot_id)) {
++			lootitem->auto_loot=-1;c->QueuePacket(app);safe_delete(inst);return;
++		}
+ 		// safe to ACK now
+ 		c->QueuePacket(app);
+ 
+@@ -1764,7 +1772,9 @@
+ 				item_data->item_id
+ 			);
+ 			/* Delete Item Instance */
+-			RemoveItem(item_data->lootslot);
++			const auto fire_actual_removed_slot=item_data->lootslot;
++			RemoveItem(fire_actual_removed_slot);
++			fire_material_loot.ObserveActualRemoval(*this,fire_actual_removed_slot);
+ 		}
+ 
+ 		/* Remove Bag Contents */
+--- a/zone/corpse.h
++++ b/zone/corpse.h
+@@ -1,3 +1,4 @@
++#include <memory>
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -25,6 +26,7 @@
+ 
+ class EQApplicationPacket;
+ class Group;
++namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
+ class NPC;
+ class Raid;
+ 
+@@ -38,6 +40,11 @@
+ #define MAX_LOOTERS 72
+ 
+ class Corpse : public Mob {
++ friend class FireRunActionSource::RunUseWitness;
++ friend class FireRunActionSource::OriginalMissionMaterialDeath;
++ friend class FireRunActionSource::NativeRunLootSource;
++ std::shared_ptr<FireRunActionSource::RunCorpseLifetime> m_fire_run_action_lifetime;
++ std::shared_ptr<FireRunActionSource::MissionMaterialCorpseOrigin> m_fire_material_origin;
+ public:
+ 
+ 	static void SendEndLootErrorPacket(Client *client);
+--- a/zone/doors.cpp
++++ b/zone/doors.cpp
+@@ -1,3 +1,4 @@
++#include "fire_run_action_scene.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -133,6 +134,7 @@
+ 
+ Doors::~Doors()
+ {
++ if(m_fire_run_action_lifetime)m_fire_run_action_lifetime->active_=false;
+ }
+ 
+ bool Doors::Process()
+@@ -157,6 +159,7 @@
+ 
+ void Doors::HandleClick(Client *sender, uint8 trigger)
+ {
++ if(!FireRunActionSource::NativeRunDoorSource::AuthorizeActualHandle(sender,*this,trigger))return;
+ 	Log(Logs::Detail, Logs::Doors,
+ 		"%s clicked door %s (dbid %d, eqid %d) at %s",
+ 		sender->GetName(),
+--- a/zone/doors.h
++++ b/zone/doors.h
+@@ -1,3 +1,4 @@
++#include <memory>
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -24,11 +25,17 @@
+ 
+ class Client;
+ class Mob;
++namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
+ class NPC;
+ struct Door;
+ 
+ class Doors : public Entity
+ {
++ friend class FireRunActionSource::RunUseWitness;
++ friend class FireRunActionSource::NativeRunDoorSource;
++ friend class FireRunActionSource::PublishedRunActionSink;
++ friend class FireRunActionSource::NativeRunHelperSource;
++ std::shared_ptr<FireRunActionSource::RunDoorLifetime> m_fire_run_action_lifetime;
+ public:
+ 	~Doors();
+ 
 --- a/zone/entity.cpp
 +++ b/zone/entity.cpp
-@@ -36,6 +36,9 @@
+@@ -1,3 +1,4 @@
++#include "fire_material_loot_source.h"
+ #include "bound_destructible_ruins.h"
+ /*	EQEmu: EQEmulator
+ 
+@@ -36,6 +37,9 @@
  #include "zone/string_ids.h"
  #include "zone/water_map.h"
  #include "zone/worldserver.h"
@@ -1744,20 +2686,30 @@
  
  #include "common/strings.h"
  #include "common/util/uuid.h"
-@@ -578,6 +581,8 @@
+@@ -578,6 +582,9 @@
  			entity_list.RemoveMob(id);
  		}
  	}
 +	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Drain();
 +	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Drain();
++	FireRunActionSource::NativeRunHelperSource::DrainCompletions();
  }
  
  void EntityList::BeaconProcess()
-@@ -693,6 +698,7 @@
+@@ -672,6 +679,7 @@
+ 
+ 	corpse->CalcCorpseName();
+ 	corpse_list.emplace(std::pair<uint16, Corpse *>(corpse->GetID(), corpse));
++	FireRunActionSource::OriginalMissionMaterialDeath::ObserveActualCorpseRegistered(*corpse);
+ 
+ 	if (!corpse_timer.Enabled())
+ 		corpse_timer.Start();
+@@ -693,6 +701,8 @@
  	npc_list.emplace(std::pair<uint16, NPC *>(npc->GetID(), npc));
  	mob_list.emplace(std::pair<uint16, Mob *>(npc->GetID(), npc));
  
 +	FirePersonalOccurrenceSource::CaptureConstructBeforeOriginalSpawnCallbacks(npc);
++	FireRunActionSource::NativeRunHelperSource::ObserveActualRegistration(npc);
  	entity_list.ScanCloseMobs(npc);
  
  	if (!BoundDestructibles::IsRuins(npc) && parse->HasQuestSub(npc->GetNPCTypeID(), EVENT_SPAWN)) {
@@ -2231,16 +3183,18 @@
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
 +++ b/zone/fire_gotonur_say_queue.h
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,45 @@
 +#pragma once
 +#include "fire_original_construct_death.h"
 +#include <memory>
 +#include <string>
++namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
 +namespace FirePersonalOccurrenceSource {
 +inline constexpr uint32_t OriginalGotonurStaticSpawn=149749; // qualified static receipt, not live identity
 +class OriginalGotonurSayQueue;
 +class OriginalGotonurSayLifetime final {
 + friend class OriginalGotonurSayQueue;
++ friend class FireRunActionSource::RunUseWitness;
 + friend class NativeConstructParticipants;
 + friend class OriginalConstructDeathQueue;
 + friend class ::Client;
@@ -2293,8 +3247,102 @@
 +};
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
++++ b/zone/fire_material_loot_source.h
+@@ -0,0 +1,91 @@
++#pragma once
++#include "fire_run_action_scene.h"
++#include <cstdint>
++#include <memory>
++class Corpse;
++class EntityList;
++namespace FireRunActionSource {
++class NativeRunItemOrigins; // Core actual finite seal/origin persistence
++class PreparedRunLootSeal; // Core preallocated pending native seal object
++class MissionMaterialCorpseOrigin;
++class NativeRunLootSource;
++struct RunLootFacts {
++ MissionRunFacts mission; // actual looter own accepted mapping, not NPC/run0 binding
++ uint64_t native_sequence=0,source_death_sequence=0;
++ uint32_t source_npc_type=0,source_spawn=0,source_corpse_entity=0;
++ uint16_t source_loot_slot=0;
++ uint32_t item_id=0;
++ int32_t native_item_serial=0;
++ int16_t charges=0,saved_slot=-1;
++};
++class OriginalRunLootUse final {
++ friend class NativeRunLootSource;
++ friend class NativeRunItemOrigins;
++ friend class NativeRunLootPublication;
++ struct State;
++ RunLootFacts facts_;
++ std::shared_ptr<State> state_;
++ OriginalRunLootUse(RunLootFacts,std::shared_ptr<State>);
++public:
++ ~OriginalRunLootUse();
++ const RunLootFacts& Facts()const noexcept{return facts_;}
++ OriginalRunLootUse(const OriginalRunLootUse&)=delete;
++ OriginalRunLootUse& operator=(const OriginalRunLootUse&)=delete;
++};
++class NativeRunLootPublication final {
++ friend class NativeRunLootSource;
++ friend class NativeRunItemOrigins;
++ RunLootFacts facts_;
++ bool taken_=false;
++ std::unique_ptr<PreparedRunLootSeal> seal_;
++ struct State;
++ std::unique_ptr<State> state_;
++ explicit NativeRunLootPublication(std::unique_ptr<PreparedRunLootSeal>,std::unique_ptr<State>)noexcept;
++public:
++ ~NativeRunLootPublication();
++ const RunLootFacts& Facts()const noexcept{return facts_;}
++ NativeRunLootPublication(const NativeRunLootPublication&)=delete;
++ NativeRunLootPublication& operator=(const NativeRunLootPublication&)=delete;
++};
++// Real successful NPC::Death -> SAME actually constructed/registered Corpse.
++// A later type/zone/name lookup cannot mint this lineage.
++class OriginalMissionMaterialDeath final {
++ friend class ::NPC;
++ friend class ::Corpse;
++ friend class ::EntityList;
++ struct State;
++ std::shared_ptr<State> state_;
++ OriginalMissionMaterialDeath* previous_=nullptr;
++ static thread_local OriginalMissionMaterialDeath* current_;
++ explicit OriginalMissionMaterialDeath(NPC&)noexcept;
++ void SealActualSuccess(NPC&,uint32_t actual_killed_entity);
++ static void CaptureActualCorpse(Corpse&,NPC&);
++ static void ObserveActualCorpseRegistered(Corpse&);
++public:
++ ~OriginalMissionMaterialDeath();
++ OriginalMissionMaterialDeath(const OriginalMissionMaterialDeath&)=delete;
++ OriginalMissionMaterialDeath& operator=(const OriginalMissionMaterialDeath&)=delete;
++};
++// Scoped only to actual native Corpse::LootCorpseItem. Preparation happens after
++// ordinary loot permission/selection, before original inventory grant; observer
++// reads SAME original SaveInventory/SaveCursor result and actual removal.
++class NativeRunLootSource final {
++ friend class ::Corpse;
++ friend class ::Client;
++ struct State;
++ std::shared_ptr<State> state_;
++ bool scene_candidate_=false;
++ uint32_t source_npc_type_=0;
++ NativeRunLootSource* previous_=nullptr;
++ static thread_local NativeRunLootSource* current_;
++ explicit NativeRunLootSource(Client&,Corpse&)noexcept;
++ bool PrepareActualItem(EQ::ItemInstance&,uint16_t actual_loot_slot);
++ static void ObserveActualInventorySave(Client&,const EQ::ItemInstance&,int16_t actual_slot,
++  bool same_existing_save_result);
++ void ObserveActualRemoval(Corpse&,uint16_t actual_removed_slot);
++public:
++ ~NativeRunLootSource();
++ NativeRunLootSource(const NativeRunLootSource&)=delete;
++ NativeRunLootSource& operator=(const NativeRunLootSource&)=delete;
++};
++} // namespace FireRunActionSource
+--- /dev/null
 +++ b/zone/fire_native_item_custody.cpp
-@@ -0,0 +1,681 @@
+@@ -0,0 +1,862 @@
 +// Native selected writer and custody source proposal. Not installed/built or
 +// activation-ready; initial admission and serving activation remain unselected.
 +#include "client.h"
@@ -2312,6 +3360,14 @@
 +#include "../common/fire_native_inventory_fence.h"
 +#include "../common/housing/inventory_row_db.h"
 +#include "../common/housing/inventory_projection.h"
++#include "fire_run_action_custody.h"
++#include "fire_run_action_scene.h"
++#include "fire_run_item_origin.h"
++#include "fire_material_loot_source.h"
++#include "../common/util/uuid.h"
++#include "../common/dynamic_zone_base.h"
++#include <charconv>
++#include <cstring>
 +#include <list>
 +#include <stdexcept>
 +#include <algorithm>
@@ -2321,6 +3377,8 @@
 +#include <vector>
 +extern Zone* zone;
 +extern ZoneDatabase database;
++#include "fire_run_action_custody_impl.inc"
++#include "fire_run_item_origin_impl.inc"
 +namespace FirePersonalOccurrenceSource {
 +PublishedNativeUse::PublishedNativeUse(const Client& owner,const OriginalItemUse& original,
 + uint64_t sequence,uint32_t output_item,int32_t output_serial,int16_t output_slot,
@@ -2341,7 +3399,7 @@
 +}
 +bool OriginalClickItem(uint32_t item) {
 + switch(item){case 50745:case 50746:case 50747:case 50749:case 50750:case 50752:
-+  case 47760:case 47752:return true;default:return false;}
++  case 47760:case 47752:case 47756:return true;default:return false;}
 +}
 +int16_t RootSlot(int16_t slot) {
 + if(EQ::ValueWithin(slot,EQ::invbag::GENERAL_BAGS_BEGIN,EQ::invbag::GENERAL_BAGS_END))
@@ -2355,13 +3413,21 @@
 +}
 +}
 +struct NativeItemCustody::State {
-+ enum class Phase { Captured,LaunchReady,Casting,Finishing,SpellSucceeded,Rejected,Unknown,Committed };
++ enum class Phase { Captured,LaunchReady,Casting,Finishing,SpellSucceeded,DoorReady,Rejected,Unknown,Committed };
 + struct Take {int16_t slot;int16_t quantity;const EQ::ItemInstance* original;uint32_t item_id;};
 + struct Click {
 +  Click(std::optional<Context> value,std::shared_ptr<PacketFence> p,uint64_t seq,uint32_t who,uint32_t to,uint32_t z,uint32_t instance_id,int16_t where)
 +   :context(std::move(value)),packet(std::move(p)),sequence(seq),caster(who),target(to),zone(z),instance(instance_id),slot(where){}
 +  std::optional<Context> context;
 +  std::optional<FireSharedTransformSource::OriginalSharedTransformUse> shared_use;
++  std::unique_ptr<FireRunActionSource::OriginalDoorUse> door_use;
++  std::unique_ptr<FireRunActionSource::OriginalHelperUse> helper_use;
++  std::unique_ptr<FireRunActionSource::PreparedRunDoorPlan> door_plan;
++  std::unique_ptr<FireRunActionSource::PreparedRunHelperPlan> helper_plan;
++  std::unique_ptr<FireRunActionSource::RunLatchSnapshot> latch;
++  std::unique_ptr<FireRunActionSource::PreparedRunActionOrigins> action_origins;
++  std::unique_ptr<FireRunActionSource::PreparedRunTransformOrigins> transform_origins;
++  bool inventory_mutates=true;
 +  int32_t native_click_spell=7651;
 +  std::shared_ptr<PacketFence> packet;
 +  uint64_t sequence;
@@ -2452,8 +3518,9 @@
 + if(state_->click&&state_->click->phase!=State::Phase::Rejected&&
 +  state_->click->phase!=State::Phase::Committed)return false;
 + const auto shared_rule=FireSharedTransformSource::OriginalRule(actual->GetID());
++ const bool is_helper=actual->GetID()==47756;
 + std::optional<Context> context;
-+ if(!shared_rule)for(const auto& bound:state_->accepted) {
++ if(!shared_rule&&!is_helper)for(const auto& bound:state_->accepted) {
 +  if(!bound)continue;
 +  const auto rule=OriginalRule(bound->task_id);if(!rule)continue;
 +  const bool combine=actual->GetID()==rule->ingredient_a;
@@ -2466,17 +3533,24 @@
 +   combine?Consumer::CombineIngredients:Consumer::ActivateConstruct);
 +  if(context)break;
 + }
-+ if(!context&&!shared_rule)return false;
++ if(!context&&!shared_rule&&!is_helper)return false;
++ std::unique_ptr<FireRunActionSource::OriginalHelperUse> helper_use;
 + std::optional<OriginalItemUse> use;
 + std::optional<FireSharedTransformSource::OriginalSharedTransformUse> shared_use;
 + if(context)use=CaptureOriginalItemUse(*context,*actual,slot,supported,c.GetID(),target,
 +  zone->GetZoneID(),zone->GetInstanceID());
++ else if(is_helper)helper_use=FireRunActionSource::NativeRunHelperSource::CaptureActual(c,*actual,slot,supported,target);
 + else shared_use=FireSharedTransformSource::NativeSharedTransform::CaptureActual(c,*actual,slot,supported,target);
-+ if((!use&&!shared_use)||actual->GetCharges()!=1||actual->IsStackable()||!actual->IsExpendable())return false;
++ if((!use&&!shared_use&&!helper_use)||actual->GetCharges()!=1||actual->IsStackable()||!actual->IsExpendable())return false;
 + auto click=std::make_unique<State::Click>(context,std::make_shared<PacketFence>(),++state_->sequence,
 +  c.GetID(),target,zone->GetZoneID(),zone->GetInstanceID(),slot);
 + click->packet->sequence=click->sequence;
-+ click->original_use=use;click->shared_use=shared_use;
++ click->original_use=use;click->shared_use=shared_use;click->helper_use=std::move(helper_use);
++ if(click->helper_use) {
++  click->latch=FireRunActionSource::NativeRunActionCustody::PreviewActual(*click->helper_use);
++  click->action_origins=FireRunActionSource::NativeRunItemOrigins::PrepareActionActual(c,nullptr,click->helper_use.get());
++  if(!click->latch||!click->action_origins)return false;
++ }
 + click->native_click_spell=context?7651:actual->GetItem()->Click.Effect;
 + if(click->native_click_spell<=0)return false;
 + click->session=c.InventorySessionReleaseTicket();
@@ -2554,6 +3628,12 @@
 +  if(fits)click->output_slot=slot;
 +  else {click->output_slot=EQ::invslot::slotCursor;click->cursor_participates=true;}
 + }
++ if(shared_use) {
++  std::vector<int16_t> inputs{slot};for(const auto& take:click->b)inputs.push_back(take.slot);
++  click->transform_origins=FireRunActionSource::NativeRunItemOrigins::PrepareTransformActual(c,*shared_use,
++   inputs,*click->output,click->sequence,click->output_slot);
++  if(!click->transform_origins)return false;
++ }
 + if(click->cursor_participates) {
 +  // Capture the complete actual queue before callbacks. Capacity qualification
 +  // accounts for removing A only if A itself is the current cursor item.
@@ -2598,8 +3678,9 @@
 + if(!state_->click||!zone||!c.task_state)return false;
 + const auto& f=*state_->click;
 + if(!f.session||c.InventorySessionReleaseTicket()!=f.session||!f.session->HeldFor(c))return false;
-+ if(bool(f.context)==bool(f.shared_use))return false;
-+ const auto character=f.shared_use?f.shared_use->shared.character:f.context->acceptance.character_id;
++ if(unsigned(bool(f.context))+unsigned(bool(f.shared_use))+unsigned(bool(f.helper_use))+unsigned(bool(f.door_use))!=1)return false;
++ const auto character=f.shared_use?f.shared_use->shared.character:f.helper_use?f.helper_use->Facts().mission.character:
++  f.door_use?f.door_use->Facts().character:f.context->acceptance.character_id;
 + const bool produces=f.shared_use||(f.context&&f.context->consumer==Consumer::CombineIngredients);
 + if(produces) {
 +  const auto output=f.shared_use?f.shared_use->shared.rule.output_item:f.context->rule.inactive_item;
@@ -2608,9 +3689,16 @@
 + }
 + if(c.GetID()!=f.caster||c.CharacterID()!=character||
 +  zone->GetZoneID()!=f.zone||zone->GetInstanceID()!=f.instance||
-+  !f.clicked->Matches(f.slot,c.m_inv.GetItem(f.slot)))return false;
++  (f.clicked&&!f.clicked->Matches(f.slot,c.m_inv.GetItem(f.slot))))return false;
 + if(f.shared_use) {
 +  if(!FireSharedTransformSource::NativeSharedTransform::RevalidateActual(c,*f.shared_use))return false;
++  if(!f.transform_origins||!FireRunActionSource::NativeRunItemOrigins::RevalidateTransformActual(c,*f.transform_origins))return false;
++ }else if(f.helper_use) {
++  if(!FireRunActionSource::NativeRunHelperSource::RevalidateActual(c,*f.helper_use)||!f.action_origins||
++   !FireRunActionSource::NativeRunItemOrigins::RevalidateActionActual(c,*f.action_origins))return false;
++ }else if(f.door_use) {
++  if(!f.door_plan||!FireRunActionSource::NativeRunActionCustody::RevalidateDoorPlan(c,*f.door_plan)||
++   (f.action_origins&&!FireRunActionSource::NativeRunItemOrigins::RevalidateActionActual(c,*f.action_origins)))return false;
 + }else {
 +  const auto* current=c.task_state->GetClientTaskInfo(TaskType::Quest,f.context->acceptance.slot);
 +  if(!current||current->activity[0].activity_state!=ActivityCompleted||
@@ -2634,7 +3722,7 @@
 + if(ticket.fence_)return false;
 + if(!actual||!OriginalClickItem(actual->GetID()))return true;
 + auto* owner=Owned(c);
-+ if(!owner&&FireSharedTransformSource::OriginalRule(actual->GetID())) {
++ if(!owner&&(FireSharedTransformSource::OriginalRule(actual->GetID())||actual->GetID()==47756)) {
 +  c.m_fire_item_custody.reset(new NativeItemCustody);owner=Owned(c);
 + }
 + if(!owner||!owner->Capture(c,slot,actual,target,supported))return false;
@@ -2726,13 +3814,111 @@
 + auto* owner=Owned(c);if(!owner||!owner->state_->click)return true;
 + auto& f=*owner->state_->click;
 + if(f.packet!=ticket.packet_||f.phase!=State::Phase::SpellSucceeded||
-+  f.slot!=slot||f.debit_slot!=slot||quantity!=1||!update_db||bool(f.original_use)==bool(f.shared_use))return true;
-+ if(!owner->Revalidate(c)){f.phase=State::Phase::Rejected;f.fence.Detach();return true;}
++  f.slot!=slot||f.debit_slot!=slot||quantity!=1||!update_db||unsigned(bool(f.original_use))+unsigned(bool(f.shared_use))+unsigned(bool(f.helper_use))!=1)return true;
++ PublishSelected(c,client_update);return true; // selected calls never reach ordinary debit
++}
++FireRunActionSource::DoorActionResult NativeItemCustody::DoorSelected(Client& c,
++ std::unique_ptr<FireRunActionSource::OriginalDoorUse> original,
++ std::unique_ptr<FireRunActionSource::PreparedRunDoorPlan> plan) {
++ using namespace FireRunActionSource;
++ const auto rejected=DoorActionResult::SelectedRejected;
++ if(!original||!plan||!zone||!c.task_state||!c.CharacterID()||!c.GetID()||
++  !NativeRunActionCustody::RevalidateDoorPlan(c,*plan))return rejected;
++ const auto facts=original->Facts();
++ if(!facts.native_sequence||facts.character!=c.CharacterID()||facts.client_entity!=c.GetID()||
++  facts.zone!=zone->GetZoneID()||facts.instance!=zone->GetInstanceID()||
++  !facts.door_database_id||!facts.native_door_id)return rejected;
++ const bool world=facts.kind==RunActionKind::WorldFontKey;
++ if(world!=!facts.mission)return rejected;
++ if(!c.m_fire_item_custody)c.m_fire_item_custody.reset(new NativeItemCustody);
++ auto* owner=Owned(c);
++ if(owner->state_->click&&owner->state_->click->phase!=State::Phase::Rejected&&
++  owner->state_->click->phase!=State::Phase::Committed)return rejected;
++ auto selected=std::make_unique<State::Click>(std::nullopt,std::make_shared<PacketFence>(),facts.native_sequence,
++  c.GetID(),0,zone->GetZoneID(),zone->GetInstanceID(),-1);
++ selected->door_use=std::move(original);selected->door_plan=std::move(plan);
++ selected->packet->sequence=facts.native_sequence;selected->phase=State::Phase::DoorReady;
++ selected->inventory_mutates=false;
++ if(!world) {
++  selected->latch=NativeRunActionCustody::PreviewActual(*selected->door_use);
++  if(!selected->latch)return rejected;
++  selected->inventory_mutates=selected->latch->debit;
++ }
++ selected->session=c.InventorySessionReleaseTicket();
++ selected->lease=selected->session?selected->session->SnapshotFor(c):std::nullopt;
++ if(!selected->lease||!c.HasInventorySessionReservation())return rejected;
++ const bool needs_physical=world||!selected->latch->row;
++ if(needs_physical) {
++  const uint32_t first=world?47759:facts.kind==RunActionKind::InnerVault?47748:
++   facts.kind==RunActionKind::WorshipPair?47762:47757;
++  if(world&&(facts.required_count!=1||facts.required_item_ids[0]!=47759||facts.physical_count!=1))return rejected;
++  const PhysicalItemFacts* primary=nullptr;
++  for(size_t i=0;i<facts.physical_count&&i<facts.physical_items.size();++i)
++   if(facts.physical_items[i].item_id==first){if(primary)return rejected;primary=&facts.physical_items[i];}
++  if(!primary||primary->units!=1)return rejected;
++  selected->slot=primary->slot;selected->debit_slot=primary->slot;
++  for(size_t i=0;i<facts.physical_count&&i<facts.physical_items.size();++i) {
++   const auto& item=facts.physical_items[i];
++   if(item.units!=1||(!CarriedGeneral(c.m_inv,item.slot)&&item.slot!=EQ::invslot::slotCursor))return rejected;
++   const auto* actual=c.m_inv.GetItem(item.slot);
++   if(!actual||!actual->GetItem()||actual->GetID()!=item.item_id||actual->GetSerialNumber()!=item.serial||
++    actual->GetCharges()!=item.charges||!actual->IsClassCommon()||actual->IsStackable()||!actual->GetContents()->empty())return rejected;
++   const auto root=RootSlot(item.slot);
++   if(root==EQ::invslot::slotCursor)selected->cursor_participates=true;
++   else if(!selected->roots.count(root)) {
++    auto snapshot=OriginalItemSnapshot::Capture(root,c.m_inv.GetItem(root));if(!snapshot)return rejected;
++    selected->roots.emplace(root,std::move(snapshot));
++   }
++   if(item.slot!=primary->slot)selected->b.push_back({item.slot,1,actual,item.item_id});
++  }
++  selected->clicked=OriginalItemSnapshot::Capture(primary->slot,c.m_inv.GetItem(primary->slot));
++  if(!selected->clicked)return rejected;
++  if(!world) {
++   selected->action_origins=NativeRunItemOrigins::PrepareActionActual(c,selected->door_use.get(),nullptr);
++   if(!selected->action_origins)return rejected;
++  }
++ }
++ if(selected->cursor_participates)for(auto it=c.m_inv.cursor_cbegin();it!=c.m_inv.cursor_cend();++it) {
++  auto snapshot=OriginalItemSnapshot::Capture(EQ::invslot::slotCursor,*it);if(!snapshot)return rejected;
++  selected->cursor.push_back(std::move(snapshot));
++ }
++ selected->fence.inventory_=&c.m_inv;selected->fence.character_=c.CharacterID();
++ selected->fence.cursor_=selected->cursor_participates;selected->fence.launched_=true;
++ const auto protect=[&](const auto& self,const EQ::ItemInstance* item,unsigned depth)->bool {
++  if(!item||item->IsEvolving()||item->GetEvolveUniqueID()||item->GetHousingHouseID()||item->GetHousingCrateID()||
++   (depth&&item->IsClassBag()))return false;
++  selected->fence.instances_.push_back(item);
++  for(const auto& child:*item->GetContents())if(child.second&&!self(self,child.second,depth+1))return false;
++  return true;
++ };
++ for(const auto& root:selected->roots) {
++  selected->fence.roots_.push_back(root.first);
++  if(!protect(protect,c.m_inv.GetItem(root.first),0))return rejected;
++ }
++ if(selected->cursor_participates)for(auto it=c.m_inv.cursor_cbegin();it!=c.m_inv.cursor_cend();++it)
++  if((*it)->IsClassBag()||!(*it)->GetContents()->empty()||!protect(protect,*it,0))return rejected;
++ owner->state_->click=std::move(selected);owner->state_->click->fence.Attach();
++ // No fake spell, FinishTicket, personal binding or callback continuation.
++ // PublishSelected's final sink owns the intent/plan. Never access c/owner again.
++ return PublishSelected(c,true)?DoorActionResult::CommittedToNativePublication:rejected;
++}
++
++bool NativeItemCustody::PublishSelected(Client& c,bool client_update) {
++ auto* owner=Owned(c);if(!owner||!owner->state_->click)return false;
++ auto& f=*owner->state_->click;const auto slot=f.slot;
++ const auto session_ticket=f.session;const auto character_id=c.CharacterID();const Client* expected=&c;
++ const auto live=[session_ticket,character_id,expected]()noexcept {
++  auto* current=entity_list.GetClientByCharID(character_id);
++  return current&&current==expected&&session_ticket&&current->InventorySessionReleaseTicket()==session_ticket&&session_ticket->HeldFor(*current);
++ };
++ if(!live()||!owner->Revalidate(c)){f.phase=State::Phase::Rejected;f.fence.Detach();return false;}
 + bool transaction=false;
 + bool known_commit=false;
 + std::unique_ptr<PreparedConstructPlan> prepared_plan;
 + std::optional<PublishedNativeUse> handoff;
 + std::optional<FireSharedTransformSource::PublishedSharedTransformUse> shared_handoff;
++ std::optional<FireRunActionSource::PublishedRunActionReceipt> run_handoff;
++ std::unique_ptr<FireRunActionSource::PublishedRunActionReceipt::State> run_receipt;
 + try {
 +  // SAME successful original cast and original selected debit invocation only.
 +  // Preparation owns the actual staged actor/definition/attempt/eligible roster;
@@ -2741,6 +3927,13 @@
 +   prepared_plan=PreparedConstructPlan::PrepareActual(c,*f.original_use,f.sequence);
 +   if(!prepared_plan||!prepared_plan->RevalidateBeforePersist(c))
 +    throw std::runtime_error("Fire actual construct plan unavailable before spend");
++  }
++  if(f.helper_use) {
++   f.helper_plan=FireRunActionSource::PreparedRunHelperPlan::PrepareActual(c,*f.helper_use,f.sequence);
++   if(!f.helper_plan||!f.helper_plan->RevalidateBeforePersist(c))throw std::runtime_error("Fire helper scene unavailable before debit");
++  }
++  if(f.helper_use||f.door_use) {
++   run_receipt=std::make_unique<FireRunActionSource::PublishedRunActionReceipt::State>();run_receipt->owner=&c;
 +  }
 +  f.staged=std::make_unique<EQ::InventoryProfile>();
 +  f.staged->SetInventoryVersion(c.m_inv.InventoryVersion());
@@ -2755,18 +3948,18 @@
 +   f.staged->m_cursor.push(value.get());value.release();
 +  }
 +  // These mutations touch only owned off-profile values, never selected live A/B.
-+  if(!f.staged->DeleteItem(slot,1))throw std::runtime_error("Fire staged A not removed");
-+  for(const auto& take:f.b) {
++  if(f.inventory_mutates&&!f.staged->DeleteItem(slot,1))throw std::runtime_error("Fire staged A not removed");
++  if(f.inventory_mutates)for(const auto& take:f.b) {
 +   auto* before=f.staged->GetItem(take.slot);
 +   if(!before||before->GetID()!=take.item_id||
 +    (before->IsStackable()&&before->GetCharges()<take.quantity))
 +    throw std::runtime_error("Fire staged B changed");
 +   f.staged->DeleteItem(take.slot,take.quantity);
 +  }
-+  uint32_t output_item=0;int32_t output_serial=0;int16_t output_charges=0;
++  uint32_t output_item=0;int32_t output_serial=0;int16_t output_charges=0;const EQ::ItemInstance* actual_output=nullptr;
 +  if(f.shared_use||(f.context&&f.context->consumer==Consumer::CombineIngredients)) {
 +   if(!f.output)throw std::runtime_error("Fire canonical output absent");
-+   output_item=f.output->GetID();output_serial=f.output->GetSerialNumber();output_charges=f.output->GetCharges();
++   actual_output=f.output.get();output_item=f.output->GetID();output_serial=f.output->GetSerialNumber();output_charges=f.output->GetCharges();
 +   if(f.output_slot==EQ::invslot::slotCursor)f.staged->m_cursor.push(f.output.get());
 +   else if(f.staged->PushItem(f.output_slot,f.output.get())!=f.output_slot)
 +    throw std::runtime_error("Fire staged output destination failed");
@@ -2799,7 +3992,7 @@
 +    f.packets.push_back(std::move(p));
 +   }
 +  };
-+  if(client_update) {
++  if(client_update&&f.inventory_mutates) {
 +   packet(slot,slot==EQ::invslot::slotCursor?nullptr:f.staged->GetItem(slot),ItemPacketTrade);
 +   for(const auto& take:f.b)packet(take.slot,f.staged->GetItem(take.slot),ItemPacketTrade);
 +   if(output_item&&f.output_slot==EQ::invslot::slotCursor) {
@@ -2814,7 +4007,7 @@
 +   for(size_t i=0;i<shared_original->shared.rule.input_count;++i)
 +    achievement_items[i]=shared_original->shared.rule.inputs[i];
 +   achievement_items[5]=output_item;
-+  }else {
++  }else if(original) {
 +   achievement_items[0]=original->item_id;
 +   achievement_items[1]=f.context->consumer==Consumer::CombineIngredients?f.context->rule.ingredient_b:0;
 +   achievement_items[2]=output_item;
@@ -2867,6 +4060,7 @@
 +   if(begin!=INVALID_INDEX)clause("slot_id BETWEEN "+std::to_string(begin)+" AND "+std::to_string(begin+EQ::invbag::SLOT_COUNT-1));
 +  }
 +  if(f.cursor_participates){clause("slot_id="+std::to_string(EQ::invslot::slotCursor));clause("slot_id BETWEEN "+std::to_string(EQ::invbag::CURSOR_BAG_BEGIN)+" AND "+std::to_string(EQ::invbag::CURSOR_BAG_END));}
++  if(where.empty())where="0";
 +  auto persisted=query("SELECT "+std::string(Housing::InventoryRowDB::Columns)+" FROM inventory WHERE character_id="+actor+" AND ("+where+") ORDER BY slot_id FOR UPDATE");
 +  std::map<int16_t,Housing::LiveItems::InventoryRow> roots;
 +  std::vector<Housing::LiveItems::InventoryRow> children;
@@ -2899,16 +4093,29 @@
 +  if(!owner->Revalidate(c))throw std::runtime_error("Fire selected frame changed before save");
 +  if(prepared_plan&&!prepared_plan->RevalidateBeforePersist(c))
 +   throw std::runtime_error("Fire construct plan changed before persistence");
++  if(f.helper_plan&&!f.helper_plan->RevalidateBeforePersist(c))throw std::runtime_error("Fire helper plan changed before persistence");
++  uint64_t action_row=0;
++  if(f.door_use||f.helper_use) {
++   if(f.latch)action_row=FireRunActionSource::NativeRunActionCustody::StageActual(database,connection,*f.latch,
++    f.door_use.get(),f.helper_use.get(),f.action_origins.get(),sequence,f.persistence_entered);
++   else if(!f.door_use||f.door_use->Facts().kind!=FireRunActionSource::RunActionKind::WorldFontKey)
++    throw std::runtime_error("Fire selected run latch unavailable");
++  }
++  if(f.transform_origins)FireRunActionSource::NativeRunItemOrigins::StageTransformActual(database,connection,*f.transform_origins,f.persistence_entered);
 +  f.fence.writer_=&database;
 +  size_t step=0;
-+  for(const auto& root:f.roots) {
++  if(f.inventory_mutates)for(const auto& root:f.roots) {
++   if(f.helper_plan&&!f.helper_plan->RevalidateBeforePersist(c))throw std::runtime_error("Fire helper plan changed before root save");
++   if(f.door_plan&&!FireRunActionSource::NativeRunActionCustody::RevalidateDoorPlan(c,*f.door_plan))throw std::runtime_error("Fire door plan changed before root save");
 +   if(prepared_plan&&!prepared_plan->RevalidateBeforePersist(c))
 +    throw std::runtime_error("Fire construct plan changed before selected root save");
 +   f.persistence_entered=true;
 +   const bool saved=database.SaveInventory(c.CharacterID(),f.staged->GetItem(root.first),root.first);
 +   f.save_results[step++]=saved?1:2;if(!saved)throw std::runtime_error("Fire selected root save failed");
 +  }
-+  if(f.cursor_participates) {
++  if(f.inventory_mutates&&f.cursor_participates) {
++   if(f.helper_plan&&!f.helper_plan->RevalidateBeforePersist(c))throw std::runtime_error("Fire helper plan changed before cursor save");
++   if(f.door_plan&&!FireRunActionSource::NativeRunActionCustody::RevalidateDoorPlan(c,*f.door_plan))throw std::runtime_error("Fire door plan changed before cursor save");
 +   auto begin=f.staged->cursor_cbegin(),end=f.staged->cursor_cend();
 +   if(prepared_plan&&!prepared_plan->RevalidateBeforePersist(c))
 +    throw std::runtime_error("Fire construct plan changed before selected cursor save");
@@ -2916,6 +4123,11 @@
 +   const bool saved=database.SaveCursor(c.CharacterID(),begin,end);
 +   f.save_results[step++]=saved?1:2;if(!saved)throw std::runtime_error("Fire whole cursor save failed");
 +  }
++  // Origin rows stay published1 and locked through the final plan/root/cursor
++  // revalidation. Consume them AFTER selected saves, still BEFORE this SAME
++  // strict COMMIT. Scene validators must not mistake our staged state2 for a
++  // foreign/unpublished input while its actual native tree is still pre-swap.
++  if(f.action_origins)FireRunActionSource::NativeRunItemOrigins::ConsumeActionActual(database,connection,*f.action_origins,action_row);
 +  f.fence.writer_=nullptr;
 +  auto final_session=query("SELECT CONNECTION_ID(),@@in_transaction");
 +  if(final_session.RowCount()!=1||number(final_session.begin()[0])!=connection||number(final_session.begin()[1])!=1||database.TransactionStrictFailed())
@@ -2927,12 +4139,26 @@
 +  // NO ALLOCATION, callbacks, sends, SQL, lookup or fallible native mutation.
 +  // The preallocated map values and complete list change ownership by noexcept
 +  // swaps only. Old original trees stay owned in f.staged until normal teardown.
-+  for(const auto& exchange:exchanges)std::swap(*exchange.first,*exchange.second);
-+  if(f.cursor_participates)c.m_inv.m_cursor.Swap(f.staged->m_cursor);
++  if(f.inventory_mutates) {
++   for(const auto& exchange:exchanges)std::swap(*exchange.first,*exchange.second);
++   if(f.cursor_participates)c.m_inv.m_cursor.Swap(f.staged->m_cursor);
++  }
 +  f.phase=State::Phase::Committed;f.fence.Detach();
 +  // Private constructor runs here, before any mutable achievement callback.
 +  // Moving into stack optional is noexcept and revokes the temporary authority.
-+  if(shared_original) {
++  if(f.transform_origins&&(!actual_output||!FireRunActionSource::NativeRunItemOrigins::PublishTransformActual(c,*f.transform_origins,*actual_output,output_slot))) {
++   f.phase=State::Phase::Unknown;
++   throw std::runtime_error("Fire committed output origin publication unknown; terminal hold");
++  }
++  if(run_receipt) {
++   const auto kind=f.helper_use?FireRunActionSource::RunActionKind::HelperActivation:f.door_use->Facts().kind;
++   const auto boundary=f.latch?f.latch->boundary:FireRunActionSource::RunActionBoundary::RetainedWorldPhysicalKey;
++   const auto run=f.latch?f.latch->run:0;
++   run_receipt->door_original=std::move(f.door_use);run_receipt->helper_original=std::move(f.helper_use);
++   run_receipt->door_plan=std::move(f.door_plan);run_receipt->helper_plan=std::move(f.helper_plan);
++   run_receipt->view={kind,boundary,action_row,run,sequence,run_receipt->door_original.get(),run_receipt->helper_original.get(),run_receipt->door_plan.get(),run_receipt->helper_plan.get()};
++   FireRunActionSource::PublishedRunActionReceipt issued(std::move(run_receipt));run_handoff.emplace(std::move(issued));
++  }else if(shared_original) {
 +   FireSharedTransformSource::PublishedSharedTransformUse issued(c,*shared_original,
 +    sequence,output_item,output_serial,output_slot,output_charges);
 +   shared_handoff.emplace(std::move(issued));
@@ -2948,14 +4174,14 @@
 +  // independent native session ticket/registry lifetime check, never f/owner.
 +  for(const auto item:achievement_items)if(item) {
 +   c.UpdateAchievementForOwnItem(item);
-+   if(!StillLive(ticket))return true;
++   if(!live())return true;
 +  }
 + }catch(...) {
 +  if(known_commit) {
-+   // Publication above cannot throw. A later packet failure must not replay a
-+   // committed debit, republish output, create a receipt or run the old branch.
-+   if(StillLive(ticket))c.RejectInventorySessionAdmission();
-+   return true;
++   // Inventory memory publication is allocation-free. Origin acknowledgment
++   // or a later packet failure never replays a committed debit/output/receipt.
++   if(live())c.RejectInventorySessionAdmission();
++   return false;
 +  }
 +  f.fence.writer_=nullptr;
 +  if(transaction)database.TransactionRollbackStrict();
@@ -2963,10 +4189,13 @@
 +   f.phase=State::Phase::Unknown;
 +   c.RejectInventorySessionAdmission(); // existing lease retained to full delete
 +  }else {f.phase=State::Phase::Rejected;f.fence.Detach();}
-+  return true;
++  return false;
 + }
 + // Deliberately outside catch: even an exception from the mutable sink must
 + // never send control back into code that dereferences Client or held trees.
++ if(run_handoff) {
++  FireRunActionSource::OnOriginalRunActionPublished(c,*run_handoff);return true;
++ }
 + if(shared_handoff) {
 +  FireSharedTransformSource::OnOriginalSharedTransformPublished(c,*shared_handoff);
 +  return true;
@@ -2978,13 +4207,14 @@
 +}
 --- /dev/null
 +++ b/zone/fire_native_item_custody.h
-@@ -0,0 +1,73 @@
+@@ -0,0 +1,78 @@
 +#pragma once
 +#include <cstdint>
 +#include <memory>
 +class Client;
 +namespace EQEmu::SharedCore::InventorySessions {class ZoneReservation;}
 +namespace EQ { class ItemInstance; }
++namespace FireRunActionSource {class NativeRunActionCustody;class OriginalDoorUse;class PreparedRunDoorPlan;enum class DoorActionResult:uint8_t;}
 +namespace FirePersonalOccurrenceSource {
 +struct Binding;
 +// Client-owned, feature-private native input state. No packet/Lua constructor.
@@ -3028,6 +4258,10 @@
 +  DeleteScope& operator=(const DeleteScope&)=delete;
 + };
 +private:
++ friend class FireRunActionSource::NativeRunActionCustody;
++ static FireRunActionSource::DoorActionResult DoorSelected(Client&,
++  std::unique_ptr<FireRunActionSource::OriginalDoorUse>,std::unique_ptr<FireRunActionSource::PreparedRunDoorPlan>);
++ static bool PublishSelected(Client&,bool client_update);
 + struct State;
 + std::unique_ptr<State> state_;
 + NativeItemCustody();
@@ -3115,17 +4349,19 @@
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
 +++ b/zone/fire_original_construct_death.h
-@@ -0,0 +1,45 @@
+@@ -0,0 +1,47 @@
 +#pragma once
 +#include "fire_original_construct_producer.h"
 +#include <memory>
 +class Zone;
++namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
 +namespace FirePersonalOccurrenceSource {
 +class OriginalConstructNativeDeath;
 +// Finite native-event queue. No timer, retry, history scan or public script API.
 +class OriginalConstructDeathQueue final {
 + friend class OriginalConstructNativeDeath;
 + friend class OriginalGotonurSayQueue;
++ friend class FireRunActionSource::RunUseWitness;
 + friend class ::EntityList;
 + friend class ::Zone;
 + struct Lifetime {const Zone* owner;bool active=true;};
@@ -3580,6 +4816,1112 @@
 +};
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
++++ b/zone/fire_run_action_custody.h
+@@ -0,0 +1,86 @@
++#pragma once
++#include <cstdint>
++#include <memory>
++#include <optional>
++#include <type_traits>
++class Client;
++class Database;
++namespace FirePersonalOccurrenceSource {class NativeItemCustody;}
++namespace FireRunActionSource {
++// Original native use records and preallocated scene/actor plans belong to
++// Spells. Constructors/capture/revalidation stay private to genuine native seams.
++class OriginalDoorUse;
++class OriginalHelperUse;
++class PreparedRunDoorPlan;
++class PreparedRunHelperPlan;
++class NativeRunDoorSource;
++class PublishedRunActionSink;
++class NativeRunHelperSource;
++class NativeRunPublication;
++struct RunLatchSnapshot;
++class PreparedRunActionOrigins;
++enum class RunActionKind : uint8_t {
++ InnerVault=1,WorshipPair=2,GuardianVaultKey=3,HelperActivation=4,WorldFontKey=5
++};
++enum class RunActionBoundary : uint8_t {
++ CommittedFirstRunAction,ExistingPublishedRunLatch,RetainedWorldPhysicalKey
++};
++struct PublishedRunActionView {
++ RunActionKind kind;
++ RunActionBoundary boundary;
++ uint64_t run_action_id; // real inserted/read row ID; zero ONLY for world key use
++ uint64_t run_id; // real shared run; zero ONLY for world key use
++ uint64_t native_sequence;
++ const OriginalDoorUse* door_original;
++ const OriginalHelperUse* helper_original;
++ PreparedRunDoorPlan* door_plan;
++ PreparedRunHelperPlan* helper_plan;
++ // All pointers borrowed from the issuing receipt, never client click state.
++};
++static_assert(std::is_trivially_copyable<PublishedRunActionView>::value,
++ "Run-action views cannot allocate or mint authority");
++class NativeRunActionCustody;
++class PublishedRunActionReceipt final {
++ friend class NativeRunActionCustody;
++ friend class FirePersonalOccurrenceSource::NativeItemCustody;
++ struct State;
++ std::unique_ptr<State> state_; // fully allocated and pinned BEFORE persistence
++ explicit PublishedRunActionReceipt(std::unique_ptr<State>) noexcept;
++public:
++ ~PublishedRunActionReceipt();
++ PublishedRunActionReceipt(const PublishedRunActionReceipt&)=delete;
++ PublishedRunActionReceipt& operator=(const PublishedRunActionReceipt&)=delete;
++ PublishedRunActionReceipt(PublishedRunActionReceipt&&) noexcept;
++ PublishedRunActionReceipt& operator=(PublishedRunActionReceipt&&)=delete;
++ std::optional<PublishedRunActionView> Take(const Client& actual_owner) noexcept;
++};
++enum class DoorActionResult : uint8_t {SelectedRejected,CommittedToNativePublication};
++class NativeRunActionCustody final {
++ friend class NativeRunDoorSource;
++ friend class NativeRunHelperSource;
++ friend class PublishedRunActionSink;
++ friend class FirePersonalOccurrenceSource::NativeItemCustody;
++ // Called ONLY by the original door click's private issuer, before mutable
++ // door/quest callbacks. This is a Door event, never a fabricated spell finish.
++ // Consumes an owned original intent and preallocated native scene plan.
++ // A selected reject MUST return from the native door event; never fall back
++ // to generic door/keyring logic. Caller returns immediately after this call
++ // and does not touch Client/door after the mutable final publication sink.
++ static DoorActionResult ExecuteOriginalDoor(Client&,std::unique_ptr<OriginalDoorUse>,
++  std::unique_ptr<PreparedRunDoorPlan>);
++ static bool RevalidateDoorPlan(Client&,const PreparedRunDoorPlan&);
++ static std::unique_ptr<RunLatchSnapshot> PreviewActual(const OriginalDoorUse&);
++ static std::unique_ptr<RunLatchSnapshot> PreviewActual(const OriginalHelperUse&);
++ static uint64_t StageActual(Database&,uint64_t connection,const RunLatchSnapshot&,
++  const OriginalDoorUse*,const OriginalHelperUse*,PreparedRunActionOrigins*,
++  uint64_t native_sequence,bool& write_entered);
++ static bool AcknowledgeNativePublication(NativeRunPublication&);
++ // Helper47756 stays on the existing genuine successful-cast/debit ticket;
++ // helper preparation and strict writer integration are feature-private.
++};
++// Final mutable native publication sink. It takes/seals the issuing receipt
++// first and transfers the SAME planned scene/helper. No Client/state access
++// follows this call in a custody issuer. Native scene acknowledgments belong to
++// private original door/walk/arrival/barrier/dust receipts, never this view alone.
++void OnOriginalRunActionPublished(Client&,PublishedRunActionReceipt&);
++} // namespace FireRunActionSource
+--- /dev/null
++++ b/zone/fire_run_action_custody_impl.inc
+@@ -0,0 +1,224 @@
++// Included ONLY by fire_native_item_custody.cpp. Finite Fire170 ledger/issuer,
++// not a public persistence service. No schema creation or automatic recovery.
++namespace FireRunActionSource {
++struct RunLatchSnapshot {
++ RunActionKind kind{};
++ RunActionBoundary boundary=RunActionBoundary::CommittedFirstRunAction;
++ uint64_t run=0,row=0;
++ uint32_t creator=0;
++ uint64_t occurrence=0,sequence=0;
++ uint8_t state=0,role=0,mask=0;
++ bool debit=false;
++};
++struct PublishedRunActionReceipt::State {
++ const Client* owner=nullptr;
++ bool taken=false;
++ PublishedRunActionView view{};
++ std::unique_ptr<OriginalDoorUse> door_original;
++ std::unique_ptr<OriginalHelperUse> helper_original;
++ std::unique_ptr<PreparedRunDoorPlan> door_plan;
++ std::unique_ptr<PreparedRunHelperPlan> helper_plan;
++};
++PublishedRunActionReceipt::PublishedRunActionReceipt(std::unique_ptr<State> s) noexcept:state_(std::move(s)){}
++PublishedRunActionReceipt::~PublishedRunActionReceipt()=default;
++PublishedRunActionReceipt::PublishedRunActionReceipt(PublishedRunActionReceipt&& o) noexcept:state_(std::move(o.state_)){}
++std::optional<PublishedRunActionView> PublishedRunActionReceipt::Take(const Client& actual) noexcept {
++ if(!state_||state_->taken||state_->owner!=&actual)return {};
++ state_->taken=true;return state_->view;
++}
++namespace {
++uint64_t ActionNumber(const char* text) {
++ if(!text||!*text)throw std::runtime_error("Fire action null number");
++ uint64_t value=0;const auto end=text+std::strlen(text);
++ const auto p=std::from_chars(text,end,value);
++ if(p.ec!=std::errc{}||p.ptr!=end)throw std::runtime_error("Fire action invalid number");
++ return value;
++}
++MySQLRequestResult ActionQuery(Database& db,const std::string& sql) {
++ if(db.GetStatus()!=DBcore::Connected)throw std::runtime_error("Fire action disconnected");
++ auto q=db.QueryDatabase(sql,false);
++ if(!q.Success())throw std::runtime_error("Fire action query failed");
++ return q;
++}
++void ActionSession(Database& db,uint64_t connection) {
++ auto q=ActionQuery(db,"SELECT CONNECTION_ID(),@@in_transaction");
++ if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=connection||ActionNumber(q.begin()[1])!=1||db.TransactionStrictFailed())
++  throw std::runtime_error("Fire action strict session differs");
++}
++void ActionFoundation(Database& db) {
++ auto q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() "
++  "AND engine='InnoDB' AND table_name IN ('rof2_fire_run_actions','shared_tasks','shared_task_members',"
++  "'character_shared_task_reward_instances','character_task_reward_instances','character_tasks',"
++  "'shared_task_dynamic_zones','dynamic_zones','dynamic_zone_members','instance_list','instance_list_player','shared_task_activity_state')");
++ if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=12)throw std::runtime_error("Fire action foundation differs");
++ q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='rof2_fire_run_actions'");
++ if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=25)throw std::runtime_error("Fire action schema differs");
++ q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() "
++  "AND table_name='rof2_fire_run_actions' AND index_name='one_action_per_run' AND non_unique=0 "
++  "AND ((seq_in_index=1 AND column_name='shared_task_id') OR (seq_in_index=2 AND column_name='action_kind'))");
++ if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=2)throw std::runtime_error("Fire action unique run key differs");
++}
++bool ValidMission(const MissionRunFacts& m) {
++ return m.run&&m.local_occurrence&&m.character&&m.accepted_time&&m.zone==490&&m.version==1&&m.instance&&m.dynamic_zone;
++}
++uint8_t RoleBit(RunActionKind kind,GateRole role) {
++ if(kind==RunActionKind::WorshipPair) {
++  if(role==GateRole::WorshipLeft)return 1;if(role==GateRole::WorshipRight)return 2;
++ }else if(kind==RunActionKind::HelperActivation) {
++  if(role==GateRole::KeymasterGarden)return 1;if(role==GateRole::KeymasterPool)return 2;
++ }else if((kind==RunActionKind::InnerVault&&role==GateRole::InnerVault)||
++  (kind==RunActionKind::GuardianVaultKey&&role==GateRole::GuardianVault))return 1;
++ return 0;
++}
++std::unique_ptr<RunLatchSnapshot> PreviewLatch(RunActionKind kind,const MissionRunFacts& m) {
++ if(!ValidMission(m))return {};
++ auto q=ActionQuery(database,fmt::format(
++  "SELECT id,creator_character_id,creator_local_occurrence,native_sequence,state,source_role,published_role_mask "
++  "FROM rof2_fire_run_actions WHERE shared_task_id={} AND action_kind={}",m.run,unsigned(kind)));
++ if(q.RowCount()>1)return {};
++ auto result=std::make_unique<RunLatchSnapshot>();result->kind=kind;result->run=m.run;
++ result->debit=kind==RunActionKind::InnerVault||kind==RunActionKind::WorshipPair||kind==RunActionKind::HelperActivation;
++ if(!q.RowCount())return result;
++ auto r=q.begin();result->row=ActionNumber(r[0]);result->creator=ActionNumber(r[1]);
++ result->occurrence=ActionNumber(r[2]);result->sequence=ActionNumber(r[3]);result->state=ActionNumber(r[4]);
++ result->role=ActionNumber(r[5]);result->mask=ActionNumber(r[6]);
++ // A helper is unique for the whole run, including lost/unknown attempts.
++ // Pending/terminal-hold rows never authorize retry or a second material debit.
++ if(kind==RunActionKind::HelperActivation||result->state!=1||!result->mask)return {};
++ result->boundary=RunActionBoundary::ExistingPublishedRunLatch;result->debit=false;
++ return result;
++}
++void LockCurrentRun(Database& db,const MissionRunFacts& m) {
++ if(!ValidMission(m))throw std::runtime_error("Fire action invalid native mission");
++ auto q=ActionQuery(db,fmt::format(
++  "SELECT h.occurrence_id,d.id FROM shared_tasks s "
++  "JOIN shared_task_members member ON member.shared_task_id=s.id AND member.character_id={} "
++  "JOIN character_shared_task_reward_instances h ON h.shared_task_id=s.id AND h.character_id=member.character_id AND h.task_id=s.task_id "
++  "JOIN character_task_reward_instances r ON r.character_id=h.character_id AND r.task_id=h.task_id AND r.occurrence_id=h.occurrence_id "
++  "JOIN character_tasks ct ON ct.charid=r.character_id AND ct.taskid=r.task_id AND ct.acceptedtime=r.accepted_time "
++  "JOIN shared_task_dynamic_zones link ON link.shared_task_id=s.id "
++  "JOIN dynamic_zones d ON d.id=link.dynamic_zone_id "
++  "JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=d.id AND dm.character_id=member.character_id "
++  "JOIN instance_list i ON i.id=d.instance_id JOIN instance_list_player ip ON ip.id=i.id AND ip.charid=member.character_id "
++  "WHERE s.id={} AND s.task_id=920170 AND s.accepted_time=FROM_UNIXTIME({}) "
++  "AND s.completion_time IS NULL AND (s.expire_time IS NULL OR s.expire_time>NOW()) "
++  "AND h.occurrence_id={} AND r.accepted_time={} AND ct.type={} AND ct.was_rewarded=0 "
++  "AND d.id={} AND d.instance_id={} AND d.type={} AND i.zone=490 AND i.version=1 "
++  "AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP()) "
++  "AND (SELECT COUNT(*) FROM shared_task_dynamic_zones WHERE shared_task_id=s.id)=1 FOR UPDATE",
++  m.character,m.run,m.accepted_time,m.local_occurrence,m.accepted_time,static_cast<int>(TaskType::Shared),
++  m.dynamic_zone,m.instance,static_cast<int>(DynamicZoneType::Mission)));
++ if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=m.local_occurrence||ActionNumber(q.begin()[1])!=m.dynamic_zone)
++  throw std::runtime_error("Fire action native run/member changed");
++}
++void FirstStage(Database& db,uint64_t run,RunActionKind kind) {
++ int activity=kind==RunActionKind::InnerVault?3:kind==RunActionKind::WorshipPair?7:kind==RunActionKind::HelperActivation?14:-1;
++ if(activity>=0) {
++  auto q=ActionQuery(db,fmt::format("SELECT done_count,UNIX_TIMESTAMP(completed_time) FROM shared_task_activity_state WHERE shared_task_id={} AND activity_id={} FOR UPDATE",run,activity));
++  if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=0||(q.begin()[1]&&ActionNumber(q.begin()[1])!=0))throw std::runtime_error("Fire first action stage differs");
++ }
++ const int first=kind==RunActionKind::InnerVault?0:kind==RunActionKind::WorshipPair?6:kind==RunActionKind::HelperActivation?13:15;
++ const int last=kind==RunActionKind::InnerVault?2:first;
++ auto q=ActionQuery(db,fmt::format("SELECT activity_id,done_count,UNIX_TIMESTAMP(completed_time) FROM shared_task_activity_state WHERE shared_task_id={} AND activity_id BETWEEN {} AND {} ORDER BY activity_id FOR UPDATE",run,first,last));
++ if(q.RowCount()!=unsigned(last-first+1))throw std::runtime_error("Fire action prior stage missing");
++ int i=first;for(auto r=q.begin();r!=q.end();++r,++i)
++  if(ActionNumber(r[0])!=unsigned(i)||ActionNumber(r[1])!=1||!r[2]||!ActionNumber(r[2]))throw std::runtime_error("Fire action prior stage differs");
++}
++}
++std::unique_ptr<RunLatchSnapshot> NativeRunActionCustody::PreviewActual(const OriginalDoorUse& use) {
++ try {const auto& f=use.Facts();if(!f.mission||!RoleBit(f.kind,f.role))return {};return PreviewLatch(f.kind,*f.mission);}catch(...){return {};}
++}
++std::unique_ptr<RunLatchSnapshot> NativeRunActionCustody::PreviewActual(const OriginalHelperUse& use) {
++ try {const auto& f=use.Facts();if(!RoleBit(RunActionKind::HelperActivation,f.selected_target))return {};return PreviewLatch(RunActionKind::HelperActivation,f.mission);}catch(...){return {};}
++}
++bool NativeRunActionCustody::RevalidateDoorPlan(Client& c,const PreparedRunDoorPlan& plan) {return plan.RevalidateBeforePersist(c);}
++DoorActionResult NativeRunActionCustody::ExecuteOriginalDoor(Client& c,std::unique_ptr<OriginalDoorUse> use,std::unique_ptr<PreparedRunDoorPlan> plan) {
++ return FirePersonalOccurrenceSource::NativeItemCustody::DoorSelected(c,std::move(use),std::move(plan));
++}
++uint64_t NativeRunActionCustody::StageActual(Database& db,uint64_t connection,const RunLatchSnapshot& preview,
++ const OriginalDoorUse* door,const OriginalHelperUse* helper,PreparedRunActionOrigins* origins,uint64_t sequence,bool& write_entered) {
++ if(bool(door)==bool(helper)||!sequence)throw std::runtime_error("Fire action missing original native issuer");
++ const auto kind=helper?RunActionKind::HelperActivation:door->Facts().kind;
++ const auto& m=helper?helper->Facts().mission:*door->Facts().mission;
++ const auto role=helper?helper->Facts().selected_target:door->Facts().role;
++ if(kind!=preview.kind||m.run!=preview.run||!RoleBit(kind,role))throw std::runtime_error("Fire action selection changed");
++ ActionSession(db,connection);ActionFoundation(db);LockCurrentRun(db,m);
++ auto existing=ActionQuery(db,fmt::format("SELECT id,state,published_role_mask FROM rof2_fire_run_actions WHERE shared_task_id={} AND action_kind={} FOR UPDATE",m.run,unsigned(kind)));
++ if(preview.row) {
++  if(existing.RowCount()!=1||ActionNumber(existing.begin()[0])!=preview.row||ActionNumber(existing.begin()[1])!=1||!ActionNumber(existing.begin()[2])||
++   preview.boundary!=RunActionBoundary::ExistingPublishedRunLatch||kind==RunActionKind::HelperActivation)
++   throw std::runtime_error("Fire published latch changed");
++  return preview.row;
++ }
++ if(existing.RowCount())throw std::runtime_error("Fire run action already entered");
++ FirstStage(db,m.run,kind);
++ PhysicalItemFacts item{};
++ uint32_t door_db=0;uint8_t door_packet=0;
++ if(helper)item=helper->Facts().clicked;
++ else {
++  const auto& f=door->Facts();const uint32_t wanted=kind==RunActionKind::InnerVault?47748:kind==RunActionKind::WorshipPair?47762:47757;
++  if(f.physical_count>f.physical_items.size())throw std::runtime_error("Fire action physical array differs");
++  for(size_t i=0;i<f.physical_count;++i)if(f.physical_items[i].item_id==wanted)item=f.physical_items[i];
++  door_db=f.door_database_id;door_packet=f.native_door_id;
++ }
++ if(!item.item_id||!item.serial||item.units!=1)throw std::runtime_error("Fire first action physical origin missing");
++ if(!origins)throw std::runtime_error("Fire action durable origin snapshot missing");
++ const auto origin_token=NativeRunItemOrigins::LockActionActual(db,connection,*origins,door,helper);
++ write_entered=true; // ANY selected write, before INSERT; unknown/failure is not retry authority.
++ auto inserted=ActionQuery(db,fmt::format(
++  "INSERT INTO rof2_fire_run_actions (shared_task_id,action_kind,creator_character_id,creator_local_occurrence,creator_accepted_time,"
++  "native_sequence,dynamic_zone_id,zone_id,instance_id,source_role,source_door_sql_id,source_door_packet_id,source_item_id,"
++  "source_origin_token,source_item_serial,source_item_slot,source_item_charges,inventory_debit_committed,state,published_role_mask,helper_entity_id,"
++  "committed_at,native_published_at,terminal_at) VALUES ({},{},{},{},{},{},{},{},{},{},{},{},{},UNHEX('{}'),{},{},{},{},0,0,NULL,UNIX_TIMESTAMP(),NULL,NULL)",
++  m.run,unsigned(kind),m.character,m.local_occurrence,m.accepted_time,sequence,m.dynamic_zone,m.zone,m.instance,unsigned(role),
++  door_db?std::to_string(door_db):"NULL",door_packet?std::to_string(door_packet):"NULL",item.item_id,origin_token,item.serial,item.slot,item.charges,preview.debit?1:0));
++ if(inserted.RowsAffected()!=1||!inserted.LastInsertedID())throw std::runtime_error("Fire action insert not exact");
++ ActionSession(db,connection);return inserted.LastInsertedID();
++}
++bool NativeRunActionCustody::AcknowledgeNativePublication(NativeRunPublication& proof) {
++ if(proof.taken_)return false;
++ proof.taken_=true; // FIRST: the private positive scene event is one-use even on failure.
++ const auto p=proof.facts_;
++ const auto bit=RoleBit(p.kind,p.role);
++ if(!proof.state_||!bit||!p.run_action_id||!p.run_id||!p.native_sequence||!p.character||p.zone!=490||!p.instance||!p.door_database_id||!p.native_door_id)return false;
++ bool transaction=false;
++ try {
++  auto fresh=ActionQuery(database,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
++  if(fresh.RowCount()!=1||ActionNumber(fresh.begin()[1])||ActionNumber(fresh.begin()[2])!=1)return false;
++  const auto connection=ActionNumber(fresh.begin()[0]);
++  if(!database.TransactionBeginStrict().Success())return false;
++  transaction=true;ActionFoundation(database);
++  auto q=ActionQuery(database,fmt::format("SELECT creator_character_id,creator_local_occurrence,creator_accepted_time,native_sequence,dynamic_zone_id,"
++   "zone_id,instance_id,source_role,source_door_sql_id,source_door_packet_id,state,published_role_mask FROM rof2_fire_run_actions "
++   "WHERE id={} AND shared_task_id={} AND action_kind={} FOR UPDATE",p.run_action_id,p.run_id,unsigned(p.kind)));
++  if(q.RowCount()!=1)throw std::runtime_error("Fire publication exact action missing");
++  auto r=q.begin();const auto state=ActionNumber(r[10]);
++  if(ActionNumber(r[5])!=p.zone||ActionNumber(r[6])!=p.instance||state>1)throw std::runtime_error("Fire publication row stage differs");
++  const bool helper=p.kind==RunActionKind::HelperActivation;
++  if((state==0||helper)&&(ActionNumber(r[0])!=p.character||ActionNumber(r[3])!=p.native_sequence))throw std::runtime_error("Fire original publication issuer differs");
++  if(helper&&(!p.actor_entity||state!=0||ActionNumber(r[7])!=unsigned(p.role)))throw std::runtime_error("Fire original helper publication differs");
++  if(!helper&&(state==0||p.kind!=RunActionKind::WorshipPair)&&
++   (ActionNumber(r[7])!=unsigned(p.role)||!r[8]||!r[9]||ActionNumber(r[8])!=p.door_database_id||ActionNumber(r[9])!=p.native_door_id))
++   throw std::runtime_error("Fire original door publication differs");
++  // Original first issuer must retain its same accepted epoch. A later genuine
++  // published-latch opener can be another current member; never copies key custody.
++  auto member=ActionQuery(database,fmt::format("SELECT h.occurrence_id,UNIX_TIMESTAMP(s.accepted_time) FROM shared_tasks s "
++   "JOIN shared_task_members m ON m.shared_task_id=s.id AND m.character_id={} "
++   "JOIN character_shared_task_reward_instances h ON h.shared_task_id=s.id AND h.character_id=m.character_id AND h.task_id=s.task_id "
++   "JOIN character_task_reward_instances a ON a.character_id=h.character_id AND a.task_id=h.task_id AND a.occurrence_id=h.occurrence_id "
++   "WHERE s.id={} AND s.task_id=920170 AND s.completion_time IS NULL AND a.accepted_time=UNIX_TIMESTAMP(s.accepted_time) FOR UPDATE",p.character,p.run_id));
++  if(member.RowCount()!=1||!ActionNumber(member.begin()[0])||
++   (state==0&&(ActionNumber(member.begin()[0])!=ActionNumber(r[1])||ActionNumber(member.begin()[1])!=ActionNumber(r[2]))))
++   throw std::runtime_error("Fire native publication current run member differs");
++  const auto mask=ActionNumber(r[11])|bit;
++  auto updated=ActionQuery(database,fmt::format("UPDATE rof2_fire_run_actions SET state={},published_role_mask={},helper_entity_id={},"
++   "native_published_at=COALESCE(native_published_at,UNIX_TIMESTAMP()),terminal_at={} WHERE id={} AND shared_task_id={} AND action_kind={} AND state={}",
++   helper?2:1,mask,helper?std::to_string(p.actor_entity):"NULL",helper?"UNIX_TIMESTAMP()":"NULL",p.run_action_id,p.run_id,unsigned(p.kind),state));
++  // A second real opening of an already-published same leaf is idempotent;
++  // no second debit, actor, progress or inferred publication event is created.
++  if(updated.RowsAffected()>1)throw std::runtime_error("Fire publication ack row mismatch");
++  ActionSession(database,connection);const auto commit=database.TransactionCommitStrict();transaction=false;
++  return commit.Success();
++ }catch(...){if(transaction)database.TransactionRollbackStrict();return false;}
++}
++} // namespace FireRunActionSource
+--- /dev/null
++++ b/zone/fire_run_action_geometry.h
+@@ -0,0 +1,40 @@
++#pragma once
++#include "fire_run_action_scene.h"
++#include <glm/glm.hpp>
++#include <array>
++// Selected LOCAL source geometry and logical reservations; no serving activation.
++namespace FireRunActionSource {
++struct GateBinding {GateRole role;uint32_t database_id;uint8_t native_id;uint32_t version;glm::vec4 pose;uint16_t size,lockpick;uint32_t key;uint8_t nokeyring;bool disable_timer;glm::vec3 low,high,before,after;};
++inline const std::array<GateBinding,7>& BoundGates(){static const std::array<GateBinding,7> values{{
++{GateRole::InnerVault,304062000,1,1,glm::vec4(0.0f,283.35f,12.7702f,384.0f),85,32767,0,1,true,glm::vec3(-20.0f,263.35f,6.0002f),glm::vec3(20.0f,303.35f,30.0002f),glm::vec3(0.0f,273.35f,16.7502f),glm::vec3(0.0f,293.35f,16.7502f)},
++{GateRole::WorshipLeft,304062001,2,1,glm::vec4(-236.0f,749.5f,11.77f,332.81044f),85,32767,0,1,true,glm::vec3(-256.0f,729.5f,5.0f),glm::vec3(-216.0f,769.5f,29.0f),glm::vec3(-230.1232f,741.4091f,15.75f),glm::vec3(-241.8768f,757.5909f,15.75f)},
++{GateRole::WorshipRight,304062002,3,1,glm::vec4(236.0f,749.5f,11.77f,435.18956f),85,32767,0,1,true,glm::vec3(216.0f,729.5f,5.0f),glm::vec3(256.0f,769.5f,29.0f),glm::vec3(230.1232f,741.4091f,15.75f),glm::vec3(241.8768f,757.5909f,15.75f)},
++{GateRole::KeymasterPool,304062003,4,1,glm::vec4(-251.175f,1020.55f,-3.23f,412.54685f),85,32767,0,1,true,glm::vec3(-271.175f,1000.55f,-10.0f),glm::vec3(-231.175f,1040.55f,14.0f),glm::vec3(-254.607f,1011.1574f,0.75f),glm::vec3(-247.743f,1029.9426f,0.75f)},
++{GateRole::KeymasterGarden,304062004,5,1,glm::vec4(251.175f,1020.55f,-3.23f,355.45315f),85,32767,0,1,true,glm::vec3(231.175f,1000.55f,-10.0f),glm::vec3(271.175f,1040.55f,14.0f),glm::vec3(254.607f,1011.1574f,0.75f),glm::vec3(247.743f,1029.9426f,0.75f)},
++{GateRole::GuardianVault,304062005,6,1,glm::vec4(0.06667f,711.594f,22.77f,384.0f),100,32767,47757,1,true,glm::vec3(-19.93333f,691.594f,16.0f),glm::vec3(20.06667f,731.594f,40.0f),glm::vec3(0.0667f,701.594f,26.75f),glm::vec3(0.0667f,721.594f,26.75f)},
++{GateRole::WorldFont,35650,7,0,glm::vec4(0.06667f,711.594f,22.77f,384.0f),100,32767,47759,1,false,glm::vec3(0.06667f,711.594f,22.77f),glm::vec3(0.06667f,711.594f,22.77f),glm::vec3(0.06667f,711.594f,22.77f),glm::vec3(0.06667f,711.594f,22.77f)}
++}};return values;}
++struct HelperRouteBinding {GateRole target;std::array<glm::vec3,4> anchors;glm::vec3 low,high,passage;};
++inline const std::array<HelperRouteBinding,2>& BoundRoutes(){static const std::array<HelperRouteBinding,2> values{{
++{GateRole::KeymasterPool,{{glm::vec3(-280.0f,970.0f,0.75f),glm::vec3(-274.0f,986.0f,-2.25f),glm::vec3(-264.0f,1000.0f,0.75f),glm::vec3(-255.2934f,1009.27888f,0.75f)}},glm::vec3(-295.0f,955.0f,-5.25f),glm::vec3(-265.0f,985.0f,6.75f),glm::vec3(-247.743f,1029.9426f,0.75f)},
++{GateRole::KeymasterGarden,{{glm::vec3(280.0f,970.0f,0.2093f),glm::vec3(274.0f,986.0f,-0.3919f),glm::vec3(264.0f,1000.0f,0.75f),glm::vec3(255.2934f,1009.27888f,0.75f)}},glm::vec3(265.0f,955.0f,-5.7907f),glm::vec3(295.0f,985.0f,6.2093f),glm::vec3(247.743f,1029.9426f,0.75f)},
++}};return values;}
++
++struct MaterialSpawnBinding {uint32_t spawn,npc,item;int activity;};
++inline const std::array<MaterialSpawnBinding,14>& BoundMaterialSpawns(){static const std::array<MaterialSpawnBinding,14> values{{
++{304062000,490900,47748,0},
++{304062001,490900,47748,0},
++{304062002,490901,47749,1},
++{304062003,490901,47749,1},
++{304062004,490902,47750,2},
++{304062005,490902,47750,2},
++{304062006,490903,47761,4},
++{304062007,490904,47760,5},
++{304062008,490905,47751,8},
++{304062009,490906,47752,9},
++{304062010,490907,47753,10},
++{304062011,490908,47754,11},
++{304062012,490909,47755,12},
++{304062013,490910,47757,15},
++}};return values;}
++} // namespace FireRunActionSource
+--- /dev/null
++++ b/zone/fire_run_action_scene.h
+@@ -0,0 +1,180 @@
++#pragma once
++#include "fire_run_action_custody.h"
++#include "common/item_instance.h"
++#include <array>
++#include <cstdint>
++#include <memory>
++#include <optional>
++#include <glm/glm.hpp>
++class Doors;
++class NPC;
++class Corpse;
++class EntityList;
++class MoveToCommand;class FlyToCommand;class SwimToCommand;
++class Zone;
++namespace FireSharedTransformSource {class PublishedSharedTransformSink;struct PublishedSharedTransformView;}
++namespace FireRunActionSource {
++class RunUseWitness;
++class RunHelperAttempt;
++class RunDoorLifetime final {friend class ::Doors;friend class RunUseWitness;bool active_=true;RunDoorLifetime()=default;public:~RunDoorLifetime()=default;};
++class RunCorpseLifetime final {friend class ::Corpse;friend class RunUseWitness;bool active_=true;RunCorpseLifetime()=default;public:~RunCorpseLifetime()=default;};
++enum class GateRole:uint8_t {InnerVault=1,WorshipLeft=2,WorshipRight=3,KeymasterGarden=4,KeymasterPool=5,GuardianVault=6,WorldFont=7};
++// Read-only facts are not authority. Only original private native issuers can
++// construct the owning uses below, with their actual lifetime/click witnesses.
++struct MissionRunFacts {
++ uint64_t run=0,local_occurrence=0;
++ uint32_t character=0,accepted_time=0,zone=0,version=0,instance=0,dynamic_zone=0;
++};
++struct PhysicalItemFacts {
++ uint32_t item_id=0;
++ int32_t serial=0;
++ int16_t slot=0,charges=0;
++ uint16_t units=0;
++};
++struct DoorUseFacts {
++ RunActionKind kind{};
++ GateRole role{};
++ std::optional<MissionRunFacts> mission; // absent ONLY for a real world Font click
++ uint64_t native_sequence=0;
++ uint32_t character=0,client_entity=0,zone=0,version=0,instance=0,door_database_id=0;
++ uint8_t native_door_id=0;
++ std::array<uint32_t,3> required_item_ids{};
++ uint8_t required_count=0;
++ std::array<PhysicalItemFacts,3> physical_items{};
++ uint8_t physical_count=0;
++ // Material facts may be absent for a later published-latch leaf. A first
++ // action needs exact captured originals; Core never manufactures possession.
++};
++class NativeRunHelperSource;
++class OriginalDoorUse final {
++ friend class NativeRunDoorSource;
++ friend class PreparedRunDoorPlan;
++ friend class PublishedRunActionSink;
++ struct State;
++ DoorUseFacts facts_;
++ std::shared_ptr<State> state_;
++ OriginalDoorUse(DoorUseFacts,std::shared_ptr<State>);
++public:
++ ~OriginalDoorUse();
++ const DoorUseFacts& Facts()const noexcept{return facts_;}
++ OriginalDoorUse(const OriginalDoorUse&)=delete;
++ OriginalDoorUse& operator=(const OriginalDoorUse&)=delete;
++};
++struct HelperUseFacts {
++ MissionRunFacts mission;
++ PhysicalItemFacts clicked; // actual47756/charge1 original slot/serial
++ uint32_t caster_entity=0,target_entity=0;
++ GateRole selected_target{}; // actual native location chooses garden OR pool
++};
++class OriginalHelperUse final {
++ friend class NativeRunHelperSource;
++ friend class PreparedRunHelperPlan;
++ friend class PublishedRunActionSink;
++ struct State;
++ HelperUseFacts facts_;
++ std::shared_ptr<State> state_;
++ OriginalHelperUse(HelperUseFacts,std::shared_ptr<State>);
++public:
++ ~OriginalHelperUse();
++ const HelperUseFacts& Facts()const noexcept{return facts_;}
++ OriginalHelperUse(const OriginalHelperUse&)=delete;
++ OriginalHelperUse& operator=(const OriginalHelperUse&)=delete;
++};
++class PreparedRunDoorPlan final {
++ friend class NativeRunDoorSource;
++ friend class NativeRunActionCustody;
++ friend class PublishedRunActionSink;
++ struct State;
++ std::unique_ptr<State> state_;
++ explicit PreparedRunDoorPlan(std::unique_ptr<State>)noexcept;
++ static std::unique_ptr<PreparedRunDoorPlan> PrepareActual(Client&,const OriginalDoorUse&);
++ bool RevalidateBeforePersist(Client&)const;
++public:
++ ~PreparedRunDoorPlan();
++ PreparedRunDoorPlan(const PreparedRunDoorPlan&)=delete;
++ PreparedRunDoorPlan& operator=(const PreparedRunDoorPlan&)=delete;
++};
++class PreparedRunHelperPlan final {
++ friend class FirePersonalOccurrenceSource::NativeItemCustody;
++ friend class NativeRunHelperSource;
++ friend class PublishedRunActionSink;
++ struct State;
++ std::unique_ptr<State> state_;
++ explicit PreparedRunHelperPlan(std::unique_ptr<State>)noexcept;
++ static std::unique_ptr<PreparedRunHelperPlan> PrepareActual(Client&,const OriginalHelperUse&,uint64_t);
++ bool RevalidateBeforePersist(Client&)const;
++public:
++ ~PreparedRunHelperPlan();
++ PreparedRunHelperPlan(const PreparedRunHelperPlan&)=delete;
++ PreparedRunHelperPlan& operator=(const PreparedRunHelperPlan&)=delete;
++};
++// Positive native publication is a different private event from a Core commit.
++// Only genuine original door or actual owned helper lifecycle can construct it.
++struct NativeRunPublicationFacts {
++ RunActionKind kind{};
++ GateRole role{};
++ uint64_t run_action_id=0,run_id=0,native_sequence=0;
++ uint32_t character=0,zone=0,instance=0,door_database_id=0,actor_entity=0;
++ uint8_t native_door_id=0;
++};
++class NativeRunPublication final {
++ friend class RunHelperAttempt;
++ friend class PreparedRunDoorPlan;
++ friend class PreparedRunHelperPlan;
++ friend class PublishedRunActionSink;
++ friend class NativeRunDoorSource;
++ friend class NativeRunHelperSource;
++ friend class NativeRunActionCustody;
++ NativeRunPublicationFacts facts_;
++ bool taken_=false; // Core seals before native publication-ack SQL
++ struct State;
++ std::unique_ptr<State> state_;
++ explicit NativeRunPublication(std::unique_ptr<State>)noexcept;
++public:
++ ~NativeRunPublication();
++ NativeRunPublication(const NativeRunPublication&)=delete;
++ NativeRunPublication& operator=(const NativeRunPublication&)=delete;
++};
++class NativeRunDoorSource final {
++ friend class ::Client;
++ friend class ::Doors;
++ friend class PublishedRunActionSink;
++ friend class NativeRunHelperSource;
++ friend class PreparedRunDoorPlan;
++ static bool RevalidateOriginalUse(Client&,const OriginalDoorUse&);
++ static bool PublishHelperBarrier(RunHelperAttempt&);
++ // Actual original packet before ordinary mutable callbacks. True means the
++ // selected branch handled/rejected and native caller MUST return immediately.
++ static bool HandleOriginalPacket(Client&,Doors&,uint8_t actual_packet_door);
++ static bool AuthorizeActualHandle(Client*,Doors&,uint8_t actual_trigger);
++ static void ObserveActualOpened(Doors&);
++};
++class NativeRunHelperSource final {
++ friend class ::MoveToCommand;friend class ::FlyToCommand;friend class ::SwimToCommand;
++ static void RecordActualWalkingStep(NPC&,const glm::vec3&,const glm::vec3&,int actual_native_mode);
++ friend class FirePersonalOccurrenceSource::NativeItemCustody;
++ friend class ::NPC;
++ friend class ::EntityList;
++ friend class ::Zone;
++ friend class PreparedRunHelperPlan;
++ friend class PublishedRunActionSink;
++ static void PublishActual(Client&,const PublishedRunActionView&);
++ static void ObserveActualRegistration(NPC*);
++ static void ObserveActualDestruction(NPC&);
++ static void DrainCompletions();
++ static void DiscardCompletions()noexcept;
++ static std::unique_ptr<OriginalHelperUse> CaptureActual(Client&,const EQ::ItemInstance&,
++  int16_t actual_slot,bool native_slot_supported,uint32_t actual_target);
++ static bool RevalidateActual(Client&,const OriginalHelperUse&);
++ // Actual private owned actor's native Process. Empty preserves ordinary NPCs.
++ static std::optional<bool> ProcessActual(NPC&);
++public:
++ // Actual native movement fallback only; rejects teleport for the genuinely
++ // owned helper and terminally holds that attempt. Never grants progress.
++ static bool RejectActualTeleport(NPC&);
++};
++class PublishedRunActionSink final {
++public:
++ static void Receive(Client&,PublishedRunActionReceipt&);
++};
++} // namespace FireRunActionSource
+--- /dev/null
++++ b/zone/fire_run_helper_profile.h
+@@ -0,0 +1,141 @@
++#pragma once
++#include "zonedump.h"
++#include <cstring>
++// SOURCE ONLY. Exact pinned loader/struct ABI; compare BEFORE NPC construction.
++// Local baseline only: never authorizes a spawn, acceptance, custody or serving activation.
++// Whole-object equality is intentional: loader and expected are memset-zeroed, including padding.
++// A different loader/ABI requires source requalification, not silent field omission.
++namespace FireHelperLocalSourceProfile {
++inline bool MatchesExpectedLoadedNPCType(const NPCType& actual) {
++ NPCType expected; std::memset(&expected,0,sizeof(expected));
++ switch(actual.npc_id) {
++ case 490913:
++  std::memcpy(expected.name,"Destructive_Golem",17);
++  std::memcpy(expected.lastname,"",0);
++  expected.current_hp = 300000;
++  expected.max_hp = 300000;
++  expected.size = 0;
++  expected.runspeed = 1.25;
++  expected.gender = 0;
++  expected.race = 649;
++  expected.class_ = 1;
++  expected.bodytype = 1;
++  expected.deity = 0;
++  expected.level = 85;
++  expected.npc_id = 490913;
++  expected.texture = 0;
++  expected.helmtexture = 0;
++  expected.herosforgemodel = 0;
++  expected.loottable_id = 0;
++  expected.npc_spells_id = 0;
++  expected.npc_spells_effects_id = 0;
++  expected.npc_faction_id = 0;
++  expected.faction_amount = 0;
++  expected.merchanttype = 0;
++  expected.alt_currency_type = 0;
++  expected.adventure_template = 0;
++  expected.trap_template = 0;
++  expected.light = 0;
++  expected.AC = 0;
++  expected.Mana = 0;
++  expected.ATK = 0;
++  expected.STR = 75;
++  expected.STA = 75;
++  expected.DEX = 75;
++  expected.AGI = 75;
++  expected.INT = 80;
++  expected.WIS = 75;
++  expected.CHA = 75;
++  expected.MR = 0;
++  expected.FR = 0;
++  expected.CR = 0;
++  expected.PR = 0;
++  expected.DR = 0;
++  expected.Corrup = 0;
++  expected.PhR = 0;
++  expected.haircolor = 1;
++  expected.beardcolor = 1;
++  expected.eyecolor1 = 1;
++  expected.eyecolor2 = 1;
++  expected.hairstyle = 1;
++  expected.luclinface = 1;
++  expected.beard = 0;
++  expected.drakkin_heritage = 0;
++  expected.drakkin_tattoo = 0;
++  expected.drakkin_details = 0;
++  expected.min_dmg = 0;
++  expected.max_dmg = 0;
++  expected.charm_ac = 0;
++  expected.charm_min_dmg = 0;
++  expected.charm_max_dmg = 0;
++  expected.charm_attack_delay = 0;
++  expected.charm_accuracy_rating = 0;
++  expected.charm_avoidance_rating = 0;
++  expected.charm_atk = 0;
++  expected.attack_count = -1;
++  std::memcpy(expected.special_abilities,"",0);
++  expected.d_melee_texture1 = 0;
++  expected.d_melee_texture2 = 0;
++  std::memcpy(expected.ammo_idfile,"IT10",4);
++  expected.prim_melee_type = 28;
++  expected.sec_melee_type = 28;
++  expected.ranged_type = 7;
++  expected.hp_regen = 0;
++  expected.hp_regen_per_second = 0;
++  expected.mana_regen = 0;
++  expected.aggroradius = 70;
++  expected.assistradius = 70;
++  expected.see_invis = 0;
++  expected.see_invis_undead = false;
++  expected.see_hide = false;
++  expected.see_improved_hide = false;
++  expected.qglobal = false;
++  expected.npc_aggro = false;
++  expected.spawn_limit = 0;
++  expected.mount_color = 0;
++  expected.attack_speed = 0;
++  expected.attack_delay = 3000;
++  expected.accuracy_rating = 0;
++  expected.avoidance_rating = 0;
++  expected.findable = false;
++  expected.trackable = true;
++  expected.is_quest_npc = true;
++  expected.slow_mitigation = 0;
++  expected.maxlevel = 0;
++  expected.scalerate = 100;
++  expected.private_corpse = false;
++  expected.unique_spawn_by_name = false;
++  expected.underwater = false;
++  expected.emoteid = 0;
++  expected.spellscale = 100;
++  expected.healscale = 100;
++  expected.no_target_hotkey = false;
++  expected.raid_target = false;
++  expected.armtexture = 0;
++  expected.bracertexture = 0;
++  expected.handtexture = 0;
++  expected.legtexture = 0;
++  expected.feettexture = 0;
++  expected.ignore_despawn = false;
++  expected.show_name = true;
++  expected.untargetable = false;
++  expected.skip_global_loot = true;
++  expected.rare_spawn = false;
++  expected.skip_auto_scale = false;
++  expected.stuck_behavior = 0;
++  expected.use_model = 0;
++  expected.flymode = -1;
++  expected.always_aggro = false;
++  expected.exp_mod = 0;
++  expected.heroic_strikethrough = 0;
++  expected.keeps_sold_items = true;
++  expected.is_parcel_merchant = false;
++  expected.greed = 0;
++  expected.multiquest_enabled = false;
++  expected.m_npc_tint_id = 0;
++  break;
++ default: return false;
++ }
++ return std::memcmp(&actual,&expected,sizeof(NPCType))==0;
++}
++} // namespace FireHelperLocalSourceProfile
+--- /dev/null
++++ b/zone/fire_run_item_origin.h
+@@ -0,0 +1,93 @@
++#pragma once
++#include <cstdint>
++#include <memory>
++#include <string>
++#include <vector>
++class Client;
++class Database;
++namespace EQ {class ItemInstance;}
++namespace FirePersonalOccurrenceSource {class NativeItemCustody;}
++namespace FireSharedTransformSource {struct OriginalSharedTransformUse;}
++namespace FireRunActionSource {
++struct MissionRunFacts;
++class OriginalRunLootUse; // Spells: private genuine current-run corpse loot issuer
++class NativeRunLootPublication; // Spells: actual positive native Save + corpse removal
++class NativeRunLootSource;
++class NativeRunDoorSource;
++class NativeRunHelperSource;
++class NativeRunActionCustody;
++class OriginalDoorUse;
++class OriginalHelperUse;
++class PreparedRunActionOrigins final {
++ friend class NativeRunItemOrigins;
++ struct State;
++ std::unique_ptr<State> state_;
++ explicit PreparedRunActionOrigins(std::unique_ptr<State>) noexcept;
++public:
++ ~PreparedRunActionOrigins();
++ PreparedRunActionOrigins(const PreparedRunActionOrigins&)=delete;
++ PreparedRunActionOrigins& operator=(const PreparedRunActionOrigins&)=delete;
++};
++class PreparedRunTransformOrigins final {
++ friend class NativeRunItemOrigins;
++ struct State;
++ std::unique_ptr<State> state_;
++ explicit PreparedRunTransformOrigins(std::unique_ptr<State>) noexcept;
++public:
++ ~PreparedRunTransformOrigins();
++ PreparedRunTransformOrigins(const PreparedRunTransformOrigins&)=delete;
++ PreparedRunTransformOrigins& operator=(const PreparedRunTransformOrigins&)=delete;
++};
++inline constexpr const char* RunOriginSealKey="rof2.fire170.origin.v1";
++class PreparedRunLootSeal final {
++ friend class NativeRunItemOrigins;
++ struct State;
++ std::unique_ptr<State> state_;
++ explicit PreparedRunLootSeal(std::unique_ptr<State>) noexcept;
++public:
++ ~PreparedRunLootSeal();
++ PreparedRunLootSeal(const PreparedRunLootSeal&)=delete;
++ PreparedRunLootSeal& operator=(const PreparedRunLootSeal&)=delete;
++ // Read-only seal identity for the SAME owned native loot lifecycle. A token
++ // alone is never publication, physical ownership or permission to consume.
++ const std::string& Token()const noexcept;
++};
++class NativeRunItemOrigins final {
++ friend class NativeRunLootSource;
++ friend class NativeRunDoorSource;
++ friend class NativeRunHelperSource;
++ friend class NativeRunActionCustody;
++ friend class FirePersonalOccurrenceSource::NativeItemCustody;
++ // Actual newly created original loot instance ONLY, before its original save.
++ // Stamps native custom_data; no DB row or publication is manufactured here.
++ static std::unique_ptr<PreparedRunLootSeal> SealOriginalLoot(
++  std::unique_ptr<OriginalRunLootUse>,EQ::ItemInstance& actual_new_item);
++ // Seals the Source-owned one-use positive save+removal proof FIRST, then
++ // persists the finite published origin. No tokenless/history/backfill path.
++ static bool PublishOriginalLoot(NativeRunLootPublication&);
++ // Actual current holder/root + sealed physical item + published current-run
++ // row. Creator is audit metadata, never the current-holder ownership check.
++ static bool HasActualPublishedOrigin(Client&,const EQ::ItemInstance&,
++  int16_t actual_slot,const MissionRunFacts&);
++ static std::unique_ptr<PreparedRunActionOrigins> PrepareActionActual(Client&,
++  const OriginalDoorUse*,const OriginalHelperUse*);
++ static bool RevalidateActionActual(Client&,const PreparedRunActionOrigins&);
++ static std::string LockActionActual(Database&,uint64_t connection,
++  PreparedRunActionOrigins&,const OriginalDoorUse*,const OriginalHelperUse*);
++ static void ConsumeActionActual(Database&,uint64_t connection,
++  PreparedRunActionOrigins&,uint64_t actual_action_row);
++ static std::unique_ptr<PreparedRunTransformOrigins> PrepareTransformActual(Client&,
++  const FireSharedTransformSource::OriginalSharedTransformUse&,
++  const std::vector<int16_t>& actual_input_slots,EQ::ItemInstance& actual_new_output,
++  uint64_t actual_sequence,int16_t actual_output_slot);
++ static bool RevalidateTransformActual(Client&,const PreparedRunTransformOrigins&);
++ // Caller is the same native strict writer, before its selected inventory saves.
++ // Consumes inputs and inserts pending output on THAT connection/transaction.
++ static void StageTransformActual(Database&,uint64_t connection,
++  PreparedRunTransformOrigins&,bool& write_entered);
++ // SAME known successful COMMIT and actual allocation-free memory publication,
++ // before mutable callbacks. A failed/unknown acknowledgment leaves pending0.
++ static bool PublishTransformActual(Client&,PreparedRunTransformOrigins&,
++  const EQ::ItemInstance& actual_published_output,int16_t actual_output_slot);
++};
++} // namespace FireRunActionSource
+--- /dev/null
++++ b/zone/fire_run_item_origin_impl.inc
+@@ -0,0 +1,321 @@
++// Included only in the feature-private native writer, after action ledger helpers.
++// Durable current-run provenance is independent of process/runtime item serials.
++namespace FireRunActionSource {
++namespace {
++bool OriginItem(uint32_t id) noexcept {
++ switch(id) {case 47748:case 47749:case 47750:case 47751:case 47752:
++ case 47753:case 47754:case 47755:case 47756:case 47757:case 47760:
++ case 47761:case 47762:return true;default:return false;}
++}
++bool OriginShape(const EQ::ItemInstance& item) {
++ return item.GetItem()&&OriginItem(item.GetID())&&item.IsClassCommon()&&
++  !item.IsStackable()&&item.GetContents()->empty()&&!item.IsEvolving()&&
++  !item.GetEvolveUniqueID()&&!item.GetHousingHouseID()&&!item.GetHousingCrateID();
++}
++bool OriginToken(const std::string& token) noexcept {
++ return token.size()==32&&token.find_first_not_of("0123456789abcdef")==std::string::npos;
++}
++std::string ItemOriginToken(const EQ::ItemInstance& item) {
++ // Native getter only finds an existing key; it does not mutate the map.
++ return const_cast<EQ::ItemInstance&>(item).GetCustomData(RunOriginSealKey);
++}
++std::string NewOriginToken() {
++ auto token=EQ::Util::UUID::Generate().ToString();
++ token.erase(std::remove(token.begin(),token.end(),'-'),token.end());
++ if(!OriginToken(token))throw std::runtime_error("Fire native UUID shape differs");
++ return token;
++}
++bool OriginHeldActual(Client& c,const EQ::ItemInstance& item,int16_t slot,const MissionRunFacts& m) {
++ if(!ValidMission(m)||m.character!=c.CharacterID()||!zone||zone->GetZoneID()!=m.zone||
++  zone->GetInstanceID()!=m.instance||!OriginShape(item)||c.GetInv().GetItem(slot)!=&item)return false;
++ if(slot==EQ::invslot::slotCursor)return true; // visible original cursor only
++ const auto root=EQ::ValueWithin(slot,EQ::invbag::GENERAL_BAGS_BEGIN,EQ::invbag::GENERAL_BAGS_END)?
++  EQ::InventoryProfile::CalcSlotId(slot):slot;
++ return EQ::ValueWithin(root,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END)&&
++  c.GetInv().GetLookup()&&((uint64_t(1)<<root)&c.GetInv().GetLookup()->PossessionsBitmask);
++}
++void OriginFoundation(Database& db) {
++ auto q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='rof2_fire_run_item_origins' AND engine='InnoDB'");
++ if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=1)throw std::runtime_error("Fire origin engine differs");
++ q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='rof2_fire_run_item_origins'");
++ if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=20)throw std::runtime_error("Fire origin schema differs");
++ q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='rof2_fire_run_item_origins' AND index_name='PRIMARY' AND non_unique=0 AND seq_in_index=1 AND column_name='token'");
++ if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=1)throw std::runtime_error("Fire origin primary key differs");
++}
++void RequirePublishedOrigin(Database& db,const MissionRunFacts& m,uint32_t item,const std::string& token,bool lock) {
++ if(!ValidMission(m)||!OriginItem(item)||!OriginToken(token))throw std::runtime_error("Fire original seal absent");
++ auto q=ActionQuery(db,fmt::format("SELECT item_id,state FROM rof2_fire_run_item_origins WHERE token=UNHEX('{}') AND shared_task_id={}{}",token,m.run,lock?" FOR UPDATE":""));
++ if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=item||ActionNumber(q.begin()[1])!=1)
++  throw std::runtime_error("Fire origin not positively published in current run");
++}
++}
++struct PreparedRunTransformOrigins::State {
++ struct Input {int16_t slot;uint32_t item;const EQ::ItemInstance* actual;std::string token;};
++ MissionRunFacts mission;
++ uint64_t sequence=0;
++ uint32_t output_item=0;
++ int32_t output_serial=0;
++ int16_t output_slot=-1;
++ uint8_t kind=0;
++ const Client* owner=nullptr;
++ std::string output_token;
++ std::vector<Input> inputs;
++ bool staged=false,publication_taken=false;
++};
++PreparedRunTransformOrigins::PreparedRunTransformOrigins(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
++PreparedRunTransformOrigins::~PreparedRunTransformOrigins()=default;
++bool NativeRunItemOrigins::HasActualPublishedOrigin(Client& c,const EQ::ItemInstance& item,int16_t slot,const MissionRunFacts& m) {
++ try {
++  if(!OriginHeldActual(c,item,slot,m))return false;
++  RequirePublishedOrigin(database,m,item.GetID(),ItemOriginToken(item),false);return true;
++ }catch(...){return false;}
++}
++std::unique_ptr<PreparedRunTransformOrigins> NativeRunItemOrigins::PrepareTransformActual(Client& c,
++ const FireSharedTransformSource::OriginalSharedTransformUse& original,
++ const std::vector<int16_t>& slots,EQ::ItemInstance& output,uint64_t sequence,int16_t output_slot) {
++ try {
++  const auto& shared=original.shared;
++  const auto rule=FireSharedTransformSource::OriginalRule(original.item_id);
++  if(!rule||rule->clicked_item!=shared.rule.clicked_item||rule->output_item!=shared.rule.output_item||
++   rule->input_count!=shared.rule.input_count||rule->inputs!=shared.rule.inputs||
++   slots.size()!=rule->input_count||!OriginShape(output)||output.GetID()!=rule->output_item||
++   !ItemOriginToken(output).empty())return {};
++  auto s=std::make_unique<PreparedRunTransformOrigins::State>();
++  s->mission={shared.run,shared.local_occurrence,shared.character,shared.accepted_time,
++   shared.zone_id,1,shared.instance_id,shared.dynamic_zone_id};
++  if(!ValidMission(s->mission)||!sequence||original.slot!=slots.front())return {};
++  s->sequence=sequence;s->output_slot=output_slot;
++  s->owner=&c;s->kind=output.GetID()==47762?2:3;
++  s->output_item=output.GetID();s->output_serial=output.GetSerialNumber();
++  s->inputs.reserve(slots.size());
++  std::array<bool,5> seen{};
++  for(const auto slot:slots) {
++   const auto* item=c.GetInv().GetItem(slot);
++   if(!item||!OriginHeldActual(c,*item,slot,s->mission))return {};
++   size_t i=0;for(;i<rule->input_count;++i)if(rule->inputs[i]==item->GetID())break;
++   if(i==rule->input_count||seen[i])return {};seen[i]=true;
++   auto token=ItemOriginToken(*item);
++   RequirePublishedOrigin(database,s->mission,item->GetID(),token,false);
++   for(const auto& prior:s->inputs)if(prior.slot==slot||prior.token==token)return {};
++   s->inputs.push_back({slot,item->GetID(),item,std::move(token)});
++  }
++  s->output_token=NewOriginToken();output.SetCustomData(RunOriginSealKey,s->output_token);
++  if(ItemOriginToken(output)!=s->output_token)return {};
++  return std::unique_ptr<PreparedRunTransformOrigins>(new PreparedRunTransformOrigins(std::move(s)));
++ }catch(...){return {};}
++}
++bool NativeRunItemOrigins::RevalidateTransformActual(Client& c,const PreparedRunTransformOrigins& prepared) {
++ if(!prepared.state_||prepared.state_->owner!=&c||prepared.state_->staged)return false;
++ const auto& s=*prepared.state_;
++ for(const auto& input:s.inputs)if(!input.actual||c.GetInv().GetItem(input.slot)!=input.actual||!OriginHeldActual(c,*input.actual,input.slot,s.mission)||
++  input.actual->GetID()!=input.item||ItemOriginToken(*input.actual)!=input.token)return false;
++ return true;
++}
++void NativeRunItemOrigins::StageTransformActual(Database& db,uint64_t connection,
++ PreparedRunTransformOrigins& prepared,bool& write_entered) {
++ if(!prepared.state_||prepared.state_->staged)throw std::runtime_error("Fire transform origins already entered");
++ auto& s=*prepared.state_;
++ if(!s.sequence)throw std::runtime_error("Fire actual transform sequence absent");
++ ActionSession(db,connection);OriginFoundation(db);LockCurrentRun(db,s.mission);
++ // All inputs are locked and proved before the first selected write. Producer
++ // character is audit only: an actual same-run member may hold transferred loot.
++ for(const auto& input:s.inputs)RequirePublishedOrigin(db,s.mission,input.item,input.token,true);
++ write_entered=true;s.staged=true;
++ auto q=ActionQuery(db,fmt::format("INSERT INTO rof2_fire_run_item_origins "
++  "(token,shared_task_id,item_id,origin_kind,state,producer_character_id,producer_local_occurrence,producer_accepted_time,producer_native_sequence,"
++  "source_npc_type_id,source_corpse_entity_id,source_loot_slot,native_item_serial,native_item_slot,created_at,published_at,consumed_at,consumed_action_id,consumed_output_token,consumed_by_character_id) "
++  "VALUES (UNHEX('{}'),{},{},{},0,{},{},{},{},NULL,NULL,NULL,{},{},UNIX_TIMESTAMP(),NULL,NULL,NULL,NULL,NULL)",
++  s.output_token,s.mission.run,s.output_item,unsigned(s.kind),s.mission.character,s.mission.local_occurrence,s.mission.accepted_time,s.sequence,s.output_serial,s.output_slot));
++ if(q.RowsAffected()!=1)throw std::runtime_error("Fire transform output origin insert differs");
++ for(const auto& input:s.inputs) {
++  q=ActionQuery(db,fmt::format("UPDATE rof2_fire_run_item_origins SET state=2,consumed_at=UNIX_TIMESTAMP(),consumed_output_token=UNHEX('{}'),consumed_by_character_id={} "
++   "WHERE token=UNHEX('{}') AND shared_task_id={} AND item_id={} AND state=1",s.output_token,s.mission.character,input.token,s.mission.run,input.item));
++  if(q.RowsAffected()!=1)throw std::runtime_error("Fire transform input origin consumption differs");
++ }
++ ActionSession(db,connection);
++}
++bool NativeRunItemOrigins::PublishTransformActual(Client& c,PreparedRunTransformOrigins& prepared,
++ const EQ::ItemInstance& output,int16_t slot) {
++ if(!prepared.state_||prepared.state_->publication_taken)return false;
++ auto& s=*prepared.state_;s.publication_taken=true; // seal FIRST; no retry on failure
++ bool held=c.GetInv().GetItem(slot)==&output;
++ if(slot==EQ::invslot::slotCursor) {
++  held=false;for(auto it=c.GetInv().cursor_cbegin();it!=c.GetInv().cursor_cend();++it)if(*it==&output){held=true;break;}
++ }
++ if(!s.staged||s.owner!=&c||!held||slot!=s.output_slot||!OriginShape(output)||output.GetID()!=s.output_item||
++  output.GetSerialNumber()!=s.output_serial||ItemOriginToken(output)!=s.output_token||
++  !ValidMission(s.mission)||c.CharacterID()!=s.mission.character||!zone||
++  zone->GetZoneID()!=s.mission.zone||zone->GetInstanceID()!=s.mission.instance)return false;
++ bool transaction=false;
++ try {
++  auto q=ActionQuery(database,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
++  if(q.RowCount()!=1||ActionNumber(q.begin()[1])||ActionNumber(q.begin()[2])!=1)return false;
++  const auto connection=ActionNumber(q.begin()[0]);
++  if(!database.TransactionBeginStrict().Success())return false;
++  transaction=true;OriginFoundation(database);LockCurrentRun(database,s.mission);
++  q=ActionQuery(database,fmt::format("UPDATE rof2_fire_run_item_origins SET state=1,published_at=UNIX_TIMESTAMP(),native_item_slot={} "
++   "WHERE token=UNHEX('{}') AND shared_task_id={} AND item_id={} AND origin_kind={} AND state=0 AND producer_character_id={} "
++   "AND producer_local_occurrence={} AND producer_accepted_time={} AND producer_native_sequence={}",slot,s.output_token,s.mission.run,s.output_item,unsigned(s.kind),
++   s.mission.character,s.mission.local_occurrence,s.mission.accepted_time,s.sequence));
++  if(q.RowsAffected()!=1)throw std::runtime_error("Fire published transform origin differs");
++  ActionSession(database,connection);const auto commit=database.TransactionCommitStrict();transaction=false;return commit.Success();
++ }catch(...){if(transaction)database.TransactionRollbackStrict();return false;}
++}
++struct PreparedRunActionOrigins::State {
++ struct Input {PhysicalItemFacts facts;const EQ::ItemInstance* actual;std::string token;};
++ MissionRunFacts mission;
++ RunActionKind kind{};
++ const OriginalDoorUse* door=nullptr;
++ const OriginalHelperUse* helper=nullptr;
++ const Client* owner=nullptr;
++ std::vector<Input> inputs;
++ bool locked=false,consumed=false;
++};
++PreparedRunActionOrigins::PreparedRunActionOrigins(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
++PreparedRunActionOrigins::~PreparedRunActionOrigins()=default;
++std::unique_ptr<PreparedRunActionOrigins> NativeRunItemOrigins::PrepareActionActual(Client& c,
++ const OriginalDoorUse* door,const OriginalHelperUse* helper) {
++ try {
++  if(bool(door)==bool(helper)||(door&&!door->Facts().mission))return {};
++  auto s=std::make_unique<PreparedRunActionOrigins::State>();
++  s->owner=&c;s->door=door;s->helper=helper;
++  s->kind=helper?RunActionKind::HelperActivation:door->Facts().kind;
++  s->mission=helper?helper->Facts().mission:*door->Facts().mission;
++  std::array<uint32_t,3> wanted{};
++  size_t count=0;
++  switch(s->kind) {
++   case RunActionKind::InnerVault:wanted={{47748,47749,47750}};count=3;break;
++   case RunActionKind::WorshipPair:wanted[0]=47762;count=1;break;
++   case RunActionKind::GuardianVaultKey:wanted[0]=47757;count=1;break;
++   case RunActionKind::HelperActivation:wanted[0]=47756;count=1;break;
++   default:return {};
++  }
++  if(door&&(door->Facts().physical_count!=count||door->Facts().required_count!=count))return {};
++  s->inputs.reserve(count);
++  // Canonical finite item order also bounds lock order and source_token meaning.
++  for(size_t i=0;i<count;++i) {
++   const PhysicalItemFacts* fact=nullptr;
++   if(helper)fact=&helper->Facts().clicked;
++   else for(size_t j=0;j<count;++j)if(door->Facts().physical_items[j].item_id==wanted[i]) {
++    if(fact)return {};fact=&door->Facts().physical_items[j];
++   }
++   if(!fact||fact->item_id!=wanted[i]||fact->units!=1)return {};
++   const auto* item=c.GetInv().GetItem(fact->slot);
++   if(!item||!OriginHeldActual(c,*item,fact->slot,s->mission)||
++    item->GetSerialNumber()!=fact->serial||item->GetCharges()!=fact->charges)return {};
++   auto token=ItemOriginToken(*item);
++   RequirePublishedOrigin(database,s->mission,item->GetID(),token,false);
++   for(const auto& prior:s->inputs)if(prior.facts.slot==fact->slot||prior.token==token)return {};
++   s->inputs.push_back({*fact,item,std::move(token)});
++  }
++  return std::unique_ptr<PreparedRunActionOrigins>(new PreparedRunActionOrigins(std::move(s)));
++ }catch(...){return {};}
++}
++bool NativeRunItemOrigins::RevalidateActionActual(Client& c,const PreparedRunActionOrigins& prepared) {
++ if(!prepared.state_||prepared.state_->owner!=&c||prepared.state_->locked)return false;
++ const auto& s=*prepared.state_;
++ for(const auto& in:s.inputs)if(!in.actual||c.GetInv().GetItem(in.facts.slot)!=in.actual||
++  !OriginHeldActual(c,*in.actual,in.facts.slot,s.mission)||in.actual->GetID()!=in.facts.item_id||
++  in.actual->GetSerialNumber()!=in.facts.serial||in.actual->GetCharges()!=in.facts.charges||
++  ItemOriginToken(*in.actual)!=in.token)return false;
++ return true;
++}
++std::string NativeRunItemOrigins::LockActionActual(Database& db,uint64_t connection,
++ PreparedRunActionOrigins& prepared,const OriginalDoorUse* door,const OriginalHelperUse* helper) {
++ if(!prepared.state_||prepared.state_->locked||prepared.state_->inputs.empty()||
++  prepared.state_->door!=door||prepared.state_->helper!=helper)
++  throw std::runtime_error("Fire original action origin issuer differs");
++ auto& s=*prepared.state_;
++ ActionSession(db,connection);OriginFoundation(db);LockCurrentRun(db,s.mission);
++ for(const auto& in:s.inputs)RequirePublishedOrigin(db,s.mission,in.facts.item_id,in.token,true);
++ s.locked=true;return s.inputs.front().token;
++}
++void NativeRunItemOrigins::ConsumeActionActual(Database& db,uint64_t connection,
++ PreparedRunActionOrigins& prepared,uint64_t action_row) {
++ if(!prepared.state_||!prepared.state_->locked||prepared.state_->consumed||!action_row)
++  throw std::runtime_error("Fire action origin consumption boundary differs");
++ auto& s=*prepared.state_;s.consumed=true;
++ ActionSession(db,connection);
++ // The genuine retained VaultKey remains physically present and published1.
++ if(s.kind==RunActionKind::GuardianVaultKey)return;
++ for(const auto& in:s.inputs) {
++  auto q=ActionQuery(db,fmt::format("UPDATE rof2_fire_run_item_origins SET state=2,consumed_at=UNIX_TIMESTAMP(),consumed_action_id={},consumed_by_character_id={} "
++   "WHERE token=UNHEX('{}') AND shared_task_id={} AND item_id={} AND state=1",action_row,s.mission.character,in.token,s.mission.run,in.facts.item_id));
++  if(q.RowsAffected()!=1)throw std::runtime_error("Fire action input origin consumption differs");
++ }
++ ActionSession(db,connection);
++}
++namespace {
++bool OriginalLootItem(uint32_t id)noexcept {
++ switch(id) {case 47748:case 47749:case 47750:case 47751:case 47752:
++ case 47753:case 47754:case 47755:case 47757:case 47760:case 47761:return true;default:return false;}
++}
++bool SameMission(const MissionRunFacts& a,const MissionRunFacts& b)noexcept {
++ return a.run==b.run&&a.local_occurrence==b.local_occurrence&&a.character==b.character&&
++  a.accepted_time==b.accepted_time&&a.zone==b.zone&&a.version==b.version&&a.instance==b.instance&&a.dynamic_zone==b.dynamic_zone;
++}
++bool SameOriginalLoot(const RunLootFacts& a,const RunLootFacts& b)noexcept {
++ // saved_slot is supplied later by the actual positive native save observer;
++ // runtime serial is audit/lifecycle concordance, never the durable item GUID.
++ return SameMission(a.mission,b.mission)&&a.native_sequence==b.native_sequence&&
++  a.source_death_sequence==b.source_death_sequence&&a.source_npc_type==b.source_npc_type&&
++  a.source_spawn==b.source_spawn&&a.source_corpse_entity==b.source_corpse_entity&&
++  a.source_loot_slot==b.source_loot_slot&&a.item_id==b.item_id&&
++  a.native_item_serial==b.native_item_serial&&a.charges==b.charges;
++}
++}
++struct PreparedRunLootSeal::State {
++ std::unique_ptr<OriginalRunLootUse> original;
++ std::string token;
++ bool publication_taken=false;
++};
++PreparedRunLootSeal::PreparedRunLootSeal(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
++PreparedRunLootSeal::~PreparedRunLootSeal()=default;
++const std::string& PreparedRunLootSeal::Token()const noexcept{return state_->token;}
++std::unique_ptr<PreparedRunLootSeal> NativeRunItemOrigins::SealOriginalLoot(
++ std::unique_ptr<OriginalRunLootUse> original,EQ::ItemInstance& item) {
++ try {
++  if(!original||!original->state_)return {};
++  const auto& f=original->Facts();
++  if(!ValidMission(f.mission)||!f.native_sequence||!f.source_death_sequence||!f.source_npc_type||
++   !f.source_spawn||!f.source_corpse_entity||!f.native_item_serial||f.saved_slot!=-1||
++   !OriginalLootItem(f.item_id)||!OriginShape(item)||item.GetID()!=f.item_id||
++   item.GetSerialNumber()!=f.native_item_serial||item.GetCharges()!=f.charges||!ItemOriginToken(item).empty())return {};
++  auto s=std::make_unique<PreparedRunLootSeal::State>();
++  s->token=NewOriginToken();s->original=std::move(original);
++  item.SetCustomData(RunOriginSealKey,s->token);
++  if(ItemOriginToken(item)!=s->token)return {};
++  return std::unique_ptr<PreparedRunLootSeal>(new PreparedRunLootSeal(std::move(s)));
++ }catch(...){return {};}
++}
++bool NativeRunItemOrigins::PublishOriginalLoot(NativeRunLootPublication& proof) {
++ if(proof.taken_)return false;
++ proof.taken_=true; // FIRST, including validation/query/COMMIT failure paths.
++ if(!proof.state_||!proof.seal_||!proof.seal_->state_)return false;
++ auto& s=*proof.seal_->state_;
++ if(s.publication_taken)return false;s.publication_taken=true;
++ if(!s.original||!s.original->state_||!OriginToken(s.token))return false;
++ const auto p=proof.Facts();
++ if(!SameOriginalLoot(p,s.original->Facts())||!ValidMission(p.mission)||!OriginalLootItem(p.item_id)||
++  p.saved_slot<0)return false;
++ bool transaction=false;
++ try {
++  // The private Source constructor owns the SAME original seal and can run
++  // only after positive native Save + original corpse removal. A token, saved
++  // row, actor ID or old goal alone cannot call this publication boundary.
++  auto q=ActionQuery(database,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
++  if(q.RowCount()!=1||ActionNumber(q.begin()[1])||ActionNumber(q.begin()[2])!=1)return false;
++  const auto connection=ActionNumber(q.begin()[0]);
++  if(!database.TransactionBeginStrict().Success())return false;
++  transaction=true;OriginFoundation(database);LockCurrentRun(database,p.mission);
++  q=ActionQuery(database,fmt::format("INSERT INTO rof2_fire_run_item_origins "
++   "(token,shared_task_id,item_id,origin_kind,state,producer_character_id,producer_local_occurrence,producer_accepted_time,producer_native_sequence,"
++   "source_npc_type_id,source_corpse_entity_id,source_loot_slot,native_item_serial,native_item_slot,created_at,published_at,consumed_at,consumed_action_id,consumed_output_token,consumed_by_character_id) "
++   "VALUES (UNHEX('{}'),{},{},1,1,{},{},{},{},{},{},{},{},{},UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),NULL,NULL,NULL,NULL)",
++   s.token,p.mission.run,p.item_id,p.mission.character,p.mission.local_occurrence,p.mission.accepted_time,p.native_sequence,
++   p.source_npc_type,p.source_corpse_entity,p.source_loot_slot,p.native_item_serial,p.saved_slot));
++  if(q.RowsAffected()!=1)throw std::runtime_error("Fire original loot origin insert differs");
++  ActionSession(database,connection);const auto commit=database.TransactionCommitStrict();transaction=false;return commit.Success();
++ }catch(...){if(transaction)database.TransactionRollbackStrict();return false;}
++}
++} // namespace FireRunActionSource
+--- /dev/null
 +++ b/zone/fire_shared_transform_published.h
 @@ -0,0 +1,37 @@
 +#pragma once
@@ -3679,12 +6021,13 @@
 +} // namespace FireSharedTransformSource
 --- a/zone/inventory.cpp
 +++ b/zone/inventory.cpp
-@@ -1,3 +1,4 @@
+@@ -1,3 +1,5 @@
++#include "fire_material_loot_source.h"
 +#include "fire_native_item_custody.h"
  /*	EQEmu: EQEmulator
  
  	Copyright (C) 2001-2026 EQEmu Development Team
-@@ -994,6 +995,11 @@
+@@ -994,6 +996,11 @@
  
  // Remove item from inventory
  void Client::DeleteItemInInventory(int16 slot_id, int16 quantity, bool client_update, bool update_db) {
@@ -3696,7 +6039,7 @@
  	#if (EQDEBUG >= 5)
  		LogDebug("DeleteItemInInventory([{}], [{}], [{}])", slot_id, quantity, (client_update) ? "true":"false");
  	#endif
-@@ -1074,6 +1080,8 @@
+@@ -1074,6 +1081,8 @@
  
  bool Client::PushItemOnCursor(const EQ::ItemInstance& inst, bool client_update)
  {
@@ -3705,7 +6048,7 @@
  	LogInventory("Putting item [{}] ([{}]) on the cursor", inst.GetItem()->Name, inst.GetItem()->ID);
  
  	EvolvingItemsManager::Instance()->DoLootChecks(CharacterID(), EQ::invslot::slotCursor, inst);
-@@ -1094,6 +1102,8 @@
+@@ -1094,6 +1103,8 @@
  // (Also saves changes back to the database: this may be optimized in the future)
  // client_update: Sends packet to client
  bool Client::PutItemInInventory(int16 slot_id, const EQ::ItemInstance& inst, bool client_update) {
@@ -3714,7 +6057,7 @@
  	LogInventory("Putting item [{}] ([{}]) into slot [{}]", inst.GetItem()->Name, inst.GetItem()->ID, slot_id);
  
  	if (slot_id == EQ::invslot::slotCursor) { // don't trust macros before conditional statements...
-@@ -1128,6 +1138,8 @@
+@@ -1128,21 +1139,26 @@
  
  void Client::PutLootInInventory(int16 slot_id, const EQ::ItemInstance &inst, LootItem** bag_item_data)
  {
@@ -3723,7 +6066,30 @@
  	LogInventory("Putting loot item [{}] ([{}]) into slot [{}]", inst.GetItem()->Name, inst.GetItem()->ID, slot_id);
  
  	bool cursor_empty = m_inv.CursorEmpty();
-@@ -1665,6 +1677,7 @@
+ 
+ 	EvolvingItemsManager::Instance()->DoLootChecks(CharacterID(), slot_id, inst);
+ 
++	bool fire_original_loot_saved=false,fire_original_loot_placed=false;
+ 	if (slot_id == EQ::invslot::slotCursor) {
+-		m_inv.PushCursor(inst);
++		fire_original_loot_placed=m_inv.PushCursor(inst)==EQ::invslot::slotCursor;
+ 		auto s = m_inv.cursor_cbegin(), e = m_inv.cursor_cend();
+-		database.SaveCursor(CharacterID(), s, e);
++		fire_original_loot_saved=database.SaveCursor(CharacterID(), s, e);
+ 	}
+ 	else {
+-		m_inv.PutItem(slot_id, inst);
+-		database.SaveInventory(CharacterID(), &inst, slot_id);
+-	}
++		fire_original_loot_placed=m_inv.PutItem(slot_id, inst)==slot_id;
++		fire_original_loot_saved=database.SaveInventory(CharacterID(), &inst, slot_id);
++	}
++	FireRunActionSource::NativeRunLootSource::ObserveActualInventorySave(
++	 *this,inst,slot_id,fire_original_loot_saved&&fire_original_loot_placed);
+ 	UpdateAchievementForOwnItem(inst.GetItem()->ID);
+ 
+ 	// Subordinate items in cursor buffer must be sent via ItemPacketSummonItem or we just overwrite the visible cursor and desync the client
+@@ -1665,6 +1681,7 @@
  }
  
  bool Client::SwapItem(MoveItem_Struct* move_in) {
@@ -3753,9 +6119,108 @@
  	}
  
  	entity_list.RemoveFromTargets(this, true);
+--- a/zone/mob_movement_manager.cpp
++++ b/zone/mob_movement_manager.cpp
+@@ -1,3 +1,4 @@
++#include "fire_run_action_scene.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -147,6 +148,7 @@
+ 
+ 	virtual bool Process(MobMovementManager *mob_movement_manager, Mob *mob)
+ 	{
++		const auto fire_native_before=glm::vec3(mob->GetPosition());
+ 		if (!mob->IsAIControlled()) {
+ 			return true;
+ 		}
+@@ -226,6 +228,8 @@
+ 			}
+ 
+ 			mob->SetPosition(m_move_to_x, m_move_to_y, m_move_to_z);
++			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
++			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
+ 
+ 			if (RuleB(Map, FixZWhenPathing)) {
+ 				mob->FixZ();
+@@ -245,6 +249,8 @@
+ 			}
+ 
+ 			mob->SetPosition(npos.x, npos.y, z_at_pos);
++			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
++			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
+ 
+ 
+ 			if (RuleB(Map, FixZWhenPathing)) {
+@@ -301,6 +307,7 @@
+ 
+ 	virtual bool Process(MobMovementManager *mob_movement_manager, Mob *mob)
+ 	{
++		const auto fire_native_before=glm::vec3(mob->GetPosition());
+ 		if (!mob->IsAIControlled()) {
+ 			return true;
+ 		}
+@@ -370,6 +377,8 @@
+ 			}
+ 
+ 			mob->SetPosition(m_move_to_x, m_move_to_y, m_move_to_z);
++			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
++			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
+ 
+ 			if (RuleB(Map, FixZWhenPathing)) {
+ 				mob->FixZ();
+@@ -389,6 +398,8 @@
+ 			}
+ 
+ 			mob->SetPosition(npos.x, npos.y, z_at_pos);
++			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
++			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
+ 		}
+ 
+ 		return false;
+@@ -422,6 +433,7 @@
+ 
+ 	virtual bool Process(MobMovementManager *mob_movement_manager, Mob *mob)
+ 	{
++		const auto fire_native_before=glm::vec3(mob->GetPosition());
+ 		if (!mob->IsAIControlled()) {
+ 			return true;
+ 		}
+@@ -489,6 +501,8 @@
+ 			}
+ 
+ 			mob->SetPosition(m_move_to_x, m_move_to_y, m_move_to_z);
++			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
++			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
+ 			return true;
+ 		}
+ 		else {
+@@ -504,6 +518,8 @@
+ 			}
+ 
+ 			mob->SetPosition(npos.x, npos.y, z_at_pos);
++			if(mob->IsNPC())FireRunActionSource::NativeRunHelperSource::RecordActualWalkingStep(
++			 *mob->CastToNPC(),fire_native_before,glm::vec3(mob->GetPosition()),int(m_move_to_mode));
+ 		}
+ 
+ 		return false;
+@@ -530,6 +546,8 @@
+ 		if (!mob->IsAIControlled()) {
+ 			return true;
+ 		}
++
++		if(mob->IsNPC()&&FireRunActionSource::NativeRunHelperSource::RejectActualTeleport(*mob->CastToNPC()))return true;
+ 
+ 		if (mob->IsNPC()) {
+ 			entity_list.ProcessMove(mob->CastToNPC(), m_teleport_to_x, m_teleport_to_y, m_teleport_to_z);
 --- a/zone/npc.cpp
 +++ b/zone/npc.cpp
-@@ -17,6 +17,7 @@
+@@ -1,3 +1,4 @@
++#include "fire_run_action_scene.h"
+ #include "bound_destructible_ruins.h"
+ /*	EQEmu: EQEmulator
+ 
+@@ -17,6 +18,7 @@
  	along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  #include "npc.h"
@@ -3763,26 +6228,38 @@
  
  #include "common/bodytypes.h"
  #include "common/classes.h"
-@@ -505,6 +506,7 @@
+@@ -505,6 +507,8 @@
  
  NPC::~NPC()
  {
 +	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
++ FireRunActionSource::NativeRunHelperSource::ObserveActualDestruction(*this);
  	AI_Stop();
  
  	if (proximity) {
+@@ -587,6 +591,8 @@
+ 		}
+ 		return false;
+ 	}
++
++	if(const auto fire_owned=FireRunActionSource::NativeRunHelperSource::ProcessActual(*this))return *fire_owned;
+ 
+ 	// Keep the binding for current/entering clients, with no AI, ticks, spells,
+ 	// regeneration or second death processing while the original timer runs.
 --- a/zone/npc.h
 +++ b/zone/npc.h
-@@ -31,6 +31,8 @@
+@@ -31,6 +31,10 @@
  
  #include <deque>
  #include <list>
 +#include <memory>
++namespace FireRunActionSource {class RunHelperAttempt;class PreparedRunHelperPlan;}
++namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
 +namespace FirePersonalOccurrenceSource { class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
  
  struct NPCProximity {
  	float	min_x;
-@@ -797,6 +799,14 @@
+@@ -797,6 +801,18 @@
  	const Handin GetHandin() { return m_hand_in; }
  
  private:
@@ -3793,6 +6270,10 @@
 +	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
 +	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_original_construct;
 +	friend class FirePersonalOccurrenceSource::OriginalGotonurSayQueue;
++ friend class FireRunActionSource::RunUseWitness;
++ friend class FireRunActionSource::NativeRunHelperSource;
++ friend class FireRunActionSource::PreparedRunHelperPlan;
++ std::shared_ptr<FireRunActionSource::RunHelperAttempt> m_fire_run_helper_attempt;
 +	std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> m_fire_gotonur_say_lifetime;
  	void ReconcileHandinTaskDeliveries();
  
@@ -4050,7 +6531,16 @@
  	auto* const fire_final_update = FirePersonalOccurrenceSource::ClaimOriginalFinalUpdate(
  		client, task_data->type, *info, activity_id, count
  	);
-@@ -1259,6 +1302,10 @@
+@@ -1251,6 +1294,8 @@
+ 	// intercept and pass to world first before processing normally
+ 	if (!client->m_shared_task_update && task_data->type == TaskType::Shared) {
+ 
++		// Original door/owned helper providers submit their own real run-stamped native packet.
++		if(info->task_id==920170&&(activity_id==3||activity_id==7||activity_id==14))return 0;
+ 		uint64_t fire_activity_run=0;
+ 		if(info->task_id==FireSharedActivityOrigin::Task) {
+ 			const auto actual=TaskSharedRewardIdentity::ReadRun(database,client->CharacterID(),info->task_id);
+@@ -1259,6 +1304,10 @@
  			 actual->accepted_time!=static_cast<uint32_t>(info->accepted_time)) return 0;
  			fire_activity_run=actual->id;
  		}
@@ -4061,7 +6551,7 @@
  		// Same one native update; stamp before optimistic local count synchronization/send.
  		auto pack = new ServerPacket(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+
  			(fire_activity_run?sizeof(FireSharedActivityOrigin::Trailer):0));
-@@ -1432,6 +1479,9 @@
+@@ -1432,6 +1481,9 @@
  	}
  
  	const bool fire_original_completion_saved = TaskManager::Instance()->SaveClientState(client, this);
@@ -4137,7 +6627,12 @@
  			TaskManager::Instance()->SendCompletedTasksToClient(this, task_state);
 --- a/zone/zone.cpp
 +++ b/zone/zone.cpp
-@@ -23,6 +23,8 @@
+@@ -1,3 +1,4 @@
++#include "fire_run_action_scene.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -23,6 +24,8 @@
  #include "housing_pets.h"
  
  #include "zone.h"
@@ -4146,11 +6641,12 @@
  
  #include "common/data_verification.h"
  #include "common/eqemu_logsys.h"
-@@ -1109,6 +1111,8 @@
+@@ -1109,6 +1112,9 @@
  }
  
  Zone::~Zone() {
 +	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Discard();
++	FireRunActionSource::NativeRunHelperSource::DiscardCompletions();
 +	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Discard();
  	ClearFellowshipCampfires();
   Housing::Pets::Clear();
