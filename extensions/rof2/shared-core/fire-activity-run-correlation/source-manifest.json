@@ -1,0 +1,48 @@
+{
+  "status": "REVIEWED_SOURCE_INTEGRATION_ARTIFACT_NOT_APPLIED_OR_BUILT",
+  "scope": "Run-origin validation only for Fire170 native activity messages, both directions.",
+  "native_files": {
+    "zone/task_client_state.cpp": {
+      "preimage_sha256": "f0b8073585dc839d943b936bb06b20732b20d4cfce238f0c5b71ec4819fcbd21",
+      "postimage_sha256": "8e1328f7152fc7f226e5099be6099fcb3ad112b32172ccf80d2d5118d3d2adfe"
+    },
+    "zone/shared_task_zone_messaging.cpp": {
+      "preimage_sha256": "d76a867970e7ea6c4b583f96f3df1827fc57a28a27b3b7788effd9b3a8e0b0c0",
+      "postimage_sha256": "018b92349616cdd988c73c4e74e48233baa9082a2503382fb384715de551b2e0"
+    },
+    "world/shared_task_world_messaging.cpp": {
+      "preimage_sha256": "1ed943fd1b6efd8793a7169d19d56f88dd98886baa516bce0c97c5c202712ed1",
+      "postimage_sha256": "f7f3c85677b3541ce4f91954f8c3656ee111f8768794137462cd60ae001ff082"
+    },
+    "world/shared_task_manager.cpp": {
+      "preimage_sha256": "4d522a2183e46b9e9d469e42ef654041debdd0a82aada3c301f565974639cb2e",
+      "postimage_sha256": "11c65535fbe526a38fc1e38d030d63d575d6aed49da8eaa35f6227deb1f28d93"
+    },
+    "common/fire_shared_activity_origin.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "5a45d9591b263a50fdb04987df2a49cf901ef65492cfaede20fec77803b3205c"
+    }
+  },
+  "dependency": {
+    "artifact_prefix": "extensions/rof2/shared-core/fire-world-zone-correlation",
+    "parent_patch_sha256": "6f221c1b4d4aef8a7a1b237945143321d18b8a8324479b13ed7459d259dcccb1",
+    "materialization": "Apply after exact reviewed World/Zone parent; preimages here are its postimages. Do not apply against raw native branch or compiled runtime files."
+  },
+  "ordinary_other_task_payload_unchanged": true,
+  "matched_world_zone_peers_required": true,
+  "guarantee": "Current canonical Worldrun identity, no stale-run progress across reacceptance.",
+  "not_guaranteed": [
+    "item/cast/corpse/output proof",
+    "durable World activity persistence receipt",
+    "automatic operation or reward recovery"
+  ],
+  "native_progression_and_persistence_calls_unchanged": true,
+  "schema_framework_opcodes_added": false,
+  "entry_registration": "Unregistered source only",
+  "patch_sha256": "2be623d367beae8676c7b8affbdbae32b1d00d76b873207b7f277c00620c03dd",
+  "rollback_sha256": "e9e337a0b206999d0ce0963a7a18f97da5b2b8498be63256d025fb85910b5a1d",
+  "compiled": false,
+  "runtime": false,
+  "tests": 0,
+  "source_review": "PASS finite activity-origin delta; no parent/seam defects; run correlation is not physical/durable-save proof"
+}
