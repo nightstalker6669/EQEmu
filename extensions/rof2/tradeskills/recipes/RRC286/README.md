@@ -10,7 +10,7 @@ Current maintained numeric bodies are observations, not immutable May2013 per-fi
 
 All65source input multisets absent.14same-name Pale Nihilite existing routes8160..8173 have different inputs and remain exact unchanged peers. Current primary literal routes independently verified; no claim older alternatives are wrong.243all-state output-use peer headers/1667entries guarded, including returned tools; no broad name exemptions.
 
-28source views across27groups remain:5trophies;8Clasp/RawGem current explicit-minimum or nofail differences;2Sublime Penetrating identical input/conflicting output views;13Stonefurniture views lacking a positive common native-capacity-qualified portable kit. No guessed minimum, selection between conflicting outputs, furniture station substitution or trophy mechanics.
+28source views across27groups remain:5trophies;8Clasp/RawGem recipes with matching explicit skill300 but required BrellsTemple/font-room spatial gates not yet implemented;2Sublime Penetrating identical input/conflicting output views;13Stonefurniture views lacking a positive common native-capacity-qualified portable kit. No guessed minimum, selection between conflicting outputs, furniture station substitution or trophy mechanics.
 
 Append65headers/entries only; full18native deps/booktext/current output producer universe/input/name peers/IDrange/count/learned guards. Rollback refuses learned references. Native book learning supported already; no actor install dependency. No source world object/player/item/book changes.
 

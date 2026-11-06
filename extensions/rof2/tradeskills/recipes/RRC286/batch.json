@@ -31774,7 +31774,7 @@
     "learning": "43Transcendent Nimble/Penetrating/Vicious primary formulas omit mandatory book notes, but explicit primary Transcendent Weapon Augmenting135564 source says scribing is required for weapon augments; native authored TSSKU20WeaponJwl100 and exact book fields/text guarded. Bind mustlearn1/book135564. Remaining22omit learning and use ordinary0. Skillminimum0 where source omits a number is labelled policy; no guessed300. Native book reqlevel96/reclevel100 preserved, no override.",
     "era": "Current maintained numeric bodies are observations, not immutable May2013 per-field proof. ThroughRoF family context:Transcendent19,GoDkit7,Stonehousing17,SilverFork0 are labelled local reconstruction floors. Furniture placement station branches not independently implemented; only source-positive native-capacity-qualified ordinary portable kit branches selected.",
     "peers": "All65source input multisets absent.14same-name Pale Nihilite existing routes8160..8173 have different inputs and remain exact unchanged peers. Current primary literal routes independently verified; no claim older alternatives are wrong.243all-state output-use peer headers/1667entries guarded, including returned tools; no broad name exemptions.",
-    "holds": "28source views across27groups remain:5trophies;8Clasp/RawGem current explicit-minimum or nofail differences;2Sublime Penetrating identical input/conflicting output views;13Stonefurniture views lacking a positive common native-capacity-qualified portable kit. No guessed minimum, selection between conflicting outputs, furniture station substitution or trophy mechanics.",
+    "holds": "28source views across27groups remain:5trophies;8Clasp/RawGem recipes with matching explicit skill300 but required BrellsTemple/font-room spatial gates not yet implemented;2Sublime Penetrating identical input/conflicting output views;13Stonefurniture views lacking a positive common native-capacity-qualified portable kit. No guessed minimum, selection between conflicting outputs, furniture station substitution or trophy mechanics.",
     "preservation": "Append65headers/entries only; full18native deps/booktext/current output producer universe/input/name peers/IDrange/count/learned guards. Rollback refuses learned references. Native book learning supported already; no actor install dependency. No source world object/player/item/book changes.",
     "execution": "Source only pending coordinator disposition, exact GitHub publication and separate one-use SQL GO; no SQL, compile, tests, rehearsal or runtime acceptance."
   },
@@ -31884,56 +31884,56 @@
     {
       "view_id": 9947,
       "name": "Clasp of the Elements",
-      "reason": "CURRENT_EXPLICIT_MINIMUM_OR_NOFAIL_FIELD_DIFFERS_UNQUALIFIED",
+      "reason": "EXPLICIT_SKILL300_MATCHES;REQUIRED_BRELLS_TEMPLE_FONT_ROOM_OR_NAMED_STATION_SPATIAL_GATE_UNQUALIFIED",
       "error_type": "AssertionError",
       "line": 56
     },
     {
       "view_id": 9995,
       "name": "Raw Gem of Chaos",
-      "reason": "CURRENT_EXPLICIT_MINIMUM_OR_NOFAIL_FIELD_DIFFERS_UNQUALIFIED",
+      "reason": "EXPLICIT_SKILL300_MATCHES;REQUIRED_BRELLS_TEMPLE_FONT_ROOM_OR_NAMED_STATION_SPATIAL_GATE_UNQUALIFIED",
       "error_type": "AssertionError",
       "line": 56
     },
     {
       "view_id": 9996,
       "name": "Raw Gem of Instinct",
-      "reason": "CURRENT_EXPLICIT_MINIMUM_OR_NOFAIL_FIELD_DIFFERS_UNQUALIFIED",
+      "reason": "EXPLICIT_SKILL300_MATCHES;REQUIRED_BRELLS_TEMPLE_FONT_ROOM_OR_NAMED_STATION_SPATIAL_GATE_UNQUALIFIED",
       "error_type": "AssertionError",
       "line": 56
     },
     {
       "view_id": 9997,
       "name": "Raw Gem of Passion",
-      "reason": "CURRENT_EXPLICIT_MINIMUM_OR_NOFAIL_FIELD_DIFFERS_UNQUALIFIED",
+      "reason": "EXPLICIT_SKILL300_MATCHES;REQUIRED_BRELLS_TEMPLE_FONT_ROOM_OR_NAMED_STATION_SPATIAL_GATE_UNQUALIFIED",
       "error_type": "AssertionError",
       "line": 56
     },
     {
       "view_id": 9998,
       "name": "Raw Gem of Reason",
-      "reason": "CURRENT_EXPLICIT_MINIMUM_OR_NOFAIL_FIELD_DIFFERS_UNQUALIFIED",
+      "reason": "EXPLICIT_SKILL300_MATCHES;REQUIRED_BRELLS_TEMPLE_FONT_ROOM_OR_NAMED_STATION_SPATIAL_GATE_UNQUALIFIED",
       "error_type": "AssertionError",
       "line": 56
     },
     {
       "view_id": 9999,
       "name": "Raw Gem of Substance",
-      "reason": "CURRENT_EXPLICIT_MINIMUM_OR_NOFAIL_FIELD_DIFFERS_UNQUALIFIED",
+      "reason": "EXPLICIT_SKILL300_MATCHES;REQUIRED_BRELLS_TEMPLE_FONT_ROOM_OR_NAMED_STATION_SPATIAL_GATE_UNQUALIFIED",
       "error_type": "AssertionError",
       "line": 56
     },
     {
       "view_id": 10000,
       "name": "Raw Gem of Vitality",
-      "reason": "CURRENT_EXPLICIT_MINIMUM_OR_NOFAIL_FIELD_DIFFERS_UNQUALIFIED",
+      "reason": "EXPLICIT_SKILL300_MATCHES;REQUIRED_BRELLS_TEMPLE_FONT_ROOM_OR_NAMED_STATION_SPATIAL_GATE_UNQUALIFIED",
       "error_type": "AssertionError",
       "line": 56
     },
     {
       "view_id": 10001,
       "name": "Raw Gem of Will",
-      "reason": "CURRENT_EXPLICIT_MINIMUM_OR_NOFAIL_FIELD_DIFFERS_UNQUALIFIED",
+      "reason": "EXPLICIT_SKILL300_MATCHES;REQUIRED_BRELLS_TEMPLE_FONT_ROOM_OR_NAMED_STATION_SPATIAL_GATE_UNQUALIFIED",
       "error_type": "AssertionError",
       "line": 56
     },
