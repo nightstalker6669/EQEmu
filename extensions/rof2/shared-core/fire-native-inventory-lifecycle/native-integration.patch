@@ -730,7 +730,14 @@
  	client_evolving_items.cpp
 --- a/zone/attack.cpp
 +++ b/zone/attack.cpp
-@@ -32,6 +32,13 @@
+@@ -1,3 +1,6 @@
++#include "fire_construct_participants.h"
++#include "fire_gotonur_say_queue.h"
++#include "groups.h"
+ #include "bound_destructible_ruins.h"
+ /*	EQEmu: EQEmulator
+ 
+@@ -32,6 +35,13 @@
  #include "zone/lua_parser.h"
  #include "zone/mob.h"
  #include "zone/npc.h"
@@ -744,7 +751,7 @@
  #include "zone/queryserv.h"
  #include "zone/quest_parser_collection.h"
  #include "zone/string_ids.h"
-@@ -2481,6 +2488,7 @@
+@@ -2481,6 +2491,7 @@
  
  bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillType attack_skill, KilledByTypes killed_by, bool is_buff_tic)
  {
@@ -752,7 +759,7 @@
  	if (BoundDestructibles::IsBlocked(this)) {
  		return false;
  	}
-@@ -3126,6 +3134,7 @@
+@@ -3126,6 +3137,7 @@
  		killer_mob->SetTarget(nullptr);
  	}
  
@@ -760,7 +767,7 @@
  	return true;
  }
  
-@@ -7116,3 +7125,244 @@
+@@ -7116,3 +7128,292 @@
  {
  	return 0; // not implemented
  }
@@ -778,8 +785,7 @@
 + :attempt_(actual.m_fire_original_construct),actor_(&actual) {
 + if(!attempt_ || !zone || !attempt_->captured_ ||
 +  attempt_->original_object_!=&actual || attempt_->death_entry_active_ ||
-+  attempt_->death_success_sealed_ || attempt_->caster_death_submitted_ ||
-+  attempt_->original_.personal.acceptance.task_id==920169) return;
++  attempt_->death_success_sealed_ || attempt_->caster_death_submitted_) return;
 + killed_entity_=actual.GetID();zone_=zone->GetZoneID();instance_=zone->GetInstanceID();
 + if(!MatchesActualConstructDeath(*attempt_->captured_,actual,killed_entity_,zone_,instance_)) return;
 + // Allocate before native mutable death callbacks. A failed allocation holds
@@ -789,6 +795,8 @@
 +  pending_.reset(new(std::nothrow) OriginalConstructDeathQueue::Pending{attempt_,lifetime,zone,zone_,instance_});
 + } catch(const std::bad_alloc&) {return;}
 + if(!pending_) return;
++ // Candidates belong to this exact entered Death invocation, never a failed predecessor.
++ for(auto& visit:attempt_->native_visits_)visit=NativeConstructParticipantVisit{};
 + attempt_->death_entry_active_=true;entered_=true;
 +}
 +void OriginalConstructNativeDeath::SealSuccess(NPC& actual,uint32_t native_killed_entity) {
@@ -816,32 +824,58 @@
 + while(pending) {auto* next=pending->next;delete pending;pending=next;}
 +}
 +void OriginalConstructDeathQueue::Drain() {
-+ // Detach the finite batch before callbacks. New genuine deaths go to the NEXT
-+ // normal pass; the current batch is never iterated twice or automatically retried.
 + auto* pending=head_;head_=tail_=nullptr;
 + while(pending) {
 +  std::unique_ptr<Pending> event(pending);pending=pending->next;
 +  const auto attempt=event->attempt;
-+  if(!event->lifetime->active || !zone || event->zone_owner!=zone || zone->GetZoneID()!=event->zone_id ||
-+   zone->GetInstanceID()!=event->instance_id || !attempt ||
-+   !attempt->death_success_sealed_ || attempt->caster_death_submitted_) continue;
-+  attempt->caster_death_submitted_=true;
-+  const auto& binding=attempt->original_.personal.acceptance;
++  const auto valid_zone=[&]() {return event->lifetime->active && zone && event->zone_owner==zone &&
++   zone->GetZoneID()==event->zone_id && zone->GetInstanceID()==event->instance_id;};
++  if(!valid_zone() || !attempt || !attempt->death_success_sealed_ || attempt->caster_death_submitted_)continue;
++  attempt->caster_death_submitted_=true; // one finite delivery, never automatic retry
++  if(UsesBoundedNativeGroupCredit(attempt->original_.personal.acceptance.task_id)) {
++   for(size_t i=0;i<attempt->activation_count_;++i) {
++    if(!valid_zone())break;
++    auto& visit=attempt->native_visits_[i];
++    if(!visit.observed_ || visit.submitted_)continue;
++    visit.submitted_=true;
++    const auto binding=visit.recipient_;
++    if(!visit.client_lifetime_ || !visit.client_lifetime_->active_)continue;
++    auto* client=entity_list.GetClientByCharID(binding.character_id);
++    if(!client || client!=visit.original_client_ || client->GetID()!=visit.client_entity_ ||
++     client->m_fire_gotonur_say_lifetime!=visit.client_lifetime_ || client->GetRaid() ||
++     !client->ClientDataLoaded() || !client->HasTaskState() || !client->GetTaskState() ||
++     client->GetZoneID()!=int(event->zone_id) || client->GetInstanceID()!=int(event->instance_id) ||
++     (client->GetGroup()?client->GetGroup()->GetID():0)!=visit.group_id_ ||
++     binding.slot<0 || binding.slot>=MAXACTIVEQUESTS)continue;
++    const auto* current=client->GetTaskState()->GetClientTaskInfo(TaskType::Quest,binding.slot);
++    if(!current || current->activity[0].activity_state!=ActivityCompleted ||
++     current->activity[1].activity_state!=ActivityCompleted ||
++     !ForConsumer(database,binding,client->CharacterID(),TaskType::Quest,*current,Consumer::ActualConstructDeath))continue;
++    OriginalConstructDeathFrame frame{binding,client};
++    {OriginalConstructDeathScope scope(frame);client->UpdateTaskActivity(binding.task_id,2,1);}
++    // Mutable native save callbacks have returned. Only attempt/stack data here.
++    visit.saved_=frame.committed;
++    if(frame.committed)visit.persisted_=ConstructDeathReceiptStore::PersistActualParticipant(database,*attempt,visit);
++    if(binding.character_id==attempt->original_.personal.acceptance.character_id) {
++     attempt->caster_death_committed_=frame.committed;
++     attempt->persisted_death_=visit.persisted_;
++    }
++   }
++   continue;
++  }
++  // Original167 remains caster-only; no party/history-derived widening.
++  const auto binding=attempt->original_.personal.acceptance;
 +  auto* client=entity_list.GetClientByCharID(binding.character_id);
-+  if(!client || !client->GetTaskState() || binding.slot<0 || binding.slot>=MAXACTIVEQUESTS) continue;
++  if(!client || !client->GetTaskState() || binding.slot<0 || binding.slot>=MAXACTIVEQUESTS)continue;
 +  const auto* current=client->GetTaskState()->GetClientTaskInfo(TaskType::Quest,binding.slot);
-+  if(!current || !ForConsumer(database,binding,client->CharacterID(),TaskType::Quest,
-+   *current,Consumer::ActualConstructDeath)) continue;
++  if(!current || !ForConsumer(database,binding,client->CharacterID(),TaskType::Quest,*current,Consumer::ActualConstructDeath))continue;
 +  OriginalConstructDeathFrame frame{binding,client};
-+  OriginalConstructDeathScope scope(frame);
-+  client->UpdateTaskActivity(binding.task_id,2,1);
-+  // Native actor stacks and entity iteration have already unwound. After the
-+  // mutable update use only retained attempt/stack data, never client/NPC/slot.
++  {OriginalConstructDeathScope scope(frame);client->UpdateTaskActivity(binding.task_id,2,1);}
 +  attempt->caster_death_committed_=frame.committed;
-+  if(frame.committed)
-+   attempt->persisted_death_=ConstructDeathReceiptStore::PersistActualDeath(database,*attempt);
++  if(frame.committed)attempt->persisted_death_=ConstructDeathReceiptStore::PersistActualDeath(database,*attempt);
 + }
 +}
++
 +} // namespace FirePersonalOccurrenceSource
 +
 +namespace FirePersonalOccurrenceSource {
@@ -909,48 +943,65 @@
 +} // finite feature-local SQL helpers, not a generic persistence service
 +
 +bool ConstructDeathReceiptStore::PersistActualDeath(Database& db,const OriginalConstructAttempt& actual) {
-+ if(!actual.captured_ || !actual.death_success_sealed_ || !actual.caster_death_submitted_ ||
-+  !actual.caster_death_committed_ || !actual.native_click_sequence_) return false;
-+ const auto& identity=*actual.captured_;
-+ const auto& use=actual.original_;
-+ const auto& b=use.personal.acceptance;
-+ const auto rule=OriginalRule(b.task_id);
-+ if(!rule || (b.task_id!=920167 && b.task_id!=920168) || !b.character_id ||
-+  !b.occurrence_id || b.slot<0 || b.slot>=MAXACTIVEQUESTS || b.accepted_time<=0 ||
++ if(actual.original_.personal.acceptance.task_id!=920167 || !actual.caster_death_submitted_ ||
++  !actual.caster_death_committed_)return false;
++ return PersistSavedRecipient(db,actual,actual.original_.personal.acceptance);
++}
++bool ConstructDeathReceiptStore::PersistActualParticipant(Database& db,const OriginalConstructAttempt& actual,
++ const NativeConstructParticipantVisit& visit) {
++ if(!UsesBoundedNativeGroupCredit(actual.original_.personal.acceptance.task_id) ||
++  !visit.observed_ || !visit.submitted_ || !visit.saved_ || visit.persisted_ ||
++  !actual.caster_death_submitted_)return false;
++ bool owned_visit=false;
++ for(size_t i=0;i<actual.activation_count_;++i)
++  if(&actual.native_visits_[i]==&visit &&
++   actual.activation_cohort_[i].original.character_id==visit.recipient_.character_id &&
++   actual.activation_cohort_[i].original.occurrence_id==visit.recipient_.occurrence_id)owned_visit=true;
++ if(!owned_visit)return false;
++ return PersistSavedRecipient(db,actual,visit.recipient_);
++}
++bool ConstructDeathReceiptStore::PersistSavedRecipient(Database& db,const OriginalConstructAttempt& actual,
++ const Binding& b) {
++ if(!actual.captured_ || !actual.death_success_sealed_ || !actual.native_click_sequence_)return false;
++ const auto& identity=*actual.captured_;const auto& use=actual.original_;
++ const auto& creator=use.personal.acceptance;const auto rule=OriginalRule(creator.task_id);
++ if(!rule || b.task_id!=creator.task_id || !b.character_id || !b.occurrence_id ||
++  b.slot<0 || b.slot>=MAXACTIVEQUESTS || b.accepted_time<=0 ||
++  !creator.character_id || !creator.occurrence_id || creator.accepted_time<=0 ||
++  creator.slot<0 || creator.slot>=MAXACTIVEQUESTS ||
 +  use.personal.consumer!=Consumer::ActivateConstruct || use.item_id!=rule->inactive_item ||
 +  !use.item_serial || use.charges_before<=0 || !use.caster_entity ||
 +  identity.npc_type_id!=rule->construct_npc || !identity.entity_id ||
-+  identity.zone_id!=rule->encounter_zone || identity.instance_id!=0) return false;
++  identity.zone_id!=rule->encounter_zone || identity.instance_id!=0)return false;
 + bool transaction=false;
 + try {
 +  const auto connection=FireReceiptFreshSession(db);
-+  if(!db.TransactionBeginStrict().Success()) return false;
-+  transaction=true;
-+  FireReceiptFoundation(db);FireReceiptStage(db,b);
++  if(!db.TransactionBeginStrict().Success())return false;
++  transaction=true;FireReceiptFoundation(db);FireReceiptStage(db,b);
 +  const auto inserted=FireReceiptQuery(db,fmt::format(
 +   "INSERT INTO rof2_fire_construct_death_receipts (character_id,task_id,occurrence_id,accepted_time,"
-+   "accepted_slot,native_click_sequence,original_item_id,original_item_serial,original_item_slot,"
++   "accepted_slot,creator_character_id,creator_task_id,creator_occurrence_id,creator_accepted_time,"
++   "creator_accepted_slot,native_click_sequence,original_item_id,original_item_serial,original_item_slot,"
 +   "original_charges,original_caster_entity,original_target_entity,construct_npc_id,construct_entity_id,"
 +   "construct_spawn_id,construct_zone_id,construct_instance_id,saved_at,claimed_at) "
-+   "VALUES ({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},UNIX_TIMESTAMP(),NULL)",
-+   b.character_id,b.task_id,b.occurrence_id,b.accepted_time,b.slot,actual.native_click_sequence_,
-+   use.item_id,use.item_serial,use.slot,use.charges_before,use.caster_entity,use.requested_target_entity,
-+   identity.npc_type_id,identity.entity_id,identity.spawn_point_id,identity.zone_id,identity.instance_id));
-+  if(inserted.RowsAffected()!=1) throw std::runtime_error("Fire receipt insert not exact");
++   "VALUES ({},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},UNIX_TIMESTAMP(),NULL)",
++   b.character_id,b.task_id,b.occurrence_id,b.accepted_time,b.slot,
++   creator.character_id,creator.task_id,creator.occurrence_id,creator.accepted_time,creator.slot,
++   actual.native_click_sequence_,use.item_id,use.item_serial,use.slot,use.charges_before,
++   use.caster_entity,use.requested_target_entity,identity.npc_type_id,identity.entity_id,
++   identity.spawn_point_id,identity.zone_id,identity.instance_id));
++  if(inserted.RowsAffected()!=1)throw std::runtime_error("Fire recipient receipt insert not exact");
 +  FireReceiptBeforeCommit(db,connection);
 +  const auto commit=db.TransactionCommitStrict();transaction=false;
-+  return commit.Success(); // no readback/replay/upsert/retry on unknown commit
-+ } catch(const std::exception&) {
-+  if(transaction) db.TransactionRollbackStrict();
-+  return false;
-+ }
++  return commit.Success(); // no unknown-commit readback/replay/upsert/retry
++ } catch(const std::exception&) {if(transaction)db.TransactionRollbackStrict();return false;}
 +}
 +
 +std::shared_ptr<PersistedConstructFinish> ConstructDeathReceiptStore::ClaimForActualHail(
 + Database& db,Client& client,NPC& giver,const ClientTaskInformation& current) {
 + if(!zone || zone->GetZoneID()!=490 || zone->GetInstanceID()!=0 ||
 +  giver.GetNPCTypeID()!=490061 || !giver.GetID() || !giver.GetSpawnPointID() ||
-+  (current.task_id!=920167 && current.task_id!=920168) || current.slot<0 ||
++  (current.task_id!=920167 && current.task_id!=920168 && current.task_id!=920169) || current.slot<0 ||
 +  current.slot>=MAXACTIVEQUESTS || current.accepted_time<=0 || current.was_rewarded ||
 +  current.activity[2].activity_state!=ActivityCompleted ||
 +  current.activity[3].activity_state!=ActivityActive) return {};
@@ -961,7 +1012,8 @@
 +  transaction=true;FireReceiptFoundation(db);
 +  auto q=FireReceiptQuery(db,fmt::format(
 +   "SELECT p.occurrence_id,p.native_click_sequence,p.original_item_id,p.original_item_serial,p.construct_npc_id,"
-+   "p.construct_entity_id,p.construct_zone_id,p.construct_instance_id,p.original_caster_entity,p.original_charges "
++   "p.construct_entity_id,p.construct_zone_id,p.construct_instance_id,p.original_caster_entity,p.original_charges,p.creator_character_id,p.creator_task_id, "
++   "p.creator_occurrence_id,p.creator_accepted_time,p.creator_accepted_slot "
 +   "FROM rof2_fire_construct_death_receipts p JOIN character_task_reward_instances r "
 +   "ON r.character_id=p.character_id AND r.task_id=p.task_id AND r.occurrence_id=p.occurrence_id "
 +   "AND r.accepted_time=p.accepted_time WHERE p.character_id={} AND p.task_id={} AND p.accepted_time={} "
@@ -976,7 +1028,10 @@
 +   !FireReceiptNumber(row[1]) || FireReceiptNumber(row[2])!=rule->inactive_item ||
 +   !FireReceiptSigned(row[3]) || FireReceiptNumber(row[4])!=rule->construct_npc ||
 +   !FireReceiptNumber(row[5]) || FireReceiptNumber(row[6])!=rule->encounter_zone ||
-+   FireReceiptNumber(row[7])!=0 || !FireReceiptNumber(row[8]) || FireReceiptSigned(row[9])<=0)
++   FireReceiptNumber(row[7])!=0 || !FireReceiptNumber(row[8]) || FireReceiptSigned(row[9])<=0 ||
++   !FireReceiptNumber(row[10]) || FireReceiptNumber(row[11])!=b.task_id ||
++   !FireReceiptNumber(row[12]) || FireReceiptSigned(row[13])<=0 ||
++   FireReceiptSigned(row[14])<0 || FireReceiptSigned(row[14])>=MAXACTIVEQUESTS)
 +   throw std::runtime_error("Fire receipt original event identity differs");
 +  FireReceiptStage(db,b);
 +  // Allocate the actual opaque handoff before persistence. It becomes authority
@@ -1007,7 +1062,18 @@
 +} // namespace FirePersonalOccurrenceSource
 --- a/zone/client.cpp
 +++ b/zone/client.cpp
-@@ -17,6 +17,11 @@
+@@ -1,3 +1,10 @@
++#include "fire_construct_local_profiles.h"
++#include "fire_prepared_construct_plan.h"
++#include "fire_construct_participants.h"
++#include "map.h"
++#include "zonedump.h"
++#include <charconv>
++#include <cstring>
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -17,6 +24,11 @@
  */
  #include "../common/mercenary/rof2_timer.h"
  #include "fire_shared_successor_native.h"
@@ -1019,7 +1085,7 @@
  
  #include "housing_guild_portal.h"
  #include "housing_actor_publication.h"
-@@ -34,6 +39,7 @@
+@@ -34,6 +46,7 @@
  #include <thread>
  
  #include "client.h"
@@ -1027,7 +1093,7 @@
  
  #include "common/data_bucket.h"
  #include "common/data_verification.h"
-@@ -754,6 +760,7 @@
+@@ -754,6 +767,7 @@
  }
  
  Client::~Client() {
@@ -1035,7 +1101,7 @@
   Housing::GuildPortalRuntime::Forget(*this);
  	struct PublicationCleanup {Client& client;~PublicationCleanup(){Housing::ActorPublication::Forget(client);}} publication_cleanup{*this};
  	// First lifecycle action: no quests, save, stream release or inventory
-@@ -1710,6 +1717,7 @@
+@@ -1710,6 +1724,7 @@
  			sender = GetPet();
  		}
  
@@ -1043,7 +1109,7 @@
  		if (!is_silent) {
  			entity_list.ChannelMessage(sender, chan_num, language, lang_skill, message);
  		}
-@@ -8962,7 +8970,7 @@
+@@ -8962,7 +8977,7 @@
  void Client::TryItemTimer(int slot)
  {
  	EQ::ItemInstance* inst = m_inv.GetItem(slot);
@@ -1052,7 +1118,7 @@
  		return;
  	}
  
-@@ -8984,14 +8992,14 @@
+@@ -8984,14 +8999,14 @@
  	for (int x = EQ::invaug::SOCKET_BEGIN; x <= EQ::invaug::SOCKET_END; ++x)
  	{
  		EQ::ItemInstance * a_inst = inst->GetAugment(x);
@@ -1070,7 +1136,7 @@
  				if (parse->ItemHasQuestSub(a_inst, EVENT_TIMER)) {
  					parse->EventItem(EVENT_TIMER, this, a_inst, nullptr, it_iter->first, 0);
  				}
-@@ -13667,3 +13675,174 @@
+@@ -13667,3 +13682,326 @@
  
  	return task_state->UncompleteTask(task_id);
  }
@@ -1125,26 +1191,23 @@
 +   (previous.original_.personal.acceptance.occurrence_id==binding.occurrence_id &&
 +    previous.original_.personal.acceptance.task_id==binding.task_id)) return;
 + }
-+ // These are unresolved owner decisions, never booleans supplied by a caller.
-+ // A source revision with the real placement and lifetime guarantees is required.
-+ constexpr bool actor_lifetime_and_no_same_frame_reuse_selected=false;
-+ const OriginalConstructPlacement placement{};
-+ if(!actor_lifetime_and_no_same_frame_reuse_selected || !placement.selected ||
-+  binding.task_id==920169) return; // authentic participant cohort remains held
-+ const auto* definition=content_db.LoadNPCTypesData(context->rule.construct_npc);
-+ if(!definition || !std::isfinite(placement.point.x) || !std::isfinite(placement.point.y) ||
-+  !std::isfinite(placement.point.z) || !std::isfinite(placement.point.w)) return;
-+ // Retain the SAME original use before publication; no history/context factory.
-+ client.m_fire_published_construct=std::make_shared<OriginalConstructAttempt>(original);
-+ auto& attempt=*client.m_fire_published_construct;
-+ attempt.attempted_=true;
-+ attempt.native_click_sequence_=view.native_click_sequence;
-+ auto* actor=new NPC(definition,nullptr,placement.point,GravityBehavior::Water);
-+ if(actor->GetNPCTypeID()!=context->rule.construct_npc) {delete actor;return;}
-+ actor->m_fire_original_construct=client.m_fire_published_construct;
++ // SAME prespend actual plan, owned by the private writer receipt.
++ auto* plan=view.prepared_construct_plan;
++ if(!plan || !plan->actor_ || !plan->attempt_ ||
++  plan->sequence_!=view.native_click_sequence ||
++  plan->original_.personal.acceptance.character_id!=binding.character_id ||
++  plan->original_.personal.acceptance.task_id!=binding.task_id ||
++  plan->original_.personal.acceptance.occurrence_id!=binding.occurrence_id ||
++  plan->original_.item_serial!=original.item_serial) return;
++ auto attempt=plan->attempt_; // retain across mutable loot/registration callbacks
++ auto* actor=plan->actor_.release();
++ client.m_fire_published_construct=attempt;
++ attempt->attempted_=true;
++ actor->m_fire_original_construct=attempt;
++ // Qualified definitions have no new actor factory/click/debit at this point.
 + actor->AddLootTable();
 + if(actor->DropsGlobalLoot()) actor->CheckGlobalLootTables();
-+ OriginalConstructRegistration frame{attempt,actor,original.actual_zone,original.actual_instance};
++ OriginalConstructRegistration frame{*attempt,actor,original.actual_zone,original.actual_instance};
 + OriginalConstructRegistrationScope scope(frame);
 + entity_list.AddNPC(actor,true,true);
 + // AddNPC has mutable callbacks: no client/actor/attempt dereference after it.
@@ -1169,7 +1232,7 @@
 + const ClientTaskInformation* selected=nullptr;
 + for(int slot=0;slot<MAXACTIVEQUESTS;++slot) {
 +  const auto* current=client.GetTaskState()->GetClientTaskInfo(TaskType::Quest,slot);
-+  if(!current || (current->task_id!=920167 && current->task_id!=920168) ||
++  if(!current || (current->task_id!=920167 && current->task_id!=920168 && current->task_id!=920169) ||
 +   current->was_rewarded || current->activity[2].activity_state!=ActivityCompleted ||
 +   current->activity[3].activity_state!=ActivityActive) continue;
 +  if(selected) return; // no inferred sequence among multiple abnormal active originals
@@ -1245,6 +1308,161 @@
 + }
 +}
 +} // namespace FirePersonalOccurrenceSource
++
++namespace FirePersonalOccurrenceSource {
++namespace {
++bool FireActualPoseAllowed(const OriginalItemUse& use,const glm::vec4& p,float* ground) {
++ if(!zone || zone->GetZoneID()!=use.actual_zone || zone->GetInstanceID()!=0 ||
++  use.actual_instance || !zone->zonemap || !std::isfinite(p.x) || !std::isfinite(p.y) ||
++  !std::isfinite(p.z) || !std::isfinite(p.w)) return false;
++ const auto task=use.personal.acceptance.task_id;
++ double dx=0,dy=0;
++ if(task==920167) {if(use.actual_zone!=487)return false;dx=double(p.x)-900;dy=double(p.y)+1280;}
++ else if(task==920168) {if(use.actual_zone!=481)return false;dx=double(p.x)+560;dy=double(p.y)+560;}
++ else if(task!=920169 || use.actual_zone!=490) return false;
++ // Explicit LOCAL horizontal radius; no historical Z manufactured.
++ if(dx*dx+dy*dy>10000.0) return false;
++ glm::vec3 start(p.x,p.y,p.z);
++ const float z=zone->zonemap->FindBestZ(start,nullptr);
++ if(!std::isfinite(z) || z==BEST_Z_INVALID) return false;
++ if(ground)*ground=z;
++ return true; // actual caster Z retained; native gravity/levitation stays native
++}
++uint32_t FireActualGroup(Client& c) {auto* g=c.GetGroup();return g?g->GetID():0;}
++bool FireSameBinding(const Binding& a,const Binding& b) {
++ return a.character_id==b.character_id && a.task_id==b.task_id && a.slot==b.slot &&
++  a.accepted_time==b.accepted_time && a.occurrence_id==b.occurrence_id;
++}
++}
++std::optional<Binding> NativeConstructParticipants::OwnEligibleOccurrence(Client& c,uint32_t task) {
++ if(!c.ClientDataLoaded() || !c.HasTaskState() || !c.GetTaskState())return {};
++ std::optional<Binding> selected;
++ for(int slot=0;slot<MAXACTIVEQUESTS;++slot) {
++  const auto* current=c.GetTaskState()->GetClientTaskInfo(TaskType::Quest,slot);
++  if(!current || current->task_id!=int(task) || current->was_rewarded ||
++   current->activity[0].activity_state!=ActivityCompleted ||
++   current->activity[1].activity_state!=ActivityCompleted ||
++   current->activity[2].activity_state!=ActivityActive)continue;
++  if(selected)return {}; // ambiguous personal slot never selects arbitrary occurrence
++  auto q=database.QueryDatabase(fmt::format(
++   "SELECT occurrence_id FROM character_task_reward_instances WHERE character_id={} "
++   "AND task_id={} AND accepted_time={}",c.CharacterID(),task,current->accepted_time));
++  if(!q.Success() || q.RowCount()!=1 || !q.begin()[0])return {};
++  const char* text=q.begin()[0];uint64_t occurrence=0;
++  const auto parsed=std::from_chars(text,text+std::strlen(text),occurrence);
++  if(parsed.ec!=std::errc{} || parsed.ptr!=text+std::strlen(text) || !occurrence)return {};
++  Binding b{c.CharacterID(),task,slot,current->accepted_time,occurrence};
++  // Read existing own accepted pointer only, never Reserve/Ensure/history origin.
++  if(!ForConsumer(database,b,c.CharacterID(),TaskType::Quest,*current,Consumer::ActualConstructDeath))return {};
++  selected=b;
++ }
++ return selected;
++}
++PreparedConstructPlan::PreparedConstructPlan(const OriginalItemUse& o,uint64_t sequence) noexcept
++ :original_(o),sequence_(sequence) {}
++PreparedConstructPlan::~PreparedConstructPlan()=default;
++std::unique_ptr<PreparedConstructPlan> PreparedConstructPlan::PrepareActual(
++ Client& c,const OriginalItemUse& use,uint64_t sequence) {
++ if(!sequence || use.personal.consumer!=Consumer::ActivateConstruct || c.GetRaid() ||
++  c.CharacterID()!=use.personal.acceptance.character_id || c.GetID()!=use.caster_entity ||
++  use.item_id!=use.personal.rule.inactive_item || !use.item_serial || use.charges_before<=0 ||
++  original_construct_registration)return {};
++ const auto own=NativeConstructParticipants::OwnEligibleOccurrence(c,use.personal.acceptance.task_id);
++ if(!own || !FireSameBinding(*own,use.personal.acceptance))return {};
++ if(c.m_fire_published_construct) {
++  const auto& prior=*c.m_fire_published_construct;
++  if(!prior.caster_death_committed_ ||
++   (prior.original_.personal.acceptance.task_id==own->task_id &&
++    prior.original_.personal.acceptance.occurrence_id==own->occurrence_id))return {};
++ }
++ auto result=std::unique_ptr<PreparedConstructPlan>(new PreparedConstructPlan(use,sequence));
++ result->point_=c.GetPosition();
++ if(!FireActualPoseAllowed(use,result->point_,&result->native_ground_))return {};
++ const auto* definition=content_db.LoadNPCTypesData(use.personal.rule.construct_npc);
++ // Exact owner-selected LOCAL full-row loader profile, not ID/HP-only acceptance.
++ if(!definition || (definition->npc_id!=use.personal.rule.construct_npc || !FireConstructLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition)))return {};
++ result->expected_definition_=std::make_unique<NPCType>();
++ std::memcpy(result->expected_definition_.get(),definition,sizeof(NPCType));
++ result->attempt_=std::make_shared<OriginalConstructAttempt>(use);
++ auto& a=*result->attempt_;a.native_click_sequence_=sequence;
++ result->group_id_=FireActualGroup(c);a.activation_group_id_=result->group_id_;
++ if(UsesBoundedNativeGroupCredit(own->task_id) && result->group_id_) {
++  for(auto* member:c.GetPartyMembers()) {
++   if(!member || member->GetRaid() || FireActualGroup(*member)!=result->group_id_ ||
++    member->GetZoneID()!=int(use.actual_zone) || member->GetInstanceID()!=0)continue;
++   const auto b=NativeConstructParticipants::OwnEligibleOccurrence(*member,own->task_id);
++   if(!b)continue;
++   if(a.activation_count_>=a.activation_cohort_.size())return {};
++   for(size_t i=0;i<a.activation_count_;++i)
++    if(a.activation_cohort_[i].original.character_id==b->character_id)return {};
++   a.activation_cohort_[a.activation_count_++].original=*b;
++  }
++ } else {a.activation_cohort_[0].original=*own;a.activation_count_=1;}
++ bool has_creator=false;
++ for(size_t i=0;i<a.activation_count_;++i)
++  if(FireSameBinding(a.activation_cohort_[i].original,*own))has_creator=true;
++ if(!has_creator)return {};
++ // Native NPC retains the type pointer: actor gets a distinct owned full copy.
++ auto owned_type=std::make_unique<NPCType>();
++ std::memcpy(owned_type.get(),definition,sizeof(NPCType));
++ result->actor_=std::make_unique<NPC>(owned_type.get(),nullptr,result->point_,GravityBehavior::Water);
++ result->actor_->GiveNPCTypeData(owned_type.release());
++ if(result->actor_->GetID()!=0 || result->actor_->GetNPCTypeID()!=use.personal.rule.construct_npc)return {};
++ if(!result->RevalidateBeforePersist(c))return {};
++ return result;
++}
++bool PreparedConstructPlan::RevalidateBeforePersist(Client& c) const {
++ if(!actor_ || !attempt_ || !expected_definition_ || !sequence_ || c.GetRaid() ||
++  c.CharacterID()!=original_.personal.acceptance.character_id || c.GetID()!=original_.caster_entity ||
++  FireActualGroup(c)!=group_id_ || actor_->GetID()!=0)return false;
++ const auto p=c.GetPosition();
++ if(p.x!=point_.x || p.y!=point_.y || p.z!=point_.z || p.w!=point_.w)return false;
++ float ground=0;
++ if(!FireActualPoseAllowed(original_,p,&ground) || ground!=native_ground_)return false;
++ const auto* definition=content_db.LoadNPCTypesData(original_.personal.rule.construct_npc);
++ if(!definition || (definition->npc_id!=original_.personal.rule.construct_npc || !FireConstructLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition)) ||
++  std::memcmp(definition,expected_definition_.get(),sizeof(NPCType))!=0)return false;
++ const auto* item=c.GetInv().GetItem(original_.slot);
++ if(!item || !SameOriginalBeforeConsumption(original_,*item,original_.slot))return false;
++ const auto own=NativeConstructParticipants::OwnEligibleOccurrence(c,original_.personal.acceptance.task_id);
++ if(!own || !FireSameBinding(*own,original_.personal.acceptance))return false;
++ for(size_t i=0;i<attempt_->activation_count_;++i) {
++  const auto& b=attempt_->activation_cohort_[i].original;
++  auto* member=entity_list.GetClientByCharID(b.character_id);
++  if(!member || member->GetRaid() || member->GetZoneID()!=int(original_.actual_zone) ||
++   member->GetInstanceID()!=0 || FireActualGroup(*member)!=group_id_)return false;
++  const auto now=NativeConstructParticipants::OwnEligibleOccurrence(*member,b.task_id);
++  if(!now || !FireSameBinding(*now,b))return false;
++ }
++ return true;
++}
++void NativeConstructParticipants::ObserveActualTaskKillVisit(Client& candidate,Client& exp,NPC& actor) {
++ try {
++ const auto a=actor.m_fire_original_construct;
++ if(!a || !zone || !a->death_entry_active_ || a->death_success_sealed_ ||
++  !a->captured_ || a->original_object_!=&actor ||
++  !UsesBoundedNativeGroupCredit(a->original_.personal.acceptance.task_id) ||
++  !MatchesActualConstructDeath(*a->captured_,actor,actor.GetID(),zone->GetZoneID(),zone->GetInstanceID()) ||
++  candidate.GetRaid() || exp.GetRaid() || FireActualGroup(candidate)!=a->activation_group_id_ ||
++  FireActualGroup(exp)!=a->activation_group_id_ ||
++  candidate.GetZoneID()!=int(a->captured_->zone_id) || candidate.GetInstanceID()!=int(a->captured_->instance_id))return;
++ if(!a->activation_group_id_ && (exp.CharacterID()!=a->original_.personal.acceptance.character_id ||
++  candidate.CharacterID()!=exp.CharacterID()))return;
++ for(size_t i=0;i<a->activation_count_;++i) {
++  const auto& b=a->activation_cohort_[i].original;auto& v=a->native_visits_[i];
++  if(b.character_id!=candidate.CharacterID() || v.observed_)continue;
++  const auto own=OwnEligibleOccurrence(candidate,b.task_id);
++  if(!own || !FireSameBinding(*own,b))return;
++  if(!candidate.m_fire_gotonur_say_lifetime)
++   candidate.m_fire_gotonur_say_lifetime=std::shared_ptr<OriginalGotonurSayLifetime>(new OriginalGotonurSayLifetime);
++  v.recipient_=b;v.original_client_=&candidate;v.client_entity_=candidate.GetID();
++  v.client_lifetime_=candidate.m_fire_gotonur_say_lifetime;
++  v.group_id_=a->activation_group_id_;v.observed_=true;
++  return; // actual visit, still NOT a successful-death or save receipt
++ }
++ } catch(...) {return;} // allocation/query failure cannot interrupt ordinary native death
++}
++} // namespace FirePersonalOccurrenceSource
 --- a/zone/client.h
 +++ b/zone/client.h
 @@ -23,7 +23,7 @@
@@ -1252,7 +1470,7 @@
  #include "../common/boat_passenger.h"
  
 -namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; }
-+namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalConstructNativeHail; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue; }
++namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalConstructNativeHail; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
  namespace SpiritShroud { struct Template; }
  class ZoneDatabase;
  struct SpiritShroudDestination;
@@ -1264,11 +1482,14 @@
  class Client : public Mob
  {
  public:
-@@ -2133,6 +2134,12 @@
+@@ -2133,6 +2134,15 @@
  private:
  	friend class FirePersonalOccurrenceSource::SharedSuccessorNative;
  	std::unique_ptr<FirePersonalOccurrenceSource::SharedSuccessorPending> m_fire_shared_successor;
 +	friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
++ friend class FirePersonalOccurrenceSource::PreparedConstructPlan;
++ friend class FirePersonalOccurrenceSource::NativeConstructParticipants;
++ friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
 +	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
 +	friend class FirePersonalOccurrenceSource::OriginalConstructNativeHail;
 +	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_published_construct;
@@ -1277,7 +1498,7 @@
  	ExternalHandinMoneyReturned m_external_handin_money_returned = {};
  	std::vector<uint32_t>       m_external_handin_items_returned = {};
  public:
-@@ -2225,6 +2232,8 @@
+@@ -2225,6 +2235,8 @@
  
  	uint8 playeraction;
  
@@ -1416,7 +1637,7 @@
  	if (!BoundDestructibles::IsRuins(npc) && parse->HasQuestSub(npc->GetNPCTypeID(), EVENT_SPAWN)) {
 --- /dev/null
 +++ b/zone/fire_construct_death_receipt.h
-@@ -0,0 +1,31 @@
+@@ -0,0 +1,33 @@
 +#pragma once
 +#include "fire_original_construct_producer.h"
 +#include <memory>
@@ -1444,15 +1665,512 @@
 + // No public write/factory/context-only proof. Only actual native death scope
 + // can persist, after its SAME original goal2 save was positively observed.
 + static bool PersistActualDeath(Database&,const OriginalConstructAttempt&);
++ static bool PersistActualParticipant(Database&,const OriginalConstructAttempt&,const NativeConstructParticipantVisit&);
++ static bool PersistSavedRecipient(Database&,const OriginalConstructAttempt&,const Binding&);
 + static std::shared_ptr<PersistedConstructFinish> ClaimForActualHail(
 +  Database&,Client&,NPC&,const ClientTaskInformation&);
 +};
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
++++ b/zone/fire_construct_local_profiles.h
+@@ -0,0 +1,391 @@
++#pragma once
++#include "zonedump.h"
++#include <cstring>
++// SOURCE ONLY. Exact pinned loader/struct ABI; compare BEFORE NPC construction.
++// Local baseline only: never authorizes a spawn, acceptance, custody or serving activation.
++// Whole-object equality is intentional: loader and expected are memset-zeroed, including padding.
++// A different loader/ABI requires source requalification, not silent field omission.
++namespace FireConstructLocalSourceProfiles {
++inline bool MatchesExpectedLoadedNPCType(const NPCType& actual) {
++ NPCType expected; std::memset(&expected,0,sizeof(expected));
++ switch(actual.npc_id) {
++ case 490922:
++  std::memcpy(expected.name,"Corporeal_Construct",19);
++  std::memcpy(expected.lastname,"",0);
++  expected.current_hp = 400000;
++  expected.max_hp = 400000;
++  expected.size = 0;
++  expected.runspeed = 1.25;
++  expected.gender = 0;
++  expected.race = 649;
++  expected.class_ = 1;
++  expected.bodytype = 1;
++  expected.deity = 0;
++  expected.level = 85;
++  expected.npc_id = 490922;
++  expected.texture = 0;
++  expected.helmtexture = 0;
++  expected.herosforgemodel = 0;
++  expected.loottable_id = 0;
++  expected.npc_spells_id = 0;
++  expected.npc_spells_effects_id = 0;
++  expected.npc_faction_id = 0;
++  expected.faction_amount = 0;
++  expected.merchanttype = 0;
++  expected.alt_currency_type = 0;
++  expected.adventure_template = 0;
++  expected.trap_template = 0;
++  expected.light = 0;
++  expected.AC = 0;
++  expected.Mana = 0;
++  expected.ATK = 0;
++  expected.STR = 75;
++  expected.STA = 75;
++  expected.DEX = 75;
++  expected.AGI = 75;
++  expected.INT = 80;
++  expected.WIS = 75;
++  expected.CHA = 75;
++  expected.MR = 0;
++  expected.FR = 0;
++  expected.CR = 0;
++  expected.PR = 0;
++  expected.DR = 0;
++  expected.Corrup = 0;
++  expected.PhR = 0;
++  expected.haircolor = 1;
++  expected.beardcolor = 1;
++  expected.eyecolor1 = 1;
++  expected.eyecolor2 = 1;
++  expected.hairstyle = 1;
++  expected.luclinface = 1;
++  expected.beard = 0;
++  expected.drakkin_heritage = 0;
++  expected.drakkin_tattoo = 0;
++  expected.drakkin_details = 0;
++  expected.min_dmg = 900;
++  expected.max_dmg = 8500;
++  expected.charm_ac = 0;
++  expected.charm_min_dmg = 0;
++  expected.charm_max_dmg = 0;
++  expected.charm_attack_delay = 0;
++  expected.charm_accuracy_rating = 0;
++  expected.charm_avoidance_rating = 0;
++  expected.charm_atk = 0;
++  expected.attack_count = -1;
++  std::memcpy(expected.special_abilities,"",0);
++  expected.d_melee_texture1 = 0;
++  expected.d_melee_texture2 = 0;
++  std::memcpy(expected.ammo_idfile,"IT10",4);
++  expected.prim_melee_type = 28;
++  expected.sec_melee_type = 28;
++  expected.ranged_type = 7;
++  expected.hp_regen = 0;
++  expected.hp_regen_per_second = 0;
++  expected.mana_regen = 0;
++  expected.aggroradius = 70;
++  expected.assistradius = 70;
++  expected.see_invis = 0;
++  expected.see_invis_undead = false;
++  expected.see_hide = false;
++  expected.see_improved_hide = false;
++  expected.qglobal = false;
++  expected.npc_aggro = false;
++  expected.spawn_limit = 0;
++  expected.mount_color = 0;
++  expected.attack_speed = 0;
++  expected.attack_delay = 3000;
++  expected.accuracy_rating = 0;
++  expected.avoidance_rating = 0;
++  expected.findable = false;
++  expected.trackable = true;
++  expected.is_quest_npc = true;
++  expected.slow_mitigation = 0;
++  expected.maxlevel = 0;
++  expected.scalerate = 100;
++  expected.private_corpse = false;
++  expected.unique_spawn_by_name = false;
++  expected.underwater = false;
++  expected.emoteid = 0;
++  expected.spellscale = 100;
++  expected.healscale = 100;
++  expected.no_target_hotkey = false;
++  expected.raid_target = false;
++  expected.armtexture = 0;
++  expected.bracertexture = 0;
++  expected.handtexture = 0;
++  expected.legtexture = 0;
++  expected.feettexture = 0;
++  expected.ignore_despawn = false;
++  expected.show_name = true;
++  expected.untargetable = false;
++  expected.skip_global_loot = true;
++  expected.rare_spawn = false;
++  expected.skip_auto_scale = false;
++  expected.stuck_behavior = 0;
++  expected.use_model = 0;
++  expected.flymode = -1;
++  expected.always_aggro = false;
++  expected.exp_mod = 100;
++  expected.heroic_strikethrough = 0;
++  expected.keeps_sold_items = true;
++  expected.is_parcel_merchant = false;
++  expected.greed = 0;
++  expected.multiquest_enabled = false;
++  expected.m_npc_tint_id = 0;
++  break;
++ case 490923:
++  std::memcpy(expected.name,"Incorporeal_Construct",21);
++  std::memcpy(expected.lastname,"",0);
++  expected.current_hp = 400000;
++  expected.max_hp = 400000;
++  expected.size = 0;
++  expected.runspeed = 1.25;
++  expected.gender = 0;
++  expected.race = 649;
++  expected.class_ = 1;
++  expected.bodytype = 1;
++  expected.deity = 0;
++  expected.level = 85;
++  expected.npc_id = 490923;
++  expected.texture = 0;
++  expected.helmtexture = 0;
++  expected.herosforgemodel = 0;
++  expected.loottable_id = 0;
++  expected.npc_spells_id = 0;
++  expected.npc_spells_effects_id = 0;
++  expected.npc_faction_id = 0;
++  expected.faction_amount = 0;
++  expected.merchanttype = 0;
++  expected.alt_currency_type = 0;
++  expected.adventure_template = 0;
++  expected.trap_template = 0;
++  expected.light = 0;
++  expected.AC = 0;
++  expected.Mana = 0;
++  expected.ATK = 0;
++  expected.STR = 75;
++  expected.STA = 75;
++  expected.DEX = 75;
++  expected.AGI = 75;
++  expected.INT = 80;
++  expected.WIS = 75;
++  expected.CHA = 75;
++  expected.MR = 0;
++  expected.FR = 0;
++  expected.CR = 0;
++  expected.PR = 0;
++  expected.DR = 0;
++  expected.Corrup = 0;
++  expected.PhR = 0;
++  expected.haircolor = 1;
++  expected.beardcolor = 1;
++  expected.eyecolor1 = 1;
++  expected.eyecolor2 = 1;
++  expected.hairstyle = 1;
++  expected.luclinface = 1;
++  expected.beard = 0;
++  expected.drakkin_heritage = 0;
++  expected.drakkin_tattoo = 0;
++  expected.drakkin_details = 0;
++  expected.min_dmg = 900;
++  expected.max_dmg = 8500;
++  expected.charm_ac = 0;
++  expected.charm_min_dmg = 0;
++  expected.charm_max_dmg = 0;
++  expected.charm_attack_delay = 0;
++  expected.charm_accuracy_rating = 0;
++  expected.charm_avoidance_rating = 0;
++  expected.charm_atk = 0;
++  expected.attack_count = -1;
++  std::memcpy(expected.special_abilities,"",0);
++  expected.d_melee_texture1 = 0;
++  expected.d_melee_texture2 = 0;
++  std::memcpy(expected.ammo_idfile,"IT10",4);
++  expected.prim_melee_type = 28;
++  expected.sec_melee_type = 28;
++  expected.ranged_type = 7;
++  expected.hp_regen = 0;
++  expected.hp_regen_per_second = 0;
++  expected.mana_regen = 0;
++  expected.aggroradius = 70;
++  expected.assistradius = 70;
++  expected.see_invis = 0;
++  expected.see_invis_undead = false;
++  expected.see_hide = false;
++  expected.see_improved_hide = false;
++  expected.qglobal = false;
++  expected.npc_aggro = false;
++  expected.spawn_limit = 0;
++  expected.mount_color = 0;
++  expected.attack_speed = 0;
++  expected.attack_delay = 3000;
++  expected.accuracy_rating = 0;
++  expected.avoidance_rating = 0;
++  expected.findable = false;
++  expected.trackable = true;
++  expected.is_quest_npc = true;
++  expected.slow_mitigation = 0;
++  expected.maxlevel = 0;
++  expected.scalerate = 100;
++  expected.private_corpse = false;
++  expected.unique_spawn_by_name = false;
++  expected.underwater = false;
++  expected.emoteid = 0;
++  expected.spellscale = 100;
++  expected.healscale = 100;
++  expected.no_target_hotkey = false;
++  expected.raid_target = false;
++  expected.armtexture = 0;
++  expected.bracertexture = 0;
++  expected.handtexture = 0;
++  expected.legtexture = 0;
++  expected.feettexture = 0;
++  expected.ignore_despawn = false;
++  expected.show_name = true;
++  expected.untargetable = false;
++  expected.skip_global_loot = true;
++  expected.rare_spawn = false;
++  expected.skip_auto_scale = false;
++  expected.stuck_behavior = 0;
++  expected.use_model = 0;
++  expected.flymode = -1;
++  expected.always_aggro = false;
++  expected.exp_mod = 100;
++  expected.heroic_strikethrough = 0;
++  expected.keeps_sold_items = true;
++  expected.is_parcel_merchant = false;
++  expected.greed = 0;
++  expected.multiquest_enabled = false;
++  expected.m_npc_tint_id = 0;
++  break;
++ case 490924:
++  std::memcpy(expected.name,"Twisted_Homunculus",18);
++  std::memcpy(expected.lastname,"",0);
++  expected.current_hp = 400000;
++  expected.max_hp = 400000;
++  expected.size = 0;
++  expected.runspeed = 1.25;
++  expected.gender = 0;
++  expected.race = 649;
++  expected.class_ = 1;
++  expected.bodytype = 1;
++  expected.deity = 0;
++  expected.level = 85;
++  expected.npc_id = 490924;
++  expected.texture = 0;
++  expected.helmtexture = 0;
++  expected.herosforgemodel = 0;
++  expected.loottable_id = 0;
++  expected.npc_spells_id = 0;
++  expected.npc_spells_effects_id = 0;
++  expected.npc_faction_id = 0;
++  expected.faction_amount = 0;
++  expected.merchanttype = 0;
++  expected.alt_currency_type = 0;
++  expected.adventure_template = 0;
++  expected.trap_template = 0;
++  expected.light = 0;
++  expected.AC = 0;
++  expected.Mana = 0;
++  expected.ATK = 0;
++  expected.STR = 75;
++  expected.STA = 75;
++  expected.DEX = 75;
++  expected.AGI = 75;
++  expected.INT = 80;
++  expected.WIS = 75;
++  expected.CHA = 75;
++  expected.MR = 0;
++  expected.FR = 0;
++  expected.CR = 0;
++  expected.PR = 0;
++  expected.DR = 0;
++  expected.Corrup = 0;
++  expected.PhR = 0;
++  expected.haircolor = 1;
++  expected.beardcolor = 1;
++  expected.eyecolor1 = 1;
++  expected.eyecolor2 = 1;
++  expected.hairstyle = 1;
++  expected.luclinface = 1;
++  expected.beard = 0;
++  expected.drakkin_heritage = 0;
++  expected.drakkin_tattoo = 0;
++  expected.drakkin_details = 0;
++  expected.min_dmg = 900;
++  expected.max_dmg = 9500;
++  expected.charm_ac = 0;
++  expected.charm_min_dmg = 0;
++  expected.charm_max_dmg = 0;
++  expected.charm_attack_delay = 0;
++  expected.charm_accuracy_rating = 0;
++  expected.charm_avoidance_rating = 0;
++  expected.charm_atk = 0;
++  expected.attack_count = -1;
++  std::memcpy(expected.special_abilities,"",0);
++  expected.d_melee_texture1 = 0;
++  expected.d_melee_texture2 = 0;
++  std::memcpy(expected.ammo_idfile,"IT10",4);
++  expected.prim_melee_type = 28;
++  expected.sec_melee_type = 28;
++  expected.ranged_type = 7;
++  expected.hp_regen = 0;
++  expected.hp_regen_per_second = 0;
++  expected.mana_regen = 0;
++  expected.aggroradius = 70;
++  expected.assistradius = 70;
++  expected.see_invis = 0;
++  expected.see_invis_undead = false;
++  expected.see_hide = false;
++  expected.see_improved_hide = false;
++  expected.qglobal = false;
++  expected.npc_aggro = false;
++  expected.spawn_limit = 0;
++  expected.mount_color = 0;
++  expected.attack_speed = 0;
++  expected.attack_delay = 3000;
++  expected.accuracy_rating = 0;
++  expected.avoidance_rating = 0;
++  expected.findable = false;
++  expected.trackable = true;
++  expected.is_quest_npc = true;
++  expected.slow_mitigation = 0;
++  expected.maxlevel = 0;
++  expected.scalerate = 100;
++  expected.private_corpse = false;
++  expected.unique_spawn_by_name = false;
++  expected.underwater = false;
++  expected.emoteid = 0;
++  expected.spellscale = 100;
++  expected.healscale = 100;
++  expected.no_target_hotkey = false;
++  expected.raid_target = false;
++  expected.armtexture = 0;
++  expected.bracertexture = 0;
++  expected.handtexture = 0;
++  expected.legtexture = 0;
++  expected.feettexture = 0;
++  expected.ignore_despawn = false;
++  expected.show_name = true;
++  expected.untargetable = false;
++  expected.skip_global_loot = true;
++  expected.rare_spawn = false;
++  expected.skip_auto_scale = false;
++  expected.stuck_behavior = 0;
++  expected.use_model = 0;
++  expected.flymode = -1;
++  expected.always_aggro = false;
++  expected.exp_mod = 100;
++  expected.heroic_strikethrough = 0;
++  expected.keeps_sold_items = true;
++  expected.is_parcel_merchant = false;
++  expected.greed = 0;
++  expected.multiquest_enabled = false;
++  expected.m_npc_tint_id = 0;
++  break;
++ default: return false;
++ }
++ return std::memcmp(&actual,&expected,sizeof(NPCType))==0;
++}
++} // namespace FireConstructLocalSourceProfiles
+--- /dev/null
++++ b/zone/fire_construct_participants.h
+@@ -0,0 +1,35 @@
++#pragma once
++#include "fire_personal_item_use.h"
++#include <memory>
++class Client;
++class NPC;
++class TaskManager;
++namespace FirePersonalOccurrenceSource {
++class OriginalGotonurSayLifetime;
++class PreparedConstructPlan;
++class NativeConstructParticipants;
++class OriginalConstructDeathQueue;
++class ConstructDeathReceiptStore;
++inline bool UsesBoundedNativeGroupCredit(uint32_t task_id) noexcept {return task_id==920168 || task_id==920169;}
++struct NativeConstructParticipantVisit {
++ friend class NativeConstructParticipants;
++ friend class OriginalConstructDeathQueue;
++ friend class ConstructDeathReceiptStore;
++private:
++ Binding recipient_{};
++ Client* original_client_=nullptr; // compare only with freshly resolved live owner
++ std::shared_ptr<OriginalGotonurSayLifetime> client_lifetime_;
++ uint32_t client_entity_=0,group_id_=0;
++ bool observed_=false,submitted_=false,saved_=false,persisted_=false;
++public:
++ NativeConstructParticipantVisit()=default; // no authority until actual native visit
++};
++class NativeConstructParticipants final {
++ friend class ::TaskManager;
++ friend class PreparedConstructPlan;
++ static std::optional<Binding> OwnEligibleOccurrence(Client&,uint32_t);
++ // Actual existing task-kill candidate loop only, before its mutable task call.
++ // An unsealed call cannot itself deliver progress or create a persisted receipt.
++ static void ObserveActualTaskKillVisit(Client& candidate,Client& actual_exp_client,NPC& actual_actor);
++};
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_gotonur_say_queue.h
+@@ -0,0 +1,43 @@
++#pragma once
++#include "fire_original_construct_death.h"
++#include <memory>
++#include <string>
++namespace FirePersonalOccurrenceSource {
++inline constexpr uint32_t OriginalGotonurStaticSpawn=149749; // qualified static receipt, not live identity
++class OriginalGotonurSayQueue;
++class OriginalGotonurSayLifetime final {
++ friend class OriginalGotonurSayQueue;
++ friend class NativeConstructParticipants;
++ friend class OriginalConstructDeathQueue;
++ friend class ::Client;
++ friend class ::NPC;
++ bool active_=true;
++ OriginalGotonurSayLifetime()=default;
++ OriginalGotonurSayLifetime(const OriginalGotonurSayLifetime&)=delete;
++ OriginalGotonurSayLifetime& operator=(const OriginalGotonurSayLifetime&)=delete;
++public:
++ ~OriginalGotonurSayLifetime()=default;
++};
++class OriginalGotonurSayQueue final {
++ friend class ::EntityList;
++ friend class ::Zone;
++ struct Pending {
++  std::shared_ptr<OriginalGotonurSayLifetime> client_lifetime,npc_lifetime;
++  std::shared_ptr<OriginalConstructDeathQueue::Lifetime> zone_lifetime;
++  Client* original_client;
++  NPC* original_npc;
++  uint32_t character_id,client_entity,npc_entity;
++  std::string message;
++  Pending* next=nullptr;
++ };
++ static Pending* head_;
++ static Pending* tail_;
++ static bool MatchesActualContext(Client&,NPC&);
++ static void Drain();
++ static void Discard() noexcept;
++public:
++ // Capture before ordinary mutable say callbacks. This queues only the genuine
++ // say intent; native admission/death-receipt checks remain at actual dispatch.
++ static void CaptureActual(Client&,const char* actual_message);
++};
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_initial_admission.h
+@@ -0,0 +1,14 @@
++#pragma once
++#include <cstdint>
++class Client;
++class NPC;
++namespace FirePersonalOccurrenceSource {
++enum class InitialAdmissionResult { Hold,SubmittedNotAccepted,AcceptedBeforeCallbacks };
++// Finite native Gotonur initial-request entry; no scripting getter or fake
++// preceding reward/claim. Actual acceptance evidence stays inside task cpp.
++class InitialAdmissionNative final {
++public:
++ static InitialAdmissionResult Request(Client&,NPC&,uint32_t actual_zone,
++  uint32_t actual_instance,uint32_t selected_original_giver_spawn);
++};
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
 +++ b/zone/fire_native_item_custody.cpp
-@@ -0,0 +1,583 @@
+@@ -0,0 +1,610 @@
 +// Native selected writer and custody source proposal. Not installed/built or
-+// activation-ready; retained placement/actor/initial167/169 holds still apply.
++// activation-ready; initial admission and serving activation remain unselected.
 +#include "client.h"
 +#include "task_client_state.h"
 +#include "zonedb.h"
@@ -1462,6 +2180,7 @@
 +#include "fire_native_item_custody.h"
 +#include "fire_original_item_snapshot.h"
 +#include "fire_native_published_use.h"
++#include "fire_prepared_construct_plan.h"
 +#include "inventory_session_owner.h"
 +#include "../common/fire_native_inventory_fence.h"
 +#include "../common/housing/inventory_row_db.h"
@@ -1476,6 +2195,19 @@
 +extern Zone* zone;
 +extern ZoneDatabase database;
 +namespace FirePersonalOccurrenceSource {
++PublishedNativeUse::PublishedNativeUse(const Client& owner,const OriginalItemUse& original,
++ uint64_t sequence,uint32_t output_item,int32_t output_serial,int16_t output_slot,
++ int16_t output_charges,std::unique_ptr<PreparedConstructPlan> prepared_plan) noexcept
++ :owner_(&owner),prepared_plan_(std::move(prepared_plan)),
++  view_{original,sequence,output_item,output_serial,output_slot,output_charges,prepared_plan_.get()} {}
++PublishedNativeUse::PublishedNativeUse(PublishedNativeUse&& other) noexcept
++ :owner_(other.owner_),prepared_plan_(std::move(other.prepared_plan_)),
++  view_(other.view_),taken_(other.taken_) {
++ view_.prepared_construct_plan=prepared_plan_.get();
++ other.owner_=nullptr;other.taken_=true;other.view_.prepared_construct_plan=nullptr;
++}
++PublishedNativeUse::~PublishedNativeUse()=default;
++
 +namespace {
 +int RuleIndex(uint32_t task) {
 + switch(task){case 920167:return 0;case 920168:return 1;case 920169:return 2;default:return -1;}
@@ -1604,10 +2336,7 @@
 +  if(context)break;
 + }
 + if(!context)return false;
-+ // Source-selected activation stays held BEFORE cast or spend. Spells owns the
-+ // real placement/lifetime/cross-zone SAME-death-save transfer composition.
-+ // No inactive construct may be consumed merely because the sink holds later.
-+ if(context->consumer==Consumer::ActivateConstruct)return false;
++ // Activation reaches debit only with the genuine pre-spend owned plan below.
 + const auto use=CaptureOriginalItemUse(*context,*actual,slot,supported,c.GetID(),target,
 +  zone->GetZoneID(),zone->GetInstanceID());
 + if(!use||actual->GetCharges()!=1||actual->IsStackable()||!actual->IsExpendable())return false;
@@ -1824,8 +2553,17 @@
 + if(!owner->Revalidate(c)){f.phase=State::Phase::Rejected;f.fence.Detach();return true;}
 + bool transaction=false;
 + bool known_commit=false;
-+ std::optional<PublishedNativeUseView> handoff;
++ std::unique_ptr<PreparedConstructPlan> prepared_plan;
++ std::optional<PublishedNativeUse> handoff;
 + try {
++  // SAME successful original cast and original selected debit invocation only.
++  // Preparation owns the actual staged actor/definition/attempt/eligible roster;
++  // it must not register actors, spend, credit, or pump mutable callbacks.
++  if(f.context.consumer==Consumer::ActivateConstruct) {
++   prepared_plan=PreparedConstructPlan::PrepareActual(c,*f.original_use,f.sequence);
++   if(!prepared_plan||!prepared_plan->RevalidateBeforePersist(c))
++    throw std::runtime_error("Fire actual construct plan unavailable before spend");
++  }
 +  f.staged=std::make_unique<EQ::InventoryProfile>();
 +  f.staged->SetInventoryVersion(c.m_inv.InventoryVersion());
 +  f.staged->SetGMInventory(c.m_inv.GMInventory());
@@ -1972,14 +2710,22 @@
 +   }
 +  }
 +  if(!owner->Revalidate(c))throw std::runtime_error("Fire selected frame changed before save");
-+  f.persistence_entered=true;f.fence.writer_=&database;
++  if(prepared_plan&&!prepared_plan->RevalidateBeforePersist(c))
++   throw std::runtime_error("Fire construct plan changed before persistence");
++  f.fence.writer_=&database;
 +  size_t step=0;
 +  for(const auto& root:f.roots) {
++   if(prepared_plan&&!prepared_plan->RevalidateBeforePersist(c))
++    throw std::runtime_error("Fire construct plan changed before selected root save");
++   f.persistence_entered=true;
 +   const bool saved=database.SaveInventory(c.CharacterID(),f.staged->GetItem(root.first),root.first);
 +   f.save_results[step++]=saved?1:2;if(!saved)throw std::runtime_error("Fire selected root save failed");
 +  }
 +  if(f.cursor_participates) {
 +   auto begin=f.staged->cursor_cbegin(),end=f.staged->cursor_cend();
++   if(prepared_plan&&!prepared_plan->RevalidateBeforePersist(c))
++    throw std::runtime_error("Fire construct plan changed before selected cursor save");
++   f.persistence_entered=true;
 +   const bool saved=database.SaveCursor(c.CharacterID(),begin,end);
 +   f.save_results[step++]=saved?1:2;if(!saved)throw std::runtime_error("Fire whole cursor save failed");
 +  }
@@ -1997,7 +2743,11 @@
 +  for(const auto& exchange:exchanges)std::swap(*exchange.first,*exchange.second);
 +  if(f.cursor_participates)c.m_inv.m_cursor.Swap(f.staged->m_cursor);
 +  f.phase=State::Phase::Committed;f.fence.Detach();
-+  const PublishedNativeUseView issued{original,sequence,output_item,output_serial,output_slot,output_charges};
++  // Private constructor runs here, before any mutable achievement callback.
++  // Moving into stack optional is noexcept and revokes the temporary authority.
++  PublishedNativeUse issued(c,original,sequence,output_item,output_serial,
++   output_slot,output_charges,std::move(prepared_plan));
++  handoff.emplace(std::move(issued));
 +  for(auto& prepared:f.packets) {
 +   auto* send=prepared.release();c.FastQueuePacket(&send);safe_delete(send);
 +  }
@@ -2007,7 +2757,6 @@
 +   c.UpdateAchievementForOwnItem(item);
 +   if(!StillLive(ticket))return true;
 +  }
-+  handoff=issued; // stack values only; no selected/owner state after callbacks.
 + }catch(...) {
 +  if(known_commit) {
 +   // Publication above cannot throw. A later packet failure must not replay a
@@ -2025,11 +2774,7 @@
 + }
 + // Deliberately outside catch: even an exception from the mutable sink must
 + // never send control back into code that dereferences Client or held trees.
-+ const auto& published=*handoff;
-+ PublishedNativeUse receipt(c,published.original,published.native_click_sequence,
-+  published.published_output_item,published.published_output_serial,
-+  published.published_output_slot,published.published_output_charges);
-+ OnOriginalNativeUsePublished(c,receipt);
++ OnOriginalNativeUsePublished(c,*handoff);
 + return true;
 +}
 +
@@ -2112,16 +2857,18 @@
 +}
 --- /dev/null
 +++ b/zone/fire_native_published_use.h
-@@ -0,0 +1,53 @@
+@@ -0,0 +1,58 @@
 +#pragma once
 +// Feature-private SOURCE INTERFACE ONLY. No writer or callback is installed.
 +#include "fire_personal_item_use.h"
 +#include <cstdint>
 +#include <optional>
++#include <memory>
 +#include <type_traits>
 +class Client;
 +namespace FirePersonalOccurrenceSource {
 +class NativeItemCustody;
++class PreparedConstructPlan;
 +struct PublishedNativeUseView {
 + OriginalItemUse original; // SAME pre-callback native item-use capture, by value
 + std::uint64_t native_click_sequence;
@@ -2129,6 +2876,7 @@
 + std::int32_t published_output_serial;
 + std::int16_t published_output_slot;
 + std::int16_t published_output_charges;
++ PreparedConstructPlan* prepared_construct_plan; // borrowed only while issuing receipt lives
 +};
 +static_assert(std::is_trivially_copyable<PublishedNativeUseView>::value,
 + "The post-commit handoff must not allocate or clone native trees");
@@ -2138,17 +2886,19 @@
 +class PublishedNativeUse final {
 + friend class NativeItemCustody;
 + const Client* owner_;
++ std::unique_ptr<PreparedConstructPlan> prepared_plan_;
 + PublishedNativeUseView view_;
 + bool taken_=false;
 + PublishedNativeUse(const Client& owner,const OriginalItemUse& original,
 +  std::uint64_t sequence,std::uint32_t output_item,std::int32_t output_serial,
-+  std::int16_t output_slot,std::int16_t output_charges) noexcept
-+  :owner_(&owner),view_{original,sequence,output_item,output_serial,output_slot,output_charges} {}
++  std::int16_t output_slot,std::int16_t output_charges,
++  std::unique_ptr<PreparedConstructPlan> prepared_plan) noexcept;
 +public:
 + PublishedNativeUse()=delete;
 + PublishedNativeUse(const PublishedNativeUse&)=delete;
 + PublishedNativeUse& operator=(const PublishedNativeUse&)=delete;
-+ PublishedNativeUse(PublishedNativeUse&&)=delete;
++ PublishedNativeUse(PublishedNativeUse&&) noexcept;
++ ~PublishedNativeUse();
 + PublishedNativeUse& operator=(PublishedNativeUse&&)=delete;
 + // Caller seals the one native producer attempt BEFORE any mutable callback,
 + // allocation, spawn, counter increment or query. View copies are evidence for
@@ -2228,7 +2978,7 @@
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
 +++ b/zone/fire_original_construct_producer.h
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,108 @@
 +// SOURCE ONLY: original transient construct producer; no registration/runtime authority.
 +#pragma once
 +#include "zone/entity.h"
@@ -2238,22 +2988,27 @@
 +#include "fire_personal_construct_identity.h"
 +#include "fire_original_final_hail_frame.h"
 +#include <cmath>
++#include <array>
++#include "fire_prepared_construct_plan.h"
++#include "fire_construct_participants.h"
 +namespace FirePersonalOccurrenceSource {
 +enum class OriginalConstructDeathResult { Hold, SubmittedWithoutCommitReceipt, CommittedAtOriginalSave };
-+struct OriginalConstructPlacement {
-+ bool selected=false; // original supported-region/position remains owner-unbound
-+ glm::vec4 point{};
-+};
 +class OriginalConstructAttempt {
 + friend struct OriginalConstructRegistration;
 + friend void CaptureConstructBeforeOriginalSpawnCallbacks(NPC*);
 + friend class PublishedNativeUseSink;
++ friend class PreparedConstructPlan;
++ friend class NativeConstructParticipants;
 + friend class OriginalConstructNativeDeath;
 + friend class ConstructDeathReceiptStore;
 + friend class OriginalConstructDeathQueue;
 + friend class OriginalConstructNativeHail;
 + OriginalItemUse original_;
 + uint64_t native_click_sequence_=0;
++ uint32_t activation_group_id_=0;
++ std::array<ActivationParticipant,6> activation_cohort_{};
++ std::array<NativeConstructParticipantVisit,6> native_visits_{};
++ size_t activation_count_=0;
 + bool persisted_death_=false;
 + bool attempted_=false,caster_death_submitted_=false,caster_death_committed_=false,death_entry_active_=false,death_success_sealed_=false;
 + NPC* original_object_=nullptr; // only compare during genuine live native death
@@ -2329,9 +3084,40 @@
 +  f->original.character_id,f->original.task_id));
 + f->committed=row.Success() && row.RowCount()==1;
 +}
-+// Other eligible original personal participants, especially920169, need their OWN accepted Binding/one-use claim.
-+// This producer neither selects that cohort nor converts the encounter to a shared task or one fight per player.
++// LOCAL168/169 cohort is captured prespend; actual native candidate visit, sealed death,
++// same-save observer and recipient-owned occurrence are all required.167 remains caster-only.
 +} // namespace FirePersonalOccurrenceSource
+--- a/zone/fire_original_final_hail_frame.h
++++ b/zone/fire_original_final_hail_frame.h
+@@ -2,6 +2,7 @@
+ // Not included, built, installed or invoked. No callback registration/public API.
+ #pragma once
+ #include "fire_personal_successor_dispatch.h"
++#include "fire_shared_successor_native.h"
+ namespace FirePersonalOccurrenceSource {
+ enum class OriginalFinishResult { Hold, SubmittedWithoutSuccessorReceipt, SuccessorAcceptedBeforeCallbacks };
+ class OriginalFinalHailAttempt {
+@@ -86,6 +87,11 @@
+   actual_actor_now->GetSpawnPointID()!=f->original_spawn || actual_zone!=490 || actual_instance!=0)
+   return;
+  f->dispatch_attempted=true;
++ if(f->original.task_id==920169) {
++  SharedSuccessorNative::Dispatch(*f->handoff,f->original,*actual_client,*actual_actor_now,
++   actual_zone,actual_instance,f->original_spawn);
++  return; // native World admission, never one DZ/create per recipient
++ }
+  const auto result=DispatchActualOriginalPersonalSuccessorOnce(*f->handoff,f->original,
+   *actual_client,*actual_actor_now,actual_zone,actual_instance,f->original_spawn);
+  // Read/write stack state only after mutable successor callbacks.
+@@ -96,7 +102,7 @@
+  Client& actual_client,TaskType actual_type,const ClientTaskInformation& current,NPC& actual_actor,
+  uint32_t actual_zone,uint32_t actual_instance,uint32_t selected_original_spawn) {
+  if(original_finish_frame || attempt.attempted_ ||
+-  (attempt.original_.task_id!=920167 && attempt.original_.task_id!=920168) ||
++  (attempt.original_.task_id!=920167 && attempt.original_.task_id!=920168 && attempt.original_.task_id!=920169) ||
+   actual_zone!=490 || actual_instance!=0 || actual_actor.GetNPCTypeID()!=490061 ||
+   !actual_actor.GetID() || !selected_original_spawn ||
+   actual_actor.GetSpawnPointID()!=selected_original_spawn ||
 --- /dev/null
 +++ b/zone/fire_original_item_snapshot.h
 @@ -0,0 +1,115 @@
@@ -2541,6 +3327,49 @@
 +}
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
++++ b/zone/fire_prepared_construct_plan.h
+@@ -0,0 +1,40 @@
++#pragma once
++#include "fire_personal_item_use.h"
++#include <array>
++#include <cstddef>
++#include <cstdint>
++#include <memory>
++#include <glm/glm.hpp>
++class Client;
++class NPC;
++struct NPCType;
++namespace FirePersonalOccurrenceSource {
++class NativeItemCustody;
++class PublishedNativeUseSink;
++class OriginalConstructAttempt;
++struct ActivationParticipant {
++ Binding original; // eligibility snapshot only; never physical/kill proof
++};
++class PreparedConstructPlan final {
++ friend class NativeItemCustody;
++ friend class PublishedNativeUseSink;
++ OriginalItemUse original_;
++ uint64_t sequence_;
++ glm::vec4 point_{};
++ float native_ground_=0;
++ uint32_t group_id_=0;
++ std::unique_ptr<NPCType> expected_definition_;
++ std::shared_ptr<OriginalConstructAttempt> attempt_;
++ std::unique_ptr<NPC> actor_;
++ PreparedConstructPlan(const OriginalItemUse& original,uint64_t sequence) noexcept;
++ // Called ONLY from genuine selected ordinary-debit entry, before live spend.
++ static std::unique_ptr<PreparedConstructPlan> PrepareActual(Client&,const OriginalItemUse&,uint64_t);
++ bool RevalidateBeforePersist(Client&) const;
++public:
++ ~PreparedConstructPlan(); // actual NPC and owned type destroyed only where complete
++ PreparedConstructPlan(const PreparedConstructPlan&)=delete;
++ PreparedConstructPlan& operator=(const PreparedConstructPlan&)=delete;
++ PreparedConstructPlan(PreparedConstructPlan&&)=delete;
++ PreparedConstructPlan& operator=(PreparedConstructPlan&&)=delete;
++};
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
 +++ b/zone/fire_published_use_sink.h
 @@ -0,0 +1,10 @@
 +#pragma once
@@ -2607,6 +3436,46 @@
  	if (!move_in) return false;
  	// Apply custody checks at the inventory operation as well as packet dispatch:
  	// multi-move and quest callers must not bypass the shroud's escrow domain.
+--- a/zone/mob.cpp
++++ b/zone/mob.cpp
+@@ -553,11 +553,14 @@
+ 		}
+ 	}
+ 
+-	EQApplicationPacket app;
+-	CreateDespawnPacket(&app, !IsCorpse());
+-	Corpse *corpse = entity_list.GetCorpseByID(GetID());
+-	if (!corpse || (corpse && !corpse->IsPlayerCorpse())) {
+-		entity_list.QueueClients(this, &app, true);
++	// An unregistered actor (ID zero) has never been published to clients.
++	if (GetID() != 0) {
++		EQApplicationPacket app;
++		CreateDespawnPacket(&app, !IsCorpse());
++		Corpse *corpse = entity_list.GetCorpseByID(GetID());
++		if (!corpse || !corpse->IsPlayerCorpse()) {
++			entity_list.QueueClients(this, &app, true);
++		}
+ 	}
+ 
+ 	entity_list.RemoveFromTargets(this, true);
+--- a/zone/npc.cpp
++++ b/zone/npc.cpp
+@@ -17,6 +17,7 @@
+ 	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+ #include "npc.h"
++#include "fire_gotonur_say_queue.h"
+ 
+ #include "common/bodytypes.h"
+ #include "common/classes.h"
+@@ -505,6 +506,7 @@
+ 
+ NPC::~NPC()
+ {
++	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
+ 	AI_Stop();
+ 
+ 	if (proximity) {
 --- a/zone/npc.h
 +++ b/zone/npc.h
 @@ -31,6 +31,8 @@
@@ -2614,15 +3483,18 @@
  #include <deque>
  #include <list>
 +#include <memory>
-+namespace FirePersonalOccurrenceSource { class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue; }
++namespace FirePersonalOccurrenceSource { class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
  
  struct NPCProximity {
  	float	min_x;
-@@ -797,6 +799,11 @@
+@@ -797,6 +799,14 @@
  	const Handin GetHandin() { return m_hand_in; }
  
  private:
 +	friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
++ friend class FirePersonalOccurrenceSource::PreparedConstructPlan;
++ friend class FirePersonalOccurrenceSource::NativeConstructParticipants;
++ friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
 +	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
 +	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_original_construct;
 +	friend class FirePersonalOccurrenceSource::OriginalGotonurSayQueue;
@@ -2630,6 +3502,64 @@
  	void ReconcileHandinTaskDeliveries();
  
  	uint32              m_loottable_id;
+--- a/zone/parcels.cpp
++++ b/zone/parcels.cpp
+@@ -742,12 +742,18 @@
+ 			default: {
+ 				std::vector<CharacterParcelsContainersRepository::CharacterParcelsContainers> results{};
+ 				if (inst->IsClassBag() && inst->GetItem()->BagSlots > 0) {
+-					auto contents = inst->GetContents();
+ 					results       = CharacterParcelsContainersRepository::GetWhere(
+ 						database, fmt::format("`parcels_id` = {}", p->second.id)
+ 					);
+ 					for (auto i: results) {
+-						auto item = database.CreateItem(
++						// Reconstruct only a valid empty child slot; do not replace another parcel item.
++						if (i.slot_id >= inst->GetItem()->BagSlots ||
++							inst->GetItem(static_cast<uint8>(i.slot_id))) {
++							SendParcelRetrieveAck();
++							return;
++						}
++
++						std::unique_ptr<EQ::ItemInstance> item(database.CreateItem(
+ 							i.item_id,
+ 							i.quantity,
+ 							i.aug_slot_1,
+@@ -756,7 +762,7 @@
+ 							i.aug_slot_4,
+ 							i.aug_slot_5,
+ 							i.aug_slot_6
+-						);
++						));
+ 
+ 						if (!item) {
+ 							SendParcelRetrieveAck();
+@@ -776,7 +782,13 @@
+ 							return;
+ 						}
+ 
+-						contents->emplace(i.slot_id, item);
++						// PutItem checks custody of both recipient and source, then owns a native clone.
++						// The temporary remains owned here on every failure/continue path.
++						inst->PutItem(static_cast<uint8>(i.slot_id), *item);
++						if (!inst->GetItem(static_cast<uint8>(i.slot_id))) {
++							SendParcelRetrieveAck();
++							return;
++						}
+ 					}
+ 				}
+ 
+--- a/zone/shared_task_zone_messaging.cpp
++++ b/zone/shared_task_zone_messaging.cpp
+@@ -68,6 +68,8 @@
+   npc.GetNPCTypeID()!=490061 || !npc.GetID() || npc.GetSpawnPointID()!=spawn ||
+   (c.m_fire_shared_successor && (!c.m_fire_shared_successor->ready ||
+    c.m_fire_shared_successor->source.occurrence_id==old.occurrence_id))) return CorrelatedSharedResult::Hold;
++ // Current normal membership is not a new Ready/origin receipt.
++ if(c.GetTaskState()->GetActiveSharedTask().task_id==920170)return CorrelatedSharedResult::Hold;
+  const auto* next=TaskManager::Instance()->GetTaskData(920170);
+  if(!next || next->type!=TaskType::Shared) return CorrelatedSharedResult::Hold;
+  auto pending=std::make_unique<SharedSuccessorPending>();
 --- a/zone/spells.cpp
 +++ b/zone/spells.cpp
 @@ -85,6 +85,7 @@
@@ -2777,7 +3707,7 @@
  	}
  }
  
-@@ -195,6 +208,30 @@
+@@ -195,6 +208,32 @@
  	return frame.recorded_before_callbacks
  		? PersonalDispatchResult::AcceptedBeforeCallbacks
  		: PersonalDispatchResult::SubmittedNotAccepted;
@@ -2787,7 +3717,7 @@
 + uint32_t actual_zone,uint32_t actual_instance,uint32_t selected_original_giver_spawn) {
 + // Keyword "prove" is sourced; full original admission/catalog selection is
 + // still an owner hold. No caller can turn this into a successful Boolean proof.
-+ constexpr bool original_initial_admission_selected=false;
++ constexpr bool original_initial_admission_selected=true; // selected LOCAL source policy; no serving authorization
 + if(!original_initial_admission_selected || fire_personal_acceptance_frame ||
 +  actual_zone!=490 || actual_instance!=0 || !selected_original_giver_spawn ||
 +  !client.CharacterID() || client.GetTarget()!=&giver || !giver.GetID() ||
@@ -2795,7 +3725,9 @@
 +  return InitialAdmissionResult::Hold;
 + const auto* task=TaskManager::Instance()->GetTaskData(920167);
 + if(!task || task->type!=TaskType::Quest || task->reward_method!=METHODSELECT ||
-+  !task->has_reward_selection) return InitialAdmissionResult::Hold;
++  !task->has_reward_selection || task->min_level!=85 || task->max_level!=0 ||
++  !task->repeatable || task->replay_timer_seconds!=21600 || task->request_timer_seconds!=0)
++  return InitialAdmissionResult::Hold;
 + FirePersonalAcceptanceFrame frame{&client,nullptr,client.CharacterID(),920167,giver.GetID()};
 + frame.origin=FirePersonalAdmissionOrigin::ActualInitialProve;
 + FirePersonalAcceptanceScope scope(frame);
@@ -2808,7 +3740,7 @@
  }
  
  } // namespace FirePersonalOccurrenceSource
-@@ -1232,6 +1269,9 @@
+@@ -1232,6 +1271,9 @@
  		return 0;
  	}
  
@@ -2818,7 +3750,7 @@
  	auto* const fire_final_update = FirePersonalOccurrenceSource::ClaimOriginalFinalUpdate(
  		client, task_data->type, *info, activity_id, count
  	);
-@@ -1432,6 +1472,9 @@
+@@ -1432,6 +1474,9 @@
  	}
  
  	const bool fire_original_completion_saved = TaskManager::Instance()->SaveClientState(client, this);
@@ -2830,20 +3762,41 @@
  		fire_original_completion_saved &&
 --- a/zone/task_client_state.h
 +++ b/zone/task_client_state.h
-@@ -48,7 +48,13 @@
+@@ -48,7 +48,16 @@
  	TaskMethodType method = TaskMethodType::METHODSINGLEID;
  };
  
-+namespace FirePersonalOccurrenceSource { class NativeItemCustody; class PublishedNativeUseSink; class OriginalConstructDeathQueue; class OriginalConstructNativeHail; }
++namespace FirePersonalOccurrenceSource { class NativeItemCustody; class PublishedNativeUseSink; class OriginalConstructDeathQueue; class OriginalConstructNativeHail;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
  class ClientTaskState {
 + friend class FirePersonalOccurrenceSource::NativeItemCustody;
 + friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
++ friend class FirePersonalOccurrenceSource::PreparedConstructPlan;
++ friend class FirePersonalOccurrenceSource::NativeConstructParticipants;
++ friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
 + friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
 + friend class FirePersonalOccurrenceSource::OriginalConstructNativeHail;
 +
  
  public:
  	ClientTaskState();
+--- a/zone/task_manager.cpp
++++ b/zone/task_manager.cpp
+@@ -16,6 +16,7 @@
+ 	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+ #include "task_manager.h"
++#include "fire_construct_participants.h"
+ #include "task_shared_reward_identity.h"
+ #include "common/shared_task_admission.h"
+ #include "common/merchant_language.h"
+@@ -2258,6 +2259,7 @@
+ 
+ 		LogTasksDetail("Looping through client [{}]", c->GetCleanName());
+ 
++		FirePersonalOccurrenceSource::NativeConstructParticipants::ObserveActualTaskKillVisit(*c, *client, *npc);
+ 		c->GetTaskState()->UpdateTasksOnKill(c, client, npc);
+ 	}
+ }
 --- a/zone/tasks.cpp
 +++ b/zone/tasks.cpp
 @@ -16,6 +16,7 @@
@@ -2891,129 +3844,3 @@
  	ClearFellowshipCampfires();
   Housing::Pets::Clear();
   Housing::ServiceAuthority::Clear();
---- a/zone/parcels.cpp
-+++ b/zone/parcels.cpp
-@@ -742,12 +742,18 @@
- 			default: {
- 				std::vector<CharacterParcelsContainersRepository::CharacterParcelsContainers> results{};
- 				if (inst->IsClassBag() && inst->GetItem()->BagSlots > 0) {
--					auto contents = inst->GetContents();
- 					results       = CharacterParcelsContainersRepository::GetWhere(
- 						database, fmt::format("`parcels_id` = {}", p->second.id)
- 					);
- 					for (auto i: results) {
--						auto item = database.CreateItem(
-+						// Reconstruct only a valid empty child slot; do not replace another parcel item.
-+						if (i.slot_id >= inst->GetItem()->BagSlots ||
-+							inst->GetItem(static_cast<uint8>(i.slot_id))) {
-+							SendParcelRetrieveAck();
-+							return;
-+						}
-+
-+						std::unique_ptr<EQ::ItemInstance> item(database.CreateItem(
- 							i.item_id,
- 							i.quantity,
- 							i.aug_slot_1,
-@@ -756,7 +762,7 @@
- 							i.aug_slot_4,
- 							i.aug_slot_5,
- 							i.aug_slot_6
--						);
-+						));
- 
- 						if (!item) {
- 							SendParcelRetrieveAck();
-@@ -776,7 +782,13 @@
- 							return;
- 						}
- 
--						contents->emplace(i.slot_id, item);
-+						// PutItem checks custody of both recipient and source, then owns a native clone.
-+						// The temporary remains owned here on every failure/continue path.
-+						inst->PutItem(static_cast<uint8>(i.slot_id), *item);
-+						if (!inst->GetItem(static_cast<uint8>(i.slot_id))) {
-+							SendParcelRetrieveAck();
-+							return;
-+						}
- 					}
- 				}
- 
---- /dev/null
-+++ b/zone/fire_initial_admission.h
-@@ -0,0 +1,14 @@
-+#pragma once
-+#include <cstdint>
-+class Client;
-+class NPC;
-+namespace FirePersonalOccurrenceSource {
-+enum class InitialAdmissionResult { Hold,SubmittedNotAccepted,AcceptedBeforeCallbacks };
-+// Finite native Gotonur initial-request entry; no scripting getter or fake
-+// preceding reward/claim. Actual acceptance evidence stays inside task cpp.
-+class InitialAdmissionNative final {
-+public:
-+ static InitialAdmissionResult Request(Client&,NPC&,uint32_t actual_zone,
-+  uint32_t actual_instance,uint32_t selected_original_giver_spawn);
-+};
-+} // namespace FirePersonalOccurrenceSource
---- a/zone/npc.cpp
-+++ b/zone/npc.cpp
-@@ -17,6 +17,7 @@
- 	along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
- #include "npc.h"
-+#include "fire_gotonur_say_queue.h"
- 
- #include "common/bodytypes.h"
- #include "common/classes.h"
-@@ -505,6 +506,7 @@
- 
- NPC::~NPC()
- {
-+	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
- 	AI_Stop();
- 
- 	if (proximity) {
---- /dev/null
-+++ b/zone/fire_gotonur_say_queue.h
-@@ -0,0 +1,41 @@
-+#pragma once
-+#include "fire_original_construct_death.h"
-+#include <memory>
-+#include <string>
-+namespace FirePersonalOccurrenceSource {
-+inline constexpr uint32_t OriginalGotonurStaticSpawn=149749; // qualified static receipt, not live identity
-+class OriginalGotonurSayQueue;
-+class OriginalGotonurSayLifetime final {
-+ friend class OriginalGotonurSayQueue;
-+ friend class ::Client;
-+ friend class ::NPC;
-+ bool active_=true;
-+ OriginalGotonurSayLifetime()=default;
-+ OriginalGotonurSayLifetime(const OriginalGotonurSayLifetime&)=delete;
-+ OriginalGotonurSayLifetime& operator=(const OriginalGotonurSayLifetime&)=delete;
-+public:
-+ ~OriginalGotonurSayLifetime()=default;
-+};
-+class OriginalGotonurSayQueue final {
-+ friend class ::EntityList;
-+ friend class ::Zone;
-+ struct Pending {
-+  std::shared_ptr<OriginalGotonurSayLifetime> client_lifetime,npc_lifetime;
-+  std::shared_ptr<OriginalConstructDeathQueue::Lifetime> zone_lifetime;
-+  Client* original_client;
-+  NPC* original_npc;
-+  uint32_t character_id,client_entity,npc_entity;
-+  std::string message;
-+  Pending* next=nullptr;
-+ };
-+ static Pending* head_;
-+ static Pending* tail_;
-+ static bool MatchesActualContext(Client&,NPC&);
-+ static void Drain();
-+ static void Discard() noexcept;
-+public:
-+ // Capture before ordinary mutable say callbacks. This queues only the genuine
-+ // say intent; native admission/death-receipt checks remain at actual dispatch.
-+ static void CaptureActual(Client&,const char* actual_message);
-+};
-+} // namespace FirePersonalOccurrenceSource

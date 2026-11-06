@@ -1,8 +1,5 @@
 {
-  "status": "REVIEWED_DISABLED_COMBINED_NATIVE_SOURCE_NOT_INSTALLED",
-  "source_revision": "Native initial167 and qualified Gotonur binding, deferred actual-say owner witnesses and pending-depop rejection",
-  "review_status": "Initial mode/save-bind/giver flow and actual say lifetime/order reviewed; exact required pending-depop correction composed per coordinator",
-  "review_receipt_sha256": "efeee8cc108a68a3f40f9cc1407ed7068f92ff87e5715d5acc307030cd972fa1",
+  "source_revision": "R13 actual prepared construct plan and own-occurrence168169 native group credit",
   "native_files": {
     "common/CMakeLists.txt": {
       "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
@@ -50,15 +47,15 @@
     },
     "zone/attack.cpp": {
       "preimage_sha256": "41e7429480265cb6b81092214cd26d069c2132da25b5071a170e453cfbaaa5de",
-      "postimage_sha256": "fef01163fa6667b7097b423ea5c75e6d8c969133f41db2743c750296765fe2af"
+      "postimage_sha256": "238f12e305734ec400709d33068ad59102be67d722821acdd7598c03e7138cef"
     },
     "zone/client.cpp": {
       "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
-      "postimage_sha256": "f044371f10a73af09a16c7b365f3ab2ccef6a4a85e5c8733b7560e3ba0b21e81"
+      "postimage_sha256": "0e19773761bba3241e846827fe0ddd83f6f701023a4c8a1f5e8947520ac2f7c1"
     },
     "zone/client.h": {
       "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
-      "postimage_sha256": "99eb9b56540f9418461c8a47644cd34889e5c6c235d2298610a66a74cca87823"
+      "postimage_sha256": "70ad39555b2107082e04be86934d287b22ea6b7050c831729679f3fe90e638e5"
     },
     "zone/client_evolving_items.cpp": {
       "preimage_sha256": "9abfd986b2b0a851e685741c89c97085b6f8b8754aae58371cca030a396baeae",
@@ -82,11 +79,27 @@
     },
     "zone/fire_construct_death_receipt.h": {
       "preimage_sha256": null,
-      "postimage_sha256": "82c2f96f708b9ebb7b585c067f51c802f6e4235e08c595ece1d7636150a2e671"
+      "postimage_sha256": "d9b685bc14fd6f7c81bfcaa8aa32d210eb5ba5f62e3c5207daf1e50551106ae5"
+    },
+    "zone/fire_construct_local_profiles.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "268f8919dfd11ab7ca5edd1b5a2456cfc9194e9397fc626186590ba71c70ad17"
+    },
+    "zone/fire_construct_participants.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "e3e18de9133c172b034a5df85ca4de61ecc4f11280d46ff42bc8c693bb082c51"
+    },
+    "zone/fire_gotonur_say_queue.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "439cecaf74378367a337c0340b91bb042cdf6d379776587b87e0cab74edcff26"
+    },
+    "zone/fire_initial_admission.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "496dce0b63d97022cce74bb47214bfb365b2ea6abdc395fb297bf828cd67f8f5"
     },
     "zone/fire_native_item_custody.cpp": {
       "preimage_sha256": null,
-      "postimage_sha256": "9e3d42b3789c081187b1cb2ccf7c4a0fcc24927c22822bf5a92a649f1dcb9bc4"
+      "postimage_sha256": "99a3c32ea81af5d596d09160d792e6082abc2870a1d74474ce85cb9e3eae377b"
     },
     "zone/fire_native_item_custody.h": {
       "preimage_sha256": null,
@@ -94,7 +107,7 @@
     },
     "zone/fire_native_published_use.h": {
       "preimage_sha256": null,
-      "postimage_sha256": "b7d0b7e1c9b92d39ab01fdad06fa5ba64adc230c9bb6780b37a137a445b17fc8"
+      "postimage_sha256": "f2534042c734c704a7bec758cd8fa69705e6e15231e201649652b93aa98fff49"
     },
     "zone/fire_original_construct_death.h": {
       "preimage_sha256": null,
@@ -106,7 +119,11 @@
     },
     "zone/fire_original_construct_producer.h": {
       "preimage_sha256": null,
-      "postimage_sha256": "452472bbebbcad5662fe7d8875bee2e2716a34498d06744911e984a0f44094a5"
+      "postimage_sha256": "a4d0ac807e0f2500aae193b900f2415ab64d19b204b54edb4cce2713e07db28f"
+    },
+    "zone/fire_original_final_hail_frame.h": {
+      "preimage_sha256": "ef70a379091c30d644a6a7b974e824d225e1fc98d741e7ca2e79d8b418893168",
+      "postimage_sha256": "dc18be2240c8b3a80c7d2764adf7dc33b8e286a4b2b72afd9935a63b4b6a931a"
     },
     "zone/fire_original_item_snapshot.h": {
       "preimage_sha256": null,
@@ -120,6 +137,10 @@
       "preimage_sha256": null,
       "postimage_sha256": "80fdcb249b2e0c6bbe5ab958a7fffc51be936e0824c150e8ab49c2ddb8d94649"
     },
+    "zone/fire_prepared_construct_plan.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "0948ee847b50ee815231a52f160b5b59ae7162eb3cae31669f85ff1ee1c39d44"
+    },
     "zone/fire_published_use_sink.h": {
       "preimage_sha256": null,
       "postimage_sha256": "52e92089e69e1c8b468aa994523515207785453ff118f9526e1e922bcee02395"
@@ -128,9 +149,25 @@
       "preimage_sha256": "5538219e5625b4baa51e7bd4182465be502a77796dd2ff41b70bcfc2a0f8b3ff",
       "postimage_sha256": "a67890b2fe79b420d5418adcb5e357cb9838ffb6e1beb89c8bbf8249058f4d68"
     },
+    "zone/mob.cpp": {
+      "preimage_sha256": "4b0590106b1482e66caf2781f4e3d65787a6d45988a1535308808c6b2419abfb",
+      "postimage_sha256": "5428db734d17308c5f1ed5ee1af818075da6a039131743c547865b1485e90a6a"
+    },
+    "zone/npc.cpp": {
+      "preimage_sha256": "560e1c8b97d68dae802d702639506eba87e0c17f54cc64f45037d0b25164d363",
+      "postimage_sha256": "9261aebd8813e10b26c3f4d49e29e60384339ba4525d32556cc7fb5a6fc9e4be"
+    },
     "zone/npc.h": {
       "preimage_sha256": "5da70d799dbe23fa2bc4b204555ffcec45026b6c23ad09b8c9efd532479c14ce",
-      "postimage_sha256": "7970fc4ee60542bafdb70b7cf2a018d11d2b26d9b94ca63f86bb3774e73e0d6f"
+      "postimage_sha256": "917046f6a407081745a1beb851e2873f37ac84601f7b8d3d72058c48df9ef1a3"
+    },
+    "zone/parcels.cpp": {
+      "preimage_sha256": "d0f540a70af8b058a6f8c3b4cf3d221cf065fb1ad0ab0d168cebaf6512d61353",
+      "postimage_sha256": "fea3deb31e656d18fcd1f9fe74ae7730dc3a450c4162d09de1f09faeb81efcad"
+    },
+    "zone/shared_task_zone_messaging.cpp": {
+      "preimage_sha256": "018b92349616cdd988c73c4e74e48233baa9082a2503382fb384715de551b2e0",
+      "postimage_sha256": "e1255d1e11b4cd7b5984b5c768b0eac47ff4b6c88e6ec193537f0663addf5536"
     },
     "zone/spells.cpp": {
       "preimage_sha256": "1ec2757560d4ce279d60461d7606933b672e3b660e5ed8bef5667d1315d78a10",
@@ -138,11 +175,15 @@
     },
     "zone/task_client_state.cpp": {
       "preimage_sha256": "8e1328f7152fc7f226e5099be6099fcb3ad112b32172ccf80d2d5118d3d2adfe",
-      "postimage_sha256": "6ea4360ddeeb8a665395f274445007fba5008b68306d8a9df41cf08d053463fe"
+      "postimage_sha256": "32d2f1a21e6dee780d3496f872c9d4fe4b59707673502c1f5e44fd855d698f84"
     },
     "zone/task_client_state.h": {
       "preimage_sha256": "4556499e483da7785759f87c53c6f1704c217c288f2f892aa877ebd7abb1d428",
-      "postimage_sha256": "815818bbb4a99847b37ae03fe10352a0a7f8a60f9ea0ad333a1ebbff40feadb8"
+      "postimage_sha256": "a12ff9023f13f61bf0bf12cace0ca55cc1fd5ccda0eb4fac25a9d2e01bcb67f4"
+    },
+    "zone/task_manager.cpp": {
+      "preimage_sha256": "f7cec7fd64984848f5ec843dec4f71b3952b6e15c0d88ed78a22ef1f70ff5de4",
+      "postimage_sha256": "b8532f9dab31d75fb631cc553a54b5d96301cc9915ff10bcbf5ed913d0fa8214"
     },
     "zone/tasks.cpp": {
       "preimage_sha256": "18bf1975f9ebbc3f0ee7b999ab1e388b6adebc05485466c9d52d986624a73e39",
@@ -151,143 +192,48 @@
     "zone/zone.cpp": {
       "preimage_sha256": "3c17cac8d75ab720a8a47e1fa60b2a7148473f38eb488019a9a320514decefb4",
       "postimage_sha256": "45a2f930f6e57bce98f633e0fff4ee804a80f3a2e6452555cfe624ce383c0d29"
-    },
-    "zone/parcels.cpp": {
-      "preimage_sha256": "d0f540a70af8b058a6f8c3b4cf3d221cf065fb1ad0ab0d168cebaf6512d61353",
-      "postimage_sha256": "fea3deb31e656d18fcd1f9fe74ae7730dc3a450c4162d09de1f09faeb81efcad"
-    },
-    "zone/fire_initial_admission.h": {
-      "preimage_sha256": null,
-      "postimage_sha256": "496dce0b63d97022cce74bb47214bfb365b2ea6abdc395fb297bf828cd67f8f5"
-    },
-    "zone/npc.cpp": {
-      "preimage_sha256": "560e1c8b97d68dae802d702639506eba87e0c17f54cc64f45037d0b25164d363",
-      "postimage_sha256": "9261aebd8813e10b26c3f4d49e29e60384339ba4525d32556cc7fb5a6fc9e4be"
-    },
-    "zone/fire_gotonur_say_queue.h": {
-      "preimage_sha256": null,
-      "postimage_sha256": "f0388c3882b1b7e7da3aed9d38502fe2ab48468182732b056507c7379ca9f4a2"
     }
   },
-  "native_patch_sha256": "a4b756a44d020fb4128e2cb720e95eae00b54dc65d90948936bb704e52171f7d",
-  "schema": {
-    "path": "001_fire_construct_death_receipts.sql.disabled",
-    "sha256": "ec487b9955095e5bbdccc02f003b7849b4258e6bed505d35ccffcb030458e9b9",
-    "status": "SOURCE_ONLY_DATABASE_OWNER_APPLICATION_NOT_AUTHORIZED"
-  },
-  "required_build_parents": [
-    {
-      "kind": "acceptanceR2",
-      "source_publication": "c2955cd37a7d38f130f743d95437eec06e3f5458",
-      "native_patch_sha256": "b71dc874870e6c0ab0ac78f85536c75913da594089ae4a18b3aa9e7cdd976764"
-    },
-    {
-      "kind": "finalhail",
-      "source_publication": "83538da0f157744c0eb26b9bde677d34268508d0",
-      "native_patch_sha256": "8035f9a1eb43f0d4742b3ebadca52265e6a144a7a296ef78458c29c5cfb8cdc1"
-    },
-    {
-      "kind": "matchedWorldActivity",
-      "source_publication": "f14dd6a9a42c2125f71ff2acb349eb77d033ccf7",
-      "prior_build": "PASS_ISOLATED_MATCHED_FIRE_WORLD_ZONE_COMPILE_LINK_NO_DEPLOY"
-    }
-  ],
-  "earlier_sink_publication": {
-    "source": "da80b090df7a75ff75d6162787e27c2741e2e17d",
-    "instruction": "Provenance only: final native sink is already included in this combined patch. Do NOT separately apply its native patch before this one."
-  },
-  "build_instruction": "Reuse exact compiled R8 parent38, materialize the listed incremental changes/new paths, verify all41 final native postimages, then incrementally compile/link matched World+Zone. No parent build/review/tests or serving migration/deployment/activation.",
-  "actual_source_connections": [
-    "Exact owner R3 writer/source fences/accepted reload/real opaque receipt issuing callsite composed, unchanged owner26file semantics",
-    "All original Spells actor/save observation/typed durable death receipt/Gotonur native hail source composed; required native item-use/identity/sink headers included",
-    "NPC::Death only seals actual success at final return. First-declared scope enqueues after DeathTransition and all later native cleanup; no task progress/SQL inside actor stack",
-    "Preallocated intrusive feature queue drains once after EntityList::MobProcess actor stacks/iteration end; no NPC lookup/dereference in delivery; same original goal2 save and strict receipt remain",
-    "Actual Zone destructor revokes independently retained lifetime guard and discards pending batch. Already detached batches observe revoked lifetime even on same-frame Zone address reuse; no event recreation on reload"
-  ],
-  "material_exceptions": [
-    "Actual initial admission selectionfalse; source hook authored",
-    "Construct placement/lifetime selectionfalse; activation rejectedprespend",
-    "Authentic169 participant cohort held",
-    "Static giver is qualified source, not serving runtime validation",
-    "Receipt migration remains unapplied; native acceptance unclaimed",
-    "Unknown/crashgapsheld/noreplay/refund/regrant"
-  ],
-  "native_rollback": "Source inverse artifact only; not authority for a serving rollback or dropping earned receipts.",
-  "prior_lifetime_review_sha256": "ee4d0cdb7de0e4fd7ccd3c2aa5bab4d0c1787666bc9c64d2d56e106995821c33",
-  "owner_correction_manifest_sha256": "7be2865ea5989ac4965090dfa64cf80b057e84235ad36f52d8ea8fa013c98518",
-  "retained_parent_rebase": {
-    "changed_paths": [
-      "zone/client_packet.cpp",
-      "zone/entity.cpp",
-      "zone/npc.h",
-      "zone/spells.cpp",
-      "zone/zone.cpp"
-    ],
-    "unchanged_paths": 32,
-    "merge": "Three-way merge: prior Fire postimage, actual original preimage, exact compiled retained parent. One npc.h declaration conflict resolved by retaining BOTH private feature state and ReconcileHandinTaskDeliveries.",
-    "preserved": [
-      "PinObjectForClick actual lifetime/id scope",
-      "Retired object/click and door publication",
-      "original_count/task_delivered_count and ReconcileHandinTaskDeliveries",
-      "Full Binding846R3 contexts/limits/native path",
-      "GroundSpawns::kMaxSpawns"
-    ]
-  },
-  "additional_compatibility_fix": "Completed/rejected Fire state cannot intercept ordinary casts in a reused slot; active selected custody still rejects changed/missing originals. No ordinary writer authority.",
-  "minimal_compiler_correction": [
-    "Include existing data_verification.h declaring EQ::ValueWithin, no predicate behavior change or numeric bounds rewrite.",
-    "Use actual private selected fence Active() in ordinary-item Start/FinishEntry. Inactive completed/rejected or returned-unlaunched captures cannot intercept later ordinary same-slot item use; active original mismatch still rejects, no ordinary Fire ticket/writer authority."
-  ],
-  "this_combined_build_status": "PENDING_ACTUAL_INCREMENTAL_COMPILE; compiled parent38 is not acceptance of new initial/say source.",
-  "current_compiler_correction": {
-    "path": "zone/task_client_state.h",
-    "scope": "Forward declarations and specific private friendship for PublishedNativeUseSink, OriginalConstructDeathQueue and OriginalConstructNativeHail, the three actual private getter callsites. No public getter/API, method movement, binding validation or lifecycle change.",
-    "failed_build_receipt_sha256": "16d1b7ec4b057292b0be3b59a317175b75f1740718982b7b4c5f9ec1362c7c87"
-  },
-  "owner_parcel_correction_manifest_sha256": "c4710b01104d1f92ff33e10fb523a6a66baa58ad92967b630a63931203f91706",
-  "parcel_caller_review_sha256": "f4d0bf8b103ceab278022e1a56fcc9a41fe5a6a30689466666dfab14ed15a1c3",
-  "say_lifetime_review_sha256": "4b19337770ddd45048abcff4565f4b0eeb181b56e7fe657e8509c5a98b7bd4f2",
-  "compiled_incremental_parent": {
-    "source_publication": "0b6111b446f59185fb30988903e1dfbf4148920a",
-    "status": "PASS_MATCHED_FIRE_R8_WORLD_ZONE_COMPILE_LINK_NO_DEPLOY",
-    "receipt_sha256": "d75e6392a8e826140e284f84cefb92840aa454a78124fba7f4f731184a734410"
-  },
+  "native_patch_sha256": "a0c1a02016267459de606109115238d0b22e5ce248cd53682d270c43a40e0822",
   "incremental_changed_paths": [
+    "zone/attack.cpp",
     "zone/client.cpp",
     "zone/client.h",
-    "zone/entity.cpp",
-    "zone/fire_original_construct_death.h",
+    "zone/fire_construct_death_receipt.h",
+    "zone/fire_construct_local_profiles.h",
+    "zone/fire_construct_participants.h",
+    "zone/fire_gotonur_say_queue.h",
+    "zone/fire_native_item_custody.cpp",
+    "zone/fire_native_published_use.h",
+    "zone/fire_original_construct_producer.h",
+    "zone/fire_original_final_hail_frame.h",
+    "zone/fire_prepared_construct_plan.h",
+    "zone/mob.cpp",
     "zone/npc.h",
+    "zone/shared_task_zone_messaging.cpp",
     "zone/task_client_state.cpp",
-    "zone/zone.cpp",
-    "zone/fire_initial_admission.h",
-    "zone/npc.cpp",
-    "zone/fire_gotonur_say_queue.h"
+    "zone/task_client_state.h",
+    "zone/task_manager.cpp"
   ],
-  "unchanged_from_compiled_R8": 31,
-  "actual_initial_request": {
-    "source": "prerequisites-source-contract external4989 keywordprove",
-    "source_parser": "Case-insensitive prove keyword substring, native source policy; not recovered original script bytes",
-    "actual_request": "ONE native AssignTask920167 with true level requirement; existing native capacity/duplicate/repeat/replay rules retained",
-    "actual_binding": "SAME native fresh reservation and positive save/initial four zero rows before TASK_ACCEPTED callbacks. NativeItemCustody Accepted receives actualBinding; no prior reward/handoff fabricated. Original reward successor mode unchanged.",
-    "enabled": false,
-    "remaining_selection": "Original complete admission/catalog policy still unselected; native initial_admission_selected=false."
+  "compiled_parent": {
+    "source_commit": "5ff638b39134ff1796a8f1b39915e897db5bc688",
+    "sha256": "fd433726d21737f7eba59bac84962404b095672fa52158e31ceda0d33d77498f",
+    "status": "MATCHED_R11_WORLD_ZONE_COMPILE_LINK_PASS_41PINS_16WARNINGS_ZEROERRORS"
   },
-  "qualified_giver": {
-    "sha256": "1a9b95313d3587fb77b731a194ac83e36ed810b0b0112e7a8ad80e6ddc3d85ba",
-    "npc_type": 490061,
-    "spawn2": 149749,
-    "group": 111251,
-    "zone": 490,
-    "version": 0,
-    "qualification": "Qualified static peq_housing_test evidence; not live entity/instance proof or independently revalidated serving process DB. Actual targeted visible/inrange unengaged NPC/world490instance0/spawn149749 required."
-  },
-  "actual_say_lifetime_flow": [
-    "Capture genuine targeted visible/inrange/nonvoicegrafted say intent BEFORE mutable Player/NPC say callbacks; ordinary callbacks/order retained unchanged",
-    "Actual Client/NPC private lifetime witnesses created on original objects, revoked FIRST in their real destructors; no public token/factory/assertion",
-    "Own copied message/native character/entity/actual owner pointers and shared real Zone lifetime; no physical authority from queued intent",
-    "Drain once after MobProcess actor/caller/iteration stacks returned; fresh native Client/NPC resolution must match same still-active private owners and fresh target/type/spawn/visibility/range/unengaged/world context",
-    "Only then call real initial nativeAssign/sameacceptBind or typeddeathreceiptHail; no Client/NPC access afterward; detached batches revoked on teardown, replacement cannot inherit old witnesses",
-    "No event/login retry or replay; newly genuine queued events wait next normal pass"
-  ]
+  "this_build": "PENDING_REVIEW_PUBLICATION_AND_ACTUAL_MATCHED_INCREMENTAL_WORLD_ZONE_COMPILE_LINK",
+  "selected_policy": "Explicit LOCAL source-only defaults;167casteronly;168169native bounded nonraid cohort with own accepted epochs/actual killvisit/sealeddeath/samesave",
+  "core_writer_manifest_sha256": "a5e2ed3e987d8177d283abb9d6b29d2a2c1a522a029bf5a4522ac6cc4207b095",
+  "npc_local_manifest_sha256": "7ffcf2c41a29133173664b6d60713d64967119729cdb58af0f146fbe2d66db74",
+  "migration_sha256": "9c356500d9a49ba52b56e998547af61d8c739901bc6daabccc91e144d6e98c7a",
+  "selected_rows_sha256": "23d666ed0252988a0b9e88925e9e57b64eec264015ab6d0f8910432df4338708",
+  "material_exceptions": [
+    "SOURCE ONLY. Review/publication/matched World+Zone compile pending; no serving migration/install/deployment/activation/native gameplay acceptance.",
+    "Admission85/repeatable/21600replay, horizontal radius100 at167/168, zoneonly169/casterpose/terrain and168169nonraidcohort timing are explicitly selected LOCAL reconstruction parameters, not authenticated retail edge rules.",
+    "Three full construct profiles are selected LOCAL NPC-owner rows/defaults. Allthree runspeed0\u21921.25 is an explicit LOCAL correction; selected-local-construct-profiles.json supersedes old component rows for any future owner migration. No historical combat-stat claim.",
+    "Finite disabled death-receipt DDL now distinguishes recipient accepted key from creator accepted/cast/item origin. Never apply old DDL or backfill from history. Existing serving schema requires exact Database-owner review before changes.",
+    "Ordinary postcommit disconnect, unknown COMMIT, same-save uncertainty or acknowledgedclaim crashgap never synthesizes replay/refund/death/Ready origin.",
+    "One creator debit/one actor.167casteronly;168169cohort intersects actual native loaded task-kill candidates, captured own accepted epoch, same group and liveowner at delivery. No invented dead/XPdistance cutoff, latejoin/history credit or per-recipient charge/fight.",
+    "169 final uses original native Worldshared170 admission; current normal170 membership skips another request and is not a new Ready/origin receipt. No per-member create/DZ loop."
+  ],
+  "build_instruction": "Reuse actual R11 compiled cache; materialize only listed incremental changes, verify all final postpins, compile/link World+Zone. No serving deployment, migration, server starts, client actions or extra tests."
 }
