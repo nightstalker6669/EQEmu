@@ -1007,17 +1007,19 @@
 -} // namespace FirePersonalOccurrenceSource
 --- a/zone/client.cpp
 +++ b/zone/client.cpp
-@@ -17,9 +17,6 @@
+@@ -17,11 +17,6 @@
  */
  #include "../common/mercenary/rof2_timer.h"
  #include "fire_shared_successor_native.h"
 -#include "fire_published_use_sink.h"
 -#include "fire_original_construct_hail.h"
 -#include "fire_construct_death_receipt.h"
+-#include "fire_initial_admission.h"
+-#include "fire_gotonur_say_queue.h"
  
  #include "housing_guild_portal.h"
  #include "housing_actor_publication.h"
-@@ -37,7 +34,6 @@
+@@ -39,7 +34,6 @@
  #include <thread>
  
  #include "client.h"
@@ -1025,15 +1027,23 @@
  
  #include "common/data_bucket.h"
  #include "common/data_verification.h"
-@@ -1753,7 +1749,6 @@
- 					if (UpdateTasksOnSpeakWith(t->CastToNPC())) {
- 						t->CastToNPC()->DoQuestPause(this);
- 					}
--					FirePersonalOccurrenceSource::OriginalConstructNativeHail::OnActualTargetedSay(*this,*t->CastToNPC(),message);
- 				}
- 			}
+@@ -760,7 +754,6 @@
+ }
+ 
+ Client::~Client() {
+-	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
+  Housing::GuildPortalRuntime::Forget(*this);
+ 	struct PublicationCleanup {Client& client;~PublicationCleanup(){Housing::ActorPublication::Forget(client);}} publication_cleanup{*this};
+ 	// First lifecycle action: no quests, save, stream release or inventory
+@@ -1717,7 +1710,6 @@
+ 			sender = GetPet();
  		}
-@@ -8967,7 +8962,7 @@
+ 
+-		if(sender==this) FirePersonalOccurrenceSource::OriginalGotonurSayQueue::CaptureActual(*this,message);
+ 		if (!is_silent) {
+ 			entity_list.ChannelMessage(sender, chan_num, language, lang_skill, message);
+ 		}
+@@ -8970,7 +8962,7 @@
  void Client::TryItemTimer(int slot)
  {
  	EQ::ItemInstance* inst = m_inv.GetItem(slot);
@@ -1042,7 +1052,7 @@
  		return;
  	}
  
-@@ -8989,14 +8984,14 @@
+@@ -8992,14 +8984,14 @@
  	for (int x = EQ::invaug::SOCKET_BEGIN; x <= EQ::invaug::SOCKET_END; ++x)
  	{
  		EQ::ItemInstance * a_inst = inst->GetAugment(x);
@@ -1060,7 +1070,7 @@
  				if (parse->ItemHasQuestSub(a_inst, EVENT_TIMER)) {
  					parse->EventItem(EVENT_TIMER, this, a_inst, nullptr, it_iter->first, 0);
  				}
-@@ -13672,108 +13667,3 @@
+@@ -13675,174 +13667,3 @@
  
  	return task_state->UncompleteTask(task_id);
  }
@@ -1144,12 +1154,18 @@
 -
 -namespace FirePersonalOccurrenceSource {
 -void OriginalConstructNativeHail::OnActualTargetedSay(Client& client,NPC& actual,const char* message) {
-- constexpr uint32_t selected_original_gotonur_spawn=0; // authenticated serving binding still held
+- constexpr uint32_t selected_original_gotonur_spawn=OriginalGotonurStaticSpawn; // qualified static source; actual owner witnesses required
 - if(!selected_original_gotonur_spawn) return;
-- if(!message || !Strings::BeginsWith(Strings::ToLower(message),"hail") || !zone ||
+- if(!message || !zone ||
 -  zone->GetZoneID()!=490 || zone->GetInstanceID()!=0 || actual.GetNPCTypeID()!=490061 ||
 -  actual.IsEngaged() || client.GetTarget()!=&actual ||
 -  actual.GetSpawnPointID()!=selected_original_gotonur_spawn || !client.GetTaskState()) return;
+- const auto lower=Strings::ToLower(message);
+- if(lower.find("prove")!=std::string::npos) {
+-  InitialAdmissionNative::Request(client,actual,490,0,selected_original_gotonur_spawn);
+-  return; // no Client/NPC/slot access after native acceptance callbacks
+- }
+- if(!Strings::BeginsWith(lower,"hail")) return;
 - const ClientTaskInformation* selected=nullptr;
 - for(int slot=0;slot<MAXACTIVEQUESTS;++slot) {
 -  const auto* current=client.GetTaskState()->GetClientTaskInfo(TaskType::Quest,slot);
@@ -1169,13 +1185,73 @@
 - // No client, NPC, slot or accepted pointer is accessed afterward.
 -}
 -} // namespace FirePersonalOccurrenceSource
+-
+-namespace FirePersonalOccurrenceSource {
+-OriginalGotonurSayQueue::Pending* OriginalGotonurSayQueue::head_=nullptr;
+-OriginalGotonurSayQueue::Pending* OriginalGotonurSayQueue::tail_=nullptr;
+-bool OriginalGotonurSayQueue::MatchesActualContext(Client& client,NPC& npc) {
+- return zone && zone->GetZoneID()==490 && zone->GetInstanceID()==0 &&
+-  client.CharacterID() && client.GetID() && npc.GetID() &&
+-  client.GetTarget()==&npc && npc.GetNPCTypeID()==490061 &&
+-  npc.GetSpawnPointID()==OriginalGotonurStaticSpawn && !npc.GetDepop() && !npc.IsEngaged() &&
+-  !client.IsInvisible(&npc) &&
+-  DistanceNoZ(client.GetPosition(),npc.GetPosition())<=RuleI(Range,Say);
+-}
+-void OriginalGotonurSayQueue::CaptureActual(Client& client,const char* message) {
+- if(!message || !zone || zone->GetZoneID()!=490 || zone->GetInstanceID()!=0) return;
+- auto* target=client.GetTarget();
+- if(!target || !target->IsNPC()) return;
+- auto* npc=target->CastToNPC();
+- if(!MatchesActualContext(client,*npc)) return;
+- try {
+-  const auto lower=Strings::ToLower(message);
+-  if(lower.find("prove")==std::string::npos && !Strings::BeginsWith(lower,"hail")) return;
+-  if(!client.m_fire_gotonur_say_lifetime)
+-   client.m_fire_gotonur_say_lifetime=std::shared_ptr<OriginalGotonurSayLifetime>(new OriginalGotonurSayLifetime);
+-  if(!npc->m_fire_gotonur_say_lifetime)
+-   npc->m_fire_gotonur_say_lifetime=std::shared_ptr<OriginalGotonurSayLifetime>(new OriginalGotonurSayLifetime);
+-  if(!client.m_fire_gotonur_say_lifetime->active_ || !npc->m_fire_gotonur_say_lifetime->active_) return;
+-  const auto zone_lifetime=OriginalConstructDeathQueue::ForActualZone(zone);
+-  auto event=std::unique_ptr<Pending>(new Pending{
+-   client.m_fire_gotonur_say_lifetime,npc->m_fire_gotonur_say_lifetime,zone_lifetime,
+-   &client,npc,client.CharacterID(),client.GetID(),npc->GetID(),std::string(message)});
+-  if(tail_) tail_->next=event.get();else head_=event.get();
+-  tail_=event.release();
+- } catch(const std::bad_alloc&) {
+-  // No callback/task/SQL happened. Preserve the ordinary native say path.
+- }
+-}
+-void OriginalGotonurSayQueue::Discard() noexcept {
+- auto* pending=head_;head_=tail_=nullptr;
+- while(pending) {auto* next=pending->next;delete pending;pending=next;}
+-}
+-void OriginalGotonurSayQueue::Drain() {
+- auto* pending=head_;head_=tail_=nullptr;
+- while(pending) {
+-  std::unique_ptr<Pending> event(pending);pending=pending->next;
+-  if(!event->zone_lifetime->active || event->zone_lifetime->owner!=zone ||
+-   !event->client_lifetime->active_ || !event->npc_lifetime->active_) continue;
+-  // Fresh native resolution is necessary but is not the identity proof: the
+-  // retained private owner witnesses must still match the SAME actual objects.
+-  auto* client=entity_list.GetClientByCharID(event->character_id);
+-  auto* npc=entity_list.GetNPCByID(static_cast<uint16>(event->npc_entity));
+-  if(!client || !npc || client!=event->original_client || npc!=event->original_npc ||
+-   client->m_fire_gotonur_say_lifetime!=event->client_lifetime ||
+-   npc->m_fire_gotonur_say_lifetime!=event->npc_lifetime ||
+-   client->GetID()!=event->client_entity || !MatchesActualContext(*client,*npc)) continue;
+-  OriginalConstructNativeHail::OnActualTargetedSay(*client,*npc,event->message.c_str());
+-  // No Client/NPC/registry/target access after mutable native accept/hail.
+-  // Destruction revokes retained witnesses before any later node can resolve.
+- }
+-}
+-} // namespace FirePersonalOccurrenceSource
 --- a/zone/client.h
 +++ b/zone/client.h
 @@ -23,7 +23,7 @@
  
  #include "../common/boat_passenger.h"
  
--namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalConstructNativeHail; }
+-namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalConstructNativeHail; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue; }
 +namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; }
  namespace SpiritShroud { struct Template; }
  class ZoneDatabase;
@@ -1188,7 +1264,7 @@
  class Client : public Mob
  {
  public:
-@@ -2134,10 +2133,6 @@
+@@ -2134,12 +2133,6 @@
  private:
  	friend class FirePersonalOccurrenceSource::SharedSuccessorNative;
  	std::unique_ptr<FirePersonalOccurrenceSource::SharedSuccessorPending> m_fire_shared_successor;
@@ -1196,10 +1272,12 @@
 -	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
 -	friend class FirePersonalOccurrenceSource::OriginalConstructNativeHail;
 -	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_published_construct;
+-	friend class FirePersonalOccurrenceSource::OriginalGotonurSayQueue;
+-	std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> m_fire_gotonur_say_lifetime;
  	ExternalHandinMoneyReturned m_external_handin_money_returned = {};
  	std::vector<uint32_t>       m_external_handin_items_returned = {};
  public:
-@@ -2230,8 +2225,6 @@
+@@ -2232,8 +2225,6 @@
  
  	uint8 playeraction;
  
@@ -1309,24 +1387,26 @@
   // COMMIT. No Save/Load, lease takeover, queue release or SQL occurs here.
 --- a/zone/entity.cpp
 +++ b/zone/entity.cpp
-@@ -36,8 +36,6 @@
+@@ -36,9 +36,6 @@
  #include "zone/string_ids.h"
  #include "zone/water_map.h"
  #include "zone/worldserver.h"
 -#include "fire_original_construct_producer.h"
 -#include "fire_original_construct_death.h"
+-#include "fire_gotonur_say_queue.h"
  
  #include "common/strings.h"
  #include "common/util/uuid.h"
-@@ -580,7 +578,6 @@
+@@ -581,8 +578,6 @@
  			entity_list.RemoveMob(id);
  		}
  	}
 -	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Drain();
+-	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Drain();
  }
  
  void EntityList::BeaconProcess()
-@@ -696,7 +693,6 @@
+@@ -698,7 +693,6 @@
  	npc_list.emplace(std::pair<uint16, NPC *>(npc->GetID(), npc));
  	mob_list.emplace(std::pair<uint16, Mob *>(npc->GetID(), npc));
  
@@ -2088,7 +2168,7 @@
 -} // namespace FirePersonalOccurrenceSource
 --- a/zone/fire_original_construct_death.h
 +++ /dev/null
-@@ -1,44 +0,0 @@
+@@ -1,45 +0,0 @@
 -#pragma once
 -#include "fire_original_construct_producer.h"
 -#include <memory>
@@ -2098,6 +2178,7 @@
 -// Finite native-event queue. No timer, retry, history scan or public script API.
 -class OriginalConstructDeathQueue final {
 - friend class OriginalConstructNativeDeath;
+- friend class OriginalGotonurSayQueue;
 - friend class ::EntityList;
 - friend class ::Zone;
 - struct Lifetime {const Zone* owner;bool active=true;};
@@ -2533,17 +2614,19 @@
  #include <deque>
  #include <list>
 -#include <memory>
--namespace FirePersonalOccurrenceSource { class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; }
+-namespace FirePersonalOccurrenceSource { class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue; }
  
  struct NPCProximity {
  	float	min_x;
-@@ -799,9 +797,6 @@
+@@ -799,11 +797,6 @@
  	const Handin GetHandin() { return m_hand_in; }
  
  private:
 -	friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
 -	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
 -	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_original_construct;
+-	friend class FirePersonalOccurrenceSource::OriginalGotonurSayQueue;
+-	std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> m_fire_gotonur_say_lifetime;
  	void ReconcileHandinTaskDeliveries();
  
  	uint32              m_loottable_id;
@@ -2643,16 +2726,48 @@
  				const uint32 before_id = before ? before->GetID() : 0;
 --- a/zone/task_client_state.cpp
 +++ b/zone/task_client_state.cpp
-@@ -39,8 +39,6 @@
+@@ -39,9 +39,6 @@
  #include "zone/zonedb.h"
  #include "fire_personal_successor_dispatch.h"
  #include "fire_original_final_hail_frame.h"
 -#include "fire_original_construct_producer.h"
+-#include "fire_initial_admission.h"
 -#include "fire_native_item_custody.h"
  #include "fire_shared_successor_native.h"
  #include "common/fire_shared_activity_origin.h"
  
-@@ -144,9 +142,6 @@
+@@ -58,7 +55,6 @@
+ 
+ // One synchronous native AssignTask call only. No client-owned pointer is
+ // dereferenced after TASK_ACCEPTED, and no state survives this dispatch frame.
+-enum class FirePersonalAdmissionOrigin { OriginalRewardSuccessor,ActualInitialProve };
+ struct FirePersonalAcceptanceFrame {
+ 	Client* expected_client;
+ 	FirePersonalOccurrenceSource::Handoff* original_handoff;
+@@ -70,7 +66,6 @@
+ 	bool acceptance_entered = false;
+ 	bool completion_observed = false;
+ 	bool recorded_before_callbacks = false;
+-	FirePersonalAdmissionOrigin origin=FirePersonalAdmissionOrigin::OriginalRewardSuccessor;
+ };
+ 
+ // This is a stack-scope pointer, not a retry/character/task registry.
+@@ -138,23 +133,15 @@
+ 		return;
+ 	}
+ 
+-	const bool initial=frame->origin==FirePersonalAdmissionOrigin::ActualInitialProve;
+-	if((initial && (frame->expected_task_id!=920167 || frame->original_handoff)) ||
+-		(!initial && !frame->original_handoff)) return;
+ 	const auto binding = FirePersonalOccurrenceSource::BindAccepted(
+ 		database, client->CharacterID(), actual_type, active_slot,
+ 		frame->native_reserved_occurrence_id, actual_save_result
+ 	);
+ 	if (binding) {
+-		// Initial origin has no preceding reward/handoff. Only this actual
+-		// successful native reservation+save+initial stage Bind can qualify it.
+-		frame->recorded_before_callbacks = initial ||
++		frame->recorded_before_callbacks =
  			FirePersonalOccurrenceSource::RecordActualPersonalAcceptance(
  				*frame->original_handoff, *binding
  			);
@@ -2662,7 +2777,38 @@
  	}
  }
  
-@@ -1237,9 +1232,6 @@
+@@ -208,30 +195,6 @@
+ 	return frame.recorded_before_callbacks
+ 		? PersonalDispatchResult::AcceptedBeforeCallbacks
+ 		: PersonalDispatchResult::SubmittedNotAccepted;
+-}
+-
+-InitialAdmissionResult InitialAdmissionNative::Request(Client& client,NPC& giver,
+- uint32_t actual_zone,uint32_t actual_instance,uint32_t selected_original_giver_spawn) {
+- // Keyword "prove" is sourced; full original admission/catalog selection is
+- // still an owner hold. No caller can turn this into a successful Boolean proof.
+- constexpr bool original_initial_admission_selected=false;
+- if(!original_initial_admission_selected || fire_personal_acceptance_frame ||
+-  actual_zone!=490 || actual_instance!=0 || !selected_original_giver_spawn ||
+-  !client.CharacterID() || client.GetTarget()!=&giver || !giver.GetID() ||
+-  giver.GetNPCTypeID()!=490061 || giver.GetSpawnPointID()!=selected_original_giver_spawn)
+-  return InitialAdmissionResult::Hold;
+- const auto* task=TaskManager::Instance()->GetTaskData(920167);
+- if(!task || task->type!=TaskType::Quest || task->reward_method!=METHODSELECT ||
+-  !task->has_reward_selection) return InitialAdmissionResult::Hold;
+- FirePersonalAcceptanceFrame frame{&client,nullptr,client.CharacterID(),920167,giver.GetID()};
+- frame.origin=FirePersonalAdmissionOrigin::ActualInitialProve;
+- FirePersonalAcceptanceScope scope(frame);
+- // Native level, capacity, active-task, repeatability and replay/request timer
+- // admission remain authoritative. No custom task slot or occurrence is minted.
+- client.AssignTask(920167,frame.expected_giver_entity_id,true);
+- // Only stack receipt after TASK_ACCEPTED; no Client/NPC/slot access.
+- return frame.recorded_before_callbacks ? InitialAdmissionResult::AcceptedBeforeCallbacks :
+-  InitialAdmissionResult::SubmittedNotAccepted;
+ }
+ 
+ } // namespace FirePersonalOccurrenceSource
+@@ -1269,9 +1232,6 @@
  		return 0;
  	}
  
@@ -2672,7 +2818,7 @@
  	auto* const fire_final_update = FirePersonalOccurrenceSource::ClaimOriginalFinalUpdate(
  		client, task_data->type, *info, activity_id, count
  	);
-@@ -1440,9 +1432,6 @@
+@@ -1472,9 +1432,6 @@
  	}
  
  	const bool fire_original_completion_saved = TaskManager::Instance()->SaveClientState(client, this);
@@ -2727,19 +2873,21 @@
  			TaskManager::Instance()->SendCompletedTasksToClient(this, task_state);
 --- a/zone/zone.cpp
 +++ b/zone/zone.cpp
-@@ -23,7 +23,6 @@
+@@ -23,8 +23,6 @@
  #include "housing_pets.h"
  
  #include "zone.h"
 -#include "fire_original_construct_death.h"
+-#include "fire_gotonur_say_queue.h"
  
  #include "common/data_verification.h"
  #include "common/eqemu_logsys.h"
-@@ -1110,7 +1109,6 @@
+@@ -1111,8 +1109,6 @@
  }
  
  Zone::~Zone() {
 -	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Discard();
+-	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Discard();
  	ClearFellowshipCampfires();
   Housing::Pets::Clear();
   Housing::ServiceAuthority::Clear();
@@ -2790,3 +2938,82 @@
  					}
  				}
  
+--- a/zone/fire_initial_admission.h
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#pragma once
+-#include <cstdint>
+-class Client;
+-class NPC;
+-namespace FirePersonalOccurrenceSource {
+-enum class InitialAdmissionResult { Hold,SubmittedNotAccepted,AcceptedBeforeCallbacks };
+-// Finite native Gotonur initial-request entry; no scripting getter or fake
+-// preceding reward/claim. Actual acceptance evidence stays inside task cpp.
+-class InitialAdmissionNative final {
+-public:
+- static InitialAdmissionResult Request(Client&,NPC&,uint32_t actual_zone,
+-  uint32_t actual_instance,uint32_t selected_original_giver_spawn);
+-};
+-} // namespace FirePersonalOccurrenceSource
+--- a/zone/npc.cpp
++++ b/zone/npc.cpp
+@@ -17,7 +17,6 @@
+ 	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+ #include "npc.h"
+-#include "fire_gotonur_say_queue.h"
+ 
+ #include "common/bodytypes.h"
+ #include "common/classes.h"
+@@ -506,7 +505,6 @@
+ 
+ NPC::~NPC()
+ {
+-	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
+ 	AI_Stop();
+ 
+ 	if (proximity) {
+--- a/zone/fire_gotonur_say_queue.h
++++ /dev/null
+@@ -1,41 +0,0 @@
+-#pragma once
+-#include "fire_original_construct_death.h"
+-#include <memory>
+-#include <string>
+-namespace FirePersonalOccurrenceSource {
+-inline constexpr uint32_t OriginalGotonurStaticSpawn=149749; // qualified static receipt, not live identity
+-class OriginalGotonurSayQueue;
+-class OriginalGotonurSayLifetime final {
+- friend class OriginalGotonurSayQueue;
+- friend class ::Client;
+- friend class ::NPC;
+- bool active_=true;
+- OriginalGotonurSayLifetime()=default;
+- OriginalGotonurSayLifetime(const OriginalGotonurSayLifetime&)=delete;
+- OriginalGotonurSayLifetime& operator=(const OriginalGotonurSayLifetime&)=delete;
+-public:
+- ~OriginalGotonurSayLifetime()=default;
+-};
+-class OriginalGotonurSayQueue final {
+- friend class ::EntityList;
+- friend class ::Zone;
+- struct Pending {
+-  std::shared_ptr<OriginalGotonurSayLifetime> client_lifetime,npc_lifetime;
+-  std::shared_ptr<OriginalConstructDeathQueue::Lifetime> zone_lifetime;
+-  Client* original_client;
+-  NPC* original_npc;
+-  uint32_t character_id,client_entity,npc_entity;
+-  std::string message;
+-  Pending* next=nullptr;
+- };
+- static Pending* head_;
+- static Pending* tail_;
+- static bool MatchesActualContext(Client&,NPC&);
+- static void Drain();
+- static void Discard() noexcept;
+-public:
+- // Capture before ordinary mutable say callbacks. This queues only the genuine
+- // say intent; native admission/death-receipt checks remain at actual dispatch.
+- static void CaptureActual(Client&,const char* actual_message);
+-};
+-} // namespace FirePersonalOccurrenceSource
