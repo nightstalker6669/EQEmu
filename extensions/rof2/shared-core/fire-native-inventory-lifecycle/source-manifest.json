@@ -1,6 +1,6 @@
 {
   "status": "REVIEWED_DISABLED_COMBINED_NATIVE_SOURCE_NOT_INSTALLED",
-  "source_revision": "Exact retained-parent source with one-header specific native friend access correction",
+  "source_revision": "Retained-parent source plus owner guarded parcel caller correction",
   "review_status": "Focused lifetime PASS; five-path retained-parent rebase PASS; exact owner correction composed per coordinator",
   "review_receipt_sha256": "efeee8cc108a68a3f40f9cc1407ed7068f92ff87e5715d5acc307030cd972fa1",
   "native_files": {
@@ -151,9 +151,13 @@
     "zone/zone.cpp": {
       "preimage_sha256": "3c17cac8d75ab720a8a47e1fa60b2a7148473f38eb488019a9a320514decefb4",
       "postimage_sha256": "a8661011fede0d7f702e3fdabc0e4cf813372829c2c0065d15d7fa6034c5d821"
+    },
+    "zone/parcels.cpp": {
+      "preimage_sha256": "d0f540a70af8b058a6f8c3b4cf3d221cf065fb1ad0ab0d168cebaf6512d61353",
+      "postimage_sha256": "fea3deb31e656d18fcd1f9fe74ae7730dc3a450c4162d09de1f09faeb81efcad"
     }
   },
-  "native_patch_sha256": "49d1aafb7bbf3314d9c0d70c65863793cd59ac8bdf3f5af8064cdf4bde18406b",
+  "native_patch_sha256": "181b264df9f0f2792882b6172382595d2dbbdc01b99155943870feca69767ea4",
   "schema": {
     "path": "001_fire_construct_death_receipts.sql.disabled",
     "sha256": "ec487b9955095e5bbdccc02f003b7849b4258e6bed505d35ccffcb030458e9b9",
@@ -223,11 +227,14 @@
     "Use actual private selected fence Active() in ordinary-item Start/FinishEntry. Inactive completed/rejected or returned-unlaunched captures cannot intercept later ordinary same-slot item use; active original mismatch still rejects, no ordinary Fire ticket/writer authority."
   ],
   "other35_postpins_unchanged": true,
-  "this_combined_build_status": "World linked R6; corrected Zone compile pending. No complete matched build PASS inferred.",
+  "this_combined_build_status": "World linked; corrected incremental Zone compile pending. No full matched build PASS inferred.",
   "current_compiler_correction": {
     "path": "zone/task_client_state.h",
     "scope": "Forward declarations and specific private friendship for PublishedNativeUseSink, OriginalConstructDeathQueue and OriginalConstructNativeHail, the three actual private getter callsites. No public getter/API, method movement, binding validation or lifecycle change.",
     "failed_build_receipt_sha256": "16d1b7ec4b057292b0be3b59a317175b75f1740718982b7b4c5f9ec1362c7c87"
   },
-  "other36_postpins_unchanged": true
+  "other36_postpins_unchanged": true,
+  "owner_parcel_correction_manifest_sha256": "c4710b01104d1f92ff33e10fb523a6a66baa58ad92967b630a63931203f91706",
+  "parcel_caller_review_sha256": "f4d0bf8b103ceab278022e1a56fcc9a41fe5a6a30689466666dfab14ed15a1c3",
+  "previous37_postpins_unchanged": true
 }

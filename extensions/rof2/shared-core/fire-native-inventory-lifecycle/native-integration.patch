@@ -2743,3 +2743,50 @@
  	ClearFellowshipCampfires();
   Housing::Pets::Clear();
   Housing::ServiceAuthority::Clear();
+--- a/zone/parcels.cpp
++++ b/zone/parcels.cpp
+@@ -742,12 +742,18 @@
+ 			default: {
+ 				std::vector<CharacterParcelsContainersRepository::CharacterParcelsContainers> results{};
+ 				if (inst->IsClassBag() && inst->GetItem()->BagSlots > 0) {
+-					auto contents = inst->GetContents();
+ 					results       = CharacterParcelsContainersRepository::GetWhere(
+ 						database, fmt::format("`parcels_id` = {}", p->second.id)
+ 					);
+ 					for (auto i: results) {
+-						auto item = database.CreateItem(
++						// Reconstruct only a valid empty child slot; do not replace another parcel item.
++						if (i.slot_id >= inst->GetItem()->BagSlots ||
++							inst->GetItem(static_cast<uint8>(i.slot_id))) {
++							SendParcelRetrieveAck();
++							return;
++						}
++
++						std::unique_ptr<EQ::ItemInstance> item(database.CreateItem(
+ 							i.item_id,
+ 							i.quantity,
+ 							i.aug_slot_1,
+@@ -756,7 +762,7 @@
+ 							i.aug_slot_4,
+ 							i.aug_slot_5,
+ 							i.aug_slot_6
+-						);
++						));
+ 
+ 						if (!item) {
+ 							SendParcelRetrieveAck();
+@@ -776,7 +782,13 @@
+ 							return;
+ 						}
+ 
+-						contents->emplace(i.slot_id, item);
++						// PutItem checks custody of both recipient and source, then owns a native clone.
++						// The temporary remains owned here on every failure/continue path.
++						inst->PutItem(static_cast<uint8>(i.slot_id), *item);
++						if (!inst->GetItem(static_cast<uint8>(i.slot_id))) {
++							SendParcelRetrieveAck();
++							return;
++						}
+ 					}
+ 				}
+ 
