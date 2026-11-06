@@ -68,10 +68,42 @@
  #include "tanaan_forge28_actor.h"
  #include "world_loom13_actor.h"
  #include "gnomish_tailoring35_actor.h"
-@@ -47,6 +49,31 @@
+@@ -41,12 +43,63 @@
+ #include <algorithm>
+ #include <list>
+ #include <array>
++#include <vector>
++#include <stdexcept>
++#include "inventory_session_owner.h"
+ 
+ extern QueryServ* QServ;
+ extern WorldServer worldserver;
  
  
  namespace {
++
++
++struct Final300InputTree {
++ struct Node {const EQ::ItemInstance* original;uint32_t id;int32_t serial;int16_t charges;std::vector<std::pair<uint8_t,Node>> children;};
++ Node root;
++ static Node Capture(const EQ::ItemInstance& item) {
++  Node n{&item,item.GetID(),item.GetSerialNumber(),item.GetCharges(),{}};
++  for(const auto& child:*item.GetContents()) {
++   if(!child.second)throw std::runtime_error("Missing finite recipe ingredient");
++   n.children.emplace_back(child.first,Capture(*child.second));
++  }
++  return n;
++ }
++ static bool Same(const Node& n,const EQ::ItemInstance* item) {
++  if(!item || item!=n.original || item->GetID()!=n.id || item->GetSerialNumber()!=n.serial ||
++   item->GetCharges()!=n.charges || item->GetContents()->size()!=n.children.size())return false;
++  for(const auto& child:n.children) {
++   auto at=item->GetContents()->find(child.first);
++   if(at==item->GetContents()->end() || !Same(child.second,at->second))return false;
++  }
++  return true;
++ }
++};
 +
 +bool Final300OutputValid(const DBTradeskillRecipe_Struct& spec) {
 + if (!FinalRecipe300::Selected(spec.recipe_id)) return true;
@@ -100,13 +132,35 @@
  struct ChargedPacking32Plan {
   struct Take {int16_t slot=INVALID_INDEX;const EQ::ItemInstance* original=nullptr;int32_t serial=0;};
   int16_t kit_slot=INVALID_INDEX;const EQ::ItemInstance* kit=nullptr;int32_t kit_serial=0;
-@@ -570,6 +597,19 @@
+@@ -570,6 +623,41 @@
  	}
  
  
 +
++ // Capture the actual matched physical input tree before mutable validation hooks.
++ // No clone/replacement/consumption; compare identities and all nested charges/slots.
++ std::unique_ptr<Final300InputTree> final300_inputs;
++ const auto final300_owner=user->InventorySessionReleaseTicket();
++ const auto final300_character=user->CharacterID();
++ const auto final300_account=user->AccountID();
++ const auto* final300_world=worldcontainer?worldo:nullptr;
++ const auto final300_world_id=final300_world?final300_world->GetDBID():0;
++ if(FinalRecipe300::Selected(spec.recipe_id)) {
++  if(!container || !final300_owner || !final300_owner->HeldFor(*user)) {
++   auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;
++  }
++  try { final300_inputs=std::make_unique<Final300InputTree>(Final300InputTree{Final300InputTree::Capture(*container)}); }
++  catch(...) {auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
++ }
++
 + const auto final300_valid=[&](){
 +  if(!FinalRecipe300::Selected(spec.recipe_id))return true;
++  if(!final300_inputs || !final300_owner || !final300_owner->HeldFor(*user) ||
++   user->CharacterID()!=final300_character || user->AccountID()!=final300_account ||
++   (worldcontainer?worldo:nullptr)!=final300_world ||
++   (final300_world && final300_world->GetDBID()!=final300_world_id) ||
++   !Final300InputTree::Same(final300_inputs->root,container))return false;
++
 +  if(!Final300OutputValid(spec)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv())||
 +   !FinalRecipe300::RaceAllowed(spec.recipe_id,user->GetPP().race))return false;
 +  if(FinalRecipe300::Font(spec.recipe_id))return !worldcontainer && Final300Kit(*user,in_combine->container_slot,container) && Final300Font(*user,spec.recipe_id);
@@ -120,7 +174,7 @@
   const auto* charged_requirement=ChargedRecipe32::Find(spec.recipe_id);
   ChargedPacking32Plan charged_packing;
   const auto charged_station_valid=[&](){
-@@ -673,7 +713,7 @@
+@@ -673,7 +761,7 @@
  	}
  
  
@@ -129,7 +183,7 @@
  	// Send acknowledgement packets to client
  	auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
  	user->QueuePacket(outapp);
-@@ -889,6 +929,23 @@
+@@ -889,6 +977,23 @@
  	}
  
  
@@ -153,7 +207,7 @@
   const auto* charged_requirement=ChargedRecipe32::Find(spec.recipe_id);
   ChargedPacking32Plan charged_packing;
   const auto charged_station_valid=[&](){
-@@ -1043,7 +1100,7 @@
+@@ -1043,7 +1148,7 @@
  	}
  
  
@@ -162,7 +216,7 @@
  	//now we know they have everything...
  
   std::unique_ptr<TrophyCertificate55::Proof> trophy_proof;
-@@ -1484,7 +1541,7 @@
+@@ -1484,7 +1589,7 @@
  			item = database.GetItem(itr->first);
  			if (item) {
  				CheckItemDiscoverability(itr->first);
@@ -171,7 +225,7 @@
  				if (GetGroup()) {
  					entity_list.MessageGroup(this, true, Chat::Skills, "%s has successfully fashioned %s!", GetName(), item->Name);
  				}
-@@ -1999,6 +2056,7 @@
+@@ -1999,6 +2104,7 @@
  
  void ZoneDatabase::UpdateRecipeMadecount(uint32 recipe_id, uint32 char_id, uint32 madeCount)
  {
@@ -179,7 +233,7 @@
  	std::string query = StringFormat("INSERT INTO char_recipe_list "
                                      "SET recipe_id = %u, char_id = %u, madecount = %u "
                                      "ON DUPLICATE KEY UPDATE madecount = %u;",
-@@ -2008,6 +2066,7 @@
+@@ -2008,6 +2114,7 @@
  
  void Client::LearnRecipe(uint32 recipe_id)
  {

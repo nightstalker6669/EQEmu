@@ -11,10 +11,10 @@
     },
     "zone/tradeskills.cpp": {
       "preimage_sha256": "e3169a34148b2a8f0cd489172815202b68027804de682587d96e9e05586930b7",
-      "postimage_sha256": "b5b5c24259f4110c13067a27d06d341275e8c07a57ed1c4470af624de1301a7c"
+      "postimage_sha256": "92c9b1bb20a1824aef7bae58a6a82b8b88de5b2494fa50d7bbb67bbd19ff7772"
     }
   },
-  "patch_sha256": "47c47b974e47b8de0d190243c0b132cfa8f5c63c0f4c5ca303e50a8f666c2ac6",
+  "patch_sha256": "4db4a326c20671112158dbaaa76ac79e20841e0a49af50f0a987b6e035191570",
   "parent": "Exact actual RRC298R3 composed inventory; tradeskills.cpp unchanged from retained R2 source. Compose with disjoint RRC299 header and current peers.",
   "parent_installed_receipt_sha256": "57a46d396ac29775faf9766ed5c88bcc1e095db73d85ba9890c4cf396b4d6478",
   "station_scope": "3original-profile creator restrictions; actual owned open native world station. Troll exactGrobb248; Clasp exactBrell228283 requires separate guarded255to20. Cask exact2PoKTanaan barrels103180/103189. No packet-authorized substitution.",
@@ -26,5 +26,8 @@
   "builds": 0,
   "SQL_execution": 0,
   "runtime_actions": 0,
-  "native_acceptance": false
+  "native_acceptance": false,
+  "revision": "R2_FINITE14_ORIGINAL_MANUAL_INPUT_TREE_FENCE",
+  "correction_patch_sha256": "e0c28b24507efe814357ef053e6b40f23dcb26a7234bea81f5a3899a00abe8a9",
+  "manual_callback_fence": "Capture complete original container/input tree pointers/IDs/native serials/charges/child keys recursively before mutable validation. Recheck same original inventory owner ticket/character/account/actual world pointer+DBID and tree after hook immediately before native debit. Missing/extra/replaced/moved/charge-changed identities reject without consumption. Finite14 only, auto path unchanged."
 }
