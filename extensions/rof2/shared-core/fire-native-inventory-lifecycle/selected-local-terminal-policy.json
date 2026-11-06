@@ -1,0 +1,50 @@
+{
+  "status": "SELECTED_LOCAL_NATIVE_TERMINAL_POLICY_SOURCE_NOT_INSTALLED",
+  "base": "Frozen R15 actual composed source; no modification or serving authority",
+  "content_manifest_sha256": "ab9fa6b9fe351381c0587782472e206acc4e3a1c1b2a63024244d7f352d02220",
+  "guardian": {
+    "npc": 490911,
+    "spawn": 304062014,
+    "count": 1,
+    "positive_boundary": "Actual registered original NPC lifetime and spawn, captured real run before original Death; same registered corpse and original successful Death return. Queue exact original run goal16 after Death stack unwinds. Ordinary generic kill submissions for this physical goal are rejected; real World echoes unchanged.",
+    "lock": "Existing native activity17 activation after acknowledged16, configured lock_activity_id17. No Lua manual lock or fabricated pickup.",
+    "mold": "Extend existing finite native item-origin producer to47758 only for this same actual corpse and original successful SaveInventory/SaveCursor plus removal; real current accepted holder/run/stage. No extra item factory."
+  },
+  "original_return": {
+    "npc": 490912,
+    "spawn": 304062015,
+    "world_npc_490061_unchanged": true,
+    "boundary": "Actual native NPC trade before generic trade slots PopItem/SaveInventory or callbacks. Exact one physical47758 in native NPC trade slot, current-run published origin, accepted occurrence, stage18, correct native recipient/lifetime/range. Cash/extra offered items reject this special return unchanged, permitting ordinary trade cancellation. Same strict inventory/origin/finite terminal transaction consumes one original mold and reserves one prepared chest. No generic auto-delivery or second goal18 submission.",
+    "post_commit": "Same known strict COMMIT and allocation-free native memory removal publishes the exact preallocated chest once. Unknown or partial state holds without retry/refund/regrant."
+  },
+  "terminal_chest": {
+    "npc": 490914,
+    "position": [
+      -35,
+      650,
+      19.875
+    ],
+    "heading": 0,
+    "source": "Existing reserved conditional anchor, full selected native profile and existing11gear/oneLOCALequal draw. No persistent spawn row or spawn condition.",
+    "selected_completion_boundary": "LOCAL: Keep displayed final return goal18 pending until the same owned chest is actually opened through native HandleLDoNOpen and successful original NPC::Death creates/registers its actual corpse. The hand-in is committed and retained before this opening; after the positive opening and after its native stack, submit original-run goal18 exactly once. This delayed acknowledgment supplies no20th displayed objective and never rewards at Guardian death, mold pickup or mere chest creation.",
+    "opener": "Actual accepted current-run member, same mission instance, original packet target/range, actual owned chest/lifetime. Restrict chest opening and its same corpse loot to the accepted member snapshot captured for this terminal run and existing current membership; do not substitute current group/raid or permit unrelated kill/loot bypass.",
+    "lifetime": "LOCAL: Unopened chest exists only for the remaining original instance lease; no new timer extension. Opened actual corpse retains native NPC corpse decay selected from its actual level/current RuleI and is capped by remaining instance lease. No invented historical timer. Deletion/expiry before positive opening is terminal hold; no replacement spawn."
+  },
+  "reward": "SOLE existing METHODSELECT common-only per-character exact shared-run occurrence/per-entry ClaimRewardSelection ledger for47759,80currency21 and class-specific scroll rows. Native World completion propagates to accepted members including elsewhere. No simultaneous hand-in grant or chest Keystone/token/class-scroll loot. Preserve explicit ledger-safe retries and ambiguous in-flight quarantine; no history backfill or new online/offline loops.",
+  "qualification": "One Guardian/death-lock and original mold return are retained period facts; selected instance return NPC, geometry, delayed final-goal acknowledgment, chest access/lifetime and draw policy are LOCAL reconstruction. Native build is not gameplay acceptance.",
+  "tests": 0,
+  "builds": 0,
+  "SQL_writes": 0,
+  "runtime_actions": 0,
+  "material_exceptions": [
+    "Selected LOCAL reconstruction includes instance return recipient, geometry/models/pose, baseline NPC profiles, helper timing, chest boundary/access/decay cap and one equal11gear draw. These are not authenticated retail bytes or native gameplay acceptance.",
+    "Canonical mission has19 activities0..18 and one Guardian490911/spawn304062014. Actual16 acknowledges original death, activating17/native configured lock17. Mold17 uses actual same original corpse/save/removal. LOCAL final18 acknowledgment is delayed until committed mold return plus actual owned chest native opening/successful death/same corpse after stack, with no20th displayed objective.",
+    "Current native Mob constructor sets permarooted from runspeed0; selected full Guardian template passes that current constructor condition. Exact period rampage/casts/combat behavior and effective scaling/bonuses remain separately qualified, not supplied by a template byte gate.",
+    "Native custom_data UUID and finite current-run origin are durable provenance; runtime serials only snapshot evidence. Creator is audit, current actual holder and accepted run are ownership checks. No tokenless/history/old-run backfill.",
+    "Known strict transaction COMMIT and actual allocation-free memory removal alone issue original return receipt. Input origins remain published and locked through all selected saves/revalidations, consumed before same COMMIT. Unknown commits/publication/lifecycle gaps hold without replay/refund/regrant or replacement chest.",
+    "Accepted member snapshot plus same current membership governs owned chest access. Sole existing METHODSELECT common-only exact shared-run occurrence/per-entry ledger delivers personal rewards including members elsewhere; no direct hand-in grant. Offline catchup depends on actual persisted task/reconnect state; no history grant loop.",
+    "Native correlated progress send is not positive durable World-save acknowledgment. Source/build review never proves client pathing/collision/animation/quest/reward acceptance.",
+    "All task/reward enable fields remain zero; selected full profile overrides replace stale raw0 helper/construct source rows. All receipt/origin/action DDL and physical scene rows remain unapplied source; logical reservations are not database locks. No persistent chest spawn/condition.",
+    "No serving SQL/migration/install/deployment/cache refresh/server starts/client actions or extra test suites are authorized by this source package. Preserve unrelated owner work."
+  ]
+}

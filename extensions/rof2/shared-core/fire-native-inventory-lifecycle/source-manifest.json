@@ -1,6 +1,6 @@
 {
-  "status": "ACTUAL_COMPILER_SYMBOL_FAILURE_CORRECTED_READY_INCREMENTAL_RESUME",
-  "source_revision": "R15-r3",
+  "status": "ACTUAL_NATIVE_TERMINAL_COMPOSITION_READY_FOCUSED_REVIEW",
+  "source_revision": "R16",
   "native_files": {
     "common/CMakeLists.txt": {
       "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
@@ -48,15 +48,15 @@
     },
     "zone/attack.cpp": {
       "preimage_sha256": "41e7429480265cb6b81092214cd26d069c2132da25b5071a170e453cfbaaa5de",
-      "postimage_sha256": "b13c1d11a93ae1421d78b8c20de861b9707b5eb8a8ae70176118c0cb685fc197"
+      "postimage_sha256": "72d3760cc7bf35c7b18db093a6b60e7b0c1edb27449cc68b792e82b5a8268d2b"
     },
     "zone/client.cpp": {
       "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
-      "postimage_sha256": "ab0a17318ea53dc7a48e990df4000d3406568b1c0abc32d3d5a334cb68775213"
+      "postimage_sha256": "943adaa38582da19db1655e581bf03bdf5f8053d5e50c43aec25749f08283c13"
     },
     "zone/client.h": {
       "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
-      "postimage_sha256": "55613d646789e5d1b06b8335d7c04822c956bf9b7cd103422c701e33942a5ad4"
+      "postimage_sha256": "780379f2dc32d2407abaaecb4ae267fcbfd9022efdfc67e21aebf29d17e20aaf"
     },
     "zone/client_evolving_items.cpp": {
       "preimage_sha256": "9abfd986b2b0a851e685741c89c97085b6f8b8754aae58371cca030a396baeae",
@@ -64,7 +64,7 @@
     },
     "zone/client_packet.cpp": {
       "preimage_sha256": "3efb2eae4077223212beb03e5c48b74fbcb09bfd236f6b1e8c7caa89e4db4a5a",
-      "postimage_sha256": "a9a2b6ca83aa886e32d7b72528d99f764eb78bee8cc2b0ef2afce006ae3ca285"
+      "postimage_sha256": "05da47fa52f75861f2d4b25a1c326cc6659eb9406f4ed6b7f111a7565cf485cb"
     },
     "zone/client_spirit_shroud.cpp": {
       "preimage_sha256": "153900d357a1fe13e7edc9baaf6406ed5b6a2a57efc79acce9bd358d67997785",
@@ -76,11 +76,11 @@
     },
     "zone/corpse.cpp": {
       "preimage_sha256": "70008903f349181c8389e694e075948ca4f42f38c33625dd3a1d0ebb7e7d8b72",
-      "postimage_sha256": "f47e79366474b8de0e93702081b10c2c2efe2a0c64e01ba966b73ee5c331327f"
+      "postimage_sha256": "cdc64346a762beb9ebf98517183bd62e2e8dfb8cb92e71a61734a2d051f5a3e8"
     },
     "zone/corpse.h": {
       "preimage_sha256": "913162429058a04bb9d2f2c51c0de13f7b842667dcb473baf6b6969600819257",
-      "postimage_sha256": "49710c8b90ef2d6efcd60565bbc1c39804d0a40a6c681a1848d651cc6e852202"
+      "postimage_sha256": "52bc41ab4e1abf4ac4d5e3e4e9fcbfc7bd947500fa3f1ad86afcbbd9be144c09"
     },
     "zone/doors.cpp": {
       "preimage_sha256": "c6d56df874b341bc83b9e941ec7649c16cd6155b519cfae2b17f1610d701a02f",
@@ -92,7 +92,7 @@
     },
     "zone/entity.cpp": {
       "preimage_sha256": "8c82cf775575fbc94448940911f168440da7d9b45453085df7aea257d83c4ad2",
-      "postimage_sha256": "552f969436c7666db0b61992080c8b53767b52ccad7d58221732ddd9ae6d53b2"
+      "postimage_sha256": "53290568d661aeaec68f9c0fbfe83b18bae1002b86398eafcd861534f1c8492e"
     },
     "zone/fire_construct_death_receipt.h": {
       "preimage_sha256": null,
@@ -120,11 +120,11 @@
     },
     "zone/fire_native_item_custody.cpp": {
       "preimage_sha256": null,
-      "postimage_sha256": "50bed0d8ded749ffa4c375d6c036bb63425f1e0ba4c5c88d69ff85ac6e01c576"
+      "postimage_sha256": "2e66056cf64e2d2147f952c76d90129513137f3aa1668bb9a7e150bdc3bb3955"
     },
     "zone/fire_native_item_custody.h": {
       "preimage_sha256": null,
-      "postimage_sha256": "af6647e52d987c6aded350e666f4e0ad390b9478aae7807ecde8b2bc355214df"
+      "postimage_sha256": "cfe1a8d3de65a035fb48b707900debaf33296edf45a7836a976fb55945fb16c0"
     },
     "zone/fire_native_published_use.h": {
       "preimage_sha256": null,
@@ -172,11 +172,11 @@
     },
     "zone/fire_run_action_custody_impl.inc": {
       "preimage_sha256": null,
-      "postimage_sha256": "8e7ea7cd57cfe252bcab9092abdd35a6ddaaa403b628e48329df467a9fce41d6"
+      "postimage_sha256": "67d59918ea2ee984cfbdbb29849fb1d4dddbeb1ac07467cda8bc2cf3a4d45be1"
     },
     "zone/fire_run_action_geometry.h": {
       "preimage_sha256": null,
-      "postimage_sha256": "5cd83fcd2115c48fea24dfa98b50a31bf7e7e6d62be099c07973ab2c7661de07"
+      "postimage_sha256": "3e5b56eaf2a8f20bb5fc19060afbfc836734e4bcc7ac141aa6b589069c9dd757"
     },
     "zone/fire_run_action_scene.h": {
       "preimage_sha256": null,
@@ -192,7 +192,19 @@
     },
     "zone/fire_run_item_origin_impl.inc": {
       "preimage_sha256": null,
-      "postimage_sha256": "2b96b86a1515574caae41e2555cd9218d38339531b7f35b785f129d90004c0e4"
+      "postimage_sha256": "b496a72b2d7a944dab0bfc73177ba29ac4413f3563ce12943a0ba0fe5681d964"
+    },
+    "zone/fire_run_terminal_custody.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b9588f4142ecdfca8d9557419d561c513db9b3d1b98bbf202d4f0d28e4509ff6"
+    },
+    "zone/fire_run_terminal_custody_impl.inc": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b9cf90ee0a147c9a75a552f2aaff42549aae0a05055ca24696b7dc870834adba"
+    },
+    "zone/fire_run_terminal_scene.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "217470eda544a2f35af754ff7cdfebdbc36110205b156055afb656efd86fbc57"
     },
     "zone/fire_shared_transform_published.h": {
       "preimage_sha256": null,
@@ -201,6 +213,10 @@
     "zone/fire_shared_transform_use.h": {
       "preimage_sha256": null,
       "postimage_sha256": "b7128e66ce19db68b9c055dd4626167c3e7a99bbc1761cb7b5febe15048ff71a"
+    },
+    "zone/fire_terminal_local_profiles.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "499fb5b6e32d0f38d05886b0a7c533fea55894b462de6e2b6a263fb2fa6d8930"
     },
     "zone/inventory.cpp": {
       "preimage_sha256": "5538219e5625b4baa51e7bd4182465be502a77796dd2ff41b70bcfc2a0f8b3ff",
@@ -216,11 +232,11 @@
     },
     "zone/npc.cpp": {
       "preimage_sha256": "560e1c8b97d68dae802d702639506eba87e0c17f54cc64f45037d0b25164d363",
-      "postimage_sha256": "8d3a600c47608544dca057a8912af4eb0871bbfca3ad8c6b95d05f41b5c50c2d"
+      "postimage_sha256": "d9f57c4762112097720a32b31a002609fcaa82398768543f4d3c4a019c625160"
     },
     "zone/npc.h": {
       "preimage_sha256": "5da70d799dbe23fa2bc4b204555ffcec45026b6c23ad09b8c9efd532479c14ce",
-      "postimage_sha256": "049985fe86a4a94e7976b4882dd408bc6a0f3bc839357ede6338a63004fabf02"
+      "postimage_sha256": "85d03caee9481c491befd65962130fc24ba8c26edacc43b4e953abb454d5b42e"
     },
     "zone/parcels.cpp": {
       "preimage_sha256": "d0f540a70af8b058a6f8c3b4cf3d221cf065fb1ad0ab0d168cebaf6512d61353",
@@ -236,7 +252,7 @@
     },
     "zone/task_client_state.cpp": {
       "preimage_sha256": "8e1328f7152fc7f226e5099be6099fcb3ad112b32172ccf80d2d5118d3d2adfe",
-      "postimage_sha256": "1f3419eb72d7a1d850650bec6acf703516dba8e41ee565df1e67be2b81c1143e"
+      "postimage_sha256": "970c04e2d666237a9de02cc5b19ead685ca63f5c6d48a54e6bff2b3a7ea698f8"
     },
     "zone/task_client_state.h": {
       "preimage_sha256": "4556499e483da7785759f87c53c6f1704c217c288f2f892aa877ebd7abb1d428",
@@ -244,15 +260,19 @@
     },
     "zone/task_manager.cpp": {
       "preimage_sha256": "f7cec7fd64984848f5ec843dec4f71b3952b6e15c0d88ed78a22ef1f70ff5de4",
-      "postimage_sha256": "b8532f9dab31d75fb631cc553a54b5d96301cc9915ff10bcbf5ed913d0fa8214"
+      "postimage_sha256": "ad13383741d9ab9f4d01ec310aff9e65a901c04492135ffee22c07ea040d672d"
     },
     "zone/tasks.cpp": {
       "preimage_sha256": "18bf1975f9ebbc3f0ee7b999ab1e388b6adebc05485466c9d52d986624a73e39",
       "postimage_sha256": "d49c60a7d34cf096692c7bf23b6b2107112f39ee3c05182011acdecf7e5a24e9"
     },
+    "zone/trading.cpp": {
+      "preimage_sha256": "cf262a8b67a9c7b58e6a020d0481436c26dc27d5f638f434c6d921f292c990c9",
+      "postimage_sha256": "9355d7ee521186d26e1984fdd8a842bcb2ca4a6685ec5b9860d942b5054a57a5"
+    },
     "zone/zone.cpp": {
       "preimage_sha256": "3c17cac8d75ab720a8a47e1fa60b2a7148473f38eb488019a9a320514decefb4",
-      "postimage_sha256": "a94e6af339ea158153283a88b2158bff6e9d427e75e613ee20960f60611d3de2"
+      "postimage_sha256": "6de1cb1489d6f531dc371c7469bb6371872a100680678ec47740b3af4dd2a22c"
     }
   },
   "incremental_changed_paths": [
@@ -262,86 +282,47 @@
     "zone/client_packet.cpp",
     "zone/corpse.cpp",
     "zone/corpse.h",
-    "zone/doors.cpp",
-    "zone/doors.h",
     "zone/entity.cpp",
-    "zone/fire_gotonur_say_queue.h",
-    "zone/fire_material_loot_source.h",
     "zone/fire_native_item_custody.cpp",
     "zone/fire_native_item_custody.h",
-    "zone/fire_original_construct_death.h",
-    "zone/fire_run_action_custody.h",
     "zone/fire_run_action_custody_impl.inc",
     "zone/fire_run_action_geometry.h",
-    "zone/fire_run_action_scene.h",
-    "zone/fire_run_helper_profile.h",
-    "zone/fire_run_item_origin.h",
     "zone/fire_run_item_origin_impl.inc",
-    "zone/inventory.cpp",
-    "zone/mob_movement_manager.cpp",
+    "zone/fire_run_terminal_custody.h",
+    "zone/fire_run_terminal_custody_impl.inc",
+    "zone/fire_run_terminal_scene.h",
+    "zone/fire_terminal_local_profiles.h",
     "zone/npc.cpp",
     "zone/npc.h",
     "zone/task_client_state.cpp",
+    "zone/task_manager.cpp",
+    "zone/trading.cpp",
     "zone/zone.cpp"
   ],
-  "unchanged_from_compiled_R14": 36,
-  "patch_sha256": "5c71e8cb974b414dcb114b5e1223ed531d74ae72095fee414903983b3b82ec23",
-  "final_spells_interface_pins": {
-    "fire_run_action_scene.h": "15b0a71c930f64e0d6e18958b1547cbfc77459259d4423cc596feb82c80a9108",
-    "fire_material_loot_source.h": "7af7f75173ece447b998affa0667ea34523883066a331598206afec45f762f04",
-    "fire_run_action_geometry.h": "5cd83fcd2115c48fea24dfa98b50a31bf7e7e6d62be099c07973ab2c7661de07",
-    "fire_run_helper_profile.h": "899fea73d716c03a877235ffdb0755f239da872527227286cea1bc478677a232"
-  },
-  "interface_alignment": "Core WIP scene/material manifest pins are superseded by these final full-package pins. Scene Facts and prepared-plan types preserved; additive private hooks/friends and actual bodies completed. Loot interface unchanged. Narrow native const accessor fixed without changing common ItemInstance API. Review final composition, not obsolete Font-only draft.",
+  "unchanged_from_compiled_R15r3": 46,
+  "patch_sha256": "e17aeef2b913ea9ff0319449c84307c33f0a220b63c534f8dfb72e17d5bfec71",
+  "private_interface_sha256": "217470eda544a2f35af754ff7cdfebdbc36110205b156055afb656efd86fbc57",
+  "source_revision_alignment": "Core authored against frozen217470ed private interface, unchanged. Final Spells r2 body adds terminalACK-before-loot, exact retained whole LootItem, full actual Guardian NPCTypedata/receiver-depop checks and unauthorized current-looter unlock. Final body also enforces saved original absolute expiry plus native timer cap in opening/processing/corpse access, so a later instance extension does not extend this chest. No Core API change. Final source overlay fa54cfbf supersedes Core pinned cd452517 only for this final original-deadline refinement; its unchanged217470ed interface and all Core native postimages remain exact. Original79991e74 Source-only postimages are also superseded.",
   "material_exceptions": [
-    "SOURCE ONLY. Review/publication/matched World+Zone compile pending; no serving migration/install/deployment/activation/native gameplay acceptance.",
-    "Admission85/repeatable/21600replay, horizontal radius100 at167/168, zoneonly169/casterpose/terrain and168169nonraidcohort timing are explicitly selected LOCAL reconstruction parameters, not authenticated retail edge rules.",
-    "Three full construct profiles are selected LOCAL NPC-owner rows/defaults. Allthree runspeed0\u21921.25 is an explicit LOCAL correction; selected-local-construct-profiles.json supersedes old component rows for any future owner migration. No historical combat-stat claim.",
-    "Finite disabled death-receipt DDL now distinguishes recipient accepted key from creator accepted/cast/item origin. Never apply old DDL or backfill from history. Existing serving schema requires exact Database-owner review before changes.",
-    "Ordinary postcommit disconnect, unknown COMMIT, same-save uncertainty or acknowledgedclaim crashgap never synthesizes replay/refund/death/Ready origin.",
-    "One creator debit/one actor.167casteronly;168169cohort intersects actual native loaded task-kill candidates, captured own accepted epoch, same group and liveowner at delivery. No invented dead/XPdistance cutoff, latejoin/history credit or per-recipient charge/fight.",
-    "169 final uses original native Worldshared170 admission; current normal170 membership skips another request and is not a new Ready/origin receipt. No per-member create/DZ loop.",
-    "Same strict writer knownCOMMIT+memorypublish and private Take receipt enter one actual native goal6/13 submission with original run before optimistic update/send. Native invocation/optimistic state is not durable World persistence proof. No automatic replay.",
-    "Doors, destructive-helper movement/key use, mold allocation and terminal chest remain held. These two transforms supply no actor/door/chest factory.",
-    "Shared transforms use exact canonical charges:47762nonstack0,47756nonstack1. One physical output is not a fabricated one-charge default. Clicked source rows47760/47752 native7651/type3/Max1. Nonclicked ingredients carried-general only; clicked cursor protected by wholecursor fence.",
-    "R15 supersedes the R14 door/helper unresolved branch only to the selected LOCAL source scope: six mission gates, helper native ordered walk/passage/dust/actual destruction, world permanent physical key. Single Guardian original-death, mold allocation and terminal single-delivery remain unresolved.",
-    "All new scene geometry, gate rules, helper profile/timing and admission defaults are selected LOCAL reconstruction, not authenticated retail behavior or native gameplay acceptance. Reserved IDs are logical reservations only.",
-    "13 mission materials require native custom_data UUID seal and finite same-run published origin, not process-local serial as durable identity. Existing tokenless/history/old-run items do not receive backfill. Real death/same corpse/actual successful inventory save and corpse removal supply raw origins; known strict transform COMMIT and memory publication supply outputs.",
-    "Unknown database/save/publication/actor lifecycle gaps remain held without retry/refund/regrant. Native World progress invocation is not durable World-save acknowledgment.",
-    "World Font existing35650/native7 selected future key47759/nokeyring1/lockpick32767/30-second relock; actual serving row remains unchanged. No key grant, mission credit or global open flag.",
-    "All receipt/origin/latch DDL, scene placements and selected profiles remain unapplied. No persistent chest spawn/condition exists in this packet. No serving migration/deploy/activation/cache refresh/client acceptance."
+    "Selected LOCAL reconstruction includes instance return recipient, geometry/models/pose, baseline NPC profiles, helper timing, chest boundary/access/decay cap and one equal11gear draw. These are not authenticated retail bytes or native gameplay acceptance.",
+    "Canonical mission has19 activities0..18 and one Guardian490911/spawn304062014. Actual16 acknowledges original death, activating17/native configured lock17. Mold17 uses actual same original corpse/save/removal. LOCAL final18 acknowledgment is delayed until committed mold return plus actual owned chest native opening/successful death/same corpse after stack, with no20th displayed objective.",
+    "Current native Mob constructor sets permarooted from runspeed0; selected full Guardian template passes that current constructor condition. Exact period rampage/casts/combat behavior and effective scaling/bonuses remain separately qualified, not supplied by a template byte gate.",
+    "Native custom_data UUID and finite current-run origin are durable provenance; runtime serials only snapshot evidence. Creator is audit, current actual holder and accepted run are ownership checks. No tokenless/history/old-run backfill.",
+    "Known strict transaction COMMIT and actual allocation-free memory removal alone issue original return receipt. Input origins remain published and locked through all selected saves/revalidations, consumed before same COMMIT. Unknown commits/publication/lifecycle gaps hold without replay/refund/regrant or replacement chest.",
+    "Accepted member snapshot plus same current membership governs owned chest access. Sole existing METHODSELECT common-only exact shared-run occurrence/per-entry ledger delivers personal rewards including members elsewhere; no direct hand-in grant. Offline catchup depends on actual persisted task/reconnect state; no history grant loop.",
+    "Native correlated progress send is not positive durable World-save acknowledgment. Source/build review never proves client pathing/collision/animation/quest/reward acceptance.",
+    "All task/reward enable fields remain zero; selected full profile overrides replace stale raw0 helper/construct source rows. All receipt/origin/action DDL and physical scene rows remain unapplied source; logical reservations are not database locks. No persistent chest spawn/condition.",
+    "No serving SQL/migration/install/deployment/cache refresh/server starts/client actions or extra test suites are authorized by this source package. Preserve unrelated owner work."
   ],
   "tests": 0,
   "builds": 0,
   "SQL_writes": 0,
   "runtime_actions": 0,
   "compiled_parent": {
-    "source_commit": "bf94e54342a6c9a0b7a54fb8f6d56205a3c1f501",
-    "sha256": "9ad623dbc1dca5e110cd255566e03d82bbe322d828631c395ac894a4e0b5ace8",
-    "status": "MATCHED_R14_WORLD_ZONE_COMPILE_LINK_PASS_50PINS_ZERO_WARNINGS_ZERO_ERRORS"
+    "source_commit": "86dd514a80a57813616c7407056e8db86b496b50",
+    "sha256": "58c8e61bb0f04a470ec88d8b3ecec649b0af1a7ad09f78491d62a5a19f7a3b45",
+    "status": "MATCHED_R15R3_WORLD_ZONE_COMPILE_LINK_PASS_63PINS_4WARNINGS_ZEROERRORS"
   },
-  "core_manifest_sha256": "a4e45a46555cf95dcfc503d0f4a01ae5eb98bbe67eb6bc59367dec08743285d8",
-  "geometry_manifest_sha256": "525b8955ca11e66a4151209ecf69a3395eed2e6f5c7e40b58fa7976ca6a2f525",
-  "focused_parent_review_sha256": "36321aa745373387aaf798ad35b6c0a07df3c6844d2dc056cd5c863a40645bf9",
-  "correction": {
-    "core_sha256": "c24b8526016e2d6f243d7677ad0e60407f62350fe101a9f676e1177ddd91b1ed",
-    "changed_from_reviewed_R15": [
-      "zone/client.cpp",
-      "zone/fire_native_item_custody.cpp",
-      "zone/fire_run_action_custody_impl.inc"
-    ],
-    "unchanged_reviewed_pins": 60,
-    "source_count": "Exact canonical19 activities0..18, configured lock17. No new objective.",
-    "strict_order": "Published origin1 and FOR UPDATE remain through all native saves/revalidation; consume2 after all saves before SAME COMMIT. No relaxed origin reads.",
-    "no_R16_merge": true
-  },
-  "compile_correction": {
-    "changed_from_failed_R15_R2": [
-      "zone/client.cpp"
-    ],
-    "unchanged_pins": 62,
-    "native_symbol": "doors.cpp private #define OPEN_DOOR 0x02; selected GateProfile requires invert_state0. Use same native MoveDoor action byte locally; no header/common API or behavior change.",
-    "failure_sha256": "1fb7ba14278753052c7c38f76ffa1d2589991343574e04283d38727043731c91",
-    "resume": "Reuse actual failed R15-r2 compiled cache and already-built World, update one client.cpp and verify all63 pins; resume matched incremental Zone+World link. No R16 merge/tests/serving."
-  }
+  "core_manifest_sha256": "ba5daa6b47f00588c7c6d7d1a6125e8517de467ae2ed22ecc9aa810143b83c0c",
+  "spells_native_manifest_sha256": "fa54cfbfc68cca3d966c0635f13ce6fde6e1198b74e6182d3c2ec9e87689a37f"
 }

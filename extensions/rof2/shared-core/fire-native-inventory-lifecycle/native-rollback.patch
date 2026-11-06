@@ -730,7 +730,8 @@
  	client_evolving_items.cpp
 --- a/zone/attack.cpp
 +++ b/zone/attack.cpp
-@@ -1,7 +1,3 @@
+@@ -1,8 +1,3 @@
+-#include "fire_run_terminal_scene.h"
 -#include "fire_material_loot_source.h"
 -#include "fire_construct_participants.h"
 -#include "fire_gotonur_say_queue.h"
@@ -738,7 +739,7 @@
  #include "bound_destructible_ruins.h"
  /*	EQEmu: EQEmulator
  
-@@ -36,13 +32,6 @@
+@@ -37,13 +32,6 @@
  #include "zone/lua_parser.h"
  #include "zone/mob.h"
  #include "zone/npc.h"
@@ -752,25 +753,28 @@
  #include "zone/queryserv.h"
  #include "zone/quest_parser_collection.h"
  #include "zone/string_ids.h"
-@@ -2492,8 +2481,6 @@
+@@ -2493,10 +2481,6 @@
  
  bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillType attack_skill, KilledByTypes killed_by, bool is_buff_tic)
  {
+-	if(FireRunActionSource::NativeRunTerminalSource::RejectOrdinaryChestDeath(*this))return false;
+-	FireRunActionSource::OriginalTerminalDeath fire_terminal_death(*this);
 -	FireRunActionSource::OriginalMissionMaterialDeath fire_mission_material_death(*this);
 -	FirePersonalOccurrenceSource::OriginalConstructNativeDeath fire_original_death(*this);
  	if (BoundDestructibles::IsBlocked(this)) {
  		return false;
  	}
-@@ -3139,8 +3126,6 @@
+@@ -3142,9 +3126,6 @@
  		killer_mob->SetTarget(nullptr);
  	}
  
 -	fire_original_death.SealSuccess(*this, entity_id);
 -	fire_mission_material_death.SealActualSuccess(*this, entity_id);
+-	fire_terminal_death.SealActualSuccess(*this,entity_id);
  	return true;
  }
  
-@@ -7131,292 +7116,3 @@
+@@ -7135,292 +7116,3 @@
  {
  	return 0; // not implemented
  }
@@ -1065,7 +1069,11 @@
 -} // namespace FirePersonalOccurrenceSource
 --- a/zone/client.cpp
 +++ b/zone/client.cpp
-@@ -1,29 +1,3 @@
+@@ -1,33 +1,3 @@
+-#include <ctime>
+-#include "fire_run_terminal_scene.h"
+-#include "fire_run_terminal_custody.h"
+-#include "fire_terminal_local_profiles.h"
 -#include "fire_run_action_scene.h"
 -#include "fire_material_loot_source.h"
 -#include "fire_run_item_origin.h"
@@ -1095,7 +1103,7 @@
  /*	EQEmu: EQEmulator
  
  	Copyright (C) 2001-2026 EQEmu Development Team
-@@ -43,11 +17,6 @@
+@@ -47,11 +17,6 @@
  */
  #include "../common/mercenary/rof2_timer.h"
  #include "fire_shared_successor_native.h"
@@ -1107,7 +1115,7 @@
  
  #include "housing_guild_portal.h"
  #include "housing_actor_publication.h"
-@@ -65,7 +34,6 @@
+@@ -69,7 +34,6 @@
  #include <thread>
  
  #include "client.h"
@@ -1115,7 +1123,7 @@
  
  #include "common/data_bucket.h"
  #include "common/data_verification.h"
-@@ -786,7 +754,6 @@
+@@ -790,7 +754,6 @@
  }
  
  Client::~Client() {
@@ -1123,7 +1131,7 @@
   Housing::GuildPortalRuntime::Forget(*this);
  	struct PublicationCleanup {Client& client;~PublicationCleanup(){Housing::ActorPublication::Forget(client);}} publication_cleanup{*this};
  	// First lifecycle action: no quests, save, stream release or inventory
-@@ -1743,7 +1710,6 @@
+@@ -1747,7 +1710,6 @@
  			sender = GetPet();
  		}
  
@@ -1131,7 +1139,15 @@
  		if (!is_silent) {
  			entity_list.ChannelMessage(sender, chan_num, language, lang_skill, message);
  		}
-@@ -8996,7 +8962,7 @@
+@@ -5779,7 +5741,6 @@
+ 
+ void Client::HandleLDoNOpen(NPC *target)
+ {
+- if(target&&!FireRunActionSource::NativeRunTerminalSource::AuthorizeActualChestOpen(*this,*target))return;
+ 	if(target)
+ 	{
+ 		if(target->GetClass() != Class::LDoNTreasure)
+@@ -9001,7 +8962,7 @@
  void Client::TryItemTimer(int slot)
  {
  	EQ::ItemInstance* inst = m_inv.GetItem(slot);
@@ -1140,7 +1156,7 @@
  		return;
  	}
  
-@@ -9018,14 +8984,14 @@
+@@ -9023,14 +8984,14 @@
  	for (int x = EQ::invaug::SOCKET_BEGIN; x <= EQ::invaug::SOCKET_END; ++x)
  	{
  		EQ::ItemInstance * a_inst = inst->GetAugment(x);
@@ -1158,7 +1174,7 @@
  				if (parse->ItemHasQuestSub(a_inst, EVENT_TIMER)) {
  					parse->EventItem(EVENT_TIMER, this, a_inst, nullptr, it_iter->first, 0);
  				}
-@@ -13701,1225 +13667,3 @@
+@@ -13706,1721 +13667,3 @@
  
  	return task_state->UncompleteTask(task_id);
  }
@@ -1721,6 +1737,10 @@
 -class RunUseWitness final {
 - friend class NativeRunDoorSource;
 - friend class PublishedRunActionSink;
+- friend class NativeRunTerminalSource;
+- friend class PreparedTerminalChestPlan;
+- friend class PublishedTerminalReturnSink;
+- friend class OriginalTerminalDeath;
 - friend class NativeRunHelperSource;
 - friend class PreparedRunDoorPlan;
 - friend class PreparedRunHelperPlan;
@@ -1832,7 +1852,8 @@
 -  if(!b)return;const auto scene=CaptureMaterialSceneRun();if(!scene)return;
 -  static uint64_t actual_death_sequence=0;if(actual_death_sequence==UINT64_MAX)return;
 -  state_=std::make_shared<State>();state_->original=&npc;state_->native_entity=npc.GetID();
--  state_->scene=*scene;state_->binding=*b;state_->sequence=++actual_death_sequence;
+-  state_->scene=*scene;state_->binding=*b;state_->sequence=b->npc==490911?OriginalTerminalDeath::ActualGuardianSequence(npc):++actual_death_sequence;
+-  if(!state_->sequence){state_.reset();return;}
 -  state_->actor_witness=RunUseWitness::CaptureNPCScene(npc);
 - }catch(...) {state_.reset();}
 -}
@@ -1882,6 +1903,7 @@
 - RunLootFacts original{};
 - std::unique_ptr<PreparedRunLootSeal> pending;
 - std::unique_ptr<NativeRunLootPublication::State> publication;
+- std::unique_ptr<ServerPacket> mold_progress;
 - bool selected=false,armed=false,save_observed=false,saved=false,removal_seen=false;
 -};
 -thread_local NativeRunLootSource* NativeRunLootSource::current_=nullptr;
@@ -1922,6 +1944,7 @@
 -  RunLootFacts f{*run,++actual_loot_sequence,o->death_sequence_,o->original_.npc,o->original_.spawn,o->corpse_entity_,
 -   actual_slot,item.GetID(),item.GetSerialNumber(),item.GetCharges()};
 -  s.original=f;
+-  if(f.item_id==47758)s.mold_progress=ProgressPacket(f.mission,17);
 -  s.use=std::unique_ptr<OriginalRunLootUse>(new OriginalRunLootUse(f,u));
 -  s.publication=std::make_unique<NativeRunLootPublication::State>();s.publication->original=f;s.publication->use=u;
 -  s.pending=NativeRunItemOrigins::SealOriginalLoot(std::move(s.use),item);
@@ -1951,7 +1974,8 @@
 - // Positive proof is minted only from the SAME original successful inventory
 - // save plus actual corpse removal. Item ID/task history never calls this.
 - NativeRunLootPublication proof(std::move(s.pending),std::move(s.publication));
-- NativeRunItemOrigins::PublishOriginalLoot(proof);
+- const bool origin_published=NativeRunItemOrigins::PublishOriginalLoot(proof);
+- if(origin_published&&s.original.item_id==47758&&s.mold_progress)worldserver.SendPacket(s.mold_progress.get());
 - // Core only persists typed provenance here. No grant, save, task increment or retry.
 -}
 -} // namespace FireRunActionSource
@@ -2384,19 +2408,508 @@
 - while(next){auto* tail=next->next;delete next;next=tail;}
 -}
 -} // namespace FireRunActionSource
+-
+-namespace FireRunActionSource {
+-class RunTerminalAttempt final {
+- friend class NativeRunTerminalSource;
+- friend class PreparedTerminalChestPlan;
+- friend class PublishedTerminalReturnSink;
+- friend class OriginalTerminalDeath;
+- TerminalReturnFacts original;
+- std::vector<TerminalAcceptedMemberFacts> members;
+- std::shared_ptr<RunUseWitness> zone_owner,actor_owner;
+- NPC* original_actor=nullptr;
+- uint64_t row=0;
+- uint32_t entity=0;
+- LootItem expected_loot{};
+- bool registered=false,registration_acknowledged=false,terminal_acknowledged=false,open_entered=false,opened=false,lost=false;
+-};
+-namespace {
+-uint32_t OriginalTerminalLeaseRemaining(const TerminalReturnFacts& f) {
+- if(!zone||!zone->GetInstanceTimer()||!zone->GetInstanceTimer()->Enabled())return 0;
+- const auto now=std::time(nullptr);
+- if(now<=0||!f.instance_expire_at||uint64_t(now)>=f.instance_expire_at)return 0;
+- const auto original=std::min<uint64_t>((f.instance_expire_at-uint64_t(now))*1000,UINT32_MAX);
+- return uint32_t(std::min<uint64_t>(original,zone->GetInstanceTimer()->GetRemainingTime()));
+-}
+-constexpr std::array<uint32_t,11> TerminalGear{{110240,110231,110244,110296,110232,110272,110285,110286,110271,110259,110297}};
+-bool TerminalLootDefinitionQualified(NPC& actual) {
+- if(!zone||RuleI(Zone,GlobalLootMultiplier)!=1||actual.GetLoottableID()!=304062012)return false;
+- zone->LoadLootTable(304062012);
+- const auto* table=zone->GetLootTable(304062012);
+- const auto entries=zone->GetLootTableEntries(304062012);
+- const auto drop=zone->GetLootdropEntries(304062012);
+- if(!table||table->id!=304062012||table->mincash||table->maxcash||table->avgcoin||
+-  table->min_expansion!=16||table->max_expansion!=-1||!table->content_flags.empty()||!table->content_flags_disabled.empty()||
+-  entries.size()!=1||drop.size()!=TerminalGear.size())return false;
+- const auto& e=entries.front();
+- if(e.loottable_id!=304062012||e.lootdrop_id!=304062012||e.multiplier!=1||e.droplimit!=1||e.mindrop!=1||e.probability!=100)return false;
+- std::set<uint32_t> ids;
+- for(const auto& x:drop) {
+-  if(x.lootdrop_id!=304062012||std::find(TerminalGear.begin(),TerminalGear.end(),x.item_id)==TerminalGear.end()||
+-   !ids.insert(x.item_id).second||x.item_charges!=1||x.equip_item||x.chance!=1||x.disabled_chance||
+-   x.trivial_min_level||x.trivial_max_level||x.multiplier!=1||x.npc_min_level||x.npc_max_level||
+-   x.min_expansion!=16||x.max_expansion!=-1||!x.content_flags.empty()||!x.content_flags_disabled.empty())return false;
+- }
+- return true;
+-}
+-bool SameTerminalLoot(const LootItem& a,const LootItem& b) {
+- return a.item_id==b.item_id&&
+-  a.equip_slot==b.equip_slot&&
+-  a.charges==b.charges&&
+-  a.lootslot==b.lootslot&&
+-  a.aug_1==b.aug_1&&
+-  a.aug_2==b.aug_2&&
+-  a.aug_3==b.aug_3&&
+-  a.aug_4==b.aug_4&&
+-  a.aug_5==b.aug_5&&
+-  a.aug_6==b.aug_6&&
+-  a.attuned==b.attuned&&
+-  a.custom_data==b.custom_data&&
+-  a.ornamenticon==b.ornamenticon&&
+-  a.ornamentidfile==b.ornamentidfile&&
+-  a.ornament_hero_model==b.ornament_hero_model&&
+-  a.trivial_min_level==b.trivial_min_level&&
+-  a.trivial_max_level==b.trivial_max_level&&
+-  a.npc_min_level==b.npc_min_level&&
+-  a.npc_max_level==b.npc_max_level&&
+-  a.lootdrop_id==b.lootdrop_id;
+-}
+-bool TerminalActualLootQualified(NPC& actual) {
+- const auto& items=actual.GetLootItems();if(items.size()!=1||!items.front())return false;
+- const auto& x=*items.front();
+- return std::find(TerminalGear.begin(),TerminalGear.end(),x.item_id)!=TerminalGear.end()&&
+-  x.charges==1&&x.lootdrop_id==304062012&&!x.aug_1&&!x.aug_2&&!x.aug_3&&!x.aug_4&&!x.aug_5&&!x.aug_6&&
+-  !x.attuned&&x.custom_data.empty()&&!x.ornamenticon&&!x.ornamentidfile&&!x.ornament_hero_model;
+-}
+-bool TerminalMemberStillActual(Client& c,const MissionRunFacts& run,const std::vector<TerminalAcceptedMemberFacts>& snapshot) {
+- if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||zone->GetInstanceID()!=run.instance||
+-  std::none_of(snapshot.begin(),snapshot.end(),[&](const auto& m){return m.character==c.CharacterID();})||!c.ClientDataLoaded())return false;
+- // Completion does not revoke corpse access. Explicit quit/removal/expiry does.
+- // Require SAME original run membership/DZ/instance, permitting its completed
+- // state while never accepting a different run or nearby group/raid member.
+- auto q=database.QueryDatabase(fmt::format(
+-  "SELECT s.id FROM shared_tasks s JOIN shared_task_members m ON m.shared_task_id=s.id "
+-  "JOIN shared_task_dynamic_zones l ON l.shared_task_id=s.id JOIN dynamic_zones d ON d.id=l.dynamic_zone_id "
+-  "JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=d.id AND dm.character_id=m.character_id "
+-  "JOIN instance_list i ON i.id=d.instance_id JOIN instance_list_player ip ON ip.id=i.id AND ip.charid=m.character_id "
+-  "WHERE s.id={} AND s.task_id=920170 AND UNIX_TIMESTAMP(s.accepted_time)={} AND m.character_id={} "
+-  "AND d.id={} AND d.instance_id={} AND i.zone=490 AND i.version=1 AND d.type={} "
+-  "AND (s.expire_time IS NULL OR s.expire_time>NOW()) AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP())",
+-  run.run,run.accepted_time,c.CharacterID(),run.dynamic_zone,run.instance,int(DynamicZoneType::Mission)),false);
+- return q.Success()&&q.RowCount()==1;
+-}
+-struct TerminalOriginalOpen {
+- NPC* actor=nullptr;Client* client=nullptr;
+- std::shared_ptr<RunTerminalAttempt> actual;
+- std::shared_ptr<RunUseWitness> opener;
+- MissionRunFacts opening;
+- TerminalOriginalOpen* previous=nullptr;
+- static thread_local TerminalOriginalOpen* current;
+- TerminalOriginalOpen(NPC& a,Client& c,std::shared_ptr<RunTerminalAttempt> s,MissionRunFacts f,std::shared_ptr<RunUseWitness> w)
+-  :actor(&a),client(&c),actual(std::move(s)),opener(std::move(w)),opening(f),previous(current){current=this;}
+- ~TerminalOriginalOpen(){current=previous;}
+-};
+-thread_local TerminalOriginalOpen* TerminalOriginalOpen::current=nullptr;
+-}
+-static thread_local RunTerminalAttempt* actual_terminal_registration=nullptr;
+-bool NativeRunTerminalSource::AuthorizeActualChestOpen(Client& c,NPC& npc) {
+- const auto a=npc.m_fire_run_terminal_attempt;if(!a)return !(zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&npc.GetNPCTypeID()==490914);
+- const auto* original=TerminalOriginalOpen::current;
+- return original&&original->actor==&npc&&original->client==&c&&original->actual==a&&
+-  original->opener->LiveClient()==&c&&a->registered&&!a->lost&&a->open_entered&&
+-  a->actor_owner->NPCStillAlive()&&npc.GetID()==a->entity&&entity_list.GetNPCByID(a->entity)==&npc;
+-}
+-bool NativeRunTerminalSource::HandleOriginalChestOpen(Client& c,NPC& npc) {
+- const auto a=npc.m_fire_run_terminal_attempt;if(!a)return zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&npc.GetNPCTypeID()==490914;
+- try {
+-  if(!a->registered||!a->registration_acknowledged||!OriginalTerminalLeaseRemaining(a->original)||a->lost||a->open_entered||!a->row||a->original_actor!=&npc||
+-   !a->actor_owner->NPCStillAlive()||npc.GetID()!=a->entity||entity_list.GetNPCByID(a->entity)!=&npc||
+-   !TerminalMemberStillActual(c,a->original.mission,a->members)||!TerminalActualLootQualified(npc)||
+-   !SameTerminalLoot(*npc.GetLootItems().front(),a->expected_loot)||
+-   npc.GetClass()!=Class::LDoNTreasure||npc.GetSpecialAbility(SpecialAbility::OpenImmunity)||
+-   npc.IsLDoNLocked()||npc.IsLDoNTrapped()||npc.GetLDoNTrapType()||npc.GetLDoNTrapSpellID()||
+-   DistanceSquaredNoZ(c.GetPosition(),npc.GetPosition())>RuleI(Adventure,LDoNTrapDistanceUse))return true;
+-  const auto opening=CaptureRun(c,18,false);if(!opening||opening->run!=a->original.mission.run)return true;
+-  // One original actual native packet target. Do not restart an interrupted or
+-  // vetoed opening, damage the chest manually, or reconstruct it from a corpse.
+-  TerminalOriginalOpen original(npc,c,a,*opening,RunUseWitness::Capture(&c,nullptr,nullptr));a->open_entered=true;
+-  c.HandleLDoNOpen(&npc);
+-  return true; // no Client/NPC dereference after native open/death callbacks
+- }catch(...) {return true;}
+-}
+-bool NativeRunTerminalSource::RejectOrdinaryChestDeath(NPC& npc) {
+- if(!npc.m_fire_run_terminal_attempt)return zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&npc.GetNPCTypeID()==490914;
+- const auto* original=TerminalOriginalOpen::current;
+- return !original||original->actor!=&npc||original->actual!=npc.m_fire_run_terminal_attempt;
+-}
+-void NativeRunTerminalSource::ObserveActualRegistration(NPC* actor) {
+- if(!actor||!actual_terminal_registration||!actor->m_fire_run_terminal_attempt)return;
+- const auto a=actor->m_fire_run_terminal_attempt;
+- if(a.get()!=actual_terminal_registration||a->registered||a->original_actor!=actor||!a->row||
+-  !a->actor_owner->NPCStillAlive()||!actor->GetID()||actor->GetNPCTypeID()!=490914||
+-  entity_list.GetNPCByID(actor->GetID())!=actor)return;
+- a->entity=actor->GetID();a->registered=true;
+- NativeTerminalPublication original({TerminalNativeBoundary::Registered,a->original.mission,a->row,a->original.native_sequence,0,a->entity,0},a);
+- a->registration_acknowledged=NativeRunTerminalCustody::AcknowledgeNativePublication(original);
+-}
+-void NativeRunTerminalSource::ObserveActualDestruction(NPC& actor) {
+- const auto a=actor.m_fire_run_terminal_attempt;
+- if(a&&a->original_actor==&actor&&!a->opened)a->lost=true;
+-}
+-std::optional<bool> NativeRunTerminalSource::ProcessActualChest(NPC& actor) {
+- const auto a=actor.m_fire_run_terminal_attempt;if(!a)return {};
+- if(!a->registered||a->lost||a->original_actor!=&actor||!a->actor_owner->NPCStillAlive()||
+-  actor.GetID()!=a->entity||!OriginalTerminalLeaseRemaining(a->original)||!RunStillActual(a->original.mission)){a->lost=true;return false;}
+- return true; // owned unopened class62 actor, no combat/waypoint/quest AI
+-}
+-} // namespace FireRunActionSource
+-
+-namespace FireRunActionSource {
+-// Genuine native death producer. It cannot be invoked from a task count,
+-// remembered item, NPC ID lookup after callbacks or a replacement corpse.
+-struct OriginalTerminalDeathProof::State {
+- std::shared_ptr<RunUseWitness> original_actor,corpse_owner;
+- std::shared_ptr<RunTerminalAttempt> chest;
+- TerminalDeathFacts original;
+- std::unique_ptr<ServerPacket> progress;
+- bool registered=false,positive_return=false,queued=false;
+- std::shared_ptr<State> next;
+-};
+-struct OriginalTerminalDeath::State {
+- NPC* original=nullptr;
+- uint32_t original_entity=0,original_spawn=0,npc_type=0;
+- std::shared_ptr<RunUseWitness> actor;
+- std::shared_ptr<OriginalTerminalDeathProof::State> positive;
+- bool kill_visit_captured=false;
+-};
+-thread_local OriginalTerminalDeath* OriginalTerminalDeath::current_=nullptr;
+-std::shared_ptr<OriginalTerminalDeathProof::State> NativeRunTerminalSource::death_head_,NativeRunTerminalSource::death_tail_;
+-OriginalTerminalDeathProof::OriginalTerminalDeathProof(TerminalDeathFacts f,std::shared_ptr<State> s)
+- :facts_(f),state_(std::move(s)){}
+-OriginalTerminalDeathProof::~OriginalTerminalDeathProof()=default;
+-OriginalTerminalDeath::OriginalTerminalDeath(NPC& npc)noexcept:previous_(current_) {
+- current_=this;
+- try {
+-  if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID())return;
+-  const bool guardian=npc.GetNPCTypeID()==490911&&npc.GetSpawnPointID()==304062014;
+-  const auto chest=npc.m_fire_run_terminal_attempt;
+-  if(!guardian&&!chest)return;
+-  if(guardian&&(!npc.NPCTypedata||!FireTerminalLocalSourceProfiles::MatchesExpectedLoadedNPCType(*npc.NPCTypedata)))return;
+-  if(!npc.GetID()||entity_list.GetNPCByID(npc.GetID())!=&npc)return;
+-  auto s=std::make_shared<State>();s->original=&npc;s->original_entity=npc.GetID();
+-  s->original_spawn=npc.GetSpawnPointID();s->npc_type=npc.GetNPCTypeID();
+-  s->actor=RunUseWitness::CaptureNPCScene(npc);
+-  s->positive=std::make_shared<OriginalTerminalDeathProof::State>();s->positive->original_actor=s->actor;
+-  static uint64_t sequence=0;if(sequence==UINT64_MAX)return;
+-  auto& f=s->positive->original;f.native_sequence=++sequence;f.npc_type=s->npc_type;
+-  f.original_spawn=s->original_spawn;f.original_entity=s->original_entity;
+-  if(chest) {
+-   // Only a live original OP_LDoNOpen scope for this SAME owned actor enters
+-   // its real HandleLDoNOpen -> NPC::Death. Generic damage/Death cannot qualify.
+-   if(!NativeRunTerminalSource::CaptureOriginalOpenDeath(npc,*s->positive))return;
+-   s->positive->chest=chest;
+-  }
+-  state_=std::move(s);
+- }catch(...) {state_.reset();}
+-}
+-OriginalTerminalDeath::~OriginalTerminalDeath(){current_=previous_;}
+-uint64_t OriginalTerminalDeath::ActualGuardianSequence(NPC& npc) {
+- const auto* f=current_;
+- return f&&f->state_&&f->state_->original==&npc&&f->state_->npc_type==490911&&
+-  f->state_->original_spawn==304062014&&f->state_->positive?
+-  f->state_->positive->original.native_sequence:0;
+-}
+-void OriginalTerminalDeath::ObserveActualKillVisit(Client& candidate,NPC& npc) {
+- auto* f=current_;
+- if(!f||!f->state_)return;auto& s=*f->state_;
+- if(s.original!=&npc||s.npc_type!=490911||s.original_spawn!=304062014||s.kill_visit_captured||
+-  !s.actor->NPCStillAlive())return;
+- const auto accepted=CaptureRun(candidate,16,false);if(!accepted)return;
+- // This visit is made by the original native TaskManager party eligibility
+- // loop, not a later search of clients near the boss or current group history.
+- s.positive->original.mission=*accepted;
+- s.positive->progress=ProgressPacket(*accepted,16);
+- s.kill_visit_captured=true;
+-}
+-void OriginalTerminalDeath::CaptureActualCorpse(Corpse& corpse,NPC& npc) {
+- auto* f=current_;
+- if(!f||!f->state_)return;auto& s=*f->state_;
+- if(s.original!=&npc||!s.actor->NPCStillAlive()||!s.positive||s.positive->corpse_owner||
+-  !corpse.IsNPCCorpse()||corpse.GetNPCTypeID()!=s.npc_type)return;
+- if(s.npc_type==490911&&!s.kill_visit_captured)return;
+- try {
+-  s.positive->corpse_owner=RunUseWitness::Capture(nullptr,nullptr,&corpse);
+-  corpse.m_fire_terminal_death_origin=s.positive;
+- }catch(...) {s.positive->corpse_owner.reset();}
+-}
+-void OriginalTerminalDeath::ObserveActualCorpseRegistered(Corpse& corpse) {
+- const auto p=corpse.m_fire_terminal_death_origin;
+- if(!p||p->registered||!current_||!current_->state_||current_->state_->positive!=p||
+-  !corpse.GetID()||!p->corpse_owner||p->corpse_owner->LiveCorpse(corpse.GetID())!=&corpse)return;
+- p->original.corpse_entity=corpse.GetID();p->registered=true;
+- if(p->chest)NativeRunTerminalSource::BindOriginalOpenedCorpse(corpse,*p);
+-}
+-void OriginalTerminalDeath::SealActualSuccess(NPC& npc,uint32_t original_entity) {
+- if(!state_)return;const auto& s=*state_;const auto p=s.positive;
+- if(!p||p->queued||s.original!=&npc||s.original_entity!=original_entity||!s.actor->NPCStillAlive()||
+-  !p->registered||!p->corpse_owner||!p->corpse_owner->LiveCorpse(p->original.corpse_entity)||
+-  !p->original.mission.run||!p->progress)return;
+- if(!NativeRunTerminalSource::SealOriginalChestCorpse(*p))return;
+- p->positive_return=true;p->queued=true;
+- if(NativeRunTerminalSource::death_tail_)NativeRunTerminalSource::death_tail_->next=p;else NativeRunTerminalSource::death_head_=p;
+- NativeRunTerminalSource::death_tail_=p; // all nodes/packets prepared before original positive return
+-}
+-void NativeRunTerminalSource::DrainCompletions() {
+- auto next=std::move(NativeRunTerminalSource::death_head_);NativeRunTerminalSource::death_tail_.reset();
+- while(next) {
+-  auto p=std::move(next);next=std::move(p->next);
+-  if(!p->queued||!p->positive_return||!p->registered||!p->corpse_owner||
+-   !p->corpse_owner->LiveCorpse(p->original.corpse_entity)||!p->progress||
+-   !p->corpse_owner->ZoneAlive()||!RunStillActual(p->original.mission))continue;
+-  OriginalTerminalDeathProof proof(p->original,p);
+-  // Core seals FIRST and validates the actual original run/finite row. Known
+-  // positive same-source death custody, not an optimistic World count, decides
+-  // whether this one original run-stamped progress invocation is authorized.
+-  bool acknowledged=false;
+-  if(p->chest) {
+-   const auto a=p->chest;
+-   NativeTerminalPublication publication({TerminalNativeBoundary::OpenedDeath,p->original.mission,p->original.terminal_row,a->original.native_sequence,p->original.native_sequence,p->original.original_entity,p->original.corpse_entity},a);
+-   acknowledged=NativeRunTerminalCustody::AcknowledgeNativePublication(publication);
+-  }else acknowledged=NativeRunTerminalCustody::AcknowledgeOriginalDeath(proof);
+-  if(!acknowledged)continue;
+-  if(p->chest)p->chest->terminal_acknowledged=true;
+-  worldserver.SendPacket(p->progress.get());
+-  // Native send is not a positive durable World save acknowledgment.
+- }
+-}
+-void NativeRunTerminalSource::DiscardCompletions()noexcept {
+- NativeRunTerminalSource::death_head_.reset();NativeRunTerminalSource::death_tail_.reset();
+-}
+-} // namespace FireRunActionSource
+-
+-namespace FireRunActionSource {
+-bool NativeRunTerminalSource::RejectUnissuedFinishTrade(Client&,NPC& giver) {
+- return zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&zone->GetInstanceID()&&giver.GetNPCTypeID()==490912;
+-}
+-namespace {
+-std::optional<std::vector<TerminalAcceptedMemberFacts>> TerminalAcceptedMembers(const MissionRunFacts& run) {
+- if(!RunStillActual(run))return {};
+- auto q=database.QueryDatabase(fmt::format("SELECT m.character_id,h.occurrence_id,r.accepted_time FROM shared_task_members m LEFT JOIN character_shared_task_reward_instances h ON h.shared_task_id=m.shared_task_id AND h.character_id=m.character_id AND h.task_id=920170 LEFT JOIN character_task_reward_instances r ON r.character_id=h.character_id AND r.task_id=h.task_id AND r.occurrence_id=h.occurrence_id WHERE m.shared_task_id={} ORDER BY m.character_id",run.run),false);
+- if(!q.Success()||!q.RowCount()||q.RowCount()>6)return {};
+- std::vector<TerminalAcceptedMemberFacts> members;members.reserve(q.RowCount());
+- for(auto r:q){const auto id=RunNumber(r[0]),occ=RunNumber(r[1]),accepted=RunNumber(r[2]);if(!id||!*id||*id>UINT32_MAX||!occ||!*occ||!accepted||*accepted!=run.accepted_time)return {};members.push_back({uint32_t(*id),uint32_t(*accepted),*occ});}
+- if(std::adjacent_find(members.begin(),members.end(),[](const auto&a,const auto&b){return a.character==b.character;})!=members.end())return {};
+- return members; // actual accepted run members, including elsewhere; no online/radius filter
+-}
+-bool TerminalNativeRange(Client& c,NPC& giver) {
+- const auto d=glm::vec3(c.GetPosition())-glm::vec3(giver.GetPosition());
+- const double squared_limit=USE_NPC_RANGE2;
+- return squared_limit>0&&std::isfinite(d.x)&&std::isfinite(d.y)&&std::isfinite(d.z)&&
+-  double(d.x)*d.x+double(d.y)*d.y+double(d.z)*d.z<=squared_limit;
+-}
+-}
+-struct OriginalMoldTrade::State {
+- std::shared_ptr<RunUseWitness> player,giver;
+- NPC* original_giver=nullptr;
+-};
+-OriginalMoldTrade::OriginalMoldTrade(TerminalReturnFacts f,std::shared_ptr<State> s)
+- :state_(std::move(s)),facts_(f){}
+-OriginalMoldTrade::~OriginalMoldTrade()=default;
+-struct PreparedTerminalChestPlan::State {
+- const OriginalMoldTrade* original=nullptr;
+- std::shared_ptr<RunTerminalAttempt> actual;
+- std::unique_ptr<NPCType> expected;
+- std::unique_ptr<NPC> chest;
+- std::unique_ptr<EQApplicationPacket> finish;
+-};
+-PreparedTerminalChestPlan::PreparedTerminalChestPlan(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
+-PreparedTerminalChestPlan::~PreparedTerminalChestPlan()=default;
+-const std::vector<TerminalAcceptedMemberFacts>& PreparedTerminalChestPlan::AcceptedMembers()const noexcept {
+- return state_->actual->members;
+-}
+-bool NativeRunTerminalSource::RevalidateOriginalReturn(Client& c,const OriginalMoldTrade& use) {
+- const auto& f=use.facts_;const auto& s=use.state_;
+- if(!s||s->player->LiveClient()!=&c||!s->giver->NPCStillAlive()||!zone||
+-  f.client_entity!=c.GetID()||f.mission.character!=c.CharacterID())return false;
+- auto* giver=entity_list.GetNPCByID(f.giver_entity);
+- if(!giver||giver!=s->original_giver||giver->GetNPCTypeID()!=490912||giver->GetSpawnPointID()!=304062015||
+-  giver->GetDepop()||!TerminalNativeRange(c,*giver))return false;
+- const auto* definition=content_db.LoadNPCTypesData(490912);
+- if(!definition||!FireTerminalLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition))return false;
+- const auto run=CaptureRun(c,18,false);if(!run||!SameRun(*run,f.mission))return false;
+- const auto members=TerminalAcceptedMembers(*run);if(!members||*members!=f.accepted_members)return false;
+- auto expiry=database.QueryDatabase(fmt::format("SELECT expire_at FROM instance_list WHERE id={} AND never_expires=0 AND expire_at={} AND expire_at>UNIX_TIMESTAMP()",f.mission.instance,f.instance_expire_at),false);
+- if(!expiry.Success()||expiry.RowCount()!=1)return false;
+- if(!c.trade||c.trade->state!=Trading||c.trade->With()!=giver||c.trade->cp||c.trade->sp||c.trade->gp||c.trade->pp)return false;
+- size_t offered=0;
+- for(int16_t slot=EQ::invslot::TRADE_BEGIN;slot<=EQ::invslot::TRADE_NPC_END;++slot) {
+-  const auto* item=c.GetInv().GetItem(slot);if(!item)continue;++offered;
+-  if(slot!=f.mold.slot||item->GetID()!=47758||item->GetSerialNumber()!=f.mold.serial||
+-   item->GetCharges()!=f.mold.charges||item->IsStackable()||!item->GetItem()||
+-   !item->GetItem()->IsClassCommon()||item->GetItem()->ItemType!=11)return false;
+- }
+- // The normal origin reader intentionally excludes trade slots. Core's narrow
+- // original-return validator must bind THIS private use and the exact native
+- // NPC trade slot, not relax the general carried-item ownership predicate.
+- return offered==1&&NativeRunTerminalCustody::ValidateOriginalMoldReturn(c,use);
+-}
+-bool NativeRunTerminalSource::HandleOriginalAccept(Client& c,NPC& giver) {
+- if(!zone||zone->GetZoneID()!=490||zone->GetInstanceVersion()!=1||!zone->GetInstanceID()||
+-  giver.GetNPCTypeID()!=490912)return false;
+- try {
+-  if(giver.GetSpawnPointID()!=304062015||!giver.GetID()||entity_list.GetNPCByID(giver.GetID())!=&giver) {
+-   return true;
+-  }
+-  const auto run=CaptureRun(c,18,false);
+-  if(!run){return true;}
+-  const auto accepted_members=TerminalAcceptedMembers(*run);if(!accepted_members)return true;
+-  auto expiry=database.QueryDatabase(fmt::format("SELECT expire_at FROM instance_list WHERE id={} AND zone=490 AND version=1 AND never_expires=0 AND expire_at>UNIX_TIMESTAMP()",run->instance),false);
+-  if(!expiry.Success()||expiry.RowCount()!=1)return true;
+-  const auto expires=RunNumber(expiry.begin()[0]);if(!expires||!*expires)return true;
+-  TerminalReturnFacts f;f.accepted_members=*accepted_members;f.instance_expire_at=*expires;f.mission=*run;f.client_entity=c.GetID();f.giver_entity=giver.GetID();
+-  f.giver_spawn=giver.GetSpawnPointID();f.giver_npc=giver.GetNPCTypeID();
+-  static uint64_t sequence=0;if(sequence==UINT64_MAX){return true;}f.native_sequence=++sequence;
+-  size_t offered=0;
+-  for(int16_t slot=EQ::invslot::TRADE_BEGIN;slot<=EQ::invslot::TRADE_NPC_END;++slot) {
+-   const auto* item=c.GetInv().GetItem(slot);if(!item)continue;++offered;
+-   f.mold={item->GetID(),item->GetSerialNumber(),slot,item->GetCharges(),1};
+-  }
+-  if(offered!=1||f.mold.item_id!=47758){return true;}
+-  auto s=std::make_shared<OriginalMoldTrade::State>();s->player=RunUseWitness::Capture(&c,nullptr,nullptr);
+-  s->giver=RunUseWitness::CaptureNPCScene(giver);s->original_giver=&giver;
+-  auto original=std::unique_ptr<OriginalMoldTrade>(new OriginalMoldTrade(f,std::move(s)));
+-  if(!RevalidateOriginalReturn(c,*original)){return true;}
+-  auto plan=PreparedTerminalChestPlan::PrepareActual(c,*original);
+-  if(!plan){return true;}
+-  const auto result=NativeRunTerminalCustody::ExecuteOriginalReturn(c,std::move(original),std::move(plan));
+-  (void)result; // rejected original accept leaves all native trade roots/coins intact
+-  // This original accept returns BEFORE native TradeAccepted/Finish/Reset.
+-  // Only the positive receipt sink finishes metadata after known memory removal.
+-  // Unknown holds never refund, cancel or regrant.
+-  return true;
+- }catch(...) {return true;} // no blind property return when boundary is unknown
+-}
+-std::unique_ptr<PreparedTerminalChestPlan> PreparedTerminalChestPlan::PrepareActual(Client& c,const OriginalMoldTrade& use) {
+- if(!NativeRunTerminalSource::RevalidateOriginalReturn(c,use))return {};
+- const auto members=TerminalAcceptedMembers(use.facts_.mission);if(!members)return {};
+- const auto* definition=content_db.LoadNPCTypesData(490914);
+- if(!definition||!FireTerminalLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition)||
+-  definition->loottable_id!=304062012||definition->class_!=Class::LDoNTreasure||RuleI(Zone,GlobalLootMultiplier)!=1)return {};
+- auto s=std::make_unique<State>();s->finish=std::make_unique<EQApplicationPacket>(OP_FinishTrade,0);s->original=&use;s->expected=std::make_unique<NPCType>();
+- std::memcpy(s->expected.get(),definition,sizeof(NPCType));
+- auto type=std::make_unique<NPCType>();std::memcpy(type.get(),definition,sizeof(NPCType));
+- s->chest=std::make_unique<NPC>(type.get(),nullptr,glm::vec4(-35.0f,650.0f,19.875f,0.0f),GravityBehavior::Water);
+- s->chest->GiveNPCTypeData(type.release());s->chest->SetCanOpenDoors(false);
+- if(s->chest->GetID()||!TerminalLootDefinitionQualified(*s->chest))return {};
+- // Native original table factory runs once on this unregistered prepared actor.
+- // The exact one actual native loot result is retained through commit/spawn.
+- s->chest->AddLootTable(304062012,false);
+- if(!TerminalActualLootQualified(*s->chest))return {};
+- auto a=std::make_shared<RunTerminalAttempt>();a->original=use.facts_;a->members=*members;
+- a->zone_owner=RunUseWitness::Capture(nullptr,nullptr,nullptr);a->actor_owner=RunUseWitness::CaptureNPCScene(*s->chest);
+- a->original_actor=s->chest.get();a->expected_loot=*s->chest->GetLootItems().front();
+- s->actual=std::move(a);
+- auto plan=std::unique_ptr<PreparedTerminalChestPlan>(new PreparedTerminalChestPlan(std::move(s)));
+- if(!plan->RevalidateBeforePersist(c))return {};return plan;
+-}
+-bool PreparedTerminalChestPlan::RevalidateBeforePersist(Client& c)const {
+- if(!state_||!state_->chest||!state_->actual||!state_->original||!state_->expected||
+-  state_->chest->GetID()||!NativeRunTerminalSource::RevalidateOriginalReturn(c,*state_->original)||
+-  !TerminalLootDefinitionQualified(*state_->chest)||!TerminalActualLootQualified(*state_->chest))return false;
+- const auto* definition=content_db.LoadNPCTypesData(490914);
+- const auto members=TerminalAcceptedMembers(state_->original->facts_.mission);
+- const auto* actual=state_->chest->GetLootItems().front();const auto& expected=state_->actual->expected_loot;
+- return definition&&FireTerminalLocalSourceProfiles::MatchesExpectedLoadedNPCType(*definition)&&
+-  std::memcmp(definition,state_->expected.get(),sizeof(NPCType))==0&&members&&*members==state_->actual->members&&
+-  actual&&SameTerminalLoot(*actual,expected);
+-}
+-} // namespace FireRunActionSource
+-
+-namespace FireRunActionSource {
+-NativeTerminalPublication::NativeTerminalPublication(TerminalNativeFacts f,std::shared_ptr<RunTerminalAttempt> a):facts_(f),owner_(std::move(a)){}
+-NativeTerminalPublication::~NativeTerminalPublication()=default;
+-void OnOriginalTerminalReturnPublished(Client& c,PublishedTerminalReturnReceipt& receipt) {
+- PublishedTerminalReturnSink::Receive(c,receipt);
+-}
+-void PublishedTerminalReturnSink::Receive(Client& c,PublishedTerminalReturnReceipt& receipt) {
+- const auto published=receipt.Take(c); // FIRST: same owned one-use strict writer receipt
+- if(!published)return;const auto v=*published;
+- if(!v.original||!v.plan||!v.terminal_row||!v.run_id||!v.native_sequence)return;
+- auto* s=v.plan->state_.get();
+- if(!s||s->original!=v.original||!s->chest||!s->actual||s->actual->row||
+-  v.original->facts_.mission.run!=v.run_id||v.original->facts_.native_sequence!=v.native_sequence||
+-  !s->actual->zone_owner->ZoneAlive()||actual_terminal_registration)return;
+- auto* owner=v.original->state_->player->LiveClient();
+- if(owner!=&c||!owner->trade||!s->finish)return;
+- // Original accept has not sent finish or reset metadata. SAME known commit
+- // and native memory removal now authorize these exact original final steps.
+- owner->QueuePacket(s->finish.get());owner->trade->Reset();
+- auto a=s->actual;a->row=v.terminal_row;
+- auto* actor=s->chest.release();actor->m_fire_run_terminal_attempt=a;
+- actual_terminal_registration=a.get();
+- struct Restore {~Restore(){actual_terminal_registration=nullptr;}} restore;
+- entity_list.AddNPC(actor,true,true);
+- // Actual AddNPC registered same actor before mutable spawn callbacks. Never
+- // dereference actor/Client after those callbacks or create a replacement.
+-}
+-bool NativeRunTerminalSource::CaptureOriginalOpenDeath(NPC& actor,OriginalTerminalDeathProof::State& positive) {
+- const auto* original=TerminalOriginalOpen::current;const auto a=actor.m_fire_run_terminal_attempt;
+- if(!original||!a||original->actor!=&actor||original->actual!=a||!a->row||!a->registered||
+-  a->lost||a->opened||!a->open_entered||!a->actor_owner->NPCStillAlive()||
+-  actor.GetID()!=a->entity||!original->opener->LiveClient())return false;
+- positive.original.mission=original->opening;positive.original.terminal_row=a->row;
+- positive.original.original_chest_open=true;positive.progress=ProgressPacket(original->opening,18);
+- return bool(positive.progress);
+-}
+-void NativeRunTerminalSource::BindOriginalOpenedCorpse(Corpse& corpse,OriginalTerminalDeathProof::State& positive) {
+- if(!positive.chest||!positive.registered||!positive.original.original_chest_open||
+-  !zone||!zone->GetInstanceTimer()||!zone->GetInstanceTimer()->Enabled())return;
+- const uint32_t remaining=OriginalTerminalLeaseRemaining(positive.chest->original);
+- if(!remaining)return;
+- corpse.SetDecayTimer(std::min(corpse.GetDecayTime(),remaining));
+- // Native rules/actual level choose normal decay; only cap the original lease.
+-}
+-bool NativeRunTerminalSource::SealOriginalChestCorpse(OriginalTerminalDeathProof::State& positive) {
+- if(!positive.chest)return true;
+- auto& a=*positive.chest;
+- auto* corpse=positive.corpse_owner?positive.corpse_owner->LiveCorpse(positive.original.corpse_entity):nullptr;
+- if(!corpse||!a.registered||a.opened||a.lost||!positive.original.original_chest_open||
+-  !a.row||a.row!=positive.original.terminal_row||a.members.empty()||
+-  a.members.size()>std::size(corpse->m_allowed_looters)||!zone||!zone->GetInstanceTimer()||
+-  !zone->GetInstanceTimer()->Enabled()||!OriginalTerminalLeaseRemaining(a.original))return false;
+- // Final native death success occurs AFTER ordinary killer/group/raid rights.
+- // Replace only this actual selected chest corpse with its accepted snapshot;
+- // source authorization additionally requires SAME current run membership.
+- std::fill(std::begin(corpse->m_allowed_looters),std::end(corpse->m_allowed_looters),0);
+- for(size_t i=0;i<a.members.size();++i)corpse->m_allowed_looters[i]=a.members[i].character;
+- corpse.SetDecayTimer(std::min(corpse->GetDecayTime(),OriginalTerminalLeaseRemaining(a.original)));
+- a.opened=true;return true;
+-}
+-bool NativeRunTerminalSource::AuthorizeActualCorpse(Client& c,Corpse& corpse) {
+- const auto p=corpse.m_fire_terminal_death_origin;
+- if(!p||!p->chest) {
+-  return !(zone&&zone->GetZoneID()==490&&zone->GetInstanceVersion()==1&&corpse.GetNPCTypeID()==490914);
+- }
+- return p->positive_return&&p->registered&&p->original.original_chest_open&&p->chest->opened&&p->chest->terminal_acknowledged&&OriginalTerminalLeaseRemaining(p->chest->original)&&
+-  p->corpse_owner&&p->corpse_owner->LiveCorpse(p->original.corpse_entity)==&corpse&&
+-  TerminalMemberStillActual(c,p->chest->original.mission,p->chest->members);
+-}
+-} // namespace FireRunActionSource
 --- a/zone/client.h
 +++ b/zone/client.h
-@@ -23,8 +23,7 @@
+@@ -23,9 +23,7 @@
  
  #include "../common/boat_passenger.h"
  
+-namespace FireRunActionSource {class NativeRunTerminalSource;class PreparedTerminalChestPlan;class PublishedTerminalReturnSink;class OriginalTerminalDeath;class RunTerminalAttempt;class OriginalTerminalDeathProof;}
 -namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
 -namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalConstructNativeHail; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
 +namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; }
  namespace SpiritShroud { struct Template; }
  class ZoneDatabase;
  struct SpiritShroudDestination;
-@@ -265,7 +264,6 @@
+@@ -266,7 +264,6 @@
  	std::string swap_name;
  };
  
@@ -2404,7 +2917,7 @@
  class Client : public Mob
  {
  public:
-@@ -2135,16 +2133,6 @@
+@@ -2136,20 +2133,6 @@
  private:
  	friend class FirePersonalOccurrenceSource::SharedSuccessorNative;
  	std::unique_ptr<FirePersonalOccurrenceSource::SharedSuccessorPending> m_fire_shared_successor;
@@ -2417,11 +2930,15 @@
 -	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_published_construct;
 -	friend class FirePersonalOccurrenceSource::OriginalGotonurSayQueue;
 - friend class FireRunActionSource::RunUseWitness;
+- friend class FireRunActionSource::NativeRunTerminalSource;
+- friend class FireRunActionSource::PreparedTerminalChestPlan;
+- friend class FireRunActionSource::PublishedTerminalReturnSink;
+- friend class FireRunActionSource::OriginalTerminalDeath;
 -	std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> m_fire_gotonur_say_lifetime;
  	ExternalHandinMoneyReturned m_external_handin_money_returned = {};
  	std::vector<uint32_t>       m_external_handin_items_returned = {};
  public:
-@@ -2237,8 +2225,6 @@
+@@ -2242,8 +2225,6 @@
  
  	uint8 playeraction;
  
@@ -2443,12 +2960,13 @@
  				CharacterID(),
 --- a/zone/client_packet.cpp
 +++ b/zone/client_packet.cpp
-@@ -1,4 +1,3 @@
+@@ -1,5 +1,3 @@
+-#include "fire_run_terminal_scene.h"
 -#include "fire_run_action_scene.h"
  /*	EQEmu: EQEmulator
  
  	Copyright (C) 2001-2026 EQEmu Development Team
-@@ -29,7 +28,6 @@
+@@ -30,7 +28,6 @@
  #include "housing_plot_marker.h"
  
  #include "client.h"
@@ -2456,7 +2974,7 @@
  
  #include "common/data_bucket.h"
  #include "common/data_verification.h"
-@@ -4927,12 +4925,6 @@
+@@ -4928,12 +4925,6 @@
  
  				if ((item->Click.Type == EQ::item::ItemEffectClick) || (item->Click.Type == EQ::item::ItemEffectExpendable) || (item->Click.Type == EQ::item::ItemEffectEquipClick) || (item->Click.Type == EQ::item::ItemEffectClick2))
  				{
@@ -2469,7 +2987,7 @@
  					if (item->Click.Level2 > 0)
  					{
  						if (GetLevel() >= item->Click.Level2)
-@@ -4951,11 +4943,7 @@
+@@ -4952,11 +4943,7 @@
  							}
  
  							if (i == 0) {
@@ -2482,7 +3000,7 @@
  							}
  							else {
  								InterruptSpell(castspell->spell_id);
-@@ -4987,10 +4975,6 @@
+@@ -4988,10 +4975,6 @@
  						}
  
  						if (i == 0) {
@@ -2493,7 +3011,7 @@
  							CastSpell(item->Click.Effect, castspell->target_id, slot, item->CastTime, 0, 0, castspell->inventoryslot);
  						}
  						else {
-@@ -5225,7 +5209,6 @@
+@@ -5226,7 +5209,6 @@
  		return;
  	}
  
@@ -2501,7 +3019,7 @@
  	if (within_distance) {
  		int quest_return = 0;
  		if (parse->PlayerHasQuestSub(EVENT_CLICK_DOOR)) {
-@@ -10077,11 +10060,6 @@
+@@ -10078,11 +10060,6 @@
  
  	if (m_inv.SupportsClickCasting(slot_id) || ((item->ItemType == EQ::item::ItemTypePotion || item->PotionBelt) && m_inv.SupportsPotionBeltCasting(slot_id))) // sanity check
  	{
@@ -2513,7 +3031,7 @@
  		auto* p_inst = (EQ::ItemInstance*) inst;
  
  		if (parse->ItemHasQuestSub(p_inst, EVENT_ITEM_CLICK)) {
-@@ -10219,8 +10197,6 @@
+@@ -10220,8 +10197,6 @@
  						return;
  					}
  					if (i == 0) {
@@ -2522,6 +3040,22 @@
  						if (!IsCastWhileInvisibleSpell(item->Click.Effect)) {
  							CommonBreakInvisible(); // client can't do this for us :(
  						}
+@@ -10440,7 +10415,6 @@
+ {
+ 	Mob * target = GetTarget();
+ 	if (target && target->IsNPC() && !target->IsAura()) {
+-		if(FireRunActionSource::NativeRunTerminalSource::HandleOriginalChestOpen(*this,*target->CastToNPC()))return;
+ 		HandleLDoNOpen(target->CastToNPC());
+ 	}
+ }
+@@ -16242,7 +16216,6 @@
+ void Client::Handle_OP_TradeAcceptClick(const EQApplicationPacket *app)
+ {
+ 	Mob* with = trade->With();
+-	if(with&&with->IsNPC()&&FireRunActionSource::NativeRunTerminalSource::HandleOriginalAccept(*this,*with->CastToNPC()))return;
+ 	trade->state = TradeAccepted;
+ 
+ 	if (with && with->IsClient()) {
 --- a/zone/client_spirit_shroud.cpp
 +++ b/zone/client_spirit_shroud.cpp
 @@ -498,7 +498,6 @@
@@ -2544,20 +3078,22 @@
   // COMMIT. No Save/Load, lease takeover, queue release or SQL occurs here.
 --- a/zone/corpse.cpp
 +++ b/zone/corpse.cpp
-@@ -1,4 +1,3 @@
+@@ -1,5 +1,3 @@
+-#include "fire_run_terminal_scene.h"
 -#include "fire_material_loot_source.h"
  /*	EQEmu: EQEmulator
  
  	Copyright (C) 2001-2026 EQEmu Development Team
-@@ -150,7 +149,6 @@
+@@ -151,8 +149,6 @@
  	SetCash(npc->GetCopper(), npc->GetSilver(), npc->GetGold(), npc->GetPlatinum());
  
  	npctype_id = npc_type_id;
 -	FireRunActionSource::OriginalMissionMaterialDeath::CaptureActualCorpse(*this,*npc);
+- FireRunActionSource::OriginalTerminalDeath::CaptureActualCorpse(*this,*npc);
  	SetPlayerKillItemID(0);
  	m_character_id        = 0;
  	m_corpse_db_id        = 0;
-@@ -636,7 +634,6 @@
+@@ -638,7 +634,6 @@
  
  Corpse::~Corpse()
  {
@@ -2565,15 +3101,24 @@
  	if (m_is_player_corpse && !(m_player_corpse_depop && m_corpse_db_id == 0)) {
  		Save();
  	}
-@@ -1474,7 +1471,6 @@
+@@ -1196,7 +1191,6 @@
  	if (!c) {
  		return;
  	}
+-	if(!FireRunActionSource::NativeRunTerminalSource::AuthorizeActualCorpse(*c,*this)){if(IsBeingLootedBy(c))ResetLooter();SendEndLootErrorPacket(c);return;}
+ 
+ 	// Added 12/08. Started compressing loot struct on live.
+ 	if (m_player_corpse_depop) {
+@@ -1477,8 +1471,6 @@
+ 	if (!c) {
+ 		return;
+ 	}
+-	if(!FireRunActionSource::NativeRunTerminalSource::AuthorizeActualCorpse(*c,*this)){if(IsBeingLootedBy(c))ResetLooter();SendEndLootErrorPacket(c);return;}
 -	FireRunActionSource::NativeRunLootSource fire_material_loot(*c,*this);
  
  	auto lootitem = (LootingItem_Struct *) app->pBuffer;
  
-@@ -1711,10 +1707,6 @@
+@@ -1715,10 +1707,6 @@
  		}
  
  
@@ -2584,7 +3129,7 @@
  		// safe to ACK now
  		c->QueuePacket(app);
  
-@@ -1772,9 +1764,7 @@
+@@ -1776,9 +1764,7 @@
  				item_data->item_id
  			);
  			/* Delete Item Instance */
@@ -2597,28 +3142,35 @@
  		/* Remove Bag Contents */
 --- a/zone/corpse.h
 +++ b/zone/corpse.h
-@@ -1,4 +1,3 @@
+@@ -1,5 +1,3 @@
+-#include "fire_run_terminal_scene.h"
 -#include <memory>
  /*	EQEmu: EQEmulator
  
  	Copyright (C) 2001-2026 EQEmu Development Team
-@@ -26,7 +25,6 @@
+@@ -27,8 +25,6 @@
  
  class EQApplicationPacket;
  class Group;
+-namespace FireRunActionSource {class NativeRunTerminalSource;class PreparedTerminalChestPlan;class PublishedTerminalReturnSink;class OriginalTerminalDeath;class RunTerminalAttempt;class OriginalTerminalDeathProof;}
 -namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
  class NPC;
  class Raid;
  
-@@ -40,11 +38,6 @@
+@@ -42,16 +38,6 @@
  #define MAX_LOOTERS 72
  
  class Corpse : public Mob {
 - friend class FireRunActionSource::RunUseWitness;
+- friend class FireRunActionSource::NativeRunTerminalSource;
+- friend class FireRunActionSource::PreparedTerminalChestPlan;
+- friend class FireRunActionSource::PublishedTerminalReturnSink;
+- friend class FireRunActionSource::OriginalTerminalDeath;
 - friend class FireRunActionSource::OriginalMissionMaterialDeath;
 - friend class FireRunActionSource::NativeRunLootSource;
 - std::shared_ptr<FireRunActionSource::RunCorpseLifetime> m_fire_run_action_lifetime;
 - std::shared_ptr<FireRunActionSource::MissionMaterialCorpseOrigin> m_fire_material_origin;
+- std::shared_ptr<FireRunActionSource::OriginalTerminalDeathProof::State> m_fire_terminal_death_origin;
  public:
  
  	static void SendEndLootErrorPacket(Client *client);
@@ -2672,12 +3224,13 @@
  
 --- a/zone/entity.cpp
 +++ b/zone/entity.cpp
-@@ -1,4 +1,3 @@
+@@ -1,5 +1,3 @@
+-#include "fire_run_terminal_scene.h"
 -#include "fire_material_loot_source.h"
  #include "bound_destructible_ruins.h"
  /*	EQEmu: EQEmulator
  
-@@ -37,9 +36,6 @@
+@@ -38,9 +36,6 @@
  #include "zone/string_ids.h"
  #include "zone/water_map.h"
  #include "zone/worldserver.h"
@@ -2687,30 +3240,33 @@
  
  #include "common/strings.h"
  #include "common/util/uuid.h"
-@@ -582,9 +578,6 @@
+@@ -583,10 +578,6 @@
  			entity_list.RemoveMob(id);
  		}
  	}
 -	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Drain();
 -	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Drain();
 -	FireRunActionSource::NativeRunHelperSource::DrainCompletions();
+-	FireRunActionSource::NativeRunTerminalSource::DrainCompletions();
  }
  
  void EntityList::BeaconProcess()
-@@ -679,7 +672,6 @@
+@@ -681,8 +672,6 @@
  
  	corpse->CalcCorpseName();
  	corpse_list.emplace(std::pair<uint16, Corpse *>(corpse->GetID(), corpse));
 -	FireRunActionSource::OriginalMissionMaterialDeath::ObserveActualCorpseRegistered(*corpse);
+- FireRunActionSource::OriginalTerminalDeath::ObserveActualCorpseRegistered(*corpse);
  
  	if (!corpse_timer.Enabled())
  		corpse_timer.Start();
-@@ -701,8 +693,6 @@
+@@ -704,9 +693,6 @@
  	npc_list.emplace(std::pair<uint16, NPC *>(npc->GetID(), npc));
  	mob_list.emplace(std::pair<uint16, Mob *>(npc->GetID(), npc));
  
 -	FirePersonalOccurrenceSource::CaptureConstructBeforeOriginalSpawnCallbacks(npc);
 -	FireRunActionSource::NativeRunHelperSource::ObserveActualRegistration(npc);
+-	FireRunActionSource::NativeRunTerminalSource::ObserveActualRegistration(npc);
  	entity_list.ScanCloseMobs(npc);
  
  	if (!BoundDestructibles::IsRuins(npc) && parse->HasQuestSub(npc->GetNPCTypeID(), EVENT_SPAWN)) {
@@ -3343,7 +3899,7 @@
 -} // namespace FireRunActionSource
 --- a/zone/fire_native_item_custody.cpp
 +++ /dev/null
-@@ -1,862 +0,0 @@
+@@ -1,988 +0,0 @@
 -// Native selected writer and custody source proposal. Not installed/built or
 -// activation-ready; initial admission and serving activation remain unselected.
 -#include "client.h"
@@ -3365,6 +3921,9 @@
 -#include "fire_run_action_scene.h"
 -#include "fire_run_item_origin.h"
 -#include "fire_material_loot_source.h"
+-#include "fire_run_terminal_custody.h"
+-#include "fire_run_terminal_scene.h"
+-#include <utility>
 -#include "../common/util/uuid.h"
 -#include "../common/dynamic_zone_base.h"
 -#include <charconv>
@@ -3379,7 +3938,11 @@
 -extern Zone* zone;
 -extern ZoneDatabase database;
 -#include "fire_run_action_custody_impl.inc"
+-namespace FireRunActionSource { namespace {
+-void RequireActualGuardianLoot(Database&,const RunLootFacts&);
+-}}
 -#include "fire_run_item_origin_impl.inc"
+-#include "fire_run_terminal_custody_impl.inc"
 -namespace FirePersonalOccurrenceSource {
 -PublishedNativeUse::PublishedNativeUse(const Client& owner,const OriginalItemUse& original,
 - uint64_t sequence,uint32_t output_item,int32_t output_serial,int16_t output_slot,
@@ -3454,6 +4017,20 @@
 -  bool persistence_entered=false,commit_attempted=false;
 -
 - };
+- enum class MoldPhase {Captured,Committed,Unknown,Rejected};
+- struct MoldReturn {
+-  MoldPhase phase=MoldPhase::Captured;
+-  std::unique_ptr<FireRunActionSource::PublishedTerminalReturnReceipt::State> receipt;
+-  std::unique_ptr<OriginalItemSnapshot> mold;
+-  const EQ::ItemInstance* original=nullptr;
+-  std::unique_ptr<EQ::ItemInstance> spent;
+-  std::string token;
+-  std::shared_ptr<Housing::InventorySessions::ZoneReservation> session;
+-  std::optional<Housing::InventorySessions::Lease> lease;
+-  NativeInventoryFence fence;
+-  bool persistence_entered=false,commit_attempted=false;
+- };
+- std::unique_ptr<MoldReturn> mold_return;
 - std::array<std::optional<Binding>,3> accepted;
 - uint64_t sequence=0;
 - std::unique_ptr<Click> click;
@@ -4205,10 +4782,115 @@
 - return true;
 -}
 -
+-FireRunActionSource::OriginalTerminalReturnResult NativeItemCustody::MoldReturnSelected(Client& c,
+- std::unique_ptr<FireRunActionSource::OriginalMoldTrade> original,
+- std::unique_ptr<FireRunActionSource::PreparedTerminalChestPlan> plan) {
+- using namespace FireRunActionSource;
+- using Result=OriginalTerminalReturnResult;
+- if(!original||!plan||!zone||!c.HasInventorySessionReservation()||
+-  !NativeRunTerminalCustody::ValidateOriginalMoldReturn(c,*original)||!plan->RevalidateBeforePersist(c))return Result::RejectedBeforeMutation;
+- if(!c.m_fire_item_custody)c.m_fire_item_custody.reset(new NativeItemCustody);
+- auto* owner=Owned(c);
+- if((owner->state_->click&&owner->state_->click->fence.Active())||
+-  (owner->state_->mold_return&&owner->state_->mold_return->phase==State::MoldPhase::Unknown))return Result::RejectedBeforeMutation;
+- auto pending=std::make_unique<State::MoldReturn>();
+- pending->receipt=std::make_unique<PublishedTerminalReturnReceipt::State>();pending->receipt->owner=&c;
+- pending->receipt->original=std::move(original);pending->receipt->plan=std::move(plan);
+- const auto& facts=pending->receipt->original->Facts();const auto slot=facts.mold.slot;
+- pending->original=c.m_inv.GetItem(slot);pending->mold=OriginalItemSnapshot::Capture(slot,pending->original);
+- if(!pending->mold)return Result::RejectedBeforeMutation;
+- pending->token=ItemOriginToken(*pending->original);
+- pending->session=c.InventorySessionReleaseTicket();pending->lease=pending->session?pending->session->SnapshotFor(c):std::nullopt;
+- if(!pending->lease||!pending->session->HeldFor(c))return Result::RejectedBeforeMutation;
+- pending->fence.inventory_=&c.m_inv;pending->fence.character_=c.CharacterID();pending->fence.launched_=true;
+- for(int16_t at=EQ::invslot::TRADE_BEGIN;at<=EQ::invslot::TRADE_NPC_END;++at)pending->fence.roots_.push_back(at);
+- pending->fence.instances_.push_back(pending->original);
+- owner->state_->mold_return=std::move(pending);auto& f=*owner->state_->mold_return;f.fence.Attach();
+- const auto character_id=c.CharacterID();const Client* expected=&c;const auto ticket=f.session;
+- const auto live=[character_id,expected,ticket]()noexcept {
+-  auto* now=entity_list.GetClientByCharID(character_id);
+-  return now&&now==expected&&ticket&&now->InventorySessionReleaseTicket()==ticket&&ticket->HeldFor(*now);
+- };
+- bool transaction=false,known_commit=false;
+- std::optional<PublishedTerminalReturnReceipt> handoff;
+- try {
+-  // The real trade map node is pinned before SQL. No ordinary PopItem, generic
+-  // delivery count, inventory mutation, trade reset or actor publication yet.
+-  auto node=c.m_inv.m_trade.find(slot);
+-  if(node==c.m_inv.m_trade.end()||node->second!=f.original||!live()||
+-   !f.mold->Matches(slot,c.m_inv.GetItem(slot))||!f.receipt->plan->RevalidateBeforePersist(c))
+-   throw std::runtime_error("Fire original mold trade changed before persistence");
+-  auto session=ActionQuery(database,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
+-  if(session.RowCount()!=1||ActionNumber(session.begin()[1])||ActionNumber(session.begin()[2])!=1)
+-   throw std::runtime_error("Fire mold writer needs fresh strict session");
+-  const auto connection=ActionNumber(session.begin()[0]);
+-  if(!database.TransactionBeginStrict().Success())throw std::runtime_error("Fire mold strict begin failed");transaction=true;
+-  auto foundation=ActionQuery(database,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' "
+-   "AND table_name IN('inventory','character_data','housing_inventory_sessions','housing_live_item_leases')");
+-  if(foundation.RowCount()!=1||ActionNumber(foundation.begin()[0])!=4)throw std::runtime_error("Fire mold native inventory foundation differs");
+-  auto actor=ActionQuery(database,fmt::format("SELECT id FROM character_data WHERE id={} AND account_id={} AND deleted_at IS NULL FOR UPDATE",c.CharacterID(),c.AccountID()));
+-  if(actor.RowCount()!=1)throw std::runtime_error("Fire mold original actor changed");
+-  const auto hex=[](const uint8_t* data,size_t size) {
+-   const char* digits="0123456789ABCDEF";std::string value;value.reserve(2*size);
+-   for(size_t i=0;i<size;++i){value+=digits[data[i]>>4];value+=digits[data[i]&15];}return value;
+-  };
+-  const auto& lease=*f.lease;
+-  auto held=ActionQuery(database,fmt::format("SELECT account_id,epoch,HEX(token),HEX(process_key),HEX(client_key),zone_id,instance_id,active "
+-   "FROM housing_inventory_sessions WHERE character_id={} FOR UPDATE",c.CharacterID()));
+-  if(held.RowCount()!=1)throw std::runtime_error("Fire mold inventory lease absent");auto row=held.begin();
+-  if(!lease.active||ActionNumber(row[0])!=lease.actor.account_id||ActionNumber(row[1])!=lease.epoch||!row[2]||
+-   std::string(row[2])!=hex(lease.token.data(),lease.token.size())||!row[3]||
+-   std::string(row[3])!=hex(reinterpret_cast<const uint8_t*>(lease.owner.process_key.data()),lease.owner.process_key.size())||!row[4]||
+-   std::string(row[4])!=hex(reinterpret_cast<const uint8_t*>(lease.owner.client_key.data()),lease.owner.client_key.size())||
+-   ActionNumber(row[5])!=lease.owner.zone_id||ActionNumber(row[6])!=lease.owner.instance_id||ActionNumber(row[7])!=1)
+-   throw std::runtime_error("Fire mold native lease changed");
+-  auto custody=ActionQuery(database,fmt::format("SELECT account_id,pending_key FROM housing_live_item_leases WHERE character_id={} FOR UPDATE",c.CharacterID()));
+-  if(custody.RowCount()>1||(custody.RowCount()&&(ActionNumber(custody.begin()[0])!=c.AccountID()||
+-   (custody.begin()[1]&&*custody.begin()[1]))))throw std::runtime_error("Fire mold native pending custody exists");
+-  std::string where;
+-  for(int16_t at=EQ::invslot::TRADE_BEGIN;at<=EQ::invslot::TRADE_NPC_END;++at) {
+-   if(!where.empty())where+=" OR ";where+="slot_id="+std::to_string(at);
+-   const auto child=EQ::InventoryProfile::CalcSlotId(at,uint8_t(0));
+-   if(child!=INVALID_INDEX)where+=" OR slot_id BETWEEN "+std::to_string(child)+" AND "+std::to_string(child+EQ::invbag::SLOT_COUNT-1);
+-  }
+-  auto persisted=ActionQuery(database,"SELECT "+std::string(Housing::InventoryRowDB::Columns)+" FROM inventory WHERE character_id="+
+-   std::to_string(c.CharacterID())+" AND ("+where+") ORDER BY slot_id FOR UPDATE");
+-  if(persisted.RowCount()!=1)throw std::runtime_error("Fire mold durable four-root universe differs");
+-  auto durable=Housing::InventoryRowDB::Decode(persisted.begin());
+-  if(durable.values.slot_id!=slot||!Housing::InventoryProjection::Matches(durable,*f.original,
+-   Housing::InventoryProjection::ReconstructionScope::CharacterProfile))throw std::runtime_error("Fire mold original durable root differs");
+-  if(!live()||!f.mold->Matches(slot,c.m_inv.GetItem(slot))||!f.receipt->plan->RevalidateBeforePersist(c)||
+-   f.receipt->plan->AcceptedMembers()!=facts.accepted_members)throw std::runtime_error("Fire mold actual plan changed before selected write");
+-  const auto terminal=StageMoldReturnActual(database,connection,*f.receipt->original,f.token,f.persistence_entered);
+-  // Same locked origin remains published1 through all original Source plan
+-  // validation;consume2 only after the real selected save, before SAME COMMIT.
+-  if(!f.receipt->plan->RevalidateBeforePersist(c))throw std::runtime_error("Fire mold plan changed before native trade save");
+-  f.fence.writer_=&database;f.persistence_entered=true;
+-  const bool saved=database.SaveInventory(c.CharacterID(),nullptr,slot);
+-  if(!saved)throw std::runtime_error("Fire mold selected native trade save failed");
+-  ConsumeMoldOriginActual(database,connection,facts,f.token,terminal);f.fence.writer_=nullptr;
+-  ActionSession(database,connection);f.commit_attempted=true;
+-  const auto commit=database.TransactionCommitStrict();transaction=false;
+-  if(!commit.Success())throw std::runtime_error("Fire mold strict COMMIT unknown");known_commit=true;
+-  // Allocation-free same actual memory removal. The preexisting trade node is
+-  // retained;its original physical instance now belongs to this held frame.
+-  f.spent.reset(std::exchange(node->second,nullptr));f.phase=State::MoldPhase::Committed;f.fence.Detach();
+-  f.receipt->row=terminal;f.receipt->run=facts.mission.run;f.receipt->sequence=facts.native_sequence;
+-  PublishedTerminalReturnReceipt issued(std::move(f.receipt));handoff.emplace(std::move(issued));
+- }catch(...) {
+-  if(known_commit){if(live())c.RejectInventorySessionAdmission();return Result::UnknownHold;}
+-  f.fence.writer_=nullptr;if(transaction)database.TransactionRollbackStrict();
+-  if(f.persistence_entered||f.commit_attempted){f.phase=State::MoldPhase::Unknown;c.RejectInventorySessionAdmission();return Result::UnknownHold;}
+-  f.phase=State::MoldPhase::Rejected;f.fence.Detach();return Result::RejectedBeforeMutation;
+- }
+- OnOriginalTerminalReturnPublished(c,*handoff); // final mutable sink, outside catch
+- return Result::KnownCommitted; // stack only;never touch Client/state after sink
+-}
+-
 -}
 --- a/zone/fire_native_item_custody.h
 +++ /dev/null
-@@ -1,78 +0,0 @@
+@@ -1,82 +0,0 @@
 -#pragma once
 -#include <cstdint>
 -#include <memory>
@@ -4216,6 +4898,7 @@
 -namespace EQEmu::SharedCore::InventorySessions {class ZoneReservation;}
 -namespace EQ { class ItemInstance; }
 -namespace FireRunActionSource {class NativeRunActionCustody;class OriginalDoorUse;class PreparedRunDoorPlan;enum class DoorActionResult:uint8_t;}
+-namespace FireRunActionSource {class NativeRunTerminalCustody;class OriginalMoldTrade;class PreparedTerminalChestPlan;enum class OriginalTerminalReturnResult;}
 -namespace FirePersonalOccurrenceSource {
 -struct Binding;
 -// Client-owned, feature-private native input state. No packet/Lua constructor.
@@ -4260,6 +4943,9 @@
 - };
 -private:
 - friend class FireRunActionSource::NativeRunActionCustody;
+- friend class FireRunActionSource::NativeRunTerminalCustody;
+- static FireRunActionSource::OriginalTerminalReturnResult MoldReturnSelected(Client&,
+-  std::unique_ptr<FireRunActionSource::OriginalMoldTrade>,std::unique_ptr<FireRunActionSource::PreparedTerminalChestPlan>);
 - static FireRunActionSource::DoorActionResult DoorSelected(Client&,
 -  std::unique_ptr<FireRunActionSource::OriginalDoorUse>,std::unique_ptr<FireRunActionSource::PreparedRunDoorPlan>);
 - static bool PublishSelected(Client&,bool client_update);
@@ -4962,7 +5648,7 @@
 -  "'shared_task_dynamic_zones','dynamic_zones','dynamic_zone_members','instance_list','instance_list_player','shared_task_activity_state')");
 - if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=12)throw std::runtime_error("Fire action foundation differs");
 - q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='rof2_fire_run_actions'");
-- if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=25)throw std::runtime_error("Fire action schema differs");
+- if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=29)throw std::runtime_error("Fire action schema differs");
 - q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() "
 -  "AND table_name='rof2_fire_run_actions' AND index_name='one_action_per_run' AND non_unique=0 "
 -  "AND ((seq_in_index=1 AND column_name='shared_task_id') OR (seq_in_index=2 AND column_name='action_kind'))");
@@ -5134,7 +5820,7 @@
 -} // namespace FireRunActionSource
 --- a/zone/fire_run_action_geometry.h
 +++ /dev/null
-@@ -1,40 +0,0 @@
+@@ -1,41 +0,0 @@
 -#pragma once
 -#include "fire_run_action_scene.h"
 -#include <glm/glm.hpp>
@@ -5158,7 +5844,7 @@
 -}};return values;}
 -
 -struct MaterialSpawnBinding {uint32_t spawn,npc,item;int activity;};
--inline const std::array<MaterialSpawnBinding,14>& BoundMaterialSpawns(){static const std::array<MaterialSpawnBinding,14> values{{
+-inline const std::array<MaterialSpawnBinding,15>& BoundMaterialSpawns(){static const std::array<MaterialSpawnBinding,15> values{{
 -{304062000,490900,47748,0},
 -{304062001,490900,47748,0},
 -{304062002,490901,47749,1},
@@ -5173,6 +5859,7 @@
 -{304062011,490908,47754,11},
 -{304062012,490909,47755,12},
 -{304062013,490910,47757,15},
+-{304062014,490911,47758,17},
 -}};return values;}
 -} // namespace FireRunActionSource
 --- a/zone/fire_run_action_scene.h
@@ -5600,15 +6287,16 @@
 -} // namespace FireRunActionSource
 --- a/zone/fire_run_item_origin_impl.inc
 +++ /dev/null
-@@ -1,321 +0,0 @@
+@@ -1,323 +0,0 @@
 -// Included only in the feature-private native writer, after action ledger helpers.
 -// Durable current-run provenance is independent of process/runtime item serials.
 -namespace FireRunActionSource {
+-namespace {void RequireActualGuardianLoot(Database&,const RunLootFacts&);}
 -namespace {
 -bool OriginItem(uint32_t id) noexcept {
 - switch(id) {case 47748:case 47749:case 47750:case 47751:case 47752:
 - case 47753:case 47754:case 47755:case 47756:case 47757:case 47760:
-- case 47761:case 47762:return true;default:return false;}
+- case 47761:case 47762:case 47758:return true;default:return false;}
 -}
 -bool OriginShape(const EQ::ItemInstance& item) {
 - return item.GetItem()&&OriginItem(item.GetID())&&item.IsClassCommon()&&
@@ -5641,7 +6329,7 @@
 - auto q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='rof2_fire_run_item_origins' AND engine='InnoDB'");
 - if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=1)throw std::runtime_error("Fire origin engine differs");
 - q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='rof2_fire_run_item_origins'");
-- if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=20)throw std::runtime_error("Fire origin schema differs");
+- if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=21)throw std::runtime_error("Fire origin schema differs");
 - q=ActionQuery(db,"SELECT COUNT(*) FROM information_schema.statistics WHERE table_schema=DATABASE() AND table_name='rof2_fire_run_item_origins' AND index_name='PRIMARY' AND non_unique=0 AND seq_in_index=1 AND column_name='token'");
 - if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=1)throw std::runtime_error("Fire origin primary key differs");
 -}
@@ -5725,9 +6413,9 @@
 - for(const auto& input:s.inputs)RequirePublishedOrigin(db,s.mission,input.item,input.token,true);
 - write_entered=true;s.staged=true;
 - auto q=ActionQuery(db,fmt::format("INSERT INTO rof2_fire_run_item_origins "
--  "(token,shared_task_id,item_id,origin_kind,state,producer_character_id,producer_local_occurrence,producer_accepted_time,producer_native_sequence,"
+-  "(token,shared_task_id,item_id,origin_kind,state,producer_character_id,producer_local_occurrence,producer_accepted_time,producer_native_sequence,source_death_sequence,"
 -  "source_npc_type_id,source_corpse_entity_id,source_loot_slot,native_item_serial,native_item_slot,created_at,published_at,consumed_at,consumed_action_id,consumed_output_token,consumed_by_character_id) "
--  "VALUES (UNHEX('{}'),{},{},{},0,{},{},{},{},NULL,NULL,NULL,{},{},UNIX_TIMESTAMP(),NULL,NULL,NULL,NULL,NULL)",
+-  "VALUES (UNHEX('{}'),{},{},{},0,{},{},{},{},NULL,NULL,NULL,NULL,{},{},UNIX_TIMESTAMP(),NULL,NULL,NULL,NULL,NULL)",
 -  s.output_token,s.mission.run,s.output_item,unsigned(s.kind),s.mission.character,s.mission.local_occurrence,s.mission.accepted_time,s.sequence,s.output_serial,s.output_slot));
 - if(q.RowsAffected()!=1)throw std::runtime_error("Fire transform output origin insert differs");
 - for(const auto& input:s.inputs) {
@@ -5851,7 +6539,7 @@
 -namespace {
 -bool OriginalLootItem(uint32_t id)noexcept {
 - switch(id) {case 47748:case 47749:case 47750:case 47751:case 47752:
-- case 47753:case 47754:case 47755:case 47757:case 47760:case 47761:return true;default:return false;}
+- case 47753:case 47754:case 47755:case 47757:case 47758:case 47760:case 47761:return true;default:return false;}
 -}
 -bool SameMission(const MissionRunFacts& a,const MissionRunFacts& b)noexcept {
 - return a.run==b.run&&a.local_occurrence==b.local_occurrence&&a.character==b.character&&
@@ -5911,16 +6599,426 @@
 -  const auto connection=ActionNumber(q.begin()[0]);
 -  if(!database.TransactionBeginStrict().Success())return false;
 -  transaction=true;OriginFoundation(database);LockCurrentRun(database,p.mission);
+-  if(p.item_id==47758)RequireActualGuardianLoot(database,p);
 -  q=ActionQuery(database,fmt::format("INSERT INTO rof2_fire_run_item_origins "
--   "(token,shared_task_id,item_id,origin_kind,state,producer_character_id,producer_local_occurrence,producer_accepted_time,producer_native_sequence,"
+-   "(token,shared_task_id,item_id,origin_kind,state,producer_character_id,producer_local_occurrence,producer_accepted_time,producer_native_sequence,source_death_sequence,"
 -   "source_npc_type_id,source_corpse_entity_id,source_loot_slot,native_item_serial,native_item_slot,created_at,published_at,consumed_at,consumed_action_id,consumed_output_token,consumed_by_character_id) "
--   "VALUES (UNHEX('{}'),{},{},1,1,{},{},{},{},{},{},{},{},{},UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),NULL,NULL,NULL,NULL)",
+-   "VALUES (UNHEX('{}'),{},{},1,1,{},{},{},{},{},{},{},{},{},{},UNIX_TIMESTAMP(),UNIX_TIMESTAMP(),NULL,NULL,NULL,NULL)",
 -   s.token,p.mission.run,p.item_id,p.mission.character,p.mission.local_occurrence,p.mission.accepted_time,p.native_sequence,
--   p.source_npc_type,p.source_corpse_entity,p.source_loot_slot,p.native_item_serial,p.saved_slot));
+-   p.source_death_sequence,p.source_npc_type,p.source_corpse_entity,p.source_loot_slot,p.native_item_serial,p.saved_slot));
 -  if(q.RowsAffected()!=1)throw std::runtime_error("Fire original loot origin insert differs");
 -  ActionSession(database,connection);const auto commit=database.TransactionCommitStrict();transaction=false;return commit.Success();
 - }catch(...){if(transaction)database.TransactionRollbackStrict();return false;}
 -}
+-} // namespace FireRunActionSource
+--- a/zone/fire_run_terminal_custody.h
++++ /dev/null
+@@ -1,43 +0,0 @@
+-#pragma once
+-#include <cstdint>
+-#include <memory>
+-#include <optional>
+-class Client;
+-namespace FirePersonalOccurrenceSource {class NativeItemCustody;}
+-namespace FireRunActionSource {
+-class OriginalMoldTrade;
+-class PreparedTerminalChestPlan;
+-class OriginalTerminalDeathProof;
+-class NativeTerminalPublication;
+-class NativeRunTerminalSource;
+-class PublishedTerminalReturnSink;
+-enum class OriginalTerminalReturnResult;
+-struct PublishedTerminalReturnView {
+- const OriginalMoldTrade* original=nullptr;
+- PreparedTerminalChestPlan* plan=nullptr;
+- uint64_t terminal_row=0,run_id=0,native_sequence=0;
+-};
+-class PublishedTerminalReturnReceipt final {
+- friend class FirePersonalOccurrenceSource::NativeItemCustody;
+- struct State;
+- std::unique_ptr<State> state_;
+- explicit PublishedTerminalReturnReceipt(std::unique_ptr<State>)noexcept;
+-public:
+- ~PublishedTerminalReturnReceipt();
+- PublishedTerminalReturnReceipt(PublishedTerminalReturnReceipt&&)noexcept;
+- PublishedTerminalReturnReceipt(const PublishedTerminalReturnReceipt&)=delete;
+- PublishedTerminalReturnReceipt& operator=(const PublishedTerminalReturnReceipt&)=delete;
+- PublishedTerminalReturnReceipt& operator=(PublishedTerminalReturnReceipt&&)=delete;
+- std::optional<PublishedTerminalReturnView> Take(const Client&)noexcept;
+-};
+-class NativeRunTerminalCustody final {
+- friend class NativeRunTerminalSource;
+- friend class FirePersonalOccurrenceSource::NativeItemCustody;
+- static bool ValidateOriginalMoldReturn(Client&,const OriginalMoldTrade&);
+- static OriginalTerminalReturnResult ExecuteOriginalReturn(Client&,
+-  std::unique_ptr<OriginalMoldTrade>,std::unique_ptr<PreparedTerminalChestPlan>);
+- static bool AcknowledgeOriginalDeath(OriginalTerminalDeathProof&);
+- static bool AcknowledgeNativePublication(NativeTerminalPublication&);
+-};
+-void OnOriginalTerminalReturnPublished(Client&,PublishedTerminalReturnReceipt&);
+-} // namespace FireRunActionSource
+--- a/zone/fire_run_terminal_custody_impl.inc
++++ /dev/null
+@@ -1,202 +0,0 @@
+-// Included only by the existing feature-private native item custody writer.
+-namespace FireRunActionSource {
+-struct PublishedTerminalReturnReceipt::State {
+- const Client* owner=nullptr;bool taken=false;
+- uint64_t row=0,run=0,sequence=0;
+- std::unique_ptr<OriginalMoldTrade> original;
+- std::unique_ptr<PreparedTerminalChestPlan> plan;
+-};
+-PublishedTerminalReturnReceipt::PublishedTerminalReturnReceipt(std::unique_ptr<State> s)noexcept:state_(std::move(s)){}
+-PublishedTerminalReturnReceipt::~PublishedTerminalReturnReceipt()=default;
+-PublishedTerminalReturnReceipt::PublishedTerminalReturnReceipt(PublishedTerminalReturnReceipt&& p)noexcept:state_(std::move(p.state_)){}
+-std::optional<PublishedTerminalReturnView> PublishedTerminalReturnReceipt::Take(const Client& c)noexcept {
+- if(!state_||state_->taken||state_->owner!=&c)return {};state_->taken=true;
+- return PublishedTerminalReturnView{state_->original.get(),state_->plan.get(),state_->row,state_->run,state_->sequence};
+-}
+-namespace {
+-constexpr unsigned TerminalKind=6; // finite existing run/action ledger, no reward path
+-struct GuardianCustody {uint64_t character,occurrence,accepted,sequence,npc,spawn,actor,corpse;};
+-std::vector<std::string> TerminalParts(const std::string& text,char separator,size_t maximum) {
+- if(text.size()>2048)throw std::runtime_error("Fire terminal snapshot too large");
+- std::vector<std::string> parts;size_t begin=0;
+- for(;;){const auto end=text.find(separator,begin);parts.push_back(text.substr(begin,end==std::string::npos?end:end-begin));
+-  if(parts.size()>maximum)throw std::runtime_error("Fire terminal snapshot count differs");
+-  if(end==std::string::npos)return parts;begin=end+1;}
+-}
+-GuardianCustody GuardianSnapshot(const char* text) {
+- if(!text)throw std::runtime_error("Fire actual Guardian custody absent");
+- const auto p=TerminalParts(text,'|',9);
+- if(p.size()!=9||p[0]!="g1")throw std::runtime_error("Fire Guardian snapshot shape differs");
+- GuardianCustody g{ActionNumber(p[1].c_str()),ActionNumber(p[2].c_str()),ActionNumber(p[3].c_str()),ActionNumber(p[4].c_str()),
+-  ActionNumber(p[5].c_str()),ActionNumber(p[6].c_str()),ActionNumber(p[7].c_str()),ActionNumber(p[8].c_str())};
+- if(!g.character||!g.occurrence||!g.accepted||!g.sequence||g.npc!=490911||g.spawn!=304062014||!g.actor||!g.corpse)
+-  throw std::runtime_error("Fire Guardian original facts differ");
+- return g;
+-}
+-std::string MemberSnapshot(const TerminalReturnFacts& f) {
+- if(!f.instance_expire_at||f.accepted_members.empty()||f.accepted_members.size()>6)
+-  throw std::runtime_error("Fire terminal accepted snapshot missing");
+- std::string text="m1|"+std::to_string(f.instance_expire_at);uint32_t last=0;bool giver=false;
+- for(const auto& m:f.accepted_members) {
+-  if(m.character<=last||!m.local_occurrence||m.accepted_time!=f.mission.accepted_time)
+-   throw std::runtime_error("Fire terminal accepted snapshot differs");
+-  text+="|"+std::to_string(m.character)+":"+std::to_string(m.local_occurrence)+":"+std::to_string(m.accepted_time);last=m.character;
+-  if(m.character==f.mission.character&&m.local_occurrence==f.mission.local_occurrence)giver=true;
+- }
+- if(!giver)throw std::runtime_error("Fire returning holder outside accepted snapshot");return text;
+-}
+-void RequireMemberSnapshot(const char* raw,const MissionRunFacts& current,uint64_t now) {
+- if(!raw)throw std::runtime_error("Fire terminal accepted snapshot absent");
+- auto p=TerminalParts(raw,'|',8);
+- if(p.size()<3||p[0]!="m1"||ActionNumber(p[1].c_str())<=now)
+-  throw std::runtime_error("Fire terminal original instance lease expired");
+- bool found=false;uint64_t previous=0;
+- for(size_t i=2;i<p.size();++i) {
+-  auto m=TerminalParts(p[i],':',3);if(m.size()!=3)throw std::runtime_error("Fire terminal member shape differs");
+-  const auto id=ActionNumber(m[0].c_str()),occ=ActionNumber(m[1].c_str()),accepted=ActionNumber(m[2].c_str());
+-  if(id<=previous||!occ||accepted!=current.accepted_time)throw std::runtime_error("Fire terminal member epoch differs");
+-  previous=id;if(id==current.character&&occ==current.local_occurrence)found=true;
+- }
+- if(!found)throw std::runtime_error("Fire opener outside original accepted snapshot");
+-}
+-void RequireTerminalMembers(Database& db,const TerminalReturnFacts& f) {
+- auto q=ActionQuery(db,fmt::format("SELECT m.character_id,h.occurrence_id,r.accepted_time FROM shared_task_members m "
+-  "JOIN character_shared_task_reward_instances h ON h.shared_task_id=m.shared_task_id AND h.character_id=m.character_id AND h.task_id=920170 "
+-  "JOIN character_task_reward_instances r ON r.character_id=h.character_id AND r.task_id=h.task_id AND r.occurrence_id=h.occurrence_id "
+-  "WHERE m.shared_task_id={} ORDER BY m.character_id FOR UPDATE",f.mission.run));
+- if(q.RowCount()!=f.accepted_members.size())throw std::runtime_error("Fire terminal member universe changed");
+- size_t i=0;for(auto row=q.begin();row!=q.end();++row,++i) {
+-  const auto& m=f.accepted_members[i];if(ActionNumber(row[0])!=m.character||ActionNumber(row[1])!=m.local_occurrence||
+-   ActionNumber(row[2])!=m.accepted_time)throw std::runtime_error("Fire terminal original member changed");
+- }
+- q=ActionQuery(db,fmt::format("SELECT expire_at FROM instance_list WHERE id={} AND zone=490 AND version=1 AND never_expires=0 "
+-  "AND expire_at={} AND expire_at>UNIX_TIMESTAMP() FOR UPDATE",f.mission.instance,f.instance_expire_at));
+- if(q.RowCount()!=1)throw std::runtime_error("Fire terminal original instance lease changed");
+-}
+-void RequireTerminalStage(Database& db,uint64_t run,int goal) {
+- auto q=ActionQuery(db,fmt::format("SELECT activity_id,done_count,UNIX_TIMESTAMP(completed_time) FROM shared_task_activity_state "
+-  "WHERE shared_task_id={} AND activity_id BETWEEN {} AND {} ORDER BY activity_id FOR UPDATE",run,16,goal));
+- if(q.RowCount()!=unsigned(goal==18?3:1))throw std::runtime_error("Fire terminal activity shape differs");
+- int index=16;for(auto row=q.begin();row!=q.end();++row,++index) {
+-  const bool completed=goal==18&&index<18;
+-  if(ActionNumber(row[0])!=unsigned(index)||ActionNumber(row[1])!=(completed?1:0)||
+-   (completed?(!row[2]||!ActionNumber(row[2])):(row[2]&&ActionNumber(row[2]))))
+-   throw std::runtime_error("Fire terminal actual activity state differs");
+- }
+-}
+-void RequireActualGuardianLoot(Database& db,const RunLootFacts& p) {
+- ActionFoundation(db);
+- auto q=ActionQuery(db,fmt::format("SELECT guardian_death_snapshot,state,inventory_debit_committed FROM rof2_fire_run_actions "
+-  "WHERE shared_task_id={} AND action_kind=6 FOR UPDATE",p.mission.run));
+- if(q.RowCount()!=1||ActionNumber(q.begin()[1])||ActionNumber(q.begin()[2]))
+-  throw std::runtime_error("Fire mold lacks actual unreturned Guardian custody");
+- const auto g=GuardianSnapshot(q.begin()[0]);
+- if(p.source_npc_type!=g.npc||p.source_spawn!=g.spawn||p.source_death_sequence!=g.sequence||p.source_corpse_entity!=g.corpse)
+-  throw std::runtime_error("Fire mold original Guardian/corpse sequence differs");
+-}
+-uint64_t StageMoldReturnActual(Database& db,uint64_t connection,const OriginalMoldTrade& original,
+- const std::string& token,bool& write_entered) {
+- const auto& f=original.Facts();ActionSession(db,connection);ActionFoundation(db);OriginFoundation(db);LockCurrentRun(db,f.mission);
+- RequireTerminalStage(db,f.mission.run,18);RequireTerminalMembers(db,f);
+- auto q=ActionQuery(db,fmt::format("SELECT id,guardian_death_snapshot,state,inventory_debit_committed FROM rof2_fire_run_actions "
+-  "WHERE shared_task_id={} AND action_kind=6 FOR UPDATE",f.mission.run));
+- if(q.RowCount()!=1||ActionNumber(q.begin()[2])||ActionNumber(q.begin()[3]))
+-  throw std::runtime_error("Fire terminal already reserved or lacks genuine Guardian");
+- const auto row=ActionNumber(q.begin()[0]);const auto g=GuardianSnapshot(q.begin()[1]);
+- RequirePublishedOrigin(db,f.mission,47758,token,true);
+- q=ActionQuery(db,fmt::format("SELECT source_npc_type_id,source_corpse_entity_id,source_death_sequence FROM rof2_fire_run_item_origins "
+-  "WHERE token=UNHEX('{}') AND shared_task_id={} AND item_id=47758 AND origin_kind=1 AND state=1 FOR UPDATE",token,f.mission.run));
+- if(q.RowCount()!=1||ActionNumber(q.begin()[0])!=g.npc||ActionNumber(q.begin()[1])!=g.corpse||ActionNumber(q.begin()[2])!=g.sequence)
+-  throw std::runtime_error("Fire returning mold lacks same original Guardian origin");
+- const auto members=MemberSnapshot(f);write_entered=true;
+- q=ActionQuery(db,fmt::format("UPDATE rof2_fire_run_actions SET creator_character_id={},creator_local_occurrence={},creator_accepted_time={},"
+-  "native_sequence={},source_item_id=47758,source_origin_token=UNHEX('{}'),source_item_serial={},source_item_slot={},source_item_charges={},"
+-  "inventory_debit_committed=1,accepted_member_snapshot='{}',committed_at=UNIX_TIMESTAMP() "
+-  "WHERE id={} AND shared_task_id={} AND action_kind=6 AND state=0 AND inventory_debit_committed=0",
+-  f.mission.character,f.mission.local_occurrence,f.mission.accepted_time,f.native_sequence,token,f.mold.serial,f.mold.slot,f.mold.charges,
+-  members,row,f.mission.run)); // snapshot is finite canonical digits/separators only
+- if(q.RowsAffected()!=1)throw std::runtime_error("Fire terminal reservation changed");ActionSession(db,connection);return row;
+-}
+-void ConsumeMoldOriginActual(Database& db,uint64_t connection,const TerminalReturnFacts& f,const std::string& token,uint64_t row) {
+- ActionSession(db,connection);
+- auto q=ActionQuery(db,fmt::format("UPDATE rof2_fire_run_item_origins SET state=2,consumed_at=UNIX_TIMESTAMP(),consumed_action_id={},consumed_by_character_id={} "
+-  "WHERE token=UNHEX('{}') AND shared_task_id={} AND item_id=47758 AND state=1",row,f.mission.character,token,f.mission.run));
+- if(q.RowsAffected()!=1)throw std::runtime_error("Fire original mold consumption changed");ActionSession(db,connection);
+-}
+-}
+-bool NativeRunTerminalCustody::ValidateOriginalMoldReturn(Client& c,const OriginalMoldTrade& original) {
+- try {
+-  const auto& f=original.Facts();const auto& p=f.mold;
+-  if(!ValidMission(f.mission)||f.mission.character!=c.CharacterID()||f.client_entity!=c.GetID()||!f.native_sequence||
+-   f.giver_npc!=490912||f.giver_spawn!=304062015||!f.giver_entity||p.item_id!=47758||!p.serial||p.units!=1||
+-   !EQ::ValueWithin(p.slot,EQ::invslot::TRADE_BEGIN,EQ::invslot::TRADE_NPC_END)||!zone||
+-   zone->GetZoneID()!=f.mission.zone||zone->GetInstanceID()!=f.mission.instance)return false;
+-  const auto* item=c.GetInv().GetItem(p.slot);
+-  if(!item||!OriginShape(*item)||item->GetID()!=47758||item->GetSerialNumber()!=p.serial||item->GetCharges()!=p.charges)return false;
+-  for(int16_t slot=EQ::invslot::TRADE_BEGIN;slot<=EQ::invslot::TRADE_NPC_END;++slot)
+-   if(slot!=p.slot&&c.GetInv().GetItem(slot))return false;
+-  RequirePublishedOrigin(database,f.mission,47758,ItemOriginToken(*item),false);return true;
+- }catch(...){return false;}
+-}
+-OriginalTerminalReturnResult NativeRunTerminalCustody::ExecuteOriginalReturn(Client& c,
+- std::unique_ptr<OriginalMoldTrade> original,std::unique_ptr<PreparedTerminalChestPlan> plan) {
+- return FirePersonalOccurrenceSource::NativeItemCustody::MoldReturnSelected(c,std::move(original),std::move(plan));
+-}
+-bool NativeRunTerminalCustody::AcknowledgeOriginalDeath(OriginalTerminalDeathProof& proof) {
+- if(proof.taken_)return false;proof.taken_=true; // FIRST, including every error path
+- const auto p=proof.Facts();const auto& m=p.mission;
+- if(!proof.state_||!ValidMission(m)||!p.native_sequence||p.terminal_row||p.original_chest_open||
+-  p.npc_type!=490911||p.original_spawn!=304062014||!p.original_entity||!p.corpse_entity)return false;
+- bool transaction=false;
+- try {
+-  const auto snapshot=fmt::format("g1|{}|{}|{}|{}|{}|{}|{}|{}",m.character,m.local_occurrence,m.accepted_time,
+-   p.native_sequence,p.npc_type,p.original_spawn,p.original_entity,p.corpse_entity);
+-  auto q=ActionQuery(database,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
+-  if(q.RowCount()!=1||ActionNumber(q.begin()[1])||ActionNumber(q.begin()[2])!=1)return false;
+-  const auto connection=ActionNumber(q.begin()[0]);if(!database.TransactionBeginStrict().Success())return false;
+-  transaction=true;ActionFoundation(database);LockCurrentRun(database,m);RequireTerminalStage(database,m.run,16);
+-  q=ActionQuery(database,fmt::format("SELECT id FROM rof2_fire_run_actions WHERE shared_task_id={} AND action_kind=6 FOR UPDATE",m.run));
+-  if(q.RowCount())throw std::runtime_error("Fire genuine Guardian already acknowledged; no replay");
+-  q=ActionQuery(database,fmt::format("INSERT INTO rof2_fire_run_actions "
+-   "(shared_task_id,action_kind,creator_character_id,creator_local_occurrence,creator_accepted_time,native_sequence,dynamic_zone_id,zone_id,instance_id,"
+-   "source_role,source_item_id,source_origin_token,source_item_serial,source_item_slot,source_item_charges,inventory_debit_committed,state,guardian_death_snapshot,committed_at) "
+-   "VALUES ({},6,{},{},{},{},{},{},{},0,NULL,NULL,NULL,NULL,NULL,0,0,'{}',UNIX_TIMESTAMP())",
+-   m.run,m.character,m.local_occurrence,m.accepted_time,p.native_sequence,m.dynamic_zone,m.zone,m.instance,snapshot));
+-  if(q.RowsAffected()!=1||!q.LastInsertedID())throw std::runtime_error("Fire Guardian custody insert differs");
+-  ActionSession(database,connection);const auto commit=database.TransactionCommitStrict();transaction=false;return commit.Success();
+- }catch(...){if(transaction)database.TransactionRollbackStrict();return false;}
+-}
+-bool NativeRunTerminalCustody::AcknowledgeNativePublication(NativeTerminalPublication& proof) {
+- if(proof.taken_)return false;proof.taken_=true;
+- const auto p=proof.Facts();const auto& m=p.mission;
+- if(!proof.owner_||!ValidMission(m)||!p.terminal_row||!p.original_accept_sequence||!p.actor_entity)return false;
+- const bool registration=p.boundary==TerminalNativeBoundary::Registered;
+- if(!registration&&p.boundary!=TerminalNativeBoundary::OpenedDeath)return false;
+- if(registration?(p.corpse_entity||p.native_death_sequence):(!p.corpse_entity||!p.native_death_sequence))return false;
+- bool transaction=false;
+- try {
+-  auto q=ActionQuery(database,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit,UNIX_TIMESTAMP()");
+-  if(q.RowCount()!=1||ActionNumber(q.begin()[1])||ActionNumber(q.begin()[2])!=1)return false;
+-  const auto connection=ActionNumber(q.begin()[0]),now=ActionNumber(q.begin()[3]);
+-  if(!database.TransactionBeginStrict().Success())return false;transaction=true;ActionFoundation(database);LockCurrentRun(database,m);
+-  q=ActionQuery(database,fmt::format("SELECT creator_character_id,creator_local_occurrence,creator_accepted_time,native_sequence,dynamic_zone_id,zone_id,instance_id,"
+-   "inventory_debit_committed,state,terminal_actor_entity_id,terminal_corpse_entity_id,accepted_member_snapshot FROM rof2_fire_run_actions "
+-   "WHERE id={} AND shared_task_id={} AND action_kind=6 FOR UPDATE",p.terminal_row,m.run));
+-  if(q.RowCount()!=1)throw std::runtime_error("Fire terminal exact custody row missing");auto row=q.begin();
+-  if(ActionNumber(row[3])!=p.original_accept_sequence||ActionNumber(row[4])!=m.dynamic_zone||ActionNumber(row[5])!=m.zone||
+-   ActionNumber(row[6])!=m.instance||ActionNumber(row[7])!=1||ActionNumber(row[8])!=(registration?0:1))
+-   throw std::runtime_error("Fire terminal publication custody differs");
+-  RequireMemberSnapshot(row[11],m,now);
+-  if(registration) {
+-   if(ActionNumber(row[0])!=m.character||ActionNumber(row[1])!=m.local_occurrence||ActionNumber(row[2])!=m.accepted_time||row[9]||row[10])
+-    throw std::runtime_error("Fire terminal original registration differs");
+-  }else if(!row[9]||ActionNumber(row[9])!=p.actor_entity||row[10])throw std::runtime_error("Fire terminal original opened actor differs");
+-  q=ActionQuery(database,fmt::format("UPDATE rof2_fire_run_actions SET state={},terminal_actor_entity_id={},terminal_corpse_entity_id={},"
+-   "native_published_at=COALESCE(native_published_at,UNIX_TIMESTAMP()),terminal_at={} WHERE id={} AND shared_task_id={} AND action_kind=6 "
+-   "AND state={} AND inventory_debit_committed=1",registration?1:2,p.actor_entity,registration?"NULL":std::to_string(p.corpse_entity),
+-   registration?"NULL":"UNIX_TIMESTAMP()",p.terminal_row,m.run,registration?0:1));
+-  if(q.RowsAffected()!=1)throw std::runtime_error("Fire terminal positive publication changed");
+-  ActionSession(database,connection);const auto commit=database.TransactionCommitStrict();transaction=false;return commit.Success();
+- }catch(...){if(transaction)database.TransactionRollbackStrict();return false;}
+-}
+-} // namespace FireRunActionSource
+--- a/zone/fire_run_terminal_scene.h
++++ /dev/null
+@@ -1,155 +0,0 @@
+-#pragma once
+-#include "fire_run_action_scene.h"
+-#include <vector>
+-class TaskManager;
+-namespace FireRunActionSource {
+-class NativeRunTerminalCustody;
+-class NativeRunTerminalSource;
+-class OriginalTerminalDeath;
+-class RunTerminalAttempt;
+-class RunUseWitness;
+-enum class OriginalTerminalReturnResult {RejectedBeforeMutation,KnownCommitted,UnknownHold};
+-struct TerminalAcceptedMemberFacts {
+- uint32_t character=0,accepted_time=0;uint64_t local_occurrence=0;
+- bool operator==(const TerminalAcceptedMemberFacts& b)const noexcept {
+-  return character==b.character&&accepted_time==b.accepted_time&&local_occurrence==b.local_occurrence;
+- }
+-};
+-struct TerminalReturnFacts {
+- MissionRunFacts mission;
+- PhysicalItemFacts mold;
+- uint64_t native_sequence=0;
+- uint32_t client_entity=0,giver_entity=0,giver_spawn=0,giver_npc=0;
+- uint64_t instance_expire_at=0;
+- std::vector<TerminalAcceptedMemberFacts> accepted_members;
+-};
+-// A read-only snapshot is not authority. This opaque use can be minted only
+-// by the actual selected native NPC trade before its first generic removal.
+-class OriginalMoldTrade final {
+- friend class NativeRunTerminalSource;
+- friend class PreparedTerminalChestPlan;
+- friend class PublishedTerminalReturnSink;
+- struct State;
+- std::shared_ptr<State> state_;
+- TerminalReturnFacts facts_;
+- OriginalMoldTrade(TerminalReturnFacts,std::shared_ptr<State>);
+-public:
+- ~OriginalMoldTrade();
+- const TerminalReturnFacts& Facts()const noexcept{return facts_;}
+- OriginalMoldTrade(const OriginalMoldTrade&)=delete;
+- OriginalMoldTrade& operator=(const OriginalMoldTrade&)=delete;
+-};
+-class PreparedTerminalChestPlan final {
+- friend class NativeRunTerminalSource;
+- friend class NativeRunTerminalCustody;
+- friend class FirePersonalOccurrenceSource::NativeItemCustody;
+- friend class PublishedTerminalReturnSink;
+- struct State;
+- std::unique_ptr<State> state_;
+- explicit PreparedTerminalChestPlan(std::unique_ptr<State>)noexcept;
+- static std::unique_ptr<PreparedTerminalChestPlan> PrepareActual(Client&,const OriginalMoldTrade&);
+- bool RevalidateBeforePersist(Client&)const;
+-public:
+- ~PreparedTerminalChestPlan();
+- const std::vector<TerminalAcceptedMemberFacts>& AcceptedMembers()const noexcept;
+- PreparedTerminalChestPlan(const PreparedTerminalChestPlan&)=delete;
+- PreparedTerminalChestPlan& operator=(const PreparedTerminalChestPlan&)=delete;
+-};
+-struct TerminalDeathFacts {
+- MissionRunFacts mission;
+- uint64_t native_sequence=0,terminal_row=0;
+- uint32_t npc_type=0,original_spawn=0,original_entity=0,corpse_entity=0;
+- bool original_chest_open=false; // fixed by private original native open frame
+-};
+-class OriginalTerminalDeathProof final {
+-public:
+- struct State; // opaque native witness state; no public constructor or issuer
+-private:
+- friend class OriginalTerminalDeath;
+- friend class NativeRunTerminalSource;
+- friend class NativeRunTerminalCustody;
+- TerminalDeathFacts facts_;
+- bool taken_=false;
+- std::shared_ptr<State> state_;
+- OriginalTerminalDeathProof(TerminalDeathFacts,std::shared_ptr<State>);
+-public:
+- ~OriginalTerminalDeathProof();
+- const TerminalDeathFacts& Facts()const noexcept{return facts_;}
+- OriginalTerminalDeathProof(const OriginalTerminalDeathProof&)=delete;
+- OriginalTerminalDeathProof& operator=(const OriginalTerminalDeathProof&)=delete;
+-};
+-// Scope begins at the original actual NPC::Death before any callback and can
+-// seal only its own positive native return plus SAME registered corpse.
+-class OriginalTerminalDeath final {
+- friend class ::TaskManager;
+- friend class OriginalMissionMaterialDeath;
+- friend class ::Corpse;
+- friend class ::EntityList;
+- friend class NativeRunTerminalSource;
+- struct State;
+- std::shared_ptr<State> state_;
+- OriginalTerminalDeath* previous_=nullptr;
+- static thread_local OriginalTerminalDeath* current_;
+- static uint64_t ActualGuardianSequence(NPC&);
+- static void ObserveActualKillVisit(Client&,NPC&);
+- static void CaptureActualCorpse(Corpse&,NPC&);
+- static void ObserveActualCorpseRegistered(Corpse&);
+-public:
+- explicit OriginalTerminalDeath(NPC&)noexcept;
+- ~OriginalTerminalDeath();
+- void SealActualSuccess(NPC&,uint32_t original_entity);
+-};
+-enum class TerminalNativeBoundary:uint8_t {Registered=1,OpenedDeath=2};
+-struct TerminalNativeFacts {
+- TerminalNativeBoundary boundary{};
+- MissionRunFacts mission;
+- uint64_t terminal_row=0,original_accept_sequence=0,native_death_sequence=0;
+- uint32_t actor_entity=0,corpse_entity=0;
+-};
+-class NativeTerminalPublication final {
+- friend class NativeRunTerminalSource;
+- friend class NativeRunTerminalCustody;
+- TerminalNativeFacts facts_;
+- std::shared_ptr<RunTerminalAttempt> owner_;
+- bool taken_=false;
+- NativeTerminalPublication(TerminalNativeFacts,std::shared_ptr<RunTerminalAttempt>);
+-public:
+- ~NativeTerminalPublication();
+- const TerminalNativeFacts& Facts()const noexcept{return facts_;}
+- NativeTerminalPublication(const NativeTerminalPublication&)=delete;
+- NativeTerminalPublication& operator=(const NativeTerminalPublication&)=delete;
+-};
+-class PublishedTerminalReturnReceipt; // Core private one-use strict writer receipt
+-struct PublishedTerminalReturnView;
+-class PublishedTerminalReturnSink final {
+-public:
+- static void Receive(Client&,PublishedTerminalReturnReceipt&);
+-};
+-class NativeRunTerminalSource final {
+- friend class ::Client;
+- friend class ::NPC;
+- friend class ::Corpse;
+- friend class ::EntityList;
+- friend class ::Zone;
+- friend class ::TaskManager;
+- friend class PreparedTerminalChestPlan;
+- friend class PublishedTerminalReturnSink;
+- friend class OriginalTerminalDeath;
+- static bool HandleOriginalAccept(Client&,NPC&); // before original finish/state/reset
+- static bool RejectUnissuedFinishTrade(Client&,NPC&);
+- static bool RevalidateOriginalReturn(Client&,const OriginalMoldTrade&);
+- static std::shared_ptr<OriginalTerminalDeathProof::State> death_head_,death_tail_;
+- static bool CaptureOriginalOpenDeath(NPC&,OriginalTerminalDeathProof::State&);
+- static void BindOriginalOpenedCorpse(Corpse&,OriginalTerminalDeathProof::State&);
+- static bool SealOriginalChestCorpse(OriginalTerminalDeathProof::State&);
+- static bool AuthorizeActualChestOpen(Client&,NPC&);
+- static bool HandleOriginalChestOpen(Client&,NPC&); // actual native open target
+- static bool RejectOrdinaryChestDeath(NPC&);
+- static void ObserveActualRegistration(NPC*);
+- static void ObserveActualDestruction(NPC&);
+- static std::optional<bool> ProcessActualChest(NPC&);
+- static bool AuthorizeActualCorpse(Client&,Corpse&);
+- static void DrainCompletions();
+- static void DiscardCompletions()noexcept;
+-};
 -} // namespace FireRunActionSource
 --- a/zone/fire_shared_transform_published.h
 +++ /dev/null
@@ -6020,6 +7118,400 @@
 -// Core owns the opaque private issuer/Take receipt and SAME post-COMMIT callsite.
 -void OnOriginalSharedTransformPublished(Client&,PublishedSharedTransformUse&);
 -} // namespace FireSharedTransformSource
+--- a/zone/fire_terminal_local_profiles.h
++++ /dev/null
+@@ -1,391 +0,0 @@
+-#pragma once
+-#include "zonedump.h"
+-#include <cstring>
+-// SOURCE ONLY. Exact pinned loader/struct ABI; compare BEFORE NPC construction.
+-// Local baseline only: never authorizes a spawn, acceptance, custody or serving activation.
+-// Whole-object equality is intentional: loader and expected are memset-zeroed, including padding.
+-// A different loader/ABI requires source requalification, not silent field omission.
+-namespace FireTerminalLocalSourceProfiles {
+-inline bool MatchesExpectedLoadedNPCType(const NPCType& actual) {
+- NPCType expected; std::memset(&expected,0,sizeof(expected));
+- switch(actual.npc_id) {
+- case 490911:
+-  std::memcpy(expected.name,"The_Vault_Guardian",18);
+-  std::memcpy(expected.lastname,"",0);
+-  expected.current_hp = 500000;
+-  expected.max_hp = 500000;
+-  expected.size = 0;
+-  expected.runspeed = 0;
+-  expected.gender = 0;
+-  expected.race = 653;
+-  expected.class_ = 1;
+-  expected.bodytype = 1;
+-  expected.deity = 0;
+-  expected.level = 88;
+-  expected.npc_id = 490911;
+-  expected.texture = 0;
+-  expected.helmtexture = 0;
+-  expected.herosforgemodel = 0;
+-  expected.loottable_id = 304062011;
+-  expected.npc_spells_id = 0;
+-  expected.npc_spells_effects_id = 0;
+-  expected.npc_faction_id = 0;
+-  expected.faction_amount = 0;
+-  expected.merchanttype = 0;
+-  expected.alt_currency_type = 0;
+-  expected.adventure_template = 0;
+-  expected.trap_template = 0;
+-  expected.light = 0;
+-  expected.AC = 0;
+-  expected.Mana = 0;
+-  expected.ATK = 0;
+-  expected.STR = 75;
+-  expected.STA = 75;
+-  expected.DEX = 75;
+-  expected.AGI = 75;
+-  expected.INT = 80;
+-  expected.WIS = 75;
+-  expected.CHA = 75;
+-  expected.MR = 0;
+-  expected.FR = 0;
+-  expected.CR = 0;
+-  expected.PR = 0;
+-  expected.DR = 0;
+-  expected.Corrup = 0;
+-  expected.PhR = 0;
+-  expected.haircolor = 1;
+-  expected.beardcolor = 1;
+-  expected.eyecolor1 = 1;
+-  expected.eyecolor2 = 1;
+-  expected.hairstyle = 1;
+-  expected.luclinface = 1;
+-  expected.beard = 0;
+-  expected.drakkin_heritage = 0;
+-  expected.drakkin_tattoo = 0;
+-  expected.drakkin_details = 0;
+-  expected.min_dmg = 900;
+-  expected.max_dmg = 14000;
+-  expected.charm_ac = 0;
+-  expected.charm_min_dmg = 0;
+-  expected.charm_max_dmg = 0;
+-  expected.charm_attack_delay = 0;
+-  expected.charm_accuracy_rating = 0;
+-  expected.charm_avoidance_rating = 0;
+-  expected.charm_atk = 0;
+-  expected.attack_count = -1;
+-  std::memcpy(expected.special_abilities,"",0);
+-  expected.d_melee_texture1 = 0;
+-  expected.d_melee_texture2 = 0;
+-  std::memcpy(expected.ammo_idfile,"IT10",4);
+-  expected.prim_melee_type = 28;
+-  expected.sec_melee_type = 28;
+-  expected.ranged_type = 7;
+-  expected.hp_regen = 0;
+-  expected.hp_regen_per_second = 0;
+-  expected.mana_regen = 0;
+-  expected.aggroradius = 70;
+-  expected.assistradius = 70;
+-  expected.see_invis = 0;
+-  expected.see_invis_undead = false;
+-  expected.see_hide = false;
+-  expected.see_improved_hide = false;
+-  expected.qglobal = false;
+-  expected.npc_aggro = false;
+-  expected.spawn_limit = 0;
+-  expected.mount_color = 0;
+-  expected.attack_speed = 0;
+-  expected.attack_delay = 3000;
+-  expected.accuracy_rating = 0;
+-  expected.avoidance_rating = 0;
+-  expected.findable = false;
+-  expected.trackable = true;
+-  expected.is_quest_npc = true;
+-  expected.slow_mitigation = 0;
+-  expected.maxlevel = 0;
+-  expected.scalerate = 100;
+-  expected.private_corpse = false;
+-  expected.unique_spawn_by_name = false;
+-  expected.underwater = false;
+-  expected.emoteid = 0;
+-  expected.spellscale = 100;
+-  expected.healscale = 100;
+-  expected.no_target_hotkey = false;
+-  expected.raid_target = false;
+-  expected.armtexture = 0;
+-  expected.bracertexture = 0;
+-  expected.handtexture = 0;
+-  expected.legtexture = 0;
+-  expected.feettexture = 0;
+-  expected.ignore_despawn = false;
+-  expected.show_name = true;
+-  expected.untargetable = false;
+-  expected.skip_global_loot = true;
+-  expected.rare_spawn = false;
+-  expected.skip_auto_scale = false;
+-  expected.stuck_behavior = 0;
+-  expected.use_model = 0;
+-  expected.flymode = -1;
+-  expected.always_aggro = false;
+-  expected.exp_mod = 100;
+-  expected.heroic_strikethrough = 0;
+-  expected.keeps_sold_items = true;
+-  expected.is_parcel_merchant = false;
+-  expected.greed = 0;
+-  expected.multiquest_enabled = false;
+-  expected.m_npc_tint_id = 0;
+-  break;
+- case 490912:
+-  std::memcpy(expected.name,"Gotonur",7);
+-  std::memcpy(expected.lastname,"",0);
+-  expected.current_hp = 300000;
+-  expected.max_hp = 300000;
+-  expected.size = 0;
+-  expected.runspeed = 0;
+-  expected.gender = 0;
+-  expected.race = 653;
+-  expected.class_ = 12;
+-  expected.bodytype = 1;
+-  expected.deity = 0;
+-  expected.level = 85;
+-  expected.npc_id = 490912;
+-  expected.texture = 0;
+-  expected.helmtexture = 0;
+-  expected.herosforgemodel = 0;
+-  expected.loottable_id = 0;
+-  expected.npc_spells_id = 0;
+-  expected.npc_spells_effects_id = 0;
+-  expected.npc_faction_id = 0;
+-  expected.faction_amount = 0;
+-  expected.merchanttype = 0;
+-  expected.alt_currency_type = 0;
+-  expected.adventure_template = 0;
+-  expected.trap_template = 0;
+-  expected.light = 0;
+-  expected.AC = 0;
+-  expected.Mana = 0;
+-  expected.ATK = 0;
+-  expected.STR = 75;
+-  expected.STA = 75;
+-  expected.DEX = 75;
+-  expected.AGI = 75;
+-  expected.INT = 80;
+-  expected.WIS = 75;
+-  expected.CHA = 75;
+-  expected.MR = 0;
+-  expected.FR = 0;
+-  expected.CR = 0;
+-  expected.PR = 0;
+-  expected.DR = 0;
+-  expected.Corrup = 0;
+-  expected.PhR = 0;
+-  expected.haircolor = 1;
+-  expected.beardcolor = 1;
+-  expected.eyecolor1 = 1;
+-  expected.eyecolor2 = 1;
+-  expected.hairstyle = 1;
+-  expected.luclinface = 1;
+-  expected.beard = 0;
+-  expected.drakkin_heritage = 0;
+-  expected.drakkin_tattoo = 0;
+-  expected.drakkin_details = 0;
+-  expected.min_dmg = 0;
+-  expected.max_dmg = 0;
+-  expected.charm_ac = 0;
+-  expected.charm_min_dmg = 0;
+-  expected.charm_max_dmg = 0;
+-  expected.charm_attack_delay = 0;
+-  expected.charm_accuracy_rating = 0;
+-  expected.charm_avoidance_rating = 0;
+-  expected.charm_atk = 0;
+-  expected.attack_count = -1;
+-  std::memcpy(expected.special_abilities,"",0);
+-  expected.d_melee_texture1 = 0;
+-  expected.d_melee_texture2 = 0;
+-  std::memcpy(expected.ammo_idfile,"IT10",4);
+-  expected.prim_melee_type = 28;
+-  expected.sec_melee_type = 28;
+-  expected.ranged_type = 7;
+-  expected.hp_regen = 0;
+-  expected.hp_regen_per_second = 0;
+-  expected.mana_regen = 0;
+-  expected.aggroradius = 70;
+-  expected.assistradius = 70;
+-  expected.see_invis = 0;
+-  expected.see_invis_undead = false;
+-  expected.see_hide = false;
+-  expected.see_improved_hide = false;
+-  expected.qglobal = false;
+-  expected.npc_aggro = false;
+-  expected.spawn_limit = 0;
+-  expected.mount_color = 0;
+-  expected.attack_speed = 0;
+-  expected.attack_delay = 3000;
+-  expected.accuracy_rating = 0;
+-  expected.avoidance_rating = 0;
+-  expected.findable = false;
+-  expected.trackable = true;
+-  expected.is_quest_npc = true;
+-  expected.slow_mitigation = 0;
+-  expected.maxlevel = 0;
+-  expected.scalerate = 100;
+-  expected.private_corpse = false;
+-  expected.unique_spawn_by_name = false;
+-  expected.underwater = false;
+-  expected.emoteid = 0;
+-  expected.spellscale = 100;
+-  expected.healscale = 100;
+-  expected.no_target_hotkey = false;
+-  expected.raid_target = false;
+-  expected.armtexture = 0;
+-  expected.bracertexture = 0;
+-  expected.handtexture = 0;
+-  expected.legtexture = 0;
+-  expected.feettexture = 0;
+-  expected.ignore_despawn = false;
+-  expected.show_name = true;
+-  expected.untargetable = false;
+-  expected.skip_global_loot = true;
+-  expected.rare_spawn = false;
+-  expected.skip_auto_scale = false;
+-  expected.stuck_behavior = 0;
+-  expected.use_model = 0;
+-  expected.flymode = -1;
+-  expected.always_aggro = false;
+-  expected.exp_mod = 0;
+-  expected.heroic_strikethrough = 0;
+-  expected.keeps_sold_items = true;
+-  expected.is_parcel_merchant = false;
+-  expected.greed = 0;
+-  expected.multiquest_enabled = false;
+-  expected.m_npc_tint_id = 0;
+-  break;
+- case 490914:
+-  std::memcpy(expected.name,"a_stone_chest",13);
+-  std::memcpy(expected.lastname,"",0);
+-  expected.current_hp = 1;
+-  expected.max_hp = 1;
+-  expected.size = 0;
+-  expected.runspeed = 0;
+-  expected.gender = 0;
+-  expected.race = 378;
+-  expected.class_ = 62;
+-  expected.bodytype = 1;
+-  expected.deity = 0;
+-  expected.level = 1;
+-  expected.npc_id = 490914;
+-  expected.texture = 0;
+-  expected.helmtexture = 0;
+-  expected.herosforgemodel = 0;
+-  expected.loottable_id = 304062012;
+-  expected.npc_spells_id = 0;
+-  expected.npc_spells_effects_id = 0;
+-  expected.npc_faction_id = 0;
+-  expected.faction_amount = 0;
+-  expected.merchanttype = 0;
+-  expected.alt_currency_type = 0;
+-  expected.adventure_template = 0;
+-  expected.trap_template = 0;
+-  expected.light = 0;
+-  expected.AC = 0;
+-  expected.Mana = 0;
+-  expected.ATK = 0;
+-  expected.STR = 75;
+-  expected.STA = 75;
+-  expected.DEX = 75;
+-  expected.AGI = 75;
+-  expected.INT = 80;
+-  expected.WIS = 75;
+-  expected.CHA = 75;
+-  expected.MR = 0;
+-  expected.FR = 0;
+-  expected.CR = 0;
+-  expected.PR = 0;
+-  expected.DR = 0;
+-  expected.Corrup = 0;
+-  expected.PhR = 0;
+-  expected.haircolor = 1;
+-  expected.beardcolor = 1;
+-  expected.eyecolor1 = 1;
+-  expected.eyecolor2 = 1;
+-  expected.hairstyle = 1;
+-  expected.luclinface = 1;
+-  expected.beard = 0;
+-  expected.drakkin_heritage = 0;
+-  expected.drakkin_tattoo = 0;
+-  expected.drakkin_details = 0;
+-  expected.min_dmg = 0;
+-  expected.max_dmg = 0;
+-  expected.charm_ac = 0;
+-  expected.charm_min_dmg = 0;
+-  expected.charm_max_dmg = 0;
+-  expected.charm_attack_delay = 0;
+-  expected.charm_accuracy_rating = 0;
+-  expected.charm_avoidance_rating = 0;
+-  expected.charm_atk = 0;
+-  expected.attack_count = -1;
+-  std::memcpy(expected.special_abilities,"19,1^20,1",9);
+-  expected.d_melee_texture1 = 0;
+-  expected.d_melee_texture2 = 0;
+-  std::memcpy(expected.ammo_idfile,"IT10",4);
+-  expected.prim_melee_type = 28;
+-  expected.sec_melee_type = 28;
+-  expected.ranged_type = 7;
+-  expected.hp_regen = 0;
+-  expected.hp_regen_per_second = 0;
+-  expected.mana_regen = 0;
+-  expected.aggroradius = 70;
+-  expected.assistradius = 70;
+-  expected.see_invis = 0;
+-  expected.see_invis_undead = false;
+-  expected.see_hide = false;
+-  expected.see_improved_hide = false;
+-  expected.qglobal = false;
+-  expected.npc_aggro = false;
+-  expected.spawn_limit = 0;
+-  expected.mount_color = 0;
+-  expected.attack_speed = 0;
+-  expected.attack_delay = 3000;
+-  expected.accuracy_rating = 0;
+-  expected.avoidance_rating = 0;
+-  expected.findable = false;
+-  expected.trackable = true;
+-  expected.is_quest_npc = true;
+-  expected.slow_mitigation = 0;
+-  expected.maxlevel = 0;
+-  expected.scalerate = 100;
+-  expected.private_corpse = false;
+-  expected.unique_spawn_by_name = false;
+-  expected.underwater = false;
+-  expected.emoteid = 0;
+-  expected.spellscale = 100;
+-  expected.healscale = 100;
+-  expected.no_target_hotkey = false;
+-  expected.raid_target = false;
+-  expected.armtexture = 0;
+-  expected.bracertexture = 0;
+-  expected.handtexture = 0;
+-  expected.legtexture = 0;
+-  expected.feettexture = 0;
+-  expected.ignore_despawn = false;
+-  expected.show_name = true;
+-  expected.untargetable = false;
+-  expected.skip_global_loot = true;
+-  expected.rare_spawn = false;
+-  expected.skip_auto_scale = false;
+-  expected.stuck_behavior = 0;
+-  expected.use_model = 0;
+-  expected.flymode = -1;
+-  expected.always_aggro = false;
+-  expected.exp_mod = 0;
+-  expected.heroic_strikethrough = 0;
+-  expected.keeps_sold_items = true;
+-  expected.is_parcel_merchant = false;
+-  expected.greed = 0;
+-  expected.multiquest_enabled = false;
+-  expected.m_npc_tint_id = 0;
+-  break;
+- default: return false;
+- }
+- return std::memcmp(&actual,&expected,sizeof(NPCType))==0;
+-}
+-} // namespace FireTerminalLocalSourceProfiles
 --- a/zone/inventory.cpp
 +++ b/zone/inventory.cpp
 @@ -1,5 +1,3 @@
@@ -6216,12 +7708,13 @@
  			entity_list.ProcessMove(mob->CastToNPC(), m_teleport_to_x, m_teleport_to_y, m_teleport_to_z);
 --- a/zone/npc.cpp
 +++ b/zone/npc.cpp
-@@ -1,4 +1,3 @@
+@@ -1,5 +1,3 @@
+-#include "fire_run_terminal_scene.h"
 -#include "fire_run_action_scene.h"
  #include "bound_destructible_ruins.h"
  /*	EQEmu: EQEmulator
  
-@@ -18,7 +17,6 @@
+@@ -19,7 +17,6 @@
  	along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  #include "npc.h"
@@ -6229,38 +7722,41 @@
  
  #include "common/bodytypes.h"
  #include "common/classes.h"
-@@ -507,8 +505,6 @@
+@@ -508,9 +505,6 @@
  
  NPC::~NPC()
  {
 -	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
 - FireRunActionSource::NativeRunHelperSource::ObserveActualDestruction(*this);
+- FireRunActionSource::NativeRunTerminalSource::ObserveActualDestruction(*this);
  	AI_Stop();
  
  	if (proximity) {
-@@ -591,8 +587,6 @@
+@@ -593,9 +587,6 @@
  		}
  		return false;
  	}
 -
 -	if(const auto fire_owned=FireRunActionSource::NativeRunHelperSource::ProcessActual(*this))return *fire_owned;
+-	if(const auto fire_chest=FireRunActionSource::NativeRunTerminalSource::ProcessActualChest(*this))return *fire_chest;
  
  	// Keep the binding for current/entering clients, with no AI, ticks, spells,
  	// regeneration or second death processing while the original timer runs.
 --- a/zone/npc.h
 +++ b/zone/npc.h
-@@ -31,10 +31,6 @@
+@@ -31,11 +31,6 @@
  
  #include <deque>
  #include <list>
 -#include <memory>
+-namespace FireRunActionSource {class NativeRunTerminalSource;class PreparedTerminalChestPlan;class PublishedTerminalReturnSink;class OriginalTerminalDeath;class RunTerminalAttempt;class OriginalTerminalDeathProof;}
 -namespace FireRunActionSource {class RunHelperAttempt;class PreparedRunHelperPlan;}
 -namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
 -namespace FirePersonalOccurrenceSource { class OriginalConstructAttempt; class PublishedNativeUseSink; class OriginalConstructNativeDeath; class OriginalGotonurSayLifetime; class OriginalGotonurSayQueue;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
  
  struct NPCProximity {
  	float	min_x;
-@@ -801,18 +797,6 @@
+@@ -802,23 +797,6 @@
  	const Handin GetHandin() { return m_hand_in; }
  
  private:
@@ -6272,9 +7768,14 @@
 -	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_original_construct;
 -	friend class FirePersonalOccurrenceSource::OriginalGotonurSayQueue;
 - friend class FireRunActionSource::RunUseWitness;
+- friend class FireRunActionSource::NativeRunTerminalSource;
+- friend class FireRunActionSource::PreparedTerminalChestPlan;
+- friend class FireRunActionSource::PublishedTerminalReturnSink;
+- friend class FireRunActionSource::OriginalTerminalDeath;
 - friend class FireRunActionSource::NativeRunHelperSource;
 - friend class FireRunActionSource::PreparedRunHelperPlan;
 - std::shared_ptr<FireRunActionSource::RunHelperAttempt> m_fire_run_helper_attempt;
+- std::shared_ptr<FireRunActionSource::RunTerminalAttempt> m_fire_run_terminal_attempt;
 -	std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> m_fire_gotonur_say_lifetime;
  	void ReconcileHandinTaskDeliveries();
  
@@ -6537,7 +8038,7 @@
  	if (!client->m_shared_task_update && task_data->type == TaskType::Shared) {
  
 -		// Original door/owned helper providers submit their own real run-stamped native packet.
--		if(info->task_id==920170&&(activity_id==3||activity_id==7||activity_id==14))return 0;
+-		if(info->task_id==920170&&(activity_id==3||activity_id==7||activity_id==14||activity_id==16||activity_id==17||activity_id==18))return 0;
  		uint64_t fire_activity_run=0;
  		if(info->task_id==FireSharedActivityOrigin::Task) {
  			const auto actual=TaskSharedRewardIdentity::ReadRun(database,client->CharacterID(),info->task_id);
@@ -6583,7 +8084,12 @@
  	ClientTaskState();
 --- a/zone/task_manager.cpp
 +++ b/zone/task_manager.cpp
-@@ -16,7 +16,6 @@
+@@ -1,4 +1,3 @@
+-#include "fire_run_terminal_scene.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -17,7 +16,6 @@
  	along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
  #include "task_manager.h"
@@ -6591,11 +8097,12 @@
  #include "task_shared_reward_identity.h"
  #include "common/shared_task_admission.h"
  #include "common/merchant_language.h"
-@@ -2259,7 +2258,6 @@
+@@ -2260,8 +2258,6 @@
  
  		LogTasksDetail("Looping through client [{}]", c->GetCleanName());
  
 -		FirePersonalOccurrenceSource::NativeConstructParticipants::ObserveActualTaskKillVisit(*c, *client, *npc);
+-		FireRunActionSource::OriginalTerminalDeath::ObserveActualKillVisit(*c,*npc);
  		c->GetTaskState()->UpdateTasksOnKill(c, client, npc);
  	}
  }
@@ -6626,14 +8133,30 @@
  			task_state->RetryCompletedSelectableRewards(this, true);
  			TaskManager::Instance()->SendActiveTasksToClient(this);
  			TaskManager::Instance()->SendCompletedTasksToClient(this, task_state);
+--- a/zone/trading.cpp
++++ b/zone/trading.cpp
+@@ -1,4 +1,3 @@
+-#include "fire_run_terminal_scene.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -522,7 +521,6 @@
+ 		}
+ 	}
+ 	else if(tradingWith->IsNPC()) {
+-		if(FireRunActionSource::NativeRunTerminalSource::RejectUnissuedFinishTrade(*this,*tradingWith->CastToNPC()))return;
+ 		if (Housing::GuildPortalRuntime::HandIn(*this, tradingWith)) return;
+ 
+ 		bool quest_npc = false;
 --- a/zone/zone.cpp
 +++ b/zone/zone.cpp
-@@ -1,4 +1,3 @@
+@@ -1,5 +1,3 @@
+-#include "fire_run_terminal_scene.h"
 -#include "fire_run_action_scene.h"
  /*	EQEmu: EQEmulator
  
  	Copyright (C) 2001-2026 EQEmu Development Team
-@@ -24,8 +23,6 @@
+@@ -25,8 +23,6 @@
  #include "housing_pets.h"
  
  #include "zone.h"
@@ -6642,12 +8165,13 @@
  
  #include "common/data_verification.h"
  #include "common/eqemu_logsys.h"
-@@ -1112,9 +1109,6 @@
+@@ -1113,10 +1109,6 @@
  }
  
  Zone::~Zone() {
 -	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Discard();
 -	FireRunActionSource::NativeRunHelperSource::DiscardCompletions();
+-	FireRunActionSource::NativeRunTerminalSource::DiscardCompletions();
 -	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Discard();
  	ClearFellowshipCampfires();
   Housing::Pets::Clear();

@@ -1,5 +1,5 @@
 -- SOURCE ONLY. Exact Database-owner review/GO required; never executed here.
--- Finite13 nonstackable one-unit Fire170 materials only. Seal UUID is native
+-- Finite14 nonstackable one-unit Fire170 materials only. Seal UUID is native
 -- custom_data rof2.fire170.origin.v1; runtime serial is audit, not durable GUID.
 CREATE TABLE rof2_fire_run_item_origins (
  token BINARY(16) NOT NULL,
@@ -11,6 +11,7 @@ CREATE TABLE rof2_fire_run_item_origins (
  producer_local_occurrence BIGINT UNSIGNED NOT NULL,
  producer_accepted_time INT UNSIGNED NOT NULL,
  producer_native_sequence BIGINT UNSIGNED NOT NULL,
+ source_death_sequence BIGINT UNSIGNED NULL,
  source_npc_type_id INT UNSIGNED NULL,
  source_corpse_entity_id INT UNSIGNED NULL,
  source_loot_slot SMALLINT NULL,
@@ -24,7 +25,7 @@ CREATE TABLE rof2_fire_run_item_origins (
  consumed_by_character_id INT UNSIGNED NULL,
  PRIMARY KEY(token),
  KEY finite_run_item(shared_task_id,item_id,state),
- CONSTRAINT fire_origin_item CHECK(item_id IN(47748,47749,47750,47751,47752,47753,47754,47755,47756,47757,47760,47761,47762)),
+ CONSTRAINT fire_origin_item CHECK(item_id IN(47748,47749,47750,47751,47752,47753,47754,47755,47756,47757,47758,47760,47761,47762)),
  CONSTRAINT fire_origin_kind CHECK(origin_kind IN(1,2,3)),
  CONSTRAINT fire_origin_state CHECK(state IN(0,1,2))
 ) ENGINE=InnoDB;
@@ -40,3 +41,7 @@ CREATE TABLE rof2_fire_run_item_origins (
 -- Unsealed/foreign-run/pending/consumed items reject before spend. No backfill,
 -- tokenless lookup, item-ID/history factory, automatic retry/refund or regrant.
 -- World47759 deliberately excluded: separate reusable physical permanent key.
+
+-- Mold47758 origin1 additionally requires same genuine Guardian custody row,
+-- sourceDeathSequence/NPC/corpse concordance;its original trade consumes to
+-- SAME kind6 action ID,never a generic delivery or second reward path.
