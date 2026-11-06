@@ -1,0 +1,87 @@
+{
+  "status": "DISABLED_DRAFT_USER_FULL_STOP_NOT_BUILDABLE_ALONE",
+  "enabled": false,
+  "owner": "Spells Source component only",
+  "installed_parent_receipt_sha256": "0408385327555a85ce46dc68903d93fa454023b5cf7fc67ee6f6bc26694c20c9",
+  "source_handoff_sha256": "d97f4d5cec30bfa7125130edfff17b290f1eb2b48619be755ec950abac6737f7",
+  "abi_manifest_sha256": "b6d03ee92e036f09b2cf076a7364497fb6ea6f47e0ddc8b70c9026b603fdf5b2",
+  "incremental_source_pins": [
+    {
+      "path": "common/fungal_delivery_defs.h",
+      "preimage_sha256": null,
+      "postimage_sha256": "eeba36c9236b0f0d3f61936f152469150e16c205a90a78d0ad93b8be249db7b1"
+    },
+    {
+      "path": "common/fungal_item_operation_wire.h",
+      "preimage_sha256": "5415cd2053df28e3c5941bb06ebb60505b16906a230197491c3c3675627c8914",
+      "postimage_sha256": "d2cd415e560b390b5febc278196ebb22004353f794dba095caac1f0386e3b0dc"
+    },
+    {
+      "path": "common/shared_tasks.h",
+      "preimage_sha256": "53a0617faa9d0fbde18749bc689267266014f20331fe1610efcd54a75a6f70e4",
+      "postimage_sha256": "fc6854cab0aefdd6270ab0c88cee60d60980e2d65ece32ca7c378ef573ff9e0f"
+    },
+    {
+      "path": "world/fungal_item_world_source_impl.inc",
+      "preimage_sha256": "0d25b8b3b9d005707c80b5da71cdf5a459d79c123d4c1c1b33b24e85fdcaee72",
+      "postimage_sha256": "93825240920a94b49aea07b572590c2245d62ffd52d94d066c3b0ec7b86687aa"
+    },
+    {
+      "path": "world/shared_task_manager.cpp",
+      "preimage_sha256": "a79b2e6a52087febea89dc38fa9cc350e676f36d3f3c90209a44a563112b333f",
+      "postimage_sha256": "9db3ab1fd813ee1ade4476545d8eb02acf43c3fc0360dc3dd747c8f4f8a1953d"
+    },
+    {
+      "path": "zone/fungal_delivery_source.h",
+      "preimage_sha256": null,
+      "postimage_sha256": "7a7b972ee48e1a26c806add0ac9dc33ac1d4bba315fea750bd64d4936062d63f"
+    },
+    {
+      "path": "zone/fungal_delivery_source_impl.inc",
+      "preimage_sha256": null,
+      "postimage_sha256": "059c956bda1d13c5479fa77b7b8ad43542e96d12139398dea7bd6f05b656bded"
+    },
+    {
+      "path": "zone/fungal_item_operation_source.h",
+      "preimage_sha256": "0bd68084e233d5b89068824e1c5b7f7bade78f8a8cb39ef247fdd4ad588a6c6f",
+      "postimage_sha256": "dafcc6e53c5af507f76a0396c622e358007814e3eb7c77c32345925d56eb36ba"
+    },
+    {
+      "path": "zone/fungal_item_source_impl.inc",
+      "preimage_sha256": "5adadbf2cf0db7eef2af1c14717f42b60affd7a72e0f2135f2e80ac7ce70e2d5",
+      "postimage_sha256": "b5febe0b6ca5d3eb6d6f4cfc937492b7d20a46479c74e56cd14ba9401bbceb6c"
+    },
+    {
+      "path": "zone/shared_task_zone_messaging.cpp",
+      "preimage_sha256": "32963468d0b3fc3a6871443058b7d8dddcfc474293a3e7ab94357fd5430661a7",
+      "postimage_sha256": "f3ae0f7f0b445fcac9870e9c874ed7b0587acc4c25f9df92c6e218974ac461da"
+    },
+    {
+      "path": "zone/zone.cpp",
+      "preimage_sha256": "41692e0742937446192f0d33e4bb4f87004d570cb438a0c651d00010684af81e",
+      "postimage_sha256": "59a344083a70b0a561e772a52da7bd4848a44445fe52d50d09f4ee70f66c1d39"
+    }
+  ],
+  "scope": "Exactly10 real physical deliveries; nativepartial/mixedoriginalroots; privatepersonalconsumedcap+sameSaveobserver; wirev2 explicitKinds; partialWorldfullsnapshot+coveredACKbeforearchive; SAMEactualrunknownACKretainedallocationfreeonlyfornativeProcesscompletionretry; offzoneoriginalsceneecho+actualZoneInitknownwhistleACK+durableoneattemptbeforeuncheckednativecondition6204setter. Existing3itemops/9purehails remain. No physicaloutputs or directreward.",
+  "dependencies": [
+    "Unpublished Core-owned ten-delivery strict inventory/World custody component and new finite disabled delivery table. Not included here; owner publishes its own exact component.",
+    "Exact ABI-r2. This Source-only patch is not an independently buildable or installable package."
+  ],
+  "pending": [
+    "Compose Source and actual frozen Core component against exact installed parent, preserving all peer work.",
+    "One focused integration review remains incomplete, including original scene lease/type/member locks and actual native11active scene eligibility.",
+    "Correct branch publication of a later complete candidate, matched World/Zone compile, and separate guarded deployment if authorized after explicit resume.",
+    "Fungal loot/death/full mission hooks and gameplay acceptance remain incomplete."
+  ],
+  "qualification": {
+    "source_authored": true,
+    "combined_review_complete": false,
+    "built": false,
+    "installed": false,
+    "DDL_executed": false,
+    "missions_enabled": false,
+    "native_acceptance": false
+  },
+  "preservation": "Existing serving Fire and prior Fungal item/hail code remain unchanged. All Fungal mission/task/reward content disabled; nineteen hail type corrections source-only and unapplied.",
+  "resume": "User explicit resume required. No implementation, research, tests, builds, SQL, installation or retries while stopped."
+}

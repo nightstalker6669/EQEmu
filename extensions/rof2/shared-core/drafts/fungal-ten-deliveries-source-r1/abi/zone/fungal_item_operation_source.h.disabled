@@ -1,0 +1,142 @@
+#pragma once
+#include <cstdint>
+#include <memory>
+#include <optional>
+#include <vector>
+class Client;
+class NPC;
+class Zone;
+class Database;
+class ServerPacket;
+class EQApplicationPacket;
+struct ClientTaskInformation;
+namespace EQ { class ItemInstance; }
+namespace FungalInventory { class NativeCustody; }
+namespace FungalItemWire {struct Trailer;}
+namespace FungalItemSource {
+class OriginalDelivery;
+class CommittedDelivery;
+class KnownDeliveryAck;
+class NativeEvents;
+class Lifetime final {
+ friend class NativeEvents;
+ bool active_=true;
+ Lifetime()=default;
+};
+struct AcceptedFate {
+ uint32_t character=0,accepted=0;
+ uint64_t occurrence=0;
+ int slot=-1;
+};
+struct OperationFacts {
+ uint8_t scope=0; // 1 personal native reward occurrence; 2 actual World shared-run ID
+ uint32_t task=0,activity=0,character=0,accepted=0;
+ uint64_t occurrence=0,source_sequence=0;
+ uint32_t client_entity=0,npc_entity=0,npc_type=0,npc_spawn=0;
+ uint32_t input_item=0,input_quantity=0,output_item=0,output_quantity=0;
+ int personal_slot=-1;
+};
+// These are actual original native objects. Only NativeEvents can issue one;
+// neither a Lua caller nor a public facts aggregate can construct authority.
+class OriginalOperation final {
+ friend class NativeEvents;
+ friend class FungalInventory::NativeCustody;
+ friend class CommittedOperation;
+ OperationFacts facts_;
+ Client* client_=nullptr;
+ NPC* npc_=nullptr;
+ std::shared_ptr<Lifetime> client_life_,npc_life_,zone_life_;
+ Zone* zone_=nullptr;
+ bool trade_=false;
+ struct Root { int16_t slot=0; EQ::ItemInstance* original=nullptr;
+  uint32_t item=0; int32_t serial=0; int16_t charges=0; };
+ std::vector<Root> roots_;
+ uint32_t copper_=0,silver_=0,gold_=0,platinum_=0;
+ std::shared_ptr<ServerPacket> progress_;
+ std::shared_ptr<EQApplicationPacket> finish_;
+ OriginalOperation()=default;
+public:
+ ~OriginalOperation()=default;
+ OriginalOperation(const OriginalOperation&)=delete;
+ OriginalOperation& operator=(const OriginalOperation&)=delete;
+ const OperationFacts& Facts()const noexcept{return facts_;}
+};
+// Core alone issues this after SAME strict transaction known COMMIT and
+// allocation-free original inventory publication. It is not a bool save flag.
+class CommittedOperation final {
+ friend class FungalInventory::NativeCustody;
+ friend class NativeEvents;
+ OperationFacts facts_;
+ uint64_t outcome_=0;
+ bool published_=false;
+ std::shared_ptr<ServerPacket> progress_;
+ std::shared_ptr<EQApplicationPacket> finish_;
+ std::shared_ptr<Lifetime> client_life_,npc_life_,zone_life_;
+ Client* original_client_=nullptr;
+ NPC* original_npc_=nullptr;
+ Zone* original_zone_=nullptr;
+ CommittedOperation(const OriginalOperation& original,uint64_t id)
+  :facts_(original.facts_),outcome_(id),progress_(original.progress_),finish_(original.finish_),
+   client_life_(original.client_life_),npc_life_(original.npc_life_),zone_life_(original.zone_life_),
+   original_client_(original.client_),original_npc_(original.npc_),original_zone_(original.zone_){}
+public:
+ CommittedOperation(const CommittedOperation&)=delete;
+ CommittedOperation& operator=(const CommittedOperation&)=delete;
+};
+class NativeEvents final {
+ friend class FungalInventory::NativeCustody;
+ struct Pending;
+ static Pending *head_,*tail_;
+ static std::shared_ptr<Lifetime> zone_life_;
+ static Zone* zone_owner_;
+ static std::unique_ptr<OriginalOperation> Capture(Client&,NPC&,bool);
+ static bool Revalidate(Client&,const OriginalOperation&);
+ static void Publish(Client&,std::unique_ptr<CommittedOperation>);
+ static bool CurrentPersonal(Client&,const AcceptedFate&,bool initial);
+ static void RestoreAccepted(Client&);
+ static thread_local const CommittedOperation* personal_progress_;
+ static thread_local const Client* personal_client_;
+ static thread_local bool personal_claimed_,personal_save_seen_;
+public:
+ // Exact native acceptance reservation and SAME acceptance SaveClientState result.
+ static void Accepted(Client&,uint64_t actual_reserved,bool actual_saved,
+  const ClientTaskInformation& actual);
+ static void ReloadAccepted(Client&);
+ static bool AllowPersonalProgress(const Client*,uint32_t task,uint32_t activity);
+ static void ActualPersonalSave(const Client*,uint32_t task,uint32_t activity,bool saved);
+ static bool AcceptWorldEcho(Client&,const void*,uint32_t size,uint32_t task,uint32_t activity,uint32_t count);
+ static bool AcceptSceneEcho(const void*,uint32_t size,uint32_t task,uint32_t activity,uint32_t count);
+ static void ReconcileDeliveryScene();
+ static void CaptureSay(Client&,const char* original_message);
+ // Called before TradeAccepted/FinishTrade/Reset; selected failures never fall through.
+ static bool OriginalTrade(Client&,NPC&) noexcept;
+ static void Drain();
+ static void Discard()noexcept;
+ static void Revoke(Client&)noexcept;
+ static void Revoke(NPC&)noexcept;
+};
+} // namespace FungalItemSource
+namespace FungalInventory {
+class NativeCustody final {
+ friend class FungalItemSource::NativeEvents;
+ // Invoked ONLY by the same original personal native UpdateTaskActivity's
+ // observed SaveClientState result, under its private consumed receipt scope.
+ static void PersonalStageSaved(Database&,const FungalItemSource::CommittedOperation&,bool) noexcept;
+ static bool KnownWorldStage(Database&,uint64_t run,uint64_t outcome,uint32_t accepted,
+  uint32_t original_recipient,uint32_t activity,uint32_t count) noexcept;
+ static void DeliveryPersonalSaved(Database&,const FungalItemSource::CommittedDelivery&,uint32_t effect,bool actual_saved) noexcept;
+ static std::unique_ptr<FungalItemSource::KnownDeliveryAck> ReadKnownDeliveryAck(Database&,
+  const FungalItemWire::Trailer&,uint32_t task,uint32_t activity,uint32_t count) noexcept;
+ static std::unique_ptr<FungalItemSource::KnownDeliveryAck> ReadMissionDeliveryAck(Database&,
+  uint32_t zone,uint32_t version,uint32_t instance) noexcept;
+ static bool ClaimDeliveryScene(Database&,const FungalItemSource::KnownDeliveryAck&) noexcept;
+public:
+ static std::unique_ptr<FungalItemSource::CommittedDelivery> ExecuteDelivery(
+  Client&,std::unique_ptr<FungalItemSource::OriginalDelivery>) noexcept;
+ // Owns original selected operation, complete actual native projection/placement,
+ // inventory lease+strict TX, occurrence/member/stage locks and finite outcome.
+ // Rejection preserves original trade roots/cash for native cancellation.
+ static std::unique_ptr<FungalItemSource::CommittedOperation> Execute(
+  Client&,std::unique_ptr<FungalItemSource::OriginalOperation>) noexcept;
+};
+}

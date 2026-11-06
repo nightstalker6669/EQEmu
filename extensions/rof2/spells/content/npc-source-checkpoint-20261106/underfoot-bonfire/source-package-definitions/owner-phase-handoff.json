@@ -1,0 +1,496 @@
+{
+  "status": "RESERVED_CORE_DEFINITION_SOURCE_NOT_INSTALLED",
+  "enabled": false,
+  "source": "https://everquest.allakhazam.com/db/quest/5004",
+  "guide": "https://www.raspersrealm.com/Everquest/Underfoot/missionLichen.html",
+  "native_task_id": 920174,
+  "native_zone_id": 487,
+  "native_zone_short_name": "lichencreep",
+  "instance_version": 1,
+  "external_zone_keys_not_native": [
+    714,
+    728
+  ],
+  "world_giver_external_ZAM_not_native": 34916,
+  "instance_giver_external_not_native": 34999,
+  "requester_prerequisites": [
+    5001,
+    5002,
+    5003
+  ],
+  "request": "sign",
+  "entry": "go",
+  "native_type": 1,
+  "duration_seconds_period_header": 21600,
+  "goals": [
+    {
+      "activity": 0,
+      "kind": "explore",
+      "target": "Searing Prominence",
+      "count": 1,
+      "native_npc_type_ids": [],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": []
+    },
+    {
+      "activity": 1,
+      "kind": "owned_kill",
+      "target": "Norket and ten minions",
+      "count": 11,
+      "native_npc_type_ids": [
+        487900,
+        487901
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "norket",
+        "minion"
+      ]
+    },
+    {
+      "activity": 2,
+      "kind": "actual_wand_rescue",
+      "target": "Fiddy Stavepockets",
+      "count": 1,
+      "native_npc_type_ids": [
+        487905
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "fiddy_captive"
+      ]
+    },
+    {
+      "activity": 3,
+      "kind": "hail",
+      "target": "instance Gweddon",
+      "count": 1,
+      "native_npc_type_ids": [
+        487911
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "gweddon_instance"
+      ]
+    },
+    {
+      "activity": 4,
+      "kind": "explore",
+      "target": "Peninfernal Lava Pool",
+      "count": 1,
+      "native_npc_type_ids": [],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": []
+    },
+    {
+      "activity": 5,
+      "kind": "owned_kill",
+      "target": "zealous lava golem",
+      "count": 10,
+      "native_npc_type_ids": [
+        487902
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "zealous_golem"
+      ]
+    },
+    {
+      "activity": 6,
+      "kind": "actual_wand_rescue",
+      "target": "Duerg Rockpiker",
+      "count": 1,
+      "native_npc_type_ids": [
+        487906
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "duerg_captive"
+      ]
+    },
+    {
+      "activity": 7,
+      "kind": "hail",
+      "target": "instance Gweddon",
+      "count": 1,
+      "native_npc_type_ids": [
+        487911
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "gweddon_instance"
+      ]
+    },
+    {
+      "activity": 8,
+      "kind": "explore",
+      "target": "Serrated Cliff",
+      "count": 1,
+      "native_npc_type_ids": [],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": []
+    },
+    {
+      "activity": 9,
+      "kind": "owned_kill",
+      "target": "lava mephit executioner",
+      "count": 6,
+      "native_npc_type_ids": [
+        487903
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "executioner"
+      ]
+    },
+    {
+      "activity": 10,
+      "kind": "owned_kill",
+      "target": "Zwurek",
+      "count": 1,
+      "native_npc_type_ids": [
+        487904
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "zwurek"
+      ]
+    },
+    {
+      "activity": 11,
+      "kind": "loot",
+      "target": "Autarchian Execution Blade",
+      "count": 6,
+      "native_npc_type_ids": [
+        487903
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "executioner"
+      ],
+      "item_id": 111900
+    },
+    {
+      "activity": 12,
+      "kind": "actual_wand_rescue",
+      "target": "Neerda Stoneguard",
+      "count": 1,
+      "native_npc_type_ids": [
+        487907
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "neerda_captive"
+      ]
+    },
+    {
+      "activity": 13,
+      "kind": "hail",
+      "target": "instance Gweddon",
+      "count": 1,
+      "native_npc_type_ids": [
+        487911
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "gweddon_instance"
+      ]
+    },
+    {
+      "activity": 14,
+      "kind": "deliver",
+      "target": "Autarchian Execution Blade to instance Gweddon",
+      "count": 6,
+      "native_npc_type_ids": [
+        487911
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "gweddon_instance"
+      ],
+      "item_id": 111900
+    },
+    {
+      "activity": 15,
+      "kind": "deliver",
+      "target": "Wand to instance Gweddon",
+      "count": 1,
+      "native_npc_type_ids": [
+        487911
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "gweddon_instance"
+      ],
+      "item_id": 111901
+    },
+    {
+      "activity": 16,
+      "kind": "hail_and_physical_warning_grant",
+      "target": "instance Gweddon",
+      "count": 1,
+      "native_npc_type_ids": [
+        487911
+      ],
+      "zone_id": 487,
+      "world_or_instance": "instance",
+      "npc_roles": [
+        "gweddon_instance"
+      ]
+    },
+    {
+      "activity": 17,
+      "kind": "deliver_and_physical_orb_exchange",
+      "target": "Warning to world Tronten",
+      "count": 1,
+      "native_npc_type_ids": [],
+      "zone_id": 488,
+      "world_or_instance": "world",
+      "npc_roles": [],
+      "item_id": 111902,
+      "recipient_npc_id": 488036
+    },
+    {
+      "activity": 18,
+      "kind": "deliver",
+      "target": "Orb to world Gweddon",
+      "count": 1,
+      "native_npc_type_ids": [],
+      "zone_id": 487,
+      "world_or_instance": "world",
+      "npc_roles": [],
+      "item_id": 111903,
+      "recipient_npc_id": 487046
+    },
+    {
+      "activity": 19,
+      "kind": "hail_terminal_world_chest",
+      "target": "world Gweddon",
+      "count": 1,
+      "native_npc_type_ids": [],
+      "zone_id": 487,
+      "world_or_instance": "world",
+      "npc_roles": [],
+      "recipient_npc_id": 487046
+    }
+  ],
+  "goal_count": 20,
+  "lock_activity_id_candidate": 8,
+  "lock_evidence": "Jan7,2010#126290799982614068 actualhailaftergolemstage locks; after activity7hail activates8. No lock at Zwurek death or completion.",
+  "wand_custody": {
+    "external_item_key_not_native": 86822,
+    "guide_magelo_item_key_not_blind_native": 111901,
+    "grant_scope": "Only task members IN SAME ZONE with original requester at request/replacement. Native full accepted roster/actual same-zone recipients required.",
+    "replacement": "Original requester says sign to WORLD Gweddon; only same-zone eligible task participants receive. No arbitrary instant grant to everyone/offzone.",
+    "period": "Apr16,2010#12714761482348895 explicitcorrection",
+    "rescue": "Actual item click on original bound prisoner after actual captors deaths/nativeacks; original relocates near instanceGweddon. Not spawn-only/hail/directprogress workaround.",
+    "target_binding_ready": false
+  },
+  "physical_items": {
+    "Autarchian Execution Blade": {
+      "ZAM_key_not_native": 86827,
+      "count": 6
+    },
+    "Gweddon Warning": {
+      "ZAM_key_not_native": 87022
+    },
+    "Tronten Protocrystalline Orb": {
+      "ZAM_key_not_native": 87023
+    }
+  },
+  "spells": [
+    {
+      "spell_id": 22531,
+      "name": "Protective Confession",
+      "items": [
+        119730
+      ],
+      "levels": {
+        "3": 85
+      },
+      "rank1_mission": "Bonfire of the Adherents",
+      "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+      "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+    },
+    {
+      "spell_id": 22556,
+      "name": "Bracing Defense",
+      "items": [
+        119724
+      ],
+      "levels": {
+        "1": 85
+      },
+      "rank1_mission": "Bonfire of the Adherents",
+      "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+      "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+    },
+    {
+      "spell_id": 22637,
+      "name": "Focused Storm of Arrows",
+      "items": [
+        119712
+      ],
+      "levels": {
+        "4": 85
+      },
+      "rank1_mission": "Bonfire of the Adherents",
+      "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+      "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+    },
+    {
+      "spell_id": 22646,
+      "name": "Wind of Malis",
+      "items": [
+        119658
+      ],
+      "levels": {
+        "10": 84
+      },
+      "rank1_mission": "Bonfire of the Adherents",
+      "mapping_status": "Rasper guide mapping; current undated compilation, period mission details not individually verified",
+      "route_status": "Original mission must be implemented; rankII/III exchange is not a rankI substitute"
+    }
+  ],
+  "period_classes": {
+    "PAL": "Jan26,2010#1264537680312936792",
+    "WAR": "Jan26,2010#1264507332100558596",
+    "RNG": "Mar3,2010#126760423920912117",
+    "SHM": "Mar6,2010#126791857814312074"
+  },
+  "native_reward_cash_copper_candidate": 440000,
+  "cash_qualification": "Currentcompiled440pp; numericalperiodcashnotseparatelyrecovered. Do not derive XP from observedAA.",
+  "currency": {
+    "id": 21,
+    "item": 47900,
+    "amount_candidate": 160,
+    "period": "May5,2010#1273095096209598672 +Jun11#1276243497219835339 actual160",
+    "conflict": "Apr16#1271475704230491128/May4#1272977927227903008 actual180; explicit later160 correction selected candidate not universalformula"
+  },
+  "terminal": {
+    "actual": "Final worldGweddon hail19 completes/nativepayout and creates ONE singed chest in WORLD Lichen Creep, not instance. No chest-open21stgoal.",
+    "period": "Apr16,2010#1271407001266545671 exactNONinstancehail/chest, May31#1275354559121357675/Jun4#1275696850293883674 originaltask-onlyloot",
+    "loot_eligibility": "Actual accepted task participants, originalchest bound to occurrence; original requirement remain INtask. Native completed-sharedtask eligibility lifecycle/corpse owner integration held. No foreignworldplayerloot or static public chest factory.",
+    "later_conflict": "May2023Aradune outsiderloot not RoF-era policy evidence; original2010 taskrestriction retained.",
+    "travel": "InstanceGweddon Tronten\u2192worldTronten; after originalWarningexchange worldTronten Gweddon\u2192WORLDGweddon. Original dialogue travel for actual eligible members, not only hand-inperson. May16#127404339435741638/Jun4#1275696850293883674. Geometry/unlockstatesheld."
+  },
+  "gear": {
+    "guide_magelo_keys_not_blind_native": [
+      110230,
+      110234,
+      110242,
+      110243,
+      110246,
+      110267,
+      110270,
+      110273,
+      110278,
+      110292,
+      110295,
+      110411
+    ],
+    "compiled_primary_extra": "Incarnadine Gemstone attribution RETRACTED, not Bonfire pool",
+    "compiled_primary_omits_guide": "Mad Mephit Blade butApr17,2010#1271501420102499102 actualpositive; doNOTdiscard. Resolve complete13identitypoolbeforeselection.",
+    "selected_gear_count": 12,
+    "retracted_identity": {
+      "item_id": 110770,
+      "source": "https://everquest.allakhazam.com/db/npc/35375#msg127168277413804655",
+      "period": "Apr19,2010report editedApr21 byoriginalreporter: actualdropfromKilltheHatchlings, notBonfire",
+      "authority": "Coordinator-supplied NPC finite evidence; no repeatedresearch",
+      "selected_for_Bonfire": false,
+      "Hatchlings_change_authorized": false
+    }
+  },
+  "NPC_intake": {
+    "minions": 10,
+    "Norket": 1,
+    "zealous_golems": 10,
+    "executioners": 6,
+    "Zwurek": 1,
+    "prisoners": 3,
+    "instance_Gweddon": 1,
+    "world_completion_chest": 1,
+    "ordinary_mephit_population": null,
+    "physical_static_spawns": null,
+    "prisoner_relocation_lineage": "Originalthree captives return near Gweddon; finite owner selects sameentitymovementvsreplacement,no blind simultaneousduplicates."
+  },
+  "profiles": {
+    "Zwurek_spell_candidate": 17823,
+    "qualification": "Current/RasperAE6500androguebackstab/maxhit notfullnativeprofile/timingproof. Dedicated realcasts remainunimplemented."
+  },
+  "optional_achievement_population": {
+    "period": "Aug28,2011#131453974856321336 approx158mephits; Feb2,2013#1359823849210472359 160=59guards+2miners+99workers",
+    "selected_count": null,
+    "qualification": "Positivewholeoptionalpopulation notzero; countconflict/actualplacementsheld. No achievementgrant/extra mandatorykillgoal. This owner does not change achievementwork."
+  },
+  "full_scene_ready": false,
+  "SQL_writes": 0,
+  "runtime_actions": 0,
+  "tests": 0,
+  "native_world_giver": 487046,
+  "native_world_Tronten": 488036,
+  "instance_giver_role": "gweddon_instance",
+  "physical_item_ids": {
+    "wand": 111901,
+    "blade": 111900,
+    "warning": 111902,
+    "orb": 111903
+  },
+  "selected_gear_pool": [
+    110230,
+    110234,
+    110242,
+    110243,
+    110246,
+    110267,
+    110270,
+    110273,
+    110278,
+    110292,
+    110295,
+    110411
+  ],
+  "selected_gear_count": 12,
+  "Incarnadine_retracted": true,
+  "dynamic_zone_template_id": 920174,
+  "native_lock_activity_id": 8,
+  "native_activity_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19
+  ],
+  "optional_population": null
+}

@@ -1,0 +1,136 @@
+{
+  "enabled": false,
+  "sets": [
+    {
+      "symbol": "execution_blade",
+      "roles": [
+        "executioner"
+      ],
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1,
+      "mindrop": 1,
+      "droplimit": 1,
+      "entries": [
+        {
+          "item_id": 111900,
+          "item_charges": 1,
+          "chance": 100,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "qualification": "LOCALonebladeperexecutionercorpse guarantees six actual pickup units. NativeLoot11 distinct from kill9/10 and Deliver14; notrecoveredodds."
+    },
+    {
+      "symbol": "gear",
+      "roles": [
+        "singed_chest"
+      ],
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1,
+      "mindrop": 1,
+      "droplimit": 1,
+      "entries": [
+        {
+          "item_id": 110230,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110234,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110242,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110243,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110246,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110267,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110270,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110273,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110278,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110292,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110295,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110411,
+          "item_charges": 1,
+          "chance": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "qualification": "Oneof12equalweightLOCALdraw; oneitempertask source. Originaltask-onlyeligibility/nativecorpseconsumerheld."
+    }
+  ],
+  "counts": {
+    "loottable": 2,
+    "lootdrop": 2,
+    "loottable_entries": 2,
+    "lootdrop_entries": 13
+  },
+  "optional_ordinary_loot": null,
+  "minion_pet_mapping": null,
+  "world_loot_edits": 0,
+  "new_items": 0
+}

@@ -1,0 +1,724 @@
+--- /dev/null
++++ b/common/fungal_delivery_defs.h
+@@ -0,0 +1,25 @@
++#pragma once
++#include <cstdint>
++namespace FungalDeliveryDefs {
++struct Goal {uint8_t scope;uint32_t task,activity,item,maximum,npc,version,spawn;};
++// Read-only finite native content roles. These values never construct an
++// operation/proof or authorize inventory mutation by themselves.
++inline constexpr Goal Goals[]={
++ {1,920141,8,40997,1,481071,0,0},
++ {1,920142,4,43579,2,481120,0,150231},
++ {1,920142,5,43580,1,481120,0,150231},
++ {1,920142,6,43581,1,481120,0,150231},
++ {1,920142,7,43582,1,481120,0,150231},
++ {2,920143,7,43583,4,481052,0,149898},
++ {2,920143,8,43584,3,481052,0,149898},
++ {2,920143,9,43586,2,481052,0,149898},
++ {2,920143,11,43587,1,481093,0,150084},
++ {2,920144,10,41979,1,481900,1,304054000}
++};
++inline const Goal* Find(uint8_t scope,uint32_t task,uint32_t activity)noexcept {
++ for(const auto& g:Goals)if(g.scope==scope&&g.task==task&&g.activity==activity)return &g;
++ return nullptr;
++}
++inline bool Personal(uint32_t task,uint32_t activity)noexcept{return Find(1,task,activity)!=nullptr;}
++inline bool Shared(uint32_t task,uint32_t activity)noexcept{return Find(2,task,activity)!=nullptr;}
++}
+--- a/common/fungal_item_operation_wire.h
++++ b/common/fungal_item_operation_wire.h
+@@ -1,13 +1,15 @@
+ #pragma once
+ #include <cstdint>
+ #include <cstring>
++#include "fungal_delivery_defs.h"
+ namespace FungalItemWire {
+ constexpr uint32_t Task=920143,Magic=0x46554e31;
++enum Kind:uint32_t {Grant=1,Pure=2,Delivery=3};
+ // Feature-private optional suffix on the existing native shared-activity packet.
+ // Original prefix, opcode and all other tasks remain unchanged.
+ #pragma pack(push,1)
+-struct Trailer { uint32_t magic=Magic,version=1;uint64_t run=0,outcome=0;
+- uint32_t accepted=0,recipient=0; };
++struct Trailer { uint32_t magic=Magic,version=2;uint64_t run=0,outcome=0;
++ uint32_t accepted=0,recipient=0,kind=Grant,instance=0; };
+ #pragma pack(pop)
+ inline bool Selected(uint32_t task,uint32_t activity)noexcept {
+  return task==Task&&(activity==5||activity==10);
+@@ -16,15 +18,16 @@
+  return task==Task&&(activity==0||activity==1||activity==6);
+ }
+ inline bool Correlated(uint32_t task,uint32_t activity)noexcept {
+- return Selected(task,activity)||PureHail(task,activity);
++ return Selected(task,activity)||PureHail(task,activity)||FungalDeliveryDefs::Shared(task,activity);
+ }
+ inline bool ReadHeader(const void* bytes,uint32_t size,uint32_t prefix,Trailer& out)noexcept {
+  if(size!=prefix+sizeof(Trailer))return false;
+  std::memcpy(&out,static_cast<const unsigned char*>(bytes)+prefix,sizeof(out));
+- return out.magic==Magic&&out.version==1&&out.run&&out.accepted&&out.recipient;
++ return out.magic==Magic&&out.version==2&&out.run&&out.accepted&&out.recipient&&
++  out.kind>=Grant&&out.kind<=Delivery;
+ }
+ inline bool Read(const void* bytes,uint32_t size,uint32_t prefix,Trailer& out)noexcept {
+- return ReadHeader(bytes,size,prefix,out)&&out.outcome;
++ return ReadHeader(bytes,size,prefix,out)&&out.kind==Grant&&out.outcome&&out.instance==0;
+ }
+ inline void Write(void* bytes,uint32_t prefix,const Trailer& value)noexcept {
+  std::memcpy(static_cast<unsigned char*>(bytes)+prefix,&value,sizeof(value));
+--- a/common/shared_tasks.h
++++ b/common/shared_tasks.h
+@@ -26,6 +26,8 @@
+ #include "common/timer.h"
+ #include "common/types.h"
+ 
++#include "fungal_item_operation_wire.h"
++#include <array>
+ #include <string>
+ #include <vector>
+ 
+@@ -207,7 +209,15 @@
+ 	bool   send_fail; // if true members receive red text failure banner
+ };
+ 
++namespace FungalItemWorldSource {class NativeStage;}
+ class SharedTask {
++ friend class FungalItemWorldSource::NativeStage;
++ friend class SharedTaskManager;
++ // Only the SAME actual native Save's known ACK can fill this finite record.
++ // It survives a completion/archive retry in this native run object, never
++ // reloads authority from task history, and dies with the run.
++ struct FungalKnownAck {FungalItemWire::Trailer trailer{};uint32_t count=0;bool valid=false;};
++ std::array<FungalKnownAck,20> m_fungal_known_acks{};
+ public:
+ 	// used in both zone and world validation
+ 	static SharedTaskRequest GetRequestCharacters(Database& db, uint32_t requested_character_id);
+--- a/world/fungal_item_world_source_impl.inc
++++ b/world/fungal_item_world_source_impl.inc
+@@ -11,10 +11,13 @@
+  selected_=FungalItemWire::Correlated(p->task_id,p->activity_id);if(!selected_)return;
+  character_=p->source_character_id;activity_=p->activity_id;count_=p->done_count;
+  const bool pure=FungalItemWire::PureHail(p->task_id,p->activity_id);
+- valid_=(pure?FungalItemWire::ReadHeader(packet.pBuffer,packet.size,sizeof(*p),original_):
+-  FungalItemWire::Read(packet.pBuffer,packet.size,sizeof(*p),original_))&&
+-  (pure?!original_.outcome:bool(original_.outcome))&&
+-  original_.recipient==character_&&count_==(activity_==5?2u:1u)&&!p->ignore_quest_update;
++ const auto* delivery=FungalDeliveryDefs::Find(2,p->task_id,p->activity_id);
++ const bool decoded=FungalItemWire::ReadHeader(packet.pBuffer,packet.size,sizeof(*p),original_);
++ const bool kind=delivery?(original_.kind==FungalItemWire::Delivery&&original_.outcome&&count_>0&&count_<=delivery->maximum&&
++  ((p->task_id==920144)?bool(original_.instance):original_.instance==0)):
++  pure?(original_.kind==FungalItemWire::Pure&&!original_.outcome&&!original_.instance&&count_==1):
++  (original_.kind==FungalItemWire::Grant&&original_.outcome&&!original_.instance&&count_==(activity_==5?2u:1u));
++ valid_=decoded&&kind&&original_.recipient==character_&&!p->ignore_quest_update;
+ }
+ PacketScope::~PacketScope(){current_=previous_;}
+ NativeStage::NativeStage(Database& db,SharedTask* actual,uint32_t character,uint32_t task,
+@@ -22,12 +25,18 @@
+  current_=this;selected_=FungalItemWire::Correlated(task,activity);if(!selected_)return;
+  const auto* packet=PacketScope::current_;
+  if(!packet||!packet->selected_||!packet->valid_||packet->character_!=character||
+-  packet->activity_!=activity||packet->count_!=count||!actual||actual->GetTaskData().id!=920143||
++  packet->activity_!=activity||packet->count_!=count||!actual||actual->GetTaskData().id!=int(task)||
+   uint64_t(actual->GetDbSharedTask().id)!=packet->original_.run)return;
+- bool active=false;bool terminal_hidden=false;
++ const auto* delivery=FungalDeliveryDefs::Find(2,task,activity);
++ bool active=false,terminal_hidden=false;
++ const uint32_t terminal=task==920144?19:11;
++ const size_t expected=task==920144?20:12;
++ if(actual->m_shared_task_activity_state.size()!=expected)return;
+  for(const auto& a:actual->m_shared_task_activity_state) {
+-  if(a.activity_id==activity)active=a.done_count==0&&a.max_done_count==count&&a.activity_state==ActivityState::ActivityActive;
+-  if(a.activity_id==11)terminal_hidden=a.done_count==0;
++  if(a.activity_id==activity)active=a.activity_state==ActivityState::ActivityActive&&
++   (delivery?(a.done_count<count&&count<=delivery->maximum&&a.max_done_count==delivery->maximum):
++    (a.done_count==0&&a.max_done_count==count));
++  if(a.activity_id==terminal)terminal_hidden=a.done_count==0;
+  }
+  if(!active||!terminal_hidden)return;
+  try {
+@@ -52,8 +61,13 @@
+   auto ack=FungalInventory::WorldCustody::CommitActualSave(db,*f->transaction_,*f->original_,rows);
+   const auto& o=f->original_->original_;
+   if(!ack||ack->original_.run!=o.run||ack->original_.outcome!=o.outcome||
++   ack->original_.kind!=o.kind||ack->original_.instance!=o.instance||
+    ack->original_.accepted!=o.accepted||ack->original_.recipient!=o.recipient||
+    ack->activity_!=f->original_->activity_||ack->count_!=f->original_->count_)return false;
++  auto* actual=f->original_->actual_;
++  if(!actual||f->original_->activity_>=actual->m_fungal_known_acks.size())return false;
++  auto& retained=actual->m_fungal_known_acks[f->original_->activity_];
++  retained.trailer=ack->original_;retained.count=ack->count_;retained.valid=true;
+   f->ack_=std::move(ack);return true;
+  }catch(...){return false;}
+ }
+--- a/world/shared_task_manager.cpp
++++ b/world/shared_task_manager.cpp
+@@ -679,18 +679,18 @@
+ 						a.activity_state = ActivityState::ActivityCompleted;
+ 					}
+ 
+-					if (HandleCompletedActivities(shared_task)) {
+-						if (!HandleCompletedTask(shared_task)) {
+-							// Keep the completed snapshot for Process to retry. Zones
+-							// optimistically sync counts before sending this request.
+-							return;
+-						}
+-					}
+-					else {
+-						SaveSharedTaskActivityState(shared_task->GetDbSharedTask().id,
+-							shared_task->m_shared_task_activity_state);
+-						if(fungal_stage.Selected()&&!fungal_stage.Committed()){
+-						 shared_task->m_shared_task_activity_state=std::move(fungal_before);return;}
++					const bool completed=HandleCompletedActivities(shared_task);
++					if(fungal_stage.Selected()) {
++					 // The physical debit receipt and ORIGINAL complete activity
++					 // snapshot commit before completion/archive can open its TX.
++					 SaveSharedTaskActivityState(shared_task->GetDbSharedTask().id,shared_task->m_shared_task_activity_state);
++					 if(!fungal_stage.Committed()){
++					  shared_task->m_shared_task_activity_state=std::move(fungal_before);return;}
++					 if(completed&&!HandleCompletedTask(shared_task))return;
++					}else if(completed) {
++					 if(!HandleCompletedTask(shared_task))return;
++					}else {
++					 SaveSharedTaskActivityState(shared_task->GetDbSharedTask().id,shared_task->m_shared_task_activity_state);
+ 					}
+ 
+ 					shared_task->SetSharedTaskActivityState(shared_task->m_shared_task_activity_state);
+@@ -1838,7 +1838,15 @@
+ 	for (const auto &m : s->GetMembers()) {
+ 		const bool fungal=FungalItemWire::Correlated(s->GetTaskData().id,activity_id);
+ 		FungalItemWire::Trailer fungal_ack;
+-		if(fungal&&!FungalItemWorldSource::NativeStage::StampActualAck(s->GetDbSharedTask().id,activity_id,fungal_ack))return;
++		if(fungal&&!FungalItemWorldSource::NativeStage::StampActualAck(s->GetDbSharedTask().id,activity_id,fungal_ack)) {
++			// Only the original native Process completion/archive retry may echo
++			// the already-known ACK retained in this SAME run, without re-debit.
++			if(!ignore_quest_update||activity_id>=s->m_fungal_known_acks.size())return;
++			const auto& known=s->m_fungal_known_acks[activity_id];
++			if(!known.valid||known.count!=done_count||known.trailer.run!=uint64_t(s->GetDbSharedTask().id)||
++			 known.trailer.accepted!=uint32_t(s->GetDbSharedTask().accepted_time))return;
++			fungal_ack=known.trailer;
++		}
+ 		const bool fire=s->GetTaskData().id==FireSharedActivityOrigin::Task;
+ 		const uint64_t original_run=s->GetDbSharedTask().id;
+ 		if(fire && !original_run) return;
+@@ -1857,6 +1865,20 @@
+ 			c->Server()->SendPacket(p.get());
+ 		}
+ 	}
++ // ONE genuine known-COMMIT scene echo goes to the original mission instance
++ // even when the original hailer no longer has a ClientList entry there.
++ if(s->GetTaskData().id==920144&&activity_id==10&&done_count==1) {
++  FungalItemWire::Trailer ack;
++  if(!FungalItemWorldSource::NativeStage::StampActualAck(s->GetDbSharedTask().id,10,ack)||
++   ack.kind!=FungalItemWire::Delivery||!ack.outcome||!ack.instance)return;
++  auto* scene=ZSList::Instance()->FindByInstanceID(ack.instance);
++  if(!scene||scene->GetZoneID()!=481||scene->GetInstanceID()!=ack.instance)return;
++  ServerPacket packet(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+sizeof(ack));
++  auto* p=reinterpret_cast<ServerSharedTaskActivityUpdate_Struct*>(packet.pBuffer);
++  p->source_character_id=0;p->task_id=920144;p->activity_id=10;p->done_count=1;p->ignore_quest_update=false;
++  FungalItemWire::Write(packet.pBuffer,sizeof(*p),ack);scene->SendPacket(&packet);
++ }
++
+ }
+ 
+ void SharedTaskManager::AddReplayTimers(SharedTask *s)
+--- /dev/null
++++ b/zone/fungal_delivery_source.h
+@@ -0,0 +1,82 @@
++#pragma once
++#include <cstdint>
++#include <functional>
++#include <memory>
++#include <vector>
++#include <utility>
++class Client;
++class NPC;
++class ServerPacket;
++class EQApplicationPacket;
++namespace EQ {class ItemInstance;}
++namespace FungalInventory {class NativeCustody;}
++namespace FungalItemSource {
++class NativeEvents;
++struct DeliveryFacts {
++ uint8_t scope=0;
++ uint32_t task=0,character=0,account=0,accepted=0;
++ uint64_t occurrence=0,local_occurrence=0,source_sequence=0;
++ int personal_slot=-1;
++ uint32_t npc_entity=0,npc_type=0,npc_spawn=0;
++ uint32_t zone=0,version=0,instance=0,dynamic_zone=0;
++};
++struct DeliveryTarget {uint32_t activity=0,item=0,maximum=0,native_count=0;};
++class OriginalDelivery final {
++ friend class NativeEvents;
++ friend class FungalInventory::NativeCustody;
++ friend class CommittedDelivery;
++ DeliveryFacts facts_;
++ struct Root {int16_t slot=0;EQ::ItemInstance* original=nullptr;
++  uint32_t item=0;int32_t serial=0;int16_t charges=0;};
++ std::vector<Root> roots_;
++ std::vector<DeliveryTarget> targets_;
++ uint32_t copper_=0,silver_=0,gold_=0,platinum_=0;
++ std::function<bool(Client&)> revalidate_;
++ std::function<Client*()> live_client_;
++ std::function<NPC*()> live_npc_;
++ std::vector<std::shared_ptr<ServerPacket>> progress_;
++ std::shared_ptr<EQApplicationPacket> finish_;
++ OriginalDelivery()=default;
++public:
++ ~OriginalDelivery()=default;
++ OriginalDelivery(const OriginalDelivery&)=delete;
++ OriginalDelivery& operator=(const OriginalDelivery&)=delete;
++};
++struct DeliveryEffect {
++ uint32_t activity=0,item=0,accepted_units=0,target_count=0,maximum=0;
++ uint64_t receipt=0;
++ std::shared_ptr<ServerPacket> progress;
++};
++// Constructed before the strict transaction finishes; Core returns it ONLY
++// after known physical COMMIT and allocation-free original map publication.
++class CommittedDelivery final {
++ friend class NativeEvents;
++ friend class FungalInventory::NativeCustody;
++ DeliveryFacts facts_;
++ std::vector<DeliveryEffect> effects_;
++ std::function<Client*()> live_client_;
++ std::function<NPC*()> live_npc_;
++ std::shared_ptr<EQApplicationPacket> finish_;
++ bool published_=false;
++ explicit CommittedDelivery(const OriginalDelivery& o)
++  :facts_(o.facts_),live_client_(o.live_client_),live_npc_(o.live_npc_),finish_(o.finish_)
++  {effects_.reserve(o.targets_.size());}
++public:
++ ~CommittedDelivery()=default;
++ CommittedDelivery(const CommittedDelivery&)=delete;
++ CommittedDelivery& operator=(const CommittedDelivery&)=delete;
++};
++// A different capability: a genuine World/scene receive reads an exact finite
++// delivery row plus current native stage ACK. It can never debit or award.
++class KnownDeliveryAck final {
++ friend class NativeEvents;
++ friend class FungalInventory::NativeCustody;
++ DeliveryFacts facts_;
++ DeliveryEffect effect_;
++ KnownDeliveryAck(DeliveryFacts f,DeliveryEffect e):facts_(f),effect_(std::move(e)){}
++public:
++ ~KnownDeliveryAck()=default;
++ KnownDeliveryAck(const KnownDeliveryAck&)=delete;
++ KnownDeliveryAck& operator=(const KnownDeliveryAck&)=delete;
++};
++}
+--- /dev/null
++++ b/zone/fungal_delivery_source_impl.inc
+@@ -0,0 +1,12 @@
++// Included once inside FungalItemSource, by the original native trade handler.
++// There is no public event constructor and no quest/Lua receipt factory.
++namespace {
++thread_local const CommittedDelivery* delivery_progress=nullptr;
++thread_local const Client* delivery_client=nullptr;
++thread_local size_t delivery_effect=0;
++thread_local bool delivery_claimed=false,delivery_save_seen=false;
++uint32_t delivery_scene_attempt=0;
++}
++
++// Source-only implementation is kept here to make the original event boundary
++// reviewable beside its private ABI. Inventory persistence belongs to Core.
+--- a/zone/fungal_item_operation_source.h
++++ b/zone/fungal_item_operation_source.h
+@@ -12,7 +12,11 @@
+ struct ClientTaskInformation;
+ namespace EQ { class ItemInstance; }
+ namespace FungalInventory { class NativeCustody; }
++namespace FungalItemWire {struct Trailer;}
+ namespace FungalItemSource {
++class OriginalDelivery;
++class CommittedDelivery;
++class KnownDeliveryAck;
+ class NativeEvents;
+ class Lifetime final {
+  friend class NativeEvents;
+@@ -101,6 +105,8 @@
+  static bool AllowPersonalProgress(const Client*,uint32_t task,uint32_t activity);
+  static void ActualPersonalSave(const Client*,uint32_t task,uint32_t activity,bool saved);
+  static bool AcceptWorldEcho(Client&,const void*,uint32_t size,uint32_t task,uint32_t activity,uint32_t count);
++ static bool AcceptSceneEcho(const void*,uint32_t size,uint32_t task,uint32_t activity,uint32_t count);
++ static void ReconcileDeliveryScene();
+  static void CaptureSay(Client&,const char* original_message);
+  // Called before TradeAccepted/FinishTrade/Reset; selected failures never fall through.
+  static bool OriginalTrade(Client&,NPC&) noexcept;
+@@ -118,7 +124,15 @@
+  static void PersonalStageSaved(Database&,const FungalItemSource::CommittedOperation&,bool) noexcept;
+  static bool KnownWorldStage(Database&,uint64_t run,uint64_t outcome,uint32_t accepted,
+   uint32_t original_recipient,uint32_t activity,uint32_t count) noexcept;
++ static void DeliveryPersonalSaved(Database&,const FungalItemSource::CommittedDelivery&,uint32_t effect,bool actual_saved) noexcept;
++ static std::unique_ptr<FungalItemSource::KnownDeliveryAck> ReadKnownDeliveryAck(Database&,
++  const FungalItemWire::Trailer&,uint32_t task,uint32_t activity,uint32_t count) noexcept;
++ static std::unique_ptr<FungalItemSource::KnownDeliveryAck> ReadMissionDeliveryAck(Database&,
++  uint32_t zone,uint32_t version,uint32_t instance) noexcept;
++ static bool ClaimDeliveryScene(Database&,const FungalItemSource::KnownDeliveryAck&) noexcept;
+ public:
++ static std::unique_ptr<FungalItemSource::CommittedDelivery> ExecuteDelivery(
++  Client&,std::unique_ptr<FungalItemSource::OriginalDelivery>) noexcept;
+  // Owns original selected operation, complete actual native projection/placement,
+  // inventory lease+strict TX, occurrence/member/stage locks and finite outcome.
+  // Rejection preserves original trade roots/cash for native cancellation.
+--- a/zone/fungal_item_source_impl.inc
++++ b/zone/fungal_item_source_impl.inc
+@@ -1,7 +1,9 @@
+ // Included once by client.cpp, after native Client/NPC/task definitions.
+ #include "fungal_item_operation_source.h"
+ #include "../common/fungal_item_operation_wire.h"
++#include "fungal_delivery_source.h"
+ namespace FungalItemSource {
++#include "fungal_delivery_source_impl.inc"
+ namespace {
+ thread_local const OriginalOperation* original_personal_hail=nullptr;
+ thread_local const Client* original_personal_hail_client=nullptr;
+@@ -213,20 +215,190 @@
+  }catch(const std::bad_alloc&){} // Original native say remains untouched; no spend occurred.
+ }
+ bool NativeEvents::OriginalTrade(Client& c,NPC& n)noexcept {
+- if(!zone||zone->GetZoneID()!=481||zone->GetInstanceID()||n.GetNPCTypeID()!=481093||
+-  n.GetSpawnPointID()!=150084)return false;
+- bool selected=c.task_state&&c.task_state->m_active_shared_task.task_id==920143&&
+-  c.task_state->m_active_shared_task.activity[5].activity_state==ActivityActive;
+- for(int16_t slot=3000;slot<=3003;++slot) {
+-  const auto* item=c.GetInv().GetItem(slot);if(item&&item->GetID()==43585)selected=true;
+- }
+- if(!selected)return false;
++ if(!zone||zone->GetZoneID()!=481||!c.task_state||!c.trade||c.trade->state!=Trading||
++  c.trade->With()!=&n||n.GetDepop()||n.IsEngaged())return false;
++ // The previously installed spore transformation keeps its original offer and
++ // policy. A disabled custom task cache does not intercept legacy hand-ins.
++ if(!zone->GetInstanceID()&&!zone->GetInstanceVersion()&&n.GetNPCTypeID()==481093&&
++  n.GetSpawnPointID()==150084&&TaskManager::Instance()->GetTaskData(920143)) {
++  bool spores=c.task_state->m_active_shared_task.task_id==920143&&
++   c.task_state->m_active_shared_task.activity[5].activity_state==ActivityActive;
++  for(int16_t slot=3000;slot<=3003;++slot) {
++   const auto* item=c.GetInv().GetItem(slot);if(item&&item->GetID()==43585)spores=true;
++  }
++  if(spores) {
++   try {auto o=Capture(c,n,true);if(o){auto r=FungalInventory::NativeCustody::Execute(c,std::move(o));
++    if(r)Publish(c,std::move(r));}}catch(...){}
++   return true;
++  }
++ }
++ bool selected=false;
+  try {
+-  auto original=Capture(c,n,true);if(!original)return true;
+-  auto result=FungalInventory::NativeCustody::Execute(c,std::move(original));
+-  if(result)Publish(c,std::move(result));
+- }catch(...){} // selected original roots/cash never fall through to generic popping
+- return true;
++  auto o=std::unique_ptr<OriginalDelivery>(new OriginalDelivery);
++  auto& f=o->facts_;
++  for(const auto& g:FungalDeliveryDefs::Goals) {
++   if(n.GetNPCTypeID()!=g.npc||!n.GetSpawnPointID()||(g.spawn&&n.GetSpawnPointID()!=g.spawn)||
++    zone->GetInstanceVersion()!=g.version||(g.version==0&&zone->GetInstanceID()!=0)||
++    (g.version==1&&zone->GetInstanceID()==0))continue;
++   const auto* definition=TaskManager::Instance()->GetTaskData(g.task);
++   if(!definition)continue; // Disabled source content remains inert.
++   const ClientTaskInformation* current=nullptr;
++   if(g.scope==1) {
++    for(const auto& t:c.task_state->m_active_quests)if(t.task_id==int(g.task)&&!t.was_rewarded&&t.accepted_time>0){current=&t;break;}
++   }else {
++    const auto& t=c.task_state->m_active_shared_task;
++    if(t.task_id==int(g.task)&&!t.was_rewarded&&t.accepted_time>0)current=&t;
++   }
++   if(!current)continue;
++   bool offered=false;for(int16_t slot=3000;slot<=3003;++slot){const auto* item=c.GetInv().GetItem(slot);
++    if(item&&item->GetID()==g.item)offered=true;}
++   if(!offered)continue;
++   selected=true; // Selected failures preserve the entire original offer.
++   if(definition->type!=(g.scope==1?TaskType::Quest:TaskType::Shared)||
++    definition->reward_method!=METHODSELECT||!definition->has_reward_selection||
++    definition->activity_count!=(g.task==920144?20:g.task==920143?12:10)||
++    definition->activity_information[g.activity].activity_type!=TaskActivityType::Deliver||
++    definition->activity_information[g.activity].goal_method!=METHODSINGLEID||
++    definition->activity_information[g.activity].npc_match_list!=std::to_string(g.npc)||
++    definition->activity_information[g.activity].item_id_list!=std::to_string(g.item)||
++    definition->activity_information[g.activity].goal_count!=int(g.maximum))return true;
++   const auto& a=current->activity[g.activity];
++   if(a.activity_state!=ActivityActive||a.done_count<0||uint32_t(a.done_count)>=g.maximum)continue;
++   if(f.task&&f.task!=g.task)return true;
++   f.scope=g.scope;f.task=g.task;f.accepted=uint32_t(current->accepted_time);f.personal_slot=g.scope==1?current->slot:-1;
++   o->targets_.push_back({g.activity,g.item,g.maximum,uint32_t(a.done_count)});
++  }
++  if(!selected)return false;
++  if(o->targets_.empty())return true;
++  f.character=c.CharacterID();f.account=c.AccountID();f.npc_entity=n.GetID();f.npc_type=n.GetNPCTypeID();
++  f.npc_spawn=n.GetSpawnPointID();f.zone=481;f.version=zone->GetInstanceVersion();f.instance=zone->GetInstanceID();
++  if(!f.character||!f.account||!f.npc_entity)return true;
++  if(f.scope==1) {
++   auto q=database.QueryDatabase(fmt::format(
++    "SELECT r.occurrence_id FROM character_task_reward_instances r JOIN character_tasks ct "
++    "ON ct.charid=r.character_id AND ct.taskid=r.task_id AND ct.acceptedtime=r.accepted_time "
++    "WHERE r.character_id={} AND r.task_id={} AND r.accepted_time={} AND ct.slot={} AND ct.type=2 AND ct.was_rewarded=0",
++    f.character,f.task,f.accepted,f.personal_slot),false);
++   if(!q.Success()||q.RowCount()!=1)return true;
++   f.occurrence=f.local_occurrence=TaskSharedRewardIdentity::Number(q.begin()[0]);
++  }else {
++   const auto run=TaskSharedRewardIdentity::ReadRun(database,f.character,f.task);
++   if(!run||c.GetSharedTaskId()<=0||uint64_t(c.GetSharedTaskId())!=run->id||run->accepted_time!=f.accepted)return true;
++   f.occurrence=run->id;
++   auto q=database.QueryDatabase(fmt::format(
++    "SELECT h.occurrence_id FROM shared_tasks s JOIN shared_task_members m ON m.shared_task_id=s.id "
++    "JOIN character_shared_task_reward_instances h ON h.shared_task_id=s.id AND h.character_id=m.character_id AND h.task_id=s.task_id "
++    "WHERE s.id={} AND s.task_id={} AND m.character_id={} AND UNIX_TIMESTAMP(s.accepted_time)={} "
++    "AND s.completion_time IS NULL AND (s.expire_time IS NULL OR s.expire_time>NOW())",
++    f.occurrence,f.task,f.character,f.accepted),false);
++   if(!q.Success()||q.RowCount()!=1)return true;
++   f.local_occurrence=TaskSharedRewardIdentity::Number(q.begin()[0]);
++   if(f.task==920144) {
++    auto scene=database.QueryDatabase(fmt::format(
++     "SELECT d.id FROM shared_task_dynamic_zones l JOIN dynamic_zones d ON d.id=l.dynamic_zone_id "
++     "JOIN dynamic_zone_members m ON m.dynamic_zone_id=d.id AND m.character_id={} "
++     "JOIN instance_list i ON i.id=d.instance_id JOIN instance_list_player ip ON ip.id=i.id AND ip.charid=m.character_id "
++     "WHERE l.shared_task_id={} AND d.instance_id={} AND d.type={} AND i.zone=481 AND i.version=1 "
++     "AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP()) "
++     "AND (SELECT COUNT(*) FROM shared_task_dynamic_zones WHERE shared_task_id=l.shared_task_id)=1",
++     f.character,f.occurrence,f.instance,static_cast<int>(DynamicZoneType::Mission)),false);
++    if(!scene.Success()||scene.RowCount()!=1)return true;
++    f.dynamic_zone=TaskSharedRewardIdentity::Number(scene.begin()[0]);if(!f.dynamic_zone)return true;
++   }
++  }
++  if(!f.occurrence||!f.local_occurrence)return true;
++  static uint64_t sequence=0;if(sequence==UINT64_MAX)return true;f.source_sequence=++sequence;
++  if(!c.m_fungal_source_life)c.m_fungal_source_life=std::shared_ptr<Lifetime>(new Lifetime);
++  if(!n.m_fungal_source_life)n.m_fungal_source_life=std::shared_ptr<Lifetime>(new Lifetime);
++  if(!zone_life_||zone_owner_!=zone){if(zone_life_)zone_life_->active_=false;
++   zone_life_=std::shared_ptr<Lifetime>(new Lifetime);zone_owner_=zone;}
++  const auto cl=c.m_fungal_source_life,nl=n.m_fungal_source_life,zl=zone_life_;
++  auto* original_zone=zone;auto* original_client=&c;auto* original_npc=&n;
++  const auto client_entity=c.GetID();const auto facts=f;
++  o->live_client_=[cl,zl,original_zone,original_client,client_entity,facts]()->Client* {
++   if(!cl||!cl->active_||!zl||!zl->active_||zone!=original_zone)return nullptr;
++   auto* live=entity_list.GetClientByCharID(facts.character);
++   return live==original_client&&live->GetID()==client_entity&&live->m_fungal_source_life==cl?live:nullptr;
++  };
++  o->live_npc_=[nl,zl,original_zone,original_npc,facts]()->NPC* {
++   if(!nl||!nl->active_||!zl||!zl->active_||zone!=original_zone)return nullptr;
++   auto* live=entity_list.GetNPCByID(facts.npc_entity);
++   return live&&live==original_npc&&live->m_fungal_source_life==nl&&!live->GetDepop()&&
++    live->GetNPCTypeID()==facts.npc_type&&live->GetSpawnPointID()==facts.npc_spawn?live:nullptr;
++  };
++  o->roots_.reserve(4);
++  for(int16_t slot=3000;slot<=3003;++slot){auto* item=c.GetInv().GetItem(slot);if(item)
++   o->roots_.push_back({slot,item,item->GetID(),item->GetSerialNumber(),item->GetCharges()});}
++  o->copper_=c.trade->cp;o->silver_=c.trade->sp;o->gold_=c.trade->gp;o->platinum_=c.trade->pp;
++  o->finish_=std::make_shared<EQApplicationPacket>(OP_FinishTrade,0);
++  o->progress_.reserve(o->targets_.size());
++  for(const auto& target:o->targets_) {
++   auto packet=std::make_shared<ServerPacket>(ServerOP_SharedTaskUpdate,
++    sizeof(ServerSharedTaskActivityUpdate_Struct)+sizeof(FungalItemWire::Trailer));
++   auto* p=reinterpret_cast<ServerSharedTaskActivityUpdate_Struct*>(packet->pBuffer);
++   p->source_character_id=f.character;p->task_id=f.task;p->activity_id=target.activity;
++   p->done_count=0;p->ignore_quest_update=false;o->progress_.push_back(std::move(packet));
++  }
++  const auto* original=o.get();
++  o->revalidate_=[original](Client& current)->bool {
++   if(original->live_client_()!=&current||!original->live_npc_()||!current.task_state||!current.trade||
++    current.trade->state!=Trading||current.trade->With()!=original->live_npc_())return false;
++   const auto& f=original->facts_;
++   if(zone->GetInstanceID()!=f.instance||zone->GetInstanceVersion()!=f.version||
++    current.trade->cp!=original->copper_||current.trade->sp!=original->silver_||
++    current.trade->gp!=original->gold_||current.trade->pp!=original->platinum_)return false;
++   size_t roots=0;for(int16_t slot=3000;slot<=3003;++slot){auto* item=current.GetInv().GetItem(slot);if(!item)continue;
++    if(roots>=original->roots_.size())return false;const auto& r=original->roots_[roots++];
++    if(r.slot!=slot||r.original!=item||r.item!=item->GetID()||r.serial!=item->GetSerialNumber()||r.charges!=item->GetCharges())return false;}
++   if(roots!=original->roots_.size())return false;
++   const ClientTaskInformation* t=nullptr;
++   if(f.scope==1){if(f.personal_slot<0||f.personal_slot>=MAXACTIVEQUESTS)return false;
++    t=&current.task_state->m_active_quests[f.personal_slot];}
++   else {t=&current.task_state->m_active_shared_task;
++    if(current.GetSharedTaskId()<=0||uint64_t(current.GetSharedTaskId())!=f.occurrence)return false;}
++   if(t->task_id!=int(f.task)||uint32_t(t->accepted_time)!=f.accepted||t->was_rewarded)return false;
++   for(const auto& target:original->targets_){const auto& a=t->activity[target.activity];
++    if(a.activity_state!=ActivityActive||a.done_count!=int(target.native_count))return false;}
++   // Core locks the exact persisted occurrence/member/scene immediately before
++   // COMMIT. This closure checks original native objects without nested SQL.
++   return true;
++  };
++  if(!o->revalidate_(c))return true;
++  auto result=FungalInventory::NativeCustody::ExecuteDelivery(c,std::move(o));
++  if(!result||result->published_||result->live_client_()!=&c||!result->live_npc_())return true;
++  result->published_=true;
++  bool remaining=c.trade->cp||c.trade->sp||c.trade->gp||c.trade->pp;
++  for(int16_t slot=3000;slot<=3003;++slot)if(c.GetInv().GetItem(slot))remaining=true;
++  if(!remaining){c.QueuePacket(result->finish_.get());c.trade->Reset();}
++  if(result->facts_.scope==2) {
++   for(const auto& effect:result->effects_) {
++    if(!effect.progress||!effect.receipt||!effect.accepted_units)continue;
++    auto* p=reinterpret_cast<ServerSharedTaskActivityUpdate_Struct*>(effect.progress->pBuffer);
++    p->done_count=effect.target_count;
++    FungalItemWire::Trailer t;t.kind=FungalItemWire::Delivery;t.run=result->facts_.occurrence;
++    t.outcome=effect.receipt;t.accepted=result->facts_.accepted;t.recipient=result->facts_.character;t.instance=result->facts_.instance;
++    FungalItemWire::Write(effect.progress->pBuffer,sizeof(*p),t);worldserver.SendPacket(effect.progress.get());
++   }
++  }else {
++   for(size_t i=0;i<result->effects_.size();++i) {
++    auto* live=result->live_client_();if(!live||!result->live_npc_()||!live->task_state)break;
++    const auto& f=result->facts_;const auto& e=result->effects_[i];
++    if(f.personal_slot<0||f.personal_slot>=MAXACTIVEQUESTS)break;
++    const auto& t=live->task_state->m_active_quests[f.personal_slot];
++    if(t.task_id!=int(f.task)||uint32_t(t.accepted_time)!=f.accepted||t.was_rewarded||
++     t.activity[e.activity].activity_state!=ActivityActive||t.activity[e.activity].done_count<0||
++     uint32_t(t.activity[e.activity].done_count)>=e.target_count)continue;
++    const auto* old=delivery_progress;const auto* old_client=delivery_client;const auto old_effect=delivery_effect;
++    const bool old_claimed=delivery_claimed,old_saved=delivery_save_seen;
++    delivery_progress=result.get();delivery_client=live;delivery_effect=i;delivery_claimed=delivery_save_seen=false;
++    struct RestoreDelivery {const CommittedDelivery* p;const Client* c;size_t e;bool claimed,saved;
++     ~RestoreDelivery(){delivery_progress=p;delivery_client=c;delivery_effect=e;delivery_claimed=claimed;delivery_save_seen=saved;}}
++     restore{old,old_client,old_effect,old_claimed,old_saved};
++    live->UpdateTaskActivity(f.task,e.activity,e.target_count-uint32_t(t.activity[e.activity].done_count));
++   }
++  }
++ }catch(...){} // Never forward selected roots/cash to generic NPC popping.
++ return selected;
+ }
+ void NativeEvents::Publish(Client& c,std::unique_ptr<CommittedOperation> receipt) {
+  if(!receipt||receipt->published_||!receipt->outcome_)return;
+@@ -267,6 +439,20 @@
+  c.UpdateTaskActivity(920141,7,1);
+ }
+ bool NativeEvents::AllowPersonalProgress(const Client* c,uint32_t task,uint32_t activity) {
++ if(FungalDeliveryDefs::Personal(task,activity)) {
++  if(!delivery_progress||!c||c!=delivery_client||delivery_claimed||!delivery_progress->published_||
++   delivery_effect>=delivery_progress->effects_.size()||delivery_progress->live_client_()!=c||
++   !delivery_progress->live_npc_())return false;
++  const auto& f=delivery_progress->facts_;const auto& e=delivery_progress->effects_[delivery_effect];
++  if(f.scope!=1||f.task!=task||e.activity!=activity||!e.receipt||!e.accepted_units||
++   f.character!=c->CharacterID()||!c->task_state||f.personal_slot<0||f.personal_slot>=MAXACTIVEQUESTS)return false;
++  const auto& native=c->task_state->m_active_quests[f.personal_slot];
++  if(native.task_id!=int(task)||uint32_t(native.accepted_time)!=f.accepted||native.was_rewarded||
++   native.activity[activity].activity_state!=ActivityActive||native.activity[activity].done_count<0||
++   uint32_t(native.activity[activity].done_count)>=e.target_count)return false;
++  delivery_claimed=true;return true;
++ }
++
+  if(PurePersonalHail(task,activity)) {
+   const auto* proof=original_personal_hail;
+   if(!proof||!c||c!=original_personal_hail_client||c!=proof->client_||
+@@ -282,6 +468,16 @@
+  personal_claimed_=true;return true;
+ }
+ void NativeEvents::ActualPersonalSave(const Client* c,uint32_t task,uint32_t activity,bool saved) {
++ if(FungalDeliveryDefs::Personal(task,activity)) {
++  if(delivery_progress&&c==delivery_client&&delivery_claimed&&!delivery_save_seen&&
++   delivery_effect<delivery_progress->effects_.size()&&delivery_progress->facts_.task==task&&
++   delivery_progress->effects_[delivery_effect].activity==activity) {
++   delivery_save_seen=true;
++   FungalInventory::NativeCustody::DeliveryPersonalSaved(database,*delivery_progress,uint32_t(delivery_effect),saved);
++  }
++  return;
++ }
++
+  if(task!=920141||activity!=7||!personal_progress_||c!=personal_client_||!personal_claimed_||personal_save_seen_)return;
+  personal_save_seen_=true;
+  // Exact pointer comparison only; no post-callback Client dereference.
+@@ -291,24 +487,54 @@
+  uint32_t task,uint32_t activity,uint32_t count) {
+  if(!FungalItemWire::Correlated(task,activity))return true;
+  FungalItemWire::Trailer t;
++ if(!FungalItemWire::ReadHeader(bytes,size,sizeof(ServerSharedTaskActivityUpdate_Struct),t)||
++  !c.task_state||c.task_state->m_active_shared_task.task_id!=int(task)||c.GetSharedTaskId()<=0||
++  uint64_t(c.GetSharedTaskId())!=t.run||uint32_t(c.task_state->m_active_shared_task.accepted_time)!=t.accepted)return false;
++ const auto run=TaskSharedRewardIdentity::ReadRun(database,c.CharacterID(),task);
++ if(!run||run->id!=t.run||run->accepted_time!=t.accepted)return false;
++ if(FungalDeliveryDefs::Shared(task,activity)) {
++  if(t.kind!=FungalItemWire::Delivery||!t.outcome)return false;
++  return bool(FungalInventory::NativeCustody::ReadKnownDeliveryAck(database,t,task,activity,count));
++ }
+  const bool pure=FungalItemWire::PureHail(task,activity);
+- const bool decoded=pure?FungalItemWire::ReadHeader(bytes,size,sizeof(ServerSharedTaskActivityUpdate_Struct),t):
+-  FungalItemWire::Read(bytes,size,sizeof(ServerSharedTaskActivityUpdate_Struct),t);
+- if(!decoded||(pure&&t.outcome)||
+-  !c.task_state||c.task_state->m_active_shared_task.task_id!=920143||c.GetSharedTaskId()<=0||
+-  uint64_t(c.GetSharedTaskId())!=t.run||uint32_t(c.task_state->m_active_shared_task.accepted_time)!=t.accepted||
+-  count!=(activity==5?2u:1u))return false;
+- const auto run=TaskSharedRewardIdentity::ReadRun(database,c.CharacterID(),920143);
+- if(!run||run->id!=t.run||run->accepted_time!=t.accepted)return false;
+- if(!pure)return FungalInventory::NativeCustody::KnownWorldStage(database,t.run,t.outcome,t.accepted,t.recipient,activity,count);
+- // This path handles an actual trusted World echo, never creates an item or
+- // a progress request from history. Only the World known-COMMIT scope stamps it.
++ if(count!=(activity==5?2u:1u)||t.instance)return false;
++ if(!pure) {
++  if(t.kind!=FungalItemWire::Grant||!t.outcome)return false;
++  return FungalInventory::NativeCustody::KnownWorldStage(database,t.run,t.outcome,t.accepted,t.recipient,activity,count);
++ }
++ if(t.kind!=FungalItemWire::Pure||t.outcome)return false;
+  auto q=database.QueryDatabase(fmt::format(
+-  "SELECT done_count,completed_time IS NOT NULL FROM shared_task_activity_state "
+-  "WHERE shared_task_id={} AND activity_id={}",t.run,activity),false);
++  "SELECT done_count,completed_time IS NOT NULL FROM shared_task_activity_state WHERE shared_task_id={} AND activity_id={}",t.run,activity),false);
+  return q.Success()&&q.RowCount()==1&&TaskSharedRewardIdentity::Number(q.begin()[0])==1&&
+   q.begin()[1]&&std::string(q.begin()[1])=="1";
+ }
++bool NativeEvents::AcceptSceneEcho(const void* bytes,uint32_t size,uint32_t task,uint32_t activity,uint32_t count) {
++ if(task!=920144||activity!=10||count!=1||!zone||zone->GetZoneID()!=481||zone->GetInstanceVersion()!=1||!zone->GetInstanceID())return false;
++ FungalItemWire::Trailer t;
++ if(!FungalItemWire::ReadHeader(bytes,size,sizeof(ServerSharedTaskActivityUpdate_Struct),t)||
++  t.kind!=FungalItemWire::Delivery||!t.outcome||t.instance!=zone->GetInstanceID())return false;
++ auto ack=FungalInventory::NativeCustody::ReadKnownDeliveryAck(database,t,task,activity,count);
++ if(!ack||ack->facts_.task!=920144||ack->facts_.scope!=2||ack->facts_.occurrence!=t.run||
++  ack->facts_.instance!=t.instance||ack->effect_.activity!=10||ack->effect_.receipt!=t.outcome)return false;
++ ReconcileDeliveryScene();return true;
++}
++void NativeEvents::ReconcileDeliveryScene() {
++ if(!zone||zone->GetZoneID()!=481||zone->GetInstanceVersion()!=1||!zone->GetInstanceID()||
++  delivery_scene_attempt==zone->GetInstanceID())return;
++ // This reader requires the exact physical delivery10 ACK, the original live
++ // mission/DZ/lease and native11active. Task history alone cannot open a scene.
++ auto ack=FungalInventory::NativeCustody::ReadMissionDeliveryAck(database,481,1,zone->GetInstanceID());
++ if(!ack||ack->facts_.task!=920144||ack->facts_.scope!=2||ack->facts_.zone!=481||ack->facts_.version!=1||
++  ack->facts_.instance!=zone->GetInstanceID()||!ack->facts_.dynamic_zone||
++  ack->effect_.activity!=10||ack->effect_.target_count!=1||!ack->effect_.receipt)return;
++ // Consume BEFORE the native setter can invoke mutable spawn callbacks. It has
++ // no checked persistence result, so never retry an ambiguous local attempt.
++ delivery_scene_attempt=zone->GetInstanceID();
++ if(!FungalInventory::NativeCustody::ClaimDeliveryScene(database,*ack))return;
++ if(zone->spawn_conditions.GetCondition(zone->GetShortName(),zone->GetInstanceID(),6204)==1)return;
++ zone->spawn_conditions.SetCondition(zone->GetShortName(),zone->GetInstanceID(),6204,1);
++}
++
+ void NativeEvents::Drain() {
+  auto* pending=head_;head_=tail_=nullptr;
+  while(pending) {
+@@ -332,7 +558,7 @@
+     c->UpdateTaskActivity(f.task,f.activity,1);continue; // No actor access after callbacks.
+    }
+    if(f.scope==2&&FungalItemWire::PureHail(f.task,f.activity)&&o.progress_) {
+-    FungalItemWire::Trailer t;t.run=f.occurrence;t.accepted=f.accepted;t.recipient=f.character;t.outcome=0;
++    FungalItemWire::Trailer t;t.run=f.occurrence;t.accepted=f.accepted;t.recipient=f.character;t.outcome=0;t.kind=FungalItemWire::Pure;
+     FungalItemWire::Write(o.progress_->pBuffer,sizeof(ServerSharedTaskActivityUpdate_Struct),t);
+     worldserver.SendPacket(o.progress_.get());
+    }
+@@ -344,6 +570,7 @@
+  }
+ }
+ void NativeEvents::Discard()noexcept {
++ delivery_scene_attempt=0;
+  if(zone_life_)zone_life_->active_=false;zone_life_.reset();zone_owner_=nullptr;
+  auto* p=head_;head_=tail_=nullptr;while(p){auto* next=p->next;delete p;p=next;}
+ }
+--- a/zone/shared_task_zone_messaging.cpp
++++ b/zone/shared_task_zone_messaging.cpp
+@@ -204,6 +204,9 @@
+ 			uint64_t original_run=0;
+ 			if(!FungalItemWire::Correlated(p->task_id,p->activity_id)&&
+ 			 !FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,p->task_id,original_run)) break;
++			if(!p->source_character_id) {
++			 FungalItemSource::NativeEvents::AcceptSceneEcho(pack->pBuffer,pack->size,p->task_id,p->activity_id,p->done_count);break;
++			}
+ 			auto c = entity_list.GetClientByCharID(p->source_character_id);
+ 			if (c) {
+ 				LogTasks("[ServerOP_SharedTaskUpdate] We're back in zone and I found [{}]", c->GetCleanName());
+--- a/zone/zone.cpp
++++ b/zone/zone.cpp
+@@ -1253,6 +1253,8 @@
+ 
+ 	guild_mgr.LoadGuilds();
+ 
++	FungalItemSource::NativeEvents::ReconcileDeliveryScene();
++
+ 	LogInfo("Zone booted successfully zone_id [{}] time_offset [{}]", zoneid, zone_time.getEQTimeZone());
+ 
+ 	// logging origination information

@@ -1,0 +1,989 @@
+{
+  "rows": [
+    {
+      "symbolic_slot": "ancient_gigyn_colossus_01",
+      "role": "ancient_gigyn_colossus",
+      "npc_type_id": 490900,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062000,
+      "spawngroup_id": 304062000,
+      "condition_id": null,
+      "xyz": [
+        -40,
+        180,
+        5.7503
+      ],
+      "heading": 0,
+      "floor_Z": 2.0003,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -105.4477,
+        2.0003,
+        45.007,
+        93.3156
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062000,
+        "npcID": 490900
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "ancient_gigyn_colossus_02",
+      "role": "ancient_gigyn_colossus",
+      "npc_type_id": 490900,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062001,
+      "spawngroup_id": 304062001,
+      "condition_id": null,
+      "xyz": [
+        40,
+        180,
+        5.7503
+      ],
+      "heading": 0,
+      "floor_Z": 2.0003,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -106.8032,
+        2.0003,
+        45.007,
+        106.5115
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062001,
+        "npcID": 490900
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "timeworn_channeler_01",
+      "role": "timeworn_channeler",
+      "npc_type_id": 490901,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062002,
+      "spawngroup_id": 304062002,
+      "condition_id": null,
+      "xyz": [
+        0,
+        95,
+        10.08
+      ],
+      "heading": 0,
+      "floor_Z": 3.0,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        -79.0288,
+        3.0,
+        50.9994,
+        79.5211
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062002,
+        "npcID": 490901
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "timeworn_channeler_02",
+      "role": "timeworn_channeler",
+      "npc_type_id": 490901,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062003,
+      "spawngroup_id": 304062003,
+      "condition_id": null,
+      "xyz": [
+        0,
+        135,
+        10.0802
+      ],
+      "heading": 0,
+      "floor_Z": 3.0002,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        -106.1805,
+        3.0002,
+        45.007,
+        107.093
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062003,
+        "npcID": 490901
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "cunning_fiend_01",
+      "role": "cunning_fiend",
+      "npc_type_id": 490902,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062004,
+      "spawngroup_id": 304062004,
+      "condition_id": null,
+      "xyz": [
+        0,
+        225,
+        6.7502
+      ],
+      "heading": 0,
+      "floor_Z": 3.0002,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -101.6946,
+        3.0002,
+        45.007,
+        100.8693
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062004,
+        "npcID": 490902
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "cunning_fiend_02",
+      "role": "cunning_fiend",
+      "npc_type_id": 490902,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062005,
+      "spawngroup_id": 304062005,
+      "condition_id": null,
+      "xyz": [
+        0,
+        260,
+        12.8493
+      ],
+      "heading": 0,
+      "floor_Z": 9.0993,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -72.3861,
+        9.0993,
+        57.0988,
+        72.4911
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062005,
+        "npcID": 490902
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "protector_of_purity_01",
+      "role": "protector_of_purity",
+      "npc_type_id": 490903,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062006,
+      "spawngroup_id": 304062006,
+      "condition_id": null,
+      "xyz": [
+        -430,
+        570,
+        -13.25
+      ],
+      "heading": 0,
+      "floor_Z": -17.0,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -18.0,
+        -17.0,
+        47.737
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062006,
+        "npcID": 490903
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "protector_of_clay_01",
+      "role": "protector_of_clay",
+      "npc_type_id": 490904,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062007,
+      "spawngroup_id": 304062007,
+      "condition_id": null,
+      "xyz": [
+        430,
+        570,
+        -13.25
+      ],
+      "heading": 0,
+      "floor_Z": -17.0,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -18.0,
+        -17.0,
+        48.6635
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062007,
+        "npcID": 490904
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "crumbling_construct_01",
+      "role": "crumbling_construct",
+      "npc_type_id": 490905,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062008,
+      "spawngroup_id": 304062008,
+      "condition_id": null,
+      "xyz": [
+        -285,
+        875,
+        -2.1538
+      ],
+      "heading": 0,
+      "floor_Z": -5.9038,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -5.9038,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062008,
+        "npcID": 490905
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "broken_construct_01",
+      "role": "broken_construct",
+      "npc_type_id": 490906,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062009,
+      "spawngroup_id": 304062009,
+      "condition_id": null,
+      "xyz": [
+        -290,
+        960,
+        0.75
+      ],
+      "heading": 0,
+      "floor_Z": -3.0,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -3.0,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062009,
+        "npcID": 490906
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "cracking_construct_01",
+      "role": "cracking_construct",
+      "npc_type_id": 490907,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062010,
+      "spawngroup_id": 304062010,
+      "condition_id": null,
+      "xyz": [
+        285,
+        875,
+        0.4772
+      ],
+      "heading": 0,
+      "floor_Z": -3.2728,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -3.2728,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062010,
+        "npcID": 490907
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "worn_construct_01",
+      "role": "worn_construct",
+      "npc_type_id": 490908,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062011,
+      "spawngroup_id": 304062011,
+      "condition_id": null,
+      "xyz": [
+        290,
+        960,
+        2.3062
+      ],
+      "heading": 0,
+      "floor_Z": -1.4438,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -1.4438,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062011,
+        "npcID": 490908
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "eroding_construct_01",
+      "role": "eroding_construct",
+      "npc_type_id": 490909,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062012,
+      "spawngroup_id": 304062012,
+      "condition_id": null,
+      "xyz": [
+        -300,
+        1000,
+        -1.0846
+      ],
+      "heading": 0,
+      "floor_Z": -4.8346,
+      "native_default_size": 6.0,
+      "native_Z_offset": 3.75,
+      "vertical_collision_intersections": [
+        -4.8346,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062012,
+        "npcID": 490909
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "keymaster_01",
+      "role": "keymaster",
+      "npc_type_id": 490910,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062013,
+      "spawngroup_id": 304062013,
+      "condition_id": null,
+      "xyz": [
+        0,
+        1170,
+        -3.92
+      ],
+      "heading": 256,
+      "floor_Z": -11.0,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        -11.0,
+        -5.6117,
+        8.3292,
+        11.043
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062013,
+        "npcID": 490910
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "vault_guardian_01",
+      "role": "vault_guardian",
+      "npc_type_id": 490911,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062014,
+      "spawngroup_id": 304062014,
+      "condition_id": null,
+      "xyz": [
+        0,
+        775,
+        30.08
+      ],
+      "heading": 256,
+      "floor_Z": 23.0,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        23.0,
+        97.9556
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062014,
+        "npcID": 490911
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "gotonur_instance_01",
+      "role": "gotonur_instance",
+      "npc_type_id": 490912,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062015,
+      "spawngroup_id": 304062015,
+      "condition_id": null,
+      "xyz": [
+        -12,
+        666,
+        25.0801
+      ],
+      "heading": 0,
+      "floor_Z": 18.0001,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        18.0001,
+        125.7851
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062015,
+        "npcID": 490912
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "stone_chest_01",
+      "role": "stone_chest",
+      "npc_type_id": 490914,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": null,
+      "spawngroup_id": null,
+      "condition_id": null,
+      "xyz": [
+        -35,
+        650,
+        19.875
+      ],
+      "heading": 0,
+      "floor_Z": 18.0,
+      "native_default_size": 3.0,
+      "native_Z_offset": 1.875,
+      "vertical_collision_intersections": [
+        18.0,
+        107.4759
+      ],
+      "initially_present": false,
+      "mechanism": "Terminalownedconditionalchestplacementonly",
+      "historical_placement": false,
+      "spawnentry_key": null,
+      "ID_disposition": "EXISTING_NPC_TYPE_REUSED_CONDITIONAL_ANCHOR_ONLY"
+    },
+    {
+      "symbolic_slot": "coldain_champion_01",
+      "role": "coldain_champion",
+      "npc_type_id": 490915,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062016,
+      "spawngroup_id": 304062016,
+      "condition_id": null,
+      "xyz": [
+        -75,
+        500,
+        18.56
+      ],
+      "heading": 0,
+      "floor_Z": 18.0,
+      "native_default_size": 4.0,
+      "native_Z_offset": 0.56,
+      "vertical_collision_intersections": [
+        18.0,
+        124.6999
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062016,
+        "npcID": 490915
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "coldain_champion_02",
+      "role": "coldain_champion",
+      "npc_type_id": 490915,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062017,
+      "spawngroup_id": 304062017,
+      "condition_id": null,
+      "xyz": [
+        75,
+        500,
+        18.56
+      ],
+      "heading": 0,
+      "floor_Z": 18.0,
+      "native_default_size": 4.0,
+      "native_Z_offset": 0.56,
+      "vertical_collision_intersections": [
+        18.0,
+        124.6999
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062017,
+        "npcID": 490915
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "gnomish_enigma_01",
+      "role": "gnomish_enigma",
+      "npc_type_id": 490916,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062018,
+      "spawngroup_id": 304062018,
+      "condition_id": null,
+      "xyz": [
+        -80,
+        590,
+        19.875
+      ],
+      "heading": 0,
+      "floor_Z": 18.0,
+      "native_default_size": 3.0,
+      "native_Z_offset": 1.875,
+      "vertical_collision_intersections": [
+        18.0,
+        139.7117
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062018,
+        "npcID": 490916
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "gnomish_enigma_02",
+      "role": "gnomish_enigma",
+      "npc_type_id": 490916,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062019,
+      "spawngroup_id": 304062019,
+      "condition_id": null,
+      "xyz": [
+        80,
+        590,
+        19.875
+      ],
+      "heading": 0,
+      "floor_Z": 18.0,
+      "native_default_size": 3.0,
+      "native_Z_offset": 1.875,
+      "vertical_collision_intersections": [
+        18.0,
+        139.7118
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062019,
+        "npcID": 490916
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "mischievous_construct_01",
+      "role": "mischievous_construct",
+      "npc_type_id": 490917,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062020,
+      "spawngroup_id": 304062020,
+      "condition_id": null,
+      "xyz": [
+        -220,
+        680,
+        17.0
+      ],
+      "heading": 0,
+      "floor_Z": 12.0,
+      "native_default_size": 8.0,
+      "native_Z_offset": 5.0,
+      "vertical_collision_intersections": [
+        12.0,
+        84.519
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062020,
+        "npcID": 490917
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "mischievous_construct_02",
+      "role": "mischievous_construct",
+      "npc_type_id": 490917,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062021,
+      "spawngroup_id": 304062021,
+      "condition_id": null,
+      "xyz": [
+        220,
+        680,
+        17.0
+      ],
+      "heading": 0,
+      "floor_Z": 12.0,
+      "native_default_size": 8.0,
+      "native_Z_offset": 5.0,
+      "vertical_collision_intersections": [
+        12.0,
+        84.519
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062021,
+        "npcID": 490917
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "roaming_automaton_01",
+      "role": "roaming_automaton",
+      "npc_type_id": 490918,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062022,
+      "spawngroup_id": 304062022,
+      "condition_id": null,
+      "xyz": [
+        -275,
+        820,
+        -0.5001
+      ],
+      "heading": 0,
+      "floor_Z": -3.0001,
+      "native_default_size": 4.0,
+      "native_Z_offset": 2.5,
+      "vertical_collision_intersections": [
+        -3.0001,
+        32.9616,
+        42.665
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062022,
+        "npcID": 490918
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "roaming_automaton_02",
+      "role": "roaming_automaton",
+      "npc_type_id": 490918,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062023,
+      "spawngroup_id": 304062023,
+      "condition_id": null,
+      "xyz": [
+        275,
+        820,
+        -0.5001
+      ],
+      "heading": 0,
+      "floor_Z": -3.0001,
+      "native_default_size": 4.0,
+      "native_Z_offset": 2.5,
+      "vertical_collision_intersections": [
+        -3.0001,
+        32.9616,
+        42.6651
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062023,
+        "npcID": 490918
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "telmiran_allurist_01",
+      "role": "telmiran_allurist",
+      "npc_type_id": 490919,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062024,
+      "spawngroup_id": 304062024,
+      "condition_id": null,
+      "xyz": [
+        -315,
+        910,
+        1.08
+      ],
+      "heading": 0,
+      "floor_Z": -6.0,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        -6.0,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062024,
+        "npcID": 490919
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "telmiran_allurist_02",
+      "role": "telmiran_allurist",
+      "npc_type_id": 490919,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062025,
+      "spawngroup_id": 304062025,
+      "condition_id": null,
+      "xyz": [
+        315,
+        910,
+        3.171
+      ],
+      "heading": 0,
+      "floor_Z": -3.909,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        -3.909,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062025,
+        "npcID": 490919
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "timeworn_archmagus_01",
+      "role": "timeworn_archmagus",
+      "npc_type_id": 490920,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062026,
+      "spawngroup_id": 304062026,
+      "condition_id": null,
+      "xyz": [
+        -260,
+        975,
+        1.08
+      ],
+      "heading": 0,
+      "floor_Z": -6.0,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        -6.0,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062026,
+        "npcID": 490920
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "timeworn_archmagus_02",
+      "role": "timeworn_archmagus",
+      "npc_type_id": 490920,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062027,
+      "spawngroup_id": 304062027,
+      "condition_id": null,
+      "xyz": [
+        260,
+        975,
+        2.661
+      ],
+      "heading": 0,
+      "floor_Z": -4.419,
+      "native_default_size": 6.0,
+      "native_Z_offset": 7.08,
+      "vertical_collision_intersections": [
+        -4.419,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062027,
+        "npcID": 490920
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "ancient_automaton_01",
+      "role": "ancient_automaton",
+      "npc_type_id": 490921,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062028,
+      "spawngroup_id": 304062028,
+      "condition_id": null,
+      "xyz": [
+        -300,
+        935,
+        -0.5
+      ],
+      "heading": 0,
+      "floor_Z": -3.0,
+      "native_default_size": 4.0,
+      "native_Z_offset": 2.5,
+      "vertical_collision_intersections": [
+        -3.0,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062028,
+        "npcID": 490921
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    },
+    {
+      "symbolic_slot": "ancient_automaton_02",
+      "role": "ancient_automaton",
+      "npc_type_id": 490921,
+      "zone": 490,
+      "version": 1,
+      "spawn2_id": 304062029,
+      "spawngroup_id": 304062029,
+      "condition_id": null,
+      "xyz": [
+        300,
+        935,
+        0.0188
+      ],
+      "heading": 0,
+      "floor_Z": -2.4812,
+      "native_default_size": 4.0,
+      "native_Z_offset": 2.5,
+      "vertical_collision_intersections": [
+        -2.4812,
+        32.9616
+      ],
+      "initially_present": true,
+      "mechanism": "LOCALmissionstaticplacementcandidate",
+      "historical_placement": false,
+      "spawnentry_key": {
+        "spawngroupID": 304062029,
+        "npcID": 490921
+      },
+      "ID_disposition": "NEW_LOGICAL_RESERVATION_ONLY"
+    }
+  ],
+  "count": 31,
+  "combat": 29,
+  "qualification": "20LOCALtrash+9namedcombat=29combat; friendlygiver1+conditionalchest1=31. No statichelper/personal/worldactorchanges.",
+  "correct_combat_count": 29,
+  "static_candidate_count": 30,
+  "conditional_chest_anchor": 1,
+  "new_SQL_rows_emitted": 0,
+  "topology_note": "Innergate283.35liesBEFOREfirstlateralbypassbranchesnearY335. Central423.5thresholdrejectedbecauseouterroomroutesbypassit. Allearlyquestdroppersliesouthof283.35; othertrash/namedbeyond. Bothworshipleavesrun-unlockallowsreturnthroughcentralhallbetweensides; nofakecrosswallconnector.",
+  "placement_claim": "AllnewplacementsLOCALselectedgeometry; validbasefloorintersection notproven nativeNPCnavigation/hate/clientvisibility. Childgate/phaseconsumers remainunchanged."
+}

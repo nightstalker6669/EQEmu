@@ -1,0 +1,73 @@
+{
+  "items": [
+    {
+      "id": "110240",
+      "Name": "Battlestaff of Symbols",
+      "lore": "The glow surges when mana is used nearby",
+      "clickeffect": "-1"
+    },
+    {
+      "id": "110231",
+      "Name": "Beguiler's Last Answer",
+      "lore": "If charming does not work, removal will",
+      "clickeffect": "-1"
+    },
+    {
+      "id": "110244",
+      "Name": "Brute's War Spear",
+      "lore": "War spear once owned by the Gigyn Brute",
+      "clickeffect": "-1"
+    },
+    {
+      "id": "110296",
+      "Name": "Eyepiece of the Fancy Tinker",
+      "lore": "Made by crafters trained in Ak'Anon",
+      "clickeffect": "595"
+    },
+    {
+      "id": "110232",
+      "Name": "Naglebrak's Cleansing Tool",
+      "lore": "You are not sure what it cleansed",
+      "clickeffect": "-1"
+    },
+    {
+      "id": "110272",
+      "Name": "Orb of Timeless Stone",
+      "lore": "A stone orb imbued with strong earthen energies",
+      "clickeffect": "-1"
+    },
+    {
+      "id": "110285",
+      "Name": "Slime-Etched Breastplate",
+      "lore": "Metal chestplate that has been burned by an acidic slime",
+      "clickeffect": "-1"
+    },
+    {
+      "id": "110286",
+      "Name": "Slime-Etched Leggings",
+      "lore": "Metal leggings that have been burned by an acidic slime",
+      "clickeffect": "-1"
+    },
+    {
+      "id": "110271",
+      "Name": "Tarnished Stone",
+      "lore": "Appears partially scarred by digestive enzymes",
+      "clickeffect": "-1"
+    },
+    {
+      "id": "110259",
+      "Name": "Telmiran War Shield",
+      "lore": "Used by only the most elite telmirans",
+      "clickeffect": "-1"
+    },
+    {
+      "id": "110297",
+      "Name": "Orb of Suspension",
+      "lore": "This orb feels as if it has no weight",
+      "clickeffect": "7530"
+    }
+  ],
+  "additional_Orb_ID": 110297,
+  "original10_preserved": true,
+  "new_items": 0
+}

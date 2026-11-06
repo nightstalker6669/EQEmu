@@ -1,0 +1,450 @@
+{
+  "status": "SIX_LOCAL_GEOMETRIES_BOUND_TO_LOGICAL_RESERVATIONS_NOT_INSTALLED",
+  "rows": [
+    {
+      "role": "inner_vault",
+      "SQL_row_id": 304062000,
+      "native_door_id": 1,
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "name": "OBJ_DOOR_BRELLS",
+      "pos_x": 0,
+      "pos_y": 283.35,
+      "pos_z": 12.7702,
+      "heading": 384.0,
+      "opentype": 77,
+      "size": 85,
+      "incline": 0,
+      "invert_state": 0,
+      "doorisopen": 0,
+      "lockpick": 32767,
+      "keyitem": 0,
+      "nokeyring": 1,
+      "disable_timer": 1,
+      "close_timer_ms": 5000,
+      "triggerdoor": 0,
+      "triggertype": 0,
+      "dest_zone": "NONE",
+      "dest_instance": 0,
+      "normal_toward_progress": [
+        0,
+        1
+      ],
+      "threshold_half_width": 8.3,
+      "frame_half_depth": 4.7,
+      "passage_before": [
+        0,
+        273.35,
+        16.7502
+      ],
+      "passage_after": [
+        0,
+        293.35,
+        16.7502
+      ],
+      "interaction_AABB": {
+        "min": [
+          -20,
+          263.35,
+          6.0002
+        ],
+        "max": [
+          20,
+          303.35,
+          30.0002
+        ]
+      },
+      "floor": 13.0002,
+      "all_vertical_collision_intersections": [
+        -32.0775,
+        13.0002,
+        48.2389
+      ],
+      "client_map_line_numbers": [
+        84,
+        85,
+        86,
+        686,
+        909,
+        935
+      ],
+      "geometry_provenance": "LOCALplacementderivedfrompinnedclientmapframeandbasecollisionfloor; headingrelative toexistingworld7orientation; nohistoricalmissionbindingclaim",
+      "action_guard": "Nativeordinaryclick denied untilactualscopedrole/run/itemconsumer accepts; lockpick32767 isdefenseonly, notsubstitute fororiginalcustody/ownerlifetimeguard. Timerdisabled supportsrunlatchedopen.",
+      "ID_disposition": "LOGICALLY_RESERVED_ONLY_NOT_INSERTED"
+    },
+    {
+      "role": "worship_left",
+      "SQL_row_id": 304062001,
+      "native_door_id": 2,
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "name": "OBJ_DOOR_BRELLS",
+      "pos_x": -236,
+      "pos_y": 749.5,
+      "pos_z": 11.77,
+      "heading": 332.81044,
+      "opentype": 77,
+      "size": 85,
+      "incline": 0,
+      "invert_state": 0,
+      "doorisopen": 0,
+      "lockpick": 32767,
+      "keyitem": 0,
+      "nokeyring": 1,
+      "disable_timer": 1,
+      "close_timer_ms": 5000,
+      "triggerdoor": 0,
+      "triggertype": 0,
+      "dest_zone": "NONE",
+      "dest_instance": 0,
+      "normal_toward_progress": [
+        -0.58768,
+        0.80909
+      ],
+      "threshold_half_width": 8.3,
+      "frame_half_depth": 4.7,
+      "passage_before": [
+        -230.1232,
+        741.4091,
+        15.75
+      ],
+      "passage_after": [
+        -241.8768,
+        757.5909,
+        15.75
+      ],
+      "interaction_AABB": {
+        "min": [
+          -256,
+          729.5,
+          5.0
+        ],
+        "max": [
+          -216,
+          769.5,
+          29.0
+        ]
+      },
+      "floor": 12.0,
+      "all_vertical_collision_intersections": [
+        12.0,
+        47.2387
+      ],
+      "client_map_line_numbers": [
+        311,
+        312,
+        314,
+        315
+      ],
+      "geometry_provenance": "LOCALplacementderivedfrompinnedclientmapframeandbasecollisionfloor; headingrelative toexistingworld7orientation; nohistoricalmissionbindingclaim",
+      "action_guard": "Nativeordinaryclick denied untilactualscopedrole/run/itemconsumer accepts; lockpick32767 isdefenseonly, notsubstitute fororiginalcustody/ownerlifetimeguard. Timerdisabled supportsrunlatchedopen.",
+      "ID_disposition": "LOGICALLY_RESERVED_ONLY_NOT_INSERTED"
+    },
+    {
+      "role": "worship_right",
+      "SQL_row_id": 304062002,
+      "native_door_id": 3,
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "name": "OBJ_DOOR_BRELLS",
+      "pos_x": 236,
+      "pos_y": 749.5,
+      "pos_z": 11.77,
+      "heading": 435.18956,
+      "opentype": 77,
+      "size": 85,
+      "incline": 0,
+      "invert_state": 0,
+      "doorisopen": 0,
+      "lockpick": 32767,
+      "keyitem": 0,
+      "nokeyring": 1,
+      "disable_timer": 1,
+      "close_timer_ms": 5000,
+      "triggerdoor": 0,
+      "triggertype": 0,
+      "dest_zone": "NONE",
+      "dest_instance": 0,
+      "normal_toward_progress": [
+        0.58768,
+        0.80909
+      ],
+      "threshold_half_width": 8.3,
+      "frame_half_depth": 4.7,
+      "passage_before": [
+        230.1232,
+        741.4091,
+        15.75
+      ],
+      "passage_after": [
+        241.8768,
+        757.5909,
+        15.75
+      ],
+      "interaction_AABB": {
+        "min": [
+          216,
+          729.5,
+          5.0
+        ],
+        "max": [
+          256,
+          769.5,
+          29.0
+        ]
+      },
+      "floor": 12.0,
+      "all_vertical_collision_intersections": [
+        12.0,
+        47.2387
+      ],
+      "client_map_line_numbers": [
+        737,
+        824,
+        920,
+        941
+      ],
+      "geometry_provenance": "LOCALplacementderivedfrompinnedclientmapframeandbasecollisionfloor; headingrelative toexistingworld7orientation; nohistoricalmissionbindingclaim",
+      "action_guard": "Nativeordinaryclick denied untilactualscopedrole/run/itemconsumer accepts; lockpick32767 isdefenseonly, notsubstitute fororiginalcustody/ownerlifetimeguard. Timerdisabled supportsrunlatchedopen.",
+      "ID_disposition": "LOGICALLY_RESERVED_ONLY_NOT_INSERTED"
+    },
+    {
+      "role": "keymaster_pool",
+      "SQL_row_id": 304062003,
+      "native_door_id": 4,
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "name": "OBJ_DOOR_BRELLS",
+      "pos_x": -251.175,
+      "pos_y": 1020.55,
+      "pos_z": -3.23,
+      "heading": 412.54685,
+      "opentype": 77,
+      "size": 85,
+      "incline": 0,
+      "invert_state": 0,
+      "doorisopen": 0,
+      "lockpick": 32767,
+      "keyitem": 0,
+      "nokeyring": 1,
+      "disable_timer": 1,
+      "close_timer_ms": 5000,
+      "triggerdoor": 0,
+      "triggertype": 0,
+      "dest_zone": "NONE",
+      "dest_instance": 0,
+      "normal_toward_progress": [
+        0.3432,
+        0.93926
+      ],
+      "threshold_half_width": 8.3,
+      "frame_half_depth": 4.7,
+      "passage_before": [
+        -254.607,
+        1011.1574,
+        0.75
+      ],
+      "passage_after": [
+        -247.743,
+        1029.9426,
+        0.75
+      ],
+      "interaction_AABB": {
+        "min": [
+          -271.175,
+          1000.55,
+          -10.0
+        ],
+        "max": [
+          -231.175,
+          1040.55,
+          14.0
+        ]
+      },
+      "floor": -3.0,
+      "all_vertical_collision_intersections": [
+        -3.0,
+        32.2387,
+        32.9616
+      ],
+      "client_map_line_numbers": [
+        419,
+        420,
+        585,
+        625
+      ],
+      "geometry_provenance": "LOCALplacementderivedfrompinnedclientmapframeandbasecollisionfloor; headingrelative toexistingworld7orientation; nohistoricalmissionbindingclaim",
+      "action_guard": "Nativeordinaryclick denied untilactualscopedrole/run/itemconsumer accepts; lockpick32767 isdefenseonly, notsubstitute fororiginalcustody/ownerlifetimeguard. Timerdisabled supportsrunlatchedopen.",
+      "ID_disposition": "LOGICALLY_RESERVED_ONLY_NOT_INSERTED"
+    },
+    {
+      "role": "keymaster_garden",
+      "SQL_row_id": 304062004,
+      "native_door_id": 5,
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "name": "OBJ_DOOR_BRELLS",
+      "pos_x": 251.175,
+      "pos_y": 1020.55,
+      "pos_z": -3.23,
+      "heading": 355.45315,
+      "opentype": 77,
+      "size": 85,
+      "incline": 0,
+      "invert_state": 0,
+      "doorisopen": 0,
+      "lockpick": 32767,
+      "keyitem": 0,
+      "nokeyring": 1,
+      "disable_timer": 1,
+      "close_timer_ms": 5000,
+      "triggerdoor": 0,
+      "triggertype": 0,
+      "dest_zone": "NONE",
+      "dest_instance": 0,
+      "normal_toward_progress": [
+        -0.3432,
+        0.93926
+      ],
+      "threshold_half_width": 8.3,
+      "frame_half_depth": 4.7,
+      "passage_before": [
+        254.607,
+        1011.1574,
+        0.75
+      ],
+      "passage_after": [
+        247.743,
+        1029.9426,
+        0.75
+      ],
+      "interaction_AABB": {
+        "min": [
+          231.175,
+          1000.55,
+          -10.0
+        ],
+        "max": [
+          271.175,
+          1040.55,
+          14.0
+        ]
+      },
+      "floor": -3.0,
+      "all_vertical_collision_intersections": [
+        -3.0,
+        32.2387,
+        32.9616
+      ],
+      "client_map_line_numbers": [
+        770,
+        781,
+        829,
+        838
+      ],
+      "geometry_provenance": "LOCALplacementderivedfrompinnedclientmapframeandbasecollisionfloor; headingrelative toexistingworld7orientation; nohistoricalmissionbindingclaim",
+      "action_guard": "Nativeordinaryclick denied untilactualscopedrole/run/itemconsumer accepts; lockpick32767 isdefenseonly, notsubstitute fororiginalcustody/ownerlifetimeguard. Timerdisabled supportsrunlatchedopen.",
+      "ID_disposition": "LOGICALLY_RESERVED_ONLY_NOT_INSERTED"
+    },
+    {
+      "role": "vault_guardian",
+      "SQL_row_id": 304062005,
+      "native_door_id": 6,
+      "zone": "brellstemple",
+      "zone_id": 490,
+      "version": 1,
+      "name": "OBJ_DOOR_BRELLS",
+      "pos_x": 0.06667,
+      "pos_y": 711.594,
+      "pos_z": 22.77,
+      "heading": 384.0,
+      "opentype": 77,
+      "size": 100,
+      "incline": 0,
+      "invert_state": 0,
+      "doorisopen": 0,
+      "lockpick": 32767,
+      "keyitem": 47757,
+      "nokeyring": 1,
+      "disable_timer": 1,
+      "close_timer_ms": 5000,
+      "triggerdoor": 0,
+      "triggertype": 0,
+      "dest_zone": "NONE",
+      "dest_instance": 0,
+      "normal_toward_progress": [
+        0,
+        1
+      ],
+      "threshold_half_width": 8.3,
+      "frame_half_depth": 4.7,
+      "passage_before": [
+        0.0667,
+        701.594,
+        26.75
+      ],
+      "passage_after": [
+        0.0667,
+        721.594,
+        26.75
+      ],
+      "interaction_AABB": {
+        "min": [
+          -19.93333,
+          691.594,
+          16.0
+        ],
+        "max": [
+          20.06667,
+          731.594,
+          40.0
+        ]
+      },
+      "floor": 23.0,
+      "all_vertical_collision_intersections": [
+        23.0,
+        58.2387
+      ],
+      "client_map_line_numbers": [
+        355,
+        356,
+        357,
+        358,
+        704
+      ],
+      "geometry_provenance": "LOCALplacementderivedfrompinnedclientmapframeandbasecollisionfloor; headingrelative toexistingworld7orientation; nohistoricalmissionbindingclaim",
+      "action_guard": "Nativeordinaryclick denied untilactualscopedrole/run/itemconsumer accepts; lockpick32767 isdefenseonly, notsubstitute fororiginalcustody/ownerlifetimeguard. Timerdisabled supportsrunlatchedopen.",
+      "ID_disposition": "LOGICALLY_RESERVED_ONLY_NOT_INSERTED"
+    }
+  ],
+  "door_model": "obj_door_brells.mod",
+  "door_model_bounds": {
+    "uncompressed_member_sha256": "2c94c8d1827d5e624df8254acf1ee1ad03a8ca804c8a5361a4d018fc1852a6a6",
+    "header": [
+      "EQGM",
+      3,
+      7397,
+      46,
+      616,
+      512
+    ],
+    "aabb_min": [
+      -10.342012405395508,
+      -3.017110824584961,
+      -8.386385889025405e-05
+    ],
+    "aabb_max": [
+      10.000100135803223,
+      3.0171945095062256,
+      36.213531494140625
+    ],
+    "bounds_scope": "Staticmodelvertices includinganyanimatedrestparts; notanimation/path/collisionproof"
+  },
+  "model_choice": "Existingnativeworld7usesOBJ_DOOR_BRELLS/opentype77; retainmodel/opentype andreferenceorientation.85percent gives17.2908width/30.7815height versus16.6frameopening; 100percentretainedatGuardianworld7anchor. Clientanimation/closedcollisionnotobserved.",
+  "model_origin_Z": "Eachnewbase=floorZ-0.23 usingexistingnativeworld7floor23/base22.77 offset; LOCALadaptation, notoriginalallgateZproof."
+}

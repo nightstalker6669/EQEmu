@@ -1,0 +1,132 @@
+{
+  "items": [
+    {
+      "id": "110230",
+      "Name": "Runed Longsword",
+      "lore": "The symbols glow with every strike",
+      "itemtype": "",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110234",
+      "Name": "Anvil Forged Axe",
+      "lore": "Large axe, forged by \"Anvil's hand\"",
+      "itemtype": "1",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110242",
+      "Name": "Ancill's Hatchet",
+      "lore": "Maybe he was using it incorrectly",
+      "itemtype": "2",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110243",
+      "Name": "Mad Mephit's Blade",
+      "lore": "It's only dangerous on one end",
+      "itemtype": "2",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110246",
+      "Name": "Hunter's Claw",
+      "lore": "Claw from a tough cliknar",
+      "itemtype": "45",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110267",
+      "Name": "Workmaster's Horn Fragment",
+      "lore": "Chipped from the horn of the Mephit Workmaster",
+      "itemtype": "54",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110270",
+      "Name": "Polished Rockomancy Diamond",
+      "lore": "Reinforced by rockomancy and harder than a normal diamond",
+      "itemtype": "54",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110273",
+      "Name": "Purifying Pyrite Stone",
+      "lore": "Helps to protect the wearer from corruptive influence",
+      "itemtype": "54",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110278",
+      "Name": "Striped Agate of Devotion",
+      "lore": "This stone was pried out of an engagement ring",
+      "itemtype": "54",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110292",
+      "Name": "Spiked War Maul",
+      "lore": "The best at what it does, and what it does isn't pretty",
+      "itemtype": "4",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110295",
+      "Name": "Deathspike Spear",
+      "lore": "This spear never seems to dull",
+      "itemtype": "2",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    {
+      "id": "110411",
+      "Name": "Mephit's Hoop of the Trickster",
+      "lore": "This earring is stained with blood",
+      "itemtype": "29",
+      "clickeffect": "3583",
+      "clicktype": "5"
+    }
+  ],
+  "selected_pool": [
+    110230,
+    110234,
+    110242,
+    110243,
+    110246,
+    110267,
+    110270,
+    110273,
+    110278,
+    110292,
+    110295,
+    110411
+  ],
+  "selected_count": 12,
+  "retracted_candidate": {
+    "native_item": {
+      "id": "110770",
+      "Name": "Incarnadine Gemstone",
+      "lore": "Sparkles with an inner strength",
+      "itemtype": "54",
+      "clickeffect": "-1",
+      "clicktype": ""
+    },
+    "status": "RETRACTED_MISATTRIBUTED_NOT_SELECTED",
+    "source": "https://everquest.allakhazam.com/db/npc/35375#msg127168277413804655",
+    "date": "2010-04-19 edited2010-04-21",
+    "finding": "Originalreporter explicitly corrected Incarnadine Gemstone to Kill the Hatchlings Volska Husk chest, not LC chest.",
+    "later_question": "2011-10-12#1318403222313883423"
+  },
+  "Mad_Mephit_Blade_110243_positive": "2010-04-17#1271501420102499102",
+  "new_items": 0
+}

@@ -1,0 +1,53 @@
+{
+  "status": "PERIOD_DIALOGUE_LEAD_RECOVERED_RESET_REEARNING_HELD",
+  "enabled": false,
+  "source_contract_used": "WORKSPACE_SOURCE/aa-work/dependencies/remaining-grant-only-acquisition/curse-blood-period-contract.private.json",
+  "requested_path_note": "The supplied aa-work/research path was absent; the existing dependencies contract contains the named npc_identity_followup. No identity audit repeated.",
+  "new_period_evidence": {
+    "url": "https://everquest.allakhazam.com/db/npc/18983#msg113038989512190",
+    "date": "2005-10-27 01:53 site display, timezone unspecified",
+    "title": "Removes the DoDh curses",
+    "author": "Current page redacts author; first-person player report with pasted NPC dialogue",
+    "reported_context": "Player reports changed dialogue after gaining some Blood AAs, describing them as Affliction of Blood AAs; exact numeric rank prerequisite not established.",
+    "observed_dialogue_sequence": [
+      {"input": "hail", "response_summary": "NPC offers his earlier story and explanation of the invitation."},
+      {"input": "offer", "response_summary": "NPC explains five affected beings, transferred power following a kill and the invitation strengthening through further victories; exposes accept dialogue."},
+      {"input": "accept", "response_summary": "NPC discusses rejecting the invitation and offers removal on explicit refusal; exposes remove it dialogue. This input opens explanation, not evidence of an affirmative removal operation."}
+    ],
+    "exposed_removal_link": "remove it",
+    "warning_summary": "NPC warns that refusing the invitation may prevent discovering Dreadspire's secrets. This is narrative warning, not proof of which admission or progression flags change.",
+    "terminal_removal_input_and_response_recorded": false,
+    "confirmation_window_recorded": false,
+    "scope_limit": "October2005 is before the September19,2006 confirmation-box patch. Do not present this transcript as a full later confirmation/removal interaction."
+  },
+  "existing_confirmation_requirement": {
+    "date": "2006-09-19",
+    "source": "https://groups.google.com/g/alt.games.everquest/c/v33Vsl_AMMA",
+    "qualification": "Existing supplied contract establishes confirmation before removal; new dialogue evidence does not establish window text, response identifier or downstream state."
+  },
+  "unproven_state": {
+    "exact_rank_threshold": null,
+    "dialogue_history_prerequisite": null,
+    "confirmation_text": null,
+    "confirmation_response_identifier": null,
+    "AA_rank_post_removal": null,
+    "unique_earned_event_flags_reset": null,
+    "admission_flags_reset": null,
+    "backflag_state_reset": null,
+    "reearning_allowed": null,
+    "repeat_victory_credit_policy": null
+  },
+  "bounded_followup": {
+    "checked": "Linked primary quest3582 progression discussion; no direct removal or reearning transcript recovered. Focused indexed searches did not yield an actionable reearning source.",
+    "absence_claim": "No positive reearning/reset evidence recovered in this bounded pass; not proof that removal is irreversible or reearning impossible.",
+    "actionable_owner_handoff": "Add the observed hail/offer/accept explanation and exposed removal link to the evidence contract only. Keep confirmation, actual removal handler and all reset/reearning state mutations held pending a period terminal transcript, recorded confirmation outcome, or authenticated implementation evidence. Do not wire accept directly to removal."
+  },
+  "identity_audit_repeated": false,
+  "script_emitted": false,
+  "database_queries": 0,
+  "database_writes": 0,
+  "player_state_changes": 0,
+  "runtime_actions": 0,
+  "tests": 0,
+  "owned_browser_tab_closed": true
+}

@@ -1,0 +1,16 @@
+{
+  "primary": "https://everquest.allakhazam.com/db/quest/5004",
+  "prerequisites": [
+    "https://everquest.allakhazam.com/db/quest/5001",
+    "https://everquest.allakhazam.com/db/quest/5002",
+    "https://everquest.allakhazam.com/db/quest/5003"
+  ],
+  "current_roster": "https://everquest.allakhazam.com/db/zone/728",
+  "chest": "https://everquest.allakhazam.com/db/npc/35375",
+  "guide": "https://www.raspersrealm.com/Everquest/Underfoot/missionLichen.html",
+  "current_vs_period": "Compiledprimary/currentrosterareundated/currentcontent; allJan2010/2011/2013comments retained as reports, not exactoriginalDBbytes.",
+  "material_retraction": "2010-04-19#127168277413804655 editedApr21 explicitly corrects gemstone to Hatchlings; original guide12+Madpositive selected.",
+  "token_conflict": "Apr16/May4,2010 actual180 vs May5/Jun11 actual160; selectedcandidate160 only, neveruniformformula.",
+  "source_lookup": "No missionnativeactorIDs found by name/current487range; externalZAMkeys never used asnativeIDs. No allocations/callbackinstallation or questsmodified.",
+  "schema_query_error": "Initial spells SELECT used unquoted reserved range column and failed; corrected after schema inspection. Error retained; no mutations."
+}

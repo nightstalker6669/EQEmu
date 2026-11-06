@@ -1,0 +1,49 @@
+{
+  "enabled": false,
+  "rows": [
+    {
+      "activity": 0,
+      "name": "Searing Prominence",
+      "zone_id": 487,
+      "instance_version": null,
+      "source_region": "north of BoilingWaterfall, paststream-lavajunction/captiveFiddy",
+      "min_x": null,
+      "max_x": null,
+      "min_y": null,
+      "max_y": null,
+      "min_z": null,
+      "max_z": null,
+      "bounds_ready": false
+    },
+    {
+      "activity": 4,
+      "name": "Peninfernal Lava Pool",
+      "zone_id": 487,
+      "instance_version": null,
+      "source_region": "west of BoilingWaterfall below cliknarcamp/Duerg",
+      "min_x": null,
+      "max_x": null,
+      "min_y": null,
+      "max_y": null,
+      "min_z": null,
+      "max_z": null,
+      "bounds_ready": false
+    },
+    {
+      "activity": 8,
+      "name": "Serrated Cliff",
+      "zone_id": 487,
+      "instance_version": null,
+      "source_region": "south ofcliknararea atcascadesintolowerpools/Neerda",
+      "min_x": null,
+      "max_x": null,
+      "min_y": null,
+      "max_y": null,
+      "min_z": null,
+      "max_z": null,
+      "bounds_ready": false
+    }
+  ],
+  "qualification": "Namedsourceareasresolved; numericalExploreboundsNOTrecovered. Do not infer from worldactoranchors, copyworldspawns, or replaceExplorewithhail/kill. Ownergeometryselectionheld.",
+  "new_Explore_goals": 0
+}
