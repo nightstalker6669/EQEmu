@@ -1,0 +1,1362 @@
+{
+  "scope": "Concrete inactive source definitions using exact reserved task/set/template/version and nine reward identities. Required null geometry/actor bindings and complete encounters must be resolved before guarded SQL assembly; never coerce to zero.",
+  "engine_path": "Native task DZ template autocreation; no questcreation/pendingjournal",
+  "missions": [
+    {
+      "mission": "battle_for_rivervale",
+      "tasks": {
+        "id": 3040488,
+        "type": 1,
+        "duration": 21600,
+        "title": "The Battle for Rivervale",
+        "description": "Complete the researched Xorbb group mission.",
+        "reward_text": "Experience, AA points and coin; chest loot is separate.",
+        "reward_id_list": "",
+        "reward_method": 3,
+        "exp_reward": 0,
+        "min_level": 85,
+        "min_players": 3,
+        "max_players": 6,
+        "repeatable": 1,
+        "enabled": 0,
+        "cash_reward": 0,
+        "reward_points": 0,
+        "reward_point_type": 0,
+        "faction_reward": 0,
+        "faction_amount": 0,
+        "request_timer_seconds": 0,
+        "replay_timer_seconds": 21600,
+        "dz_template_id": 3040488,
+        "lock_activity_id": -1
+      },
+      "task_field_provenance": {
+        "type": "Native Shared1",
+        "reward_method": "Native METHODSELECT3, corrected9345authoringerrorreused",
+        "lock_activity_id": "Native locks when designatedactivitybecomesACTIVE: Return0=request; Gems1=afterinitialhail. Battle-1requiresproducerLockSharedTaskafterfourthactualsiegekill, notactiveactivity4whichwouldlockearly.",
+        "duration_group_limits_replay": "Currentmutableguideheader;requesttimer0/replay6h qualifiedimplementationchoice"
+      },
+      "dynamic_zone_templates": {
+        "id": 3040488,
+        "zone_id": 753,
+        "zone_version": 1,
+        "name": "The Battle for Rivervale",
+        "min_players": 3,
+        "max_players": 6,
+        "duration_seconds": 21600,
+        "dz_switch_id": 0,
+        "compass_zone_id": 753,
+        "compass_x": null,
+        "compass_y": null,
+        "compass_z": null,
+        "return_zone_id": 753,
+        "return_x": null,
+        "return_y": null,
+        "return_z": null,
+        "return_h": null,
+        "override_zone_in": 1,
+        "zone_in_x": null,
+        "zone_in_y": null,
+        "zone_in_z": null,
+        "zone_in_h": null
+      },
+      "reward_sets": {
+        "reward_set_id": 3040488,
+        "title": "The Battle for Rivervale",
+        "enabled": 0
+      },
+      "reward_sources": {
+        "source_type": 2,
+        "source_id": 3040488,
+        "reward_set_id": 3040488,
+        "enabled": 0
+      },
+      "reward_options": {
+        "reward_set_id": 3040488,
+        "option_id": 1,
+        "sequence": 1,
+        "label": "Completion rewards",
+        "common_to_all": 0,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 65535
+      },
+      "rewards": [
+        {
+          "symbol": "battle_for_rivervale.normal_xp",
+          "reward_id": 304048801,
+          "sequence": 1,
+          "reward_type": 1,
+          "reward_data_id": 1,
+          "amount": 1000,
+          "description": "Approved configurable PEQ-style default, not original recovered XP",
+          "enabled": 0
+        },
+        {
+          "symbol": "battle_for_rivervale.AA_points",
+          "reward_id": 304048802,
+          "sequence": 2,
+          "reward_type": 2,
+          "reward_data_id": 0,
+          "amount": 3,
+          "description": "Current guide; AA points, not ability grant",
+          "enabled": 0
+        },
+        {
+          "symbol": "battle_for_rivervale.copper",
+          "reward_id": 304048803,
+          "sequence": 3,
+          "reward_type": 3,
+          "reward_data_id": 0,
+          "amount": 225000,
+          "description": "Current guide225platinum, original amount unverified",
+          "enabled": 0
+        }
+      ],
+      "achievement_criteria": {
+        "achievement_id": 2075330,
+        "component_type": 1,
+        "component_sequence": 1,
+        "component_id": 2075330,
+        "event_type": 4,
+        "progress_mode": 3,
+        "behavior": 0,
+        "target_id": 3040488,
+        "target_id2": 0,
+        "target_value": 0,
+        "required_count": 1,
+        "enabled": 0
+      },
+      "source_ready": false,
+      "blockers": [
+        "Exactreviewedentry/return/compassposes",
+        "Actor/spawn/lootidentityreservations andcompleteencounterscripts",
+        "Actualitem/kill/destructible/corpse/hailproducers forallactivities",
+        "FinalguardedSQLcomposition/rollbackandnativeacceptance"
+      ],
+      "reward_option_entries": [
+        {
+          "reward_set_id": 3040488,
+          "option_id": 1,
+          "sequence": 1,
+          "reward_id": 304048801
+        },
+        {
+          "reward_set_id": 3040488,
+          "option_id": 1,
+          "sequence": 2,
+          "reward_id": 304048802
+        },
+        {
+          "reward_set_id": 3040488,
+          "option_id": 1,
+          "sequence": 3,
+          "reward_id": 304048803
+        }
+      ],
+      "task_activities": [
+        {
+          "row": {
+            "taskid": 3040488,
+            "activityid": 0,
+            "step": 0,
+            "activitytype": 4,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Speak with Thistlebrush",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 1,
+            "optional": 0
+          },
+          "actor_role": "Thistlebrush",
+          "producer": "Native exact-stage NPC dialogue",
+          "phrase": "ready",
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "battle_thistlebrush"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753920
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040488,
+            "activityid": 1,
+            "step": 1,
+            "activitytype": 2,
+            "goalmethod": 0,
+            "goalcount": 40,
+            "description_override": "Defeat enemy soldiers",
+            "npc_match_list": "753929|753931|753932|753933|753935|753936",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 1,
+            "optional": 0
+          },
+          "actor_role": "enemy soldiers",
+          "producer": "Native registered instance actor kill/merit",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "enemy_bruiser",
+            "enemy_defender",
+            "enemy_flame_ranger",
+            "enemy_healer",
+            "enemy_trooper",
+            "enemy_exploder"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753929,
+            753931,
+            753932,
+            753933,
+            753935,
+            753936
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040488,
+            "activityid": 2,
+            "step": 1,
+            "activitytype": 2,
+            "goalmethod": 0,
+            "goalcount": 6,
+            "description_override": "Defeat enemy commanders",
+            "npc_match_list": "753930|753934",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 1,
+            "optional": 0
+          },
+          "actor_role": "enemy commanders",
+          "producer": "Native registered instance actor kill/merit",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "enemy_commander",
+            "enemy_lord"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753930,
+            753934
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040488,
+            "activityid": 3,
+            "step": 1,
+            "activitytype": 2,
+            "goalmethod": 0,
+            "goalcount": 12,
+            "description_override": "Destroy minotaur shelter tents",
+            "npc_match_list": "753937",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 1,
+            "optional": 0
+          },
+          "actor_role": "minotaur shelter tents",
+          "producer": "Native registered destructible actor death",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "shelter"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753937
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040488,
+            "activityid": 4,
+            "step": 1,
+            "activitytype": 2,
+            "goalmethod": 0,
+            "goalcount": 4,
+            "description_override": "Destroy catapults/ballistae",
+            "npc_match_list": "753938|753939",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 1,
+            "optional": 0
+          },
+          "actor_role": "catapults/ballistae",
+          "producer": "Native registered destructible actor death",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "catapult",
+            "ballista"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753938,
+            753939
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040488,
+            "activityid": 5,
+            "step": 2,
+            "activitytype": 2,
+            "goalmethod": 0,
+            "goalcount": 2,
+            "description_override": "Defeat powershard golems",
+            "npc_match_list": "753940",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 1,
+            "optional": 0
+          },
+          "actor_role": "powershard golems",
+          "producer": "Native registered instance actor kill/merit",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "powershard_golem"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753940
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040488,
+            "activityid": 6,
+            "step": 3,
+            "activitytype": 4,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Speak with Thistlebrush",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 1,
+            "optional": 0
+          },
+          "actor_role": "Thistlebrush",
+          "producer": "Native exact-stage NPC dialogue",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "battle_thistlebrush"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753920
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040488,
+            "activityid": 7,
+            "step": 4,
+            "activitytype": 5,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Open reward chest",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 1,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual registered reward chest opening",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "battle_reward_chest"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753941
+          ],
+          "display_qualification": "Visible Explore5 carrier under METHODQUEST2, matching currentXorbbjournalcorrection. Actual registered chest opening remains the only producer; not proximity."
+        }
+      ],
+      "activity_phase_provenance": "Explicit implementation proposal, not recovered task step metadata. Battle main objectives permit siege-first strategy; exact gems cross-loot/delivery activation needs corroboration before native acceptance.",
+      "activity_goal_methods": "Native kill/destructible/loot/delivery where exact bindings exist; phrase/chest interactions remain quest-controlled METHODQUEST2. None0 chest display requires actual opening producer."
+    },
+    {
+      "mission": "return_of_king_xorbb",
+      "tasks": {
+        "id": 3040489,
+        "type": 1,
+        "duration": 21600,
+        "title": "The Return of King Xorbb",
+        "description": "Complete the researched Xorbb group mission.",
+        "reward_text": "Experience, AA points and coin; chest loot is separate.",
+        "reward_id_list": "",
+        "reward_method": 3,
+        "exp_reward": 0,
+        "min_level": 85,
+        "min_players": 3,
+        "max_players": 6,
+        "repeatable": 1,
+        "enabled": 0,
+        "cash_reward": 0,
+        "reward_points": 0,
+        "reward_point_type": 0,
+        "faction_reward": 0,
+        "faction_amount": 0,
+        "request_timer_seconds": 0,
+        "replay_timer_seconds": 21600,
+        "dz_template_id": 3040489,
+        "lock_activity_id": 0
+      },
+      "task_field_provenance": {
+        "type": "Native Shared1",
+        "reward_method": "Native METHODSELECT3, corrected9345authoringerrorreused",
+        "lock_activity_id": "Native locks when designatedactivitybecomesACTIVE: Return0=request; Gems1=afterinitialhail. Battle-1requiresproducerLockSharedTaskafterfourthactualsiegekill, notactiveactivity4whichwouldlockearly.",
+        "duration_group_limits_replay": "Currentmutableguideheader;requesttimer0/replay6h qualifiedimplementationchoice"
+      },
+      "dynamic_zone_templates": {
+        "id": 3040489,
+        "zone_id": 753,
+        "zone_version": 2,
+        "name": "The Return of King Xorbb",
+        "min_players": 3,
+        "max_players": 6,
+        "duration_seconds": 21600,
+        "dz_switch_id": 0,
+        "compass_zone_id": 753,
+        "compass_x": null,
+        "compass_y": null,
+        "compass_z": null,
+        "return_zone_id": 753,
+        "return_x": null,
+        "return_y": null,
+        "return_z": null,
+        "return_h": null,
+        "override_zone_in": 1,
+        "zone_in_x": null,
+        "zone_in_y": null,
+        "zone_in_z": null,
+        "zone_in_h": null
+      },
+      "reward_sets": {
+        "reward_set_id": 3040489,
+        "title": "The Return of King Xorbb",
+        "enabled": 0
+      },
+      "reward_sources": {
+        "source_type": 2,
+        "source_id": 3040489,
+        "reward_set_id": 3040489,
+        "enabled": 0
+      },
+      "reward_options": {
+        "reward_set_id": 3040489,
+        "option_id": 1,
+        "sequence": 1,
+        "label": "Completion rewards",
+        "common_to_all": 0,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 65535
+      },
+      "rewards": [
+        {
+          "symbol": "return_of_king_xorbb.normal_xp",
+          "reward_id": 304048901,
+          "sequence": 1,
+          "reward_type": 1,
+          "reward_data_id": 1,
+          "amount": 1000,
+          "description": "Approved configurable PEQ-style default, not original recovered XP",
+          "enabled": 0
+        },
+        {
+          "symbol": "return_of_king_xorbb.AA_points",
+          "reward_id": 304048902,
+          "sequence": 2,
+          "reward_type": 2,
+          "reward_data_id": 0,
+          "amount": 3,
+          "description": "Current guide; AA points, not ability grant",
+          "enabled": 0
+        },
+        {
+          "symbol": "return_of_king_xorbb.copper",
+          "reward_id": 304048903,
+          "sequence": 3,
+          "reward_type": 3,
+          "reward_data_id": 0,
+          "amount": 225000,
+          "description": "Current guide225platinum, original amount unverified",
+          "enabled": 0
+        }
+      ],
+      "achievement_criteria": {
+        "achievement_id": 2075330,
+        "component_type": 1,
+        "component_sequence": 2,
+        "component_id": 2075331,
+        "event_type": 4,
+        "progress_mode": 3,
+        "behavior": 0,
+        "target_id": 3040489,
+        "target_id2": 0,
+        "target_value": 0,
+        "required_count": 1,
+        "enabled": 0
+      },
+      "source_ready": false,
+      "blockers": [
+        "Exactreviewedentry/return/compassposes",
+        "Actor/spawn/lootidentityreservations andcompleteencounterscripts",
+        "Actualitem/kill/destructible/corpse/hailproducers forallactivities",
+        "FinalguardedSQLcomposition/rollbackandnativeacceptance"
+      ],
+      "reward_option_entries": [
+        {
+          "reward_set_id": 3040489,
+          "option_id": 1,
+          "sequence": 1,
+          "reward_id": 304048901
+        },
+        {
+          "reward_set_id": 3040489,
+          "option_id": 1,
+          "sequence": 2,
+          "reward_id": 304048902
+        },
+        {
+          "reward_set_id": 3040489,
+          "option_id": 1,
+          "sequence": 3,
+          "reward_id": 304048903
+        }
+      ],
+      "task_activities": [
+        {
+          "row": {
+            "taskid": 3040489,
+            "activityid": 0,
+            "step": 0,
+            "activitytype": 4,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Speak with Barleyburr",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 2,
+            "optional": 0
+          },
+          "actor_role": "Barleyburr",
+          "producer": "Native exact-stage NPC dialogue",
+          "phrase": "destroy",
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "barleyburr"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753942
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040489,
+            "activityid": 1,
+            "step": 1,
+            "activitytype": 4,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Speak with Lupex",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 2,
+            "optional": 0
+          },
+          "actor_role": "Lupex",
+          "producer": "Native exact-stage NPC dialogue",
+          "phrase": "kill",
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "lupex"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753943
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040489,
+            "activityid": 2,
+            "step": 2,
+            "activitytype": 4,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Speak with King Xorbb",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 2,
+            "optional": 0
+          },
+          "actor_role": "King Xorbb",
+          "producer": "Native exact-stage NPC dialogue",
+          "phrase": "escape",
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "king_xorbb"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753944
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040489,
+            "activityid": 3,
+            "step": 3,
+            "activitytype": 2,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Defeat King Xorbb",
+            "npc_match_list": "753944",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 2,
+            "optional": 0
+          },
+          "actor_role": "King Xorbb",
+          "producer": "Native registered instance actor kill/merit",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "king_xorbb"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753944
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040489,
+            "activityid": 4,
+            "step": 4,
+            "activitytype": 5,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Open reward chest",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 2,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual registered reward chest opening",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "king_reward_chest"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753955
+          ],
+          "display_qualification": "Visible Explore5 carrier under METHODQUEST2, matching currentXorbbjournalcorrection. Actual registered chest opening remains the only producer; not proximity."
+        }
+      ],
+      "activity_phase_provenance": "Explicit implementation proposal, not recovered task step metadata. Battle main objectives permit siege-first strategy; exact gems cross-loot/delivery activation needs corroboration before native acceptance.",
+      "activity_goal_methods": "Native kill/destructible/loot/delivery where exact bindings exist; phrase/chest interactions remain quest-controlled METHODQUEST2. None0 chest display requires actual opening producer."
+    },
+    {
+      "mission": "find_the_gems",
+      "tasks": {
+        "id": 3040490,
+        "type": 1,
+        "duration": 21600,
+        "title": "Find the Gems... Or Die!",
+        "description": "Complete the researched Xorbb group mission.",
+        "reward_text": "Experience, AA points and coin; chest loot is separate.",
+        "reward_id_list": "",
+        "reward_method": 3,
+        "exp_reward": 0,
+        "min_level": 85,
+        "min_players": 3,
+        "max_players": 6,
+        "repeatable": 1,
+        "enabled": 0,
+        "cash_reward": 0,
+        "reward_points": 0,
+        "reward_point_type": 0,
+        "faction_reward": 0,
+        "faction_amount": 0,
+        "request_timer_seconds": 0,
+        "replay_timer_seconds": 21600,
+        "dz_template_id": 3040490,
+        "lock_activity_id": 1
+      },
+      "task_field_provenance": {
+        "type": "Native Shared1",
+        "reward_method": "Native METHODSELECT3, corrected9345authoringerrorreused",
+        "lock_activity_id": "Native locks when designatedactivitybecomesACTIVE: Return0=request; Gems1=afterinitialhail. Battle-1requiresproducerLockSharedTaskafterfourthactualsiegekill, notactiveactivity4whichwouldlockearly.",
+        "duration_group_limits_replay": "Currentmutableguideheader;requesttimer0/replay6h qualifiedimplementationchoice"
+      },
+      "dynamic_zone_templates": {
+        "id": 3040490,
+        "zone_id": 753,
+        "zone_version": 3,
+        "name": "Find the Gems... Or Die!",
+        "min_players": 3,
+        "max_players": 6,
+        "duration_seconds": 21600,
+        "dz_switch_id": 0,
+        "compass_zone_id": 753,
+        "compass_x": null,
+        "compass_y": null,
+        "compass_z": null,
+        "return_zone_id": 753,
+        "return_x": null,
+        "return_y": null,
+        "return_z": null,
+        "return_h": null,
+        "override_zone_in": 1,
+        "zone_in_x": null,
+        "zone_in_y": null,
+        "zone_in_z": null,
+        "zone_in_h": null
+      },
+      "reward_sets": {
+        "reward_set_id": 3040490,
+        "title": "Find the Gems... Or Die!",
+        "enabled": 0
+      },
+      "reward_sources": {
+        "source_type": 2,
+        "source_id": 3040490,
+        "reward_set_id": 3040490,
+        "enabled": 0
+      },
+      "reward_options": {
+        "reward_set_id": 3040490,
+        "option_id": 1,
+        "sequence": 1,
+        "label": "Completion rewards",
+        "common_to_all": 0,
+        "flags": 0,
+        "enabled": 0,
+        "class_mask": 65535
+      },
+      "rewards": [
+        {
+          "symbol": "find_the_gems.normal_xp",
+          "reward_id": 304049001,
+          "sequence": 1,
+          "reward_type": 1,
+          "reward_data_id": 1,
+          "amount": 1000,
+          "description": "Approved configurable PEQ-style default, not original recovered XP",
+          "enabled": 0
+        },
+        {
+          "symbol": "find_the_gems.AA_points",
+          "reward_id": 304049002,
+          "sequence": 2,
+          "reward_type": 2,
+          "reward_data_id": 0,
+          "amount": 3,
+          "description": "Current guide; AA points, not ability grant",
+          "enabled": 0
+        },
+        {
+          "symbol": "find_the_gems.copper",
+          "reward_id": 304049003,
+          "sequence": 3,
+          "reward_type": 3,
+          "reward_data_id": 0,
+          "amount": 225000,
+          "description": "Current guide225platinum, original amount unverified",
+          "enabled": 0
+        }
+      ],
+      "achievement_criteria": {
+        "achievement_id": 2075330,
+        "component_type": 1,
+        "component_sequence": 3,
+        "component_id": 2075332,
+        "event_type": 4,
+        "progress_mode": 3,
+        "behavior": 0,
+        "target_id": 3040490,
+        "target_id2": 0,
+        "target_value": 0,
+        "required_count": 1,
+        "enabled": 0
+      },
+      "source_ready": false,
+      "blockers": [
+        "Exactreviewedentry/return/compassposes",
+        "Actor/spawn/lootidentityreservations andcompleteencounterscripts",
+        "Actualitem/kill/destructible/corpse/hailproducers forallactivities",
+        "FinalguardedSQLcomposition/rollbackandnativeacceptance"
+      ],
+      "reward_option_entries": [
+        {
+          "reward_set_id": 3040490,
+          "option_id": 1,
+          "sequence": 1,
+          "reward_id": 304049001
+        },
+        {
+          "reward_set_id": 3040490,
+          "option_id": 1,
+          "sequence": 2,
+          "reward_id": 304049002
+        },
+        {
+          "reward_set_id": 3040490,
+          "option_id": 1,
+          "sequence": 3,
+          "reward_id": 304049003
+        }
+      ],
+      "task_activities": [
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 0,
+            "step": 0,
+            "activitytype": 4,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Speak with Griznab Finkledink",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Griznab Finkledink",
+          "producer": "Native exact-stage NPC dialogue",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "griznab"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753956
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 1,
+            "step": 1,
+            "activitytype": 3,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Loot radiant diamond",
+            "npc_match_list": "",
+            "item_id_list": "69990",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "safe_diamond"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753957
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 2,
+            "step": 1,
+            "activitytype": 3,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Loot blue sapphire",
+            "npc_match_list": "",
+            "item_id_list": "69991",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "safe_sapphire"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753958
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 3,
+            "step": 1,
+            "activitytype": 3,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Loot deep green emerald",
+            "npc_match_list": "",
+            "item_id_list": "69992",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "safe_emerald"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753959
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 4,
+            "step": 1,
+            "activitytype": 3,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Loot red ruby",
+            "npc_match_list": "",
+            "item_id_list": "69993",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "safe_ruby"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753960
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 5,
+            "step": 1,
+            "activitytype": 3,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Loot purple amethyst",
+            "npc_match_list": "",
+            "item_id_list": "69994",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "safe_amethyst"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753961
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 6,
+            "step": 1,
+            "activitytype": 3,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Loot pitch black onyx",
+            "npc_match_list": "",
+            "item_id_list": "69995",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "safe_onyx"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753962
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 7,
+            "step": 2,
+            "activitytype": 1,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Deliver Chrom treasure chest",
+            "npc_match_list": "753965",
+            "item_id_list": "69990",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Chrom treasure chest",
+          "producer": "Native physical hand-in custody",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "chrom_delivery_chest"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753965
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 8,
+            "step": 2,
+            "activitytype": 1,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Deliver Chrom treasure chest",
+            "npc_match_list": "753965",
+            "item_id_list": "69991",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Chrom treasure chest",
+          "producer": "Native physical hand-in custody",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "chrom_delivery_chest"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753965
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 9,
+            "step": 2,
+            "activitytype": 1,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Deliver Chrom treasure chest",
+            "npc_match_list": "753965",
+            "item_id_list": "69992",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Chrom treasure chest",
+          "producer": "Native physical hand-in custody",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "chrom_delivery_chest"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753965
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 10,
+            "step": 2,
+            "activitytype": 1,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Deliver Chrom treasure chest",
+            "npc_match_list": "753965",
+            "item_id_list": "69993",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Chrom treasure chest",
+          "producer": "Native physical hand-in custody",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "chrom_delivery_chest"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753965
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 11,
+            "step": 2,
+            "activitytype": 1,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Deliver Chrom treasure chest",
+            "npc_match_list": "753965",
+            "item_id_list": "69994",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Chrom treasure chest",
+          "producer": "Native physical hand-in custody",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "chrom_delivery_chest"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753965
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 12,
+            "step": 2,
+            "activitytype": 1,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Deliver Chrom treasure chest",
+            "npc_match_list": "753965",
+            "item_id_list": "69995",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Chrom treasure chest",
+          "producer": "Native physical hand-in custody",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "chrom_delivery_chest"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753965
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 13,
+            "step": 3,
+            "activitytype": 2,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Defeat Chrom",
+            "npc_match_list": "753966",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Chrom",
+          "producer": "Native registered instance actor kill/merit",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "chrom"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753966
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 14,
+            "step": 4,
+            "activitytype": 3,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Loot Chrom Hardened Heart",
+            "npc_match_list": "",
+            "item_id_list": "69996",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual corpse/chest inventory custody increase",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "chrom"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753966
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 15,
+            "step": 5,
+            "activitytype": 1,
+            "goalmethod": 0,
+            "goalcount": 1,
+            "description_override": "Deliver Belmoore Bigdigger",
+            "npc_match_list": "753979",
+            "item_id_list": "69996",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Belmoore Bigdigger",
+          "producer": "Native physical hand-in custody",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "belmoore"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753979
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 16,
+            "step": 6,
+            "activitytype": 4,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Speak with Belmoore Bigdigger",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": "Belmoore Bigdigger",
+          "producer": "Native exact-stage NPC dialogue",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "belmoore"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753979
+          ]
+        },
+        {
+          "row": {
+            "taskid": 3040490,
+            "activityid": 17,
+            "step": 7,
+            "activitytype": 5,
+            "goalmethod": 2,
+            "goalcount": 1,
+            "description_override": "Open reward chest",
+            "npc_match_list": "",
+            "item_id_list": "",
+            "zones": "753",
+            "zone_version": 3,
+            "optional": 0
+          },
+          "actor_role": null,
+          "producer": "Actual registered reward chest opening",
+          "phrase": null,
+          "ready": false,
+          "binding_requirement": "Reserved numeric IDs resolved; actual event producer, geometry and actor installation remain required.",
+          "actor_binding_keys": [
+            "gems_reward_chest"
+          ],
+          "actor_binding_namespace": "Database exact reserved actor_identity_mapping; not installed",
+          "actor_npc_type_ids": [
+            753980
+          ],
+          "display_qualification": "Visible Explore5 carrier under METHODQUEST2, matching currentXorbbjournalcorrection. Actual registered chest opening remains the only producer; not proximity."
+        }
+      ],
+      "activity_phase_provenance": "Explicit implementation proposal, not recovered task step metadata. Battle main objectives permit siege-first strategy; exact gems cross-loot/delivery activation needs corroboration before native acceptance.",
+      "activity_goal_methods": "Native kill/destructible/loot/delivery where exact bindings exist; phrase/chest interactions remain quest-controlled METHODQUEST2. None0 chest display requires actual opening producer."
+    }
+  ],
+  "native_accepted": false,
+  "actor_reservation_contract_sha256": "369b59c2867d6f4d49e05fdba8fa2e0e696e610429f92fe3ba8ab56007f008fd",
+  "npc_owner_handoff_sha256": "0cc120203b2e51dc6bcc63bfb11be039c457dbd0ac18b2f45767a8e5aa82a7f9"
+}

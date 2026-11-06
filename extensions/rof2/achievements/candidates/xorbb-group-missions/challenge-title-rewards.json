@@ -1,0 +1,304 @@
+{
+  "enabled": false,
+  "definitions": [
+    {
+      "achievement_id": 2075370,
+      "enabled": false,
+      "catalogue_suffix": "the Killer of Lords",
+      "titles": {
+        "id": 2075370,
+        "skill_id": -1,
+        "min_skill_value": -1,
+        "max_skill_value": -1,
+        "min_aa_points": -1,
+        "max_aa_points": -1,
+        "class_": -1,
+        "gender": -1,
+        "char_id": -1,
+        "status": -1,
+        "item_id": -1,
+        "prefix": "",
+        "suffix": "the Killer of Lords",
+        "title_set": 3040570
+      },
+      "reward": {
+        "reward_id": 207537001,
+        "reward_type": 5,
+        "reward_data_id": 3040570,
+        "amount": 1,
+        "enabled": 0
+      },
+      "source": {
+        "source_type": 1,
+        "source_id": 2075370,
+        "reward_set_id": 2075370,
+        "enabled": 0
+      },
+      "binding_rule": "reward_data_id must equal this titles.title_set, not titles.id. Allocate one distinct set per independently earned suffix. Do not grant allfive from one shared set.",
+      "reward_option": {
+        "reward_set_id": 2075370,
+        "option_id": 1,
+        "sequence": 1,
+        "common_to_all": 0,
+        "class_mask": 65535,
+        "label": "Achievement title",
+        "enabled": 0
+      },
+      "qualification": "Exact retained catalogue wording preserved, including Conquerer spelling. Current conflicting golem-title guide does not override original catalogue. New local numeric IDs must be reserved, not guessed.",
+      "reward_set": {
+        "reward_set_id": 2075370,
+        "title": "the Killer of Lords",
+        "enabled": 0
+      },
+      "reward_option_entry": {
+        "reward_set_id": 2075370,
+        "option_id": 1,
+        "reward_id": 207537001,
+        "sequence": 1
+      }
+    },
+    {
+      "achievement_id": 2075371,
+      "enabled": false,
+      "catalogue_suffix": "the Subjugator",
+      "titles": {
+        "id": 2075371,
+        "skill_id": -1,
+        "min_skill_value": -1,
+        "max_skill_value": -1,
+        "min_aa_points": -1,
+        "max_aa_points": -1,
+        "class_": -1,
+        "gender": -1,
+        "char_id": -1,
+        "status": -1,
+        "item_id": -1,
+        "prefix": "",
+        "suffix": "the Subjugator",
+        "title_set": 3040571
+      },
+      "reward": {
+        "reward_id": 207537101,
+        "reward_type": 5,
+        "reward_data_id": 3040571,
+        "amount": 1,
+        "enabled": 0
+      },
+      "source": {
+        "source_type": 1,
+        "source_id": 2075371,
+        "reward_set_id": 2075371,
+        "enabled": 0
+      },
+      "binding_rule": "reward_data_id must equal this titles.title_set, not titles.id. Allocate one distinct set per independently earned suffix. Do not grant allfive from one shared set.",
+      "reward_option": {
+        "reward_set_id": 2075371,
+        "option_id": 1,
+        "sequence": 1,
+        "common_to_all": 0,
+        "class_mask": 65535,
+        "label": "Achievement title",
+        "enabled": 0
+      },
+      "qualification": "Exact retained catalogue wording preserved, including Conquerer spelling. Current conflicting golem-title guide does not override original catalogue. New local numeric IDs must be reserved, not guessed.",
+      "reward_set": {
+        "reward_set_id": 2075371,
+        "title": "the Subjugator",
+        "enabled": 0
+      },
+      "reward_option_entry": {
+        "reward_set_id": 2075371,
+        "option_id": 1,
+        "reward_id": 207537101,
+        "sequence": 1
+      }
+    },
+    {
+      "achievement_id": 2075372,
+      "enabled": false,
+      "catalogue_suffix": "the Dimensional Conquerer",
+      "titles": {
+        "id": 2075372,
+        "skill_id": -1,
+        "min_skill_value": -1,
+        "max_skill_value": -1,
+        "min_aa_points": -1,
+        "max_aa_points": -1,
+        "class_": -1,
+        "gender": -1,
+        "char_id": -1,
+        "status": -1,
+        "item_id": -1,
+        "prefix": "",
+        "suffix": "the Dimensional Conquerer",
+        "title_set": 3040572
+      },
+      "reward": {
+        "reward_id": 207537201,
+        "reward_type": 5,
+        "reward_data_id": 3040572,
+        "amount": 1,
+        "enabled": 0
+      },
+      "source": {
+        "source_type": 1,
+        "source_id": 2075372,
+        "reward_set_id": 2075372,
+        "enabled": 0
+      },
+      "binding_rule": "reward_data_id must equal this titles.title_set, not titles.id. Allocate one distinct set per independently earned suffix. Do not grant allfive from one shared set.",
+      "reward_option": {
+        "reward_set_id": 2075372,
+        "option_id": 1,
+        "sequence": 1,
+        "common_to_all": 0,
+        "class_mask": 65535,
+        "label": "Achievement title",
+        "enabled": 0
+      },
+      "qualification": "Exact retained catalogue wording preserved, including Conquerer spelling. Current conflicting golem-title guide does not override original catalogue. New local numeric IDs must be reserved, not guessed.",
+      "reward_set": {
+        "reward_set_id": 2075372,
+        "title": "the Dimensional Conquerer",
+        "enabled": 0
+      },
+      "reward_option_entry": {
+        "reward_set_id": 2075372,
+        "option_id": 1,
+        "reward_id": 207537201,
+        "sequence": 1
+      }
+    },
+    {
+      "achievement_id": 2075373,
+      "enabled": false,
+      "catalogue_suffix": "the Deathbringer",
+      "titles": {
+        "id": 2075373,
+        "skill_id": -1,
+        "min_skill_value": -1,
+        "max_skill_value": -1,
+        "min_aa_points": -1,
+        "max_aa_points": -1,
+        "class_": -1,
+        "gender": -1,
+        "char_id": -1,
+        "status": -1,
+        "item_id": -1,
+        "prefix": "",
+        "suffix": "the Deathbringer",
+        "title_set": 3040573
+      },
+      "reward": {
+        "reward_id": 207537301,
+        "reward_type": 5,
+        "reward_data_id": 3040573,
+        "amount": 1,
+        "enabled": 0
+      },
+      "source": {
+        "source_type": 1,
+        "source_id": 2075373,
+        "reward_set_id": 2075373,
+        "enabled": 0
+      },
+      "binding_rule": "reward_data_id must equal this titles.title_set, not titles.id. Allocate one distinct set per independently earned suffix. Do not grant allfive from one shared set.",
+      "reward_option": {
+        "reward_set_id": 2075373,
+        "option_id": 1,
+        "sequence": 1,
+        "common_to_all": 0,
+        "class_mask": 65535,
+        "label": "Achievement title",
+        "enabled": 0
+      },
+      "qualification": "Exact retained catalogue wording preserved, including Conquerer spelling. Current conflicting golem-title guide does not override original catalogue. New local numeric IDs must be reserved, not guessed.",
+      "reward_set": {
+        "reward_set_id": 2075373,
+        "title": "the Deathbringer",
+        "enabled": 0
+      },
+      "reward_option_entry": {
+        "reward_set_id": 2075373,
+        "option_id": 1,
+        "reward_id": 207537301,
+        "sequence": 1
+      }
+    },
+    {
+      "achievement_id": 2075374,
+      "enabled": false,
+      "catalogue_suffix": "the Supreme Golem Killer",
+      "titles": {
+        "id": 2075374,
+        "skill_id": -1,
+        "min_skill_value": -1,
+        "max_skill_value": -1,
+        "min_aa_points": -1,
+        "max_aa_points": -1,
+        "class_": -1,
+        "gender": -1,
+        "char_id": -1,
+        "status": -1,
+        "item_id": -1,
+        "prefix": "",
+        "suffix": "the Supreme Golem Killer",
+        "title_set": 3040574
+      },
+      "reward": {
+        "reward_id": 207537401,
+        "reward_type": 5,
+        "reward_data_id": 3040574,
+        "amount": 1,
+        "enabled": 0
+      },
+      "source": {
+        "source_type": 1,
+        "source_id": 2075374,
+        "reward_set_id": 2075374,
+        "enabled": 0
+      },
+      "binding_rule": "reward_data_id must equal this titles.title_set, not titles.id. Allocate one distinct set per independently earned suffix. Do not grant allfive from one shared set.",
+      "reward_option": {
+        "reward_set_id": 2075374,
+        "option_id": 1,
+        "sequence": 1,
+        "common_to_all": 0,
+        "class_mask": 65535,
+        "label": "Achievement title",
+        "enabled": 0
+      },
+      "qualification": "Exact retained catalogue wording preserved, including Conquerer spelling. Current conflicting golem-title guide does not override original catalogue. New local numeric IDs must be reserved, not guessed.",
+      "reward_set": {
+        "reward_set_id": 2075374,
+        "title": "the Supreme Golem Killer",
+        "enabled": 0
+      },
+      "reward_option_entry": {
+        "reward_set_id": 2075374,
+        "option_id": 1,
+        "reward_id": 207537401,
+        "sequence": 1
+      }
+    }
+  ],
+  "delivery_semantics": "Existing native reward type5 calls EnableTitle(set), persists player_titlesets and verifies CheckTitle(set). Entitlement is distinct from selecting/equipping suffix; no autoequip. Catalog title rows must exist/load separately. CheckTitle(set) alone does not prove selectable title row/rendering.",
+  "source_hashes": {
+    "zone/titles.cpp": "023f15bcbc3fc3163dab1c8a9ec80a65c640dea892a4953ecc147f366e08a8c1",
+    "zone/reward_selection.cpp": "5c9cca308e2b6687bbdf3c1fd533fd0e1f046f63d45800d624f33330f9744902",
+    "common/repositories/base/base_titles_repository.h": "36df6e895b6d83de6de8395ad36706e6d986d9cd00977967b01cc727a9d5553d"
+  },
+  "reservation_request": {
+    "titles_rows": 5,
+    "distinct_title_sets": 5,
+    "achievement_reward_sets": 5,
+    "rewards": 5,
+    "achievement_reward_sources": 5,
+    "options": 5,
+    "option_entries": 5
+  },
+  "runtime_writes": 0,
+  "native_accepted": false,
+  "reservation_contract_sha256": "fd478f2a105d34093914b5a109a873bcbf798de961395041f157927299f34335",
+  "reservation_status": "Exact coordinator/Database reserved identities consumed; not installed, granted or native accepted"
+}

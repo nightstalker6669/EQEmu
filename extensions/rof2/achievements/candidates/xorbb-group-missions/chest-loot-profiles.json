@@ -1,0 +1,226 @@
+{
+  "enabled": false,
+  "policy": {
+    "status": "SELECTED_CONFIGURABLE_EMULATOR_DEFAULT",
+    "approval": "Coordinator source-policy approval2026-11-04; standing user defaults permission",
+    "qualification": "One equipment item plus one uniformly selected97-100 Dreadmote is a local configurable default. Neither universal quantity nor probabilities were recovered from original Live. Two dated Battle reports establish co-occurrence in those runs only.",
+    "equipment_quantity": 1,
+    "equipment_weights": "Equal weight1 for each retained per-mission interface entry, explicitly configurable emulator weights. Conflicting guide additions held.",
+    "mote_quantity": 1,
+    "motes": [
+      {
+        "item_id": 76551,
+        "weight": 1
+      },
+      {
+        "item_id": 76552,
+        "weight": 1
+      },
+      {
+        "item_id": 76553,
+        "weight": 1
+      },
+      {
+        "item_id": 76554,
+        "weight": 1
+      }
+    ],
+    "enabled": false,
+    "native_accepted": false
+  },
+  "missions": [
+    {
+      "mission": "battle_for_rivervale",
+      "task_id": 3040488,
+      "zone_version": 1,
+      "equipment_drop": {
+        "quantity": 1,
+        "entries": [
+          {
+            "item_id": 132919,
+            "weight": 1
+          },
+          {
+            "item_id": 133080,
+            "weight": 1
+          },
+          {
+            "item_id": 135613,
+            "weight": 1
+          },
+          {
+            "item_id": 132910,
+            "weight": 1
+          },
+          {
+            "item_id": 132929,
+            "weight": 1
+          },
+          {
+            "item_id": 132932,
+            "weight": 1
+          },
+          {
+            "item_id": 133133,
+            "weight": 1
+          }
+        ]
+      },
+      "mote_drop": {
+        "quantity": 1,
+        "entries": [
+          {
+            "item_id": 76551,
+            "weight": 1
+          },
+          {
+            "item_id": 76552,
+            "weight": 1
+          },
+          {
+            "item_id": 76553,
+            "weight": 1
+          },
+          {
+            "item_id": 76554,
+            "weight": 1
+          }
+        ]
+      },
+      "native_loottable_id": null,
+      "native_equipment_lootdrop_id": null,
+      "native_mote_lootdrop_id": null,
+      "implementation": "Actual owner-allocated native chest loot tables with exactly one draw per category. No player-direct SummonItem rewards; fill IDs through NPC/Database owner."
+    },
+    {
+      "mission": "return_of_king_xorbb",
+      "task_id": 3040489,
+      "zone_version": 2,
+      "equipment_drop": {
+        "quantity": 1,
+        "entries": [
+          {
+            "item_id": 133881,
+            "weight": 1
+          },
+          {
+            "item_id": 133101,
+            "weight": 1
+          },
+          {
+            "item_id": 132906,
+            "weight": 1
+          },
+          {
+            "item_id": 133115,
+            "weight": 1
+          },
+          {
+            "item_id": 135610,
+            "weight": 1
+          }
+        ]
+      },
+      "mote_drop": {
+        "quantity": 1,
+        "entries": [
+          {
+            "item_id": 76551,
+            "weight": 1
+          },
+          {
+            "item_id": 76552,
+            "weight": 1
+          },
+          {
+            "item_id": 76553,
+            "weight": 1
+          },
+          {
+            "item_id": 76554,
+            "weight": 1
+          }
+        ]
+      },
+      "native_loottable_id": null,
+      "native_equipment_lootdrop_id": null,
+      "native_mote_lootdrop_id": null,
+      "implementation": "Actual owner-allocated native chest loot tables with exactly one draw per category. No player-direct SummonItem rewards; fill IDs through NPC/Database owner."
+    },
+    {
+      "mission": "find_the_gems",
+      "task_id": 3040490,
+      "zone_version": 3,
+      "equipment_drop": {
+        "quantity": 1,
+        "entries": [
+          {
+            "item_id": 133087,
+            "weight": 1
+          },
+          {
+            "item_id": 133880,
+            "weight": 1
+          },
+          {
+            "item_id": 133128,
+            "weight": 1
+          },
+          {
+            "item_id": 133106,
+            "weight": 1
+          },
+          {
+            "item_id": 132922,
+            "weight": 1
+          },
+          {
+            "item_id": 133131,
+            "weight": 1
+          },
+          {
+            "item_id": 132916,
+            "weight": 1
+          },
+          {
+            "item_id": 133107,
+            "weight": 1
+          },
+          {
+            "item_id": 132953,
+            "weight": 1
+          },
+          {
+            "item_id": 133168,
+            "weight": 1
+          }
+        ]
+      },
+      "mote_drop": {
+        "quantity": 1,
+        "entries": [
+          {
+            "item_id": 76551,
+            "weight": 1
+          },
+          {
+            "item_id": 76552,
+            "weight": 1
+          },
+          {
+            "item_id": 76553,
+            "weight": 1
+          },
+          {
+            "item_id": 76554,
+            "weight": 1
+          }
+        ]
+      },
+      "native_loottable_id": null,
+      "native_equipment_lootdrop_id": null,
+      "native_mote_lootdrop_id": null,
+      "implementation": "Actual owner-allocated native chest loot tables with exactly one draw per category. No player-direct SummonItem rewards; fill IDs through NPC/Database owner."
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "enabled": false,
+  "qualification": "Selected originalprovidedRoF2client fields, indexesconfirmedagainstretainedlegacyDBloaderlayout. Not actorcast/runtime/May2013timing/realroom/lens geometry proof. No rawclientspellrows.",
+  "beams": [
+    {
+      "spell_id": 37226,
+      "name": "Omnisight Beam",
+      "directional_start_degrees": 345.0,
+      "directional_end_degrees": 15.0,
+      "aoe_range": 300.0,
+      "base_damage": -20000,
+      "target_type": 42
+    },
+    {
+      "spell_id": 37227,
+      "name": "Omnisight Beam",
+      "directional_start_degrees": 75.0,
+      "directional_end_degrees": 105.0,
+      "aoe_range": 300.0,
+      "base_damage": -20000,
+      "target_type": 42
+    },
+    {
+      "spell_id": 37228,
+      "name": "Omnisight Beam",
+      "directional_start_degrees": 165.0,
+      "directional_end_degrees": 195.0,
+      "aoe_range": 300.0,
+      "base_damage": -20000,
+      "target_type": 42
+    },
+    {
+      "spell_id": 37229,
+      "name": "Omnisight Beam",
+      "directional_start_degrees": 255.0,
+      "directional_end_degrees": 285.0,
+      "aoe_range": 300.0,
+      "base_damage": -20000,
+      "target_type": 42
+    }
+  ],
+  "trigger_families": [
+    {
+      "parents": [
+        37207,
+        37213
+      ],
+      "effect_id": 340,
+      "children": [
+        37208,
+        37209,
+        37210,
+        37211
+      ],
+      "slot_base_values": [
+        25,
+        25,
+        25,
+        25
+      ],
+      "qualification": "Given the originalfourSPA340slots withbase25each(total100), retainednativeMob::TrySpellTrigger usesone1..100weightedroll; SpellEffect dispatcher stopsafterfirstsuccess. Onevalidchild selected, notfourindependent25percentrolls. Preserveallchilddefinitions, runtimefield/castacceptance stillpending."
+    },
+    {
+      "parent": 37211,
+      "effect_ids": [
+        339,
+        85
+      ],
+      "child": 37212
+    }
+  ],
+  "gaze": {
+    "spell_id": 37201,
+    "effect_id": 22,
+    "range": 1500,
+    "target_type": 5,
+    "cast_restriction": 0,
+    "caster_requirement_id": 0,
+    "facing_threshold": "Not established by these data fields; controllerdefault must remain labelled."
+  },
+  "runtime_writes": 0,
+  "native_trigger_source_sha256": {
+    "zone/mob.cpp": "4b0590106b1482e66caf2781f4e3d65787a6d45988a1535308808c6b2419abfb",
+    "zone/spell_effects.cpp": "71a19c77c416d16954b32ba5a7c154391b733634a42ad6e77930910dfd19cc24"
+  }
+}

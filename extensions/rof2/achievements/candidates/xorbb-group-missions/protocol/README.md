@@ -1,0 +1,13 @@
+# Existing RoF2 mission protocol references
+
+These are existing configured mappings and retained implementation layouts, not newly discovered opcodes or native acceptance. No active mapping is modified. Task admission, membership, objectives, history and dynamic-zone choice use the existing task/instance system; server encounter Lua witnesses are not additional network packets.
+
+`configured-opcodes.json` lists the relevant configured values. `rof2_mission_layouts.h` documents fixed layouts and variable-message prefixes using fixed-width types. Shared task names are variable NUL strings where noted; do not use sizeof a placeholder-array struct as a packet length. In particular the actual member-list serializer writes the true number N, despite an older common-header comment saying N-1. Member-change sends a nine-byte prefix plus a name. RoF2 dynamic-zone info lacks the newer dz_type tail; its choice reply is52bytes.
+
+The named shared-task request layout applies to add/remove/make-leader. Invite-response handling checks12bytes; acceptance carries actual giver entity/task identity and reward multiplier. Names in server replies are not authority to enroll a player or award completion: world/native membership and actual instance occurrence remain authoritative.
+
+Task description/history are variable records adapted by common/patches/rof2.cpp; the existing 9345 protocol notes retain task completion and object fields. This header intentionally does not pretend those full variable messages have a single fixed size. Internal ServerOP_CZAchievementStateUpdateRequest is world/zone communication, separate from client OP values and from durable achievement acknowledgement.
+
+Source-provenance hashes and line references are retained privately with this research batch. No proprietary client assets, captures, credentials, test scripts or private player fixtures belong in the public payload. The header has compile-time size assertions but has not been compiled in this source-only step.
+
+The configured `OP_LDoNOpen=0x3d5c` is also relevant to the actual reward and trapped chests. The current native handler ignores the payload and operates on the server-selected NPC, then checks treasure class62, OpenImmunity, native range and lock state. It calls `Death(client,0,SPELL_UNKNOWN,HandtoHand)` after a successful open. The source reward-chest producer checks this death shape and the exact owned corpse/lifetime before submitting the final task objective. This does not establish the original packet body length or a new opcode recovery; no guessed struct is added for an unparsed body. Ordinary NPC damage can also destroy a chest, so class62/death alone is insufficient to classify the explicit opening action.
