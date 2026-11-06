@@ -1,0 +1,2033 @@
+{
+  "status": "DRAFT_DISABLED_NONEXECUTING_RESEARCH_CHECKPOINT",
+  "date": "2026-11-06",
+  "cutoff": "2013-05-31",
+  "activation_enabled": false,
+  "database_execution_authorized": false,
+  "runtime_build_authorized": false,
+  "completeness": "Unresolved. No authenticated historical all-class/all-rank denominator.",
+  "units": [
+    {
+      "unit": "enchanter-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 517,
+          "target": 12904,
+          "ordinal": 3,
+          "revision": "2012-03-29 06:58:51",
+          "reason": "Rank3cost/level/eraunknown;description30sec/rankdoesnotfillpurchasefields.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_First_Spire_of_Enchantment?oldid=419310"
+        },
+        {
+          "ability_id": 523,
+          "target": 12909,
+          "ordinal": 3,
+          "revision": "2012-03-29 08:25:52",
+          "reason": "Rank3cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Second_Spire_of_Enchantment?oldid=419400"
+        },
+        {
+          "ability_id": 527,
+          "target": 12914,
+          "ordinal": 3,
+          "revision": "2012-03-29 08:42:07",
+          "reason": "Rank3cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Third_Spire_of_Enchantment?oldid=419417"
+        },
+        {
+          "ability_id": 530,
+          "target": 12921,
+          "ordinal": 2,
+          "revision": "2012-03-29 19:02:59",
+          "reason": "Rank2cost/level/eraunknown;3same.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Profound_Visage?oldid=419707"
+        },
+        {
+          "ability_id": 545,
+          "target": 16063,
+          "ordinal": 10,
+          "revision": "2012-03-29 00:59:11",
+          "reason": "Only1..8;no rank10contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Deep_Sleep?oldid=418979"
+        },
+        {
+          "ability_id": 513,
+          "target": 12895,
+          "ordinal": 2,
+          "revision": "2012-03-29 08:00:04",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Phantasmal_Opponent?oldid=419373"
+        },
+        {
+          "ability_id": 554,
+          "target": 14342,
+          "ordinal": 2,
+          "revision": "2012-03-29 07:53:22",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Nightmare_Stasis?oldid=419366"
+        },
+        {
+          "ability_id": 645,
+          "target": 13754,
+          "ordinal": 2,
+          "revision": "2012-03-29 06:19:38",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Calculated_Insanity?oldid=419269"
+        },
+        {
+          "ability_id": 646,
+          "target": 13759,
+          "ordinal": 2,
+          "revision": "2012-03-29 07:47:37",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Mental_Contortion?oldid=419361"
+        },
+        {
+          "ability_id": 647,
+          "target": 13765,
+          "ordinal": 2,
+          "revision": "2012-03-29 06:31:08",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Crippling_Aurora?oldid=419281"
+        },
+        {
+          "ability_id": 724,
+          "target": 14365,
+          "ordinal": 2,
+          "revision": "2012-03-29 06:51:12",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Eldritch_Rune?oldid=419302"
+        },
+        {
+          "ability_id": 1123,
+          "target": 15473,
+          "ordinal": 8,
+          "revision": "2012-03-29 06:50:15",
+          "reason": "Only1..6;no rank8contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Edict_of_Command?oldid=419301"
+        },
+        {
+          "ability_id": 2201,
+          "target": 15479,
+          "ordinal": 2,
+          "revision": "2013-05-21 03:07:23",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Glyph_Spray?oldid=465261"
+        },
+        {
+          "ability_id": 2208,
+          "target": 15494,
+          "ordinal": 2,
+          "revision": "2013-05-26 01:40:23",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quick_Mezz?oldid=466035"
+        },
+        {
+          "ability_id": 3716,
+          "target": 15463,
+          "ordinal": 6,
+          "revision": "2012-03-29 00:04:42",
+          "reason": "Only1..3;no rank6contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Clinging_Root?oldid=418930"
+        },
+        {
+          "ability_id": 8701,
+          "target": 14765,
+          "ordinal": 5,
+          "revision": "2012-03-29 18:42:56",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Phantasmic_Reflex?oldid=419687"
+        },
+        {
+          "ability_id": 8703,
+          "target": 15470,
+          "ordinal": 5,
+          "revision": "2012-03-29 08:28:44",
+          "reason": "Only1..3;no rank5contract; revisionrenderfinishedafterinitialwaittimeout and DOMread verified.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Self_Stasis?oldid=419403"
+        },
+        {
+          "ability_id": 8704,
+          "target": 15467,
+          "ordinal": 5,
+          "revision": "2012-03-29 03:48:25",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Forceful_Banishment?oldid=419145"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "wizard-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 397,
+          "target": 12524,
+          "ordinal": 17,
+          "revision": "2013-02-18 22:16:27",
+          "reason": "Wizard397rank17cost/level/era/magnitudeunknown. Separate398rank20cost15/lvl93/VoA butcriticalmagnitudeunknown; known14350prefix not guessed. Separate1022only1..9; rank11contractabsent. Classlinesnotmerged.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Destructive_Fury?oldid=456873"
+        },
+        {
+          "ability_id": 776,
+          "target": 13227,
+          "ordinal": 14,
+          "revision": "2013-02-12 17:09:05",
+          "reason": "Only1..12; no rank14contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Arcane_Overkill?oldid=456713"
+        },
+        {
+          "ability_id": 551,
+          "target": 17490,
+          "ordinal": 7,
+          "revision": "2012-03-29 07:50:30",
+          "reason": "Only1..5; no rank7contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Mind_Crash?oldid=419363"
+        },
+        {
+          "ability_id": 561,
+          "target": 12882,
+          "ordinal": 2,
+          "revision": "2012-03-29 07:22:46",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Harvest_of_Druzzil?oldid=419335"
+        },
+        {
+          "ability_id": 9700,
+          "target": 12873,
+          "ordinal": 8,
+          "revision": "2012-03-29 06:39:44",
+          "reason": "Only1..5; no rank8contract. AliasHastenedProlongedDestruction documented, no split.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Destruction?oldid=419290"
+        },
+        {
+          "ability_id": 1153,
+          "target": 15607,
+          "ordinal": 5,
+          "revision": "2012-03-29 03:50:20",
+          "reason": "Only1..3; no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Fortified_Entanglement?oldid=419146"
+        },
+        {
+          "ability_id": 1261,
+          "target": 15599,
+          "ordinal": 2,
+          "revision": "2013-05-21 03:06:47",
+          "reason": "Rank2RoF cost/levelunknown;3same.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Fury_of_the_Gods?oldid=465260"
+        },
+        {
+          "ability_id": 1263,
+          "target": 15603,
+          "ordinal": 2,
+          "revision": "2013-05-14 06:46:28",
+          "reason": "Rank2RoF cost/levelunknown;descriptionup-to2%perrankdoesnotfillpurchasefields.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Destructive_Adept?oldid=464096"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "magician-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 266,
+          "target": 13714,
+          "ordinal": 27,
+          "revision": "2013-03-21 11:21:08",
+          "reason": "Rank27cost8/lvl92/VoA supported,exactpetcriticalchanceunknown;28cost10/lvl93,29cost12/lvl94,30costunknown/lvl95. No magnitudeguess.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Elemental_Fury?oldid=457959"
+        },
+        {
+          "ability_id": 267,
+          "target": 13711,
+          "ordinal": 27,
+          "revision": "2013-03-19 20:54:08",
+          "reason": "Rank27cost12/lvl93/VoA supported,exactpetflurrychanceunknown;28cost15/lvl95, nativeIDunestablished.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Elemental_Alacrity?oldid=457867"
+        },
+        {
+          "ability_id": 546,
+          "target": 13708,
+          "ordinal": 14,
+          "revision": "2013-04-25 10:11:35",
+          "reason": "Rank14HoT cost/levelunknown; exactcriticalpethealchanceunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Companion's_Gift?oldid=461938"
+        },
+        {
+          "ability_id": 757,
+          "target": 15239,
+          "ordinal": 5,
+          "revision": "2012-03-29 20:50:07",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Shifting_Elements?oldid=419820"
+        },
+        {
+          "ability_id": 722,
+          "target": 14305,
+          "ordinal": 2,
+          "revision": "2012-03-29 06:49:17",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Drape_of_Shadows?oldid=419300"
+        },
+        {
+          "ability_id": 2062,
+          "target": 15205,
+          "ordinal": 2,
+          "revision": "2013-05-21 02:57:41",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Elemental_Union?oldid=465257"
+        },
+        {
+          "ability_id": 2063,
+          "target": 15208,
+          "ordinal": 2,
+          "revision": "2013-05-24 01:53:34",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Virulent_Talon?oldid=465691"
+        },
+        {
+          "ability_id": 2076,
+          "target": 15218,
+          "ordinal": 2,
+          "revision": "2013-05-26 03:36:16",
+          "reason": "Rank2RoF cost/levelunknown; procidentity/magnitudeunestablished.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Steel_Vengeance?oldid=466074"
+        },
+        {
+          "ability_id": 2081,
+          "target": 15233,
+          "ordinal": 2,
+          "revision": "2013-05-15 03:34:37",
+          "reason": "Rank2RoF cost/levelunknown; procidentity/magnitudeunestablished.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Flames_of_Power?oldid=464219"
+        },
+        {
+          "ability_id": 2077,
+          "target": 15221,
+          "ordinal": 2,
+          "revision": "2013-05-15 03:33:01",
+          "reason": "Rank2lvl100/RoF costunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Vapor_Core?oldid=464218"
+        },
+        {
+          "ability_id": 2078,
+          "target": 15224,
+          "ordinal": 2,
+          "revision": "2013-05-15 03:31:56",
+          "reason": "Rank2lvl100/RoF costunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Stone_Core?oldid=464217"
+        },
+        {
+          "ability_id": 2079,
+          "target": 15227,
+          "ordinal": 2,
+          "revision": "2013-05-15 02:53:49",
+          "reason": "Rank2lvl100/RoF costunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Fire_Core?oldid=464205"
+        },
+        {
+          "ability_id": 2080,
+          "target": 15230,
+          "ordinal": 2,
+          "revision": "2013-05-15 03:15:54",
+          "reason": "Rank2lvl100/RoF costunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Ice_Core?oldid=464207"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "cleric-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 139,
+          "target": 14214,
+          "ordinal": 2,
+          "revision": "2012-11-10 04:56:34",
+          "reason": "Rank2cost13/VoA butlevelunknown; rank3cost15/lvl95doesnotbridge. No inferred93.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Focused_Celestial_Regeneration?oldid=448954"
+        },
+        {
+          "ability_id": 991,
+          "target": 15828,
+          "ordinal": 4,
+          "revision": "2012-03-29 19:46:59",
+          "reason": "Only1..3;no rank4contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Turn_Undead?oldid=419756"
+        },
+        {
+          "ability_id": 993,
+          "target": 13366,
+          "ordinal": 4,
+          "revision": "2012-03-29 20:08:59",
+          "reason": "Rank4cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Righteous_Zeal?oldid=419779"
+        },
+        {
+          "ability_id": 1064,
+          "target": 15329,
+          "ordinal": 8,
+          "revision": "2012-03-29 20:17:35",
+          "reason": "Only1..6;no rank8contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Sanctified_Blessing?oldid=419788"
+        },
+        {
+          "ability_id": 3840,
+          "target": 10441,
+          "ordinal": 20,
+          "revision": "2012-11-10 07:07:53",
+          "reason": "Rank20cost6/lvl90/HoT supported, but exacttriggeredgrouphealidentity/powerunknown. Beyondrank5 increaseshealpoweronly,notchance; no inventedbinding.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Recourse_of_Life?oldid=448972"
+        },
+        {
+          "ability_id": 6481,
+          "target": 15315,
+          "ordinal": 5,
+          "revision": "2012-11-10 06:14:40",
+          "reason": "Only1..3;no rank5contract. Postcutoffrank2levelinference excluded.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Divine_Resurrection?oldid=448962"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "druid-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 8605,
+          "target": 12643,
+          "ordinal": 5,
+          "revision": "2012-03-29 08:35:25",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Spirit_of_the_Wood?oldid=419410"
+        },
+        {
+          "ability_id": 8606,
+          "target": 12640,
+          "ordinal": 5,
+          "revision": "2012-03-29 06:29:13",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Convergence_of_Spirits?oldid=419279"
+        },
+        {
+          "ability_id": 168,
+          "target": 14242,
+          "ordinal": 2,
+          "revision": "2012-03-29 07:51:27",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Nature's_Fury?oldid=419364"
+        },
+        {
+          "ability_id": 179,
+          "target": 14250,
+          "ordinal": 2,
+          "revision": "2012-11-03 01:30:24",
+          "reason": "Rank2cost/level/eraunknown;rank5cost17doesnotbridge.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Gift_of_Sylvan_Spirits?oldid=447176"
+        },
+        {
+          "ability_id": 183,
+          "target": 14255,
+          "ordinal": 2,
+          "revision": "2012-03-29 03:11:10",
+          "reason": "Rank2cost/level/eraunknown;sourcefirstprereqNatureFury1not normalized.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Vinelash_Cascade?oldid=419111"
+        },
+        {
+          "ability_id": 383,
+          "target": 15388,
+          "ordinal": 2,
+          "revision": "2012-03-29 03:07:21",
+          "reason": "Onlyrank1cost9/lvl90/HoT.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Spirit_of_the_Wood?oldid=419104"
+        },
+        {
+          "ability_id": 394,
+          "target": 15386,
+          "ordinal": 2,
+          "revision": "2012-03-29 02:39:37",
+          "reason": "Onlyrank1cost9/lvl90/HoT/ConvergenceSpirit1.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Convergence_of_Spirit?oldid=419068"
+        },
+        {
+          "ability_id": 2055,
+          "target": 15384,
+          "ordinal": 2,
+          "revision": "2013-05-21 03:08:54",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Lunar_Healing?oldid=465263"
+        },
+        {
+          "ability_id": 2056,
+          "target": 15390,
+          "ordinal": 2,
+          "revision": "2013-05-26 02:52:06",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Blessing_of_Ro?oldid=466038"
+        },
+        {
+          "ability_id": 2057,
+          "target": 15404,
+          "ordinal": 2,
+          "revision": "2013-05-24 01:54:12",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Wall_of_Wind?oldid=465692"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "shaman-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 634,
+          "target": 16205,
+          "ordinal": 5,
+          "revision": "2012-03-29 06:22:30",
+          "reason": "Only1..4;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Cannibalization?oldid=419272"
+        },
+        {
+          "ability_id": 158,
+          "target": 15360,
+          "ordinal": 5,
+          "revision": "2012-03-29 08:13:27",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Rabidity?oldid=419388"
+        },
+        {
+          "ability_id": 620,
+          "target": 15349,
+          "ordinal": 5,
+          "revision": "2012-03-29 07:29:28",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Inconspicuous_Totem?oldid=419342"
+        },
+        {
+          "ability_id": 2053,
+          "target": 15372,
+          "ordinal": 2,
+          "revision": "2013-05-24 01:51:39",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Turgur's_Swarm?oldid=465686"
+        },
+        {
+          "ability_id": 9501,
+          "target": 15364,
+          "ordinal": 5,
+          "revision": "2012-03-29 06:02:26",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Ancestral_Aid?oldid=419252"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "necromancer-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 343,
+          "target": 14309,
+          "ordinal": 2,
+          "revision": "2012-03-29 07:59:06",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Pestilent_Paralysis?oldid=419372"
+        },
+        {
+          "ability_id": 344,
+          "target": 14312,
+          "ordinal": 2,
+          "revision": "2012-03-29 07:48:35",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Mercurial_Torment?oldid=419362"
+        },
+        {
+          "ability_id": 703,
+          "target": 14319,
+          "ordinal": 2,
+          "revision": "2012-03-29 19:30:42",
+          "reason": "Rank2VoA cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Death_Bloom?oldid=419739"
+        },
+        {
+          "ability_id": 765,
+          "target": 13690,
+          "ordinal": 2,
+          "revision": "2012-03-29 19:39:20",
+          "reason": "Rank2VoA cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Scent_of_Terris?oldid=419748"
+        },
+        {
+          "ability_id": 1254,
+          "target": 15572,
+          "ordinal": 2,
+          "revision": "2013-05-21 02:57:05",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Dying_Grasp?oldid=465256"
+        },
+        {
+          "ability_id": 1258,
+          "target": 15592,
+          "ordinal": 2,
+          "revision": "2013-05-26 02:56:34",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Levant?oldid=466043"
+        },
+        {
+          "ability_id": 1271,
+          "target": 15623,
+          "ordinal": 2,
+          "revision": "2013-05-26 01:38:47",
+          "reason": "ScopedNEC1271rank2RoF cost/levelunknown. Separate44DRU/MAG/WIZrank5cost12/lvl100/20% doesnotfillNECpayload or mergeclasses.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quick_Damage?oldid=466034"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "bard-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 238,
+          "target": 15530,
+          "ordinal": 7,
+          "revision": "2012-11-10 15:41:56",
+          "reason": "Only1..5;no rank7contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Tune_of_Pursuance?oldid=449066"
+        },
+        {
+          "ability_id": 417,
+          "target": 15527,
+          "ordinal": 5,
+          "revision": "2012-11-11 18:12:18",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Quick_Time?oldid=449352"
+        },
+        {
+          "ability_id": 425,
+          "target": 16304,
+          "ordinal": 5,
+          "revision": "2012-11-11 18:04:17",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Fierce_Eye?oldid=449346"
+        },
+        {
+          "ability_id": 427,
+          "target": 15962,
+          "ordinal": 5,
+          "revision": "2012-03-29 20:05:09",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Resounding_Dirge?oldid=419775"
+        },
+        {
+          "ability_id": 864,
+          "target": 14170,
+          "ordinal": 2,
+          "revision": "2012-11-11 18:10:08",
+          "reason": "Rank2cost9/VoA levelunknown;rank4cost13/lvl95doesnotbridge.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Thousand_Blades?oldid=449349"
+        },
+        {
+          "ability_id": 3819,
+          "target": 13522,
+          "ordinal": 6,
+          "revision": "2012-11-11 01:48:30",
+          "reason": "Rank6cost11 butlevel/eraunknown;rank7cost13/lvl94/VoAdoesnotbridge.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Maestro's_Concentration?oldid=449151"
+        },
+        {
+          "ability_id": 8262,
+          "target": 13534,
+          "ordinal": 8,
+          "revision": "2012-11-11 01:54:22",
+          "reason": "Rank8cost12 butlevel/eraunknown;rank9cost15/lvl94/VoAdoesnotbridge.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:The_Show_Must_Go_On?oldid=449153"
+        },
+        {
+          "ability_id": 8314,
+          "target": 13509,
+          "ordinal": 5,
+          "revision": "2012-11-11 01:51:26",
+          "reason": "Rank5cost11 butlevel/eraunknown;rank6cost13/lvl94/VoAdoesnotbridge.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Fluid_March?oldid=449152"
+        },
+        {
+          "ability_id": 3518,
+          "target": 16298,
+          "ordinal": 11,
+          "revision": "2012-11-28 22:24:43",
+          "reason": "Only1..9;no rank11contract. Earlierera labelsimpliedbyhistory.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Cacophony?oldid=451309"
+        },
+        {
+          "ability_id": 1176,
+          "target": 15960,
+          "ordinal": 2,
+          "revision": "2013-05-25 22:18:01",
+          "reason": "Onlyrank1cost9/lvl100/RoF.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Improved_Requiem_of_Time?oldid=466002"
+        },
+        {
+          "ability_id": 1177,
+          "target": 15518,
+          "ordinal": 2,
+          "revision": "2013-05-26 02:57:33",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Requiem_of_Time?oldid=466044"
+        },
+        {
+          "ability_id": 1245,
+          "target": 15541,
+          "ordinal": 2,
+          "revision": "2013-05-26 03:40:52",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Troubadour's_Slashing_Mastery?oldid=466079"
+        },
+        {
+          "ability_id": 1246,
+          "target": 15544,
+          "ordinal": 2,
+          "revision": "2013-05-26 03:39:27",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Troubadour's_Blunt_Mastery?oldid=466077"
+        },
+        {
+          "ability_id": 1247,
+          "target": 15547,
+          "ordinal": 2,
+          "revision": "2013-05-26 03:40:12",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Troubadour's_Piercing_Mastery?oldid=466078"
+        },
+        {
+          "ability_id": 1248,
+          "target": 15550,
+          "ordinal": 2,
+          "revision": "2013-05-21 03:09:24",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Lure_of_the_Siren's_Song?oldid=465264"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "rogue-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 281,
+          "target": 13796,
+          "ordinal": 20,
+          "revision": "2012-03-29 22:31:22",
+          "reason": "Only1..18;no rank20contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Triple_Backstab?oldid=419920"
+        },
+        {
+          "ability_id": 555,
+          "target": 13768,
+          "ordinal": 21,
+          "revision": "2013-05-05 08:56:55",
+          "reason": "Rank21cost/level/era/maxNPC/damageunknown;17..22incomplete. No assassinationmechanic extrapolation.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Anatomy?oldid=463217"
+        },
+        {
+          "ability_id": 294,
+          "target": 16268,
+          "ordinal": 7,
+          "revision": "2012-03-29 23:10:27",
+          "reason": "Only1..5;no rank7contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Virulent_Venom?oldid=419962"
+        },
+        {
+          "ability_id": 9301,
+          "target": 15955,
+          "ordinal": 14,
+          "revision": "2012-08-18 04:49:32",
+          "reason": "ScopedROG9301only1..12,fields2..12unknown;no rank14. SeparateMNK271only1..12partial;no classmerge.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Strikethrough?oldid=438865"
+        },
+        {
+          "ability_id": 8325,
+          "target": 13799,
+          "ordinal": 8,
+          "revision": "2012-03-29 21:51:17",
+          "reason": "Only1..3;no rank8contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Subtle_Blows?oldid=419880"
+        },
+        {
+          "ability_id": 167,
+          "target": 6529,
+          "ordinal": 8,
+          "revision": "2012-03-29 08:08:40",
+          "reason": "ScopedROG167only1..6;no rank8contract. SeparatePAL3831only1..8partial;do not restore retiredHastenedOriginSID6528.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Purification?oldid=419382"
+        },
+        {
+          "ability_id": 716,
+          "target": 14142,
+          "ordinal": 2,
+          "revision": "2012-11-08 17:17:50",
+          "reason": "ROG716rank2cost/level/eraunknown. Rangersectionlabel9207 differsnativePiercing9206 vsBlunt9207; do not reassign IDs. Rangerrank6cost13/lvl90/HoT buteffectmagnitudeunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Scout's_Mastery_of_Piercing?oldid=448513"
+        },
+        {
+          "ability_id": 717,
+          "target": 14145,
+          "ordinal": 2,
+          "revision": "2012-03-29 02:44:22",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Envenomed_Blades?oldid=419074"
+        },
+        {
+          "ability_id": 714,
+          "target": 14136,
+          "ordinal": 2,
+          "revision": "2012-03-29 06:04:21",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Assassination_Disciplines?oldid=419254"
+        },
+        {
+          "ability_id": 7107,
+          "target": 15633,
+          "ordinal": 5,
+          "revision": "2012-03-29 07:15:07",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Getaway?oldid=419328"
+        },
+        {
+          "ability_id": 12615,
+          "target": 15499,
+          "ordinal": 5,
+          "revision": "2012-03-29 08:49:46",
+          "reason": "Only1..4;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Twisted_Chance_Discipline?oldid=419425"
+        },
+        {
+          "ability_id": 1171,
+          "target": 15503,
+          "ordinal": 2,
+          "revision": "2013-05-21 02:54:47",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Counterattack_Discipline?oldid=465253"
+        },
+        {
+          "ability_id": 1173,
+          "target": 15510,
+          "ordinal": 2,
+          "revision": "2013-05-21 03:10:02",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Onslaught?oldid=465265"
+        },
+        {
+          "ability_id": 1272,
+          "target": 15626,
+          "ordinal": 2,
+          "revision": "2013-05-12 06:08:30",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Assassin's_Wrath?oldid=463823"
+        },
+        {
+          "ability_id": 1273,
+          "target": 15636,
+          "ordinal": 3,
+          "revision": "2013-05-24 01:50:10",
+          "reason": "Rank3RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Swiftblade?oldid=465684"
+        },
+        {
+          "ability_id": 12607,
+          "target": 15631,
+          "ordinal": 3,
+          "revision": "2012-03-29 08:01:58",
+          "reason": "Only1..2;no rank3contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Pinpoint?oldid=419375"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "monk-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 3511,
+          "target": 13824,
+          "ordinal": 25,
+          "revision": "2013-04-18 11:25:17",
+          "reason": "Only1..18;no rank25contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Punch_Mastery?oldid=461123"
+        },
+        {
+          "ability_id": 989,
+          "target": 13830,
+          "ordinal": 8,
+          "revision": "2012-10-07 14:37:54",
+          "reason": "Rank8cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Stonefoot?oldid=444151"
+        },
+        {
+          "ability_id": 8900,
+          "target": 13805,
+          "ordinal": 5,
+          "revision": "2012-03-28 21:57:21",
+          "reason": "Only1..3;no rank5contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Agile_Feet?oldid=418839"
+        },
+        {
+          "ability_id": 718,
+          "target": 14152,
+          "ordinal": 2,
+          "revision": "2012-03-29 09:14:37",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Heel_of_Brithrax?oldid=419450"
+        },
+        {
+          "ability_id": 719,
+          "target": 14164,
+          "ordinal": 2,
+          "revision": "2012-03-29 03:13:05",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Zan_Fi's_Whistle?oldid=419113"
+        },
+        {
+          "ability_id": 806,
+          "target": 14161,
+          "ordinal": 2,
+          "revision": "2012-03-29 09:02:12",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Zan_Fi's_Whistle?oldid=419439"
+        },
+        {
+          "ability_id": 796,
+          "target": 13890,
+          "ordinal": 2,
+          "revision": "2012-03-29 07:00:47",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Five_Point_Palm?oldid=419312"
+        },
+        {
+          "ability_id": 805,
+          "target": 14149,
+          "ordinal": 2,
+          "revision": "2012-03-29 08:32:33",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Speed_Focus?oldid=419407"
+        },
+        {
+          "ability_id": 807,
+          "target": 14158,
+          "ordinal": 2,
+          "revision": "2012-03-29 19:01:05",
+          "reason": "Rank2cost/level/eraunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Pressure_Points?oldid=419705"
+        },
+        {
+          "ability_id": 808,
+          "target": 14167,
+          "ordinal": 2,
+          "revision": "2012-03-29 08:44:59",
+          "reason": "Monk808rank2cost/level/eraunknown;separateBST503RoarThunderhasdifferenttimer/line,notmerged.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Thunder?oldid=419420"
+        },
+        {
+          "ability_id": 8903,
+          "target": 14155,
+          "ordinal": 8,
+          "revision": "2012-09-08 21:43:36",
+          "reason": "Only1..3;no rank8contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Destructive_Force?oldid=441415"
+        },
+        {
+          "ability_id": 1232,
+          "target": 15430,
+          "ordinal": 2,
+          "revision": "2013-05-26 03:50:09",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Way_of_the_Katori?oldid=466087"
+        },
+        {
+          "ability_id": 1233,
+          "target": 15433,
+          "ordinal": 2,
+          "revision": "2013-05-17 01:32:08",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Harmony_of_Battle?oldid=464643"
+        },
+        {
+          "ability_id": 1234,
+          "target": 15439,
+          "ordinal": 2,
+          "revision": "2013-05-21 03:08:08",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Ironfist?oldid=465262"
+        },
+        {
+          "ability_id": 1242,
+          "target": 15451,
+          "ordinal": 2,
+          "revision": "2013-05-24 01:51:00",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Synergy?oldid=465685"
+        },
+        {
+          "ability_id": 1243,
+          "target": 15454,
+          "ordinal": 2,
+          "revision": "2013-05-21 02:55:39",
+          "reason": "Rank2RoF cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Crane_Stance?oldid=465254"
+        },
+        {
+          "ability_id": 1244,
+          "target": 15457,
+          "ordinal": 2,
+          "revision": "2013-05-21 02:59:08",
+          "reason": "Rank2RoF cost/levelunknown; selectedhistory03:01:49rendered02:59:08actualoldidretained.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Eye_Gouge?oldid=465259"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "ranger-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 218,
+          "target": 13265,
+          "revision": "2013-05-26 12:30:38",
+          "reason": "Nativepresent16/lvl91 structurallydiffersfromperiod16/lvl89;period20islvl91. Ordinalmappingunresolved;rank21damageunknown despitecost18/lvl93/max86. No substitutionbyordinalormagnitudeguess.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Headshot?oldid=466118"
+        },
+        {
+          "ability_id": 875,
+          "target": 10765,
+          "revision": "2012-10-16 23:23:15",
+          "reason": "Rank9 cost12/lvl90/HoT supported; exact bypass-defenses magnitude unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Keen_Blade?oldid=444909"
+        },
+        {
+          "ability_id": 288,
+          "target": 10756,
+          "revision": "2012-11-08 15:59:39",
+          "reason": "Rank14 cost7/lvl89/HoT supported; exact damage-shield effectiveness unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Coat_of_Thistles?oldid=448478"
+        },
+        {
+          "ability_id": 661,
+          "target": 16171,
+          "revision": "2012-10-09 21:47:13",
+          "reason": "Source only ranks1..9; native successor11 contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hunter%27s_Fury?oldid=444323"
+        },
+        {
+          "ability_id": 664,
+          "target": 14116,
+          "revision": "2012-03-29 02:55:51",
+          "reason": "Rank2 cost/level/era unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Outrider%27s_Attack?oldid=419089"
+        },
+        {
+          "ability_id": 583,
+          "target": 13569,
+          "revision": "2012-03-29 07:57:12",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Outrider%27s_Evasion?oldid=419370"
+        },
+        {
+          "ability_id": 923,
+          "target": 15281,
+          "revision": "2012-11-08 17:24:29",
+          "reason": "Source only ranks1..5; native successor7 contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Protection_of_the_Spirit_Wolf?oldid=448519"
+        },
+        {
+          "ability_id": 924,
+          "target": 10729,
+          "revision": "2012-03-29 07:27:34",
+          "reason": "Rank3 cost/level/era unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Imbued_Ferocity?oldid=419340"
+        },
+        {
+          "ability_id": 9205,
+          "target": 13112,
+          "revision": "2012-11-08 17:18:18",
+          "reason": "Rank6 cost13/lvl90/HoT supported; exact damage unknown. Page name Slashing but header9207 conflicts native Slashing9205; no identity reassignment.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Scout%27s_Mastery_of_Slashing?oldid=448514"
+        },
+        {
+          "ability_id": 9207,
+          "target": 13118,
+          "revision": "2012-11-08 17:17:25",
+          "reason": "Rank6 cost13/lvl90/HoT supported; exact damage magnitude unknown. Native Blunt9207 distinct from Slashing9205/Piercing9206.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Scout%27s_Mastery_of_Blunt_Weapons?oldid=448512"
+        },
+        {
+          "ability_id": 3211,
+          "target": 15293,
+          "revision": "2012-11-08 16:56:35",
+          "reason": "Source only ranks1..2; native successor3 contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Nature%27s_Reprieve?oldid=448507"
+        },
+        {
+          "ability_id": 2041,
+          "target": 15289,
+          "revision": "2013-05-14 03:27:28",
+          "reason": "Rank1 cost7/lvl96/RoF; rank2 cost/level unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Close_Combat_Mastery?oldid=464091"
+        },
+        {
+          "ability_id": 2036,
+          "target": null,
+          "revision": "2013-05-26 01:41:23",
+          "reason": "Rank1 cost4/lvl96/RoF; rank2 cost/level unknown despite explicit10% cast-time increment.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Auspice_of_the_Hunter?oldid=466036"
+        },
+        {
+          "ability_id": 2040,
+          "target": null,
+          "revision": "2013-05-21 02:58:31",
+          "reason": "Rank1 cost5/lvl96/RoF; rank2 cost/level unknown despite explicit1second/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Enraging_Kicks?oldid=465258"
+        },
+        {
+          "ability_id": 2042,
+          "target": null,
+          "revision": "2013-05-26 02:54:34",
+          "reason": "Rank1 cost7/lvl96/RoF; rank2 cost/level unknown despite explicit25% cast-time reduction.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Cover_Tracks?oldid=466040"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "beastlord-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 239,
+          "target": 13475,
+          "revision": "2012-03-29 06:28:15",
+          "reason": "Rank2 purchase fields unknown despite explicit120seconds/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Companion's_Sacrifice?oldid=419278"
+        },
+        {
+          "ability_id": 242,
+          "target": 13486,
+          "revision": "2012-03-29 19:02:03",
+          "reason": "Rank2 purchase fields and flurry magnitude unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Primal_Fury?oldid=419706"
+        },
+        {
+          "ability_id": 448,
+          "target": 12817,
+          "revision": "2012-03-29 02:45:20",
+          "reason": "Rank2 purchase fields unknown despite explicit1tick/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Feralgia?oldid=419075"
+        },
+        {
+          "ability_id": 450,
+          "target": 12821,
+          "revision": "2012-03-29 08:07:42",
+          "reason": "Rank3 purchase fields unknown despite explicit10%/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Protective_Spirit?oldid=419381"
+        },
+        {
+          "ability_id": 457,
+          "target": 12832,
+          "revision": "2012-03-29 19:37:26",
+          "reason": "Rank2 purchase fields unknown despite explicit0.5second cast-time/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Paragon_of_Spirit?oldid=419746"
+        },
+        {
+          "ability_id": 460,
+          "target": 12850,
+          "revision": "2012-03-29 19:36:27",
+          "reason": "Rank2 purchase fields unknown despite explicit0.5second cast-time/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Nature's_Salve?oldid=419745"
+        },
+        {
+          "ability_id": 983,
+          "target": 12842,
+          "revision": "2012-03-29 07:04:36",
+          "reason": "Period table only1..3, partial; native successor6 unsupported.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Focused_Paragon?oldid=419316"
+        },
+        {
+          "ability_id": 2059,
+          "target": 15407,
+          "revision": "2013-05-26 02:55:54",
+          "reason": "Rank2 cost/level unknown; eraRoF and10%cast-time/rank insufficient.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Focused_Paragon_of_Spirit?oldid=466042"
+        },
+        {
+          "ability_id": 6988,
+          "target": 16248,
+          "revision": "2012-03-29 02:48:12",
+          "reason": "Period table only1..3, partial; native successor5 unsupported.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Group_Bestial_Alignment?oldid=419080"
+        },
+        {
+          "ability_id": 8304,
+          "target": 13478,
+          "revision": "2012-03-29 03:39:50",
+          "reason": "Period table only1..3, partial; native successor5 purchase/magnitude unsupported.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Focus_of_Animus?oldid=419139"
+        },
+        {
+          "ability_id": 11077,
+          "target": 15896,
+          "revision": "2012-01-30 21:52:40",
+          "reason": "Onlyrank1 contract; native successor3 unsupported.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Bite_of_the_Asp?oldid=412580"
+        },
+        {
+          "ability_id": 11078,
+          "target": 15892,
+          "revision": "2012-01-30 21:53:37",
+          "reason": "Onlyrank1 contract; native successor3 unsupported. Distinct hastepage, no retry of unavailable activeGorillaSmashsource.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Gorilla_Smash?oldid=412581"
+        },
+        {
+          "ability_id": 11079,
+          "target": 15894,
+          "revision": "2012-01-30 07:02:04",
+          "reason": "Onlyrank1 contract; native successor3 unsupported.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Raven's_Claw?oldid=412346"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "paladin-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 75,
+          "target": 15142,
+          "revision": "2012-06-17 12:12:20",
+          "reason": "Onlyranks1..9; native successor11 purchase/effect contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Slay_Undead?oldid=429450"
+        },
+        {
+          "ability_id": 129,
+          "target": 13579,
+          "revision": "2012-03-28 23:58:00",
+          "reason": "Onlyranks1..3 partial; native successor5 purchase/magnitude unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Chains_of_Purity?oldid=418926"
+        },
+        {
+          "ability_id": 656,
+          "target": 14069,
+          "revision": "2012-03-29 08:05:48",
+          "reason": "Rank2 purchase fields unknown despite explicit60seconds/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Projection_of_Piety?oldid=419379"
+        },
+        {
+          "ability_id": 658,
+          "target": 14077,
+          "revision": "2012-03-29 08:22:03",
+          "reason": "Rank2 purchase fields unknown despite explicit8minutes/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Sanctification_Discipline?oldid=419396"
+        },
+        {
+          "ability_id": 720,
+          "target": 14089,
+          "revision": "2012-03-29 07:43:49",
+          "reason": "Rank2 purchase fields unknown despite explicit30seconds/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Marr's_Salvation?oldid=419357"
+        },
+        {
+          "ability_id": 721,
+          "target": 14092,
+          "revision": "2012-03-29 06:03:23",
+          "reason": "Rank2 purchase fields unknown despite explicit2minutes/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Armor_of_the_Inquisitor?oldid=419253"
+        },
+        {
+          "ability_id": 770,
+          "target": 14083,
+          "revision": "2012-03-28 23:16:05",
+          "reason": "Rank5 purchase fields/proc chance unknown. Ranksbeyond3 increase proc chance; no guessed scaling.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Blessing_of_the_Faithful?oldid=418887"
+        },
+        {
+          "ability_id": 891,
+          "target": 13599,
+          "revision": "2012-03-29 09:09:50",
+          "reason": "Only1..6 partial; native successor11 purchase/heal binding unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Healing_Light?oldid=419447"
+        },
+        {
+          "ability_id": 1024,
+          "target": 14086,
+          "revision": "2012-03-29 07:34:15",
+          "reason": "Rank2 purchase fields unknown despite explicit2seconds/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Leap_of_Faith?oldid=419347"
+        },
+        {
+          "ability_id": 1025,
+          "target": 14012,
+          "revision": "2012-03-29 06:08:10",
+          "reason": "Rank2 purchase fields unknown despite explicit30seconds/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Beacon_of_the_Righteous?oldid=419258"
+        },
+        {
+          "ability_id": 2014,
+          "target": 15133,
+          "revision": "2013-05-21 02:56:22",
+          "reason": "Rank2 cost/level unknown despite explicit10seconds/rank andRoFera.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Divine_Call?oldid=465255"
+        },
+        {
+          "ability_id": 2020,
+          "target": 15151,
+          "revision": "2013-05-26 02:55:12",
+          "reason": "Rank2 cost/level unknown despite explicit10%cast-time/rank andRoFera.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Demand_For_Honor?oldid=466041"
+        },
+        {
+          "ability_id": 2023,
+          "target": 15156,
+          "revision": "2013-05-15 03:17:00",
+          "reason": "Rank2 cost/level unknown despite explicit1tick/rank andRoFera.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Preservation_of_Marr?oldid=464208"
+        },
+        {
+          "ability_id": 2025,
+          "target": 15160,
+          "revision": "2013-05-14 07:05:50",
+          "reason": "Rank2 cost/level unknown despite explicit1tick/rank andRoFera.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Blessing_of_the_Faithful?oldid=464101"
+        },
+        {
+          "ability_id": 2026,
+          "target": 15163,
+          "revision": "2013-05-24 01:49:32",
+          "reason": "Rank2 cost/level unknown despite explicit2minutes/rank andRoFera.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Speed_of_the_Savior?oldid=465683"
+        },
+        {
+          "ability_id": 2028,
+          "target": 15169,
+          "revision": "2013-05-24 01:47:56",
+          "reason": "Rank2 cost/level unknown despite explicit1minute/rank andRoFera.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Shield_of_Brilliance?oldid=465681"
+        },
+        {
+          "ability_id": 3500,
+          "target": 14095,
+          "revision": "2012-03-28 22:50:56",
+          "reason": "Only1..3 partial; native successor8 purchase/proc damage magnitude unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Blessing_of_Light?oldid=418884"
+        },
+        {
+          "ability_id": 3820,
+          "target": 14098,
+          "revision": "2012-03-28 22:49:57",
+          "reason": "Only1..9 partial; native successor14 purchase/heal binding unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Blessing_of_Life?oldid=418883"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "shadowknight-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 89,
+          "target": 16658,
+          "revision": "2012-11-11 23:31:41",
+          "reason": "Only1..12; native successor14 contract absent. History explicitly inferred rank11level; not a new rank14 contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Soul_Abrasion?oldid=449479"
+        },
+        {
+          "ability_id": 198,
+          "target": 15779,
+          "revision": "2013-03-09 14:25:32",
+          "reason": "Only1..20partial; native successor22 contract absent. No LeechTouch damage/healing magnitude supplied.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Consumption_of_the_Soul?oldid=457583"
+        },
+        {
+          "ability_id": 360,
+          "target": 14786,
+          "revision": "2012-03-28 23:22:37",
+          "reason": "Rank4 contract absent; ranks2/3 purchase fields and exact damage unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Bloodthirsty_Blade?oldid=418894"
+        },
+        {
+          "ability_id": 442,
+          "target": 14044,
+          "revision": "2012-11-25 17:19:06",
+          "reason": "Rank26 cost15/VoA supported, level/proc binding unknown. History calls late eras implied; rank27level95 does not establish rank26level.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Touch_of_the_Cursed?oldid=450957"
+        },
+        {
+          "ability_id": 649,
+          "target": 14047,
+          "revision": "2012-11-12 00:07:41",
+          "reason": "Rank2 cost7/VoA supported, levelunknown. Explicit90seconds/rank and rank5level95 do not establish rank2level.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Leech_Touch?oldid=449506"
+        },
+        {
+          "ability_id": 652,
+          "target": 14057,
+          "revision": "2012-03-29 07:36:10",
+          "reason": "Rank2 purchase fields unknown despite explicit6minutes/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Leechcurse_Discipline?oldid=419349"
+        },
+        {
+          "ability_id": 653,
+          "target": 14060,
+          "revision": "2012-03-29 08:50:43",
+          "reason": "Rank2 purchase fields unknown despite explicit3minutes/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Unholy_Aura_Discipline?oldid=419426"
+        },
+        {
+          "ability_id": 655,
+          "target": 14066,
+          "revision": "2012-03-29 08:03:53",
+          "reason": "Rank2 purchase fields unknown despite explicit60seconds/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Projection_of_Doom?oldid=419377"
+        },
+        {
+          "ability_id": 820,
+          "target": 13622,
+          "revision": "2012-03-29 00:56:19",
+          "reason": "Only1..10partial; native successor12 contract absent despite explicit1%petcritical/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Death's_Revenge?oldid=418976"
+        },
+        {
+          "ability_id": 823,
+          "target": 16193,
+          "revision": "2012-11-27 11:13:07",
+          "reason": "Only1..6partial; native successor8 purchase/protection binding unsupported. History lateeras implied.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Cascading_Theft_of_Defense?oldid=451036"
+        },
+        {
+          "ability_id": 931,
+          "target": 15175,
+          "revision": "2012-11-19 00:55:49",
+          "reason": "Only1..3; native successor5 contract absent despite explicit10seconds/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Hate's_Attraction?oldid=450543"
+        },
+        {
+          "ability_id": 2032,
+          "target": 15180,
+          "revision": "2013-05-26 02:58:12",
+          "reason": "Rank2 cost/level unknown despite explicit25%cast-time reduction andRoFera.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quickened_Scourge_Skin?oldid=466045"
+        },
+        {
+          "ability_id": 7757,
+          "target": 15183,
+          "revision": "2012-11-12 23:11:13",
+          "reason": "Only1..6partial; native successor8 contract absent despite explicit2minutes/rank.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Visage_of_Death?oldid=449709"
+        },
+        {
+          "ability_id": 9404,
+          "target": 16190,
+          "revision": "2012-11-11 22:39:22",
+          "reason": "Only1..3; native successor5 purchase/groupheal binding unsupported.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Cascading_Theft_of_Life?oldid=449449"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "warrior-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 802,
+          "target": 16122,
+          "revision": "2012-03-29 07:08:26",
+          "reason": "Only1..5partial; native successor8 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Fortitude_Discipline?oldid=419320"
+        },
+        {
+          "ability_id": 906,
+          "target": 10523,
+          "revision": "2012-03-29 07:19:54",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Gut_Punch?oldid=419332"
+        },
+        {
+          "ability_id": 907,
+          "target": 10528,
+          "revision": "2012-03-29 06:59:49",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_First_Spire_of_the_Warlord?oldid=419311"
+        },
+        {
+          "ability_id": 908,
+          "target": 10533,
+          "revision": "2012-03-29 08:26:49",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Second_Spire_of_the_Warlord?oldid=419401"
+        },
+        {
+          "ability_id": 909,
+          "target": 10538,
+          "revision": "2012-03-29 08:43:05",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Third_Spire_of_the_Warlord?oldid=419418"
+        },
+        {
+          "ability_id": 914,
+          "target": 10549,
+          "revision": "2012-03-29 09:42:19",
+          "reason": "Rank2 purchase fields unknown; first requiresShieldSpecialist13, not a source-ready successor.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Improved_Shield_Specialist?oldid=419475"
+        },
+        {
+          "ability_id": 928,
+          "target": 14027,
+          "revision": "2012-03-29 11:09:13",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Merciless_Blade?oldid=419560"
+        },
+        {
+          "ability_id": 929,
+          "target": 14030,
+          "revision": "2012-03-29 00:13:17",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Combatant's_Pact?oldid=418937"
+        },
+        {
+          "ability_id": 946,
+          "target": 14038,
+          "revision": "2012-03-29 08:57:26",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Warlord's_Bravery?oldid=419434"
+        },
+        {
+          "ability_id": 947,
+          "target": 14041,
+          "revision": "2012-03-29 08:58:22",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Warlord's_Tenacity?oldid=419435"
+        },
+        {
+          "ability_id": 965,
+          "target": 10520,
+          "revision": "2012-03-29 08:04:50",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Projection_of_Fury?oldid=419378"
+        },
+        {
+          "ability_id": 1680,
+          "target": 13906,
+          "revision": "2012-03-29 07:01:44",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Flash_of_Anger?oldid=419313"
+        },
+        {
+          "ability_id": 1681,
+          "target": 13909,
+          "revision": "2012-03-29 06:07:13",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Bazu_Roar?oldid=419257"
+        },
+        {
+          "ability_id": 1682,
+          "target": 13912,
+          "revision": "2012-03-29 08:24:54",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Scowl?oldid=419399"
+        },
+        {
+          "ability_id": 1683,
+          "target": 13918,
+          "revision": "2012-03-29 07:42:51",
+          "reason": "Rank2 purchase fields unknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Mark_of_the_Mage_Hunter?oldid=419356"
+        },
+        {
+          "ability_id": 2003,
+          "target": 15101,
+          "revision": "2013-05-21 03:10:38",
+          "reason": "Rank2 cost/level unknown; RoFera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Press_the_Attack?oldid=465266"
+        },
+        {
+          "ability_id": 2004,
+          "target": 15106,
+          "revision": "2013-05-24 01:47:03",
+          "reason": "Rank2 cost/level unknown; RoFera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Rage_of_Rallos_Zek?oldid=465680"
+        },
+        {
+          "ability_id": 2005,
+          "target": 15109,
+          "revision": "2013-05-24 01:52:21",
+          "reason": "Rank1cost9/lvl98; rank2cost/levelunknown,RoFera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Unbroken_Attention?oldid=465688"
+        },
+        {
+          "ability_id": 2006,
+          "target": 15114,
+          "revision": "2013-05-15 03:27:19",
+          "reason": "Rank2 cost/level unknown; RoFera only. Preserve dated Resplendant page name versus prerequisite Resplendent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Resplendant_Glory?oldid=464212"
+        },
+        {
+          "ability_id": 2008,
+          "target": 15121,
+          "revision": "2013-05-24 01:52:55",
+          "reason": "Rank2 cost/level unknown; RoFera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Vehement_Rage?oldid=465690"
+        },
+        {
+          "ability_id": 2009,
+          "target": 15124,
+          "revision": "2013-05-17 01:34:48",
+          "reason": "Rank2 cost/level unknown; RoFera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Barbed_Tongue?oldid=464644"
+        },
+        {
+          "ability_id": 2010,
+          "target": 15127,
+          "revision": "2013-05-24 01:48:35",
+          "reason": "Rank2 cost/level unknown; RoFera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Shield_Topple?oldid=465682"
+        },
+        {
+          "ability_id": 3600,
+          "target": 6137,
+          "revision": "2012-03-29 19:56:33",
+          "reason": "Onlyrank1, levelunknown. Native successor2 unsupported.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Rapid_Defiance?oldid=419766"
+        },
+        {
+          "ability_id": 3731,
+          "target": 10569,
+          "revision": "2012-03-29 09:46:08",
+          "reason": "Only1..9partial; native successor11 purchase contract absent. Native name trailing space retained.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Infused_by_Rage?oldid=419478"
+        },
+        {
+          "ability_id": 7033,
+          "target": 15747,
+          "revision": "2012-03-29 10:31:01",
+          "reason": "Only1..3partial; native successor5 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Lasting_Bravery?oldid=419519"
+        },
+        {
+          "ability_id": 7036,
+          "target": 10581,
+          "revision": "2012-03-29 06:13:55",
+          "reason": "Only1..3partial; native successor6 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Blast_of_Anger?oldid=419263"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "berserker-passive-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 368,
+          "target": 13036,
+          "revision": "2012-03-28 23:23:35",
+          "reason": "Only1..23partial; native successor25 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Blur_of_Axes?oldid=418895"
+        },
+        {
+          "ability_id": 644,
+          "target": 13068,
+          "revision": "2012-03-29 06:01:28",
+          "reason": "Rank2cost/level unknown; HoTera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Absolution?oldid=419251"
+        },
+        {
+          "ability_id": 779,
+          "target": 13874,
+          "revision": "2012-03-29 07:32:21",
+          "reason": "Rank2 purchase fields unknown; even rank1levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Juggernaut_Surge?oldid=419345"
+        },
+        {
+          "ability_id": 780,
+          "target": 13879,
+          "revision": "2012-03-29 08:19:11",
+          "reason": "Rank2 purchase fields unknown; even rank1levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Resilience?oldid=419393"
+        },
+        {
+          "ability_id": 781,
+          "target": 13882,
+          "revision": "2012-03-29 06:16:46",
+          "reason": "Rank2cost/level unknown; VoAera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Blood_Pact?oldid=419266"
+        },
+        {
+          "ability_id": 1249,
+          "target": 15556,
+          "revision": "2013-05-15 06:31:01",
+          "reason": "Rank2cost/level unknown; RoFera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Frenzied_Axe_of_Rallos?oldid=464223"
+        },
+        {
+          "ability_id": 1250,
+          "target": 15565,
+          "revision": "2013-05-26 00:21:17",
+          "reason": "Rank2cost/level unknown; RoFera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Juggernaut's_Mastery_of_Throwing?oldid=466022"
+        },
+        {
+          "ability_id": 1281,
+          "target": 15649,
+          "revision": "2013-05-14 07:04:20",
+          "reason": "Rank2cost/level unknown; RoFera only.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Everburn?oldid=464100"
+        },
+        {
+          "ability_id": 3525,
+          "target": 13044,
+          "revision": "2012-03-29 18:54:23",
+          "reason": "Only1..6partial; native successor8 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Precise_Blow?oldid=419697"
+        },
+        {
+          "ability_id": 6302,
+          "target": 15553,
+          "revision": "2012-03-29 08:16:19",
+          "reason": "Only1..6partial; native successor8 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Reckless_Abandon?oldid=419390"
+        },
+        {
+          "ability_id": 6362,
+          "target": 16328,
+          "revision": "2012-03-29 08:17:16",
+          "reason": "Only1..5partial; native successor7 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Recklessness?oldid=419391"
+        },
+        {
+          "ability_id": 7060,
+          "target": 13041,
+          "revision": "2012-03-29 18:57:15",
+          "reason": "Only1..6partial; native successor8 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Precision_of_Axes?oldid=419700"
+        },
+        {
+          "ability_id": 8401,
+          "target": 13053,
+          "revision": "2012-03-29 07:10:21",
+          "reason": "Only1..3partial; native successor5 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Frenzy?oldid=419322"
+        },
+        {
+          "ability_id": 8708,
+          "target": 15560,
+          "revision": "2012-03-29 06:23:28",
+          "reason": "Only1..3partial; native successor5 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Cascading_Rage?oldid=419273"
+        },
+        {
+          "ability_id": 11085,
+          "target": 13022,
+          "revision": "2012-03-25 05:04:17",
+          "reason": "Only1..3partial; native successor5 purchase contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Two_Hands%2C_No_Mercy!?oldid=418273"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "shared-passive-support-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 159,
+          "target": 16095,
+          "ordinal": 8,
+          "revision": "2013-05-10 21:49:39",
+          "reason": "Only1..6; no rank8contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Exodus?oldid=463614"
+        },
+        {
+          "ability_id": 214,
+          "target": 15586,
+          "ordinal": 21,
+          "revision": "2012-12-02 09:51:54",
+          "reason": "Only1..19; no rank21contract; earlier17/18erasinferred.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Theft_of_Life?oldid=451824"
+        },
+        {
+          "ability_id": 284,
+          "target": 13614,
+          "ordinal": 17,
+          "revision": "2012-11-30 22:16:58",
+          "reason": "Rank17cost/level/eraunknown; sourceera11/18implied,19..21assumedRoF.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Vicious_Smash?oldid=451569"
+        },
+        {
+          "ability_id": 313,
+          "target": 14296,
+          "ordinal": 2,
+          "revision": "2012-03-29 06:27:19",
+          "reason": "Rank2cost/level/eraunknown;description1secondperrank doesnotfillpurchasefields.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Companion's_Relocation?oldid=419277"
+        },
+        {
+          "ability_id": 400,
+          "target": 14332,
+          "ordinal": 2,
+          "revision": "2013-01-06 07:17:43",
+          "reason": "Rank2VoA cost/levelunknown;description2minutesperrank. Sourceclassheadercontradicts currentmask; no maskflip.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Improved_Twincast?oldid=454876"
+        },
+        {
+          "ability_id": 532,
+          "target": 15189,
+          "ordinal": 12,
+          "revision": "2012-03-29 23:36:08",
+          "reason": "Only1..10; no successorcontract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Willful_Death?oldid=419990"
+        },
+        {
+          "ability_id": 637,
+          "target": 13397,
+          "ordinal": 5,
+          "revision": "2012-11-11 11:45:20",
+          "reason": "Rank5cost/level/eraunknown;powercriticalDoTs no exactmagnitude; preserveDestructiveCascade10.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Vengeful_Spirits?oldid=449200"
+        },
+        {
+          "ability_id": 654,
+          "target": 14063,
+          "ordinal": 2,
+          "revision": "2012-03-29 07:21:49",
+          "reason": "Rank2cost/level/eraunknown;description60sec/rank doesnotfillpurchasefields.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Harmshield?oldid=419334"
+        },
+        {
+          "ability_id": 698,
+          "target": 13417,
+          "ordinal": 2,
+          "revision": "2012-03-29 08:11:32",
+          "reason": "Rank2cost/level/eraunknown;description20sec/rank doesnotfillpurchasefields.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Hastened_Purified_Spirits?oldid=419386"
+        },
+        {
+          "ability_id": 763,
+          "target": 16653,
+          "ordinal": 4,
+          "revision": "2013-04-22 17:36:12",
+          "reason": "Only1..3; no rank4contract;2%first+1%additional documented, no payloadinference.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Mirrored_Pestilence?oldid=461721"
+        },
+        {
+          "ability_id": 995,
+          "target": 16403,
+          "ordinal": 5,
+          "revision": "2012-11-02 01:59:52",
+          "reason": "Only1..3; no rank5contract. Duplicatedlatesthistory timestamp firstselected.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Intrinsic_Efficiency?oldid=446937"
+        },
+        {
+          "ability_id": 1256,
+          "target": 15580,
+          "ordinal": 2,
+          "revision": "2013-05-15 02:50:48",
+          "reason": "Rank2RoF cost/levelunknown;description2ticks/rank doesnotfillpurchasefields.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Extended_Encroaching_Darkness?oldid=464204"
+        },
+        {
+          "ability_id": 1403,
+          "target": 5361,
+          "ordinal": 11,
+          "revision": "2013-03-22 13:43:40",
+          "reason": "Rank11cost13/lvl93/VoA/Alaran1 supported but exactmitigationmagnitudeunknown. Rank12cost15/lvl95,13suspectduplicate explicithistory. No inferred effects.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Sturdy_Companion?oldid=457988"
+        },
+        {
+          "ability_id": 1665,
+          "target": 16886,
+          "ordinal": 6,
+          "revision": "2012-11-11 09:25:58",
+          "reason": "Scoped1665PAL/SHD/MNK/BRD/BST only1..5; no rank6. Separate213WAR/BER1..9incomplete, no lineclassmerge.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Tactical_Mastery?oldid=449177"
+        },
+        {
+          "ability_id": 2048,
+          "target": 15851,
+          "ordinal": 2,
+          "revision": "2013-05-14 03:32:40",
+          "reason": "Onlyrank1cost15/lvl100/RoF/Preincarnation1; no successorcontract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Covenant_of_Spirit?oldid=464094"
+        },
+        {
+          "ability_id": 2054,
+          "target": 15375,
+          "ordinal": 2,
+          "revision": "2013-05-26 03:27:10",
+          "reason": "Rank2costunknown;level98explicitlyguesstimatedbyhistory,exactstunresistmagnitudeunknown. Do not useguessedlevel.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Shielding_of_Spirits?oldid=466067"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "shared-passive-final-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 3818,
+          "target": 5340,
+          "revision": "2013-01-06 06:51:58",
+          "reason": "Rank11cost/levelunknown,VoAera known. Explicit5/7/10 then2%additional supplies magnitude but not purchase. Higher12cost15/lvl94 cannot establish11.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Companion's_Agility?oldid=454864"
+        },
+        {
+          "ability_id": 8501,
+          "target": 13608,
+          "revision": "2012-11-10 06:56:49",
+          "reason": "Rank5cost13known but level/eraunknown. Explicit1%stun/rank and rank6lvl95/VoA do not establish missingpurchasefields.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Overpowering_Strikes?oldid=448970"
+        },
+        {
+          "ability_id": 1663,
+          "target": 14490,
+          "revision": "2012-11-12 23:09:37",
+          "reason": "Sourcehybridtableonly1..3; no native successor9 contract. PeriodhybridclassheaderPAL/RNG/SHD/BST differsnative1663PAL/RNG/DRU/BST; preserve mask, no familymerge. Separate495appliedAA008 unchanged.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Gift_of_Mana?oldid=449708"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    },
+    {
+      "unit": "healer-spell-linked-final-unit",
+      "status": "DRAFT_DISABLED_UNRESOLVED_RESEARCH",
+      "holds": [
+        {
+          "ability_id": 135,
+          "target": 15324,
+          "ordinal": 2,
+          "revision": "2012-03-29 19:48:54",
+          "reason": "Onlyrank1cost12/lvl95/VoA/spell32339; no successor2contract.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Quiet_Miracle?oldid=419758"
+        },
+        {
+          "ability_id": 137,
+          "target": 14568,
+          "ordinal": 2,
+          "revision": "2012-03-28 22:30:50",
+          "reason": "Onlyrank1; no successor2contract. Source labelsHoT withlevel95/Alaran1, not corrected by inference.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Beacon_of_Life?oldid=418869"
+        },
+        {
+          "ability_id": 170,
+          "target": 10825,
+          "ordinal": 11,
+          "revision": "2012-03-29 23:38:02",
+          "reason": "Only1..9partial; native successor11 contract absent. Earlier duplicated3256 spellrow not repaired by guessing.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Wrath_of_the_Wild?oldid=419992"
+        },
+        {
+          "ability_id": 254,
+          "target": 15322,
+          "ordinal": 17,
+          "revision": "2012-03-29 01:15:26",
+          "reason": "Only1..15partial; native successor17 contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Divine_Avatar?oldid=418992"
+        },
+        {
+          "ability_id": 257,
+          "target": 12659,
+          "ordinal": 19,
+          "revision": "2012-03-29 11:23:32",
+          "reason": "Only1..17partial; native successor19 contract absent. Oldtablabels NaturesBlessing/BoonForest do not erase separate393activated identity.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Nature's_Boon?oldid=419574"
+        },
+        {
+          "ability_id": 391,
+          "target": 13364,
+          "ordinal": 17,
+          "revision": "2012-03-28 23:55:08",
+          "reason": "Only1..15partial; native successor17 contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Celestial_Hammer?oldid=418923"
+        },
+        {
+          "ability_id": 392,
+          "target": 15334,
+          "ordinal": 7,
+          "revision": "2012-03-29 01:21:10",
+          "reason": "Only1..5partial; native successor7 contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Divine_Retribution?oldid=418996"
+        },
+        {
+          "ability_id": 393,
+          "target": 12656,
+          "ordinal": 2,
+          "revision": "2012-03-29 11:22:34",
+          "reason": "Separate393activatedcritical-healingability,spell23586..23588. Rank2spell23587/HoT known but cost/levelunknown. Preserve distinctidentity despite oldNatureBoon tabalias.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Nature's_Blessing?oldid=419573"
+        },
+        {
+          "ability_id": 520,
+          "target": 13402,
+          "ordinal": 17,
+          "revision": "2012-03-29 11:26:24",
+          "reason": "Rank17spell30680/HoT known but cost/levelunknown. Do not fill by first/Higherrows.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Nature's_Guardian?oldid=419577"
+        },
+        {
+          "ability_id": 699,
+          "target": 13420,
+          "ordinal": 2,
+          "revision": "2012-03-29 22:03:43",
+          "reason": "Rank2spell30685/VoA known but cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Swarm_of_Fireflies?oldid=419892"
+        },
+        {
+          "ability_id": 735,
+          "target": 13380,
+          "ordinal": 4,
+          "revision": "2012-03-28 22:27:58",
+          "reason": "Rank4spell30654/VoA known but cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Battle_Frenzy?oldid=418866"
+        },
+        {
+          "ability_id": 2045,
+          "target": 15339,
+          "ordinal": 2,
+          "revision": "2013-05-26 03:22:37",
+          "reason": "Rank2spell38055/RoF known but cost/levelunknown.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Shield_of_Reverence?oldid=466062"
+        },
+        {
+          "ability_id": 8500,
+          "target": 15840,
+          "ordinal": 8,
+          "revision": "2012-03-29 09:07:55",
+          "reason": "Only1..3partial; native successor8 contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Healing_Frenzy?oldid=419444"
+        },
+        {
+          "ability_id": 8603,
+          "target": 12649,
+          "ordinal": 5,
+          "revision": "2012-03-29 21:27:24",
+          "reason": "Only1..3partial; native successor5 contract absent.",
+          "source_url": "https://everquest.allakhazam.com/wiki/EQ:Spirits_of_Nature?oldid=419855"
+        }
+      ],
+      "qualification": "Retained observations only. Partial tables, source endpoints and unknown fields do not establish historical maxima, released omissions or full class-line coverage. No payload or activation authorization."
+    }
+  ],
+  "limits": "Research holds are not proposed mutations. Reference links and IDs are leads requiring scope checks. Preserve published/applied packets and earned acquisition boundaries; no replay."
+}
