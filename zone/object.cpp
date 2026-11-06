@@ -350,6 +350,7 @@ Object::~Object()
 
 void Object::SetID(uint16 set_id)
 {
+	if (m_click_only && GetID() != 0) { return; }
 	// Invoke base class
 	Entity::SetID(set_id);
 
@@ -373,6 +374,7 @@ void Object::ResetState()
 
 bool Object::Save()
 {
+	if (m_click_only) { return false; }
 	if (m_id) { // Update existing
 		content_db.UpdateObject(m_id, m_type, m_icon, m_data, m_inst);
 	} else { // Doesn't yet exist, add now
@@ -384,6 +386,7 @@ bool Object::Save()
 
 uint16 Object::VarSave()
 {
+	if (m_click_only) { return 0; }
 	if (m_id) { // Update existing
 		content_db.UpdateObject(m_id, m_type, m_icon, m_data, m_inst);
 	} else { // Doesn't yet exist, add now
@@ -396,6 +399,7 @@ uint16 Object::VarSave()
 // Remove object from database
 void Object::Delete(bool reset_state)
 {
+	if (m_click_only) { Depop(); return; }
 	if (m_id != 0) {
 		content_db.DeleteObject(m_id);
 	}
@@ -406,7 +410,7 @@ void Object::Delete(bool reset_state)
 }
 
 const EQ::ItemInstance* Object::GetItem(uint8 index) {
-	if (index < EQ::invtype::WORLD_SIZE) {
+	if (m_inst && index < EQ::invtype::WORLD_SIZE) {
 		return m_inst->GetItem(index);
 	}
 
@@ -581,6 +585,20 @@ void Object::RandomSpawn(bool send_packet) {
 
 bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 {
+	if (m_click_only) {
+		if (!sender || !click_object) {
+			return false;
+		}
+		// Existing pickup-veto acknowledgement: no item and no container window.
+		EQApplicationPacket ack(OP_ClickObject, sizeof(ClickObject_Struct));
+		auto *reply = reinterpret_cast<ClickObject_Struct *>(ack.pBuffer);
+		*reply = *click_object;
+		reply->drop_id = 0;
+		reply->player_id = sender->GetID();
+		sender->QueuePacket(&ack);
+		return true;
+	}
+
 	if (m_ground_spawn) {//This is a Cool Groundspawn
 		respawn_timer.Start();
 	}
@@ -589,7 +607,7 @@ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 		bool cursor_delete  = false;
 		bool duplicate_lore = false;
 
-		if (m_inst && sender) {
+		if (m_inst && sender && m_inst->GetItem()) {
 			// if there is a lore conflict, delete the offending item from the server inventory
 			// the client updates itself and takes care of sending "duplicate lore item" messages
 			auto item = m_inst->GetItem();
@@ -884,10 +902,11 @@ GroundSpawns* ZoneDatabase::LoadGroundSpawns(
 	const auto& l = GroundSpawnsRepository::GetWhere(
 		*this,
 		fmt::format(
-			"`zoneid` = {} AND (`version` = {} OR `version` = -1) {} LIMIT 50",
+			"`zoneid` = {} AND (`version` = {} OR `version` = -1) {} LIMIT {}",
 			zone_id,
 			instance_version,
-			ContentFilterCriteria::apply()
+			ContentFilterCriteria::apply(),
+			GroundSpawns::kMaxSpawns
 		)
 	);
 
@@ -937,6 +956,7 @@ uint32 Object::GetType()
 
 void Object::SetType(uint32 type)
 {
+	if (m_click_only) { return; }
 	m_type = type;
 	m_data.object_type = type;
 }
@@ -1153,6 +1173,7 @@ uint32 Object::GetItemID()
 
 void Object::SetItemID(uint32 itemid)
 {
+	if (m_click_only) { return; }
 	safe_delete(m_inst);
 
 	if (itemid)

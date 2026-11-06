@@ -4688,7 +4688,9 @@ void WorldServer::ProcessReload(const ServerReload::Request& request)
 
 		case ServerReload::Type::ZoneData:
 			ZoneStore::Instance()->LoadZones(content_db);
-			zone->LoadZoneCFG(zone->GetShortName(), zone->GetInstanceVersion());
+			if (zone && zone->IsLoaded()) {
+				zone->LoadZoneCFG(zone->GetShortName(), zone->GetInstanceVersion());
+			}
 			break;
 
 		default:

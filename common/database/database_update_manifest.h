@@ -7265,6 +7265,445 @@ ALTER TABLE `character_pet_buffs`
 	CHANGE COLUMN `instrument_mod` `instrument_mod` INT(10) UNSIGNED NOT NULL DEFAULT 10 AFTER `ExtraDIChance`;
 )",
 	},
+	ManifestEntry{
+		.version = 9331,
+		.description = "2026_07_28_achievement_content.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Achievement definitions and selectable reward metadata.
+
+CREATE TABLE IF NOT EXISTS `achievement_categories` (
+	`id` INT(10) UNSIGNED NOT NULL,
+	`parent_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`sequence` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`name` VARCHAR(255) NOT NULL DEFAULT '',
+	`description` TEXT NOT NULL,
+	`icon` VARCHAR(255) NOT NULL DEFAULT '',
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `achievements` (
+	`id` INT(10) UNSIGNED NOT NULL,
+	`name` VARCHAR(255) NOT NULL DEFAULT '',
+	`description` TEXT NOT NULL,
+	`icon_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`points` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`has_reward` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+	`client_flag` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`version` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`reset_on_version_change` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+	`enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+	PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `achievement_category_associations` (
+	`category_id` INT(10) UNSIGNED NOT NULL,
+	`sequence` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`achievement_id` INT(10) UNSIGNED NOT NULL,
+	`display_text` VARCHAR(255) NOT NULL DEFAULT '',
+	PRIMARY KEY (`category_id`, `achievement_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `achievement_components` (
+	`achievement_id` INT(10) UNSIGNED NOT NULL,
+	`component_type` TINYINT(3) UNSIGNED NOT NULL,
+	`sequence` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`component_id` INT(10) UNSIGNED NOT NULL,
+	`name` TEXT NOT NULL,
+	`description` TEXT NOT NULL,
+	PRIMARY KEY (`achievement_id`, `component_type`, `component_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `achievement_associations` (
+	`component_id` INT(10) UNSIGNED NOT NULL,
+	`required_count` INT(10) UNSIGNED NOT NULL DEFAULT 1,
+	PRIMARY KEY (`component_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Server-authored event bindings. Numeric enum values are defined in
+-- common/achievements.h and are intentionally not constrained by SQL ENUMs.
+CREATE TABLE IF NOT EXISTS `achievement_criteria` (
+	`id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`achievement_id` INT(10) UNSIGNED NOT NULL,
+	`component_type` TINYINT(3) UNSIGNED NOT NULL,
+	`component_sequence` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`component_id` INT(10) UNSIGNED NOT NULL,
+	`event_type` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`progress_mode` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`behavior` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`target_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`target_id2` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`target_value` BIGINT(20) NOT NULL DEFAULT 0,
+	`required_count` INT(10) UNSIGNED NOT NULL DEFAULT 1,
+	`enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+	PRIMARY KEY (`id`),
+	UNIQUE KEY `achievement_criteria_definition` (`achievement_id`, `component_type`, `component_id`, `event_type`, `target_id`, `target_id2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- All rows for one restriction_id must pass.
+CREATE TABLE IF NOT EXISTS `achievement_cast_requirements` (
+	`restriction_id` INT(10) UNSIGNED NOT NULL,
+	`achievement_id` INT(10) UNSIGNED NOT NULL,
+	`requires_completed` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+	PRIMARY KEY (`restriction_id`, `achievement_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Reward definitions are provider-independent. reward_sources links a
+-- selectable set to an achievement, task, or future source. Automatic rewards
+-- use reward_source_entries instead.
+CREATE TABLE IF NOT EXISTS `reward_sets` (
+	`reward_set_id` INT(10) UNSIGNED NOT NULL,
+	`title` VARCHAR(255) NOT NULL DEFAULT '',
+	`enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+	PRIMARY KEY (`reward_set_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `reward_options` (
+	`reward_set_id` INT(10) UNSIGNED NOT NULL,
+	`option_id` INT(10) UNSIGNED NOT NULL,
+	`sequence` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`label` VARCHAR(255) NOT NULL DEFAULT '',
+	`common_to_all` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+	`flags` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+	PRIMARY KEY (`reward_set_id`, `option_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `rewards` (
+	`reward_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`reward_type` TINYINT(3) UNSIGNED NOT NULL,
+	`reward_data_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`amount` BIGINT(20) UNSIGNED NOT NULL DEFAULT 1,
+	`description` VARCHAR(255) NOT NULL DEFAULT '',
+	`enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+	PRIMARY KEY (`reward_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `reward_option_entries` (
+	`reward_set_id` INT(10) UNSIGNED NOT NULL,
+	`option_id` INT(10) UNSIGNED NOT NULL,
+	`sequence` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`reward_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`reward_set_id`, `option_id`, `reward_id`),
+	UNIQUE KEY `reward_option_entries_set_reward` (`reward_set_id`, `reward_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `reward_sources` (
+	`source_type` TINYINT(3) UNSIGNED NOT NULL,
+	`source_id` BIGINT(20) UNSIGNED NOT NULL,
+	`reward_set_id` INT(10) UNSIGNED NOT NULL,
+	`enabled` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1,
+	PRIMARY KEY (`source_type`, `source_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `reward_source_entries` (
+	`source_type` TINYINT(3) UNSIGNED NOT NULL,
+	`source_id` BIGINT(20) UNSIGNED NOT NULL,
+	`sequence` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`reward_id` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`source_type`, `source_id`, `reward_id`),
+	UNIQUE KEY `reward_source_entries_source_sequence` (`source_type`, `source_id`, `sequence`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+)SQL",
+		.content_schema_update = true
+	},
+	ManifestEntry{
+		.version = 9332,
+		.description = "2026_07_28_achievement_state.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Character achievement state, reward delivery state, and queued state updates.
+
+CREATE TABLE IF NOT EXISTS `character_achievements` (
+	`character_id` INT(10) UNSIGNED NOT NULL,
+	`achievement_id` INT(10) UNSIGNED NOT NULL,
+	`version` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`completed_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	PRIMARY KEY (`character_id`, `achievement_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `character_achievement_progress` (
+	`character_id` INT(10) UNSIGNED NOT NULL,
+	`achievement_id` INT(10) UNSIGNED NOT NULL,
+	`component_type` TINYINT(3) UNSIGNED NOT NULL,
+	`component_sequence` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`component_id` INT(10) UNSIGNED NOT NULL,
+	`current_count` BIGINT(20) UNSIGNED NOT NULL DEFAULT 0,
+	`completed` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0,
+	`version` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`updated_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	PRIMARY KEY (`character_id`, `achievement_id`, `component_type`, `component_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- status: 0=claimed/in-flight, 1=granted, 2=explicit delivery failure.
+CREATE TABLE IF NOT EXISTS `character_achievement_rewards` (
+	`character_id` INT(10) UNSIGNED NOT NULL,
+	`achievement_id` INT(10) UNSIGNED NOT NULL,
+	`reward_id` BIGINT(20) UNSIGNED NOT NULL,
+	`status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`attempt_count` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`granted_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`last_attempt_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`last_error` VARCHAR(255) NOT NULL DEFAULT '',
+	PRIMARY KEY (`character_id`, `achievement_id`, `reward_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- status: 0=pending/in progress, 1=fully granted, 2=retryable failure,
+-- 3=ambiguous delivery.
+CREATE TABLE IF NOT EXISTS `character_achievement_reward_selections` (
+	`character_id` INT(10) UNSIGNED NOT NULL,
+	`achievement_id` INT(10) UNSIGNED NOT NULL,
+	`reward_set_id` INT(10) UNSIGNED NOT NULL,
+	`selected_option_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`attempt_count` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`claimed_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`last_attempt_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`last_error` VARCHAR(255) NOT NULL DEFAULT '',
+	PRIMARY KEY (`character_id`, `achievement_id`, `reward_set_id`),
+	KEY `character_achievement_reward_selections_status` (`status`, `character_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `character_task_reward_instances` (
+	`occurrence_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`character_id` INT(10) UNSIGNED NOT NULL,
+	`task_id` INT(10) UNSIGNED NOT NULL,
+	`accepted_time` INT(10) UNSIGNED NOT NULL,
+	PRIMARY KEY (`occurrence_id`),
+	UNIQUE KEY `character_task_reward_instances_source` (`character_id`, `task_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- status: 0=pending/in progress, 1=fully granted, 2=retryable failure,
+-- 3=ambiguous delivery.
+CREATE TABLE IF NOT EXISTS `character_task_reward_selections` (
+	`pending_reward_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`character_id` INT(10) UNSIGNED NOT NULL,
+	`task_id` INT(10) UNSIGNED NOT NULL,
+	`accepted_time` INT(10) UNSIGNED NOT NULL,
+	`source_instance_id` BIGINT(20) UNSIGNED NOT NULL,
+	`reward_set_id` INT(10) UNSIGNED NOT NULL,
+	`selected_option_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`attempt_count` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`claimed_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`last_attempt_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`last_error` VARCHAR(255) NOT NULL DEFAULT '',
+	PRIMARY KEY (`pending_reward_id`),
+	UNIQUE KEY `character_task_reward_selections_source` (`character_id`, `source_instance_id`),
+	KEY `character_task_reward_selections_status` (`status`, `character_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `character_task_rewards` (
+	`character_id` INT(10) UNSIGNED NOT NULL,
+	`pending_reward_id` INT(10) UNSIGNED NOT NULL,
+	`reward_id` BIGINT(20) UNSIGNED NOT NULL,
+	`status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`attempt_count` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`granted_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`last_attempt_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`last_error` VARCHAR(255) NOT NULL DEFAULT '',
+	PRIMARY KEY (`pending_reward_id`, `reward_id`),
+	KEY `character_task_rewards_character` (`character_id`, `pending_reward_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- status: 0=pending, 1=blocked, 2=processing under a bounded lease.
+CREATE TABLE IF NOT EXISTS `character_achievement_pending_updates` (
+	`update_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`character_id` INT(10) UNSIGNED NOT NULL,
+	`source_target_type` TINYINT(3) UNSIGNED NOT NULL,
+	`source_target_id` BIGINT(20) UNSIGNED NOT NULL,
+	`operation` TINYINT(3) UNSIGNED NOT NULL,
+	`achievement_id` INT(10) UNSIGNED NOT NULL,
+	`component_type` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`component_id` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`requested_value` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`version` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`status` TINYINT(3) UNSIGNED NOT NULL DEFAULT 0,
+	`attempt_count` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`created_at` INT(10) UNSIGNED NOT NULL,
+	`last_attempt_at` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+	`last_error` VARCHAR(255) NOT NULL DEFAULT '',
+	PRIMARY KEY (`update_id`),
+	KEY `character_achievement_updates_character` (`character_id`, `status`, `update_id`),
+	KEY `character_achievement_updates_status` (`status`, `character_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+)SQL",
+		.content_schema_update = false
+	},
+	ManifestEntry{
+		.version = 9333,
+		.description = "2026_10_31_task_reward_progression_state.sql",
+		.check = "SHOW COLUMNS FROM character_task_reward_selections LIKE 'progression_count'",
+		.condition = "empty",
+		.match = "",
+		.sql = R"SQL(
+-- Freeze distinct quest completion count with the durable reward occurrence.
+-- NULL identifies a legacy/static reward; zero is a valid progression snapshot.
+ALTER TABLE character_task_reward_selections
+ ADD COLUMN IF NOT EXISTS progression_count INT UNSIGNED NULL DEFAULT NULL;
+)SQL",
+		.content_schema_update = false
+	},
+	ManifestEntry{
+		.version = 9334,
+		.description = "2026_10_31_task_reward_progression_content.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Optional per-task membership and option gates. Empty tables preserve static rewards.
+CREATE TABLE IF NOT EXISTS task_reward_progression_members (
+ task_id INT UNSIGNED NOT NULL,
+ qualifying_task_id INT UNSIGNED NOT NULL,
+ PRIMARY KEY (task_id, qualifying_task_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE TABLE IF NOT EXISTS task_reward_option_gates (
+ task_id INT UNSIGNED NOT NULL,
+ option_id INT UNSIGNED NOT NULL,
+ minimum_completions INT UNSIGNED NOT NULL,
+ PRIMARY KEY (task_id, option_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+)SQL",
+		.content_schema_update = true
+	},
+	ManifestEntry{
+		.version = 9335,
+		.description = "2026_11_01_shared_task_average_levels.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Average-level content policy for original shared missions. Empty table
+-- preserves existing per-character admission. Mer requires an enabled row.
+SET NAMES utf8mb4;
+SET SESSION check_constraint_checks=1;
+CREATE TABLE IF NOT EXISTS shared_task_average_level_policies (
+ task_id INT UNSIGNED NOT NULL,
+ minimum_average_level TINYINT UNSIGNED NOT NULL,
+ enabled TINYINT UNSIGNED NOT NULL DEFAULT 0,
+ PRIMARY KEY(task_id),
+ CHECK(minimum_average_level BETWEEN 1 AND 255),
+ CHECK(enabled IN(0,1))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TEMPORARY TABLE IF EXISTS `_shared_average_schema_guard`;
+CREATE TEMPORARY TABLE `_shared_average_schema_guard`(ok TINYINT NOT NULL CHECK(ok=1))ENGINE=InnoDB;
+INSERT INTO `_shared_average_schema_guard` VALUES(
+ (SELECT COUNT(*)FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND ENGINE='InnoDB'AND TABLE_TYPE='BASE TABLE')=1
+ AND(SELECT COUNT(*)FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies')=3
+ AND(SELECT COUNT(*)FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND COLUMN_NAME='task_id'AND DATA_TYPE='int'AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO')=1
+ AND(SELECT COUNT(*)FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND COLUMN_NAME IN('minimum_average_level','enabled')AND DATA_TYPE='tinyint'AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO')=2
+ AND(SELECT COUNT(*)FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND INDEX_NAME='PRIMARY')=1
+ AND(SELECT COUNT(*)FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE()AND TABLE_NAME='shared_task_average_level_policies'AND INDEX_NAME='PRIMARY'AND COLUMN_NAME='task_id'AND SEQ_IN_INDEX=1)=1
+);
+DROP TEMPORARY TABLE `_shared_average_schema_guard`;
+)SQL",
+		.content_schema_update = true
+	},
+	ManifestEntry{
+		.version = 9336,
+		.description = "2026_11_01_merchant_language_requirements.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Content schema 9336. Requires the matching merchant-language binary.
+-- Additive defaults preserve unrestricted existing merchant catalogues.
+ALTER TABLE merchantlist
+ ADD COLUMN IF NOT EXISTS language_required SMALLINT NOT NULL DEFAULT -1,
+ ADD COLUMN IF NOT EXISTS language_skill_required TINYINT UNSIGNED NOT NULL DEFAULT 0;
+-- Refuse incompatible pre-existing columns instead of silently adopting them.
+DROP TEMPORARY TABLE IF EXISTS `_merchant_language_schema_guard`;
+CREATE TEMPORARY TABLE `_merchant_language_schema_guard`(ok TINYINT NOT NULL CHECK(ok=1)) ENGINE=InnoDB;
+INSERT INTO `_merchant_language_schema_guard` VALUES (
+ (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='merchantlist' AND COLUMN_NAME='language_required' AND DATA_TYPE='smallint' AND LOCATE('unsigned',COLUMN_TYPE)=0 AND IS_NULLABLE='NO' AND COLUMN_DEFAULT='-1')=1
+ AND (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='merchantlist' AND COLUMN_NAME='language_skill_required' AND DATA_TYPE='tinyint' AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO' AND COLUMN_DEFAULT='0')=1
+);
+DROP TEMPORARY TABLE `_merchant_language_schema_guard`;
+)SQL",
+		.content_schema_update = true
+	},
+	ManifestEntry{
+		.version = 9337,
+		.description = "2026_11_02_task_spell_exchange_policies.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Explicit policies for original personal spell exchange tasks only.
+CREATE TABLE IF NOT EXISTS task_spell_exchange_policies (
+ task_id INT UNSIGNED NOT NULL,
+ return_item_id INT UNSIGNED NOT NULL,
+ language_required SMALLINT NOT NULL DEFAULT -1,
+ language_skill_required TINYINT UNSIGNED NOT NULL DEFAULT 0,
+ faction_id INT UNSIGNED NOT NULL DEFAULT 0,
+ maximum_faction_con TINYINT UNSIGNED NOT NULL DEFAULT 0,
+ hide_known_spells TINYINT UNSIGNED NOT NULL DEFAULT 0,
+ PRIMARY KEY(task_id),
+ CHECK(return_item_id>0),
+ CHECK((language_required=-1 AND language_skill_required=0) OR (language_required BETWEEN 0 AND 27 AND language_skill_required<=100)),
+ CHECK((faction_id=0 AND maximum_faction_con=0) OR (faction_id>0 AND maximum_faction_con BETWEEN 1 AND 9)),
+ CHECK(hide_known_spells IN(0,1))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TEMPORARY TABLE IF EXISTS `_spell_policy_schema_guard`;
+CREATE TEMPORARY TABLE `_spell_policy_schema_guard`(ok TINYINT NOT NULL CHECK(ok=1)) ENGINE=InnoDB;
+INSERT INTO `_spell_policy_schema_guard` VALUES(
+ (SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='task_spell_exchange_policies' AND ENGINE='InnoDB' AND TABLE_TYPE='BASE TABLE')=1
+ AND (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='task_spell_exchange_policies')=7
+ AND (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='task_spell_exchange_policies' AND COLUMN_NAME IN('task_id','return_item_id','faction_id') AND DATA_TYPE='int' AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO')=3
+ AND (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='task_spell_exchange_policies' AND COLUMN_NAME='language_required' AND DATA_TYPE='smallint' AND LOCATE('unsigned',COLUMN_TYPE)=0 AND IS_NULLABLE='NO' AND COLUMN_DEFAULT='-1')=1
+ AND (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='task_spell_exchange_policies' AND COLUMN_NAME IN('language_skill_required','maximum_faction_con','hide_known_spells') AND DATA_TYPE='tinyint' AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO' AND COLUMN_DEFAULT='0')=3
+ AND (SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='task_spell_exchange_policies' AND INDEX_NAME='PRIMARY')=1
+ AND (SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='task_spell_exchange_policies' AND INDEX_NAME='PRIMARY' AND COLUMN_NAME='task_id' AND SEQ_IN_INDEX=1)=1
+);
+DROP TEMPORARY TABLE `_spell_policy_schema_guard`;
+)SQL",
+		.content_schema_update = true
+	},
+	ManifestEntry{
+		.version = 9338,
+		.description = "2026_11_02_task_spell_reward_policy_state.sql",
+		.check = "SELECT 1",
+		.condition = "not_empty",
+		.match = "",
+		.sql = R"SQL(
+-- Pin policy at occurrence creation. Legacy occurrences retain unrestricted 0.
+ALTER TABLE character_task_reward_selections ADD COLUMN IF NOT EXISTS hide_known_spells TINYINT UNSIGNED NOT NULL DEFAULT 0;
+DROP TEMPORARY TABLE IF EXISTS `_spell_policy_state_guard`;
+CREATE TEMPORARY TABLE `_spell_policy_state_guard`(ok TINYINT NOT NULL CHECK(ok=1)) ENGINE=InnoDB;
+INSERT INTO `_spell_policy_state_guard` VALUES(
+ (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='character_task_reward_selections' AND COLUMN_NAME='hide_known_spells' AND DATA_TYPE='tinyint' AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO' AND COLUMN_DEFAULT='0')=1
+ AND NOT EXISTS(SELECT 1 FROM character_task_reward_selections WHERE hide_known_spells NOT IN(0,1))
+);
+DROP TEMPORARY TABLE `_spell_policy_state_guard`;
+
+-- Shared wire identity namespace. Never reset this row during content rollback.
+CREATE TABLE IF NOT EXISTS reward_selection_wire_allocator (
+ id TINYINT UNSIGNED NOT NULL,
+ last_id BIGINT UNSIGNED NOT NULL DEFAULT 0,
+ PRIMARY KEY(id),
+ CHECK(id=1), CHECK(last_id<4294967295)
+) ENGINE=InnoDB;
+INSERT IGNORE INTO reward_selection_wire_allocator(id,last_id) VALUES(1,0);
+DROP TEMPORARY TABLE IF EXISTS `_reward_wire_schema_guard`;
+CREATE TEMPORARY TABLE `_reward_wire_schema_guard`(ok TINYINT NOT NULL CHECK(ok=1)) ENGINE=InnoDB;
+INSERT INTO `_reward_wire_schema_guard` VALUES(
+ (SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='reward_selection_wire_allocator' AND ENGINE='InnoDB' AND TABLE_TYPE='BASE TABLE')=1
+ AND (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='reward_selection_wire_allocator')=2
+ AND (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='reward_selection_wire_allocator' AND COLUMN_NAME='id' AND DATA_TYPE='tinyint' AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO')=1
+ AND (SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='reward_selection_wire_allocator' AND COLUMN_NAME='last_id' AND DATA_TYPE='bigint' AND LOCATE('unsigned',COLUMN_TYPE)>0 AND IS_NULLABLE='NO' AND COLUMN_DEFAULT='0')=1
+ AND (SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='reward_selection_wire_allocator' AND INDEX_NAME='PRIMARY')=1
+ AND (SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='reward_selection_wire_allocator' AND INDEX_NAME='PRIMARY' AND COLUMN_NAME='id' AND SEQ_IN_INDEX=1)=1
+ AND (SELECT COUNT(*) FROM reward_selection_wire_allocator)=1
+ AND EXISTS(SELECT 1 FROM reward_selection_wire_allocator WHERE id=1 AND last_id<4294967295)
+);
+DROP TEMPORARY TABLE `_reward_wire_schema_guard`;
+)SQL",
+		.content_schema_update = false
+	},
 // -- template; copy/paste this when you need to create a new entry
 //	ManifestEntry{
 //		.version = 9228,

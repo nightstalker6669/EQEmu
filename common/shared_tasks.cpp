@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "shared_tasks.h"
+#include "shared_task_admission.h"
 
 #include "common/repositories/character_data_repository.h"
 
@@ -77,54 +78,56 @@ SharedTaskRequest SharedTask::GetRequestCharacters(Database &db, uint32_t reques
 	SharedTaskRequest request{};
 
 	request.group_type = SharedTaskRequestGroupType::Group;
-	auto characters = CharacterDataRepository::GetWhere(
-		db, fmt::format(
-			"id IN (select character_id from group_id where group_id = (select group_id from group_id where character_id = {}))",
-			requested_character_id
-		)
-	);
-
-	if (characters.empty()) {
-		request.group_type = SharedTaskRequestGroupType::Raid;
-		characters = CharacterDataRepository::GetWhere(
-			db, fmt::format(
-				"id IN (select charid from raid_members where raidid = (select raidid from raid_members where charid = {}))",
-				requested_character_id
-			)
-		);
+	auto fetch = [&](const std::string &where) {
+		return db.QueryDatabase(fmt::format("SELECT id, name, level FROM character_data WHERE {}", where));
+	};
+	auto characters = fetch(fmt::format(
+		"id IN (select character_id from group_id where group_id = "
+		"(select group_id from group_id where character_id = {}))", requested_character_id));
+	if (!characters.Success()) {
+		return request;
 	}
-
-	if (characters.empty()) // solo request
-	{
+	if (!characters.RowCount()) {
+		request.group_type = SharedTaskRequestGroupType::Raid;
+		characters = fetch(fmt::format(
+			"id IN (select charid from raid_members where raidid = "
+			"(select raidid from raid_members where charid = {}))", requested_character_id));
+		if (!characters.Success()) {
+			return request;
+		}
+	}
+	if (!characters.RowCount()) {
 		request.group_type = SharedTaskRequestGroupType::Solo;
-		characters = CharacterDataRepository::GetWhere(
-			db, fmt::format(
-				"id = {} LIMIT 1",
-				requested_character_id
-			)
-		);
+		characters = fetch(fmt::format("id = {} LIMIT 1", requested_character_id));
+		if (!characters.Success()) {
+			return request;
+		}
 	}
 
 	request.leader_id     = requested_character_id;
 	request.lowest_level  = std::numeric_limits<uint8_t>::max();
 	request.highest_level = 0;
-	request.members.reserve(characters.size());
-	for (const auto& character: characters)
+	request.members.reserve(characters.RowCount());
+	for (auto row: characters)
 	{
-		request.lowest_level  = std::min(request.lowest_level, character.level);
-		request.highest_level = std::max(request.highest_level, character.level);
-		request.character_ids.emplace_back(character.id); // convenience
-
-		SharedTaskMember member = {};
-		member.character_id   = character.id;
-		member.character_name = character.name;
-		if (character.id == requested_character_id)
-		{
-			member.is_leader = true;
+		const auto id = SharedTaskAdmission::Number(row[0]);
+		const auto level = SharedTaskAdmission::Number(row[2]);
+		if (!id || !*id || *id > UINT32_MAX || !level || !*level || *level > 255 || !row[1] || !*row[1]) {
+			return {};
 		}
+		request.lowest_level = std::min(request.lowest_level, static_cast<uint32_t>(*level));
+		request.highest_level = std::max(request.highest_level, static_cast<uint32_t>(*level));
+		request.character_ids.emplace_back(static_cast<uint32_t>(*id));
+		SharedTaskMember member{};
+		member.character_id = static_cast<uint32_t>(*id);
+		member.character_name = row[1];
+		member.is_leader = member.character_id == requested_character_id;
 		request.members.emplace_back(member);
 	}
 
+	if (request.members.empty() || std::find(request.character_ids.begin(), request.character_ids.end(), requested_character_id) == request.character_ids.end()) {
+		return {};
+	}
 	return request;
 }
 

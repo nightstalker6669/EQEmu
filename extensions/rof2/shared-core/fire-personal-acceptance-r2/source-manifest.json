@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "package": "fire-personal-acceptance-r2",
+  "status": "INTEGRATION_SOURCE_ONLY_UNCOMPILED_NOT_APPLIED",
+  "runtime_checkout_head_provenance": "aedc7e878f325a8beaffb04c932fb3c1469f69d3",
+  "runtime_head_is_exact_preimage": false,
+  "target_files": {
+    "zone/task_client_state.cpp": {
+      "preimage_sha256": "1b25852d7d2011a0669dab8108e7026ad6cc37422ef0783223d1d45b9f1c3c14",
+      "postimage_sha256": "7788256d13297bda707f27149b8a08cd6067ff2c6217f890c3bc76e27f06cbcd",
+      "expected_absent": false
+    },
+    "zone/fire_personal_occurrence.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "78b77ca30ade7ee624c10b89d33d9c1f5f7ce09490e44b9ce68e195c5cd59fb0",
+      "expected_absent": true
+    },
+    "zone/fire_personal_after_reward_r2.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "558f7de1b0f4f695f58c6cdd12766659b78f8e350bf8c3aa35bc4ace9bd8e91b",
+      "expected_absent": true
+    },
+    "zone/fire_personal_successor_dispatch.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "41e3c01c08b52289760a05406059085f23124a3ed77d0a9ce7fff9ab10c9c4b1",
+      "expected_absent": true
+    }
+  },
+  "reviewed_input_hashes": {
+    "fire_personal_occurrence.h.disabled": "41e85cea3c5f9b76147c5e4fb00f167dc0c61a65c6b98e18265ebcf0835d50d5",
+    "fire_personal_after_reward_r2.h.disabled": "7ddf62101b3b62220daee63997d8a2575c1be27f2f152daacddd8c1495390c88",
+    "fire_personal_successor_dispatch.h.disabled": "b27eb417f4e3c80fb7593547e6e99938354a4cf56de69242094af2b2489ae99e",
+    "AFTER-REWARD-R2-INTEGRATION.md": "f2ac5a2a8f8d8503da5867465886dafedcdfa0a14ac3f32ae3102464ce5dfeff",
+    "PERSONAL-SUCCESSOR-DISPATCH-INTEGRATION.md": "4b446867e69f4235d299bb8bb280a73f1651bf817fbac5bd38c1abf16c7547c8"
+  },
+  "published_baseline": {
+    "branch": "rof2-shared-core",
+    "commit": "2d05521f1c0ae819bea55f416e82e07d40b610e0",
+    "zone/task_client_state.cpp_sha256": "f412c63281a97d2b7dd6ccf54b87ba844b30532ddbe3519644bc95b706506e3c",
+    "matches_required_runtime_preimage": false,
+    "three_new_header_paths_absent": true
+  },
+  "artifact_sha256": {
+    "native-integration.patch": "b71dc874870e6c0ab0ac78f85536c75913da594089ae4a18b3aa9e7cdd976764",
+    "native-rollback.patch": "1de71a01e2dacb6c17f663e94d44292eabdd8f599eab66c555646e2c26eae2b8",
+    "INTEGRATION.md": "62278aadd318c69e7f2fabe18eaacf425bbc505281bbac963569d4daa7e9798b"
+  },
+  "limits": {
+    "compiled": false,
+    "tests_run": false,
+    "runtime_actions": false,
+    "sql_writes": 0,
+    "whole_fire_activation": false,
+    "raw_branch_native_files_modified": false
+  },
+  "rollback_scope": "Exact four reviewed postimages only; restore task source and remove three new headers."
+}

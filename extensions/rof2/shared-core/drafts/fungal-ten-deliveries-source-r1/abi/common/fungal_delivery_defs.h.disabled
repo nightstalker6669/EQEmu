@@ -1,0 +1,25 @@
+#pragma once
+#include <cstdint>
+namespace FungalDeliveryDefs {
+struct Goal {uint8_t scope;uint32_t task,activity,item,maximum,npc,version,spawn;};
+// Read-only finite native content roles. These values never construct an
+// operation/proof or authorize inventory mutation by themselves.
+inline constexpr Goal Goals[]={
+ {1,920141,8,40997,1,481071,0,0},
+ {1,920142,4,43579,2,481120,0,150231},
+ {1,920142,5,43580,1,481120,0,150231},
+ {1,920142,6,43581,1,481120,0,150231},
+ {1,920142,7,43582,1,481120,0,150231},
+ {2,920143,7,43583,4,481052,0,149898},
+ {2,920143,8,43584,3,481052,0,149898},
+ {2,920143,9,43586,2,481052,0,149898},
+ {2,920143,11,43587,1,481093,0,150084},
+ {2,920144,10,41979,1,481900,1,304054000}
+};
+inline const Goal* Find(uint8_t scope,uint32_t task,uint32_t activity)noexcept {
+ for(const auto& g:Goals)if(g.scope==scope&&g.task==task&&g.activity==activity)return &g;
+ return nullptr;
+}
+inline bool Personal(uint32_t task,uint32_t activity)noexcept{return Find(1,task,activity)!=nullptr;}
+inline bool Shared(uint32_t task,uint32_t activity)noexcept{return Find(2,task,activity)!=nullptr;}
+}

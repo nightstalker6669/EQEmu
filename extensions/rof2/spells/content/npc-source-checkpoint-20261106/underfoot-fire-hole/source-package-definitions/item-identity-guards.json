@@ -1,0 +1,124 @@
+{
+  "items": [
+    {
+      "id": 47748,
+      "Name": "Jagged Shard",
+      "lore": "Jagged Shard"
+    },
+    {
+      "id": 47749,
+      "Name": "Pulsing Sphere",
+      "lore": "Pulsing Sphere"
+    },
+    {
+      "id": 47750,
+      "Name": "Chipped Claw",
+      "lore": "Chipped Claw"
+    },
+    {
+      "id": 47751,
+      "Name": "Crumbling Head",
+      "lore": "Crumbling Head"
+    },
+    {
+      "id": 47752,
+      "Name": "Broken Torso",
+      "lore": "Broken Torso"
+    },
+    {
+      "id": 47753,
+      "Name": "Cracking Legs",
+      "lore": "Cracking Legs"
+    },
+    {
+      "id": 47754,
+      "Name": "Worn Arms",
+      "lore": "Worn Arms"
+    },
+    {
+      "id": 47755,
+      "Name": "Eroding Feet",
+      "lore": "Eroding Feet"
+    },
+    {
+      "id": 47757,
+      "Name": "Vault Key",
+      "lore": "Vault Key"
+    },
+    {
+      "id": 47758,
+      "Name": "Keystone Mold",
+      "lore": "Keystone Mold"
+    },
+    {
+      "id": 47760,
+      "Name": "Unstable Glob of Clay",
+      "lore": "Unstable Glob of Clay"
+    },
+    {
+      "id": 47761,
+      "Name": "Vial of Purified Water",
+      "lore": "Vial of Purified Water"
+    },
+    {
+      "id": 110231,
+      "Name": "Beguiler's Last Answer",
+      "lore": "If charming does not work, removal will"
+    },
+    {
+      "id": 110232,
+      "Name": "Naglebrak's Cleansing Tool",
+      "lore": "You are not sure what it cleansed"
+    },
+    {
+      "id": 110240,
+      "Name": "Battlestaff of Symbols",
+      "lore": "The glow surges when mana is used nearby"
+    },
+    {
+      "id": 110244,
+      "Name": "Brute's War Spear",
+      "lore": "War spear once owned by the Gigyn Brute"
+    },
+    {
+      "id": 110259,
+      "Name": "Telmiran War Shield",
+      "lore": "Used by only the most elite telmirans"
+    },
+    {
+      "id": 110271,
+      "Name": "Tarnished Stone",
+      "lore": "Appears partially scarred by digestive enzymes"
+    },
+    {
+      "id": 110272,
+      "Name": "Orb of Timeless Stone",
+      "lore": "A stone orb imbued with strong earthen energies"
+    },
+    {
+      "id": 110285,
+      "Name": "Slime-Etched Breastplate",
+      "lore": "Metal chestplate that has been burned by an acidic slime"
+    },
+    {
+      "id": 110286,
+      "Name": "Slime-Etched Leggings",
+      "lore": "Metal leggings that have been burned by an acidic slime"
+    },
+    {
+      "id": 110296,
+      "Name": "Eyepiece of the Fancy Tinker",
+      "lore": "Made by crafters trained in Ak'Anon"
+    },
+    {
+      "id": 110297,
+      "Name": "Orb of Suspension",
+      "lore": "This orb feels as if it has no weight"
+    }
+  ],
+  "item_edits": 0,
+  "water": 47761,
+  "Orb": 110297,
+  "legacy_water4499_preserved": true,
+  "Keystone47759_not_NPC_loot": true
+}

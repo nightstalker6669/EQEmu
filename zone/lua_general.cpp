@@ -42,6 +42,9 @@
 #include "zone/questmgr.h"
 #include "zone/worldserver.h"
 #include "zone/zone.h"
+#include "zone/client.h"
+#include "zone/npc.h"
+#include "zone/xorbb_gems_state.h"
 
 #include "lua.hpp"
 #include "luabind/luabind.hpp"
@@ -880,6 +883,59 @@ uint16 lua_create_door(const char *model, float x, float y, float z, float h, ui
 	return quest_manager.CreateDoor(model, x, y, z, h, open_type, size);
 }
 
+luabind::object lua_create_transient_click_object(
+	lua_State *L, std::string owner, std::string model, float x, float y, float z, float heading)
+{
+	if (model.find('\0') != std::string::npos) {
+		return luabind::object();
+	}
+	const auto handle = entity_list.CreateTransientClickObject(
+		owner, model.c_str(), glm::vec4(x, y, z, heading));
+	if (handle.first == 0) {
+		return luabind::object();
+	}
+	auto result = luabind::newtable(L);
+	result["entity_id"] = handle.first;
+	result["token"] = handle.second;
+	return result;
+}
+
+bool lua_remove_transient_click_object(std::string owner, int entity_id, std::string token)
+{
+	if (entity_id <= 0 || entity_id > 65535) {
+		return false;
+	}
+	return entity_list.RemoveTransientClickObject(owner, static_cast<uint16>(entity_id), token);
+}
+
+luabind::object lua_create_transient_door(
+	lua_State *L, std::string owner, std::string model, float x, float y, float z, float heading,
+	int open_type, int size
+) {
+	if (open_type < 0 || open_type > 255 || size <= 0 || size > 65535 ||
+		model.find('\0') != std::string::npos) {
+		return luabind::object();
+	}
+	const auto handle = entity_list.CreateTransientDoor(
+		owner, model.c_str(), glm::vec4(x, y, z, heading),
+		static_cast<uint8>(open_type), static_cast<uint16>(size)
+	);
+	if (handle.first == 0) {
+		return luabind::object();
+	}
+	auto result = luabind::newtable(L);
+	result["entity_id"] = handle.first;
+	result["token"] = handle.second;
+	return result;
+}
+
+bool lua_remove_transient_door(std::string owner, int entity_id, std::string token) {
+	if (entity_id <= 0 || entity_id > 65535) {
+		return false;
+	}
+	return entity_list.RemoveTransientDoor(owner, static_cast<uint16>(entity_id), token);
+}
+
 void lua_modify_npc_stat(std::string stat, std::string value) {
 	quest_manager.ModifyNPCStat(stat, value);
 }
@@ -948,6 +1004,110 @@ std::string lua_get_rule(std::string rule_name) {
 	std::string rule_value;
 	RuleManager::Instance()->GetRule(rule_name, rule_value);
 	return rule_value;
+}
+
+static luabind::object xorbb_state_result(lua_State* L, const XorbbGemsState::Result& r)
+{
+	auto out = luabind::newtable(L);
+	out["ok"] = r.ok;
+	out["status"] = r.status;
+	// A committed operation is not a cross-zone event/terminal ordering receipt.
+	out["terminal_ready"] = false;
+	auto values = luabind::newtable(L);
+	for (const auto& entry : r.values) { values[entry.first] = entry.second; }
+	out["values"] = values;
+	return out;
+}
+
+static luabind::object lua_xorbb_gems_state(lua_State* L, Lua_Client client,
+	std::string identity, uint32 instance, std::string op, std::string field)
+{
+	XorbbGemsState::Result invalid;
+	int64_t occurrence = 0;
+	Client* c = client;
+	auto owner = quest_manager.GetOwner();
+	if (!XorbbGemsState::Positive(identity, occurrence) || instance > UINT16_MAX || !zone || !owner) {
+		return xorbb_state_result(L, invalid);
+	}
+	uint32 character = 0;
+	if (c) {
+		if (c->GetSharedTaskId() != occurrence) { return xorbb_state_result(L, invalid); }
+		character = c->CharacterID();
+	}
+	if (op == "fail" && field == "participant_death") {
+		// Exact event character; never infer a later player's current occurrence.
+		if (!c || owner != c || !owner->IsClient()) { return xorbb_state_result(L, invalid); }
+	} else if (op == "fail") {
+		if (!owner->IsNPC() || zone->GetZoneID() != 753 || zone->GetInstanceVersion() != 3 ||
+			instance == 0 || instance != zone->GetInstanceID() ||
+			owner->GetEntityVariable("xorbb_gems_occurrence") != identity ||
+			owner->GetEntityVariable("xorbb_gems_instance") != std::to_string(instance)) {
+			return xorbb_state_result(L, invalid);
+		}
+		const auto npc = owner->CastToNPC();
+		const bool trapped = field == "trapped_open" && npc->GetNPCTypeID() == 753963 &&
+			owner->GetEntityVariable("xorbb_gems_role") == "trapped_treasure_chest";
+		const bool contestant = (field == "contestant_killed" || field == "contestant_attribution_unknown") &&
+			npc->GetNPCTypeID() == 753964 && owner->GetEntityVariable("xorbb_gems_role") == "failed_contestant";
+		if (!trapped && !contestant) { return xorbb_state_result(L, invalid); }
+	} else if (op == "initialize") {
+		if (!c || quest_manager.GetInitiator() != c || !owner->IsNPC() ||
+			owner->CastToNPC()->GetNPCTypeID() != 753191 || zone->GetZoneID() != 753 ||
+			zone->GetInstanceID() != 0 || instance != 0) { return xorbb_state_result(L, invalid); }
+	} else if (op == "bind" || op == "read") {
+		if (!c || zone->GetZoneID() != 753 || zone->GetInstanceVersion() != 3 ||
+			instance == 0 || instance != zone->GetInstanceID()) { return xorbb_state_result(L, invalid); }
+	} else { return xorbb_state_result(L, invalid); }
+	return xorbb_state_result(L, XorbbGemsState::Apply(database, occurrence, character,
+		static_cast<uint16_t>(instance), op, field, ""));
+}
+
+static luabind::object lua_xorbb_chrom_state(lua_State* L, Lua_Client client,
+	Lua_NPC chrom, std::string identity, uint32 instance, std::string op,
+	std::string field, std::string value)
+{
+	XorbbGemsState::Result invalid;
+	int64_t occurrence = 0;
+	Client* c = client;
+	NPC* n = chrom;
+	if (!XorbbGemsState::Positive(identity, occurrence) || !n || n->GetNPCTypeID() != 753966 ||
+		!zone || zone->GetZoneID() != 753 || zone->GetInstanceVersion() != 3 || instance == 0 ||
+		instance > UINT16_MAX || instance != zone->GetInstanceID() || op.compare(0, 6, "chrom_") != 0) {
+		return xorbb_state_result(L, invalid);
+	}
+	uint32 character = 0;
+	if (c) {
+		if (c->GetSharedTaskId() != occurrence) { return xorbb_state_result(L, invalid); }
+		character = c->CharacterID();
+	}
+	if (op == "chrom_initialize") {
+		if (!c || n->GetHPRatio() < 100 || !n->GetEntityVariable("xorbb_chrom_occurrence").empty() ||
+			!n->GetEntityVariable("xorbb_chrom_instance").empty()) { return xorbb_state_result(L, invalid); }
+	} else if (quest_manager.GetOwner() != n ||
+		n->GetEntityVariable("xorbb_chrom_occurrence") != identity ||
+		n->GetEntityVariable("xorbb_chrom_instance") != std::to_string(instance)) {
+		return xorbb_state_result(L, invalid);
+	}
+	if (op == "chrom_slot") {
+		int64_t entity = 0;
+		if (!XorbbGemsState::Positive(value, entity) || entity > UINT16_MAX) { return xorbb_state_result(L, invalid); }
+		auto add = entity_list.GetNPCByID(static_cast<uint16>(entity));
+		bool match = false;
+		for (size_t index = 0; index < XorbbGemsState::Waves.size(); ++index) {
+			const auto hp = std::to_string(XorbbGemsState::Waves[index]);
+			for (auto slot : {1, 2}) {
+				if (field == "wave" + hp + "_slot" + std::to_string(slot) && add &&
+					add->GetNPCTypeID() == 753973 + index &&
+					add->GetEntityVariable("xorbb_chrom_occurrence") == identity &&
+					add->GetEntityVariable("xorbb_chrom_instance") == std::to_string(instance) &&
+					add->GetEntityVariable("xorbb_chrom_wave") == hp &&
+					add->GetEntityVariable("xorbb_chrom_slot") == std::to_string(slot)) { match = true; }
+			}
+		}
+		if (!match) { return xorbb_state_result(L, invalid); }
+	}
+	return xorbb_state_result(L, XorbbGemsState::Apply(database, occurrence, character,
+		static_cast<uint16_t>(instance), op, field, value));
 }
 
 std::string lua_get_data(std::string bucket_key) {
@@ -6060,6 +6220,10 @@ luabind::scope lua_register_general() {
 		luabind::def("create_ground_object_from_model", (uint16(*)(const char*,float,float,float,float))&lua_create_ground_object_from_model),
 		luabind::def("create_ground_object_from_model", (uint16(*)(const char*,float,float,float,float,uint8))&lua_create_ground_object_from_model),
 		luabind::def("create_ground_object_from_model", (uint16(*)(const char*,float,float,float,float,uint8,uint32))&lua_create_ground_object_from_model),
+		luabind::def("create_transient_click_object", &lua_create_transient_click_object),
+		luabind::def("remove_transient_click_object", &lua_remove_transient_click_object),
+		luabind::def("create_transient_door", &lua_create_transient_door),
+		luabind::def("remove_transient_door", &lua_remove_transient_door),
 		luabind::def("create_door", (uint16(*)(const char*,float,float,float,float))&lua_create_door),
 		luabind::def("create_door", (uint16(*)(const char*,float,float,float,float,uint8))&lua_create_door),
 		luabind::def("create_door", (uint16(*)(const char*,float,float,float,float,uint8,uint16))&lua_create_door),
@@ -6090,6 +6254,8 @@ luabind::scope lua_register_general() {
 		luabind::def("say_link", (std::string(*)(std::string,bool,std::string))&lua_say_link),
 		luabind::def("set_rule", (void(*)(std::string, std::string))&lua_set_rule),
 		luabind::def("get_rule", (std::string(*)(std::string))&lua_get_rule),
+		luabind::def("xorbb_gems_state", &lua_xorbb_gems_state),
+		luabind::def("xorbb_chrom_state", &lua_xorbb_chrom_state),
 		luabind::def("get_data", (std::string(*)(std::string))&lua_get_data),
 		luabind::def("get_data_expires", (std::string(*)(std::string))&lua_get_data_expires),
 		luabind::def("set_data", (void(*)(std::string, std::string))&lua_set_data),

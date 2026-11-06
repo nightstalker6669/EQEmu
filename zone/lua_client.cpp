@@ -32,6 +32,7 @@
 #include "zone/lua_packet.h"
 #include "zone/lua_raid.h"
 #include "zone/titles.h"
+#include "common/repositories/shared_task_dynamic_zones_repository.h"
 
 #include "lua.hpp"
 #include "luabind/luabind.hpp"
@@ -456,6 +457,11 @@ int16 Lua_Client::Admin() {
 uint32 Lua_Client::CharacterID() {
 	Lua_Safe_Call_Int();
 	return self->CharacterID();
+}
+
+uint16 Lua_Client::GetPassengerBoatID() {
+	Lua_Safe_Call_Int();
+	return self->GetPassengerBoatID();
 }
 
 int Lua_Client::GuildRank() {
@@ -1430,6 +1436,44 @@ bool Lua_Client::IsTaskActive(int task) {
 bool Lua_Client::IsTaskActivityActive(int task, int activity) {
 	Lua_Safe_Call_Bool();
 	return self->IsTaskActivityActive(task, activity);
+}
+
+uint16 Lua_Client::GetSharedTaskInstanceID(uint32 task_id, uint32 zone_id, uint32 zone_version) {
+	Lua_Safe_Call_Int();
+	const auto state = self->GetTaskState();
+	const auto identity = self->GetSharedTaskId();
+	if (!state || identity <= 0 || task_id == 0 || zone_id == 0 ||
+		zone_version > static_cast<uint32>(std::numeric_limits<int>::max()) ||
+		state->GetActiveSharedTask().task_id != task_id) {
+		return 0;
+	}
+
+	// Bind the current occurrence, task definition and actual database member.
+	// A cached same-zone expedition or an earlier mission is not sufficient.
+	const auto mappings = SharedTaskDynamicZonesRepository::GetWhere(database, fmt::format(
+		"shared_task_id = {} AND EXISTS (SELECT 1 FROM shared_tasks st "
+		"JOIN shared_task_members sm ON sm.shared_task_id = st.id "
+		"WHERE st.id = {} AND st.task_id = {} AND sm.character_id = {} "
+		"AND st.completion_time IS NULL AND (st.expire_time IS NULL OR st.expire_time > NOW()))",
+		identity, identity, task_id, self->CharacterID()
+	));
+	uint16 instance_id = 0;
+	for (auto dz : self->GetDynamicZones(zone_id, static_cast<int>(zone_version))) {
+		if (!dz || dz->GetType() != DynamicZoneType::Mission || !dz->IsValid() ||
+			dz->IsExpired() || !dz->HasMember(self->CharacterID()) ||
+			!dz->HasDatabaseMember(self->CharacterID())) {
+			continue;
+		}
+		for (const auto &mapping : mappings) {
+			if (mapping.dynamic_zone_id == dz->GetID()) {
+				if (instance_id != 0) {
+					return 0; // Ambiguous mappings must not consume a travel ticket.
+				}
+				instance_id = dz->GetInstanceID();
+			}
+		}
+	}
+	return instance_id;
 }
 
 void Lua_Client::LockSharedTask(bool lock) {
@@ -3713,6 +3757,7 @@ luabind::scope lua_register_client() {
 	.def("GrantPetNameChange", &Lua_Client::GrantPetNameChange)
 	.def("ClearNameChange", &Lua_Client::ClearNameChange)
 	.def("CharacterID", (uint32(Lua_Client::*)(void))&Lua_Client::CharacterID)
+	.def("GetPassengerBoatID", &Lua_Client::GetPassengerBoatID)
 	.def("CheckIncreaseSkill", (void(Lua_Client::*)(int,Lua_Mob))&Lua_Client::CheckIncreaseSkill)
 	.def("CheckIncreaseSkill", (void(Lua_Client::*)(int,Lua_Mob,int))&Lua_Client::CheckIncreaseSkill)
 	.def("CheckSpecializeIncrease", (void(Lua_Client::*)(int))&Lua_Client::CheckSpecializeIncrease)
@@ -3981,6 +4026,7 @@ luabind::scope lua_register_client() {
 	.def("LeaveGroup", (void(Lua_Client::*)(void))&Lua_Client::LeaveGroup)
 	.def("LoadPEQZoneFlags", (void(Lua_Client::*)(void))&Lua_Client::LoadPEQZoneFlags)
 	.def("LoadZoneFlags", (void(Lua_Client::*)(void))&Lua_Client::LoadZoneFlags)
+	.def("GetSharedTaskInstanceID", &Lua_Client::GetSharedTaskInstanceID)
 	.def("LockSharedTask", &Lua_Client::LockSharedTask)
 	.def("MarkSingleCompassLoc", (void(Lua_Client::*)(float,float,float))&Lua_Client::MarkSingleCompassLoc)
 	.def("MarkSingleCompassLoc", (void(Lua_Client::*)(float,float,float,int))&Lua_Client::MarkSingleCompassLoc)

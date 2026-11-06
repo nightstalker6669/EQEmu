@@ -841,6 +841,11 @@ void Doors::SetDisableTimer(bool flag)
 
 void Doors::CreateDatabaseEntry()
 {
+	// A scene transient must never insert or update a persistent door.
+	if (!m_transient_token.empty()) {
+		return;
+	}
+
 	if (content_db.GetDoorsDBCountPlusOne(zone->GetShortName(), zone->GetInstanceVersion()) - 1 >= 255) {
 		return;
 	}

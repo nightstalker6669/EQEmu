@@ -1,0 +1,45 @@
+{
+  "status": "FINITE_EXISTING_NATIVE_REWARD_ROUTE_SOURCE_CANDIDATE_NOT_AUTHORIZED_FOR_DELIVERY",
+  "task": 920170,
+  "Keystone_item": 47759,
+  "reserved_reward_identity": 3839201706,
+  "delivery_authorized": false,
+  "selected_delivery_path": null,
+  "existing_source_facts": [
+    {
+      "source": "world/shared_task_manager.cpp:1758-1774",
+      "fact": "SendActivityUpdate visits actual shared task members and sends to each online member's ZoneServer. It is not a nearby-zone/currentgroup loop; legitimate other-zone members receive native progress."
+    },
+    {
+      "source": "zone/task_client_state.cpp:1340-1377; zone/task_shared_reward_identity.h:24-129",
+      "fact": "Native METHODSELECT reward path validates original local task identity, ensures per-character exact shared-run occurrence mapping, and persists a pending selection with source_instance_id. Timestamp alone is not the run identity. ReadRun requires current membership when creating/recovering the occurrence."
+    },
+    {
+      "source": "zone/task_client_state.cpp:1481-1498",
+      "fact": "If every eligible reward row is common_to_all, native IsCommonOnly claims automatically through the existing per-entry ledger when client data is loaded. No player choice page or manual class/rank substitution is required."
+    },
+    {
+      "source": "zone/task_manager.cpp:1992-2076",
+      "fact": "Native reconnect synchronization can catch up an offline member and invoke RewardTask on actual persisted completion while the shared task remains active. This is conditional recovery, not unlimited delivery after any historical completion."
+    },
+    {
+      "source": "zone/task_client_state.cpp:1836-1965",
+      "fact": "Existing pending-selection restoration resumes supported ledger-safe pending/retryable states and quarantines interrupted in-flight delivery as ambiguous. No custom directgrant or blind ambiguousretry should be added."
+    }
+  ],
+  "current_candidate_rows": "All9 reserved Fire rows are common_to_all1 with class masks; classscrolls are fixed class-specific, currency common, Keystone identity common. All flags0. Source candidate can use existing native auto common-only path if owner selects it after authentic terminal completion.",
+  "scope_distinction": {
+    "world_chest": "Bonfire corpse item access requires originalarchivedmember AND current membership at eachloot; quitting loses continuedtask-onlyaccess.",
+    "already_earned_pending_reward": "A previously durably earned per-character reward occurrence has its own nativeclaim/restoration lifecycle. Do not impose Bonfirecorpse currentmembershippredicate on it or replace it with publichistory grants."
+  },
+  "one_path_requirement": "If owner chooses existing nativecommon-only catalogue path, Keystone must not also be manually delivered in Gotonur hand-in/complete callback. If owner chooses another authentic nativephysicalroute, catalogueKeystone delivery stays disabled. Never both.",
+  "limits": [
+    "ActualMold47758return/nativefinal18completion/Keystone-originaldooraccess integrationstillheld.",
+    "This boundedsource doesnot prove native per-entryphysicaldelivery acceptance or all disconnected/expiry/quit cases.",
+    "No runtimecache/restart/publication/newglobalframework/schema/API or individualgrants authorized.",
+    "Do not infer universalofflinerecovery after tasktermination; retain actualmember/sourceoccurrenceconditions and unresolvedoriginalpolicy."
+  ],
+  "SQL_writes": 0,
+  "runtime_actions": 0,
+  "tests": 0
+}

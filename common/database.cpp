@@ -15,6 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include <cstring>
 #include "common/data_verification.h"
 #include "common/database_schema.h"
 #include "common/database.h"
@@ -1921,13 +1922,34 @@ bool Database::CopyCharacter(
 
 	std::vector<std::string> ignore_tables = {
 		"guilds",
+		// Journal identities and generations belong to the source character only.
+		"character_oculus_events",
+		"character_oculus_generations",
 	};
 
 	size_t total_rows_copied = 0;
 
 	TransactionBegin();
 
-	for (const auto &t : DatabaseSchema::GetCharacterTables()) {
+	// A feature opts into journal guards by registering its character tables.
+	// Neutral shared-core has no such registration and needs no journal schema.
+	const auto character_tables = DatabaseSchema::GetCharacterTables();
+	for (const auto& table_name : std::vector<std::string>{"character_oculus_events", "character_oculus_generations"}) {
+		if (character_tables.find(table_name) == character_tables.end()) {
+			continue;
+		}
+		auto journal = QueryDatabase(fmt::format(
+			"SELECT character_id FROM {} WHERE character_id = {} LIMIT 1 FOR UPDATE",
+			table_name, new_character_id
+		));
+		if (!journal.Success() || journal.RowCount() != 0) {
+			LogError("Character copy withheld: destination journal identity exists or schema is unavailable");
+			TransactionRollback();
+			return false;
+		}
+	}
+
+	for (const auto &t : character_tables) {
 		const std::string& table_name               = t.first;
 		const std::string& character_id_column_name = t.second;
 
@@ -1979,29 +2001,35 @@ bool Database::CopyCharacter(
 
 			for (int column_index = 0; column_index < column_count; column_index++) {
 				const std::string& column = columns[column_index];
-				std::string value = row[column_index] ? row[column_index] : "null";
+				bool is_null = row[column_index] == nullptr;
+				std::string value = is_null ? "" : row[column_index];
 
 				if (column == "id" && Strings::Contains(tables_to_zero_id, table_name)) {
 					value = "0";
+					is_null = false;
 				}
 
 				if (column == character_id_column_name) {
 					value = std::to_string(new_character_id);
+					is_null = false;
 				}
 
 				if (column == "name" && table_name == "character_data") {
 					value = destination_character_name;
+					is_null = false;
 				}
 
 				if (column == "account_id" && table_name == "character_data") {
 					value = std::to_string(destination_account_id);
+					is_null = false;
 				}
 
-				if (!Strings::IsNumber(value)) {
+				if (!is_null && !Strings::IsNumber(value)) {
 					value = Strings::Escape(value);
 				}
 
-				new_values.emplace_back(value);
+				// Keep SQL NULL distinct from every non-NULL string, including "null".
+				new_values.emplace_back(is_null ? "NULL" : "'" + value + "'");
 			}
 
 			new_rows.emplace_back(new_values);
@@ -2010,7 +2038,7 @@ bool Database::CopyCharacter(
 		std::vector<std::string> insert_rows;
 
 		for (auto &r : new_rows) {
-			const std::string& insert_row = "(" + Strings::Implode(",", Strings::Wrap(r, "'")) + ")";
+			const std::string& insert_row = "(" + Strings::Implode(",", r) + ")";
 			insert_rows.emplace_back(insert_row);
 		}
 

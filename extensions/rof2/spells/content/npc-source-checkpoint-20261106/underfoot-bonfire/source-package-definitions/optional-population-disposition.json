@@ -1,0 +1,137 @@
+{
+  "enabled": false,
+  "ordinary_candidates": [
+    {
+      "role": "cliknar_gatherer",
+      "external_ZAM_key": 35014,
+      "world_donor_id": 487040,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "cliknar_scout",
+      "external_ZAM_key": 35015,
+      "world_donor_id": 487047,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "frightened_sporali",
+      "external_ZAM_key": 35003,
+      "world_donor_id": 487013,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "hungry_sessiloid",
+      "external_ZAM_key": 35010,
+      "world_donor_id": 487004,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "lava_mephit_guard",
+      "external_ZAM_key": 35006,
+      "world_donor_id": 487007,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "lava_mephit_worker",
+      "external_ZAM_key": 35008,
+      "world_donor_id": 487011,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "magma_golem",
+      "external_ZAM_key": 35011,
+      "world_donor_id": 487014,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "rock_golem_guardian",
+      "external_ZAM_key": 35013,
+      "world_donor_id": 487010,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "rock_golem_smasher",
+      "external_ZAM_key": 35012,
+      "world_donor_id": 487042,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "autarchian_dwarf",
+      "external_ZAM_key": 35004,
+      "world_donor_id": 487016,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "autarchian_gnome",
+      "external_ZAM_key": 35001,
+      "world_donor_id": 487012,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Currentzone728rosterpositive"
+    },
+    {
+      "role": "lava_mephit_miner",
+      "external_ZAM_key": null,
+      "world_donor_id": 487048,
+      "mission_npc_id": null,
+      "population": null,
+      "xyz": null,
+      "qualification": "Feb2013countreportpositive, notcurrent728roster; identity/count/placementsheld"
+    }
+  ],
+  "ordinary_candidate_definitions": 12,
+  "selected_ordinary_definition_count": null,
+  "ordinary_population": null,
+  "mephit_population": null,
+  "period_report_2011_approx": 158,
+  "period_report_2013": {
+    "total": 160,
+    "guard": 59,
+    "miner": 2,
+    "worker": 99
+  },
+  "minion_pet": {
+    "external_ZAM_key": 35019,
+    "name": "an Autarchian minion pet",
+    "reported_level": 60,
+    "spell": null,
+    "npc_id": null,
+    "pet_type": null,
+    "pets_mapping": null,
+    "population": null,
+    "qualification": "Currentzone728rosterpositive; no recovered casts/summon or native mapping. Do not remove or fabricate pet."
+  },
+  "achievement_scope": "Keep positive optional population distinct from mandatory28combat. Counts remain NULL notzero; no native achievement grant/additional mandatory goal.",
+  "full_scene_ready": false
+}

@@ -1,0 +1,333 @@
+{
+  "status": "ACTUAL_R17_SAME_CORPSE_GUARDIAN_ACK_CLOSURE_READY_FOCUSED_REVIEW",
+  "source_revision": "R17",
+  "native_files": {
+    "common/CMakeLists.txt": {
+      "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
+      "postimage_sha256": "2bfa6595ecb318c715bc7740eb5826483b348db62c60c3de977e80f5ebfad77a"
+    },
+    "common/fire_native_inventory_fence.cpp": {
+      "preimage_sha256": null,
+      "postimage_sha256": "d9ca12a4a0cdccd706530007d1c81a186e81dc4867e54fcb3138bb41030bc50c"
+    },
+    "common/fire_native_inventory_fence.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "602973209fe99eea62e10637ac4b49bd6c27cbd07e9e47ea8c6b504ec1a2ba20"
+    },
+    "common/inventory_profile.cpp": {
+      "preimage_sha256": "f26243ed757c7c3e75d30e0405774ddcb39cb9db0ae47b7ad70ece1031c42e31",
+      "postimage_sha256": "26d4b3cdb5ab9c135e3d041d14d4fa78d8e21984da4785ee55920e1f9af8f968"
+    },
+    "common/inventory_profile.h": {
+      "preimage_sha256": "74388673aefbb33b6bc34d3ab18f4192482aa55688161499569ebd68e1c861aa",
+      "postimage_sha256": "02a38cd8913fb90105915293eeac71753e9bac5771662981f5180c1e77c743f4"
+    },
+    "common/item_instance.cpp": {
+      "preimage_sha256": "dc5627ce3615b8ede7a3169e187df128230a3cbc394979ee07214b67638c8126",
+      "postimage_sha256": "ea5634d4c23695c352ecefbdc4f89df05abdf5bb31e252f2cdf8449c44032b53"
+    },
+    "common/item_instance.h": {
+      "preimage_sha256": "85b52b532316aafdc64a3c2ff46a9cfbae6d95c04cdc4ea40bf19d683f2a5d90",
+      "postimage_sha256": "7abd6509ac94499b055c333a8d9d590d686dbc06fb8dcd291280f51346e38351"
+    },
+    "common/shared_core/evolving_item_custody.h": {
+      "preimage_sha256": "a63be5423650399a04e7bc2191e6a84e1a5b138ea35bdb418818c72ff9907307",
+      "postimage_sha256": "75cdefd64ed2806f629a35e714d9e488af404356e21c13604c7d345970600031"
+    },
+    "common/shareddb.cpp": {
+      "preimage_sha256": "f42e48ed64f150afefd15d85ed586f7819bce7d47e571d6a41d44e54b8613925",
+      "postimage_sha256": "a28f62b3c1ceb9b4432a3479b309b8894e1cea765dd57f7eb0007d8385455009"
+    },
+    "common/timer.h": {
+      "preimage_sha256": "49c01639ba19c520e6d74107b06edaaf6d43633ee09b0ef8f8d51c43c25dd721",
+      "postimage_sha256": "4824f4d65ee19d198d17580a9888fbabc97874a815bd985525a019bf1e673f7f"
+    },
+    "zone/CMakeLists.txt": {
+      "preimage_sha256": "62fe0b7380c7fbaee34f6bb9d46db82b5a84f21d0ce8d32370a1871a70842501",
+      "postimage_sha256": "57589fdd617fa404d788c813f983002c6fd5a46ef5bb49d3806c07e4c47a6e9d"
+    },
+    "zone/attack.cpp": {
+      "preimage_sha256": "41e7429480265cb6b81092214cd26d069c2132da25b5071a170e453cfbaaa5de",
+      "postimage_sha256": "72d3760cc7bf35c7b18db093a6b60e7b0c1edb27449cc68b792e82b5a8268d2b"
+    },
+    "zone/client.cpp": {
+      "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
+      "postimage_sha256": "47da09611533ba7cd233b15b593883a8af2e72e930799f8b0cef6a553d27b5e7"
+    },
+    "zone/client.h": {
+      "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
+      "postimage_sha256": "780379f2dc32d2407abaaecb4ae267fcbfd9022efdfc67e21aebf29d17e20aaf"
+    },
+    "zone/client_evolving_items.cpp": {
+      "preimage_sha256": "9abfd986b2b0a851e685741c89c97085b6f8b8754aae58371cca030a396baeae",
+      "postimage_sha256": "1aab37bc2672ef8811a411b8d00a551944ef8f77e5394923dba97305edfd5a5e"
+    },
+    "zone/client_packet.cpp": {
+      "preimage_sha256": "3efb2eae4077223212beb03e5c48b74fbcb09bfd236f6b1e8c7caa89e4db4a5a",
+      "postimage_sha256": "05da47fa52f75861f2d4b25a1c326cc6659eb9406f4ed6b7f111a7565cf485cb"
+    },
+    "zone/client_spirit_shroud.cpp": {
+      "preimage_sha256": "153900d357a1fe13e7edc9baaf6406ed5b6a2a57efc79acce9bd358d67997785",
+      "postimage_sha256": "4f94fa164ede3cea3e0f0c23a8d1e92c06ddb2b3014894a5ad5b1b34d733f2bc"
+    },
+    "zone/client_spirit_shroud_native.cpp": {
+      "preimage_sha256": "7454762e25b4db799f7f28d1f4f84b8bbb508a463b1db443e0fa6a5ab04c7073",
+      "postimage_sha256": "aac1e27bcdd7597c6d13c34bcfb9e65740c5b37ecc565c248ca567ea98f76e82"
+    },
+    "zone/corpse.cpp": {
+      "preimage_sha256": "70008903f349181c8389e694e075948ca4f42f38c33625dd3a1d0ebb7e7d8b72",
+      "postimage_sha256": "cdc64346a762beb9ebf98517183bd62e2e8dfb8cb92e71a61734a2d051f5a3e8"
+    },
+    "zone/corpse.h": {
+      "preimage_sha256": "913162429058a04bb9d2f2c51c0de13f7b842667dcb473baf6b6969600819257",
+      "postimage_sha256": "52bc41ab4e1abf4ac4d5e3e4e9fcbfc7bd947500fa3f1ad86afcbbd9be144c09"
+    },
+    "zone/doors.cpp": {
+      "preimage_sha256": "c6d56df874b341bc83b9e941ec7649c16cd6155b519cfae2b17f1610d701a02f",
+      "postimage_sha256": "19c904a9c1eff53f39730d7c718efbd0d39ad52cc19e7ba4b54c6b20be7d3ccd"
+    },
+    "zone/doors.h": {
+      "preimage_sha256": "23471854e2c6d59344524a6ddff0643792821252d0a6cc3786abdac057b29116",
+      "postimage_sha256": "e91ac665a9fdea873535445aac5b207b0dd8d77655adc60b77fdcf13a7271a10"
+    },
+    "zone/entity.cpp": {
+      "preimage_sha256": "8c82cf775575fbc94448940911f168440da7d9b45453085df7aea257d83c4ad2",
+      "postimage_sha256": "53290568d661aeaec68f9c0fbfe83b18bae1002b86398eafcd861534f1c8492e"
+    },
+    "zone/fire_construct_death_receipt.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "d9b685bc14fd6f7c81bfcaa8aa32d210eb5ba5f62e3c5207daf1e50551106ae5"
+    },
+    "zone/fire_construct_local_profiles.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "268f8919dfd11ab7ca5edd1b5a2456cfc9194e9397fc626186590ba71c70ad17"
+    },
+    "zone/fire_construct_participants.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "e3e18de9133c172b034a5df85ca4de61ecc4f11280d46ff42bc8c693bb082c51"
+    },
+    "zone/fire_gotonur_say_queue.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "1906c7dc6bcee1792a46cdb99624c647fb8840b88b5b4564f39bf214193a1858"
+    },
+    "zone/fire_initial_admission.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "496dce0b63d97022cce74bb47214bfb365b2ea6abdc395fb297bf828cd67f8f5"
+    },
+    "zone/fire_material_loot_source.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "7af7f75173ece447b998affa0667ea34523883066a331598206afec45f762f04"
+    },
+    "zone/fire_native_item_custody.cpp": {
+      "preimage_sha256": null,
+      "postimage_sha256": "543ca93510d9289780078ff3306caf045cbdaa8a70df5892906a323f3ed66ca7"
+    },
+    "zone/fire_native_item_custody.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "cfe1a8d3de65a035fb48b707900debaf33296edf45a7836a976fb55945fb16c0"
+    },
+    "zone/fire_native_published_use.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "f2534042c734c704a7bec758cd8fa69705e6e15231e201649652b93aa98fff49"
+    },
+    "zone/fire_original_construct_death.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "6d9d361e8c767114aab36b2d9baccd270d601f4aa3961fa7ca92bad5c6a360a9"
+    },
+    "zone/fire_original_construct_hail.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "8ee6edf9e00c8d78b553f254dae4675129f38b0923e55eba5909a4b47fc97d6b"
+    },
+    "zone/fire_original_construct_producer.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "a4d0ac807e0f2500aae193b900f2415ab64d19b204b54edb4cce2713e07db28f"
+    },
+    "zone/fire_original_final_hail_frame.h": {
+      "preimage_sha256": "ef70a379091c30d644a6a7b974e824d225e1fc98d741e7ca2e79d8b418893168",
+      "postimage_sha256": "dc18be2240c8b3a80c7d2764adf7dc33b8e286a4b2b72afd9935a63b4b6a931a"
+    },
+    "zone/fire_original_item_snapshot.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "4bfd47c339863d0731f45b4437ec16765f42cae4a236e29ecdaa1b0c584dac98"
+    },
+    "zone/fire_personal_construct_identity.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "dbe3a557a25d15805daeb06f5600106610da09eae8da86d55ce0bb0b389f2ef7"
+    },
+    "zone/fire_personal_item_use.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "80fdcb249b2e0c6bbe5ab958a7fffc51be936e0824c150e8ab49c2ddb8d94649"
+    },
+    "zone/fire_prepared_construct_plan.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "0948ee847b50ee815231a52f160b5b59ae7162eb3cae31669f85ff1ee1c39d44"
+    },
+    "zone/fire_published_use_sink.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "52e92089e69e1c8b468aa994523515207785453ff118f9526e1e922bcee02395"
+    },
+    "zone/fire_run_action_custody.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b8e8d166e1f96d201e331030340ef5b3fa593b5c711bb6e75da1f71b1bfe43ec"
+    },
+    "zone/fire_run_action_custody_impl.inc": {
+      "preimage_sha256": null,
+      "postimage_sha256": "67d59918ea2ee984cfbdbb29849fb1d4dddbeb1ac07467cda8bc2cf3a4d45be1"
+    },
+    "zone/fire_run_action_geometry.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "3e5b56eaf2a8f20bb5fc19060afbfc836734e4bcc7ac141aa6b589069c9dd757"
+    },
+    "zone/fire_run_action_scene.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "15b0a71c930f64e0d6e18958b1547cbfc77459259d4423cc596feb82c80a9108"
+    },
+    "zone/fire_run_helper_profile.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "899fea73d716c03a877235ffdb0755f239da872527227286cea1bc478677a232"
+    },
+    "zone/fire_run_item_origin.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "45d39e16a3b7a1ab84b5e967da30f10c8a6ebb13667e6f080982eddbe3af2c45"
+    },
+    "zone/fire_run_item_origin_impl.inc": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b496a72b2d7a944dab0bfc73177ba29ac4413f3563ce12943a0ba0fe5681d964"
+    },
+    "zone/fire_run_terminal_custody.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b9588f4142ecdfca8d9557419d561c513db9b3d1b98bbf202d4f0d28e4509ff6"
+    },
+    "zone/fire_run_terminal_custody_impl.inc": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b9cf90ee0a147c9a75a552f2aaff42549aae0a05055ca24696b7dc870834adba"
+    },
+    "zone/fire_run_terminal_scene.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "81e5c4ede3318a2faf7ebea5e4104f9651b6ac8e6902e7f962b9f912569688cd"
+    },
+    "zone/fire_shared_transform_published.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "af5578dec3c07d0983c137418ff3f8e478c43785965ff9d3264a41d0bc3b75da"
+    },
+    "zone/fire_shared_transform_use.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b7128e66ce19db68b9c055dd4626167c3e7a99bbc1761cb7b5febe15048ff71a"
+    },
+    "zone/fire_terminal_local_profiles.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "499fb5b6e32d0f38d05886b0a7c533fea55894b462de6e2b6a263fb2fa6d8930"
+    },
+    "zone/inventory.cpp": {
+      "preimage_sha256": "5538219e5625b4baa51e7bd4182465be502a77796dd2ff41b70bcfc2a0f8b3ff",
+      "postimage_sha256": "a5c2c0a1862121a7d3d38f4007f647615f7dad9d08941b914d6e96bdb0ac47dd"
+    },
+    "zone/mob.cpp": {
+      "preimage_sha256": "4b0590106b1482e66caf2781f4e3d65787a6d45988a1535308808c6b2419abfb",
+      "postimage_sha256": "5428db734d17308c5f1ed5ee1af818075da6a039131743c547865b1485e90a6a"
+    },
+    "zone/mob_movement_manager.cpp": {
+      "preimage_sha256": "a7e1cd87152c09d7aa53a6f1fdbc983b134c7aec6ada3efb098ffb32beb7e78a",
+      "postimage_sha256": "06d36d08289abc7078f81e61ac66f53a5472a397687e7177cf1c7a47e64b83f3"
+    },
+    "zone/npc.cpp": {
+      "preimage_sha256": "560e1c8b97d68dae802d702639506eba87e0c17f54cc64f45037d0b25164d363",
+      "postimage_sha256": "d9f57c4762112097720a32b31a002609fcaa82398768543f4d3c4a019c625160"
+    },
+    "zone/npc.h": {
+      "preimage_sha256": "5da70d799dbe23fa2bc4b204555ffcec45026b6c23ad09b8c9efd532479c14ce",
+      "postimage_sha256": "85d03caee9481c491befd65962130fc24ba8c26edacc43b4e953abb454d5b42e"
+    },
+    "zone/parcels.cpp": {
+      "preimage_sha256": "d0f540a70af8b058a6f8c3b4cf3d221cf065fb1ad0ab0d168cebaf6512d61353",
+      "postimage_sha256": "fea3deb31e656d18fcd1f9fe74ae7730dc3a450c4162d09de1f09faeb81efcad"
+    },
+    "zone/shared_task_zone_messaging.cpp": {
+      "preimage_sha256": "018b92349616cdd988c73c4e74e48233baa9082a2503382fb384715de551b2e0",
+      "postimage_sha256": "e1255d1e11b4cd7b5984b5c768b0eac47ff4b6c88e6ec193537f0663addf5536"
+    },
+    "zone/spells.cpp": {
+      "preimage_sha256": "1ec2757560d4ce279d60461d7606933b672e3b660e5ed8bef5667d1315d78a10",
+      "postimage_sha256": "f3539499a8cd9525d3006bc967462d98bd76516fdb2327195f6ba2d4f5ebc2af"
+    },
+    "zone/task_client_state.cpp": {
+      "preimage_sha256": "8e1328f7152fc7f226e5099be6099fcb3ad112b32172ccf80d2d5118d3d2adfe",
+      "postimage_sha256": "970c04e2d666237a9de02cc5b19ead685ca63f5c6d48a54e6bff2b3a7ea698f8"
+    },
+    "zone/task_client_state.h": {
+      "preimage_sha256": "4556499e483da7785759f87c53c6f1704c217c288f2f892aa877ebd7abb1d428",
+      "postimage_sha256": "a12ff9023f13f61bf0bf12cace0ca55cc1fd5ccda0eb4fac25a9d2e01bcb67f4"
+    },
+    "zone/task_manager.cpp": {
+      "preimage_sha256": "f7cec7fd64984848f5ec843dec4f71b3952b6e15c0d88ed78a22ef1f70ff5de4",
+      "postimage_sha256": "ad13383741d9ab9f4d01ec310aff9e65a901c04492135ffee22c07ea040d672d"
+    },
+    "zone/tasks.cpp": {
+      "preimage_sha256": "18bf1975f9ebbc3f0ee7b999ab1e388b6adebc05485466c9d52d986624a73e39",
+      "postimage_sha256": "d49c60a7d34cf096692c7bf23b6b2107112f39ee3c05182011acdecf7e5a24e9"
+    },
+    "zone/trading.cpp": {
+      "preimage_sha256": "cf262a8b67a9c7b58e6a020d0481436c26dc27d5f638f434c6d921f292c990c9",
+      "postimage_sha256": "9355d7ee521186d26e1984fdd8a842bcb2ca4a6685ec5b9860d942b5054a57a5"
+    },
+    "zone/zone.cpp": {
+      "preimage_sha256": "3c17cac8d75ab720a8a47e1fa60b2a7148473f38eb488019a9a320514decefb4",
+      "postimage_sha256": "6de1cb1489d6f531dc371c7469bb6371872a100680678ec47740b3af4dd2a22c"
+    }
+  },
+  "incremental_changed_paths": [
+    "zone/client.cpp",
+    "zone/fire_run_terminal_scene.h"
+  ],
+  "unchanged_from_compiled_R15r3": 46,
+  "patch_sha256": "b1b54d27b6947458a4a069fdcafc33baa319d4bb239f53269d24931868503832",
+  "private_interface_sha256": "81e5c4ede3318a2faf7ebea5e4104f9651b6ac8e6902e7f962b9f912569688cd",
+  "source_revision_alignment": "R17 header adds only a private Source raw-loot friend and actual same-corpse acknowledgment method. Core original trade/receipt/facts interfaces remain unchanged; all Core postimages retain compiled R16-r4 hashes. New final header pin supersedes217470ed only for these private Source hooks.",
+  "material_exceptions": [
+    "Selected LOCAL reconstruction includes instance return recipient, geometry/models/pose, baseline NPC profiles, helper timing, chest boundary/access/decay cap and one equal11gear draw. These are not authenticated retail bytes or native gameplay acceptance.",
+    "Canonical mission has19 activities0..18 and one Guardian490911/spawn304062014. Actual16 acknowledges original death, activating17/native configured lock17. Mold17 uses actual same original corpse/save/removal. LOCAL final18 acknowledgment is delayed until committed mold return plus actual owned chest native opening/successful death/same corpse after stack, with no20th displayed objective.",
+    "Current native Mob constructor sets permarooted from runspeed0; selected full Guardian template passes that current constructor condition. Exact period rampage/casts/combat behavior and effective scaling/bonuses remain separately qualified, not supplied by a template byte gate.",
+    "Native custom_data UUID and finite current-run origin are durable provenance; runtime serials only snapshot evidence. Creator is audit, current actual holder and accepted run are ownership checks. No tokenless/history/old-run backfill.",
+    "Known strict transaction COMMIT and actual allocation-free memory removal alone issue original return receipt. Input origins remain published and locked through all selected saves/revalidations, consumed before same COMMIT. Unknown commits/publication/lifecycle gaps hold without replay/refund/regrant or replacement chest.",
+    "Accepted member snapshot plus same current membership governs owned chest access. Sole existing METHODSELECT common-only exact shared-run occurrence/per-entry ledger delivers personal rewards including members elsewhere; no direct hand-in grant. Offline catchup depends on actual persisted task/reconnect state; no history grant loop.",
+    "Native correlated progress send is not positive durable World-save acknowledgment. Source/build review never proves client pathing/collision/animation/quest/reward acceptance.",
+    "All task/reward enable fields remain zero; selected full profile overrides replace stale raw0 helper/construct source rows. All receipt/origin/action DDL and physical scene rows remain unapplied source; logical reservations are not database locks. No persistent chest spawn/condition.",
+    "No serving SQL/migration/install/deployment/cache refresh/server starts/client actions or extra test suites are authorized by this source package. Preserve unrelated owner work."
+  ],
+  "tests": 0,
+  "builds": 0,
+  "SQL_writes": 0,
+  "runtime_actions": 0,
+  "compiled_parent": {
+    "source_commit": "d6a20894cc775fd84475a9dd107c3d5e11c8ace4",
+    "sha256": "ef11c2a444bdb807f19f6d440ec244a78cfaaebde1febbf7135a2dfec5d52d17",
+    "status": "MATCHED_R16R4_WORLD_ZONE_COMPILE_LINK_PASS_68PINS_4WARNINGS_ZEROERRORS"
+  },
+  "core_manifest_sha256": "ba5daa6b47f00588c7c6d7d1a6125e8517de467ae2ed22ecc9aa810143b83c0c",
+  "spells_native_manifest_sha256": "fa54cfbfc68cca3d966c0635f13ce6fde6e1198b74e6182d3c2ec9e87689a37f",
+  "compile_correction": {
+    "changed_from_failed_R16_R3": [
+      "zone/fire_native_item_custody.cpp"
+    ],
+    "unchanged_pins": 67,
+    "native_pointer": "MoldReturnFrame retains native GetItem existing ItemInstance* rather than artificial const pointer; unchanged InventoryProjection::Matches now accepts original. No const_cast, common API or semantic change.",
+    "core_fix_sha256": "2b6668e0a5326c075913f905d4f87bba769951939cf70be42e793e65c578d35e",
+    "failure_sha256": "c57eaed1e622d23318e0089783eabd52e864b9a52e36fd329d2ae0b76284911b",
+    "resume": "Reuse actual failed R16-r3 compiled cache and already-built World, update one fire_native_item_custody.cpp and verify all68 pins; resume matched incremental Zone+World link. No new scope/tests/serving."
+  },
+  "restart_corpse_closure": {
+    "status": "ACTUAL_SOURCE_RESTART_ID_REUSE_GAP_CLOSED_PENDING_FOCUSED_REVIEW",
+    "trigger": "A same-run instance process restarts with prior Guardian kind6 custody and native16 already completed. Reloaded static Guardian can yield a fresh actual material corpse whose runtime IDs/death counter repeat; it has no new eligible16 capture/known Guardian acknowledgment, while old numeric custody could match.",
+    "fix": "Set private same-corpse guardian_acknowledged only AFTER known positive Core AcknowledgeOriginalDeath; before native16 send. Raw47758 preparation additionally requires that actual current corpse opaque node, positive original return/registration, exact live witness and known acknowledgment plus original scene/death sequence. No lookup/history/numeric tuple can set the bit.",
+    "recovery": "New/reloaded/unacknowledged corpora reject. Previously genuine published47758 inventory items still return after relog via existing UUID/run origin; their hand-in does not require retaining the corpse. Current accepted different looters compare shared scene, not creator character/occurrence.",
+    "changed_native_paths": [
+      "zone/client.cpp",
+      "zone/fire_run_terminal_scene.h"
+    ],
+    "unchanged_pins": 66,
+    "no_new_Core_API_or_DDL_or_objectives": true,
+    "tests": 0,
+    "SQL_writes": 0,
+    "runtime_actions": 0
+  }
+}

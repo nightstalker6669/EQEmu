@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "crc32.h"
+#include <cstdint>
 
 unsigned int CRC32EncodeTable[256] =
 {

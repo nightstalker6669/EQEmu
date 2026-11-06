@@ -1,0 +1,29 @@
+{
+  "status": "PAUSED_BY_USER",
+  "date": "2026-11-06",
+  "instruction": "All project work paused; final publication only; explicit user resume required.",
+  "last_confirmed_serving": "Aggregate RRC299\u2013303 actors plus all prior installed peers; matched server running and admission restored.",
+  "last_confirmed_recipes": 34438,
+  "last_confirmed_recipe_entries": 261105,
+  "remaining_recipe_groups": 58,
+  "pending_uninstalled_recipe_batches": [
+    "RRC307",
+    "RRC309"
+  ],
+  "pending_item_definition": {
+    "item_id": 23382,
+    "status": "Definition applied and verified; item cache refresh and associated recipe/actor installation pending."
+  },
+  "draft_work": "Further property-preserving recharge and remaining source qualification work must remain explicitly draft until resumed.",
+  "other_features": "Paused, including Fungal delivery implementation and client research/tests.",
+  "validation_limits": [
+    "Source/SQL/build receipts do not imply native gameplay acceptance.",
+    "Historical source findings, local reconstruction decisions, and actual application remain separately qualified."
+  ],
+  "ownership": {
+    "publication": "GitHub chat, correct feature branches and database repository",
+    "compilation_installation": "Build chat",
+    "recipe_content": "Tradeskills chat",
+    "routing": "Coordinator"
+  }
+}

@@ -38,6 +38,9 @@
 	void Handle_Connect_OP_ZoneComplete(const EQApplicationPacket *app);
 	void Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app);
 	/* Connected opcode handlers*/
+	void Handle_OP_AchievementReward(const EQApplicationPacket *app);
+	void Handle_OP_RewardSelection(const EQApplicationPacket *app);
+	void HandleRewardSelectionPacket(const EQApplicationPacket *app, RewardSelectionChannel channel);
 	void Handle_OP_AAAction(const EQApplicationPacket *app);
 	void Handle_OP_AcceptNewTask(const EQApplicationPacket *app);
 	void Handle_OP_AdventureInfoRequest(const EQApplicationPacket *app);

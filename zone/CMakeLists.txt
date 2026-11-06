@@ -1,4 +1,6 @@
 set(zone_sources
+	reward_selection.cpp
+	reward_selection_catalog.cpp
 	aa.cpp
 	aa_ability.cpp
 	aggro.cpp

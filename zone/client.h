@@ -17,6 +17,8 @@
 */
 #pragma once
 
+#include "../common/boat_passenger.h"
+
 class Client;
 class EQApplicationPacket;
 class DynamicZone;
@@ -45,6 +47,7 @@ namespace EQ
 #include "zone/mob.h"
 #include "zone/qglobals.h"
 #include "zone/questmgr.h"
+#include "zone/reward_selection.h"
 #include "zone/task_client_state.h"
 #include "zone/task_manager.h"
 #include "zone/xtargetautohaters.h"
@@ -576,6 +579,7 @@ public:
 	void BulkSendTraderInventory(uint32 char_id);
 	void SendSingleTraderItem(uint32 char_id, int serial_number);
 	void BulkSendMerchantInventory(int merchant_id, int npcid);
+	bool MeetsMerchantLanguageRequirement(const MerchantList &entry) const;
 
 	inline uint8 GetLanguageSkill(uint8 language_id) const { return m_pp.languages[language_id]; }
 
@@ -1143,6 +1147,7 @@ public:
 	void PutLootInInventory(int16 slot_id, const EQ::ItemInstance &inst, LootItem** bag_item_data = 0);
 	bool AutoPutLootInInventory(EQ::ItemInstance& inst, bool try_worn = false, bool try_cursor = true, LootItem** bag_item_data = 0);
 	bool SummonItem(uint32 item_id, int16 charges = -1, uint32 aug1 = 0, uint32 aug2 = 0, uint32 aug3 = 0, uint32 aug4 = 0, uint32 aug5 = 0, uint32 aug6 = 0, bool attuned = false, uint16 to_slot = EQ::invslot::slotCursor, uint32 ornament_icon = 0, uint32 ornament_idfile = 0, uint32 ornament_hero_model = 0);
+	bool SummonItem(uint32 item_id, int16 charges, uint32 aug1, uint32 aug2, uint32 aug3, uint32 aug4, uint32 aug5, uint32 aug6, bool attuned, uint16 to_slot, uint32 ornament_icon, uint32 ornament_idfile, uint32 ornament_hero_model, bool *persistence_succeeded);
 	void SummonItemIntoInventory(uint32 item_id, int16 charges = -1, uint32 aug1 = 0, uint32 aug2 = 0, uint32 aug3 = 0, uint32 aug4 = 0, uint32 aug5 = 0, uint32 aug6 = 0, bool is_attuned = false);
 	void SummonBaggedItems(uint32 bag_item_id, const std::vector<LootItem>& bag_items);
 	void SetStats(uint8 type,int16 set_val);
@@ -1667,8 +1672,11 @@ public:
 	Mob *GetBindSightTarget() { return bind_sight_target; }
 	void SetBindSightTarget(Mob *n) { bind_sight_target = n; }
 	const uint16 GetBoatID() const { return controlling_boat_id; }
+	// Recent movement-packet passenger state; does not grant boat control.
+	uint16 GetPassengerBoatID() const;
 	void SendRewards();
 	bool TryReward(uint32 claim_id);
+	ClientRewardSelection &GetRewardSelection();
 	QGlobalCache *GetQGlobals() { return qGlobals; }
 	QGlobalCache *CreateQGlobals() { qGlobals = new QGlobalCache(); return qGlobals; }
 	void GuildBankAck();
@@ -1704,8 +1712,9 @@ public:
 	inline void ClearDraggedCorpses() { DraggedCorpses.clear(); }
 	void ConsentCorpses(std::string consent_name, bool deny = false);
 	void SendAltCurrencies();
-	void SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount);
+	bool SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount);
 	int AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_scripted = false);
+	int AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_scripted, bool *persistence_succeeded);
 	bool RemoveAlternateCurrencyValue(uint32 currency_id, uint32 amount);
 	void SendAlternateCurrencyValues();
 	void SendAlternateCurrencyValue(uint32 currency_id, bool send_if_null = true);
@@ -2075,6 +2084,7 @@ private:
 	bool berserk;
 	bool dead;
 	uint16 controlling_boat_id;
+	EQ::BoatPassengerState m_boat_passenger;
 	uint16 controlled_mob_id;
 	uint16 TrackingID;
 	bool   trader;
@@ -2338,6 +2348,7 @@ private:
 	std::vector<uint32_t> m_dynamic_zone_ids;
 
 	std::vector<uint32_t> m_completed_shared_tasks;
+	std::unique_ptr<ClientRewardSelection> m_reward_selection;
 
 public:
 	enum BotOwnerOption : size_t {

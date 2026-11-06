@@ -850,6 +850,8 @@ void handle_player_click_object(
 	luabind::adl::object l_object_o = luabind::adl::object(L, l_object);
 	l_object_o.push(L);
 	lua_setfield(L, -2, "object");
+	lua_pushinteger(L, Strings::ToUnsignedInt(data));
+	lua_setfield(L, -2, "object_id");
 }
 
 void handle_player_click_door(
@@ -915,6 +917,9 @@ void handle_player_pick_up(
 	uint32 extra_data,
 	std::vector<std::any> *extra_pointers
 ) {
+	lua_pushinteger(L, extra_data);
+	lua_setfield(L, -2, "object_id");
+
 	Lua_ItemInst l_item(std::any_cast<EQ::ItemInstance*>(extra_pointers->at(0)));
 	luabind::adl::object l_item_o = luabind::adl::object(L, l_item);
 	l_item_o.push(L);
@@ -3012,6 +3017,8 @@ void handle_zone_click_object(
 	luabind::adl::object l_object_o = luabind::adl::object(L, l_object);
 	l_object_o.push(L);
 	lua_setfield(L, -2, "object");
+	lua_pushinteger(L, Strings::ToUnsignedInt(data));
+	lua_setfield(L, -2, "object_id");
 
 	Lua_Client l_client(std::any_cast<Client*>(extra_pointers->at(1)));
 	luabind::adl::object l_client_o = luabind::adl::object(L, l_client);
@@ -3163,6 +3170,9 @@ void handle_zone_pickup(
 	uint32 extra_data,
 	std::vector<std::any> *extra_pointers
 ) {
+	lua_pushinteger(L, extra_data);
+	lua_setfield(L, -2, "object_id");
+
 	Lua_ItemInst l_item(std::any_cast<EQ::ItemInstance*>(extra_pointers->at(0)));
 	luabind::adl::object l_item_o = luabind::adl::object(L, l_item);
 	l_item_o.push(L);

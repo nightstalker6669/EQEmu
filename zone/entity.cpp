@@ -32,6 +32,13 @@
 #include "zone/water_map.h"
 #include "zone/worldserver.h"
 
+#include "common/strings.h"
+#include "common/util/uuid.h"
+#include "zone/doors.h"
+
+#include <array>
+#include <cmath>
+#include <memory>
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
@@ -426,8 +433,7 @@ void EntityList::ObjectProcess()
 	auto it = object_list.begin();
 	while (it != object_list.end()) {
 		if (!it->second->Process()) {
-			safe_delete(it->second);
-			free_ids.push(it->first);
+			RetireObject(it->first, it->second);
 			it = object_list.erase(it);
 		} else {
 			++it;
@@ -2717,8 +2723,11 @@ void EntityList::RespawnAllDoors()
 	while (it != client_list.end()) {
 		if (it->second) {
 			auto outapp = new EQApplicationPacket();
-			MakeDoorSpawnPacket(outapp, it->second);
-			it->second->FastQueuePacket(&outapp, true, Client::CLIENT_CONNECTED);
+			if (MakeDoorSpawnPacket(outapp, it->second)) {
+				it->second->FastQueuePacket(&outapp, true, Client::CLIENT_CONNECTED);
+			} else {
+				safe_delete(outapp);
+			}
 		}
 		++it;
 	}
@@ -2738,8 +2747,7 @@ void EntityList::RemoveAllObjects()
 {
 	auto it = object_list.begin();
 	while (it != object_list.end()) {
-		safe_delete(it->second);
-		free_ids.push(it->first);
+		RetireObject(it->first, it->second);
 		it = object_list.erase(it);
 	}
 }
@@ -2982,12 +2990,55 @@ bool EntityList::RemoveClient(Client *delete_client)
 	return false;
 }
 
+EntityList::ObjectClickScope::~ObjectClickScope()
+{
+	if (owner_) {
+		owner_->EndObjectClick(object_);
+	}
+}
+
+EntityList::ObjectClickScope EntityList::PinObjectForClick(uint16 entity_id)
+{
+	auto object = GetObjectByID(entity_id);
+	if (!object) {
+		return {};
+	}
+	++object_click_depth[object];
+	return ObjectClickScope(this, object);
+}
+
+void EntityList::EndObjectClick(Object *object)
+{
+	auto depth = object_click_depth.find(object);
+	if (depth == object_click_depth.end() || --depth->second != 0) {
+		return;
+	}
+	object_click_depth.erase(depth);
+	auto retired = deferred_click_objects.find(object);
+	if (retired != deferred_click_objects.end()) {
+		const auto entity_id = retired->second;
+		deferred_click_objects.erase(retired);
+		delete object;
+		free_ids.push(entity_id);
+	}
+}
+
+void EntityList::RetireObject(uint16 entity_id, Object *object)
+{
+	if (object_click_depth.find(object) != object_click_depth.end()) {
+		// Keep both the instance and its ID out of reuse until click callbacks finish.
+		deferred_click_objects.emplace(object, entity_id);
+		return;
+	}
+	delete object;
+	free_ids.push(entity_id);
+}
+
 bool EntityList::RemoveObject(uint16 delete_id)
 {
 	auto it = object_list.find(delete_id);
 	if (it != object_list.end()) {
-		safe_delete(it->second);
-		free_ids.push(it->first);
+		RetireObject(it->first, it->second);
 		object_list.erase(it);
 		return true;
 	}
@@ -4684,6 +4735,146 @@ uint16 EntityList::CreateGroundObjectFromModel(const char *model, const glm::vec
 	}
 
 	return object->GetID();
+}
+
+std::pair<uint16, std::string> EntityList::CreateTransientClickObject(
+	const std::string &owner, const char *model, const glm::vec4 &position)
+{
+	if (!zone || owner.empty() || !model ||
+		!std::isfinite(position.x) || !std::isfinite(position.y) ||
+		!std::isfinite(position.z) || !std::isfinite(position.w)) {
+		return {};
+	}
+	const auto model_length = std::strlen(model);
+	if (model_length < 4 || model_length >= 32 || free_ids.empty() ||
+		free_ids.front() == 0 || GetID(free_ids.front()) != nullptr) {
+		return {};
+	}
+	const auto token = EQ::Util::UUID::Generate().ToString();
+	if (token.empty()) {
+		return {};
+	}
+	// This constructor has no item/world-container instance and preserves authored Z.
+	auto object = std::make_unique<Object>(
+		static_cast<const EQ::ItemInstance *>(nullptr), position.x, position.y,
+		position.z, position.w, 0, true);
+	strn0cpy(object->m_data.object_name, model, sizeof(object->m_data.object_name));
+	object->m_click_only = true;
+	object->m_click_owner = owner;
+	object->m_click_token = token;
+	AddObject(object.get(), true);
+	const auto entity_id = object->GetID();
+	object.release(); // object_list owns it, as for other AddObject callers.
+	return {entity_id, token};
+}
+
+bool EntityList::RemoveTransientClickObject(
+	const std::string &owner, uint16 entity_id, const std::string &token)
+{
+	auto object = GetObjectByID(entity_id);
+	if (!object || entity_id == 0 || owner.empty() || token.empty() ||
+		!object->m_click_only || object->m_id != 0 || object->m_inst != nullptr ||
+		object->m_ground_spawn || object->m_quest_ground_spawn ||
+		object->m_click_owner != owner || object->m_click_token != token) {
+		return false;
+	}
+	object->Depop();
+	return true;
+}
+
+std::pair<uint16, std::string> EntityList::CreateTransientDoor(
+	const std::string &owner, const char *model, const glm::vec4 &position, uint8 type, uint16 size
+)
+{
+	if (!zone || owner.empty() || !model || size == 0 ||
+		!std::isfinite(position.x) || !std::isfinite(position.y) ||
+		!std::isfinite(position.z) || !std::isfinite(position.w)) {
+		return {};
+	}
+	const auto model_length = std::strlen(model);
+	if (model_length < 4 || model_length >= 32 || door_list.size() >= 500 ||
+		free_ids.empty() || free_ids.front() == 0 || GetID(free_ids.front()) != nullptr) {
+		return {};
+	}
+
+	// Reserve DB IDs even when a door is not currently visible through content filtering.
+	const auto query = fmt::format(
+		"SELECT doorid FROM doors WHERE zone = '{}' AND (version = {} OR version = -1)",
+		Strings::Escape(zone->GetShortName()), zone->GetInstanceVersion()
+	);
+	auto results = content_db.QueryDatabase(query);
+	if (!results.Success()) {
+		return {};
+	}
+	std::array<bool, 256> used{};
+	used[0] = true;
+	for (auto row = results.begin(); row != results.end(); ++row) {
+		if (!row[0]) {
+			return {};
+		}
+		const int id = Strings::ToInt(row[0]);
+		if (id > 0 && id < static_cast<int>(used.size())) {
+			used[id] = true;
+		}
+	}
+	for (const auto &entry : door_list) {
+		used[entry.second->GetDoorID()] = true;
+	}
+	uint16 client_id = 1;
+	while (client_id < used.size() && used[client_id]) {
+		++client_id;
+	}
+	if (client_id == used.size()) {
+		return {};
+	}
+
+	auto record = DoorsRepository::NewEntity();
+	record.id = 0;
+	record.doorid = client_id;
+	record.zone = zone->GetShortName();
+	record.version = zone->GetInstanceVersion();
+	record.name = model;
+	record.pos_x = position.x;
+	record.pos_y = position.y;
+	record.pos_z = position.z;
+	record.heading = position.w;
+	record.opentype = type;
+	record.size = size;
+	auto door = std::make_unique<Doors>(record);
+	door->m_transient_owner = owner;
+	door->m_transient_token = EQ::Util::UUID::Generate().ToString();
+	if (door->m_transient_token.empty()) {
+		return {};
+	}
+	const auto token = door->m_transient_token;
+	AddDoor(door.get());
+	const auto entity_id = static_cast<uint16>(door->GetEntityID());
+	door.release(); // door_list now owns the instance, as for ordinary AddDoor callers.
+
+	// Rebuild client lists only: existing server Doors instances and state are retained.
+	DespawnAllDoors();
+	RespawnAllDoors();
+	return {entity_id, token};
+}
+
+bool EntityList::RemoveTransientDoor(const std::string &owner, uint16 entity_id, const std::string &token)
+{
+	const auto it = door_list.find(entity_id);
+	if (entity_id == 0 || owner.empty() || token.empty() || it == door_list.end()) {
+		return false;
+	}
+	const auto door = it->second;
+	if (door->GetDoorDBID() != 0 || door->m_transient_owner.empty() ||
+		door->m_transient_token.empty() || door->m_transient_owner != owner ||
+		door->m_transient_token != token) {
+		return false;
+	}
+	if (!RemoveDoor(entity_id)) {
+		return false;
+	}
+	DespawnAllDoors();
+	RespawnAllDoors();
+	return true;
 }
 
 uint16 EntityList::CreateDoor(const char *model, const glm::vec4& position, uint8 opentype, uint16 size)

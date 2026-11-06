@@ -106,6 +106,8 @@ void MapOpcodes()
 	ConnectingOpcodes[OP_ZoneEntry] = &Client::Handle_Connect_OP_ZoneEntry;
 
 	// connected opcode handler assignments:
+	ConnectedOpcodes[OP_AchievementReward] = &Client::Handle_OP_AchievementReward;
+	ConnectedOpcodes[OP_RewardSelection] = &Client::Handle_OP_RewardSelection;
 	ConnectedOpcodes[OP_AAAction] = &Client::Handle_OP_AAAction;
 	ConnectedOpcodes[OP_AcceptNewTask] = &Client::Handle_OP_AcceptNewTask;
 	ConnectedOpcodes[OP_AdventureInfoRequest] = &Client::Handle_OP_AdventureInfoRequest;
@@ -871,6 +873,10 @@ void Client::CompleteConnect()
 
 	/* This needs to be set, this determines whether or not data was loaded properly before a save */
 	client_data_loaded = true;
+	// Retry pending common-only rewards with a fully loaded save target.
+	if (task_state) {
+		task_state->RestorePendingRewardSelection(this);
+	}
 
 	CalcItemScale();
 	DoItemEnterZone();
@@ -1915,6 +1921,92 @@ void Client::Handle_OP_AAAction(const EQApplicationPacket *app)
 	}
 }
 
+void Client::Handle_OP_AchievementReward(const EQApplicationPacket *app)
+{
+	HandleRewardSelectionPacket(
+		app,
+		RewardSelectionChannel::Claimable
+	);
+}
+
+void Client::Handle_OP_RewardSelection(const EQApplicationPacket *app)
+{
+	HandleRewardSelectionPacket(app, RewardSelectionChannel::Preview);
+}
+
+void Client::HandleRewardSelectionPacket(
+	const EQApplicationPacket *app,
+	RewardSelectionChannel channel
+)
+{
+	if (!app) {
+		return;
+	}
+
+	auto &selection = GetRewardSelection();
+	auto result = selection.HandlePacket(*app, channel);
+	switch (result.type) {
+	case RewardSelectionPacketResultType::ViewRequested:
+		if (
+			result.requested_source == RewardSelectionSource::Task &&
+			task_state
+		) {
+			task_state->SendRewardSelection(this, result.requested_id);
+		}
+		return;
+	case RewardSelectionPacketResultType::PendingRequested:
+		if (const auto active = selection.ActiveSession(
+				RewardSelectionChannel::Claimable
+			)) {
+			const auto session = *active;
+			selection.Open(session);
+		}
+		if (task_state) {
+			task_state->RestorePendingRewardSelection(this);
+		}
+		if (
+			!selection.HasActiveSession(RewardSelectionChannel::Claimable)
+		) {
+			selection.Clear(RewardSelectionChannel::Claimable);
+		}
+		return;
+	case RewardSelectionPacketResultType::ClaimRequested:
+		break;
+	default:
+		return;
+	}
+
+	if (!result.claim) {
+		return;
+	}
+
+	auto delivery_result = RewardSelectionDeliveryResult::RetryableFailure;
+	switch (result.claim->session.source.source) {
+	case RewardSelectionSource::Task:
+		if (task_state) {
+			delivery_result = task_state->ClaimRewardSelection(
+				this,
+				*result.claim
+			);
+		}
+		break;
+	default:
+		break;
+	}
+
+	selection.CompleteClaim(*result.claim, delivery_result);
+	if (delivery_result == RewardSelectionDeliveryResult::Ambiguous) {
+		return;
+	}
+
+	if (task_state) {
+		task_state->RestorePendingRewardSelection(this);
+	}
+	if (!selection.HasActiveSession(RewardSelectionChannel::Claimable)) {
+		selection.Clear(RewardSelectionChannel::Claimable);
+	}
+}
+
 void Client::Handle_OP_AcceptNewTask(const EQApplicationPacket *app)
 {
 
@@ -2015,7 +2107,7 @@ void Client::Handle_OP_AdventureMerchantPurchase(const EQApplicationPacket *app)
 	bool found = false;
 	std::list<MerchantList> merchantlists = zone->merchanttable[merchantid];
 	for (auto merchantlist : merchantlists) {
-		if (GetLevel() < merchantlist.level_required) {
+		if (GetLevel() < merchantlist.level_required || !MeetsMerchantLanguageRequirement(merchantlist)) {
 			continue;
 		}
 
@@ -2205,7 +2297,7 @@ void Client::Handle_OP_AdventureMerchantRequest(const EQApplicationPacket *app)
 	std::list<MerchantList>::const_iterator itr;
 	for (itr = merlist.begin(); itr != merlist.end(); ++itr) {
 		const MerchantList &ml = *itr;
-		if (GetLevel() < ml.level_required) {
+		if (GetLevel() < ml.level_required || !MeetsMerchantLanguageRequirement(ml)) {
 			continue;
 		}
 
@@ -2571,7 +2663,7 @@ void Client::Handle_OP_AltCurrencyMerchantRequest(const EQApplicationPacket *app
 		std::list<MerchantList>::const_iterator itr;
 		for (itr = merlist.begin(); itr != merlist.end() && count < 255; ++itr) {
 			const MerchantList &ml = *itr;
-			if (GetLevel() < ml.level_required) {
+			if (GetLevel() < ml.level_required || !MeetsMerchantLanguageRequirement(ml)) {
 				continue;
 			}
 
@@ -2635,7 +2727,7 @@ void Client::Handle_OP_AltCurrencyPurchase(const EQApplicationPacket *app)
 		std::list<MerchantList>::const_iterator itr;
 		for (itr = merlist.begin(); itr != merlist.end(); ++itr) {
 			MerchantList ml = *itr;
-			if (GetLevel() < ml.level_required) {
+			if (GetLevel() < ml.level_required || !MeetsMerchantLanguageRequirement(ml)) {
 				continue;
 			}
 
@@ -4113,6 +4205,13 @@ void Client::Handle_OP_BlockedBuffs(const EQApplicationPacket *app)
 	}
 }
 
+uint16 Client::GetPassengerBoatID() const
+{
+	const auto id = m_boat_passenger.Get();
+	const auto boat = id ? entity_list.GetMob(id) : nullptr;
+	return boat && (boat->IsBoat() || boat->IsControllableBoat()) ? id : 0;
+}
+
 void Client::Handle_OP_BoardBoat(const EQApplicationPacket *app)
 {
 	// this sends unclean mob name, so capped at 64
@@ -4718,31 +4817,36 @@ void Client::Handle_OP_ClickObject(const EQApplicationPacket *app)
 		return;
 	}
 
-	auto* click_object = (ClickObject_Struct*) app->pBuffer;
-	auto* entity = entity_list.GetID(click_object->drop_id);
-	if (entity && entity->IsObject()) {
-		auto* object = entity->CastToObject();
+	ClickObject_Struct click_object{};
+	memcpy(&click_object, app->pBuffer, sizeof(click_object));
+	if (click_object.drop_id == 0 || click_object.drop_id > UINT16_MAX) {
+		return;
+	}
+	const auto object_id = static_cast<uint16>(click_object.drop_id);
+	auto click_scope = entity_list.PinObjectForClick(object_id);
+	auto *object = click_scope.GetObject();
+	if (object) {
 
-		object->HandleClick(this, click_object);
+		object->HandleClick(this, &click_object);
 
 		if (parse->PlayerHasQuestSub(EVENT_CLICK_OBJECT)) {
 			std::vector<std::any> args = { object };
-			parse->EventPlayer(EVENT_CLICK_OBJECT, this, std::to_string(click_object->drop_id), GetID(), &args);
+			parse->EventPlayer(EVENT_CLICK_OBJECT, this, std::to_string(object_id), GetID(), &args);
 		}
 
 		if (parse->ZoneHasQuestSub(EVENT_CLICK_OBJECT)) {
 			std::vector<std::any> args = { object, this };
-			parse->EventZone(EVENT_CLICK_OBJECT, zone, std::to_string(click_object->drop_id), GetID(), &args);
+			parse->EventZone(EVENT_CLICK_OBJECT, zone, std::to_string(object_id), GetID(), &args);
 		}
 
-		if (IsDevToolsEnabled()) {
-			SetObjectToolEntityId(entity->GetID());
+		if (IsDevToolsEnabled() && entity_list.GetObjectByID(object_id) == object) {
+			SetObjectToolEntityId(object_id);
 			ObjectManipulation::CommandHeader(this);
 			Message(
 				Chat::White,
 				fmt::format(
 					"Object ({}) [{}] [{}]",
-					entity->CastToObject()->GetDBID(),
+					object->GetDBID(),
 					Saylink::Silent("#object edit", "Edit"),
 					Saylink::Silent("#object delete", "Delete")
 				).c_str()
@@ -4893,12 +4997,19 @@ void Client::Handle_OP_ClientUpdate(const EQApplicationPacket *app) {
 	float	cz = ppu->z_pos;
 	float 	new_heading = EQ12toFloat(ppu->heading);
 
+	// A normal on-foot update clears passenger state. Only a packet naming
+	// an existing boat can refresh it; proximity to a ship never boards it.
+	m_boat_passenger.Observe(0, false);
+
 	if (on_boat) {
 		Mob *boat = entity_list.GetMob(ppu->vehicle_id);
 		if (boat == 0) {
 			LogError("Can't find boat for client position offset.");
 		}
 		else {
+			m_boat_passenger.Observe(
+				ppu->vehicle_id, boat->IsBoat() || boat->IsControllableBoat()
+			);
 			if (boat->turning) return;
 
 			// Calculate angle from boat heading to EQ heading
@@ -14142,6 +14253,20 @@ void Client::Handle_OP_ShopPlayerBuy(const EQApplicationPacket *app)
 	std::list<MerchantList>::const_iterator itr;
 	for (itr = merlist.begin(); itr != merlist.end(); ++itr) {
 		MerchantList ml = *itr;
+		if (mp->itemslot == ml.slot && !MeetsMerchantLanguageRequirement(ml)) {
+			Message(Chat::Red, "Your language skill is too low to purchase that item.");
+			return;
+		}
+		if (mp->itemslot == ml.slot) {
+			const int32 faction_id = tmp->GetPrimaryFaction();
+			const int32 faction_level = (!faction_id || sneaking) ?
+				0 : GetModCharacterFactionLevel(faction_id);
+			if (faction_level < ml.faction_required) {
+				Message(Chat::Red, "Your faction standing is too low to purchase that item.");
+				SendMerchantEnd();
+				return;
+			}
+		}
 		if (GetLevel() < ml.level_required) {
 			continue;
 		}

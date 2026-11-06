@@ -1,0 +1,559 @@
+--- a/zone/client.h
++++ b/zone/client.h
+@@ -23,6 +23,7 @@
+ 
+ #include "../common/boat_passenger.h"
+ 
++namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; }
+ namespace SpiritShroud { struct Template; }
+ class ZoneDatabase;
+ struct SpiritShroudDestination;
+@@ -2130,6 +2131,8 @@
+ 		std::string return_source;
+ 	};
+ private:
++	friend class FirePersonalOccurrenceSource::SharedSuccessorNative;
++	std::unique_ptr<FirePersonalOccurrenceSource::SharedSuccessorPending> m_fire_shared_successor;
+ 	ExternalHandinMoneyReturned m_external_handin_money_returned = {};
+ 	std::vector<uint32_t>       m_external_handin_items_returned = {};
+ public:
+--- a/zone/client.cpp
++++ b/zone/client.cpp
+@@ -16,6 +16,7 @@
+ 	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+ #include "../common/mercenary/rof2_timer.h"
++#include "fire_shared_successor_native.h"
+ 
+ #include "housing_guild_portal.h"
+ #include "housing_actor_publication.h"
+--- a/zone/shared_task_zone_messaging.cpp
++++ b/zone/shared_task_zone_messaging.cpp
+@@ -20,19 +20,162 @@
+ #include "common/servertalk.h"
+ #include "common/shared_tasks.h"
+ #include "zone/client.h"
++#include "fire_shared_successor_native.h"
++#include "zone/task_client_state.h"
++#include "zone/task_manager.h"
++#include "zone/npc.h"
++#include "zone/dynamic_zone.h"
++#include "zone/zonedb.h"
+ 
+ #include <memory>
+ #include <vector>
++
++namespace FirePersonalOccurrenceSource {
++namespace {
++thread_local const SharedSuccessorPending* active_fire_shared_request=nullptr;
++struct SharedRequestScope {
++ const SharedSuccessorPending* previous;
++ explicit SharedRequestScope(const SharedSuccessorPending* p):previous(active_fire_shared_request) {active_fire_shared_request=p;}
++ ~SharedRequestScope(){active_fire_shared_request=previous;}
++};
++bool SavedLocalShared(Database& db,const SharedSuccessorPending& s,const ClientTaskInformation& current) {
++ if(current.task_id!=920170 || current.accepted_time!=static_cast<int>(s.accepted.accept_time) ||
++  current.was_rewarded || !s.local_occurrence) return false;
++ auto r=db.QueryDatabase(fmt::format(
++  "SELECT 1 FROM character_tasks c JOIN character_task_reward_instances r ON r.character_id=c.charid "
++  "AND r.task_id=c.taskid AND r.accepted_time=c.acceptedtime "
++  "JOIN character_shared_task_reward_instances h ON h.character_id=c.charid AND h.task_id=c.taskid "
++  "AND h.occurrence_id=r.occurrence_id WHERE c.charid={} AND c.taskid=920170 AND c.type={} "
++  "AND c.slot={} AND c.acceptedtime={} AND c.was_rewarded=0 AND r.occurrence_id={} AND h.shared_task_id={}",
++  s.source.character_id,static_cast<int>(TaskType::Shared),current.slot,current.accepted_time,
++  s.local_occurrence,s.world.run));
++ return r.Success() && r.RowCount()==1;
++}
++}
++bool SharedSuccessorNative::Match(const SharedSuccessorPending& s,const ServerSharedTaskRequest_Struct& p,
++ const FireSharedCorrelation::Trailer& t) {
++ return p.requested_character_id==s.source.character_id && p.requested_task_id==920170 &&
++  p.requested_npc_entity_id==s.giver && t.source_occurrence==s.source.occurrence_id &&
++  t.pending_reward==s.reward;
++}
++CorrelatedSharedResult SharedSuccessorNative::Dispatch(Handoff& handoff,const Binding& old,Client& c,NPC& npc,
++ uint32_t actual_zone,uint32_t actual_instance,uint32_t spawn) {
++ if(active_fire_shared_request || old.task_id!=920169 || !old.occurrence_id || !old.character_id ||
++  old.slot<0 || old.accepted_time<=0 || old.character_id!=c.CharacterID() || !c.GetTaskState() ||
++  c.m_requesting_shared_task || actual_zone!=490 || actual_instance || !spawn ||
++  npc.GetNPCTypeID()!=490061 || !npc.GetID() || npc.GetSpawnPointID()!=spawn ||
++  (c.m_fire_shared_successor && (!c.m_fire_shared_successor->ready ||
++   c.m_fire_shared_successor->source.occurrence_id==old.occurrence_id))) return CorrelatedSharedResult::Hold;
++ const auto* next=TaskManager::Instance()->GetTaskData(920170);
++ if(!next || next->type!=TaskType::Shared) return CorrelatedSharedResult::Hold;
++ auto pending=std::make_unique<SharedSuccessorPending>();
++ auto intent=TakeOriginalHandoffOnce(handoff);
++ if(!intent || intent->next_task!=920170 || intent->next_type!=TaskType::Shared || !intent->pending_reward_id ||
++  intent->finished.character_id!=old.character_id || intent->finished.task_id!=old.task_id ||
++  intent->finished.occurrence_id!=old.occurrence_id || intent->finished.slot!=old.slot ||
++  intent->finished.accepted_time!=old.accepted_time) return CorrelatedSharedResult::Hold;
++ pending->source=old;pending->reward=intent->pending_reward_id;
++ pending->giver=npc.GetID();pending->spawn=spawn;pending->original_actor=&npc;
++ c.m_fire_shared_successor=std::move(pending);
++ SharedRequestScope scope(c.m_fire_shared_successor.get());
++ c.AssignTask(920170,npc.GetID(),true);
++ return CorrelatedSharedResult::NativeInvocationUnconfirmed; // stack-only after call
++}
++bool SharedSuccessorNative::Stamp(Client& c,ServerSharedTaskRequest_Struct& p,FireSharedCorrelation::Trailer& t) {
++ if(p.requested_task_id!=920170 || !c.m_fire_shared_successor || c.m_fire_shared_successor->ready) return true;
++ auto& s=*c.m_fire_shared_successor;
++ if(active_fire_shared_request!=&s || s.held || s.stamped || p.requested_character_id!=s.source.character_id ||
++  p.requested_npc_entity_id!=s.giver) return false;
++ s.stamped=true;t.source_occurrence=s.source.occurrence_id;t.pending_reward=s.reward;
++ return true;
++}
++bool SharedSuccessorNative::BeginAccept(Client& c,const ServerSharedTaskRequest_Struct& p,
++ const FireSharedCorrelation::Trailer& t) {
++ auto* s=c.m_fire_shared_successor.get();
++ if(!s || !s->stamped || s->held || s->accept_claimed || !Match(*s,p,t) ||
++  t.phase!=FireSharedCorrelation::Admitted || t.dz || t.instance || !zone ||
++  zone->GetZoneID()!=490 || zone->GetInstanceID()) return false;
++ s->accept_claimed=true; // seal before DB reads/mutable task acceptance
++ if(!c.GetTaskState()) {s->held=true;return false;}
++ auto* n=entity_list.GetNPCByID(s->giver);
++ if(!n || n!=s->original_actor || n->GetNPCTypeID()!=490061 || n->GetSpawnPointID()!=s->spawn ||
++  !FireSharedCorrelation::HeaderAndRoster(database,p,t)) {s->held=true;return false;}
++ s->accepted=p;s->world=t;return true;
++}
++void SharedSuccessorNative::ObserveReservation(Client& c,int task,uint32_t accepted,uint64_t occurrence) {
++ auto* s=c.m_fire_shared_successor.get();
++ if(!s || !s->accept_claimed || s->held || s->save_seen || task!=920170 ||
++  !c.m_requesting_shared_task || accepted!=s->accepted.accept_time || !occurrence) return;
++ s->local_occurrence=occurrence; // SAME existing successful native shared Ensure result
++}
++void SharedSuccessorNative::ObserveSave(Client& c,TaskType type,const ClientTaskInformation& current,
++ bool actual_save,int activity_count) {
++ auto* s=c.m_fire_shared_successor.get();
++ if(!s || !s->accept_claimed || s->held || s->save_seen || current.task_id!=920170 ||
++  !c.m_requesting_shared_task) return;
++ s->save_seen=true;
++ if(type!=TaskType::Shared || !actual_save || activity_count!=19 || !SavedLocalShared(database,*s,current) ||
++  !FireSharedCorrelation::HeaderAndRoster(database,s->accepted,s->world)) {s->held=true;return;}
++ auto r=database.QueryDatabase(fmt::format(
++  "SELECT COUNT(*) FROM character_activities WHERE charid={} AND taskid=920170 "
++  "AND activityid BETWEEN 0 AND 18 AND donecount=0 AND completed=0",c.CharacterID()));
++ if(!r.Success() || r.RowCount()!=1) {s->held=true;return;}
++ auto row=r.begin();
++ if(!row[0] || std::string(row[0])!="19") {s->held=true;return;}
++ s->local_saved=true; // before mutable TASK_ACCEPTED; not a post-callback view
++}
++void SharedSuccessorNative::Finish(Client& c) {
++ auto* s=c.m_fire_shared_successor.get();
++ if(!s || s->held || s->ready || !s->local_saved || !s->reloaded || !s->ready_received) return;
++ auto* state=c.GetTaskState();
++ if(!state || c.GetSharedTaskId()<=0 || static_cast<uint64_t>(c.GetSharedTaskId())!=s->world.run ||
++  !SavedLocalShared(database,*s,state->GetActiveSharedTask()) ||
++  !FireSharedCorrelation::PersistedMissionReady(database,s->accepted,s->world)) {s->held=true;return;}
++ bool matched=false;
++ for(auto* dz:c.GetDynamicZones(490,1)) {
++  if(dz && dz->GetID()==s->world.dz && dz->GetInstanceID()==s->world.instance &&
++   dz->GetType()==DynamicZoneType::Mission && dz->IsValid() && !dz->IsExpired() &&
++   dz->HasMember(c.CharacterID()) && dz->HasDatabaseMember(c.CharacterID())) matched=true;
++ }
++ if(!matched) {s->held=true;return;}
++ s->ready=true; // private exact original source->actual run/roster/DZ result; no travel/reward
++}
++void SharedSuccessorNative::AfterReload(Client& c) {
++ auto* s=c.m_fire_shared_successor.get();
++ if(!s || !s->accept_claimed || s->held) return;
++ s->reloaded=true;Finish(c);
++}
++void SharedSuccessorNative::ReadyOrHeld(Client& c,const ServerSharedTaskRequest_Struct& p,
++ const FireSharedCorrelation::Trailer& t) {
++ auto* s=c.m_fire_shared_successor.get();
++ if(!s || !s->stamped || s->held || s->ready || !Match(*s,p,t)) return;
++ if(t.phase==FireSharedCorrelation::Held) {s->held=true;return;}
++ if(t.phase!=FireSharedCorrelation::Ready || !s->accept_claimed || s->ready_received ||
++  p.accept_time!=s->accepted.accept_time || t.run!=s->world.run ||
++  t.count!=s->world.count || !std::equal(std::begin(t.members),std::end(t.members),std::begin(s->world.members)) ||
++  !FireSharedCorrelation::PersistedMissionReady(database,p,t)) {s->held=true;return;}
++ s->world=t;s->ready_received=true;Finish(c);
++}
++} // namespace FirePersonalOccurrenceSource
+ 
+ void SharedTaskZoneMessaging::HandleWorldMessage(ServerPacket *pack)
+ {
+ 	switch (pack->opcode) {
+ 		case ServerOP_SharedTaskAcceptNewTask: {
++			FireSharedCorrelation::Trailer fire_reply;
++			const auto kind=FireSharedCorrelation::Decode(pack->pBuffer,pack->size,fire_reply);
++			if(kind==FireSharedCorrelation::Kind::Invalid) break;
+ 			auto p = reinterpret_cast<ServerSharedTaskRequest_Struct *>(pack->pBuffer);
+ 			auto c = entity_list.GetClientByCharID(p->requested_character_id);
+ 			if (c) {
+ 				LogTasks("[ServerOP_SharedTaskAcceptNewTask] We're back in zone and I found [{}]", c->GetCleanName());
+ 
++				if(kind==FireSharedCorrelation::Kind::Fire) {
++					if(fire_reply.phase!=FireSharedCorrelation::Admitted) {
++						FirePersonalOccurrenceSource::SharedSuccessorNative::ReadyOrHeld(*c,*p,fire_reply);break;
++					}
++					if(!FirePersonalOccurrenceSource::SharedSuccessorNative::BeginAccept(*c,*p,fire_reply)) break;
++				}
+ 				c->m_requesting_shared_task = true;
+ 				c->GetTaskState()
+ 					->AcceptNewTask(
+@@ -43,6 +186,8 @@
+ 					);
+ 				c->LoadClientTaskState();
+ 				c->m_requesting_shared_task = false;
++				if(kind==FireSharedCorrelation::Kind::Fire)
++					FirePersonalOccurrenceSource::SharedSuccessorNative::AfterReload(*c);
+ 			}
+ 
+ 			break;
+--- a/zone/task_client_state.cpp
++++ b/zone/task_client_state.cpp
+@@ -39,6 +39,7 @@
+ #include "zone/zonedb.h"
+ #include "fire_personal_successor_dispatch.h"
+ #include "fire_original_final_hail_frame.h"
++#include "fire_shared_successor_native.h"
+ 
+ #include <cstdlib>
+ #include <limits>
+@@ -3534,18 +3535,17 @@
+ 			client->GetCleanName()
+ 		);
+ 
+-		// struct
+-		auto pack = new ServerPacket(ServerOP_SharedTaskRequest, sizeof(ServerSharedTaskRequest_Struct));
+-		auto *r   = (ServerSharedTaskRequest_Struct *) pack->pBuffer;
+-
+-		// fill
+-		r->requested_character_id = client->CharacterID();
+-		r->requested_task_id      = task_id;
+-		r->requested_npc_entity_id  = npc_entity_id;
+-
+-		// send
+-		worldserver.SendPacket(pack);
+-		safe_delete(pack);
++		ServerSharedTaskRequest_Struct request{};
++		request.requested_character_id=client->CharacterID();
++		request.requested_task_id=task_id;
++		request.requested_npc_entity_id=npc_entity_id;
++		FireSharedCorrelation::Trailer fire_origin;
++		if (!FirePersonalOccurrenceSource::SharedSuccessorNative::Stamp(*client,request,fire_origin)) return;
++		const bool correlated=fire_origin.source_occurrence!=0;
++		ServerPacket packet(ServerOP_SharedTaskRequest,sizeof(request)+(correlated?sizeof(fire_origin):0));
++		std::memcpy(packet.pBuffer,&request,sizeof(request));
++		if(correlated) std::memcpy(packet.pBuffer+sizeof(request),&fire_origin,sizeof(fire_origin));
++		worldserver.SendPacket(&packet);
+ 
+ 		return;
+ 	}
+@@ -3734,6 +3734,8 @@
+ 			);
+ 			return;
+ 		}
++		if(task->type==TaskType::Shared) FirePersonalOccurrenceSource::SharedSuccessorNative::ObserveReservation(
++			*client,task_id,reward_accepted_time,*occurrence_id);
+ 		if (fire_acceptance && task->type == TaskType::Quest) {
+ 			// Retain this SAME native reservation, before its locals go out of scope.
+ 			fire_acceptance->native_reserved_occurrence_id = *occurrence_id;
+@@ -3797,6 +3799,8 @@
+ 	RecordFirePersonalAcceptanceBeforeCallbacks(
+ 		fire_acceptance, client, task->type, *active_slot, acceptance_saved
+ 	);
++	FirePersonalOccurrenceSource::SharedSuccessorNative::ObserveSave(
++		*client,task->type,*active_slot,acceptance_saved,task->activity_count);
+ 
+ 	NPC *npc = entity_list.GetNPCByID(npc_entity_id);
+ 	if (npc) {
+--- a/world/shared_task_manager.h
++++ b/world/shared_task_manager.h
+@@ -25,6 +25,7 @@
+ #include <optional>
+ #include <set>
+ 
++namespace FireSharedCorrelation { struct Trailer; }
+ class DynamicZone;
+ 
+ namespace EQ {
+@@ -56,7 +57,7 @@
+ 	std::vector<TaskActivitiesRepository::TaskActivities> GetSharedTaskActivityDataByTaskId(uint32 task_id);
+ 
+ 	// client attempting to create a shared task
+-	void AttemptSharedTaskCreation(uint32 requested_task_id, uint32 requested_character_id, uint32 npc_type_id);
++	void AttemptSharedTaskCreation(uint32 requested_task_id, uint32 requested_character_id, uint32 npc_type_id, const FireSharedCorrelation::Trailer* fire_origin=nullptr);
+ 
+ 	// shared task activity update middleware
+ 	void SharedTaskActivityUpdate(
+--- a/world/shared_task_manager.cpp
++++ b/world/shared_task_manager.cpp
+@@ -26,6 +26,7 @@
+ #include "common/repositories/completed_shared_tasks_repository.h"
+ #include "common/repositories/shared_task_activity_state_repository.h"
+ #include "common/repositories/shared_task_dynamic_zones_repository.h"
++#include "common/fire_shared_correlation.h"
+ #include "common/repositories/shared_task_members_repository.h"
+ #include "common/rulesys.h"
+ #include "common/shared_task_completion.h"
+@@ -56,12 +57,63 @@
+ 	return this;
+ }
+ 
++namespace {
++void SendFireSharedResponse(uint32_t character,uint32_t giver,uint32_t accepted,
++ const FireSharedCorrelation::Trailer& trailer) {
++ ServerSharedTaskRequest_Struct base{};
++ base.requested_character_id=character;base.requested_task_id=920170;
++ base.requested_npc_entity_id=giver;base.accept_time=accepted;
++ ServerPacket packet(ServerOP_SharedTaskAcceptNewTask,sizeof(base)+sizeof(trailer));
++ std::memcpy(packet.pBuffer,&base,sizeof(base));
++ std::memcpy(packet.pBuffer+sizeof(base),&trailer,sizeof(trailer));
++ auto* cle=ClientList::Instance()->FindCLEByCharacterID(character);
++ if(cle && cle->Server()) cle->Server()->SendPacket(&packet);
++}
++std::optional<FireSharedCorrelation::Trailer> FireAdmissionOrigin(
++ const FireSharedCorrelation::Trailer* origin,SharedTask& actual,uint32_t requester) {
++ if(!origin) return std::nullopt;
++ auto t=*origin;t.phase=FireSharedCorrelation::Admitted;t.run=actual.GetDbSharedTask().id;
++ std::vector<uint32_t> ids;
++ for(const auto& m:actual.GetMembers()) ids.push_back(m.character_id);
++ std::sort(ids.begin(),ids.end());
++ if(ids.empty() || ids.size()>FireSharedCorrelation::MaxMembers ||
++  std::adjacent_find(ids.begin(),ids.end())!=ids.end() ||
++  !std::binary_search(ids.begin(),ids.end(),requester)) return std::nullopt;
++ t.count=static_cast<uint32_t>(ids.size());
++ std::copy(ids.begin(),ids.end(),std::begin(t.members));return t;
++}
++void SendFireMissionResult(Database& db,SharedTask& actual,uint32_t requester,uint32_t giver,
++ uint32_t accepted,FireSharedCorrelation::Trailer t) {
++ ServerSharedTaskRequest_Struct base{};base.requested_character_id=requester;
++ base.requested_task_id=920170;base.requested_npc_entity_id=giver;base.accept_time=accepted;
++ t.phase=FireSharedCorrelation::Held;
++ if(actual.dynamic_zone_ids.size()==1) {
++  auto it=dynamic_zone_manager.dynamic_zone_cache.find(actual.dynamic_zone_ids.front());
++  if(it!=dynamic_zone_manager.dynamic_zone_cache.end() && it->second) {
++   const auto& dz=*it->second;
++   t.dz=dz.GetID();t.instance=dz.GetInstanceID();
++   std::vector<uint32_t> dz_ids;
++   for(const auto& m:dz.GetMembers()) dz_ids.push_back(m.id);
++   std::sort(dz_ids.begin(),dz_ids.end());
++   auto admitted=FireSharedCorrelation::Roster(t,requester);
++   if(admitted && dz_ids==*admitted && dz.GetType()==DynamicZoneType::Mission &&
++    dz.GetZoneID()==490 && dz.GetZoneVersion()==1 && dz.IsValid() && !dz.IsExpired() &&
++    FireSharedCorrelation::PersistedMissionReady(db,base,t)) t.phase=FireSharedCorrelation::Ready;
++  }
++ }
++ SendFireSharedResponse(requester,giver,accepted,t);
++}
++} // namespace
++
+ void SharedTaskManager::AttemptSharedTaskCreation(
+ 	uint32 requested_task_id,
+ 	uint32 requested_character_id,
+-	uint32 npc_type_id
++	uint32 npc_type_id,
++	const FireSharedCorrelation::Trailer* fire_origin
+ )
+ {
++	if(fire_origin && (requested_task_id!=920170 || !FireSharedCorrelation::RequestShape(*fire_origin) ||
++	 !FireSharedCorrelation::DeliveredSource(*m_database,requested_character_id,*fire_origin))) return;
+ 	auto task = GetSharedTaskDataByTaskId(requested_task_id);
+ 	if (task.id != 0 && task.type == TASK_TYPE_SHARED) {
+ 		LogTasksDetail(
+@@ -205,16 +257,27 @@
+ 	// add to shared tasks list
+ 	auto& inserted = m_shared_tasks.emplace_back(new_shared_task);
+ 
++	const auto fire_admission=FireAdmissionOrigin(fire_origin,inserted,requested_character_id);
+ 	// send accept to members
+ 	for (auto &m: request.members) {
+ 		// only requester (leader) receives back the npc context to trigger task accept event
+ 		uint32_t npc_context_id = m.character_id == requested_character_id ? npc_type_id : 0;
++		if(fire_origin && m.character_id==requested_character_id) {
++			auto reply=fire_admission ? *fire_admission : *fire_origin;
++			ServerSharedTaskRequest_Struct base{};base.requested_character_id=requested_character_id;
++			base.requested_task_id=920170;base.requested_npc_entity_id=npc_context_id;
++			base.accept_time=shared_task_entity.accepted_time;
++			if(!fire_admission || !FireSharedCorrelation::HeaderAndRoster(*m_database,base,reply))
++				reply.phase=FireSharedCorrelation::Held;
++			SendFireSharedResponse(m.character_id,npc_context_id,base.accept_time,reply);
++		} else {
+ 		SendAcceptNewSharedTaskPacket(
+ 			m.character_id,
+ 			requested_task_id,
+ 			npc_context_id,
+ 			shared_task_entity.accepted_time
+ 		);
++		}
+ 	}
+ 	SendSharedTaskMemberListToAllMembers(&new_shared_task);
+ 
+@@ -222,6 +285,8 @@
+ 	HandleCompletedActivities(&inserted);
+ 
+ 	LoadDynamicZoneTemplate(&inserted);
++	if(fire_admission) SendFireMissionResult(*m_database,inserted,requested_character_id,
++		npc_type_id,shared_task_entity.accepted_time,*fire_admission);
+ 
+ 	LogTasks(
+ 		"shared_task_id [{}] created successfully | task_id [{}] member_count [{}] activity_count [{}] current tasks in state [{}]",
+--- a/world/shared_task_world_messaging.cpp
++++ b/world/shared_task_world_messaging.cpp
+@@ -22,6 +22,7 @@
+ #include "common/repositories/task_activities_repository.h"
+ #include "common/repositories/tasks_repository.h"
+ #include "common/shared_tasks.h"
++#include "common/fire_shared_correlation.h"
+ #include "common/tasks.h"
+ #include "world/cliententry.h"
+ #include "world/cliententry.h"
+@@ -36,7 +37,12 @@
+ {
+ 	switch (pack->opcode) {
+ 		case ServerOP_SharedTaskRequest: {
++			FireSharedCorrelation::Trailer origin;
++			const auto kind=FireSharedCorrelation::Decode(pack->pBuffer,pack->size,origin);
++			if(kind==FireSharedCorrelation::Kind::Invalid ||
++			 (kind==FireSharedCorrelation::Kind::Fire && !FireSharedCorrelation::RequestShape(origin))) break;
+ 			auto *r = (ServerSharedTaskRequest_Struct *) pack->pBuffer;
++			if(kind==FireSharedCorrelation::Kind::Fire && r->requested_task_id!=920170) break;
+ 			LogTasksDetail(
+ 				"[ServerOP_SharedTaskRequest] Received request from character [{}] task_id [{}] npc_entity_id [{}]",
+ 				r->requested_character_id,
+@@ -47,7 +53,8 @@
+ 			SharedTaskManager::Instance()->AttemptSharedTaskCreation(
+ 				r->requested_task_id,
+ 				r->requested_character_id,
+-				r->requested_npc_entity_id
++				r->requested_npc_entity_id,
++				kind==FireSharedCorrelation::Kind::Fire ? &origin : nullptr
+ 			);
+ 
+ 			break;
+--- /dev/null
++++ b/common/fire_shared_correlation.h
+@@ -0,0 +1,95 @@
++// OFFLINE SOURCE PROPOSAL ONLY. Matched World/Zone peers required; not activated.
++#pragma once
++#include "shared_tasks.h"
++#include "database.h"
++#include "dynamic_zone_base.h"
++#include "fmt/format.h"
++#include <algorithm>
++#include <array>
++#include <charconv>
++#include <cstring>
++#include <optional>
++#include <string>
++#include <vector>
++namespace FireSharedCorrelation {
++constexpr uint32_t Task=920170,SourceTask=920169,Magic=0x46495245,Version=1,MaxMembers=6;
++enum Phase : uint32_t { Request=1,Admitted=2,Ready=3,Held=4 };
++// Optional trailer only: ordinary ServerSharedTaskRequest_Struct is unchanged.
++struct Trailer {
++ uint32_t magic=Magic,version=Version,phase=Request,count=0;
++ uint64_t source_occurrence=0,pending_reward=0,run=0;
++ uint32_t dz=0,instance=0;
++ uint32_t members[MaxMembers]{};
++};
++enum class Kind { Ordinary,Fire,Invalid };
++inline Kind Decode(const unsigned char* bytes,uint32_t size,Trailer& out) {
++ if(size==sizeof(ServerSharedTaskRequest_Struct)) return Kind::Ordinary;
++ if(size!=sizeof(ServerSharedTaskRequest_Struct)+sizeof(Trailer)) return Kind::Invalid;
++ std::memcpy(&out,bytes+sizeof(ServerSharedTaskRequest_Struct),sizeof(out));
++ if(out.magic!=Magic || out.version!=Version || out.phase<Request || out.phase>Held ||
++  !out.source_occurrence || !out.pending_reward || out.count>MaxMembers) return Kind::Invalid;
++ return Kind::Fire;
++}
++inline bool RequestShape(const Trailer& t) {
++ if(t.phase!=Request || t.count || t.run || t.dz || t.instance) return false;
++ for(auto id:t.members) if(id) return false;
++ return true;
++}
++inline bool DeliveredSource(Database& db,uint32_t character,const Trailer& t) {
++ auto r=db.QueryDatabase(fmt::format(
++  "SELECT 1 FROM character_task_reward_selections s WHERE s.character_id={} AND s.task_id=920169 "
++  "AND s.source_instance_id={} AND s.pending_reward_id={} AND s.reward_set_id=920169 AND s.status=1 "
++  "AND EXISTS(SELECT 1 FROM character_task_rewards e WHERE e.character_id=s.character_id "
++  "AND e.pending_reward_id=s.pending_reward_id AND e.reward_id=3839201691 AND e.status=1)",
++  character,t.source_occurrence,t.pending_reward));
++ return r.Success() && r.RowCount()==1; // validate a received genuine origin, never reconstruct one
++}
++inline std::optional<uint64_t> Number(const char* text) {
++ if(!text) return std::nullopt;
++ const std::string s(text);uint64_t n=0;
++ const auto r=std::from_chars(s.data(),s.data()+s.size(),n);
++ if(r.ec!=std::errc{} || r.ptr!=s.data()+s.size() || !n) return std::nullopt;
++ return n;
++}
++inline std::optional<std::vector<uint32_t>> Roster(const Trailer& t,uint32_t requester) {
++ if(!t.count || t.count>MaxMembers) return std::nullopt;
++ std::vector<uint32_t> ids(t.members,t.members+t.count);
++ if(std::any_of(ids.begin(),ids.end(),[](auto id){return id==0;})) return std::nullopt;
++ std::sort(ids.begin(),ids.end());
++ if(std::adjacent_find(ids.begin(),ids.end())!=ids.end() ||
++  !std::binary_search(ids.begin(),ids.end(),requester)) return std::nullopt;
++ for(uint32_t i=t.count;i<MaxMembers;++i) if(t.members[i]) return std::nullopt;
++ return ids;
++}
++inline bool ExactRoster(Database& db,const std::string& sql,const std::vector<uint32_t>& expected) {
++ auto r=db.QueryDatabase(sql);
++ if(!r.Success() || r.RowCount()!=expected.size()) return false;
++ std::vector<uint32_t> actual;
++ for(auto row:r) {auto id=Number(row[0]);if(!id || *id>UINT32_MAX) return false;actual.push_back(*id);}
++ std::sort(actual.begin(),actual.end());return actual==expected;
++}
++inline bool HeaderAndRoster(Database& db,const ServerSharedTaskRequest_Struct& p,const Trailer& t) {
++ auto ids=Roster(t,p.requested_character_id);
++ if(!ids || !t.run || p.requested_task_id!=Task || !p.accept_time) return false;
++ auto h=db.QueryDatabase(fmt::format(
++  "SELECT 1 FROM shared_tasks WHERE id={} AND task_id={} AND accepted_time=FROM_UNIXTIME({}) "
++  "AND completion_time IS NULL AND (expire_time IS NULL OR expire_time>NOW())",
++  t.run,Task,p.accept_time));
++ return h.Success() && h.RowCount()==1 && ExactRoster(db,fmt::format(
++  "SELECT character_id FROM shared_task_members WHERE shared_task_id={}",t.run),*ids);
++}
++inline bool PersistedMissionReady(Database& db,const ServerSharedTaskRequest_Struct& p,const Trailer& t) {
++ auto ids=Roster(t,p.requested_character_id);
++ if(!ids || !t.dz || !t.instance || t.instance>UINT16_MAX || !HeaderAndRoster(db,p,t)) return false;
++ auto h=db.QueryDatabase(fmt::format(
++  "SELECT 1 FROM shared_task_dynamic_zones m JOIN dynamic_zones d ON d.id=m.dynamic_zone_id "
++  "JOIN instance_list i ON i.id=d.instance_id WHERE m.shared_task_id={} AND d.id={} "
++  "AND d.instance_id={} AND d.type={} AND i.zone=490 AND i.version=1 "
++  "AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP()) "
++  "AND (SELECT COUNT(*) FROM shared_task_dynamic_zones WHERE shared_task_id={})=1",
++  t.run,t.dz,t.instance,static_cast<int>(DynamicZoneType::Mission),t.run));
++ return h.Success() && h.RowCount()==1 && ExactRoster(db,fmt::format(
++  "SELECT character_id FROM dynamic_zone_members WHERE dynamic_zone_id={}",t.dz),*ids) &&
++  ExactRoster(db,fmt::format("SELECT charid FROM instance_list_player WHERE id={}",t.instance),*ids);
++}
++} // namespace FireSharedCorrelation
+--- /dev/null
++++ b/zone/fire_shared_successor_native.h
+@@ -0,0 +1,33 @@
++// OFFLINE SOURCE PROPOSAL ONLY. No NPC entry is registered by this header.
++#pragma once
++#include "common/fire_shared_correlation.h"
++#include "fire_personal_after_reward_r2.h"
++#include <memory>
++class Client;
++class NPC;
++namespace FirePersonalOccurrenceSource {
++struct SharedSuccessorPending {
++ Binding source;
++ uint64_t reward=0,local_occurrence=0;
++ uint32_t giver=0,spawn=0;
++ const NPC* original_actor=nullptr; // compare only, never dereference retained pointer
++ bool stamped=false,accept_claimed=false,save_seen=false,local_saved=false,reloaded=false;
++ bool ready_received=false,ready=false,held=false;
++ ServerSharedTaskRequest_Struct accepted{};
++ FireSharedCorrelation::Trailer world{};
++};
++enum class CorrelatedSharedResult { Hold,NativeInvocationUnconfirmed };
++class SharedSuccessorNative {
++ static bool Match(const SharedSuccessorPending&,const ServerSharedTaskRequest_Struct&,
++  const FireSharedCorrelation::Trailer&);
++ static void Finish(Client&);
++public:
++ static CorrelatedSharedResult Dispatch(Handoff&,const Binding&,Client&,NPC&,uint32_t,uint32_t,uint32_t);
++ static bool Stamp(Client&,ServerSharedTaskRequest_Struct&,FireSharedCorrelation::Trailer&);
++ static bool BeginAccept(Client&,const ServerSharedTaskRequest_Struct&,const FireSharedCorrelation::Trailer&);
++ static void ObserveReservation(Client&,int,uint32_t,uint64_t);
++ static void ObserveSave(Client&,TaskType,const ClientTaskInformation&,bool,int);
++ static void AfterReload(Client&);
++ static void ReadyOrHeld(Client&,const ServerSharedTaskRequest_Struct&,const FireSharedCorrelation::Trailer&);
++};
++} // namespace FirePersonalOccurrenceSource

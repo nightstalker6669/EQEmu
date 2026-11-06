@@ -171,6 +171,7 @@ public:
 	const char *AccountName();
 	int16 Admin();
 	uint32 CharacterID();
+	uint16 GetPassengerBoatID();
 	int GuildRank();
 	uint32 GuildID();
 	int GetFace();
@@ -379,6 +380,7 @@ public:
 	bool IsTaskCompleted(int task_id);
 	bool IsTaskActive(int task);
 	bool IsTaskActivityActive(int task, int activity);
+	uint16 GetSharedTaskInstanceID(uint32 task_id, uint32 zone_id, uint32 zone_version);
 	void LockSharedTask(bool lock);
 	void EndSharedTask();
 	void EndSharedTask(bool send_fail);

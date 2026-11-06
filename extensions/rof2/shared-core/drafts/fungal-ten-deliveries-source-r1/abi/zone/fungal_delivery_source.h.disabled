@@ -1,0 +1,82 @@
+#pragma once
+#include <cstdint>
+#include <functional>
+#include <memory>
+#include <vector>
+#include <utility>
+class Client;
+class NPC;
+class ServerPacket;
+class EQApplicationPacket;
+namespace EQ {class ItemInstance;}
+namespace FungalInventory {class NativeCustody;}
+namespace FungalItemSource {
+class NativeEvents;
+struct DeliveryFacts {
+ uint8_t scope=0;
+ uint32_t task=0,character=0,account=0,accepted=0;
+ uint64_t occurrence=0,local_occurrence=0,source_sequence=0;
+ int personal_slot=-1;
+ uint32_t npc_entity=0,npc_type=0,npc_spawn=0;
+ uint32_t zone=0,version=0,instance=0,dynamic_zone=0;
+};
+struct DeliveryTarget {uint32_t activity=0,item=0,maximum=0,native_count=0;};
+class OriginalDelivery final {
+ friend class NativeEvents;
+ friend class FungalInventory::NativeCustody;
+ friend class CommittedDelivery;
+ DeliveryFacts facts_;
+ struct Root {int16_t slot=0;EQ::ItemInstance* original=nullptr;
+  uint32_t item=0;int32_t serial=0;int16_t charges=0;};
+ std::vector<Root> roots_;
+ std::vector<DeliveryTarget> targets_;
+ uint32_t copper_=0,silver_=0,gold_=0,platinum_=0;
+ std::function<bool(Client&)> revalidate_;
+ std::function<Client*()> live_client_;
+ std::function<NPC*()> live_npc_;
+ std::vector<std::shared_ptr<ServerPacket>> progress_;
+ std::shared_ptr<EQApplicationPacket> finish_;
+ OriginalDelivery()=default;
+public:
+ ~OriginalDelivery()=default;
+ OriginalDelivery(const OriginalDelivery&)=delete;
+ OriginalDelivery& operator=(const OriginalDelivery&)=delete;
+};
+struct DeliveryEffect {
+ uint32_t activity=0,item=0,accepted_units=0,target_count=0,maximum=0;
+ uint64_t receipt=0;
+ std::shared_ptr<ServerPacket> progress;
+};
+// Constructed before the strict transaction finishes; Core returns it ONLY
+// after known physical COMMIT and allocation-free original map publication.
+class CommittedDelivery final {
+ friend class NativeEvents;
+ friend class FungalInventory::NativeCustody;
+ DeliveryFacts facts_;
+ std::vector<DeliveryEffect> effects_;
+ std::function<Client*()> live_client_;
+ std::function<NPC*()> live_npc_;
+ std::shared_ptr<EQApplicationPacket> finish_;
+ bool published_=false;
+ explicit CommittedDelivery(const OriginalDelivery& o)
+  :facts_(o.facts_),live_client_(o.live_client_),live_npc_(o.live_npc_),finish_(o.finish_)
+  {effects_.reserve(o.targets_.size());}
+public:
+ ~CommittedDelivery()=default;
+ CommittedDelivery(const CommittedDelivery&)=delete;
+ CommittedDelivery& operator=(const CommittedDelivery&)=delete;
+};
+// A different capability: a genuine World/scene receive reads an exact finite
+// delivery row plus current native stage ACK. It can never debit or award.
+class KnownDeliveryAck final {
+ friend class NativeEvents;
+ friend class FungalInventory::NativeCustody;
+ DeliveryFacts facts_;
+ DeliveryEffect effect_;
+ KnownDeliveryAck(DeliveryFacts f,DeliveryEffect e):facts_(f),effect_(std::move(e)){}
+public:
+ ~KnownDeliveryAck()=default;
+ KnownDeliveryAck(const KnownDeliveryAck&)=delete;
+ KnownDeliveryAck& operator=(const KnownDeliveryAck&)=delete;
+};
+}

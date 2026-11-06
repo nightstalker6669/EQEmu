@@ -1,0 +1,394 @@
+{
+  "enabled": false,
+  "sets": [
+    {
+      "symbol": "drop_ancient_gigyn_colossus",
+      "roles": [
+        "ancient_gigyn_colossus"
+      ],
+      "entries": [
+        {
+          "item_id": 47748,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_timeworn_channeler",
+      "roles": [
+        "timeworn_channeler"
+      ],
+      "entries": [
+        {
+          "item_id": 47749,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_cunning_fiend",
+      "roles": [
+        "cunning_fiend"
+      ],
+      "entries": [
+        {
+          "item_id": 47750,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_protector_of_purity",
+      "roles": [
+        "protector_of_purity"
+      ],
+      "entries": [
+        {
+          "item_id": 47761,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_protector_of_clay",
+      "roles": [
+        "protector_of_clay"
+      ],
+      "entries": [
+        {
+          "item_id": 47760,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_crumbling_construct",
+      "roles": [
+        "crumbling_construct"
+      ],
+      "entries": [
+        {
+          "item_id": 47751,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_broken_construct",
+      "roles": [
+        "broken_construct"
+      ],
+      "entries": [
+        {
+          "item_id": 47752,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_cracking_construct",
+      "roles": [
+        "cracking_construct"
+      ],
+      "entries": [
+        {
+          "item_id": 47753,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_worn_construct",
+      "roles": [
+        "worn_construct"
+      ],
+      "entries": [
+        {
+          "item_id": 47754,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_eroding_construct",
+      "roles": [
+        "eroding_construct"
+      ],
+      "entries": [
+        {
+          "item_id": 47755,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_keymaster",
+      "roles": [
+        "keymaster"
+      ],
+      "entries": [
+        {
+          "item_id": 47757,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "drop_vault_guardian",
+      "roles": [
+        "vault_guardian"
+      ],
+      "entries": [
+        {
+          "item_id": 47758,
+          "chance": 100,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Oneactualphysicalquestitem/corpseLOCALguarantee, not recoveredperiododds. Lootgoalneedsnativeactualcorpsepickup, no onkill/hailfactory.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    },
+    {
+      "symbol": "gear",
+      "roles": [
+        "stone_chest"
+      ],
+      "entries": [
+        {
+          "item_id": 110240,
+          "Name": "Battlestaff of Symbols",
+          "lore": "The glow surges when mana is used nearby",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110231,
+          "Name": "Beguiler's Last Answer",
+          "lore": "If charming does not work, removal will",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110244,
+          "Name": "Brute's War Spear",
+          "lore": "War spear once owned by the Gigyn Brute",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110296,
+          "Name": "Eyepiece of the Fancy Tinker",
+          "lore": "Made by crafters trained in Ak'Anon",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110232,
+          "Name": "Naglebrak's Cleansing Tool",
+          "lore": "You are not sure what it cleansed",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110272,
+          "Name": "Orb of Timeless Stone",
+          "lore": "A stone orb imbued with strong earthen energies",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110285,
+          "Name": "Slime-Etched Breastplate",
+          "lore": "Metal chestplate that has been burned by an acidic slime",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110286,
+          "Name": "Slime-Etched Leggings",
+          "lore": "Metal leggings that have been burned by an acidic slime",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110271,
+          "Name": "Tarnished Stone",
+          "lore": "Appears partially scarred by digestive enzymes",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110259,
+          "Name": "Telmiran War Shield",
+          "lore": "Used by only the most elite telmirans",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        },
+        {
+          "item_id": 110297,
+          "Name": "Orb of Suspension",
+          "lore": "This orb feels as if it has no weight",
+          "chance": 1,
+          "item_charges": 1,
+          "multiplier": 1,
+          "equip_item": 0
+        }
+      ],
+      "droplimit": 1,
+      "mindrop": 1,
+      "qualification": "Retainoriginal10+positiveOrb110297as11th. OneequalweightdrawLOCALnotperiododds.",
+      "loottable_id": null,
+      "lootdrop_id": null,
+      "table_probability": 100,
+      "multiplier": 1
+    }
+  ],
+  "counts": {
+    "loottable": 13,
+    "lootdrop": 13,
+    "loottable_entries": 13,
+    "lootdrop_entries": 23
+  },
+  "new_items": 0,
+  "entry_primary_keys": false,
+  "world_loot_edits": 0,
+  "effective_GlobalLootMultiplier_required": 1,
+  "Keystone_personal_reward_not_NPC_loot": true
+}

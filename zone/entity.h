@@ -28,6 +28,8 @@
 #include "zone/zonedump.h"
 
 #include <queue>
+#include <string>
+#include <utility>
 #include <unordered_map>
 
 class Encounter;
@@ -137,6 +139,28 @@ private:
 class EntityList
 {
 public:
+	class ObjectClickScope {
+	public:
+		ObjectClickScope() = default;
+		ObjectClickScope(const ObjectClickScope &) = delete;
+		ObjectClickScope &operator=(const ObjectClickScope &) = delete;
+		ObjectClickScope(ObjectClickScope &&other) noexcept
+			: owner_(other.owner_), object_(other.object_) {
+			other.owner_ = nullptr;
+			other.object_ = nullptr;
+		}
+		~ObjectClickScope();
+		Object *GetObject() const { return object_; }
+	private:
+		friend class EntityList;
+		ObjectClickScope(EntityList *owner, Object *object) : owner_(owner), object_(object) {}
+		EntityList *owner_ = nullptr;
+		Object *object_ = nullptr;
+	};
+	ObjectClickScope PinObjectForClick(uint16 entity_id);
+	std::pair<uint16, std::string> CreateTransientClickObject(
+		const std::string &owner, const char *model, const glm::vec4 &position);
+	bool RemoveTransientClickObject(const std::string &owner, uint16 entity_id, const std::string &token);
 	struct Area {
 		int id;
 		int type;
@@ -518,6 +542,10 @@ public:
 	uint16	CreateGroundObject(uint32 itemid, const glm::vec4& position, uint32 decay_time = 300000);
 	uint16	CreateGroundObjectFromModel(const char *model, const glm::vec4& position, uint8 type = 0x00, uint32 decay_time = 0);
 	uint16	CreateDoor(const char *model, const glm::vec4& position, uint8 type = 0, uint16 size = 100);
+	std::pair<uint16, std::string> CreateTransientDoor(
+		const std::string &owner, const char *model, const glm::vec4 &position, uint8 type, uint16 size
+	);
+	bool RemoveTransientDoor(const std::string &owner, uint16 entity_id, const std::string &token);
 	void	ZoneWho(Client *c, Who_All_Struct* Who);
 	void	UnMarkNPC(uint16 ID);
 
@@ -603,6 +631,10 @@ private:
 	std::unordered_map<uint16, Merc *> merc_list;
 	std::unordered_map<uint16, Corpse *> corpse_list;
 	std::unordered_map<uint16, Object *> object_list;
+	std::unordered_map<Object *, uint32> object_click_depth;
+	std::unordered_map<Object *, uint16> deferred_click_objects;
+	void EndObjectClick(Object *object);
+	void RetireObject(uint16 entity_id, Object *object);
 	std::unordered_map<uint16, Doors *> door_list;
 	std::unordered_map<uint16, Trap *> trap_list;
 	std::unordered_map<uint16, Beacon *> beacon_list;

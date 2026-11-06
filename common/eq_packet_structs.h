@@ -4042,7 +4042,8 @@ struct GroundSpawn {
 };
 
 struct GroundSpawns {
-	struct GroundSpawn spawn[50]; //Assigned max number to allow
+	static constexpr uint32 kMaxSpawns = 64;
+	struct GroundSpawn spawn[kMaxSpawns];
 };
 
 //struct PetitionBug_Struct{
@@ -4387,6 +4388,9 @@ struct MerchantList {
 	std::string bucket_name;
 	std::string bucket_value;
 	uint8       bucket_comparison;
+	// Server-side merchant catalogue metadata; not a client packet layout.
+	int16       language_required = -1;
+	uint16      language_skill_required = 0;
 };
 
 struct TempMerchantList {

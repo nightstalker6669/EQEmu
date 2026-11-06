@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "common/event/event_loop.h"
 
 #include "common/random.h"
 #include "common/net/packet.h"
@@ -344,9 +345,10 @@ namespace EQ
 			void Detach();
 
 			EQ::Random m_rand;
-			uv_timer_t m_timer;
-			uv_udp_t m_socket;
+			uv_timer_t *m_timer = nullptr;
+			uv_udp_t *m_socket = nullptr;
 			uv_loop_t *m_attached;
+			EQ::EventLoop *m_loop_owner = nullptr;
 			ReliableStreamConnectionManagerOptions m_options;
 			std::function<void(std::shared_ptr<ReliableStreamConnection>)> m_on_new_connection;
 			std::function<void(std::shared_ptr<ReliableStreamConnection>, DbProtocolStatus, DbProtocolStatus)> m_on_connection_state_change;

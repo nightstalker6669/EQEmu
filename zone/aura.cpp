@@ -16,14 +16,15 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "common/repositories/auras_repository.h"
+#include "common/ground_aura_position.h"
 #include "common/strings.h"
 #include "zone/aura.h"
 #include "zone/client.h"
 #include "zone/raids.h"
 #include "zone/string_ids.h"
 
-Aura::Aura(NPCType *type_data, Mob *owner, AuraRecord &record)
-	: NPC(type_data, 0, owner->GetPosition(), GravityBehavior::Flying), spell_id(record.spell_id),
+Aura::Aura(NPCType *type_data, Mob *owner, AuraRecord &record, const glm::vec4 &position)
+	: NPC(type_data, 0, position, GravityBehavior::Flying), spell_id(record.spell_id),
 	  distance(record.distance),
 	  remove_timer(record.duration), movement_timer(1000), process_timer(1000), aura_id(-1)
 {
@@ -877,6 +878,17 @@ void Mob::MakeAura(int32 spell_id)
 	if (!IsValidSpell(spell_id)) {
 		return;
 	}
+	const bool ground_ring = spells[spell_id].target_type == ST_Ring;
+	if (ground_ring && !EQ::GroundAura::InRange(
+		GetX(), GetY(), GetZ(), GetTargetRingX(), GetTargetRingY(), GetTargetRingZ(),
+		GetActSpellRange(spell_id, spells[spell_id].range), spells[spell_id].min_range
+	)) {
+		return;
+	}
+	if (ground_ring && IsDetrimentalSpell(spell_id) && !spells[spell_id].npc_no_los &&
+	    !CheckLosFN(GetTargetRingX(), GetTargetRingY(), GetTargetRingZ(), GetSize())) {
+		return;
+	}
 
 	AuraRecord record{};
 	if (!content_db.GetAuraEntry(spell_id, record)) {
@@ -929,9 +941,11 @@ void Mob::MakeAura(int32 spell_id)
 
 	strn0cpy(npc_type->name, record.name, 64);
 
-	auto npc = new Aura(npc_type, this, record);
+	const auto position = ground_ring ?
+		glm::vec4(GetTargetRingLocation(), GetHeading()) : GetPosition();
+	auto npc = new Aura(npc_type, this, record, position);
 	npc->SetAuraID(spell_id);
-	if (trap) {
+	if (trap && !ground_ring) {
 		npc->TryMoveAlong(5.0f, 0.0f, false);
 	} // try to place 5 units in front
 	entity_list.AddNPC(npc, false);

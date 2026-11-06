@@ -1,0 +1,9 @@
+# Fire World/Zone correlation — integration artifact
+
+This reviewed native source patch is stored as an integration artifact. It does not replace raw branch native sources or register a Fire quest. Materialize it only on the exact preimages in source-manifest.json after the published acceptanceR2 and original-final-hail parents. Preserve that composed task_client_state.cpp parent; the raw public branch is not the compilation baseline. Do not force a drifting patch.
+
+Ordinary shared-task prefix/packet semantics remain unchanged. A bounded optional Fire-only trailer carries the genuine original169 R2 finish occurrence and pending reward through native request handling. World verifies that received origin and uses its existing native admission/creation path once. Admitted is sent after task commit; Ready/Held is sent only after the same mission-creation path and exact persisted run, roster, mapping and instance checks. The Zone result is joined with the actual existing shared Ensure/save/reload; Ready must not call AcceptNewTask a second time.
+
+Both World and Zone must use matching optional-trailer peers. This artifact has source ownership review but no compile/deploy/runtime result. Compile/link in the owner’s isolated compatible cohort; no tests, restart, shared-memory regeneration or game action is authorized. The inverse patch is an exact source artifact only, not an automatic rollback or gameplay-state restoration.
+
+Native Client/header/task seams require merge coordination with the in-progress finite inventory writer. Initial167, supported placement, real169 participant/cleanup and native object-lifetime/no-reuse requirements remain unresolved. The actual169 final entry stays unregistered. Unknown result never triggers request resend, new mission, cancellation, refund, regrant or historical reconstruction. Existing creation/eligibility/timers remain native.

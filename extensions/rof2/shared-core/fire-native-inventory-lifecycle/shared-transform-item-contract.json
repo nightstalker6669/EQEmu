@@ -1,0 +1,67 @@
+{
+  "status": "SOURCE_ONLY_ORIGINAL_SHARED170_TRANSFORMS_NOT_REGISTERED_OR_DEPLOYED",
+  "rules": [
+    {
+      "click": 47760,
+      "spell": 7651,
+      "type": 3,
+      "native_MaxCharges": 1,
+      "actual_click_charges_required": 1,
+      "stackable": false,
+      "inputs": [
+        [
+          47760,
+          1
+        ],
+        [
+          47761,
+          1
+        ]
+      ],
+      "output": 47762,
+      "canonical_output_charges": 0,
+      "output_click_effect": -1,
+      "activity": 6
+    },
+    {
+      "click": 47752,
+      "spell": 7651,
+      "type": 3,
+      "native_MaxCharges": 1,
+      "actual_click_charges_required": 1,
+      "stackable": false,
+      "inputs": [
+        [
+          47751,
+          1
+        ],
+        [
+          47752,
+          1
+        ],
+        [
+          47753,
+          1
+        ],
+        [
+          47754,
+          1
+        ],
+        [
+          47755,
+          1
+        ]
+      ],
+      "output": 47756,
+      "canonical_output_charges": 1,
+      "output_click_effect": 7651,
+      "output_click_type": 3,
+      "activity": 13
+    }
+  ],
+  "source_qualification": "Retained native item identity/effect/type/nonstack evidence supplemented by one bounded four-item current read for previously omitted charges. Current modified content/native loader and factory semantics, not immutable retail item-byte proof. Zero writes.",
+  "canonical_charge_derivation": "Current native loader sets ItemData.MaxCharges=e.maxcharges (repositoryNULL\u21920); CreateBaseItem preserves requested0 for nonstackable MaxCharges0, sets minimum1 only stackable or MaxCharges-1; ItemInstance stores supplied charges. CreateItem(definition,definition.MaxCharges) therefore outputs clay0 and golem1. Do not invent charge1 for both. Snapshot and validate real native input/output definitions and actual canonical factory result in writer.",
+  "accepted_origin": "Actual native active shared170/run id, existing accepted local occurrence mapping, unique actual missionDZ490version1 and member/instance rows, canonical world and local stage; no Ensure/Reserve/personal Binding/Ready reconstruction.",
+  "progression": "Same strict writer knownCOMMIT+memorypublish and private Take receipt enter one actual native goal6/13 submission with original run before optimistic update/send. Native invocation/optimistic state is not durable World persistence proof. No automatic replay.",
+  "unresolved_branches": "R16 supplies selected LOCAL Guardian/mold/terminal native source. Serving data/code remain unapplied and native gameplay acceptance plus exact period combat remain separately qualified."
+}

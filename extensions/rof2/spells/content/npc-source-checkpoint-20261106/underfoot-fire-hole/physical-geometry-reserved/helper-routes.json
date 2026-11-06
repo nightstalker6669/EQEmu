@@ -1,0 +1,586 @@
+{
+  "rows": [
+    {
+      "role": "keymaster_pool",
+      "helper_NPC_id": 490913,
+      "zone": 490,
+      "version": 1,
+      "spawn_anchor": {
+        "X": -280,
+        "Y": 970,
+        "floor_Z": -3.0,
+        "Z": 0.75
+      },
+      "waypoints": [
+        {
+          "X": -280,
+          "Y": 970,
+          "floor_Z": -3.0,
+          "Z": 0.75
+        },
+        {
+          "X": -274,
+          "Y": 986,
+          "floor_Z": -6.0,
+          "Z": -2.25
+        },
+        {
+          "X": -264,
+          "Y": 1000,
+          "floor_Z": -3.0,
+          "Z": 0.75
+        },
+        {
+          "X": -255.2934,
+          "Y": 1009.27888,
+          "floor_Z": -3.0,
+          "Z": 0.75
+        }
+      ],
+      "activation_AABB": {
+        "min": [
+          -295,
+          955,
+          -5.25
+        ],
+        "max": [
+          -265,
+          985,
+          6.75
+        ]
+      },
+      "max_clicker_to_spawn_distance": 35,
+      "arrival_radius": 5,
+      "arrival_max_Z_delta": 6,
+      "stop_distance_before_gate": 12,
+      "walk_timeout_seconds": 90,
+      "dust_visual_seconds": 2,
+      "passage_after": [
+        -247.743,
+        1029.9426,
+        0.75
+      ],
+      "floor_offset_derivation": "Helperrace649maleheight6\u2192GetZOffset0.2*6*3.125=3.75 underpinnedwaypoints.cpp; allwaypointZarefloor+3.75.",
+      "native_movement": "NativeWalkTo eachanchorunderownedattempt; actualteleportfallbackboundary terminallyholdsONLYthisfeatureownedattempt. No fallbackteleport counted asarrival, no ordinaryNPCmovementchange.",
+      "barrier": "Uponactualarrivalatboundstop andfreshsameownedgate/lifetimereceipt, scopednativeconsumer opensONLYchosengate; requireopen/passagereceipt thenhelperdustretirement. Gate remainsopenforrun.",
+      "local_assignment": "NegativeX=pool/GardenofReflection;positiveX=garden/GardenofInspiration fromretainedmaplabels, notoriginalmissionleafidentity.",
+      "bound_gate": {
+        "role": "keymaster_pool",
+        "zone": "brellstemple",
+        "zone_id": 490,
+        "version": 1,
+        "SQL_row_id": 304062003,
+        "native_door_id": 4
+      }
+    },
+    {
+      "role": "keymaster_garden",
+      "helper_NPC_id": 490913,
+      "zone": 490,
+      "version": 1,
+      "spawn_anchor": {
+        "X": 280,
+        "Y": 970,
+        "floor_Z": -3.5407,
+        "Z": 0.2093
+      },
+      "waypoints": [
+        {
+          "X": 280,
+          "Y": 970,
+          "floor_Z": -3.5407,
+          "Z": 0.2093
+        },
+        {
+          "X": 274,
+          "Y": 986,
+          "floor_Z": -4.1419,
+          "Z": -0.3919
+        },
+        {
+          "X": 264,
+          "Y": 1000,
+          "floor_Z": -3.0,
+          "Z": 0.75
+        },
+        {
+          "X": 255.2934,
+          "Y": 1009.27888,
+          "floor_Z": -3.0,
+          "Z": 0.75
+        }
+      ],
+      "activation_AABB": {
+        "min": [
+          265,
+          955,
+          -5.7907
+        ],
+        "max": [
+          295,
+          985,
+          6.2093
+        ]
+      },
+      "max_clicker_to_spawn_distance": 35,
+      "arrival_radius": 5,
+      "arrival_max_Z_delta": 6,
+      "stop_distance_before_gate": 12,
+      "walk_timeout_seconds": 90,
+      "dust_visual_seconds": 2,
+      "passage_after": [
+        247.743,
+        1029.9426,
+        0.75
+      ],
+      "floor_offset_derivation": "Helperrace649maleheight6\u2192GetZOffset0.2*6*3.125=3.75 underpinnedwaypoints.cpp; allwaypointZarefloor+3.75.",
+      "native_movement": "NativeWalkTo eachanchorunderownedattempt; actualteleportfallbackboundary terminallyholdsONLYthisfeatureownedattempt. No fallbackteleport counted asarrival, no ordinaryNPCmovementchange.",
+      "barrier": "Uponactualarrivalatboundstop andfreshsameownedgate/lifetimereceipt, scopednativeconsumer opensONLYchosengate; requireopen/passagereceipt thenhelperdustretirement. Gate remainsopenforrun.",
+      "local_assignment": "NegativeX=pool/GardenofReflection;positiveX=garden/GardenofInspiration fromretainedmaplabels, notoriginalmissionleafidentity.",
+      "bound_gate": {
+        "role": "keymaster_garden",
+        "zone": "brellstemple",
+        "zone_id": 490,
+        "version": 1,
+        "SQL_row_id": 304062004,
+        "native_door_id": 5
+      }
+    }
+  ],
+  "static_floor_samples": [
+    {
+      "route": "keymaster_pool",
+      "segment": 0,
+      "fraction": 0.0,
+      "X": -280.0,
+      "Y": 970.0,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 0,
+      "fraction": 0.125,
+      "X": -279.25,
+      "Y": 972.0,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 0,
+      "fraction": 0.25,
+      "X": -278.5,
+      "Y": 974.0,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 0,
+      "fraction": 0.375,
+      "X": -277.75,
+      "Y": 976.0,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 0,
+      "fraction": 0.5,
+      "X": -277.0,
+      "Y": 978.0,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 0,
+      "fraction": 0.625,
+      "X": -276.25,
+      "Y": 980.0,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 0,
+      "fraction": 0.75,
+      "X": -275.5,
+      "Y": 982.0,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 0,
+      "fraction": 0.875,
+      "X": -274.75,
+      "Y": 984.0,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 0,
+      "fraction": 1.0,
+      "X": -274.0,
+      "Y": 986.0,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 1,
+      "fraction": 0.0,
+      "X": -274.0,
+      "Y": 986.0,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 1,
+      "fraction": 0.125,
+      "X": -272.75,
+      "Y": 987.75,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 1,
+      "fraction": 0.25,
+      "X": -271.5,
+      "Y": 989.5,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 1,
+      "fraction": 0.375,
+      "X": -270.25,
+      "Y": 991.25,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 1,
+      "fraction": 0.5,
+      "X": -269.0,
+      "Y": 993.0,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 1,
+      "fraction": 0.625,
+      "X": -267.75,
+      "Y": 994.75,
+      "floor_Z": -6.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 1,
+      "fraction": 0.75,
+      "X": -266.5,
+      "Y": 996.5,
+      "floor_Z": -5.446
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 1,
+      "fraction": 0.875,
+      "X": -265.25,
+      "Y": 998.25,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 1,
+      "fraction": 1.0,
+      "X": -264.0,
+      "Y": 1000.0,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 2,
+      "fraction": 0.0,
+      "X": -264.0,
+      "Y": 1000.0,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 2,
+      "fraction": 0.125,
+      "X": -262.91168,
+      "Y": 1001.15986,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 2,
+      "fraction": 0.25,
+      "X": -261.82335,
+      "Y": 1002.31972,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 2,
+      "fraction": 0.375,
+      "X": -260.73503,
+      "Y": 1003.47958,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 2,
+      "fraction": 0.5,
+      "X": -259.6467,
+      "Y": 1004.63944,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 2,
+      "fraction": 0.625,
+      "X": -258.55838,
+      "Y": 1005.7993,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 2,
+      "fraction": 0.75,
+      "X": -257.47005,
+      "Y": 1006.95916,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 2,
+      "fraction": 0.875,
+      "X": -256.38173,
+      "Y": 1008.11902,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_pool",
+      "segment": 2,
+      "fraction": 1.0,
+      "X": -255.2934,
+      "Y": 1009.27888,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 0,
+      "fraction": 0.0,
+      "X": 280.0,
+      "Y": 970.0,
+      "floor_Z": -3.5407
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 0,
+      "fraction": 0.125,
+      "X": 279.25,
+      "Y": 972.0,
+      "floor_Z": -3.6686
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 0,
+      "fraction": 0.25,
+      "X": 278.5,
+      "Y": 974.0,
+      "floor_Z": -3.6958
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 0,
+      "fraction": 0.375,
+      "X": 277.75,
+      "Y": 976.0,
+      "floor_Z": -3.6805
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 0,
+      "fraction": 0.5,
+      "X": 277.0,
+      "Y": 978.0,
+      "floor_Z": -3.663
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 0,
+      "fraction": 0.625,
+      "X": 276.25,
+      "Y": 980.0,
+      "floor_Z": -3.6986
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 0,
+      "fraction": 0.75,
+      "X": 275.5,
+      "Y": 982.0,
+      "floor_Z": -3.757
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 0,
+      "fraction": 0.875,
+      "X": 274.75,
+      "Y": 984.0,
+      "floor_Z": -3.8685
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 0,
+      "fraction": 1.0,
+      "X": 274.0,
+      "Y": 986.0,
+      "floor_Z": -4.1419
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 1,
+      "fraction": 0.0,
+      "X": 274.0,
+      "Y": 986.0,
+      "floor_Z": -4.1419
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 1,
+      "fraction": 0.125,
+      "X": 272.75,
+      "Y": 987.75,
+      "floor_Z": -4.4853
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 1,
+      "fraction": 0.25,
+      "X": 271.5,
+      "Y": 989.5,
+      "floor_Z": -4.6911
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 1,
+      "fraction": 0.375,
+      "X": 270.25,
+      "Y": 991.25,
+      "floor_Z": -4.4124
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 1,
+      "fraction": 0.5,
+      "X": 269.0,
+      "Y": 993.0,
+      "floor_Z": -4.0186
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 1,
+      "fraction": 0.625,
+      "X": 267.75,
+      "Y": 994.75,
+      "floor_Z": -4.2909
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 1,
+      "fraction": 0.75,
+      "X": 266.5,
+      "Y": 996.5,
+      "floor_Z": -4.5084
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 1,
+      "fraction": 0.875,
+      "X": 265.25,
+      "Y": 998.25,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 1,
+      "fraction": 1.0,
+      "X": 264.0,
+      "Y": 1000.0,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 2,
+      "fraction": 0.0,
+      "X": 264.0,
+      "Y": 1000.0,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 2,
+      "fraction": 0.125,
+      "X": 262.91168,
+      "Y": 1001.15986,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 2,
+      "fraction": 0.25,
+      "X": 261.82335,
+      "Y": 1002.31972,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 2,
+      "fraction": 0.375,
+      "X": 260.73503,
+      "Y": 1003.47958,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 2,
+      "fraction": 0.5,
+      "X": 259.6467,
+      "Y": 1004.63944,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 2,
+      "fraction": 0.625,
+      "X": 258.55838,
+      "Y": 1005.7993,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 2,
+      "fraction": 0.75,
+      "X": 257.47005,
+      "Y": 1006.95916,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 2,
+      "fraction": 0.875,
+      "X": 256.38173,
+      "Y": 1008.11902,
+      "floor_Z": -3.0
+    },
+    {
+      "route": "keymaster_garden",
+      "segment": 2,
+      "fraction": 1.0,
+      "X": 255.2934,
+      "Y": 1009.27888,
+      "floor_Z": -3.0
+    }
+  ],
+  "analysis_scope": "Base+placedcollidabletriangleverticalintersectionsalongwaypointsandsegments, not nav-path/client/animation/physics acceptance; intermediatefloor samples mayincludeedge/ceiling surfaces, chosennearest-3floor.",
+  "actual_walk_and_teleport_boundary_owner": "Spells retainsactualWalkTo movementqueue andholdsownedattemptifnativefallbackteleportwouldoccur."
+}

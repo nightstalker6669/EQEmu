@@ -1,0 +1,72 @@
+{
+  "items": [
+    {
+      "id": 110230,
+      "Name": "Runed Longsword",
+      "lore": "The symbols glow with every strike"
+    },
+    {
+      "id": 110234,
+      "Name": "Anvil Forged Axe",
+      "lore": "Large axe, forged by \"Anvil's hand\""
+    },
+    {
+      "id": 110242,
+      "Name": "Ancill's Hatchet",
+      "lore": "Maybe he was using it incorrectly"
+    },
+    {
+      "id": 110243,
+      "Name": "Mad Mephit's Blade",
+      "lore": "It's only dangerous on one end"
+    },
+    {
+      "id": 110246,
+      "Name": "Hunter's Claw",
+      "lore": "Claw from a tough cliknar"
+    },
+    {
+      "id": 110267,
+      "Name": "Workmaster's Horn Fragment",
+      "lore": "Chipped from the horn of the Mephit Workmaster"
+    },
+    {
+      "id": 110270,
+      "Name": "Polished Rockomancy Diamond",
+      "lore": "Reinforced by rockomancy and harder than a normal diamond"
+    },
+    {
+      "id": 110273,
+      "Name": "Purifying Pyrite Stone",
+      "lore": "Helps to protect the wearer from corruptive influence"
+    },
+    {
+      "id": 110278,
+      "Name": "Striped Agate of Devotion",
+      "lore": "This stone was pried out of an engagement ring"
+    },
+    {
+      "id": 110292,
+      "Name": "Spiked War Maul",
+      "lore": "The best at what it does, and what it does isn't pretty"
+    },
+    {
+      "id": 110295,
+      "Name": "Deathspike Spear",
+      "lore": "This spear never seems to dull"
+    },
+    {
+      "id": 110411,
+      "Name": "Mephit's Hoop of the Trickster",
+      "lore": "This earring is stained with blood"
+    },
+    {
+      "id": 111900,
+      "Name": "Autarchian Execution Blade",
+      "lore": "A quasi-infernal blade which brings death swiftly"
+    }
+  ],
+  "new_items": 0,
+  "retracted110770_excluded": true,
+  "wand_warning_orb_not_NPC_loot": true
+}

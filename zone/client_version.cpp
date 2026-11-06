@@ -17,6 +17,8 @@
 */
 
 #include "client_version.h"
+#include "groups.h"
+#include "raids.h"
 
 using Version = EQ::versions::ClientVersion;
 

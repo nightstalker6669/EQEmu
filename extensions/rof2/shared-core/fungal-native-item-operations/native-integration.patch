@@ -1,0 +1,1457 @@
+--- a/common/fire_native_inventory_fence.cpp
++++ b/common/fire_native_inventory_fence.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_unknown_inventory.h"
+ #include "fire_native_inventory_fence.h"
+ #include "data_verification.h"
+ #include "inventory_profile.h"
+@@ -26,21 +27,25 @@
+  attached_=false;next_=nullptr;writer_=nullptr;
+ }
+ bool NativeInventoryFence::ItemAllowed(const EQ::ItemInstance* item) noexcept {
++ if(!FungalInventory::UnknownInventory::ItemAllowed(item))return false;
+  for(auto* f=first_;f;f=f->next_)
+   if(f->Active()&&std::find(f->instances_.begin(),f->instances_.end(),item)!=f->instances_.end())return false;
+  return true;
+ }
+ bool NativeInventoryFence::SlotAllowed(const EQ::InventoryProfile* inv,int16_t slot) noexcept {
++ if(!FungalInventory::UnknownInventory::ProfileAllowed(inv))return false;
+  for(auto* f=first_;f;f=f->next_)if(f->Active()&&f->inventory_==inv) {
+   if((f->cursor_&&Cursor(slot))||std::find(f->roots_.begin(),f->roots_.end(),Root(slot))!=f->roots_.end())return false;
+  }
+  return true;
+ }
+ bool NativeInventoryFence::ProfileAllowed(const EQ::InventoryProfile* inv) noexcept {
++ if(!FungalInventory::UnknownInventory::ProfileAllowed(inv))return false;
+  for(auto* f=first_;f;f=f->next_)if(f->Active()&&f->inventory_==inv)return false;
+  return true;
+ }
+ bool NativeInventoryFence::SaveAllowed(const SharedDatabase* db,uint32_t character,int16_t slot,bool whole_cursor) noexcept {
++ if(!FungalInventory::UnknownInventory::SaveAllowed(character))return false;
+  for(auto* f=first_;f;f=f->next_)if(f->Active()&&f->character_==character) {
+   const bool selected=(f->cursor_&&(whole_cursor||Cursor(slot)))||
+    std::find(f->roots_.begin(),f->roots_.end(),Root(slot))!=f->roots_.end();
+--- /dev/null
++++ b/common/fungal_item_custody_sql.h
+@@ -0,0 +1,28 @@
++#pragma once
++#include "database.h"
++#include <map>
++#include <stdexcept>
++#include <string>
++namespace FungalCustodySQL {
++inline uint64_t Number(const char* p){if(!p)throw std::runtime_error("Fungal missing identity");std::string s=p;size_t n=0;auto v=std::stoull(s,&n);if(n!=s.size())throw std::runtime_error("Fungal malformed identity");return v;}
++inline auto Query(Database& db,const std::string& sql){if(db.GetStatus()!=DBcore::Connected)throw std::runtime_error("Fungal disconnected");auto r=db.QueryDatabase(sql,false);if(!r.Success())throw std::runtime_error("Fungal strict query failed");return r;}
++struct Activity {int count=0;uint64_t updated=0,completed=0;};
++inline std::map<int,Activity> LockShared(Database& db,uint64_t run,uint32_t accepted,uint32_t member,uint32_t activity,bool allow_complete) {
++ const bool pure=activity==0||activity==1||activity==6;
++ if(!run||!accepted||!member||(!pure&&activity!=5&&activity!=10))throw std::runtime_error("Fungal unsupported run");
++ auto engines=Query(db,pure?"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()AND engine='InnoDB'AND table_name IN('shared_tasks','shared_task_members','shared_task_activity_state')":"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()AND engine='InnoDB'AND table_name IN('shared_tasks','shared_task_members','shared_task_activity_state','fungal_item_operations')");if(engines.RowCount()!=1||Number(engines.begin()[0])!=(pure?3u:4u))throw std::runtime_error("Fungal shared foundation differs");
++ auto task=Query(db,"SELECT id FROM shared_tasks WHERE id="+std::to_string(run)+" AND task_id=920143 AND accepted_time=FROM_UNIXTIME("+std::to_string(accepted)+") AND completion_time IS NULL AND(expire_time IS NULL OR expire_time>NOW()) FOR UPDATE");if(task.RowCount()!=1)throw std::runtime_error("Fungal native run changed");
++ auto membership=Query(db,"SELECT character_id FROM shared_task_members WHERE shared_task_id="+std::to_string(run)+" AND character_id="+std::to_string(member)+" FOR UPDATE");if(membership.RowCount()!=1)throw std::runtime_error("Fungal native member changed");
++ auto rows=Query(db,"SELECT activity_id,done_count,COALESCE(UNIX_TIMESTAMP(updated_time),0),COALESCE(UNIX_TIMESTAMP(completed_time),0) FROM shared_task_activity_state WHERE shared_task_id="+std::to_string(run)+" ORDER BY activity_id FOR UPDATE");std::map<int,Activity> snapshot;
++ for(auto r=rows.begin();r!=rows.end();++r){int id=Number(r[0]);if(!snapshot.emplace(id,Activity{int(Number(r[1])),Number(r[2]),Number(r[3])}).second)throw std::runtime_error("Fungal duplicate stage");}
++ auto selected=snapshot.find(activity);if(selected==snapshot.end()||(!allow_complete&&(selected->second.count||selected->second.completed)))throw std::runtime_error("Fungal selected stage differs");
++ if(activity==10)for(auto pair:{std::pair<int,int>{7,4},{8,3},{9,2}}){auto at=snapshot.find(pair.first);if(at==snapshot.end()||at->second.count<pair.second||!at->second.completed)throw std::runtime_error("Fungal original deliveries incomplete");}
++ return snapshot;
++}
++inline void LockPersonal(Database& db,uint64_t occurrence,uint32_t accepted,uint32_t character,int slot) {
++ auto engines=Query(db,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE()AND engine='InnoDB'AND table_name IN('character_task_reward_instances','character_tasks','character_activities')");if(engines.RowCount()!=1||Number(engines.begin()[0])!=3)throw std::runtime_error("Fungal personal foundation differs");
++ auto identity=Query(db,"SELECT occurrence_id FROM character_task_reward_instances WHERE character_id="+std::to_string(character)+" AND task_id=920141 AND occurrence_id="+std::to_string(occurrence)+" AND accepted_time="+std::to_string(accepted)+" FOR UPDATE");if(identity.RowCount()!=1)throw std::runtime_error("Fungal personal occurrence changed");
++ auto task=Query(db,"SELECT taskid FROM character_tasks WHERE charid="+std::to_string(character)+" AND taskid=920141 AND acceptedtime="+std::to_string(accepted)+" AND slot="+std::to_string(slot)+" AND type=2 AND was_rewarded=0 FOR UPDATE");if(task.RowCount()!=1)throw std::runtime_error("Fungal personal acceptance changed");
++ auto stage=Query(db,"SELECT activityid FROM character_activities WHERE charid="+std::to_string(character)+" AND taskid=920141 AND activityid=7 AND donecount=0 AND completed=0 FOR UPDATE");if(stage.RowCount()!=1)throw std::runtime_error("Fungal personal stage changed");
++}
++}
+--- /dev/null
++++ b/common/fungal_item_operation_wire.h
+@@ -0,0 +1,32 @@
++#pragma once
++#include <cstdint>
++#include <cstring>
++namespace FungalItemWire {
++constexpr uint32_t Task=920143,Magic=0x46554e31;
++// Feature-private optional suffix on the existing native shared-activity packet.
++// Original prefix, opcode and all other tasks remain unchanged.
++#pragma pack(push,1)
++struct Trailer { uint32_t magic=Magic,version=1;uint64_t run=0,outcome=0;
++ uint32_t accepted=0,recipient=0; };
++#pragma pack(pop)
++inline bool Selected(uint32_t task,uint32_t activity)noexcept {
++ return task==Task&&(activity==5||activity==10);
++}
++inline bool PureHail(uint32_t task,uint32_t activity)noexcept {
++ return task==Task&&(activity==0||activity==1||activity==6);
++}
++inline bool Correlated(uint32_t task,uint32_t activity)noexcept {
++ return Selected(task,activity)||PureHail(task,activity);
++}
++inline bool ReadHeader(const void* bytes,uint32_t size,uint32_t prefix,Trailer& out)noexcept {
++ if(size!=prefix+sizeof(Trailer))return false;
++ std::memcpy(&out,static_cast<const unsigned char*>(bytes)+prefix,sizeof(out));
++ return out.magic==Magic&&out.version==1&&out.run&&out.accepted&&out.recipient;
++}
++inline bool Read(const void* bytes,uint32_t size,uint32_t prefix,Trailer& out)noexcept {
++ return ReadHeader(bytes,size,prefix,out)&&out.outcome;
++}
++inline void Write(void* bytes,uint32_t prefix,const Trailer& value)noexcept {
++ std::memcpy(static_cast<unsigned char*>(bytes)+prefix,&value,sizeof(value));
++}
++}
+--- /dev/null
++++ b/common/fungal_unknown_inventory.h
+@@ -0,0 +1,34 @@
++#pragma once
++#include <algorithm>
++#include <cstdint>
++#include <vector>
++namespace EQ {class InventoryProfile;class ItemInstance;}
++namespace FungalInventory {
++class NativeCustody;
++// Only the three finite writer operations can attach this hold. It is activated
++// ONLY on unknown strict commit, with all allocations made before persistence.
++// No new authority, task grant API, whitelist or Fire action-table reuse.
++class UnknownInventory final {
++ friend class NativeCustody;
++ UnknownInventory()=default;
++ uint32_t character_=0;
++ const EQ::InventoryProfile* inventory_=nullptr;
++ std::vector<const EQ::ItemInstance*> items_;
++ UnknownInventory* next_=nullptr;
++ inline static thread_local UnknownInventory* first_=nullptr;
++ void Attach()noexcept{next_=first_;first_=this;}
++public:
++ ~UnknownInventory()=default;
++ UnknownInventory(const UnknownInventory&)=delete;
++ UnknownInventory& operator=(const UnknownInventory&)=delete;
++ static bool ItemAllowed(const EQ::ItemInstance* item)noexcept{for(auto* p=first_;p;p=p->next_)if(std::find(p->items_.begin(),p->items_.end(),item)!=p->items_.end())return false;return true;}
++ static bool ProfileAllowed(const EQ::InventoryProfile* inv)noexcept{for(auto* p=first_;p;p=p->next_)if(p->inventory_==inv)return false;return true;}
++ static bool SaveAllowed(uint32_t character)noexcept{for(auto* p=first_;p;p=p->next_)if(p->character_==character)return false;return true;}
++ // Actual InventoryProfile destructor only: allow its owned trees to be freed,
++ // while character-wide stale saves remain blocked through full Client delete.
++ static void Destructing(const EQ::InventoryProfile* inv)noexcept{for(auto* p=first_;p;p=p->next_)if(p->inventory_==inv){p->inventory_=nullptr;p->items_.clear();}}
++ // Existing ZoneReservation complete-delete boundary only. Never on a timer,
++ // disconnect callback, frame cancellation, or an unknown save result.
++ static void AfterCompleteDelete(uint32_t character)noexcept{auto** p=&first_;while(*p){if((*p)->character_==character){auto* old=*p;*p=old->next_;delete old;}else p=&(*p)->next_;}}
++};
++}
+--- /dev/null
++++ b/common/fungal_world_hold.h
+@@ -0,0 +1,20 @@
++#pragma once
++#include <cstdint>
++namespace FungalInventory {
++class WorldCustody;
++class WorldHold final {
++ friend class WorldCustody;
++ explicit WorldHold(uint64_t run):run_(run){}
++ uint64_t run_;WorldHold* next_=nullptr;
++ inline static thread_local WorldHold* first_=nullptr;
++ void Attach()noexcept{next_=first_;first_=this;}
++public:
++ ~WorldHold()=default;
++ WorldHold(const WorldHold&)=delete;
++ WorldHold& operator=(const WorldHold&)=delete;
++ // Source's existing native run update/save entry must call this before ANY
++ // native mutation/full snapshot save, including non-Fungal stages in this run.
++ // Unknown runs remain held until authoritative owner reload/process teardown.
++ static bool Allows(uint64_t run)noexcept{for(auto* p=first_;p;p=p->next_)if(p->run_==run)return false;return true;}
++};
++}
+--- a/common/inventory_profile.cpp
++++ b/common/inventory_profile.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_unknown_inventory.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -87,6 +88,7 @@
+ //
+ EQ::InventoryProfile::~InventoryProfile()
+ {
++ FungalInventory::UnknownInventory::Destructing(this);
+ 	for (auto iter = m_worn.begin(); iter != m_worn.end(); ++iter) {
+ 		safe_delete(iter->second);
+ 	}
+--- a/common/inventory_profile.h
++++ b/common/inventory_profile.h
+@@ -1,3 +1,4 @@
++namespace FungalInventory {class NativeCustody;}
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -85,6 +86,7 @@
+ 	{
+ 		friend class ItemInstance;
+ 		friend class FirePersonalOccurrenceSource::NativeItemCustody;
++		friend class FungalInventory::NativeCustody;
+ 	public:
+ 		///////////////////////////////
+ 		// Public Methods
+--- a/world/CMakeLists.txt
++++ b/world/CMakeLists.txt
+@@ -1,4 +1,5 @@
+ set(world_sources
++	fungal_native_world_custody.cpp
+ 	wguild_trophies.cpp
+ 	achievement_state_update_manager.cpp
+ 	adventure.cpp
+--- /dev/null
++++ b/world/fungal_item_world_source.h
+@@ -0,0 +1,86 @@
++#pragma once
++#include <cstdint>
++#include <memory>
++#include <vector>
++#include "../common/fungal_item_operation_wire.h"
++#include "../common/fungal_world_hold.h" // supplied by the exact Core owner component
++#include "../common/repositories/shared_task_activity_state_repository.h"
++class Database;
++class ServerPacket;
++class SharedTask;
++class SharedTaskManager;
++class SharedTaskWorldMessaging;
++namespace FungalInventory {class WorldCustody;class WorldTransaction;}
++namespace FungalItemWorldSource {
++class NativeStage;
++class PacketScope final {
++ friend class ::SharedTaskWorldMessaging;
++ friend class NativeStage;
++ PacketScope* previous_=nullptr;
++ static thread_local PacketScope* current_;
++ FungalItemWire::Trailer original_{};
++ uint32_t character_=0,activity_=0,count_=0;
++ bool selected_=false,valid_=false;
++ explicit PacketScope(const ServerPacket&);
++public:
++ ~PacketScope();
++ PacketScope(const PacketScope&)=delete;
++ PacketScope& operator=(const PacketScope&)=delete;
++};
++class OriginalWorldUpdate final {
++ friend class NativeStage;
++ friend class FungalInventory::WorldCustody;
++ FungalItemWire::Trailer original_{};
++ uint32_t activity_=0,count_=0;
++ SharedTask* actual_=nullptr;
++ OriginalWorldUpdate()=default;
++public:
++ OriginalWorldUpdate(const OriginalWorldUpdate&)=delete;
++ OriginalWorldUpdate& operator=(const OriginalWorldUpdate&)=delete;
++};
++class KnownStageAck final {
++ friend class FungalInventory::WorldCustody;
++ friend class NativeStage;
++ FungalItemWire::Trailer original_{};
++ uint32_t activity_=0,count_=0;
++ KnownStageAck(FungalItemWire::Trailer f,uint32_t a,uint32_t c):original_(f),activity_(a),count_(c){}
++public:
++ ~KnownStageAck()=default;
++ KnownStageAck(const KnownStageAck&)=delete;
++ KnownStageAck& operator=(const KnownStageAck&)=delete;
++};
++class NativeStage final {
++ friend class ::SharedTaskManager;
++ static thread_local NativeStage* current_;
++ NativeStage* previous_=nullptr;
++ bool selected_=false;
++ std::unique_ptr<OriginalWorldUpdate> original_;
++ std::unique_ptr<FungalInventory::WorldTransaction> transaction_;
++ std::unique_ptr<KnownStageAck> ack_;
++ NativeStage(Database&,SharedTask*,uint32_t character,uint32_t task,uint32_t activity,uint32_t count);
++public:
++ ~NativeStage();
++ NativeStage(const NativeStage&)=delete;
++ NativeStage& operator=(const NativeStage&)=delete;
++ bool Selected()const noexcept{return selected_;}
++ bool Ready()const noexcept{return bool(transaction_);}
++ bool Committed()const noexcept{return bool(ack_);}
++ static bool SelectedSave(uint64_t run);
++ static bool CommitActualSave(Database&,uint64_t run,
++  const std::vector<SharedTaskActivityStateRepository::SharedTaskActivityState>&);
++ static bool StampActualAck(uint64_t run,uint32_t activity,FungalItemWire::Trailer&);
++};
++}
++namespace FungalInventory {
++// Core owns the ONLY strict transaction implementation; the source frame
++// exists only inside the genuine native World shared update/save call chain.
++class WorldTransaction { public: virtual ~WorldTransaction()=default; };
++class WorldCustody final {
++public:
++ static std::unique_ptr<WorldTransaction> Prepare(Database&,
++  const FungalItemWorldSource::OriginalWorldUpdate&);
++ static std::unique_ptr<FungalItemWorldSource::KnownStageAck> CommitActualSave(
++  Database&,WorldTransaction&,const FungalItemWorldSource::OriginalWorldUpdate&,
++  const std::vector<SharedTaskActivityStateRepository::SharedTaskActivityState>&);
++};
++}
+--- /dev/null
++++ b/world/fungal_item_world_source_impl.inc
+@@ -0,0 +1,65 @@
++// Included once by shared_task_manager.cpp. Actual native state, not a shadow
++// task implementation, supplies the snapshot committed by the inventory owner.
++#include "fungal_item_world_source.h"
++namespace FungalItemWorldSource {
++thread_local PacketScope* PacketScope::current_=nullptr;
++thread_local NativeStage* NativeStage::current_=nullptr;
++PacketScope::PacketScope(const ServerPacket& packet):previous_(current_) {
++ current_=this;
++ if(packet.opcode!=ServerOP_SharedTaskUpdate||packet.size<sizeof(ServerSharedTaskActivityUpdate_Struct))return;
++ const auto* p=reinterpret_cast<const ServerSharedTaskActivityUpdate_Struct*>(packet.pBuffer);
++ selected_=FungalItemWire::Correlated(p->task_id,p->activity_id);if(!selected_)return;
++ character_=p->source_character_id;activity_=p->activity_id;count_=p->done_count;
++ const bool pure=FungalItemWire::PureHail(p->task_id,p->activity_id);
++ valid_=(pure?FungalItemWire::ReadHeader(packet.pBuffer,packet.size,sizeof(*p),original_):
++  FungalItemWire::Read(packet.pBuffer,packet.size,sizeof(*p),original_))&&
++  (pure?!original_.outcome:bool(original_.outcome))&&
++  original_.recipient==character_&&count_==(activity_==5?2u:1u)&&!p->ignore_quest_update;
++}
++PacketScope::~PacketScope(){current_=previous_;}
++NativeStage::NativeStage(Database& db,SharedTask* actual,uint32_t character,uint32_t task,
++ uint32_t activity,uint32_t count):previous_(current_) {
++ current_=this;selected_=FungalItemWire::Correlated(task,activity);if(!selected_)return;
++ const auto* packet=PacketScope::current_;
++ if(!packet||!packet->selected_||!packet->valid_||packet->character_!=character||
++  packet->activity_!=activity||packet->count_!=count||!actual||actual->GetTaskData().id!=920143||
++  uint64_t(actual->GetDbSharedTask().id)!=packet->original_.run)return;
++ bool active=false;bool terminal_hidden=false;
++ for(const auto& a:actual->m_shared_task_activity_state) {
++  if(a.activity_id==activity)active=a.done_count==0&&a.max_done_count==count&&a.activity_state==ActivityState::ActivityActive;
++  if(a.activity_id==11)terminal_hidden=a.done_count==0;
++ }
++ if(!active||!terminal_hidden)return;
++ try {
++  original_=std::unique_ptr<OriginalWorldUpdate>(new OriginalWorldUpdate);
++  original_->original_=packet->original_;original_->activity_=activity;original_->count_=count;
++  original_->actual_=actual;
++  // Core locks persisted run/member/stages + exact committed finite outcome
++  // BEFORE the original World mutates its own native activity vector.
++  transaction_=FungalInventory::WorldCustody::Prepare(db,*original_);
++ }catch(...){transaction_.reset();original_.reset();}
++}
++NativeStage::~NativeStage(){transaction_.reset();current_=previous_;}
++bool NativeStage::SelectedSave(uint64_t run) {
++ return current_&&current_->selected_&&current_->original_&&
++  current_->original_->original_.run==run;
++}
++bool NativeStage::CommitActualSave(Database& db,uint64_t run,
++ const std::vector<SharedTaskActivityStateRepository::SharedTaskActivityState>& rows) {
++ auto* f=current_;
++ if(!SelectedSave(run)||!f->transaction_||f->ack_)return false;
++ try {
++  auto ack=FungalInventory::WorldCustody::CommitActualSave(db,*f->transaction_,*f->original_,rows);
++  const auto& o=f->original_->original_;
++  if(!ack||ack->original_.run!=o.run||ack->original_.outcome!=o.outcome||
++   ack->original_.accepted!=o.accepted||ack->original_.recipient!=o.recipient||
++   ack->activity_!=f->original_->activity_||ack->count_!=f->original_->count_)return false;
++  f->ack_=std::move(ack);return true;
++ }catch(...){return false;}
++}
++bool NativeStage::StampActualAck(uint64_t run,uint32_t activity,FungalItemWire::Trailer& out) {
++ const auto* f=current_;
++ if(!f||!f->ack_||f->ack_->original_.run!=run||f->ack_->activity_!=activity)return false;
++ out=f->ack_->original_;return true;
++}
++} // namespace FungalItemWorldSource
+--- /dev/null
++++ b/world/fungal_native_world_custody.cpp
+@@ -0,0 +1,87 @@
++#include "fungal_item_world_source.h"
++#include "../common/fungal_item_custody_sql.h"
++#include "../common/fungal_world_hold.h"
++#include "../common/shared_tasks.h"
++#include <map>
++#include <algorithm>
++#include <memory>
++#include <stdexcept>
++namespace FungalInventory {
++namespace {
++using namespace FungalCustodySQL;
++class Transaction final:public WorldTransaction {
++public:
++ Database* db=nullptr;
++ const FungalItemWorldSource::OriginalWorldUpdate* original=nullptr;
++ uint64_t connection=0,run=0,outcome=0;
++ bool active=false,known_commit=false,commit_attempted=false,already_ack=false,pure=false;
++ std::map<int,Activity> before;
++ std::unique_ptr<WorldHold> unknown;
++ ~Transaction(){if(active&&db)db->TransactionRollbackStrict();}
++};
++std::string Time(time_t t){return t>0?"FROM_UNIXTIME("+std::to_string(t)+")":"NULL";}
++}
++std::unique_ptr<WorldTransaction> WorldCustody::Prepare(Database& db,const FungalItemWorldSource::OriginalWorldUpdate& original) {
++ const auto& f=original.original_;auto* actual=original.actual_;
++ const bool pure=(original.activity_==0||original.activity_==1||original.activity_==6)&&f.outcome==0;
++ if((!pure&&!FungalItemWire::Selected(920143,original.activity_))||original.count_!=(pure?1u:(original.activity_==5?2u:1u))||!actual||!WorldHold::Allows(f.run))return nullptr;
++ const auto& current=actual->GetDbSharedTask();
++ if(current.id<=0||uint64_t(current.id)!=f.run||current.task_id!=920143||current.accepted_time!=f.accepted||current.completion_time||(!pure&&!f.outcome)||!f.recipient)return nullptr;
++ auto t=std::make_unique<Transaction>();t->db=&db;t->original=&original;t->run=f.run;t->outcome=f.outcome;t->pure=pure;t->unknown=std::unique_ptr<WorldHold>(new WorldHold(f.run));
++ try {
++  auto connection=Query(db,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
++  if(connection.RowCount()!=1||Number(connection.begin()[1])||Number(connection.begin()[2])!=1)return nullptr;t->connection=Number(connection.begin()[0]);
++  if(!db.TransactionBeginStrict().Success())return nullptr;t->active=true;
++  t->before=LockShared(db,f.run,f.accepted,f.recipient,original.activity_,true);
++  const uint32_t goal=pure?1:(original.activity_==5?2:1);
++  if(!pure){
++  auto outcome=Query(db,"SELECT native_ack,output_item,output_quantity FROM fungal_item_operations WHERE outcome_id="+std::to_string(f.outcome)+" AND scope=2 AND task_id=920143 AND native_occurrence="+std::to_string(f.run)+" AND activity_id="+std::to_string(original.activity_)+" AND accepted_time="+std::to_string(f.accepted)+" AND recipient_character="+std::to_string(f.recipient)+" FOR UPDATE");
++  if(outcome.RowCount()!=1)return nullptr;
++  auto row=outcome.begin();
++  if(Number(row[1])!=(original.activity_==5?43586:43587)||Number(row[2])!=goal)return nullptr;
++  t->already_ack=Number(row[0])==1;
++  }
++  const auto& stage=t->before.at(original.activity_);
++  if((pure&&(stage.count||stage.completed))||(!pure&&((!t->already_ack&&(stage.count||stage.completed))||(t->already_ack&&(stage.count!=int(goal)||!stage.completed)))))return nullptr;
++  // DB locks are held BEFORE Source mutates this very native SharedTask vector.
++  const auto native=actual->GetActivityState();
++  if(native.size()!=t->before.size())return nullptr;
++  if(pure){
++   if(native.size()!=12)return nullptr;
++   const auto active=Tasks::GetActiveElements(native,native,native.size());
++   const auto at=std::find_if(native.begin(),native.end(),[&](const auto& a){return a.activity_id==original.activity_;});
++   if(at==native.end()||active.is_task_complete||std::find(active.active.begin(),active.active.end(),int(at-native.begin()))==active.active.end())return nullptr;
++  }
++  for(const auto& a:native){if(pure&&a.activity_id==original.activity_&&a.max_done_count!=1)return nullptr;auto at=t->before.find(a.activity_id);if(at==t->before.end()||a.done_count!=uint32_t(at->second.count)||a.updated_time!=at->second.updated||a.completed_time!=at->second.completed)return nullptr;}
++  return t;
++ }catch(...){return nullptr;}
++}
++std::unique_ptr<FungalItemWorldSource::KnownStageAck> WorldCustody::CommitActualSave(Database& db,WorldTransaction& base,const FungalItemWorldSource::OriginalWorldUpdate& original,const std::vector<SharedTaskActivityStateRepository::SharedTaskActivityState>& rows) {
++ auto* t=dynamic_cast<Transaction*>(&base);
++ if(!t||!t->active||t->db!=&db||t->original!=&original||!WorldHold::Allows(t->run))return nullptr;
++ try {
++  const auto& f=original.original_;const auto native=original.actual_->GetActivityState();
++  if(rows.size()!=t->before.size()||native.size()!=rows.size())throw std::runtime_error("Fungal native snapshot universe differs");
++  std::map<int,SharedTaskActivityStateRepository::SharedTaskActivityState> actual;
++  for(const auto& a:rows)if(a.shared_task_id!=int64_t(f.run)||a.done_count<0||a.updated_time<0||a.completed_time<0||!actual.emplace(a.activity_id,a).second)throw std::runtime_error("Fungal native snapshot identity differs");
++  for(const auto& n:native){auto at=actual.find(n.activity_id);if(at==actual.end()||n.done_count!=uint32_t(at->second.done_count)||n.updated_time!=uint64_t(at->second.updated_time)||n.completed_time!=uint64_t(at->second.completed_time))throw std::runtime_error("Fungal snapshot is not actual native vector");}
++  for(const auto& before:t->before){const auto at=actual.find(before.first);if(at==actual.end())throw std::runtime_error("Fungal original stage missing");const auto& after=at->second;
++   if(uint32_t(before.first)==original.activity_){if(after.done_count!=int(original.count_)||after.completed_time<=0||after.updated_time<=0)throw std::runtime_error("Fungal original selected result differs");}
++   else if(after.done_count!=before.second.count||uint64_t(after.updated_time)!=before.second.updated||uint64_t(after.completed_time)!=before.second.completed)throw std::runtime_error("Fungal other native stage changed");
++  }
++  // Private ACK is preallocated before any persistent mutation or COMMIT.
++  auto ack=std::unique_ptr<FungalItemWorldSource::KnownStageAck>(new FungalItemWorldSource::KnownStageAck(f,original.activity_,original.count_));
++  auto state=Query(db,"SELECT CONNECTION_ID(),@@in_transaction");if(state.RowCount()!=1||Number(state.begin()[0])!=t->connection||Number(state.begin()[1])!=1||db.TransactionStrictFailed())throw std::runtime_error("Fungal World strict session differs");
++  // Persist precisely the existing native full snapshot at its original Save
++  // call, not a standalone replacement activity/progress UPDATE.
++  auto removed=Query(db,"DELETE FROM shared_task_activity_state WHERE shared_task_id="+std::to_string(f.run));
++  if(removed.RowsAffected()!=rows.size())throw std::runtime_error("Fungal original activity universe drift");
++  for(const auto& a:rows){auto inserted=Query(db,"INSERT INTO shared_task_activity_state(shared_task_id,activity_id,done_count,updated_time,completed_time)VALUES("+std::to_string(a.shared_task_id)+","+std::to_string(a.activity_id)+","+std::to_string(a.done_count)+","+Time(a.updated_time)+","+Time(a.completed_time)+")");if(inserted.RowsAffected()!=1)throw std::runtime_error("Fungal actual snapshot save failed");}
++  if(!t->pure&&!t->already_ack){auto acked=Query(db,"UPDATE fungal_item_operations SET native_ack=1 WHERE outcome_id="+std::to_string(f.outcome)+" AND native_ack=0");if(acked.RowsAffected()!=1)throw std::runtime_error("Fungal exact outcome ACK drift");}
++  state=Query(db,"SELECT CONNECTION_ID(),@@in_transaction");if(state.RowCount()!=1||Number(state.begin()[0])!=t->connection||Number(state.begin()[1])!=1||db.TransactionStrictFailed())throw std::runtime_error("Fungal World session changed before COMMIT");
++  t->commit_attempted=true;auto commit=db.TransactionCommitStrict();t->active=false;
++  if(!commit.Success())throw std::runtime_error("Fungal World COMMIT unknown");t->known_commit=true;
++  return ack;
++ }catch(...){if(t->active){db.TransactionRollbackStrict();t->active=false;}if(t->commit_attempted&&!t->known_commit&&t->unknown){t->unknown->Attach();t->unknown.release();}return nullptr;}
++}
++}
+--- a/world/shared_task_manager.cpp
++++ b/world/shared_task_manager.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_item_world_source.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -625,6 +626,10 @@
+ )
+ {
+ 	auto shared_task = FindSharedTaskByTaskIdAndCharacterId(task_id, source_character_id);
++	if(shared_task&&!FungalInventory::WorldHold::Allows(shared_task->GetDbSharedTask().id))return;
++	FungalItemWorldSource::NativeStage fungal_stage(*m_database,shared_task,source_character_id,task_id,activity_id,done_count);
++	std::vector<SharedTaskActivityStateEntry> fungal_before;
++	if(fungal_stage.Selected()){if(!fungal_stage.Ready())return;fungal_before=shared_task->m_shared_task_activity_state;}
+ 	if (shared_task) {
+ 		LogTasksDetail(
+ 			"shared_task_id [{}] character_id [{}] task_id [{}] activity_id [{}] done_count [{}]",
+@@ -684,6 +689,8 @@
+ 					else {
+ 						SaveSharedTaskActivityState(shared_task->GetDbSharedTask().id,
+ 							shared_task->m_shared_task_activity_state);
++						if(fungal_stage.Selected()&&!fungal_stage.Committed()){
++						 shared_task->m_shared_task_activity_state=std::move(fungal_before);return;}
+ 					}
+ 
+ 					shared_task->SetSharedTaskActivityState(shared_task->m_shared_task_activity_state);
+@@ -740,6 +747,7 @@
+ 	std::vector<SharedTaskActivityStateEntry> activity_state
+ )
+ {
++	if(!FungalInventory::WorldHold::Allows(shared_task_id))return;
+ 	// transfer from memory to database
+ 	std::vector<SharedTaskActivityStateRepository::SharedTaskActivityState> shared_task_db_activities = {};
+ 	shared_task_db_activities.reserve(activity_state.size());
+@@ -757,6 +765,8 @@
+ 		shared_task_db_activities.emplace_back(e);
+ 	}
+ 
++	if(FungalItemWorldSource::NativeStage::SelectedSave(shared_task_id)){
++	 FungalItemWorldSource::NativeStage::CommitActualSave(*m_database,shared_task_id,shared_task_db_activities);return;}
+ 	SharedTaskActivityStateRepository::DeleteWhere(*m_database, fmt::format("shared_task_id = {}", shared_task_id));
+ 	SharedTaskActivityStateRepository::InsertMany(*m_database, shared_task_db_activities);
+ }
+@@ -1826,11 +1836,14 @@
+ void SharedTaskManager::SendActivityUpdate(SharedTask *s, uint32_t activity_id, uint32_t done_count, bool ignore_quest_update)
+ {
+ 	for (const auto &m : s->GetMembers()) {
++		const bool fungal=FungalItemWire::Correlated(s->GetTaskData().id,activity_id);
++		FungalItemWire::Trailer fungal_ack;
++		if(fungal&&!FungalItemWorldSource::NativeStage::StampActualAck(s->GetDbSharedTask().id,activity_id,fungal_ack))return;
+ 		const bool fire=s->GetTaskData().id==FireSharedActivityOrigin::Task;
+ 		const uint64_t original_run=s->GetDbSharedTask().id;
+ 		if(fire && !original_run) return;
+ 		auto p = std::make_unique<ServerPacket>(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+
+-		 (fire?sizeof(FireSharedActivityOrigin::Trailer):0));
++		 (fire?sizeof(FireSharedActivityOrigin::Trailer):0)+(fungal?sizeof(FungalItemWire::Trailer):0));
+ 		auto d = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(p->pBuffer);
+ 		d->source_character_id = m.character_id;
+ 		d->task_id = s->GetTaskData().id;
+@@ -1838,6 +1851,7 @@
+ 		d->done_count = done_count;
+ 		d->ignore_quest_update = ignore_quest_update;
+ 		if(fire) FireSharedActivityOrigin::Write(p->pBuffer,original_run);
++		if(fungal)FungalItemWire::Write(p->pBuffer,sizeof(ServerSharedTaskActivityUpdate_Struct),fungal_ack);
+ 		auto c = ClientList::Instance()->FindCLEByCharacterID(m.character_id);
+ 		if (c && c->Server()) {
+ 			c->Server()->SendPacket(p.get());
+@@ -2095,3 +2109,5 @@
+ 		DeleteSharedTask(shared_task_id);
+ 	}
+ }
++
++#include "fungal_item_world_source_impl.inc"
+--- a/world/shared_task_world_messaging.cpp
++++ b/world/shared_task_world_messaging.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_item_world_source.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -102,8 +103,10 @@
+ 		case ServerOP_SharedTaskUpdate: {
+ 			if(pack->size<sizeof(ServerSharedTaskActivityUpdate_Struct)) break;
+ 			auto *r = (ServerSharedTaskActivityUpdate_Struct *) pack->pBuffer;
++			FungalItemWorldSource::PacketScope fungal_packet(*pack);
+ 			uint64_t original_run=0;
+-			if(!FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,r->task_id,original_run)) break;
++			if(!FungalItemWire::Correlated(r->task_id,r->activity_id)&&
++			 !FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,r->task_id,original_run)) break;
+ 			if(r->task_id==FireSharedActivityOrigin::Task) {
+ 				auto* actual=SharedTaskManager::Instance()->FindSharedTaskByTaskIdAndCharacterId(
+ 				 r->task_id,r->source_character_id);
+--- a/zone/CMakeLists.txt
++++ b/zone/CMakeLists.txt
+@@ -1,4 +1,5 @@
+ set(zone_sources
++	fungal_native_inventory_custody.cpp
+ 	client_spirit_shroud.cpp
+ 	client_spirit_shroud_native.cpp
+ 	client_mercenary_transfer.cpp
+--- a/zone/client.cpp
++++ b/zone/client.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_item_operation_source.h"
+ #include <ctime>
+ #include "fire_run_terminal_scene.h"
+ #include "fire_run_terminal_custody.h"
+@@ -790,6 +791,7 @@
+ }
+ 
+ Client::~Client() {
++ FungalItemSource::NativeEvents::Revoke(*this);
+ 	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
+  Housing::GuildPortalRuntime::Forget(*this);
+ 	struct PublicationCleanup {Client& client;~PublicationCleanup(){Housing::ActorPublication::Forget(client);}} publication_cleanup{*this};
+@@ -1747,6 +1749,7 @@
+ 			sender = GetPet();
+ 		}
+ 
++		if(sender==this) FungalItemSource::NativeEvents::CaptureSay(*this,message);
+ 		if(sender==this) FirePersonalOccurrenceSource::OriginalGotonurSayQueue::CaptureActual(*this,message);
+ 		if (!is_silent) {
+ 			entity_list.ChannelMessage(sender, chan_num, language, lang_skill, message);
+@@ -15439,3 +15442,5 @@
+   TerminalMemberStillActual(c,p->chest->original.mission,p->chest->members);
+ }
+ } // namespace FireRunActionSource
++
++#include "fungal_item_source_impl.inc"
+--- a/zone/client.h
++++ b/zone/client.h
+@@ -1,3 +1,4 @@
++#include "fungal_item_operation_source.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -2149,6 +2150,9 @@
+  friend class FireRunActionSource::PreparedTerminalChestPlan;
+  friend class FireRunActionSource::PublishedTerminalReturnSink;
+  friend class FireRunActionSource::OriginalTerminalDeath;
++ friend class FungalItemSource::NativeEvents;
++ std::shared_ptr<FungalItemSource::Lifetime> m_fungal_source_life;
++ std::optional<FungalItemSource::AcceptedFate> m_fungal_fate;
+ 	std::shared_ptr<FirePersonalOccurrenceSource::OriginalGotonurSayLifetime> m_fire_gotonur_say_lifetime;
+ 	ExternalHandinMoneyReturned m_external_handin_money_returned = {};
+ 	std::vector<uint32_t>       m_external_handin_items_returned = {};
+--- a/zone/client_packet.cpp
++++ b/zone/client_packet.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_item_operation_source.h"
+ #include "fire_run_terminal_scene.h"
+ #include "fire_run_action_scene.h"
+ /*	EQEmu: EQEmulator
+@@ -16242,6 +16243,7 @@
+ void Client::Handle_OP_TradeAcceptClick(const EQApplicationPacket *app)
+ {
+ 	Mob* with = trade->With();
++	if(with&&with->IsNPC()&&FungalItemSource::NativeEvents::OriginalTrade(*this,*with->CastToNPC()))return;
+ 	if(with&&with->IsNPC()&&FireRunActionSource::NativeRunTerminalSource::HandleOriginalAccept(*this,*with->CastToNPC()))return;
+ 	trade->state = TradeAccepted;
+ 
+--- a/zone/entity.cpp
++++ b/zone/entity.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_item_operation_source.h"
+ #include "fire_run_terminal_scene.h"
+ #include "fire_material_loot_source.h"
+ #include "bound_destructible_ruins.h"
+@@ -585,6 +586,7 @@
+ 	}
+ 	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Drain();
+ 	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Drain();
++	FungalItemSource::NativeEvents::Drain();
+ 	FireRunActionSource::NativeRunHelperSource::DrainCompletions();
+ 	FireRunActionSource::NativeRunTerminalSource::DrainCompletions();
+ }
+--- /dev/null
++++ b/zone/fungal_item_operation_source.h
+@@ -0,0 +1,128 @@
++#pragma once
++#include <cstdint>
++#include <memory>
++#include <optional>
++#include <vector>
++class Client;
++class NPC;
++class Zone;
++class Database;
++class ServerPacket;
++class EQApplicationPacket;
++struct ClientTaskInformation;
++namespace EQ { class ItemInstance; }
++namespace FungalInventory { class NativeCustody; }
++namespace FungalItemSource {
++class NativeEvents;
++class Lifetime final {
++ friend class NativeEvents;
++ bool active_=true;
++ Lifetime()=default;
++};
++struct AcceptedFate {
++ uint32_t character=0,accepted=0;
++ uint64_t occurrence=0;
++ int slot=-1;
++};
++struct OperationFacts {
++ uint8_t scope=0; // 1 personal native reward occurrence; 2 actual World shared-run ID
++ uint32_t task=0,activity=0,character=0,accepted=0;
++ uint64_t occurrence=0,source_sequence=0;
++ uint32_t client_entity=0,npc_entity=0,npc_type=0,npc_spawn=0;
++ uint32_t input_item=0,input_quantity=0,output_item=0,output_quantity=0;
++ int personal_slot=-1;
++};
++// These are actual original native objects. Only NativeEvents can issue one;
++// neither a Lua caller nor a public facts aggregate can construct authority.
++class OriginalOperation final {
++ friend class NativeEvents;
++ friend class FungalInventory::NativeCustody;
++ friend class CommittedOperation;
++ OperationFacts facts_;
++ Client* client_=nullptr;
++ NPC* npc_=nullptr;
++ std::shared_ptr<Lifetime> client_life_,npc_life_,zone_life_;
++ Zone* zone_=nullptr;
++ bool trade_=false;
++ struct Root { int16_t slot=0; EQ::ItemInstance* original=nullptr;
++  uint32_t item=0; int32_t serial=0; int16_t charges=0; };
++ std::vector<Root> roots_;
++ uint32_t copper_=0,silver_=0,gold_=0,platinum_=0;
++ std::shared_ptr<ServerPacket> progress_;
++ std::shared_ptr<EQApplicationPacket> finish_;
++ OriginalOperation()=default;
++public:
++ ~OriginalOperation()=default;
++ OriginalOperation(const OriginalOperation&)=delete;
++ OriginalOperation& operator=(const OriginalOperation&)=delete;
++ const OperationFacts& Facts()const noexcept{return facts_;}
++};
++// Core alone issues this after SAME strict transaction known COMMIT and
++// allocation-free original inventory publication. It is not a bool save flag.
++class CommittedOperation final {
++ friend class FungalInventory::NativeCustody;
++ friend class NativeEvents;
++ OperationFacts facts_;
++ uint64_t outcome_=0;
++ bool published_=false;
++ std::shared_ptr<ServerPacket> progress_;
++ std::shared_ptr<EQApplicationPacket> finish_;
++ std::shared_ptr<Lifetime> client_life_,npc_life_,zone_life_;
++ Client* original_client_=nullptr;
++ NPC* original_npc_=nullptr;
++ Zone* original_zone_=nullptr;
++ CommittedOperation(const OriginalOperation& original,uint64_t id)
++  :facts_(original.facts_),outcome_(id),progress_(original.progress_),finish_(original.finish_),
++   client_life_(original.client_life_),npc_life_(original.npc_life_),zone_life_(original.zone_life_),
++   original_client_(original.client_),original_npc_(original.npc_),original_zone_(original.zone_){}
++public:
++ CommittedOperation(const CommittedOperation&)=delete;
++ CommittedOperation& operator=(const CommittedOperation&)=delete;
++};
++class NativeEvents final {
++ friend class FungalInventory::NativeCustody;
++ struct Pending;
++ static Pending *head_,*tail_;
++ static std::shared_ptr<Lifetime> zone_life_;
++ static Zone* zone_owner_;
++ static std::unique_ptr<OriginalOperation> Capture(Client&,NPC&,bool);
++ static bool Revalidate(Client&,const OriginalOperation&);
++ static void Publish(Client&,std::unique_ptr<CommittedOperation>);
++ static bool CurrentPersonal(Client&,const AcceptedFate&,bool initial);
++ static void RestoreAccepted(Client&);
++ static thread_local const CommittedOperation* personal_progress_;
++ static thread_local const Client* personal_client_;
++ static thread_local bool personal_claimed_,personal_save_seen_;
++public:
++ // Exact native acceptance reservation and SAME acceptance SaveClientState result.
++ static void Accepted(Client&,uint64_t actual_reserved,bool actual_saved,
++  const ClientTaskInformation& actual);
++ static void ReloadAccepted(Client&);
++ static bool AllowPersonalProgress(const Client*,uint32_t task,uint32_t activity);
++ static void ActualPersonalSave(const Client*,uint32_t task,uint32_t activity,bool saved);
++ static bool AcceptWorldEcho(Client&,const void*,uint32_t size,uint32_t task,uint32_t activity,uint32_t count);
++ static void CaptureSay(Client&,const char* original_message);
++ // Called before TradeAccepted/FinishTrade/Reset; selected failures never fall through.
++ static bool OriginalTrade(Client&,NPC&) noexcept;
++ static void Drain();
++ static void Discard()noexcept;
++ static void Revoke(Client&)noexcept;
++ static void Revoke(NPC&)noexcept;
++};
++} // namespace FungalItemSource
++namespace FungalInventory {
++class NativeCustody final {
++ friend class FungalItemSource::NativeEvents;
++ // Invoked ONLY by the same original personal native UpdateTaskActivity's
++ // observed SaveClientState result, under its private consumed receipt scope.
++ static void PersonalStageSaved(Database&,const FungalItemSource::CommittedOperation&,bool) noexcept;
++ static bool KnownWorldStage(Database&,uint64_t run,uint64_t outcome,uint32_t accepted,
++  uint32_t original_recipient,uint32_t activity,uint32_t count) noexcept;
++public:
++ // Owns original selected operation, complete actual native projection/placement,
++ // inventory lease+strict TX, occurrence/member/stage locks and finite outcome.
++ // Rejection preserves original trade roots/cash for native cancellation.
++ static std::unique_ptr<FungalItemSource::CommittedOperation> Execute(
++  Client&,std::unique_ptr<FungalItemSource::OriginalOperation>) noexcept;
++};
++}
+--- /dev/null
++++ b/zone/fungal_item_source_impl.inc
+@@ -0,0 +1,352 @@
++// Included once by client.cpp, after native Client/NPC/task definitions.
++#include "fungal_item_operation_source.h"
++#include "../common/fungal_item_operation_wire.h"
++namespace FungalItemSource {
++namespace {
++thread_local const OriginalOperation* original_personal_hail=nullptr;
++thread_local const Client* original_personal_hail_client=nullptr;
++thread_local bool original_personal_hail_claimed=false;
++bool PurePersonalHail(uint32_t task,uint32_t activity)noexcept {
++ return (task==920141&&(activity==1||activity==3||activity==5||activity==9))||
++  (task==920142&&(activity==8||activity==9));
++}
++}
++struct NativeEvents::Pending {
++ std::unique_ptr<OriginalOperation> original;
++ Pending* next=nullptr;
++};
++NativeEvents::Pending* NativeEvents::head_=nullptr;
++NativeEvents::Pending* NativeEvents::tail_=nullptr;
++std::shared_ptr<Lifetime> NativeEvents::zone_life_;
++Zone* NativeEvents::zone_owner_=nullptr;
++thread_local const CommittedOperation* NativeEvents::personal_progress_=nullptr;
++thread_local const Client* NativeEvents::personal_client_=nullptr;
++thread_local bool NativeEvents::personal_claimed_=false;
++thread_local bool NativeEvents::personal_save_seen_=false;
++bool NativeEvents::CurrentPersonal(Client& c,const AcceptedFate& b,bool initial) {
++ if(!c.task_state||!b.character||b.character!=c.CharacterID()||!b.occurrence||!b.accepted||
++  b.slot<0||b.slot>=MAXACTIVEQUESTS)return false;
++ const auto& t=c.task_state->m_active_quests[b.slot];
++ if(t.task_id!=920141||t.slot!=b.slot||uint32_t(t.accepted_time)!=b.accepted||t.was_rewarded)return false;
++ const std::string activities=initial?
++  " AND (SELECT COUNT(*) FROM character_activities a WHERE a.charid=c.charid AND a.taskid=c.taskid "
++  "AND a.activityid BETWEEN 0 AND 9 AND a.donecount=0 AND a.completed=0)=10":"";
++ auto q=database.QueryDatabase(fmt::format(
++  "SELECT r.occurrence_id FROM character_task_reward_instances r JOIN character_tasks c "
++  "ON c.charid=r.character_id AND c.taskid=r.task_id AND c.acceptedtime=r.accepted_time "
++  "WHERE r.character_id={} AND r.task_id=920141 AND r.occurrence_id={} AND r.accepted_time={} "
++  "AND c.slot={} AND c.type=2 AND c.was_rewarded=0{}",
++  b.character,b.occurrence,b.accepted,b.slot,activities),false);
++ return q.Success()&&q.RowCount()==1&&q.begin()[0]&&
++  std::string(q.begin()[0])==std::to_string(b.occurrence);
++}
++void NativeEvents::Accepted(Client& c,uint64_t reserved,bool saved,const ClientTaskInformation& t) {
++ if(t.task_id!=920141)return;
++ c.m_fungal_fate.reset();
++ AcceptedFate b{c.CharacterID(),uint32_t(std::max(t.accepted_time,0)),reserved,t.slot};
++ if(saved&&CurrentPersonal(c,b,true))c.m_fungal_fate=b;
++}
++void NativeEvents::RestoreAccepted(Client& c) {
++ c.m_fungal_fate.reset();if(!c.task_state)return;
++ for(const auto& t:c.task_state->m_active_quests) {
++  if(t.task_id!=920141||t.was_rewarded||t.accepted_time<=0)continue;
++  auto q=database.QueryDatabase(fmt::format(
++   "SELECT occurrence_id FROM character_task_reward_instances WHERE character_id={} "
++   "AND task_id=920141 AND accepted_time={}",c.CharacterID(),t.accepted_time),false);
++  if(!q.Success()||q.RowCount()!=1||!q.begin()[0])return;
++  const auto occurrence=TaskSharedRewardIdentity::Number(q.begin()[0]);
++  AcceptedFate b{c.CharacterID(),uint32_t(t.accepted_time),occurrence,t.slot};
++  if(CurrentPersonal(c,b,false))c.m_fungal_fate=b;
++  return;
++ }
++}
++void NativeEvents::ReloadAccepted(Client& c){RestoreAccepted(c);}
++std::unique_ptr<OriginalOperation> NativeEvents::Capture(Client& c,NPC& n,bool trade) {
++ if(!zone||zone->GetZoneID()!=481||zone->GetInstanceID()!=0||zone->GetInstanceVersion()!=0||
++  !c.CharacterID()||!c.GetID()||!n.GetID()||n.GetDepop()||n.IsEngaged()||!c.task_state)return {};
++ const bool deagus=n.GetNPCTypeID()==481093&&n.GetSpawnPointID()==150084;
++ const bool rakkirin=n.GetNPCTypeID()==481052&&n.GetSpawnPointID()==149898;
++ const bool autoros=n.GetNPCTypeID()==481118&&n.GetSpawnPointID()==150223;
++ const bool eulyris=n.GetNPCTypeID()==481115&&n.GetSpawnPointID()==150205;
++ const bool excrug=n.GetNPCTypeID()==481109&&n.GetSpawnPointID()==150152;
++ const bool orgus=n.GetNPCTypeID()==481120&&n.GetSpawnPointID()==150231;
++ // Native normal-world Adeenas role; no exact static spawn was authenticated
++ // by the retained source. Require a real static spawn of this original type,
++ // not a transient/GM-created actor or a mission-instance namesake.
++ const bool adeenas=n.GetNPCTypeID()==481071&&n.GetSpawnPointID()!=0;
++ if(!deagus&&!rakkirin&&!autoros&&!eulyris&&!excrug&&!orgus&&!adeenas)return {};
++ if(!trade&&(c.GetTarget()!=&n||c.IsInvisible(&n)||
++  DistanceNoZ(c.GetPosition(),n.GetPosition())>RuleI(Range,Say)))return {};
++ auto out=std::unique_ptr<OriginalOperation>(new OriginalOperation);
++ auto& f=out->facts_;
++ f.character=c.CharacterID();f.client_entity=c.GetID();f.npc_entity=n.GetID();
++ f.npc_type=n.GetNPCTypeID();f.npc_spawn=n.GetSpawnPointID();
++ int fate_activity=-1;
++ if(!trade&&c.m_fungal_fate&&CurrentPersonal(c,*c.m_fungal_fate,false)) {
++  const auto& current=c.task_state->m_active_quests[c.m_fungal_fate->slot];
++  const int candidate=autoros?1:eulyris?3:excrug?5:deagus?7:adeenas?9:-1;
++  if(candidate>=0&&current.activity[candidate].activity_state==ActivityActive&&
++   current.activity[candidate].done_count==0)fate_activity=candidate;
++ }
++ if(fate_activity>=0) {
++  const auto& b=*c.m_fungal_fate;
++  f.scope=1;f.task=920141;f.activity=fate_activity;f.occurrence=b.occurrence;f.accepted=b.accepted;
++  f.personal_slot=b.slot;
++  if(fate_activity==7){f.output_item=40997;f.output_quantity=1;}
++ }
++ if(!f.scope&&!trade&&(adeenas||orgus)) {
++  const int activity=adeenas?8:9;
++  for(const auto& t:c.task_state->m_active_quests) {
++   if(t.task_id!=920142||t.was_rewarded||t.accepted_time<=0||
++    t.activity[activity].activity_state!=ActivityActive||t.activity[activity].done_count!=0)continue;
++   auto q=database.QueryDatabase(fmt::format(
++    "SELECT r.occurrence_id FROM character_task_reward_instances r JOIN character_tasks ct "
++    "ON ct.charid=r.character_id AND ct.taskid=r.task_id AND ct.acceptedtime=r.accepted_time "
++    "WHERE r.character_id={} AND r.task_id=920142 AND r.accepted_time={} "
++    "AND ct.type=2 AND ct.slot={} AND ct.was_rewarded=0",c.CharacterID(),t.accepted_time,t.slot),false);
++   if(!q.Success()||q.RowCount()!=1||!q.begin()[0])return {};
++   const auto occurrence=TaskSharedRewardIdentity::Number(q.begin()[0]);if(!occurrence)return {};
++   f.scope=1;f.task=920142;f.activity=activity;f.occurrence=occurrence;
++   f.accepted=uint32_t(t.accepted_time);f.personal_slot=t.slot;break;
++  }
++ }
++ if(!f.scope) {
++  auto& t=c.task_state->m_active_shared_task;
++  int selected=trade&&deagus?5:-1;
++  if(!trade&&rakkirin){for(int a:{0,10})if(t.activity[a].activity_state==ActivityActive&&t.activity[a].done_count==0){selected=a;break;}}
++  if(!trade&&deagus){for(int a:{1,6})if(t.activity[a].activity_state==ActivityActive&&t.activity[a].done_count==0){selected=a;break;}}
++  if(selected<0)return {};const uint32_t activity=uint32_t(selected);
++  if(t.task_id!=920143||t.was_rewarded||t.accepted_time<=0||
++   t.activity[activity].activity_state!=ActivityActive||t.activity[activity].done_count!=0)return {};
++  const auto run=TaskSharedRewardIdentity::ReadRun(database,c.CharacterID(),920143);
++  if(!run||c.GetSharedTaskId()<=0||run->id!=uint64_t(c.GetSharedTaskId())||
++   run->accepted_time!=uint32_t(t.accepted_time))return {};
++  auto q=database.QueryDatabase(fmt::format(
++   "SELECT s.id FROM shared_tasks s JOIN shared_task_members m ON m.shared_task_id=s.id "
++   "WHERE s.id={} AND s.task_id=920143 AND m.character_id={} AND s.completion_time IS NULL "
++   "AND (s.expire_time IS NULL OR s.expire_time>NOW()) AND UNIX_TIMESTAMP(s.accepted_time)={}",
++   run->id,c.CharacterID(),run->accepted_time),false);
++  if(!q.Success()||q.RowCount()!=1)return {};
++  if(activity==10) {
++   auto deliveries=database.QueryDatabase(fmt::format(
++    "SELECT activity_id,done_count,completed_time IS NOT NULL FROM shared_task_activity_state "
++    "WHERE shared_task_id={} AND activity_id BETWEEN 7 AND 9 ORDER BY activity_id",run->id),false);
++   if(!deliveries.Success()||deliveries.RowCount()!=3)return {};
++   unsigned i=0;for(auto row:deliveries) {
++    const uint32_t goals[]={4,3,2};
++    if(TaskSharedRewardIdentity::Number(row[0])!=7+i||
++     TaskSharedRewardIdentity::Number(row[1])!=goals[i]||!row[2]||std::string(row[2])!="1"||
++     t.activity[7+i].activity_state!=ActivityCompleted||t.activity[7+i].done_count!=int(goals[i]))return {};
++    ++i;
++   }
++  }
++  f.scope=2;f.task=920143;f.activity=activity;f.occurrence=run->id;f.accepted=run->accepted_time;
++  if(trade){f.output_item=43586;f.output_quantity=2;}
++  else if(activity==10){f.output_item=43587;f.output_quantity=1;}
++  if(trade){f.input_item=43585;f.input_quantity=2;}
++ }
++ const auto* task=TaskManager::Instance()->GetTaskData(f.task);
++ if(!task||task->type!=(f.scope==1?TaskType::Quest:TaskType::Shared)||
++  task->reward_method!=METHODSELECT||!task->has_reward_selection||
++  task->activity_count!=(f.task==920142?10:f.scope==1?10:12)||
++  task->activity_information[f.activity].goal_count!=(f.scope==2&&f.activity==5?2:1)||
++  task->activity_information[f.activity].activity_type!=(trade?TaskActivityType::Deliver:TaskActivityType::SpeakWith))return {};
++ static uint64_t sequence=0;if(sequence==UINT64_MAX)return {};f.source_sequence=++sequence;
++ if(!c.m_fungal_source_life)c.m_fungal_source_life=std::shared_ptr<Lifetime>(new Lifetime);
++ if(!n.m_fungal_source_life)n.m_fungal_source_life=std::shared_ptr<Lifetime>(new Lifetime);
++ if(!zone_life_||zone_owner_!=zone) {
++  if(zone_life_)zone_life_->active_=false;
++  zone_life_=std::shared_ptr<Lifetime>(new Lifetime);zone_owner_=zone;
++ }
++ if(!c.m_fungal_source_life->active_||!n.m_fungal_source_life->active_||!zone_life_->active_)return {};
++ out->client_=&c;out->npc_=&n;out->zone_=zone;out->trade_=trade;
++ out->client_life_=c.m_fungal_source_life;out->npc_life_=n.m_fungal_source_life;out->zone_life_=zone_life_;
++ if(trade) {
++  if(!c.trade||c.trade->state!=Trading||c.trade->With()!=&n)return {};
++  out->roots_.reserve(4);
++  for(int16_t slot=3000;slot<=3003;++slot) {
++   auto* item=c.GetInv().GetItem(slot);if(!item)continue;
++   out->roots_.push_back({slot,item,item->GetID(),item->GetSerialNumber(),item->GetCharges()});
++  }
++  out->copper_=c.trade->cp;out->silver_=c.trade->sp;out->gold_=c.trade->gp;out->platinum_=c.trade->pp;
++  out->finish_=std::make_shared<EQApplicationPacket>(OP_FinishTrade,0);
++ }
++ if(f.scope==2) {
++  out->progress_=std::make_shared<ServerPacket>(ServerOP_SharedTaskUpdate,
++   sizeof(ServerSharedTaskActivityUpdate_Struct)+sizeof(FungalItemWire::Trailer));
++  auto* p=reinterpret_cast<ServerSharedTaskActivityUpdate_Struct*>(out->progress_->pBuffer);
++  p->source_character_id=f.character;p->task_id=f.task;p->activity_id=f.activity;
++  p->done_count=f.scope==2&&f.activity==5?2:1;p->ignore_quest_update=false;
++ }
++ return out;
++}
++bool NativeEvents::Revalidate(Client& c,const OriginalOperation& o) {
++ if(!o.zone_life_||!o.zone_life_->active_||zone!=o.zone_||zone_owner_!=zone||
++  !o.client_life_||!o.client_life_->active_||!o.npc_life_||!o.npc_life_->active_||
++  entity_list.GetClientByCharID(o.facts_.character)!=&c||&c!=o.client_||
++  c.m_fungal_source_life!=o.client_life_||c.GetID()!=o.facts_.client_entity)return false;
++ auto* n=entity_list.GetNPCByID(o.facts_.npc_entity);
++ if(n!=o.npc_||!n||n->m_fungal_source_life!=o.npc_life_)return false;
++ // Capture freshly observes stage/run/member, but does not create entitlement.
++ auto now=Capture(c,*n,o.trade_);if(!now)return false;
++ const auto& f=now->facts_;const auto& old=o.facts_;
++ if(f.scope!=old.scope||f.task!=old.task||f.activity!=old.activity||f.occurrence!=old.occurrence||
++  f.accepted!=old.accepted||f.personal_slot!=old.personal_slot)return false;
++ if(o.trade_) {
++  if(now->roots_.size()!=o.roots_.size()||now->copper_!=o.copper_||now->silver_!=o.silver_||
++   now->gold_!=o.gold_||now->platinum_!=o.platinum_)return false;
++  for(size_t i=0;i<o.roots_.size();++i) {
++   const auto& a=o.roots_[i];const auto& b=now->roots_[i];
++   if(a.slot!=b.slot||a.original!=b.original||a.item!=b.item||a.serial!=b.serial||a.charges!=b.charges)return false;
++  }
++ }
++ return true;
++}
++void NativeEvents::CaptureSay(Client& c,const char* message) {
++ if(!message||!zone||zone->GetZoneID()!=481||zone->GetInstanceID()!=0)return;
++ try {
++  if(!Strings::BeginsWith(Strings::ToLower(message),"hail"))return;
++  auto* target=c.GetTarget();if(!target||!target->IsNPC())return;
++  auto o=Capture(c,*target->CastToNPC(),false);if(!o)return;
++  auto p=std::unique_ptr<Pending>(new Pending{std::move(o),nullptr});
++  if(tail_)tail_->next=p.get();else head_=p.get();tail_=p.release();
++ }catch(const std::bad_alloc&){} // Original native say remains untouched; no spend occurred.
++}
++bool NativeEvents::OriginalTrade(Client& c,NPC& n)noexcept {
++ if(!zone||zone->GetZoneID()!=481||zone->GetInstanceID()||n.GetNPCTypeID()!=481093||
++  n.GetSpawnPointID()!=150084)return false;
++ bool selected=c.task_state&&c.task_state->m_active_shared_task.task_id==920143&&
++  c.task_state->m_active_shared_task.activity[5].activity_state==ActivityActive;
++ for(int16_t slot=3000;slot<=3003;++slot) {
++  const auto* item=c.GetInv().GetItem(slot);if(item&&item->GetID()==43585)selected=true;
++ }
++ if(!selected)return false;
++ try {
++  auto original=Capture(c,n,true);if(!original)return true;
++  auto result=FungalInventory::NativeCustody::Execute(c,std::move(original));
++  if(result)Publish(c,std::move(result));
++ }catch(...){} // selected original roots/cash never fall through to generic popping
++ return true;
++}
++void NativeEvents::Publish(Client& c,std::unique_ptr<CommittedOperation> receipt) {
++ if(!receipt||receipt->published_||!receipt->outcome_)return;
++ if(!receipt->client_life_||!receipt->client_life_->active_||
++  !receipt->npc_life_||!receipt->npc_life_->active_||!receipt->zone_life_||!receipt->zone_life_->active_||
++  zone!=receipt->original_zone_||&c!=receipt->original_client_||
++  entity_list.GetClientByCharID(receipt->facts_.character)!=receipt->original_client_)return;
++ receipt->published_=true;const auto f=receipt->facts_;
++ if(f.input_item==43585) {
++  if(!c.trade||c.trade->state!=Trading||c.trade->With()!=receipt->original_npc_)return;
++  bool remaining=c.trade->cp||c.trade->sp||c.trade->gp||c.trade->pp;
++  for(int16_t slot=3000;slot<=3003;++slot)if(c.GetInv().GetItem(slot))remaining=true;
++  // Metadata is finalized before mutable native progress callbacks. An offer
++  // with remaining excess/other property stays open for ordinary cancellation;
++  // it is never reset or passed to the destructive generic NPC hand-in path.
++  if(!remaining) {
++   if(!receipt->finish_)return;
++   c.QueuePacket(receipt->finish_.get());c.trade->Reset();
++  }
++ }
++ if(f.scope==2) {
++  if(!receipt->progress_)return;
++  FungalItemWire::Trailer t;t.run=f.occurrence;t.outcome=receipt->outcome_;
++  t.accepted=f.accepted;t.recipient=f.character;
++  FungalItemWire::Write(receipt->progress_->pBuffer,sizeof(ServerSharedTaskActivityUpdate_Struct),t);
++  worldserver.SendPacket(receipt->progress_.get());return;
++ }
++ if(f.scope!=1||f.task!=920141||f.activity!=7||f.character!=c.CharacterID())return;
++ const auto* previous=personal_progress_;const auto* previous_client=personal_client_;
++ const bool previous_claimed=personal_claimed_,previous_saved=personal_save_seen_;
++ personal_progress_=receipt.get();personal_client_=&c;personal_claimed_=personal_save_seen_=false;
++ struct Restore {const CommittedOperation*& field;const CommittedOperation* old;
++  const Client*& client;const Client* old_client;bool& claimed;bool old_claimed;bool& saved;bool old_saved;
++  ~Restore(){field=old;client=old_client;claimed=old_claimed;saved=old_saved;}}
++  restore{personal_progress_,previous,personal_client_,previous_client,personal_claimed_,previous_claimed,
++   personal_save_seen_,previous_saved};
++ // Last actor operation: native progress/save/callbacks may destroy the actor.
++ c.UpdateTaskActivity(920141,7,1);
++}
++bool NativeEvents::AllowPersonalProgress(const Client* c,uint32_t task,uint32_t activity) {
++ if(PurePersonalHail(task,activity)) {
++  const auto* proof=original_personal_hail;
++  if(!proof||!c||c!=original_personal_hail_client||c!=proof->client_||
++   original_personal_hail_claimed||proof->facts_.scope!=1||proof->facts_.task!=task||
++   proof->facts_.activity!=activity||proof->facts_.input_item||proof->facts_.output_item||
++   !proof->client_life_||!proof->client_life_->active_||
++   !proof->npc_life_||!proof->npc_life_->active_||!proof->zone_life_||!proof->zone_life_->active_||
++   !Revalidate(*proof->client_,*proof))return false;
++  original_personal_hail_claimed=true;return true;
++ }
++ if(task!=920141||activity!=7)return true;
++ if(!personal_progress_||!personal_progress_->published_||!c||c!=personal_client_||personal_claimed_)return false;
++ personal_claimed_=true;return true;
++}
++void NativeEvents::ActualPersonalSave(const Client* c,uint32_t task,uint32_t activity,bool saved) {
++ if(task!=920141||activity!=7||!personal_progress_||c!=personal_client_||!personal_claimed_||personal_save_seen_)return;
++ personal_save_seen_=true;
++ // Exact pointer comparison only; no post-callback Client dereference.
++ FungalInventory::NativeCustody::PersonalStageSaved(database,*personal_progress_,saved);
++}
++bool NativeEvents::AcceptWorldEcho(Client& c,const void* bytes,uint32_t size,
++ uint32_t task,uint32_t activity,uint32_t count) {
++ if(!FungalItemWire::Correlated(task,activity))return true;
++ FungalItemWire::Trailer t;
++ const bool pure=FungalItemWire::PureHail(task,activity);
++ const bool decoded=pure?FungalItemWire::ReadHeader(bytes,size,sizeof(ServerSharedTaskActivityUpdate_Struct),t):
++  FungalItemWire::Read(bytes,size,sizeof(ServerSharedTaskActivityUpdate_Struct),t);
++ if(!decoded||(pure&&t.outcome)||
++  !c.task_state||c.task_state->m_active_shared_task.task_id!=920143||c.GetSharedTaskId()<=0||
++  uint64_t(c.GetSharedTaskId())!=t.run||uint32_t(c.task_state->m_active_shared_task.accepted_time)!=t.accepted||
++  count!=(activity==5?2u:1u))return false;
++ const auto run=TaskSharedRewardIdentity::ReadRun(database,c.CharacterID(),920143);
++ if(!run||run->id!=t.run||run->accepted_time!=t.accepted)return false;
++ if(!pure)return FungalInventory::NativeCustody::KnownWorldStage(database,t.run,t.outcome,t.accepted,t.recipient,activity,count);
++ // This path handles an actual trusted World echo, never creates an item or
++ // a progress request from history. Only the World known-COMMIT scope stamps it.
++ auto q=database.QueryDatabase(fmt::format(
++  "SELECT done_count,completed_time IS NOT NULL FROM shared_task_activity_state "
++  "WHERE shared_task_id={} AND activity_id={}",t.run,activity),false);
++ return q.Success()&&q.RowCount()==1&&TaskSharedRewardIdentity::Number(q.begin()[0])==1&&
++  q.begin()[1]&&std::string(q.begin()[1])=="1";
++}
++void NativeEvents::Drain() {
++ auto* pending=head_;head_=tail_=nullptr;
++ while(pending) {
++  std::unique_ptr<Pending> event(pending);pending=pending->next;
++  auto& o=*event->original;
++  if(!o.client_life_||!o.client_life_->active_||!o.zone_life_||!o.zone_life_->active_)continue;
++  auto* c=entity_list.GetClientByCharID(o.facts_.character);
++  if(!c||c!=o.client_||!Revalidate(*c,o))continue;
++  if(!o.facts_.input_item&&!o.facts_.output_item) {
++   const auto f=o.facts_;
++   if(f.scope==1&&PurePersonalHail(f.task,f.activity)) {
++    const auto* old=original_personal_hail;const auto* old_client=original_personal_hail_client;
++    const bool old_claimed=original_personal_hail_claimed;
++    original_personal_hail=&o;original_personal_hail_client=c;original_personal_hail_claimed=false;
++    struct RestorePure {
++     const OriginalOperation*& operation;const OriginalOperation* old;
++     const Client*& client;const Client* old_client;bool& claimed;bool old_claimed;
++     ~RestorePure(){operation=old;client=old_client;claimed=old_claimed;}
++    } restore{original_personal_hail,old,original_personal_hail_client,old_client,
++     original_personal_hail_claimed,old_claimed};
++    c->UpdateTaskActivity(f.task,f.activity,1);continue; // No actor access after callbacks.
++   }
++   if(f.scope==2&&FungalItemWire::PureHail(f.task,f.activity)&&o.progress_) {
++    FungalItemWire::Trailer t;t.run=f.occurrence;t.accepted=f.accepted;t.recipient=f.character;t.outcome=0;
++    FungalItemWire::Write(o.progress_->pBuffer,sizeof(ServerSharedTaskActivityUpdate_Struct),t);
++    worldserver.SendPacket(o.progress_.get());
++   }
++   continue;
++  }
++  auto committed=FungalInventory::NativeCustody::Execute(*c,std::move(event->original));
++  if(committed)Publish(*c,std::move(committed));
++  // No actor access after native progress/callback publication.
++ }
++}
++void NativeEvents::Discard()noexcept {
++ if(zone_life_)zone_life_->active_=false;zone_life_.reset();zone_owner_=nullptr;
++ auto* p=head_;head_=tail_=nullptr;while(p){auto* next=p->next;delete p;p=next;}
++}
++void NativeEvents::Revoke(Client& c)noexcept {if(c.m_fungal_source_life)c.m_fungal_source_life->active_=false;}
++void NativeEvents::Revoke(NPC& n)noexcept {if(n.m_fungal_source_life)n.m_fungal_source_life->active_=false;}
++} // namespace FungalItemSource
+--- /dev/null
++++ b/zone/fungal_native_inventory_custody.cpp
+@@ -0,0 +1,182 @@
++// Finite source-only Fungal writer. Spells r4 actual original-event/World
++// seams and uncertain-session hold must be composed before this can be enabled.
++#include "fungal_item_operation_source.h"
++#include "../common/fungal_item_custody_sql.h"
++#include "../common/fungal_unknown_inventory.h"
++#include "../common/util/uuid.h"
++#include "client.h"
++#include "zonedb.h"
++extern ZoneDatabase database;
++#include "inventory_session_owner.h"
++#include "../common/shared_core/inventory_row_db.h"
++#include "../common/shared_core/inventory_projection.h"
++#include <algorithm>
++#include <map>
++#include <stdexcept>
++#include <utility>
++#include <vector>
++#include <cstring>
++namespace FungalInventory {
++namespace {
++using Row=EQEmu::SharedCore::InventoryRow;
++using Projection=EQEmu::SharedCore::InventoryProjection::ReconstructionScope;
++std::string Hex(const void* data,size_t size) {
++ const auto* p=static_cast<const uint8_t*>(data);const char* h="0123456789ABCDEF";
++ std::string s;s.reserve(size*2);for(size_t i=0;i<size;++i){s+=h[p[i]>>4];s+=h[p[i]&15];}return s;
++}
++std::string Hex(const std::string& s){return Hex(s.data(),s.size());}
++uint64_t Number(const char* p){if(!p)throw std::runtime_error("Fungal null identity");std::string s=p;size_t n=0;auto v=std::stoull(s,&n);if(n!=s.size())throw std::runtime_error("Fungal invalid identity");return v;}
++auto Query(ZoneDatabase& db,const std::string& sql) {
++ if(db.GetStatus()!=DBcore::Connected)throw std::runtime_error("Fungal disconnected");
++ auto r=db.QueryDatabase(sql,false);if(!r.Success())throw std::runtime_error("Fungal strict query failed");return r;
++}
++std::string Key(uint8_t scope,uint32_t task,uint64_t occurrence,uint8_t activity) {
++ return "scope="+std::to_string(scope)+" AND task_id="+std::to_string(task)+" AND native_occurrence="+std::to_string(occurrence)+" AND activity_id="+std::to_string(activity);
++}
++Row OutputRow(uint32_t who,int16_t slot,EQ::ItemInstance& item) {
++ Row r;auto& v=r.values;v.character_id=who;v.slot_id=slot;v.item_id=item.GetID();v.charges=item.GetCharges();v.color=item.GetColor();v.instnodrop=item.IsAttuned();v.custom_data=item.GetCustomDataString();v.ornament_icon=item.GetOrnamentationIcon();v.ornament_idfile=item.GetOrnamentationIDFile();v.ornament_hero_model=item.GetOrnamentHeroModel();v.guid=item.GetSerialNumber();return r;
++}
++}
++std::unique_ptr<FungalItemSource::CommittedOperation> NativeCustody::Execute(Client& c,std::unique_ptr<FungalItemSource::OriginalOperation> original) noexcept {
++ using namespace FungalItemSource;
++ bool transaction=false,commit_attempted=false,known_commit=false;
++ std::unique_ptr<UnknownInventory> unknown;
++ auto& db=database;auto& inv=c.GetInv();
++ if(!original)return nullptr;
++ try {
++ const auto& f=original->facts_;
++ const auto live=[&](){return NativeEvents::Revalidate(c,*original);};
++ if(!live())return nullptr;
++ struct View {
++  uint8_t scope_,activity_;uint32_t task_,accepted_,character_,account_;uint64_t occurrence_;
++  uint32_t actor_entity_,actor_spawn_,actor_npc_;std::vector<char> source_token_;std::string source_identity_;
++ } e{f.scope,uint8_t(f.activity),f.task,f.accepted,f.character,c.AccountID(),f.occurrence,f.npc_entity,f.npc_spawn,f.npc_type,EQ::Util::UUID::Generate().ToByteArray(),"source_sequence="+std::to_string(f.source_sequence)};
++ if(!f.source_sequence||f.activity>255||e.source_token_.size()!=16)return nullptr;
++ const bool personal=e.scope_==1&&e.task_==920141&&e.activity_==7&&e.actor_npc_==481093;
++ const bool spores=e.scope_==2&&e.task_==920143&&e.activity_==5&&e.actor_npc_==481093;
++ const bool bottle=e.scope_==2&&e.task_==920143&&e.activity_==10&&e.actor_npc_==481052;
++ if((!personal&&!spores&&!bottle)||!e.occurrence_||!e.accepted_||!e.actor_entity_||!e.actor_spawn_||e.character_!=c.CharacterID()||e.account_!=c.AccountID()||e.source_identity_.empty()||e.source_identity_.size()>2048||std::all_of(e.source_token_.begin(),e.source_token_.end(),[](char v){return !v;}))return nullptr;
++ auto reservation=c.InventorySessionReleaseTicket();
++ auto lease=reservation?reservation->SnapshotFor(c):std::nullopt;
++ if(!lease||!lease->active||lease->actor.character_id!=e.character_||lease->actor.account_id!=e.account_||!c.HasInventorySessionReservation())return nullptr;
++ const uint32_t output=personal?40997:spores?43586:43587;const uint32_t quantity=spores?2:1;
++ if(f.output_item!=output||f.output_quantity!=quantity||f.input_item!=(spores?43585u:0u)||f.input_quantity!=(spores?2u:0u)||original->trade_!=spores)return nullptr;
++ struct Take {int16_t slot;EQ::ItemInstance** live;EQ::ItemInstance* original;std::unique_ptr<EQ::ItemInstance> remainder;int16_t debit;};
++ std::vector<Take> takes;
++ unknown=std::unique_ptr<UnknownInventory>(new UnknownInventory);
++ unknown->character_=c.CharacterID();unknown->inventory_=&inv;
++ const auto remember=[&](const auto& self,const EQ::ItemInstance* item)->void {if(!item)return;unknown->items_.push_back(item);for(const auto& child:*item->GetContents())self(self,child.second);};
++ for(const auto* bucket:{&inv.m_worn,&inv.m_inv,&inv.m_bank,&inv.m_shbank,&inv.m_trade})for(const auto& x:*bucket)remember(remember,x.second);
++ for(auto it=inv.cursor_cbegin();it!=inv.cursor_cend();++it)remember(remember,*it);
++ std::unique_ptr<EQ::ItemInstance> prepared_output;
++ EQ::ItemInstance** output_live=nullptr;
++ {
++  const auto* definition=db.GetItem(output);
++  if(!definition||definition->ItemClass!=0||!definition->Stackable||definition->StackSize<quantity||definition->MaxCharges!=0||c.CheckLoreConflict(definition))return nullptr;
++  prepared_output.reset(db.CreateItem(definition,int16_t(quantity)));
++  if(!prepared_output||prepared_output->GetSerialNumber()<=0||prepared_output->GetCharges()!=int16_t(quantity)||!prepared_output->GetContents()->empty())return nullptr;
++  int16_t slot=-1;
++  for(int16_t s=EQ::invslot::GENERAL_BEGIN;s<=EQ::invslot::GENERAL_END;++s) {
++   if(inv.GetLookup()&&((uint64_t(1)<<s)&inv.GetLookup()->PossessionsBitmask)&&!inv.GetItem(s)){slot=s;break;}
++  }
++  // Supported placement is one empty ordinary general root. No cursor/stack
++  // merge or invented owed award. Full inventory rejects with property intact.
++  if(slot<0)return nullptr;
++  output_live=&inv.m_inv.emplace(slot,nullptr).first->second;
++  if(*output_live)return nullptr;
++  if(spores) {
++   int remaining=2;
++   for(int16_t s=EQ::invslot::TRADE_BEGIN;s<EQ::invslot::TRADE_BEGIN+4&&remaining;++s) {
++    auto at=inv.m_trade.find(s);if(at==inv.m_trade.end()||!at->second||at->second->GetID()!=43585)continue;
++    auto* item=at->second;
++    if(!item->GetItem()||!item->IsStackable()||item->GetCharges()<=0||item->GetSerialNumber()<=0||!item->GetContents()->empty())return nullptr;
++    const auto debit=int16_t(std::min(remaining,int(item->GetCharges())));
++    std::unique_ptr<EQ::ItemInstance> remainder;
++    if(item->GetCharges()>debit){remainder.reset(item->Clone());if(!remainder)return nullptr;remainder->SetCharges(item->GetCharges()-debit);}
++    takes.push_back({s,&at->second,item,std::move(remainder),debit});remaining-=debit;
++   }
++   if(remaining)return nullptr; // no partial debit/output/progress
++  }
++  const auto token=Hex(e.source_token_.data(),e.source_token_.size());
++  auto receipt=std::unique_ptr<CommittedOperation>(new CommittedOperation(*original,0));
++  const auto output_row=OutputRow(e.character_,slot,*prepared_output);
++  if(!EQEmu::SharedCore::InventoryProjection::Matches(output_row,*prepared_output,Projection::CharacterProfile))return nullptr;
++  const auto output_identity=EQEmu::SharedCore::InventoryRowDB::Values(output_row,slot);
++  std::vector<std::unique_ptr<EQApplicationPacket>> packets;packets.reserve(takes.size()+1);
++  const auto packet=[&](int16_t changed,const EQ::ItemInstance* item) {
++   if(item){const auto bytes=item->Serialize(changed);auto p=std::make_unique<EQApplicationPacket>(OP_ItemPacket,bytes.size()+sizeof(ItemPacket_Struct));auto* wire=reinterpret_cast<ItemPacket_Struct*>(p->pBuffer);wire->PacketType=ItemPacketTrade;std::memcpy(wire->SerializedItem,bytes.data(),bytes.size());packets.push_back(std::move(p));}
++   else {auto p=std::make_unique<EQApplicationPacket>(OP_MoveItem,sizeof(MoveItem_Struct));auto* wire=reinterpret_cast<MoveItem_Struct*>(p->pBuffer);wire->from_slot=changed;wire->to_slot=0xFFFFFFFF;wire->number_in_stack=0xFFFFFFFF;packets.push_back(std::move(p));}
++  };
++  packet(slot,prepared_output.get());for(const auto& take:takes)packet(take.slot,take.remainder.get());
++  auto before=Query(db,"SELECT CONNECTION_ID(),@@in_transaction,@@autocommit");
++  if(before.RowCount()!=1||Number(before.begin()[1])||Number(before.begin()[2])!=1)return nullptr;
++  const auto connection=Number(before.begin()[0]);
++  if(!db.TransactionBeginStrict().Success())return nullptr;transaction=true;
++  auto engines=Query(db,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN('inventory','character_data','housing_inventory_sessions','housing_live_item_leases','fungal_item_operations')");
++  if(engines.RowCount()!=1||Number(engines.begin()[0])!=5)throw std::runtime_error("Fungal table foundation differs");
++  auto actor=Query(db,"SELECT id FROM character_data WHERE id="+std::to_string(e.character_)+" AND account_id="+std::to_string(e.account_)+" AND deleted_at IS NULL FOR UPDATE");if(actor.RowCount()!=1)throw std::runtime_error("Fungal actor differs");
++  auto held=Query(db,"SELECT account_id,epoch,HEX(token),HEX(process_key),HEX(client_key),zone_id,instance_id,active FROM housing_inventory_sessions WHERE character_id="+std::to_string(e.character_)+" FOR UPDATE");
++  if(held.RowCount()!=1)throw std::runtime_error("Fungal lease absent");auto h=held.begin();
++  if(Number(h[0])!=lease->actor.account_id||Number(h[1])!=lease->epoch||!h[2]||std::string(h[2])!=Hex(lease->token.data(),lease->token.size())||!h[3]||std::string(h[3])!=Hex(lease->owner.process_key)||!h[4]||std::string(h[4])!=Hex(lease->owner.client_key)||Number(h[5])!=lease->owner.zone_id||Number(h[6])!=lease->owner.instance_id||Number(h[7])!=1)throw std::runtime_error("Fungal lease changed");
++  auto custody=Query(db,"SELECT account_id,pending_key FROM housing_live_item_leases WHERE character_id="+std::to_string(e.character_)+" FOR UPDATE");
++  if(custody.RowCount()>1||(custody.RowCount()&&(Number(custody.begin()[0])!=e.account_||(custody.begin()[1]&&*custody.begin()[1]))))throw std::runtime_error("Fungal pending custody");
++  if(!reservation->HeldFor(c)||!live())throw std::runtime_error("Fungal original owner changed");
++  const auto key=Key(e.scope_,e.task_,e.occurrence_,e.activity_);
++  if(e.scope_==2)FungalCustodySQL::LockShared(db,e.occurrence_,e.accepted_,e.character_,e.activity_,false);
++  else FungalCustodySQL::LockPersonal(db,e.occurrence_,e.accepted_,e.character_,f.personal_slot);
++  auto existing=Query(db,"SELECT outcome_id FROM fungal_item_operations WHERE "+key+" FOR UPDATE");
++  // Existing physical outcome is never a fresh award or a new capability.
++  // Source must resolve its original pending publication; do not regrant.
++  if(existing.RowCount()){db.TransactionRollbackStrict();transaction=false;return nullptr;}
++  auto empty=Query(db,"SELECT slot_id FROM inventory WHERE character_id="+std::to_string(e.character_)+" AND(slot_id="+std::to_string(slot)+" OR slot_id BETWEEN "+std::to_string(EQ::InventoryProfile::CalcSlotId(slot,uint8_t(0)))+" AND "+std::to_string(EQ::InventoryProfile::CalcSlotId(slot,uint8_t(0))+EQ::invbag::SLOT_COUNT-1)+") FOR UPDATE");
++  if(empty.RowCount()||*output_live)throw std::runtime_error("Fungal output preimage changed");
++  std::string source=e.source_identity_;
++  for(auto& take:takes) {
++   auto rows=Query(db,"SELECT "+std::string(EQEmu::SharedCore::InventoryRowDB::Columns)+" FROM inventory WHERE character_id="+std::to_string(e.character_)+" AND slot_id="+std::to_string(take.slot)+" FOR UPDATE");
++   if(rows.RowCount()!=1||*take.live!=take.original)throw std::runtime_error("Fungal offered identity changed");
++   auto row=EQEmu::SharedCore::InventoryRowDB::Decode(rows.begin());
++   if(!EQEmu::SharedCore::InventoryProjection::Matches(row,*take.original,Projection::CharacterProfile))throw std::runtime_error("Fungal original property differs");
++   source+='\n'+EQEmu::SharedCore::InventoryRowDB::Values(row,take.slot)+";debit="+std::to_string(take.debit);
++  }
++  if(source.size()>4096||!live()||!reservation->HeldFor(c))throw std::runtime_error("Fungal final source fence differs");
++  for(auto& take:takes)if(!db.SaveInventory(e.character_,take.remainder.get(),take.slot))throw std::runtime_error("Fungal raw-spore save failed");
++  if(!db.SaveInventory(e.character_,prepared_output.get(),slot))throw std::runtime_error("Fungal output save failed");
++  auto inserted=Query(db,"INSERT INTO fungal_item_operations(scope,task_id,native_occurrence,activity_id,accepted_time,recipient_character,source_token,actor_entity,actor_spawn,actor_npc,source_identity,output_item,output_quantity,output_serial,output_slot,output_charges,output_identity,native_ack) VALUES("+std::to_string(e.scope_)+","+std::to_string(e.task_)+","+std::to_string(e.occurrence_)+","+std::to_string(e.activity_)+","+std::to_string(e.accepted_)+","+std::to_string(e.character_)+",x'"+token+"',"+std::to_string(e.actor_entity_)+","+std::to_string(e.actor_spawn_)+","+std::to_string(e.actor_npc_)+",x'"+Hex(source)+"',"+std::to_string(output)+","+std::to_string(quantity)+","+std::to_string(prepared_output->GetSerialNumber())+","+std::to_string(slot)+","+std::to_string(prepared_output->GetCharges())+",x'"+Hex(output_identity)+"',0)");
++  if(inserted.RowsAffected()!=1)throw std::runtime_error("Fungal once outcome not inserted");
++  auto final=Query(db,"SELECT CONNECTION_ID(),@@in_transaction");
++  if(final.RowCount()!=1||Number(final.begin()[0])!=connection||Number(final.begin()[1])!=1||db.TransactionStrictFailed()||!live())throw std::runtime_error("Fungal strict transaction changed");
++  auto identity=Query(db,"SELECT LAST_INSERT_ID()");if(identity.RowCount()!=1||!Number(identity.begin()[0]))throw std::runtime_error("Fungal outcome ID absent");receipt->outcome_=Number(identity.begin()[0]);
++  commit_attempted=true;auto commit=db.TransactionCommitStrict();transaction=false;
++  if(!commit.Success())throw std::runtime_error("Fungal commit unknown");known_commit=true;
++  // Allocation-free publication into preallocated native map values. The old
++  // raw instances stay owned by temporary unique_ptrs until normal teardown.
++  *output_live=prepared_output.release();
++  for(auto& take:takes){auto* spent=*take.live;*take.live=take.remainder.release();take.remainder.reset(spent);}
++  // Source consumes its private receipt and marks published_ exactly once.
++  for(auto& p:packets){auto* send=p.release();try{c.FastQueuePacket(&send);}catch(...){/* Physical outcome remains known; delivery is not a new award. */}safe_delete(send);}
++  return receipt;
++ }
++ }catch(...) {
++  if(transaction)db.TransactionRollbackStrict();
++  if(commit_attempted&&!known_commit&&unknown){unknown->Attach();unknown.release();}
++  return nullptr;
++ }
++}
++
++void NativeCustody::PersonalStageSaved(Database& db,const FungalItemSource::CommittedOperation& proof,bool saved) noexcept {
++ const auto& f=proof.facts_;
++ if(!saved||!proof.published_||!proof.outcome_||f.scope!=1||f.task!=920141||f.activity!=7)return;
++ try {
++  using FungalCustodySQL::Query;
++  // Actual observed original native SaveClientState receipt only. It never
++  // creates an operation, grants another item, or updates progress directly.
++  Query(db,"UPDATE fungal_item_operations o SET o.native_ack=1 WHERE o.outcome_id="+std::to_string(proof.outcome_)+" AND o.scope=1 AND o.task_id=920141 AND o.native_occurrence="+std::to_string(f.occurrence)+" AND o.activity_id=7 AND o.accepted_time="+std::to_string(f.accepted)+" AND o.recipient_character="+std::to_string(f.character)+" AND o.output_item=40997 AND o.output_quantity=1 AND o.native_ack=0 AND EXISTS(SELECT 1 FROM character_task_reward_instances r WHERE r.character_id=o.recipient_character AND r.task_id=o.task_id AND r.occurrence_id=o.native_occurrence AND r.accepted_time=o.accepted_time) AND EXISTS(SELECT 1 FROM character_tasks t JOIN character_activities a ON a.charid=t.charid AND a.taskid=t.taskid WHERE t.charid=o.recipient_character AND t.taskid=920141 AND t.type=2 AND t.slot="+std::to_string(f.personal_slot)+" AND t.acceptedtime=o.accepted_time AND a.activityid=7 AND a.donecount>=1 AND a.completed=1)");
++ }catch(...){} // ACK remains unresolved; no replay/regrant or stage inference.
++}
++bool NativeCustody::KnownWorldStage(Database& db,uint64_t run,uint64_t outcome,uint32_t accepted,uint32_t recipient,uint32_t activity,uint32_t count) noexcept {
++ if(!run||!outcome||!accepted||!recipient||(activity!=5&&activity!=10)||count!=(activity==5?2u:1u))return false;
++ try {
++  auto r=FungalCustodySQL::Query(db,"SELECT o.outcome_id FROM fungal_item_operations o JOIN shared_tasks t ON t.id=o.native_occurrence JOIN shared_task_activity_state a ON a.shared_task_id=t.id AND a.activity_id=o.activity_id WHERE o.outcome_id="+std::to_string(outcome)+" AND o.scope=2 AND o.task_id=920143 AND o.native_occurrence="+std::to_string(run)+" AND o.activity_id="+std::to_string(activity)+" AND o.accepted_time="+std::to_string(accepted)+" AND o.recipient_character="+std::to_string(recipient)+" AND o.output_item="+std::to_string(activity==5?43586:43587)+" AND o.output_quantity="+std::to_string(count)+" AND o.native_ack=1 AND t.task_id=920143 AND t.accepted_time=FROM_UNIXTIME("+std::to_string(accepted)+") AND a.done_count="+std::to_string(count)+" AND a.completed_time IS NOT NULL");return r.RowCount()==1;
++ }catch(...){return false;}
++}
++}
+--- a/zone/inventory_session_owner.cpp
++++ b/zone/inventory_session_owner.cpp
+@@ -1,3 +1,4 @@
++#include "../common/fungal_unknown_inventory.h"
+ #include "inventory_session_owner.h"
+ #include "housing_inventory_bridge.h"
+ #include "client.h"
+@@ -34,5 +35,5 @@
+ void ZoneReservation::ReleaseAfterCompleteDelete(){
+  if(released_)return; // Token/release history stays durable even if next epoch starts.
+  if(!Housing::InventoryBridge::IsRegisteredZoneThread())for(;;)Wait();
+- for(;;){try{auto service=Fresh();if(service){auto closed=service->Release(lease_);if(closed){released_=true;lease_.active=false;return;}if(closed.error==Error::CommitUncertain||closed.error==Error::DatabaseFailure){service.reset();auto fresh=Fresh();if(fresh){auto resolved=fresh->ResolveReleased(lease_);if(resolved&&resolved.value){released_=true;lease_.active=false;return;}}}}}catch(...){}Wait();}}
++ for(;;){try{auto service=Fresh();if(service){auto closed=service->Release(lease_);if(closed){released_=true;lease_.active=false;FungalInventory::UnknownInventory::AfterCompleteDelete(lease_.actor.character_id);return;}if(closed.error==Error::CommitUncertain||closed.error==Error::DatabaseFailure){service.reset();auto fresh=Fresh();if(fresh){auto resolved=fresh->ResolveReleased(lease_);if(resolved&&resolved.value){released_=true;lease_.active=false;FungalInventory::UnknownInventory::AfterCompleteDelete(lease_.actor.character_id);return;}}}}}catch(...){}Wait();}}
+ }
+--- a/zone/npc.cpp
++++ b/zone/npc.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_item_operation_source.h"
+ #include "fire_run_terminal_scene.h"
+ #include "fire_run_action_scene.h"
+ #include "bound_destructible_ruins.h"
+@@ -508,6 +509,7 @@
+ 
+ NPC::~NPC()
+ {
++ FungalItemSource::NativeEvents::Revoke(*this);
+ 	if(m_fire_gotonur_say_lifetime) m_fire_gotonur_say_lifetime->active_=false;
+  FireRunActionSource::NativeRunHelperSource::ObserveActualDestruction(*this);
+  FireRunActionSource::NativeRunTerminalSource::ObserveActualDestruction(*this);
+--- a/zone/npc.h
++++ b/zone/npc.h
+@@ -1,3 +1,4 @@
++#include "fungal_item_operation_source.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -808,6 +809,8 @@
+  friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
+ 	friend class FirePersonalOccurrenceSource::OriginalConstructNativeDeath;
+ 	std::shared_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_original_construct;
++ friend class FungalItemSource::NativeEvents;
++ std::shared_ptr<FungalItemSource::Lifetime> m_fungal_source_life;
+ 	friend class FirePersonalOccurrenceSource::OriginalGotonurSayQueue;
+  friend class FireRunActionSource::RunUseWitness;
+  friend class FireRunActionSource::NativeRunTerminalSource;
+--- a/zone/shared_task_zone_messaging.cpp
++++ b/zone/shared_task_zone_messaging.cpp
+@@ -1,3 +1,5 @@
++#include "../common/fungal_item_operation_wire.h"
++#include "fungal_item_operation_source.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -200,7 +202,8 @@
+ 			if(pack->size<sizeof(ServerSharedTaskActivityUpdate_Struct)) break;
+ 			auto p = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(pack->pBuffer);
+ 			uint64_t original_run=0;
+-			if(!FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,p->task_id,original_run)) break;
++			if(!FungalItemWire::Correlated(p->task_id,p->activity_id)&&
++			 !FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,p->task_id,original_run)) break;
+ 			auto c = entity_list.GetClientByCharID(p->source_character_id);
+ 			if (c) {
+ 				LogTasks("[ServerOP_SharedTaskUpdate] We're back in zone and I found [{}]", c->GetCleanName());
+@@ -213,6 +216,7 @@
+ 					if(!actual || actual->id!=original_run || actual->accepted_time!=
+ 					 static_cast<uint32_t>(state->GetActiveSharedTask().accepted_time)) break;
+ 				}
++				if(!FungalItemSource::NativeEvents::AcceptWorldEcho(*c,pack->pBuffer,pack->size,p->task_id,p->activity_id,p->done_count))break;
+ 				c->m_shared_task_update = true;
+ 				c->GetTaskState()->SharedTaskIncrementDoneCount(
+ 					c,
+--- a/zone/task_client_state.cpp
++++ b/zone/task_client_state.cpp
+@@ -1,3 +1,5 @@
++#include "../common/fungal_item_operation_wire.h"
++#include "fungal_item_operation_source.h"
+ #include "fire_shared_transform_use.h"
+ /*	EQEmu: EQEmulator
+ 
+@@ -1272,6 +1274,8 @@
+ 		return 0;
+ 	}
+ 
++	if(!FungalItemSource::NativeEvents::AllowPersonalProgress(client,info->task_id,activity_id))return 0;
++	if(!client->m_shared_task_update&&FungalItemWire::Correlated(info->task_id,activity_id))return 0;
+ 	auto* const fire_construct_death_update = FirePersonalOccurrenceSource::ClaimOriginalConstructDeathUpdate(
+ 		client, task_data->type, *info, activity_id, count
+ 	);
+@@ -1481,6 +1485,7 @@
+ 	}
+ 
+ 	const bool fire_original_completion_saved = TaskManager::Instance()->SaveClientState(client, this);
++	FungalItemSource::NativeEvents::ActualPersonalSave(client,info->task_id,activity_id,fire_original_completion_saved);
+ 	FirePersonalOccurrenceSource::ObserveOriginalConstructDeathSave(
+ 		fire_construct_death_update, database, client, task_data->type, *info, fire_original_completion_saved
+ 	);
+@@ -3551,6 +3556,7 @@
+ 	bool enforce_level_requirement
+ )
+ {
++	uint64_t fungal_actual_reserved_occurrence=0;
+ 	auto* const fire_acceptance = ClaimFirePersonalAcceptance(client, task_id, npc_entity_id);
+ 	if (task_id < 0) {
+ 		client->Message(Chat::Red, "Task system not functioning, or task_id %i out of range.", task_id);
+@@ -3797,6 +3803,7 @@
+ 			);
+ 			return;
+ 		}
++		if(task_id==920141&&task->type==TaskType::Quest)fungal_actual_reserved_occurrence=*occurrence_id;
+ 		if(task->type==TaskType::Shared) FirePersonalOccurrenceSource::SharedSuccessorNative::ObserveReservation(
+ 			*client,task_id,reward_accepted_time,*occurrence_id);
+ 		if (fire_acceptance && task->type == TaskType::Quest) {
+@@ -3859,6 +3866,7 @@
+ 	client->MessageString(Chat::DefaultText, YOU_ASSIGNED_TASK, task->title.c_str());
+ 
+ 	const bool acceptance_saved = TaskManager::Instance()->SaveClientState(client, this);
++	FungalItemSource::NativeEvents::Accepted(*client,fungal_actual_reserved_occurrence,acceptance_saved,*active_slot);
+ 	RecordFirePersonalAcceptanceBeforeCallbacks(
+ 		fire_acceptance, client, task->type, *active_slot, acceptance_saved
+ 	);
+--- a/zone/task_client_state.h
++++ b/zone/task_client_state.h
+@@ -1,3 +1,4 @@
++#include "fungal_item_operation_source.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -50,6 +51,7 @@
+ 
+ namespace FirePersonalOccurrenceSource { class NativeItemCustody; class PublishedNativeUseSink; class OriginalConstructDeathQueue; class OriginalConstructNativeHail;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
+ class ClientTaskState {
++ friend class FungalItemSource::NativeEvents;
+  friend class FirePersonalOccurrenceSource::NativeItemCustody;
+  friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
+  friend class FirePersonalOccurrenceSource::PreparedConstructPlan;
+--- a/zone/tasks.cpp
++++ b/zone/tasks.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_item_operation_source.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -47,6 +48,7 @@
+ 		}
+ 		else {
+             // Existing accepted occurrence ONLY, before any reload reward callbacks.
++            FungalItemSource::NativeEvents::ReloadAccepted(*this);
+             FirePersonalOccurrenceSource::NativeItemCustody::ReloadAccepted(*this);
+ 			task_state->RetryCompletedSelectableRewards(this, true);
+ 			TaskManager::Instance()->SendActiveTasksToClient(this);
+--- a/zone/zone.cpp
++++ b/zone/zone.cpp
+@@ -1,3 +1,4 @@
++#include "fungal_item_operation_source.h"
+ #include "fire_run_terminal_scene.h"
+ #include "fire_run_action_scene.h"
+ /*	EQEmu: EQEmulator
+@@ -1116,6 +1117,7 @@
+ 	FirePersonalOccurrenceSource::OriginalConstructDeathQueue::Discard();
+ 	FireRunActionSource::NativeRunHelperSource::DiscardCompletions();
+ 	FireRunActionSource::NativeRunTerminalSource::DiscardCompletions();
++	FungalItemSource::NativeEvents::Discard();
+ 	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Discard();
+ 	ClearFellowshipCampfires();
+  Housing::Pets::Clear();

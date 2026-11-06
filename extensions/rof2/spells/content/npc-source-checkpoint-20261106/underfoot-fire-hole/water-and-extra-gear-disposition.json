@@ -1,0 +1,57 @@
+{
+  "status": "POSITIVE_SOURCE_IDENTITY_RESOLVED_NO_ITEM_EDITS",
+  "water": {
+    "selected": 47761,
+    "rejected_for_this_route": 4499,
+    "same_Name_lore": true,
+    "native_candidates": [
+      {
+        "id": "4499",
+        "Name": "Vial of Purified Water",
+        "lore": "Vial of Purified Water",
+        "itemtype": "11",
+        "bagtype": "",
+        "bagslots": "",
+        "bagsize": "",
+        "stackable": "",
+        "stacksize": "1",
+        "clickeffect": "-1",
+        "clicktype": ""
+      },
+      {
+        "id": "47761",
+        "Name": "Vial of Purified Water",
+        "lore": "Vial of Purified Water",
+        "itemtype": "11",
+        "bagtype": "",
+        "bagslots": "",
+        "bagsize": "",
+        "stackable": "",
+        "stacksize": "1",
+        "clickeffect": "-1",
+        "clicktype": ""
+      }
+    ],
+    "positive_chain": [
+      "Original4992linksZAMitem86935andProtectorPurity34957",
+      "CanonicalLucyitem.html?id=47761 explicitly links Allakhazam86935 and lists DropsfromProtectorofPurity inFireintheHole",
+      "Native47761exactName/loreexists; native4499insteadhasretainedlegacyLuclinNPClootlinks"
+    ],
+    "source": "https://lucy.allakhazam.com/item.html?id=47761",
+    "qualification": "CanonicalitemID plus exactoriginaldrop/quest association, notadjacentID/name/loreonly. No source47761currentNPClootmembershipwasfound; newdedicatedmissiondropneeded. Legacy4499rows untouched."
+  },
+  "Orb_of_Suspension": {
+    "selected": 110297,
+    "native": {
+      "id": "110297",
+      "Name": "Orb of Suspension",
+      "lore": "This orb feels as if it has no weight",
+      "clickeffect": "7530"
+    },
+    "period": "Aug19,2010#1282193012206252898 actualchestpositive",
+    "positive": "Primary11poolincludesOrbofSuspension; exactnativeName/lore/clickeffect7530queried, NOTdiscardedbecauseRasper10poolomitsit.",
+    "source": "https://everquest.allakhazam.com/db/quest/4992#msg1282193012206252898"
+  },
+  "new_items": 0,
+  "item_edits": 0
+}

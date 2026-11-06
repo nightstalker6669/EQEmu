@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #pragma once
+#include "common/event/event_loop.h"
 
 #include "common/net/tcp_connection_pooling.h"
 
@@ -30,7 +31,7 @@ namespace EQ
 {
 	namespace Net
 	{
-		class TCPConnection
+		class TCPConnection : public std::enable_shared_from_this<TCPConnection>
 		{
 		public:
 			TCPConnection(uv_tcp_t *socket);
@@ -55,6 +56,7 @@ namespace EQ
 			TCPConnection();
 
 			uv_tcp_t *m_socket;
+			EQ::EventLoop *m_loop = nullptr;
 			std::function<void(TCPConnection*, const unsigned char *, size_t)> m_on_read_cb;
 			std::function<void(TCPConnection*)> m_on_disconnect_cb;
 		};
