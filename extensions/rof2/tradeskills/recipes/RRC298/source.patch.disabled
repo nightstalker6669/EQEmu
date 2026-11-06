@@ -183,7 +183,7 @@
  				}
 --- /dev/null
 +++ b/zone/trophy_certificate55.cpp
-@@ -0,0 +1,122 @@
+@@ -0,0 +1,129 @@
 +#include "trophy_certificate55.h"
 +#include "client.h"
 +#include "object.h"
@@ -270,6 +270,13 @@
 +  auto roles=Query("SELECT item_id,successcount,failcount,componentcount,iscontainer FROM tradeskill_recipe_entries WHERE recipe_id="+std::to_string(d.recipe)+" ORDER BY item_id FOR UPDATE");bool input=false,output=false,container=false;if(roles.RowCount()!=3)throw std::runtime_error("Trophy recipe shape differs");for(auto r=roles.begin();r!=roles.end();++r){if(Number(r[0])==d.certificate&&Number(r[1])==0&&Number(r[2])==0&&Number(r[3])==1&&Number(r[4])==0)input=true;else if(Number(r[0])==d.output&&Number(r[1])==1&&Number(r[2])==0&&Number(r[3])==0&&Number(r[4])==0)output=true;else if(Number(r[0])==d.kit&&Number(r[1])==0&&Number(r[2])==0&&Number(r[3])==0&&Number(r[4])==1)container=true;else throw std::runtime_error("Trophy unexpected recipe role");}if(!input||!output||!container)throw std::runtime_error("Trophy exact roles absent");
 +  auto evolution=Query("SELECT item_id,item_evo_id,item_evolve_level,type FROM items_evolving_details WHERE item_id IN("+std::to_string(d.beginner)+","+std::to_string(d.output)+") ORDER BY item_id FOR UPDATE");if(evolution.RowCount()!=2)throw std::runtime_error("Trophy evolution definition absent");for(auto r=evolution.begin();r!=evolution.end();++r)if(Number(r[1])!=d.family||Number(r[2])!=(Number(r[0])==d.beginner?1u:d.level)||Number(r[3])!=99)throw std::runtime_error("Trophy evolution family changed");
 +  auto worn=Query("SELECT "+std::string(EQEmu::SharedCore::InventoryRowDB::Columns)+" FROM inventory WHERE character_id="+std::to_string(who)+" AND slot_id="+std::to_string(trophy_slot)+" FOR UPDATE");if(worn.RowCount()!=1)throw std::runtime_error("Original worn trophy absent");auto before=EQEmu::SharedCore::InventoryRowDB::Decode(worn.begin());before.evolving_payload=Evo::Capture(database,who,trophy_slot,*trophy);if(before.values.guid!=uint64_t(serial)||!EQEmu::SharedCore::InventoryProjection::Matches(before,*trophy,Projection::CharacterProfile))throw std::runtime_error("Original trophy full property differs");
++  // Capture validates owner/item/slot/component. Fence the ORIGINAL root
++  // GUID for every existing root or evolving-augment locator as well.
++  // An absent locator retains Capture's separately checked unique-legacy path.
++  for(const auto& component:Evo::Decode(before.evolving_payload)){
++   auto locator=Query("SELECT inventory_guid FROM housing_evolving_item_locations WHERE evolving_id="+std::to_string(component.id)+" FOR UPDATE");
++   if(locator.RowCount()>1||(locator.RowCount()==1&&Number(locator.begin()[0])!=before.values.guid))throw std::runtime_error("Original trophy evolving locator GUID differs");
++  }
 +  auto after=before;after.values.item_id=d.output;auto states=Evo::Decode(after.evolving_payload);bool root=false;for(auto& s:states)if(!s.component){if(s.id!=trophy->GetEvolveUniqueID()||s.item!=d.beginner)throw std::runtime_error("Trophy evolving UID differs");s.item=d.output;s.amount=0;s.progression_bits=s.runtime_progression_bits=0;s.nulls&=uint8_t(~(16u|32u));root=true;}if(!root)throw std::runtime_error("Trophy evolving identity absent");after.evolving_payload=Evo::Encode(states);prepared->m_color=EQEmu::SharedCore::InventoryProjection::Color(after,*target);if(!EQEmu::SharedCore::InventoryProjection::Matches(after,*prepared,Projection::CharacterProfile))throw std::runtime_error("Trophy transform loses property");
 +  const auto conflict=[&](const auto& self,const EQ::ItemInstance* item)->bool{if(!item)return false;const auto* data=item->GetItem();if(item!=trophy&&data&&target->LoreGroup&&((target->LoreGroup==-1&&item->GetID()==d.output)||(target->LoreGroup!=-1&&data->LoreGroup==target->LoreGroup)))return true;for(const auto& x:*item->GetContents())if(self(self,x.second))return true;return false;};
 +  for(const auto* bucket:{&inv.m_worn,&inv.m_inv,&inv.m_bank,&inv.m_shbank,&inv.m_trade})for(const auto& x:*bucket)if(conflict(conflict,x.second))throw std::runtime_error("Trophy target lore conflict");for(auto at=inv.cursor_cbegin();at!=inv.cursor_cend();++at)if(conflict(conflict,*at))throw std::runtime_error("Trophy cursor lore conflict");

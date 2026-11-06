@@ -2,7 +2,7 @@
   "status": "SOURCE_ONLY_FINITE55_CERTIFICATE_EVOLUTION_SQL_HOLD_UNTIL_COMPATIBLE_INSTALL",
   "parent_installed_receipt_sha256": "0408385327555a85ce46dc68903d93fa454023b5cf7fc67ee6f6bc26694c20c9",
   "parent_role": "Actual installed Fungal9R2+Fire+RRC290/291/294 source. Compose only exact pinned deltas onto current serving source; preserve all intervening unrelated work.",
-  "patch_sha256": "213708c487564872fc1c4434ecc43f5bc8dd6d3dbef2fe6d6c41a5e2c371544a",
+  "patch_sha256": "07d961216d235437c1417277815ef97a6c5e3e7860bbedba72eecbca59b4998b",
   "files": {
     "common/fungal_unknown_inventory.h": {
       "preimage_sha256": "024fdab2328a303151eb30cc10218ec70682596d89409efc3de682906710b23e",
@@ -34,7 +34,7 @@
     },
     "zone/trophy_certificate55.cpp": {
       "preimage_sha256": null,
-      "postimage_sha256": "8dae0f29047a958b297f83f71dcdd7403a186dbb177996f559f9a53ed764b2e0"
+      "postimage_sha256": "542679d5fb18126a44c2467a2b651585feec0052cb76da50cd168ff90606e622"
     },
     "zone/trophy_certificate55.h": {
       "preimage_sha256": null,
@@ -612,5 +612,14 @@
   "tests": 0,
   "builds": 0,
   "SQL_execution": 0,
-  "runtime_actions": 0
+  "runtime_actions": 0,
+  "source_revision": 2,
+  "focused_correction": {
+    "finding_receipt_sha256": "715a61fc677e56e4dffb5bc67ffccb40196fc9d36c65fce7538e3294f0763c0c",
+    "r1_publication": "eff07774b8a7049ff443750391c4287a32e852f9",
+    "r1_cpp_preimage_sha256": "8dae0f29047a958b297f83f71dcdd7403a186dbb177996f559f9a53ed764b2e0",
+    "r2_cpp_postimage_sha256": "542679d5fb18126a44c2467a2b651585feec0052cb76da50cd168ff90606e622",
+    "correction_patch_sha256": "5524a794bce8548be274747521e4c27855a067d4e64502f5fee8ba88e521e22e",
+    "behavior": "Before any mutation, actor locks each original captured root/evolving-augment locator and compares existing inventory_guid to original worn-row/native GUID. Any mismatch rejects unchanged. Absent locators retain Capture existing independently checked unique legacy policy. Shared helper unchanged; all other assessed boundaries reused. No new tests/build/SQL/runtime."
+  }
 }
