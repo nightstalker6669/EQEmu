@@ -1,5 +1,5 @@
 {
-  "source_revision": "R13 actual prepared construct plan and own-occurrence168169 native group credit",
+  "source_revision": "R14 original shared170 clay/golem-part native transforms with separate actual shared writer receipt",
   "native_files": {
     "common/CMakeLists.txt": {
       "preimage_sha256": "7fff3415ca7378ffd960c657a600e12705dc9650d6a76f3cc229a4393e8d7991",
@@ -51,7 +51,7 @@
     },
     "zone/client.cpp": {
       "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
-      "postimage_sha256": "0e19773761bba3241e846827fe0ddd83f6f701023a4c8a1f5e8947520ac2f7c1"
+      "postimage_sha256": "e85d01f6cde567d985e5cc75a06d7f3ba0c3dbd21c21a2386e9527b7593e39b5"
     },
     "zone/client.h": {
       "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
@@ -99,7 +99,7 @@
     },
     "zone/fire_native_item_custody.cpp": {
       "preimage_sha256": null,
-      "postimage_sha256": "99a3c32ea81af5d596d09160d792e6082abc2870a1d74474ce85cb9e3eae377b"
+      "postimage_sha256": "1b2c7745c2522eab384f3532354189b0fbb058debd3513d2aa377ba7c5f91670"
     },
     "zone/fire_native_item_custody.h": {
       "preimage_sha256": null,
@@ -145,6 +145,14 @@
       "preimage_sha256": null,
       "postimage_sha256": "52e92089e69e1c8b468aa994523515207785453ff118f9526e1e922bcee02395"
     },
+    "zone/fire_shared_transform_published.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "af5578dec3c07d0983c137418ff3f8e478c43785965ff9d3264a41d0bc3b75da"
+    },
+    "zone/fire_shared_transform_use.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b7128e66ce19db68b9c055dd4626167c3e7a99bbc1761cb7b5febe15048ff71a"
+    },
     "zone/inventory.cpp": {
       "preimage_sha256": "5538219e5625b4baa51e7bd4182465be502a77796dd2ff41b70bcfc2a0f8b3ff",
       "postimage_sha256": "a67890b2fe79b420d5418adcb5e357cb9838ffb6e1beb89c8bbf8249058f4d68"
@@ -175,7 +183,7 @@
     },
     "zone/task_client_state.cpp": {
       "preimage_sha256": "8e1328f7152fc7f226e5099be6099fcb3ad112b32172ccf80d2d5118d3d2adfe",
-      "postimage_sha256": "32d2f1a21e6dee780d3496f872c9d4fe4b59707673502c1f5e44fd855d698f84"
+      "postimage_sha256": "f51242483b7e43351fad2da79811b3f156a0dbe522766b095355bf953c1c0191"
     },
     "zone/task_client_state.h": {
       "preimage_sha256": "4556499e483da7785759f87c53c6f1704c217c288f2f892aa877ebd7abb1d428",
@@ -194,38 +202,23 @@
       "postimage_sha256": "45a2f930f6e57bce98f633e0fff4ee804a80f3a2e6452555cfe624ce383c0d29"
     }
   },
-  "native_patch_sha256": "a0c1a02016267459de606109115238d0b22e5ce248cd53682d270c43a40e0822",
+  "native_patch_sha256": "b9230a44375d01bac19ee2f3065a41825d9d27c2f520fe2ed8ad418febff92ee",
   "incremental_changed_paths": [
-    "zone/attack.cpp",
     "zone/client.cpp",
-    "zone/client.h",
-    "zone/fire_construct_death_receipt.h",
-    "zone/fire_construct_local_profiles.h",
-    "zone/fire_construct_participants.h",
-    "zone/fire_gotonur_say_queue.h",
     "zone/fire_native_item_custody.cpp",
-    "zone/fire_native_published_use.h",
-    "zone/fire_original_construct_producer.h",
-    "zone/fire_original_final_hail_frame.h",
-    "zone/fire_prepared_construct_plan.h",
-    "zone/mob.cpp",
-    "zone/npc.h",
-    "zone/shared_task_zone_messaging.cpp",
-    "zone/task_client_state.cpp",
-    "zone/task_client_state.h",
-    "zone/task_manager.cpp"
+    "zone/fire_shared_transform_published.h",
+    "zone/fire_shared_transform_use.h",
+    "zone/task_client_state.cpp"
   ],
   "compiled_parent": {
-    "source_commit": "5ff638b39134ff1796a8f1b39915e897db5bc688",
-    "sha256": "fd433726d21737f7eba59bac84962404b095672fa52158e31ceda0d33d77498f",
-    "status": "MATCHED_R11_WORLD_ZONE_COMPILE_LINK_PASS_41PINS_16WARNINGS_ZEROERRORS"
+    "source_commit": "ef1a9ac78d3c32d153230b756f4148702b2a462d",
+    "sha256": "813f8bcdfb32bc61b292c50598fbdccb1f306dee832df12ba73f6dc8deef5fde",
+    "status": "MATCHED_R13_WORLD_ZONE_COMPILE_LINK_PASS_48PINS_16WARNINGS_ZEROERRORS"
   },
-  "this_build": "PENDING_REVIEW_PUBLICATION_AND_ACTUAL_MATCHED_INCREMENTAL_WORLD_ZONE_COMPILE_LINK",
-  "selected_policy": "Explicit LOCAL source-only defaults;167casteronly;168169native bounded nonraid cohort with own accepted epochs/actual killvisit/sealeddeath/samesave",
-  "core_writer_manifest_sha256": "a5e2ed3e987d8177d283abb9d6b29d2a2c1a522a029bf5a4522ac6cc4207b095",
-  "npc_local_manifest_sha256": "7ffcf2c41a29133173664b6d60713d64967119729cdb58af0f146fbe2d66db74",
-  "migration_sha256": "9c356500d9a49ba52b56e998547af61d8c739901bc6daabccc91e144d6e98c7a",
-  "selected_rows_sha256": "23d666ed0252988a0b9e88925e9e57b64eec264015ab6d0f8910432df4338708",
+  "this_build": "PENDING_FOCUSED_REVIEW_PUBLICATION_ACTUAL_MATCHED_INCREMENTAL_COMPILE",
+  "core_writer_manifest_sha256": "88feb3458e9964f3325198be306d67e7ab32bc08f464d8333e58252937d25bfc",
+  "spells_capture_sink_manifest_sha256": "9071d45413c3e460e25d6fc9bc7a5a718ba4cd0b59d2c2db84950a4de14e8133",
+  "native_item_contract_sha256": "302083924a233d9c6177d754046b92b31bd02981750354e3a32ab0c711b56b14",
   "material_exceptions": [
     "SOURCE ONLY. Review/publication/matched World+Zone compile pending; no serving migration/install/deployment/activation/native gameplay acceptance.",
     "Admission85/repeatable/21600replay, horizontal radius100 at167/168, zoneonly169/casterpose/terrain and168169nonraidcohort timing are explicitly selected LOCAL reconstruction parameters, not authenticated retail edge rules.",
@@ -233,7 +226,10 @@
     "Finite disabled death-receipt DDL now distinguishes recipient accepted key from creator accepted/cast/item origin. Never apply old DDL or backfill from history. Existing serving schema requires exact Database-owner review before changes.",
     "Ordinary postcommit disconnect, unknown COMMIT, same-save uncertainty or acknowledgedclaim crashgap never synthesizes replay/refund/death/Ready origin.",
     "One creator debit/one actor.167casteronly;168169cohort intersects actual native loaded task-kill candidates, captured own accepted epoch, same group and liveowner at delivery. No invented dead/XPdistance cutoff, latejoin/history credit or per-recipient charge/fight.",
-    "169 final uses original native Worldshared170 admission; current normal170 membership skips another request and is not a new Ready/origin receipt. No per-member create/DZ loop."
+    "169 final uses original native Worldshared170 admission; current normal170 membership skips another request and is not a new Ready/origin receipt. No per-member create/DZ loop.",
+    "Same strict writer knownCOMMIT+memorypublish and private Take receipt enter one actual native goal6/13 submission with original run before optimistic update/send. Native invocation/optimistic state is not durable World persistence proof. No automatic replay.",
+    "Doors, destructive-helper movement/key use, mold allocation and terminal chest remain held. These two transforms supply no actor/door/chest factory.",
+    "Shared transforms use exact canonical charges:47762nonstack0,47756nonstack1. One physical output is not a fabricated one-charge default. Clicked source rows47760/47752 native7651/type3/Max1. Nonclicked ingredients carried-general only; clicked cursor protected by wholecursor fence."
   ],
-  "build_instruction": "Reuse actual R11 compiled cache; materialize only listed incremental changes, verify all final postpins, compile/link World+Zone. No serving deployment, migration, server starts, client actions or extra tests."
+  "build_instruction": "Reuse actual R13 compiled cache. Materialize five incremental native paths, verify all50 final pins, one matched World+Zone compile/link. No parent rehearsal/review/tests or serving migration/deployment/activation."
 }

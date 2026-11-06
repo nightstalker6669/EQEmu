@@ -1062,7 +1062,11 @@
 +} // namespace FirePersonalOccurrenceSource
 --- a/zone/client.cpp
 +++ b/zone/client.cpp
-@@ -1,3 +1,10 @@
+@@ -1,3 +1,14 @@
++#include "fire_shared_transform_use.h"
++#include "fire_shared_transform_published.h"
++#include "task_shared_reward_identity.h"
++#include "common/dynamic_zone_base.h"
 +#include "fire_construct_local_profiles.h"
 +#include "fire_prepared_construct_plan.h"
 +#include "fire_construct_participants.h"
@@ -1073,7 +1077,7 @@
  /*	EQEmu: EQEmulator
  
  	Copyright (C) 2001-2026 EQEmu Development Team
-@@ -17,6 +24,11 @@
+@@ -17,6 +28,11 @@
  */
  #include "../common/mercenary/rof2_timer.h"
  #include "fire_shared_successor_native.h"
@@ -1085,7 +1089,7 @@
  
  #include "housing_guild_portal.h"
  #include "housing_actor_publication.h"
-@@ -34,6 +46,7 @@
+@@ -34,6 +50,7 @@
  #include <thread>
  
  #include "client.h"
@@ -1093,7 +1097,7 @@
  
  #include "common/data_bucket.h"
  #include "common/data_verification.h"
-@@ -754,6 +767,7 @@
+@@ -754,6 +771,7 @@
  }
  
  Client::~Client() {
@@ -1101,7 +1105,7 @@
   Housing::GuildPortalRuntime::Forget(*this);
  	struct PublicationCleanup {Client& client;~PublicationCleanup(){Housing::ActorPublication::Forget(client);}} publication_cleanup{*this};
  	// First lifecycle action: no quests, save, stream release or inventory
-@@ -1710,6 +1724,7 @@
+@@ -1710,6 +1728,7 @@
  			sender = GetPet();
  		}
  
@@ -1109,7 +1113,7 @@
  		if (!is_silent) {
  			entity_list.ChannelMessage(sender, chan_num, language, lang_skill, message);
  		}
-@@ -8962,7 +8977,7 @@
+@@ -8962,7 +8981,7 @@
  void Client::TryItemTimer(int slot)
  {
  	EQ::ItemInstance* inst = m_inv.GetItem(slot);
@@ -1118,7 +1122,7 @@
  		return;
  	}
  
-@@ -8984,14 +8999,14 @@
+@@ -8984,14 +9003,14 @@
  	for (int x = EQ::invaug::SOCKET_BEGIN; x <= EQ::invaug::SOCKET_END; ++x)
  	{
  		EQ::ItemInstance * a_inst = inst->GetAugment(x);
@@ -1136,7 +1140,7 @@
  				if (parse->ItemHasQuestSub(a_inst, EVENT_TIMER)) {
  					parse->EventItem(EVENT_TIMER, this, a_inst, nullptr, it_iter->first, 0);
  				}
-@@ -13667,3 +13682,326 @@
+@@ -13667,3 +13686,448 @@
  
  	return task_state->UncompleteTask(task_id);
  }
@@ -1463,6 +1467,128 @@
 + } catch(...) {return;} // allocation/query failure cannot interrupt ordinary native death
 +}
 +} // namespace FirePersonalOccurrenceSource
++
++namespace FireSharedTransformSource {
++namespace {
++std::optional<uint64_t> SharedTransformNumber(const char* text) {
++ if(!text || !*text)return {};
++ uint64_t value=0;const auto end=text+std::strlen(text);
++ const auto parsed=std::from_chars(text,end,value);
++ if(parsed.ec!=std::errc{} || parsed.ptr!=end)return {};
++ return value;
++}
++bool SameSharedTransformContext(const SharedTransformContext& a,const SharedTransformContext& b) {
++ return a.run==b.run && a.local_occurrence==b.local_occurrence && a.character==b.character &&
++  a.accepted_time==b.accepted_time && a.zone_id==b.zone_id && a.instance_id==b.instance_id &&
++  a.dynamic_zone_id==b.dynamic_zone_id && a.rule.clicked_item==b.rule.clicked_item &&
++  a.rule.output_item==b.rule.output_item && a.rule.activity==b.rule.activity &&
++  a.rule.inputs==b.rule.inputs && a.rule.input_count==b.rule.input_count;
++}
++}
++thread_local NativeSharedTransform::Dispatch* NativeSharedTransform::dispatch_=nullptr;
++std::optional<SharedTransformContext> NativeSharedTransform::CaptureContextActual(Client& c,uint32_t clicked) {
++ const auto rule=OriginalRule(clicked);
++ if(!rule || !zone || zone->GetZoneID()!=490 || zone->GetInstanceVersion()!=1 ||
++  !zone->GetInstanceID() || !c.GetID() || !c.ClientDataLoaded() || !c.HasTaskState() ||
++  !c.GetTaskState() || c.GetSharedTaskId()<=0)return {};
++ const auto& current=c.GetTaskState()->GetActiveSharedTask();
++ if(current.task_id!=int(Task) || current.accepted_time<=0 || current.was_rewarded ||
++  current.activity[rule->activity].activity_state!=ActivityActive ||
++  current.activity[rule->activity].done_count!=0)return {};
++ const int first=rule->activity==6?4:8;
++ for(int goal=first;goal<rule->activity;++goal)
++  if(current.activity[goal].activity_state!=ActivityCompleted || current.activity[goal].done_count!=1)return {};
++ const auto run=TaskSharedRewardIdentity::ReadRun(database,c.CharacterID(),Task);
++ if(!run || run->id!=uint64_t(c.GetSharedTaskId()) || run->accepted_time!=uint32_t(current.accepted_time))return {};
++ // Existing accepted mapping and actual mission membership only. This does not
++ // create an accepted occurrence, Ready/origin receipt or physical cast proof.
++ auto q=database.QueryDatabase(fmt::format(
++  "SELECT h.occurrence_id,d.id FROM shared_tasks s "
++  "JOIN shared_task_members m ON m.shared_task_id=s.id AND m.character_id={} "
++  "JOIN character_shared_task_reward_instances h ON h.shared_task_id=s.id "
++  "AND h.character_id=m.character_id AND h.task_id=s.task_id "
++  "JOIN character_task_reward_instances r ON r.character_id=h.character_id AND r.task_id=h.task_id "
++  "AND r.occurrence_id=h.occurrence_id AND r.accepted_time={} "
++  "JOIN shared_task_dynamic_zones link ON link.shared_task_id=s.id "
++  "JOIN dynamic_zones d ON d.id=link.dynamic_zone_id "
++  "JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=d.id AND dm.character_id=m.character_id "
++  "JOIN instance_list i ON i.id=d.instance_id "
++  "JOIN instance_list_player ip ON ip.id=i.id AND ip.charid=m.character_id "
++  "JOIN shared_task_activity_state a ON a.shared_task_id=s.id AND a.activity_id={} "
++  "WHERE s.id={} AND s.task_id={} AND s.accepted_time=FROM_UNIXTIME({}) "
++  "AND s.completion_time IS NULL AND (s.expire_time IS NULL OR s.expire_time>NOW()) "
++  "AND d.instance_id={} AND d.type={} AND i.zone=490 AND i.version=1 "
++  "AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP()) "
++  "AND a.done_count=0 AND (a.completed_time IS NULL OR a.completed_time=0) "
++  "AND (SELECT COUNT(*) FROM shared_task_dynamic_zones WHERE shared_task_id=s.id)=1 "
++  "AND (SELECT COUNT(*) FROM shared_task_activity_state p WHERE p.shared_task_id=s.id "
++  "AND p.activity_id BETWEEN {} AND {} AND p.done_count=1 AND p.completed_time>0)={}",
++  c.CharacterID(),current.accepted_time,rule->activity,run->id,Task,current.accepted_time,
++  zone->GetInstanceID(),static_cast<int>(DynamicZoneType::Mission),first,rule->activity-1,
++  rule->activity-first),false);
++ if(!q.Success() || q.RowCount()!=1)return {};
++ const auto occurrence=SharedTransformNumber(q.begin()[0]);const auto dz=SharedTransformNumber(q.begin()[1]);
++ if(!occurrence || !*occurrence || !dz || !*dz || *dz>UINT32_MAX)return {};
++ return SharedTransformContext{run->id,*occurrence,c.CharacterID(),uint32_t(current.accepted_time),
++  zone->GetZoneID(),zone->GetInstanceID(),uint32_t(*dz),*rule};
++}
++bool NativeSharedTransform::ContextMatchesActual(Client& c,const SharedTransformContext& original) {
++ const auto now=CaptureContextActual(c,original.rule.clicked_item);
++ return now && SameSharedTransformContext(original,*now);
++}
++std::optional<OriginalSharedTransformUse> NativeSharedTransform::CaptureActual(Client& c,
++ const EQ::ItemInstance& item,int16_t slot,bool supported,uint32_t target) {
++ if(!supported || c.GetInv().GetItem(slot)!=&item || !item.GetItem() || !item.GetSerialNumber() ||
++  item.GetItem()->Click.Effect!=7651 || item.GetItem()->Click.Type!=3 ||
++  item.GetItem()->MaxCharges!=1 || item.GetCharges()!=1 || item.IsStackable() || !item.IsExpendable())return {};
++ const auto shared=CaptureContextActual(c,item.GetID());
++ if(!shared)return {};
++ return OriginalSharedTransformUse{*shared,item.GetID(),c.GetID(),target,item.GetSerialNumber(),slot,item.GetCharges()};
++}
++bool NativeSharedTransform::RevalidateActual(Client& c,const OriginalSharedTransformUse& original) {
++ if(original.caster_entity!=c.GetID() || original.shared.character!=c.CharacterID() ||
++  original.item_id!=original.shared.rule.clicked_item || !original.item_serial || original.charges_before!=1)return false;
++ const auto* actual=c.GetInv().GetItem(original.slot);
++ return actual && actual->GetID()==original.item_id && actual->GetSerialNumber()==original.item_serial &&
++  actual->GetCharges()==original.charges_before && actual->GetItem() &&
++  actual->GetItem()->Click.Effect==7651 && actual->GetItem()->Click.Type==3 && actual->GetItem()->MaxCharges==1 &&
++  actual->IsExpendable() && !actual->IsStackable() && ContextMatchesActual(c,original.shared);
++}
++bool NativeSharedTransform::ClaimActualSubmission(Client& c,uint32_t task,int activity,uint64_t run) {
++ if(task!=Task || (activity!=6 && activity!=13))return true;
++ auto* actual=dispatch_;
++ if(!actual || actual->entered || actual->owner!=&c || !actual->original)return false;
++ const auto& original=*actual->original;
++ if(original.shared.character!=c.CharacterID() || original.caster_entity!=c.GetID() ||
++  original.shared.run!=run || original.shared.rule.activity!=activity)return false;
++ actual->entered=true;
++ return true; // entering native shim only, never a World durable-save acknowledgment
++}
++void OnOriginalSharedTransformPublished(Client& c,PublishedSharedTransformUse& receipt) {
++ PublishedSharedTransformSink::Receive(c,receipt);
++}
++void PublishedSharedTransformSink::Receive(Client& c,PublishedSharedTransformUse& receipt) {
++ const auto published=receipt.Take(c); // FIRST action; no query/allocation before one-use seal
++ if(!published)return;
++ const auto& view=*published;const auto& original=view.original;
++ const auto rule=OriginalRule(original.item_id);
++ if(!rule || !view.native_click_sequence || !original.item_serial || original.charges_before!=1 ||
++  original.caster_entity!=c.GetID() || original.shared.character!=c.CharacterID() ||
++  view.published_output_item!=rule->output_item || !view.published_output_serial ||
++  view.published_output_charges!=(rule->output_item==47762?0:1) ||
++  NativeSharedTransform::dispatch_ || !NativeSharedTransform::ContextMatchesActual(c,original.shared))return;
++ // Canonical output identity belongs to this SAME private writer receipt. Do
++ // not summon another item, spend inputs again or infer ownership from history.
++ NativeSharedTransform::Dispatch frame{&original,&c};
++ NativeSharedTransform::dispatch_=&frame;
++ try {c.UpdateTaskActivity(Task,rule->activity,1);}
++ catch(...) {NativeSharedTransform::dispatch_=nullptr;throw;}
++ NativeSharedTransform::dispatch_=nullptr;
++ // After mutable native update: stack/thread-local only, no Client/item access.
++ // Native shim stamps captured run; eventual World echo is ordinary correlated
++ // state, not a private physical-origin/save receipt or replay authority.
++}
++} // namespace FireSharedTransformSource
 --- a/zone/client.h
 +++ b/zone/client.h
 @@ -23,7 +23,7 @@
@@ -2168,7 +2294,7 @@
 +} // namespace FirePersonalOccurrenceSource
 --- /dev/null
 +++ b/zone/fire_native_item_custody.cpp
-@@ -0,0 +1,610 @@
+@@ -0,0 +1,681 @@
 +// Native selected writer and custody source proposal. Not installed/built or
 +// activation-ready; initial admission and serving activation remain unselected.
 +#include "client.h"
@@ -2180,6 +2306,7 @@
 +#include "fire_native_item_custody.h"
 +#include "fire_original_item_snapshot.h"
 +#include "fire_native_published_use.h"
++#include "fire_shared_transform_published.h"
 +#include "fire_prepared_construct_plan.h"
 +#include "inventory_session_owner.h"
 +#include "../common/fire_native_inventory_fence.h"
@@ -2213,7 +2340,8 @@
 + switch(task){case 920167:return 0;case 920168:return 1;case 920169:return 2;default:return -1;}
 +}
 +bool OriginalClickItem(uint32_t item) {
-+ switch(item){case 50745:case 50746:case 50747:case 50749:case 50750:case 50752:return true;default:return false;}
++ switch(item){case 50745:case 50746:case 50747:case 50749:case 50750:case 50752:
++  case 47760:case 47752:return true;default:return false;}
 +}
 +int16_t RootSlot(int16_t slot) {
 + if(EQ::ValueWithin(slot,EQ::invbag::GENERAL_BAGS_BEGIN,EQ::invbag::GENERAL_BAGS_END))
@@ -2228,11 +2356,13 @@
 +}
 +struct NativeItemCustody::State {
 + enum class Phase { Captured,LaunchReady,Casting,Finishing,SpellSucceeded,Rejected,Unknown,Committed };
-+ struct Take {int16_t slot;int16_t quantity;const EQ::ItemInstance* original;};
++ struct Take {int16_t slot;int16_t quantity;const EQ::ItemInstance* original;uint32_t item_id;};
 + struct Click {
-+  Click(Context value,std::shared_ptr<PacketFence> p,uint64_t seq,uint32_t who,uint32_t to,uint32_t z,uint32_t instance_id,int16_t where)
++  Click(std::optional<Context> value,std::shared_ptr<PacketFence> p,uint64_t seq,uint32_t who,uint32_t to,uint32_t z,uint32_t instance_id,int16_t where)
 +   :context(std::move(value)),packet(std::move(p)),sequence(seq),caster(who),target(to),zone(z),instance(instance_id),slot(where){}
-+  Context context;
++  std::optional<Context> context;
++  std::optional<FireSharedTransformSource::OriginalSharedTransformUse> shared_use;
++  int32_t native_click_spell=7651;
 +  std::shared_ptr<PacketFence> packet;
 +  uint64_t sequence;
 +  uint32_t caster,target,zone,instance;
@@ -2321,8 +2451,9 @@
 +  state_->click->packet->returned)state_->click->phase=State::Phase::Rejected;
 + if(state_->click&&state_->click->phase!=State::Phase::Rejected&&
 +  state_->click->phase!=State::Phase::Committed)return false;
++ const auto shared_rule=FireSharedTransformSource::OriginalRule(actual->GetID());
 + std::optional<Context> context;
-+ for(const auto& bound:state_->accepted) {
++ if(!shared_rule)for(const auto& bound:state_->accepted) {
 +  if(!bound)continue;
 +  const auto rule=OriginalRule(bound->task_id);if(!rule)continue;
 +  const bool combine=actual->GetID()==rule->ingredient_a;
@@ -2335,15 +2466,19 @@
 +   combine?Consumer::CombineIngredients:Consumer::ActivateConstruct);
 +  if(context)break;
 + }
-+ if(!context)return false;
-+ // Activation reaches debit only with the genuine pre-spend owned plan below.
-+ const auto use=CaptureOriginalItemUse(*context,*actual,slot,supported,c.GetID(),target,
++ if(!context&&!shared_rule)return false;
++ std::optional<OriginalItemUse> use;
++ std::optional<FireSharedTransformSource::OriginalSharedTransformUse> shared_use;
++ if(context)use=CaptureOriginalItemUse(*context,*actual,slot,supported,c.GetID(),target,
 +  zone->GetZoneID(),zone->GetInstanceID());
-+ if(!use||actual->GetCharges()!=1||actual->IsStackable()||!actual->IsExpendable())return false;
-+ auto click=std::make_unique<State::Click>(*context,std::make_shared<PacketFence>(),++state_->sequence,
++ else shared_use=FireSharedTransformSource::NativeSharedTransform::CaptureActual(c,*actual,slot,supported,target);
++ if((!use&&!shared_use)||actual->GetCharges()!=1||actual->IsStackable()||!actual->IsExpendable())return false;
++ auto click=std::make_unique<State::Click>(context,std::make_shared<PacketFence>(),++state_->sequence,
 +  c.GetID(),target,zone->GetZoneID(),zone->GetInstanceID(),slot);
 + click->packet->sequence=click->sequence;
-+ click->original_use=*use;
++ click->original_use=use;click->shared_use=shared_use;
++ click->native_click_spell=context?7651:actual->GetItem()->Click.Effect;
++ if(click->native_click_spell<=0)return false;
 + click->session=c.InventorySessionReleaseTicket();
 + click->lease=click->session?click->session->SnapshotFor(c):std::nullopt;
 + if(!click->lease||!c.HasInventorySessionReservation())return false;
@@ -2358,7 +2493,7 @@
 +  click->roots.emplace(root,std::move(snapshot));return true;
 + };
 + if(!capture_root(slot))return false;
-+ if(context->consumer==Consumer::CombineIngredients) {
++ if(context&&context->consumer==Consumer::CombineIngredients) {
 +  int need=10;
 +  for(const auto candidate:c.GetInventorySlots()) {
 +   if(need==0)break;
@@ -2368,16 +2503,47 @@
 +    item->GetCharges()<=0)continue;
 +   const auto quantity=static_cast<int16_t>(std::min<int>(need,item->GetCharges()));
 +   if(!capture_root(candidate))return false;
-+   click->b.push_back({candidate,quantity,item});need-=quantity;
++   click->b.push_back({candidate,quantity,item,context->rule.ingredient_b});need-=quantity;
 +  }
 +  if(need)return false;
-+  const auto* definition=database.GetItem(context->rule.inactive_item);
-+  if(!definition||definition->Stackable||definition->MaxCharges<=0||
-+   definition->Click.Effect!=7651||definition->Click.Type!=3||c.CheckLoreConflict(definition))return false;
++ }
++ if(shared_use) {
++  const auto& rule=shared_use->shared.rule;
++  if(rule.input_count!=2&&rule.input_count!=5)return false;
++  // All remaining physical inputs come from this SAME holder's carried trees.
++  // Each distinct input ID consumes one actual instance/unit, never a group copy.
++  bool clicked_once=false;
++  for(size_t i=0;i<rule.input_count;++i) {
++   const auto input=rule.inputs[i];if(!input)return false;
++   for(size_t j=0;j<i;++j)if(rule.inputs[j]==input)return false;
++   if(input==actual->GetID()){if(clicked_once)return false;clicked_once=true;continue;}
++   bool found=false;
++   for(const auto candidate:c.GetInventorySlots()) {
++    if(candidate==slot||!CarriedGeneral(c.m_inv,candidate))continue;
++    const auto* item=c.m_inv.GetItem(candidate);
++    if(!item||item->GetID()!=input||(item->IsStackable()&&item->GetCharges()<1))continue;
++    if(!capture_root(candidate))return false;
++    click->b.push_back({candidate,1,item,input});found=true;break;
++   }
++   if(!found)return false;
++  }
++  if(!clicked_once)return false;
++ }
++ if(shared_use||(context&&context->consumer==Consumer::CombineIngredients)) {
++  const auto output=shared_use?shared_use->shared.rule.output_item:context->rule.inactive_item;
++  const auto* definition=database.GetItem(output);
++  if(!definition||c.CheckLoreConflict(definition))return false;
++  if(shared_use&&(definition->Stackable ||
++   (output==47762?(definition->MaxCharges!=0||definition->Click.Effect!=-1):
++    (output!=47756||definition->MaxCharges!=1||definition->Click.Effect!=7651||definition->Click.Type!=3))))return false;
++  if(!shared_use&&(definition->Stackable||definition->MaxCharges<=0||
++   definition->Click.Effect!=7651||definition->Click.Type!=3))return false;
++  // ONE actual output, canonical native charges are separate from physical yield.
++  const int16_t canonical_charges=definition->Stackable?1:definition->MaxCharges;
 +  std::memcpy(click->output_definition.data(),definition,sizeof(EQ::ItemData));
-+  click->output.reset(database.CreateItem(definition,definition->MaxCharges));
-+  if(!click->output||click->output->GetID()!=context->rule.inactive_item||
-+   click->output->GetCharges()!=definition->MaxCharges)return false;
++  click->output.reset(database.CreateItem(definition,canonical_charges));
++  if(!click->output||click->output->GetID()!=output||
++   click->output->GetCharges()!=canonical_charges)return false;
 +  bool fits=CarriedGeneral(c.m_inv,slot);
 +  const auto root=RootSlot(slot);
 +  if(fits&&root!=slot) {
@@ -2392,7 +2558,7 @@
 +  // Capture the complete actual queue before callbacks. Capacity qualification
 +  // accounts for removing A only if A itself is the current cursor item.
 +  const auto old_count=c.m_inv.CursorSize();
-+  const auto add=context->consumer==Consumer::CombineIngredients?1:0;
++  const auto add=click->output?1:0;
 +  const auto remove=slot==EQ::invslot::slotCursor?1:0;
 +  if(old_count+add-remove>EQ::invbag::CURSOR_BAG_COUNT)return false;
 +  for(auto it=c.m_inv.cursor_cbegin();it!=c.m_inv.cursor_cend();++it) {
@@ -2432,17 +2598,25 @@
 + if(!state_->click||!zone||!c.task_state)return false;
 + const auto& f=*state_->click;
 + if(!f.session||c.InventorySessionReleaseTicket()!=f.session||!f.session->HeldFor(c))return false;
-+ if(f.context.consumer==Consumer::CombineIngredients) {
-+  const auto* definition=database.GetItem(f.context.rule.inactive_item);
++ if(bool(f.context)==bool(f.shared_use))return false;
++ const auto character=f.shared_use?f.shared_use->shared.character:f.context->acceptance.character_id;
++ const bool produces=f.shared_use||(f.context&&f.context->consumer==Consumer::CombineIngredients);
++ if(produces) {
++  const auto output=f.shared_use?f.shared_use->shared.rule.output_item:f.context->rule.inactive_item;
++  const auto* definition=database.GetItem(output);
 +  if(!definition||std::memcmp(f.output_definition.data(),definition,sizeof(EQ::ItemData))||c.CheckLoreConflict(definition))return false;
 + }
-+ if(c.GetID()!=f.caster||c.CharacterID()!=f.context.acceptance.character_id||
++ if(c.GetID()!=f.caster||c.CharacterID()!=character||
 +  zone->GetZoneID()!=f.zone||zone->GetInstanceID()!=f.instance||
 +  !f.clicked->Matches(f.slot,c.m_inv.GetItem(f.slot)))return false;
-+ const auto* current=c.task_state->GetClientTaskInfo(TaskType::Quest,f.context.acceptance.slot);
-+ if(!current||current->activity[0].activity_state!=ActivityCompleted||
-+  current->activity[1].activity_state!=ActivityCompleted)return false;
-+ if(!ForConsumer(database,f.context.acceptance,c.CharacterID(),TaskType::Quest,*current,f.context.consumer))return false;
++ if(f.shared_use) {
++  if(!FireSharedTransformSource::NativeSharedTransform::RevalidateActual(c,*f.shared_use))return false;
++ }else {
++  const auto* current=c.task_state->GetClientTaskInfo(TaskType::Quest,f.context->acceptance.slot);
++  if(!current||current->activity[0].activity_state!=ActivityCompleted||
++   current->activity[1].activity_state!=ActivityCompleted)return false;
++  if(!ForConsumer(database,f.context->acceptance,c.CharacterID(),TaskType::Quest,*current,f.context->consumer))return false;
++ }
 + for(const auto& entry:f.roots)
 +  if(!entry.second->Matches(entry.first,c.m_inv.GetItem(entry.first)))return false;
 + if(f.cursor_participates) {
@@ -2460,6 +2634,9 @@
 + if(ticket.fence_)return false;
 + if(!actual||!OriginalClickItem(actual->GetID()))return true;
 + auto* owner=Owned(c);
++ if(!owner&&FireSharedTransformSource::OriginalRule(actual->GetID())) {
++  c.m_fire_item_custody.reset(new NativeItemCustody);owner=Owned(c);
++ }
 + if(!owner||!owner->Capture(c,slot,actual,target,supported))return false;
 + ticket.fence_=owner->state_->click->packet;return true;
 +}
@@ -2469,7 +2646,7 @@
 + auto* owner=Owned(c);if(!owner||!owner->state_->click)return false;
 + auto& f=*owner->state_->click;
 + if(f.packet!=ticket.fence_||f.sequence!=ticket.fence_->sequence||ticket.fence_->returned||
-+  f.phase!=State::Phase::Captured||spell!=7651||
++  f.phase!=State::Phase::Captured||spell!=f.native_click_spell||
 +  slot!=f.slot||target!=f.target||!owner->Revalidate(c))return false;
 + f.phase=State::Phase::LaunchReady;return true;
 +}
@@ -2487,7 +2664,7 @@
 + if(!owner||!owner->state_->click||owner->state_->click->slot!=slot)
 +  return !actual||!OriginalClickItem(actual->GetID());
 + auto& f=*owner->state_->click;
-+ if(f.phase!=State::Phase::LaunchReady||slot!=f.slot||spell!=7651||target!=f.target||!owner->Revalidate(c))return false;
++ if(f.phase!=State::Phase::LaunchReady||slot!=f.slot||spell!=f.native_click_spell||target!=f.target||!owner->Revalidate(c))return false;
 + f.fence.launched_=true;f.phase=State::Phase::Casting;return true;
 +}
 +bool NativeItemCustody::FinishEntry(Client& c,int16_t slot,int32_t spell,int16_t debit,FinishTicket& ticket) {
@@ -2506,7 +2683,7 @@
 +  return false;
 + }
 + auto& f=*owner->state_->click;
-+ if(f.slot!=slot||spell!=7651||f.phase!=State::Phase::Casting||debit!=f.slot||!owner->Revalidate(c))return false;
++ if(f.slot!=slot||spell!=f.native_click_spell||f.phase!=State::Phase::Casting||debit!=f.slot||!owner->Revalidate(c))return false;
 + f.debit_slot=debit;f.phase=State::Phase::Finishing;ticket.packet_=f.packet;ticket.session_=f.session;ticket.original_=&c;ticket.character_=c.CharacterID();return true;
 +}
 +thread_local NativeItemCustody::DeleteScope* NativeItemCustody::DeleteScope::current_=nullptr;
@@ -2549,17 +2726,18 @@
 + auto* owner=Owned(c);if(!owner||!owner->state_->click)return true;
 + auto& f=*owner->state_->click;
 + if(f.packet!=ticket.packet_||f.phase!=State::Phase::SpellSucceeded||
-+  f.slot!=slot||f.debit_slot!=slot||quantity!=1||!update_db||!f.original_use)return true;
++  f.slot!=slot||f.debit_slot!=slot||quantity!=1||!update_db||bool(f.original_use)==bool(f.shared_use))return true;
 + if(!owner->Revalidate(c)){f.phase=State::Phase::Rejected;f.fence.Detach();return true;}
 + bool transaction=false;
 + bool known_commit=false;
 + std::unique_ptr<PreparedConstructPlan> prepared_plan;
 + std::optional<PublishedNativeUse> handoff;
++ std::optional<FireSharedTransformSource::PublishedSharedTransformUse> shared_handoff;
 + try {
 +  // SAME successful original cast and original selected debit invocation only.
 +  // Preparation owns the actual staged actor/definition/attempt/eligible roster;
 +  // it must not register actors, spend, credit, or pump mutable callbacks.
-+  if(f.context.consumer==Consumer::ActivateConstruct) {
++  if(f.context&&f.context->consumer==Consumer::ActivateConstruct) {
 +   prepared_plan=PreparedConstructPlan::PrepareActual(c,*f.original_use,f.sequence);
 +   if(!prepared_plan||!prepared_plan->RevalidateBeforePersist(c))
 +    throw std::runtime_error("Fire actual construct plan unavailable before spend");
@@ -2580,12 +2758,13 @@
 +  if(!f.staged->DeleteItem(slot,1))throw std::runtime_error("Fire staged A not removed");
 +  for(const auto& take:f.b) {
 +   auto* before=f.staged->GetItem(take.slot);
-+   if(!before||before->GetID()!=f.context.rule.ingredient_b||before->GetCharges()<take.quantity)
++   if(!before||before->GetID()!=take.item_id||
++    (before->IsStackable()&&before->GetCharges()<take.quantity))
 +    throw std::runtime_error("Fire staged B changed");
 +   f.staged->DeleteItem(take.slot,take.quantity);
 +  }
 +  uint32_t output_item=0;int32_t output_serial=0;int16_t output_charges=0;
-+  if(f.context.consumer==Consumer::CombineIngredients) {
++  if(f.shared_use||(f.context&&f.context->consumer==Consumer::CombineIngredients)) {
 +   if(!f.output)throw std::runtime_error("Fire canonical output absent");
 +   output_item=f.output->GetID();output_serial=f.output->GetSerialNumber();output_charges=f.output->GetCharges();
 +   if(f.output_slot==EQ::invslot::slotCursor)f.staged->m_cursor.push(f.output.get());
@@ -2628,10 +2807,18 @@
 +   }
 +  }
 +  f.save_results.assign(f.roots.size()+(f.cursor_participates?1:0),0);
-+  const auto original=*f.original_use;const auto sequence=f.sequence;
++  const auto original=f.original_use;const auto shared_original=f.shared_use;const auto sequence=f.sequence;
 +  const auto output_slot=f.output_slot;
-+  const std::array<uint32_t,3> achievement_items{original.item_id,
-+   f.context.consumer==Consumer::CombineIngredients?f.context.rule.ingredient_b:0,output_item};
++  std::array<uint32_t,6> achievement_items{};
++  if(shared_original) {
++   for(size_t i=0;i<shared_original->shared.rule.input_count;++i)
++    achievement_items[i]=shared_original->shared.rule.inputs[i];
++   achievement_items[5]=output_item;
++  }else {
++   achievement_items[0]=original->item_id;
++   achievement_items[1]=f.context->consumer==Consumer::CombineIngredients?f.context->rule.ingredient_b:0;
++   achievement_items[2]=output_item;
++  }
 +  // No callbacks/sends/event pumping in the following transaction/publication.
 +  const auto query=[&](const std::string& sql) {
 +   if(database.GetStatus()!=DBcore::Connected)throw std::runtime_error("Fire disconnected");
@@ -2745,9 +2932,15 @@
 +  f.phase=State::Phase::Committed;f.fence.Detach();
 +  // Private constructor runs here, before any mutable achievement callback.
 +  // Moving into stack optional is noexcept and revokes the temporary authority.
-+  PublishedNativeUse issued(c,original,sequence,output_item,output_serial,
-+   output_slot,output_charges,std::move(prepared_plan));
-+  handoff.emplace(std::move(issued));
++  if(shared_original) {
++   FireSharedTransformSource::PublishedSharedTransformUse issued(c,*shared_original,
++    sequence,output_item,output_serial,output_slot,output_charges);
++   shared_handoff.emplace(std::move(issued));
++  }else {
++   PublishedNativeUse issued(c,*original,sequence,output_item,output_serial,
++    output_slot,output_charges,std::move(prepared_plan));
++   handoff.emplace(std::move(issued));
++  }
 +  for(auto& prepared:f.packets) {
 +   auto* send=prepared.release();c.FastQueuePacket(&send);safe_delete(send);
 +  }
@@ -2774,6 +2967,10 @@
 + }
 + // Deliberately outside catch: even an exception from the mutable sink must
 + // never send control back into code that dereferences Client or held trees.
++ if(shared_handoff) {
++  FireSharedTransformSource::OnOriginalSharedTransformPublished(c,*shared_handoff);
++  return true;
++ }
 + OnOriginalNativeUsePublished(c,*handoff);
 + return true;
 +}
@@ -3382,6 +3579,104 @@
 + static void Receive(Client&,PublishedNativeUse&);
 +};
 +} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_shared_transform_published.h
+@@ -0,0 +1,37 @@
++#pragma once
++#include "fire_shared_transform_use.h"
++#include <optional>
++#include <type_traits>
++namespace FireSharedTransformSource {
++struct PublishedSharedTransformView {
++ OriginalSharedTransformUse original;
++ uint64_t native_click_sequence;
++ uint32_t published_output_item;
++ int32_t published_output_serial;
++ int16_t published_output_slot,published_output_charges;
++};
++static_assert(std::is_trivially_copyable<PublishedSharedTransformView>::value,
++ "Shared transform publication must not allocate or clone inventory");
++class PublishedSharedTransformUse final {
++ friend class FirePersonalOccurrenceSource::NativeItemCustody;
++ const Client* owner_;
++ PublishedSharedTransformView view_;
++ bool taken_=false;
++ PublishedSharedTransformUse(const Client& owner,const OriginalSharedTransformUse& original,
++  uint64_t sequence,uint32_t output,int32_t serial,int16_t slot,int16_t charges) noexcept
++  :owner_(&owner),view_{original,sequence,output,serial,slot,charges} {}
++public:
++ PublishedSharedTransformUse()=delete;
++ PublishedSharedTransformUse(const PublishedSharedTransformUse&)=delete;
++ PublishedSharedTransformUse& operator=(const PublishedSharedTransformUse&)=delete;
++ PublishedSharedTransformUse(PublishedSharedTransformUse&& other) noexcept
++  :owner_(other.owner_),view_(other.view_),taken_(other.taken_) {
++  other.owner_=nullptr;other.taken_=true;
++ }
++ PublishedSharedTransformUse& operator=(PublishedSharedTransformUse&&)=delete;
++ std::optional<PublishedSharedTransformView> Take(const Client& actual_owner) noexcept {
++  if(taken_||owner_!=&actual_owner)return std::nullopt;
++  taken_=true;return view_;
++ }
++};
++} // namespace FireSharedTransformSource
+--- /dev/null
++++ b/zone/fire_shared_transform_use.h
+@@ -0,0 +1,55 @@
++#pragma once
++#include "common/item_instance.h"
++#include <array>
++#include <cstdint>
++#include <optional>
++class Client;
++class ClientTaskState;
++namespace FirePersonalOccurrenceSource {class NativeItemCustody;}
++namespace FireSharedTransformSource {
++inline constexpr uint32_t Task=920170;
++struct SharedTransformRule {
++ uint32_t clicked_item=0,output_item=0;
++ int activity=0;
++ std::array<uint32_t,5> inputs{}; // one physical unit of each, ONE actual holder
++ uint8_t input_count=0;
++};
++inline std::optional<SharedTransformRule> OriginalRule(uint32_t clicked) noexcept {
++ if(clicked==47760)return SharedTransformRule{47760,47762,6,{{47760,47761,0,0,0}},2};
++ if(clicked==47752)return SharedTransformRule{47752,47756,13,{{47751,47752,47753,47754,47755}},5};
++ return {};
++}
++struct SharedTransformContext {
++ uint64_t run=0,local_occurrence=0;
++ uint32_t character=0,accepted_time=0,zone_id=0,instance_id=0,dynamic_zone_id=0;
++ SharedTransformRule rule{};
++};
++struct OriginalSharedTransformUse {
++ SharedTransformContext shared;
++ uint32_t item_id=0,caster_entity=0,target_entity=0;
++ int32_t item_serial=0;
++ int16_t slot=0,charges_before=0;
++};
++class PublishedSharedTransformUse;
++class PublishedSharedTransformSink;
++class NativeSharedTransform final {
++ friend class FirePersonalOccurrenceSource::NativeItemCustody;
++ friend class PublishedSharedTransformSink;
++ friend class ::ClientTaskState;
++ struct Dispatch {const OriginalSharedTransformUse* original;Client* owner;bool entered=false;};
++ static thread_local Dispatch* dispatch_;
++ static bool ClaimActualSubmission(Client&,uint32_t task,int activity,uint64_t actual_run);
++ static std::optional<SharedTransformContext> CaptureContextActual(Client&,uint32_t clicked_item);
++ static bool ContextMatchesActual(Client&,const SharedTransformContext&);
++ // Actual original supported-slot/click invocation only; no event from history.
++ static std::optional<OriginalSharedTransformUse> CaptureActual(Client&,const EQ::ItemInstance&,
++  int16_t actual_slot,bool native_slot_supported,uint32_t actual_target);
++ static bool RevalidateActual(Client&,const OriginalSharedTransformUse&);
++};
++class PublishedSharedTransformSink final {
++public:
++ static void Receive(Client&,PublishedSharedTransformUse&);
++};
++// Core owns the opaque private issuer/Take receipt and SAME post-COMMIT callsite.
++void OnOriginalSharedTransformPublished(Client&,PublishedSharedTransformUse&);
++} // namespace FireSharedTransformSource
 --- a/zone/inventory.cpp
 +++ b/zone/inventory.cpp
 @@ -1,3 +1,4 @@
@@ -3656,7 +3951,12 @@
  				const uint32 before_id = before ? before->GetID() : 0;
 --- a/zone/task_client_state.cpp
 +++ b/zone/task_client_state.cpp
-@@ -39,6 +39,9 @@
+@@ -1,3 +1,4 @@
++#include "fire_shared_transform_use.h"
+ /*	EQEmu: EQEmulator
+ 
+ 	Copyright (C) 2001-2026 EQEmu Development Team
+@@ -39,6 +40,9 @@
  #include "zone/zonedb.h"
  #include "fire_personal_successor_dispatch.h"
  #include "fire_original_final_hail_frame.h"
@@ -3666,7 +3966,7 @@
  #include "fire_shared_successor_native.h"
  #include "common/fire_shared_activity_origin.h"
  
-@@ -55,6 +58,7 @@
+@@ -55,6 +59,7 @@
  
  // One synchronous native AssignTask call only. No client-owned pointer is
  // dereferenced after TASK_ACCEPTED, and no state survives this dispatch frame.
@@ -3674,7 +3974,7 @@
  struct FirePersonalAcceptanceFrame {
  	Client* expected_client;
  	FirePersonalOccurrenceSource::Handoff* original_handoff;
-@@ -66,6 +70,7 @@
+@@ -66,6 +71,7 @@
  	bool acceptance_entered = false;
  	bool completion_observed = false;
  	bool recorded_before_callbacks = false;
@@ -3682,7 +3982,7 @@
  };
  
  // This is a stack-scope pointer, not a retry/character/task registry.
-@@ -133,15 +138,23 @@
+@@ -133,15 +139,23 @@
  		return;
  	}
  
@@ -3707,7 +4007,7 @@
  	}
  }
  
-@@ -195,6 +208,32 @@
+@@ -195,6 +209,32 @@
  	return frame.recorded_before_callbacks
  		? PersonalDispatchResult::AcceptedBeforeCallbacks
  		: PersonalDispatchResult::SubmittedNotAccepted;
@@ -3740,7 +4040,7 @@
  }
  
  } // namespace FirePersonalOccurrenceSource
-@@ -1232,6 +1271,9 @@
+@@ -1232,6 +1272,9 @@
  		return 0;
  	}
  
@@ -3750,7 +4050,18 @@
  	auto* const fire_final_update = FirePersonalOccurrenceSource::ClaimOriginalFinalUpdate(
  		client, task_data->type, *info, activity_id, count
  	);
-@@ -1432,6 +1474,9 @@
+@@ -1259,6 +1302,10 @@
+ 			 actual->accepted_time!=static_cast<uint32_t>(info->accepted_time)) return 0;
+ 			fire_activity_run=actual->id;
+ 		}
++		// Physical goal6/13 requires the SAME one-use post-COMMIT shared origin.
++		// World echo follows its ordinary m_shared_task_update path and skips this shim.
++		if(!FireSharedTransformSource::NativeSharedTransform::ClaimActualSubmission(
++		 *client,info->task_id,activity_id,fire_activity_run)) return 0;
+ 		// Same one native update; stamp before optimistic local count synchronization/send.
+ 		auto pack = new ServerPacket(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+
+ 			(fire_activity_run?sizeof(FireSharedActivityOrigin::Trailer):0));
+@@ -1432,6 +1479,9 @@
  	}
  
  	const bool fire_original_completion_saved = TaskManager::Instance()->SaveClientState(client, this);
