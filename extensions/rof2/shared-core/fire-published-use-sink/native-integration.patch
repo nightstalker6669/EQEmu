@@ -1,0 +1,305 @@
+--- a/zone/client.h
++++ b/zone/client.h
+@@ -23,7 +23,7 @@
+ 
+ #include "../common/boat_passenger.h"
+ 
+-namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; }
++namespace FirePersonalOccurrenceSource { struct SharedSuccessorPending; class SharedSuccessorNative; class OriginalConstructAttempt; class PublishedNativeUseSink; }
+ namespace SpiritShroud { struct Template; }
+ class ZoneDatabase;
+ struct SpiritShroudDestination;
+@@ -2133,6 +2133,8 @@
+ private:
+ 	friend class FirePersonalOccurrenceSource::SharedSuccessorNative;
+ 	std::unique_ptr<FirePersonalOccurrenceSource::SharedSuccessorPending> m_fire_shared_successor;
++	friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
++	std::unique_ptr<FirePersonalOccurrenceSource::OriginalConstructAttempt> m_fire_published_construct;
+ 	ExternalHandinMoneyReturned m_external_handin_money_returned = {};
+ 	std::vector<uint32_t>       m_external_handin_items_returned = {};
+ public:
+--- a/zone/client.cpp
++++ b/zone/client.cpp
+@@ -17,6 +17,7 @@
+ */
+ #include "../common/mercenary/rof2_timer.h"
+ #include "fire_shared_successor_native.h"
++#include "fire_published_use_sink.h"
+ 
+ #include "housing_guild_portal.h"
+ #include "housing_actor_publication.h"
+@@ -13667,3 +13668,72 @@
+ 
+ 	return task_state->UncompleteTask(task_id);
+ }
++
++namespace FirePersonalOccurrenceSource {
++void OnOriginalNativeUsePublished(Client& actual_owner,PublishedNativeUse& receipt) {
++ PublishedNativeUseSink::Receive(actual_owner,receipt);
++}
++
++void PublishedNativeUseSink::Receive(Client& client,PublishedNativeUse& receipt) {
++ // This MUST precede queries, allocation, inventory observations and callbacks.
++ const auto published=receipt.Take(client);
++ if(!published) return;
++ const auto& view=*published;
++ const auto& original=view.original;
++ const auto& binding=original.personal.acceptance;
++ if(!view.native_click_sequence || binding.slot<0 || binding.slot>=MAXACTIVEQUESTS ||
++  client.CharacterID()!=binding.character_id || client.GetID()!=original.caster_entity ||
++  !zone || zone->GetZoneID()!=original.actual_zone ||
++  zone->GetInstanceID()!=original.actual_instance || !client.GetTaskState()) return;
++ const auto* current=client.GetTaskState()->GetClientTaskInfo(TaskType::Quest,binding.slot);
++ if(!current) return;
++ const auto consumer=original.personal.consumer;
++ if(consumer!=Consumer::CombineIngredients && consumer!=Consumer::ActivateConstruct) return;
++ const auto context=ForConsumer(database,binding,client.CharacterID(),TaskType::Quest,*current,consumer);
++ if(!context || original.personal.activity!=context->activity ||
++  original.personal.rule.task_id!=context->rule.task_id ||
++  original.personal.rule.ingredient_a!=context->rule.ingredient_a ||
++  original.personal.rule.ingredient_b!=context->rule.ingredient_b ||
++  original.personal.rule.inactive_item!=context->rule.inactive_item ||
++  original.personal.rule.construct_npc!=context->rule.construct_npc ||
++  original.personal.rule.encounter_zone!=context->rule.encounter_zone) return;
++ if(consumer==Consumer::CombineIngredients) {
++  if(original.item_id!=context->rule.ingredient_a ||
++   view.published_output_item!=context->rule.inactive_item ||
++   !view.published_output_serial) return;
++  // The writer receipt identifies the actual published output, including cursor
++  // queue placement and canonical native charges. Do not assume cursor-top or
++  // invent a one-charge default from a one-unit output quantity.
++  // Inventory is ALREADY conserved and published by the actual writer.
++  // No extra debit, output, spawn, activity2, save, or successor follows a combine.
++  return;
++ }
++ if(original.item_id!=context->rule.inactive_item || original.charges_before<=0 ||
++  original.actual_zone!=context->rule.encounter_zone || original.actual_instance!=0 ||
++  view.published_output_item || view.published_output_serial ||
++  view.published_output_charges || client.m_fire_published_construct ||
++  original_construct_registration) return;
++ // These are unresolved owner decisions, never booleans supplied by a caller.
++ // A source revision with the real placement and lifetime guarantees is required.
++ constexpr bool actor_lifetime_and_no_same_frame_reuse_selected=false;
++ const OriginalConstructPlacement placement{};
++ if(!actor_lifetime_and_no_same_frame_reuse_selected || !placement.selected ||
++  binding.task_id==920169) return; // authentic participant cohort remains held
++ const auto* definition=content_db.LoadNPCTypesData(context->rule.construct_npc);
++ if(!definition || !std::isfinite(placement.point.x) || !std::isfinite(placement.point.y) ||
++  !std::isfinite(placement.point.z) || !std::isfinite(placement.point.w)) return;
++ // Retain the SAME original use before publication; no history/context factory.
++ client.m_fire_published_construct=std::make_unique<OriginalConstructAttempt>(original);
++ auto& attempt=*client.m_fire_published_construct;
++ attempt.attempted_=true;
++ auto* actor=new NPC(definition,nullptr,placement.point,GravityBehavior::Water);
++ if(actor->GetNPCTypeID()!=context->rule.construct_npc) {delete actor;return;}
++ actor->AddLootTable();
++ if(actor->DropsGlobalLoot()) actor->CheckGlobalLootTables();
++ OriginalConstructRegistration frame{attempt,actor,original.actual_zone,original.actual_instance};
++ OriginalConstructRegistrationScope scope(frame);
++ entity_list.AddNPC(actor,true,true);
++ // AddNPC has mutable callbacks: no client/actor/attempt dereference after it.
++ // The real death owner still needs the retained attempt plus original actor identity.
++}
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_original_construct_producer.h
+@@ -0,0 +1,130 @@
++// SOURCE ONLY: original transient construct producer; no registration/runtime authority.
++#pragma once
++#include "zone/entity.h"
++#include "zone/client.h"
++#include "zone/npc.h"
++#include "fire_personal_item_use.h"
++#include "fire_personal_construct_identity.h"
++#include "fire_original_final_hail_frame.h"
++#include <cmath>
++namespace FirePersonalOccurrenceSource {
++enum class OriginalConstructDeathResult { Hold, SubmittedWithoutCommitReceipt, CommittedAtOriginalSave };
++struct OriginalConstructPlacement {
++ bool selected=false; // original supported-region/position remains owner-unbound
++ glm::vec4 point{};
++};
++class OriginalConstructAttempt {
++ friend struct OriginalConstructRegistration;
++ friend void CaptureConstructBeforeOriginalSpawnCallbacks(NPC*);
++ friend class PublishedNativeUseSink;
++ friend OriginalConstructDeathResult SubmitActualOriginalCasterDeathOnce(Database&,OriginalConstructAttempt&,NPC&,
++  uint32_t,uint32_t,uint32_t,Client&,TaskType,const ClientTaskInformation&);
++ friend OriginalFinishResult SubmitOriginalFinalHailAfterCasterDeathCommit(Database&,OriginalConstructAttempt&,
++  OriginalFinalHailAttempt&,Client&,TaskType,const ClientTaskInformation&,NPC&,uint32_t,uint32_t,uint32_t);
++ OriginalItemUse original_;
++ bool attempted_=false,caster_death_submitted_=false,caster_death_committed_=false;
++ NPC* original_object_=nullptr; // only compare during genuine live native death
++ std::optional<ConstructIdentity> captured_;
++public:
++ explicit OriginalConstructAttempt(const OriginalItemUse& original):original_(original) {}
++ OriginalConstructAttempt(const OriginalConstructAttempt&)=delete;
++ OriginalConstructAttempt& operator=(const OriginalConstructAttempt&)=delete;
++};
++struct OriginalConstructRegistration {
++ OriginalConstructAttempt& attempt;
++ NPC* expected_object;
++ uint32_t actual_zone,actual_instance;
++ bool entered=false,captured_before_callbacks=false;
++};
++inline thread_local OriginalConstructRegistration* original_construct_registration=nullptr;
++class OriginalConstructRegistrationScope {
++ OriginalConstructRegistration* previous_;
++public:
++ explicit OriginalConstructRegistrationScope(OriginalConstructRegistration& f)
++  :previous_(original_construct_registration) { original_construct_registration=&f; }
++ ~OriginalConstructRegistrationScope() { original_construct_registration=previous_; }
++ OriginalConstructRegistrationScope(const OriginalConstructRegistrationScope&)=delete;
++ OriginalConstructRegistrationScope& operator=(const OriginalConstructRegistrationScope&)=delete;
++};
++// Native AddNPC seam: AFTER its actual ID/list insertion, BEFORE ScanCloseMobs/EVENT_SPAWN.
++inline void CaptureConstructBeforeOriginalSpawnCallbacks(NPC* actual_registered) {
++ auto* f=original_construct_registration;
++ if(!f || f->entered || actual_registered!=f->expected_object) return;
++ f->entered=true;
++ auto captured=CaptureActualReturnedConstruct(f->attempt.original_,*actual_registered,
++  f->actual_zone,f->actual_instance);
++ if(!captured) return;
++ f->attempt.original_object_=actual_registered;
++ f->attempt.captured_=*captured;
++ f->captured_before_callbacks=true;
++}
++struct OriginalConstructDeathFrame {
++ Binding original;
++ Client* client;
++ bool entered=false,save_observed=false,committed=false;
++};
++inline thread_local OriginalConstructDeathFrame* original_construct_death_frame=nullptr;
++class OriginalConstructDeathScope {
++ OriginalConstructDeathFrame* previous_;
++public:
++ explicit OriginalConstructDeathScope(OriginalConstructDeathFrame& f)
++  :previous_(original_construct_death_frame) { original_construct_death_frame=&f; }
++ ~OriginalConstructDeathScope() { original_construct_death_frame=previous_; }
++ OriginalConstructDeathScope(const OriginalConstructDeathScope&)=delete;
++ OriginalConstructDeathScope& operator=(const OriginalConstructDeathScope&)=delete;
++};
++inline OriginalConstructDeathFrame* ClaimOriginalConstructDeathUpdate(Client* client,TaskType type,
++ const ClientTaskInformation& current,int goal,int count) {
++ auto* f=original_construct_death_frame;
++ if(!f || f->entered || f->client!=client || goal!=2 || count!=1 ||
++  !MatchesLocal(f->original,client->CharacterID(),type,current) ||
++  current.activity[2].activity_state!=ActivityActive) return nullptr;
++ f->entered=true;return f;
++}
++inline void ObserveOriginalConstructDeathSave(OriginalConstructDeathFrame* f,Database& db,Client* client,
++ TaskType type,const ClientTaskInformation& current,bool actual_existing_save_result) {
++ if(!f || f->save_observed || f->client!=client) return;
++ f->save_observed=true;
++ if(!actual_existing_save_result || !MatchesLocal(f->original,client->CharacterID(),type,current) ||
++  current.activity[2].activity_state!=ActivityCompleted ||
++  current.activity[3].activity_state!=ActivityActive) return;
++ auto matched=PersistedMatches(db,f->original,false);
++ if(!matched || !*matched) return;
++ auto row=db.QueryDatabase(fmt::format(
++  "SELECT 1 FROM character_activities WHERE charid={} AND taskid={} "
++  "AND activityid=2 AND donecount=1 AND completed=1",
++  f->original.character_id,f->original.task_id));
++ f->committed=row.Success() && row.RowCount()==1;
++}
++// Genuine original native death-complete only; capture the SAME original native goal2 save, no second save.
++inline OriginalConstructDeathResult SubmitActualOriginalCasterDeathOnce(Database& db,OriginalConstructAttempt& attempt,NPC& actual_dead,
++ uint32_t actual_killed_entity,uint32_t actual_zone,uint32_t actual_instance,Client& actual_caster,
++ TaskType actual_type,const ClientTaskInformation& current) {
++ if(original_construct_death_frame || !attempt.captured_ || attempt.caster_death_submitted_ || attempt.original_object_!=&actual_dead ||
++  actual_caster.CharacterID()!=attempt.original_.personal.acceptance.character_id ||
++  !MatchesActualConstructDeath(*attempt.captured_,actual_dead,actual_killed_entity,actual_zone,actual_instance))
++  return OriginalConstructDeathResult::Hold;
++ auto context=CasterDeathAcceptanceContext(db,*attempt.captured_,actual_caster.CharacterID(),actual_type,current);
++ if(!context) return OriginalConstructDeathResult::Hold;
++ attempt.caster_death_submitted_=true;
++ OriginalConstructDeathFrame frame{context->acceptance,&actual_caster};
++ OriginalConstructDeathScope scope(frame);
++ actual_caster.UpdateTaskActivity(context->acceptance.task_id,2,1);
++ // Only owner/stack state is touched after mutable callbacks. Owner must keep this attempt alive.
++ attempt.caster_death_committed_=frame.committed;
++ return frame.committed ? OriginalConstructDeathResult::CommittedAtOriginalSave :
++  OriginalConstructDeathResult::SubmittedWithoutCommitReceipt;
++}
++// Actual Gotonur hail owner only. A generic activity count or spawn cannot open this entry.
++inline OriginalFinishResult SubmitOriginalFinalHailAfterCasterDeathCommit(Database& db,OriginalConstructAttempt& construct,
++ OriginalFinalHailAttempt& hail,Client& actual_client,TaskType actual_type,const ClientTaskInformation& current,
++ NPC& actual_gotonur,uint32_t actual_zone,uint32_t actual_instance,uint32_t selected_original_spawn) {
++ if(!construct.caster_death_committed_ ||
++  !ForConsumer(db,construct.original_.personal.acceptance,actual_client.CharacterID(),actual_type,current,
++   Consumer::FinalHail)) return OriginalFinishResult::Hold;
++ return SubmitActualOriginalFinalHailOnce(db,hail,actual_client,actual_type,current,actual_gotonur,
++  actual_zone,actual_instance,selected_original_spawn);
++}
++// Other eligible original personal participants, especially920169, need their OWN accepted Binding/one-use claim.
++// This producer neither selects that cohort nor converts the encounter to a shared task or one fight per player.
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_native_published_use.h
+@@ -0,0 +1,53 @@
++#pragma once
++// Feature-private SOURCE INTERFACE ONLY. No writer or callback is installed.
++#include "fire_personal_item_use.h"
++#include <cstdint>
++#include <optional>
++#include <type_traits>
++class Client;
++namespace FirePersonalOccurrenceSource {
++class NativeItemCustody;
++struct PublishedNativeUseView {
++ OriginalItemUse original; // SAME pre-callback native item-use capture, by value
++ std::uint64_t native_click_sequence;
++ std::uint32_t published_output_item;
++ std::int32_t published_output_serial;
++ std::int16_t published_output_slot;
++ std::int16_t published_output_charges;
++};
++static_assert(std::is_trivially_copyable<PublishedNativeUseView>::value,
++ "The post-commit handoff must not allocate or clone native trees");
++// Created ONLY by the selected custody writer after strict known COMMIT and
++// allocation-free memory publication. Context/SpellFinished/SaveInventory alone
++// MUST NEVER construct it. Failed/unknown persistence produces no such object.
++class PublishedNativeUse final {
++ friend class NativeItemCustody;
++ const Client* owner_;
++ PublishedNativeUseView view_;
++ bool taken_=false;
++ PublishedNativeUse(const Client& owner,const OriginalItemUse& original,
++  std::uint64_t sequence,std::uint32_t output_item,std::int32_t output_serial,
++  std::int16_t output_slot,std::int16_t output_charges) noexcept
++  :owner_(&owner),view_{original,sequence,output_item,output_serial,output_slot,output_charges} {}
++public:
++ PublishedNativeUse()=delete;
++ PublishedNativeUse(const PublishedNativeUse&)=delete;
++ PublishedNativeUse& operator=(const PublishedNativeUse&)=delete;
++ PublishedNativeUse(PublishedNativeUse&&)=delete;
++ PublishedNativeUse& operator=(PublishedNativeUse&&)=delete;
++ // Caller seals the one native producer attempt BEFORE any mutable callback,
++ // allocation, spawn, counter increment or query. View copies are evidence for
++ // that attempt, never authority to construct or replay another receipt.
++ std::optional<PublishedNativeUseView> Take(const Client& actual_owner) noexcept {
++  if(taken_ || owner_!=&actual_owner)return std::nullopt;
++  taken_=true;
++  return view_;
++ }
++};
++// Spells can implement this exact native sink independently. The writer will
++// invoke it once at its final publication boundary, then MUST NOT dereference
++// Client/custody/selected objects after this mutable producer callback.
++// CombineIngredients never spawns or credits activity2. ActivateConstruct may
++// proceed only through the existing held placement/lifetime/cohort predicates.
++void OnOriginalNativeUsePublished(Client& actual_owner,PublishedNativeUse& receipt);
++} // namespace FirePersonalOccurrenceSource
+--- /dev/null
++++ b/zone/fire_published_use_sink.h
+@@ -0,0 +1,10 @@
++#pragma once
++// SOURCE ONLY: private receipt sink, not a writer or registered callback.
++#include "fire_native_published_use.h"
++#include "fire_original_construct_producer.h"
++namespace FirePersonalOccurrenceSource {
++class PublishedNativeUseSink final {
++public:
++ static void Receive(Client&,PublishedNativeUse&);
++};
++} // namespace FirePersonalOccurrenceSource

@@ -1,0 +1,47 @@
+{
+  "status": "SOURCE_ONLY_UNREGISTERED_NO_WRITER_CALLSITE",
+  "scope": "Exact private published-use sink plus native Client ownership; replaced boolean-charge producer entry absent",
+  "owner_header_sha256": "b7d0b7e1c9b92d39ab01fdad06fa5ba64adc230c9bb6780b37a137a445b17fc8",
+  "native_files": {
+    "zone/client.h": {
+      "preimage_sha256": "24540c697490ad29f170b89ac293fe8c6463aa3844190f21489351f64c98d5a3",
+      "postimage_sha256": "54511bc94b66dc1e76fb3b7c5b60bc2fbd111499a81a1c5d042533cc0b729dd5"
+    },
+    "zone/client.cpp": {
+      "preimage_sha256": "699687e3841d95337da273b0e6af801ffbc4dbf68282b720afaa497bee9ff336",
+      "postimage_sha256": "9ee638d58e1cce0a0f62ccd02de3c239e52c9a140efa623edfdf97248aca6d72"
+    },
+    "zone/fire_original_construct_producer.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "3085f3be79cf98d5b9f19dd057e9d41b75652f724d33a6d573285e22a8ed11d3"
+    },
+    "zone/fire_native_published_use.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "b7d0b7e1c9b92d39ab01fdad06fa5ba64adc230c9bb6780b37a137a445b17fc8"
+    },
+    "zone/fire_published_use_sink.h": {
+      "preimage_sha256": null,
+      "postimage_sha256": "52e92089e69e1c8b468aa994523515207785453ff118f9526e1e922bcee02395"
+    }
+  },
+  "patch_sha256": "74de795ebce586c1dd4bc4d88476bae6f8d552b8e9c7042b5c074ffd407fc83c",
+  "required_other_source_dependencies": [
+    "acceptanceR2 and finalhail reviewed compiled chain",
+    "original producer entity.cpp pre-spawn capture and task_client_state.cpp same-save observation (03cbba9f source; not integrated by this delta)",
+    "original item-use and construct-identity headers from original producer proposal"
+  ],
+  "holds": [
+    "Actual strict writer and issuing callsite remain owner WIP",
+    "placement remains empty/selectedfalse",
+    "actor lifetime and no-same-frame-reuse remain false",
+    "initial167 acceptance remains owner-held",
+    "real169 personal participant cohort remains held",
+    "No death routing or new sink registration",
+    "No replay/refund/regrant on consumed receipt with held downstream creation"
+  ],
+  "checks": "Authoring deterministic composition only; no compile, test, runtime, SQL, shared checkout edit or acceptance claimed",
+  "review_status": "PASS_FINITE_RECEIPT_SINK_SOURCE_BOUNDARY_WRITER_STILL_NOT_IMPLEMENTED",
+  "parent_publication": "f14dd6a9a42c2125f71ff2acb349eb77d033ccf7",
+  "parent_build_status": "PASS_ISOLATED_MATCHED_FIRE_WORLD_ZONE_COMPILE_LINK_NO_DEPLOY",
+  "this_sink_build_status": "NOT_BUILT; no separate build requested while actual writer/callsite remain unimplemented"
+}
