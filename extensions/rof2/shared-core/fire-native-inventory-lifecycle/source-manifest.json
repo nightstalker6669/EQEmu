@@ -1,6 +1,6 @@
 {
   "status": "REVIEWED_DISABLED_COMBINED_NATIVE_SOURCE_NOT_INSTALLED",
-  "source_revision": "Retained-parent rebase with minimal two-path owner declaration/active-fence correction",
+  "source_revision": "Exact retained-parent source with one-header specific native friend access correction",
   "review_status": "Focused lifetime PASS; five-path retained-parent rebase PASS; exact owner correction composed per coordinator",
   "review_receipt_sha256": "efeee8cc108a68a3f40f9cc1407ed7068f92ff87e5715d5acc307030cd972fa1",
   "native_files": {
@@ -142,7 +142,7 @@
     },
     "zone/task_client_state.h": {
       "preimage_sha256": "4556499e483da7785759f87c53c6f1704c217c288f2f892aa877ebd7abb1d428",
-      "postimage_sha256": "3f51d0a703f999f581161afcc941915d2de0a5c03d415ff7f0208cfa9d58bc09"
+      "postimage_sha256": "815818bbb4a99847b37ae03fe10352a0a7f8a60f9ea0ad333a1ebbff40feadb8"
     },
     "zone/tasks.cpp": {
       "preimage_sha256": "18bf1975f9ebbc3f0ee7b999ab1e388b6adebc05485466c9d52d986624a73e39",
@@ -153,7 +153,7 @@
       "postimage_sha256": "a8661011fede0d7f702e3fdabc0e4cf813372829c2c0065d15d7fa6034c5d821"
     }
   },
-  "native_patch_sha256": "2697f2c75de5e31981cff45109881b007863efc680054875b769fb07753ee1cf",
+  "native_patch_sha256": "49d1aafb7bbf3314d9c0d70c65863793cd59ac8bdf3f5af8064cdf4bde18406b",
   "schema": {
     "path": "001_fire_construct_death_receipts.sql.disabled",
     "sha256": "ec487b9955095e5bbdccc02f003b7849b4258e6bed505d35ccffcb030458e9b9",
@@ -218,11 +218,16 @@
     ]
   },
   "additional_compatibility_fix": "Completed/rejected Fire state cannot intercept ordinary casts in a reused slot; active selected custody still rejects changed/missing originals. No ordinary writer authority.",
-  "unchanged_from_published_R3": 31,
   "minimal_compiler_correction": [
     "Include existing data_verification.h declaring EQ::ValueWithin, no predicate behavior change or numeric bounds rewrite.",
     "Use actual private selected fence Active() in ordinary-item Start/FinishEntry. Inactive completed/rejected or returned-unlaunched captures cannot intercept later ordinary same-slot item use; active original mismatch still rejects, no ordinary Fire ticket/writer authority."
   ],
   "other35_postpins_unchanged": true,
-  "this_combined_build_status": "PENDING_ACTUAL_COMPILE; previous R5 failed ValueWithin declaration before link"
+  "this_combined_build_status": "World linked R6; corrected Zone compile pending. No complete matched build PASS inferred.",
+  "current_compiler_correction": {
+    "path": "zone/task_client_state.h",
+    "scope": "Forward declarations and specific private friendship for PublishedNativeUseSink, OriginalConstructDeathQueue and OriginalConstructNativeHail, the three actual private getter callsites. No public getter/API, method movement, binding validation or lifecycle change.",
+    "failed_build_receipt_sha256": "16d1b7ec4b057292b0be3b59a317175b75f1740718982b7b4c5f9ec1362c7c87"
+  },
+  "other36_postpins_unchanged": true
 }

@@ -2684,13 +2684,16 @@
  		fire_original_completion_saved &&
 --- a/zone/task_client_state.h
 +++ b/zone/task_client_state.h
-@@ -48,7 +48,10 @@
+@@ -48,7 +48,13 @@
  	TaskMethodType method = TaskMethodType::METHODSINGLEID;
  };
  
-+namespace FirePersonalOccurrenceSource { class NativeItemCustody; }
++namespace FirePersonalOccurrenceSource { class NativeItemCustody; class PublishedNativeUseSink; class OriginalConstructDeathQueue; class OriginalConstructNativeHail; }
  class ClientTaskState {
 + friend class FirePersonalOccurrenceSource::NativeItemCustody;
++ friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;
++ friend class FirePersonalOccurrenceSource::OriginalConstructDeathQueue;
++ friend class FirePersonalOccurrenceSource::OriginalConstructNativeHail;
 +
  
  public:
