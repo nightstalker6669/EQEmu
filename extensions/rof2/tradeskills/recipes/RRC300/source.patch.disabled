@@ -132,7 +132,7 @@
  struct ChargedPacking32Plan {
   struct Take {int16_t slot=INVALID_INDEX;const EQ::ItemInstance* original=nullptr;int32_t serial=0;};
   int16_t kit_slot=INVALID_INDEX;const EQ::ItemInstance* kit=nullptr;int32_t kit_serial=0;
-@@ -570,6 +623,41 @@
+@@ -570,6 +623,47 @@
  	}
  
  
@@ -156,25 +156,31 @@
 + const auto final300_valid=[&](){
 +  if(!FinalRecipe300::Selected(spec.recipe_id))return true;
 +  if(!final300_inputs || !final300_owner || !final300_owner->HeldFor(*user) ||
-+   user->CharacterID()!=final300_character || user->AccountID()!=final300_account ||
-+   (worldcontainer?worldo:nullptr)!=final300_world ||
-+   (final300_world && final300_world->GetDBID()!=final300_world_id) ||
-+   !Final300InputTree::Same(final300_inputs->root,container))return false;
-+
++   user->CharacterID()!=final300_character || user->AccountID()!=final300_account)return false;
 +  if(!Final300OutputValid(spec)||!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&user->GetInv())||
 +   !FinalRecipe300::RaceAllowed(spec.recipe_id,user->GetPP().race))return false;
-+  if(FinalRecipe300::Font(spec.recipe_id))return !worldcontainer && Final300Kit(*user,in_combine->container_slot,container) && Final300Font(*user,spec.recipe_id);
-+  auto* station=worldcontainer?worldo:nullptr;
-+  const auto* data=station&&station->m_inst?station->m_inst->GetItem():nullptr;
-+  return station && station==user->GetTradeskillObject() && station->user==user &&
-+   station->m_inst && station->m_inst==container && station->m_inst->IsType(EQ::item::ItemClassBag) && data &&
-+   FinalRecipe300::WorldAllowed(spec.recipe_id,zone->GetZoneID(),zone->GetInstanceVersion(),station->GetDBID(),station->GetType(),data->ID);
++  // Resolve current native custody before touching the retained original pointer.
++  const EQ::ItemInstance* current=nullptr;
++  if(FinalRecipe300::Font(spec.recipe_id)) {
++   if(worldcontainer || !Final300Kit(*user,in_combine->container_slot,container) || !Final300Font(*user,spec.recipe_id))return false;
++   current=user->GetInv().GetItem(in_combine->container_slot);
++  }else {
++   auto* station=user->GetTradeskillObject();
++   if(!worldcontainer || !station || station!=worldo || station!=final300_world ||
++    station->user!=user || station->GetDBID()!=final300_world_id || !station->m_inst ||
++    station->m_inst!=container || !station->m_inst->IsType(EQ::item::ItemClassBag))return false;
++   const auto* data=station->m_inst->GetItem();
++   if(!data || !FinalRecipe300::WorldAllowed(spec.recipe_id,zone->GetZoneID(),zone->GetInstanceVersion(),station->GetDBID(),station->GetType(),data->ID))return false;
++   current=station->m_inst;
++  }
++  return Final300InputTree::Same(final300_inputs->root,current);
 + };
++
 + if(!final300_valid()){user->Message(Chat::Red,"This recipe requires its correct station, location, and maker.");auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
   const auto* charged_requirement=ChargedRecipe32::Find(spec.recipe_id);
   ChargedPacking32Plan charged_packing;
   const auto charged_station_valid=[&](){
-@@ -673,7 +761,7 @@
+@@ -673,7 +767,7 @@
  	}
  
  
@@ -183,7 +189,7 @@
  	// Send acknowledgement packets to client
  	auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
  	user->QueuePacket(outapp);
-@@ -889,6 +977,23 @@
+@@ -889,6 +983,23 @@
  	}
  
  
@@ -207,7 +213,7 @@
   const auto* charged_requirement=ChargedRecipe32::Find(spec.recipe_id);
   ChargedPacking32Plan charged_packing;
   const auto charged_station_valid=[&](){
-@@ -1043,7 +1148,7 @@
+@@ -1043,7 +1154,7 @@
  	}
  
  
@@ -216,7 +222,7 @@
  	//now we know they have everything...
  
   std::unique_ptr<TrophyCertificate55::Proof> trophy_proof;
-@@ -1484,7 +1589,7 @@
+@@ -1484,7 +1595,7 @@
  			item = database.GetItem(itr->first);
  			if (item) {
  				CheckItemDiscoverability(itr->first);
@@ -225,7 +231,7 @@
  				if (GetGroup()) {
  					entity_list.MessageGroup(this, true, Chat::Skills, "%s has successfully fashioned %s!", GetName(), item->Name);
  				}
-@@ -1999,6 +2104,7 @@
+@@ -1999,6 +2110,7 @@
  
  void ZoneDatabase::UpdateRecipeMadecount(uint32 recipe_id, uint32 char_id, uint32 madeCount)
  {
@@ -233,7 +239,7 @@
  	std::string query = StringFormat("INSERT INTO char_recipe_list "
                                      "SET recipe_id = %u, char_id = %u, madecount = %u "
                                      "ON DUPLICATE KEY UPDATE madecount = %u;",
-@@ -2008,6 +2114,7 @@
+@@ -2008,6 +2120,7 @@
  
  void Client::LearnRecipe(uint32 recipe_id)
  {
