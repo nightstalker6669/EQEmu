@@ -19835,7 +19835,9 @@
     "containers": "Only per-body explicit ordinary Wheel21/Kiln22; each exact physical input count<=10. Other named/Tanaan/furniture/guild stations remain unqualified; source quest-use notes do not create manufacture task gates.",
     "holds": "Ceramic Claw Sleeve Set22969 and Ceramic Dagger Sleeve22970 explicit Vah Shir manufacture gate unsupported; Fine Xakra Runed Jar23135 nonnumeric >250 trivial; existing9398 Advanced Vial yield1 versus source2; existing9562 Sealed Vial trivial255 versus source188. Preserve both existing bodies, no duplicate/repair.",
     "preservation": "All113 full18 native definitions and131 existing peer headers/769 entries guarded unchanged; positive output-use universe/all-state-all-skill exact input multisets/new entry multiplicity/count deltas and rollback learned-reference refusal. No player/item/book/core mutations.",
-    "execution": "Source only pending explicit coordinator reconstruction/era disposition, GitHub publication and exact one-use SQL GO. No runtime, gameplay acceptance, build or rehearsal."
+    "execution": "Source only pending explicit coordinator reconstruction/era disposition, GitHub publication and exact one-use SQL GO. No runtime, gameplay acceptance, build or rehearsal.",
+    "name_guard": "A same-name peer is exempt only by its captured primary key in the131 fully guarded existing definitions/769 exact entries; all peer preimages/postimages and output universe remain guarded. Every full-input collision still rejects.",
+    "failure_disposition": "R1 one SQL invocation stopped on overly broad recipe-name collision guard. Read-only confirmation: all affected preimages unchanged, no new IDs, actual31826/242976, transaction0. No retry/inverse; r2 requires fresh publication/exactGO."
   },
   "source_urls": [
     "https://www.eqtraders.com/recipes/pottery_recipe_page.php?article=114&rsa=Pottery&sub=basic",
@@ -19880,5 +19882,6 @@
       "reason": "Native9562 exact roles but trivial255 versus source188; preserve existing body, no duplicate or repair"
     }
   ],
-  "existing_source_bodies_unchanged": 96
+  "existing_source_bodies_unchanged": 96,
+  "source_revision": 2
 }

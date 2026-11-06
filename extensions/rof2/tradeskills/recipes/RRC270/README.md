@@ -25,3 +25,8 @@ Source: https://www.eqtraders.com/recipes/pottery_recipe_page.php?article=439&rs
 Source: https://www.eqtraders.com/recipes/pottery_recipe_page.php?article=550&rsa=Pottery&sub=VoA
 Source: https://www.eqtraders.com/recipes/pottery_recipe_page.php?article=56&rsa=Pottery&sub=tools
 Source: https://www.eqtraders.com/recipes/recipe_page.php?article=385&rsa=Pottery&sub=quest
+
+
+Revision2: A same-name peer is exempt only by its captured primary key in the131 fully guarded existing definitions/769 exact entries; all peer preimages/postimages and output universe remain guarded. Every full-input collision still rejects.
+
+R1 one SQL invocation stopped on overly broad recipe-name collision guard. Read-only confirmation: all affected preimages unchanged, no new IDs, actual31826/242976, transaction0. No retry/inverse; r2 requires fresh publication/exactGO.
