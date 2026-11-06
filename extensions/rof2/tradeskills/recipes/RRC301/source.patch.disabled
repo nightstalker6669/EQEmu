@@ -1,0 +1,485 @@
+--- a/common/housing/live_item_service.cpp
++++ b/common/housing/live_item_service.cpp
+@@ -303,7 +303,12 @@
+                 int32_t(std::stol(row[0])),int32_t(std::stol(row[1])),int32_t(std::stol(row[2])),int32_t(std::stol(row[3]))
+             };
+             if(vault){auto current=VaultStorage::Profile(db,r);if(Cat(current)!=Cat(c))throw Failure{Error::Conflict};}
+-            if(!vault&&(c.item_class!=0||c.bag_slots!=0))throw Failure{
++            bool recipe301_empty=false;
++            if(!vault && v.item_id==54250 && c.item_class==1 && c.bag_slots==10 && r.children.empty()) {
++             auto exact=Q(db,"SELECT COUNT(*) FROM items WHERE id=54250 AND idfile='IT11543' AND itemclass=1 AND bagslots=10 AND bagtype=20 AND bagsize=4 AND stackable=0 AND stacksize=1 AND UNK224=14 AND UNK225=0 AND UNK226=0 AND UNK227=0 AND UNK228=1036831949 AND UNK229=1075838976 AND UNK230=6 AND UNK231=1 FOR UPDATE");
++             recipe301_empty=exact.RowCount()==1&&exact.begin()[0]&&std::stoul(exact.begin()[0])==1;
++            }
++            if(!vault&&!recipe301_empty&&(c.item_class!=0||c.bag_slots!=0))throw Failure{
+                 Error::UnsupportedItem
+             };
+             return c;
+@@ -1392,6 +1397,7 @@
+     }
+     Result<InteriorReservation> Service::ReserveInteriorPlacement(const InteriorPreviewRequest& r,InventorySessionFence& fence,const Scene::HouseScenePolicy& h,const InteriorContent::ProfilePolicy& p,const CrateMemberContext* d){return ReserveInteriorPlacementCurrent(r,fence,h,p,d);}
+     Result<InteriorReservation> Service::ReserveInteriorPlacementCurrent(const InteriorPreviewRequest& r,InventorySessionFence& fence,const Scene::HouseScenePolicy& house_policy,const InteriorContent::ProfilePolicy& profile_policy,const CrateMemberContext* destination,Database* parent_transaction){
++        if(r.expected.values.item_id==54250)return {{},Error::UnsupportedItem};
+         std::lock_guard<std::mutex> lock(mutex_);if(!enabled_)return {{},Error::Disabled};
+         if(!LeaseShape(r.lease)||!Key(r.request_key)||!r.expected_house_id||!r.expected_house_revision||!r.expected_profile_revision||!Valid(r.expected)||r.expected.values.character_id!=r.lease.actor.character_id||!General(r.expected.values.slot_id)||r.verified_runtime_serial<=0)return {{},Error::InvalidArgument};
+         if(!fence.HeldFor(r.lease.actor,r.lease.epoch,r.lease.session_key))return {{},Error::UnheldFence};auto* connection=parent_transaction?parent_transaction:database_.get();if(!connection||connection->GetStatus()!=DBcore::Connected)return {{},Error::DatabaseFailure};
+--- /dev/null
++++ b/common/housing/static_furniture_recipe301.inc
+@@ -0,0 +1,4 @@
++// Exact source-placeable recipe301 Jewelry Making Table only. Empty bag, never an item escrow.
++// Original EQGMv3 ordinary-static class, default ActorTag, no local/manifest LOD.
++// Geometry from native triangle-box parser plus retained class producer policy; no new gameplay acceptance.
++ {54250,11543,"IT11543",{11543,{0.0,-1.1920928955078125e-07,2.355673313140869},{1.53548002243042,1.0995376110076904,2.3602170944213867},true,9.5367431640625e-07},"tradeskill_objects.eqg","90bbf54350e110d8799b1a2d1ab361abf34f886bed8dcf002bdec0b2c9d6fd10","ab364d48d4e39eb13604883e46466b70952ecf15e9ced6abf6d52abe78ca9a92",Evidence::ReviewedStaticClass,2},
+--- a/common/housing/static_furniture_registry.h
++++ b/common/housing/static_furniture_registry.h
+@@ -24,6 +24,7 @@
+ inline constexpr Record Records[]={
+  {54573,23240,"IT23240",{23240,{0.0,0.00593218207359314,1.999120831489563},{0.8187458515167236,0.7710634171962738,1.999120831489563},true,3.973643e-7},"pfpremium01.eqg","bb7227361b55a0f12b3630c17b88d6d9d38e68b27947518ffdc4962d8a25366d","7102e1e5b903acc0b00ec2675a2aabf2cf9cbf216521b90481425af59c119da3",Evidence::LegacyChairAccepted,1},
+ #include "static_furniture_class.inc"
++#include "static_furniture_recipe301.inc"
+ #include "static_furniture_rigid_extension.inc"
+ #include "static_furniture_personal_trophies.inc"
+ #include "anchor_geometry.inc"
+@@ -37,6 +38,7 @@
+ inline bool AnchorItem(uint32_t id){return id==50874||id==52584||id==52585;}
+ inline bool NativeProfile(uint32_t id,uint32_t mask,uint32_t ignore,uint32_t definition,
+  float minimum,float maximum,uint32_t upkeep,int32_t max_per_estate){
++ if(id==54250)return mask==14&&!ignore&&!definition&&minimum==0.10000000149011612f&&maximum==2.5f&&upkeep==6&&max_per_estate==1;
+  if(id==68727||id==68730)return mask==12&&!ignore&&!definition&&
+   minimum==0.10000000149011612f&&maximum==2.5f&&upkeep==4&&max_per_estate==1;
+  if(!AnchorItem(id))return !definition&&!ignore;
+--- a/zone/CMakeLists.txt
++++ b/zone/CMakeLists.txt
+@@ -1,4 +1,5 @@
+ set(zone_sources
++	housing_recipe301.cpp
+ 	fungal_native_inventory_custody.cpp
+ 	client_spirit_shroud.cpp
+ 	client_spirit_shroud_native.cpp
+--- a/zone/client.h
++++ b/zone/client.h
+@@ -1,3 +1,4 @@
++namespace HousingRecipe301 {struct Binding;}
+ #include "fungal_item_operation_source.h"
+ /*	EQEmu: EQEmulator
+ 
+@@ -1124,6 +1125,7 @@
+ 
+ 	void Disarm(Client* disarmer, int chance);
+ 	bool BindWound(Mob* bindmob, bool start, bool fail = false);
++	bool ValidateHousingRecipe301(const HousingRecipe301::Binding&);
+ 	void SetTradeskillObject(Object* object) { m_tradeskill_object = object; }
+ 	Object* GetTradeskillObject() { return m_tradeskill_object; }
+ 	void SendTributes();
+--- a/zone/client_housing.cpp
++++ b/zone/client_housing.cpp
+@@ -1,3 +1,5 @@
++#include "object.h"
++#include "housing_recipe301.h"
+ #include "housing_service_npcs.h"
+ #include "housing_pets.h"
+ #include "../common/housing/item_payload_db.h"
+@@ -499,8 +501,9 @@
+ const Housing::StaticFurniture::Record* FurnitureModel(const EQ::ItemInstance& item){
+  const auto* d=item.GetUnscaledItem();if(!d||!Housing::NpcItemMetadata::Ordinary(*d))return nullptr;
+  const auto* model=Housing::StaticFurniture::Lookup(d->ID,std::string(d->IDFile));
+- return model&&d->ItemClass==EQ::item::ItemClassCommon&&!item.IsScaling()&&
+-  Housing::StaticFurniture::PlacementTypeMatches(d->ID,d->HousingPlacementType)&&Housing::StaticFurniture::NativeProfile(d->ID,d->Placeable,d->HousingIgnoreCollisions,d->HousingDefinitionID,d->HousingMinimumScale,d->HousingMaximumScale,d->HousingUpkeepID,d->HousingMaxPerEstate)&&!d->BagSlots&&(d->Placeable&142)!=0&&std::isfinite(d->HousingMinimumScale)&&
++ const bool recipe301_empty=d->ID==54250&&d->ItemClass==EQ::item::ItemClassBag&&d->BagType==20&&d->BagSlots==10&&d->BagSize==4&&item.GetContents()->empty();
++ return model&&(d->ItemClass==EQ::item::ItemClassCommon||recipe301_empty)&&!item.IsScaling()&&
++  Housing::StaticFurniture::PlacementTypeMatches(d->ID,d->HousingPlacementType)&&Housing::StaticFurniture::NativeProfile(d->ID,d->Placeable,d->HousingIgnoreCollisions,d->HousingDefinitionID,d->HousingMinimumScale,d->HousingMaximumScale,d->HousingUpkeepID,d->HousingMaxPerEstate)&&(!d->BagSlots||recipe301_empty)&&(d->Placeable&142)!=0&&std::isfinite(d->HousingMinimumScale)&&
+   std::isfinite(d->HousingMaximumScale)&&d->HousingMinimumScale>0&&d->HousingMinimumScale<=1&&d->HousingMaximumScale>=1?model:nullptr;
+ }
+ std::optional<Housing::NpcRuntime::Profile> FurnitureNpc(const EQ::ItemInstance& item){
+@@ -595,6 +598,7 @@
+         (p.content_binding || p.catalog_revision==target.revision);
+ }
+ std::optional<FurnitureTarget> FurniturePlot(Client* c,const HousingView& view,const EQ::ItemInstance& item,uint32_t requested=0,const Housing::Scene::InteriorSnapshot* attached=nullptr){
++ if(item.GetID()==54250&&(view.interior||attached))return {};
+  if(view.interior||attached){
+   const auto& current=view.interior?*view.interior:*attached;if(!current.house||!current.house->interior||!current.room_profile||Housing::HousePlacement::Model(item)||(requested&&requested!=current.house->interior->native_estate_id))return {};
+   auto node=std::find_if(view.data.catalog.nodes.begin(),view.data.catalog.nodes.end(),[&](const auto& n){return n.native_id.value==current.house->interior->native_estate_id;});if(node==view.data.catalog.nodes.end())return {};
+@@ -1472,6 +1476,17 @@
+   if(row->stored.stowed?!FurniturePlayerInRegion(this,*current):(!distance||*distance>20)){FurnitureResult(this,20);return;}
+   const bool swap=RuleB(Housing,EnableNativeHouseSwap)&&row->house&&row->stored.stowed&&row->stored.row.values.character_id==CharacterID()&&std::any_of(current->items.begin(),current->items.end(),[&](const auto& placed){return placed.house&&!placed.stored.stowed&&placed.stored.row.values.character_id==CharacterID();})&&current->access.Allows(Housing::AccessPolicy::Capability::AddHouse)&&current->access.Allows(Housing::AccessPolicy::Capability::RemoveHouse);
+   auto scene=FurnitureCurrentScene(this,session,*bridge,*target);if(!scene||!scene->entries.count(item)){FurnitureResult(this,9);return;}
++  if(row->stored.row.values.item_id==54250 && !target->room && !view->interior &&
++   !row->stored.stowed && !row->contained_in_crate &&
++   current->access.Allows(Housing::AccessPolicy::Capability::InteractItem) && FurniturePlayerInRegion(this,*current)) {
++   HousingRecipe301::Binding binding;binding.stored=row->stored;binding.owner=InventorySessionReleaseTicket();binding.actor=CharacterID();binding.account=AccountID();
++   binding.native_plot=current->native_plot_id;binding.catalog_revision=current->current_catalog_revision;binding.acl_revision=current->acl_revision;
++   binding.zone=zone->GetZoneID();binding.instance=zone->GetInstanceID();binding.version=zone->GetInstanceVersion();binding.guid=guid;
++   binding.regions=current->additional_regions;binding.regions.insert(binding.regions.begin(),current->region);
++   FurnitureSendScene(this,session,*scene);
++   if(!Object::OpenHousingRecipe301(*this,binding,*cache->second))FurnitureResult(this,23);
++   return;
++  }
+   // Native5b74c4 item-owner match bypasses ordinary RemoveItem8/CanDrop.
+   // Only the immutable creator receives Pickup; Move independently needs Move10.
+   auto payload=Housing::InteractionWire::EncodeChairMenu(estate,item,guid,cache->second->GetUnscaledItem()->Name,mouse,current->access.Allows(Housing::AccessPolicy::Capability::MoveItem),row->stored.row.values.character_id==CharacterID()&&(!row->house||current->access.Allows(Housing::AccessPolicy::Capability::RemoveHouse))&&(!row->crate||current->access.Allows(Housing::AccessPolicy::Capability::RemoveCrate)),bool(row->house)&&!row->stored.stowed&&current->access.Allows(Housing::AccessPolicy::Capability::Enter),true,swap,!row->stored.stowed&&Housing::Pets::Distance(*this,estate,item).has_value()&&current->access.Allows(Housing::AccessPolicy::Capability::InteractItem));
+@@ -2057,3 +2072,27 @@
+  auto request=Housing::PetCommands::Decode(app->pBuffer,app->size);if(!request){FurnitureResult(this,1);return;}
+  if(!Housing::Pets::Command(*this,*request)){FurnitureResult(this,23);return;}FurnitureResult(this,0);
+ }
++
++
++bool Client::ValidateHousingRecipe301(const HousingRecipe301::Binding& b) {
++ try {
++  if(!NativeFurniture(this)||!Connected()||!ClientDataLoaded()||!HasInventorySessionReservation()||!m_housing_placement_session||
++   CharacterID()!=b.actor||AccountID()!=b.account||!b.owner||InventorySessionReleaseTicket()!=b.owner||!b.owner->HeldFor(*this)||!zone||zone->GetZoneID()!=712||zone->GetZoneID()!=b.zone||
++   zone->GetInstanceID()!=b.instance||zone->GetInstanceVersion()!=b.version||!b.stored.placement||b.stored.row.values.item_id!=54250)return false;
++  auto& session=*m_housing_placement_session;const auto& p=*b.stored.placement;
++  auto cached=session.presentations.find(p.reservation.native_item_id);if(cached==session.presentations.end()||!cached->second||cached->second->GetID()!=54250||FurnitureGuid(*cached->second)!=b.guid)return false;
++  auto view=LoadHousingView(this);auto* bridge=GetHousingInventoryBridge();if(!view||view->interior||!bridge)return false;
++  auto target=FurniturePlot(this,*view,*cached->second,p.reservation.native_estate_id);if(!target||target->room)return false;
++  auto fresh=FurnitureSnapshot(this,*bridge,*target);if(!fresh||fresh->native_plot_id!=b.native_plot||fresh->estate_id!=b.stored.estate_id||fresh->current_catalog_revision!=b.catalog_revision||fresh->acl_revision!=b.acl_revision||!FurniturePlayerInRegion(this,*fresh)||!fresh->access.Allows(Housing::AccessPolicy::Capability::InteractItem))return false;
++  auto regions=fresh->additional_regions;regions.insert(regions.begin(),fresh->region);if(regions.size()!=b.regions.size())return false;for(size_t n=0;n<regions.size();++n)if(regions[n].id!=b.regions[n].id||regions[n].matrix!=b.regions[n].matrix)return false;
++  if(!Housing::RentState::Plot(database,fresh->estate_id,fresh->native_plot_id,false).Active())return false;
++  for(const auto& entry:fresh->items) {
++   const auto& row=entry.stored;
++   if(row.custody_id!=b.stored.custody_id||!row.placement||row.stowed||entry.contained_in_crate||row.storage_revision!=b.stored.storage_revision||row.row.values.item_id!=54250||Housing::CustodyCodec::Encode(row.row)!=Housing::CustodyCodec::Encode(b.stored.row))continue;
++   if(row.placement->reservation.native_estate_id!=p.reservation.native_estate_id||row.placement->reservation.native_item_id!=p.reservation.native_item_id||row.placement->pose_revision!=p.pose_revision||!FurnitureSameTransform(row.placement->transform,p.transform)||!FurnitureCurrentCatalog(row,*target,fresh->current_catalog_revision)||!Housing::InventoryBridge::MatchesProjection(row.row,*cached->second)||!Housing::HousePresentation::Matches(entry,*cached->second))return false;
++   auto scene=FurnitureCurrentScene(this,session,*bridge,*target);if(!scene||!scene->entries.count(p.reservation.native_item_id))return false;
++   auto distance=FurnitureDistance(this,*cached->second,p.transform);return distance&&*distance<=20;
++  }
++  return false;
++ }catch(...){return false;}
++}
+--- a/zone/client_packet.cpp
++++ b/zone/client_packet.cpp
+@@ -5334,6 +5334,7 @@
+ 		Entity* entity = entity_list.GetEntityObject(oos->drop_id);
+ 		if (entity && entity->IsObject()) {
+ 			Object* object = entity->CastToObject();
++   if(object->IsHousingRecipe301() && (!object->HousingRecipe301Origin() || object->HousingRecipe301Origin()->actor!=CharacterID()))return;
+ 			if (oos->open == 0) {
+ 				object->Close();
+ 			}
+--- a/zone/entity.cpp
++++ b/zone/entity.cpp
+@@ -1501,6 +1501,7 @@
+ {
+ 	auto it = object_list.begin();
+ 	while (it != object_list.end()) {
++  if(it->second->IsHousingRecipe301()){++it;continue;}
+ 		auto app = new EQApplicationPacket;
+ 		it->second->CreateSpawnPacket(app);
+ 		client->FastQueuePacket(&app);
+--- /dev/null
++++ b/zone/housing_recipe301.cpp
+@@ -0,0 +1,55 @@
++#include "housing_recipe301.h"
++#include "client.h"
++#include "inventory_session_owner.h"
++#include "../common/fire_native_inventory_fence.h"
++#include "../common/database.h"
++#include "../common/eqemu_config.h"
++#include "../common/housing/current_estate_access.h"
++#include "../common/housing/custody_codec.h"
++#include "../common/housing/item_storage_db.h"
++#include "../common/housing/rent_state_db.h"
++#include <cstring>
++#include <stdexcept>
++namespace HousingRecipe301 {
++namespace {
++auto Q(Database& db,const std::string& sql) {if(db.GetStatus()!=DBcore::Connected)throw std::runtime_error("Station connection unavailable");auto r=db.QueryDatabase(sql,false);if(!r.Success())throw std::runtime_error("Station authority query failed");return r;}
++std::string Hex(const uint8_t* p,size_t size){std::string s;const char* h="0123456789ABCDEF";for(size_t n=0;n<size;++n){s+=h[p[n]>>4];s+=h[p[n]&15];}return s;}
++std::string Pose(const Housing::PlacementPolicy::Transform& p){std::vector<uint8_t>b;for(float f:{p.heading,p.pitch,p.roll,p.scale,p.position[0],p.position[1],p.position[2]}){uint32_t n;std::memcpy(&n,&f,4);for(unsigned j=0;j<4;++j)b.push_back(uint8_t(n>>(j*8)));}return Hex(b.data(),b.size());}
++}
++Use::~Use(){if(db_&&db_->GetStatus()==DBcore::Connected)db_->QueryDatabase(std::string("ROLLBACK"),false);}
++bool Use::Held() noexcept {try{if(!db_)return false;auto r=Q(*db_,"SELECT CONNECTION_ID(),@@in_transaction");return r.RowCount()==1&&r.begin()[0]&&r.begin()[1]&&std::stoull(r.begin()[0])==connection_&&std::stoul(r.begin()[1])==1;}catch(...){return false;}}
++std::unique_ptr<Use> Use::Acquire(Client& c,const Binding& b) noexcept {
++ try {
++  if(!FirePersonalOccurrenceSource::NativeInventoryFence::ProfileAllowed(&c.GetInv())||!c.ValidateHousingRecipe301(b)||!b.stored.placement||b.stored.row.values.item_id!=54250)return nullptr;
++  auto ticket=b.owner;auto lease=ticket?ticket->SnapshotFor(c):std::nullopt;
++  if(!ticket||!lease||!lease->active||!ticket->HeldFor(c))return nullptr;
++  const auto* config=EQEmuConfig::get();if(!config)return nullptr;
++  auto out=std::unique_ptr<Use>(new Use);out->db_=std::make_unique<Database>();auto& db=*out->db_;
++  if(!db.Connect(config->DatabaseHost,config->DatabaseUsername,config->DatabasePassword,config->DatabaseDB,config->DatabasePort,"recipe301-station-authority"))return nullptr;
++  Q(db,"SET SESSION innodb_lock_wait_timeout=2");Q(db,"START TRANSACTION");auto state=Q(db,"SELECT CONNECTION_ID(),@@in_transaction");if(state.RowCount()!=1||!state.begin()[0]||!state.begin()[1]||std::stoul(state.begin()[1])!=1)return nullptr;out->connection_=std::stoull(state.begin()[0]);
++  const auto& l=*lease;
++  auto actor=Q(db,"SELECT account_id,epoch,HEX(token),process_key,client_key,zone_id,instance_id,active FROM housing_inventory_sessions WHERE character_id="+std::to_string(c.CharacterID())+" FOR UPDATE");
++  if(actor.RowCount()!=1)return nullptr;auto ar=actor.begin();for(unsigned n=0;n<8;++n)if(!ar[n])return nullptr;
++  if(std::stoul(ar[0])!=c.AccountID()||std::stoull(ar[1])!=l.epoch||std::string(ar[2])!=Hex(l.token.data(),l.token.size())||std::string(ar[3])!=l.owner.process_key||std::string(ar[4])!=l.owner.client_key||std::stoul(ar[5])!=b.zone||std::stoul(ar[6])!=b.instance||std::stoul(ar[7])!=1)return nullptr;
++  const auto& p=*b.stored.placement;
++  // Existing custody/pose writers take these same rows FOR UPDATE. They cannot
++  // move, transfer, pick up, stow, or replace this original table during debit.
++  auto custody=Q(db,"SELECT estate_id,owner_character_id,HEX(row_blob) FROM housing_live_item_custody WHERE custody_id="+std::to_string(b.stored.custody_id)+" FOR UPDATE");
++  auto raw=Housing::CustodyCodec::Encode(b.stored.row);
++  if(custody.RowCount()!=1||!custody.begin()[0]||!custody.begin()[1]||!custody.begin()[2]||std::stoul(custody.begin()[0])!=b.stored.estate_id||std::stoul(custody.begin()[1])!=b.stored.row.values.character_id||std::string(custody.begin()[2])!=Hex(raw.data(),raw.size()))return nullptr;
++  auto pose=Q(db,"SELECT native_item_id,pose_revision,HEX(pose_blob) FROM housing_live_placed_items WHERE custody_id="+std::to_string(b.stored.custody_id)+" FOR UPDATE");
++  if(pose.RowCount()!=1||!pose.begin()[0]||!pose.begin()[1]||!pose.begin()[2]||std::stoul(pose.begin()[0])!=p.reservation.native_item_id||std::stoull(pose.begin()[1])!=p.pose_revision||std::string(pose.begin()[2])!=Pose(p.transform))return nullptr;
++  auto reservation=Q(db,"SELECT state,custody_id,native_estate_id,estate_id,catalog_key FROM housing_live_placement_reservations WHERE native_item_id="+std::to_string(p.reservation.native_item_id)+" FOR UPDATE");
++  if(reservation.RowCount()!=1)return nullptr;auto rr=reservation.begin();for(unsigned n=0;n<5;++n)if(!rr[n])return nullptr;
++  if(std::stoul(rr[0])!=1||std::stoull(rr[1])!=b.stored.custody_id||std::stoul(rr[2])!=b.native_plot||std::stoul(rr[3])!=b.stored.estate_id||std::string(rr[4])!=p.reservation.catalog_key)return nullptr;
++  auto storage=Housing::ItemStorage::Locked(db,b.stored.custody_id);if(storage.stowed||storage.revision!=b.stored.storage_revision||Housing::HouseItemScope::Locked(db,b.stored.custody_id))return nullptr;
++  auto catalog=Q(db,"SELECT revision FROM housing_catalogs WHERE catalog_key='"+db.Escape(p.reservation.catalog_key)+"' FOR UPDATE");if(catalog.RowCount()!=1||!catalog.begin()[0]||std::stoull(catalog.begin()[0])!=b.catalog_revision)return nullptr;
++  auto mapping=Q(db,"SELECT h.zone_id,h.zone_version,h.instance_id FROM housing_native_estates n JOIN housing_neighborhoods h ON h.id=n.neighborhood_id WHERE n.native_id="+std::to_string(b.native_plot)+" AND n.ownership_estate_id="+std::to_string(b.stored.estate_id)+" AND n.active=1 FOR UPDATE");
++  if(mapping.RowCount()!=1||!mapping.begin()[0]||!mapping.begin()[1]||!mapping.begin()[2]||std::stoul(mapping.begin()[0])!=b.zone||std::stoul(mapping.begin()[1])!=b.version||std::stoul(mapping.begin()[2])!=b.instance)return nullptr;
++  auto access=Housing::LoadCurrentEstateAccessUnderTransaction(db,b.stored.estate_id,b.native_plot,{c.CharacterID(),c.AccountID()});
++  if(!access||access.value.acl_revision!=b.acl_revision||!access.value.effective.Allows(Housing::AccessPolicy::Capability::InteractItem)||!Housing::RentState::Plot(db,b.stored.estate_id,b.native_plot).Active())return nullptr;
++  if(!ticket->HeldFor(c)||!out->Held())return nullptr;
++  return out;
++ }catch(...){return nullptr;}
++}
++}
+--- /dev/null
++++ b/zone/housing_recipe301.h
+@@ -0,0 +1,44 @@
++#pragma once
++#include "../common/housing/live_item_service.h"
++#include "../common/housing/region_wire.h"
++#include <memory>
++#include "inventory_session_owner.h"
++class Client; class Database;
++namespace HousingRecipe301 {
++inline bool Selected(uint32_t id) { return id>=3102767 && id<=3102779; }
++inline uint32_t Output(uint32_t id) { switch(id) {
++ case 3102767:return 61642;
++ case 3102768:return 61659;
++ case 3102769:return 61669;
++ case 3102770:return 61674;
++ case 3102771:return 61703;
++ case 3102772:return 61713;
++ case 3102773:return 61724;
++ case 3102774:return 61738;
++ case 3102775:return 61757;
++ case 3102776:return 61765;
++ case 3102777:return 61769;
++ case 3102778:return 61792;
++ case 3102779:return 61809;
++ default:return 0; } }
++struct Binding {
++ Housing::LiveItems::Stored stored;
++ std::shared_ptr<EQEmu::SharedCore::InventorySessions::ZoneReservation> owner;
++ uint32_t actor=0,account=0,native_plot=0,zone=0,instance=0,version=0;
++ uint64_t catalog_revision=0,acl_revision=0;
++ std::string guid;
++ std::vector<Housing::RegionWire::Region> regions;
++};
++// Dedicated READ/row-lock connection, never the native inventory writer's connection.
++// Locks are held through ingredient debit and released before ordinary output/task hooks.
++class Use {
++public:
++ static std::unique_ptr<Use> Acquire(Client&,const Binding&) noexcept;
++ ~Use();
++ bool Held() noexcept;
++private:
++ Use()=default;
++ std::unique_ptr<Database> db_;
++ uint64_t connection_=0;
++};
++}
+--- a/zone/inventory.cpp
++++ b/zone/inventory.cpp
+@@ -1681,6 +1681,14 @@
+ }
+ 
+ bool Client::SwapItem(MoveItem_Struct* move_in) {
++ // Recipe301 station window uses ordinary auto ingredients in personal inventory.
++ // It never accepts world-slot transfers or creates a new inventory escrow domain.
++ if(move_in && GetTradeskillObject() && GetTradeskillObject()->IsHousingRecipe301() &&
++  ((move_in->from_slot>=EQ::invslot::WORLD_BEGIN&&move_in->from_slot<=EQ::invslot::WORLD_END)||
++   (move_in->to_slot>=EQ::invslot::WORLD_BEGIN&&move_in->to_slot<=EQ::invslot::WORLD_END))) {
++  Message(Chat::Red,"Keep ingredients in your inventory and use the recipe list at this table.");return false;
++ }
++
+  if(!move_in||!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(&m_inv,move_in->from_slot)||!FirePersonalOccurrenceSource::NativeInventoryFence::SlotAllowed(&m_inv,move_in->to_slot))return false;
+ 	if (!move_in) return false;
+ 	// Apply custody checks at the inventory operation as well as packet dispatch:
+--- a/zone/object.cpp
++++ b/zone/object.cpp
+@@ -341,6 +341,22 @@
+ 	safe_delete(inst);
+ }
+ 
++
++bool Object::OpenHousingRecipe301(Client& actor,const HousingRecipe301::Binding& binding,const EQ::ItemInstance& actual) {
++ if(actual.GetID()!=54250 || !actual.IsClassBag() || !actual.GetContents()->empty() ||
++  !actual.GetItem() || actual.GetItem()->BagType!=20 || actual.GetItem()->BagSlots!=10 || actual.GetItem()->BagSize!=4 ||
++  !actor.ValidateHousingRecipe301(binding))return false;
++ if(auto* previous=actor.GetTradeskillObject())previous->Close();
++ Object_Struct data{};data.x=actor.GetX();data.y=actor.GetY();data.z=actor.GetZ();data.zone_id=zone->GetZoneID();
++ auto station=std::make_unique<Object>(0,20,actual.GetItem()->Icon,data,&actual,false);
++ station->m_recipe301=std::make_unique<HousingRecipe301::Binding>(binding);
++ strn0cpy(station->m_display_name,actual.GetItem()->Name,sizeof(station->m_display_name));
++ auto* live=station.release();entity_list.AddObject(live,false);
++ ClickObject_Struct click{};click.drop_id=live->GetID();click.player_id=actor.GetID();
++ live->HandleClick(&actor,&click);
++ return actor.GetTradeskillObject()==live;
++}
++
+ Object::~Object()
+ {
+ 	safe_delete(m_inst);
+@@ -376,7 +392,7 @@
+ 
+ bool Object::Save()
+ {
+-	if (m_click_only) { return false; }
++	if (m_click_only || IsHousingRecipe301()) { return false; }
+ 	if (m_id) { // Update existing
+ 		content_db.UpdateObject(m_id, m_type, m_icon, m_data, m_inst);
+ 	} else { // Doesn't yet exist, add now
+@@ -388,7 +404,7 @@
+ 
+ uint16 Object::VarSave()
+ {
+-	if (m_click_only) { return 0; }
++	if (m_click_only || IsHousingRecipe301()) { return 0; }
+ 	if (m_id) { // Update existing
+ 		content_db.UpdateObject(m_id, m_type, m_icon, m_data, m_inst);
+ 	} else { // Doesn't yet exist, add now
+@@ -401,7 +417,7 @@
+ // Remove object from database
+ void Object::Delete(bool reset_state)
+ {
+-	if (m_click_only) { Depop(); return; }
++	if (m_click_only || IsHousingRecipe301()) { Close(); Depop(); return; }
+ 	if (m_id != 0) {
+ 		content_db.DeleteObject(m_id);
+ 	}
+@@ -422,6 +438,7 @@
+ // Add item to object (only logical for world tradeskill containers
+ void Object::PutItem(uint8 index, const EQ::ItemInstance* inst)
+ {
++ if(IsHousingRecipe301())return;
+ 	if (index > 9) {
+ 		LogError("Invalid index specified ([{}])", index);
+ 		return;
+@@ -470,6 +487,7 @@
+ // Remove item from container
+ void Object::DeleteItem(uint8 index)
+ {
++ if(IsHousingRecipe301())return;
+ 	if (m_inst && m_inst->IsType(EQ::item::ItemClassBag)) {
+ 		m_inst->DeleteItem(index);
+ 
+@@ -481,6 +499,7 @@
+ // Pop item out of container
+ EQ::ItemInstance* Object::PopItem(uint8 index)
+ {
++ if(IsHousingRecipe301())return nullptr;
+ 	EQ::ItemInstance* inst = nullptr;
+ 
+ 	if (m_inst && m_inst->IsType(EQ::item::ItemClassBag)) {
+@@ -523,6 +542,13 @@
+ }
+ 
+ bool Object::Process(){
++ if(IsHousingRecipe301()) {
++  auto* owner=entity_list.GetClientByCharID(m_recipe301->actor);
++  if(!owner || owner!=user || owner->GetTradeskillObject()!=this) {user=nullptr;return false;}
++  if(m_recipe301_timer.Check()&&!owner->ValidateHousingRecipe301(*m_recipe301)){Close();return false;}
++  return true;
++ }
++
+ 	if (m_type == ObjectTypes::Temporary && decay_timer.Enabled() && decay_timer.Check()) {
+ 		// Send click to all clients (removes entity on client)
+ 		auto outapp = new EQApplicationPacket(OP_ClickObject, sizeof(ClickObject_Struct));
+@@ -594,6 +620,7 @@
+ 
+ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
+ {
++ if(IsHousingRecipe301() && (!sender || sender->CharacterID()!=m_recipe301->actor || !sender->ValidateHousingRecipe301(*m_recipe301)))return false;
+  if(zone&&!TrophyCertificate55::Custody::WorldAllowed(zone->GetZoneID(),GetDBID()))return false;
+ 	if (m_click_only) {
+ 		if (!sender || !click_object) {
+--- a/zone/object.h
++++ b/zone/object.h
+@@ -17,6 +17,7 @@
+ 	along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+ #pragma once
++#include "housing_recipe301.h"
+ 
+ // Object Class:
+ // Represents Zone Objects (forges, ovens, brew barrels, items dropped to ground, etc)
+@@ -135,6 +136,9 @@
+ {
+  friend class TrophyCertificate55::Custody;
+ public:
++ static bool OpenHousingRecipe301(Client&,const HousingRecipe301::Binding&,const EQ::ItemInstance&);
++ bool IsHousingRecipe301()const {return bool(m_recipe301);}
++ const HousingRecipe301::Binding* HousingRecipe301Origin()const {return m_recipe301.get();}
+ 	// Loading object from database
+ 	Object(uint32 id, uint32 type, uint32 icon, const Object_Struct& data, const EQ::ItemInstance* inst = nullptr, bool fix_z = true);
+ 	Object(const EQ::ItemInstance* inst, const std::string& name, float max_x, float min_x, float max_y, float min_y, float z, float heading, uint32 respawn_timer, bool fix_z);
+@@ -226,6 +230,8 @@
+ protected:
+ 	friend class EntityList;
+ 	bool m_click_only = false;
++ std::unique_ptr<HousingRecipe301::Binding> m_recipe301;
++ Timer m_recipe301_timer{1000};
+ 	std::string m_click_owner;
+ 	std::string m_click_token;
+ 	void	ResetState();	// Set state back to original
+--- a/zone/tradeskills.cpp
++++ b/zone/tradeskills.cpp
+@@ -1,3 +1,4 @@
++#include "housing_recipe301.h"
+ #include "trophy_certificate55.h"
+ /*	EQEmu: EQEmulator
+ 
+@@ -377,6 +378,10 @@
+ // Perform tradeskill combine
+ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Object *worldo)
+ {
++ if(user && user->GetTradeskillObject() && user->GetTradeskillObject()->IsHousingRecipe301()) {
++  user->Message(Chat::Red,"Keep ingredients in your inventory and use the recipe list at this table.");auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;
++ }
++
+ 	if (!user || !in_combine) {
+ 		LogError("Client or NewCombine_Struct not set in Object::HandleCombine");
+ 		auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
+@@ -624,6 +629,9 @@
+ 
+ 
+ 
++ if(HousingRecipe301::Selected(spec.recipe_id)) {
++  user->Message(Chat::Red,"This recipe needs a placed Jewelry Making Table and its recipe list.");auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;
++ }
+  // Capture the actual matched physical input tree before mutable validation hooks.
+  // No clone/replacement/consumption; compare identities and all nested charges/slots.
+  std::unique_ptr<Final300InputTree> final300_inputs;
+@@ -874,6 +882,8 @@
+ 	outp->recipe_id = rac->recipe_id;
+ 	outp->reply_code = 0xFFFFFFF5;	//default fail.
+ 
++
++ if(auto* station=user->GetTradeskillObject();station&&station->IsHousingRecipe301()&&!HousingRecipe301::Selected(rac->recipe_id)){user->QueuePacket(outapp);safe_delete(outapp);return;}
+ 
+ 	//ask the database for the recipe to make sure it exists...
+ 	DBTradeskillRecipe_Struct spec;
+@@ -1155,6 +1165,16 @@
+ 
+ 
+  if(!final300_valid()||!charged_station_valid()||(charged_requirement&&charged_requirement->units&&(results.RowCount()!=1||items[0]!=charged_requirement->input||counts[0]!=charged_requirement->units||!Charged32PackingStillOriginal(*user,*charged_requirement,charged_packing)))){user->QueuePacket(outapp);safe_delete(outapp);return;}
++ std::unique_ptr<HousingRecipe301::Use> housing301_use;
++ if(HousingRecipe301::Selected(spec.recipe_id)) {
++  auto* station=user->GetTradeskillObject();const auto* origin=station?station->HousingRecipe301Origin():nullptr;
++  if(!station||!origin||station->user!=user||station->GetType()!=20||rac->object_type!=20||
++   !station->m_inst||!station->m_inst->IsClassBag()||station->m_inst->GetID()!=54250||!station->m_inst->GetContents()->empty()||
++   uint32_t(spec.tradeskill)!=68||spec.quest||spec.replace_container||spec.onsuccess.size()!=1||
++   spec.onsuccess.begin()->first!=HousingRecipe301::Output(spec.recipe_id)||spec.onsuccess.begin()->second!=1||
++   !(housing301_use=HousingRecipe301::Use::Acquire(*user,*origin))) {user->QueuePacket(outapp);safe_delete(outapp);return;}
++ }
++
+ 	//now we know they have everything...
+ 
+  std::unique_ptr<TrophyCertificate55::Proof> trophy_proof;
+@@ -1186,6 +1206,7 @@
+ 
+ 			const EQ::ItemInstance* inst = user_inv.GetItem(slot);
+ 
++			if(housing301_use&&!housing301_use->Held()){user->QueuePacket(outapp);safe_delete(outapp);return;}
+ 			if (inst && !inst->IsStackable())
+ 				user->DeleteItemInInventory(slot, 0, true);
+ 			else
+@@ -1199,6 +1220,7 @@
+   user->DeleteItemInInventory(charged_packing.kit_slot,0,true);spec.replace_container=false;
+  }
+  }
++ housing301_use.reset(); // release source-only locks before output/task/quest hooks
+ 	//otherwise, we found it all...
+ 	outp->reply_code = 0x00000000;	//success for finding it...
+ 	user->QueuePacket(outapp);
