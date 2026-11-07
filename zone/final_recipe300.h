@@ -2,13 +2,13 @@
 #include <cstdint>
 #include <cmath>
 #include <cstring>
-// Original fourteen, two never-learn307 routes, one Northman309 route. No global policy.
+// Existing finite routes plus the explicitly never-learn Grimling312 tool. No global policy.
 namespace FinalRecipe300 {
-inline bool Selected(uint32_t id) { return (id >= 3102753 && id <= 3102766) || id == 3102867 || id == 3102868 || id == 3102882; }
-inline bool NeverLearn(uint32_t id) { return id == 3102756 || id == 3102757 || id == 3102867 || id == 3102868; }
+inline bool Selected(uint32_t id) { return (id >= 3102753 && id <= 3102766) || id == 3102867 || id == 3102868 || id == 3102882 || id == 3102918; }
+inline bool NeverLearn(uint32_t id) { return id == 3102756 || id == 3102757 || id == 3102867 || id == 3102868 || id == 3102918; }
 inline bool Font(uint32_t id) { return id >= 3102758 && id <= 3102764; }
 inline uint32_t Skill(uint32_t id) {
- if (id == 3102867) return 64;
+ if (id == 3102867 || id == 3102918) return 64;
  if (id == 3102868 || id == 3102882) return 63;
  if (id <= 3102754) return 69;
  if (id == 3102755) return 63;
@@ -17,13 +17,13 @@ inline uint32_t Skill(uint32_t id) {
 }
 inline bool RaceAllowed(uint32_t id, uint32_t race) {
  if (id == 3102882) return race == 2;
- if (id == 3102867 || id == 3102868) return true;
+ if (id == 3102867 || id == 3102868 || id == 3102918) return true;
  return id <= 3102754 ? race == 130 : id != 3102755 || race == 9;
 }
 inline bool WorldAllowed(uint32_t id, uint32_t zone, uint16_t version,
  uint32_t object, uint32_t type, uint32_t item) {
  if (!Selected(id) || Font(id) || item != 0) return false;
- if (id == 3102867) return false; // actual owned portable Fletching Kit only
+ if (id == 3102867 || id == 3102918) return false; // actual owned portable Fletching Kit only
  if (id == 3102868) return type == 17;
  if (id == 3102882) return zone == 29 && version == 0 && object == 40 && type == 36;
  if (id <= 3102754) return type == 22;

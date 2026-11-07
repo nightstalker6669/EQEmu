@@ -1160,6 +1160,10 @@ inline constexpr Requirement Requirements[] = {
  {3102792,Race::Ogre,92880,16,7,1},
  {3102793,Race::Ogre,92880,16,7,1},
  {3102794,Race::Ogre,92880,16,7,1},
+ {3102892,Race::Erudite,92873,16,7,1},
+ {3102893,Race::Erudite,92873,16,7,1},
+ {3102894,Race::Erudite,92873,16,7,1},
+ {3102895,Race::Erudite,92873,16,7,1},
 };
 inline const Requirement* Find(std::uint32_t id) noexcept {
  constexpr std::uint32_t count=sizeof(Requirements)/sizeof(Requirements[0]);
