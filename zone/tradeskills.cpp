@@ -1,3 +1,4 @@
+#include "recharge_recipe8.h"
 #include "final_recipe302.h"
 #include "housing_recipe301.h"
 #include "trophy_certificate55.h"
@@ -671,12 +672,22 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
  // No clone/replacement/consumption; compare identities and all nested charges/slots.
  // Keep the original finite307/309 selector bound across mutable validation.
  const auto final307_recipe=(spec.recipe_id==3102867 || spec.recipe_id==3102868 || spec.recipe_id==3102882)?spec.recipe_id:0;
+ const auto recharge_recipe=RechargeRecipe8::Find(spec.recipe_id)?spec.recipe_id:0;
+ const auto recharge_parent_slot=in_combine->container_slot;
+ std::unique_ptr<Final300InputTree> recharge_inputs;
  std::unique_ptr<Final300InputTree> final300_inputs;
  const auto final300_owner=user->InventorySessionReleaseTicket();
  const auto final300_character=user->CharacterID();
  const auto final300_account=user->AccountID();
  auto* const final300_world=worldcontainer?worldo:nullptr;
  const auto final300_world_id=final300_world?final300_world->GetDBID():0;
+ if(recharge_recipe) {
+  if(worldcontainer || !container || !final300_owner || !final300_owner->HeldFor(*user)) {
+   auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;
+  }
+  try { recharge_inputs=std::make_unique<Final300InputTree>(Final300InputTree{Final300InputTree::Capture(*container)}); }
+  catch(...) {auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+ }
  if(FinalRecipe300::Selected(spec.recipe_id)) {
   if(!container || !final300_owner || !final300_owner->HeldFor(*user)) {
    auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;
@@ -725,6 +736,17 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
   return Final300InputTree::Same(final302_inputs->root,current);
  };
  if(!final302_valid()){user->Message(Chat::Red,"This recipe requires its correct container and original ingredients.");auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+ const auto recharge_valid=[&](){
+  if(!recharge_recipe && !RechargeRecipe8::Find(spec.recipe_id))return true;
+  if(!recharge_recipe || spec.recipe_id!=recharge_recipe || worldcontainer || !recharge_inputs ||
+   !final300_owner || !final300_owner->HeldFor(*user) || user->CharacterID()!=final300_character || user->AccountID()!=final300_account || user->GetPP().race!=12)return false;
+  if(in_combine->container_slot!=recharge_parent_slot || !EQ::ValueWithin(recharge_parent_slot,EQ::invslot::GENERAL_BEGIN,EQ::invslot::GENERAL_END))return false;
+  const auto* current=user->GetInv().GetItem(recharge_parent_slot);
+  const auto* data=current&&current->IsClassBag()?current->GetItem():nullptr;
+  return current==container && data && data->ID==17902 && data->BagType==10 && data->BagSlots==8 && data->BagSize==4 &&
+   Final300InputTree::Same(recharge_inputs->root,current);
+ };
+ if(!recharge_valid()){auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
  const auto final300_valid=[&](){
   if(final307_recipe && spec.recipe_id!=final307_recipe)return false;
   if(!FinalRecipe300::Selected(spec.recipe_id))return true;
@@ -858,18 +880,23 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
 	}
 
 
- if(!ogre303_valid()||!final302_valid()||!final300_valid()||!charged_station_valid()||(charged_requirement&&charged_requirement->units&&!Charged32PackingStillOriginal(*user,*charged_requirement,charged_packing))){auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
+ if(!recharge_valid()||!ogre303_valid()||!final302_valid()||!final300_valid()||!charged_station_valid()||(charged_requirement&&charged_requirement->units&&!Charged32PackingStillOriginal(*user,*charged_requirement,charged_packing))){auto* denied=new EQApplicationPacket(OP_TradeSkillCombine,0);user->QueuePacket(denied);safe_delete(denied);return;}
 	// Send acknowledgement packets to client
 	auto outapp = new EQApplicationPacket(OP_TradeSkillCombine, 0);
 	user->QueuePacket(outapp);
 	safe_delete(outapp);
 
+ std::unique_ptr<RechargeRecipe8::Proof> recharge_proof;
+ if(RechargeRecipe8::Find(spec.recipe_id)) {
+  recharge_proof=RechargeRecipe8::Custody::Manual(*user,spec,worldcontainer?worldo:nullptr,container,in_combine->container_slot);
+  if(!recharge_proof)return;
+ }
  std::unique_ptr<TrophyCertificate55::Proof> trophy_proof;
  if(TrophyCertificate55::Find(spec.recipe_id)) {
   trophy_proof=TrophyCertificate55::Custody::Manual(*user,spec,worldcontainer?worldo:nullptr,container,in_combine->container_slot);
   if(!trophy_proof)return;
  }
- if(!trophy_proof){
+ if(!trophy_proof && !recharge_proof){
 	//now clean out the containers.
 	if(worldcontainer){
 		container->Clear();
@@ -897,8 +924,9 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
   user->DeleteItemInInventory(charged_packing.kit_slot,0,true);spec.replace_container=false;
  }
  }
- if(trophy_proof)user->CalcBonuses();
- bool success=trophy_proof?TrophyCertificate55::Custody::Complete(*user,std::move(trophy_proof),spec):user->TradeskillExecute(&spec);
+ if(trophy_proof || recharge_proof)user->CalcBonuses();
+ bool success=recharge_proof?RechargeRecipe8::Custody::Complete(*user,std::move(recharge_proof),spec):
+  trophy_proof?TrophyCertificate55::Custody::Complete(*user,std::move(trophy_proof),spec):user->TradeskillExecute(&spec);
 
 	// Learn new recipe message
 	// Update Made count
@@ -976,6 +1004,12 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 		safe_delete(outapp);
 		return;
 	}
+
+ // Reject the original recharge selector before mutable validation callbacks.
+ // The later gate also rejects an ordinary selector changed into a recharge.
+ if(RechargeRecipe8::Find(spec.recipe_id)) {
+  user->Message(Chat::Red,"Use an opened Toolbox to recharge this device.");user->QueuePacket(outapp);safe_delete(outapp);return;
+ }
 
 	if (ResearchTablet335::Selected(spec.recipe_id)) {
 		// Packet recipe/container identifiers confer no ownership or maker-class authority.
@@ -1286,6 +1320,9 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 	}
 
 
+ if(RechargeRecipe8::Find(spec.recipe_id)) {
+  user->Message(Chat::Red,"Use an opened Toolbox to recharge this device.");user->QueuePacket(outapp);safe_delete(outapp);return;
+ }
  if(!ogre303_valid()||!final302_valid()||!final300_valid()||!charged_station_valid()||(charged_requirement&&charged_requirement->units&&(results.RowCount()!=1||items[0]!=charged_requirement->input||counts[0]!=charged_requirement->units||!Charged32PackingStillOriginal(*user,*charged_requirement,charged_packing)))){user->QueuePacket(outapp);safe_delete(outapp);return;}
  std::unique_ptr<HousingRecipe301::Use> housing301_use;
  if(HousingRecipe301::Selected(spec.recipe_id)) {
@@ -1582,6 +1619,8 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 		return false;
 	}
 
+ const bool recharge_selected=RechargeRecipe8::Find(spec->recipe_id)!=nullptr;
+ if(recharge_selected&&!RechargeRecipe8::Custody::Claim(*this,*spec))return false;
  const bool trophy_selected=TrophyCertificate55::Find(spec->recipe_id)!=nullptr;
  if(trophy_selected&&!TrophyCertificate55::Custody::Claim(*this,*spec))return false;
 	uint16 user_skill = GetSkill(spec->tradeskill);
@@ -1742,7 +1781,7 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 			item = database.GetItem(itr->first);
 			if (item) {
 				CheckItemDiscoverability(itr->first);
-				if(!trophy_selected) SummonItem(itr->first, FinalRecipe300::SummonCount(spec->recipe_id, itr->first, ChargedRecipe32::SummonCount(spec->recipe_id, itr->first, itr->second)));
+				if(!trophy_selected && !recharge_selected) SummonItem(itr->first, FinalRecipe300::SummonCount(spec->recipe_id, itr->first, ChargedRecipe32::SummonCount(spec->recipe_id, itr->first, itr->second)));
 				if (GetGroup()) {
 					entity_list.MessageGroup(this, true, Chat::Skills, "%s has successfully fashioned %s!", GetName(), item->Name);
 				}

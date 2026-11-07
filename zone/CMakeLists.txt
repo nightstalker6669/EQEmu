@@ -135,6 +135,7 @@ set(zone_sources
 	tasks.cpp
 	titles.cpp
 	trophy_certificate55.cpp
+	recharge_recipe8.cpp
 	tradeskills.cpp
 	trading.cpp
 	trap.cpp

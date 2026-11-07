@@ -1,3 +1,4 @@
+namespace RechargeRecipe8 {class Custody;}
 namespace TrophyCertificate55 {class Custody;}
 namespace FungalInventory {class NativeCustody;}
 /*	EQEmu: EQEmulator
@@ -89,6 +90,7 @@ namespace EQ
 		friend class FirePersonalOccurrenceSource::NativeItemCustody;
 		friend class FungalInventory::NativeCustody;
 		friend class TrophyCertificate55::Custody;
+ friend class RechargeRecipe8::Custody;
 	public:
 		///////////////////////////////
 		// Public Methods

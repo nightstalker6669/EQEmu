@@ -1,3 +1,4 @@
+namespace RechargeRecipe8 {class Custody;}
 namespace TrophyCertificate55 {class Custody;}
 #include "fire_native_inventory_fence.h"
 /*	EQEmu: EQEmulator
@@ -70,6 +71,7 @@ namespace EQ
 
 	class ItemInstance {
 		friend class TrophyCertificate55::Custody;
+ friend class RechargeRecipe8::Custody;
 	public:
 		/////////////////////////
 		// Methods

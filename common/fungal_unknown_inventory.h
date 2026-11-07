@@ -1,3 +1,4 @@
+namespace RechargeRecipe8 {class Custody;}
 namespace TrophyCertificate55 {class Custody;}
 #pragma once
 #include <algorithm>
@@ -6,12 +7,13 @@ namespace TrophyCertificate55 {class Custody;}
 namespace EQ {class InventoryProfile;class ItemInstance;}
 namespace FungalInventory {
 class NativeCustody;
-// Only the three finite writer operations can attach this hold. It is activated
+// Existing finite native writers may attach this shared admission hold. It is activated
 // ONLY on unknown strict commit, with all allocations made before persistence.
 // No new authority, task grant API, whitelist or Fire action-table reuse.
 class UnknownInventory final {
  friend class NativeCustody;
  friend class TrophyCertificate55::Custody;
+ friend class RechargeRecipe8::Custody;
  UnknownInventory()=default;
  uint32_t character_=0;
  const EQ::InventoryProfile* inventory_=nullptr;
