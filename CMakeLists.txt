@@ -76,7 +76,7 @@ if(UNIX)
 	endif()
 endif()
 
-find_package(Boost REQUIRED COMPONENTS dynamic_bitset foreach tuple CONFIG REQUIRED)
+find_package(Boost REQUIRED COMPONENTS dynamic_bitset foreach multiprecision tuple CONFIG REQUIRED)
 find_package(cereal CONFIG REQUIRED)
 find_package(fmt CONFIG REQUIRED)
 find_package(glm CONFIG REQUIRED)
