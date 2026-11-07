@@ -42,7 +42,16 @@ namespace perl = perlbind;
 #undef Null
 
 #ifdef WIN32
+#if defined(_MSC_VER) && _MSC_VER >= 1900
+// Modern MSVC provides snprintf. Do not leak Perl/legacy aliases into C++ headers.
+#ifdef snprintf
+#undef snprintf
+#endif
+#else
+#ifndef snprintf
 #define snprintf _snprintf
+#endif
+#endif
 #endif
 
 //perl defines these macros and dosent clean them up, lazy bastards. -- I hate them too!

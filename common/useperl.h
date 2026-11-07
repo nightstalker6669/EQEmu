@@ -39,8 +39,15 @@ extern "C" {	//the perl headers dont do this for us...
 #endif
 
 #ifdef WIN32
+#if defined(_MSC_VER) && _MSC_VER >= 1900
+// Modern MSVC provides snprintf. Do not leak Perl/legacy aliases into C++ headers.
+#ifdef snprintf
+#undef snprintf
+#endif
+#else
 #ifndef snprintf
 #define snprintf _snprintf
+#endif
 #endif
 #endif
 
