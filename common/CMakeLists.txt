@@ -896,3 +896,11 @@ endif()
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set_property(TARGET common PROPERTY FOLDER libraries)
+
+# The supervised inventory launcher must use a helper built from this same revision.
+add_executable(inventory_recovery_cli housing/inventory_recovery_cli.cpp)
+target_link_libraries(inventory_recovery_cli PRIVATE common)
+set_target_properties(inventory_recovery_cli PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin"
+    FOLDER executables/tools)
+install(TARGETS inventory_recovery_cli RUNTIME DESTINATION bin)
