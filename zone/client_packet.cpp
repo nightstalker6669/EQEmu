@@ -5269,7 +5269,7 @@ void Client::Handle_OP_ClickObject(const EQApplicationPacket *app)
 	}
 	const auto object_id = static_cast<uint16>(click_object.drop_id);
 	auto click_scope = entity_list.PinObjectForClick(object_id);
-	auto *object = click_scope.GetObject();
+	auto *object = click_scope.GetPinnedObject();
 	if (object) {
 
 		object->HandleClick(this, &click_object);

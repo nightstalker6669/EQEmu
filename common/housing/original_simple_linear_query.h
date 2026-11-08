@@ -32,7 +32,7 @@ inline Enumeration Enumerate(const Source& source,const Context& context,const P
  try{for(uint32_t n=source.definition.polygon_count;n>0;--n){if(out.visited==budget){out.status=Status::BudgetExceeded;return out;}++out.visited;const auto id=n-1;const auto&p=source.mesh->polygons[id];const auto&c=source.descriptors[id];if(p.index!=id||p.flags)return out;
   if(!c.valid){++out.invalid_descriptors;continue;}
   if(context.backface_cull){auto front=OriginalSimpleTreeQuery::Front(*q,c.normal);if(!front){out.status=Status::Unknown;return out;}if(!*front){++out.backfaces;continue;}}
-  auto near=OriginalSimpleTreeQuery::DistanceMayReach(*q,p.native_abc[0],c.radius,1);if(!near){out.status=Status::Unknown;return out;}if(!*near){++out.distance_pruned;continue;}out.polygon_ids.push_back(id);
+  auto may_reach=OriginalSimpleTreeQuery::DistanceMayReach(*q,p.native_abc[0],c.radius,1);if(!may_reach){out.status=Status::Unknown;return out;}if(!*may_reach){++out.distance_pruned;continue;}out.polygon_ids.push_back(id);
  }out.status=Status::Ready;return out;}catch(...){return out;}
 }
 enum class ContactStatus {Hit,Clear,Unknown};

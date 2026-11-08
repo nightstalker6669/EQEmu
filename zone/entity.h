@@ -150,7 +150,7 @@ public:
 			other.object_ = nullptr;
 		}
 		~ObjectClickScope();
-		Object *GetObject() const { return object_; }
+		Object *GetPinnedObject() const { return object_; }
 	private:
 		friend class EntityList;
 		ObjectClickScope(EntityList *owner, Object *object) : owner_(owner), object_(object) {}
