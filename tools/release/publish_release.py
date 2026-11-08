@@ -95,13 +95,18 @@ Read the platform install guide, CONTENT-LIMITS.md and per-platform manifest. 32
         print('::notice::Source advanced before staging; Latest remains untouched')
         return
     # A failed upload/readback leaves only an unpublished draft; no existing release is edited/deleted.
-    subprocess.run(['gh', 'release', 'create', tag, '--repo', repo, '--draft', '--target', sha,
-                    '--title', 'RoF2 CI runtime r' + str(number) + ' (' + sha[:12] + ')', '--notes-file', str(notes)], check=True)
+    created = api('repos/' + repo + '/releases', 'POST', {
+        'tag_name': tag, 'target_commitish': sha, 'draft': True,
+        'name': 'RoF2 CI runtime r' + str(number) + ' (' + sha[:12] + ')',
+        'body': notes.read_text(encoding='utf-8')})
+    if not created['draft'] or created['tag_name'] != tag or created['target_commitish'] != sha:
+        raise RuntimeError('Created draft source/tag differs; no promotion attempted')
+    release_id = created['id']
     files = sorted(p for p in directory.iterdir() if p.is_file())
     subprocess.run(['gh', 'release', 'upload', tag, '--repo', repo] + [str(p) for p in files], check=True)
-    release = api('repos/' + repo + '/releases/tags/' + tag)
-    if not release['draft']:
-        raise RuntimeError('Staging release is unexpectedly public')
+    release = api('repos/' + repo + '/releases/' + str(release_id))
+    if not release['draft'] or release['tag_name'] != tag or release['target_commitish'] != sha:
+        raise RuntimeError('Staging release source/tag/draft differs')
     assets = {x['name']: x for x in release['assets']}
     if set(assets) != {p.name for p in files}:
         raise RuntimeError('Incomplete staged remote release; draft remains unpublished')
