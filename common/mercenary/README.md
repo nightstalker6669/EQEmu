@@ -36,6 +36,10 @@ The standard content snapshot contains 553 templates, 2,380 stat rows across 28 
 
 The restored Journeyman III–V content passed local original-client hire, spawn, HP/mana and dismissal checks for all four roles at level 85 on 2026-10-30. See [rank acceptance and its limits](RANKS.md#evidence-boundaries).
 
+## Level 86–100 content update
+
+Apply `utils/sql/mercenary/006_level86_100_content.sql` after 005 with the matched source. It adds explicit rows for all 40 variants, current role/proficiency spell progressions and NPC focus ranges through 100. Read [LEVEL100.md](LEVEL100.md) for the reconstruction model, era limits, exact-preimage safeguards, release/cache requirements and gameplay-validation boundary. Existing fallback remains available; this is not a claim of exact Live balance.
+
 ## Rules and policies
 
 | Setting | Behavior |

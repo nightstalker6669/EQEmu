@@ -231,6 +231,18 @@ def package(args):
         stage.mkdir()
         seed_content(seed, inputs['runtime_content'], stage)
         database_content(database, db, stage)
+        # New qualifications must come from this checkout, not the older content seed.
+        merc_docs = stage / 'common/mercenary'
+        merc_docs.mkdir(parents=True)
+        shutil.copy2(repo / 'common/mercenary/LEVEL100.md', merc_docs / 'LEVEL100.md')
+        limits = stage / 'CONTENT-LIMITS.md'
+        with limits.open('a', encoding='utf-8') as output:
+            output.write('\n## Mercenary level 86–100 content\n\n'
+                         'The numeric stats and NPC repertoire are documented emulator reconstruction; '
+                         'an immutable May 2013 definition snapshot and exact historical Live balance/casts '
+                         'are not authenticated. Read [the same-source level-100 guide]'
+                         '(common/mercenary/LEVEL100.md) for scope, cache/upgrade requirements and native '
+                         'acceptance limits. Build/package success does not establish gameplay acceptance.\n')
         native = stage / 'server/bin'
         native.mkdir(parents=True)
         hashes, binaries = {}, []

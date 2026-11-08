@@ -1,19 +1,29 @@
 {
   "database": {
     "CI_consumption": [
-      "Fetch this explicit public release asset without any live DB access.",
-      "Verify downloaded ZIP against committed asset.sha256; a remote checksum sidecar is informational only.",
-      "Verify required root member hashes and SHA256SUMS payload inventory; extract identical full.sql and all331Housing JSON files for the server release bundle.",
-      "Carry README.md, COMPLETED-RECIPE-UPDATES.json, TABLE-INVENTORY.json and checksums with the bundle; preserve fresh-empty-only semantics and reconstruction/source limitations."
+      "Fetch explicit tag/asset and verify committed assetSHA256; remote checksum sidecar is informational, not authority.",
+      "Verify rootmember hashes and SHA256SUMS inventory; package identical full.sql and331HousingJSON plus all qualificationdocs. No live DB access/reassembly/private config required.",
+      "Bind the coherent final mercenary code+SQL/docs+this validated DBreleasepin in ONEdevelopintegration/push/CIbuild; sourcefeature5178 is authoritative stagedcohort provenance, finalintegration commit separately GitHub-owned."
     ],
     "asset": {
-      "bytes": 35791918,
-      "name": "PEQ-RoF2-full-2026-11-07.zip",
-      "sha256": "6cdc90e335c90bcb1427067063326dfb4de04c2e3afd3d6ee1367c1107b4e1d8",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-07/PEQ-RoF2-full-2026-11-07.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-07/PEQ-RoF2-full-2026-11-07.zip"
+      "bytes": 35850444,
+      "name": "PEQ-RoF2-full-2026-11-07-mercenary86-100.zip",
+      "sha256": "022eac4166e5052d123635084dc6e9d65274170b201933c0d5404d593554722a",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-07-mercenary86-100/PEQ-RoF2-full-2026-11-07-mercenary86-100.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-07-mercenary86-100/PEQ-RoF2-full-2026-11-07-mercenary86-100.zip"
+    },
+    "base_database_source_commit": "945e9f1b772d457fcb451e0a3e23f91f32936ec3",
+    "cohort_source_binding": {
+      "SQL_sha256": "6ad8f950c178e9c1d84658387c521dc33695572fd8926c30a711aff44e50790f",
+      "complete_patch_sha256": "a5b2b0022a9b339fbed6d45d9823090236dd2638b0cb5f2c2d8e6d4f8d7d1816",
+      "expected_develop_merc_cpp_postimage_sha256": "11ac144556a3caa91e9ab33bd31e937a9a30c2ab1f117265c32a77b30db99c91",
+      "feature_branch": "rof2-mercenaries",
+      "feature_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
+      "manifest_sha256": "78710b4716455c626cc62189cca8eacd252d2ce796adc018c0b4dd18657aace9",
+      "source_base_commit": "c642eb178b8a0a9881812c2b3d3f188acb1217d8"
     },
     "database_repository": "nightstalker6669/EQEmu-Database",
+    "database_source_capture_commit": "92220a200c51da46bfa334871dc8328a859f6aa9",
     "format": "eqemu-ci-database-release-inputs-v1",
     "fresh_install": {
       "MariaDB": "10.11",
@@ -23,50 +33,59 @@
       "custom_version": 0,
       "empty_private_player_and_operation_tables_preserved": true,
       "full_dump_replaces_tables": true,
+      "merc_inventory": 81,
+      "merc_spell_list_entries": 625,
+      "merc_stats": 4000,
       "new_empty_database_only": true,
       "player_preserving_upgrade": false,
       "recipe_entries": 261389,
       "recipes": 34486,
-      "rows": 3049781,
+      "rows": 3050609,
       "schema_version": 9338,
       "views": 1
     },
-    "future_update_policy": "A newer matching database requires a separately assembled and validated sanitized DB release, its exact source commit/tag/asset hash, and an explicit committed update of this contract. Never silently select Latest/latest, redump a running DB, replay unfinished migrations, or enable drafts in CI.",
-    "metadata_basis": "Existing verified November7 export receipt/README/SHA256SUMS only; no new DBquery/reassembly/test/runtime observation.",
+    "future_update_policy": "A futurematchedDBversion requires a separately validatedwholecohort sanitizedrelease and explicitcommitted source/tag/assetdigest pin; never silently mutableLatest/latestDB, partialrank/itemexports, or old945-only pin for newcohort. ActualCIfailure corrections gather allvisible errors in one batch.",
+    "live_application_status": "HOLD_SEPARATE_ROOT_MATCHED_DEPLOYMENT_AUTHORITY",
+    "native_gameplay_acceptance": false,
     "payload_inventory": {
       "all_member_sha256_file": "SHA256SUMS",
-      "full_sql_bytes": 300983691,
+      "full_sql_bytes": 301066842,
       "housing_json_member_count": 331,
       "housing_json_prefix": "housing-runtime-content/",
       "housing_profile_bindings": "housing-runtime-content/PROFILE-BINDINGS.json",
       "housing_profile_bindings_sha256": "4d6c3533a882ce79ef790caa08a781a1994d56ac3d9c58a8459bb9e1ac9b73b2",
       "identical_SQL_and_Housing_bytes_required": true,
-      "payload_member_count": 336
+      "payload_member_count": 337
     },
-    "pin_semantics": "Tag and asset name locate the release. The committed source commit and SHA256 identify the accepted immutable input; never trust a mutable Latest/latest database asset or its remote sidecar as replacement authority.",
     "qualification_documents": [
       "README.md",
+      "MERCENARY86-100-CONTENT.json",
       "COMPLETED-RECIPE-UPDATES.json",
       "TABLE-INVENTORY.json",
       "housing-runtime-content/PROFILE-BINDINGS.json"
     ],
-    "release_tag": "peq-rof2-2026-11-07",
+    "release_tag": "peq-rof2-2026-11-07-mercenary86-100",
     "required_code_boundary": {
       "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
+      "completed_mercenary_feature_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
       "external_operator_resources": "Authenticated original RoF2 archives/maps and matching server quests/opcodes; generate fresh target shared memory normally."
     },
     "required_members_sha256": {
       "COMPLETED-RECIPE-UPDATES.json": "fdf459a6bef7e90351d3db5c983e30920205876a990aa144b5779a4c242d25e0",
-      "README.md": "9399459269f1f2a5bc508f5e943dc9388e8f47887c1c459f0656f96cb9f4edcf",
-      "SHA256SUMS": "e5ba4f6c6399876a8fdf56541ecbf7c8f03c7511dcc6046b009e1dc9498e0eb2",
-      "TABLE-INVENTORY.json": "873e12738393031cd7b03537707f45a205cae179e0ecdf2403e296d8f4cfa7f5",
-      "full.sql": "b00a9ceb63ded0f6a2d1453ac0002277be2e925f48a09eb6ace179df63b31df6"
+      "MERCENARY86-100-CONTENT.json": "27a9d180e6a66320ae9877cd763341f6579d0a1a8a66ac6fc23c26fb9dc15c16",
+      "README.md": "9d661df4676661cd6f3d791679e371622c4eb382d78cfd62e55186846d3b8172",
+      "SHA256SUMS": "959e764199d19663fce7a9d4c43fbe86d1e961034c951c709029d3846e195237",
+      "TABLE-INVENTORY.json": "d6f167fbfbe3f7cbd64b44932d735f985af1e6551fcc8d5e06beceae49b1f330",
+      "full.sql": "2985a52a017a77bde5bbbe5cfe835ad83351ecbb858dbf07405904f0a1759fdf"
     },
     "runtime_or_DB_access_required_for_packaging": false,
-    "source_commit": "945e9f1b772d457fcb451e0a3e23f91f32936ec3"
+    "source_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
+    "source_commit_role": "Exact finalcohort featurecheckpoint in EQEmu; NOT a Database repository commit. Separate base_database_source_commit is prior sanitizedDB provenance only.",
+    "source_repository": "nightstalker6669/EQEmu",
+    "verification_basis": "Existing validateddisposableassembly: exact600stats/188newspells/50legacycaps/40focus rows, allother3tablecells and allunrelatedtablecounts unchanged;ZIPCRC/allmemberSHA/331Housingbytes PASS. No liveapply or nativegameplayacceptance."
   },
-  "database_contract_sha256": "872f113486489237387b588b0404bdbe10c5de02194a3e9875cbcb53c1a9ef14",
+  "database_contract_sha256": "5221357c6aaab77e2a648c4bc10f7532b42ac571ccea72b0ac15ff96de800b1c",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [

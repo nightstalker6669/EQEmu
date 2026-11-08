@@ -24,3 +24,7 @@ The exact build ABI and runtime dependency inventory follows. Install matching l
 The helper `inventory_recovery_cli` and `export_client_files` are built from this exact server commit. The latter is an operator tool; CI does not connect to a serving database or export private data. Runtime logs, generated shared memory, player state, credentials and exported client files belong only to your installation.
 
 Preserve LOCAL/reconstruction/source-unconfirmed and unfinished-content qualifications. The three open recipe bounds do not gain an invented scalar, and inactive/unfinished features are not made accepted by packaging. For upgrades to an existing player database, obtain a separately reviewed additive migration plan; this full database dump is a fresh-install input only.
+
+## Mercenary level 86–100 qualification
+
+Read [the level-100 content guide](common/mercenary/LEVEL100.md). Its stat curves and NPC repertoire are documented emulator reconstruction; immutable May 2013 spell definitions, exact historical Live balance and historical NPC casts are not authenticated. The matched sanitized database supplies the reviewed content; build/package success does not establish native gameplay acceptance. Existing player databases need the separately coordinated additive migration and normal mercenary catalogue cache refresh. Do not import this package's full database over player data.
