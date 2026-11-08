@@ -75,6 +75,50 @@ def fetch(pin, cache):
     return target
 
 
+def input_pins(inputs):
+    pins = (inputs['database']['asset'], inputs['runtime_content'])
+    names = [pin['sha256'] for pin in pins]
+    if any(not re.fullmatch('[0-9a-f]{64}', name) for name in names) or len(set(names)) != 2:
+        raise ValueError('Expected two distinct SHA256-named public input assets')
+    return pins
+
+
+def verified_input_files(inputs, directory):
+    pins = input_pins(inputs)
+    expected = {pin['sha256'] for pin in pins}
+    if not directory.is_dir() or directory.is_symlink():
+        raise ValueError('Pinned input artifact directory is missing or invalid')
+    if {path.name for path in directory.iterdir()} != expected:
+        raise ValueError('Pinned input artifact has missing or unexpected files')
+    paths = []
+    for pin in pins:
+        path = directory / pin['sha256']
+        if path.is_symlink() or not path.is_file() or path.stat().st_size != pin['bytes'] or digest(path) != pin['sha256']:
+            raise ValueError('Pinned input artifact bytes/hash differ: ' + pin['sha256'])
+        paths.append(path)
+    return paths
+
+
+def prepare_inputs(args):
+    repo = args.source.resolve()
+    contract = repo / 'tools/release/release-inputs.json'
+    inputs = json.loads(contract.read_text(encoding='utf-8'))
+    commit = capture(['git', '-C', str(repo), 'rev-parse', 'HEAD'])
+    if commit != os.environ['GITHUB_SHA']:
+        raise ValueError('Input producer checkout differs from this workflow commit')
+    cache = args.build.resolve() / 'release-input-cache'
+    cache.mkdir(parents=True, exist_ok=True)
+    output = args.prepare_inputs.resolve()
+    output.mkdir(parents=True, exist_ok=True)
+    if any(output.iterdir()):
+        raise ValueError('Pinned input artifact output must be empty')
+    for pin in input_pins(inputs):
+        shutil.copy2(fetch(pin, cache), output / pin['sha256'])
+    verified_input_files(inputs, output)
+    print(json.dumps({'commit': commit, 'release_inputs_sha256': digest(contract),
+                      'artifact_files': sorted(path.name for path in output.iterdir())}))
+
+
 def copy_member(z, info, target, expected=None):
     member_name(info)
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -239,10 +283,9 @@ def package(args):
     platform_id = 'Windows-x64' if windows else 'Linux-x86_64'
     stem = 'EQEmu-RoF2-' + platform_id
     binary_dir = build / 'bin/Release' if windows else build / 'bin'
-    cache = build / 'release-input-cache'
-    cache.mkdir(exist_ok=True)
-    database = fetch(db['asset'], cache)
-    seed = fetch(inputs['runtime_content'], cache)
+    if args.input_directory is None:
+        raise ValueError('Packaging requires the verified shared input artifact; no public-download fallback')
+    database, seed = verified_input_files(inputs, args.input_directory)
     out.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='eqemu-release-', dir=build) as tmp:
         stage = Path(tmp) / 'EQEmu-RoF2-server'
@@ -340,5 +383,16 @@ if __name__ == '__main__':
     parser.add_argument('--source', type=Path, default=Path('.'))
     parser.add_argument('--build', type=Path, default=Path('build'))
     parser.add_argument('--output', type=Path, default=Path('dist'))
-    parser.add_argument('--platform', choices=['linux', 'windows'], required=True)
-    package(parser.parse_args())
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--platform', choices=['linux', 'windows'])
+    mode.add_argument('--prepare-inputs', type=Path, help='Fetch/verify only the two public pins into an empty artifact directory')
+    parser.add_argument('--input-directory', type=Path, help='Exact shared input artifact directory; packaging never fetches missing files')
+    args = parser.parse_args()
+    if args.prepare_inputs is not None:
+        if args.input_directory is not None:
+            parser.error('--input-directory belongs to packaging, not input preparation')
+        prepare_inputs(args)
+    else:
+        if args.input_directory is None:
+            parser.error('--platform requires --input-directory')
+        package(args)

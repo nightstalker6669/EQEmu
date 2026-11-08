@@ -8,8 +8,38 @@ on:
 permissions:
   contents: read
 jobs:
+  inputs:
+    name: Fetch pinned public inputs
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout input contract
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Restore pinned public input cache
+        uses: actions/cache@v5
+        with:
+          path: build/release-input-cache
+          key: pinned-release-inputs-v1-${{ hashFiles('tools/release/release-inputs.json') }}
+
+      - name: Fetch and verify public inputs
+        run: python3 tools/release/package_runtime.py --prepare-inputs pinned-release-inputs
+
+      - name: Hand off only the two verified public assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: pinned-release-inputs
+          path: pinned-release-inputs/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+
   linux:
     name: Linux
+    needs: inputs
+    if: ${{ always() && !cancelled() && (needs.inputs.result == 'success' || needs.inputs.result == 'skipped') }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
@@ -65,9 +95,16 @@ jobs:
         working-directory: build
         run: ./bin/tests
 
+      - name: Receive verified pinned input artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
+        uses: actions/download-artifact@v4
+        with:
+          name: pinned-release-inputs
+          path: build/release-input-cache
+
       - name: Package linux runtime
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
-        run: python3 tools/release/package_runtime.py --platform linux
+        run: python3 tools/release/package_runtime.py --platform linux --input-directory build/release-input-cache
 
       - name: Upload linux runtime
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
@@ -80,6 +117,8 @@ jobs:
 
   windows:
     name: Windows
+    needs: inputs
+    if: ${{ always() && !cancelled() && (needs.inputs.result == 'success' || needs.inputs.result == 'skipped') }}
     runs-on: windows-latest
     env:
       VCPKG_DOWNLOADS: ${{ github.workspace }}\submodules\vcpkg\downloads
@@ -130,9 +169,16 @@ jobs:
         working-directory: build
         run: ./bin/Release/tests.exe
 
+      - name: Receive verified pinned input artifact
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
+        uses: actions/download-artifact@v4
+        with:
+          name: pinned-release-inputs
+          path: build/release-input-cache
+
       - name: Package windows runtime
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
-        run: python tools/release/package_runtime.py --platform windows
+        run: python tools/release/package_runtime.py --platform windows --input-directory build/release-input-cache
 
       - name: Upload windows runtime
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
