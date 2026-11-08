@@ -21,3 +21,6 @@
 *.js text
 *.types text
 *.pdf binary
+
+# Release manifests bind these exact input bytes on both platforms.
+/tools/release/release-inputs.json text eol=lf
