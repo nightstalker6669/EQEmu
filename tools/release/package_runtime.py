@@ -11,6 +11,8 @@ import shutil
 import struct
 import subprocess
 import tempfile
+import time
+import urllib.error
 import urllib.request
 import zipfile
 
@@ -43,15 +45,31 @@ def fetch(pin, cache):
     target = cache / pin['sha256']
     if not target.exists():
         part = target.with_suffix('.partial')
-        request = urllib.request.Request(pin['url'], headers={'User-Agent': 'EQEmu-runtime-packager'})
-        try:
-            with urllib.request.urlopen(request, timeout=180) as response, part.open('wb') as out:
-                shutil.copyfileobj(response, out, 1024 * 1024)
-            if part.stat().st_size != pin['bytes'] or digest(part) != pin['sha256']:
-                raise ValueError('Pinned asset bytes/hash mismatch: ' + pin['url'])
-            part.replace(target)
-        finally:
-            part.unlink(missing_ok=True)
+        for attempt in range(1, 4):
+            part.unlink(missing_ok=True)  # A retry never appends to an earlier response.
+            request = urllib.request.Request(pin['url'], headers={'User-Agent': 'EQEmu-runtime-packager'})
+            try:
+                with urllib.request.urlopen(request, timeout=180) as response, part.open('wb') as out:
+                    shutil.copyfileobj(response, out, 1024 * 1024)
+                if part.stat().st_size != pin['bytes'] or digest(part) != pin['sha256']:
+                    raise ValueError('Pinned asset bytes/hash mismatch: ' + pin['url'])
+                part.replace(target)  # Only complete, verified bytes become a cache entry.
+                break
+            except urllib.error.HTTPError as error:
+                error.close()
+                transient = error.code in (502, 503, 504)
+                if not transient or attempt == 3:
+                    raise RuntimeError(
+                        f"Pinned asset download failed: HTTP {error.code}, attempt {attempt}/3: {pin['url']}"
+                    ) from error
+                print(
+                    f"Transient HTTP {error.code} fetching {pin['url']}; "
+                    f"attempt {attempt}/3 failed, retrying in {attempt}s",
+                    flush=True,
+                )
+            finally:
+                part.unlink(missing_ok=True)
+            time.sleep(attempt)
     if target.stat().st_size != pin['bytes'] or digest(target) != pin['sha256']:
         raise ValueError('Pinned cached input differs')
     return target
