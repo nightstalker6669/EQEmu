@@ -5,6 +5,8 @@ on:
       - master
       - develop
   pull_request:
+permissions:
+  contents: read
 jobs:
   linux:
     name: Linux
@@ -14,6 +16,8 @@ jobs:
         uses: actions/checkout@v5
         with:
           submodules: recursive
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Setup ccache
         uses: hendrikmuhs/ccache-action@v1.2
@@ -55,6 +59,19 @@ jobs:
         working-directory: build
         run: ./bin/tests
 
+      - name: Package linux runtime
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
+        run: python3 tools/release/package_runtime.py --platform linux
+
+      - name: Upload linux runtime
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-linux
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 14
+
   windows:
     name: Windows
     runs-on: windows-latest
@@ -66,6 +83,8 @@ jobs:
         uses: actions/checkout@v5
         with:
           submodules: recursive
+          fetch-depth: 0
+          persist-credentials: false
 
       - name: Enable long paths
         run: git config --global core.longpaths true
@@ -94,6 +113,7 @@ jobs:
             -DEQEMU_BUILD_LOGIN=ON `
             -DEQEMU_BUILD_LUA=ON `
             -DEQEMU_BUILD_ZLIB=ON `
+            -DEQEMU_BUILD_PERL=ON `
             -DEQEMU_BUILD_CLIENT_FILES=ON
 
       - name: Build
@@ -103,3 +123,45 @@ jobs:
       - name: Test
         working-directory: build
         run: ./bin/Release/tests.exe
+
+      - name: Package windows runtime
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
+        run: python tools/release/package_runtime.py --platform windows
+
+      - name: Upload windows runtime
+        if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
+        uses: actions/upload-artifact@v4
+        with:
+          name: runtime-windows
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Publish complete Latest
+    needs: [linux, windows]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: eqemu-latest-release
+      cancel-in-progress: false
+    steps:
+      - name: Checkout release scripts
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+
+      - name: Download both runtime packages
+        uses: actions/download-artifact@v4
+        with:
+          pattern: runtime-*
+          merge-multiple: true
+          path: release-assets
+
+      - name: Verify and publish Latest
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/release/publish_release.py --assets release-assets
