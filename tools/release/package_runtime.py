@@ -234,7 +234,8 @@ def package(args):
         # New qualifications must come from this checkout, not the older content seed.
         merc_docs = stage / 'common/mercenary'
         merc_docs.mkdir(parents=True)
-        shutil.copy2(repo / 'common/mercenary/LEVEL100.md', merc_docs / 'LEVEL100.md')
+        for name in ('LEVEL100.md', 'RESOURCE-UPDATES.md', 'README.md'):
+            shutil.copy2(repo / 'common/mercenary' / name, merc_docs / name)
         limits = stage / 'CONTENT-LIMITS.md'
         with limits.open('a', encoding='utf-8') as output:
             output.write('\n## Mercenary level 86–100 content\n\n'

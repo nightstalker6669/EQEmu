@@ -1,5 +1,7 @@
 # RoF2 mercenaries
 
+See [RESOURCE-UPDATES.md](RESOURCE-UPDATES.md) for group HP, mana and endurance notification behavior and acceptance limits.
+
 This implementation extends the existing EQEmu mercenary system for the matching May 10, 2013 Rain of Fear client. It covers liaison offers, hiring, owned contracts, native management, stances, suspension, upkeep, automatic and manual assistance, roster switching, and ownership transfer. Mercenary rows, buffs, carried coin payments, and stored Bayle Mark upkeep payments are persisted with authenticated session checks and explicit transaction outcomes.
 
 **Native acceptance: core May 10, 2013 RoF2 cases passed on the deployed build (2026-10-23).** Original-client tests covered liaison offers and initial stances; all four combat roles, healer resurrection and level-100 spell fallback; paid hiring, Bayle-to-coin fallback and Passive upkeep waiver; manual/automatic assistance and the healer Puller override; suspension, death/revival deadlines and zone restrictions; three owned contracts, sparse slots, capacity rejection and replacement in a six-member group; declined and accepted priced ownership transfer; and zone, relog and server-restart persistence. Tests also confirmed the full recurring upkeep period and safe notifications across mixed-unit interval changes. This verifies the implemented core behavior; marketplace slot/rename purchases, later-client progression systems and exact historical Live balance are outside that claim.

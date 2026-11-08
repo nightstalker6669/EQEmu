@@ -951,6 +951,7 @@ bool Merc::Process()
 	}
 
 	if (send_hp_update_timer.Check()) {
+		SendGroupResourceUpdates();
 		SendHPUpdate();
 	}
 
@@ -965,6 +966,32 @@ bool Merc::Process()
 	AI_Process();
 
 	return true;
+}
+
+void Merc::SendGroupResourceUpdates()
+{
+	auto group = GetGroup();
+	if (!group) {
+		last_resource_group_id_ = 0;
+		last_group_mana_percent_ = -1;
+		last_group_endurance_percent_ = -1;
+		return;
+	}
+
+	// Resource changes must not depend on SendHPUpdate's HP-percent gate.
+	// A new group needs a snapshot even if neither resource changed.
+	const auto mana_percent = GetMaxMana() > 0 ? GetManaPercent() : 0;
+	const auto endurance_percent = GetEndurancePercent();
+	const bool group_changed = last_resource_group_id_ != group->GetID();
+	if (group_changed || mana_percent != last_group_mana_percent_) {
+		group->SendManaPacketFrom(this);
+		last_group_mana_percent_ = mana_percent;
+	}
+	if (group_changed || endurance_percent != last_group_endurance_percent_) {
+		group->SendEndurancePacketFrom(this);
+		last_group_endurance_percent_ = endurance_percent;
+	}
+	last_resource_group_id_ = group->GetID();
 }
 
 bool Merc::IsMercCasterCombatRange(Mob *target) {

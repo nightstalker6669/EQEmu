@@ -412,7 +412,7 @@ void Group::SendHPManaEndPacketsTo(Mob *member)
 
 					MobManaUpdate_Struct *mana_update = (MobManaUpdate_Struct *)outapp.pBuffer;
 					mana_update->spawn_id = members[i]->GetID();
-					mana_update->mana = members[i]->GetManaPercent();
+					mana_update->mana = members[i]->GetMaxMana() > 0 ? members[i]->GetManaPercent() : 0;
 					member->CastToClient()->QueuePacket(&outapp, false);
 
 					MobEnduranceUpdate_Struct *endurance_update = (MobEnduranceUpdate_Struct *)outapp.pBuffer;
@@ -442,7 +442,7 @@ void Group::SendHPPacketsFrom(Mob *member)
 				outapp.SetOpcode(OP_MobManaUpdate);
 				MobManaUpdate_Struct *mana_update = (MobManaUpdate_Struct *)outapp.pBuffer;
 				mana_update->spawn_id = member->GetID();
-				mana_update->mana = member->GetManaPercent();
+				mana_update->mana = member->GetMaxMana() > 0 ? member->GetManaPercent() : 0;
 				members[i]->CastToClient()->QueuePacket(&outapp, false);
 
 				MobEnduranceUpdate_Struct *endurance_update = (MobEnduranceUpdate_Struct *)outapp.pBuffer;
@@ -467,7 +467,7 @@ void Group::SendManaPacketFrom(Mob *member)
 				outapp.SetOpcode(OP_MobManaUpdate);
 				MobManaUpdate_Struct *mana_update = (MobManaUpdate_Struct *)outapp.pBuffer;
 				mana_update->spawn_id = member->GetID();
-				mana_update->mana = member->GetManaPercent();
+				mana_update->mana = member->GetMaxMana() > 0 ? member->GetManaPercent() : 0;
 				members[i]->CastToClient()->QueuePacket(&outapp, false);
 			}
 		}
@@ -479,7 +479,7 @@ void Group::SendEndurancePacketFrom(Mob* member)
 	if (!member)
 		return;
 
-	EQApplicationPacket outapp(OP_MobEnduranceUpdate, sizeof(MobManaUpdate_Struct));
+	EQApplicationPacket outapp(OP_MobEnduranceUpdate, sizeof(MobEnduranceUpdate_Struct));
 
 	uint32 i;
 	for (i = 0; i < MAX_GROUP_MEMBERS; i++) {

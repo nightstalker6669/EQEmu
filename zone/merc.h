@@ -206,7 +206,7 @@ public:
 	virtual void ScaleStats(int scalepercent, bool setmax = false);
 	virtual void CalcBonuses();
 	int64 GetEndurance() const {return cur_end;} //This gets our current endurance
-	inline uint8 GetEndurancePercent() { return (uint8)((float)cur_end / (float)max_end * 100.0f); }
+	inline uint8 GetEndurancePercent() override { return max_end > 0 ? (uint8)((float)cur_end / (float)max_end * 100.0f) : 0; }
 	inline virtual int32 GetATK() const { return ATK; }
 	inline virtual int32 GetATKBonus() const { return itembonuses.ATK + spellbonuses.ATK; }
 	int32 GetRawACNoShield(int &shield_ac) const;
@@ -314,6 +314,10 @@ protected:
 	uint8 sec_melee_type; //Sets the Secondary Weapon attack message and animation
 
 private:
+	void SendGroupResourceUpdates();
+	uint32 last_resource_group_id_ = 0;
+	int last_group_mana_percent_ = -1;
+	int last_group_endurance_percent_ = -1;
 
 	int32 CalcAC();
 	int32 CalcATK();
