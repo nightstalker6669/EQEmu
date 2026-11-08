@@ -1994,8 +1994,35 @@ bool Merc::AICastSpell(int8 iChance, uint32 iSpellTypes) {
 									break;
 								case HEALER:
 									break;
-								case MELEEDPS:
+								case MELEEDPS: {
+									// The level86-100 repertoire has real targeted rogue
+									// attacks/stuns; previously this branch did nothing.
+									// Keep accepted lower-level behavior unchanged.
+									auto* target = GetTarget();
+									if (mercLevel < 86 || !target || !CheckLosFN(target)) {
+										break;
+									}
+									for (const auto& attack : GetMercSpellsBySpellType(this, SpellType_Nuke)) {
+										const auto& spell = spells[attack.spellid];
+										if (spell.target_type != ST_Target || spell.sneak || spell.range <= 0.0f ||
+											GetEndurance() < spell.endurance_cost ||
+											DistanceSquared(m_Position, target->GetPosition()) > spell.range * spell.range ||
+											!CheckSpellRecastTimers(this, attack.spellid) ||
+											!CheckDisciplineRecastTimers(this, attack.spellid, spell.timer_id)) {
+											continue;
+										}
+										if (IsEffectInSpell(attack.spellid, SpellEffect::SkillAttack)) {
+											selectedMercSpell = attack;
+											break;
+										}
+										if (!selectedMercSpell.spellid &&
+											IsEffectInSpell(attack.spellid, SpellEffect::Stun) &&
+											!target->GetSpecialAbility(SpecialAbility::StunImmunity) && !target->IsStunned()) {
+											selectedMercSpell = attack;
+										}
+									}
 									break;
+								}
 								case CASTERDPS:
 									Mob* tar = GetTarget();
 
@@ -3654,6 +3681,12 @@ bool Merc::UseDiscipline(int32 spell_id, int32 target) {
 
 	const SPDat_Spell_Struct &spell = spells[spell_id];
 
+	// Match native client admission: exact cost is affordable, including a
+	// zero-cost discipline at zero endurance. Reject before reserving reuse.
+	if (GetEndurance() < spell.endurance_cost) {
+		return false;
+	}
+
 	if(spell.recast_time > 0)
 	{
 		if(CheckDisciplineRecastTimers(this, spell_id, spells[spell_id].timer_id)) {
@@ -3668,12 +3701,7 @@ bool Merc::UseDiscipline(int32 spell_id, int32 target) {
 		}
 	}
 
-	if(GetEndurance() > spell.endurance_cost) {
-		SetEndurance(GetEndurance() - spell.endurance_cost);
-	} else {
-		//too fatigued to use this skill right now.
-		return(false);
-	}
+	SetEndurance(GetEndurance() - spell.endurance_cost);
 
 	if(IsCasting())
 		InterruptSpell();
