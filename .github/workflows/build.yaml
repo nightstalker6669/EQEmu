@@ -50,7 +50,13 @@ jobs:
             -DEQEMU_BUILD_LOGIN=ON \
             -DEQEMU_BUILD_LUA=ON \
             -DEQEMU_BUILD_PERL=ON \
-            -DEQEMU_BUILD_CLIENT_FILES=ON
+            -DEQEMU_BUILD_CLIENT_FILES=ON || {
+              configure_status=$?
+              if [ -f build/vcpkg-bootstrap.log ]; then
+                cat build/vcpkg-bootstrap.log
+              fi
+              exit "$configure_status"
+            }
 
       - name: Build
         run: cmake --build build --parallel
