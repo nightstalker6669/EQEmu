@@ -8,7 +8,7 @@ The aim is familiar EverQuest gameplay: build a home, gather your fellowship, hi
 
 Restoration is ongoing. The pack includes substantial working additions, but it does not yet recreate every quest, spell acquisition route, AA, or encounter through RoF.
 
-**[Server downloads](https://github.com/nightstalker6669/EQEmu/releases/latest)** · **[Database downloads](https://github.com/nightstalker6669/EQEmu-Database/releases)** · **[Installation guide](docs/rof2/INSTALL.md)** · **[Feature source and documentation](extensions/rof2/)**
+**[EverForge on Docker Hub](https://hub.docker.com/r/nightsta69/everforge-rof2)** · **[Docker installation](docs/rof2/EVERFORGE.md)** · **[Server downloads](https://github.com/nightstalker6669/EQEmu/releases/latest)** · **[Database downloads](https://github.com/nightstalker6669/EQEmu-Database/releases)** · **[Installation guide](docs/rof2/INSTALL.md)** · **[Feature source and documentation](extensions/rof2/)**
 
 ## What this pack adds
 
@@ -33,6 +33,28 @@ The combined local build and content installation are complete, and the two requ
 
 Further work remains on later SoD themes, spell acquisition gaps, AA coverage, achievement content, and unresolved recipes. Completed improvements will move into the feature overview and release notes as they become available.
 
+## Install with Docker: EverForge RoF2
+
+[**EverForge RoF2 on Docker Hub**](https://hub.docker.com/r/nightsta69/everforge-rof2) packages this fork as a Docker Compose stack with a separate MariaDB database. It includes setup for Spire, SSH/SFTP, encrypted FTP, scheduled backups, phpMyAdmin, and the PEQ Editor.
+
+Start with a Linux AMD64 host, Docker Compose v2, and Python 3.11 or newer. Extract the complete public setup from the tested image:
+
+```sh
+mkdir everforge
+docker run --rm --entrypoint tar nightsta69/everforge-rof2:0.2.0 \
+  -C /opt/everforge/setup -cf - . | tar -xf - -C everforge
+cd everforge
+python3 configure.py
+```
+
+Then follow the [EverForge installation guide](docs/rof2/EVERFORGE.md) to set your server addresses, verify and mount the required operator-owned housing resources, install utilities, and start the stack. **Configuration alone is not the complete installation.** Original EverQuest files are not distributed in the image; the current published housing system requires the matching archives, maps, and geometry resources.
+
+EverForge checks for the latest published server release at startup, or can use a pinned release. First utility installation selects supported versions and records them for reuse. Existing database volumes are never reseeded; incompatible database upgrades stop with instructions. Spire's installer and replacement actions are blocked while normal content editing remains available.
+
+The public map set includes 507 V2 collision maps, six documented supported V1 exceptions, and 497 V2 navigation files. The guide explains the separate water formats and housing-resource requirements.
+
+**Already using 0.1.0?** Follow the guide's upgrade steps and keep your existing environment and volumes.
+
 ## Getting the pack
 
 Start with the [server releases](https://github.com/nightstalker6669/EQEmu/releases/latest). Choose the package for the computer running your server, then follow its included installation instructions and matching database reference.
@@ -52,3 +74,4 @@ This overview is updated with completed restoration batches. The release notes p
 This project builds on [EQEmu](https://github.com/EQEmu/EQEmu), [ProjectEQ](https://github.com/ProjectEQ), and the work of their contributors. Credit for EverQuest and its original art and game content belongs to its creators and rights holders.
 
 [Upstream EQEmu overview](docs/rof2/UPSTREAM-README.md) · [EQEmu documentation](https://docs.eqemu.dev/) · [License](LICENSE.md)
+
