@@ -1,0 +1,86 @@
+--- a/frontend/src/views/admin/server-update/UpdateReleases.vue
++++ b/frontend/src/views/admin/server-update/UpdateReleases.vue
+@@ -207,7 +207,7 @@
+ 
+       if (confirm(`Install this release?\n\nThis will replace your current binaries \n\n[${r.name}] ${release}`)) {
+         try {
+-          const r = await SpireApi.v1().post(`eqemuserver/install-release/` + release)
++          const r = await SpireApi.v1().post(`eqemuserver/install-release/` + encodeURIComponent(release))
+           if (r.status === 200) {
+             this.notification = r.data.message
+ 
+@@ -322,6 +322,15 @@
+       });
+     },
+     async loadReleases() {
++      // EverForge supplies its published server contract. Other installations
++      // keep the normal upstream release listing when this adapter is absent.
++      try {
++        const custom = await SpireApi.v1().get('everforge/releases')
++        if (custom.status === 200 && Array.isArray(custom.data.releases)) {
++          this.releases = custom.data.releases
++          return
++        }
++      } catch (e) { /* ordinary upstream installation */ }
+       return new Promise(async (resolve) => {
+         for (let url of SpireApi.getPublicWithLocalFallbacks()) {
+           try {
+@@ -344,7 +353,7 @@
+     },
+     getWindowsDownloads(r) {
+       const f = r.assets.find((e) => {
+-        return e.name.includes("windows")
++        return e.name.toLowerCase().includes("windows")
+       })
+ 
+       if (f) {
+@@ -355,7 +364,7 @@
+     },
+     getWindowsDownloadLink(r) {
+       const f = r.assets.find((e) => {
+-        return e.name.includes("windows")
++        return e.name.toLowerCase().includes("windows")
+       })
+ 
+       if (f) {
+@@ -366,7 +375,7 @@
+     },
+     getLinuxDownloadLink(r) {
+       const f = r.assets.find((e) => {
+-        return e.name.includes("linux")
++        return e.name.toLowerCase().includes("linux")
+       })
+ 
+       if (f) {
+@@ -377,7 +386,7 @@
+     },
+     getLinuxDownloads(r) {
+       const f = r.assets.find((e) => {
+-        return e.name.includes("linux")
++        return e.name.toLowerCase().includes("linux")
+       })
+ 
+       if (f) {
+--- a/frontend/src/app/api/eqemu-websocket-client.ts
++++ b/frontend/src/app/api/eqemu-websocket-client.ts
+@@ -31,10 +31,9 @@
+       }
+ 
+       this.port = port
+-      this.ws   = new WebSocket('ws://' + location.hostname + ':' + port)
++      this.ws   = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host + '/eqemu-websocket/' + encodeURIComponent(port))
+       this.uuid = this.generateUUID()
+ 
+-      console.log(auth)
+ 
+       this.ws.onerror = (event: any) => {
+         this.log(util.format('Error %s', JSON.stringify(event)))
+@@ -87,7 +86,7 @@
+    * @param parameters
+    */
+   public send(method: string, parameters: any[] = []) {
+-    this.log(util.format('Method: \'%s\' Params %s', method, JSON.stringify(parameters)))
++    if (method !== 'login') this.log(util.format('Method: \'%s\' Params %s', method, JSON.stringify(parameters)))
+ 
+     this.ws.send(
+       JSON.stringify(

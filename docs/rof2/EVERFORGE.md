@@ -1,45 +1,39 @@
-[Back to the restoration pack](../../README.md) · [EverForge on Docker Hub](https://hub.docker.com/r/nightsta69/everforge-rof2)
+# EverForge RoF2 0.3.0
 
-This guide describes the tested **0.2.0** setup. The server release downloaded at startup is versioned separately from the Docker runtime.
+EverForge runs the published Rain of Fear 2 server and matching custom database, with Spire administration, PEQ Editor, phpMyAdmin, SSH/SFTP, explicit FTPS and local scheduled backups. It is a community project, with no official EQEmu or Daybreak affiliation.
 
-# EverForge RoF2 — EQEmu Restoration Pack 0.2.0
+Spire and PEQ Editor are built from our maintained forks. [utilities-sources.json](everforge/utilities-sources.json) identifies the exact source commits and archive checksums. Normal authentication and Spire permissions remain active. Authenticated operators can administer the whole game schema; the previous content-table grants and deny-default gateway are removed.
 
-A Rain of Fear 2 server stack with restored systems, release-based updates and optional operator utilities. Ready to run after the required operator resource setup. Community project; no official EQEmu or Daybreak affiliation or claim that every feature is complete.
+## Install
 
-The core runtime downloads the latest stable published `nightstalker6669/EQEmu` Linux release on startup, follows that release's matching public database contract, verifies hashes/ABI and preserves existing database volumes. Optional utilities provide Spire content editing, SSH/SFTP, FTPS, phpMyAdmin, PEQ Editor and scheduled local backups.
+Use Linux amd64, Docker with Compose v2 and Python 3.11+ on the host. Allow at least 20 GB for the server, source-build caches and backups. First installation needs Internet access. Utility installation builds Spire's frontend and Go binary and the PEQ PHP image inside Docker; host compilers are unnecessary. The native runtime uses Ubuntu 26.04 and the published glibc 2.43 / Perl 5.40 ABI.
 
-## Requirements and setup files
-
-Linux amd64, Docker with Compose v2, Python 3.11+ on the operator host, Internet access for first setup and sufficient persistent storage (allow 15 GB or more including backups). Compilers are not required on the host. The core runtime is Ubuntu 26.04 with the published glibc 2.43 / Perl 5.40 ABI.
-
-Extract the public setup files from the image, or unpack the supplied setup archive:
+Extract the setup files:
 
 ```sh
 mkdir everforge
-docker run --rm --entrypoint tar nightsta69/everforge-rof2:0.2.0 \
+docker run --rm --entrypoint tar nightsta69/everforge-rof2:0.3.0 \
   -C /opt/everforge/setup -cf - . | tar -xf - -C everforge
 cd everforge
 python3 configure.py
 ```
 
-Edit the private `.env` file. Set `PUBLIC_ADDRESS` to the IP/DNS name clients use; set `LOCAL_ADDRESS` and `BIND_ADDRESS` to the host's LAN address for LAN use. Utility ports bind to loopback unless `UTILITY_BIND_ADDRESS` is changed. Set `FTP_PUBLIC_HOST` to the address FTP clients can reach. Put your SSH public key in `authorized_keys`, or set `SSH_AUTHORIZED_KEYS_FILE` to an existing public-key file. No default public password is supplied; generated secrets stay in `.env` mode 600.
+Edit the private `.env`. Set `PUBLIC_ADDRESS` to the address game clients use, `LOCAL_ADDRESS` to the LAN address, and `BIND_ADDRESS` to the host interface that should serve the game. Set `UTILITY_BIND_ADDRESS` for administrative access and `FTP_PUBLIC_HOST` for passive FTPS. Defaults bind published ports to loopback. Place your SSH public key in `authorized_keys`, or set `SSH_AUTHORIZED_KEYS_FILE` to its existing path. Password-only SSH needs an existing empty key file and an explicit `SSH_PASSWORD`.
 
-**Upgrade from 0.1.0:** preserve the existing `.env`, database and data directories. Run `python3 configure.py --add-utilities`, set `BOOTSTRAP_IMAGE_TAG=0.2.0`, then complete utility setup below. Do not replace existing database credentials or delete volumes.
+Generated passwords remain in `.env`, mode 600. No shared public password is supplied. [PORTS.md](everforge/PORTS.md) lists every protocol, bind setting and firewall/router forwarding requirement. Setup does not change the host firewall, host SSH daemon or router.
 
-## Required original resources
+### Provide the required original resources
 
-The unchanged published release requires 13 exact EQG archive witnesses and 13 matching housing maps during Zone startup. Public maps alone are insufficient. These operator-owned inputs are never baked into the image, copied into releases or included in publication bundles.
-
-First fetch/verify the current release without starting a database:
+The published native server requires 13 exact housing EQGs and 13 matching maps. Supply your authorized originals as read-only external mounts. They are not included in the image, source bundle or backups. Public maps and optional mesh sidecars do not replace these witnesses.
 
 ```sh
 mkdir -p ../everforge-data
-# Bind directory must be writable by runtime UID/GID 1000.
+# This directory must be writable by container UID/GID 1000.
 docker run --rm -v "$(realpath ../everforge-data):/data" \
-  nightsta69/everforge-rof2:0.2.0 verify-release
+  nightsta69/everforge-rof2:0.3.0 verify-release
 ```
 
-The log prints the selected tag. Replace `TAG_FROM_LOG` and the resource paths below with your actual values:
+Use the tag printed by that command:
 
 ```sh
 python3 provision-resources.py \
@@ -50,11 +44,9 @@ python3 provision-resources.py \
   --output-directory ../everforge-operator
 ```
 
-Optionally add `--original-mesh-directory /absolute/operator/housing-original-meshes`. The published mesh installer produces additional sidecars; it does **not** produce the required full EQGs/maps. No map generator is invented here. Obtain exact matching maps with documented provenance from your authorized installation or compatible tools. `REQUIRED-HOUSING-WITNESSES.json` records the current published selection requirements; the helper always reads the downloaded release's own manifests and verifies every resource before emitting read-only mounts.
+Optionally add `--original-mesh-directory /absolute/operator/housing-original-meshes`. The helper verifies the downloaded release's inventory and every required resource hash before generating its override. Missing resources stop startup before DB access and produce `/data/missing-resources.json`.
 
-Missing or changed resources produce `/data/missing-resources.json` and stop before DB access. Resource mounts stay outside versioned downloads; a later release revalidates its own requirements. Keep the generated override/receipt private and outside this source directory.
-
-## Install utilities and lock versions
+### Build and lock the utilities
 
 ```sh
 python3 utilities-install.py install \
@@ -62,92 +54,108 @@ python3 utilities-install.py install \
   --server-data-directory ../everforge-data
 ```
 
-First install resolves the current stable compatible official Spire release, its preview assets, current phpMyAdmin image and maintained PEQ Editor source. It pulls supported OS/PHP/MariaDB base images and builds the SSH/FTP, backup and PEQ sidecars once using current supported packages. This is a setup-time build; there is no apt upgrade, software reinstall or version check on ordinary service restart.
+This builds the two reviewed forks, installs supported SSH/FTP packages, pulls phpMyAdmin, and builds the matching MariaDB backup image. It verifies source/asset checksums and records commits, binary hashes, image IDs and package versions in `install-lock.json`. An existing installation is reused by `install`; normal restarts do not reinstall or upgrade software. Optional `--download-cache /path` reuses verified public downloads.
 
-The persistent `install-lock.json` records selected versions, digests, source revision and package versions. Versioned utility payloads and generated `utilities.override.yaml` retain those selections. Re-running `install` with an existing lock reuses it, including without network access. Optional `--download-cache /path` reuses previously verified public downloads.
-
-The tested compatible Spire API set is v4.24.2. A future unreviewed release fails clearly and preserves the installation; it is not silently treated as compatible. PEQ source has no release series here, so its maintained master commit is resolved once and recorded. Images/base versions are not described as “latest forever.”
-
-Add the following to `.env`, using actual absolute override paths and preserving this order:
+Set `COMPOSE_FILE` in `.env`, preserving this order and using actual absolute override paths:
 
 ```dotenv
 COMPOSE_FILE=compose.yaml:compose.utilities.yaml:/absolute/everforge-operator/operator-resources.override.yaml:/absolute/everforge-utilities/utilities.override.yaml
 ```
 
-Start the core, provision dedicated utility identities, then start utilities:
+If you use a private environment file other than the setup directory's `.env`, also set `EVERFORGE_ENV_FILE` to that file for backup coverage.
+
+### Initialize, then start
 
 ```sh
-docker compose up -d mariadb server
-# Wait for the server's successful startup in the logs before provisioning editors.
-docker compose logs -f server
+docker compose up -d mariadb
+docker compose run --rm server initialize
 docker compose run --rm utility-init
 docker compose --profile utilities up -d
 ```
 
-Individual profiles: `spire`, `ssh`, `ftp`, `admin`, `editor`, `backups`. `utilities` enables all six utilities. `utility-init` alone receives provisioning authority; running Spire does not receive root/runtime database credentials.
+`initialize` validates resources, seeds only an empty database and installs persistent server files without launching native processes. `utility-init` provisions authenticated utility identities and the dedicated World console account. Running Spire receives the game account, not the MariaDB root credential. The complete utility profile starts the integrated Spire server plus SSH, FTP, phpMyAdmin, PEQ Editor and backups. Optional sidecar profiles are `ssh`, `ftp`, `admin`, `editor` and `backups`.
 
-For an intentional utility update, stop utility writers and back up first, then:
+For the game alone, omit `compose.utilities.yaml` and the utility override, then use the core Compose file plus the operator-resource override. Spire is integrated with the native server when the utility configuration is included.
+
+## Access and controls
+
+| Utility | Default address | Authentication |
+| --- | --- | --- |
+| Spire | `http://HOST:3000` | `SPIRE_ADMIN_USER` / `SPIRE_ADMIN_PASSWORD` |
+| phpMyAdmin | `http://HOST:8080` | `everforge_editor` / `EDITOR_DB_PASSWORD`; DB host `mariadb` |
+| PEQ Editor | `http://HOST:8081` | Native PEQ login: `PEQ_EDITOR_USER` / `PEQ_EDITOR_PASSWORD` on first initialization |
+| SSH / SFTP | `HOST:2222` | User `eqemu`, authorized key or explicitly enabled SSH password |
+| Explicit FTPS | `HOST:2121` | User `ftpuser` / `FTP_PASSWORD`; passive TCP 30000–30009 |
+
+PEQ uses its own administrator/user management. Existing PEQ accounts and passwords are preserved; environment credentials create an administrator only when the user table is empty. The upstream `admin/password` seed is never imported.
+
+Spire's dashboard and counts come from the real World console and native processes. Its start/stop/restart and delayed cancellation controls use the container's process manager. Stopping the game keeps Spire available. The manager retains the published direct-parent inventory supervisor's Zone birth, reaping and recovery logic. Ordinary child failures recover through that supervisor; an inventory recovery failure is reported for operator review. It does not fabricate ownership after a supervisor crash.
+
+Process CPU percentages are averages since process start; process memory is resident usage relative to system memory. System widgets use native Spire measurements.
+
+Native process options and dynamic Zone count are applied on a deliberate start/restart. Zone capacity follows the configured game port range; adjust Compose mappings and network rules when changing that range. The package's default is UDP 7000–7010. Native Zone log websocket traffic travels through the Spire origin, so internal TCP listeners need no additional public forwarding.
+
+SSH starts in `/data/server`, with server libraries and the server's PID/network namespace. SFTP and FTPS transfer directly into the persistent serving tree. FTPS requires TLS for both control and data by default. Its certificate persists in `ftp-state`; export `ftp:/state/ftps.crt` and verify/trust it in your client. `FTP_TLS_REQUIRED=false` explicitly permits plaintext compatibility. FTP is chrooted to the server directory. SSH host keys persist in `ssh-state`.
+
+The CLI offers `start`, `stop`, `restart`, `logs`, `shell`, `backup`, `backup-list` and `restore`:
+
+```sh
+python3 everforge.py shell
+python3 everforge.py logs
+```
+
+CLI stop/restart operates the server container; Spire's controls operate the native game processes while keeping administration available.
+
+## Persistent files and updates
+
+`/data/server` is the writable installed server: configuration, quests, binaries and exports. Operator edits survive restarts and recreation. `/data/releases` holds the checksummed download cache; startup validates it and does not copy it over an existing serving tree. Public maps are installed into the serving tree; required original witnesses remain external read-only links. Legacy quest overlays are copied into the serving tree on initial upgrade, after which direct edits belong in `/data/server/quests`.
+
+Spire configuration saves preserve custom native fields, including `server.auto_database_updates=false`. Startup never automatically installs an upstream server, imports a new full SQL dump into an existing database, or resets custom content. Existing database-local bootstrap markers and schema/resource compatibility are checked before launch.
+
+Spire's release page lists this project's published server assets. Stop the native server before installing selected binaries. The adapter verifies the release/ABI/resource/database contract, retains previous binaries, and replaces only the installed binary directory. Configuration, quests and DB data remain in place. A persisted selection survives container restart. `EQEMU_RELEASE` selects the initial installation; ordinary startup retains the installed selection instead of relabeling unchanged binaries as a newly downloaded release. A release needing a different database contract requires a reviewed database upgrade; no full dump is applied automatically.
+
+For an explicit binary update without Spire, stop the server container and use:
+
+```sh
+docker compose stop server
+docker compose run --rm server install-release PUBLISHED_TAG
+docker compose --profile utilities up -d server ssh
+```
+
+The bootstrap lock refuses a concurrent update against a running server container. The CLI uses the same verified project release installation path.
+
+Source-build tools are available for an operator-supplied checkout and configured build directory. Upstream installation/import actions remain explicit operator operations on writable paths. They are not run at startup. A stock upstream installation can replace custom project components; use the published-project release path for this restoration pack.
+
+Utility updates use our reviewed fork pins rather than replacing custom additions with upstream releases. Obtain the newer EverForge setup, preserve `.env` and data, then run:
 
 ```sh
 python3 utilities-install.py update --directory ../everforge-utilities \
   --server-data-directory ../everforge-data
-docker compose --profile utilities up -d --force-recreate
+docker compose --profile utilities up -d
 ```
 
-New downloads/builds complete before the lock/override changes. Previously selected payloads remain on disk; existing running containers keep their selected payload mount until explicitly recreated. This utility update does not update or reinstall the custom EQEmu server/database.
+New builds finish before the lock and override switch. Prior utility payloads and manifests remain available. This does not reseed the game DB.
 
-## Services and ports
+## Upgrade from 0.1 or 0.2
 
-| Service | Host ports / protocol | Login / scope |
-| --- | --- | --- |
-| RoF2/SoD login | 5999 UDP | Authorized game client |
-| Legacy login listener | 5998 UDP | Only for that protocol |
-| World | 9000 UDP | Game clients |
-| Zones | 7000–7010 UDP | Matches runtime port range |
-| Universal chat/mail | 7778 UDP | Game clients |
-| Spire | 3000 TCP | `SPIRE_ADMIN_USER` / `SPIRE_ADMIN_PASSWORD` |
-| SSH and SFTP | 2222 TCP | User `eqemu`, authorized public key by default |
-| Explicit FTPS | 2121 TCP + 30000–30009 TCP | User `ftpuser` / `FTP_PASSWORD` |
-| phpMyAdmin | 8080 TCP | User `everforge_editor` / `EDITOR_DB_PASSWORD`, server `mariadb` |
-| PEQ Editor | 8081 TCP | `PEQ_EDITOR_USER` / `PEQ_EDITOR_PASSWORD` |
-| Scheduled backups | None | Local volume / CLI |
+Stop the old stack using its existing setup, keeping all volumes and private configuration. Extract the new setup into that same setup directory without deleting `.env` or operator overrides. Run `python3 configure.py --add-utilities`, set `BOOTSTRAP_IMAGE_TAG=0.3.0`, and use `utilities-install.py update` above. Keep the same Compose project name, database volume and server data directory.
 
-MariaDB 3306 TCP, world interserver 9001 TCP, login registration 5998 TCP and Spire's backend 3001 are not published. World HTTP/telnet remain disabled. These are container services; installation does not modify host sshd, host firewall or router rules.
+Run the initialization/start sequence above. Existing server config and legacy quest edits are copied once into `/data/server`. Initialized standalone Spire metadata is copied into the native game's empty `spire_*` tables, preserving the original encryption/JWT keys and users. A private pre-migration SQL snapshot and receipt are retained under `/data/admin`; the old schema/volume are kept. Conflicting initialized metadata stops for reconciliation instead of overwriting either copy. Old standalone backend/gateway containers can remain stopped; no volume pruning is required.
 
-For LAN utility access set `UTILITY_BIND_ADDRESS` to the host LAN IP and allow the selected TCP ports from your administrative LAN. Internet game access requires forwarding the game UDP ports to the host's LAN IP. Ordinary game access does not require forwarding database/admin ports. Docker publishing and any host firewall/router rules must agree.
-
-Spire is `http://HOST:3000`, phpMyAdmin `http://HOST:8080`, PEQ Editor `http://HOST:8081`. Use trusted LAN access or SSH forwarding for HTTP administration. SSH password authentication is off unless explicitly set; a password-only setup still needs an existing empty `authorized_keys` file for the configured bind. Server host keys persist in `ssh-state`.
-
-FTPS requires TLS for login and data by default. The first start creates a persistent self-signed certificate in `ftp-state`; export its public certificate with `docker compose cp ftp:/state/ftps.crt ./ftps.crt` and verify/trust it in the client. Port 2121 uses explicit FTP-over-TLS, not implicit TLS/SFTP. `FTP_TLS_REQUIRED=false` is an explicit plaintext compatibility choice. Passive addressing uses `FTP_PUBLIC_HOST` and fixed 30000–30009 ports. The supported Pure-FTPd package requires `SYS_NICE` and `DAC_READ_SEARCH` in its container; it is not privileged and receives no host or server-cache mount.
-
-## Protected Spire and operator files
-
-Spire is a **content editor** in this package. A standalone working directory and explicit separate DSNs keep its metadata in the `spire` schema. The game editor can SELECT the game schema and perform DML only on the 68 reviewed existing content tables in `utilities/content-scope.json`; it cannot perform game DDL, change schema version/housing activation or write player/login/custody tables. Empty pre-existing `spire_*` tables in the public game seed remain unchanged and unused.
-
-A deny-by-default HTTP gateway permits the reviewed content CRUD routes and limited login/read operations. It rejects installer, binary/content updater, import/raw-SQL, configuration replacement, build/process control, Spire updater and onboarding reset requests before forwarding. The backend has no published port, resides on an isolated internal network and receives no server binaries/quests/opcodes/resources/configuration or Docker socket. Actual prohibited install/update attempts were tested with unchanged full game data/schema/payload fingerprints. Limited server-management screens may show denied operations; this is intentional and enforced at the backend gateway, not by hiding buttons.
-
-Spire's own native backup button is unavailable because it delegates to the server and does not provide this package's backup contract. Use the backup CLI below. The separate metadata schema may run Spire's own metadata migrations; it cannot run game migrations. Spire preview assets are verified/locked at setup, mounted read-only and use upstream's supported `SKIP_ASSET_CHECK` to prevent automatic asset replacement.
-
-PEQ Editor uses Apache's verified operator identity through a small session adapter and the same constrained content DB identity. Its built-in DB administration/default-password account setup is not enabled. phpMyAdmin uses normal database login; the documented editor identity is intentionally limited.
-
-SSH/SFTP and FTPS share only `operator-data` with `quests/` and `uploads/`. Put quest overrides in `quests/`; originals remain immutable in the verified release. A deliberate server restart merges overrides into its launch view. New uploads are not applied to the running server automatically. No server cache or operator client archives are writable through these services.
-
-## Backups and restore
-
-`BACKUP_SCHEDULE` uses five schedule fields (minute/hour/day/month/weekday), default `0 3 * * *`, with `TZ` and retention days configurable. The backup profile runs the scheduler inside the stack, not as a host/Codex automation. The actual schedule and selected utility versions are recorded in logs/receipts.
+## Backup and restore
 
 ```sh
 python3 everforge.py backup
 python3 everforge.py backup-list
 ```
 
-Each completed archive contains an InnoDB transactional full dump of **both** `peq_full` and `spire`, including custom tables, routines/events/triggers/views, plus server configuration/world key, custom quest overlays and Spire state/encryption key. The dedicated reader uses a private options file; DB passwords do not appear in commands or logs. Dump failure cannot publish a successful backup. Compression/checksums are validated before atomic finalization; retention only removes this tool's expired completed archive/receipt pairs.
+The scheduler uses five numeric cron fields, `BACKUP_SCHEDULE` (default `0 3 * * *`), `TZ` and `BACKUP_RETENTION_DAYS` (default 14). The matching MariaDB 10.11 dump includes both schemas, routines, events and triggers using one InnoDB transaction. File coverage includes the mutable server, direct quest edits, configuration, Spire keys/metadata state, administration control state, SSH host keys, FTPS certificates and the private operator environment. Release caches, generated shared memory/logs, maps, required external original resources and known client archive formats are excluded. Keep file editing quiescent for a consistent file snapshot alongside the DB transaction. Backups contain private credentials and player data; retain them privately.
 
-Backups exclude release/download caches, operator original archives/maps/mesh inputs, generic uploads, native server logs and host Docker credentials. Keep the host `.env`, SSH public/private keys, `ssh-state`, `ftp-state` and utility-install directory separately as operator configuration. Local backup archives contain private DB/configuration secrets; retain them privately. There is no cloud upload.
+For a clean inventory recovery checkpoint, stop the native game through Spire, create the complete archive, then start it again. This lets the owning supervisor reap its children and finish inventory recovery before the snapshot. Live scheduled copies retain any unreaped ownership rows; recovery may require review before affected actors can enter the recovered game. The helper never marks old source processes dead merely because a snapshot was restored.
 
-The DB snapshot is transactionally consistent for InnoDB. For a matching DB+file snapshot, pause editing and stop the server/Spire/FTP/SSH writers before a manual backup; scheduled online backups do not claim an atomic filesystem+DB snapshot. Non-InnoDB tables cause a clear refusal.
+Spire's native SQL backup/download facility also remains available. The complete recovery archive is produced by `everforge.py backup` or the scheduler.
 
-Restore always uses a separate project and empty schemas/file destinations:
+Restore into a separate empty project and directory:
 
 ```sh
 python3 everforge.py restore \
@@ -157,26 +165,8 @@ python3 everforge.py restore \
   --archive everforge-TIMESTAMP.tar.gz
 ```
 
-The helper creates private target credentials, restores into a separate MariaDB instance with no host ports and preserves the source archive. It refuses an existing source project, nonempty target schemas or occupied target file directories. Preserve the target's private `.restore-root-password` file. To activate recovery, reattach the restored data/quest/Spire directories, retain the operator environment and resource mounts, provision utility identities against the target DB and verify the release pin before serving it. User/grant tables from the source MariaDB system schema are deliberately not replayed.
+The helper verifies archive/SQL hashes and refuses nonempty target schemas or files. It creates a separate DB with no host-published DB port and retains the source. Restored directories include `server-data`, `operator-data`, `spire-state`, `ssh-state`, `ftp-state` and `operator-config/.env`. Keep the target's `.restore-root-password`; set the recovered environment's root password to that value, retain its original game/utility credentials, and point recovery Compose mounts at the restored directories. Reattach the required original resource mounts and the reviewed utility payload; regenerate public map/cache files from the release if needed. Run `utility-init` against the target DB before serving it. Original MariaDB system users/grants are not replayed.
 
-The isolated restore test matched the complete frozen game data/schema and Spire metadata, retained the binary probe/NPC edit, omitted a post-backup source marker, and booted restored services without reseeding. No gameplay acceptance is implied.
+## Validation and scope
 
-## Core release updates and persistence
-
-An empty `EQEMU_RELEASE` resolves the latest stable **server** release on each start; an explicit cached tag can start offline. Changed payloads are staged and verified against exact platform asset, published checksum inventory, manifest, per-file hashes, native ABI, SQL binding and resource requirements. There is no polling watcher or forced running restart. `docker compose restart server` deliberately checks the selected policy.
-
-Existing matching databases skip full SQL permanently, using a DB-local bootstrap marker even if the server cache is replaced. A changed SQL digest, unmanaged DB, interrupted import or schema mismatch stops before native launch. The current release provides no reviewed automatic additive upgrade chain; never replay fresh-install SQL over player data. Keep the compatible cached release pinned and obtain the reviewed migration procedure before changing DB requirements. Native `server.auto_database_updates=false` is retained. No upstream server/content updater runs over this fork.
-
-Download/ABI/checksum failures preserve cached artifacts and DB, and fail clearly rather than silently running an incompatible or fallback server. Pin the last compatible cached release in `.env` and recreate the server deliberately to recover. Core image version, server release tag and utility version lock are distinct.
-
-Named database/maps/utility-state volumes and configured server-data binds survive replacement. Never use `down -v` or prune these volumes to update. `everforge.py` also provides `start`, `stop`, `restart`, `logs` and a scoped operator `shell`.
-
-## V2 server-side maps
-
-Pinned public maps: `EQEmu/maps` commit `e8efa8ed4f4ea4c434c03c40d2a758388a54f4d6`, archive SHA256 `a0abccc76a993ea582974294fc86e565791466a4d1166a9cdc7dd2eb92b8dfec`. The public map cache preserves the original GPL license and provenance.
-
-The complete inventory has **507 V2 collision maps** and six supported legacy V1 files: `sky.map`, `frogequip.map`, `vequip.map`, `warrens2.map`, `warslikswood_lit.map`, `firiona_lit.map`. V2 magic `0x02000000` routes to the published native `Map::LoadV2`; V1 is also supported. No verified public V2 replacement/conversion is claimed for those six exceptions.
-
-All 497 navigation files use the supported EQNAVMESH V2 format. Water data is separate: 494 files, 234 V2 and 260 supported V1. `base/`, `nav/` and `water/` remain in the layout expected by native source. The 13 exact operator housing maps are overlaid by verified hash, never replaced with an unrelated public map. See `MAP-FORMATS.json` for full coverage/exception proof; file-format validation is distinct from gameplay/pathing acceptance.
-
-The source bundle includes `VERIFICATION.md` with selected versions and validation limits. Design references: [AkkStack](https://docs.eqemu.dev/akk-stack/introduction/), [Spire](https://github.com/EQEmu/spire), [server maps](https://docs.eqemu.dev/server/maps/).
+See [VERIFICATION.md](everforge/VERIFICATION.md) and [TEST-RECEIPTS.json](everforge/TEST-RECEIPTS.json) for the tested image, fork identities and actual utility/restore checks. PEQ compatibility covers the reviewed schema 9338 additions and retains warnings for newer unsupported schemas. Representative editor writes are verified; this does not claim every editor page, destructive player/custody operation or native gameplay system has been exhaustively accepted. Map format inventory and native loader compatibility are recorded in [MAP-FORMATS.json](everforge/MAP-FORMATS.json).

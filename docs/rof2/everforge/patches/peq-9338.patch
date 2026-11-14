@@ -1,0 +1,232 @@
+--- a/index.php
++++ b/index.php
+@@ -1,7 +1,8 @@
+ <?php
+ 
+ $current_revision = "3 November 2026";
+-$current_db_version = 9328;
++$current_db_version = 9338;
++require_once("lib/rof2_schema.php");
+ 
+ require_once("config.php");
+ require_once("lib/logging.php");
+--- a/lib/common.php
++++ b/lib/common.php
+@@ -593,7 +593,7 @@
+   $mysql->query_no_result($query);
+   $query = "DELETE FROM character_parcels WHERE char_id=$playerid";
+   $mysql->query_no_result($query);
+-  $query = "DELETE FROM character_pet_buffs WHERE char_id=$playerid";
++  $query = "DELETE FROM character_pet_buffs WHERE character_id=$playerid";
+   $mysql->query_no_result($query);
+   $query = "DELETE FROM character_pet_info WHERE char_id=$playerid";
+   $mysql->query_no_result($query);
+--- /dev/null
++++ b/lib/rof2_schema.php
+@@ -0,0 +1,22 @@
++<?php
++// Native RoF2 schema 9338 additions. Validate before the first write and retain
++// fields omitted by older forms; spell IDs remain full signed 32-bit values.
++function rof2_integer($name, $minimum, $maximum) {
++  $value = filter_var($_POST[$name], FILTER_VALIDATE_INT, ['options'=>['min_range'=>$minimum, 'max_range'=>$maximum]]);
++  if ($value === false) { http_response_code(400); exit("Invalid " . htmlspecialchars($name, ENT_QUOTES)); }
++  return $value;
++}
++function rof2_language_fields() {
++  $sql = '';
++  foreach (['language_required'=>[-1,27], 'language_skill_required'=>[0,100]] as $name=>$range) {
++    if (array_key_exists($name, $_POST)) $sql .= ", $name=" . rof2_integer($name,$range[0],$range[1]);
++  }
++  return $sql;
++}
++function rof2_merc_buff_fields() {
++  $sql = '';
++  foreach (['InitialDuration'=>[-2147483648,2147483647], 'instrument_mod'=>[0,4294967295]] as $name=>$range) {
++    if (array_key_exists($name, $_POST)) $sql .= ", $name=" . rof2_integer($name,$range[0],$range[1]);
++  }
++  return $sql;
++}
+--- a/lib/merchant.php
++++ b/lib/merchant.php
+@@ -266,12 +266,13 @@
+   $content_flags_disabled = $_POST['content_flags_disabled'];
+   $new_slot = $_POST['new_slot'];
+ 
++  $language_fields = rof2_language_fields();
+   $classes_value = 0;
+   foreach ($classes_required as $v) {
+     $classes_value = $classes_value ^ $v;
+   }
+ 
+-  $query = "UPDATE merchantlist SET slot=$new_slot, item=$item, faction_required=$faction_required, level_required=$level_required, min_status=$min_status, max_status=$max_status, alt_currency_cost=$alt_currency_cost, classes_required=$classes_value, probability=$probability, bucket_name=\"$bucket_name\", bucket_value=\"$bucket_value\", bucket_comparison=$bucket_comparison, min_expansion=$min_expansion, max_expansion=$max_expansion, content_flags=NULL, content_flags_disabled=NULL WHERE merchantid=$merchantid AND slot=$slot";
++  $query = "UPDATE merchantlist SET slot=$new_slot, item=$item, faction_required=$faction_required, level_required=$level_required, min_status=$min_status, max_status=$max_status, alt_currency_cost=$alt_currency_cost, classes_required=$classes_value, probability=$probability, bucket_name=\"$bucket_name\", bucket_value=\"$bucket_value\", bucket_comparison=$bucket_comparison, min_expansion=$min_expansion, max_expansion=$max_expansion, content_flags=NULL, content_flags_disabled=NULL$language_fields WHERE merchantid=$merchantid AND slot=$slot";
+   $mysql_content_db->query_no_result($query);
+ 
+   if ($content_flags != "") {
+@@ -365,12 +366,13 @@
+   $content_flags = $_POST['content_flags'];
+   $content_flags_disabled = $_POST['content_flags_disabled'];
+ 
++  $language_fields = rof2_language_fields();
+   $classes_value = 0;
+   foreach ($classes_required as $v) {
+     $classes_value = $classes_value ^ $v;
+   }
+ 
+-  $query = "INSERT INTO merchantlist SET merchantid=$mid, slot=$slot, item=$item, faction_required=$faction_required, level_required=$level_required, min_status=$min_status, max_status=$max_status, alt_currency_cost=$alt_currency_cost, classes_required=$classes_value, probability=$probability, bucket_name=\"$bucket_name\", bucket_value=\"$bucket_value\", bucket_comparison=$bucket_comparison, min_expansion=$min_expansion, max_expansion=$max_expansion, content_flags=NULL, content_flags_disabled=NULL";
++  $query = "INSERT INTO merchantlist SET merchantid=$mid, slot=$slot, item=$item, faction_required=$faction_required, level_required=$level_required, min_status=$min_status, max_status=$max_status, alt_currency_cost=$alt_currency_cost, classes_required=$classes_value, probability=$probability, bucket_name=\"$bucket_name\", bucket_value=\"$bucket_value\", bucket_comparison=$bucket_comparison, min_expansion=$min_expansion, max_expansion=$max_expansion, content_flags=NULL, content_flags_disabled=NULL$language_fields";
+   $mysql_content_db->query_no_result($query);
+ 
+   if ($content_flags != "") {
+@@ -492,19 +494,13 @@
+ function copy_merchantlist() {
+   check_authorization();
+   global $mysql_content_db, $npcid;
+-  $mid = $_POST['mid'];
++  $mid = intval($_POST['mid'] ?? $_GET['mid'] ?? 0);
+ 
+   $query = "SELECT MAX(merchantid) AS merid FROM merchantlist";
+   $result = $mysql_content_db->query_assoc($query);
+   $nmid = $result['merid'] + 1;
+ 
+-  $query = "DELETE FROM merchantlist WHERE merchantid=0";
+-  $mysql_content_db->query_no_result($query);
+-
+-  $query = "INSERT INTO merchantlist (slot, item, faction_required, level_required, min_status, max_status, alt_currency_cost, classes_required, probability, bucket_name, bucket_value, bucket_comparison, min_expansion, max_expansion, content_flags, content_flags_disabled) SELECT slot, item, faction_required, level_required, min_status, max_status, alt_currency_cost, classes_required, probability, bucket_name, bucket_value, bucket_comparison, min_expansion, max_expansion, content_flags, content_flags_disabled FROM merchantlist WHERE merchantid=$mid";
+-  $mysql_content_db->query_no_result($query);
+-
+-  $query = "UPDATE merchantlist SET merchantid=$nmid WHERE merchantid=0";
++  $query = "INSERT INTO merchantlist (merchantid, slot, item, faction_required, level_required, min_status, max_status, alt_currency_cost, classes_required, probability, bucket_name, bucket_value, bucket_comparison, min_expansion, max_expansion, content_flags, content_flags_disabled, language_required, language_skill_required) SELECT $nmid, slot, item, faction_required, level_required, min_status, max_status, alt_currency_cost, classes_required, probability, bucket_name, bucket_value, bucket_comparison, min_expansion, max_expansion, content_flags, content_flags_disabled, language_required, language_skill_required FROM merchantlist WHERE merchantid=$mid";
+   $mysql_content_db->query_no_result($query);
+ 
+   $query = "UPDATE npc_types SET merchant_id=$nmid WHERE id=$npcid";
+--- a/lib/mercs.php
++++ b/lib/mercs.php
+@@ -1890,7 +1890,8 @@
+ 
+   $MercBuffId = $_POST['MercBuffId'];
+   $MercId = $_POST['MercId'];
+-  $SpellId = $_POST['SpellId'];
++  $SpellId = rof2_integer('SpellId',0,2147483647);
++  $additional_fields = rof2_merc_buff_fields();
+   $CasterLevel = $_POST['CasterLevel'];
+   $DurationFormula = $_POST['DurationFormula'];
+   $TicsRemaining = $_POST['TicsRemaining'];
+@@ -1908,7 +1909,7 @@
+   $caston_z = $_POST['caston_z'];
+   $ExtraDIChance = $_POST['ExtraDIChance'];
+ 
+-  $query = "INSERT INTO merc_buffs SET MercBuffId=$MercBuffId, MercId=$MercId, SpellId=$SpellId, CasterLevel=$CasterLevel, DurationFormula=$DurationFormula, TicsRemaining=$TicsRemaining, PoisonCounters=$PoisonCounters, DiseaseCounters=$DiseaseCounters, CurseCounters=$CurseCounters, CorruptionCounters=$CorruptionCounters, HitCount=$HitCount, MeleeRune=$MeleeRune, MagicRune=$MagicRune, dot_rune=$dot_rune, caston_x=$caston_x, Persistent=$Persistent, caston_y=$caston_y, caston_z=$caston_z, ExtraDIChance=$ExtraDIChance";
++  $query = "INSERT INTO merc_buffs SET MercBuffId=$MercBuffId, MercId=$MercId, SpellId=$SpellId, CasterLevel=$CasterLevel, DurationFormula=$DurationFormula, TicsRemaining=$TicsRemaining, PoisonCounters=$PoisonCounters, DiseaseCounters=$DiseaseCounters, CurseCounters=$CurseCounters, CorruptionCounters=$CorruptionCounters, HitCount=$HitCount, MeleeRune=$MeleeRune, MagicRune=$MagicRune, dot_rune=$dot_rune, caston_x=$caston_x, Persistent=$Persistent, caston_y=$caston_y, caston_z=$caston_z, ExtraDIChance=$ExtraDIChance$additional_fields";
+   $mysql->query_no_result($query);
+ }
+ 
+@@ -1917,7 +1918,8 @@
+ 
+   $MercBuffId = $_POST['MercBuffId'];
+   $MercId = $_POST['MercId'];
+-  $SpellId = $_POST['SpellId'];
++  $SpellId = rof2_integer('SpellId',0,2147483647);
++  $additional_fields = rof2_merc_buff_fields();
+   $CasterLevel = $_POST['CasterLevel'];
+   $DurationFormula = $_POST['DurationFormula'];
+   $TicsRemaining = $_POST['TicsRemaining'];
+@@ -1935,7 +1937,7 @@
+   $caston_z = $_POST['caston_z'];
+   $ExtraDIChance = $_POST['ExtraDIChance'];
+ 
+-  $query = "UPDATE merc_buffs SET MercId=$MercId, SpellId=$SpellId, CasterLevel=$CasterLevel, DurationFormula=$DurationFormula, TicsRemaining=$TicsRemaining, PoisonCounters=$PoisonCounters, DiseaseCounters=$DiseaseCounters, CurseCounters=$CurseCounters, CorruptionCounters=$CorruptionCounters, HitCount=$HitCount, MeleeRune=$MeleeRune, MagicRune=$MagicRune, dot_rune=$dot_rune, caston_x=$caston_x, Persistent=$Persistent, caston_y=$caston_y, caston_z=$caston_z, ExtraDIChance=$ExtraDIChance WHERE MercBuffId=$MercBuffId";
++  $query = "UPDATE merc_buffs SET MercId=$MercId, SpellId=$SpellId, CasterLevel=$CasterLevel, DurationFormula=$DurationFormula, TicsRemaining=$TicsRemaining, PoisonCounters=$PoisonCounters, DiseaseCounters=$DiseaseCounters, CurseCounters=$CurseCounters, CorruptionCounters=$CorruptionCounters, HitCount=$HitCount, MeleeRune=$MeleeRune, MagicRune=$MagicRune, dot_rune=$dot_rune, caston_x=$caston_x, Persistent=$Persistent, caston_y=$caston_y, caston_z=$caston_z, ExtraDIChance=$ExtraDIChance$additional_fields WHERE MercBuffId=$MercBuffId";
+   $mysql->query_no_result($query);
+ }
+ 
+--- a/templates/merchant/item.add.tmpl.php
++++ b/templates/merchant/item.add.tmpl.php
+@@ -107,7 +107,8 @@
+                     <tr>
+                       <td colspan="8" align="center"><br><input type="checkbox" id="all_classes" onChange="all_boxes_changed('classes_required[]', 'all_classes');" checked>All Classes</td>
+                     </tr>
+-                  </table>
++                  <tr><td><strong>Language required (-1 = none):</strong><br><input type="number" name="language_required" min="-1" max="27" value="-1"></td><td><strong>Language skill required:</strong><br><input type="number" name="language_skill_required" min="0" max="100" value="0"></td></tr>
++</table>
+                 </fieldset>
+               </td>
+             </tr>
+--- a/templates/mercs/merc.buff.add.tmpl.php
++++ b/templates/mercs/merc.buff.add.tmpl.php
+@@ -101,7 +101,8 @@
+             </td>
+             <td>&nbsp;</td>
+           </tr>
+-        </table><br>
++        <tr><td><strong>Initial Duration:</strong><br><input type="number" name="InitialDuration" min="-2147483648" max="2147483647" value="0"></td><td><strong>Instrument modifier:</strong><br><input type="number" name="instrument_mod" min="0" max="4294967295" value="10"></td></tr>
++</table><br>
+         <center>
+           <input type="hidden" name="MercId" value="<?=$MercId?>">
+           <input type="submit" value="Insert Buff">&nbsp;&nbsp;
+--- a/templates/merchant/item.edit.tmpl.php
++++ b/templates/merchant/item.edit.tmpl.php
+@@ -107,7 +107,8 @@
+                     <tr>
+                       <td colspan="8" align="center"><br><input type="checkbox" id="all_classes" onChange="all_boxes_changed('classes_required[]', 'all_classes');"<?echo ($classes_required == 65535) ? " checked" : "";?>>All Classes</td>
+                     </tr>
+-                  </table>
++                  <tr><td><strong>Language required (-1 = none):</strong><br><input type="number" name="language_required" min="-1" max="27" value="<?=$language_required?>"></td><td><strong>Language skill required:</strong><br><input type="number" name="language_skill_required" min="0" max="100" value="<?=$language_skill_required?>"></td></tr>
++</table>
+                 </fieldset>
+               </td>
+             </tr>
+--- a/templates/mercs/merc.buff.edit.tmpl.php
++++ b/templates/mercs/merc.buff.edit.tmpl.php
+@@ -101,7 +101,8 @@
+             </td>
+             <td>&nbsp;</td>
+           </tr>
+-        </table><br>
++        <tr><td><strong>Initial Duration:</strong><br><input type="number" name="InitialDuration" min="-2147483648" max="2147483647" value="<?=$buff['InitialDuration']?>"></td><td><strong>Instrument modifier:</strong><br><input type="number" name="instrument_mod" min="0" max="4294967295" value="<?=$buff['instrument_mod']?>"></td></tr>
++</table><br>
+         <center>
+           <input type="hidden" name="MercId" value="<?=$buff['MercId']?>">
+           <input type="hidden" name="MercBuffId" value="<?=$buff['MercBuffId']?>">
+--- a/templates/merchant/merchant.tmpl.php
++++ b/templates/merchant/merchant.tmpl.php
+@@ -26,7 +26,8 @@
+           <th>&nbsp;</th>
+           <th>Buy<br>Price</th>
+           <th>Sell<br>Price</th>
+-          <th>Fact<br>Req</th>
++          <th>Language<br>Req / Skill</th>
++<th>Fact<br>Req</th>
+           <th>Lvl<br>Req</th>
+           <th>Alt<br>Cur</th>
+           <th>Class<br>Req</th>
+@@ -101,7 +102,8 @@
+             cp
+ <?endif;?>
+           </td>
+-          <td align="center"><?=$v['faction_required']?></td>
++          <td align="center"><?=$v['language_required']?> / <?=$v['language_skill_required']?></td>
++<td align="center"><?=$v['faction_required']?></td>
+           <td align="center"><?=$v['level_required']?></td>
+           <td align="center"><?=$v['alt_currency_cost']?></td>
+           <td align="center"><?echo ($v['classes_required'] == 65535) ? "N" : "Y";?></td>
+--- a/templates/mercs/merc.buffs.view.tmpl.php
++++ b/templates/mercs/merc.buffs.view.tmpl.php
+@@ -14,7 +14,7 @@
+         <td align="center" width="45%"><strong>Spell</strong></td>
+         <td align="center" width="15%"><strong>Caster Level</strong></td>
+         <td align="center" width="15%"><strong>Tics Remaining</strong></td>
+-        <td width="10%">&nbsp;</td>
++        <td>Initial Duration</td><td>Instrument modifier</td><td width="10%">&nbsp;</td>
+       </tr>
+ <?$x=0;
+ foreach($buffs as $buff):?>
+@@ -23,7 +23,7 @@
+         <td align="center" width="45%"><?=getSpellName($buff['SpellId'])?> (<?=$buff['SpellId']?>)</td>
+         <td align="center" width="15%"><?=$buff['CasterLevel']?></td>
+         <td align="center" width="15%"><?=$buff['TicsRemaining']?></td>
+-        <td align="right" width="10%">
++        <td><?=$buff['InitialDuration']?></td><td><?=$buff['instrument_mod']?></td><td align="right" width="10%">
+           <a href="index.php?editor=mercs&MercBuffId=<?=$buff['MercBuffId']?>&action=82"><img src="images/edit2.gif" width="13" height="13" border="0" title="Edit Mercenary Buff"></a>&nbsp;
+           <a href="index.php?editor=mercs&MercId=<?=$buff['MercId']?>&MercBuffId=<?=$buff['MercBuffId']?>&action=84" onClick="return confirm('Really delete mercenary buff?');"><img src="images/remove.gif" width="13" height="13" border="0" title="Delete Mercenary Buff"></a>
+         </td>

@@ -1,0 +1,6111 @@
+{
+  "repository": "EQEmu/maps",
+  "commit": "e8efa8ed4f4ea4c434c03c40d2a758388a54f4d6",
+  "archive_sha256": "a0abccc76a993ea582974294fc86e565791466a4d1166a9cdc7dd2eb92b8dfec",
+  "native_source": "c383bf49d560ebe8af1bf22d597f4e0d4fac0ce4",
+  "files": {
+    "base": {
+      "abysmal.map": {
+        "version": 2,
+        "header_hex": "0000000275fe1600909e4700785e"
+      },
+      "acrylia.map": {
+        "version": 2,
+        "header_hex": "0000000280f90700253e1800785e"
+      },
+      "airplane.map": {
+        "version": 2,
+        "header_hex": "0000000234fb02009a8e0800785e"
+      },
+      "akanon.map": {
+        "version": 2,
+        "header_hex": "00000002e31a03003bf40a00785e"
+      },
+      "akheva.map": {
+        "version": 2,
+        "header_hex": "0000000254cd0800a1591c00785e"
+      },
+      "alkabormare.map": {
+        "version": 2,
+        "header_hex": "00000002eadf1a00be014500785e"
+      },
+      "anguish.map": {
+        "version": 2,
+        "header_hex": "00000002886d1b00863e5800785e"
+      },
+      "arcstone.map": {
+        "version": 2,
+        "header_hex": "000000028f881300b1dc2400785e"
+      },
+      "arelis.map": {
+        "version": 2,
+        "header_hex": "00000002013f16005ffe3800785e"
+      },
+      "arena.map": {
+        "version": 2,
+        "header_hex": "00000002341e03004d940700785e"
+      },
+      "arena2.map": {
+        "version": 2,
+        "header_hex": "00000002341e03004d940700785e"
+      },
+      "argath.map": {
+        "version": 2,
+        "header_hex": "00000002575e180024604300785e"
+      },
+      "arthicrex.map": {
+        "version": 2,
+        "header_hex": "00000002ac281e00c69b3f00785e"
+      },
+      "ashengate.map": {
+        "version": 2,
+        "header_hex": "00000002bddc0b00c1a71c00785e"
+      },
+      "atiiki.map": {
+        "version": 2,
+        "header_hex": "00000002eb6b1400b8c03100785e"
+      },
+      "barindu.map": {
+        "version": 2,
+        "header_hex": "0000000254930c0044872500785e"
+      },
+      "barren.map": {
+        "version": 2,
+        "header_hex": "000000021861190031ff3200785e"
+      },
+      "barter.map": {
+        "version": 2,
+        "header_hex": "000000029b76120019093500785e"
+      },
+      "bazaar.map": {
+        "version": 2,
+        "header_hex": "00000002f8ac120025573500785e"
+      },
+      "bazaar_v0.map": {
+        "version": 2,
+        "header_hex": "00000002b22a0300e21e0a00785e"
+      },
+      "bazaar_v1.map": {
+        "version": 2,
+        "header_hex": "00000002f8ac120025573500785e"
+      },
+      "beastdomain.map": {
+        "version": 2,
+        "header_hex": "00000002731b1f0034044200785e"
+      },
+      "befallen.map": {
+        "version": 2,
+        "header_hex": "00000002754402004e830700785e"
+      },
+      "beholder.map": {
+        "version": 2,
+        "header_hex": "00000002f31301007ebf0200785e"
+      },
+      "bertoxtemple.map": {
+        "version": 2,
+        "header_hex": "00000002953e0a00c7a01900785e"
+      },
+      "blackburrow.map": {
+        "version": 2,
+        "header_hex": "000000023c00020009720600785e"
+      },
+      "blacksail.map": {
+        "version": 2,
+        "header_hex": "0000000200df0400574e0b00785e"
+      },
+      "bloodfields.map": {
+        "version": 2,
+        "header_hex": "000000027129280024ef8f00785e"
+      },
+      "bloodmoon.map": {
+        "version": 2,
+        "header_hex": "0000000231411c00a2fe4b00785e"
+      },
+      "bothunder.map": {
+        "version": 2,
+        "header_hex": "000000020e6c0900993b2000785e"
+      },
+      "breedinggrounds.map": {
+        "version": 2,
+        "header_hex": "0000000201472c00b4556600785e"
+      },
+      "brellsarena.map": {
+        "version": 2,
+        "header_hex": "00000002e5240100f7a50200785e"
+      },
+      "brellsrest.map": {
+        "version": 2,
+        "header_hex": "00000002a126130092b42800785e"
+      },
+      "brellstemple.map": {
+        "version": 2,
+        "header_hex": "00000002921a120076d72d00785e"
+      },
+      "broodlands.map": {
+        "version": 2,
+        "header_hex": "00000002e2e70f00e2d42700785e"
+      },
+      "buriedsea.map": {
+        "version": 2,
+        "header_hex": "00000002d111300037206f00785e"
+      },
+      "burningwood.map": {
+        "version": 2,
+        "header_hex": "00000002e1840b00101e2000785e"
+      },
+      "butcher.map": {
+        "version": 2,
+        "header_hex": "00000002da5e060080ad1200785e"
+      },
+      "cabeast.map": {
+        "version": 2,
+        "header_hex": "00000002e825040099330e00785e"
+      },
+      "cabwest.map": {
+        "version": 2,
+        "header_hex": "00000002626b020051e10700785e"
+      },
+      "cauldron.map": {
+        "version": 2,
+        "header_hex": "000000027eb30200af760700785e"
+      },
+      "causeway.map": {
+        "version": 2,
+        "header_hex": "00000002764518009acf5000785e"
+      },
+      "cazicthule.map": {
+        "version": 2,
+        "header_hex": "000000023d15030084550a00785e"
+      },
+      "chambersa.map": {
+        "version": 2,
+        "header_hex": "0000000203cf0200d3af0700785e"
+      },
+      "chambersb.map": {
+        "version": 2,
+        "header_hex": "0000000203cf0200d3af0700785e"
+      },
+      "chambersc.map": {
+        "version": 2,
+        "header_hex": "0000000203cf0200d3af0700785e"
+      },
+      "chambersd.map": {
+        "version": 2,
+        "header_hex": "0000000203cf0200d3af0700785e"
+      },
+      "chamberse.map": {
+        "version": 2,
+        "header_hex": "0000000203cf0200d3af0700785e"
+      },
+      "chambersf.map": {
+        "version": 2,
+        "header_hex": "0000000203cf0200d3af0700785e"
+      },
+      "chapterhouse.map": {
+        "version": 2,
+        "header_hex": "000000024bc034009ce18900785e"
+      },
+      "charasis.map": {
+        "version": 2,
+        "header_hex": "00000002abe90100f2bb0600785e"
+      },
+      "chardok.map": {
+        "version": 2,
+        "header_hex": "0000000240f70200e8000a00785e"
+      },
+      "chardokb.map": {
+        "version": 2,
+        "header_hex": "000000021ef20900a6451e00785e"
+      },
+      "chelsithreborn.map": {
+        "version": 2,
+        "header_hex": "0000000211521a00dbe44f00785e"
+      },
+      "citymist.map": {
+        "version": 2,
+        "header_hex": "00000002945304007ef90d00785e"
+      },
+      "cityofbronze.map": {
+        "version": 2,
+        "header_hex": "0000000237552500140e6c00785e"
+      },
+      "clz.map": {
+        "version": 2,
+        "header_hex": "00000002858d00009e810100785e"
+      },
+      "cobaltscar.map": {
+        "version": 2,
+        "header_hex": "00000002cce3020078650800785e"
+      },
+      "codecay.map": {
+        "version": 2,
+        "header_hex": "00000002686d070012f61600785e"
+      },
+      "commonlands.map": {
+        "version": 2,
+        "header_hex": "000000025a351f00d90c3600785e"
+      },
+      "commons.map": {
+        "version": 2,
+        "header_hex": "00000002ada70100f4590500785e"
+      },
+      "convorteum.map": {
+        "version": 2,
+        "header_hex": "00000002d819190074ed4600785e"
+      },
+      "coolingchamber.map": {
+        "version": 2,
+        "header_hex": "00000002f1c91c002eaf4a00785e"
+      },
+      "corathus.map": {
+        "version": 2,
+        "header_hex": "00000002fb7e0d0036912100785e"
+      },
+      "corathusa.map": {
+        "version": 2,
+        "header_hex": "000000027148070024f80f00785e"
+      },
+      "corathusb.map": {
+        "version": 2,
+        "header_hex": "00000002b0be0f0001b92d00785e"
+      },
+      "crescent.map": {
+        "version": 2,
+        "header_hex": "00000002ccf81200c7ff2f00785e"
+      },
+      "crushbone.map": {
+        "version": 2,
+        "header_hex": "000000025157020017630700785e"
+      },
+      "cryptofshade.map": {
+        "version": 2,
+        "header_hex": "00000002b92d0a005f291500785e"
+      },
+      "crystal.map": {
+        "version": 2,
+        "header_hex": "000000021f1d0300ad470a00785e"
+      },
+      "crystallos.map": {
+        "version": 2,
+        "header_hex": "00000002390f2e00abfd8900785e"
+      },
+      "crystalshard.map": {
+        "version": 2,
+        "header_hex": "000000021f1d0300ad470a00785e"
+      },
+      "cshome.map": {
+        "version": 2,
+        "header_hex": "00000002ecf80100bab00600785e"
+      },
+      "dalnir.map": {
+        "version": 2,
+        "header_hex": "0000000219390200a30d0700785e"
+      },
+      "dawnshroud.map": {
+        "version": 2,
+        "header_hex": "000000023b840f00bb3f2c00785e"
+      },
+      "deadbone.map": {
+        "version": 2,
+        "header_hex": "00000002c4eb0600bbd20e00785e"
+      },
+      "delvea.map": {
+        "version": 2,
+        "header_hex": "00000002ddbc1c00cf394100785e"
+      },
+      "delveb.map": {
+        "version": 2,
+        "header_hex": "00000002deba15009f1c3d00785e"
+      },
+      "devastation.map": {
+        "version": 2,
+        "header_hex": "0000000299fd1d00bda33e00785e"
+      },
+      "devastationa.map": {
+        "version": 2,
+        "header_hex": "000000027a0a07002ae50e00785e"
+      },
+      "direwind.map": {
+        "version": 2,
+        "header_hex": "0000000276aa2000b8a53c00785e"
+      },
+      "discord.map": {
+        "version": 2,
+        "header_hex": "00000002436c280013916600785e"
+      },
+      "discordtower.map": {
+        "version": 2,
+        "header_hex": "00000002477d1600b24a3900785e"
+      },
+      "drachnidhive.map": {
+        "version": 2,
+        "header_hex": "0000000295311900a76b3800785e"
+      },
+      "drachnidhivea.map": {
+        "version": 2,
+        "header_hex": "000000020b100300eae30600785e"
+      },
+      "drachnidhiveb.map": {
+        "version": 2,
+        "header_hex": "00000002d3950100e4d80300785e"
+      },
+      "drachnidhivec.map": {
+        "version": 2,
+        "header_hex": "000000025b33020051b90400785e"
+      },
+      "dragoncrypt.map": {
+        "version": 2,
+        "header_hex": "000000024da80100811e0400785e"
+      },
+      "dragonscale.map": {
+        "version": 2,
+        "header_hex": "000000028f81360064967b00785e"
+      },
+      "dragonscalea.map": {
+        "version": 2,
+        "header_hex": "00000002c95f0e00d8591f00785e"
+      },
+      "dragonscaleb.map": {
+        "version": 2,
+        "header_hex": "00000002eb90170074533400785e"
+      },
+      "dranik.map": {
+        "version": 2,
+        "header_hex": "00000002f05e2c00e3dd7b00785e"
+      },
+      "dranikcatacombsa.map": {
+        "version": 2,
+        "header_hex": "00000002bc8720007db14d00785e"
+      },
+      "dranikcatacombsb.map": {
+        "version": 2,
+        "header_hex": "000000024fe61600e15d3700785e"
+      },
+      "dranikcatacombsc.map": {
+        "version": 2,
+        "header_hex": "000000025e442900b29c6c00785e"
+      },
+      "dranikhollowsa.map": {
+        "version": 2,
+        "header_hex": "00000002d54f1600f5123800785e"
+      },
+      "dranikhollowsb.map": {
+        "version": 2,
+        "header_hex": "00000002cbd80e005e402600785e"
+      },
+      "dranikhollowsc.map": {
+        "version": 2,
+        "header_hex": "0000000224cb0e0030722500785e"
+      },
+      "draniksewersa.map": {
+        "version": 2,
+        "header_hex": "00000002ee7a1800b10b3c00785e"
+      },
+      "draniksewersb.map": {
+        "version": 2,
+        "header_hex": "00000002ee351b0056af4000785e"
+      },
+      "draniksewersc.map": {
+        "version": 2,
+        "header_hex": "000000026c2d1a0068833b00785e"
+      },
+      "draniksscar.map": {
+        "version": 2,
+        "header_hex": "000000025204180051fb4100785e"
+      },
+      "dreadlands.map": {
+        "version": 2,
+        "header_hex": "0000000206121500bf0f3b00785e"
+      },
+      "dreadspire.map": {
+        "version": 2,
+        "header_hex": "00000002e90a18003a694000785e"
+      },
+      "droga.map": {
+        "version": 2,
+        "header_hex": "00000002df6c030046a00b00785e"
+      },
+      "dulak.map": {
+        "version": 2,
+        "header_hex": "0000000240281500a1534300785e"
+      },
+      "eastkarana.map": {
+        "version": 2,
+        "header_hex": "000000022d48020026160700785e"
+      },
+      "eastkorlach.map": {
+        "version": 2,
+        "header_hex": "00000002fbeb2900d5786100785e"
+      },
+      "eastkorlacha.map": {
+        "version": 2,
+        "header_hex": "0000000290940d0067861c00785e"
+      },
+      "eastsepulcher.map": {
+        "version": 2,
+        "header_hex": "000000027ae41500b2713700785e"
+      },
+      "eastwastes.map": {
+        "version": 2,
+        "header_hex": "00000002505d0d003b402a00785e"
+      },
+      "eastwastesshard.map": {
+        "version": 2,
+        "header_hex": "00000002505d0d003b402a00785e"
+      },
+      "echo.map": {
+        "version": 2,
+        "header_hex": "0000000256b90a00c56b1f00785e"
+      },
+      "ecommons.map": {
+        "version": 2,
+        "header_hex": "00000002c4070200cf940600785e"
+      },
+      "elddar.map": {
+        "version": 2,
+        "header_hex": "00000002f2b22b0078956300785e"
+      },
+      "elddara.map": {
+        "version": 2,
+        "header_hex": "000000025c350700f2f31200785e"
+      },
+      "emeraldjungle.map": {
+        "version": 2,
+        "header_hex": "00000002b4a835005217ab00785e"
+      },
+      "erudnext.map": {
+        "version": 2,
+        "header_hex": "00000002c0f702008b490a00785e"
+      },
+      "erudnint.map": {
+        "version": 2,
+        "header_hex": "000000028a57020057640800785e"
+      },
+      "erudsxing.map": {
+        "version": 2,
+        "header_hex": "00000002edc100001b400200785e"
+      },
+      "everfrost.map": {
+        "version": 2,
+        "header_hex": "000000023d260900f2d01900785e"
+      },
+      "eviltree.map": {
+        "version": 2,
+        "header_hex": "000000027d7e1f0086f43f00785e"
+      },
+      "fallen.map": {
+        "version": 2,
+        "header_hex": "00000002cc8f1300cfbf3000785e"
+      },
+      "fearplane.map": {
+        "version": 2,
+        "header_hex": "00000002968b0200bfaf0700785e"
+      },
+      "feerrott.map": {
+        "version": 2,
+        "header_hex": "000000023aa90300a0ea0a00785e"
+      },
+      "feerrott2.map": {
+        "version": 2,
+        "header_hex": "00000002fc010f004d6b2900785e"
+      },
+      "felwithea.map": {
+        "version": 2,
+        "header_hex": "0000000284d7010042550600785e"
+      },
+      "felwitheb.map": {
+        "version": 2,
+        "header_hex": "0000000233600100d4b40400785e"
+      },
+      "ferubi.map": {
+        "version": 2,
+        "header_hex": "00000002701d1100fc463900785e"
+      },
+      "fhalls.map": {
+        "version": 2,
+        "header_hex": "00000002cae604004d300e00785e"
+      },
+      "fieldofbone.map": {
+        "version": 2,
+        "header_hex": "0000000238e70b00ea392400785e"
+      },
+      "firiona.map": {
+        "version": 2,
+        "header_hex": "000000021ba40c0017182400785e"
+      },
+      "firiona_lit.map": {
+        "version": 1,
+        "header_hex": "0000000100000000010000000000"
+      },
+      "foundation.map": {
+        "version": 2,
+        "header_hex": "00000002d63d10002b1f2200785e"
+      },
+      "freeportacademy.map": {
+        "version": 2,
+        "header_hex": "00000002ca93050044610f00785e"
+      },
+      "freeportarena.map": {
+        "version": 2,
+        "header_hex": "0000000235560500062f0f00785e"
+      },
+      "freeportcityhall.map": {
+        "version": 2,
+        "header_hex": "000000027c6c010076390400785e"
+      },
+      "freeporteast.map": {
+        "version": 2,
+        "header_hex": "000000023e932500e9146700785e"
+      },
+      "freeporthall.map": {
+        "version": 2,
+        "header_hex": "000000029d830a0059d41f00785e"
+      },
+      "freeportmilitia.map": {
+        "version": 2,
+        "header_hex": "00000002e7da0300af1d0b00785e"
+      },
+      "freeportsewers.map": {
+        "version": 2,
+        "header_hex": "00000002ec170a00da5b1a00785e"
+      },
+      "freeporttemple.map": {
+        "version": 2,
+        "header_hex": "00000002f30c05007f110e00785e"
+      },
+      "freeporttheater.map": {
+        "version": 2,
+        "header_hex": "0000000205b703008e700a00785e"
+      },
+      "freeportwest.map": {
+        "version": 2,
+        "header_hex": "00000002591e2a005bb77b00785e"
+      },
+      "freporte.map": {
+        "version": 2,
+        "header_hex": "00000002d5af04003f461000785e"
+      },
+      "freportn.map": {
+        "version": 2,
+        "header_hex": "00000002e1a50300e1e40c00785e"
+      },
+      "freportw.map": {
+        "version": 2,
+        "header_hex": "00000002c516040030fc0d00785e"
+      },
+      "frogequip.map": {
+        "version": 1,
+        "header_hex": "0000000108040000010008040000"
+      },
+      "frontiermtns.map": {
+        "version": 2,
+        "header_hex": "000000023bf60f0014912b00785e"
+      },
+      "frostcrypt.map": {
+        "version": 2,
+        "header_hex": "00000002d55c0e00b32b2800785e"
+      },
+      "frozenshadow.map": {
+        "version": 2,
+        "header_hex": "000000021c780500920d1200785e"
+      },
+      "fungalforest.map": {
+        "version": 2,
+        "header_hex": "00000002ff880b000e3b1e00785e"
+      },
+      "fungusgrove.map": {
+        "version": 2,
+        "header_hex": "0000000204441000e4cb2c00785e"
+      },
+      "gfaydark.map": {
+        "version": 2,
+        "header_hex": "00000002825d08008d951900785e"
+      },
+      "greatdivide.map": {
+        "version": 2,
+        "header_hex": "0000000243fc0a0019501f00785e"
+      },
+      "grelleth.map": {
+        "version": 2,
+        "header_hex": "000000021f743a0071208400785e"
+      },
+      "griegsend.map": {
+        "version": 2,
+        "header_hex": "000000025ab4090017ff2000785e"
+      },
+      "grimling.map": {
+        "version": 2,
+        "header_hex": "000000024c9a1100fc1d2f00785e"
+      },
+      "grobb.map": {
+        "version": 2,
+        "header_hex": "000000029f500200025d0700785e"
+      },
+      "growthplane.map": {
+        "version": 2,
+        "header_hex": "00000002f66d0c00d9dd2300785e"
+      },
+      "guardian.map": {
+        "version": 2,
+        "header_hex": "000000028938110082a72d00785e"
+      },
+      "guildhall.map": {
+        "version": 2,
+        "header_hex": "000000027381040026a50b00785e"
+      },
+      "guildhall3.map": {
+        "version": 2,
+        "header_hex": "000000022b910000e4750100785e"
+      },
+      "guildhalllrg.map": {
+        "version": 2,
+        "header_hex": "00000002ad8d050034580f00785e"
+      },
+      "guildhallsml.map": {
+        "version": 2,
+        "header_hex": "000000025bd20000d82f0200785e"
+      },
+      "guildlobby.map": {
+        "version": 2,
+        "header_hex": "00000002f898050035c20e00785e"
+      },
+      "guka.map": {
+        "version": 2,
+        "header_hex": "0000000246460a00ce791f00785e"
+      },
+      "gukb.map": {
+        "version": 2,
+        "header_hex": "0000000227680a004b132000785e"
+      },
+      "gukbottom.map": {
+        "version": 2,
+        "header_hex": "0000000204090300d9900a00785e"
+      },
+      "gukc.map": {
+        "version": 2,
+        "header_hex": "00000002ffb5080094cb1a00785e"
+      },
+      "gukd.map": {
+        "version": 2,
+        "header_hex": "0000000293f0090011161e00785e"
+      },
+      "guke.map": {
+        "version": 2,
+        "header_hex": "00000002baa1090074041d00785e"
+      },
+      "gukf.map": {
+        "version": 2,
+        "header_hex": "00000002492d0a001a2b1f00785e"
+      },
+      "gukg.map": {
+        "version": 2,
+        "header_hex": "0000000255e307004e991700785e"
+      },
+      "gukh.map": {
+        "version": 2,
+        "header_hex": "000000023e080a0010991e00785e"
+      },
+      "guktop.map": {
+        "version": 2,
+        "header_hex": "00000002f3ea020015d90900785e"
+      },
+      "gunthak.map": {
+        "version": 2,
+        "header_hex": "0000000285a01600bc874200785e"
+      },
+      "gyrospireb.map": {
+        "version": 2,
+        "header_hex": "00000002ba8c0e00479a2500785e"
+      },
+      "gyrospirez.map": {
+        "version": 2,
+        "header_hex": "00000002fb63100085ba2900785e"
+      },
+      "halas.map": {
+        "version": 2,
+        "header_hex": "0000000257330300f2950a00785e"
+      },
+      "harbingers.map": {
+        "version": 2,
+        "header_hex": "00000002aa3d10001f0c2f00785e"
+      },
+      "hateplane.map": {
+        "version": 2,
+        "header_hex": "00000002ad0e0b006fdb2100785e"
+      },
+      "hateplaneb.map": {
+        "version": 2,
+        "header_hex": "00000002b7412100bc276e00785e"
+      },
+      "hatesfury.map": {
+        "version": 2,
+        "header_hex": "000000025fda0e00793c3100785e"
+      },
+      "heartoffear.map": {
+        "version": 2,
+        "header_hex": "00000002e69f330038407400785e"
+      },
+      "highkeep.map": {
+        "version": 2,
+        "header_hex": "000000027c0d0200a13d0700785e"
+      },
+      "highpass.map": {
+        "version": 2,
+        "header_hex": "00000002016e0200816f0800785e"
+      },
+      "highpasshold.map": {
+        "version": 2,
+        "header_hex": "000000028291140076163800785e"
+      },
+      "hillsofshade.map": {
+        "version": 2,
+        "header_hex": "00000002756f1f0065504c00785e"
+      },
+      "hohonora.map": {
+        "version": 2,
+        "header_hex": "00000002bf620c00f8502700785e"
+      },
+      "hohonorb.map": {
+        "version": 2,
+        "header_hex": "000000023df00200e2640800785e"
+      },
+      "hole.map": {
+        "version": 2,
+        "header_hex": "00000002440e0a0082312400785e"
+      },
+      "hollowshade.map": {
+        "version": 2,
+        "header_hex": "00000002d9771200dfed3000785e"
+      },
+      "housegarden.map": {
+        "version": 2,
+        "header_hex": "000000028ab81000329a2c00785e"
+      },
+      "iceclad.map": {
+        "version": 2,
+        "header_hex": "00000002ab330f00d9fb2a00785e"
+      },
+      "icefall.map": {
+        "version": 2,
+        "header_hex": "0000000206582400ab773b00785e"
+      },
+      "ikkinz.map": {
+        "version": 2,
+        "header_hex": "00000002a64a06005a871300785e"
+      },
+      "illsalin.map": {
+        "version": 2,
+        "header_hex": "0000000299561500cf523500785e"
+      },
+      "illsalina.map": {
+        "version": 2,
+        "header_hex": "00000002f5660300f5e90800785e"
+      },
+      "illsalinb.map": {
+        "version": 2,
+        "header_hex": "0000000254f6040004350b00785e"
+      },
+      "illsalinc.map": {
+        "version": 2,
+        "header_hex": "00000002f49a03007c0f0900785e"
+      },
+      "inktuta.map": {
+        "version": 2,
+        "header_hex": "0000000290860600d58a1300785e"
+      },
+      "innothule.map": {
+        "version": 2,
+        "header_hex": "0000000231430300c8aa0900785e"
+      },
+      "innothuleb.map": {
+        "version": 2,
+        "header_hex": "0000000283da0e00ddf01f00785e"
+      },
+      "jaggedpine.map": {
+        "version": 2,
+        "header_hex": "00000002f4aa1f0043565700785e"
+      },
+      "jardelshook.map": {
+        "version": 2,
+        "header_hex": "00000002e6260a0041531800785e"
+      },
+      "kael.map": {
+        "version": 2,
+        "header_hex": "0000000230d10300fdf60c00785e"
+      },
+      "kaelshard.map": {
+        "version": 2,
+        "header_hex": "0000000230d10300fdf60c00785e"
+      },
+      "kaesora.map": {
+        "version": 2,
+        "header_hex": "0000000250c50200411b0900785e"
+      },
+      "kaladima.map": {
+        "version": 2,
+        "header_hex": "000000022fd501009e5c0600785e"
+      },
+      "kaladimb.map": {
+        "version": 2,
+        "header_hex": "000000028043020067e10700785e"
+      },
+      "karnor.map": {
+        "version": 2,
+        "header_hex": "000000023f6203008ec40b00785e"
+      },
+      "katta.map": {
+        "version": 2,
+        "header_hex": "00000002fbcc0e00a34a3100785e"
+      },
+      "kattacastrum.map": {
+        "version": 2,
+        "header_hex": "0000000208f61c00533a5400785e"
+      },
+      "kedge.map": {
+        "version": 2,
+        "header_hex": "0000000241c4000021810200785e"
+      },
+      "kerraridge.map": {
+        "version": 2,
+        "header_hex": "0000000242f0010037480600785e"
+      },
+      "kithicor.map": {
+        "version": 2,
+        "header_hex": "0000000225e7010058c70500785e"
+      },
+      "kodtaz.map": {
+        "version": 2,
+        "header_hex": "000000022b2912005c673700785e"
+      },
+      "korascian.map": {
+        "version": 2,
+        "header_hex": "00000002abd30c009b431c00785e"
+      },
+      "kurn.map": {
+        "version": 2,
+        "header_hex": "00000002e391030021cd0c00785e"
+      },
+      "lakeofillomen.map": {
+        "version": 2,
+        "header_hex": "000000029d21110059ef3100785e"
+      },
+      "lakerathe.map": {
+        "version": 2,
+        "header_hex": "000000022ddf0300566b0b00785e"
+      },
+      "lavastorm.map": {
+        "version": 2,
+        "header_hex": "000000027a920e0030602500785e"
+      },
+      "lavastorm_v0.map": {
+        "version": 2,
+        "header_hex": "00000002822a0100275f0300785e"
+      },
+      "lavastorm_v1.map": {
+        "version": 2,
+        "header_hex": "000000027a920e0030602500785e"
+      },
+      "letalis.map": {
+        "version": 2,
+        "header_hex": "0000000261e81300de713500785e"
+      },
+      "lfaydark.map": {
+        "version": 2,
+        "header_hex": "000000023cb0030000120b00785e"
+      },
+      "lichencreep.map": {
+        "version": 2,
+        "header_hex": "0000000266730f0026172200785e"
+      },
+      "load.map": {
+        "version": 2,
+        "header_hex": "00000002bd5500001d180100785e"
+      },
+      "load2.map": {
+        "version": 2,
+        "header_hex": "00000002434708003a3b1b00785e"
+      },
+      "lopingplains.map": {
+        "version": 2,
+        "header_hex": "00000002b18034003c4f6e00785e"
+      },
+      "maiden.map": {
+        "version": 2,
+        "header_hex": "00000002f50a10007f2f2d00785e"
+      },
+      "maidensgrave.map": {
+        "version": 2,
+        "header_hex": "00000002a22f0500159d0a00785e"
+      },
+      "mansion.map": {
+        "version": 2,
+        "header_hex": "000000028aad230000bc6300785e"
+      },
+      "mechanotus.map": {
+        "version": 2,
+        "header_hex": "000000024d671f002e895800785e"
+      },
+      "mesa.map": {
+        "version": 2,
+        "header_hex": "00000002da6e20004aa53800785e"
+      },
+      "mira.map": {
+        "version": 2,
+        "header_hex": "00000002c4d307005c241800785e"
+      },
+      "miragulmare.map": {
+        "version": 2,
+        "header_hex": "0000000275b71f00aef55500785e"
+      },
+      "mirb.map": {
+        "version": 2,
+        "header_hex": "000000029b3606008acf1200785e"
+      },
+      "mirc.map": {
+        "version": 2,
+        "header_hex": "00000002354f0700f5d11500785e"
+      },
+      "mird.map": {
+        "version": 2,
+        "header_hex": "0000000281f7060004171600785e"
+      },
+      "mire.map": {
+        "version": 2,
+        "header_hex": "00000002ac980500fa5d1200785e"
+      },
+      "mirf.map": {
+        "version": 2,
+        "header_hex": "0000000242030500c1ef0f00785e"
+      },
+      "mirg.map": {
+        "version": 2,
+        "header_hex": "00000002cb1d0700545f1700785e"
+      },
+      "mirh.map": {
+        "version": 2,
+        "header_hex": "000000022e1f0a00e31d2000785e"
+      },
+      "miri.map": {
+        "version": 2,
+        "header_hex": "00000002c5d80700d2b61900785e"
+      },
+      "mirj.map": {
+        "version": 2,
+        "header_hex": "0000000270fb0700f4b81900785e"
+      },
+      "mischiefplane.map": {
+        "version": 2,
+        "header_hex": "000000022a8b0600e05b1700785e"
+      },
+      "mistmoore.map": {
+        "version": 2,
+        "header_hex": "000000023f7b02003eca0800785e"
+      },
+      "misty.map": {
+        "version": 2,
+        "header_hex": "00000002e66b0100af450400785e"
+      },
+      "mistythicket.map": {
+        "version": 2,
+        "header_hex": "0000000258260d00fce31500785e"
+      },
+      "mmca.map": {
+        "version": 2,
+        "header_hex": "000000028df90700db881400785e"
+      },
+      "mmcb.map": {
+        "version": 2,
+        "header_hex": "000000025bb0070048901300785e"
+      },
+      "mmcc.map": {
+        "version": 2,
+        "header_hex": "0000000246bd090030d61800785e"
+      },
+      "mmcd.map": {
+        "version": 2,
+        "header_hex": "00000002a0ab06007fe71600785e"
+      },
+      "mmce.map": {
+        "version": 2,
+        "header_hex": "0000000285d40600a5691700785e"
+      },
+      "mmcf.map": {
+        "version": 2,
+        "header_hex": "00000002597c0600b4601600785e"
+      },
+      "mmcg.map": {
+        "version": 2,
+        "header_hex": "000000028a220600d02a1200785e"
+      },
+      "mmch.map": {
+        "version": 2,
+        "header_hex": "0000000297f20600204a1400785e"
+      },
+      "mmci.map": {
+        "version": 2,
+        "header_hex": "0000000258cf06000f8a1300785e"
+      },
+      "mmcj.map": {
+        "version": 2,
+        "header_hex": "000000027a360600c4881500785e"
+      },
+      "monkeyrock.map": {
+        "version": 2,
+        "header_hex": "00000002968907004f4a1000785e"
+      },
+      "moors.map": {
+        "version": 2,
+        "header_hex": "0000000225ff2f0081235000785e"
+      },
+      "morellcastle.map": {
+        "version": 2,
+        "header_hex": "00000002875d1e0098c94f00785e"
+      },
+      "mseru.map": {
+        "version": 2,
+        "header_hex": "00000002087a0d00c0872500785e"
+      },
+      "nadox.map": {
+        "version": 2,
+        "header_hex": "0000000213d61400a7dd3e00785e"
+      },
+      "najena.map": {
+        "version": 2,
+        "header_hex": "00000002d0800100ebd80400785e"
+      },
+      "natimbi.map": {
+        "version": 2,
+        "header_hex": "00000002d19b1e00d41c5200785e"
+      },
+      "necropolis.map": {
+        "version": 2,
+        "header_hex": "00000002cf7e0300a4a00a00785e"
+      },
+      "nedaria.map": {
+        "version": 2,
+        "header_hex": "00000002b9a11000f3493000785e"
+      },
+      "neighborhood.map": {
+        "version": 2,
+        "header_hex": "00000002f0f20a0050b11900785e"
+      },
+      "nektropos.map": {
+        "version": 2,
+        "header_hex": "00000002a60d0300f5480900785e"
+      },
+      "nektulos(v3).map": {
+        "version": 2,
+        "header_hex": "0000000228bd1e00a5163000785e"
+      },
+      "nektulos.map": {
+        "version": 2,
+        "header_hex": "00000002d3c81e0085483000785e"
+      },
+      "nektulos_classic.map": {
+        "version": 2,
+        "header_hex": "0000000279620100370f0400785e"
+      },
+      "nektulos_v0.map": {
+        "version": 2,
+        "header_hex": "0000000279620100370f0400785e"
+      },
+      "nektulos_v1.map": {
+        "version": 2,
+        "header_hex": "00000002d3c81e0085483000785e"
+      },
+      "nektulosa.map": {
+        "version": 2,
+        "header_hex": "00000002f95e0100fbc70200785e"
+      },
+      "neriaka.map": {
+        "version": 2,
+        "header_hex": "00000002dba4020092f10800785e"
+      },
+      "neriakb.map": {
+        "version": 2,
+        "header_hex": "000000022f9f030074780c00785e"
+      },
+      "neriakc.map": {
+        "version": 2,
+        "header_hex": "0000000232830400aacd0f00785e"
+      },
+      "neriakd.map": {
+        "version": 2,
+        "header_hex": "0000000202b632003e4a7c00785e"
+      },
+      "netherbian.map": {
+        "version": 2,
+        "header_hex": "0000000259e41400773f4800785e"
+      },
+      "nexus.map": {
+        "version": 2,
+        "header_hex": "000000022ba30300942e0b00785e"
+      },
+      "nightmareb.map": {
+        "version": 2,
+        "header_hex": "0000000262be050016980f00785e"
+      },
+      "northkarana.map": {
+        "version": 2,
+        "header_hex": "00000002c8e30100c7580600785e"
+      },
+      "northro.map": {
+        "version": 2,
+        "header_hex": "000000022c492800aa074200785e"
+      },
+      "nro.map": {
+        "version": 2,
+        "header_hex": "00000002a1ab010081ef0400785e"
+      },
+      "nurga.map": {
+        "version": 2,
+        "header_hex": "00000002c07c0100d0d50400785e"
+      },
+      "oasis.map": {
+        "version": 2,
+        "header_hex": "000000029cb3010056020500785e"
+      },
+      "oceangreenhills.map": {
+        "version": 2,
+        "header_hex": "00000002b6c1190069db3500785e"
+      },
+      "oceangreenvillage.map": {
+        "version": 2,
+        "header_hex": "00000002f7c81300f5b32800785e"
+      },
+      "oceanoftears.map": {
+        "version": 2,
+        "header_hex": "00000002c25d1800abfd3600785e"
+      },
+      "oggok.map": {
+        "version": 2,
+        "header_hex": "0000000261a52600b4266500785e"
+      },
+      "oldblackburrow.map": {
+        "version": 2,
+        "header_hex": "00000002a63f1800a0d83300785e"
+      },
+      "oldbloodfield.map": {
+        "version": 2,
+        "header_hex": "00000002401f1f00fad64100785e"
+      },
+      "oldcommons.map": {
+        "version": 2,
+        "header_hex": "0000000283fd3d002823c800785e"
+      },
+      "olddranik.map": {
+        "version": 2,
+        "header_hex": "00000002fcf72400fb345b00785e"
+      },
+      "oldfieldofbone.map": {
+        "version": 2,
+        "header_hex": "000000023f6b2f00f6166200785e"
+      },
+      "oldhighpass.map": {
+        "version": 2,
+        "header_hex": "0000000246cf1200ee3e3600785e"
+      },
+      "oldkaesoraa.map": {
+        "version": 2,
+        "header_hex": "0000000286071c00b94b5000785e"
+      },
+      "oldkaesorab.map": {
+        "version": 2,
+        "header_hex": "00000002d37e0300c65c0900785e"
+      },
+      "oldkithicor.map": {
+        "version": 2,
+        "header_hex": "0000000250f33c00048e7c00785e"
+      },
+      "oldkurn.map": {
+        "version": 2,
+        "header_hex": "00000002898c080032891800785e"
+      },
+      "oot.map": {
+        "version": 2,
+        "header_hex": "00000002233d0500eb4c0e00785e"
+      },
+      "overthere.map": {
+        "version": 2,
+        "header_hex": "00000002a9c70d00eb202800785e"
+      },
+      "paineel.map": {
+        "version": 2,
+        "header_hex": "00000002bf400500a1ad1200785e"
+      },
+      "paludal.map": {
+        "version": 2,
+        "header_hex": "00000002e0ff0600c28e1300785e"
+      },
+      "paw.map": {
+        "version": 2,
+        "header_hex": "000000025b82010078e00400785e"
+      },
+      "pellucid.map": {
+        "version": 2,
+        "header_hex": "00000002b499110012b62600785e"
+      },
+      "permafrost.map": {
+        "version": 2,
+        "header_hex": "00000002c207020021780600785e"
+      },
+      "phinteriortree.map": {
+        "version": 2,
+        "header_hex": "0000000260140600e6560c00785e"
+      },
+      "phylactery.map": {
+        "version": 2,
+        "header_hex": "00000002f1be100088ee2d00785e"
+      },
+      "pillarsalra.map": {
+        "version": 2,
+        "header_hex": "00000002851f2b00eb497a00785e"
+      },
+      "plhdkeinteriors1a1.map": {
+        "version": 2,
+        "header_hex": "00000002e8770000fa4b0100785e"
+      },
+      "plhdkeinteriors1a2.map": {
+        "version": 2,
+        "header_hex": "00000002e8770000fa4b0100785e"
+      },
+      "plhdkeinteriors1a3.map": {
+        "version": 2,
+        "header_hex": "00000002e8770000fa4b0100785e"
+      },
+      "plhdkeinteriors3a1.map": {
+        "version": 2,
+        "header_hex": "00000002779f000092b60100785e"
+      },
+      "plhdkeinteriors3a2.map": {
+        "version": 2,
+        "header_hex": "0000000297ac000032e30100785e"
+      },
+      "plhdkeinteriors3a3.map": {
+        "version": 2,
+        "header_hex": "0000000297ac000032e30100785e"
+      },
+      "plhogrinteriors1a1.map": {
+        "version": 2,
+        "header_hex": "00000002182b0000805a0000785e"
+      },
+      "plhogrinteriors1a2.map": {
+        "version": 2,
+        "header_hex": "00000002322b0000805a0000785e"
+      },
+      "plhogrinteriors3a1.map": {
+        "version": 2,
+        "header_hex": "00000002be42000014900000785e"
+      },
+      "plhogrinteriors3a2.map": {
+        "version": 2,
+        "header_hex": "00000002bf42000014900000785e"
+      },
+      "plhogrinteriors3b1.map": {
+        "version": 2,
+        "header_hex": "00000002266b000044e40000785e"
+      },
+      "plhogrinteriors3b2.map": {
+        "version": 2,
+        "header_hex": "00000002216b000044e40000785e"
+      },
+      "poair.map": {
+        "version": 2,
+        "header_hex": "00000002b5b00a0029a12200785e"
+      },
+      "podisease.map": {
+        "version": 2,
+        "header_hex": "00000002a7641b00a5364700785e"
+      },
+      "poeartha.map": {
+        "version": 2,
+        "header_hex": "0000000265300900bb251b00785e"
+      },
+      "poearthb.map": {
+        "version": 2,
+        "header_hex": "0000000297f00300ad370c00785e"
+      },
+      "pofire.map": {
+        "version": 2,
+        "header_hex": "00000002a8ce1a003d7b4b00785e"
+      },
+      "poinnovation.map": {
+        "version": 2,
+        "header_hex": "000000022bea1700cb594e00785e"
+      },
+      "pojustice.map": {
+        "version": 2,
+        "header_hex": "000000021a800800bdf71a00785e"
+      },
+      "poknowledge.map": {
+        "version": 2,
+        "header_hex": "0000000204590e000f812f00785e"
+      },
+      "ponightmare.map": {
+        "version": 2,
+        "header_hex": "000000026e5a1f0011f35800785e"
+      },
+      "poshadow.map": {
+        "version": 2,
+        "header_hex": "0000000243e7380000e3a200785e"
+      },
+      "postorms.map": {
+        "version": 2,
+        "header_hex": "00000002725a2500c9576600785e"
+      },
+      "potactics.map": {
+        "version": 2,
+        "header_hex": "000000027b021b0024ee5b00785e"
+      },
+      "potimea.map": {
+        "version": 2,
+        "header_hex": "0000000259c20600157a1500785e"
+      },
+      "potimeb.map": {
+        "version": 2,
+        "header_hex": "000000028fd90700bd0a1800785e"
+      },
+      "potorment.map": {
+        "version": 2,
+        "header_hex": "00000002f3e20900d5351e00785e"
+      },
+      "potranquility.map": {
+        "version": 2,
+        "header_hex": "0000000211801100309e3200785e"
+      },
+      "povalor.map": {
+        "version": 2,
+        "header_hex": "00000002ebab1700580e4300785e"
+      },
+      "powar.map": {
+        "version": 2,
+        "header_hex": "00000002a4e70a00ed612000785e"
+      },
+      "powater.map": {
+        "version": 2,
+        "header_hex": "00000002b41a08000a491600785e"
+      },
+      "precipiceofwar.map": {
+        "version": 2,
+        "header_hex": "00000002e0a90800eabe1400785e"
+      },
+      "provinggrounds.map": {
+        "version": 2,
+        "header_hex": "00000002642a2300299a7c00785e"
+      },
+      "qcat.map": {
+        "version": 2,
+        "header_hex": "00000002b6f20000d1380300785e"
+      },
+      "qey2hh1.map": {
+        "version": 2,
+        "header_hex": "000000023f9a02000bd10800785e"
+      },
+      "qeynos.map": {
+        "version": 2,
+        "header_hex": "0000000298aa03001c630c00785e"
+      },
+      "qeynos2.map": {
+        "version": 2,
+        "header_hex": "0000000284030200cb1b0700785e"
+      },
+      "qeytoqrg.map": {
+        "version": 2,
+        "header_hex": "000000023761010031f50300785e"
+      },
+      "qinimi.map": {
+        "version": 2,
+        "header_hex": "000000021e9a0800dafa1900785e"
+      },
+      "qrg.map": {
+        "version": 2,
+        "header_hex": "00000002920f0100567b0300785e"
+      },
+      "qvic.map": {
+        "version": 2,
+        "header_hex": "00000002f43c0c0050ce2300785e"
+      },
+      "qvicb.map": {
+        "version": 2,
+        "header_hex": "00000002eedb0000e54f0200785e"
+      },
+      "rage.map": {
+        "version": 2,
+        "header_hex": "000000026c160c00ab732300785e"
+      },
+      "ragea.map": {
+        "version": 2,
+        "header_hex": "00000002b8af0f005c562d00785e"
+      },
+      "rathechamber.map": {
+        "version": 2,
+        "header_hex": "00000002d8541200496c3600785e"
+      },
+      "rathemtn.map": {
+        "version": 2,
+        "header_hex": "00000002ba1a0500cf3e0f00785e"
+      },
+      "redfeather.map": {
+        "version": 2,
+        "header_hex": "00000002fefe080089bb1600785e"
+      },
+      "relic.map": {
+        "version": 2,
+        "header_hex": "0000000256a805002f520f00785e"
+      },
+      "resplendent.map": {
+        "version": 2,
+        "header_hex": "0000000286db3600c3708e00785e"
+      },
+      "riftseekers.map": {
+        "version": 2,
+        "header_hex": "00000002f4411800b8114c00785e"
+      },
+      "rivervale.map": {
+        "version": 2,
+        "header_hex": "00000002114602004dc20700785e"
+      },
+      "riwwi.map": {
+        "version": 2,
+        "header_hex": "00000002771a080098031a00785e"
+      },
+      "roost.map": {
+        "version": 2,
+        "header_hex": "00000002e94d090043e11600785e"
+      },
+      "rubak.map": {
+        "version": 2,
+        "header_hex": "0000000255b81c00cfda4100785e"
+      },
+      "ruja.map": {
+        "version": 2,
+        "header_hex": "00000002bb930900950b1d00785e"
+      },
+      "rujb.map": {
+        "version": 2,
+        "header_hex": "00000002c64a0900ac8c1b00785e"
+      },
+      "rujc.map": {
+        "version": 2,
+        "header_hex": "00000002d7b60c003fa82500785e"
+      },
+      "rujd.map": {
+        "version": 2,
+        "header_hex": "0000000296350c00d4ff2400785e"
+      },
+      "ruje.map": {
+        "version": 2,
+        "header_hex": "00000002bef50800f3fa1a00785e"
+      },
+      "rujf.map": {
+        "version": 2,
+        "header_hex": "00000002a00f080086fc1700785e"
+      },
+      "rujg.map": {
+        "version": 2,
+        "header_hex": "00000002ef800700345f1600785e"
+      },
+      "rujh.map": {
+        "version": 2,
+        "header_hex": "00000002248a060001ea1200785e"
+      },
+      "ruji.map": {
+        "version": 2,
+        "header_hex": "00000002c82e0700bc191500785e"
+      },
+      "rujj.map": {
+        "version": 2,
+        "header_hex": "00000002255b0700a9591500785e"
+      },
+      "runnyeye.map": {
+        "version": 2,
+        "header_hex": "0000000222740200756e0800785e"
+      },
+      "sarithcity.map": {
+        "version": 2,
+        "header_hex": "000000026f391a000df54500785e"
+      },
+      "scarlet.map": {
+        "version": 2,
+        "header_hex": "0000000286741700b9ad4000785e"
+      },
+      "sebilis.map": {
+        "version": 2,
+        "header_hex": "0000000259f50300a28d0d00785e"
+      },
+      "sepulcher.map": {
+        "version": 2,
+        "header_hex": "0000000270a523008f3f5900785e"
+      },
+      "shadeweaver.map": {
+        "version": 2,
+        "header_hex": "00000002645e11008fa52e00785e"
+      },
+      "shadowedmount.map": {
+        "version": 2,
+        "header_hex": "0000000266f80c00c7bd1b00785e"
+      },
+      "shadowhaven.map": {
+        "version": 2,
+        "header_hex": "000000027160100025d33700785e"
+      },
+      "shadowrest.map": {
+        "version": 2,
+        "header_hex": "00000002a60d0300f5480900785e"
+      },
+      "shadowspine.map": {
+        "version": 2,
+        "header_hex": "0000000280690100e4880300785e"
+      },
+      "shardslanding.map": {
+        "version": 2,
+        "header_hex": "00000002abb32000b27d4c00785e"
+      },
+      "sharvahl.map": {
+        "version": 2,
+        "header_hex": "0000000256a8100041e93200785e"
+      },
+      "shiningcity.map": {
+        "version": 2,
+        "header_hex": "0000000238851d0031d35300785e"
+      },
+      "shipmvm.map": {
+        "version": 2,
+        "header_hex": "000000027fb705009b660e00785e"
+      },
+      "shipmvp.map": {
+        "version": 2,
+        "header_hex": "000000021a4b1100a9c52c00785e"
+      },
+      "shipmvu.map": {
+        "version": 2,
+        "header_hex": "0000000265b30600f8af1400785e"
+      },
+      "shippvu.map": {
+        "version": 2,
+        "header_hex": "00000002c89709008a241900785e"
+      },
+      "shipuvu.map": {
+        "version": 2,
+        "header_hex": "000000020bcd0300a2b10a00785e"
+      },
+      "shipworkshop.map": {
+        "version": 2,
+        "header_hex": "000000026dc816008a603800785e"
+      },
+      "silyssar.map": {
+        "version": 2,
+        "header_hex": "0000000295ca090094ed2400785e"
+      },
+      "sirens.map": {
+        "version": 2,
+        "header_hex": "00000002b8160300f8750a00785e"
+      },
+      "sky.map": {
+        "version": 1,
+        "header_hex": "00000001e86400000100e8640000"
+      },
+      "skyfire.map": {
+        "version": 2,
+        "header_hex": "00000002cbd51100f96a3100785e"
+      },
+      "skylance.map": {
+        "version": 2,
+        "header_hex": "00000002706109000a981c00785e"
+      },
+      "skyshrine.map": {
+        "version": 2,
+        "header_hex": "0000000242da0500b1aa1300785e"
+      },
+      "sleeper.map": {
+        "version": 2,
+        "header_hex": "00000002111702007bca0600785e"
+      },
+      "sncrematory.map": {
+        "version": 2,
+        "header_hex": "000000020f4405008c2e1200785e"
+      },
+      "snlair.map": {
+        "version": 2,
+        "header_hex": "000000020b41050088a01100785e"
+      },
+      "snplant.map": {
+        "version": 2,
+        "header_hex": "00000002573804008db20e00785e"
+      },
+      "snpool.map": {
+        "version": 2,
+        "header_hex": "000000023ee904007aba1000785e"
+      },
+      "soldunga.map": {
+        "version": 2,
+        "header_hex": "0000000283ea030056a80d00785e"
+      },
+      "soldungb.map": {
+        "version": 2,
+        "header_hex": "000000021bf8020063760900785e"
+      },
+      "soldungc.map": {
+        "version": 2,
+        "header_hex": "0000000235b30a0030e21f00785e"
+      },
+      "solrotower.map": {
+        "version": 2,
+        "header_hex": "0000000270570d00005e2900785e"
+      },
+      "soltemple.map": {
+        "version": 2,
+        "header_hex": "00000002a7710100b6040500785e"
+      },
+      "solteris.map": {
+        "version": 2,
+        "header_hex": "00000002d0830e002dba2500785e"
+      },
+      "somnium.map": {
+        "version": 2,
+        "header_hex": "00000002cf0535000cea8900785e"
+      },
+      "southkarana.map": {
+        "version": 2,
+        "header_hex": "0000000278c4020006710900785e"
+      },
+      "southro.map": {
+        "version": 2,
+        "header_hex": "000000022bbe35000f365000785e"
+      },
+      "sro.map": {
+        "version": 2,
+        "header_hex": "000000024d7d0100da770400785e"
+      },
+      "sseru.map": {
+        "version": 2,
+        "header_hex": "00000002b8111900ad3f5300785e"
+      },
+      "ssratemple.map": {
+        "version": 2,
+        "header_hex": "0000000273a40d007e542b00785e"
+      },
+      "steamfactory.map": {
+        "version": 2,
+        "header_hex": "00000002e438100085f72800785e"
+      },
+      "steamfont.map": {
+        "version": 2,
+        "header_hex": "00000002f5b5020091ea0700785e"
+      },
+      "steamfontmts.map": {
+        "version": 2,
+        "header_hex": "00000002f3611200f3132400785e"
+      },
+      "steppes.map": {
+        "version": 2,
+        "header_hex": "00000002011a1b0063cb3800785e"
+      },
+      "stillmoona.map": {
+        "version": 2,
+        "header_hex": "00000002a3ea230036336200785e"
+      },
+      "stillmoonb.map": {
+        "version": 2,
+        "header_hex": "0000000276410d004b461e00785e"
+      },
+      "stonebrunt.map": {
+        "version": 2,
+        "header_hex": "000000023b5709005e9f1a00785e"
+      },
+      "stonehive.map": {
+        "version": 2,
+        "header_hex": "00000002521f0d0068152200785e"
+      },
+      "stonesnake.map": {
+        "version": 2,
+        "header_hex": "000000029fcc360058ae7100785e"
+      },
+      "suncrest.map": {
+        "version": 2,
+        "header_hex": "000000027f640d00f9e61c00785e"
+      },
+      "sunderock.map": {
+        "version": 2,
+        "header_hex": "000000021e6b1f00180d3600785e"
+      },
+      "swampofnohope.map": {
+        "version": 2,
+        "header_hex": "000000022a480a00e5c21c00785e"
+      },
+      "tacvi.map": {
+        "version": 2,
+        "header_hex": "00000002ec1f0400340e0d00785e"
+      },
+      "taka.map": {
+        "version": 2,
+        "header_hex": "00000002030d090079281c00785e"
+      },
+      "takb.map": {
+        "version": 2,
+        "header_hex": "00000002a7d40a0092162200785e"
+      },
+      "takc.map": {
+        "version": 2,
+        "header_hex": "000000029a1309007b6e1b00785e"
+      },
+      "takd.map": {
+        "version": 2,
+        "header_hex": "00000002c9be0b00373f2600785e"
+      },
+      "take.map": {
+        "version": 2,
+        "header_hex": "00000002a6bf07005d9d1500785e"
+      },
+      "takf.map": {
+        "version": 2,
+        "header_hex": "00000002042d0800d24e1700785e"
+      },
+      "takg.map": {
+        "version": 2,
+        "header_hex": "00000002b5e90a005a622300785e"
+      },
+      "takh.map": {
+        "version": 2,
+        "header_hex": "00000002015f0b0097bd2400785e"
+      },
+      "taki.map": {
+        "version": 2,
+        "header_hex": "000000029d9608007bbb1900785e"
+      },
+      "takishruins.map": {
+        "version": 2,
+        "header_hex": "00000002d1f60b00e6471f00785e"
+      },
+      "takishruinsa.map": {
+        "version": 2,
+        "header_hex": "00000002a8790900c1521500785e"
+      },
+      "takj.map": {
+        "version": 2,
+        "header_hex": "000000023432080019f81700785e"
+      },
+      "templeveeshan.map": {
+        "version": 2,
+        "header_hex": "000000024579020034860800785e"
+      },
+      "tenebrous.map": {
+        "version": 2,
+        "header_hex": "000000024d490c0022e52200785e"
+      },
+      "thalassius.map": {
+        "version": 2,
+        "header_hex": "00000002218a1900bdae3e00785e"
+      },
+      "theater.map": {
+        "version": 2,
+        "header_hex": "00000002fea72a00101d4100785e"
+      },
+      "theatera.map": {
+        "version": 2,
+        "header_hex": "000000022bba050092f91000785e"
+      },
+      "thedeep.map": {
+        "version": 2,
+        "header_hex": "000000025aad050033e70e00785e"
+      },
+      "thegrey.map": {
+        "version": 2,
+        "header_hex": "00000002f6420d008a702500785e"
+      },
+      "thenest.map": {
+        "version": 2,
+        "header_hex": "0000000212562e003ced6a00785e"
+      },
+      "thevoida.map": {
+        "version": 2,
+        "header_hex": "000000022d570800fa9d1300785e"
+      },
+      "thevoidb.map": {
+        "version": 2,
+        "header_hex": "00000002ca550800f8961300785e"
+      },
+      "thevoidc.map": {
+        "version": 2,
+        "header_hex": "00000002295008007a7d1300785e"
+      },
+      "thevoidd.map": {
+        "version": 2,
+        "header_hex": "00000002295008007a7d1300785e"
+      },
+      "thevoide.map": {
+        "version": 2,
+        "header_hex": "00000002295008007a7d1300785e"
+      },
+      "thevoidf.map": {
+        "version": 2,
+        "header_hex": "00000002295008007a7d1300785e"
+      },
+      "thevoidg.map": {
+        "version": 2,
+        "header_hex": "00000002295008007a7d1300785e"
+      },
+      "thuledream.map": {
+        "version": 2,
+        "header_hex": "0000000285ed1800e9c03900785e"
+      },
+      "thulehouse1.map": {
+        "version": 2,
+        "header_hex": "000000020add2800f8597200785e"
+      },
+      "thulehouse2.map": {
+        "version": 2,
+        "header_hex": "00000002df764000819aac00785e"
+      },
+      "thulelibrary.map": {
+        "version": 2,
+        "header_hex": "00000002b2740d00418d2500785e"
+      },
+      "thuliasaur.map": {
+        "version": 2,
+        "header_hex": "000000020a172100c3605400785e"
+      },
+      "thuliasaur2.map": {
+        "version": 2,
+        "header_hex": "0000000236b81e0040b14e00785e"
+      },
+      "thundercrest.map": {
+        "version": 2,
+        "header_hex": "00000002474a2600f3156f00785e"
+      },
+      "thurgadina.map": {
+        "version": 2,
+        "header_hex": "00000002983f0600f9d31500785e"
+      },
+      "thurgadinb.map": {
+        "version": 2,
+        "header_hex": "0000000220fc030040d70c00785e"
+      },
+      "timorous.map": {
+        "version": 2,
+        "header_hex": "00000002aeb91c0064114d00785e"
+      },
+      "tipt.map": {
+        "version": 2,
+        "header_hex": "00000002d37209001b9c1a00785e"
+      },
+      "torgiran.map": {
+        "version": 2,
+        "header_hex": "0000000285c60f0022cb2d00785e"
+      },
+      "toskirakk.map": {
+        "version": 2,
+        "header_hex": "000000026beb130004163300785e"
+      },
+      "tox.map": {
+        "version": 2,
+        "header_hex": "00000002657202005f4e0700785e"
+      },
+      "toxxulia.map": {
+        "version": 2,
+        "header_hex": "00000002d8621e00616a3a00785e"
+      },
+      "trakanon.map": {
+        "version": 2,
+        "header_hex": "0000000229f71b00c1175700785e"
+      },
+      "tutorial.map": {
+        "version": 2,
+        "header_hex": "00000002d00c010079700300785e"
+      },
+      "tutoriala.map": {
+        "version": 2,
+        "header_hex": "000000029fe403009bf10900785e"
+      },
+      "tutoriala2.map": {
+        "version": 2,
+        "header_hex": "000000029ee403009bf10900785e"
+      },
+      "tutorialb.map": {
+        "version": 2,
+        "header_hex": "00000002ce70150024893800785e"
+      },
+      "twilight.map": {
+        "version": 2,
+        "header_hex": "00000002c71f1a00d3cd4600785e"
+      },
+      "txevu.map": {
+        "version": 2,
+        "header_hex": "0000000218050b001cd72100785e"
+      },
+      "umbral.map": {
+        "version": 2,
+        "header_hex": "00000002c43411009be92f00785e"
+      },
+      "underquarry.map": {
+        "version": 2,
+        "header_hex": "00000002fbed1500a6f93100785e"
+      },
+      "unrest.map": {
+        "version": 2,
+        "header_hex": "00000002b18b020094840800785e"
+      },
+      "uqua.map": {
+        "version": 2,
+        "header_hex": "0000000243e4040009b61000785e"
+      },
+      "valdeholm.map": {
+        "version": 2,
+        "header_hex": "00000002868238000ad18c00785e"
+      },
+      "veeshan.map": {
+        "version": 2,
+        "header_hex": "00000002f3fb0300f9080d00785e"
+      },
+      "veksar.map": {
+        "version": 2,
+        "header_hex": "0000000212bc0a00a77d2200785e"
+      },
+      "velketor.map": {
+        "version": 2,
+        "header_hex": "000000029b300300a47d0a00785e"
+      },
+      "vequip.map": {
+        "version": 1,
+        "header_hex": "00000001960f00000100960f0000"
+      },
+      "vergalid.map": {
+        "version": 2,
+        "header_hex": "00000002e25f140006473200785e"
+      },
+      "vexthal.map": {
+        "version": 2,
+        "header_hex": "0000000289ff1300b6b63f00785e"
+      },
+      "vxed.map": {
+        "version": 2,
+        "header_hex": "00000002b0390900824d1a00785e"
+      },
+      "wakening.map": {
+        "version": 2,
+        "header_hex": "00000002c4f51e0091e06600785e"
+      },
+      "wallofslaughter.map": {
+        "version": 2,
+        "header_hex": "00000002f5bc1c000ab05300785e"
+      },
+      "warrens.map": {
+        "version": 2,
+        "header_hex": "0000000239aa0200e51f0900785e"
+      },
+      "warrens2.map": {
+        "version": 1,
+        "header_hex": "00000001766f0000be001e8c0000"
+      },
+      "warslikswood.map": {
+        "version": 2,
+        "header_hex": "00000002e9e61e00bf8d5c00785e"
+      },
+      "warslikswood_lit.map": {
+        "version": 1,
+        "header_hex": "0000000100000000010000000000"
+      },
+      "weddingchapel.map": {
+        "version": 2,
+        "header_hex": "00000002f7a8020094b00700785e"
+      },
+      "weddingchapeldark.map": {
+        "version": 2,
+        "header_hex": "0000000217a80200d4ae0700785e"
+      },
+      "well.map": {
+        "version": 2,
+        "header_hex": "0000000235fc030093340800785e"
+      },
+      "westkorlach.map": {
+        "version": 2,
+        "header_hex": "000000023ac01b006d914000785e"
+      },
+      "westkorlacha.map": {
+        "version": 2,
+        "header_hex": "0000000266150a0083641800785e"
+      },
+      "westkorlachb.map": {
+        "version": 2,
+        "header_hex": "00000002236a070049b41000785e"
+      },
+      "westkorlachc.map": {
+        "version": 2,
+        "header_hex": "00000002b97f0400ee600900785e"
+      },
+      "westsepulcher.map": {
+        "version": 2,
+        "header_hex": "000000027f9d1d0024c74600785e"
+      },
+      "westwastes.map": {
+        "version": 2,
+        "header_hex": "0000000208bf0800aa4d1900785e"
+      },
+      "windsong.map": {
+        "version": 2,
+        "header_hex": "00000002e381170096983300785e"
+      },
+      "xorbb.map": {
+        "version": 2,
+        "header_hex": "000000021252290016836100785e"
+      },
+      "yxtta.map": {
+        "version": 2,
+        "header_hex": "0000000291250b0082792000785e"
+      },
+      "zhisza.map": {
+        "version": 2,
+        "header_hex": "000000026c4e0d0042582300785e"
+      }
+    },
+    "nav": {
+      "abysmal.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a2"
+      },
+      "acrylia.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c6"
+      },
+      "airplane.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000054"
+      },
+      "akanon.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005c"
+      },
+      "akheva.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008d"
+      },
+      "alkabormare.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d9"
+      },
+      "anguish.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b1"
+      },
+      "arcstone.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000009"
+      },
+      "arelis.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e7"
+      },
+      "arena.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000004"
+      },
+      "arena2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e2"
+      },
+      "argath.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000009d"
+      },
+      "arthicrex.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000064"
+      },
+      "ashengate.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000084"
+      },
+      "atiiki.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000086"
+      },
+      "barindu.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f2"
+      },
+      "barren.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f9"
+      },
+      "barter.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d3"
+      },
+      "bazaar.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000081"
+      },
+      "bazaar_v0.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f5"
+      },
+      "bazaar_v1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000081"
+      },
+      "beastdomain.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e7"
+      },
+      "befallen.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000014"
+      },
+      "beholder.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000094"
+      },
+      "bertoxtemple.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004b"
+      },
+      "blackburrow.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000092"
+      },
+      "blacksail.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000040"
+      },
+      "bloodfields.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b6"
+      },
+      "bloodmoon.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d4"
+      },
+      "bothunder.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005e"
+      },
+      "breedinggrounds.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002f"
+      },
+      "brellsarena.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000045"
+      },
+      "brellsrest.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000061"
+      },
+      "brellstemple.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000018"
+      },
+      "broodlands.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ac"
+      },
+      "buriedsea.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000069"
+      },
+      "burningwood.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000085"
+      },
+      "butcher.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000014"
+      },
+      "cabeast.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b5"
+      },
+      "cabwest.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000022"
+      },
+      "cauldron.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d9"
+      },
+      "causeway.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f2"
+      },
+      "cazicthule.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008f"
+      },
+      "chambersa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000011"
+      },
+      "chambersb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004f"
+      },
+      "chambersc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d3"
+      },
+      "chambersd.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ad"
+      },
+      "chamberse.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001f"
+      },
+      "chambersf.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000052"
+      },
+      "chapterhouse.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000068"
+      },
+      "charasis.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000bf"
+      },
+      "chardok.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005e"
+      },
+      "chardokb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000038"
+      },
+      "chelsithreborn.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000082"
+      },
+      "citymist.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000cf"
+      },
+      "cityofbronze.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000065"
+      },
+      "clz.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000006e"
+      },
+      "cobaltscar.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000074"
+      },
+      "codecay.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b4"
+      },
+      "commonlands.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008e"
+      },
+      "commons.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000026"
+      },
+      "convorteum.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000085"
+      },
+      "coolingchamber.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000009e"
+      },
+      "corathus.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000031"
+      },
+      "corathusa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005f"
+      },
+      "corathusb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000be"
+      },
+      "crescent.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005a"
+      },
+      "crushbone.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007d"
+      },
+      "cryptofshade.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ed"
+      },
+      "crystal.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002e"
+      },
+      "crystallos.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000bb"
+      },
+      "crystalshard.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000036"
+      },
+      "cshome.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000017"
+      },
+      "dalnir.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000db"
+      },
+      "dawnshroud.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007b"
+      },
+      "deadbone.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000027"
+      },
+      "delvea.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000071"
+      },
+      "delveb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000009c"
+      },
+      "devastation.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007d"
+      },
+      "devastationa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005f"
+      },
+      "direwind.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002d"
+      },
+      "discord.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000016"
+      },
+      "discordtower.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ab"
+      },
+      "drachnidhive.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008c"
+      },
+      "drachnidhivea.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005a"
+      },
+      "drachnidhiveb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000db"
+      },
+      "drachnidhivec.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000058"
+      },
+      "dragoncrypt.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c4"
+      },
+      "dragonscale.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001f"
+      },
+      "dragonscalea.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000080"
+      },
+      "dragonscaleb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000093"
+      },
+      "dranik.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000040"
+      },
+      "dranikcatacombsa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000005"
+      },
+      "dranikcatacombsb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000bc"
+      },
+      "dranikcatacombsc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d9"
+      },
+      "dranikhollowsa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d5"
+      },
+      "dranikhollowsb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002e"
+      },
+      "dranikhollowsc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f6"
+      },
+      "draniksewersa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000006a"
+      },
+      "draniksewersb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000023"
+      },
+      "draniksewersc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000027"
+      },
+      "draniksscar.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000090"
+      },
+      "dreadlands.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a4"
+      },
+      "dreadspire.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000035"
+      },
+      "droga.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000be"
+      },
+      "dulak.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e3"
+      },
+      "eastkarana.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004a"
+      },
+      "eastkorlach.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000045"
+      },
+      "eastkorlacha.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000003f"
+      },
+      "eastsepulcher.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000aa"
+      },
+      "eastwastes.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000036"
+      },
+      "eastwastesshard.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000be"
+      },
+      "echo.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002e"
+      },
+      "ecommons.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a9"
+      },
+      "elddar.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000046"
+      },
+      "elddara.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ba"
+      },
+      "emeraldjungle.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001b"
+      },
+      "erudnext.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000061"
+      },
+      "erudnint.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e9"
+      },
+      "erudsxing.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d5"
+      },
+      "everfrost.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000074"
+      },
+      "eviltree.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007e"
+      },
+      "fallen.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c6"
+      },
+      "fearplane.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000fe"
+      },
+      "feerrott.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b9"
+      },
+      "feerrott2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000000c"
+      },
+      "felwithea.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000de"
+      },
+      "felwitheb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000010"
+      },
+      "ferubi.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000bc"
+      },
+      "fhalls.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000039"
+      },
+      "fieldofbone.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001c"
+      },
+      "firiona.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000de"
+      },
+      "foundation.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000fe"
+      },
+      "freeportacademy.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000086"
+      },
+      "freeportarena.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000bb"
+      },
+      "freeportcityhall.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000003f"
+      },
+      "freeporteast.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000006c"
+      },
+      "freeporthall.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000066"
+      },
+      "freeportmilitia.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000028"
+      },
+      "freeportsewers.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c7"
+      },
+      "freeporttemple.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000085"
+      },
+      "freeportwest.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000028"
+      },
+      "freporte.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007d"
+      },
+      "freportn.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000015"
+      },
+      "freportw.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000003b"
+      },
+      "frontiermtns.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000bc"
+      },
+      "frostcrypt.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000074"
+      },
+      "frozenshadow.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000006c"
+      },
+      "fungalforest.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b9"
+      },
+      "fungusgrove.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a8"
+      },
+      "gfaydark.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c8"
+      },
+      "greatdivide.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000dd"
+      },
+      "griegsend.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007a"
+      },
+      "grimling.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a8"
+      },
+      "grobb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000066"
+      },
+      "growthplane.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e5"
+      },
+      "guardian.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000096"
+      },
+      "guildhall.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ae"
+      },
+      "guildhall3.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005c"
+      },
+      "guildhalllrg.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000099"
+      },
+      "guildhallsml.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007d"
+      },
+      "guildlobby.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000018"
+      },
+      "guka.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000de"
+      },
+      "gukb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000009"
+      },
+      "gukbottom.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b5"
+      },
+      "gukc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000009b"
+      },
+      "gukd.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000009"
+      },
+      "guke.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000040"
+      },
+      "gukf.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a1"
+      },
+      "gukg.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d9"
+      },
+      "gukh.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c1"
+      },
+      "guktop.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002e"
+      },
+      "gunthak.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b1"
+      },
+      "gyrospireb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000038"
+      },
+      "gyrospirez.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007e"
+      },
+      "halas.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000049"
+      },
+      "harbingers.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000068"
+      },
+      "hateplane.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ec"
+      },
+      "hateplaneb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a7"
+      },
+      "hatesfury.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a9"
+      },
+      "heartoffear.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000075"
+      },
+      "highkeep.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000016"
+      },
+      "highpass.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000db"
+      },
+      "highpasshold.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ab"
+      },
+      "hillsofshade.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ff"
+      },
+      "hohonora.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000030"
+      },
+      "hohonorb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a0"
+      },
+      "hole.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000092"
+      },
+      "hollowshade.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000076"
+      },
+      "housegarden.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000013"
+      },
+      "iceclad.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000069"
+      },
+      "icefall.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001f"
+      },
+      "ikkinz.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000054"
+      },
+      "illsalin.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000045"
+      },
+      "illsalina.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e6"
+      },
+      "illsalinb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000069"
+      },
+      "illsalinc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007c"
+      },
+      "inktuta.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000078"
+      },
+      "innothule.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f3"
+      },
+      "innothuleb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000029"
+      },
+      "jaggedpine.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b1"
+      },
+      "jardelshook.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f1"
+      },
+      "kael.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000001"
+      },
+      "kaesora.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f8"
+      },
+      "kaladima.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a3"
+      },
+      "kaladimb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000058"
+      },
+      "karnor.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c8"
+      },
+      "katta.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ce"
+      },
+      "kattacastrum.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000087"
+      },
+      "kedge.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000006"
+      },
+      "kerraridge.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000040"
+      },
+      "kithicor.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000096"
+      },
+      "kodtaz.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b8"
+      },
+      "korascian.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007f"
+      },
+      "kurn.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c9"
+      },
+      "lakeofillomen.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000000b"
+      },
+      "lakerathe.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001e"
+      },
+      "lavastorm.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000028"
+      },
+      "lavastorm_v0.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000052"
+      },
+      "lavastorm_v1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000028"
+      },
+      "letalis.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001f"
+      },
+      "lfaydark.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000041"
+      },
+      "lichencreep.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c3"
+      },
+      "load.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d0"
+      },
+      "load2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c0"
+      },
+      "lopingplains.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e2"
+      },
+      "maiden.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005b"
+      },
+      "maidensgrave.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000027"
+      },
+      "mansion.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000df"
+      },
+      "mechanotus.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000013"
+      },
+      "mesa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e8"
+      },
+      "mira.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000066"
+      },
+      "miragulmare.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b8"
+      },
+      "mirb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d9"
+      },
+      "mirc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000062"
+      },
+      "mird.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000097"
+      },
+      "mire.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000003a"
+      },
+      "mirf.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a8"
+      },
+      "mirg.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008b"
+      },
+      "mirh.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000035"
+      },
+      "miri.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ab"
+      },
+      "mirj.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000017"
+      },
+      "mischiefplane.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000008"
+      },
+      "mistmoore.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000015"
+      },
+      "misty.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000046"
+      },
+      "mistythicket.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000009"
+      },
+      "mmca.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007b"
+      },
+      "mmcb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000055"
+      },
+      "mmcc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000089"
+      },
+      "mmcd.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000065"
+      },
+      "mmce.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000000d"
+      },
+      "mmcf.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b4"
+      },
+      "mmcg.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000038"
+      },
+      "mmch.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d5"
+      },
+      "mmci.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b7"
+      },
+      "mmcj.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000006"
+      },
+      "monkeyrock.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002a"
+      },
+      "moors.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000095"
+      },
+      "morellcastle.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f2"
+      },
+      "mseru.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000073"
+      },
+      "nadox.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007d"
+      },
+      "najena.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d5"
+      },
+      "natimbi.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a0"
+      },
+      "necropolis.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000092"
+      },
+      "nedaria.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000044"
+      },
+      "neighborhood.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001d"
+      },
+      "nektulos(v3).nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000009d"
+      },
+      "nektulos.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000074"
+      },
+      "nektulos_classic.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000041"
+      },
+      "nektulos_v0.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b8"
+      },
+      "nektulos_v1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000077"
+      },
+      "nektulosa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000067"
+      },
+      "neriaka.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ba"
+      },
+      "neriakb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000000d"
+      },
+      "neriakc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b1"
+      },
+      "netherbian.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000024"
+      },
+      "nexus.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000bd"
+      },
+      "nightmareb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d3"
+      },
+      "northkarana.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d4"
+      },
+      "northro.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000049"
+      },
+      "nro.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000031"
+      },
+      "nurga.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000cb"
+      },
+      "oasis.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007a"
+      },
+      "oceangreenhills.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c4"
+      },
+      "oceangreenvillage.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000000e"
+      },
+      "oceanoftears.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000003e"
+      },
+      "oggok.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000080"
+      },
+      "oldblackburrow.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000093"
+      },
+      "oldbloodfield.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000080"
+      },
+      "oldcommons.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001f"
+      },
+      "olddranik.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000000b"
+      },
+      "oldfieldofbone.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000060"
+      },
+      "oldkaesoraa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000037"
+      },
+      "oldkaesorab.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000048"
+      },
+      "oldkithicor.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f6"
+      },
+      "oldkurn.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ad"
+      },
+      "oot.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000097"
+      },
+      "overthere.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000071"
+      },
+      "paineel.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004e"
+      },
+      "paludal.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000dc"
+      },
+      "paw.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000077"
+      },
+      "pellucid.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000016"
+      },
+      "permafrost.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d9"
+      },
+      "phinteriortree.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d4"
+      },
+      "phylactery.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000096"
+      },
+      "pillarsalra.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c6"
+      },
+      "plhdkeinteriors1a1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d0"
+      },
+      "plhdkeinteriors1a2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d0"
+      },
+      "plhdkeinteriors1a3.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d0"
+      },
+      "plhdkeinteriors3a1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000092"
+      },
+      "plhdkeinteriors3a2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000092"
+      },
+      "plhdkeinteriors3a3.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000092"
+      },
+      "plhogrinteriors1a1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000001"
+      },
+      "plhogrinteriors1a2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000fc"
+      },
+      "plhogrinteriors3a1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000092"
+      },
+      "plhogrinteriors3a2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000092"
+      },
+      "plhogrinteriors3b1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000018"
+      },
+      "plhogrinteriors3b2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008f"
+      },
+      "poair.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000021"
+      },
+      "podisease.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000037"
+      },
+      "poeartha.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000062"
+      },
+      "poearthb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008b"
+      },
+      "pofire.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c2"
+      },
+      "poinnovation.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000008"
+      },
+      "pojustice.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000060"
+      },
+      "poknowledge.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000005"
+      },
+      "ponightmare.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000058"
+      },
+      "poshadow.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000077"
+      },
+      "postorms.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f7"
+      },
+      "potactics.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000033"
+      },
+      "potimea.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000064"
+      },
+      "potimeb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002e"
+      },
+      "potorment.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000056"
+      },
+      "potranquility.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b2"
+      },
+      "povalor.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001b"
+      },
+      "powar.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f1"
+      },
+      "powater.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ab"
+      },
+      "precipiceofwar.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007f"
+      },
+      "provinggrounds.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000009f"
+      },
+      "qcat.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000000f"
+      },
+      "qey2hh1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c9"
+      },
+      "qeynos.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e1"
+      },
+      "qeynos2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000000c"
+      },
+      "qeytoqrg.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000de"
+      },
+      "qinimi.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008b"
+      },
+      "qrg.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000da"
+      },
+      "qvic.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001b"
+      },
+      "qvicb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000006b"
+      },
+      "rage.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000060"
+      },
+      "ragea.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000003d"
+      },
+      "rathechamber.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000af"
+      },
+      "rathemtn.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000003a"
+      },
+      "redfeather.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004c"
+      },
+      "relic.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000069"
+      },
+      "resplendent.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000009e"
+      },
+      "riftseekers.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005d"
+      },
+      "rivervale.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000009c"
+      },
+      "riwwi.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000003e"
+      },
+      "roost.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000087"
+      },
+      "rubak.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000041"
+      },
+      "ruja.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000034"
+      },
+      "rujb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000090"
+      },
+      "rujc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f6"
+      },
+      "rujd.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a1"
+      },
+      "ruje.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b6"
+      },
+      "rujf.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000078"
+      },
+      "rujg.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d5"
+      },
+      "rujh.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000009d"
+      },
+      "ruji.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000093"
+      },
+      "rujj.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000047"
+      },
+      "runnyeye.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000088"
+      },
+      "sarithcity.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000001b"
+      },
+      "scarlet.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004d"
+      },
+      "sebilis.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000000"
+      },
+      "sepulcher.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000005"
+      },
+      "shadeweaver.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004d"
+      },
+      "shadowedmount.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008f"
+      },
+      "shadowhaven.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000031"
+      },
+      "shadowrest.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b1"
+      },
+      "shadowspine.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ec"
+      },
+      "shardslanding.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000073"
+      },
+      "sharvahl.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c8"
+      },
+      "shiningcity.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000088"
+      },
+      "shipmvm.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000077"
+      },
+      "shipmvp.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000053"
+      },
+      "shipmvu.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000069"
+      },
+      "shippvu.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000080"
+      },
+      "shipuvu.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000035"
+      },
+      "shipworkshop.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000078"
+      },
+      "silyssar.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000039"
+      },
+      "sirens.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a0"
+      },
+      "skyfire.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000cc"
+      },
+      "skylance.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000031"
+      },
+      "skyshrine.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004a"
+      },
+      "sleeper.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000073"
+      },
+      "sncrematory.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000065"
+      },
+      "snlair.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000096"
+      },
+      "snplant.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d1"
+      },
+      "snpool.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000060"
+      },
+      "soldunga.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008a"
+      },
+      "soldungb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000006a"
+      },
+      "soldungc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005f"
+      },
+      "solrotower.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e0"
+      },
+      "soltemple.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000069"
+      },
+      "solteris.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000081"
+      },
+      "somnium.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000005f"
+      },
+      "southkarana.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000bb"
+      },
+      "southro.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f8"
+      },
+      "sro.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007b"
+      },
+      "sseru.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000087"
+      },
+      "ssratemple.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000076"
+      },
+      "steamfactory.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000049"
+      },
+      "steamfont.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000009"
+      },
+      "steamfontmts.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000046"
+      },
+      "steppes.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000025"
+      },
+      "stillmoona.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008b"
+      },
+      "stillmoonb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000035"
+      },
+      "stonebrunt.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b2"
+      },
+      "stonehive.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000051"
+      },
+      "stonesnake.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000063"
+      },
+      "suncrest.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e3"
+      },
+      "sunderock.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b6"
+      },
+      "swampofnohope.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000025"
+      },
+      "tacvi.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e3"
+      },
+      "taka.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000083"
+      },
+      "takb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000008"
+      },
+      "takc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a5"
+      },
+      "takd.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ae"
+      },
+      "take.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000001"
+      },
+      "takf.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000070"
+      },
+      "takg.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000033"
+      },
+      "takh.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000037"
+      },
+      "taki.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000044"
+      },
+      "takishruins.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000006d"
+      },
+      "takishruinsa.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000006f"
+      },
+      "takj.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000090"
+      },
+      "templeveeshan.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000004"
+      },
+      "tenebrous.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000099"
+      },
+      "thalassius.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000078"
+      },
+      "theater.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000057"
+      },
+      "thedeep.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000058"
+      },
+      "thegrey.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ff"
+      },
+      "thenest.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000000"
+      },
+      "thevoida.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000098"
+      },
+      "thevoidb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000038"
+      },
+      "thevoidc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007c"
+      },
+      "thevoidd.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000099"
+      },
+      "thevoide.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000008e"
+      },
+      "thevoidf.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007c"
+      },
+      "thevoidg.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000081"
+      },
+      "thuledream.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000006f"
+      },
+      "thulehouse1.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000be"
+      },
+      "thulehouse2.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000b9"
+      },
+      "thulelibrary.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000045"
+      },
+      "thundercrest.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004f"
+      },
+      "thurgadina.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c2"
+      },
+      "thurgadinb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000028"
+      },
+      "timorous.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d6"
+      },
+      "tipt.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000070"
+      },
+      "torgiran.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000db"
+      },
+      "toskirakk.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000d1"
+      },
+      "tox.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002d"
+      },
+      "toxxulia.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000bf"
+      },
+      "trakanon.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000054"
+      },
+      "tutorial.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ae"
+      },
+      "tutoriala.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ca"
+      },
+      "tutorialb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000084"
+      },
+      "twilight.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e3"
+      },
+      "txevu.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000066"
+      },
+      "umbral.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f4"
+      },
+      "underquarry.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000083"
+      },
+      "unrest.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000007f"
+      },
+      "uqua.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000ec"
+      },
+      "valdeholm.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000059"
+      },
+      "veeshan.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c1"
+      },
+      "veksar.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000002c"
+      },
+      "velketor.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000000d"
+      },
+      "vergalid.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a2"
+      },
+      "vexthal.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000f6"
+      },
+      "vxed.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e7"
+      },
+      "wakening.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c0"
+      },
+      "wallofslaughter.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000043"
+      },
+      "warrens.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a1"
+      },
+      "warslikswood.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000035"
+      },
+      "weddingchapel.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000050"
+      },
+      "weddingchapeldark.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000050"
+      },
+      "well.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000098"
+      },
+      "westkorlach.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a8"
+      },
+      "westkorlacha.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000a2"
+      },
+      "westkorlachb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000e7"
+      },
+      "westkorlachc.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000069"
+      },
+      "westsepulcher.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000018"
+      },
+      "westwastes.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000017"
+      },
+      "windsong.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000c2"
+      },
+      "xorbb.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d455348020000004f"
+      },
+      "yxtta.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d4553480200000053"
+      },
+      "zhisza.nav": {
+        "version": 2,
+        "header_hex": "45514e41564d45534802000000cf"
+      }
+    },
+    "water": {
+      "abysmal.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "acrylia.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "airplane.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "akanon.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "akheva.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "alkabormare.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "anguish.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "arcstone.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "arelis.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "arena.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "arena2.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "argath.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "arthicrex.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "ashengate.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "atiiki.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "barindu.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "barren.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "barter.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "bazaar.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "bazaar_v0.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "bazaar_v1.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "beastdomain.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "befallen.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "beholder.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "bertoxtemple.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "blackburrow.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "blacksail.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "bloodfields.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "bloodmoon.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "bothunder.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "brellsarena.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "brellsrest.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "brellstemple.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "broodlands.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "buriedsea.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "burningwood.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "butcher.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "cabeast.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "cabwest.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "cauldron.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "causeway.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "cazicthule.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "chambersa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "chambersb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "chambersc.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "chambersd.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "chamberse.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "chambersf.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "charasis.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "chardok.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "chardokb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "chelsithreborn.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "citymist.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "cityofbronze.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "clz.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "cobaltscar.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "codecay.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "commonlands.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "commons.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "convorteum.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "coolingchamber.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "corathus.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "corathusa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "corathusb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "crescent.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "crushbone.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "cryptofshade.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "crystal.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "crystallos.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "cshome.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "dalnir.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "dawnshroud.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "deadbone.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "delvea.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "delveb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "devastation.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "devastationa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "direwind.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "discord.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "discordtower.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "drachnidhive.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "drachnidhivea.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "drachnidhiveb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "drachnidhivec.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dragoncrypt.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dragonscale.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dragonscalea.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dragonscaleb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dranik.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dranikcatacombsa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dranikcatacombsb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dranikcatacombsc.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dranikhollowsa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dranikhollowsb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dranikhollowsc.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "draniksewersa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "draniksewersb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "draniksewersc.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "draniksscar.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "dreadlands.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "dreadspire.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "droga.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "dulak.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "eastkarana.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "eastkorlach.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "eastkorlacha.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "eastsepulcher.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "eastwastes.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "echo.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "ecommons.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "elddar.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "elddara.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "emeraldjungle.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "erudnext.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "erudnint.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "erudsxing.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "everfrost.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "fallen.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "fearplane.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "feerrott.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "feerrott2.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "felwithea.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "felwitheb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "ferubi.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "fhalls.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "fieldofbone.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "firiona.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "foundation.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeportacademy.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeportarena.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeportcityhall.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeporteast.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeporthall.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeportmilitia.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeportsewers.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeporttemple.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeporttheater.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freeportwest.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "freporte.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "freportn.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "freportw.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "frontiermtns.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "frostcrypt.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "frozenshadow.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "fungalforest.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "fungusgrove.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gfaydark.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "greatdivide.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "griegsend.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "grimling.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "grobb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "growthplane.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "guardian.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "guildhall.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "guildhall3.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "guildhalllrg.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "guildhallsml.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "guildlobby.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "guka.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gukb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gukbottom.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gukc.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gukd.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "guke.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gukf.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gukg.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gukh.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "guktop.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gunthak.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "gyrospireb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "gyrospirez.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "halas.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "harbingers.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "hateplane.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "hateplaneb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "hatesfury.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "heartoffear.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "highkeep.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "highpass.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "highpasshold.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "hillsofshade.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "hohonora.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "hohonorb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "hole.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "hollowshade.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "housegarden.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "iceclad.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "icefall.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "ikkinz.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "illsalin.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "illsalina.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "illsalinb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "illsalinc.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "inktuta.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "innothule.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "innothuleb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "jaggedpine.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "jardelshook.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "kael.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "kaesora.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "kaladima.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "kaladimb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "karnor.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "katta.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "kattacastrum.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "kedge.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "kerraridge.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "kithforest.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "kithicor.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "kodtaz.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "korascian.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "kurn.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "lakeofillomen.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "lakerathe.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "lavastorm.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "lavastorm_v0.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "lavastorm_v1.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "letalis.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "lfaydark.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "lichencreep.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "load.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "load2.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "lopingplains.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "maiden.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "maidensgrave.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "mansion.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "mechanotus.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "mesa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "mira.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "miragulmare.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "mirb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mirc.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mird.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mire.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mirf.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mirg.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mirh.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "miri.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mirj.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mischiefplane.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mistmoore.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "misty.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mistythicket.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "mmca.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mmcb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mmcc.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mmcd.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mmce.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mmcf.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mmcg.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mmch.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mmci.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "mmcj.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "monkeyrock.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "moors.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "morellcastle.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "mseru.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "nadox.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "najena.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "natimbi.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "necropolis.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "nedaria.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "neighborhood.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "nektulos.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "nektulos_classic.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "nektulos_v0.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "nektulos_v1.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "nektulosa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "neriaka.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "neriakb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "neriakc.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "netherbian.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "nexus.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "nightmareb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "northkarana.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "northro.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "nro.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "nurga.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "oasis.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "oceangreenhills.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oceangreenvillage.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oceanoftears.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oggok.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oldblackburrow.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oldbloodfield.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oldcommons.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "olddranik.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oldfieldofbone.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oldkaesoraa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oldkaesorab.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oldkithicor.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oldkurn.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "oot.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "overthere.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "paineel.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "paludal.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "paw.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "pellucid.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "permafrost.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "phinteriortree.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "phylactery.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "pillarsalra.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhdkeinteriors1a1.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhdkeinteriors1a2.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhdkeinteriors1a3.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhdkeinteriors3a1.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhdkeinteriors3a2.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhdkeinteriors3a3.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhogrinteriors1a1.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhogrinteriors1a2.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhogrinteriors3a1.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhogrinteriors3a2.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhogrinteriors3b1.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "plhogrinteriors3b2.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "poair.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "podisease.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "poeartha.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "poearthb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "pofire.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "poinnovation.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "pojustice.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "poknowledge.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "ponightmare.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "poshadow.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "postorms.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "potactics.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "potimea.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "potimeb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "potorment.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "potranquility.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "povalor.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "powar.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "powater.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "precipiceofwar.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "provinggrounds.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "qcat.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "qey2hh1.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "qeynos.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "qeynos2.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "qeytoqrg.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "qinimi.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "qrg.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "qvic.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "qvicb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "rage.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "ragea.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "rathechamber.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "rathemtn.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "redfeather.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "relic.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "resplendent.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "riftseekers.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "rivervale.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "riwwi.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "roost.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "rubak.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "ruja.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "rujb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "rujc.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "rujd.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "ruje.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "rujf.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "rujg.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "rujh.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "ruji.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "rujj.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "runnyeye.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "sarithcity.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "scarlet.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "sebilis.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "sepulcher.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "shadeweaver.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "shadowedmount.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "shadowhaven.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "shadowrest.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "shadowspine.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "shardslanding.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "sharvahl.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "shiningcity.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "shipmvm.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "shipmvp.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "shipmvu.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "shippvu.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "shipuvu.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "shipworkshop.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "silyssar.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "sirens.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "skyfire.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "skylance.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "skyshrine.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "sleeper.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "sncrematory.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "snlair.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "snplant.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "snpool.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "soldunga.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "soldungb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "soldungc.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "solrotower.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "soltemple.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "solteris.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "somnium.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "southkarana.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "southro.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "sro.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "sseru.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "ssratemple.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "steamfactory.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "steamfont.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "steamfontmts.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "steppes.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "stillmoona.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "stillmoonb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "stonebrunt.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "stonehive.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "stonesnake.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "suncrest.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "sunderock.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "swampofnohope.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "tacvi.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "taka.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "takb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "takc.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "takd.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "take.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "takf.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "takg.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "takh.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "taki.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "takishruins.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "takishruinsa.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "takj.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "templeveeshan.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "tenebrous.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "thalassius.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "theater.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "theatera.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thedeep.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "thegrey.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "thenest.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thevoida.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thevoidb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thevoidc.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thevoidd.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thevoide.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thevoidf.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thevoidg.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thuledream.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thulehouse1.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thulehouse2.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thulelibrary.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thundercrest.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "thurgadina.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "thurgadinb.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "timorous.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "tipt.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "torgiran.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "toskirakk.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "tox.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "toxxulia.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "trakanon.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "tutorial.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "tutoriala.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "tutorialb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "twilight.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "txevu.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "umbral.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "underquarry.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "unrest.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "uqua.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "valdeholm.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "veeshan.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "veksar.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "velketor.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "vergalid.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "vexthal.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "vxed.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "wakening.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "wallofslaughter.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "warrens.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "warslikswood.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "weddingchapel.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "weddingchapeldark.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "well.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "westkorlach.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "westkorlacha.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "westkorlachb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "westkorlachc.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "westsepulcher.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "westwastes.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "windsong.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "xorbb.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      },
+      "yxtta.wtr": {
+        "version": 1,
+        "header_hex": "4551454d55574154455201000000"
+      },
+      "zhisza.wtr": {
+        "version": 2,
+        "header_hex": "4551454d55574154455202000000"
+      }
+    }
+  },
+  "summary": {
+    "base": {
+      "1": 6,
+      "2": 507
+    },
+    "nav": {
+      "2": 497
+    },
+    "water": {
+      "1": 260,
+      "2": 234
+    }
+  },
+  "operator_overlay": {
+    "guildhall.map": {
+      "version": 2,
+      "sha256": "6af6b64420b29eeb146545a704758ab11e996ee2056c4f7e4446f5fad39c2030"
+    },
+    "guildhall3.map": {
+      "version": 2,
+      "sha256": "633f3123081aeb7158cfbd57874e6f0baf966bd56ba12b5bfc2dc0d4799ad222"
+    },
+    "guildhalllrg.map": {
+      "version": 2,
+      "sha256": "ec5e8c1d3a5ea6ff0506e608921c0fa271b098db0b1e087717f9e919670ed541"
+    },
+    "guildhallsml.map": {
+      "version": 2,
+      "sha256": "0988ed865a30e778a4522cddb7015c8d143a4104b8ca9637d525840156002119"
+    },
+    "neighborhood.map": {
+      "version": 2,
+      "sha256": "d16b27d7c3a07797a45b2900017652d58875207122e7df9e0a506b270d5b6f14"
+    },
+    "phinterior1a1.map": {
+      "version": 2,
+      "sha256": "e9723b133abc4591f62d1d3cdebfa6630c270c2a72ee1aeb0e8e12a02884d339"
+    },
+    "phinterior1a2.map": {
+      "version": 2,
+      "sha256": "e9723b133abc4591f62d1d3cdebfa6630c270c2a72ee1aeb0e8e12a02884d339"
+    },
+    "phinterior1a3.map": {
+      "version": 2,
+      "sha256": "e9723b133abc4591f62d1d3cdebfa6630c270c2a72ee1aeb0e8e12a02884d339"
+    },
+    "phinterior1d1.map": {
+      "version": 2,
+      "sha256": "fb8a1ea99fcfcb2497a209e4d5238c458136cd9e376d998e0d2d31868ee50aae"
+    },
+    "phinterior3a1.map": {
+      "version": 2,
+      "sha256": "e725a2ed41219d77236d516662f52074696ea2ff98d652ee44f1173bc1e1238d"
+    },
+    "phinterior3a2.map": {
+      "version": 2,
+      "sha256": "e725a2ed41219d77236d516662f52074696ea2ff98d652ee44f1173bc1e1238d"
+    },
+    "phinterior3a3.map": {
+      "version": 2,
+      "sha256": "1c7edc48e5e88636c984607d1bea18492c4fdbca6ff551a03ddc738b8aef486c"
+    },
+    "phinteriortree.map": {
+      "version": 2,
+      "sha256": "9834f7f44e98597da319f7711c5300373405b1ff79ba3f6fee003b0216c7d4bb"
+    }
+  },
+  "legacy_v1_exceptions": [
+    "firiona_lit.map",
+    "frogequip.map",
+    "sky.map",
+    "vequip.map",
+    "warrens2.map",
+    "warslikswood_lit.map"
+  ],
+  "native_paths": {
+    "collision": "maps/base",
+    "navigation": "maps/nav",
+    "water": "maps/water"
+  },
+  "gameplay_acceptance": false
+}

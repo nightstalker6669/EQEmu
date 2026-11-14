@@ -1,0 +1,69 @@
+--- a/internal/eqemuserverconfig/config.go
++++ b/internal/eqemuserverconfig/config.go
+@@ -6,6 +6,8 @@
+ 	"github.com/EQEmu/spire/internal/pathmgmt"
+ 	"os"
+ 	"path/filepath"
++ "reflect"
++ "strings"
+ 	"sync"
+ 	"time"
+ )
+@@ -257,16 +259,20 @@
+ 		}
+ 	}
+ 
+-	file, err := json.MarshalIndent(c, "", " ")
+-	if err != nil {
+-		return err
+-	}
+-
+-	path := filepath.Join(e.pathmgmt.GetEQEmuServerPath(), "eqemu_config.json")
+-	err = os.WriteFile(path, file, 0755)
+-	if err != nil {
+-		return err
+-	}
++    // Preserve extension fields supplied by downstream servers. The typed
++    // editor must not erase native options it does not know about.
++    path := filepath.Join(e.pathmgmt.GetEQEmuServerPath(), "eqemu_config.json")
++    encoded, err := json.Marshal(c)
++    if err != nil { return err }
++    var next, previous map[string]interface{}
++    if err := json.Unmarshal(encoded, &next); err != nil { return err }
++    if raw, err := os.ReadFile(path); err == nil {
++        if err := json.Unmarshal(raw, &previous); err != nil { return err }
++        preserveUnknownFields(next, previous, reflect.TypeOf(c))
++    } else if !os.IsNotExist(err) { return err }
++    file, err := json.MarshalIndent(next, "", " ")
++    if err != nil { return err }
++    if err = os.WriteFile(path, file, 0600); err != nil { return err }
+ 
+ 	cachedConfig = &c
+ 
+@@ -319,3 +325,26 @@
+ 		e.Save(*c)
+ 	}
+ }
++
++// Known omitted fields retain their normal omitempty behavior; only unknown
++// extension keys are copied from the existing configuration.
++func preserveUnknownFields(next, previous map[string]interface{}, typ reflect.Type) {
++    for typ.Kind() == reflect.Ptr { typ = typ.Elem() }
++    if typ.Kind() != reflect.Struct { return }
++    fields := map[string]reflect.Type{}
++    for i := 0; i < typ.NumField(); i++ {
++        field := typ.Field(i)
++        if field.PkgPath != "" { continue }
++        name := strings.Split(field.Tag.Get("json"), ",")[0]
++        if name == "-" { continue }
++        if name == "" { name = field.Name }
++        fields[name] = field.Type
++    }
++    for name, value := range previous {
++        field, known := fields[name]
++        if !known { next[name] = value; continue }
++        oldMap, okOld := value.(map[string]interface{})
++        newMap, okNew := next[name].(map[string]interface{})
++        if okOld && okNew { preserveUnknownFields(newMap, oldMap, field) }
++    }
++}

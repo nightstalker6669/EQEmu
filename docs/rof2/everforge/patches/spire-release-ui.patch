@@ -1,0 +1,134 @@
+--- a/frontend/src/views/admin/server-update/UpdateReleases.vue
++++ b/frontend/src/views/admin/server-update/UpdateReleases.vue
+@@ -18,7 +18,7 @@
+     </b-modal>
+ 
+     <eq-window
+-      title="Official Releases"
++      :title="customProjectReleases ? 'Project Releases' : 'Official Releases'"
+       class="p-3"
+       v-if="!loading"
+     >
+@@ -112,6 +112,7 @@
+                 variant="primary"
+                 class="btn-dark btn-sm btn-dark ml-1"
+                 style="padding: 0px 6px; width: 50px"
++                v-if="!customProjectReleases"
+                 title="View Release Crashes"
+                 @click="goToRelease(r.name.replaceAll('v', ''))"
+               >
+@@ -175,6 +176,7 @@
+ 
+   data() {
+     return {
++      customProjectReleases: false,
+       tabSelected: "Official Releases",
+ 
+       loading: false,
+@@ -327,6 +329,8 @@
+       try {
+         const custom = await SpireApi.v1().get('everforge/releases')
+         if (custom.status === 200 && Array.isArray(custom.data.releases)) {
++          this.customProjectReleases = true
++          this.$emit('release-repository', custom.data.repository)
+           this.releases = custom.data.releases
+           return
+         }
+@@ -353,7 +357,7 @@
+     },
+     getWindowsDownloads(r) {
+       const f = r.assets.find((e) => {
+-        return e.name.toLowerCase().includes("windows")
++        return e.name.toLowerCase().includes("windows") && e.name.toLowerCase().endsWith(".zip")
+       })
+ 
+       if (f) {
+@@ -364,7 +368,7 @@
+     },
+     getWindowsDownloadLink(r) {
+       const f = r.assets.find((e) => {
+-        return e.name.toLowerCase().includes("windows")
++        return e.name.toLowerCase().includes("windows") && e.name.toLowerCase().endsWith(".zip")
+       })
+ 
+       if (f) {
+@@ -375,7 +379,7 @@
+     },
+     getLinuxDownloadLink(r) {
+       const f = r.assets.find((e) => {
+-        return e.name.toLowerCase().includes("linux")
++        return e.name.toLowerCase().includes("linux") && e.name.toLowerCase().endsWith(".zip")
+       })
+ 
+       if (f) {
+@@ -386,7 +390,7 @@
+     },
+     getLinuxDownloads(r) {
+       const f = r.assets.find((e) => {
+-        return e.name.toLowerCase().includes("linux")
++        return e.name.toLowerCase().includes("linux") && e.name.toLowerCase().endsWith(".zip")
+       })
+ 
+       if (f) {
+@@ -396,6 +400,7 @@
+       return 0
+     },
+     getCrashCount(r) {
++      if (this.customProjectReleases) return "—"
+       const version = r.name.replaceAll("v", "")
+       for (let v of this.counts) {
+         if (v.server_version === version) {
+@@ -406,6 +411,7 @@
+       return 0
+     },
+     getUniqueCrashCount(r) {
++      if (this.customProjectReleases) return "—"
+       const version = r.name.replaceAll("v", "")
+       let total     = 0;
+       for (let v of this.uniqueCounts) {
+@@ -419,10 +425,13 @@
+   async mounted() {
+     this.loadQueryState();
+     this.loading = true;
+-    this.loadCounts().then((r) => {
+-      this.loadReleases()
++    try {
++      await this.loadReleases()
++      // The upstream crash service tracks official versions, not project tags.
++      if (!this.customProjectReleases) await this.loadCounts()
++    } finally {
+       this.loading = false
+-    })
++    }
+   },
+ 
+ }
+--- a/frontend/src/views/admin/server-update/ServerUpdate.vue
++++ b/frontend/src/views/admin/server-update/ServerUpdate.vue
+@@ -53,8 +53,8 @@
+             </div>
+             <div class="col-9">
+               <small class="text-muted">
+-                Uses official release binaries from
+-                <a href="https://github.com/EQEmu/EQEmu/releases" target="releases">EverQuest Emulator Server</a>
++                Uses published release binaries from
++                <a :href="'https://github.com/' + releaseRepository + '/releases'" target="releases">{{ releaseRepository }}</a>
+               </small>
+               <div class="mt-1">
+                 Use this when you are not developing server or making code changes to server code
+@@ -178,6 +178,7 @@
+     <update-releases
+       class="mt-5"
+       :version="version.server_version"
++      @release-repository="releaseRepository = $event"
+       @refresh-version="getVersions()"
+       v-if="updateType === BUILD_TYPE.RELEASE && version"
+     />
+@@ -247,6 +248,7 @@
+   components: { EqProgressBar, LoaderFakeProgress, UpdateReleases, InfoErrorBanner, EqCheckbox, EqWindow },
+   data() {
+     return {
++      releaseRepository: "EQEmu/EQEmu",
+       updateType: "",
+ 
+       version: {},

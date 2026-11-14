@@ -1,0 +1,170 @@
+{
+  "format": "everforge-validation-v1",
+  "version": "0.3.0",
+  "utc": "2026-11-14T01:07:41.853832+00:00",
+  "platform": "linux/amd64",
+  "sources": {
+    "format": "everforge-utility-sources-v1",
+    "package_version": "0.3.0",
+    "database_schema": 9338,
+    "spire": {
+      "repository": "nightstalker6669/spire",
+      "commit": "bc6e88f1f84a595cf7fa496302ee644cb6678ce5",
+      "upstream_tag": "v4.24.2",
+      "archive_sha256": "6b52cc171cade9f66f90a9fe29a9013e565b5a118d39af44eb25fb6d94ce19fd"
+    },
+    "peq_editor": {
+      "repository": "nightstalker6669/peqphpeditor",
+      "commit": "da8c24099ed5081552a8bb48a46375bee9229111",
+      "archive_sha256": "79ede7b4a66247c2164ca771b1ad69f093deae23cce10d8273a1ced70fe07aa8"
+    }
+  },
+  "installed_outputs": {
+    "spire_binary_sha256": "33c14a1ae20be38cc955615dfca39a7f6c02d8d7497982243d41d68eb6cea161",
+    "utility_image": "sha256:070b5670063a750e19d9e84bff46e4fefca00414445d8d0d033f29705fe0e140",
+    "backup_image": "sha256:7c553bf8b8f80a94aef4f6e019e0beac9e006fdf971c152ae867ade88fddac75",
+    "peq_image": "sha256:5c80371708adfa9fa1773f11ed2eb0e2dc39f4a789f512113e3672cc4ed28c53",
+    "phpmyadmin": "phpmyadmin@sha256:e4b3eb5305cd42d21512bb55def2bab52625d56df927ad4ee1864a9354c84d40"
+  },
+  "checks": {
+    "spire-functional.json": {
+      "real_World_and_native_processes": "PASS",
+      "native_process_metrics": "PASS",
+      "unauthenticated_controls_rejected": "PASS",
+      "authenticated_dashboard": "PASS",
+      "live_API_eqemuserver/zone-list": "PASS",
+      "live_API_eqemuserver/reload-types": "PASS",
+      "live_API_eqemuserver/logs": "PASS",
+      "live_API_items": "PASS",
+      "live_API_zones": "PASS",
+      "real_configuration_save": "PASS",
+      "native_lock_control": "PASS",
+      "fork_typed_save_preserves_custom_native_keys": "PASS",
+      "actual_Spire_content_update": "PASS"
+    },
+    "process-controls-functional.json": {
+      "final_coldstart_real_three_zones": "PASS",
+      "delayed_stop_cancel": "PASS",
+      "cancel_preserves_World_pid": "PASS",
+      "stop_accepted": "PASS",
+      "actual_native_stop_with_admin_still_available": "PASS",
+      "intentional_stop_health": "PASS",
+      "start_accepted": "PASS",
+      "actual_native_start": "PASS",
+      "restart_accepted": "PASS",
+      "actual_native_restart": "PASS",
+      "native_child_failure_recovers_through_owned_supervisor": "PASS",
+      "configuration_and_content_survive_controls": "PASS"
+    },
+    "peq-functional.json": {
+      "native_PEQ_administrator_login": "PASS",
+      "landing_editor=merchant": "PASS",
+      "landing_editor=mercs": "PASS",
+      "landing_editor=items": "PASS",
+      "landing_admin": "PASS",
+      "merchant_actual_add_language": "PASS",
+      "merchant_language_edit_form": "PASS",
+      "merchant_actual_edit_language": "PASS",
+      "merchant_omitted_fields_preserved": "PASS",
+      "merchant_invalid_input_preserves_row": "PASS",
+      "merchant_GET_copy_preserves_language": "PASS",
+      "merc_buff_create_full_width_spell_and_new_fields": "PASS",
+      "merc_buff_actual_edit_new_fields": "PASS",
+      "merc_buff_omitted_fields_preserved": "PASS",
+      "merc_buff_invalid_input_preserves_row": "PASS",
+      "merc_buff_actual_delete": "PASS",
+      "pet_cleanup_statement_matches_9338": "PASS",
+      "future_schema_warning_retained": "PASS"
+    },
+    "phpmyadmin-functional.json": {
+      "phpMyAdmin_real_login": "PASS",
+      "phpMyAdmin_actual_query": "PASS"
+    },
+    "file-transfers-functional.json": {
+      "SSH_actual_native_workspace_and_auth": "PASS",
+      "SFTP_actual_file_roundtrip": "PASS",
+      "FTPS_actual_encrypted_file_roundtrip": "PASS"
+    },
+    "backup-independent-restore-functional.json": {
+      "Spire_actual_database_backup_file": "PASS",
+      "complete_mutable_runtime_backup": "PASS",
+      "restored_file_server/eqemu_config.json": "PASS",
+      "restored_file_server/login.json": "PASS",
+      "restored_file_server/.env": "PASS",
+      "restored_file_server/quests/ef030_sftp.lua": "PASS",
+      "restored_file_server/quests/ef030_ftps.lua": "PASS",
+      "restored_file_admin/console.json": "PASS",
+      "restored_file_admin/control.json": "PASS",
+      "restored_file_admin/spire-installed.json": "PASS",
+      "restored_utility_identity_ssh-state/ssh_host_ed25519_key": "PASS",
+      "restored_utility_identity_ftp-state/ftps.pem": "PASS",
+      "restored_private_operator_environment": "PASS",
+      "independent_DB_restore_content": "PASS",
+      "independent_DB_restore_authentication_metadata": "PASS",
+      "original_resources_excluded": "PASS"
+    },
+    "independent-restored-runtime-functional.json": {
+      "independent_restore_real_World_and_three_Zones": "PASS",
+      "independent_restore_original_Spire_login": "PASS",
+      "independent_restore_custom_configuration": "PASS",
+      "independent_restore_final_compiled_fork": "PASS",
+      "independent_restore_direct_quest_edits": "PASS"
+    },
+    "native-permissions-update-persistence.json": {
+      "native_passive_ACL_check_denies_write": "PASS",
+      "native_and_adapted_read_permissions": "PASS",
+      "adapted_controls_preserve_native_write_ACL": "PASS",
+      "adapted_configuration_preserves_native_write_ACL": "PASS",
+      "unowned_authentication_rejected": "PASS",
+      "retained_operator_permission": "PASS",
+      "operator_console_configuration_applies": "PASS",
+      "project_published_release_list": "PASS",
+      "actual_published_binary_install": "PASS",
+      "binary_update_preserves_custom_files_and_DB": "PASS",
+      "native_start_after_project_update": "PASS",
+      "whole_container_restart_preserves_operator_config": "PASS",
+      "whole_container_restart_preserves_release_selection": "PASS",
+      "retained_operator_login_after_whole_restart": "PASS"
+    },
+    "browser-functional.json": {
+      "authenticated_dashboard": "PASS",
+      "World_status": "Online",
+      "process_counts": {
+        "supervisor": 1,
+        "world": 1,
+        "zone": 3,
+        "ucs": 1,
+        "loginserver": 1,
+        "queryserv": 1
+      },
+      "system_widgets": "PASS",
+      "project_release_repository_link": "nightstalker6669/EQEmu",
+      "Linux_download_asset": "EQEmu-RoF2-Linux-x86_64.zip",
+      "Windows_download_asset": "EQEmu-RoF2-Windows-x64.zip",
+      "unrelated_crash_analytics_error_absent": true,
+      "custom_crash_metrics": "unmeasured, displayed as dash",
+      "method": "Actual in-app browser login/navigation and rendered state; no browser-side state fabrication",
+      "source_commit": "bc6e88f1f84a595cf7fa496302ee644cb6678ce5"
+    },
+    "final-installed-artifact-functional.json": {
+      "installed_Spire_fork_commit": "PASS",
+      "running_Spire_binary_matches_compiled_fork": "PASS",
+      "installed_PEQ_matches_all_11_fork_postimages": "PASS",
+      "FTPS_normal_file_permissions_available": "PASS",
+      "concurrent_CLI_update_refused_by_real_bootstrap_lock": "PASS",
+      "actual_installer_backup_provenance_mount": "PASS"
+    },
+    "native-websocket-functional.json": {
+      "native_Zone_websocket_same_origin_proxy": "PASS",
+      "native_websocket_real_authentication": "PASS",
+      "native_idle_Zone_RPC_precondition": "PASS"
+    },
+    "explicit-cli-and-ssh-native-functional.json": {
+      "stopped_container_explicit_verified_CLI_update": "PASS",
+      "CLI_update_retains_authentication_and_content": "PASS",
+      "SSH_actual_published_native_binary_execution": "PASS"
+    }
+  },
+  "scope": "Isolated synthetic data only; actual native World/Zone processes and actual utility operations; no native gameplay acceptance or exhaustive destructive player/custody editor audit",
+  "live_stack": "Untouched; feature work remains paused"
+}

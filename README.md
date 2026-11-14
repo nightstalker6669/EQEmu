@@ -33,27 +33,19 @@ The combined local build and content installation are complete, and the two requ
 
 Further work remains on later SoD themes, spell acquisition gaps, AA coverage, achievement content, and unresolved recipes. Completed improvements will move into the feature overview and release notes as they become available.
 
-## Install with Docker: EverForge RoF2
+## EverForge Docker stack
 
-[**EverForge RoF2 on Docker Hub**](https://hub.docker.com/r/nightsta69/everforge-rof2) packages this fork as a Docker Compose stack with a separate MariaDB database. It includes setup for Spire, SSH/SFTP, encrypted FTP, scheduled backups, phpMyAdmin, and the PEQ Editor.
-
-Start with a Linux AMD64 host, Docker Compose v2, and Python 3.11 or newer. Extract the complete public setup from the tested image:
+EverForge0.3.0 runs the published RoF2 server with our source-built Spire and PEQ forks, real World administration, SSH/SFTP, FTPS, phpMyAdmin and complete private backup/restore. See [the full installation and upgrade guide](docs/rof2/EVERFORGE.md) and [ports/network access](docs/rof2/everforge/PORTS.md). Required authorized original EQGs/maps are supplied separately; they are not distributed in the image.
 
 ```sh
 mkdir everforge
-docker run --rm --entrypoint tar nightsta69/everforge-rof2:0.2.0 \
+docker run --rm --entrypoint tar nightsta69/everforge-rof2:0.3.0 \
   -C /opt/everforge/setup -cf - . | tar -xf - -C everforge
 cd everforge
 python3 configure.py
 ```
 
-Then follow the [EverForge installation guide](docs/rof2/EVERFORGE.md) to set your server addresses, verify and mount the required operator-owned housing resources, install utilities, and start the stack. **Configuration alone is not the complete installation.** Original EverQuest files are not distributed in the image; the current published housing system requires the matching archives, maps, and geometry resources.
-
-EverForge checks for the latest published server release at startup, or can use a pinned release. First utility installation selects supported versions and records them for reuse. Existing database volumes are never reseeded; incompatible database upgrades stop with instructions. Spire's installer and replacement actions are blocked while normal content editing remains available.
-
-The public map set includes 507 V2 collision maps, six documented supported V1 exceptions, and 497 V2 navigation files. The guide explains the separate water formats and housing-resource requirements.
-
-**Already using 0.1.0?** Follow the guide's upgrade steps and keep your existing environment and volumes.
+Continue with the full guide for resources, utility installation, initialization and credentials. Existing installations retain their database/data volumes and private environment. Utilities use the reviewed fork commits recorded in the setup; ordinary restart does not reinstall upstream software or reseed an existing DB. [Docker Hub](https://hub.docker.com/r/nightsta69/everforge-rof2) · [validation](docs/rof2/everforge/VERIFICATION.md).
 
 ## Getting the pack
 

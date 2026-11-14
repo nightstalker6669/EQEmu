@@ -1,0 +1,16 @@
+{
+  "format": "everforge-utility-sources-v1",
+  "package_version": "0.3.0",
+  "database_schema": 9338,
+  "spire": {
+    "repository": "nightstalker6669/spire",
+    "commit": "bc6e88f1f84a595cf7fa496302ee644cb6678ce5",
+    "upstream_tag": "v4.24.2",
+    "archive_sha256": "6b52cc171cade9f66f90a9fe29a9013e565b5a118d39af44eb25fb6d94ce19fd"
+  },
+  "peq_editor": {
+    "repository": "nightstalker6669/peqphpeditor",
+    "commit": "da8c24099ed5081552a8bb48a46375bee9229111",
+    "archive_sha256": "79ede7b4a66247c2164ca771b1ad69f093deae23cce10d8273a1ced70fe07aa8"
+  }
+}
