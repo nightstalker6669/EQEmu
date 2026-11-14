@@ -76,6 +76,7 @@ jobs:
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_C_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_FLAGS="-D_FORTIFY_SOURCE=3" \
             -DEQEMU_BUILD_TESTS=ON \
             -DEQEMU_BUILD_LOGIN=ON \
             -DEQEMU_BUILD_LUA=ON \
@@ -93,7 +94,9 @@ jobs:
 
       - name: Test
         working-directory: build
-        run: ./bin/tests
+        run: |
+          ./bin/tests
+          ./bin/character_select_encoder_test
 
       - name: Receive verified pinned input artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'
@@ -167,7 +170,10 @@ jobs:
 
       - name: Test
         working-directory: build
-        run: ./bin/Release/tests.exe
+        run: |
+          ./bin/Release/tests.exe
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          ./bin/Release/character_select_encoder_test.exe
 
       - name: Receive verified pinned input artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/develop' && github.repository == 'nightstalker6669/EQEmu'

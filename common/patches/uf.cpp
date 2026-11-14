@@ -15,6 +15,7 @@
 	You should have received a copy of the GNU General Public License
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+#include "character_select.h"
 #include <cstring>
 #include "uf.h"
 #include "uf_structs.h"
@@ -2278,6 +2279,15 @@ namespace UF
 	ENCODE(OP_SendCharInfo)
 	{
 		ENCODE_LENGTH_ATLEAST(CharacterSelect_Struct);
+		const auto layout = EQ::patches::GetCharacterSelectLayout(
+			(*p)->pBuffer, (*p)->size, constants::CHARACTER_CREATION_LIMIT,
+			sizeof(structs::CharacterSelect_Struct), sizeof(structs::CharacterSelectEntry_Struct));
+		if (!layout) {
+			LogNetcode("Invalid character select entries on outbound OP_SendCharInfo");
+			delete *p;
+			*p = nullptr;
+			return;
+		}
 		SETUP_VAR_ENCODE(CharacterSelect_Struct);
 
 		// Zero-character count shunt
@@ -2301,17 +2311,8 @@ namespace UF
 		emu_ptr += sizeof(CharacterSelect_Struct);
 		CharacterSelectEntry_Struct *emu_cse = (CharacterSelectEntry_Struct *)nullptr;
 
-		size_t names_length = 0;
-		size_t character_count = 0;
-		for (; character_count < emu->CharCount && character_count < constants::CHARACTER_CREATION_LIMIT; ++character_count) {
-			emu_cse = (CharacterSelectEntry_Struct *)emu_ptr;
-			names_length += strlen(emu_cse->Name);
-			emu_ptr += sizeof(CharacterSelectEntry_Struct);
-		}
-
-		size_t total_length = sizeof(structs::CharacterSelect_Struct)
-			+ character_count * sizeof(structs::CharacterSelectEntry_Struct)
-			+ names_length;
+		const size_t character_count = layout->name_lengths.size();
+		const size_t total_length = layout->total_length;
 
 		ALLOC_VAR_ENCODE(structs::CharacterSelect_Struct, total_length);
 		structs::CharacterSelectEntry_Struct *eq_cse = (structs::CharacterSelectEntry_Struct *)nullptr;
@@ -2340,8 +2341,12 @@ namespace UF
 			eq_cse->HairStyle = emu_cse->HairStyle;
 			eq_cse->Gender = emu_cse->Gender;
 
-			strcpy(eq_cse->Name, emu_cse->Name);
-			eq_ptr += strlen(emu_cse->Name);
+			// Name[1] is a wire placeholder, not the destination object.
+			// The validated layout bounds this copy in the allocated packet.
+			const size_t name_length = layout->name_lengths[counter];
+			std::memcpy(eq_ptr + offsetof(structs::CharacterSelectEntry_Struct, Name),
+				emu_cse->Name, name_length + 1);
+			eq_ptr += name_length;
 			eq_cse = (structs::CharacterSelectEntry_Struct *)eq_ptr; // offset address (base + name length offset)
 			eq_cse->Name[0] = '\0'; // (offset)eq_cse->Name[0] = (base)eq_cse->Name[strlen(emu_cse->Name)]
 

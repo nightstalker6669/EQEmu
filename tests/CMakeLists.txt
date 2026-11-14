@@ -45,3 +45,17 @@ endif()
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 set_property(TARGET tests PROPERTY FOLDER executables/tests)
+
+# Calls the production charselect encoders; keep this separate so failures return
+# a nonzero status independently of the legacy cppunit runner.
+add_executable(character_select_encoder_test character_select_encoder_test.cpp)
+target_link_libraries(character_select_encoder_test PRIVATE common)
+if(WIN32)
+    target_link_libraries(character_select_encoder_test PRIVATE ws2_32)
+endif()
+if(UNIX)
+    target_link_libraries(character_select_encoder_test PRIVATE ${CMAKE_DL_LIBS} z m pthread)
+    if(NOT DARWIN)
+        target_link_libraries(character_select_encoder_test PRIVATE rt)
+    endif()
+endif()
