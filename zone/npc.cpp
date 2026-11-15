@@ -2294,6 +2294,30 @@ void NPC::ModifyNPCStat(const std::string& stat, const std::string& value)
 
 	LogNPCScaling("NPC::ModifyNPCStat: Key [{}] Value [{}] ", variable_key, value);
 
+	if(RuleB(SodProgression,EnableOceangreenSlice)&&zone&&zone->GetZoneID()==467&&zone->GetInstanceID()&&
+	 (zone->GetInstanceVersion()==1||zone->GetInstanceVersion()==2)) {
+		if(stat_lower=="sod_resident_owned") {
+			switch(GetNPCTypeID()) {
+			case 467059:case 467060:case 467061:case 467062:case 467064:case 467065:case 467067:case 467068:
+			case 467070:case 467072:case 467075:case 467078:case 467079:case 467080:case 467081:case 467085:
+				if(!NPCTypedata_ours)NPCTypedata_ours=new NPCType(*NPCTypedata);return;
+			default:return;
+			}
+		}
+		if(stat_lower=="sod_diversion_exp"&&zone->GetInstanceVersion()==2&&GetNPCTypeID()==467924) {
+			switch(GetSpawnPointID()) {
+			case 304064037:case 304064038:case 304064039:case 304064040:case 304064041:
+			case 304064042:case 304064043:case 304064044:case 304064045:
+				if(!NPCTypedata_ours)NPCTypedata_ours=new NPCType(*NPCTypedata);
+				NPCTypedata_ours->exp_mod=100;return; // Ordinary combat profile only; post-event instances stay0.
+			default:return;
+			}
+		}
+	}
+	if(stat_lower=="sod_walkspeed" && GetNPCTypeID()==467912 &&
+	 RuleB(SodProgression,EnableOceangreenSlice)&&zone&&zone->GetZoneID()==468&&zone->GetInstanceVersion()==1) {
+		walkspeed=0.7f;base_walkspeed=28;return;
+	}
 	if (stat_lower == "ac") {
 		AC = Strings::ToInt(value);
 		CalcAC();

@@ -377,7 +377,19 @@ public:
 	void AssignTask(int task_id, int npc_id);
 	void AssignTask(int task_id, int npc_id, bool enforce_level_requirement);
 	void FailTask(int task);
+
 	bool IsTaskCompleted(int task_id);
+	int GetSodTaskCompletionState(int task_id);
+	int GetSodVoidZone();
+	bool SodHiranTravel(Lua_NPC npc, bool return_to_keep);
+	bool SodChiefKey(Lua_NPC giver);
+	std::string SodActorGrounding(Lua_NPC actor);
+	int SodSceneState(uint32 task);
+	bool SodRestoreSceneVictory(uint32 task);
+	bool SodSceneTransition(uint32 task, int expected, int next);
+	int SodSceneDraw(uint32 task, uint32 index, uint32 range);
+	int GetSodGroupThemeState(int theme);
+	int GetSodJourneymanTierState(int tier);
 	bool IsTaskActive(int task);
 	bool IsTaskActivityActive(int task, int activity);
 	bool HasCompletedAchievement(uint32 achievement_id);

@@ -3945,11 +3945,12 @@ std::unique_ptr<EQApplicationPacket> MessageComponent::InterruptSpell(uint32_t m
 std::unique_ptr<EQApplicationPacket> MessageComponent::InterruptSpellOther(Mob* sender, uint32_t message, uint32_t spawn_id,
 	const char* name, const char* spell_link) const
 {
-	auto outapp = std::make_unique<EQApplicationPacket>(OP_InterruptCast, sizeof(InterruptCast_Struct) + strlen(name) + 1);
+	const auto name_size = strlen(name) + 1;
+	auto outapp = std::make_unique<EQApplicationPacket>(OP_InterruptCast, sizeof(InterruptCast_Struct) + name_size);
 	auto ic = reinterpret_cast<InterruptCast_Struct*>(outapp->pBuffer);
 	ic->messageid = ResolveID(message);
 	ic->spawnid = spawn_id;
-	strcpy(ic->message, spell_link);
+	memcpy(ic->message, name, name_size);
 	return outapp;
 }
 

@@ -95,6 +95,10 @@ static EQ::RewardSelection::RewardDisplayEntry BuildDisplayEntry(
 			);
 		}
 		break;
+	case RewardSelectionRewardType::Faction:
+		entry.wire_type = RewardWireType::Text;
+		if(entry.description.empty()) entry.description=fmt::format("Faction {}: +{}",reward.data_id,reward.amount);
+		break;
 	case RewardSelectionRewardType::Title:
 		entry.wire_type = RewardWireType::Text;
 		entry.fields[1] = kRoF2PlayerFlagsStringId;
@@ -206,7 +210,8 @@ bool ClientRewardSelection::ValidateSession(
 			if (
 				(reward.type == RewardSelectionRewardType::Item ||
 					reward.type == RewardSelectionRewardType::AlternateCurrency ||
-					reward.type == RewardSelectionRewardType::Title) &&
+					reward.type == RewardSelectionRewardType::Title ||
+				reward.type == RewardSelectionRewardType::Faction) &&
 				!reward.data_id
 			) {
 				return false;
@@ -1060,6 +1065,8 @@ RewardSelectionDeliveryResult ClientRewardSelection::GrantReward(
 				? RewardSelectionDeliveryResult::Delivered
 				: RewardSelectionDeliveryResult::Ambiguous;
 		}
+	case RewardSelectionRewardType::Faction:
+		return RewardSelectionDeliveryResult::RetryableFailure; // Owned task adapter only.
 	case RewardSelectionRewardType::Title:
 		if (
 			!reward.data_id ||

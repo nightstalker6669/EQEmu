@@ -1,3 +1,4 @@
+#include "zone/sod_orders_loot.h"
 #include "fire_run_terminal_scene.h"
 #include "fire_material_loot_source.h"
 /*	EQEmu: EQEmulator
@@ -1749,6 +1750,7 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 			}
 		}
 
+		SodOrdersLoot::Scope sod_orders_native_loot(*c,*inst,*this);
 		/* First add it to the looter - this will do the bag contents too */
 		if (lootitem->auto_loot > 0) {
 			if (!c->AutoPutLootInInventory(*inst, true, true, bag_item_data)) {

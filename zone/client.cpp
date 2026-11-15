@@ -1,3 +1,6 @@
+#include "zone/sod_progression.h"
+#include "common/sod_admission.h"
+#include "common/sod_reward_quote.h"
 #include "fungal_item_operation_source.h"
 #include <ctime>
 #include "fire_run_terminal_scene.h"
@@ -7482,6 +7485,113 @@ void Client::SendAltCurrencies() {
 	}
 }
 
+bool Client::ObserveSodRunestone(uint32 spell,int32 slot,uint32 serial) {
+ if(spell!=7651||slot<0||!serial||!zone||zone->GetZoneID()!=468||zone->GetInstanceVersion()!=2||!zone->GetInstanceID()||
+  !IsTaskActive(920180)||!SodProgression::MissionEntry(database,content_db,CharacterID(),GetSharedTaskId(),468,2,zone->GetInstanceID(),false))return false;
+ auto* item=GetInv().GetItem(slot);
+ if(!item||item->GetID()!=88304||item->GetSerialNumber()!=serial||!item->GetItem()||item->GetItem()->Click.Effect!=7651||item->GetItem()->Click.Type!=1)return false;
+ // Approved local ward anchor. Physical collision/disable binding remains a
+ // separate activation hold; this receipt never teleports or invents a wall.
+ const auto dx=GetX()+198.0f,dy=GetY()-279.5f,dz=GetZ()+68.5f;
+ if(dx*dx+dy*dy+dz*dz>625.0f)return false;
+ if(!database.TransactionBeginStrict().Success())return false;
+ const auto fail=[&](){database.TransactionRollbackStrict();return false;};
+ auto scene=database.QueryDatabase(fmt::format("SELECT state FROM sod_task_scene_runs WHERE shared_task_id={} AND task_id=920180 AND instance_id={} AND model_version=2 FOR UPDATE",GetSharedTaskId(),zone->GetInstanceID()));
+ if(!scene.Success()||scene.RowCount()!=1||SharedTaskAdmission::Number(scene.begin()[0])!=std::optional<uint64_t>(1))return fail();
+ const auto now=SodAdmission::Milliseconds();
+ if(!database.QueryDatabase(fmt::format("INSERT INTO sod_task_ward_uses (shared_task_id,character_id,used_at) VALUES ({},{},{}) ON DUPLICATE KEY UPDATE used_at=VALUES(used_at)",GetSharedTaskId(),CharacterID(),now)).Success())return fail();
+ auto uses=database.QueryDatabase(fmt::format("SELECT COUNT(*) FROM sod_task_ward_uses u JOIN shared_task_members m ON m.shared_task_id=u.shared_task_id AND m.character_id=u.character_id WHERE u.shared_task_id={} AND u.used_at>={} AND u.used_at<={}",GetSharedTaskId(),now-15000,now));
+ if(!uses.Success()||uses.RowCount()!=1)return fail();auto count=SharedTaskAdmission::Number(uses.begin()[0]);if(!count)return fail();
+ bool opened=false;
+ if(*count>=2) {
+  auto update=database.QueryDatabase(fmt::format("UPDATE sod_task_scene_runs SET state=4,updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND task_id=920180 AND instance_id={} AND model_version=2 AND state=1",GetSharedTaskId(),zone->GetInstanceID()));
+  if(!update.Success()||update.RowsAffected()!=1)return fail();opened=true;
+ }
+ if(!database.TransactionCommitStrict().Success()){database.TransactionRollbackStrict();return false;}
+ if(opened)UpdateTaskActivity(920180,1,1);
+ return opened;
+}
+
+int Client::GrantSodFaction(uint32 pending,uint64 entry,uint32 faction,uint32 amount)
+{
+ if(!pending||!entry||!faction||!amount||amount>INT32_MAX||m_sod_faction_pending||
+  m_mercenary_persistence_failed||m_inventory_session_rejected)return 0;
+ auto owned=database.QueryDatabase(fmt::format("SELECT task_id FROM character_task_reward_selections WHERE pending_reward_id={} AND character_id={} AND selected_option_id>0 AND status=0",pending,CharacterID()));
+ if(!owned.Success()||owned.RowCount()!=1)return 0;
+ auto task=SharedTaskAdmission::Number(owned.begin()[0]);if(!task||*task>UINT32_MAX||!SodRewardQuote::Range(*task).maximum)return 0;
+ const bool sergeant=*task==920175||*task==920176||*task==920177;
+ const bool hiran=*task==920178||*task==920179;
+ const uint32 expected=faction==1222?(sergeant?10:30):((sergeant||hiran)&&faction==1200?(sergeant?10:30):((sergeant||hiran)&&(faction==1199||faction==1221)?(sergeant?1:3):0));
+ if(amount!=expected)return 0;
+ FactionMods mods;if(!content_db.GetFactionData(&mods,GetClass(),GetFactionRace(),GetDeity(),faction))return 0;
+ m_sod_faction_pending=pending;m_sod_faction_entry=entry;m_sod_faction_id=faction;m_sod_faction_committed=false;
+ SetFactionLevel2(CharacterID(),faction,GetBaseClass(),GetBaseRace(),GetDeity(),static_cast<int32>(amount),0);
+ const bool committed=m_sod_faction_committed;
+ m_sod_faction_pending=0;m_sod_faction_entry=0;m_sod_faction_id=0;m_sod_faction_committed=false;
+ return committed?1:(m_inventory_session_rejected?-1:0);
+}
+bool Client::PersistSodFaction(int32 faction,int32 value,uint8 temp)
+{
+ if(!m_sod_faction_pending||m_sod_faction_id!=faction||!database.TransactionBeginStrict().Success())return false;
+ const auto fail=[&](){database.TransactionRollbackStrict();return false;};
+ auto entry=database.QueryDatabase(fmt::format("SELECT r.status FROM character_task_rewards r JOIN character_task_reward_selections s ON s.pending_reward_id=r.pending_reward_id AND s.character_id=r.character_id WHERE r.character_id={} AND r.pending_reward_id={} AND r.reward_id={} AND s.status=0 AND s.selected_option_id>0 FOR UPDATE",CharacterID(),m_sod_faction_pending,m_sod_faction_entry));
+ if(!entry.Success()||entry.RowCount()!=1)return fail();
+ auto status=SharedTaskAdmission::Number(entry.begin()[0]);if(!status||*status!=0)return fail();
+ if(!database.QueryDatabase(fmt::format("INSERT INTO faction_values (char_id,faction_id,current_value,temp) VALUES ({},{},0,0) ON DUPLICATE KEY UPDATE char_id=char_id",CharacterID(),faction)).Success())return fail();
+ auto before=database.QueryDatabase(fmt::format("SELECT current_value FROM faction_values WHERE char_id={} AND faction_id={} FOR UPDATE",CharacterID(),faction));
+ if(!before.Success()||before.RowCount()!=1||!before.begin()[0]||Strings::ToInt(before.begin()[0])!=GetCharacterFactionLevel(faction))return fail();
+ faction_map staged;
+ if(!database.SetCharacterFactionLevel(CharacterID(),faction,value,temp,staged))return fail();
+ auto receipt=database.QueryDatabase(fmt::format("UPDATE character_task_rewards SET status=1,granted_at=UNIX_TIMESTAMP(),last_error='' WHERE character_id={} AND pending_reward_id={} AND reward_id={} AND status=0",CharacterID(),m_sod_faction_pending,m_sod_faction_entry));
+ if(!receipt.Success()||receipt.RowsAffected()!=1)return fail();
+ if(!database.TransactionCommitStrict().Success()){database.TransactionRollbackStrict();m_inventory_session_rejected=true;return false;}
+ factionvalues[faction]=value;m_sod_faction_committed=true;return true;
+}
+
+int Client::GrantSodChronobines(uint32 pending, uint64 entry, uint32 amount)
+{
+ if(!pending||!entry||!amount||!alternate_currency_loaded||
+  m_mercenary_persistence_failed||m_inventory_session_rejected||!zone||!zone->DoesAlternateCurrencyExist(15))return 0;
+ if(!database.TransactionBeginStrict().Success())return 0;
+ const auto fail=[&](){database.TransactionRollbackStrict();return 0;};
+ auto owned=database.QueryDatabase(fmt::format(
+  "SELECT s.task_id,s.source_instance_id,r.status FROM character_task_reward_selections s "
+  "JOIN character_task_rewards r ON r.pending_reward_id=s.pending_reward_id AND r.character_id=s.character_id "
+  "WHERE s.pending_reward_id={} AND s.character_id={} AND r.reward_id={} AND s.selected_option_id>0 AND s.status=0 FOR UPDATE",pending,CharacterID(),entry));
+ if(!owned.Success()||owned.RowCount()!=1)return fail();
+ auto row=owned.begin();auto task=SharedTaskAdmission::Number(row[0]),source=SharedTaskAdmission::Number(row[1]),status=SharedTaskAdmission::Number(row[2]);
+ if(!task||*task>UINT32_MAX||!source||!status||(*status!=0&&*status!=1))return fail();
+ auto quote=SodRewardQuote::ForRecipient(database,CharacterID(),static_cast<uint32>(*task),*source);
+ if(!quote||quote->amount!=amount)return fail();
+ if(!database.QueryDatabase(fmt::format("INSERT INTO character_alt_currency (char_id,currency_id,amount) VALUES ({},15,0) ON DUPLICATE KEY UPDATE char_id=char_id",CharacterID())).Success())return fail();
+ auto wallet=database.QueryDatabase(fmt::format("SELECT amount FROM character_alt_currency WHERE char_id={} AND currency_id=15 FOR UPDATE",CharacterID()));
+ if(!wallet.Success()||wallet.RowCount()!=1)return fail();
+ auto balance=SharedTaskAdmission::Number(wallet.begin()[0]);
+ if(!balance||*balance>INT32_MAX)return fail();
+ if(*status==1) {
+  // Read-only recovery of our atomic receipt; never add the amount again.
+  if(!database.TransactionCommitStrict().Success()){m_inventory_session_rejected=true;return -1;}
+  alternate_currency[15]=static_cast<uint32>(*balance);SendAlternateCurrencyValue(15);return 1;
+ }
+ if(*balance!=GetAlternateCurrencyValue(15)||amount>INT32_MAX-*balance)return fail();
+ const uint32 next=static_cast<uint32>(*balance)+amount;
+ auto paid=database.QueryDatabase(fmt::format("UPDATE character_alt_currency SET amount={} WHERE char_id={} AND currency_id=15 AND amount={}",next,CharacterID(),*balance));
+ auto receipt=database.QueryDatabase(fmt::format("UPDATE character_task_rewards SET status=1,granted_at=UNIX_TIMESTAMP(),last_error='' WHERE character_id={} AND pending_reward_id={} AND reward_id={} AND status=0",CharacterID(),pending,entry));
+ if(!paid.Success()||paid.RowsAffected()!=1||!receipt.Success()||receipt.RowsAffected()!=1)return fail();
+ if(!database.TransactionCommitStrict().Success()) {
+  database.TransactionRollbackStrict();
+  // A lost commit acknowledgement may already have persisted BOTH rows.
+  // Prevent stale in-memory wallet writes until reconnect/reconciliation.
+  m_inventory_session_rejected=true;return -1;
+ }
+ alternate_currency[15]=next;SendAlternateCurrencyValue(15);
+ if(parse->PlayerHasQuestSub(EVENT_ALT_CURRENCY_GAIN)) {
+  const auto export_string=fmt::format("15 {} {}",amount,next);
+  parse->EventPlayer(EVENT_ALT_CURRENCY_GAIN,this,export_string,0);
+ }
+ return 1;
+}
+
 bool Client::SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount)
 {
 	if (m_mercenary_persistence_failed || m_inventory_session_rejected) { return false; }
@@ -8791,7 +8901,11 @@ void Client::UpdatePersonalFaction(int32 char_id, int32 npc_value, int32 faction
 		else if (*current_value < this_faction_min)
 			*current_value = this_faction_min;
 
-		database.SetCharacterFactionLevel(char_id, faction_id, *current_value, temp, factionvalues);
+		if(m_sod_faction_pending&&m_sod_faction_id==static_cast<uint32>(faction_id)) {
+			PersistSodFaction(faction_id,*current_value,temp);
+		} else database.SetCharacterFactionLevel(char_id, faction_id, *current_value, temp, factionvalues);
+	} else if(m_sod_faction_pending&&m_sod_faction_id==static_cast<uint32>(faction_id)) {
+		PersistSodFaction(faction_id,*current_value,temp);
 	}
 
 return;

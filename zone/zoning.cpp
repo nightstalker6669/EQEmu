@@ -1,3 +1,4 @@
+#include "zone/dynamic_zone.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -16,6 +17,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "client.h"
+#include "sod_progression.h"
 
 #include "common/eqemu_logsys.h"
 #include "common/events/player_event_logs.h"
@@ -34,6 +36,92 @@
 extern QueryServ* QServ;
 extern WorldServer worldserver;
 extern Zone* zone;
+
+
+int Client::GetSodTaskCompletionState(uint32 task_id)
+{
+	const auto tasks = SodProgression::ReadCommittedTasks(database, content_db, CharacterID(), {task_id});
+	const auto it = tasks.completion.find(task_id);
+	return tasks.available && it != tasks.completion.end() ? static_cast<int>(it->second) : -1;
+}
+
+SodProgression::Evidence Client::ReadSodProgression()
+{
+	return SodProgression::ReadOceangreenSlice(database, content_db, CharacterID());
+}
+
+uint32 Client::GetSodVoidZone()
+{
+	const auto evidence = ReadSodProgression();
+	return evidence.available ? SodProgression::VoidZone(SodProgression::ProvenVoidStage(evidence)) : 0;
+}
+
+int Client::GetSodGroupThemeState(uint32 theme)
+{
+	const auto evidence = ReadSodProgression();
+	return evidence.available && theme < evidence.group.size() ? static_cast<int>(evidence.group[theme]) : -1;
+}
+
+int Client::GetSodJourneymanTierState(uint32 tier)
+{
+	return static_cast<int>(SodProgression::JourneymanTier(ReadSodProgression(), tier));
+}
+
+bool Client::CanEnterSodProgressionZone(uint32 destination, int version, uint32 instance, bool preflight)
+{
+	if (!SodProgression::IsSodZone(destination)) return true;
+	if (!RuleB(SodProgression, EnableOceangreenSlice)) return false;
+	if (instance || version>0) {
+		const auto occurrence=GetSharedTaskId();
+		return occurrence>0 && SodProgression::MissionEntry(database, content_db, CharacterID(),
+			static_cast<uint64_t>(occurrence), destination, version, instance, preflight);
+	}
+	if (version<0) return false;
+	if (destination==468) return SodProgression::BlackburrowAccess(database, content_db, CharacterID(), IsTaskActive(920181));
+	return SodProgression::AllowsOceangreenSliceBase(ReadSodProgression(), destination);
+}
+
+bool Client::CanRequestSodTask(uint32 task_id, uint32 npc_type_id)
+{
+	using SodProgression::Credit;
+	if (!SodProgression::IsOceangreenRequest(task_id)) return true;
+	if (!RuleB(SodProgression, EnableOceangreenSlice) || !zone) return false;
+	if (!SodProgression::MayStartOrJoinTask(content_db, task_id)) return false;
+	uint32 giver = 0;
+	uint32 giver_zone = 466;
+	std::vector<uint32_t> prerequisites;
+	switch (task_id) {
+	case 920175: giver = 466141; prerequisites = {920175,920176}; break;
+	case 920176: giver = 466141; prerequisites = {920175}; break;
+	case 920177: giver = 466035; prerequisites = {920175,920176}; break;
+	case 920178: giver = 466035; prerequisites = {920177}; break;
+	case 920179: giver = 466035; prerequisites = {920178}; break;
+	case 920180: giver = 466160; prerequisites = {920183}; break;
+	case 920181: giver = 466154; break;
+	case 920182: giver = 466157; break;
+	case 920183: giver = 466160; prerequisites = {920181,920190,920182}; break;
+	case 920184: giver = 467066; giver_zone = 467; break;
+	case 920185: giver = 467066; giver_zone = 467; prerequisites = {920184}; break;
+	case 920186: giver = 467066; giver_zone = 467; prerequisites = {920185}; break;
+	case 920187: giver = 467069; giver_zone = 467; prerequisites = {920184,920185,920186}; break;
+	case 920190: giver = 466155; break;
+	default: return false; // requester/raid contracts not yet bound by this packet
+	}
+	if (npc_type_id != giver || zone->GetZoneID() != giver_zone) return false;
+	if (prerequisites.empty()) return true;
+	const auto tasks = SodProgression::ReadCommittedTasks(database, content_db, CharacterID(), prerequisites);
+	if (!tasks.available) return false;
+	if (task_id == 920175) {
+		// Both Sergeant tasks become repeatable after the second is complete.
+		return tasks.completion.at(920175) == Credit::Incomplete ||
+			(tasks.completion.at(920175) == Credit::Complete && tasks.completion.at(920176) == Credit::Complete);
+	}
+	for (const auto prerequisite : prerequisites) {
+		const auto it = tasks.completion.find(prerequisite);
+		if (it == tasks.completion.end() || it->second != Credit::Complete) return false;
+	}
+	return true;
+}
 
 void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 	if (RuleB(Bots, Enabled)) {
@@ -147,6 +235,23 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 		}
 	}
 
+	// Only the verified original Hills -> Blackburrow zone point selects an
+	// admitted mission. Explicit/GM/bind/internal moves keep their destination.
+	if(RuleB(SodProgression,EnableOceangreenSlice)&&zone_mode==ZoneUnsolicited&&zone_point&&
+	 zone->GetZoneID()==466&&zone->GetInstanceID()==0&&zone_point->number==30&&
+	 zone_point->target_zone_id==468&&zone_point->target_zone_instance==0&&target_zone_id==468&&target_instance_id==0&&GetTaskState()) {
+		const auto task=GetTaskState()->GetActiveSharedTask().task_id;
+		if(task==920180||task==920183) {
+			const int version=task==920183?1:2;uint32 matched=0;
+			for(auto* dz:GetDynamicZones(468,version)) {
+				if(!dz||dz->GetType()!=DynamicZoneType::Mission||!dz->IsValid()||dz->IsExpired()||!dz->HasZoneInLocation())continue;
+				if(!SodProgression::MissionEntry(database,content_db,CharacterID(),GetSharedTaskId(),468,version,dz->GetInstanceID(),false))continue;
+				if(matched){SendZoneCancel(zc);return;}matched=dz->GetInstanceID();
+			}
+			if(!matched){SendZoneCancel(zc);return;}target_instance_id=matched;
+		}
+	}
+
 	if (target_instance_id) {
 		LogZoning(
 			"Client [{}] attempting zone to instance_id [{}] zone [{}] ({})",
@@ -183,6 +288,19 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 			SendZoneCancel(zc);
 			return;
 		}
+	}
+
+
+	// Only redirect a verified default return from outside the Void. Never
+	// rewrite internal Void self-zone points, explicit variants or instances.
+	if (RuleB(SodProgression, EnableOceangreenSlice) && !GetGM() &&
+		zone_mode == ZoneUnsolicited && zone_point &&
+		SodProgression::IsDefaultVoidReturnPoint(zone->GetZoneID(), zone_point->number) &&
+		zone_point->target_zone_id == 459 && zone_point->target_zone_instance == 0 &&
+		target_zone_id == 459 && target_instance_id == 0) {
+		const auto resolved = GetSodVoidZone();
+		if (!resolved) { SendZoneCancel(zc); return; }
+		target_zone_id = resolved;
 	}
 
 	/* Check for Valid Zone */
@@ -332,7 +450,15 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 			break;
 	};
 
+
 	auto zoning_message = ZoningMessage::ZoneSuccess;
+	// Ordinary scripted ignore_restrictions is not progression proof. Native
+	// GM-directed summons retain their administrative override for any target.
+	if (RuleB(SodProgression, EnableOceangreenSlice) && !GetGM() &&
+		zone_mode != GMSummon && zone_mode != GMHiddenSummon &&
+		SodProgression::IsSodZone(target_zone_id) && !CanEnterSodProgressionZone(target_zone_id, target_instance_version, target_instance_id)) {
+		zoning_message = ZoningMessage::ZoneNoExperience;
+	}
 
 	// Check Minimum Status, Minimum Level, Maximum Level, and Zone Flag
 	if (
@@ -1474,6 +1600,22 @@ bool Client::CanEnterZone(const std::string& zone_short_name, int16 instance_ver
 			z->max_level
 		);
 		return false;
+	}
+
+
+	if (RuleB(SodProgression, EnableOceangreenSlice) && !GetGM() &&
+		SodProgression::IsSodZone(z->zoneidnumber)) {
+		// An empty destination is the current-zone arrival/login check, not
+		// destination preflight. Never borrow another matching instance's
+		// membership on saved, internal or GM-directed arrival.
+		const bool arrival = zone_short_name.empty();
+		const auto sod_version = arrival ? zone->GetInstanceVersion() :
+			(instance_version == -1 ? zone->GetInstanceVersion() : instance_version);
+		const uint32 sod_instance = arrival ? zone->GetInstanceID() : 0;
+		if (arrival && sod_instance &&
+			(!database.VerifyInstanceAlive(sod_instance, CharacterID()) ||
+			 !database.VerifyZoneInstance(z->zoneidnumber, sod_instance))) return false;
+		if (!CanEnterSodProgressionZone(z->zoneidnumber, sod_version, sod_instance, !arrival)) return false;
 	}
 
 	if (Admin() < z->min_status) {

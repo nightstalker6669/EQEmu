@@ -51,6 +51,8 @@
 #include "common/repositories/guild_tributes_repository.h"
 #include "common/repositories/tradeskill_recipe_entries_repository.h"
 #include "common/rulesys.h"
+
+#include <algorithm>
 #include "common/shared_tasks.h"
 #include "zone/achievement_manager.h"
 #include "zone/bot.h"
@@ -11215,6 +11217,16 @@ void Client::Handle_OP_MercenaryDataRequest(const EQApplicationPacket *app)
 
 		std::list<MercType> mercTypeList = tar->GetMercenaryTypesList(static_cast<unsigned int>(ClientVersion()));
 		std::list<MercData> mercDataList = tar->GetMercenariesList(static_cast<unsigned int>(ClientVersion()));
+		const auto unfiltered_count = mercDataList.size();
+		FilterSodMercenaryOffers(mercDataList);
+		if (mercDataList.size() != unfiltered_count) {
+			// Do not advertise a grade with no remaining eligible templates.
+			mercTypeList.remove_if([&mercDataList](const MercType& grade) {
+				return std::none_of(mercDataList.begin(), mercDataList.end(), [&grade](const MercData& offer) {
+					return offer.MercType == grade.Type;
+				});
+			});
+		}
 		mercTypeCount = mercTypeList.size();
 		mercCount = mercDataList.size();
 

@@ -1,3 +1,7 @@
+#include "zone/sod_progression.h"
+#include <algorithm>
+#include "common/sod_solo_loot.h"
+#include "common/shared_task_admission.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -281,6 +285,61 @@ bool NPC::MeetsLootDropLevelRequirements(LootdropEntriesRepository::LootdropEntr
 }
 
 //if itemlist is null, just send wear changes
+bool NPC::SuppressSodStockLoot(uint32 item) const {
+ if(!RuleB(SodProgression,EnableOceangreenSlice)||!zone||zone->GetInstanceVersion()!=0||zone->GetInstanceID()!=0)return false;
+ return (zone->GetZoneID()==468&&item==17342&&SodSoloLoot::InsigniaChance(GetNPCTypeID())) ||
+  (zone->GetZoneID()==466&&item==17312&&GetNPCTypeID()==466057);
+}
+static std::optional<uint64_t> SodEvilOccurrence(Client& c) {
+ if(!c.IsTaskActive(920182))return std::nullopt;
+ auto q=database.QueryDatabase(fmt::format("SELECT occurrence_id FROM character_task_reward_instances WHERE character_id={} AND task_id=920182",c.CharacterID()));
+ if(!q.Success()||q.RowCount()!=1)return std::nullopt;return SharedTaskAdmission::Number(q.begin()[0]);
+}
+void NPC::CaptureSodEvilCohort(Mob* attacker) {
+ if(!SuppressSodStockLoot(17312)||m_sod_aggro_observed)return;
+ m_sod_aggro_observed=true;
+ auto* owner=attacker?attacker->GetUltimateOwner():nullptr;
+ if(!owner||!owner->IsClient())return;
+ for(auto* member:owner->CastToClient()->GetRaidOrGroupOrSelf(true)) {
+  if(!member||!member->IsClient())continue;
+  auto* c=member->CastToClient();auto occurrence=SodEvilOccurrence(*c);
+  if(occurrence&&*occurrence)m_sod_evil_cohort.emplace(c->CharacterID(),*occurrence);
+ }
+}
+void NPC::AddSodDeathLoot(Client* credited,Mob* actual_killer) {
+ if(m_sod_loot_finalized)return;m_sod_loot_finalized=true;
+ if(RuleB(SodProgression,EnableOceangreenSlice)&&zone&&zone->GetZoneID()==468&&zone->GetInstanceVersion()==2&&
+  GetNPCTypeID()==467915&&actual_killer) {
+  auto* owner=actual_killer->GetUltimateOwner();
+  if(owner&&owner->IsClient()&&owner->GetHP()>0) {
+   auto* c=owner->CastToClient();
+   auto ready=database.QueryDatabase(fmt::format("SELECT r.state FROM sod_task_scene_runs r JOIN sod_task_scene_actions a ON a.shared_task_id=r.shared_task_id AND a.action_id=1 AND a.status=1 WHERE r.shared_task_id={} AND r.task_id=920180 AND r.instance_id={} AND r.state=5",c->GetSharedTaskId(),zone->GetInstanceID()));
+   if(ready.Success()&&ready.RowCount()==1&&SodProgression::MissionEntry(database,content_db,c->CharacterID(),c->GetSharedTaskId(),468,2,zone->GetInstanceID(),false))
+    SpellFinished(17532,c); // Native single-target effect, before NPC entity/caster removal.
+  }
+ }
+
+ if(SuppressSodStockLoot(17342)) {
+  while(std::any_of(m_loot_items.begin(),m_loot_items.end(),[](const LootItem* i){return i&&i->item_id==17342;}))RemoveItem(17342); // Remove every stock copy, including multiplier2.
+  m_sod_adding_owned_loot=true;
+  if(zone->random.Real(0.0,100.0)<SodSoloLoot::InsigniaChance(GetNPCTypeID()))AddItem(17342,1,false);
+  m_sod_adding_owned_loot=false;
+ }
+ if(SuppressSodStockLoot(17312)) {
+  while(std::any_of(m_loot_items.begin(),m_loot_items.end(),[](const LootItem* i){return i&&i->item_id==17312;}))RemoveItem(17312);
+  if(!credited||!m_sod_aggro_observed)return;
+  const auto cohort=credited->GetRaidOrGroupOrSelf(true);if(cohort.empty())return;
+  for(auto* member:cohort) {
+   if(!member||!member->IsClient())return;
+   auto* c=member->CastToClient();auto it=m_sod_evil_cohort.find(c->CharacterID());auto occurrence=SodEvilOccurrence(*c);
+   if(it==m_sod_evil_cohort.end()||!occurrence||*occurrence!=it->second)return;
+  }
+  m_sod_adding_owned_loot=true;
+  if(zone->random.Real(0.0,100.0)<26.241)AddItem(17312,1,false);
+  m_sod_adding_owned_loot=false;
+ }
+}
+
 void NPC::AddLootDrop(
 	const EQ::ItemData *item2,
 	LootdropEntriesRepository::LootdropEntries loot_drop,
@@ -301,6 +360,7 @@ void NPC::AddLootDrop(
 	if (!item2) {
 		return;
 	}
+	if(!m_sod_adding_owned_loot&&SuppressSodStockLoot(item2->ID))return;
 
 	auto item = new LootItem;
 

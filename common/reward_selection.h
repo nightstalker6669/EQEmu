@@ -19,7 +19,8 @@ enum class RewardType : uint8_t {
 	AlternateAdvancement = 2,
 	Copper               = 3,
 	AlternateCurrency    = 4,
-	Title                = 5
+	Title                = 5,
+	Faction              = 6
 };
 
 enum class ExperienceMode : uint32_t {

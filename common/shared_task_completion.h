@@ -1,3 +1,4 @@
+#include "common/sod_reward_quote.h"
 #pragma once
 
 #include "common/database.h"
@@ -152,6 +153,9 @@ inline std::optional<int64_t> Archive(
 		SharedTaskAdmission::Number(verified.begin()[0]) != std::optional<uint64_t>(activities.size())) {
 		return std::nullopt;
 	}
+
+	if (!SodRewardQuote::RecordCompletion(db, task.task_id, 1, task.id,
+		static_cast<uint32_t>(*completed))) return std::nullopt;
 
 	// Persist the final active snapshot in the same commit as the archive.
 	if (!db.QueryDatabase(fmt::format(

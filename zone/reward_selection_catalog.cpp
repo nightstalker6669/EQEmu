@@ -30,7 +30,7 @@ static bool ValidReward(const RewardsRepository::Rewards &row)
 	if (
 		!row.reward_id ||
 		!row.amount ||
-		row.reward_type > static_cast<uint8_t>(RewardSelectionRewardType::Title)
+		row.reward_type > static_cast<uint8_t>(RewardSelectionRewardType::Faction)
 	) {
 		return false;
 	}
@@ -39,7 +39,8 @@ static bool ValidReward(const RewardsRepository::Rewards &row)
 	const auto requires_data_id =
 		type == RewardSelectionRewardType::Item ||
 		type == RewardSelectionRewardType::AlternateCurrency ||
-		type == RewardSelectionRewardType::Title;
+		type == RewardSelectionRewardType::Title ||
+		type == RewardSelectionRewardType::Faction;
 	const auto invalid_experience_mode =
 		type == RewardSelectionRewardType::Experience &&
 		row.reward_data_id > static_cast<uint32_t>(

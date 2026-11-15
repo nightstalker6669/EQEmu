@@ -1,3 +1,4 @@
+#include <map>
 #include "fungal_item_operation_source.h"
 /*	EQEmu: EQEmulator
 
@@ -111,6 +112,14 @@ namespace EQ
 class NPC : public Mob
 {
 public:
+	bool IsSodReconstructedCaster() const;
+	bool SuppressSodStockLoot(uint32 item) const;
+	void CaptureSodEvilCohort(Mob* first_attacker);
+	void AddSodDeathLoot(Client* credited, Mob* actual_killer);
+	bool m_sod_loot_finalized=false,m_sod_adding_owned_loot=false,m_sod_aggro_observed=false;
+	std::map<uint32,uint64> m_sod_evil_cohort;
+	uint64 m_sod_next_ai_check_ms=0;
+
 	static NPC* SpawnNPC(const char* spawncommand, const glm::vec4& position, Client* client = nullptr);
 	static bool	SpawnZoneController();
 

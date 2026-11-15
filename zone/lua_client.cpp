@@ -1,3 +1,5 @@
+#include "common/sod_content_bindings.h"
+#include "common/sod_reward_quote.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -18,6 +20,7 @@
 #ifdef LUA_EQEMU
 
 #include "lua_client.h"
+#include "sod_actor_grounding.h"
 #include <cmath>
 #include <limits>
 
@@ -25,6 +28,7 @@
 #include "zone/client.h"
 #include "zone/dialogue_window.h"
 #include "zone/dynamic_zone.h"
+#include "zone/sod_progression.h"
 #include "zone/expedition_request.h"
 #include "zone/lua_expedition.h"
 #include "zone/lua_group.h"
@@ -1424,6 +1428,172 @@ void Lua_Client::AssignTask(int task_id, int npc_id, bool enforce_level_requirem
 void Lua_Client::FailTask(int task) {
 	Lua_Safe_Call_Void();
 	self->FailTask(task);
+}
+
+
+int Lua_Client::GetSodTaskCompletionState(int task_id) {
+	Lua_Safe_Call_Int();
+	return task_id > 0 ? self->GetSodTaskCompletionState(static_cast<uint32>(task_id)) : -1;
+}
+int Lua_Client::GetSodVoidZone() {
+	Lua_Safe_Call_Int();
+	return static_cast<int>(self->GetSodVoidZone());
+}
+int Lua_Client::GetSodGroupThemeState(int theme) {
+	Lua_Safe_Call_Int();
+	return theme >= 0 ? self->GetSodGroupThemeState(static_cast<uint32>(theme)) : -1;
+}
+int Lua_Client::GetSodJourneymanTierState(int tier) {
+	Lua_Safe_Call_Int();
+	return tier > 0 ? self->GetSodJourneymanTierState(static_cast<uint32>(tier)) : -1;
+}
+
+std::string Lua_Client::SodActorGrounding(Lua_NPC actor) {
+ Lua_Safe_Call_String();
+ NPC* npc=actor;
+ // Read-only, feature-OFF fixture. No task credit, grant, spawn or SQL write.
+ // Require a real GM and a temporary actor in the isolated approved version.
+ if(!self->GetGM() || RuleB(SodProgression,EnableOceangreenSlice) || !zone ||
+    zone->GetZoneID()!=468 || zone->GetInstanceVersion()!=2 || !zone->GetInstanceID() ||
+    !npc || !npc->GetID() || entity_list.GetNPCByID(npc->GetID())!=npc || npc->GetSpawnPointID()) return "";
+ const auto binding=::SodActorGrounding::Binding(npc->GetNPCTypeID());
+ if(!binding) return "";
+ const auto ground=::SodActorGrounding::Resolve(*npc,*binding);
+ if(!ground) return "";
+ return fmt::format("SOD_GROUND_V1 {} {} {} {:.9f} {:.9f} {:.9f} {:.9f} {:.9f}",
+   zone->GetInstanceID(),binding->npc_id,binding->spawn_id,
+   binding->x,binding->y,ground->floor,ground->offset,ground->origin);
+}
+
+bool Lua_Client::SodChiefKey(Lua_NPC giver) {
+ Lua_Safe_Call_Bool();
+ NPC* npc=giver;
+ if(!npc||!zone||zone->GetZoneID()!=468||zone->GetInstanceVersion()!=2||SodSceneState(920180)!=5||
+  entity_list.GetNPCByID(npc->GetID())!=npc||npc->CalculateDistance(self)>25)return false;
+ auto role=SodContent::Role(content_db,920180,"Chief");if(!role||npc->GetNPCTypeID()!=*role)return false;
+ const auto* key=database.GetItem(88303);if(!key||self->CheckLoreConflict(key))return false;
+ auto claim=database.QueryDatabase(fmt::format("INSERT IGNORE INTO sod_task_scene_actions (shared_task_id,action_id,character_id,item_id,status,updated_at) VALUES ({},1,{},88303,0,UNIX_TIMESTAMP())",self->GetSharedTaskId(),self->CharacterID()));
+ if(!claim.Success()||claim.RowsAffected()!=1)return false;
+ bool saved=false;
+ const bool summoned=self->SummonItem(88303,1,0,0,0,0,0,0,false,EQ::invslot::slotCursor,0,0,0,&saved);
+ if(!summoned||!saved) {
+  // Ambiguous native writer result is intentionally retained status0. Never
+  // turn an unacknowledged grant into a second item or a lore workaround.
+  return false;
+ }
+ auto receipt=database.QueryDatabase(fmt::format("UPDATE sod_task_scene_actions SET status=1,updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND action_id=1 AND character_id={} AND item_id=88303 AND status=0",self->GetSharedTaskId(),self->CharacterID()));
+ return receipt.Success()&&receipt.RowsAffected()==1;
+}
+
+int Lua_Client::SodSceneState(uint32 task) {
+ Lua_Safe_Call_Int();
+ if(!zone||!self->CanEnterZone()||!SodRewardQuote::Shared(task)||!zone->GetInstanceID()||
+  GetSharedTaskInstanceID(task,zone->GetZoneID(),zone->GetInstanceVersion())!=zone->GetInstanceID())return -1;
+ auto q=database.QueryDatabase(fmt::format("SELECT state FROM sod_task_scene_runs WHERE shared_task_id={} AND task_id={} AND instance_id={} AND model_version=2",self->GetSharedTaskId(),task,zone->GetInstanceID()));
+ if(!q.Success()||q.RowCount()>1)return -1;if(!q.RowCount())return 0;
+ auto state=SharedTaskAdmission::Number(q.begin()[0]);return state&&*state<=6?static_cast<int>(*state):-1;
+}
+bool Lua_Client::SodRestoreSceneVictory(uint32 task) {
+ Lua_Safe_Call_Bool();
+ const int scene=SodSceneState(task);
+ if(scene!=2&&!(task==920180&&(scene==4||scene==5||scene==6)))return false;
+ if(task==920180&&scene==6&&!SodSceneTransition(task,6,2))return false;
+ auto* state=self->GetTaskState();if(!state)return false;
+ const auto& active=state->GetActiveSharedTask();if(active.task_id!=task)return false;
+ // Only goals established by the journaled encounter are repaired. In
+ // particular, Freedom Orders are NEVER fabricated by the boss receipt.
+ const auto repair=[&](int activity,int goal) {
+  if(self->IsTaskActivityActive(task,activity)) {
+   const int current=active.activity[activity].done_count;
+   if(current>=0&&current<goal)self->UpdateTaskActivity(task,activity,goal-current);
+  }
+ };
+ if(task==920178)repair(2,1);
+ else if(task==920179)repair(2,3);
+ else if(task==920183){repair(1,8);repair(2,1);}
+ else if(task==920180){
+  repair(1,1);
+  if(scene==5||scene==6||scene==2)repair(2,1);
+  if(scene==6||scene==2)repair(3,1);
+ }
+ else return false;
+ return true;
+}
+
+bool Lua_Client::SodSceneTransition(uint32 task,int expected,int next) {
+ Lua_Safe_Call_Bool();
+ if(expected<0||expected>6||next<1||next>6||next==expected||SodSceneState(task)!=expected)return false;
+ // Allowed mission lifecycle edges only. Failed/success receipts never reset.
+ const bool hiran=task==920178||task==920179;
+ if(!(expected==0&&next==1) && !(expected==1&&(next==2||next==3||(!hiran&&next==4))) &&
+  !(task==920180&&expected==4&&(next==5||next==3)) &&
+  !(task==920180&&expected==5&&(next==6||next==3)) &&
+  !(task==920180&&expected==6&&next==2))return false;
+ DynamicZone* dz=nullptr;for(auto* candidate:self->GetDynamicZones(zone->GetZoneID(),zone->GetInstanceVersion())) {
+  if(candidate&&candidate->GetInstanceID()==zone->GetInstanceID()){if(dz)return false;dz=candidate;}
+ }
+ if(!dz)return false;
+ if(expected==0) {
+  auto init=database.QueryDatabase(fmt::format(
+   "INSERT INTO sod_task_scene_runs (shared_task_id,task_id,instance_id,model_version,state,started_at,seed,updated_at) "
+   "VALUES ({},{},{},2,0,0,SHA2(CONCAT({},':','{}',':',2),256),UNIX_TIMESTAMP()) ON DUPLICATE KEY UPDATE shared_task_id=shared_task_id",
+   self->GetSharedTaskId(),task,zone->GetInstanceID(),self->GetSharedTaskId(),Strings::Escape(dz->GetUUID())));
+  if(!init.Success())return false;
+ }
+ auto r=database.QueryDatabase(fmt::format("UPDATE sod_task_scene_runs SET state={},started_at=IF(started_at=0,UNIX_TIMESTAMP(),started_at),updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND task_id={} AND instance_id={} AND model_version=2 AND state={}",next,self->GetSharedTaskId(),task,zone->GetInstanceID(),expected));
+ return r.Success()&&r.RowsAffected()==1;
+}
+int Lua_Client::SodSceneDraw(uint32 task,uint32 index,uint32 range) {
+ Lua_Safe_Call_Int();
+ if(index>100000||!range||range>10000||SodSceneState(task)!=1)return -1;
+ auto r=database.QueryDatabase(fmt::format("SELECT MOD(CONV(SUBSTRING(SHA2(CONCAT(seed,':',{}),256),1,8),16,10),{}) FROM sod_task_scene_runs WHERE shared_task_id={} AND task_id={} AND instance_id={} AND state=1",index,range,self->GetSharedTaskId(),task,zone->GetInstanceID()));
+ if(!r.Success()||r.RowCount()!=1)return -1;auto n=SharedTaskAdmission::Number(r.begin()[0]);return n&&*n<range?static_cast<int>(*n):-1;
+}
+
+// Original Koel hail entry and post-defense Billik keep return. The exact
+// occurrence/DZ and reviewed template locations are used; no fallback port.
+bool Lua_Client::SodHiranTravel(Lua_NPC npc, bool return_to_keep) {
+	Lua_Safe_Call_Bool();
+	NPC* giver = npc;
+	if (!RuleB(SodProgression, EnableOceangreenSlice) || !giver ||
+		entity_list.GetNPCByID(giver->GetID())!=giver || !self->GetTaskState()) return false;
+	const auto distance=giver->CalculateDistance(self);
+	if (!std::isfinite(distance) || distance>MAX_TASK_SELECT_DISTANCE) return false;
+	const auto task=self->GetTaskState()->GetActiveSharedTask().task_id;
+	if (task!=920178 && task!=920179) return false;
+	if (return_to_keep) {
+		if (giver->GetNPCTypeID()!=467072 || self->GetZoneID()!=467 ||
+			!self->IsTaskActivityActive(task,4)) return false;
+	} else if (giver->GetNPCTypeID()!=466040 || self->GetZoneID()!=466 || self->GetInstanceID()!=0) return false;
+	auto mapping=content_db.QueryDatabase(fmt::format(
+		"SELECT p.zone_version FROM tasks t JOIN dynamic_zone_templates p ON p.id=t.dz_template_id "
+		"WHERE t.id={} AND t.type=1 AND p.id=t.id AND p.zone_id=467 AND p.override_zone_in=1",task));
+	if (!mapping.Success() || mapping.RowCount()!=1) return false;
+	const auto version=SharedTaskAdmission::Number(mapping.begin()[0]);
+	if (!version || !*version || *version>255) return false;
+	const auto instance=GetSharedTaskInstanceID(task,467,static_cast<uint32>(*version));
+	if (!instance || (return_to_keep && self->GetInstanceID()!=instance)) return false;
+	const auto occurrence=self->GetSharedTaskId();
+	if (occurrence<=0 || !SodProgression::MissionEntry(database,content_db,self->CharacterID(),
+		static_cast<uint64_t>(occurrence),467,static_cast<int>(*version),instance,false)) return false;
+	for (auto dz:self->GetDynamicZones(467,static_cast<int>(*version))) {
+		if (!dz || dz->GetInstanceID()!=instance) continue;
+		const auto& location=return_to_keep ? dz->GetSafeReturnLocation() : dz->GetZoneInLocation();
+		// Native zonein locations carry XYZ/heading but leave zone_id unset;
+		// entry identity is the verified DZ's zone. Safereturn has its own zone.
+		if ((return_to_keep && location.zone_id!=466) ||
+			(!return_to_keep && dz->GetZoneID()!=467) ||
+			!std::isfinite(location.x) || !std::isfinite(location.y) ||
+			!std::isfinite(location.z) || !std::isfinite(location.heading)) return false;
+		if (return_to_keep) {
+			self->MovePC(466,0,location.x,location.y,location.z,location.heading);
+		} else {
+			if (!dz->HasZoneInLocation()) return false;
+			dz->MovePCInto(self);
+		}
+		return true;
+	}
+	return false;
 }
 
 bool Lua_Client::IsTaskCompleted(int task_id) {
@@ -4177,6 +4347,18 @@ luabind::scope lua_register_client() {
 	.def("IsStanding", (bool(Lua_Client::*)(void))&Lua_Client::IsStanding)
 	.def("IsTaskActive", (bool(Lua_Client::*)(int))&Lua_Client::IsTaskActive)
 	.def("IsTaskActivityActive", (bool(Lua_Client::*)(int,int))&Lua_Client::IsTaskActivityActive)
+
+	.def("GetSodTaskCompletionState", &Lua_Client::GetSodTaskCompletionState)
+	.def("GetSodVoidZone", &Lua_Client::GetSodVoidZone)
+	.def("SodHiranTravel", &Lua_Client::SodHiranTravel)
+	.def("SodChiefKey", &Lua_Client::SodChiefKey)
+	.def("SodActorGrounding", &Lua_Client::SodActorGrounding)
+	.def("SodSceneState", &Lua_Client::SodSceneState)
+	.def("SodRestoreSceneVictory", &Lua_Client::SodRestoreSceneVictory)
+	.def("SodSceneTransition", &Lua_Client::SodSceneTransition)
+	.def("SodSceneDraw", &Lua_Client::SodSceneDraw)
+	.def("GetSodGroupThemeState", &Lua_Client::GetSodGroupThemeState)
+	.def("GetSodJourneymanTierState", &Lua_Client::GetSodJourneymanTierState)
 	.def("IsTaskCompleted", (bool(Lua_Client::*)(int))&Lua_Client::IsTaskCompleted)
 	.def("KeyRingAdd", (bool(Lua_Client::*)(uint32))&Lua_Client::KeyRingAdd)
 	.def("KeyRingCheck", (bool(Lua_Client::*)(uint32))&Lua_Client::KeyRingCheck)

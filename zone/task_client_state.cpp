@@ -1,3 +1,6 @@
+#include "common/sod_shared_activity.h"
+#include "zone/sod_admission.h"
+#include "common/sod_reward_quote.h"
 #include "../common/fungal_item_operation_wire.h"
 #include "fungal_item_operation_source.h"
 #include "fire_shared_transform_use.h"
@@ -19,6 +22,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "task_client_state.h"
+#include "sod_progression.h"
 #include "task_shared_reward_identity.h"
 #include "common/task_spell_rewards.h"
 #include "common/shared_task_admission.h"
@@ -897,6 +901,11 @@ void ClientTaskState::RecordCompletedTask(uint32_t character_id, const TaskInfor
 	if (RuleB(TasksSystem, KeepOneRecordPerCompletedTask))
 	{
 		size_t before = m_completed_tasks.size();
+		const bool sod_history = SodProgression::IsReservedOceangreenTask(client_task.task_id);
+		const auto loaded_end = m_completed_tasks.begin() + std::min(m_completed_tasks.size(),
+			static_cast<size_t>(std::max(0, m_last_completed_task_loaded)));
+		const auto loaded_erased = std::count_if(m_completed_tasks.begin(), loaded_end,
+			[&](const CompletedTaskInformation& c) { return c.task_id == client_task.task_id; });
 
 		m_completed_tasks.erase(std::remove_if(m_completed_tasks.begin(), m_completed_tasks.end(),
 			[&](const CompletedTaskInformation& completed) { return completed.task_id == client_task.task_id; }
@@ -908,8 +917,14 @@ void ClientTaskState::RecordCompletedTask(uint32_t character_id, const TaskInfor
 
 		if (erased > 0)
 		{
-			m_last_completed_task_loaded -= erased;
-			DeleteCompletedTaskFromDatabase(character_id, client_task.task_id);
+			if (sod_history) {
+				// Pending failed replacements are not loaded DB records. Do not
+				// underflow the cursor when replacing another pending attempt.
+				m_last_completed_task_loaded -= loaded_erased;
+			} else {
+				m_last_completed_task_loaded -= erased;
+				DeleteCompletedTaskFromDatabase(character_id, client_task.task_id);
+			}
 		}
 	}
 
@@ -1013,6 +1028,9 @@ int ClientTaskState::UpdateTasks(Client* client, const TaskUpdateFilter& filter,
 		{
 			continue;
 		}
+
+		// Orders credit is emitted only by the exact acknowledged native loot save.
+		if(filter.type==TaskActivityType::Loot && ((client_task.task_id==920183&&filter.item_id==17285)||(client_task.task_id==920182&&filter.item_id==17312)))continue;
 
 		// legacy eqemu task update logic loops through group on kill of npc to update a single task
 		// shared tasks only require one client to receive an update to propagate
@@ -1308,13 +1326,20 @@ int ClientTaskState::IncrementDoneCount(
 			 actual->accepted_time!=static_cast<uint32_t>(info->accepted_time)) return 0;
 			fire_activity_run=actual->id;
 		}
+		uint64_t sod_activity_run=0;
+		if(SodRewardQuote::Shared(info->task_id)) {
+			const auto actual=TaskSharedRewardIdentity::ReadRun(database,client->CharacterID(),info->task_id);
+			if(!actual||actual->id!=static_cast<uint64_t>(client->GetSharedTaskId())||
+			 actual->accepted_time!=static_cast<uint32_t>(info->accepted_time))return 0;
+			sod_activity_run=actual->id;
+		}
 		// Physical goal6/13 requires the SAME one-use post-COMMIT shared origin.
 		// World echo follows its ordinary m_shared_task_update path and skips this shim.
 		if(!FireSharedTransformSource::NativeSharedTransform::ClaimActualSubmission(
 		 *client,info->task_id,activity_id,fire_activity_run)) return 0;
 		// Same one native update; stamp before optimistic local count synchronization/send.
 		auto pack = new ServerPacket(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+
-			(fire_activity_run?sizeof(FireSharedActivityOrigin::Trailer):0));
+			(fire_activity_run?sizeof(FireSharedActivityOrigin::Trailer):0)+(sod_activity_run?sizeof(SodSharedActivity::Trailer):0));
 		auto *r   = (ServerSharedTaskActivityUpdate_Struct *) pack->pBuffer;
 
 		// fill
@@ -1324,6 +1349,7 @@ int ClientTaskState::IncrementDoneCount(
 		r->done_count          = info->activity[activity_id].done_count + count;
 		r->ignore_quest_update = ignore_quest_update;
 		if(fire_activity_run) FireSharedActivityOrigin::Write(pack->pBuffer,fire_activity_run);
+		if(sod_activity_run)SodSharedActivity::Write(pack->pBuffer,sod_activity_run);
 
 		LogTasksDetail(
 			"shared_task sending client [{}] task_id [{}] activity_id [{}] count [{}] ignore_quest_update [{}]",
@@ -1524,6 +1550,39 @@ int ClientTaskState::DispatchEventTaskComplete(Client* client, ClientTaskInforma
 	return 0;
 }
 
+static std::optional<uint64_t> SodFrozenExperience(Client& client,uint32 task,uint64 occurrence,bool create)
+{
+ if(create) {
+  const auto amount=client.CalculateLevelBasedExp(SodRewardQuote::Shared(task)?2:1,80,RuleB(TaskSystem,ExpRewardsIgnoreLevelBasedEXPMods));
+  if(amount>UINT32_MAX)return std::nullopt;
+  if(!database.QueryDatabase(fmt::format("INSERT INTO sod_task_recipient_reward_inputs (character_id,task_id,occurrence_id,experience_amount) VALUES ({},{},{},{}) ON DUPLICATE KEY UPDATE occurrence_id=occurrence_id",client.CharacterID(),task,occurrence,amount)).Success())return std::nullopt;
+ }
+ auto r=database.QueryDatabase(fmt::format("SELECT experience_amount FROM sod_task_recipient_reward_inputs WHERE character_id={} AND task_id={} AND occurrence_id={}",client.CharacterID(),task,occurrence));
+ if(!r.Success()||r.RowCount()!=1)return std::nullopt;
+ auto amount=SharedTaskAdmission::Number(r.begin()[0]);return amount&&*amount<=UINT32_MAX?amount:std::nullopt;
+}
+
+static std::optional<RewardSelectionSet> ApplySodFrozenQuote(
+ const RewardSelectionSet& original, Client* client, uint32 task, uint64 occurrence, bool preview=false)
+{
+ if(!SodRewardQuote::Range(task).maximum)return original;
+ if(!client)return std::nullopt;
+ auto q=preview&&!occurrence?SodRewardQuote::Preview(database,task):SodRewardQuote::ForRecipient(database,client->CharacterID(),task,occurrence);
+ if(!q||!EQ::RewardSelection::IsCommonOnly(original))return std::nullopt;
+ auto xp=SodFrozenExperience(*client,task,occurrence,false);
+ if(!xp&&preview)xp=client->CalculateLevelBasedExp(SodRewardQuote::Shared(task)?2:1,80,RuleB(TaskSystem,ExpRewardsIgnoreLevelBasedEXPMods));
+ if(!xp)return std::nullopt;
+ auto set=original;uint32 count=0,xp_count=0;
+ for(auto& option:set.options)for(auto& reward:option.rewards) {
+  if(reward.type==RewardSelectionRewardType::AlternateCurrency&&reward.data_id==15){reward.amount=q->amount;++count;}
+  if(reward.type==RewardSelectionRewardType::Experience){reward.amount=*xp;reward.data_id=static_cast<uint32>(RewardSelectionExperienceMode::NormalOnly);++xp_count;}
+ }
+ // A zero native EXP multiplier is a frozen zero award, not an invalid
+ // catalogue/session entry and not a reason to block the other rewards.
+ for(auto& option:set.options)option.rewards.erase(std::remove_if(option.rewards.begin(),option.rewards.end(),[](const auto& reward){return reward.type==RewardSelectionRewardType::Experience&&reward.amount==0;}),option.rewards.end());
+ return count==1&&xp_count==1?std::optional<RewardSelectionSet>(set):std::nullopt;
+}
+
 bool ClientTaskState::RewardTask(
 	Client *c,
 	const TaskInformation *ti,
@@ -1549,6 +1608,9 @@ bool ClientTaskState::RewardTask(
 		);
 		return false;
 	}
+
+	if (SodRewardQuote::Range(client_task.task_id).maximum &&
+		(!RuleB(TaskSystem,RecordCompletedTasks)||!TaskManager::Instance()->SaveClientState(c, this))) return false;
 
 	std::optional<RewardSelectionSession> task_reward_session;
 	if (ti->reward_method == METHODSELECT) {
@@ -1597,6 +1659,8 @@ bool ClientTaskState::RewardTask(
 			);
 			return false;
 		}
+
+		if(SodRewardQuote::Range(task_id).maximum && !SodFrozenExperience(*c,task_id,*source_instance_id,true))return false;
 
 		auto pending = database.QueryDatabase(fmt::format(
 			"INSERT IGNORE INTO character_task_reward_selections "
@@ -1688,6 +1752,7 @@ bool ClientTaskState::RewardTask(
 			eligible_set = FilterSpellRewards(*eligible_set, c,
 				persisted.hide_known_spells, persisted.selected_option_id);
 		}
+		if (eligible_set) eligible_set = ApplySodFrozenQuote(*eligible_set, c, persisted.task_id, persisted.source_instance_id);
 		if (!eligible_set) {
 			LogError("Task reward [{}] has no valid progression snapshot",
 				persisted.pending_reward_id);
@@ -2055,6 +2120,7 @@ void ClientTaskState::SendRewardSelection(Client *client, uint32_t task_id)
 		eligible_set = FilterSpellRewards(*eligible_set, client,
 			(persisted.pending_reward_id ? persisted.hide_known_spells : std::optional(TaskManager::Instance()->HideKnownSpellRewards(task_id))), selected_option_id);
 	}
+	if (eligible_set) eligible_set = ApplySodFrozenQuote(*eligible_set, client, task_id, source_instance_id, true);
 	if (!eligible_set) {
 		client->GetRewardSelection().Clear(RewardSelectionChannel::Preview);
 		return;
@@ -2173,6 +2239,7 @@ void ClientTaskState::RestorePendingRewardSelection(Client *client)
 				eligible_set = FilterSpellRewards(*eligible_set, client,
 					persisted.hide_known_spells, persisted.selected_option_id);
 			}
+			if (eligible_set) eligible_set = ApplySodFrozenQuote(*eligible_set, client, persisted.task_id, persisted.source_instance_id);
 			if (!eligible_set) {
 				LogError("Pending task reward [{}] has no valid progression snapshot",
 					persisted.pending_reward_id);
@@ -2291,6 +2358,7 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 		eligible_set = FilterSpellRewards(*eligible_set, client,
 			persisted.hide_known_spells, persisted.selected_option_id);
 	}
+	if (eligible_set) eligible_set = ApplySodFrozenQuote(*eligible_set, client, persisted.task_id, persisted.source_instance_id);
 	if (!eligible_set) {
 		return RewardSelectionDeliveryResult::RetryableFailure;
 	}
@@ -2455,11 +2523,33 @@ RewardSelectionDeliveryResult ClientTaskState::ClaimRewardSelection(
 			}
 		}
 
-		const auto grant_result = ClientRewardSelection::GrantReward(
-			*client,
-			reward,
-			policy
-		);
+		if (SodRewardQuote::Range(persisted.task_id).maximum &&
+			((reward.type==RewardSelectionRewardType::AlternateCurrency && reward.data_id==15) || reward.type==RewardSelectionRewardType::Faction)) {
+			const auto result=reward.type==RewardSelectionRewardType::Faction
+				? client->GrantSodFaction(persisted.pending_reward_id,reward.entry_id,reward.data_id,static_cast<uint32>(reward.amount))
+				: client->GrantSodChronobines(persisted.pending_reward_id,reward.entry_id,static_cast<uint32>(reward.amount));
+			if(result==1)continue; // Receipt was committed WITH balance; no second finalization.
+			if(result<0)batch_result=RewardSelectionDeliveryResult::Ambiguous;
+			else {
+				auto retry=database.QueryDatabase(fmt::format("UPDATE character_task_rewards SET status=2,last_error='atomic task reward not committed' WHERE character_id={} AND pending_reward_id={} AND reward_id={} AND status=0",client->CharacterID(),persisted.pending_reward_id,reward.entry_id));
+				if(!retry.Success()||retry.RowsAffected()!=1)batch_result=RewardSelectionDeliveryResult::Ambiguous;
+				else if(batch_result==RewardSelectionDeliveryResult::Delivered)batch_result=RewardSelectionDeliveryResult::RetryableFailure;
+			}
+			continue;
+		}
+
+		auto grant_result = SodRewardQuote::Range(persisted.task_id).maximum && reward.type==RewardSelectionRewardType::Experience && reward.amount==0
+			? RewardSelectionDeliveryResult::Delivered : ClientRewardSelection::GrantReward(*client,reward,policy);
+		if(SodRewardQuote::Range(persisted.task_id).maximum && reward.type==RewardSelectionRewardType::Experience && grant_result==RewardSelectionDeliveryResult::Delivered) {
+			// Existing native SetEXP may persist level changes before its final
+			// Save. Verify the actual character-data write, not Save's legacy
+			// unconditional true. Any gap/lost acknowledgement stays ambiguous;
+			// the existing owned status-zero receipt forbids automatic replay.
+			auto ack=database.QueryDatabase(fmt::format("SELECT exp,aa_exp,aa_points,level FROM character_data WHERE id={}",client->CharacterID()));
+			bool same=ack.Success()&&ack.RowCount()==1;
+			if(same){auto row=ack.begin();same=SharedTaskAdmission::Number(row[0])==std::optional<uint64_t>(client->GetEXP())&&SharedTaskAdmission::Number(row[1])==std::optional<uint64_t>(client->GetAAXP())&&SharedTaskAdmission::Number(row[2])==std::optional<uint64_t>(client->GetAAPoints())&&SharedTaskAdmission::Number(row[3])==std::optional<uint64_t>(client->GetLevel());}
+			if(!same)grant_result=RewardSelectionDeliveryResult::Ambiguous;
+		}
 		if (grant_result == RewardSelectionDeliveryResult::Delivered) {
 			auto finalized = database.QueryDatabase(fmt::format(
 				"UPDATE character_task_rewards "
@@ -3591,6 +3681,19 @@ void ClientTaskState::AcceptNewTask(
 		return;
 	}
 
+
+	// Activation applies even to the World-confirmed requester/participants.
+	if (!SodProgression::MayStartOrJoinTask(content_db, task_id)) return;
+
+	// Recheck the original requester's durable prerequisites before any
+	// shared request is sent to World. World-confirmed participant delivery
+	// deliberately does not inherit requester-only requirements.
+	if (SodProgression::IsOceangreenRequest(task_id) &&
+		!(client->m_requesting_shared_task && task->type == TaskType::Shared)) {
+		auto* giver = entity_list.GetNPCByID(npc_entity_id);
+		if (!giver || !client->CanRequestSodTask(task_id, giver->GetNPCTypeID())) return;
+	}
+
 	// Shared occurrences are reserved only after world confirms actual
 	// membership; failed requests must not mutate a previous run's identity.
 
@@ -3611,9 +3714,12 @@ void ClientTaskState::AcceptNewTask(
 		FireSharedCorrelation::Trailer fire_origin;
 		if (!FirePersonalOccurrenceSource::SharedSuccessorNative::Stamp(*client,request,fire_origin)) return;
 		const bool correlated=fire_origin.source_occurrence!=0;
-		ServerPacket packet(ServerOP_SharedTaskRequest,sizeof(request)+(correlated?sizeof(fire_origin):0));
+		const auto sod=SodRewardQuote::Shared(task_id)?SodAdmission::Observe(*client,task_id):std::nullopt;
+		if(SodRewardQuote::Shared(task_id)&&!sod){client->Message(Chat::Red,"This task requires three to six eligible players and active mercenaries.");return;}
+		ServerPacket packet(ServerOP_SharedTaskRequest,sizeof(request)+(correlated?sizeof(fire_origin):0)+(sod?sizeof(SodAdmission::Proof):0));
 		std::memcpy(packet.pBuffer,&request,sizeof(request));
 		if(correlated) std::memcpy(packet.pBuffer+sizeof(request),&fire_origin,sizeof(fire_origin));
+		if(sod) std::memcpy(packet.pBuffer+sizeof(request),&*sod,sizeof(*sod));
 		worldserver.SendPacket(&packet);
 
 		return;
@@ -3801,6 +3907,11 @@ void ClientTaskState::AcceptNewTask(
 				Chat::Red,
 				"This task's selectable reward could not be prepared. Please try again."
 			);
+			return;
+		}
+		if (SodRewardQuote::Range(task_id).maximum && task->type != TaskType::Shared &&
+			!SodRewardQuote::Freeze(database, task_id, 0, *occurrence_id, reward_accepted_time)) {
+			client->Message(Chat::Red, "Unable to prepare this task reward. Please try again later.");
 			return;
 		}
 		if(task_id==920141&&task->type==TaskType::Quest)fungal_actual_reserved_occurrence=*occurrence_id;
@@ -4206,6 +4317,10 @@ bool ClientTaskState::CanAcceptNewTask(Client* client, int task_id, int npc_enti
 		LogTasks("Client [{}] accepted task [{}] from missing or invalid giver", client->GetName(), task_id);
 		return false;
 	}
+
+
+	if (SodProgression::IsOceangreenRequest(task_id) &&
+		(!giver->IsNPC() || !client->CanRequestSodTask(task_id, giver->GetNPCTypeID()))) return false;
 
 	auto dist = giver->CalculateDistance(client->GetX(), client->GetY(), client->GetZ());
 	if (dist > MAX_TASK_SELECT_DISTANCE)

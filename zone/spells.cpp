@@ -1891,6 +1891,7 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 	const int32 completed_cast_item_slot = completed_cast_item_id
 		? static_cast<int32>(inventory_slot) : -1;
 
+	const uint32 sod_completed_stone_serial=completed_cast_item_id==88304&&item?item->GetSerialNumber():0;
 	FirePersonalOccurrenceSource::NativeItemCustody::FinishTicket fire_finish;
 	if(IsClient() && IsFromItem && !FirePersonalOccurrenceSource::NativeItemCustody::FinishEntry(
 		*CastToClient(),static_cast<int16>(inventory_slot),spell_id,DeleteChargeFromSlot,fire_finish)) {
@@ -1907,6 +1908,9 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 		StopCasting();
 		return;
 	}
+
+	if(IsClient()&&completed_cast_item_id==88304&&spell_id==7651&&sod_completed_stone_serial)
+		CastToClient()->ObserveSodRunestone(spell_id,completed_cast_item_slot,sod_completed_stone_serial);
 
 	if(IsOfClientBotMerc()) {
 		TrySympatheticProc(target, spell_id);

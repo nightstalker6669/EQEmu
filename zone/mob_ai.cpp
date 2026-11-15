@@ -1,3 +1,4 @@
+#include "common/sod_admission.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -1746,6 +1747,7 @@ void NPC::AI_SetupNextWaypoint() {
  */
 void Mob::AI_Event_Engaged(Mob *attacker, bool yell_for_help)
 {
+	if(IsNPC())CastToNPC()->CaptureSodEvilCohort(attacker);
 	if (!IsAIControlled()) {
 		return;
 	}
@@ -1863,9 +1865,22 @@ void NPC::AI_Event_SpellCastFinished(bool iCastSucceeded, uint16 slot) {
 }
 
 
+bool NPC::IsSodReconstructedCaster() const {
+ if(!RuleB(SodProgression,EnableOceangreenSlice)||!zone||!zone->GetInstanceID()||
+  !((zone->GetZoneID()==467&&(zone->GetInstanceVersion()==1||zone->GetInstanceVersion()==2))||
+    (zone->GetZoneID()==468&&zone->GetInstanceVersion()==1)))return false;
+ switch(GetNPCTypeID()) { case 467900: case 467901: case 467910: case 467912: case 467918: case 467919: return true;default:return false; }
+}
+
 bool NPC::AI_EngagedCastCheck() {
+	const bool sod=IsSodReconstructedCaster();
+	if(sod&&SodAdmission::Milliseconds()<m_sod_next_ai_check_ms)return false;
 	if (AIautocastspell_timer->Check(false)) {
 		AIautocastspell_timer->Disable();	//prevent the timer from going off AGAIN while we are casting.
+		if(sod) {
+			m_sod_next_ai_check_ms=SodAdmission::Milliseconds()+6000;
+			if(!zone->random.Roll(50)){AIautocastspell_timer->Start(6000,false);return false;}
+		}
 
 		LogAIDetail("Engaged autocast check triggered. Trying to cast healing spells then maybe offensive spells");
 
@@ -1874,11 +1889,11 @@ bool NPC::AI_EngagedCastCheck() {
 			// try innate (spam) self targeted spells
 			if (!AICastSpell(this, 0, SpellType_InCombatBuff, true)) {
 				// try casting a heal or gate
-				if (!AICastSpell(this, AISpellVar.engaged_beneficial_self_chance, SpellType_Heal | SpellType_Escape | SpellType_InCombatBuff)) {
+				if (!AICastSpell(this, (sod?100:AISpellVar.engaged_beneficial_self_chance), SpellType_Heal | SpellType_Escape | SpellType_InCombatBuff)) {
 					// try casting a heal on nearby
-					if (!AICheckCloseBeneficialSpells(this, AISpellVar.engaged_beneficial_other_chance, MobAISpellRange, SpellType_Heal)) {
+					if (!AICheckCloseBeneficialSpells(this, (sod?100:AISpellVar.engaged_beneficial_other_chance), MobAISpellRange, SpellType_Heal)) {
 						//nobody to heal, try some detrimental spells.
-						if(!AICastSpell(GetTarget(), AISpellVar.engaged_detrimental_chance, SpellType_Nuke | SpellType_Lifetap | SpellType_DOT | SpellType_Dispel | SpellType_Mez | SpellType_Slow | SpellType_Debuff | SpellType_Charm | SpellType_Root)) {
+						if(!AICastSpell(GetTarget(), (sod?100:AISpellVar.engaged_detrimental_chance), SpellType_Nuke | SpellType_Lifetap | SpellType_DOT | SpellType_Dispel | SpellType_Mez | SpellType_Slow | SpellType_Debuff | SpellType_Charm | SpellType_Root)) {
 							//no spell to cast, try again soon.
 							AIautocastspell_timer->Start(RandomTimer(AISpellVar.engaged_no_sp_recast_min, AISpellVar.engaged_no_sp_recast_max), false);
 						}
@@ -1893,13 +1908,19 @@ bool NPC::AI_EngagedCastCheck() {
 }
 
 bool NPC::AI_PursueCastCheck() {
+	const bool sod=IsSodReconstructedCaster();
+	if(sod&&SodAdmission::Milliseconds()<m_sod_next_ai_check_ms)return false;
 	if (AIautocastspell_timer->Check(false)) {
 		AIautocastspell_timer->Disable();	//prevent the timer from going off AGAIN while we are casting.
+		if(sod) {
+			m_sod_next_ai_check_ms=SodAdmission::Milliseconds()+6000;
+			if(!zone->random.Roll(50)){AIautocastspell_timer->Start(6000,false);return false;}
+		}
 
 		LogAIDetail("Engaged (pursuing) autocast check triggered. Trying to cast offensive spells");
 		// checking innate (spam) spells first
-		if(!AICastSpell(GetTarget(), AISpellVar.pursue_detrimental_chance, SpellType_Root | SpellType_Nuke | SpellType_Lifetap | SpellType_Snare | SpellType_DOT | SpellType_Dispel | SpellType_Mez | SpellType_Slow | SpellType_Debuff, true)) {
-			if(!AICastSpell(GetTarget(), AISpellVar.pursue_detrimental_chance, SpellType_Root | SpellType_Nuke | SpellType_Lifetap | SpellType_Snare | SpellType_DOT | SpellType_Dispel | SpellType_Mez | SpellType_Slow | SpellType_Debuff)) {
+		if(!AICastSpell(GetTarget(), (sod?100:AISpellVar.pursue_detrimental_chance), SpellType_Root | SpellType_Nuke | SpellType_Lifetap | SpellType_Snare | SpellType_DOT | SpellType_Dispel | SpellType_Mez | SpellType_Slow | SpellType_Debuff, true)) {
+			if(!AICastSpell(GetTarget(), (sod?100:AISpellVar.pursue_detrimental_chance), SpellType_Root | SpellType_Nuke | SpellType_Lifetap | SpellType_Snare | SpellType_DOT | SpellType_Dispel | SpellType_Mez | SpellType_Slow | SpellType_Debuff)) {
 				//no spell cast, try again soon.
 				AIautocastspell_timer->Start(RandomTimer(AISpellVar.pursue_no_sp_recast_min, AISpellVar.pursue_no_sp_recast_max), false);
 			} //else, spell casting finishing will reset the timer.
@@ -1910,10 +1931,16 @@ bool NPC::AI_PursueCastCheck() {
 }
 
 bool NPC::AI_IdleCastCheck() {
+	const bool sod=IsSodReconstructedCaster();
+	if(sod&&SodAdmission::Milliseconds()<m_sod_next_ai_check_ms)return false;
 	if (AIautocastspell_timer->Check(false)) {
 		AIautocastspell_timer->Disable();	//prevent the timer from going off AGAIN while we are casting.
-		if (!AICastSpell(this, AISpellVar.idle_beneficial_chance, SpellType_Heal | SpellType_Buff | SpellType_Pet)) {
-			if(!AICheckCloseBeneficialSpells(this, 33, MobAISpellRange, SpellType_Heal | SpellType_Buff)) {
+		if(sod) {
+			m_sod_next_ai_check_ms=SodAdmission::Milliseconds()+6000;
+			if(!zone->random.Roll(50)){AIautocastspell_timer->Start(6000,false);return false;}
+		}
+		if (!AICastSpell(this, (sod?100:AISpellVar.idle_beneficial_chance), SpellType_Heal | SpellType_Buff | SpellType_Pet)) {
+			if(!AICheckCloseBeneficialSpells(this, sod?100:33, MobAISpellRange, SpellType_Heal | SpellType_Buff)) {
 				//if we didnt cast any spells, our autocast timer just resets to the
 				//last duration it was set to... try to put up a more reasonable timer...
 				AIautocastspell_timer->Start(RandomTimer(AISpellVar.idle_no_sp_recast_min, AISpellVar.idle_no_sp_recast_max), false);

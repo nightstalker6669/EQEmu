@@ -1121,7 +1121,7 @@ uint32 Client::GetEXPForLevel(uint16 check_level)
 	return finalxp;
 }
 
-void Client::AddLevelBasedExp(ExpSource exp_source, uint8 exp_percentage, uint8 max_level, bool ignore_mods)
+uint64 Client::CalculateLevelBasedExp(uint8 exp_percentage, uint8 max_level, bool ignore_mods)
 {
 	uint64	award;
 	uint64	xp_for_level;
@@ -1149,8 +1149,12 @@ void Client::AddLevelBasedExp(ExpSource exp_source, uint8 exp_percentage, uint8 
 		award *= RuleR(Character, FinalExpMultiplier);
 	}
 
-	uint64 newexp = GetEXP() + award;
-	SetEXP(exp_source, newexp, GetAAXP());
+	return award;
+}
+
+void Client::AddLevelBasedExp(ExpSource exp_source,uint8 exp_percentage,uint8 max_level,bool ignore_mods)
+{
+ SetEXP(exp_source,GetEXP()+CalculateLevelBasedExp(exp_percentage,max_level,ignore_mods),GetAAXP());
 }
 
 void Group::SplitExp(ExpSource exp_source, const uint64 exp, Mob* other) {

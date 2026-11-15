@@ -17,6 +17,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "spawn2.h"
+#include "sod_actor_grounding.h"
 
 #include "common/repositories/criteria/content_filter_criteria.h"
 #include "common/repositories/respawn_times_repository.h"
@@ -293,6 +294,22 @@ bool Spawn2::Process() {
 		}
 
 		NPC *npc = new NPC(tmp, this, loc, GravityBehavior::Water);
+		if (RuleB(SodProgression, EnableOceangreenSlice) &&
+		    zone->GetZoneID() == 468 && zone->GetInstanceID() && zone->GetInstanceVersion() == 2) {
+			const auto binding = SodActorGrounding::Binding(npc->GetNPCTypeID());
+			if (binding && spawn2_id == binding->spawn_id) {
+				const auto ground = SodActorGrounding::Resolve(*npc, *binding);
+				if (!ground) {
+					LogSpawns("SoD actor [{}] spawn [{}] rejected: native grounding failed", npc->GetNPCTypeID(), spawn2_id);
+					delete npc;
+					timer.Start(60000);
+					return true;
+				}
+				npc->SetPosition(binding->x, binding->y, ground->origin);
+				npc->m_SpawnPoint.z = ground->origin;
+				npc->SaveGuardSpot();
+			}
+		}
 
 		npcthis = npc;
 

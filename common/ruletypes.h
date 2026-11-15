@@ -1204,6 +1204,10 @@ RULE_BOOL(Housing, EnableNativeEscrowTransfers, false, "Enable native RoF2 curso
 RULE_INT(Housing, ReviewedPersonalTransferLimit, 0, "Explicit reviewed personal plot ownership transfer limit (1 to 3); zero disables transfer until policy is reviewed. Not a recovered historical limit.")
 RULE_CATEGORY_END()
 
+RULE_CATEGORY(SodProgression)
+RULE_BOOL(SodProgression, EnableOceangreenSlice, false, "Enable reviewed original Oceangreen completion, request and Void A/B routing. Does not lower zone status restrictions. Leave off until the entire content slice is reviewed and installed.")
+RULE_CATEGORY_END()
+
 #undef RULE_CATEGORY
 #undef RULE_INT
 #undef RULE_REAL

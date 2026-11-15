@@ -1,3 +1,7 @@
+#include "common/sod_shared_activity.h"
+#include <map>
+#include "common/sod_admission.h"
+#include "common/sod_reward_quote.h"
 #include "fungal_item_world_source.h"
 /*	EQEmu: EQEmulator
 
@@ -33,6 +37,7 @@
 #include "common/rulesys.h"
 #include "common/shared_task_completion.h"
 #include "world/cliententry.h"
+#include "common/sod_task_activation.h"
 #include "world/clientlist.h"
 #include "world/dynamic_zone_manager.h"
 #include "world/dynamic_zone.h"
@@ -111,7 +116,8 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 	uint32 requested_task_id,
 	uint32 requested_character_id,
 	uint32 npc_type_id,
-	const FireSharedCorrelation::Trailer* fire_origin
+	const FireSharedCorrelation::Trailer* fire_origin,
+	const SodAdmission::Proof* sod_origin
 )
 {
 	if(fire_origin && (requested_task_id!=920170 || !FireSharedCorrelation::RequestShape(*fire_origin) ||
@@ -125,10 +131,20 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 		);
 	}
 
+	// Proof is emitted by the trusted Zone native roster, never a client field.
+	if(SodRewardQuote::Shared(requested_task_id)) {
+		if(!sod_origin||sod_origin->task!=requested_task_id||sod_origin->requester!=requested_character_id||!SodAdmission::Shape(*sod_origin)||!SodAdmission::Fresh(*sod_origin))return;
+		static std::map<std::pair<uint32_t,uint64_t>,uint64_t> used;
+		const auto now=SodAdmission::Milliseconds();
+		for(auto i=used.begin();i!=used.end();)if(now-i->second>5000)i=used.erase(i);else ++i;
+		if(!used.emplace(std::make_pair(requested_character_id,sod_origin->nonce),now).second)return;
+		auto* cle=ClientList::Instance()->FindCLEByCharacterID(requested_character_id);
+		if(!cle||!cle->Server()||cle->Server()->GetZoneID()!=sod_origin->zone||cle->Server()->GetInstanceID()!=sod_origin->instance)return;
+	}
 	// shared task validation
 	// todo: this should be online group/raid members only (avoid queries)
 	auto request = SharedTask::GetRequestCharacters(*m_database, requested_character_id);
-	if (!CanRequestSharedTask(task.id, request)) {
+	if (!CanRequestSharedTask(task.id, request, sod_origin)) {
 		LogTasksDetail("Shared task validation failed");
 		return;
 	}
@@ -144,6 +160,7 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 		LogError("Unable to load shared task [{}] activities for admission", task.id);
 		return;
 	}
+	if (!SodProgression::MayStartOrJoinTask(*m_content_database, requested_task_id, true)) return;
 	if (!m_database->TransactionBeginStrict().Success()) {
 		LogError("Unable to begin shared task admission transaction");
 		return;
@@ -242,6 +259,16 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 		m_database->TransactionRollbackStrict();
 		return;
 	}
+	if (!SodProgression::MayStartOrJoinTask(*m_content_database, requested_task_id, true)) {
+		m_database->TransactionRollbackStrict();
+		return;
+	}
+	if (SodRewardQuote::Shared(requested_task_id) && (!sod_origin || !SodAdmission::Fresh(*sod_origin))) {m_database->TransactionRollbackStrict();return;}
+	if (!SodRewardQuote::Freeze(*m_database, requested_task_id, 1, created_db_shared_task.id,
+		static_cast<uint32_t>(shared_task_entity.accepted_time))) {
+		m_database->TransactionRollbackStrict();
+		return;
+	}
 	if (!m_database->TransactionCommitStrict().Success()) {
 		m_database->TransactionRollbackStrict();
 		LogError("Unable to commit shared task admission; no member acceptance sent");
@@ -321,7 +348,7 @@ void SharedTaskManager::RemoveMember(SharedTask* s, const SharedTaskMember& memb
 	}
 
 	// todo: filter requirements
-	if (s->GetMembers().size() < s->GetTaskData().min_players)
+	if (s->GetMembers().size() < (SodRewardQuote::Shared(s->GetTaskData().id)?1:s->GetTaskData().min_players))
 	{
 		SendMembersMessageID(s, Chat::Red, TaskStr::MIN_PLAYERS);
 		StartTerminateTimer(s);
@@ -1145,6 +1172,7 @@ void SharedTaskManager::AddPlayerByCharacterIdAndName(
 	if (!does_member_exist && CanAddPlayer(s, character_id, character_name, true)) {
 		members.push_back(new_member);
 
+		if (!SodProgression::MayStartOrJoinTask(*m_content_database, s->GetTaskData().id, true)) return;
 		// Commit only the new membership, never delete/reinsert existing members.
 		// This admission ordering applies to all shared reward methods.
 		if (!m_database->TransactionBeginStrict().Success()) {
@@ -1178,6 +1206,10 @@ void SharedTaskManager::AddPlayerByCharacterIdAndName(
 			}
 		}
 
+		if (!SodProgression::MayStartOrJoinTask(*m_content_database, s->GetTaskData().id, true)) {
+			m_database->TransactionRollbackStrict();
+			return;
+		}
 		if (!m_database->TransactionCommitStrict().Success()) {
 			m_database->TransactionRollbackStrict();
 			LogError("Unable to commit shared task member admission; no acceptance sent");
@@ -1190,7 +1222,7 @@ void SharedTaskManager::AddPlayerByCharacterIdAndName(
 		s->AddCharacterToMemberHistory(character_id);
 
 		// min players should be the only thing to check, other failed reqs prevent player add
-		if (s->GetMembers().size() >= s->GetTaskData().min_players)
+		if (s->GetMembers().size() >= (SodRewardQuote::Shared(s->GetTaskData().id)?1:s->GetTaskData().min_players))
 		{
 			s->terminate_timer.Disable();
 		}
@@ -1463,8 +1495,9 @@ std::optional<std::vector<CharacterTaskTimersRepository::CharacterTaskTimers>> S
 	return timers;
 }
 
-bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskRequest& request)
+bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskRequest& request, const SodAdmission::Proof* sod_origin)
 {
+	if (!SodProgression::MayStartOrJoinTask(*m_content_database, task_id, true)) return false;
 	auto task = GetSharedTaskDataByTaskId(task_id);
 	if (task.id == 0 || task.type != TASK_TYPE_SHARED || !request.leader_id ||
 		request.members.empty() || request.character_ids.size() != request.members.size()) {
@@ -1557,8 +1590,14 @@ bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskR
 	auto requester = ClientList::Instance()->FindCLEByCharacterID(request.leader_id);
 	bool is_gm     = (requester && requester->GetGM());
 
+	if(SodRewardQuote::Shared(task_id)) {
+		if(!sod_origin||!SodAdmission::Matches(*sod_origin,request.character_ids))return false;
+		for(auto id:request.character_ids){auto* member=ClientList::Instance()->FindCLEByCharacterID(id);if(!member||!member->Server())return false;}
+		if(request.lowest_level<65||request.highest_level-request.lowest_level>15)return false;
+		const auto avg=SharedTaskAdmission::CheckAverage(*m_database,75,request.character_ids);if(!avg||!*avg)return false;
+	}
 	// check if party member count is below the minimum
-	if (!is_gm && task.min_players > 0 && request.members.size() < task.min_players) {
+	if (!is_gm && task.min_players > 0 && (SodRewardQuote::Shared(task_id) ? sod_origin->player_count+sod_origin->merc_count : request.members.size()) < task.min_players) {
 		ClientList::Instance()->SendCharacterMessageID(request.leader_id, Chat::Red, TaskStr::MIN_PLAYERS);
 		return false;
 	}
@@ -1569,7 +1608,7 @@ bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskR
 
 	// check if party member count is above the maximum
 	// todo: live creates the shared task but truncates members if it exceeds max (sorted by leader and raid group numbers)
-	if (task.max_players > 0 && request.members.size() > task.max_players) {
+	if (task.max_players > 0 && (SodRewardQuote::Shared(task_id) ? sod_origin->player_count+sod_origin->merc_count : request.members.size()) > task.max_players) {
 		ClientList::Instance()->SendCharacterMessageID(request.leader_id, Chat::Red, TaskStr::MAX_PLAYERS);
 		return false;
 	}
@@ -1636,6 +1675,12 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 	if (!s || !character_id) {
 		return false;
 	}
+	if(SodRewardQuote::Shared(s->GetTaskData().id)) {
+		auto state=m_database->QueryDatabase(fmt::format("SELECT state FROM sod_task_scene_runs WHERE shared_task_id={}",s->GetDbSharedTask().id));
+		if(!state.Success()||state.RowCount()>1||(state.RowCount()==1&&SharedTaskAdmission::Number(state.begin()[0])!=std::optional<uint64_t>(0)))return false;
+	}
+
+	if (!SodProgression::MayStartOrJoinTask(*m_content_database, s->GetTaskData().id, true)) return false;
 	const auto policy = SharedTaskAdmission::ReadPolicy(*m_content_database,
 		s->GetTaskData().id, s->GetTaskData().min_level, s->GetTaskData().max_level);
 	if (!policy.valid) {
@@ -1777,7 +1822,7 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 		SendLeaderMessage(s, Chat::Red, "Unable to verify shared task average-level policy.");
 		return false;
 	}
-	if (average.minimum > 0) {
+	if (average.minimum > 0 && !SodRewardQuote::Shared(s->GetTaskData().id)) {
 		std::vector<uint32_t> member_ids;
 		for (const auto &member : s->GetMembers()) {
 			member_ids.push_back(member.character_id);
@@ -1840,10 +1885,11 @@ void SharedTaskManager::SendActivityUpdate(SharedTask *s, uint32_t activity_id, 
 		FungalItemWire::Trailer fungal_ack;
 		if(fungal&&!FungalItemWorldSource::NativeStage::StampActualAck(s->GetDbSharedTask().id,activity_id,fungal_ack))return;
 		const bool fire=s->GetTaskData().id==FireSharedActivityOrigin::Task;
+		const bool sod=SodRewardQuote::Shared(s->GetTaskData().id);
 		const uint64_t original_run=s->GetDbSharedTask().id;
 		if(fire && !original_run) return;
 		auto p = std::make_unique<ServerPacket>(ServerOP_SharedTaskUpdate,sizeof(ServerSharedTaskActivityUpdate_Struct)+
-		 (fire?sizeof(FireSharedActivityOrigin::Trailer):0)+(fungal?sizeof(FungalItemWire::Trailer):0));
+		 (fire?sizeof(FireSharedActivityOrigin::Trailer):0)+(fungal?sizeof(FungalItemWire::Trailer):0)+(sod?sizeof(SodSharedActivity::Trailer):0));
 		auto d = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(p->pBuffer);
 		d->source_character_id = m.character_id;
 		d->task_id = s->GetTaskData().id;
@@ -1851,6 +1897,7 @@ void SharedTaskManager::SendActivityUpdate(SharedTask *s, uint32_t activity_id, 
 		d->done_count = done_count;
 		d->ignore_quest_update = ignore_quest_update;
 		if(fire) FireSharedActivityOrigin::Write(p->pBuffer,original_run);
+		if(sod)SodSharedActivity::Write(p->pBuffer,original_run);
 		if(fungal)FungalItemWire::Write(p->pBuffer,sizeof(ServerSharedTaskActivityUpdate_Struct),fungal_ack);
 		auto c = ClientList::Instance()->FindCLEByCharacterID(m.character_id);
 		if (c && c->Server()) {

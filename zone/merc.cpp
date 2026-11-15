@@ -5073,6 +5073,21 @@ void Client::UpdateMercTimer()
 	}
 }
 
+void Client::FilterSodMercenaryOffers(std::list<MercData>& offers)
+{
+	// Explicitly scoped to the opt-in Oceangreen reconstruction. Active GM
+	// mode bypasses this new progression check only, not other hire checks.
+	if (!RuleB(SodProgression, EnableOceangreenSlice) || GetGM()) return;
+
+	int tier_state = -2; // Not read yet; the authoritative API returns -1/0/1.
+	offers.remove_if([this, &tier_state](const MercData& offer) {
+		const auto definition = zone->GetMercTemplate(offer.MercTemplateID);
+		if (!definition || definition->ProficiencyID != 2 || definition->TierID != 2) return false;
+		if (tier_state == -2) tier_state = GetSodJourneymanTierState(2);
+		return tier_state != 1; // Unknown history never grants a new J2 contract.
+	});
+}
+
 bool Client::CheckCanHireMerc(Mob* merchant, uint32 template_id) {
 
 	if(IsSpiritShrouded() && !m_spirit_shroud_session_id){
@@ -5116,7 +5131,10 @@ bool Client::CheckCanHireMerc(Mob* merchant, uint32 template_id) {
 	}
 
 	// Only templates actually offered by this liaison may be hired.
-	const auto offered = merchant->CastToNPC()->GetMercenariesList(static_cast<uint32>(ClientVersion()));
+	auto offered = merchant->CastToNPC()->GetMercenariesList(static_cast<uint32>(ClientVersion()));
+	// Re-read committed progression at hire time; a prior shop response is
+	// not acquisition authority, including for a forged/direct hire packet.
+	FilterSodMercenaryOffers(offered);
 	const auto found = std::find_if(offered.begin(), offered.end(), [template_id](const MercData& entry) {
 		return entry.MercTemplateID == template_id;
 	});

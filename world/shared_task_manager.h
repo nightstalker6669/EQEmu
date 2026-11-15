@@ -1,3 +1,4 @@
+#include "common/sod_admission.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -57,7 +58,7 @@ public:
 	std::vector<TaskActivitiesRepository::TaskActivities> GetSharedTaskActivityDataByTaskId(uint32 task_id);
 
 	// client attempting to create a shared task
-	void AttemptSharedTaskCreation(uint32 requested_task_id, uint32 requested_character_id, uint32 npc_type_id, const FireSharedCorrelation::Trailer* fire_origin=nullptr);
+	void AttemptSharedTaskCreation(uint32 requested_task_id, uint32 requested_character_id, uint32 npc_type_id, const FireSharedCorrelation::Trailer* fire_origin=nullptr, const SodAdmission::Proof* sod_origin=nullptr);
 
 	// shared task activity update middleware
 	void SharedTaskActivityUpdate(
@@ -153,7 +154,7 @@ protected:
 
 	void AddReplayTimers(SharedTask *s);
 	bool CanAddPlayer(SharedTask *s, uint32_t character_id, std::string player_name, bool accepted);
-	bool CanRequestSharedTask(uint32_t task_id, const SharedTaskRequest& request);
+	bool CanRequestSharedTask(uint32_t task_id, const SharedTaskRequest& request, const SodAdmission::Proof* sod_origin=nullptr);
 	void ChooseNewLeader(SharedTask *s);
 	bool HandleCompletedActivities(SharedTask* s);
 	bool HandleCompletedTask(SharedTask* s);

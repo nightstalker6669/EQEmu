@@ -187,6 +187,30 @@ def seed_content(path, pin, stage):
     write_json(config, cfg)  # Portable on Windows too; no symlink-only module lookup.
 
 
+def quest_overlay(repo, contract, stage):
+    root_name = PurePosixPath(contract['root'])
+    if root_name.is_absolute() or '..' in root_name.parts or '\\' in contract['root']:
+        raise ValueError('Unsafe quest overlay root')
+    root = repo / root_name
+    files = contract['files']
+    if root.is_symlink() or not root.is_dir() or not files:
+        raise ValueError('Missing quest overlay')
+    inventory = {p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()}
+    if inventory != set(files):
+        raise ValueError('Quest overlay inventory differs from committed allowlist')
+    for name, expected in sorted(files.items()):
+        relative = PurePosixPath(name)
+        if relative.is_absolute() or '..' in relative.parts or '\\' in name or relative.suffix not in ('.lua', '.pl'):
+            raise ValueError('Unsafe quest overlay path: ' + name)
+        source = root / relative
+        if any(p.is_symlink() for p in (source, *source.parents)) or digest(source) != expected:
+            raise ValueError('Quest overlay source differs: ' + name)
+        target = stage / 'server/quests' / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
+        target.chmod(0o644)
+
+
 def architecture(path, windows):
     with path.open('rb') as f:
         head = f.read(64)
@@ -291,6 +315,7 @@ def package(args):
         stage = Path(tmp) / 'EQEmu-RoF2-server'
         stage.mkdir()
         seed_content(seed, inputs['runtime_content'], stage)
+        quest_overlay(repo, inputs['quest_overlay'], stage)
         database_content(database, db, stage)
         # New qualifications must come from this checkout, not the older content seed.
         merc_docs = stage / 'common/mercenary'
@@ -349,6 +374,7 @@ def package(args):
                    'SQL_sha256': db['required_members_sha256']['full.sql'],
                    'runtime_content_source': inputs['runtime_content']['source_commit'],
                    'runtime_content_asset_sha256': inputs['runtime_content']['sha256'],
+                   'quest_overlay_files': inputs['quest_overlay']['files'],
                    'release_inputs_sha256': digest(repo / 'tools/release/release-inputs.json'),
                    'submodules': capture(['git', '-C', str(repo), 'submodule', 'status', '--recursive']),
                    'fresh_empty_database_only': True}

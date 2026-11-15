@@ -1,3 +1,4 @@
+#include "common/sod_shared_activity.h"
 #include "../common/fungal_item_operation_wire.h"
 #include "fungal_item_operation_source.h"
 /*	EQEmu: EQEmulator
@@ -202,13 +203,15 @@ void SharedTaskZoneMessaging::HandleWorldMessage(ServerPacket *pack)
 			if(pack->size<sizeof(ServerSharedTaskActivityUpdate_Struct)) break;
 			auto p = reinterpret_cast<ServerSharedTaskActivityUpdate_Struct *>(pack->pBuffer);
 			uint64_t original_run=0;
-			if(!FungalItemWire::Correlated(p->task_id,p->activity_id)&&
+			if(SodRewardQuote::Shared(p->task_id)) {
+				if(!SodSharedActivity::Read(pack->pBuffer,pack->size,original_run))break;
+			} else if(!FungalItemWire::Correlated(p->task_id,p->activity_id)&&
 			 !FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,p->task_id,original_run)) break;
 			auto c = entity_list.GetClientByCharID(p->source_character_id);
 			if (c) {
 				LogTasks("[ServerOP_SharedTaskUpdate] We're back in zone and I found [{}]", c->GetCleanName());
 
-				if(p->task_id==FireSharedActivityOrigin::Task) {
+				if(p->task_id==FireSharedActivityOrigin::Task||SodRewardQuote::Shared(p->task_id)) {
 					auto* state=c->GetTaskState();
 					if(!state || state->GetActiveSharedTask().task_id!=static_cast<int>(p->task_id) ||
 					 c->GetSharedTaskId()<=0 || static_cast<uint64_t>(c->GetSharedTaskId())!=original_run) break;

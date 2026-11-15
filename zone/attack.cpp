@@ -2879,6 +2879,7 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 				entity_list.RemoveFromAutoXTargets(this);
 			}
 	
+			AddSodDeathLoot(give_exp_client,killer_mob);
 			corpse = new Corpse(
 				this,
 				&m_loot_items,

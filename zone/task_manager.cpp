@@ -1,3 +1,4 @@
+#include "common/sod_reward_quote.h"
 #include "fire_run_terminal_scene.h"
 /*	EQEmu: EQEmulator
 
@@ -17,6 +18,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "task_manager.h"
+#include "sod_progression.h"
 #include "fire_construct_participants.h"
 #include "task_shared_reward_identity.h"
 #include "common/shared_task_admission.h"
@@ -735,6 +737,41 @@ bool TaskManager::SaveClientState(Client *client, ClientTaskState *cts)
 			continue;
 		}
 
+		if (SodProgression::IsReservedOceangreenTask(task_id)) {
+			// Never delete earned prerequisites before the acknowledged atomic
+			// replacement. A failed first completion must not publish a -1 row.
+			if (!all_saved || !database.TransactionBeginStrict().Success()) {
+				all_saved = false;
+				continue;
+			}
+			bool saved = true;
+			if (RuleB(TasksSystem, KeepOneRecordPerCompletedTask)) {
+				saved = database.QueryDatabase(fmt::format(
+					"DELETE FROM completed_tasks WHERE charid={} AND taskid={}", character_id, task_id)).Success();
+			}
+			std::string values = fmt::format("({},{},{},-1)", character_id, t.completed_time, task_id);
+			if (RuleB(TaskSystem, RecordCompletedOptionalActivities)) {
+				for (int a = 0; a < task_data->activity_count; ++a) {
+					if (task_data->activity_information[a].optional && t.activity_done[a])
+						values += fmt::format(",({},{},{},{})", character_id, t.completed_time, task_id, a);
+				}
+			}
+			if (saved) saved = database.QueryDatabase(
+				"REPLACE INTO completed_tasks (charid,completedtime,taskid,activityid) VALUES " + values).Success();
+			if (saved && SodRewardQuote::Range(task_id).maximum) {
+				auto occurrence = database.QueryDatabase(fmt::format(
+					"SELECT occurrence_id FROM character_task_reward_instances WHERE character_id={} AND task_id={}", character_id, task_id));
+				const auto id = occurrence.Success() && occurrence.RowCount()==1
+					? SharedTaskAdmission::Number(occurrence.begin()[0]) : std::nullopt;
+				saved = id && SodRewardQuote::RecordCompletion(database, task_id, 0, *id, t.completed_time);
+			}
+			if (!saved || !database.TransactionCommitStrict().Success()) {
+				database.TransactionRollbackStrict();
+				all_saved = false;
+			}
+			continue;
+		}
+
 		// First we save a record with an activity_id of -1.
 		// This indicates this task was completed at the given time. We infer that all
 		// none optional activities were completed.
@@ -960,8 +997,13 @@ void TaskManager::TaskSetSelector(Client* client, Mob* mob, int task_set_id, boo
 
 // unlike the non-Quest version of this function, it does not check enabled, that is assumed the responsibility of the quest to handle
 // we do however still want it to check the other stuff like level, active, room, etc
-void TaskManager::TaskQuestSetSelector(Client* client, Mob* mob, const std::vector<int>& tasks, bool ignore_cooldown)
+void TaskManager::TaskQuestSetSelector(Client* client, Mob* mob, const std::vector<int>& requested, bool ignore_cooldown)
 {
+	std::vector<int> tasks;
+	for (const auto task : requested) {
+		if (!SodProgression::IsOceangreenRequest(task) ||
+			(mob && mob->IsNPC() && client->CanRequestSodTask(task, mob->GetNPCTypeID()))) tasks.push_back(task);
+	}
 	std::vector<int> task_list;
 	int player_level    = client->GetLevel();
 	ClientTaskState* client_task_state = client->GetTaskState();

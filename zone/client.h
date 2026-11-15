@@ -24,6 +24,7 @@ namespace HousingRecipe301 {struct Binding;}
 #pragma once
 
 #include "../common/boat_passenger.h"
+#include "../common/sod_progression.h"
 
 namespace FireRunActionSource {class NativeRunTerminalSource;class PreparedTerminalChestPlan;class PublishedTerminalReturnSink;class OriginalTerminalDeath;class RunTerminalAttempt;class OriginalTerminalDeathProof;}
 namespace FireRunActionSource {class RunUseWitness;class NativeRunDoorSource;class PublishedRunActionSink;class NativeRunHelperSource;class RunDoorLifetime;class RunCorpseLifetime;class MissionMaterialCorpseOrigin;class OriginalMissionMaterialDeath;class NativeRunLootSource;}
@@ -856,6 +857,7 @@ public:
 		int aa_percent = -1, bool leadership = true);
 	void SetEXP(ExpSource exp_source, uint64 set_exp, uint64 set_aaxp, bool resexp = false, NPC* npc = nullptr);
 	void AddLevelBasedExp(ExpSource exp_source, uint8 exp_percentage, uint8 max_level = 0, bool ignore_mods = false);
+	uint64 CalculateLevelBasedExp(uint8 exp_percentage, uint8 max_level, bool ignore_mods);
 	void SetLeadershipEXP(uint64 group_exp, uint64 raid_exp);
 	void AddLeadershipEXP(uint64 group_exp, uint64 raid_exp);
 	void SendLeadershipEXPUpdate();
@@ -1709,6 +1711,15 @@ public:
 	void ClearPendingAdventureDoorClick() { safe_delete(adventure_door_timer); }
 	void ClearPendingAdventureData();
 
+
+	// Read only committed native completion. Unknown/read failures are -1.
+	int GetSodTaskCompletionState(uint32 task_id);
+	SodProgression::Evidence ReadSodProgression();
+	uint32 GetSodVoidZone();
+	int GetSodGroupThemeState(uint32 theme);
+	int GetSodJourneymanTierState(uint32 tier);
+	bool CanEnterSodProgressionZone(uint32 destination, int version = 0, uint32 instance = 0, bool preflight = false);
+	bool CanRequestSodTask(uint32 task_id, uint32 npc_type_id);
 	bool CanEnterZone(const std::string& zone_short_name = "", int16 instance_version = -1);
 
 	uint32 GetAggroCount();
@@ -1891,6 +1902,11 @@ public:
 	inline void ClearDraggedCorpses() { DraggedCorpses.clear(); }
 	void ConsentCorpses(std::string consent_name, bool deny = false);
 	void SendAltCurrencies();
+	// Native task entry + Chronobine balance commit together; 1=delivered,0=retry,-1=ambiguous.
+	int GrantSodChronobines(uint32 pending_reward_id, uint64 reward_entry_id, uint32 amount);
+	int GrantSodFaction(uint32 pending_reward_id, uint64 reward_entry_id, uint32 faction_id, uint32 amount);
+	bool PersistSodFaction(int32 faction_id, int32 value, uint8 temp);
+	bool ObserveSodRunestone(uint32 spell_id, int32 slot_id, uint32 serial);
 	bool SetAlternateCurrencyValue(uint32 currency_id, uint32 new_amount);
 	int AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_scripted = false);
 	int AddAlternateCurrencyValue(uint32 currency_id, int amount, bool is_scripted, bool *persistence_succeeded);
@@ -1955,6 +1971,7 @@ public:
 	void SetMercenaryAutoAssist(bool enabled);
 	bool CheckCanSpawnMerc(uint32 template_id);
 	bool CheckCanHireMerc(Mob* merchant, uint32 template_id);
+	void FilterSodMercenaryOffers(std::list<MercData>& offers);
 	bool CheckCanRetainMerc(uint32 upkeep);
 	bool CheckCanUnsuspendMerc();
 	bool DismissMerc(uint32 MercID);
@@ -2469,6 +2486,9 @@ private:
 
 	void BulkSendInventoryItems();
 
+	uint32 m_sod_faction_pending=0, m_sod_faction_id=0;
+	uint64 m_sod_faction_entry=0;
+	bool m_sod_faction_committed=false;
 	faction_map factionvalues;
 
 	uint32 tribute_master_id;

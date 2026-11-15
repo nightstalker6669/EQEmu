@@ -1,3 +1,5 @@
+#include "common/sod_shared_activity.h"
+#include "common/sod_admission.h"
 #include "fungal_item_world_source.h"
 /*	EQEmu: EQEmulator
 
@@ -39,6 +41,15 @@ void SharedTaskWorldMessaging::HandleZoneMessage(ServerPacket *pack)
 {
 	switch (pack->opcode) {
 		case ServerOP_SharedTaskRequest: {
+			if(pack->size>=sizeof(ServerSharedTaskRequest_Struct)&&SodRewardQuote::Shared(reinterpret_cast<ServerSharedTaskRequest_Struct*>(pack->pBuffer)->requested_task_id)) {
+				if(pack->size!=sizeof(ServerSharedTaskRequest_Struct)+sizeof(SodAdmission::Proof))break;
+				ServerSharedTaskRequest_Struct request{};SodAdmission::Proof proof{};
+				std::memcpy(&request,pack->pBuffer,sizeof(request));std::memcpy(&proof,pack->pBuffer+sizeof(request),sizeof(proof));
+				if(SodRewardQuote::Shared(request.requested_task_id)&&proof.task==request.requested_task_id&&proof.requester==request.requested_character_id&&SodAdmission::Shape(proof))
+					SharedTaskManager::Instance()->AttemptSharedTaskCreation(request.requested_task_id,request.requested_character_id,request.requested_npc_entity_id,nullptr,&proof);
+				break;
+			}
+
 			FireSharedCorrelation::Trailer origin;
 			const auto kind=FireSharedCorrelation::Decode(pack->pBuffer,pack->size,origin);
 			if(kind==FireSharedCorrelation::Kind::Invalid ||
@@ -105,7 +116,11 @@ void SharedTaskWorldMessaging::HandleZoneMessage(ServerPacket *pack)
 			auto *r = (ServerSharedTaskActivityUpdate_Struct *) pack->pBuffer;
 			FungalItemWorldSource::PacketScope fungal_packet(*pack);
 			uint64_t original_run=0;
-			if(!FungalItemWire::Correlated(r->task_id,r->activity_id)&&
+			if(SodRewardQuote::Shared(r->task_id)) {
+				if(!SodSharedActivity::Read(pack->pBuffer,pack->size,original_run))break;
+				auto* current=SharedTaskManager::Instance()->FindSharedTaskByTaskIdAndCharacterId(r->task_id,r->source_character_id);
+				if(!current||static_cast<uint64_t>(current->GetDbSharedTask().id)!=original_run)break;
+			} else if(!FungalItemWire::Correlated(r->task_id,r->activity_id)&&
 			 !FireSharedActivityOrigin::Read(pack->pBuffer,pack->size,r->task_id,original_run)) break;
 			if(r->task_id==FireSharedActivityOrigin::Task) {
 				auto* actual=SharedTaskManager::Instance()->FindSharedTaskByTaskIdAndCharacterId(

@@ -1,3 +1,7 @@
+#include "common/rulesys.h"
+#include "common/sod_reward_quote.h"
+#include "zone/task_manager.h"
+#include "zone/dynamic_zone.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -510,6 +514,19 @@ std::string Lua_Zone::GetZoneDescription()
 	return self->GetZoneDescription();
 }
 
+bool Lua_Zone::FailSodScene(std::string identity) {
+ Lua_Safe_Call_Bool();
+ if(!RuleB(SodProgression,EnableOceangreenSlice)||!self->GetInstanceID()||!TaskManager::Instance())return false;
+ auto run=SharedTaskAdmission::Number(identity.c_str());if(!run||!*run)return false;
+ auto* dz=self->GetDynamicZone();if(!dz||dz->GetType()!=DynamicZoneType::Mission)return false;
+ auto mapped=database.QueryDatabase(fmt::format("SELECT st.task_id FROM shared_tasks st JOIN shared_task_dynamic_zones sd ON sd.shared_task_id=st.id JOIN dynamic_zones dz ON dz.id=sd.dynamic_zone_id WHERE st.id={} AND dz.id={} AND dz.instance_id={}",*run,dz->GetID(),self->GetInstanceID()));
+ if(!mapped.Success()||mapped.RowCount()!=1)return false;
+ auto task=SharedTaskAdmission::Number(mapped.begin()[0]);if(!task||*task>UINT32_MAX||!SodRewardQuote::Shared(static_cast<uint32_t>(*task)))return false;
+ auto failed=database.QueryDatabase(fmt::format("UPDATE sod_task_scene_runs SET state=3,updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND task_id={} AND instance_id={} AND state IN (1,4,5,6)",*run,*task,self->GetInstanceID()));
+ if(!failed.Success()||failed.RowsAffected()!=1)return false;
+ TaskManager::Instance()->EndSharedTask(dz->GetID(),true);return true;
+}
+
 uint32 Lua_Zone::GetZoneID()
 {
 	Lua_Safe_Call_Int();
@@ -981,6 +998,7 @@ luabind::scope lua_register_zone() {
 	.def("GetTimers", &Lua_Zone::GetTimers)
 	.def("GetZoneDescription", &Lua_Zone::GetZoneDescription)
 	.def("GetZoneID", &Lua_Zone::GetZoneID)
+	.def("FailSodScene", &Lua_Zone::FailSodScene)
 	.def("GetZoneType", &Lua_Zone::GetZoneType)
 	.def("GetUnderworld", &Lua_Zone::GetUnderworld)
 	.def("GetUnderworldTeleportIndex", &Lua_Zone::GetUnderworldTeleportIndex)

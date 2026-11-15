@@ -17,6 +17,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "doors.h"
+#include "common/sod_progression.h"
 
 #include "common/eqemu_logsys.h"
 #include "common/evolving_items.h"
@@ -543,6 +544,15 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 
 	// teleport door
 	if (EQ::ValueWithin(m_open_type, 57, 58) && HasDestinationZone()) {
+		uint32 destination_zone = ZoneID(m_destination_zone_name);
+		// Resolve only this actual configured default portal, after the normal
+		// door checks. Generic MovePC/GM/bind/explicit A calls remain untouched.
+		if (RuleB(SodProgression, EnableOceangreenSlice) && !sender->GetGM() &&
+			destination_zone == 459 && m_destination_instance_id == 0 &&
+			SodProgression::IsDefaultVoidReturnDoor(zone->GetZoneID(), GetDoorDBID())) {
+			destination_zone = sender->GetSodVoidZone();
+			if (!destination_zone) return;
+		}
 		bool has_key_required = (required_key_item && required_key_item == player_key);
 
 		if (sender->GetGM() && !has_key_required) {
@@ -580,7 +590,7 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 			}
 			else {
 				sender->MovePC(
-					ZoneID(m_destination_zone_name),
+					destination_zone,
 					static_cast<uint32>(m_destination_instance_id),
 					m_destination.x,
 					m_destination.y,
@@ -603,7 +613,7 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 			}
 			else {
 				sender->MovePC(
-					ZoneID(m_destination_zone_name),
+					destination_zone,
 					static_cast<uint32>(m_destination_instance_id),
 					m_destination.x,
 					m_destination.y,

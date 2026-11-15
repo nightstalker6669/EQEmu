@@ -1,3 +1,4 @@
+#include "zone/sod_orders_loot.h"
 #include "fire_material_loot_source.h"
 #include "fire_native_item_custody.h"
 /*	EQEmu: EQEmulator
@@ -1157,6 +1158,7 @@ void Client::PutLootInInventory(int16 slot_id, const EQ::ItemInstance &inst, Loo
 		fire_original_loot_placed=m_inv.PutItem(slot_id, inst)==slot_id;
 		fire_original_loot_saved=database.SaveInventory(CharacterID(), &inst, slot_id);
 	}
+	SodOrdersLoot::Saved(*this,inst,fire_original_loot_saved&&fire_original_loot_placed);
 	FireRunActionSource::NativeRunLootSource::ObserveActualInventorySave(
 	 *this,inst,slot_id,fire_original_loot_saved&&fire_original_loot_placed);
 	UpdateAchievementForOwnItem(inst.GetItem()->ID);

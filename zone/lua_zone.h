@@ -126,6 +126,7 @@ public:
 	int GetTimeZone();
 	std::string GetZoneDescription();
 	uint32 GetZoneID();
+	bool FailSodScene(std::string identity);
 	uint8 GetZoneType();
 	float GetUnderworld();
 	int GetUnderworldTeleportIndex();
