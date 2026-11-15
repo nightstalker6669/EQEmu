@@ -320,8 +320,11 @@ def package(args):
         # New qualifications must come from this checkout, not the older content seed.
         merc_docs = stage / 'common/mercenary'
         merc_docs.mkdir(parents=True)
-        for name in ('LEVEL100.md', 'RESOURCE-UPDATES.md', 'README.md'):
+        for name in ('LEVEL100.md', 'RESOURCE-UPDATES.md', 'README.md', 'SOD-OCEANGREEN.md'):
             shutil.copy2(repo / 'common/mercenary' / name, merc_docs / name)
+        progression_docs = stage / 'docs/rof2'
+        progression_docs.mkdir(parents=True)
+        shutil.copy2(repo / 'docs/rof2/OCEANGREEN.md', progression_docs / 'OCEANGREEN.md')
         limits = stage / 'CONTENT-LIMITS.md'
         with limits.open('a', encoding='utf-8') as output:
             output.write('\n## Mercenary level 86–100 content\n\n'
@@ -330,6 +333,16 @@ def package(args):
                          'are not authenticated. Read [the same-source level-100 guide]'
                          '(common/mercenary/LEVEL100.md) for scope, cache/upgrade requirements and native '
                          'acceptance limits. Build/package success does not establish gameplay acceptance.\n')
+            output.write('\n## Accepted Oceangreen scope\n\n'
+                         'The matched local native cohort completed the ten-task Oceangreen reconstruction, '
+                         'shared once-only rewards, earned Void B purchase and scribing, and an ordinary '
+                         'Journeyman II healer hire. Upper-ward physical blocking remains LIMITED: '
+                         'standing access, line of sight and melee passed, but complete closed/open collision '
+                         'behavior was not qualified. Encounter, loot and AI values are approved local '
+                         'reconstruction, not authenticated original Live data. See '
+                         '[the accepted scope and additive-upgrade guide](docs/rof2/OCEANGREEN.md) and '
+                         '[the J2 acquisition contract](common/mercenary/SOD-OCEANGREEN.md). '
+                         'Packaging on another platform does not establish native gameplay acceptance there.\n')
         native = stage / 'server/bin'
         native.mkdir(parents=True)
         hashes, binaries = {}, []

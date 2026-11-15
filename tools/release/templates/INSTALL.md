@@ -28,3 +28,9 @@ Preserve LOCAL/reconstruction/source-unconfirmed and unfinished-content qualific
 ## Mercenary level 86–100 qualification
 
 Read [the level-100 content guide](common/mercenary/LEVEL100.md). Its stat curves and NPC repertoire are documented emulator reconstruction; immutable May 2013 spell definitions, exact historical Live balance and historical NPC casts are not authenticated. The matched sanitized database supplies the reviewed content; build/package success does not establish native gameplay acceptance. Existing player databases need the separately coordinated additive migration and normal mercenary catalogue cache refresh. Do not import this package's full database over player data.
+
+## Oceangreen progression and existing-server upgrades
+
+Read [the accepted Oceangreen scope and upgrade guide](docs/rof2/OCEANGREEN.md) and `database/migrations/oceangreen/UPGRADE-CONTRACT.json`. This package includes the fifteen final quests and matching sanitized content. The ten tasks, shared once-only rewards, earned Void B acquisition and ordinary J2 hire passed on the matched local native cohort; upper-ward physical blocking remains limited. Encounter parameters are local reconstruction.
+
+The full SQL is for a fresh empty database only. Existing supported player databases use the reviewed ordered additive migrations; managed EverForge markers advance only after their guarded postconditions succeed. Stop writers and back up first. Never replay the full seed, weaken migration guards or retry partial DDL blindly. Install the matched code and quests together; an ordinary EverForge restart retains its installed binary selection.
