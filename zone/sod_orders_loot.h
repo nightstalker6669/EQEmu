@@ -4,7 +4,7 @@
 #include "zone/sod_progression.h"
 #include "common/sod_content_bindings.h"
 namespace SodOrdersLoot {
-struct Ticket { Client* client;const EQ::ItemInstance* item;uint32_t serial;Corpse* corpse;bool consumed=false; };
+struct Ticket { Client* client;const EQ::ItemInstance* item;int32_t serial;Corpse* corpse;bool consumed=false; };
 inline thread_local Ticket* active=nullptr;
 struct Scope {
  Ticket ticket;Ticket* previous;
