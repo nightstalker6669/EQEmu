@@ -24,3 +24,4 @@
 
 # Release manifests bind these exact input bytes on both platforms.
 /tools/release/release-inputs.json text eol=lf
+/tools/release/quest-overlays/** text eol=lf
