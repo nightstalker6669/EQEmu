@@ -10,6 +10,10 @@ Restoration is ongoing. The pack includes substantial working additions, but it 
 
 **[EverForge on Docker Hub](https://hub.docker.com/r/nightsta69/everforge-rof2)** · **[Docker installation](docs/rof2/EVERFORGE.md)** · **[Server downloads](https://github.com/nightstalker6669/EQEmu/releases/latest)** · **[Database downloads](https://github.com/nightstalker6669/EQEmu-Database/releases)** · **[Installation guide](docs/rof2/INSTALL.md)** · **[Feature source and documentation](extensions/rof2/)**
 
+## Restoration roadmap
+
+Explore the [restoration roadmap](ROADMAP.md) for system features, quest and zone coverage, remaining gaps, and the interactive map. Publication and local gameplay acceptance are tracked separately.
+
 ## What this pack adds
 
 | Area | What the restoration brings |
