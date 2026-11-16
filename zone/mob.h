@@ -1315,6 +1315,7 @@ public:
 	int64 CalcSpellEffectValue_formula(uint32 formula, int64 base_value, int64 max_value, int caster_level, int32 spell_id, int ticsremaining = 0);
 	virtual int CheckStackConflict(int32 spellid1, int caster_level1, int32 spellid2, int caster_level2, Mob* caster1 = nullptr, Mob* caster2 = nullptr, int buffslot = -1);
 	uint32 GetCastedSpellInvSlot() const { return casting_spell_inventory_slot; }
+	bool IsCastingFromItem() const { return casting_spell_slot == EQ::spells::CastingSlot::Item || casting_spell_slot == EQ::spells::CastingSlot::PotionBelt; }
 
 	// HP Event
 	inline int GetNextHPEvent() const { return nexthpevent; }

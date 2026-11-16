@@ -19,10 +19,16 @@ inline Bounds Range(uint32_t task) {
  case 920181:return {45,55};
  case 920182: case 920190:return {15,45};
  case 920183:return {30,60};
+ // User-approved Kithicor reconstruction: same frozen popularity model,
+ // guide-sourced caps. Integer quarter-cap floors are local numeric policy.
+ case 920191:return {50,200};
+ case 920192:return {22,90};
+ case 920193:case 920194:return {11,45};
+ case 920195:case 920196:return {15,60};
  default:return {0,0};
  }
 }
-inline bool Shared(uint32_t task) { return task==920178||task==920179||task==920180||task==920183; }
+inline bool Shared(uint32_t task) { return task==920178||task==920179||task==920180||task==920183||task==920192||task==920193; }
 inline uint32_t Amount(Bounds b,uint64_t count) {
  // Saturate before arithmetic; values beyond this already reach every floor.
  return std::max(b.floor,static_cast<uint32_t>(uint64_t(b.maximum)*8/(8+std::min<uint64_t>(count,UINT32_MAX))));

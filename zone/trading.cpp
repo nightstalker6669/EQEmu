@@ -1,4 +1,5 @@
 #include "fire_run_terminal_scene.h"
+#include "kithicor_poison_trade.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -522,6 +523,7 @@ void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, st
 		}
 	}
 	else if(tradingWith->IsNPC()) {
+		if(KithicorPoisonTrade::RejectUnissued(*this,*tradingWith->CastToNPC()))return;
 		if(FireRunActionSource::NativeRunTerminalSource::RejectUnissuedFinishTrade(*this,*tradingWith->CastToNPC()))return;
 		if (Housing::GuildPortalRuntime::HandIn(*this, tradingWith)) return;
 
@@ -3890,3 +3892,5 @@ void Client::CancelTraderTradeWindow()
 	auto end_session = new EQApplicationPacket(OP_ShopEnd);
 	FastQueuePacket(&end_session);
 }
+
+#include "kithicor_poison_trade.inc"

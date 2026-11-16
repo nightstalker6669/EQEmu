@@ -22,6 +22,6 @@ inline std::optional<Proof> Observe(Client& c,uint32_t task) {
    owner->GetZoneID()!=p.zone||owner->GetInstanceID()!=p.instance||owner->GetHP()<=0)continue;
   p.mercs[p.merc_count]=merc->GetMercenaryID();p.owners[p.merc_count++]=owner->CharacterID();
  }
- return Shape(p)&&(p.player_count+p.merc_count>=3||c.GetGM())?std::optional<Proof>(p):std::nullopt;
+ return Shape(p)&&(p.player_count+p.merc_count>=(task==920193?1u:3u)||c.GetGM())?std::optional<Proof>(p):std::nullopt;
 }
 }

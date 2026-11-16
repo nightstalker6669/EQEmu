@@ -1,3 +1,4 @@
+#include "kithicor_poison_trade.h"
 #include "fungal_item_operation_source.h"
 #include "fire_run_terminal_scene.h"
 #include "fire_run_action_scene.h"
@@ -16264,6 +16265,7 @@ void Client::Handle_OP_TrackUnknown(const EQApplicationPacket *app)
 void Client::Handle_OP_TradeAcceptClick(const EQApplicationPacket *app)
 {
 	Mob* with = trade->With();
+	if(with&&with->IsNPC()&&KithicorPoisonTrade::OriginalAccept(*this,*with->CastToNPC()))return;
 	if(with&&with->IsNPC()&&FungalItemSource::NativeEvents::OriginalTrade(*this,*with->CastToNPC()))return;
 	if(with&&with->IsNPC()&&FireRunActionSource::NativeRunTerminalSource::HandleOriginalAccept(*this,*with->CastToNPC()))return;
 	trade->state = TradeAccepted;

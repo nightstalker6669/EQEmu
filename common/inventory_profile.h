@@ -1,3 +1,4 @@
+namespace KithicorPoisonTrade {class Writer;}
 namespace RechargeRecipe8 {class Custody;}
 namespace TrophyCertificate55 {class Custody;}
 namespace FungalInventory {class NativeCustody;}
@@ -87,6 +88,7 @@ namespace EQ
 	class InventoryProfile
 	{
 		friend class ItemInstance;
+		friend class KithicorPoisonTrade::Writer;
 		friend class FirePersonalOccurrenceSource::NativeItemCustody;
 		friend class FungalInventory::NativeCustody;
 		friend class TrophyCertificate55::Custody;

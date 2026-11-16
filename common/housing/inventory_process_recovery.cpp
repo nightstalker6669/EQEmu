@@ -1,4 +1,5 @@
 #include "inventory_process_recovery.h"
+#include "../kithicor_poison_custody.h"
 #include "../shared_core/process_registry.h"
 #include "layout_mixed_journal_db.h"
 #include "coin_pending_guard.h"
@@ -180,6 +181,7 @@ Result<Reconciliation> Service::Reconcile(const InventorySessions::Lease& lease)
   if (std::string(history.begin()[0])!="0") throw Failure{Error::Stale};
   auto current = Query(db,"SELECT active FROM housing_inventory_sessions WHERE " + predicate + " FOR UPDATE");
   if (current.RowCount()!=1 || std::string(current.begin()[0])!="1") throw Failure{Error::Stale};
+  KithicorPoisonCustody::ReconcilePhysicalUnderTransaction(db,lease);
   const auto coin=CoinPending::InspectEscrow(db,lease.actor.character_id,true);
   const auto purchase=CoinPending::InspectPurchase(db,lease.actor.character_id,true);
   if(purchase==CoinPending::State::Unavailable)throw Failure{Error::DatabaseFailure};

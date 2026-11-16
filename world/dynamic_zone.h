@@ -42,6 +42,8 @@ public:
 	void SetSecondsRemaining(uint32_t seconds_remaining) override;
 
 	void CacheMemberStatuses();
+	// Publish this existing World cache entry; no creation or roster mutation.
+	bool SendCreationToZones();
 	DynamicZoneStatus Process();
 	bool SetNewLeader(uint32_t member_id);
 

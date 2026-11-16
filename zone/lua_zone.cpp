@@ -1,3 +1,5 @@
+#include "common/kithicor_mission.h"
+#include "common/sod_content_bindings.h"
 #include "common/rulesys.h"
 #include "common/sod_reward_quote.h"
 #include "zone/task_manager.h"
@@ -514,14 +516,68 @@ std::string Lua_Zone::GetZoneDescription()
 	return self->GetZoneDescription();
 }
 
+int Lua_Zone::KithicorEscortDeath(std::string identity, Lua_NPC actor) {
+ Lua_Safe_Call_Int();
+ NPC* npc=actor;
+ if(!RuleB(SodProgression,EnableKithicorSlice) || !self->GetInstanceID() || !npc || npc->GetHP()>0 || !npc->GetSpawnPointID())return -1;
+ const auto run=SharedTaskAdmission::Number(identity.c_str());
+ const auto* phase=KithicorMission::Find(920192,self->GetZoneID(),self->GetInstanceVersion());
+ auto* dz=self->GetDynamicZone();
+ if(!run || !*run || !phase || !dz || !KithicorMission::Ready(database,*run,*phase,dz->GetID(),self->GetInstanceID()))return -1;
+ auto state=database.QueryDatabase(fmt::format("SELECT scene_state FROM kithicor_mission_phases WHERE shared_task_id={} AND phase={} AND task_id=920192 AND model_version={} AND ready=1 AND instance_id={}",*run,phase->phase,KithicorMission::Model,self->GetInstanceID()));
+ if(!state.Success() || state.RowCount()!=1)return -1;
+ const auto scene=SharedTaskAdmission::Number(state.begin()[0]);
+ if(!scene || *scene>3)return -1;
+ if(*scene>=2)return 0; // Terminal success is immutable, including delayed phase0 deaths.
+ const auto colonel=SodContent::Role(content_db,920192,fmt::format("colonel_{}",phase->phase));
+ const auto civilian=SodContent::Role(content_db,920192,fmt::format("refugee_{}",phase->phase));
+ const bool is_colonel=colonel && npc->GetNPCTypeID()==*colonel;
+ if(!is_colonel && (!civilian || npc->GetNPCTypeID()!=*civilian))return -1;
+ auto spawns=content_db.QueryDatabase(fmt::format("SELECT s.id FROM spawn2 s JOIN spawnentry e ON e.spawngroupID=s.spawngroupID WHERE s.zone='{}' AND s.version={} AND e.npcID={} ORDER BY s.id",Strings::Escape(self->GetShortName()),phase->version,npc->GetNPCTypeID()));
+ if(!spawns.Success() || spawns.RowCount()!=(is_colonel?1:20))return -1;
+ unsigned slot=0,index=0;
+ for(auto row:spawns) {
+  ++index;const auto id=SharedTaskAdmission::Number(row[0]);
+  if(!id || !*id)return -1;
+  if(*id==npc->GetSpawnPointID()) { if(slot)return -1;slot=index; }
+ }
+ if(!slot)return -1;
+ unsigned count=21; // Colonel death, not a fabricated civilian count.
+ if(!is_colonel) {
+  auto receipt=database.QueryDatabase(fmt::format("INSERT IGNORE INTO kithicor_mission_actions(shared_task_id,phase,action_id,character_id,item_id,status,updated_at) SELECT {},{},100+{},0,0,1,UNIX_TIMESTAMP() FROM kithicor_mission_phases p JOIN shared_tasks st ON st.id=p.shared_task_id WHERE p.shared_task_id={} AND p.phase={} AND p.task_id=920192 AND p.model_version={} AND p.ready=1 AND p.instance_id={} AND p.scene_state IN(0,1) AND st.completion_time IS NULL AND st.expire_time>NOW()",*run,phase->phase,slot,*run,phase->phase,KithicorMission::Model,self->GetInstanceID()));
+  if(!receipt.Success())return -1;
+  auto total=database.QueryDatabase(fmt::format("SELECT COUNT(*) FROM kithicor_mission_actions WHERE shared_task_id={} AND phase={} AND action_id BETWEEN 101 AND 120 AND status=1",*run,phase->phase));
+  if(!total.Success() || total.RowCount()!=1)return -1;
+  const auto deaths=SharedTaskAdmission::Number(total.begin()[0]);
+  if(!deaths || *deaths>20)return -1;
+  count=static_cast<unsigned>(*deaths);
+ }
+ if(count>=11) {
+  // The actual bound dead NPC permits failure during the prelude as well as
+  // the march. Generic unload/failure hooks still CAS ACTIVE phase only.
+  auto failed=database.QueryDatabase(fmt::format("UPDATE kithicor_mission_phases SET scene_state=3,updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND phase={} AND task_id=920192 AND model_version={} AND ready=1 AND instance_id={} AND scene_state IN(0,1)",*run,phase->phase,KithicorMission::Model,self->GetInstanceID()));
+  if(!failed.Success())return -1;
+  if(failed.RowsAffected()==1)TaskManager::Instance()->EndSharedTask(dz->GetID(),true);
+ }
+ return static_cast<int>(count);
+}
+
 bool Lua_Zone::FailSodScene(std::string identity) {
  Lua_Safe_Call_Bool();
- if(!RuleB(SodProgression,EnableOceangreenSlice)||!self->GetInstanceID()||!TaskManager::Instance())return false;
+ if((!RuleB(SodProgression,EnableOceangreenSlice)&&!RuleB(SodProgression,EnableKithicorSlice))||!self->GetInstanceID()||!TaskManager::Instance())return false;
  auto run=SharedTaskAdmission::Number(identity.c_str());if(!run||!*run)return false;
  auto* dz=self->GetDynamicZone();if(!dz||dz->GetType()!=DynamicZoneType::Mission)return false;
  auto mapped=database.QueryDatabase(fmt::format("SELECT st.task_id FROM shared_tasks st JOIN shared_task_dynamic_zones sd ON sd.shared_task_id=st.id JOIN dynamic_zones dz ON dz.id=sd.dynamic_zone_id WHERE st.id={} AND dz.id={} AND dz.instance_id={}",*run,dz->GetID(),self->GetInstanceID()));
  if(!mapped.Success()||mapped.RowCount()!=1)return false;
  auto task=SharedTaskAdmission::Number(mapped.begin()[0]);if(!task||*task>UINT32_MAX||!SodRewardQuote::Shared(static_cast<uint32_t>(*task)))return false;
+ if(SodProgression::IsKithicorSharedTask(static_cast<uint32_t>(*task))) {
+  if(!RuleB(SodProgression,EnableKithicorSlice))return false;
+  const auto* phase=KithicorMission::Find(static_cast<uint32_t>(*task),self->GetZoneID(),self->GetInstanceVersion());
+  if(!phase || !KithicorMission::Ready(database,*run,*phase,dz->GetID(),self->GetInstanceID()))return false;
+  auto failed=database.QueryDatabase(fmt::format("UPDATE kithicor_mission_phases SET scene_state=3,updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND phase={} AND task_id={} AND model_version={} AND ready=1 AND instance_id={} AND scene_state=1",*run,phase->phase,*task,KithicorMission::Model,self->GetInstanceID()));
+  if(!failed.Success() || failed.RowsAffected()!=1)return false;
+  TaskManager::Instance()->EndSharedTask(dz->GetID(),true);return true;
+ }
  auto failed=database.QueryDatabase(fmt::format("UPDATE sod_task_scene_runs SET state=3,updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND task_id={} AND instance_id={} AND state IN (1,4,5,6)",*run,*task,self->GetInstanceID()));
  if(!failed.Success()||failed.RowsAffected()!=1)return false;
  TaskManager::Instance()->EndSharedTask(dz->GetID(),true);return true;
@@ -998,6 +1054,7 @@ luabind::scope lua_register_zone() {
 	.def("GetTimers", &Lua_Zone::GetTimers)
 	.def("GetZoneDescription", &Lua_Zone::GetZoneDescription)
 	.def("GetZoneID", &Lua_Zone::GetZoneID)
+	.def("KithicorEscortDeath", &Lua_Zone::KithicorEscortDeath)
 	.def("FailSodScene", &Lua_Zone::FailSodScene)
 	.def("GetZoneType", &Lua_Zone::GetZoneType)
 	.def("GetUnderworld", &Lua_Zone::GetUnderworld)

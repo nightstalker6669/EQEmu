@@ -1,4 +1,5 @@
 #include "fire_run_terminal_scene.h"
+#include "death_experience.h"
 #include "fire_material_loot_source.h"
 #include "fire_construct_participants.h"
 #include "fire_gotonur_say_queue.h"
@@ -2052,13 +2053,7 @@ bool Client::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::Skill
 		// Shrouded loss is applied to the original pending ledger only after
 		// a durable corpse identity exists; the temporary XP profile is fixed.
 		if (exploss > 0 && !IsSpiritShrouded()) {
-			int32 newexp = GetEXP();
-			if (exploss > newexp) {
-				//lost more than we have... wtf..
-				newexp = 1;
-			} else {
-				newexp -= exploss;
-			}
+			const uint32 newexp = DeathExperience::Remaining(GetEXP(), static_cast<uint32>(exploss));
 			SetEXP(ExpSource::Death, newexp, GetAAXP());
 			//m_epp.perAA = 0;	//reset to no AA exp on death.
 		}

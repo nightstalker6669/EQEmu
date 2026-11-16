@@ -18,6 +18,7 @@ Restoration is ongoing. The pack includes substantial working additions, but it 
 | **Fellowships** | Fellowship creation and invitations, the native window and chat, campsites and their effects, insignia travel, and normal/AA experience sharing. [Details](extensions/rof2/fellowship/) |
 | **Mercenaries through level 100** | Tank, healer, melee, and caster roles; hiring, upkeep, stances, suspension, revival, and extended level 86–100 stats and spell progression. Group resource updates also reflect changing mana. Some scaling values are documented reconstructions. [Details](extensions/rof2/mercenaries/) |
 | **Oceangreen progression** | Ten accepted personal/shared tasks, once-only shared rewards, earned Void B access and ordinary Journeyman II acquisition. Upper-ward physical blocking remains limited; encounter values are documented local reconstruction. [Scope and upgrade guide](docs/rof2/OCEANGREEN.md) |
+| **Kithicor, Void C and Journeyman III** | Six accepted progression tasks and shared mission rewards, earned original Void C access, spell-vendor acquisition and an ordinary Journeyman III healer hire. Physical escorts passed on the accepted native cohort; a later guard fix has focused validation only. [Scope and upgrade guide](docs/rof2/KITHICOR.md) |
 | **Spirit Shrouds** | Native selection and previews, transformation and character restoration, earned-item retrieval, and shroud abilities. The enabled catalogue covers eight starting forms at levels 5–70; later branches remain incomplete. [Details](extensions/rof2/spirit-shrouds/) |
 | **Achievements and quest rewards** | Achievement tracking, persistent progress, completion notifications, and reward selection, alongside restored portions of Hero’s Journey and Rain of Fear quest content. Coverage includes work in Crescent Reach, Blightfire Moors, Stone Hive, and Shard’s Landing. [Details](extensions/rof2/achievements/) |
 | **Spells and their acquisition routes** | Missing scrolls and vendor stock, faction and language requirements, and original rune, fragment, mote, cantrip, and periapt exchanges. The work covers multiple expansions through RoF; remaining access and quest gaps are tracked separately. [Details](extensions/rof2/spells/) |
@@ -30,7 +31,9 @@ These additions share improvements to inventory handling, purchases, task credit
 
 The accepted Oceangreen slice now covers the ten-task village and Blackburrow progression batch, shared rewards, earned Void B access, scroll acquisition and ordinary Journeyman II hiring. Use the matching server/database release and [reviewed additive upgrade](docs/rof2/OCEANGREEN.md); the full database export is for fresh installations only. Upper-ward closed/open collision remains limited and is not a global pass.
 
-Later Seeds of Destruction themes, spell acquisition gaps, AA coverage, achievement content and unresolved recipes remain unfinished. Completed improvements move into the feature overview and release notes with their accepted scope.
+The accepted Kithicor batch extends this progression through six tasks, earned original Void C access, spell acquisition and an ordinary Journeyman III healer hire. See the [Kithicor scope and upgrade guide](docs/rof2/KITHICOR.md) for the native escort evidence and the limits on the later guard fix.
+
+Further Seeds of Destruction themes, spell acquisition gaps, AA coverage, achievement content and unresolved recipes remain unfinished. Completed improvements move into the feature overview and release notes with their accepted scope.
 
 ## EverForge Docker stack
 

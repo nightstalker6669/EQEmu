@@ -1,0 +1,32 @@
+-- DRAFT source packet; Database owner reviews/applies with complete Kith batch.
+-- This journal grants neither task activity nor entitlement. No existing rows edited.
+CREATE TABLE kithicor_poison_custody (
+ request_key CHAR(32) CHARACTER SET ascii COLLATE ascii_bin NOT NULL,
+ character_id INT UNSIGNED NOT NULL,
+ account_id INT UNSIGNED NOT NULL,
+ inventory_epoch BIGINT UNSIGNED NOT NULL,
+ inventory_token BINARY(32) NOT NULL,
+ process_key VARBINARY(96) NOT NULL,
+ client_key VARBINARY(96) NOT NULL,
+ instance_id INT UNSIGNED NOT NULL,
+ shared_task_id BIGINT UNSIGNED NOT NULL,
+ phase TINYINT UNSIGNED NOT NULL DEFAULT 0,
+ chest TINYINT UNSIGNED NOT NULL,
+ npc_type_id INT UNSIGNED NOT NULL,
+ npc_entity_id INT UNSIGNED NOT NULL,
+ npc_spawn_id INT UNSIGNED NOT NULL,
+ source_slot INT UNSIGNED NOT NULL,
+ source_guid BIGINT UNSIGNED NOT NULL,
+ source_charges SMALLINT UNSIGNED NOT NULL,
+ preimage MEDIUMBLOB NOT NULL,
+ return_plan MEDIUMBLOB NOT NULL COMMENT 'immutable no-debit full-vial/all-items/coin abort return plan',
+ postimage MEDIUMBLOB NULL,
+ physical TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '0 intent with action reservation,1 debit/returns committed,2 no-debit full returns committed,3 abort-only intent without action authority',
+ settled TINYINT UNSIGNED NOT NULL DEFAULT 0 COMMENT '0 custody pending,1 memory publication OR exact dead-session physical reconciliation; never gameplay ACK',
+ created_at INT UNSIGNED NOT NULL,
+ settled_at INT UNSIGNED NULL,
+ PRIMARY KEY(request_key),
+ KEY actor_pending(character_id,settled),
+ KEY old_session(character_id,inventory_epoch),
+ KEY native_action(shared_task_id,phase,chest)
+) ENGINE=InnoDB;

@@ -1,4 +1,5 @@
 #include "common/sod_shared_activity.h"
+#include "common/kithicor_mission.h"
 #include <map>
 #include "common/sod_admission.h"
 #include "common/sod_reward_quote.h"
@@ -658,6 +659,13 @@ void SharedTaskManager::SharedTaskActivityUpdate(
 	std::vector<SharedTaskActivityStateEntry> fungal_before;
 	if(fungal_stage.Selected()){if(!fungal_stage.Ready())return;fungal_before=shared_task->m_shared_task_activity_state;}
 	if (shared_task) {
+		if (task_id==920193 && activity_id==10) {
+			auto q=m_database->QueryDatabase(fmt::format("SELECT COUNT(*) FROM kithicor_mission_actions WHERE shared_task_id={} AND phase=0 AND action_id BETWEEN 1 AND 6 AND item_id=38504 AND status=1",shared_task->GetDbSharedTask().id));
+			if (!q.Success() || q.RowCount()!=1) return;
+			const auto count=SharedTaskAdmission::Number(q.begin()[0]);
+			if (!count || *count>6) return;
+			done_count=static_cast<uint32_t>(*count);
+		}
 		LogTasksDetail(
 			"shared_task_id [{}] character_id [{}] task_id [{}] activity_id [{}] done_count [{}]",
 			shared_task->GetDbSharedTask().id,
@@ -1336,6 +1344,10 @@ void SharedTaskManager::RemoveActiveInvitationByCharacterID(uint32_t character_i
 
 void SharedTaskManager::CreateDynamicZone(SharedTask *shared_task, DynamicZone &dz_request)
 {
+	if (shared_task && SodProgression::IsKithicorSharedTask(shared_task->GetTaskData().id)) {
+		EnsureKithicorPhase(shared_task, dz_request);
+		return;
+	}
 	std::vector<DynamicZoneMember> dz_members;
 	for (const auto                &member : shared_task->GetMembers()) {
 		dz_members.emplace_back(member.character_id, member.character_name);
@@ -1354,6 +1366,119 @@ void SharedTaskManager::CreateDynamicZone(SharedTask *shared_task, DynamicZone &
 
 		shared_task->dynamic_zone_ids.emplace_back(new_dz->GetID());
 	}
+}
+
+// Kithicor alone needs two separately journaled phases of one shared task.
+// World processes these requests serially. An interrupted reservation is held
+// unless a real, unique native association can be reconciled; it is not replayed.
+void SharedTaskManager::EnsureKithicorPhase(SharedTask* shared, const DynamicZone& request)
+{
+	if (!shared || !RuleB(SodProgression, EnableKithicorSlice)) return;
+	const auto& task=shared->GetTaskData();
+	const auto& run=shared->GetDbSharedTask();
+	const auto* phase=KithicorMission::Find(task.id,request.GetZoneID(),request.GetZoneVersion());
+	const auto now=std::time(nullptr);
+	if (!phase || run.completion_time>0 || run.expire_time<=now ||
+		!KithicorMission::PriorSuccess(*m_database,run.id,*phase)) return;
+	if (phase->required_activity>=0) {
+		bool acknowledged=false;
+		for (const auto& activity:shared->GetActivityState()) {
+			if (activity.activity_id==static_cast<uint32_t>(phase->required_activity) &&
+				activity.done_count>=activity.max_done_count && activity.max_done_count>0 && activity.completed_time>0) acknowledged=true;
+		}
+		if (!acknowledged) return;
+		auto persisted=m_database->QueryDatabase(fmt::format(
+			"SELECT done_count FROM shared_task_activity_state WHERE shared_task_id={} AND activity_id={} "
+			"AND completed_time IS NOT NULL AND UNIX_TIMESTAMP(completed_time)>0",run.id,phase->required_activity));
+		if (!persisted.Success() || persisted.RowCount()!=1) return;
+		const auto count=SharedTaskAdmission::Number(persisted.begin()[0]);
+		if (!count || *count<1) return;
+	}
+	auto templ=dynamic_zone_manager.GetTemplates().find(phase->template_id);
+	if (templ==dynamic_zone_manager.GetTemplates().end() || templ->second.zone_id!=phase->zone ||
+		templ->second.zone_version!=phase->version) return;
+	std::vector<DynamicZoneMember> members;
+	std::vector<uint32_t> ids;
+	DynamicZone dz(DynamicZoneType::Mission);
+	dz.LoadTemplate(templ->second); // Serialized request coordinates are never trusted.
+	dz.SetMinPlayers(task.min_players);
+	dz.SetMaxPlayers(task.max_players);
+	for (const auto& member:shared->GetMembers()) {
+		members.emplace_back(member.character_id,member.character_name);
+		ids.push_back(member.character_id);
+		if (member.is_leader) dz.SetLeader({member.character_id,member.character_name});
+	}
+	if (ids.empty() || !dz.GetLeader().id) return;
+	std::sort(ids.begin(),ids.end());
+	if (std::adjacent_find(ids.begin(),ids.end())!=ids.end()) return;
+
+	// Scan actual persisted associations, not just a possibly stale cache/vector.
+	auto links=m_database->QueryDatabase(fmt::format(
+		"SELECT dz.id FROM shared_task_dynamic_zones sd JOIN dynamic_zones dz ON dz.id=sd.dynamic_zone_id "
+		"JOIN instance_list i ON i.id=dz.instance_id WHERE sd.shared_task_id={} AND dz.type=4 AND i.zone={} AND i.version={}",
+		run.id,phase->zone,phase->version));
+	if (!links.Success() || links.RowCount()>1) return;
+	DynamicZone* actual=nullptr;
+	if (links.RowCount()==1) {
+		const auto id=SharedTaskAdmission::Number(links.begin()[0]);
+		if (!id || *id>UINT32_MAX) return;
+		auto cached=dynamic_zone_manager.dynamic_zone_cache.find(static_cast<uint32_t>(*id));
+		if (cached==dynamic_zone_manager.dynamic_zone_cache.end() || !cached->second) return;
+		actual=cached->second.get();
+	}
+	auto claim=m_database->QueryDatabase(fmt::format(
+		"INSERT IGNORE INTO kithicor_mission_phases "
+		"(shared_task_id,phase,task_id,model_version,seed,updated_at) VALUES ({},{},{},{},SHA2(CONCAT({},':',{},':',{}),256),UNIX_TIMESTAMP())",
+		run.id,phase->phase,task.id,KithicorMission::Model,run.id,phase->phase,KithicorMission::Model));
+	if (!claim.Success()) return;
+	if (!actual) {
+		if (claim.RowsAffected()!=1) return; // Existing linkless intent cannot create again.
+		const auto remaining=run.expire_time-std::time(nullptr);
+		if (remaining<=1 || static_cast<uint64_t>(remaining)>UINT32_MAX) return;
+		dz.SetDuration(static_cast<uint32_t>(remaining-1)); // Never exceed the original absolute deadline.
+		actual=dynamic_zone_manager.TryCreate(dz,members);
+		if (!actual) return;
+		auto link=m_database->QueryDatabase(fmt::format(
+			"INSERT INTO shared_task_dynamic_zones(shared_task_id,dynamic_zone_id) VALUES ({},{})",run.id,actual->GetID()));
+		if (!link.Success() || link.RowsAffected()!=1) return;
+	}
+	if (!actual->IsValid() || actual->IsExpired() || actual->GetType()!=DynamicZoneType::Mission ||
+		actual->GetZoneID()!=phase->zone || actual->GetZoneVersion()!=phase->version || actual->GetExpireTime()>static_cast<uint64_t>(run.expire_time)) return;
+	const auto member_list=Strings::Join(ids,",");
+	auto cached_ids=actual->GetMemberIds();
+	std::sort(cached_ids.begin(),cached_ids.end());
+	if (cached_ids!=ids) return;
+	auto canonical_members=m_database->QueryDatabase(fmt::format("SELECT character_id FROM shared_task_members WHERE shared_task_id={} ORDER BY character_id",run.id));
+	if (!canonical_members.Success() || canonical_members.RowCount()!=ids.size()) return;
+	std::vector<uint32_t> persisted_ids;
+	for (auto row:canonical_members) {
+		const auto id=SharedTaskAdmission::Number(row[0]);
+		if (!id || !*id || *id>UINT32_MAX) return;
+		persisted_ids.push_back(static_cast<uint32_t>(*id));
+	}
+	if (persisted_ids!=ids) return;
+	auto checked=m_database->QueryDatabase(fmt::format(
+		"SELECT EXISTS(SELECT 1 FROM shared_task_dynamic_zones WHERE shared_task_id={} AND dynamic_zone_id={}),"
+		"(SELECT COUNT(*) FROM dynamic_zone_members WHERE dynamic_zone_id={}),"
+		"(SELECT COUNT(*) FROM dynamic_zone_members WHERE dynamic_zone_id={} AND character_id IN ({})),"
+		"(SELECT COUNT(*) FROM shared_task_members WHERE shared_task_id={} AND character_id IN ({}))",
+		run.id,actual->GetID(),actual->GetID(),actual->GetID(),member_list,run.id,member_list));
+	if (!checked.Success() || checked.RowCount()!=1) return;
+	auto row=checked.begin();
+	const auto link=SharedTaskAdmission::Number(row[0]), all=SharedTaskAdmission::Number(row[1]);
+	const auto matched=SharedTaskAdmission::Number(row[2]), canonical=SharedTaskAdmission::Number(row[3]);
+	if (!link || *link!=1 || !all || *all!=ids.size() || !matched || *matched!=ids.size() || !canonical || *canonical!=ids.size()) return;
+	auto ready=m_database->QueryDatabase(fmt::format(
+		"UPDATE kithicor_mission_phases SET ready=1,dynamic_zone_id={},instance_id={},updated_at=UNIX_TIMESTAMP() "
+		"WHERE shared_task_id={} AND phase={} AND task_id={} AND model_version={} AND scene_state<>3 "
+		"AND ((ready=0 AND dynamic_zone_id=0 AND instance_id=0) OR (ready=1 AND dynamic_zone_id={} AND instance_id={}))",
+		actual->GetID(),actual->GetInstanceID(),run.id,phase->phase,task.id,KithicorMission::Model,actual->GetID(),actual->GetInstanceID()));
+	if (!ready.Success() || !KithicorMission::Ready(*m_database,run.id,*phase,actual->GetID(),actual->GetInstanceID())) return;
+	if (std::find(shared->dynamic_zone_ids.begin(),shared->dynamic_zone_ids.end(),actual->GetID())==shared->dynamic_zone_ids.end())
+		shared->dynamic_zone_ids.push_back(actual->GetID());
+	// Generic creation broadcasts early; only this post-readback readiness is
+	// consumable by Kithicor Zone travel and arrival checks.
+	actual->SendCreationToZones();
 }
 
 void SharedTaskManager::LoadDynamicZoneTemplate(SharedTask* s)
@@ -1594,7 +1719,9 @@ bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskR
 		if(!sod_origin||!SodAdmission::Matches(*sod_origin,request.character_ids))return false;
 		for(auto id:request.character_ids){auto* member=ClientList::Instance()->FindCLEByCharacterID(id);if(!member||!member->Server())return false;}
 		if(request.lowest_level<65||request.highest_level-request.lowest_level>15)return false;
-		const auto avg=SharedTaskAdmission::CheckAverage(*m_database,75,request.character_ids);if(!avg||!*avg)return false;
+		if(!SodProgression::IsKithicorSharedTask(task_id)) {
+			const auto avg=SharedTaskAdmission::CheckAverage(*m_database,75,request.character_ids);if(!avg||!*avg)return false;
+		}
 	}
 	// check if party member count is below the minimum
 	if (!is_gm && task.min_players > 0 && (SodRewardQuote::Shared(task_id) ? sod_origin->player_count+sod_origin->merc_count : request.members.size()) < task.min_players) {
@@ -1675,7 +1802,7 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 	if (!s || !character_id) {
 		return false;
 	}
-	if(SodRewardQuote::Shared(s->GetTaskData().id)) {
+	if(SodRewardQuote::Shared(s->GetTaskData().id) && !SodProgression::IsKithicorSharedTask(s->GetTaskData().id)) {
 		auto state=m_database->QueryDatabase(fmt::format("SELECT state FROM sod_task_scene_runs WHERE shared_task_id={}",s->GetDbSharedTask().id));
 		if(!state.Success()||state.RowCount()>1||(state.RowCount()==1&&SharedTaskAdmission::Number(state.begin()[0])!=std::optional<uint64_t>(0)))return false;
 	}

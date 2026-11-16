@@ -1,6 +1,7 @@
 #include "zone/sod_progression.h"
 #include "common/sod_admission.h"
 #include "common/sod_reward_quote.h"
+#include "common/sod_faction_reward.h"
 #include "fungal_item_operation_source.h"
 #include <ctime>
 #include "fire_run_terminal_scene.h"
@@ -7519,9 +7520,7 @@ int Client::GrantSodFaction(uint32 pending,uint64 entry,uint32 faction,uint32 am
  auto owned=database.QueryDatabase(fmt::format("SELECT task_id FROM character_task_reward_selections WHERE pending_reward_id={} AND character_id={} AND selected_option_id>0 AND status=0",pending,CharacterID()));
  if(!owned.Success()||owned.RowCount()!=1)return 0;
  auto task=SharedTaskAdmission::Number(owned.begin()[0]);if(!task||*task>UINT32_MAX||!SodRewardQuote::Range(*task).maximum)return 0;
- const bool sergeant=*task==920175||*task==920176||*task==920177;
- const bool hiran=*task==920178||*task==920179;
- const uint32 expected=faction==1222?(sergeant?10:30):((sergeant||hiran)&&faction==1200?(sergeant?10:30):((sergeant||hiran)&&(faction==1199||faction==1221)?(sergeant?1:3):0));
+ const uint32 expected=SodFactionReward::ExpectedBase(static_cast<uint32_t>(*task),faction);
  if(amount!=expected)return 0;
  FactionMods mods;if(!content_db.GetFactionData(&mods,GetClass(),GetFactionRace(),GetDeity(),faction))return 0;
  m_sod_faction_pending=pending;m_sod_faction_entry=entry;m_sod_faction_id=faction;m_sod_faction_committed=false;

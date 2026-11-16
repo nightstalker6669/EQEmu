@@ -1205,6 +1205,7 @@ RULE_INT(Housing, ReviewedPersonalTransferLimit, 0, "Explicit reviewed personal 
 RULE_CATEGORY_END()
 
 RULE_CATEGORY(SodProgression)
+RULE_BOOL(SodProgression, EnableKithicorSlice, false, "Enable reviewed original Kithicor group progression, two-stage Safe Passage, earned Void routing and J3. Leave off until matched content is installed.")
 RULE_BOOL(SodProgression, EnableOceangreenSlice, false, "Enable reviewed original Oceangreen completion, request and Void A/B routing. Does not lower zone status restrictions. Leave off until the entire content slice is reviewed and installed.")
 RULE_CATEGORY_END()
 

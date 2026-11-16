@@ -384,6 +384,10 @@ public:
 	bool SodHiranTravel(Lua_NPC npc, bool return_to_keep);
 	bool SodChiefKey(Lua_NPC giver);
 	std::string SodActorGrounding(Lua_NPC actor);
+	bool SodKithicorTravel(Lua_NPC giver, bool return_to_camp);
+	bool SodKithicorBook(uint32 door_id);
+	bool SodKithicorBurn(Lua_NPC target);
+	bool SodKithicorPoison(Lua_NPC giver);
 	int SodSceneState(uint32 task);
 	bool SodRestoreSceneVictory(uint32 task);
 	bool SodSceneTransition(uint32 task, int expected, int next);

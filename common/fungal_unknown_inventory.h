@@ -1,3 +1,4 @@
+namespace KithicorPoisonTrade {class Writer;}
 namespace RechargeRecipe8 {class Custody;}
 namespace TrophyCertificate55 {class Custody;}
 #pragma once
@@ -12,6 +13,7 @@ class NativeCustody;
 // No new authority, task grant API, whitelist or Fire action-table reuse.
 class UnknownInventory final {
  friend class NativeCustody;
+ friend class KithicorPoisonTrade::Writer;
  friend class TrophyCertificate55::Custody;
  friend class RechargeRecipe8::Custody;
  UnknownInventory()=default;

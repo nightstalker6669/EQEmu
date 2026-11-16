@@ -110,6 +110,7 @@ public:
 
 	// dz
 	void CreateDynamicZone(SharedTask *s, DynamicZone &dz_request);
+	void EnsureKithicorPhase(SharedTask *s, const DynamicZone &request);
 
 	void PurgeAllSharedTasks();
 

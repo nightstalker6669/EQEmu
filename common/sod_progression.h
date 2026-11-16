@@ -41,8 +41,8 @@ constexpr Credit Korafax(const Evidence& evidence)
 }
 
 // This is the highest positively proved stage, not a claim that unbound paths
-// are incomplete. In this packet only the four-task Oceangreen group path is
-// bound; other themes, raid aggregation and F/G remain explicitly unknown.
+// are incomplete. The Oceangreen and Kithicor group paths are bound;
+// other themes, raid aggregation and F/G remain explicitly unknown.
 constexpr VoidStage ProvenVoidStage(const Evidence& evidence)
 {
 	unsigned count = 0;
@@ -79,6 +79,14 @@ inline constexpr std::array<TaskBinding, 4> OceangreenGroupTasks{{
 	{920180, "Beat the Blackburrow Boss"}
 }};
 
+inline constexpr std::array<TaskBinding, 3> KithicorGroupTasks{{
+	{920191, "Rain of Ruin"},
+	{920192, "Safe Passage"},
+	{920193, "Bitter Victuals"}
+}};
+constexpr bool IsKithicorTask(uint32_t task) { return task >= 920191 && task <= 920196; }
+constexpr bool IsKithicorSharedTask(uint32_t task) { return task == 920192 || task == 920193; }
+
 // Exact current source/door and source/zone-point mappings for default
 // returns only. Explicit A, bind, GM summon and internal Void paths are not
 // default return contexts. No client-supplied zone ID alone establishes one.
@@ -98,5 +106,8 @@ constexpr bool IsDefaultVoidReturnPoint(uint32_t source, uint32_t point)
 
 constexpr bool IsReservedOceangreenTask(uint32_t task) { return (task >= 920175 && task <= 920187) || task == 920190; }
 constexpr bool IsOceangreenRequest(uint32_t task) { return task >= 920175 && task <= 920190; }
+
+constexpr bool IsSodRequest(uint32_t task) { return IsOceangreenRequest(task) || IsKithicorTask(task); }
+constexpr bool IsBoundTask(uint32_t task) { return IsReservedOceangreenTask(task) || IsKithicorTask(task); }
 
 } // namespace SodProgression

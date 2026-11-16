@@ -1,4 +1,4 @@
-> **Current Oceangreen release:** install the matched native source, fifteen quests and database inputs together. Read [accepted scope and the additive upgrade path](OCEANGREEN.md). The full database export is fresh-empty-only; preserve player databases. The historical installation details below remain as provenance.
+> **Current matched progression release:** install the native server, all thirty-three pinned quests and database inputs together. Read the [Kithicor/Void C/J3 scope and upgrade guide](KITHICOR.md) and the retained [Oceangreen qualifications](OCEANGREEN.md). Full SQL is fresh-empty-only; existing player databases use the matched reviewed additive migrations. Historical installation details below remain as provenance.
 
 > **Combined release source:** see [the 2026-11-06 release guide](RELEASE-2026-11-06.md). Branch layout and build statements below retain historical provenance.
 

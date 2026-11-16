@@ -1,4 +1,5 @@
 #include "../common/fungal_unknown_inventory.h"
+#include "../common/kithicor_poison_custody.h"
 #include "inventory_session_owner.h"
 #include "housing_inventory_bridge.h"
 #include "client.h"
@@ -35,5 +36,15 @@ std::optional<Lease> ZoneReservation::SnapshotFor(const Client& c)const {
 void ZoneReservation::ReleaseAfterCompleteDelete(){
  if(released_)return; // Token/release history stays durable even if next epoch starts.
  if(!Housing::InventoryBridge::IsRegisteredZoneThread())for(;;)Wait();
+ // The actual complete-delete boundary, not disconnect/timer, resolves only
+ // this feature's pending physical outcome on a FRESH exclusive connection.
+ // Until verified/committed, ordinary Release also remains journal-gated.
+ for(;;){try{
+  const auto* cfg=EQEmuConfig::get();if(!cfg){Wait();continue;}
+  Database db;if(!db.Connect(cfg->DatabaseHost,cfg->DatabaseUsername,cfg->DatabasePassword,cfg->DatabaseDB,cfg->DatabasePort,"kithicor-complete-delete")){Wait();continue;}
+  if(!db.TransactionBeginStrict().Success()){Wait();continue;}
+  KithicorPoisonCustody::ReconcilePhysicalUnderTransaction(db,lease_);
+  if(db.TransactionCommitStrict().Success())break;
+ }catch(...){}Wait();}
  for(;;){try{auto service=Fresh();if(service){auto closed=service->Release(lease_);if(closed){released_=true;lease_.active=false;FungalInventory::UnknownInventory::AfterCompleteDelete(lease_.actor.character_id);return;}if(closed.error==Error::CommitUncertain||closed.error==Error::DatabaseFailure){service.reset();auto fresh=Fresh();if(fresh){auto resolved=fresh->ResolveReleased(lease_);if(resolved&&resolved.value){released_=true;lease_.active=false;FungalInventory::UnknownInventory::AfterCompleteDelete(lease_.actor.character_id);return;}}}}}catch(...){}Wait();}}
 }

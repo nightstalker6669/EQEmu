@@ -1,4 +1,7 @@
 #include "common/sod_shared_activity.h"
+#include "common/kithicor_mission.h"
+#include "zone/kithicor_poison_trade.h"
+#include "common/sod_content_bindings.h"
 #include "zone/sod_admission.h"
 #include "common/sod_reward_quote.h"
 #include "../common/fungal_item_operation_wire.h"
@@ -901,7 +904,7 @@ void ClientTaskState::RecordCompletedTask(uint32_t character_id, const TaskInfor
 	if (RuleB(TasksSystem, KeepOneRecordPerCompletedTask))
 	{
 		size_t before = m_completed_tasks.size();
-		const bool sod_history = SodProgression::IsReservedOceangreenTask(client_task.task_id);
+		const bool sod_history = SodProgression::IsBoundTask(client_task.task_id);
 		const auto loaded_end = m_completed_tasks.begin() + std::min(m_completed_tasks.size(),
 			static_cast<size_t>(std::max(0, m_last_completed_task_loaded)));
 		const auto loaded_erased = std::count_if(m_completed_tasks.begin(), loaded_end,
@@ -1042,6 +1045,17 @@ int ClientTaskState::UpdateTasks(Client* client, const TaskUpdateFilter& filter,
 		for (const ClientActivityInformation& client_activity : client_task.activity)
 		{
 			const ActivityInformation& activity = task->activity_information[client_activity.activity_id];
+
+			// These four house defenders reuse types elsewhere. Require the
+			// actual reviewed source spawn, never a type-only match.
+			if (client_task.task_id==920191 && client_activity.activity_id==14 && filter.type==TaskActivityType::Kill) {
+				if (!filter.mob || !filter.mob->IsNPC() || zone->GetZoneID()!=456 ||
+					zone->GetInstanceVersion()!=0 || zone->GetInstanceID()!=0) continue;
+				auto* npc=filter.mob->CastToNPC();
+				const auto spawn=npc->GetSpawnPointID(), type=npc->GetNPCTypeID();
+				if (!((spawn==128274 && type==456140) || (spawn==128292 && type==456019) ||
+					(spawn==128304 && type==456031) || (spawn==128305 && type==456116))) continue;
+			}
 
 			if (CanUpdate(client, filter, client_task.task_id, activity, client_activity))
 			{
@@ -1241,6 +1255,44 @@ bool ClientTaskState::UpdateTasksOnDeliver(Client* client, std::vector<EQ::ItemI
 			continue;
 		}
 
+		// Poisoning is an actual item hand-in to six DISTINCT native chest
+		// identities, not six repetitions on a single chest. Only the bounded
+		// writer's actual post-COMMIT one-use callback can acknowledge debit.
+		if (item->GetID()==38504 && m_active_shared_task.task_id==920193 && zone->GetZoneID()==457 && zone->GetInstanceVersion()==2) {
+			const auto run=client->GetSharedTaskId();
+			unsigned chest=0;
+			for (unsigned n=1;n<=6;++n) {
+				const auto role=SodContent::Role(content_db,920193,fmt::format("victual_{}",n));
+				if (role && *role==npc->GetNPCTypeID()) { if(chest) { chest=0;break; } chest=n; }
+			}
+			if (!chest || run<=0 || !client->IsTaskActivityActive(920193,10)) continue;
+			if (!KithicorPoisonTrade::ConsumeAcknowledgment(*client,*npc,*item)) continue;
+			// The acknowledged writer owns this exact status0 reservation already.
+			// Requiring a new INSERT would reject every legitimate hand-in.
+			auto acknowledged=database.QueryDatabase(fmt::format(
+				"UPDATE kithicor_mission_actions a "
+				"JOIN kithicor_mission_phases p ON p.shared_task_id=a.shared_task_id AND p.phase=a.phase "
+				"JOIN shared_task_dynamic_zones sd ON sd.shared_task_id=p.shared_task_id AND sd.dynamic_zone_id=p.dynamic_zone_id "
+				"JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=sd.dynamic_zone_id AND dm.character_id={} "
+				"JOIN shared_tasks st ON st.id=p.shared_task_id AND st.task_id=920193 AND st.completion_time IS NULL AND st.expire_time>NOW() "
+				"JOIN shared_task_members sm ON sm.shared_task_id=st.id AND sm.character_id=dm.character_id "
+				"JOIN dynamic_zones dz ON dz.id=sd.dynamic_zone_id AND dz.instance_id=p.instance_id AND dz.type=4 "
+				"JOIN instance_list i ON i.id=dz.instance_id AND i.zone=457 AND i.version=2 "
+				"SET a.status=1,a.updated_at=UNIX_TIMESTAMP() "
+				"WHERE a.shared_task_id={} AND a.phase=0 AND a.action_id={} AND a.character_id={} AND a.item_id=38504 AND a.status=0 "
+				"AND p.task_id=920193 AND p.model_version={} AND p.ready=1 AND p.scene_state=1 AND p.instance_id={}",
+				client->CharacterID(),run,chest,client->CharacterID(),KithicorMission::Model,zone->GetInstanceID()));
+			if (!acknowledged.Success() || acknowledged.RowsAffected()!=1) continue;
+			item->SetTaskDeliveredCount(1);
+			is_updated=true;
+			auto total=database.QueryDatabase(fmt::format("SELECT COUNT(*) FROM kithicor_mission_actions WHERE shared_task_id={} AND phase=0 AND action_id BETWEEN 1 AND 6 AND item_id=38504 AND status=1",run));
+			if (total.Success() && total.RowCount()==1) {
+				const auto count=SharedTaskAdmission::Number(total.begin()[0]);
+				const auto current=m_active_shared_task.activity[10].done_count;
+				if (count && *count<=6 && *count>static_cast<uint64_t>(current)) client->UpdateTaskActivity(920193,10,static_cast<int>(*count)-current);
+			}
+			continue;
+		}
 		filter.item_id = item->GetID();
 
 		int count = item->IsStackable() ? item->GetCharges() : 1;
@@ -3688,7 +3740,7 @@ void ClientTaskState::AcceptNewTask(
 	// Recheck the original requester's durable prerequisites before any
 	// shared request is sent to World. World-confirmed participant delivery
 	// deliberately does not inherit requester-only requirements.
-	if (SodProgression::IsOceangreenRequest(task_id) &&
+	if (SodProgression::IsSodRequest(task_id) &&
 		!(client->m_requesting_shared_task && task->type == TaskType::Shared)) {
 		auto* giver = entity_list.GetNPCByID(npc_entity_id);
 		if (!giver || !client->CanRequestSodTask(task_id, giver->GetNPCTypeID())) return;
@@ -3715,7 +3767,7 @@ void ClientTaskState::AcceptNewTask(
 		if (!FirePersonalOccurrenceSource::SharedSuccessorNative::Stamp(*client,request,fire_origin)) return;
 		const bool correlated=fire_origin.source_occurrence!=0;
 		const auto sod=SodRewardQuote::Shared(task_id)?SodAdmission::Observe(*client,task_id):std::nullopt;
-		if(SodRewardQuote::Shared(task_id)&&!sod){client->Message(Chat::Red,"This task requires three to six eligible players and active mercenaries.");return;}
+		if(SodRewardQuote::Shared(task_id)&&!sod){client->Message(Chat::Red,task_id==920193?"This task requires one to six eligible players and active mercenaries.":"This task requires three to six eligible players and active mercenaries.");return;}
 		ServerPacket packet(ServerOP_SharedTaskRequest,sizeof(request)+(correlated?sizeof(fire_origin):0)+(sod?sizeof(SodAdmission::Proof):0));
 		std::memcpy(packet.pBuffer,&request,sizeof(request));
 		if(correlated) std::memcpy(packet.pBuffer+sizeof(request),&fire_origin,sizeof(fire_origin));
@@ -4319,7 +4371,7 @@ bool ClientTaskState::CanAcceptNewTask(Client* client, int task_id, int npc_enti
 	}
 
 
-	if (SodProgression::IsOceangreenRequest(task_id) &&
+	if (SodProgression::IsSodRequest(task_id) &&
 		(!giver->IsNPC() || !client->CanRequestSodTask(task_id, giver->GetNPCTypeID()))) return false;
 
 	auto dist = giver->CalculateDistance(client->GetX(), client->GetY(), client->GetZ());

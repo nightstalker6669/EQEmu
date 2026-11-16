@@ -21,6 +21,7 @@
 
 #include "zone/common.h"
 #include "zone/lua_client.h"
+#include "zone/lua_npc.h"
 #include "zone/lua_ptr.h"
 #include "zone/zone.h"
 
@@ -126,6 +127,7 @@ public:
 	int GetTimeZone();
 	std::string GetZoneDescription();
 	uint32 GetZoneID();
+	int KithicorEscortDeath(std::string identity, Lua_NPC actor);
 	bool FailSodScene(std::string identity);
 	uint8 GetZoneType();
 	float GetUnderworld();

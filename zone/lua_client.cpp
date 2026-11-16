@@ -1,4 +1,6 @@
 #include "common/sod_content_bindings.h"
+#include "common/kithicor_mission.h"
+#include "zone/doors.h"
 #include "common/sod_reward_quote.h"
 /*	EQEmu: EQEmulator
 
@@ -1485,8 +1487,161 @@ bool Lua_Client::SodChiefKey(Lua_NPC giver) {
  return receipt.Success()&&receipt.RowsAffected()==1;
 }
 
+bool Lua_Client::SodKithicorTravel(Lua_NPC source, bool return_to_camp) {
+ Lua_Safe_Call_Bool();
+ NPC* npc=source;
+ if(!RuleB(SodProgression,EnableKithicorSlice) || !zone || !npc ||
+  entity_list.GetNPCByID(npc->GetID())!=npc || npc->CalculateDistance(self)>25 || !self->GetTaskState())return false;
+ const auto& active=self->GetTaskState()->GetActiveSharedTask();
+ if(active.task_id!=920192 || self->GetSharedTaskId()<=0)return false;
+ const bool base=zone->GetZoneID()==456 && zone->GetInstanceVersion()==0 && zone->GetInstanceID()==0;
+ const KithicorMission::Phase* phase=nullptr;
+ if(return_to_camp) {
+  phase=KithicorMission::Find(920192,456,1);
+  const auto role=SodContent::Role(content_db,920192,"colonel_1");
+  if(base || !phase || !role || npc->GetNPCTypeID()!=*role || SodSceneState(920192)!=2 ||
+   active.activity[10].done_count<1 || !self->IsTaskActivityActive(920192,11))return false;
+ } else if(base) {
+  if(npc->GetNPCTypeID()!=456163 || active.activity[0].done_count<1)return false;
+  phase=active.activity[5].done_count>0?KithicorMission::Find(920192,456,1):KithicorMission::Find(920192,457,1);
+ } else {
+  const auto role=SodContent::Role(content_db,920192,"colonel_0");
+  if(zone->GetZoneID()!=457 || zone->GetInstanceVersion()!=1 || !role || npc->GetNPCTypeID()!=*role ||
+   SodSceneState(920192)!=2 || active.activity[5].done_count<1)return false;
+  phase=KithicorMission::Find(920192,456,1);
+ }
+ if(!phase || !KithicorMission::PriorSuccess(database,self->GetSharedTaskId(),*phase))return false;
+ const auto instance=GetSharedTaskInstanceID(920192,phase->zone,phase->version);
+ if(!instance) {
+  if(return_to_camp || phase->phase!=1)return false;
+  DynamicZone request(phase->zone,phase->version,0,DynamicZoneType::Mission);
+  self->CreateTaskDynamicZone(920192,request);
+  return false; // No travel until actual World link/roster/readiness acknowledgement.
+ }
+ if(return_to_camp && instance!=zone->GetInstanceID())return false;
+ if(!SodProgression::MissionEntry(database,content_db,self->CharacterID(),self->GetSharedTaskId(),phase->zone,phase->version,instance,false))return false;
+ for(auto* dz:self->GetDynamicZones(phase->zone,phase->version)) {
+  if(!dz || dz->GetInstanceID()!=instance || !KithicorMission::Ready(database,self->GetSharedTaskId(),*phase,dz->GetID(),instance))continue;
+  const auto& location=return_to_camp?dz->GetSafeReturnLocation():dz->GetZoneInLocation();
+  if(!std::isfinite(location.x) || !std::isfinite(location.y) || !std::isfinite(location.z) || !std::isfinite(location.heading))return false;
+  if(return_to_camp) {
+   if(location.zone_id!=456)return false;
+   self->MovePC(456,0,location.x,location.y,location.z,location.heading);
+  } else {
+   if(!dz->HasZoneInLocation())return false;
+   dz->MovePCInto(self);
+  }
+  return true;
+ }
+ return false;
+}
+
+// Called only by the actual spell8140 NPC effect event. Verify the live
+// native item cast as well as the retained original world placement.
+bool Lua_Client::SodKithicorBurn(Lua_NPC target) {
+ Lua_Safe_Call_Bool();
+ NPC* npc=target;
+ if(!RuleB(SodProgression,EnableKithicorSlice) || !zone || zone->GetZoneID()!=456 ||
+  zone->GetInstanceVersion()!=0 || zone->GetInstanceID()!=0 || !npc || npc->GetHP()<=0 ||
+  entity_list.GetNPCByID(npc->GetID())!=npc || !self->IsTaskActive(920191) ||
+  self->CastingSpellID()!=8140 || !self->IsCastingFromItem() || npc->CalculateDistance(self)>100)return false;
+ const auto* item=self->GetInv().GetItem(self->GetCastedSpellInvSlot());
+ if(!item || item->GetID()!=37641 || !item->GetItem() || item->GetItem()->Click.Effect!=8140)return false;
+ const auto source=npc->GetSpawnPointID(), type=npc->GetNPCTypeID();
+ int activity=-1;
+ if(source==128171 && type==456102)activity=6;
+ else if(source==128288 && type==456145)activity=15;
+ else if(type==456155 && (source==128323 || source==128363 || source==128385 || source==128405))activity=18;
+ if(activity<0 || !self->IsTaskActivityActive(920191,activity))return false;
+ auto* state=self->GetTaskState();
+ int active_slot=-1;
+ if(!state)return false;
+ for(int slot=0;slot<MAXACTIVEQUESTS;++slot) {
+  if(state->GetActiveTaskID(slot)==920191) { if(active_slot>=0)return false;active_slot=slot; }
+ }
+ if(active_slot<0)return false;
+ const auto accepted_time=state->GetTaskStartTime(TaskType::Quest,active_slot);
+ if(accepted_time<=0)return false;
+ auto occurrence=database.QueryDatabase(fmt::format(
+  "SELECT occurrence_id FROM character_task_reward_instances WHERE character_id={} AND task_id=920191 AND accepted_time={}",
+  self->CharacterID(),accepted_time));
+ if(!occurrence.Success() || occurrence.RowCount()!=1)return false;
+ const auto identity=SharedTaskAdmission::Number(occurrence.begin()[0]);
+ if(!identity || !*identity)return false;
+ // Four houses means four distinct original placements in this exact native
+ // personal occurrence, including after zoning/relog or a source respawn.
+ auto receipt=database.QueryDatabase(fmt::format(
+  "INSERT IGNORE INTO kithicor_personal_burns(character_id,occurrence_id,task_id,spawn_id,activity_id,cast_at) "
+  "VALUES ({},{},920191,{},{},UNIX_TIMESTAMP())",self->CharacterID(),*identity,source,activity));
+ if(!receipt.Success())return false;
+ auto total=database.QueryDatabase(fmt::format(
+  "SELECT COUNT(*) FROM kithicor_personal_burns WHERE character_id={} AND occurrence_id={} AND task_id=920191 AND activity_id={}",
+  self->CharacterID(),*identity,activity));
+ if(!total.Success() || total.RowCount()!=1)return false;
+ const auto count=SharedTaskAdmission::Number(total.begin()[0]);
+ const unsigned maximum=activity==18?4u:1u;
+ if(!count || *count>maximum)return false;
+ const auto current=state->GetTaskActivityDoneCount(TaskType::Quest,active_slot,activity);
+ if(current>=0 && *count>static_cast<uint64_t>(current))self->UpdateTaskActivity(920191,activity,static_cast<int>(*count)-current);
+ // Preserve normal source respawn; no fabricated kill/loot/EXP/faction event.
+ npc->Depop(true);
+ return true;
+}
+
+bool Lua_Client::SodKithicorBook(uint32 door_id) {
+ Lua_Safe_Call_Bool();
+ if(!RuleB(SodProgression,EnableKithicorSlice) || !zone || zone->GetZoneID()!=456 ||
+  zone->GetInstanceVersion()!=0 || zone->GetInstanceID()!=0 || door_id!=19 || !self->GetTaskState() ||
+  self->GetTaskState()->GetActiveSharedTask().task_id!=920193)return false;
+ auto* door=entity_list.FindDoor(19);
+ if(!door || door->GetDoorDBID()!=18760)return false;
+ const auto& point=door->GetPosition();
+ const float dx=self->GetX()-point.x,dy=self->GetY()-point.y,dz_distance=self->GetZ()-point.z;
+ if(!std::isfinite(dx) || !std::isfinite(dy) || !std::isfinite(dz_distance) || dx*dx+dy*dy+dz_distance*dz_distance>625.0f)return false;
+ const auto instance=GetSharedTaskInstanceID(920193,457,2);
+ if(!instance || !SodProgression::MissionEntry(database,content_db,self->CharacterID(),self->GetSharedTaskId(),457,2,instance,false))return false;
+ for(auto* dz:self->GetDynamicZones(457,2)) {
+  const auto* phase=KithicorMission::Find(920193,457,2);
+  if(!dz || dz->GetInstanceID()!=instance || !dz->HasZoneInLocation() || !phase ||
+   !KithicorMission::Ready(database,self->GetSharedTaskId(),*phase,dz->GetID(),instance))continue;
+  // Actual physical book click, durably bound to the current shared run.
+  auto touch=database.QueryDatabase(fmt::format("INSERT IGNORE INTO kithicor_mission_actions(shared_task_id,phase,action_id,character_id,item_id,status,updated_at) VALUES ({},0,60,{},0,1,UNIX_TIMESTAMP())",self->GetSharedTaskId(),self->CharacterID()));
+  if(!touch.Success())return false;
+  if(self->IsTaskActivityActive(920193,0))self->UpdateTaskActivity(920193,0,1);
+  dz->MovePCInto(self);
+  return true;
+ }
+ return false;
+}
+
+bool Lua_Client::SodKithicorPoison(Lua_NPC giver) {
+ Lua_Safe_Call_Bool();
+ NPC* npc=giver;
+ if(!npc || !zone || zone->GetZoneID()!=457 || zone->GetInstanceVersion()!=2 || SodSceneState(920193)!=1 ||
+  entity_list.GetNPCByID(npc->GetID())!=npc || npc->CalculateDistance(self)>25 || !self->IsTaskActivityActive(920193,10))return false;
+ const auto role=SodContent::Role(content_db,920193,"Selkith");
+ if(!role || npc->GetNPCTypeID()!=*role)return false;
+ auto claim=database.QueryDatabase(fmt::format("INSERT IGNORE INTO kithicor_mission_actions(shared_task_id,phase,action_id,character_id,item_id,status,updated_at) VALUES ({},0,50,{},38504,0,UNIX_TIMESTAMP())",self->GetSharedTaskId(),self->CharacterID()));
+ if(!claim.Success() || claim.RowsAffected()!=1)return false;
+ bool saved=false;
+ const bool granted=self->SummonItem(38504,6,0,0,0,0,0,0,false,EQ::invslot::slotCursor,0,0,0,&saved);
+ if(!granted || !saved)return false; // Hold ambiguous native grant; never replay it.
+ auto ack=database.QueryDatabase(fmt::format("UPDATE kithicor_mission_actions SET status=1,updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND phase=0 AND action_id=50 AND character_id={} AND item_id=38504 AND status=0",self->GetSharedTaskId(),self->CharacterID()));
+ return ack.Success() && ack.RowsAffected()==1;
+}
+
 int Lua_Client::SodSceneState(uint32 task) {
  Lua_Safe_Call_Int();
+ if(SodProgression::IsKithicorSharedTask(task)) {
+  if(!zone || !self->CanEnterZone() || !zone->GetInstanceID() ||
+   GetSharedTaskInstanceID(task,zone->GetZoneID(),zone->GetInstanceVersion())!=zone->GetInstanceID())return -1;
+  const auto* phase=KithicorMission::Find(task,zone->GetZoneID(),zone->GetInstanceVersion());
+  if(!phase)return -1;
+  auto q=database.QueryDatabase(fmt::format("SELECT scene_state FROM kithicor_mission_phases WHERE shared_task_id={} AND phase={} AND task_id={} AND model_version={} AND ready=1 AND instance_id={}",self->GetSharedTaskId(),phase->phase,task,KithicorMission::Model,zone->GetInstanceID()));
+  if(!q.Success() || q.RowCount()!=1)return -1;
+  const auto state=SharedTaskAdmission::Number(q.begin()[0]);
+  return state && *state<=3 ? static_cast<int>(*state) : -1;
+ }
  if(!zone||!self->CanEnterZone()||!SodRewardQuote::Shared(task)||!zone->GetInstanceID()||
   GetSharedTaskInstanceID(task,zone->GetZoneID(),zone->GetInstanceVersion())!=zone->GetInstanceID())return -1;
  auto q=database.QueryDatabase(fmt::format("SELECT state FROM sod_task_scene_runs WHERE shared_task_id={} AND task_id={} AND instance_id={} AND model_version=2",self->GetSharedTaskId(),task,zone->GetInstanceID()));
@@ -1495,6 +1650,31 @@ int Lua_Client::SodSceneState(uint32 task) {
 }
 bool Lua_Client::SodRestoreSceneVictory(uint32 task) {
  Lua_Safe_Call_Bool();
+ if(SodProgression::IsKithicorSharedTask(task)) {
+  const auto scene=SodSceneState(task);
+  if(scene<0 || scene==3)return false;
+  const auto* phase=KithicorMission::Find(task,zone->GetZoneID(),zone->GetInstanceVersion());
+  const auto* state=self->GetTaskState();
+  if(!phase || !state || state->GetActiveSharedTask().task_id!=task)return false;
+  int activity=-1, goal=0;
+  if(task==920192 && scene==2) { activity=phase->phase==0?4:9;goal=1; }
+  else if(task==920193) {
+   if(self->IsTaskActivityActive(task,0)) {
+    auto touch=database.QueryDatabase(fmt::format("SELECT status FROM kithicor_mission_actions WHERE shared_task_id={} AND phase=0 AND action_id=60",self->GetSharedTaskId()));
+    if(touch.Success() && touch.RowCount()==1 && SharedTaskAdmission::Number(touch.begin()[0])==std::optional<uint64_t>(1))self->UpdateTaskActivity(task,0,1);
+   }
+   auto receipts=database.QueryDatabase(fmt::format("SELECT COUNT(*) FROM kithicor_mission_actions WHERE shared_task_id={} AND phase=0 AND action_id BETWEEN 1 AND 6 AND item_id=38504 AND status=1",self->GetSharedTaskId()));
+   if(!receipts.Success() || receipts.RowCount()!=1)return false;
+   const auto count=SharedTaskAdmission::Number(receipts.begin()[0]);
+   if(!count || *count>6)return false;
+   activity=10;goal=static_cast<int>(*count);
+  }
+  if(activity>=0 && self->IsTaskActivityActive(task,activity)) {
+   const int current=state->GetActiveSharedTask().activity[activity].done_count;
+   if(current>=0 && current<goal)self->UpdateTaskActivity(task,activity,goal-current);
+  }
+  return true;
+ }
  const int scene=SodSceneState(task);
  if(scene!=2&&!(task==920180&&(scene==4||scene==5||scene==6)))return false;
  if(task==920180&&scene==6&&!SodSceneTransition(task,6,2))return false;
@@ -1522,6 +1702,13 @@ bool Lua_Client::SodRestoreSceneVictory(uint32 task) {
 
 bool Lua_Client::SodSceneTransition(uint32 task,int expected,int next) {
  Lua_Safe_Call_Bool();
+ if(SodProgression::IsKithicorSharedTask(task)) {
+  if(!((expected==0 && next==1) || (expected==1 && (next==2 || next==3))) || SodSceneState(task)!=expected)return false;
+  const auto* phase=KithicorMission::Find(task,zone->GetZoneID(),zone->GetInstanceVersion());
+  if(!phase || !KithicorMission::PriorSuccess(database,self->GetSharedTaskId(),*phase))return false;
+  auto q=database.QueryDatabase(fmt::format("UPDATE kithicor_mission_phases SET scene_state={},started_at=IF(started_at=0,UNIX_TIMESTAMP(),started_at),updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND phase={} AND task_id={} AND model_version={} AND ready=1 AND instance_id={} AND scene_state={}",next,self->GetSharedTaskId(),phase->phase,task,KithicorMission::Model,zone->GetInstanceID(),expected));
+  return q.Success() && q.RowsAffected()==1;
+ }
  if(expected<0||expected>6||next<1||next>6||next==expected||SodSceneState(task)!=expected)return false;
  // Allowed mission lifecycle edges only. Failed/success receipts never reset.
  const bool hiran=task==920178||task==920179;
@@ -1546,6 +1733,15 @@ bool Lua_Client::SodSceneTransition(uint32 task,int expected,int next) {
 int Lua_Client::SodSceneDraw(uint32 task,uint32 index,uint32 range) {
  Lua_Safe_Call_Int();
  if(index>100000||!range||range>10000||SodSceneState(task)!=1)return -1;
+ if(SodProgression::IsKithicorSharedTask(task)) {
+  const auto* phase=KithicorMission::Find(task,zone->GetZoneID(),zone->GetInstanceVersion());
+  if(!phase)return -1;
+  auto r=database.QueryDatabase(fmt::format("SELECT MOD(CONV(SUBSTRING(SHA2(CONCAT(seed,':',{}),256),1,8),16,10),{}) FROM kithicor_mission_phases WHERE shared_task_id={} AND phase={} AND task_id={} AND model_version={} AND instance_id={} AND ready=1 AND scene_state=1",index,range,self->GetSharedTaskId(),phase->phase,task,KithicorMission::Model,zone->GetInstanceID()));
+  if(!r.Success() || r.RowCount()!=1)return -1;
+  const auto n=SharedTaskAdmission::Number(r.begin()[0]);
+  return n && *n<range ? static_cast<int>(*n) : -1;
+ }
+
  auto r=database.QueryDatabase(fmt::format("SELECT MOD(CONV(SUBSTRING(SHA2(CONCAT(seed,':',{}),256),1,8),16,10),{}) FROM sod_task_scene_runs WHERE shared_task_id={} AND task_id={} AND instance_id={} AND state=1",index,range,self->GetSharedTaskId(),task,zone->GetInstanceID()));
  if(!r.Success()||r.RowCount()!=1)return -1;auto n=SharedTaskAdmission::Number(r.begin()[0]);return n&&*n<range?static_cast<int>(*n):-1;
 }
@@ -1763,6 +1959,10 @@ uint16 Lua_Client::GetSharedTaskInstanceID(uint32 task_id, uint32 zone_id, uint3
 		}
 		for (const auto &mapping : mappings) {
 			if (mapping.dynamic_zone_id == dz->GetID()) {
+				if (SodProgression::IsKithicorSharedTask(task_id)) {
+					const auto* phase=KithicorMission::Find(task_id,zone_id,zone_version);
+					if (!phase || !KithicorMission::Ready(database,static_cast<uint64_t>(identity),*phase,dz->GetID(),dz->GetInstanceID())) continue;
+				}
 				if (instance_id != 0) {
 					return 0; // Ambiguous mappings must not consume a travel ticket.
 				}
@@ -4353,6 +4553,10 @@ luabind::scope lua_register_client() {
 	.def("SodHiranTravel", &Lua_Client::SodHiranTravel)
 	.def("SodChiefKey", &Lua_Client::SodChiefKey)
 	.def("SodActorGrounding", &Lua_Client::SodActorGrounding)
+	.def("SodKithicorTravel", &Lua_Client::SodKithicorTravel)
+	.def("SodKithicorBook", &Lua_Client::SodKithicorBook)
+	.def("SodKithicorBurn", &Lua_Client::SodKithicorBurn)
+	.def("SodKithicorPoison", &Lua_Client::SodKithicorPoison)
 	.def("SodSceneState", &Lua_Client::SodSceneState)
 	.def("SodRestoreSceneVictory", &Lua_Client::SodRestoreSceneVictory)
 	.def("SodSceneTransition", &Lua_Client::SodSceneTransition)

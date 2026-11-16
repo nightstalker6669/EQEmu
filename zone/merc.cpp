@@ -5075,16 +5075,22 @@ void Client::UpdateMercTimer()
 
 void Client::FilterSodMercenaryOffers(std::list<MercData>& offers)
 {
-	// Explicitly scoped to the opt-in Oceangreen reconstruction. Active GM
-	// mode bypasses this new progression check only, not other hire checks.
-	if (!RuleB(SodProgression, EnableOceangreenSlice) || GetGM()) return;
+	if (GetGM()) return;
+	const bool oceangreen = RuleB(SodProgression, EnableOceangreenSlice);
+	const bool kithicor = RuleB(SodProgression, EnableKithicorSlice);
+	if (!oceangreen && !kithicor) return;
 
-	int tier_state = -2; // Not read yet; the authoritative API returns -1/0/1.
-	offers.remove_if([this, &tier_state](const MercData& offer) {
+	// Offer and authoritative hire both use this filter. Each theme unlocks
+	// its own tier; J3 does not grant J2 and owned contracts are untouched.
+	std::array<int, 2> tier_state{{-2, -2}};
+	offers.remove_if([this, oceangreen, kithicor, &tier_state](const MercData& offer) {
 		const auto definition = zone->GetMercTemplate(offer.MercTemplateID);
-		if (!definition || definition->ProficiencyID != 2 || definition->TierID != 2) return false;
-		if (tier_state == -2) tier_state = GetSodJourneymanTierState(2);
-		return tier_state != 1; // Unknown history never grants a new J2 contract.
+		if (!definition || definition->ProficiencyID != 2) return false;
+		const auto tier = definition->TierID;
+		if (!((tier == 2 && oceangreen) || (tier == 3 && kithicor))) return false;
+		auto& state = tier_state[tier - 2];
+		if (state == -2) state = GetSodJourneymanTierState(tier);
+		return state != 1;
 	});
 }
 

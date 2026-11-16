@@ -325,6 +325,7 @@ def package(args):
         progression_docs = stage / 'docs/rof2'
         progression_docs.mkdir(parents=True)
         shutil.copy2(repo / 'docs/rof2/OCEANGREEN.md', progression_docs / 'OCEANGREEN.md')
+        shutil.copy2(repo / 'docs/rof2/KITHICOR.md', progression_docs / 'KITHICOR.md')
         limits = stage / 'CONTENT-LIMITS.md'
         with limits.open('a', encoding='utf-8') as output:
             output.write('\n## Mercenary level 86–100 content\n\n'
@@ -343,6 +344,7 @@ def package(args):
                          '[the accepted scope and additive-upgrade guide](docs/rof2/OCEANGREEN.md) and '
                          '[the J2 acquisition contract](common/mercenary/SOD-OCEANGREEN.md). '
                          'Packaging on another platform does not establish native gameplay acceptance there.\n')
+            output.write('\n## Kithicor reconstruction and qualification\n\nThe server includes the matched Kithicor native cohort and 18 exact quest files in addition to the 15 preserved Oceangreen quest files. The expanded per-actor route data is packaged byte-identically, including its 1,007,266-byte Lua data module. Geometry and navigation assets remain external resources; route samples do not replace native walking acceptance.\n\nCurrent native mission evidence belongs to the r8 scene cohort. The final r11 scene adds per-waypoint guard destinations and once-only holds at actual physical arrival; its supplied source and mock qualification is separate from future native walking proof. The stationary behavior of guards 615 and 616 has no confirmed cause in this change. Platform builds and packaging do not establish native gameplay acceptance. Read [the Kithicor guide](docs/rof2/KITHICOR.md) for the accepted content and remaining limits.\n\nUse the separately pinned sanitized database release. Full SQL is for a new empty database only. Existing player volumes require the exact reviewed, ordered additive upgrade and its source/content binding; never replay the fresh-only full SQL. Private runtime tables are schema-only in distributable database content, with no player, mission, reward, inventory-session or poison-custody rows. No release step may reset old runs, replay rewards, grant items or erase custody. The four private schema names and their empty-data proof must come from the final Database package manifest.\n')
         native = stage / 'server/bin'
         native.mkdir(parents=True)
         hashes, binaries = {}, []

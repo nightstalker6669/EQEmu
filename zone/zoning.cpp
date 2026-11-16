@@ -47,7 +47,7 @@ int Client::GetSodTaskCompletionState(uint32 task_id)
 
 SodProgression::Evidence Client::ReadSodProgression()
 {
-	return SodProgression::ReadOceangreenSlice(database, content_db, CharacterID());
+	return SodProgression::ReadEnabledGroupSlices(database, content_db, CharacterID());
 }
 
 uint32 Client::GetSodVoidZone()
@@ -70,20 +70,59 @@ int Client::GetSodJourneymanTierState(uint32 tier)
 bool Client::CanEnterSodProgressionZone(uint32 destination, int version, uint32 instance, bool preflight)
 {
 	if (!SodProgression::IsSodZone(destination)) return true;
-	if (!RuleB(SodProgression, EnableOceangreenSlice)) return false;
+	if (!SodProgression::AnyGroupSliceEnabled()) return false;
 	if (instance || version>0) {
 		const auto occurrence=GetSharedTaskId();
 		return occurrence>0 && SodProgression::MissionEntry(database, content_db, CharacterID(),
 			static_cast<uint64_t>(occurrence), destination, version, instance, preflight);
 	}
 	if (version<0) return false;
-	if (destination==468) return SodProgression::BlackburrowAccess(database, content_db, CharacterID(), IsTaskActive(920181));
-	return SodProgression::AllowsOceangreenSliceBase(ReadSodProgression(), destination);
+	if (destination==468) return RuleB(SodProgression, EnableOceangreenSlice) &&
+		SodProgression::BlackburrowAccess(database, content_db, CharacterID(), IsTaskActive(920181));
+	const auto evidence = ReadSodProgression();
+	if (!evidence.available) return false;
+	if (SodProgression::IsVoidZone(destination)) {
+		return destination <= SodProgression::VoidZone(SodProgression::ProvenVoidStage(evidence));
+	}
+	if (RuleB(SodProgression, EnableKithicorSlice) && (destination==456 || destination==457)) return true;
+	return RuleB(SodProgression, EnableOceangreenSlice) &&
+		SodProgression::AllowsOceangreenSliceBase(evidence, destination);
 }
 
 bool Client::CanRequestSodTask(uint32 task_id, uint32 npc_type_id)
 {
 	using SodProgression::Credit;
+	if (SodProgression::IsKithicorTask(task_id)) {
+		if (!RuleB(SodProgression, EnableKithicorSlice) || !zone || zone->GetZoneID()!=456 ||
+			zone->GetInstanceID()!=0 || zone->GetInstanceVersion()!=0 ||
+			!SodProgression::MayStartOrJoinTask(content_db, task_id)) return false;
+		uint32 giver = 0;
+		std::vector<uint32_t> prerequisites;
+		switch (task_id) {
+		case 920191: giver=456178; break;
+		case 920192: giver=456174; prerequisites={920194,920195}; break;
+		case 920193: giver=456171; prerequisites={920194,920195}; break;
+		case 920194: giver=456172; break;
+		case 920195: giver=456171; prerequisites={920194}; break;
+		case 920196: giver=456175; break;
+		default: return false;
+		}
+		if (npc_type_id!=giver) return false;
+		auto* npc=entity_list.GetNPCByNPCTypeID(giver);
+		if (!npc) return false;
+		// Native faction includes EQUIPPED item modifiers. Vengeance's Kindly
+		// threshold has period corroboration; no inventory-possession shortcut.
+		const auto faction=GetFactionLevel(CharacterID(),giver,GetFactionRace(),GetClass(),GetDeity(),npc->GetPrimaryFaction(),npc);
+		if (faction > (task_id==920195 ? FACTION_KINDLY : FACTION_AMIABLY)) return false;
+		if (prerequisites.empty()) return true;
+		const auto history=SodProgression::ReadCommittedTasks(database,content_db,CharacterID(),prerequisites);
+		if (!history.available) return false;
+		for (const auto prerequisite:prerequisites) {
+			const auto it=history.completion.find(prerequisite);
+			if (it==history.completion.end() || it->second!=Credit::Complete) return false;
+		}
+		return true;
+	}
 	if (!SodProgression::IsOceangreenRequest(task_id)) return true;
 	if (!RuleB(SodProgression, EnableOceangreenSlice) || !zone) return false;
 	if (!SodProgression::MayStartOrJoinTask(content_db, task_id)) return false;
@@ -237,7 +276,7 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 
 	// Only the verified original Hills -> Blackburrow zone point selects an
 	// admitted mission. Explicit/GM/bind/internal moves keep their destination.
-	if(RuleB(SodProgression,EnableOceangreenSlice)&&zone_mode==ZoneUnsolicited&&zone_point&&
+	if(SodProgression::AnyGroupSliceEnabled()&&zone_mode==ZoneUnsolicited&&zone_point&&
 	 zone->GetZoneID()==466&&zone->GetInstanceID()==0&&zone_point->number==30&&
 	 zone_point->target_zone_id==468&&zone_point->target_zone_instance==0&&target_zone_id==468&&target_instance_id==0&&GetTaskState()) {
 		const auto task=GetTaskState()->GetActiveSharedTask().task_id;
@@ -293,7 +332,7 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 
 	// Only redirect a verified default return from outside the Void. Never
 	// rewrite internal Void self-zone points, explicit variants or instances.
-	if (RuleB(SodProgression, EnableOceangreenSlice) && !GetGM() &&
+	if (SodProgression::AnyGroupSliceEnabled() && !GetGM() &&
 		zone_mode == ZoneUnsolicited && zone_point &&
 		SodProgression::IsDefaultVoidReturnPoint(zone->GetZoneID(), zone_point->number) &&
 		zone_point->target_zone_id == 459 && zone_point->target_zone_instance == 0 &&
@@ -454,7 +493,7 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 	auto zoning_message = ZoningMessage::ZoneSuccess;
 	// Ordinary scripted ignore_restrictions is not progression proof. Native
 	// GM-directed summons retain their administrative override for any target.
-	if (RuleB(SodProgression, EnableOceangreenSlice) && !GetGM() &&
+	if (SodProgression::AnyGroupSliceEnabled() && !GetGM() &&
 		zone_mode != GMSummon && zone_mode != GMHiddenSummon &&
 		SodProgression::IsSodZone(target_zone_id) && !CanEnterSodProgressionZone(target_zone_id, target_instance_version, target_instance_id)) {
 		zoning_message = ZoningMessage::ZoneNoExperience;
@@ -1603,7 +1642,7 @@ bool Client::CanEnterZone(const std::string& zone_short_name, int16 instance_ver
 	}
 
 
-	if (RuleB(SodProgression, EnableOceangreenSlice) && !GetGM() &&
+	if (SodProgression::AnyGroupSliceEnabled() && !GetGM() &&
 		SodProgression::IsSodZone(z->zoneidnumber)) {
 		// An empty destination is the current-zone arrival/login check, not
 		// destination preflight. Never borrow another matching instance's

@@ -547,7 +547,7 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 		uint32 destination_zone = ZoneID(m_destination_zone_name);
 		// Resolve only this actual configured default portal, after the normal
 		// door checks. Generic MovePC/GM/bind/explicit A calls remain untouched.
-		if (RuleB(SodProgression, EnableOceangreenSlice) && !sender->GetGM() &&
+		if ((RuleB(SodProgression, EnableOceangreenSlice) || RuleB(SodProgression, EnableKithicorSlice)) && !sender->GetGM() &&
 			destination_zone == 459 && m_destination_instance_id == 0 &&
 			SodProgression::IsDefaultVoidReturnDoor(zone->GetZoneID(), GetDoorDBID())) {
 			destination_zone = sender->GetSodVoidZone();

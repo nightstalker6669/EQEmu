@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common/database.h"
+#include "common/kithicor_mission.h"
 #include "common/rulesys.h"
 #include "common/shared_task_admission.h"
 #include "common/sod_progression.h"
@@ -28,7 +29,7 @@ inline TaskRead ReadCommittedTasks(Database& db, Database& content, uint32_t cha
 	TaskRead out;
 	if (!character || tasks.empty()) return out;
 	for (const auto id : tasks) {
-		if (!IsReservedOceangreenTask(id)) return out;
+		if (!IsBoundTask(id)) return out;
 	}
 	// Content and character databases may be separate schemas/servers. Never
 	// join tasks to player history through an assumed single DB connection.
@@ -86,6 +87,38 @@ inline Evidence ReadOceangreenSlice(Database& db, Database& content, uint32_t ch
 	return evidence;
 }
 
+// An enabled theme must have readable, acknowledged native history before a
+// new entitlement decision. Disabled and unbound themes remain unknown.
+inline Evidence ReadEnabledGroupSlices(Database& db, Database& content, uint32_t character)
+{
+	Evidence evidence;
+	if (RuleB(SodProgression, EnableOceangreenSlice)) {
+		evidence = ReadOceangreenSlice(db, content, character);
+		if (!evidence.available) return evidence;
+	}
+	if (RuleB(SodProgression, EnableKithicorSlice)) {
+		std::vector<uint32_t> ids;
+		for (const auto& task : KithicorGroupTasks) ids.push_back(task.id);
+		const auto tasks = ReadCommittedTasks(db, content, character, ids);
+		if (!tasks.available) return Evidence{};
+		Credit complete = Credit::Complete;
+		for (const auto& task : KithicorGroupTasks) {
+			const auto title = tasks.titles.find(task.id);
+			const auto credit = tasks.completion.find(task.id);
+			if (title == tasks.titles.end() || title->second != task.title || credit == tasks.completion.end()) return Evidence{};
+			if (credit->second != Credit::Complete) complete = Credit::Incomplete;
+		}
+		evidence.available = true;
+		evidence.group[static_cast<unsigned>(Theme::Kithicor)] = complete;
+	}
+	return evidence;
+}
+
+inline bool AnyGroupSliceEnabled()
+{
+	return RuleB(SodProgression, EnableOceangreenSlice) || RuleB(SodProgression, EnableKithicorSlice);
+}
+
 // A base Blackburrow visit is allowed during Summary Execution, then forever
 // from its acknowledged native completion. No invented key or player flag.
 inline bool BlackburrowAccess(Database& db, Database& content, uint32_t character, bool native_active)
@@ -132,7 +165,29 @@ inline bool MissionEntry(Database& db, Database& content, uint32_t character,
 		instance ? fmt::format("AND i.id={}",instance) : ""));
 	if (!native.Success() || native.RowCount()!=1) return false;
 	const auto task = SharedTaskAdmission::Number(native.begin()[0]);
-	if (!task || *task>UINT32_MAX || OceangreenMissionZone(static_cast<uint32_t>(*task))!=destination) return false;
+	if (!task || *task>UINT32_MAX) return false;
+	if (IsKithicorSharedTask(static_cast<uint32_t>(*task))) {
+		if (!RuleB(SodProgression, EnableKithicorSlice)) return false;
+		const auto* phase=KithicorMission::Find(static_cast<uint32_t>(*task),destination,version);
+		if (!phase || !KithicorMission::PriorSuccess(db,occurrence,*phase)) return false;
+		auto ready=db.QueryDatabase(fmt::format(
+			"SELECT p.dynamic_zone_id,p.instance_id FROM kithicor_mission_phases p "
+			"JOIN shared_task_dynamic_zones sd ON sd.shared_task_id=p.shared_task_id AND sd.dynamic_zone_id=p.dynamic_zone_id "
+			"JOIN dynamic_zones dz ON dz.id=sd.dynamic_zone_id JOIN instance_list i ON i.id=dz.instance_id "
+			"JOIN shared_tasks st ON st.id=p.shared_task_id WHERE p.shared_task_id={} AND p.task_id={} AND p.phase={} "
+			"AND p.model_version={} AND p.ready=1 AND p.scene_state<>3 AND i.zone={} AND i.version={} "
+			"AND st.completion_time IS NULL AND st.expire_time>NOW() AND i.id=p.instance_id {}",
+			occurrence,*task,phase->phase,KithicorMission::Model,destination,version,
+			instance ? fmt::format("AND i.id={}",instance) : ""));
+		if (!ready.Success() || ready.RowCount()!=1) return false;
+		auto binding=content.QueryDatabase(fmt::format(
+			"SELECT p.zone_id,p.zone_version,t.type FROM dynamic_zone_templates p JOIN tasks t ON t.id={} WHERE p.id={}",*task,phase->template_id));
+		if (!binding.Success() || binding.RowCount()!=1) return false;
+		auto row=binding.begin();
+		const auto z=SharedTaskAdmission::Number(row[0]), v=SharedTaskAdmission::Number(row[1]), type=SharedTaskAdmission::Number(row[2]);
+		return z && *z==destination && v && *v==static_cast<uint32_t>(version) && type && *type==1;
+	}
+	if (!RuleB(SodProgression, EnableOceangreenSlice) || OceangreenMissionZone(static_cast<uint32_t>(*task))!=destination) return false;
 	auto mapping = content.QueryDatabase(fmt::format(
 		"SELECT t.type,t.dz_template_id,p.zone_id,p.zone_version FROM tasks t "
 		"JOIN dynamic_zone_templates p ON p.id=t.dz_template_id WHERE t.id={}",*task));

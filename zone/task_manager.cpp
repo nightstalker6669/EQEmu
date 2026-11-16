@@ -737,7 +737,7 @@ bool TaskManager::SaveClientState(Client *client, ClientTaskState *cts)
 			continue;
 		}
 
-		if (SodProgression::IsReservedOceangreenTask(task_id)) {
+		if (SodProgression::IsBoundTask(task_id)) {
 			// Never delete earned prerequisites before the acknowledged atomic
 			// replacement. A failed first completion must not publish a -1 row.
 			if (!all_saved || !database.TransactionBeginStrict().Success()) {
@@ -977,6 +977,7 @@ void TaskManager::TaskSetSelector(Client* client, Mob* mob, int task_set_id, boo
 		// verify level, we're not currently on it, repeatable status, if it's a (shared) task
 		// we aren't currently on another, and if it's enabled if not all_enabled
 		if (SupportsTaskRewardMethod(client, task_data) &&
+			(!SodProgression::IsSodRequest(task) || (mob && mob->IsNPC() && client->CanRequestSodTask(task, mob->GetNPCTypeID()))) &&
 			(all_enabled || client_task_state->IsTaskEnabled(task)) && ValidateLevel(task, player_level) &&
 			!client_task_state->IsTaskActive(task) && client_task_state->HasSlotForTask(task_data) &&
 			// this slot checking is a bit silly, but we allow mixing of task types ...
@@ -1001,7 +1002,7 @@ void TaskManager::TaskQuestSetSelector(Client* client, Mob* mob, const std::vect
 {
 	std::vector<int> tasks;
 	for (const auto task : requested) {
-		if (!SodProgression::IsOceangreenRequest(task) ||
+		if (!SodProgression::IsSodRequest(task) ||
 			(mob && mob->IsNPC() && client->CanRequestSodTask(task, mob->GetNPCTypeID()))) tasks.push_back(task);
 	}
 	std::vector<int> task_list;
@@ -1113,7 +1114,8 @@ void TaskManager::SharedTaskSelector(Client* client, Mob* mob, const std::vector
 			const auto task_data = GetTaskData(tasks[i]);
 			if (
 				SupportsTaskRewardMethod(client, task_data) &&
-				CanOfferSharedTask(tasks[i], request)
+				CanOfferSharedTask(tasks[i], request) &&
+				(!SodProgression::IsSodRequest(tasks[i]) || (mob && mob->IsNPC() && client->CanRequestSodTask(tasks[i], mob->GetNPCTypeID())))
 			)
 			{
 				task_list.push_back(tasks[i]);

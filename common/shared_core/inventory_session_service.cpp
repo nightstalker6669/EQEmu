@@ -1,4 +1,5 @@
 #include "inventory_session_service.h"
+#include "../kithicor_poison_custody.h"
 #include "process_registry.h"
 #include "coin_pending_guard.h"
 #include "pending_operations.h"
@@ -19,6 +20,7 @@ std::array<uint8_t,32> Token(const char* p){if(!p||std::string(p).size()!=64)thr
 void Verify(Database& d){auto r=Q(d,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('housing_inventory_sessions','housing_inventory_session_history','character_data','account','inventory')");if(r.RowCount()!=1||std::stoul(r.begin()[0])!=5)throw Failure{Error::DatabaseFailure};}
 void ValidateActor(Database& d,Actor a){auto r=Q(d,"SELECT account_id,deleted_at FROM character_data WHERE id="+std::to_string(a.character_id)+" FOR UPDATE");if(r.RowCount()!=1||r.begin()[1]||std::stoul(r.begin()[0])!=a.account_id)throw Failure{Error::Unauthorized};auto account=Q(d,"SELECT id FROM account WHERE id="+std::to_string(a.account_id)+" FOR UPDATE");if(account.RowCount()!=1)throw Failure{Error::Unauthorized};}
 void HousePending(Database& db,uint32_t character) {
+ if(KithicorPoisonCustody::Pending(db,character))throw Failure{Error::Busy};
  const auto state=PendingOperations::InspectPending(db,character,true);
  if(state!=PendingOperations::PendingState::Clear)
   throw Failure{state==PendingOperations::PendingState::Pending?Error::Busy:Error::DatabaseFailure};

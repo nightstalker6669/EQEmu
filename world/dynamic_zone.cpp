@@ -36,6 +36,13 @@ bool DynamicZone::SendServerPacket(ServerPacket* packet)
 	return ZSList::Instance()->SendPacket(packet);
 }
 
+bool DynamicZone::SendCreationToZones()
+{
+	if (!IsValid()) return false;
+	auto packet = CreateServerPacket(0, 0);
+	return SendServerPacket(packet.get());
+}
+
 DynamicZone* DynamicZone::FindDynamicZoneByID(uint32_t dz_id)
 {
 	auto dz = dynamic_zone_manager.dynamic_zone_cache.find(dz_id);
