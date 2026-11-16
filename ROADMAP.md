@@ -149,15 +149,37 @@ Published restorations affect 5,327 existing player-spell IDs across 5,629 class
 </details>
 
 <details>
-<summary>Alternate Abilities — Published + ongoing</summary>
+<summary>Alternate Abilities — Published named changes; partial coverage</summary>
 
-Targeted restoration and corrections, with further families still under review.
+75 changed ability families and 198 distinct rank IDs: 125 added/restored plus 73 existing ranks affected. Shared ranks repeat in 1,804 class entries.
 
-- **Published core work:** Origin and knight innate support, alongside reviewed AA data corrections.
-- **Eligibility & progression:** Targeted requirements and progression handling for the reviewed ability families.
-- **Further batches:** Additional data batches have been published; other AA proposals remain local, queued or awaiting gameplay checks.
+- **Class and rank catalogue:** Sixteen readable class lists, sorted by native required level, name and rank; acquisition minimum is a separate requirement.
+- **Restorations and corrections:** Named rank additions, eligibility fixes, effect/core-bonus corrections, book acquisition, entitlement source and bot-duration work; categories overlap.
+- **Race and acquisition gates:** Drakkin breaths remain race/heritage-specific; Gnome tinkering and Enchanter books retain their prerequisites and acquisition rules.
+- **Held and reference scope:** Hero’s Barracks is an unchanged-definition finite-H reference; Pack Hunt rank 8 is held. Unresolved incidental consumers and disabled drafts are excluded from named totals.
 
-**Remaining / qualified scope:** This is not a completed through-RoF AA catalogue. The next inventory pass should list accepted ability families individually, with their publication and gameplay evidence.
+**Remaining / qualified scope:** Finite published-source named-change inventory, not all-AAs-complete proof. No rank is marked native-gameplay-proven in this packet. Source publication, applied data, install/cache receipts and serving activation remain distinct. Preserve race/heritage, grant/book requirements, unknown metadata and approved numerical reconstruction limits.
+
+[AA changes by class](docs/rof2/roadmap/aa/README.md) · [Portable searchable catalogue](docs/rof2/roadmap/aa.html)
+
+| Class | Changed families | Rank entries |
+| --- | ---: | ---: |
+| [Bard](docs/rof2/roadmap/aa/bard.md) | 23 | 107 |
+| [Beastlord](docs/rof2/roadmap/aa/beastlord.md) | 25 | 113 |
+| [Berserker](docs/rof2/roadmap/aa/berserker.md) | 16 | 100 |
+| [Cleric](docs/rof2/roadmap/aa/cleric.md) | 25 | 115 |
+| [Druid](docs/rof2/roadmap/aa/druid.md) | 24 | 112 |
+| [Enchanter](docs/rof2/roadmap/aa/enchanter.md) | 39 | 132 |
+| [Magician](docs/rof2/roadmap/aa/magician.md) | 24 | 110 |
+| [Monk](docs/rof2/roadmap/aa/monk.md) | 17 | 113 |
+| [Necromancer](docs/rof2/roadmap/aa/necromancer.md) | 22 | 108 |
+| [Paladin](docs/rof2/roadmap/aa/paladin.md) | 24 | 123 |
+| [Ranger](docs/rof2/roadmap/aa/ranger.md) | 37 | 125 |
+| [Rogue](docs/rof2/roadmap/aa/rogue.md) | 16 | 102 |
+| [Shadowknight](docs/rof2/roadmap/aa/shadowknight.md) | 22 | 121 |
+| [Shaman](docs/rof2/roadmap/aa/shaman.md) | 24 | 112 |
+| [Warrior](docs/rof2/roadmap/aa/warrior.md) | 17 | 103 |
+| [Wizard](docs/rof2/roadmap/aa/wizard.md) | 22 | 108 |
 
 [Source and scope notes](extensions/rof2/aa/)
 
@@ -474,7 +496,7 @@ Targeted compatibility repairs and matched release packaging.
 ## Next roadmap refinements
 
 - Reconcile the remaining source packages against accepted installation and release receipts.
-- Expand AA coverage into individual accepted ability families.
+- Keep the finite AA class catalogue aligned with accepted owner handoffs; wider AA coverage remains incomplete.
 - Keep the craft-sorted recipe catalogue and class/level spell index aligned with accepted owner handoffs.
 - Add individual quest names and acceptance evidence beneath each zone.
 - Keep native acceptance, source publication and released downloads separate; add dates only when an actual milestone exists.

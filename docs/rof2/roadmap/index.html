@@ -2183,23 +2183,115 @@ html&gt;body{padding:0}&lt;/style&gt;
       &quot;id&quot;: &quot;aa&quot;,
       &quot;name&quot;: &quot;Alternate Abilities&quot;,
       &quot;status&quot;: &quot;Published + ongoing&quot;,
-      &quot;intro&quot;: &quot;Targeted restoration and corrections, with further families still under review.&quot;,
+      &quot;intro&quot;: &quot;75 changed ability families and 198 distinct rank IDs: 125 added/restored plus 73 existing ranks affected. Shared ranks repeat in 1,804 class entries.&quot;,
       &quot;features&quot;: [
         [
-          &quot;Published core work&quot;,
-          &quot;Origin and knight innate support, alongside reviewed AA data corrections.&quot;
+          &quot;Class and rank catalogue&quot;,
+          &quot;Sixteen readable class lists, sorted by native required level, name and rank; acquisition minimum is a separate requirement.&quot;
         ],
         [
-          &quot;Eligibility &amp; progression&quot;,
-          &quot;Targeted requirements and progression handling for the reviewed ability families.&quot;
+          &quot;Restorations and corrections&quot;,
+          &quot;Named rank additions, eligibility fixes, effect/core-bonus corrections, book acquisition, entitlement source and bot-duration work; categories overlap.&quot;
         ],
         [
-          &quot;Further batches&quot;,
-          &quot;Additional data batches have been published; other AA proposals remain local, queued or awaiting gameplay checks.&quot;
+          &quot;Race and acquisition gates&quot;,
+          &quot;Drakkin breaths remain race/heritage-specific; Gnome tinkering and Enchanter books retain their prerequisites and acquisition rules.&quot;
+        ],
+        [
+          &quot;Held and reference scope&quot;,
+          &quot;Hero’s Barracks is an unchanged-definition finite-H reference; Pack Hunt rank 8 is held. Unresolved incidental consumers and disabled drafts are excluded from named totals.&quot;
         ]
       ],
-      &quot;limit&quot;: &quot;This is not a completed through-RoF AA catalogue. The next inventory pass should list accepted ability families individually, with their publication and gameplay evidence.&quot;,
-      &quot;source&quot;: &quot;extensions/rof2/aa/&quot;
+      &quot;limit&quot;: &quot;Finite published-source named-change inventory, not all-AAs-complete proof. No rank is marked native-gameplay-proven in this packet. Source publication, applied data, install/cache receipts and serving activation remain distinct. Preserve race/heritage, grant/book requirements, unknown metadata and approved numerical reconstruction limits.&quot;,
+      &quot;source&quot;: &quot;extensions/rof2/aa/&quot;,
+      &quot;catalogue&quot;: {
+        &quot;label&quot;: &quot;AA changes by class&quot;,
+        &quot;countLabel&quot;: &quot;Class rank entries&quot;,
+        &quot;path&quot;: &quot;aa/README.md&quot;,
+        &quot;portable&quot;: &quot;aa.html&quot;,
+        &quot;groups&quot;: [
+          {
+            &quot;name&quot;: &quot;Bard&quot;,
+            &quot;count&quot;: 107,
+            &quot;path&quot;: &quot;aa/bard.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Beastlord&quot;,
+            &quot;count&quot;: 113,
+            &quot;path&quot;: &quot;aa/beastlord.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Berserker&quot;,
+            &quot;count&quot;: 100,
+            &quot;path&quot;: &quot;aa/berserker.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Cleric&quot;,
+            &quot;count&quot;: 115,
+            &quot;path&quot;: &quot;aa/cleric.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Druid&quot;,
+            &quot;count&quot;: 112,
+            &quot;path&quot;: &quot;aa/druid.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Enchanter&quot;,
+            &quot;count&quot;: 132,
+            &quot;path&quot;: &quot;aa/enchanter.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Magician&quot;,
+            &quot;count&quot;: 110,
+            &quot;path&quot;: &quot;aa/magician.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Monk&quot;,
+            &quot;count&quot;: 113,
+            &quot;path&quot;: &quot;aa/monk.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Necromancer&quot;,
+            &quot;count&quot;: 108,
+            &quot;path&quot;: &quot;aa/necromancer.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Paladin&quot;,
+            &quot;count&quot;: 123,
+            &quot;path&quot;: &quot;aa/paladin.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Ranger&quot;,
+            &quot;count&quot;: 125,
+            &quot;path&quot;: &quot;aa/ranger.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Rogue&quot;,
+            &quot;count&quot;: 102,
+            &quot;path&quot;: &quot;aa/rogue.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Shadowknight&quot;,
+            &quot;count&quot;: 121,
+            &quot;path&quot;: &quot;aa/shadowknight.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Shaman&quot;,
+            &quot;count&quot;: 112,
+            &quot;path&quot;: &quot;aa/shaman.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Warrior&quot;,
+            &quot;count&quot;: 103,
+            &quot;path&quot;: &quot;aa/warrior.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Wizard&quot;,
+            &quot;count&quot;: 108,
+            &quot;path&quot;: &quot;aa/wizard.md&quot;
+          }
+        ]
+      }
     },
     {
       &quot;id&quot;: &quot;tradeskills&quot;,
@@ -2737,7 +2829,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   choices.innerHTML=groups.map(g=&gt;&#x27;&lt;div class=&quot;rm-group&quot;&gt;&#x27;+(g?&#x27;&lt;h3 class=&quot;text-small text-muted&quot;&gt;&#x27;+esc(g)+&#x27;&lt;/h3&gt;&#x27;:&#x27;&#x27;)+&#x27;&lt;div class=&quot;rm-topic-row&quot;&gt;&#x27;+data[area].filter(x=&gt;(x.group||&#x27;&#x27;)===g).map(x=&gt;&#x27;&lt;button class=&quot;btn&quot; type=&quot;button&quot; data-topic=&quot;&#x27;+x.id+&#x27;&quot; aria-pressed=&quot;&#x27;+(selected===x.id)+&#x27;&quot;&gt;&#x27;+esc(x.name)+&#x27;&lt;/button&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;).join(&#x27;&#x27;);
   const item=data[area].find(x=&gt;x.id===selected);
   detail.innerHTML=&#x27;&lt;div class=&quot;rm-detail-head&quot;&gt;&lt;h2&gt;&#x27;+esc(item.name)+&#x27;&lt;/h2&gt;&lt;span class=&quot;viz-badge&quot;&gt;&#x27;+esc(item.status)+&#x27;&lt;/span&gt;&lt;/div&gt;&lt;p&gt;&#x27;+esc(item.intro)+&#x27;&lt;/p&gt;&lt;div class=&quot;rm-leaves&quot;&gt;&#x27;+item.features.map(([title,text])=&gt;&#x27;&lt;div class=&quot;rm-leaf&quot;&gt;&lt;h3&gt;&#x27;+esc(title)+&#x27;&lt;/h3&gt;&lt;p&gt;&#x27;+esc(text)+&#x27;&lt;/p&gt;&lt;/div&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;div class=&quot;rm-boundary text-small&quot;&gt;&lt;h3&gt;Remaining / qualified scope&lt;/h3&gt;&lt;p&gt;&#x27;+esc(item.limit)+&#x27;&lt;/p&gt;&lt;/div&gt;&#x27;+((item.source||item.sourceURL)?&#x27;&lt;a class=&quot;text-small&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+esc(item.sourceURL||sourceBase+item.source)+&#x27;&quot;&gt;Read the source &amp; scope notes ↗&lt;/a&gt;&#x27;:&#x27;&#x27;);
-  if(item.catalogue){const c=item.catalogue,base=&#x27;https://github.com/nightstalker6669/EQEmu/blob/develop/docs/rof2/roadmap/&#x27;;detail.insertAdjacentHTML(&#x27;beforeend&#x27;,&#x27;&lt;details&gt;&lt;summary&gt;&#x27;+esc(c.label)+&#x27;&lt;/summary&gt;&lt;table class=&quot;table table-sm&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&#x27;+ (item.id===&#x27;tradeskills&#x27;?&#x27;Tradeskill&#x27;:&#x27;Class&#x27;)+&#x27;&lt;/th&gt;&lt;th class=&quot;text-end&quot;&gt;&#x27;+(item.id===&#x27;tradeskills&#x27;?&#x27;Added recipe IDs&#x27;:&#x27;Class spell IDs&#x27;)+&#x27;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&#x27;+c.groups.map(g=&gt;&#x27;&lt;tr&gt;&lt;td&gt;&lt;a target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+base+g.path+&#x27;&quot;&gt;&#x27;+esc(g.name)+&#x27;&lt;/a&gt;&lt;/td&gt;&lt;td class=&quot;text-end tabular-nums&quot;&gt;&#x27;+g.count.toLocaleString()+&#x27;&lt;/td&gt;&lt;/tr&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/tbody&gt;&lt;/table&gt;&lt;/details&gt;&lt;a target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+base+c.path+&#x27;&quot;&gt;Open the full catalogue ↗&lt;/a&gt;&#x27;);}
+  if(item.catalogue){const c=item.catalogue,base=&#x27;https://github.com/nightstalker6669/EQEmu/blob/develop/docs/rof2/roadmap/&#x27;;detail.insertAdjacentHTML(&#x27;beforeend&#x27;,&#x27;&lt;details&gt;&lt;summary&gt;&#x27;+esc(c.label)+&#x27;&lt;/summary&gt;&lt;table class=&quot;table table-sm&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&#x27;+ (item.id===&#x27;tradeskills&#x27;?&#x27;Tradeskill&#x27;:&#x27;Class&#x27;)+&#x27;&lt;/th&gt;&lt;th class=&quot;text-end&quot;&gt;&#x27;+(c.countLabel||(item.id===&#x27;tradeskills&#x27;?&#x27;Added recipe IDs&#x27;:&#x27;Class spell IDs&#x27;))+&#x27;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&#x27;+c.groups.map(g=&gt;&#x27;&lt;tr&gt;&lt;td&gt;&lt;a target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+base+g.path+&#x27;&quot;&gt;&#x27;+esc(g.name)+&#x27;&lt;/a&gt;&lt;/td&gt;&lt;td class=&quot;text-end tabular-nums&quot;&gt;&#x27;+g.count.toLocaleString()+&#x27;&lt;/td&gt;&lt;/tr&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/tbody&gt;&lt;/table&gt;&lt;/details&gt;&lt;a target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+base+c.path+&#x27;&quot;&gt;Open the full catalogue ↗&lt;/a&gt;&#x27;);}
  }
  function restore(state){const s=state?.privateContent;if(s&amp;&amp;data[s.area]?.some(x=&gt;x.id===s.selected)){area=s.area;selected=s.selected;}render();}
  root.addEventListener(&#x27;click&#x27;,e=&gt;{const b=e.target.closest(&#x27;button&#x27;);if(!b)return; if(b.dataset.area){area=b.dataset.area;selected=data[area][0].id;}else if(b.dataset.topic){selected=b.dataset.topic;}else return;render();if(window.openai?.setWidgetState){window.openai.setWidgetState({modelContent:{roadmapArea:area,selectedTopic:data[area].find(x=&gt;x.id===selected).name},privateContent:{area,selected}}).catch(()=&gt;{});}});

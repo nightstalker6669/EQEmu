@@ -8,16 +8,18 @@
     "tradeskill_packet_sha256": "768de9724425c100655b06b0972750eb55c9aaef2438c0699e6c86a0ff947a4c",
     "tradeskill_inventory_sha256": "486986573f8564233c3d45cbfee8030e0c943ee0d0458b3688cba3be6582e3d0",
     "spell_packet_sha256": "588bb38781815b933df6f2870f1b166fe4396272e278f5b4d085db2453f308d2",
-    "spell_index_sha256": "3973190dfd74dbed4f1116ddadd8545404d7898171874843eaeff300fff21922"
+    "spell_index_sha256": "3973190dfd74dbed4f1116ddadd8545404d7898171874843eaeff300fff21922",
+    "aa_public_inventory_sha256": "faa12fc0a980613bc4ea8c86fc8cb13fab2ba30607478b7b5b94d61c1fa4182d",
+    "aa_public_markdown_sha256": "62dde8cb75cd1067fd0e068babea7ea22e8baa6a067ffc1bd48f982389d26060"
   },
   "files": {
     "ROADMAP.md": {
-      "sha256": "90960ec0405313b127f071bf0ba03b77298532613588354359879cbcc39aa08d",
-      "bytes": 26184
+      "sha256": "55ed74ad07520224d4560b8cab4595d9af9527cf738f046f887ec81f9f0aedfa",
+      "bytes": 27978
     },
     "docs/rof2/roadmap/index.html": {
-      "sha256": "1471bc23f7d903b8a69e058feee6e33380e547587abefbcdad91fe72a7ce6b01",
-      "bytes": 133068
+      "sha256": "4400c0097b76c2de877008c4c75ef8af7eb77e756720023eca4b8c816508b16c",
+      "bytes": 136744
     },
     "docs/rof2/roadmap/spells/README.md": {
       "sha256": "adac102d51ebce54a7a0e942d4138deccf43a2691698d21a6155529780099a16",
@@ -174,6 +176,105 @@
     "docs/rof2/roadmap/tradeskills.json": {
       "sha256": "cce9f015448814cd3757acd5647086d99da78f5dc0bc14a30c3ca1585efe97e6",
       "bytes": 715534
+    },
+    "docs/rof2/roadmap/aa/README.md": {
+      "sha256": "587c68a6dfceed14659e71680955aa7b7ceaa90f98cc65d1f6c1b054ceea04d3",
+      "bytes": 4057
+    },
+    "docs/rof2/roadmap/aa/bard.md": {
+      "sha256": "ed5fd9a7262781d7d4a96493973876e0f7fdca8ff2ec63fdf4126559791ff1e9",
+      "bytes": 17677
+    },
+    "docs/rof2/roadmap/aa/beastlord.md": {
+      "sha256": "585da5533e56507dcef22b6b72b9a89c0fe8bf78467f09845a1434076c06ede1",
+      "bytes": 18400
+    },
+    "docs/rof2/roadmap/aa/berserker.md": {
+      "sha256": "e6dc78f0330441fadae224f6e05fdac8ab83bc11eafa78ce10fab05b258c874e",
+      "bytes": 16878
+    },
+    "docs/rof2/roadmap/aa/cleric.md": {
+      "sha256": "8c7d76efb456a1ce928cee6d392742594d76882da8a2f834af13e000bf0ead32",
+      "bytes": 18670
+    },
+    "docs/rof2/roadmap/aa/conditions-and-held.md": {
+      "sha256": "ed36cb1a0b13a128fee799932053c144facc54c6b4a77a3bbf3346a77e99f1b0",
+      "bytes": 233508
+    },
+    "docs/rof2/roadmap/aa/druid.md": {
+      "sha256": "0c13c77fcda1354c48a9d787c534eb5cd55c7e44310245e1eb988eca128a0c0f",
+      "bytes": 18279
+    },
+    "docs/rof2/roadmap/aa/enchanter.md": {
+      "sha256": "8259d316a918e9498d85d37a1a156e575276def3270d4861558e1640f19ebca2",
+      "bytes": 20674
+    },
+    "docs/rof2/roadmap/aa/magician.md": {
+      "sha256": "2a0f4725b079bf12f30470981ae2a5e71d3c3569d9bfa5aa53ba23c3cc2a15af",
+      "bytes": 18095
+    },
+    "docs/rof2/roadmap/aa/monk.md": {
+      "sha256": "4f14432b0e87173c3f8d76292363e090bcaf66d1bc39ae5441e66723cd75c331",
+      "bytes": 18315
+    },
+    "docs/rof2/roadmap/aa/necromancer.md": {
+      "sha256": "5b1fd218f8157bb02933508eb119ec395553911e305c9f5df24fa59c3cd38dd4",
+      "bytes": 17845
+    },
+    "docs/rof2/roadmap/aa/paladin.md": {
+      "sha256": "b84f7a0780529ca12db75e0a78913774ffc84c7a63cd1beb8191f6ded25e203a",
+      "bytes": 19620
+    },
+    "docs/rof2/roadmap/aa/ranger.md": {
+      "sha256": "8bbd9606eb6c7d214c8baacbd36c5db28b2b015b307d360304fcd3d55f6ae13b",
+      "bytes": 19831
+    },
+    "docs/rof2/roadmap/aa/rogue.md": {
+      "sha256": "e5056c0f49facac8603796991f85b900a963e0d3f93007d9dae05d71fd26fa1e",
+      "bytes": 17156
+    },
+    "docs/rof2/roadmap/aa/shadowknight.md": {
+      "sha256": "a0f46619456a311c1b19579237f1b4080fdda41317ec211c39619ff644927315",
+      "bytes": 19395
+    },
+    "docs/rof2/roadmap/aa/shaman.md": {
+      "sha256": "1cab89d9fb473d24885065f6cf81782602b5b3e5c1c7b89723c26eb8223e73bf",
+      "bytes": 18273
+    },
+    "docs/rof2/roadmap/aa/warrior.md": {
+      "sha256": "101d1540ab029ee427cfcc080d15ef32f48a66a146ebda842a08542e3847a23e",
+      "bytes": 17272
+    },
+    "docs/rof2/roadmap/aa/wizard.md": {
+      "sha256": "4fe494332fd90c2ff1d69c18216b7c8dd9919b424725031789999903f107a92e",
+      "bytes": 17844
+    },
+    "docs/rof2/roadmap/aa.html": {
+      "sha256": "1afc5056c7c421c0b2245f9badcc4e8b0d05ee82f56562ca898c58c64a7dc68e",
+      "bytes": 477729
+    },
+    "docs/rof2/roadmap/aa.json": {
+      "sha256": "a9ba0a29d7955303a3f1b67dcf4b7a469a9a78e63c6706fe2d83a508151be7bd",
+      "bytes": 275863
+    }
+  },
+  "aa_counts": {
+    "unique_modified_ability_families": 75,
+    "unique_modified_or_added_rank_ids": 198,
+    "unique_added_rank_ids": 125,
+    "unique_changed_existing_rank_ids": 73,
+    "class_membership_rows": 1804,
+    "scope_reference_families": 1,
+    "scope_reference_rank_ids": 1,
+    "held_proposals": 1,
+    "by_change_kind": {
+      "automatic_entitlement_source": 21,
+      "book_acquisition_handler": 19,
+      "bot_duration_effect_correction": 9,
+      "core_bonus_handler_correction": 16,
+      "effect_data_correction": 2,
+      "eligibility_fix": 90,
+      "new_rank": 125
     }
   }
 }
