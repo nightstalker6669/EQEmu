@@ -73,7 +73,7 @@ Native hiring and management with four roles and progression through level 100.
 - **Combat & upkeep:** Role-aware assistance, healer behavior, coin upkeep and Bayle Mark fallback.
 - **Ownership & progression:** Configurable multiple owned contracts with one active; earned Journeyman II acquisition in the accepted Oceangreen slice.
 
-**Remaining / qualified scope:** Some scaling is reconstructed. Marketplace slot/rename commerce, later mercenary AAs and player-equipped mercenary gear are not implemented. Earned J3 progression now has local native acceptance for one ordinary level-100 healer hire; publication is pending. See Kithicor in Quests & zones.
+**Remaining / qualified scope:** Some scaling is reconstructed. Marketplace slot/rename commerce, later mercenary AAs and player-equipped mercenary gear are not implemented. Earned J3 progression has local native acceptance for one ordinary level-100 healer hire; its matched source, database and server download are published. See Kithicor in Quests & zones.
 
 [Source and scope notes](extensions/rof2/mercenaries/)
 
@@ -112,16 +112,37 @@ Native achievement tracking connected to restored quest routes.
 </details>
 
 <details>
-<summary>Spells & acquisition — Published scope</summary>
+<summary>Spells &amp; acquisition — Published scope</summary>
 
-Restore ways to obtain spells, alongside targeted content and engine repairs.
+Published restorations affect 5,327 existing player-spell IDs across 5,629 class memberships. No new spell definitions are claimed.
 
-- **Vendors & eligibility:** Missing scroll stock, faction requirements and Alaran language checks.
-- **Original exchanges:** Runes, fragments, motes, cantrips and periapts; class-aware reward choices and bundle handling.
-- **Expansion coverage:** Restored acquisition routes across TSS, SoF, SoD, Underfoot, HoT, VoA and RoF.
-- **Content corrections:** Targeted summon items and spell content; optional reconstructed pets and auras are separately documented.
+- **Class and level catalogue:** All indexed names and ranks, sorted by retained native learning level, with links to the source-qualified routes.
+- **Acquisition and scrolls:** Merchant stock, faction/language gates, original exchanges and restored scroll items; a scroll-only restoration does not establish a working route.
+- **Support content:** Summoned items and optional estimated pet/aura support, separated from ordinary baseline spell definitions.
+- **Earned Void access:** 77 indexed stock spells are distinct from 8 earned B spells plus 14 new C entries, 22 cumulative. Later D–G ordinary access is not claimed.
 
-**Remaining / qualified scope:** Not every spell effect, acquisition route or faction path is complete. Optional estimated pet/aura content is not enabled by default.
+**Remaining / qualified scope:** Source publication is separate from activation and native proof. Categories overlap and are not additive; shared-class display rows are not new spell IDs. Two House of Thule exchange routes remain on hold. Optional support is estimated, unchanged baseline spells and NPC/helper references are excluded, and class levels are retained metadata rather than a new historical audit.
+
+[Restorations by class and learning level](docs/rof2/roadmap/spells/README.md) · [Portable searchable catalogue](docs/rof2/roadmap/spells.html)
+
+| Class | Class spell IDs |
+| --- | ---: |
+| [Bard](docs/rof2/roadmap/spells/bard.md) | 324 |
+| [Beastlord](docs/rof2/roadmap/spells/beastlord.md) | 338 |
+| [Berserker](docs/rof2/roadmap/spells/berserker.md) | 173 |
+| [Cleric](docs/rof2/roadmap/spells/cleric.md) | 516 |
+| [Druid](docs/rof2/roadmap/spells/druid.md) | 494 |
+| [Enchanter](docs/rof2/roadmap/spells/enchanter.md) | 510 |
+| [Magician](docs/rof2/roadmap/spells/magician.md) | 434 |
+| [Monk](docs/rof2/roadmap/spells/monk.md) | 152 |
+| [Necromancer](docs/rof2/roadmap/spells/necromancer.md) | 443 |
+| [Paladin](docs/rof2/roadmap/spells/paladin.md) | 379 |
+| [Ranger](docs/rof2/roadmap/spells/ranger.md) | 370 |
+| [Rogue](docs/rof2/roadmap/spells/rogue.md) | 200 |
+| [Shadow Knight](docs/rof2/roadmap/spells/shadow-knight.md) | 330 |
+| [Shaman](docs/rof2/roadmap/spells/shaman.md) | 391 |
+| [Warrior](docs/rof2/roadmap/spells/warrior.md) | 145 |
+| [Wizard](docs/rof2/roadmap/spells/wizard.md) | 430 |
 
 [Source and scope notes](extensions/rof2/spells/)
 
@@ -145,14 +166,33 @@ Targeted restoration and corrections, with further families still under review.
 <details>
 <summary>Tradeskills — Published + ongoing</summary>
 
-Recipe restoration plus support for special combines and item-preserving hand-ins.
+11,662 distinct added recipe IDs, grouped by craft; existing recipe fixes and access changes are listed separately.
 
-- **Recipe & ingredient work:** Reviewed recipe additions, ingredient corrections and through-RoF recipe auditing.
-- **Special crafting:** Charged items, reviewed recharge combines and quest crafting consumer support.
-- **Latest published cohort:** RRC312-r2 adds a finite 32-recipe batch, with its reconstruction choices documented.
-- **Remaining research:** Three unsupported groups remain in the recorded final checkpoint; unknown historical values are not treated as verified originals.
+- **Added recipe catalogue:** Alphabetical craft lists include physical recipe variants, names, IDs, families and accepted trivial values.
+- **Existing recipe changes:** Corrections to ingredients, yields, containers, recipe availability and access are separate from additions; overlapping counts are not summed.
+- **Special crafting:** Charged items, eight reviewed recharges and quest crafting consumer support; recharge gameplay acceptance is not established.
+- **Scope limits:** Three exact-trivial variants remain unsupported; approved local scalar choices and source-unconfirmed stew remain qualified.
 
-**Remaining / qualified scope:** Full database recipe totals include existing EQEmu/PEQ content and are not counts of recipes we added. A per-batch ledger is the next useful breakdown.
+**Remaining / qualified scope:** Finite accepted/published owner inventory, not a complete through-RoF audit. Counts are distinct added IDs, not unique output names or the full PEQ database. Fletcher Ceramic Clay remains unclassified stored skill 62. Application/publication evidence is not native gameplay proof.
+
+[Added recipes by craft](docs/rof2/roadmap/tradeskills/README.md) · [Portable searchable catalogue](docs/rof2/roadmap/tradeskills.html)
+
+| Tradeskill | Added recipe IDs |
+| --- | ---: |
+| [Alchemy](docs/rof2/roadmap/tradeskills/alchemy.md) | 788 |
+| [Baking](docs/rof2/roadmap/tradeskills/baking.md) | 1,300 |
+| [Blacksmithing](docs/rof2/roadmap/tradeskills/blacksmithing.md) | 2,091 |
+| [Brewing](docs/rof2/roadmap/tradeskills/brewing.md) | 143 |
+| [Fishing](docs/rof2/roadmap/tradeskills/fishing.md) | 26 |
+| [Fletching](docs/rof2/roadmap/tradeskills/fletching.md) | 637 |
+| [Jewelry Making](docs/rof2/roadmap/tradeskills/jewelry-making.md) | 1,393 |
+| [Make Poison](docs/rof2/roadmap/tradeskills/make-poison.md) | 15 |
+| [No Skill / quest and container combines](docs/rof2/roadmap/tradeskills/no-skill-quest-and-container-combines.md) | 102 |
+| [Pottery](docs/rof2/roadmap/tradeskills/pottery.md) | 1,846 |
+| [Research](docs/rof2/roadmap/tradeskills/research.md) | 1,209 |
+| [Tailoring](docs/rof2/roadmap/tradeskills/tailoring.md) | 1,589 |
+| [Tinkering](docs/rof2/roadmap/tradeskills/tinkering.md) | 522 |
+| [Unclassified stored skill 62](docs/rof2/roadmap/tradeskills/unclassified-stored-skill-62.md) | 1 |
 
 [Source and scope notes](extensions/rof2/tradeskills/)
 
@@ -334,16 +374,18 @@ The newly accepted ten-task village and Blackburrow progression slice.
 </details>
 
 <details>
-<summary>Kithicor → Void C / J3 — Native accepted · local</summary>
+<summary>Kithicor → Void C / J3 — Published batch · native scope qualified</summary>
 
-Recorded local gameplay acceptance for six Kithicor tasks and the next earned progression step. Publication is pending.
+Matched source, database and r25 server downloads are published. Recorded native gameplay acceptance remains the matched local Linux scope.
 
-- **Six tasks & shared rewards:** Four personal tasks plus Safe’s original two-stage mission and Bitter. Actual physical stages, refugees and rewards passed; 31 reward components were paid, with two real shared-mission recipients.
+- **Six tasks & shared rewards:** Charges of Treason, Vengeance and Deliverance, Destroy the Impostor, Rain of Ruin, Safe Passage and Bitter Victuals. Both physical escort stages, refugees and rewards passed; 31 reward components were paid, with two real shared-mission recipients.
 - **Earned Void C:** Original door progression into Void C and 22 cumulative vendor rows checked through the native client.
-- **Scroll & Journeyman III:** One Mindfreeze scroll purchase and spell scribing, then one ordinary level-100 Journeyman III healer hire. Existing contracts, spells and items were preserved.
-- **Release preparation:** The matched source/content batch and sanitized database package are being prepared. No published release is claimed yet.
+- **Scroll & Journeyman III:** One 165-Chronobine Mindfreeze scroll purchase and spell scribing, then one ordinary level-100 Journeyman III healer hire. Existing contracts, spells and items were preserved.
+- **Published matched batch:** Source 5a9d8a0, the peq-rof2-2026-11-15-kithicor database and server release rof2-ci-r25-a1-5a9d8a0b3c8b are public. Windows/Linux CI passed; native gameplay coverage retains its existing limits.
 
-**Remaining / qualified scope:** Accepted scope is local; publication is pending. A later escort-homing fix has focused source/mock evidence but awaits a fresh gameplay check. Some escort and NPC ready/return behavior remains unproved. Numeric reconstruction is user-approved, not exact historical parity. Local acceptance milestone recorded November 15.
+**Remaining / qualified scope:** Native acceptance used the matched local Linux cohort and r8 physical escort revision. The r11 escort-homing fix has focused mock and exact staging evidence only, pending a future fresh load; a full r11 escort walk and every guard route are not proved. Earlier 615/616 guard behavior causes and the peer NPC ready path remain unproved. The owned AA exit and main NPC ready path passed. Numeric reconstruction is user-approved, not exact historical parity. Windows native gameplay is not established by CI. Oceangreen geometry limits continue to apply.
+
+[Source and scope notes](https://github.com/nightstalker6669/EQEmu/blob/5a9d8a0b3c8bfc7a2c5728cc9c006d640e2d33d6/docs/rof2/KITHICOR.md)
 
 </details>
 
@@ -433,16 +475,17 @@ Targeted compatibility repairs and matched release packaging.
 
 - Reconcile the remaining source packages against accepted installation and release receipts.
 - Expand AA coverage into individual accepted ability families.
-- Expand tradeskills into reviewed recipe batches without counting existing PEQ recipes as new additions.
+- Keep the craft-sorted recipe catalogue and class/level spell index aligned with accepted owner handoffs.
 - Add individual quest names and acceptance evidence beneath each zone.
 - Keep native acceptance, source publication and released downloads separate; add dates only when an actual milestone exists.
 
 ## Provenance and upkeep
 
-The published overview was checked at [`99c1162`](https://github.com/nightstalker6669/EQEmu/tree/99c11623c2cf5ed15b0f0830a3aecea28528fc21). Content-package notes have different validation histories. Kithicor’s local acceptance was reported by the coordinator and its final native receipt hash was checked separately; it remains explicitly unpublished in this snapshot.
+The published overview was checked at [`99c1162`](https://github.com/nightstalker6669/EQEmu/tree/99c11623c2cf5ed15b0f0830a3aecea28528fc21). Content-package notes have different validation histories. Kithicor source is published at [5a9d8a0](https://github.com/nightstalker6669/EQEmu/commit/5a9d8a0b3c8bfc7a2c5728cc9c006d640e2d33d6), with the [matching database](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-15-kithicor) and [r25 server release](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r25-a1-5a9d8a0b3c8b). Local Linux native acceptance retains the r8 escort / r11 focused-mock distinction, unresolved guard and peer NPC ready qualifications, approved local reconstruction and continuing Oceangreen geometry limits. CI and publication do not widen gameplay acceptance.
 
 Original or uncertain encounter values that were reconstructed locally are not presented as authenticated historical Live values. Original EQEmu and ProjectEQ work retains its community attribution.
 
 Roadmap Chat maintains this inventory using accepted-scope handoffs. Update this document and the interactive map together when publication or acceptance changes. Do not attach private operational receipts, credentials, character records or proprietary client assets.
 
 [Back to project overview](README.md)
+

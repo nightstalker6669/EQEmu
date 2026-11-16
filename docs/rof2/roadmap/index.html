@@ -1907,7 +1907,7 @@ html&gt;body{padding:0}&lt;/style&gt;
   &lt;details class=&quot;rm-notes&quot;&gt;&lt;summary&gt;Scope &amp;amp; status guide&lt;/summary&gt;
     &lt;div class=&quot;rm-note-content text-small&quot;&gt;
       &lt;p&gt;&lt;strong&gt;Published scope:&lt;/strong&gt; included in reviewed public source or content packages; this does not mean every variation has passed gameplay testing.&lt;/p&gt;
-      &lt;p&gt;&lt;strong&gt;Source package:&lt;/strong&gt; implementation is available for review, with activation or gameplay acceptance still pending. &lt;strong&gt;Local testing:&lt;/strong&gt; current development work, held from publication.&lt;/p&gt;
+      &lt;p&gt;&lt;strong&gt;Source package:&lt;/strong&gt; implementation is available for review, with activation or gameplay acceptance still pending. &lt;strong&gt;Local testing:&lt;/strong&gt; current development work, held from publication. &lt;strong&gt;Source + DB published · server pending:&lt;/strong&gt; source and database are public, but the matched server download is not yet confirmed.&lt;/p&gt;
       &lt;p&gt;This first inventory covers reviewed restoration packages. It is not yet an exhaustive upstream diff. Counts describe package scope, not additions inferred from the full database. Original mechanics, EQEmu foundations and ProjectEQ content retain their community credit.&lt;/p&gt;
       &lt;p&gt;Published overview checked at &lt;a href=&quot;https://github.com/nightstalker6669/EQEmu/tree/99c11623c2cf5ed15b0f0830a3aecea28528fc21&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot;&gt;99c1162&lt;/a&gt;. Zone package notes have different gameplay-validation histories. Locally reconstructed values are not a claim of exact historical Live parity.&lt;/p&gt;
     &lt;/div&gt;
@@ -2011,7 +2011,7 @@ html&gt;body{padding:0}&lt;/style&gt;
           &quot;Configurable multiple owned contracts with one active; earned Journeyman II acquisition in the accepted Oceangreen slice.&quot;
         ]
       ],
-      &quot;limit&quot;: &quot;Some scaling is reconstructed. Marketplace slot/rename commerce, later mercenary AAs and player-equipped mercenary gear are not implemented. Earned J3 progression now has local native acceptance for one ordinary level-100 healer hire; publication is pending. See Kithicor in Quests &amp; zones.&quot;,
+      &quot;limit&quot;: &quot;Some scaling is reconstructed. Marketplace slot/rename commerce, later mercenary AAs and player-equipped mercenary gear are not implemented. Earned J3 progression has local native acceptance for one ordinary level-100 healer hire; its matched source, database and server download are published. See Kithicor in Quests &amp; zones.&quot;,
       &quot;source&quot;: &quot;extensions/rof2/mercenaries/&quot;
     },
     {
@@ -2070,27 +2070,114 @@ html&gt;body{padding:0}&lt;/style&gt;
       &quot;id&quot;: &quot;spells&quot;,
       &quot;name&quot;: &quot;Spells &amp; acquisition&quot;,
       &quot;status&quot;: &quot;Published scope&quot;,
-      &quot;intro&quot;: &quot;Restore ways to obtain spells, alongside targeted content and engine repairs.&quot;,
+      &quot;intro&quot;: &quot;Published restorations affect 5,327 existing player-spell IDs across 5,629 class memberships. No new spell definitions are claimed.&quot;,
       &quot;features&quot;: [
         [
-          &quot;Vendors &amp; eligibility&quot;,
-          &quot;Missing scroll stock, faction requirements and Alaran language checks.&quot;
+          &quot;Class and level catalogue&quot;,
+          &quot;All indexed names and ranks, sorted by retained native learning level, with links to the source-qualified routes.&quot;
         ],
         [
-          &quot;Original exchanges&quot;,
-          &quot;Runes, fragments, motes, cantrips and periapts; class-aware reward choices and bundle handling.&quot;
+          &quot;Acquisition and scrolls&quot;,
+          &quot;Merchant stock, faction/language gates, original exchanges and restored scroll items; a scroll-only restoration does not establish a working route.&quot;
         ],
         [
-          &quot;Expansion coverage&quot;,
-          &quot;Restored acquisition routes across TSS, SoF, SoD, Underfoot, HoT, VoA and RoF.&quot;
+          &quot;Support content&quot;,
+          &quot;Summoned items and optional estimated pet/aura support, separated from ordinary baseline spell definitions.&quot;
         ],
         [
-          &quot;Content corrections&quot;,
-          &quot;Targeted summon items and spell content; optional reconstructed pets and auras are separately documented.&quot;
+          &quot;Earned Void access&quot;,
+          &quot;77 indexed stock spells are distinct from 8 earned B spells plus 14 new C entries, 22 cumulative. Later D–G ordinary access is not claimed.&quot;
         ]
       ],
-      &quot;limit&quot;: &quot;Not every spell effect, acquisition route or faction path is complete. Optional estimated pet/aura content is not enabled by default.&quot;,
-      &quot;source&quot;: &quot;extensions/rof2/spells/&quot;
+      &quot;limit&quot;: &quot;Source publication is separate from activation and native proof. Categories overlap and are not additive; shared-class display rows are not new spell IDs. Two House of Thule exchange routes remain on hold. Optional support is estimated, unchanged baseline spells and NPC/helper references are excluded, and class levels are retained metadata rather than a new historical audit.&quot;,
+      &quot;source&quot;: &quot;extensions/rof2/spells/&quot;,
+      &quot;catalogue&quot;: {
+        &quot;label&quot;: &quot;Restorations by class and learning level&quot;,
+        &quot;path&quot;: &quot;spells/README.md&quot;,
+        &quot;portable&quot;: &quot;spells.html&quot;,
+        &quot;groups&quot;: [
+          {
+            &quot;name&quot;: &quot;Bard&quot;,
+            &quot;count&quot;: 324,
+            &quot;path&quot;: &quot;spells/bard.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Beastlord&quot;,
+            &quot;count&quot;: 338,
+            &quot;path&quot;: &quot;spells/beastlord.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Berserker&quot;,
+            &quot;count&quot;: 173,
+            &quot;path&quot;: &quot;spells/berserker.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Cleric&quot;,
+            &quot;count&quot;: 516,
+            &quot;path&quot;: &quot;spells/cleric.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Druid&quot;,
+            &quot;count&quot;: 494,
+            &quot;path&quot;: &quot;spells/druid.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Enchanter&quot;,
+            &quot;count&quot;: 510,
+            &quot;path&quot;: &quot;spells/enchanter.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Magician&quot;,
+            &quot;count&quot;: 434,
+            &quot;path&quot;: &quot;spells/magician.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Monk&quot;,
+            &quot;count&quot;: 152,
+            &quot;path&quot;: &quot;spells/monk.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Necromancer&quot;,
+            &quot;count&quot;: 443,
+            &quot;path&quot;: &quot;spells/necromancer.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Paladin&quot;,
+            &quot;count&quot;: 379,
+            &quot;path&quot;: &quot;spells/paladin.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Ranger&quot;,
+            &quot;count&quot;: 370,
+            &quot;path&quot;: &quot;spells/ranger.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Rogue&quot;,
+            &quot;count&quot;: 200,
+            &quot;path&quot;: &quot;spells/rogue.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Shadow Knight&quot;,
+            &quot;count&quot;: 330,
+            &quot;path&quot;: &quot;spells/shadow-knight.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Shaman&quot;,
+            &quot;count&quot;: 391,
+            &quot;path&quot;: &quot;spells/shaman.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Warrior&quot;,
+            &quot;count&quot;: 145,
+            &quot;path&quot;: &quot;spells/warrior.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Wizard&quot;,
+            &quot;count&quot;: 430,
+            &quot;path&quot;: &quot;spells/wizard.md&quot;
+          }
+        ]
+      }
     },
     {
       &quot;id&quot;: &quot;aa&quot;,
@@ -2118,27 +2205,104 @@ html&gt;body{padding:0}&lt;/style&gt;
       &quot;id&quot;: &quot;tradeskills&quot;,
       &quot;name&quot;: &quot;Tradeskills&quot;,
       &quot;status&quot;: &quot;Published + ongoing&quot;,
-      &quot;intro&quot;: &quot;Recipe restoration plus support for special combines and item-preserving hand-ins.&quot;,
+      &quot;intro&quot;: &quot;11,662 distinct added recipe IDs, grouped by craft; existing recipe fixes and access changes are listed separately.&quot;,
       &quot;features&quot;: [
         [
-          &quot;Recipe &amp; ingredient work&quot;,
-          &quot;Reviewed recipe additions, ingredient corrections and through-RoF recipe auditing.&quot;
+          &quot;Added recipe catalogue&quot;,
+          &quot;Alphabetical craft lists include physical recipe variants, names, IDs, families and accepted trivial values.&quot;
+        ],
+        [
+          &quot;Existing recipe changes&quot;,
+          &quot;Corrections to ingredients, yields, containers, recipe availability and access are separate from additions; overlapping counts are not summed.&quot;
         ],
         [
           &quot;Special crafting&quot;,
-          &quot;Charged items, reviewed recharge combines and quest crafting consumer support.&quot;
+          &quot;Charged items, eight reviewed recharges and quest crafting consumer support; recharge gameplay acceptance is not established.&quot;
         ],
         [
-          &quot;Latest published cohort&quot;,
-          &quot;RRC312-r2 adds a finite 32-recipe batch, with its reconstruction choices documented.&quot;
-        ],
-        [
-          &quot;Remaining research&quot;,
-          &quot;Three unsupported groups remain in the recorded final checkpoint; unknown historical values are not treated as verified originals.&quot;
+          &quot;Scope limits&quot;,
+          &quot;Three exact-trivial variants remain unsupported; approved local scalar choices and source-unconfirmed stew remain qualified.&quot;
         ]
       ],
-      &quot;limit&quot;: &quot;Full database recipe totals include existing EQEmu/PEQ content and are not counts of recipes we added. A per-batch ledger is the next useful breakdown.&quot;,
-      &quot;source&quot;: &quot;extensions/rof2/tradeskills/&quot;
+      &quot;limit&quot;: &quot;Finite accepted/published owner inventory, not a complete through-RoF audit. Counts are distinct added IDs, not unique output names or the full PEQ database. Fletcher Ceramic Clay remains unclassified stored skill 62. Application/publication evidence is not native gameplay proof.&quot;,
+      &quot;source&quot;: &quot;extensions/rof2/tradeskills/&quot;,
+      &quot;catalogue&quot;: {
+        &quot;label&quot;: &quot;Added recipes by craft&quot;,
+        &quot;path&quot;: &quot;tradeskills/README.md&quot;,
+        &quot;portable&quot;: &quot;tradeskills.html&quot;,
+        &quot;groups&quot;: [
+          {
+            &quot;name&quot;: &quot;Alchemy&quot;,
+            &quot;count&quot;: 788,
+            &quot;path&quot;: &quot;tradeskills/alchemy.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Baking&quot;,
+            &quot;count&quot;: 1300,
+            &quot;path&quot;: &quot;tradeskills/baking.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Blacksmithing&quot;,
+            &quot;count&quot;: 2091,
+            &quot;path&quot;: &quot;tradeskills/blacksmithing.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Brewing&quot;,
+            &quot;count&quot;: 143,
+            &quot;path&quot;: &quot;tradeskills/brewing.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Fishing&quot;,
+            &quot;count&quot;: 26,
+            &quot;path&quot;: &quot;tradeskills/fishing.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Fletching&quot;,
+            &quot;count&quot;: 637,
+            &quot;path&quot;: &quot;tradeskills/fletching.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Jewelry Making&quot;,
+            &quot;count&quot;: 1393,
+            &quot;path&quot;: &quot;tradeskills/jewelry-making.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Make Poison&quot;,
+            &quot;count&quot;: 15,
+            &quot;path&quot;: &quot;tradeskills/make-poison.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;No Skill / quest and container combines&quot;,
+            &quot;count&quot;: 102,
+            &quot;path&quot;: &quot;tradeskills/no-skill-quest-and-container-combines.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Pottery&quot;,
+            &quot;count&quot;: 1846,
+            &quot;path&quot;: &quot;tradeskills/pottery.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Research&quot;,
+            &quot;count&quot;: 1209,
+            &quot;path&quot;: &quot;tradeskills/research.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Tailoring&quot;,
+            &quot;count&quot;: 1589,
+            &quot;path&quot;: &quot;tradeskills/tailoring.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Tinkering&quot;,
+            &quot;count&quot;: 522,
+            &quot;path&quot;: &quot;tradeskills/tinkering.md&quot;
+          },
+          {
+            &quot;name&quot;: &quot;Unclassified stored skill 62&quot;,
+            &quot;count&quot;: 1,
+            &quot;path&quot;: &quot;tradeskills/unclassified-stored-skill-62.md&quot;
+          }
+        ]
+      }
     }
   ],
   &quot;zones&quot;: [
@@ -2407,12 +2571,12 @@ html&gt;body{padding:0}&lt;/style&gt;
       &quot;id&quot;: &quot;kithicor&quot;,
       &quot;name&quot;: &quot;Kithicor → Void C / J3&quot;,
       &quot;group&quot;: &quot;Seeds of Destruction&quot;,
-      &quot;status&quot;: &quot;Native accepted · local&quot;,
-      &quot;intro&quot;: &quot;Recorded local gameplay acceptance for six Kithicor tasks and the next earned progression step. Publication is pending.&quot;,
+      &quot;status&quot;: &quot;Published batch · native scope qualified&quot;,
+      &quot;intro&quot;: &quot;Matched source, database and r25 server downloads are published. Recorded native gameplay acceptance remains the matched local Linux scope.&quot;,
       &quot;features&quot;: [
         [
           &quot;Six tasks &amp; shared rewards&quot;,
-          &quot;Four personal tasks plus Safe’s original two-stage mission and Bitter. Actual physical stages, refugees and rewards passed; 31 reward components were paid, with two real shared-mission recipients.&quot;
+          &quot;Charges of Treason, Vengeance and Deliverance, Destroy the Impostor, Rain of Ruin, Safe Passage and Bitter Victuals. Both physical escort stages, refugees and rewards passed; 31 reward components were paid, with two real shared-mission recipients.&quot;
         ],
         [
           &quot;Earned Void C&quot;,
@@ -2420,15 +2584,15 @@ html&gt;body{padding:0}&lt;/style&gt;
         ],
         [
           &quot;Scroll &amp; Journeyman III&quot;,
-          &quot;One Mindfreeze scroll purchase and spell scribing, then one ordinary level-100 Journeyman III healer hire. Existing contracts, spells and items were preserved.&quot;
+          &quot;One 165-Chronobine Mindfreeze scroll purchase and spell scribing, then one ordinary level-100 Journeyman III healer hire. Existing contracts, spells and items were preserved.&quot;
         ],
         [
-          &quot;Release preparation&quot;,
-          &quot;The matched source/content batch and sanitized database package are being prepared. No published release is claimed yet.&quot;
+          &quot;Published matched batch&quot;,
+          &quot;Source 5a9d8a0, the peq-rof2-2026-11-15-kithicor database and server release rof2-ci-r25-a1-5a9d8a0b3c8b are public. Windows/Linux CI passed; native gameplay coverage retains its existing limits.&quot;
         ]
       ],
-      &quot;limit&quot;: &quot;Accepted scope is local; publication is pending. A later escort-homing fix has focused source/mock evidence but awaits a fresh gameplay check. Some escort and NPC ready/return behavior remains unproved. Numeric reconstruction is user-approved, not exact historical parity. Local acceptance milestone recorded November 15.&quot;,
-      &quot;source&quot;: null
+      &quot;limit&quot;: &quot;Native acceptance used the matched local Linux cohort and r8 physical escort revision. The r11 escort-homing fix has focused mock and exact staging evidence only, pending a future fresh load; a full r11 escort walk and every guard route are not proved. Earlier 615/616 guard behavior causes and the peer NPC ready path remain unproved. The owned AA exit and main NPC ready path passed. Numeric reconstruction is user-approved, not exact historical parity. Windows native gameplay is not established by CI. Oceangreen geometry limits continue to apply.&quot;,
+      &quot;sourceURL&quot;: &quot;https://github.com/nightstalker6669/EQEmu/blob/5a9d8a0b3c8bfc7a2c5728cc9c006d640e2d33d6/docs/rof2/KITHICOR.md&quot;
     },
     {
       &quot;id&quot;: &quot;shards&quot;,
@@ -2572,7 +2736,8 @@ html&gt;body{padding:0}&lt;/style&gt;
   const groups=[...new Set(data[area].map(x=&gt;x.group||&#x27;&#x27;))];
   choices.innerHTML=groups.map(g=&gt;&#x27;&lt;div class=&quot;rm-group&quot;&gt;&#x27;+(g?&#x27;&lt;h3 class=&quot;text-small text-muted&quot;&gt;&#x27;+esc(g)+&#x27;&lt;/h3&gt;&#x27;:&#x27;&#x27;)+&#x27;&lt;div class=&quot;rm-topic-row&quot;&gt;&#x27;+data[area].filter(x=&gt;(x.group||&#x27;&#x27;)===g).map(x=&gt;&#x27;&lt;button class=&quot;btn&quot; type=&quot;button&quot; data-topic=&quot;&#x27;+x.id+&#x27;&quot; aria-pressed=&quot;&#x27;+(selected===x.id)+&#x27;&quot;&gt;&#x27;+esc(x.name)+&#x27;&lt;/button&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;).join(&#x27;&#x27;);
   const item=data[area].find(x=&gt;x.id===selected);
-  detail.innerHTML=&#x27;&lt;div class=&quot;rm-detail-head&quot;&gt;&lt;h2&gt;&#x27;+esc(item.name)+&#x27;&lt;/h2&gt;&lt;span class=&quot;viz-badge&quot;&gt;&#x27;+esc(item.status)+&#x27;&lt;/span&gt;&lt;/div&gt;&lt;p&gt;&#x27;+esc(item.intro)+&#x27;&lt;/p&gt;&lt;div class=&quot;rm-leaves&quot;&gt;&#x27;+item.features.map(([title,text])=&gt;&#x27;&lt;div class=&quot;rm-leaf&quot;&gt;&lt;h3&gt;&#x27;+esc(title)+&#x27;&lt;/h3&gt;&lt;p&gt;&#x27;+esc(text)+&#x27;&lt;/p&gt;&lt;/div&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;div class=&quot;rm-boundary text-small&quot;&gt;&lt;h3&gt;Remaining / qualified scope&lt;/h3&gt;&lt;p&gt;&#x27;+esc(item.limit)+&#x27;&lt;/p&gt;&lt;/div&gt;&#x27;+(item.source?&#x27;&lt;a class=&quot;text-small&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+sourceBase+item.source+&#x27;&quot;&gt;Read the source &amp; scope notes ↗&lt;/a&gt;&#x27;:&#x27;&#x27;);
+  detail.innerHTML=&#x27;&lt;div class=&quot;rm-detail-head&quot;&gt;&lt;h2&gt;&#x27;+esc(item.name)+&#x27;&lt;/h2&gt;&lt;span class=&quot;viz-badge&quot;&gt;&#x27;+esc(item.status)+&#x27;&lt;/span&gt;&lt;/div&gt;&lt;p&gt;&#x27;+esc(item.intro)+&#x27;&lt;/p&gt;&lt;div class=&quot;rm-leaves&quot;&gt;&#x27;+item.features.map(([title,text])=&gt;&#x27;&lt;div class=&quot;rm-leaf&quot;&gt;&lt;h3&gt;&#x27;+esc(title)+&#x27;&lt;/h3&gt;&lt;p&gt;&#x27;+esc(text)+&#x27;&lt;/p&gt;&lt;/div&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;div class=&quot;rm-boundary text-small&quot;&gt;&lt;h3&gt;Remaining / qualified scope&lt;/h3&gt;&lt;p&gt;&#x27;+esc(item.limit)+&#x27;&lt;/p&gt;&lt;/div&gt;&#x27;+((item.source||item.sourceURL)?&#x27;&lt;a class=&quot;text-small&quot; target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+esc(item.sourceURL||sourceBase+item.source)+&#x27;&quot;&gt;Read the source &amp; scope notes ↗&lt;/a&gt;&#x27;:&#x27;&#x27;);
+  if(item.catalogue){const c=item.catalogue,base=&#x27;https://github.com/nightstalker6669/EQEmu/blob/develop/docs/rof2/roadmap/&#x27;;detail.insertAdjacentHTML(&#x27;beforeend&#x27;,&#x27;&lt;details&gt;&lt;summary&gt;&#x27;+esc(c.label)+&#x27;&lt;/summary&gt;&lt;table class=&quot;table table-sm&quot;&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&#x27;+ (item.id===&#x27;tradeskills&#x27;?&#x27;Tradeskill&#x27;:&#x27;Class&#x27;)+&#x27;&lt;/th&gt;&lt;th class=&quot;text-end&quot;&gt;&#x27;+(item.id===&#x27;tradeskills&#x27;?&#x27;Added recipe IDs&#x27;:&#x27;Class spell IDs&#x27;)+&#x27;&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&#x27;+c.groups.map(g=&gt;&#x27;&lt;tr&gt;&lt;td&gt;&lt;a target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+base+g.path+&#x27;&quot;&gt;&#x27;+esc(g.name)+&#x27;&lt;/a&gt;&lt;/td&gt;&lt;td class=&quot;text-end tabular-nums&quot;&gt;&#x27;+g.count.toLocaleString()+&#x27;&lt;/td&gt;&lt;/tr&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/tbody&gt;&lt;/table&gt;&lt;/details&gt;&lt;a target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+base+c.path+&#x27;&quot;&gt;Open the full catalogue ↗&lt;/a&gt;&#x27;);}
  }
  function restore(state){const s=state?.privateContent;if(s&amp;&amp;data[s.area]?.some(x=&gt;x.id===s.selected)){area=s.area;selected=s.selected;}render();}
  root.addEventListener(&#x27;click&#x27;,e=&gt;{const b=e.target.closest(&#x27;button&#x27;);if(!b)return; if(b.dataset.area){area=b.dataset.area;selected=data[area][0].id;}else if(b.dataset.topic){selected=b.dataset.topic;}else return;render();if(window.openai?.setWidgetState){window.openai.setWidgetState({modelContent:{roadmapArea:area,selectedTopic:data[area].find(x=&gt;x.id===selected).name},privateContent:{area,selected}}).catch(()=&gt;{});}});

@@ -1,0 +1,179 @@
+{
+  "scope": "Owner-supplied accepted/published inventory; no new audit or runtime claims",
+  "recipes": 11662,
+  "spells_existing_ids": 5327,
+  "spell_class_memberships": 5629,
+  "new_spell_definition_claims": 0,
+  "inputs": {
+    "tradeskill_packet_sha256": "768de9724425c100655b06b0972750eb55c9aaef2438c0699e6c86a0ff947a4c",
+    "tradeskill_inventory_sha256": "486986573f8564233c3d45cbfee8030e0c943ee0d0458b3688cba3be6582e3d0",
+    "spell_packet_sha256": "588bb38781815b933df6f2870f1b166fe4396272e278f5b4d085db2453f308d2",
+    "spell_index_sha256": "3973190dfd74dbed4f1116ddadd8545404d7898171874843eaeff300fff21922"
+  },
+  "files": {
+    "ROADMAP.md": {
+      "sha256": "90960ec0405313b127f071bf0ba03b77298532613588354359879cbcc39aa08d",
+      "bytes": 26184
+    },
+    "docs/rof2/roadmap/index.html": {
+      "sha256": "1471bc23f7d903b8a69e058feee6e33380e547587abefbcdad91fe72a7ce6b01",
+      "bytes": 133068
+    },
+    "docs/rof2/roadmap/spells/README.md": {
+      "sha256": "adac102d51ebce54a7a0e942d4138deccf43a2691698d21a6155529780099a16",
+      "bytes": 3210
+    },
+    "docs/rof2/roadmap/spells/bard.md": {
+      "sha256": "bc47ed59f78065ebcce0ddfdf0030ebd9133e6733f82c9d07fab4e5387e35880",
+      "bytes": 54059
+    },
+    "docs/rof2/roadmap/spells/beastlord.md": {
+      "sha256": "97d86c998a0e694a7615974d201cfd120d491dfb41d3f2017504dc81d6979b6f",
+      "bytes": 53294
+    },
+    "docs/rof2/roadmap/spells/berserker.md": {
+      "sha256": "74477fb098b89f06fe9f89c3f76d10ebfe16de9b60d255b6846fdaed58dd5f12",
+      "bytes": 26280
+    },
+    "docs/rof2/roadmap/spells/cleric.md": {
+      "sha256": "8ba174e80257e3a79cd01244cae30d92ea4185a5a925b9fe4cad4bb7d5393c17",
+      "bytes": 83193
+    },
+    "docs/rof2/roadmap/spells/druid.md": {
+      "sha256": "3c96ea5d8ba4ae82271b029f84fdc690cc64c1e4d2878324bf09828d99bb022a",
+      "bytes": 79035
+    },
+    "docs/rof2/roadmap/spells/enchanter.md": {
+      "sha256": "463d83db08e7c1434d58a38bce142f215b624f5f35388c46754ed4bc8b51ce39",
+      "bytes": 80672
+    },
+    "docs/rof2/roadmap/spells/magician.md": {
+      "sha256": "0f66154775fc803b0fbb1a963a934790479cd66c727e42e80ef4ac17c3561f78",
+      "bytes": 70919
+    },
+    "docs/rof2/roadmap/spells/monk.md": {
+      "sha256": "80245eeb3ba83ecc7f69efbd9ce0099875a75be3c2770933c0d671d29642ff6f",
+      "bytes": 24108
+    },
+    "docs/rof2/roadmap/spells/necromancer.md": {
+      "sha256": "89b3aa6e7faf799fdae1eedca7da85c63bf224c91a8460d96de23b535a4f84e9",
+      "bytes": 74305
+    },
+    "docs/rof2/roadmap/spells/paladin.md": {
+      "sha256": "c1db538d0c8b67a2b985164c0ffb486d63ac99c1c4f639c76cc9625b2953a03b",
+      "bytes": 61055
+    },
+    "docs/rof2/roadmap/spells/ranger.md": {
+      "sha256": "ef8a72c5e0488ea6707869a6e6665b77fbb1b407352d4378c4a1a50e168ce4c7",
+      "bytes": 56858
+    },
+    "docs/rof2/roadmap/spells/rogue.md": {
+      "sha256": "e5a557a0d88cd07194a339c2a12d426947f3b8e11769396364f0cfa9fb59bb77",
+      "bytes": 32266
+    },
+    "docs/rof2/roadmap/spells/routes.md": {
+      "sha256": "164eea71ef64a16a6b19016bde428cd37a34914be6d9b8abff7a65534d798bc1",
+      "bytes": 90722
+    },
+    "docs/rof2/roadmap/spells/shadow-knight.md": {
+      "sha256": "7cd1b8ac35c392b93fcd3cc42101791dd34e936163eccb849f17562c9adecff8",
+      "bytes": 50826
+    },
+    "docs/rof2/roadmap/spells/shaman.md": {
+      "sha256": "9e9877d2abac33cea48216abe2cb4fa893c3381402f5ea06114ac8b16b0b3061",
+      "bytes": 62408
+    },
+    "docs/rof2/roadmap/spells/warrior.md": {
+      "sha256": "c6f43623464c8b88b8edbe624ed2b8a45c8aad81294c6564feb240c4b3dfae4f",
+      "bytes": 20481
+    },
+    "docs/rof2/roadmap/spells/wizard.md": {
+      "sha256": "c49c10503cdaef8c4ea9bb1130199bb3f78d069286bb37c3eecb8dba823be71b",
+      "bytes": 66441
+    },
+    "docs/rof2/roadmap/spells.html": {
+      "sha256": "7b89928271d501f60303255178dda88bb7f209c2056aa0646a4a61d5fb5e8bff",
+      "bytes": 744219
+    },
+    "docs/rof2/roadmap/spells.json": {
+      "sha256": "f3917a27da87090c72702405dce38174c6c92c3c5810ff52b1db38f2e0682aa0",
+      "bytes": 453852
+    },
+    "docs/rof2/roadmap/tradeskills/README.md": {
+      "sha256": "f9f5669a44e7f4d44e4b4d77f423ef6971d59c525a439ba49e15e2be294d454e",
+      "bytes": 3934
+    },
+    "docs/rof2/roadmap/tradeskills/alchemy.md": {
+      "sha256": "5e6b372fd1497db7be0f501a6a63e8d9531561d19f1413e3c38b197fa5af2cb1",
+      "bytes": 73559
+    },
+    "docs/rof2/roadmap/tradeskills/baking.md": {
+      "sha256": "bbc1f2cf3addce8e9d5484be7e8ceb922e66405c5b1ba371921047284e22d309",
+      "bytes": 121498
+    },
+    "docs/rof2/roadmap/tradeskills/blacksmithing.md": {
+      "sha256": "52377ec9f9fb8da2a92a1a22e890c5e32850f7f3751a5bde9f1f40bb437ba028",
+      "bytes": 220639
+    },
+    "docs/rof2/roadmap/tradeskills/brewing.md": {
+      "sha256": "6eb3e6208f1f932a73048d5cfae50ad06e753586df1c7743159ba5e0d337c09e",
+      "bytes": 15317
+    },
+    "docs/rof2/roadmap/tradeskills/existing-changes.md": {
+      "sha256": "29063dd5a4be98967758e28e8bd1757355023689a3098a1168e639f7e165acb2",
+      "bytes": 120454
+    },
+    "docs/rof2/roadmap/tradeskills/fishing.md": {
+      "sha256": "751ee8484666ede6eb0acff2c0989eca8dafc669c0aab0fcc6f2f6dc152e33ef",
+      "bytes": 3518
+    },
+    "docs/rof2/roadmap/tradeskills/fletching.md": {
+      "sha256": "ed40cfa80f9cd8d5132cc10c6851a30fd5b4a505c8d814ba1f0f56a81beb7fd9",
+      "bytes": 71659
+    },
+    "docs/rof2/roadmap/tradeskills/jewelry-making.md": {
+      "sha256": "effcd7855ff6a31d8387e0005c37e26d9f516a41de4b521617660075a86011d9",
+      "bytes": 142914
+    },
+    "docs/rof2/roadmap/tradeskills/make-poison.md": {
+      "sha256": "42f7bd8be8069894dedb217f2581b9c5bb3c209a8b9d5178a5fd9e68d2f22bff",
+      "bytes": 2781
+    },
+    "docs/rof2/roadmap/tradeskills/no-skill-quest-and-container-combines.md": {
+      "sha256": "794f28bdfee360a63a3186d07f196dd1c56e805fee1dd096b57e40815b078583",
+      "bytes": 10586
+    },
+    "docs/rof2/roadmap/tradeskills/pottery.md": {
+      "sha256": "68664467716f8339222407fc2ab607e18899448b6954b2efa2d348ce61a79125",
+      "bytes": 183372
+    },
+    "docs/rof2/roadmap/tradeskills/research.md": {
+      "sha256": "97150d0355717a8cf24cd9985829a4fae09fd9810030177dd4deb63e28150dcd",
+      "bytes": 126466
+    },
+    "docs/rof2/roadmap/tradeskills/tailoring.md": {
+      "sha256": "a9517151533cdedfa92eea92e575270e803ef3f769daff102c7a126b03315f51",
+      "bytes": 161976
+    },
+    "docs/rof2/roadmap/tradeskills/tinkering.md": {
+      "sha256": "6f7f0f59d42b99a14cc8df81b36362c844b88d8ecf2bc54fef91ec6d1db43579",
+      "bytes": 52934
+    },
+    "docs/rof2/roadmap/tradeskills/unclassified-stored-skill-62.md": {
+      "sha256": "6593359aeb43b76cf2148f652f32c2d3cf8cbded562b879467979e4e1d9e33e0",
+      "bytes": 733
+    },
+    "docs/rof2/roadmap/tradeskills-existing-changes.json": {
+      "sha256": "3ef73cb45828b4cf2e8cbbc78fbe3de75185a3906875c00d6ddb7d4d18b047df",
+      "bytes": 170363
+    },
+    "docs/rof2/roadmap/tradeskills.html": {
+      "sha256": "0dac40d86dee03a1a218096ebe2f320258ca8e5c700215966b9e2146cdaa3144",
+      "bytes": 936790
+    },
+    "docs/rof2/roadmap/tradeskills.json": {
+      "sha256": "cce9f015448814cd3757acd5647086d99da78f5dc0bc14a30c3ca1585efe97e6",
+      "bytes": 715534
+    }
+  }
+}
