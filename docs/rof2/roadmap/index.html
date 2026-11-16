@@ -1901,6 +1901,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     &lt;/div&gt;
   &lt;/div&gt;
   &lt;div id=&quot;rm-choices&quot; class=&quot;rm-choices&quot; aria-label=&quot;Topics&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;rm-quest-index&quot; hidden&gt;&lt;/div&gt;
   &lt;hr&gt;
   &lt;section id=&quot;rm-detail&quot; aria-live=&quot;polite&quot; aria-atomic=&quot;true&quot;&gt;&lt;/section&gt;
   &lt;hr&gt;
@@ -2815,15 +2816,18 @@ html&gt;body{padding:0}&lt;/style&gt;
   ]
 }
 &lt;/script&gt;
+&lt;script type=&quot;application/json&quot; id=&quot;rm-quest-data&quot;&gt;{&quot;summary&quot;:&quot;337 documented named task routes · 5 descriptive exchange routes · 12 held/source-only entries; source tiers and native limits remain separate.&quot;,&quot;url&quot;:&quot;https://github.com/nightstalker6669/EQEmu/blob/develop/docs/rof2/roadmap/quests/README.md&quot;}&lt;/script&gt;
 &lt;script&gt;
 (()=&gt;{
  const root=document.getElementById(&#x27;eqemu-roadmap&#x27;);
  const data=JSON.parse(document.getElementById(&#x27;rm-data&#x27;).textContent);
+ const questCatalogue=JSON.parse(document.getElementById(&#x27;rm-quest-data&#x27;).textContent),questIndex=root.querySelector(&#x27;#rm-quest-index&#x27;);
  const choices=root.querySelector(&#x27;#rm-choices&#x27;), detail=root.querySelector(&#x27;#rm-detail&#x27;);
  const sourceBase=&#x27;https://github.com/nightstalker6669/EQEmu/tree/99c11623c2cf5ed15b0f0830a3aecea28528fc21/&#x27;;
  let area=&#x27;systems&#x27;, selected=&#x27;housing&#x27;;
  const esc=s=&gt;String(s).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g,c=&gt;({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#39;&#x27;}[c]));
  function render(){
+  questIndex.hidden=area!==&#x27;zones&#x27;;questIndex.innerHTML=&#x27;&lt;a target=&quot;_blank&quot; rel=&quot;noreferrer&quot; href=&quot;&#x27;+esc(questCatalogue.url)+&#x27;&quot;&gt;Browse all documented quest routes by zone ↗&lt;/a&gt;&lt;p class=&quot;text-small&quot;&gt;&#x27;+esc(questCatalogue.summary)+&#x27;&lt;/p&gt;&#x27;;
   root.querySelectorAll(&#x27;[data-area]&#x27;).forEach(b=&gt;b.setAttribute(&#x27;aria-pressed&#x27;,String(b.dataset.area===area)));
   const groups=[...new Set(data[area].map(x=&gt;x.group||&#x27;&#x27;))];
   choices.innerHTML=groups.map(g=&gt;&#x27;&lt;div class=&quot;rm-group&quot;&gt;&#x27;+(g?&#x27;&lt;h3 class=&quot;text-small text-muted&quot;&gt;&#x27;+esc(g)+&#x27;&lt;/h3&gt;&#x27;:&#x27;&#x27;)+&#x27;&lt;div class=&quot;rm-topic-row&quot;&gt;&#x27;+data[area].filter(x=&gt;(x.group||&#x27;&#x27;)===g).map(x=&gt;&#x27;&lt;button class=&quot;btn&quot; type=&quot;button&quot; data-topic=&quot;&#x27;+x.id+&#x27;&quot; aria-pressed=&quot;&#x27;+(selected===x.id)+&#x27;&quot;&gt;&#x27;+esc(x.name)+&#x27;&lt;/button&gt;&#x27;).join(&#x27;&#x27;)+&#x27;&lt;/div&gt;&lt;/div&gt;&#x27;).join(&#x27;&#x27;);

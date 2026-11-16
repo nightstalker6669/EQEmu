@@ -222,6 +222,11 @@ Published restorations affect 5,327 existing player-spell IDs across 5,629 class
 
 ## Quests & zones
 
+[Browse the alphabetical quest-route catalogue](docs/rof2/roadmap/quests/README.md) · [Portable searchable catalogue](docs/rof2/roadmap/quests.html)
+
+**337 documented named task routes, five descriptive scripted exchange routes and twelve held/source-only appendix entries.** These counts distinguish source work, accepted tasks and held content; they are not 354 completed or newly added quests. Multi-zone crosslinks do not increase global totals. The Achievements subset retains its 108 exact saved receipt / eleven coherent-source summary / 172 older-overlay unresolved-receipt tiers. Existing zone-package scope and native limitations below remain unchanged.
+
+
 ### The Serpent’s Spine / Hero’s Journey
 
 <details>

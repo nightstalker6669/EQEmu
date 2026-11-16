@@ -10,16 +10,18 @@
     "spell_packet_sha256": "588bb38781815b933df6f2870f1b166fe4396272e278f5b4d085db2453f308d2",
     "spell_index_sha256": "3973190dfd74dbed4f1116ddadd8545404d7898171874843eaeff300fff21922",
     "aa_public_inventory_sha256": "faa12fc0a980613bc4ea8c86fc8cb13fab2ba30607478b7b5b94d61c1fa4182d",
-    "aa_public_markdown_sha256": "62dde8cb75cd1067fd0e068babea7ea22e8baa6a067ffc1bd48f982389d26060"
+    "aa_public_markdown_sha256": "62dde8cb75cd1067fd0e068babea7ea22e8baa6a067ffc1bd48f982389d26060",
+    "quest_spells_inventory_sha256": "1328d5babcfa10c80b53b136c9c0d11a999ca1367f50435a183c35b476e6d827",
+    "quest_achievement_sanitized_component_sha256": "3d8204a72c2a5ce4ba131c564a76a7fedd403a29eeb5ac273fd72c12bd92d6ea"
   },
   "files": {
     "ROADMAP.md": {
-      "sha256": "55ed74ad07520224d4560b8cab4595d9af9527cf738f046f887ec81f9f0aedfa",
-      "bytes": 27978
+      "sha256": "3072694e90a19cf8f0a097d177e3371d4b3e6fd72406feb6560e1b14dff5d560",
+      "bytes": 28645
     },
     "docs/rof2/roadmap/index.html": {
-      "sha256": "4400c0097b76c2de877008c4c75ef8af7eb77e756720023eca4b8c816508b16c",
-      "bytes": 136744
+      "sha256": "8c7d09903c8de65dd6bc9710dfdb6b9433b2d52831f9aaf850370ddd53c0470b",
+      "bytes": 137696
     },
     "docs/rof2/roadmap/spells/README.md": {
       "sha256": "adac102d51ebce54a7a0e942d4138deccf43a2691698d21a6155529780099a16",
@@ -256,6 +258,170 @@
     "docs/rof2/roadmap/aa.json": {
       "sha256": "a9ba0a29d7955303a3f1b67dcf4b7a469a9a78e63c6706fe2d83a508151be7bd",
       "bytes": 275863
+    },
+    "docs/rof2/roadmap/quests/README.md": {
+      "sha256": "287e457d6c89f7e1bfa4c1e45c0c44095a86b75a27f43dedd3f5af3ff9a249cb",
+      "bytes": 6803
+    },
+    "docs/rof2/roadmap/quests/arthicrex.md": {
+      "sha256": "5bd8c663687c6c8f2951217be2c1a205229ef7055992af7b427b0179600e201b",
+      "bytes": 5520
+    },
+    "docs/rof2/roadmap/quests/ashengate-reliquary-of-scale.md": {
+      "sha256": "c75f575de0e22cd5d9e6a21d40271e6c04698d658467eff9f3a81172ba0cc455",
+      "bytes": 1864
+    },
+    "docs/rof2/roadmap/quests/barren-coast.md": {
+      "sha256": "e25babc4d00cb224806ee9a491159d14b8e70bfee432ac6b48d2c779e774d4ce",
+      "bytes": 3885
+    },
+    "docs/rof2/roadmap/quests/beasts-domain.md": {
+      "sha256": "2cdf800df0f9b41b757456ea67809acc79308c28c3bd2245813e829637878c03",
+      "bytes": 13313
+    },
+    "docs/rof2/roadmap/quests/blackburrow-oceangreen-era.md": {
+      "sha256": "f5d40ee2f6c70d81c3cf220806e3d13b2daeea1aa0c30e7f72a0a0bbf34e8f3a",
+      "bytes": 4030
+    },
+    "docs/rof2/roadmap/quests/blackfeather-roost.md": {
+      "sha256": "14a893296f51e958dc533e840b94b0a0e75e17d8950fde103ded8f01fcd3c7e1",
+      "bytes": 21657
+    },
+    "docs/rof2/roadmap/quests/blightfire-moors.md": {
+      "sha256": "7a3166258ec50a7610391b79488658252ab1d9667e3a8dfaee8ba60ae8653510",
+      "bytes": 70847
+    },
+    "docs/rof2/roadmap/quests/bloody-kithicor.md": {
+      "sha256": "04624dc04ba0e614731570e2d318ff144081954b92d6f0d48243971c36fda155",
+      "bytes": 5004
+    },
+    "docs/rof2/roadmap/quests/brell-s-rest.md": {
+      "sha256": "c09223e62fd09f54a83c2631e424b2a65ad597a8fa127e20dec71bf0236dfd7d",
+      "bytes": 3104
+    },
+    "docs/rof2/roadmap/quests/brell-s-temple.md": {
+      "sha256": "670a5b10f91751d6dd2baa9c79a8f074e4ec29205820774722fb3f80e1577ab9",
+      "bytes": 1724
+    },
+    "docs/rof2/roadmap/quests/crescent-reach.md": {
+      "sha256": "2703e9ba2aa6b4df5f02a67ac5eb86ef7eac5d1a910f91a7e076129529947194",
+      "bytes": 42739
+    },
+    "docs/rof2/roadmap/quests/direwind-cliffs.md": {
+      "sha256": "b06638ce73a78a881956c1cb53e768cf1e858d4925fe3001d048fa1e6b305ee4",
+      "bytes": 1309
+    },
+    "docs/rof2/roadmap/quests/dragonscale-hills.md": {
+      "sha256": "8c49c659157ac25db1e07fbe81855c598fade78bf50863cd5e9b40028fa4c44b",
+      "bytes": 21181
+    },
+    "docs/rof2/roadmap/quests/east-wastes-zeixshi-kar-s-awakening.md": {
+      "sha256": "ac7fc23e71c6630a09b2f7b59e4a43b168ad1e62fd8ca850b7818492af5f0a34",
+      "bytes": 1114
+    },
+    "docs/rof2/roadmap/quests/evidence.md": {
+      "sha256": "47575ba3b7732667db472cad603d3d38e7e58c04fb8bbacb0c5f962b47811b34",
+      "bytes": 5034
+    },
+    "docs/rof2/roadmap/quests/feerrott-the-dream.md": {
+      "sha256": "4708f4573df70064d9cee0446bb4bf82678492e2405dcca0ebabd66a6f2fa418",
+      "bytes": 9546
+    },
+    "docs/rof2/roadmap/quests/fortress-mechanotus.md": {
+      "sha256": "4233ced90b735c0eb3571175b490a0da45655d35b8123d31e6632db55543148b",
+      "bytes": 12635
+    },
+    "docs/rof2/roadmap/quests/goru-kar-mesa.md": {
+      "sha256": "3d0f2e4389652328f0654c33659684006bbf0014c3e11baa7cb9759f12cadaf8",
+      "bytes": 77105
+    },
+    "docs/rof2/roadmap/quests/icefall-glacier.md": {
+      "sha256": "7954b8d3f42396baa6c0c04c0353847bb0d325776998876472672dca08e4766f",
+      "bytes": 745
+    },
+    "docs/rof2/roadmap/quests/kael-drakkel-the-king-s-madness.md": {
+      "sha256": "b1b500a2f6aa72dc514472b10ccd7445273be7dd1b741501e47780e1b04c402c",
+      "bytes": 787
+    },
+    "docs/rof2/roadmap/quests/loping-plains.md": {
+      "sha256": "0e08844cb721b9a938d13b5130c1b05d9e2b85aa9a7f9b3086d505e53b22f659",
+      "bytes": 1034
+    },
+    "docs/rof2/roadmap/quests/oceangreen-hills.md": {
+      "sha256": "000ad06e73daa5d8b828c062c7c4ef511aa3b27105a72dfcf22d2b6c16dd4a49",
+      "bytes": 10242
+    },
+    "docs/rof2/roadmap/quests/oceangreen-village.md": {
+      "sha256": "c3374722c2c00ed82f3dde9815d8f2787677cbb2f18ce7a559fc9f1c2bfd0038",
+      "bytes": 3985
+    },
+    "docs/rof2/roadmap/quests/plane-of-time.md": {
+      "sha256": "adac0b17620d53959f4310405b1e89f0aedea49be7e87f8e6922206189c0498a",
+      "bytes": 1806
+    },
+    "docs/rof2/roadmap/quests/shard-s-landing.md": {
+      "sha256": "f3e7ffdfe345d383363d2f01ca78e0ca06dfbd4f6b23fae32847efa34aee84ab",
+      "bytes": 26366
+    },
+    "docs/rof2/roadmap/quests/stone-hive.md": {
+      "sha256": "592f0cee2d942ba09cb313c7119812cfd246dbd1babcb188883c56d4cf29875b",
+      "bytes": 27342
+    },
+    "docs/rof2/roadmap/quests/sunderock-springs.md": {
+      "sha256": "f1c4bf30bcfbce0ce1ea6c0703b757b727483cf7251faa857aa6c407b77998ad",
+      "bytes": 20611
+    },
+    "docs/rof2/roadmap/quests/the-buried-sea.md": {
+      "sha256": "a8d27b1ae71e89efd5bbb4f17efaabe2b0350cb726c71643d0a6c39387fe313f",
+      "bytes": 51167
+    },
+    "docs/rof2/roadmap/quests/the-commonlands-seeds-of-destruction.md": {
+      "sha256": "981200b1a575c161d573c638d9b2a3b06373734bee0eca637786c20baff31ba7",
+      "bytes": 3329
+    },
+    "docs/rof2/roadmap/quests/the-cooling-chamber.md": {
+      "sha256": "0fdc8dc08064d9a706bbeb3ee0195e320f6344c432a4936bf74d6afe57072d2e",
+      "bytes": 740
+    },
+    "docs/rof2/roadmap/quests/the-crystal-caverns-fragment-of-fear.md": {
+      "sha256": "d2f966b83fec2ea75dd507ca1fd24f348b39920ba453acef4bd2e513713b55a5",
+      "bytes": 792
+    },
+    "docs/rof2/roadmap/quests/the-foundation.md": {
+      "sha256": "7f9139584e28db05469af3188427b2cd2039476e9c93c219131ddb5ca4868b38",
+      "bytes": 735
+    },
+    "docs/rof2/roadmap/quests/the-grounds.md": {
+      "sha256": "28cbb877cfccbee35814ca0c99ecb99425c07f6520537def0822ce6de4058cd9",
+      "bytes": 6819
+    },
+    "docs/rof2/roadmap/quests/the-steppes.md": {
+      "sha256": "c57cdce08c5b1d391e88c1ec4f71c3d0cf81fc9950405ac19eeefec3981b62d5",
+      "bytes": 17458
+    },
+    "docs/rof2/roadmap/quests/underquarry.md": {
+      "sha256": "66b7e3066c79075cfc98cdf51c7638093821beaf794eda97b397b0bf9003f945",
+      "bytes": 6477
+    },
+    "docs/rof2/roadmap/quests/valdeholm.md": {
+      "sha256": "d4010b036d3fbdd7efeee20ac1e040cc9361abc64b4b013f15b862dc3bebea5d",
+      "bytes": 730
+    },
+    "docs/rof2/roadmap/quests/valley-of-king-xorbb.md": {
+      "sha256": "45ef9e7e11d8b7d25cc92f20ded916d3c78cd76e9a126621bacc428728e52238",
+      "bytes": 17287
+    },
+    "docs/rof2/roadmap/quests/vergalid-mines.md": {
+      "sha256": "cc5d0a08fd8036cb558206028b8d65ff55c32ce164b3f4a81bad3f52b624cce4",
+      "bytes": 22177
+    },
+    "docs/rof2/roadmap/quests.html": {
+      "sha256": "5e4bd22d148be9955eb0f933d7fce76f561cb0ffa5d90859388c41d683de2bc3",
+      "bytes": 761981
+    },
+    "docs/rof2/roadmap/quests.json": {
+      "sha256": "ef45bbacf2ee66d37a94f87be38f79d9e0d11c21ca92e04592235d8cf2f1efe3",
+      "bytes": 503282
     }
   },
   "aa_counts": {
@@ -276,5 +442,20 @@
       "eligibility_fix": 90,
       "new_rank": 125
     }
+  },
+  "quest_counts": {
+    "all_records": 354,
+    "named_task_routes": 337,
+    "descriptive_script_routes": 5,
+    "held_appendix_entries": 12,
+    "unique_task_ids_including_held": 349,
+    "native_completed_sod_tasks": 16,
+    "cross_owner_duplicate_keys": 0,
+    "zone_appearances": 441
+  },
+  "quest_achievement_evidence_tiers": {
+    "retained_public_overlay_and_package_evidence": 172,
+    "exact_saved_connector_receipt": 108,
+    "saved_published_coherent_source_summary": 11
   }
 }
