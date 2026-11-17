@@ -67,8 +67,8 @@
 | 83 | Crystallizing Circle Rk. II · II | 19927 | [Restored original exchange: Holdegar Bairdun original named-gem exchange](routes.md#route-157) |
 | 83 | Crystallizing Circle Rk. III · III | 19928 | [Restored original exchange: Dwekvard Gravelpick ordered Underfoot rune exchange](routes.md#route-109) |
 | 83 | Flarelure Rk. III · III | 19601 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-73) |
-| 83 | Funnel of Frigidity · I / unranked | 19688 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
-| 83 | Gelid Snap · I / unranked | 19614 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Funnel of Frigidity · I / unranked | 19688 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
+| 83 | Gelid Snap · I / unranked | 19614 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Leap of Lightning Sprites Rk. III · III | 19607 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-96) |
 | 83 | Nethermist Guard Rk. III · III | 19661 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-79) |
 | 83 | Ribbon Lightning Rk. III · III | 19610 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-78) |

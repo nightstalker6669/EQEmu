@@ -45,6 +45,7 @@ public:
 	bool SaveClientState(Client *client, ClientTaskState *cts);
 	void SendTaskSelector(Client* client, Mob* mob, const std::vector<int>& tasks);
 	bool ValidateLevel(int task_id, int player_level);
+ bool CanOfferOriginalMessage(Client*,Mob*,uint32_t task);
 	std::string GetTaskName(uint32 task_id);
 	TaskType GetTaskType(uint32 task_id);
 	void TaskSetSelector(Client* client, Mob* mob, int task_set_id, bool ignore_cooldown);

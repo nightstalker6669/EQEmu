@@ -192,6 +192,7 @@ public:
 	double GetX();
 	double GetY();
 	double GetZ();
+ double GetFixedZ(double x,double y,double z);
 	double GetHeading();
 	double GetWaypointX();
 	double GetWaypointY();

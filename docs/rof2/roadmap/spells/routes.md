@@ -4,6 +4,8 @@
 
 These entries preserve owner-supplied qualifications. A route entry is published-source evidence; it is not automatically enabled or native-tested. Merchant IDs are retained when the packet does not supply a verified name.
 
+**Current Field of Scale milestone:** eighteen existing D stock IDs have earned access, for forty cumulative B–D IDs. Earlier D–G-unavailable phrases below are retained source-snapshot qualifications, superseded only for D by [the QA-qualified new route](#route-251). E–G remains held.
+
 ## Route 1
 
 **Restored original exchange — Kalim`Kar original ordered TSS runes**
@@ -2376,3 +2378,17 @@ Existing spell definition retained; item restoration is not a new spell definiti
 Published source inventory; activation and native acceptance are not inferred from presence. 
 
 - **conditions:** {"alt_currency_cost": 0, "language_required": -1, "language_skill_required": 0, "faction_required": -100, "min_expansion": 19}
+
+## Route 251
+
+**Earned vendor access — Field of Scale / Void D**
+
+[Accepted scope](https://github.com/nightstalker6669/EQEmu/blob/develop/docs/rof2/FIELD-OF-SCALE.md)
+
+Eighteen existing stock spell IDs gain earned D access: B8 + C14 + D18 =40 cumulative of77 existing stock IDs; E–G ordinary progression remains held. Final positive consumer QA retained developer-level access with GM mode off; it is not ordinary-status-0 positive access certification. One existing Wizard scroll purchase/learn and one Human Healer Journeyman IV offer/hire passed; this does not certify all spells/classes/roles.
+
+QA used maximum-level geared characters, a test weapon for routine kills and approved position assistance. Real spell cycles established the 60/30/20-percent mechanics; no forced HP/race/cast/RNG/task counters or completion-history edits established acceptance. Assisted movement does not prove full ordinary travel, collision or path coverage.
+
+Food used four natural carcasses and sixteen seeded QA ingredients. Some Sarnak actors/note sources were approved NPC-type fixtures with real loot RNG and actual combat; Burynai note provenance was natural, while the final Kurn note used a post-cache-refresh fixture. These are not wholly natural drop/respawn proofs. Required item definitions must be present in the deployed item cache before ordinary loot testing.
+
+Approved local reward floors/caps, population-decay policy, XP/faction bases, NPC balance, bounds and placement geometry are reconstructions, not authenticated original Live values or coordinates. Existing Oceangreen geometry, Kithicor r8/r11 and other held qualifications remain unchanged.

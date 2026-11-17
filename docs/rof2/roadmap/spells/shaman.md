@@ -64,8 +64,8 @@
 | 82 | Listlessness · I / unranked | 19485 | [Void stock restoration: Zebuxoruk; first stock stage Void C](routes.md#route-69); [Earned vendor access: Earned Void C; Zebuxoruk](routes.md#route-70) |
 | 82 | Malosenea Rk. III · III | 18728 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-71); [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-62) |
 | 83 | Ancestral Obligation Rk. III · III | 19435 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-73) |
-| 83 | Antecedent's Intervention · I / unranked | 19504 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
-| 83 | Bite of the Ukun · I / unranked | 19436 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Antecedent's Intervention · I / unranked | 19504 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
+| 83 | Bite of the Ukun · I / unranked | 19436 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Dannal's Mending Rk. III · III | 19423 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-76) |
 | 83 | Halcyon Whisper Rk. III · III | 19471 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-93) |
 | 83 | Healing Counterbias · I / unranked | 19899 | [Restored merchant stock: Mystic Voskovek (merchant 202906)](routes.md#route-149) |

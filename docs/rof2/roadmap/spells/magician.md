@@ -73,10 +73,10 @@
 | 82 | Rain of Molten Scoria Rk. III · III | 18750 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-72) |
 | 82 | Shock of Discordant Steel Rk. III · III | 18759 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-76) |
 | 82 | Wand of Ethereal Transvergence Rk. III · III | 18744 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-71) |
-| 83 | Annihilate the Anomalous · I / unranked | 18494 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Annihilate the Anomalous · I / unranked | 18494 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Aspect of Fire · I / unranked | 18760 | [Optional estimated pet support: Restored missing pet/focus template](routes.md#route-14) |
 | 83 | Earthen Stance Rk. III · III | 18766 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-96) |
-| 83 | Promised Rejuvenation · I / unranked | 18120 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Promised Rejuvenation · I / unranked | 18120 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Renewal of Cadwin Rk. III · III | 18775 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-79) |
 | 83 | Thaumatize Pet · I / unranked | 19956 | [Restored merchant stock: Elementalist Bartbur (merchant 202909)](routes.md#route-127) |
 | 83 | Thaumatize Pet Rk. II · II | 19957 | [Restored original exchange: Holdegar Bairdun original named-gem exchange](routes.md#route-159) |

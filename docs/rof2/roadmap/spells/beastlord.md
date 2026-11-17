@@ -51,11 +51,11 @@
 | 82 | Minax's Mending Rk. III · III | 18190 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-76) |
 | 82 | Spiritual Verve Rk. III · III | 18119 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-72) |
 | 82 | Tsetsian Endemic Rk. III · III | 18153 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-74) |
-| 83 | Bite of the Vitrik · I / unranked | 18157 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Bite of the Vitrik · I / unranked | 18157 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Friendly Pet · I / unranked | 19735 | [Restored merchant stock: Primalist Beal (merchant 202911)](routes.md#route-105) |
 | 83 | Friendly Pet Rk. II · II | 19736 | [Restored original exchange: Holdegar Bairdun original named-gem exchange](routes.md#route-108) |
 | 83 | Friendly Pet Rk. III · III | 19737 | [Restored original exchange: Dwekvard Gravelpick ordered Underfoot rune exchange](routes.md#route-109) |
-| 83 | Promised Rejuvenation · I / unranked | 18120 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Promised Rejuvenation · I / unranked | 18120 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Spirit of Hoshkar · I / unranked | 18150 | [Optional estimated pet support: Restored missing pet/focus template](routes.md#route-14) |
 | 83 | Unrivaled Rapidity Rk. III · III | 18128 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-73) |
 | 84 | Frozen Venom · I / unranked | 19726 | [Restored merchant stock: Primalist Beal (merchant 202911)](routes.md#route-105) |

@@ -22,7 +22,7 @@
 | 83 | Lionhearted Rally-Cry · I / unranked | 19914 | [Restored merchant stock: Heldin Swordbreaker (merchant 202310)](routes.md#route-152) |
 | 83 | Lionhearted Rally-Cry Rk. II · II | 19915 | [Restored original exchange: Holdegar Bairdun original named-gem exchange](routes.md#route-153) |
 | 83 | Lionhearted Rally-Cry Rk. III · III | 19916 | [Restored original exchange: Dwekvard Gravelpick ordered Underfoot rune exchange](routes.md#route-109) |
-| 83 | Shield Topple · I / unranked | 19555 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Shield Topple · I / unranked | 19555 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 84 | Maelstrom Blade Rk. III · III | 19530 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-77) |
 | 84 | Punch Through Rk. III · III | 19554 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-83); [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-77) |
 | 85 | Bracing Defense · I / unranked | 22556 | [Restored merchant stock: Heldin Swordbreaker (merchant 202310)](routes.md#route-152) |

@@ -49,7 +49,7 @@
 | 82 | Symbol of Jeneca Rk. III · III | 19064 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-71) |
 | 83 | Armor of Endless Honor Rk. III · III | 19103 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-96) |
 | 83 | Armor of Unwavering Faith Rk. III · III | 19085 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-73) |
-| 83 | Burst of Dawnlight · I / unranked | 19059 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Burst of Dawnlight · I / unranked | 19059 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Devout Cleansing Rk. III · III | 19088 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-93) |
 | 83 | Honorific Mantle · I / unranked | 22665 | [Restored merchant stock: Ulin Velnik (merchant 202161)](routes.md#route-184) |
 | 83 | Honorific Mantle Rk. II · II | 22666 | [Restored original exchange: Holdegar Bairdun original named-gem exchange](routes.md#route-185) |

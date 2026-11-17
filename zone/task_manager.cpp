@@ -18,6 +18,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "task_manager.h"
+#include "common/fungal_unknown_inventory.h"
 #include "sod_progression.h"
 #include "fire_construct_participants.h"
 #include "task_shared_reward_identity.h"
@@ -652,6 +653,17 @@ bool TaskManager::SaveClientState(Client *client, ClientTaskState *cts)
 			int updated_activity_count = 0;
 
 			for (int activity_index = 0; activity_index < task_data->activity_count; ++activity_index) {
+                // A Food/finite Purify physical/semantic COMMIT may be unknown or may have
+                // committed before native acknowledgement. The existing exact
+                // character custody hold prevents stale teardown overwriting
+                // ONLY the affected native delivery count. Other activities/tasks keep
+                // their ordinary persistence. Reconnect loads the durable row.
+                if (((task_id==920198 && activity_index==1) ||
+                     (task_id==920207 && (activity_index==1 || activity_index==7 || activity_index==9))) &&
+                    !FungalInventory::UnknownInventory::SaveAllowed(character_id)) {
+                    all_saved=false;
+                    continue;
+                }
 				if (!active_task.activity[activity_index].updated) {
 					continue;
 				}
@@ -1130,6 +1142,16 @@ void TaskManager::SharedTaskSelector(Client* client, Mob* mob, const std::vector
 			client->MessageString(Chat::Red, TaskStr::NOT_MEET_REQ);
 		}
 	}
+}
+
+bool TaskManager::CanOfferOriginalMessage(Client* client,Mob* mob,uint32_t id) {
+ if(!client||!mob||!mob->IsNPC()||id<920200||id>920203||!client->GetTaskState()||
+  client->GetTaskState()->HasActiveSharedTask()||client->HasTaskRequestCooldownTimer()||!client->CanRequestSodTask(id,mob->GetNPCTypeID()))return false;
+ const auto* task=GetTaskData(id);if(!SupportsTaskRewardMethod(client,task)||!ValidateLevel(id,client->GetLevel()))return false;
+ const auto request=SharedTask::GetRequestCharacters(database,client->CharacterID());
+ if(!CanOfferSharedTask(id,request)||request.character_ids.empty())return false;
+ auto members=database.QueryDatabase(fmt::format("SELECT COUNT(*) FROM shared_task_members WHERE character_id IN ({})",Strings::Join(request.character_ids,",")));
+ return members.Success()&&members.RowCount()==1&&SharedTaskAdmission::Number(members.begin()[0])==std::optional<uint64_t>(0);
 }
 
 bool TaskManager::CanOfferSharedTask(int task_id, const SharedTaskRequest& request)

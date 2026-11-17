@@ -1,3 +1,5 @@
+#include "common/sod_message_admission.h"
+#include "sod_original_transform_world.h"
 #include "common/sod_shared_activity.h"
 #include "common/kithicor_mission.h"
 #include <map>
@@ -123,6 +125,32 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 {
 	if(fire_origin && (requested_task_id!=920170 || !FireSharedCorrelation::RequestShape(*fire_origin) ||
 	 !FireSharedCorrelation::DeliveredSource(*m_database,requested_character_id,*fire_origin))) return;
+ namespace Message=SodMessageAdmission;
+ const bool message=Message::Task(requested_task_id);
+ struct MessageTransaction {Database* db;bool active=false;~MessageTransaction(){if(active)db->TransactionRollbackStrict();}} message_tx{m_database};
+ std::optional<Message::Attempt> message_attempt;
+ if(message) {
+  if(!sod_origin||sod_origin->task!=requested_task_id||sod_origin->requester!=requested_character_id||!SodAdmission::Shape(*sod_origin))return;
+  if(!m_database->TransactionBeginStrict().Success())return;message_tx.active=true;
+  try {
+   message_attempt=Message::ForWorld(*m_database,*sod_origin,npc_type_id);
+   if(!message_attempt)return; // No durable original-note nonce: no free request.
+   const auto known=Message::S::ReadFinal(*m_database,message_attempt->key,message_attempt->context,true);
+   if(known.state==Message::X::DecisionState::Known)return; // Same-key replay never allocates another run.
+   auto available=Message::S::Q(*m_content_database,fmt::format("SELECT enabled,type,title FROM tasks WHERE id={}",requested_task_id));
+   bool allowed=available.RowCount()==1;
+   if(allowed){auto row=available.begin();allowed=row[2]&&Message::S::N(row[0])==1&&Message::S::N(row[1])==1&&std::string(row[2])==(requested_task_id==920200?"Raising Cabilis":"Sarnak Recovery");}
+   auto live=Message::S::Q(*m_database,fmt::format("SELECT active FROM housing_inventory_sessions WHERE character_id={} FOR UPDATE",requested_character_id));
+   auto* owner=ClientList::Instance()->FindCLEByCharacterID(requested_character_id);
+   if(!allowed||!RuleB(SodProgression,EnableFieldOfScaleSlice)||!RuleB(TaskSystem,RecordCompletedTasks)||!SodAdmission::Fresh(*sod_origin)||
+    live.RowCount()!=1||Message::S::N(live.begin()[0])!=1||!owner||!owner->Server()||owner->Server()->GetZoneID()!=452||owner->Server()->GetInstanceID()!=0) {
+    Message::RefuseSubmittedLocked(*m_database,*message_attempt,4);
+    if(m_database->TransactionCommitStrict().Success())message_tx.active=false;
+    return; // Actual World-serialized refusal, never guessed by a Zone timeout.
+   }
+   EQEmu::SharedCore::OriginalTradeCustody::ValidateWorldOutboxUnderTransaction(*m_database,message_attempt->key,message_attempt->context);
+  }catch(...){return;} // SQL/commit ambiguity remains held for same-key readback.
+ }
 	auto task = GetSharedTaskDataByTaskId(requested_task_id);
 	if (task.id != 0 && task.type == TASK_TYPE_SHARED) {
 		LogTasksDetail(
@@ -134,13 +162,15 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 
 	// Proof is emitted by the trusted Zone native roster, never a client field.
 	if(SodRewardQuote::Shared(requested_task_id)) {
-		if(!sod_origin||sod_origin->task!=requested_task_id||sod_origin->requester!=requested_character_id||!SodAdmission::Shape(*sod_origin)||!SodAdmission::Fresh(*sod_origin))return;
+		if(!sod_origin||sod_origin->task!=requested_task_id||sod_origin->requester!=requested_character_id||!SodAdmission::Shape(*sod_origin)||(!message&&!SodAdmission::Fresh(*sod_origin)))return;
+		if(!message) { // Messages use the durable unique native nonce, not an ephemeral replay cache.
 		static std::map<std::pair<uint32_t,uint64_t>,uint64_t> used;
 		const auto now=SodAdmission::Milliseconds();
 		for(auto i=used.begin();i!=used.end();)if(now-i->second>5000)i=used.erase(i);else ++i;
 		if(!used.emplace(std::make_pair(requested_character_id,sod_origin->nonce),now).second)return;
 		auto* cle=ClientList::Instance()->FindCLEByCharacterID(requested_character_id);
 		if(!cle||!cle->Server()||cle->Server()->GetZoneID()!=sod_origin->zone||cle->Server()->GetInstanceID()!=sod_origin->instance)return;
+		}
 	}
 	// shared task validation
 	// todo: this should be online group/raid members only (avoid queries)
@@ -162,7 +192,7 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 		return;
 	}
 	if (!SodProgression::MayStartOrJoinTask(*m_content_database, requested_task_id, true)) return;
-	if (!m_database->TransactionBeginStrict().Success()) {
+	if (!message && !m_database->TransactionBeginStrict().Success()) {
 		LogError("Unable to begin shared task admission transaction");
 		return;
 	}
@@ -270,12 +300,17 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 		m_database->TransactionRollbackStrict();
 		return;
 	}
+ if(message) {
+  try{Message::AcceptLocked(*m_database,*message_attempt,uint64_t(created_db_shared_task.id),uint32_t(shared_task_entity.accepted_time));}
+  catch(...){return;}
+ }
 	if (!m_database->TransactionCommitStrict().Success()) {
 		m_database->TransactionRollbackStrict();
 		LogError("Unable to commit shared task admission; no member acceptance sent");
 		return;
 	}
 
+ message_tx.active=false; // Known canonical admission/receipt commit completed together.
 	// state
 	new_shared_task.SetSharedTaskActivityState(shared_task_activity_state);
 
@@ -654,6 +689,13 @@ void SharedTaskManager::SharedTaskActivityUpdate(
 )
 {
 	auto shared_task = FindSharedTaskByTaskIdAndCharacterId(task_id, source_character_id);
+ if(task_id==920197) {
+  // Finite physical deliveries0/1 originate ONLY from the durable kind3
+  // original accept outbox. Generic optimistic packets cannot spend inputs.
+  if(activity_id==0||activity_id==1)return;
+  if(shared_task)try{if(SodOriginalTransform::RunPending(*m_database,shared_task->GetDbSharedTask().id))return;}catch(...){return;}
+ }
+
 	if(shared_task&&!FungalInventory::WorldHold::Allows(shared_task->GetDbSharedTask().id))return;
 	FungalItemWorldSource::NativeStage fungal_stage(*m_database,shared_task,source_character_id,task_id,activity_id,done_count);
 	std::vector<SharedTaskActivityStateEntry> fungal_before;
@@ -802,6 +844,8 @@ void SharedTaskManager::SaveSharedTaskActivityState(
 
 	if(FungalItemWorldSource::NativeStage::SelectedSave(shared_task_id)){
 	 FungalItemWorldSource::NativeStage::CommitActualSave(*m_database,shared_task_id,shared_task_db_activities);return;}
+	if(SodOriginalTransformWorld::Save::Selected(shared_task_id)){
+	 SodOriginalTransformWorld::Save::CommitActualSave(*m_database,shared_task_id,shared_task_db_activities);return;}
 	SharedTaskActivityStateRepository::DeleteWhere(*m_database, fmt::format("shared_task_id = {}", shared_task_id));
 	SharedTaskActivityStateRepository::InsertMany(*m_database, shared_task_db_activities);
 }
@@ -1623,6 +1667,18 @@ std::optional<std::vector<CharacterTaskTimersRepository::CharacterTaskTimers>> S
 bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskRequest& request, const SodAdmission::Proof* sod_origin)
 {
 	if (!SodProgression::MayStartOrJoinTask(*m_content_database, task_id, true)) return false;
+    if(task_id==920209) {
+        // Original Lost and Found is a public Field of Scale scene: only one
+        // group at a time, with the native fifteen-minute expiry. World admits
+        // synchronously/serially and commits before another request is handled.
+        // Do not create an invented DZ or a private progression flag for it.
+        auto occupied=m_database->QueryDatabase(
+            "SELECT COUNT(*) FROM shared_tasks WHERE task_id=920209 AND completion_time IS NULL "
+            "AND (expire_time IS NULL OR expire_time>NOW())");
+        if(!occupied.Success() || occupied.RowCount()!=1)return false;
+        const auto count=SharedTaskAdmission::Number(occupied.begin()[0]);
+        if(!count || *count!=0)return false;
+    }
 	auto task = GetSharedTaskDataByTaskId(task_id);
 	if (task.id == 0 || task.type != TASK_TYPE_SHARED || !request.leader_id ||
 		request.members.empty() || request.character_ids.size() != request.members.size()) {
@@ -2252,10 +2308,14 @@ void SharedTaskManager::Process()
 		return;
 	}
 
+	ProcessOriginalTransforms();
+ ProcessOriginalMessageAdmissions();
 	std::vector<int64_t> delete_tasks;
 	for (auto& shared_task : m_shared_tasks)
 	{
-		const bool needs_archive = !m_archived_shared_tasks.count(shared_task.GetDbSharedTask().id) &&
+        bool original_pending=false;
+        if(shared_task.GetTaskData().id==920197)try{original_pending=SodOriginalTransform::RunPending(*m_database,shared_task.GetDbSharedTask().id);}catch(...){original_pending=true;}
+		const bool needs_archive = !original_pending && !m_archived_shared_tasks.count(shared_task.GetDbSharedTask().id) &&
 			(shared_task.GetDbSharedTask().completion_time > 0 || HandleCompletedActivities(&shared_task));
 		if (needs_archive) {
 			if (!HandleCompletedTask(&shared_task)) {
@@ -2285,3 +2345,5 @@ void SharedTaskManager::Process()
 }
 
 #include "fungal_item_world_source_impl.inc"
+
+#include "sod_original_transform_world.inc"

@@ -1,3 +1,4 @@
+#include "original_trade_transform_hooks.h"
 #include "../common/fungal_unknown_inventory.h"
 #include "../common/kithicor_poison_custody.h"
 #include "inventory_session_owner.h"
@@ -46,5 +47,5 @@ void ZoneReservation::ReleaseAfterCompleteDelete(){
   KithicorPoisonCustody::ReconcilePhysicalUnderTransaction(db,lease_);
   if(db.TransactionCommitStrict().Success())break;
  }catch(...){}Wait();}
- for(;;){try{auto service=Fresh();if(service){auto closed=service->Release(lease_);if(closed){released_=true;lease_.active=false;FungalInventory::UnknownInventory::AfterCompleteDelete(lease_.actor.character_id);return;}if(closed.error==Error::CommitUncertain||closed.error==Error::DatabaseFailure){service.reset();auto fresh=Fresh();if(fresh){auto resolved=fresh->ResolveReleased(lease_);if(resolved&&resolved.value){released_=true;lease_.active=false;FungalInventory::UnknownInventory::AfterCompleteDelete(lease_.actor.character_id);return;}}}}}catch(...){}Wait();}}
+ for(;;){try{auto service=Fresh();if(service){auto closed=service->Release(lease_);if(closed){released_=true;lease_.active=false;OriginalTradeTransforms::AfterCompleteDelete(lease_.actor.character_id,lease_.epoch);FungalInventory::UnknownInventory::AfterCompleteDelete(lease_.actor.character_id);return;}if(closed.error==Error::CommitUncertain||closed.error==Error::DatabaseFailure){service.reset();auto fresh=Fresh();if(fresh){auto resolved=fresh->ResolveReleased(lease_);if(resolved&&resolved.value){released_=true;lease_.active=false;OriginalTradeTransforms::AfterCompleteDelete(lease_.actor.character_id,lease_.epoch);FungalInventory::UnknownInventory::AfterCompleteDelete(lease_.actor.character_id);return;}}}}}catch(...){}Wait();}}
 }

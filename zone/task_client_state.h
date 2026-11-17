@@ -50,7 +50,12 @@ struct TaskUpdateFilter
 };
 
 namespace FirePersonalOccurrenceSource { class NativeItemCustody; class PublishedNativeUseSink; class OriginalConstructDeathQueue; class OriginalConstructNativeHail;  class PreparedConstructPlan; class NativeConstructParticipants; class OriginalConstructDeathQueue; }
+namespace SodFoodDelivery { struct NativeTaskAccess; }
+namespace OriginalTradeTransforms { struct NativeTaskAccess; }
+
 class ClientTaskState {
+	friend struct SodFoodDelivery::NativeTaskAccess;
+	friend struct OriginalTradeTransforms::NativeTaskAccess;
  friend class FungalItemSource::NativeEvents;
  friend class FirePersonalOccurrenceSource::NativeItemCustody;
  friend class FirePersonalOccurrenceSource::PublishedNativeUseSink;

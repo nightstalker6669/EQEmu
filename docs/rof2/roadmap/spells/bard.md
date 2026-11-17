@@ -45,7 +45,7 @@
 | 82 | Aura of Rodcet · I / unranked | 18096 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17); [Void stock restoration: Zebuxoruk; first stock stage Void C](routes.md#route-69); [Earned vendor access: Earned Void C; Zebuxoruk](routes.md#route-70) |
 | 82 | Aura of Rodcet Rk. II · II | 18097 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17) |
 | 82 | Aura of Rodcet Rk. III · III | 18098 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17) |
-| 83 | Pests of the Piper · I / unranked | 18093 | [Optional estimated pet support: Restored missing pet/focus template](routes.md#route-14); [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Pests of the Piper · I / unranked | 18093 | [Optional estimated pet support: Restored missing pet/focus template](routes.md#route-14); [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Pests of the Piper Rk. II · II | 18094 | [Optional estimated pet support: Restored missing pet/focus template](routes.md#route-14) |
 | 83 | Pests of the Piper Rk. III · III | 18095 | [Optional estimated pet support: Restored missing pet/focus template](routes.md#route-14) |
 | 85 | Arcane Arietta · I / unranked | 18066 | [Void stock restoration: Zebuxoruk; first stock stage Void F](routes.md#route-64) |

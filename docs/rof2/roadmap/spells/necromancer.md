@@ -72,9 +72,9 @@
 | 83 | Bone-Rattling Shriek Rk. III · III | 18978 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-73) |
 | 83 | Corpseskin Rk. III · III | 18984 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-93) |
 | 83 | Icy Stitches Rk. III · III | 18990 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-78) |
-| 83 | Pyre of the Forgotten · I / unranked | 18991 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Pyre of the Forgotten · I / unranked | 18991 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Voidwhisper Manacles Rk. III · III | 18987 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-96) |
-| 83 | Withering Decay · I / unranked | 19047 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17); [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Withering Decay · I / unranked | 19047 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17); [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Withering Decay Rk. II · II | 19048 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17) |
 | 83 | Withering Decay Rk. III · III | 19049 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17) |
 | 84 | Clawing Darkness Rk. III · III | 18975 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-77) |

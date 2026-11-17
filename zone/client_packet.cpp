@@ -1,3 +1,7 @@
+#include "sod_message_admission.h"
+#include "original_message_admission.h"
+#include "original_trade_transform_hooks.h"
+#include "sod_food_delivery.h"
 #include "kithicor_poison_trade.h"
 #include "fungal_item_operation_source.h"
 #include "fire_run_terminal_scene.h"
@@ -32,6 +36,7 @@
 #include "housing_plot_marker.h"
 
 #include "client.h"
+#include "sod_fieldofscale_crystal_source.h"
 #include "fire_native_item_custody.h"
 
 #include "common/data_bucket.h"
@@ -2424,6 +2429,7 @@ void Client::Handle_OP_AcceptNewTask(const EQApplicationPacket *app)
 	{
 		if (task_state->CanAcceptNewTask(this, ant->task_id, ant->task_master_id))
 		{
+			SodMessageAdmission::NativeChoice message_choice(*this,ant->task_id,ant->task_master_id);
 			task_state->AcceptNewTask(this, ant->task_id, ant->task_master_id, std::time(nullptr));
 		}
 		task_state->ClearLastOffers();
@@ -4812,6 +4818,10 @@ void Client::Handle_OP_CancelTask(const EQApplicationPacket *app)
 
 void Client::Handle_OP_CancelTrade(const EQApplicationPacket *app)
 {
+	if(OriginalTradeTransforms::Pending(*this)){
+  if(app->size==sizeof(CancelTrade_Struct))OriginalTradeTransforms::DeclineOriginalMessageTrade(*this);
+  OriginalTradeTransforms::PollPending(*this);return;
+ }
 	if (app->size != sizeof(CancelTrade_Struct)) {
 		LogError("Wrong size: OP_CancelTrade, size=[{}], expected [{}]", app->size, sizeof(CancelTrade_Struct));
 		return;
@@ -10090,6 +10100,8 @@ void Client::Handle_OP_ItemVerifyRequest(const EQApplicationPacket *app)
 		}
 		auto* p_inst = (EQ::ItemInstance*) inst;
 
+		SodFieldOfScaleCrystalSource::Frame fos_crystal_click(*this,slot_id,inst,request->target);
+
 		if (parse->ItemHasQuestSub(p_inst, EVENT_ITEM_CLICK)) {
 			parse->EventItem(EVENT_ITEM_CLICK, this, p_inst, nullptr, "", slot_id);
 		}
@@ -11609,6 +11621,7 @@ void Client::Handle_OP_MercenaryTimerRequest(const EQApplicationPacket *app)
 
 void Client::Handle_OP_MoveCoin(const EQApplicationPacket *app)
 {
+	if(OriginalTradeTransforms::Pending(*this)){OriginalTradeTransforms::PollPending(*this);return;}
 	if (app->size != sizeof(MoveCoin_Struct)) {
 		LogError("Wrong size on OP_MoveCoin. Got: [{}], Expected: [{}]", app->size, sizeof(MoveCoin_Struct));
 		DumpPacket(app);
@@ -16264,8 +16277,11 @@ void Client::Handle_OP_TrackUnknown(const EQApplicationPacket *app)
 
 void Client::Handle_OP_TradeAcceptClick(const EQApplicationPacket *app)
 {
+	if(OriginalTradeTransforms::Pending(*this)){OriginalTradeTransforms::PollPending(*this);return;}
 	Mob* with = trade->With();
 	if(with&&with->IsNPC()&&KithicorPoisonTrade::OriginalAccept(*this,*with->CastToNPC()))return;
+	if(with&&with->IsNPC()&&OriginalTradeFood::OriginalAccept(*this,*with->CastToNPC()))return;
+	if(with&&with->IsNPC()&&OriginalTradeTransforms::OriginalAccept(*this,*with->CastToNPC()))return;
 	if(with&&with->IsNPC()&&FungalItemSource::NativeEvents::OriginalTrade(*this,*with->CastToNPC()))return;
 	if(with&&with->IsNPC()&&FireRunActionSource::NativeRunTerminalSource::HandleOriginalAccept(*this,*with->CastToNPC()))return;
 	trade->state = TradeAccepted;
@@ -16514,6 +16530,7 @@ void Client::Handle_OP_TraderBuy(const EQApplicationPacket *app)
 
 void Client::Handle_OP_TradeRequest(const EQApplicationPacket *app)
 {
+	if(OriginalTradeTransforms::Pending(*this)){OriginalTradeTransforms::PollPending(*this);return;}
 	if (app->size != sizeof(TradeRequest_Struct)) {
 		LogError("Wrong size: OP_TradeRequest, size=[{}], expected [{}]", app->size, sizeof(TradeRequest_Struct));
 		return;
@@ -16561,6 +16578,7 @@ void Client::Handle_OP_TradeRequest(const EQApplicationPacket *app)
 
 void Client::Handle_OP_TradeRequestAck(const EQApplicationPacket *app)
 {
+	if(OriginalTradeTransforms::Pending(*this)){OriginalTradeTransforms::PollPending(*this);return;}
 	if (app->size != sizeof(TradeRequest_Struct)) {
 		LogError("Wrong size: OP_TradeRequestAck, size=[{}], expected [{}]", app->size, sizeof(TradeRequest_Struct));
 		return;
@@ -17535,6 +17553,7 @@ void Client::Handle_OP_SharedTaskInviteResponse(const EQApplicationPacket *app)
 
 void Client::Handle_OP_SharedTaskAccept(const EQApplicationPacket* app)
 {
+ if(app->size!=sizeof(SharedTaskAccept_Struct))return;
 	auto buf = reinterpret_cast<SharedTaskAccept_Struct*>(app->pBuffer);
 
 	LogTasksDetail(
@@ -17549,6 +17568,7 @@ void Client::Handle_OP_SharedTaskAccept(const EQApplicationPacket* app)
 	{
 		if (task_state->CanAcceptNewTask(this, buf->task_id, buf->npc_entity_id))
 		{
+			SodMessageAdmission::NativeChoice message_choice(*this,buf->task_id,buf->npc_entity_id);
 			task_state->AcceptNewTask(this, buf->task_id, buf->npc_entity_id, std::time(nullptr));
 		}
 		task_state->ClearLastOffers();

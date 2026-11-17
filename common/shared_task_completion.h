@@ -154,6 +154,21 @@ inline std::optional<int64_t> Archive(
 		return std::nullopt;
 	}
 
+    if (task.task_id >= 920211 && task.task_id <= 920215) {
+        // Final native goals are already archived and verified above. Commit
+        // the terminal encounter receipt with completion, before any Zone
+        // death callback can mistake a completed member for a missing one.
+        if (!db.QueryDatabase(fmt::format(
+            "UPDATE sod_task_scene_runs SET state=2,updated_at=UNIX_TIMESTAMP() "
+            "WHERE shared_task_id={} AND task_id={} AND instance_id>0 AND model_version=2 "
+            "AND state IN (1,2,4,5,6)", task.id, task.task_id)).Success()) return std::nullopt;
+        auto terminal = db.QueryDatabase(fmt::format(
+            "SELECT COUNT(*) FROM sod_task_scene_runs WHERE shared_task_id={} AND task_id={} "
+            "AND instance_id>0 AND model_version=2 AND state=2", task.id, task.task_id));
+        if (!terminal.Success() || terminal.RowCount()!=1 ||
+            SharedTaskAdmission::Number(terminal.begin()[0])!=std::optional<uint64_t>(1)) return std::nullopt;
+    }
+
 	if (!SodRewardQuote::RecordCompletion(db, task.task_id, 1, task.id,
 		static_cast<uint32_t>(*completed))) return std::nullopt;
 

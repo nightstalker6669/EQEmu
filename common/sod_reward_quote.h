@@ -1,5 +1,6 @@
 #pragma once
 #include "common/database.h"
+#include "common/sod_progression.h"
 #include "common/shared_task_admission.h"
 #include <algorithm>
 #include <optional>
@@ -25,10 +26,30 @@ inline Bounds Range(uint32_t task) {
  case 920192:return {22,90};
  case 920193:case 920194:return {11,45};
  case 920195:case 920196:return {15,60};
+ // FoS LOCAL reconstruction approved for exact proposal-r1 values.
+ case 920197:return {45,360};
+ case 920198:return {15,45};
+ case 920199:return {15,60};
+ case 920200:return {15,45};
+ case 920201:return {15,45};
+ case 920202:return {15,45};
+ case 920203:return {15,45};
+ case 920204:return {10,25};
+ case 920205:return {15,45};
+ case 920206:return {35,140};
+ case 920207:return {15,60};
+ case 920208:return {15,45};
+ case 920209:return {5,15};
+ case 920210:return {15,45};
+ case 920211:return {5,17};
+ case 920212:return {5,22};
+ case 920213:return {5,22};
+ case 920214:return {5,25};
+ case 920215:return {5,15};
  default:return {0,0};
  }
 }
-inline bool Shared(uint32_t task) { return task==920178||task==920179||task==920180||task==920183||task==920192||task==920193; }
+inline bool Shared(uint32_t task) { return task==920178||task==920179||task==920180||task==920183||task==920192||task==920193||SodProgression::IsFieldOfScaleSharedTask(task); }
 inline uint32_t Amount(Bounds b,uint64_t count) {
  // Saturate before arithmetic; values beyond this already reach every floor.
  return std::max(b.floor,static_cast<uint32_t>(uint64_t(b.maximum)*8/(8+std::min<uint64_t>(count,UINT32_MAX))));

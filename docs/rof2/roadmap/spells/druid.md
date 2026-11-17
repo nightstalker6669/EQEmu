@@ -71,7 +71,7 @@
 | 82 | Heartwood Skin Rk. III · III | 18430 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-74) |
 | 82 | Promised Reknit Rk. III · III | 18536 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-93) |
 | 82 | Wild Growth Rk. III · III | 18551 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-96); [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-61) |
-| 83 | Annihilate the Anomalous · I / unranked | 18494 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Annihilate the Anomalous · I / unranked | 18494 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Brierbloom Coat Rk. III · III | 18439 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-81) |
 | 83 | Horde of the Hive Rk. III · III | 18436 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-80) |
 | 83 | Morning's Glory Rk. III · III | 18527 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-94) |
@@ -80,8 +80,8 @@
 | 83 | Remote Manaflux Rk. III · III | 19786 | [Restored original exchange: Dwekvard Gravelpick ordered Underfoot rune exchange](routes.md#route-109) |
 | 83 | Repel Corruption Rk. III · III | 18245 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-78) |
 | 83 | Skin to Flora Rk. III · III | 18427 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-79) |
-| 83 | Survival of the Felicitous · I / unranked | 18531 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
-| 83 | Winter's Flare · I / unranked | 18440 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Survival of the Felicitous · I / unranked | 18531 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
+| 83 | Winter's Flare · I / unranked | 18440 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 84 | Blanched Frost Rk. III · III | 18406 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-84) |
 | 84 | Blast of Hypergrowth · I / unranked | 19787 | [Restored merchant stock: Wanderer Abel (merchant 202904)](routes.md#route-117); [Optional estimated pet support: Restored missing pet/focus template](routes.md#route-14) |
 | 84 | Blast of Hypergrowth Rk. II · II | 19788 | [Restored original exchange: Holdegar Bairdun original named-gem exchange](routes.md#route-120); [Optional estimated pet support: Restored missing pet/focus template](routes.md#route-14) |

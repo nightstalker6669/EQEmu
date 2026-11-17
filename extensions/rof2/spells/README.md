@@ -63,3 +63,9 @@ Stages 009/010 restore the TSS rune teacher and Underfoot rank II gem trader, pl
 
 
 Stage011 repairs four original SoF standard faction merchants with exact stock/consumer guards and receipt-owned rollback. Three factions lacking established gain routes remain withheld. See `docs/RESEARCH.md`, `docs/INSTALL.md`, and `provenance/sof-faction-merchants.json`; this does not complete all through-RoF acquisition or native acceptance.
+
+## Field of Scale progression acceptance
+
+The 19 Field of Scale tasks, earned Void D scroll purchase/learning and native Journeyman IV hire passed the qualified local RoF2 acceptance batch. The final source includes the original Kurn client-trigger instance selector, original-note admission, weighted Food deliveries and completion-safe recipient reward recovery. See [Field of Scale acceptance and qualifications](../../../docs/rof2/FIELD-OF-SCALE.md) for the exact scope, approved local policies, development-access and QA fixture/position qualifications.
+
+This adds earned access to 18 existing Void D stock spell IDs (40 cumulative B-D), not new spell definitions. The existing published spell index remains 5,327 unique IDs / 5,629 class memberships, with overlapping change categories. E-G progression and unrelated held acquisition routes remain outside this acceptance.

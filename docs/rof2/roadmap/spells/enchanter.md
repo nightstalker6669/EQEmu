@@ -97,14 +97,14 @@
 | 82 | Runic Shimmer Aura Rk. III · III | 18710 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17) |
 | 82 | Seduction Rk. III · III | 18578 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-74) |
 | 83 | Aegis of Xadrith Rk. III · III | 18584 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-93) |
-| 83 | Aura of Abstract Acumen · I / unranked | 18684 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17); [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Aura of Abstract Acumen · I / unranked | 18684 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17); [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Aura of Abstract Acumen Rk. II · II | 18685 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17) |
 | 83 | Aura of Abstract Acumen Rk. III · III | 18686 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17) |
 | 83 | Chaotic Befuddling · I / unranked | 19811 | [Restored merchant stock: Illusionist Phili (merchant 202910)](routes.md#route-122) |
 | 83 | Chaotic Befuddling Rk. II · II | 19812 | [Restored original exchange: Holdegar Bairdun original named-gem exchange](routes.md#route-126) |
 | 83 | Chaotic Befuddling Rk. III · III | 19813 | [Restored original exchange: Dwekvard Gravelpick ordered Underfoot rune exchange](routes.md#route-109) |
 | 83 | Docility Rk. III · III | 18590 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-78) |
-| 83 | Mana Reiterate · I / unranked | 18657 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Mana Reiterate · I / unranked | 18657 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Polychaotic Assault Rk. III · III | 18587 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-96) |
 | 83 | Prescience Rk. III · III | 18581 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-73) |
 | 83 | Smother Rk. III · III | 18596 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-79) |

@@ -5306,6 +5306,13 @@ void Mob::BuffDetachCaster(Mob *caster) {
 // returns true if the spell should fail, false otherwise
 bool Mob::IsImmuneToSpell(int32 spell_id, Mob *caster)
 {
+ // Exact approved FoS guardian in its owned mission version only. FR350 is
+ // retained content, not the implementation of its original fire immunity.
+ if(RuleB(SodProgression,EnableFieldOfScaleSlice) && zone &&
+  zone->GetZoneID()==454 && zone->GetInstanceVersion()==2 && zone->GetInstanceID() &&
+  IsNPC() && CastToNPC()->GetNPCTypeID()==452916 &&
+  !GetEntityVariable("sod_fos_run").empty() && IsValidSpell(spell_id) && spells[spell_id].resist_type==RESIST_FIRE)return true;
+
 	int effect_index;
 
 	if(caster == nullptr)

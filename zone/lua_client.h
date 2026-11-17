@@ -388,7 +388,12 @@ public:
 	bool SodKithicorBook(uint32 door_id);
 	bool SodKithicorBurn(Lua_NPC target);
 	bool SodKithicorPoison(Lua_NPC giver);
-	int SodSceneState(uint32 task);
+	Lua_NPC SodFieldOfScaleEye();
+ bool SodFieldOfScalePublicRun(uint32 task);
+ uint32 SodFieldOfScalePublicExpires(uint32 task);
+ bool SodFieldOfScaleEnterMission(uint32 task,uint32 door_db,uint32 door_id);
+	Lua_NPC SodFieldOfScaleCrystalTarget();
+ int SodSceneState(uint32 task);
 	bool SodRestoreSceneVictory(uint32 task);
 	bool SodSceneTransition(uint32 task, int expected, int next);
 	int SodSceneDraw(uint32 task, uint32 index, uint32 range);

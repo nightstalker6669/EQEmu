@@ -24,6 +24,8 @@
 #include "common/timer.h"
 
 #include <optional>
+#include <array>
+#include <map>
 #include <set>
 
 namespace FireSharedCorrelation { struct Trailer; }
@@ -146,6 +148,11 @@ protected:
 	std::vector<SharedTaskActiveInvitation> m_active_invitations{};
 
 	Timer m_process_timer;
+	void ProcessOriginalTransforms();
+ void ProcessOriginalMessageAdmissions();
+ std::string m_original_message_cursor;
+	std::optional<bool> m_original_transform_schema_ready;
+	std::map<uint64_t,std::array<uint32_t,2>> m_original_transform_published;
 
 	// Only successful archive commits enter this transient cache; reload revalidates.
 	std::set<int64_t> m_archived_shared_tasks;

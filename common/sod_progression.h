@@ -42,7 +42,8 @@ constexpr Credit Korafax(const Evidence& evidence)
 
 // This is the highest positively proved stage, not a claim that unbound paths
 // are incomplete. The Oceangreen and Kithicor group paths are bound;
-// other themes, raid aggregation and F/G remain explicitly unknown.
+// Field of Scale is bound by its five group missions when enabled;
+// Rathe, raid aggregation and F/G remain explicitly unknown.
 constexpr VoidStage ProvenVoidStage(const Evidence& evidence)
 {
 	unsigned count = 0;
@@ -87,6 +88,72 @@ inline constexpr std::array<TaskBinding, 3> KithicorGroupTasks{{
 constexpr bool IsKithicorTask(uint32_t task) { return task >= 920191 && task <= 920196; }
 constexpr bool IsKithicorSharedTask(uint32_t task) { return task == 920192 || task == 920193; }
 
+// The original Gaining Audience With Jaled'Dar achievement requires FOUR
+// distinct completions from its eight entries (period report, Alla4718,
+// August2012). The caller supplies one acknowledged result per bound task,
+// never repeat counts or participant-wide requester requirements.
+constexpr bool FieldOfScaleAudienceReady(const std::array<Credit, 8>& completed)
+{
+ unsigned count=0;
+ for (const auto credit:completed) {
+  if (credit==Credit::Unknown) return false;
+  if (credit==Credit::Complete) ++count;
+ }
+ return count>=4;
+}
+
+inline constexpr std::array<TaskBinding, 19> FieldOfScaleTasks{{
+	{920197, "Drake Scourge"},
+	{920198, "Food Supplies"},
+	{920199, "The Grand Illusion"},
+	{920200, "Raising Cabilis"},
+	{920201, "Sarnak Recovery"},
+	{920202, "Sarnak Recovery"},
+	{920203, "Sarnak Recovery"},
+	{920204, "Supplies"},
+	{920205, "Evil Afoot"},
+	{920206, "Idle Hands"},
+	{920207, "Purify the Body"},
+	{920208, "The Skull of the Ancient"},
+	{920209, "Lost and Found"},
+	{920210, "Parley with Ganak"},
+	{920211, "Audience with the Warmaster"},
+	{920212, "The Brood of an Emperor"},
+	{920213, "The Price of Knowledge"},
+	{920214, "Defeat the Dragonbane Phalanx"},
+	{920215, "An Impenetrable Shield"}
+}};
+inline constexpr std::array<TaskBinding, 8> FieldOfScaleAudienceTasks{{
+	{920197, "Drake Scourge"},
+	{920198, "Food Supplies"},
+	{920199, "The Grand Illusion"},
+	{920200, "Raising Cabilis"},
+	{920201, "Sarnak Recovery"},
+	{920202, "Sarnak Recovery"},
+	{920203, "Sarnak Recovery"},
+	{920204, "Supplies"}
+}};
+inline constexpr std::array<TaskBinding, 5> FieldOfScaleGroupTasks{{
+	{920211, "Audience with the Warmaster"},
+	{920212, "The Brood of an Emperor"},
+	{920213, "The Price of Knowledge"},
+	{920214, "Defeat the Dragonbane Phalanx"},
+	{920215, "An Impenetrable Shield"}
+}};
+constexpr bool IsFieldOfScaleTask(uint32_t id) { for (const auto& t:FieldOfScaleTasks) if (t.id==id) return true; return false; }
+constexpr bool IsFieldOfScaleSharedTask(uint32_t id) { return id==920197 || id==920200 || id==920201 || id==920202 || id==920203 || id==920209 || id==920210 || id==920211 || id==920212 || id==920213 || id==920214 || id==920215; }
+
+constexpr uint32_t FieldOfScaleMissionZone(uint32_t id) {
+ switch(id) {
+ case 920211:return 455;
+ case 920212:return 454;
+ case 920213:return 453;
+ case 920214:return 455;
+ case 920215:return 454;
+ default:return 0;
+ }
+}
+
 // Exact current source/door and source/zone-point mappings for default
 // returns only. Explicit A, bind, GM summon and internal Void paths are not
 // default return contexts. No client-supplied zone ID alone establishes one.
@@ -107,7 +174,7 @@ constexpr bool IsDefaultVoidReturnPoint(uint32_t source, uint32_t point)
 constexpr bool IsReservedOceangreenTask(uint32_t task) { return (task >= 920175 && task <= 920187) || task == 920190; }
 constexpr bool IsOceangreenRequest(uint32_t task) { return task >= 920175 && task <= 920190; }
 
-constexpr bool IsSodRequest(uint32_t task) { return IsOceangreenRequest(task) || IsKithicorTask(task); }
-constexpr bool IsBoundTask(uint32_t task) { return IsReservedOceangreenTask(task) || IsKithicorTask(task); }
+constexpr bool IsSodRequest(uint32_t task) { return IsOceangreenRequest(task) || IsKithicorTask(task) || IsFieldOfScaleTask(task); }
+constexpr bool IsBoundTask(uint32_t task) { return IsReservedOceangreenTask(task) || IsKithicorTask(task) || IsFieldOfScaleTask(task); }
 
 } // namespace SodProgression

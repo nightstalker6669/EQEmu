@@ -730,6 +730,11 @@ double Lua_Mob::GetZ() {
 	return self->GetZ();
 }
 
+double Lua_Mob::GetFixedZ(double x,double y,double z) {
+ Lua_Safe_Call_Real();
+ return self->GetFixedZ(glm::vec3(x,y,z));
+}
+
 double Lua_Mob::GetHeading() {
 	Lua_Safe_Call_Real();
 	return self->GetHeading();
@@ -3932,6 +3937,7 @@ luabind::scope lua_register_mob() {
 	.def("GetX", &Lua_Mob::GetX)
 	.def("GetY", &Lua_Mob::GetY)
 	.def("GetZ", &Lua_Mob::GetZ)
+	.def("GetFixedZ", &Lua_Mob::GetFixedZ)
 	.def("GotoBind", &Lua_Mob::GotoBind)
 	.def("HalveAggro", &Lua_Mob::HalveAggro)
 	.def("HasNPCSpecialAtk", (bool(Lua_Mob::*)(const char*))&Lua_Mob::HasNPCSpecialAtk)

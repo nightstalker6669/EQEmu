@@ -89,14 +89,14 @@
 | 82 | Twelfth Night · I / unranked | 18352 | [Void stock restoration: Zebuxoruk; first stock stage Void C](routes.md#route-69); [Earned vendor access: Earned Void C; Zebuxoruk](routes.md#route-70) |
 | 82 | Ward of Admonishment Rk. III · III | 18299 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-73) |
 | 83 | Devout Light Rk. III · III | 18263 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-80) |
-| 83 | Holy Ground · I / unranked | 18339 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17); [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Holy Ground · I / unranked | 18339 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17); [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Holy Ground Rk. II · II | 18340 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17) |
 | 83 | Holy Ground Rk. III · III | 18341 | [Optional estimated aura support: Restored missing aura definition](routes.md#route-17) |
 | 83 | Holy Intervention · I / unranked | 19768 | [Restored merchant stock: Vicar Feyl (merchant 202900)](routes.md#route-113) |
 | 83 | Holy Intervention Rk. II · II | 19769 | [Restored original exchange: Holdegar Bairdun original named-gem exchange](routes.md#route-115) |
 | 83 | Holy Intervention Rk. III · III | 19770 | [Restored original exchange: Dwekvard Gravelpick ordered Underfoot rune exchange](routes.md#route-109) |
 | 83 | Palladium of Vie Rk. III · III | 18260 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-79) |
-| 83 | Promised Recuperation · I / unranked | 18270 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68) |
+| 83 | Promised Recuperation · I / unranked | 18270 | [Void stock restoration: Zebuxoruk; first stock stage Void D](routes.md#route-68); [Earned Void D access — QA qualified](routes.md#route-251) |
 | 83 | Providence Rk. III · III | 18375 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-98) |
 | 83 | Repel Corruption Rk. III · III | 18245 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-78) |
 | 83 | Sermon of Castigation Rk. III · III | 18363 | [Restored original exchange: Kalim in Plane of Time ordered SoD runes](routes.md#route-94) |

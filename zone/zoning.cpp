@@ -18,6 +18,7 @@
 */
 #include "client.h"
 #include "sod_progression.h"
+#include "task_shared_reward_identity.h"
 
 #include "common/eqemu_logsys.h"
 #include "common/events/player_event_logs.h"
@@ -41,8 +42,14 @@ extern Zone* zone;
 int Client::GetSodTaskCompletionState(uint32 task_id)
 {
 	const auto tasks = SodProgression::ReadCommittedTasks(database, content_db, CharacterID(), {task_id});
-	const auto it = tasks.completion.find(task_id);
-	return tasks.available && it != tasks.completion.end() ? static_cast<int>(it->second) : -1;
+ const auto it = tasks.completion.find(task_id);
+ if(SodProgression::IsFieldOfScaleTask(task_id)) {
+  const auto title=tasks.titles.find(task_id);
+  bool matched=false;
+  for(const auto& t:SodProgression::FieldOfScaleTasks)if(t.id==task_id)matched=title!=tasks.titles.end() && title->second==t.title;
+  if(!matched)return -1;
+ }
+ return tasks.available && it != tasks.completion.end() ? static_cast<int>(it->second) : -1;
 }
 
 SodProgression::Evidence Client::ReadSodProgression()
@@ -84,6 +91,7 @@ bool Client::CanEnterSodProgressionZone(uint32 destination, int version, uint32 
 	if (SodProgression::IsVoidZone(destination)) {
 		return destination <= SodProgression::VoidZone(SodProgression::ProvenVoidStage(evidence));
 	}
+	if (RuleB(SodProgression,EnableFieldOfScaleSlice) && destination>=452 && destination<=455) return true;
 	if (RuleB(SodProgression, EnableKithicorSlice) && (destination==456 || destination==457)) return true;
 	return RuleB(SodProgression, EnableOceangreenSlice) &&
 		SodProgression::AllowsOceangreenSliceBase(evidence, destination);
@@ -92,6 +100,67 @@ bool Client::CanEnterSodProgressionZone(uint32 destination, int version, uint32 
 bool Client::CanRequestSodTask(uint32 task_id, uint32 npc_type_id)
 {
 	using SodProgression::Credit;
+ if(SodProgression::IsFieldOfScaleTask(task_id)) {
+  if(!RuleB(SodProgression,EnableFieldOfScaleSlice) || !zone || zone->GetZoneID()!=452 || zone->GetInstanceID()!=0 || zone->GetInstanceVersion()!=0 || !SodProgression::MayStartOrJoinTask(content_db,task_id))return false;
+  bool giver_ok=false;std::vector<uint32_t> prerequisites;
+  switch(task_id) {
+  case 920197: giver_ok=(npc_type_id==452108); prerequisites={};break;
+  case 920198: giver_ok=(npc_type_id==452108); prerequisites={};break;
+  case 920199: giver_ok=(npc_type_id==452150); prerequisites={};break;
+  case 920200: giver_ok=(npc_type_id==452079 || npc_type_id==452108 || npc_type_id==452121 || npc_type_id==452133 || npc_type_id==452147 || npc_type_id==452150); prerequisites={};break;
+  case 920201: giver_ok=(npc_type_id==452079 || npc_type_id==452108 || npc_type_id==452121 || npc_type_id==452133 || npc_type_id==452147 || npc_type_id==452150); prerequisites={};break;
+  case 920202: giver_ok=(npc_type_id==452079 || npc_type_id==452108 || npc_type_id==452121 || npc_type_id==452133 || npc_type_id==452147 || npc_type_id==452150); prerequisites={};break;
+  case 920203: giver_ok=(npc_type_id==452079 || npc_type_id==452108 || npc_type_id==452121 || npc_type_id==452133 || npc_type_id==452147 || npc_type_id==452150); prerequisites={};break;
+  case 920204: giver_ok=(npc_type_id==452079); prerequisites={};break;
+  case 920205: giver_ok=(npc_type_id==452150); prerequisites={};break;
+  case 920206: giver_ok=(npc_type_id==452150); prerequisites={};break;
+  case 920207: giver_ok=(npc_type_id==452150); prerequisites={};break;
+  case 920208: giver_ok=(npc_type_id==452150); prerequisites={};break;
+  case 920209: giver_ok=(npc_type_id==452147); prerequisites={};break;
+  case 920210: giver_ok=(npc_type_id==452147); prerequisites={920209};break;
+  case 920211: giver_ok=(npc_type_id==452147); prerequisites={920209,920210};break;
+  case 920212: giver_ok=(npc_type_id==452147); prerequisites={920209,920210,920211};break;
+  case 920213: giver_ok=(npc_type_id==452147); prerequisites={920209,920210,920211,920212};break;
+  case 920214: giver_ok=(npc_type_id==452147); prerequisites={920209,920210,920211,920212,920213};break;
+  case 920215: giver_ok=(npc_type_id==452147); prerequisites={920209,920210,920211,920212,920213,920214};break;
+  default:return false;
+  }
+  if(!giver_ok || !entity_list.GetNPCByNPCTypeID(npc_type_id))return false;
+  if((task_id==920205 || task_id==920206 || task_id==920207 || task_id==920208) && !IsTaskActive(920199))return false;
+  if(task_id>=920209 && task_id<=920215) {
+   std::vector<uint32_t> ids;
+   for(const auto& t:SodProgression::FieldOfScaleTasks)ids.push_back(t.id);
+   const auto h=SodProgression::ReadCommittedTasks(database,content_db,CharacterID(),ids);
+   if(!h.available)return false;
+   for(const auto& t:SodProgression::FieldOfScaleTasks) {
+    const auto title=h.titles.find(t.id);const auto credit=h.completion.find(t.id);
+    if(title==h.titles.end() || title->second!=t.title || credit==h.completion.end())return false;
+   }
+   std::array<Credit,8> completed{};unsigned index=0;
+   for(const auto& t:SodProgression::FieldOfScaleAudienceTasks)completed[index++]=h.completion.at(t.id);
+   if(!SodProgression::FieldOfScaleAudienceReady(completed))return false;
+   for(const auto id:prerequisites)if(h.completion.at(id)!=Credit::Complete)return false;
+   if(task_id>=920211) {
+    bool all_group=true;
+    for(const auto& t:SodProgression::FieldOfScaleGroupTasks)
+     if(h.completion.at(t.id)!=Credit::Complete)all_group=false;
+    if(h.completion.at(task_id)==Credit::Complete && !all_group)return false;
+   }
+   return true;
+  }
+  if(prerequisites.empty())return true;
+  const auto h=SodProgression::ReadCommittedTasks(database,content_db,CharacterID(),prerequisites);
+  if(!h.available)return false;
+  for(const auto id:prerequisites) {
+   const auto credit=h.completion.find(id),dummy=h.completion.end();
+   if(credit==dummy || credit->second!=Credit::Complete)return false;
+   const auto title=h.titles.find(id);
+   bool matched=false;
+   for(const auto& t:SodProgression::FieldOfScaleTasks)if(t.id==id)matched=title!=h.titles.end() && title->second==t.title;
+   if(!matched)return false;
+  }
+  return true;
+ }
 	if (SodProgression::IsKithicorTask(task_id)) {
 		if (!RuleB(SodProgression, EnableKithicorSlice) || !zone || zone->GetZoneID()!=456 ||
 			zone->GetInstanceID()!=0 || zone->GetInstanceVersion()!=0 ||
@@ -273,6 +342,37 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 			}
 		}
 	}
+
+    // The original Kurn walk-through trigger reaches this native zone-point
+    // path before the remote click door. Select only the active owned mission;
+    // retain the original point and its target geometry for the transfer below.
+    if (RuleB(SodProgression, EnableFieldOfScaleSlice) && zone_mode == ZoneUnsolicited && zone_point &&
+        zone->GetZoneID() == 452 && zone->GetInstanceID() == 0 && zone->GetInstanceVersion() == 0 &&
+        (zone_point->number == 200 || zone_point->number == 210) &&
+        zone_point->target_zone_id == 455 && zone_point->target_zone_instance == 0 &&
+        target_zone_id == 455 && target_instance_id == 0 && GetTaskState()) {
+        const auto& active = GetTaskState()->GetActiveSharedTask();
+        if (active.task_id == 920211 || active.task_id == 920214) {
+            const auto run = TaskSharedRewardIdentity::ReadRun(database, CharacterID(), active.task_id);
+            if (!run || GetSharedTaskId() <= 0 || run->id != static_cast<uint64_t>(GetSharedTaskId()) ||
+                active.accepted_time <= 0 || run->accepted_time != static_cast<uint32_t>(active.accepted_time)) {
+                SendZoneCancel(zc);
+                return;
+            }
+            const int version = active.task_id == 920214 ? 2 : 1;
+            uint32 matched = 0;
+            for (auto* owned : GetDynamicZones(455, version)) {
+                if (!owned || owned->GetType() != DynamicZoneType::Mission || !owned->IsValid() ||
+                    owned->IsExpired() || !owned->HasZoneInLocation()) continue;
+                if (!SodProgression::MissionEntry(database, content_db, CharacterID(), run->id,
+                    455, version, owned->GetInstanceID(), false)) continue;
+                if (matched) { SendZoneCancel(zc); return; }
+                matched = owned->GetInstanceID();
+            }
+            if (!matched) { SendZoneCancel(zc); return; }
+            target_instance_id = matched;
+        }
+    }
 
 	// Only the verified original Hills -> Blackburrow zone point selects an
 	// admitted mission. Explicit/GM/bind/internal moves keep their destination.

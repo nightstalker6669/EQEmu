@@ -1,3 +1,4 @@
+#include "sod_message_admission.h"
 #include "common/sod_shared_activity.h"
 #include "common/kithicor_mission.h"
 #include "zone/kithicor_poison_trade.h"
@@ -2191,6 +2192,68 @@ void ClientTaskState::SendRewardSelection(Client *client, uint32_t task_id)
 	}
 }
 
+// Recover only already-earned FoS group entitlements. The immutable World
+// archive and original per-member occurrence replace neither membership nor
+// task/goal state; the existing pending selection and per-entry writer deliver.
+static void RestoreArchivedFieldOfScaleSelections(Client& client)
+{
+    if (!client.ClientDataLoaded()) return;
+    auto earned = database.QueryDatabase(fmt::format(
+        "SELECT h.task_id,h.shared_task_id,h.occurrence_id,UNIX_TIMESTAMP(st.accepted_time) "
+        "FROM character_shared_task_reward_instances h "
+        "JOIN completed_shared_tasks st ON st.id=h.shared_task_id AND st.task_id=h.task_id "
+        "JOIN completed_shared_task_members m ON m.shared_task_id=st.id AND m.character_id=h.character_id "
+        "LEFT JOIN character_task_reward_selections r ON r.character_id=h.character_id AND r.source_instance_id=h.occurrence_id "
+        "WHERE h.character_id={} AND h.task_id BETWEEN 920211 AND 920215 "
+        "AND st.is_locked=1 AND st.completion_time IS NOT NULL AND st.completion_time>=st.accepted_time "
+        "AND r.pending_reward_id IS NULL ORDER BY h.shared_task_id LIMIT 100", client.CharacterID()));
+    if (!earned.Success()) return;
+    for (auto row : earned) {
+        const auto task_id=SharedTaskAdmission::Number(row[0]), run=SharedTaskAdmission::Number(row[1]),
+            occurrence=SharedTaskAdmission::Number(row[2]), accepted=SharedTaskAdmission::Number(row[3]);
+        if (!task_id || *task_id<920211 || *task_id>920215 || !run || !*run ||
+            !occurrence || !*occurrence || !accepted || !*accepted || *accepted>UINT32_MAX) continue;
+        const auto* task=TaskManager::Instance()->GetTaskData(static_cast<int>(*task_id));
+        const auto* rewards=TaskManager::Instance()->GetTaskRewardSet(static_cast<uint32_t>(*task_id));
+        if (!task || task->type!=TaskType::Shared || task->reward_method!=METHODSELECT ||
+            !task->has_reward_selection || task->activity_count<=0 || !rewards ||
+            rewards->reward_set_id!=*task_id || !EQ::RewardSelection::IsCommonOnly(*rewards) ||
+            TaskManager::Instance()->GetTaskRewardProgression(static_cast<uint32_t>(*task_id))) continue;
+        auto goals=database.QueryDatabase(fmt::format(
+            "SELECT activity_id,done_count,UNIX_TIMESTAMP(completed_time) FROM completed_shared_task_activity_state "
+            "WHERE shared_task_id={} ORDER BY activity_id", *run));
+        if (!goals.Success() || goals.RowCount()!=static_cast<uint32_t>(task->activity_count)) continue;
+        bool complete=true; int index=0;
+        for (auto goal : goals) {
+            const auto id=SharedTaskAdmission::Number(goal[0]), done=SharedTaskAdmission::Number(goal[1]),
+                completed=SharedTaskAdmission::Number(goal[2]);
+            const auto& definition=task->activity_information[index];
+            if (!id || *id!=static_cast<uint32_t>(index) || !done ||
+                (!definition.optional && (definition.goal_count<=0 || *done<static_cast<uint32_t>(definition.goal_count) ||
+                 !completed || !*completed))) complete=false;
+            ++index;
+        }
+        if (!complete || !SodRewardQuote::ForRecipient(database,client.CharacterID(),static_cast<uint32_t>(*task_id),*occurrence) ||
+            !SodFrozenExperience(client,static_cast<uint32_t>(*task_id),*occurrence,true)) continue;
+        // Unique character/source occurrence is the existing idempotency key.
+        // Recheck the immutable ownership proof in the insert; never overwrite
+        // a selection or a paid component, and never mint another occurrence.
+        auto queued=database.QueryDatabase(fmt::format(
+            "INSERT IGNORE INTO character_task_reward_selections "
+            "(character_id,task_id,accepted_time,source_instance_id,reward_set_id,status,progression_count,hide_known_spells) "
+            "SELECT h.character_id,h.task_id,UNIX_TIMESTAMP(st.accepted_time),h.occurrence_id,{},0,NULL,{} "
+            "FROM character_shared_task_reward_instances h "
+            "JOIN completed_shared_tasks st ON st.id=h.shared_task_id AND st.task_id=h.task_id "
+            "JOIN completed_shared_task_members m ON m.shared_task_id=st.id AND m.character_id=h.character_id "
+            "WHERE h.character_id={} AND h.shared_task_id={} AND h.task_id={} AND h.occurrence_id={} "
+            "AND UNIX_TIMESTAMP(st.accepted_time)={} AND st.is_locked=1 "
+            "AND st.completion_time IS NOT NULL AND st.completion_time>=st.accepted_time",
+            rewards->reward_set_id,TaskManager::Instance()->HideKnownSpellRewards(static_cast<uint32_t>(*task_id))?1:0,
+            client.CharacterID(),*run,*task_id,*occurrence,*accepted));
+        if (!queued.Success()) LogError("Unable to restore earned FoS reward for character [{}] run [{}]",client.CharacterID(),*run);
+    }
+}
+
 void ClientTaskState::RestorePendingRewardSelection(Client *client)
 {
 	if (
@@ -2200,6 +2263,8 @@ void ClientTaskState::RestorePendingRewardSelection(Client *client)
 	) {
 		return;
 	}
+
+    RestoreArchivedFieldOfScaleSelections(*client);
 
 	auto &selection = client->GetRewardSelection();
 
@@ -3767,7 +3832,8 @@ void ClientTaskState::AcceptNewTask(
 		if (!FirePersonalOccurrenceSource::SharedSuccessorNative::Stamp(*client,request,fire_origin)) return;
 		const bool correlated=fire_origin.source_occurrence!=0;
 		const auto sod=SodRewardQuote::Shared(task_id)?SodAdmission::Observe(*client,task_id):std::nullopt;
-		if(SodRewardQuote::Shared(task_id)&&!sod){client->Message(Chat::Red,task_id==920193?"This task requires one to six eligible players and active mercenaries.":"This task requires three to six eligible players and active mercenaries.");return;}
+		if(SodRewardQuote::Shared(task_id)&&!sod){client->Message(Chat::Red,(task_id==920193||SodProgression::IsFieldOfScaleSharedTask(task_id))?"This task requires one to six eligible players and active mercenaries.":"This task requires three to six eligible players and active mercenaries.");return;}
+		if(sod && !SodMessageAdmission::BindNonce(*client,*sod))return;
 		ServerPacket packet(ServerOP_SharedTaskRequest,sizeof(request)+(correlated?sizeof(fire_origin):0)+(sod?sizeof(SodAdmission::Proof):0));
 		std::memcpy(packet.pBuffer,&request,sizeof(request));
 		if(correlated) std::memcpy(packet.pBuffer+sizeof(request),&fire_origin,sizeof(fire_origin));
@@ -3778,6 +3844,17 @@ void ClientTaskState::AcceptNewTask(
 	}
 
 	const bool world_shared_confirmation = task->type == TaskType::Shared && client->m_requesting_shared_task;
+    // A message requester still owns the original inventory hold when World
+    // confirms admission. Its normal LoadClientTaskState reload is fenced, so
+    // retain the canonical identity here without bypassing that inventory fence.
+    std::optional<TaskSharedRewardIdentity::Run> message_admitted_run;
+    if (world_shared_confirmation && SodMessageAdmission::Task(task_id)) {
+        message_admitted_run = TaskSharedRewardIdentity::ReadRun(database, client->CharacterID(), task_id);
+        if (!message_admitted_run || message_admitted_run->accepted_time != accept_time) {
+            LogError("Unable to verify original message shared admission for character [{}] task [{}]", client->CharacterID(), task_id);
+            return;
+        }
+    }
 	if (world_shared_confirmation) {
 		const auto policy = SharedTaskAdmission::ReadPolicy(content_db, task_id, task->min_level, task->max_level);
 		if (!policy.valid) {
@@ -4029,6 +4106,9 @@ void ClientTaskState::AcceptNewTask(
 	client->MessageString(Chat::DefaultText, YOU_ASSIGNED_TASK, task->title.c_str());
 
 	const bool acceptance_saved = TaskManager::Instance()->SaveClientState(client, this);
+    if (acceptance_saved && message_admitted_run) {
+        client->SetSharedTaskId(message_admitted_run->id);
+    }
 	FungalItemSource::NativeEvents::Accepted(*client,fungal_actual_reserved_occurrence,acceptance_saved,*active_slot);
 	RecordFirePersonalAcceptanceBeforeCallbacks(
 		fire_acceptance, client, task->type, *active_slot, acceptance_saved

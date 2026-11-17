@@ -12,60 +12,62 @@
     "aa_public_inventory_sha256": "faa12fc0a980613bc4ea8c86fc8cb13fab2ba30607478b7b5b94d61c1fa4182d",
     "aa_public_markdown_sha256": "62dde8cb75cd1067fd0e068babea7ea22e8baa6a067ffc1bd48f982389d26060",
     "quest_spells_inventory_sha256": "1328d5babcfa10c80b53b136c9c0d11a999ca1367f50435a183c35b476e6d827",
-    "quest_achievement_sanitized_component_sha256": "3d8204a72c2a5ce4ba131c564a76a7fedd403a29eeb5ac273fd72c12bd92d6ea"
+    "quest_achievement_sanitized_component_sha256": "3d8204a72c2a5ce4ba131c564a76a7fedd403a29eeb5ac273fd72c12bd92d6ea",
+    "field_of_scale_public_guide_md_sha256": "e6ef00c565fba2a982ae616fe833faf5dd05cad41cd4ae1975300e93b5a59fbe",
+    "field_of_scale_public_guide_json_sha256": "e45473d2d6d77fcfcdfbf340ee0a3c119bd6162ca19eba1ecb61328ca831690d"
   },
   "files": {
     "ROADMAP.md": {
-      "sha256": "3072694e90a19cf8f0a097d177e3371d4b3e6fd72406feb6560e1b14dff5d560",
-      "bytes": 28645
+      "sha256": "0c9dfe365641287eeaf95689f3e832ec461f0aed0aa9f039e76fae8ddb22355c",
+      "bytes": 31512
     },
     "docs/rof2/roadmap/index.html": {
-      "sha256": "8c7d09903c8de65dd6bc9710dfdb6b9433b2d52831f9aaf850370ddd53c0470b",
-      "bytes": 137696
+      "sha256": "a46fadc0108aa4c8085f7f90762adcad583f2daaab38ff28a8b1b57740ac8ebc",
+      "bytes": 132115
     },
     "docs/rof2/roadmap/spells/README.md": {
-      "sha256": "adac102d51ebce54a7a0e942d4138deccf43a2691698d21a6155529780099a16",
-      "bytes": 3210
+      "sha256": "4c420c4ec1714c76004706154b7cca7a12c517d34d17e4f3dd7ae6b15eb1b1e6",
+      "bytes": 5197
     },
     "docs/rof2/roadmap/spells/bard.md": {
-      "sha256": "bc47ed59f78065ebcce0ddfdf0030ebd9133e6733f82c9d07fab4e5387e35880",
-      "bytes": 54059
+      "sha256": "4a1c94ae2a361c5891eddf94d910d912e704633dadc8f2201a3c3e0b7461acfc",
+      "bytes": 54121
     },
     "docs/rof2/roadmap/spells/beastlord.md": {
-      "sha256": "97d86c998a0e694a7615974d201cfd120d491dfb41d3f2017504dc81d6979b6f",
-      "bytes": 53294
+      "sha256": "63aa4e89a89054ff442bc296eab67af6089636e86fb1caa757be2169fb0ee0e2",
+      "bytes": 53418
     },
     "docs/rof2/roadmap/spells/berserker.md": {
       "sha256": "74477fb098b89f06fe9f89c3f76d10ebfe16de9b60d255b6846fdaed58dd5f12",
       "bytes": 26280
     },
     "docs/rof2/roadmap/spells/cleric.md": {
-      "sha256": "8ba174e80257e3a79cd01244cae30d92ea4185a5a925b9fe4cad4bb7d5393c17",
-      "bytes": 83193
+      "sha256": "d6163b9f32a944488c4609a3f5aa1a4fd3a09c30003d75ff67dbd8135af76982",
+      "bytes": 83317
     },
     "docs/rof2/roadmap/spells/druid.md": {
-      "sha256": "3c96ea5d8ba4ae82271b029f84fdc690cc64c1e4d2878324bf09828d99bb022a",
-      "bytes": 79035
+      "sha256": "014a3a117ef471b4f2c212bbfc1622ac4ebb361f84ee207e713931dafcc12f43",
+      "bytes": 79221
     },
     "docs/rof2/roadmap/spells/enchanter.md": {
-      "sha256": "463d83db08e7c1434d58a38bce142f215b624f5f35388c46754ed4bc8b51ce39",
-      "bytes": 80672
+      "sha256": "0629e9e1a7430f9c152ca88c2daab529cd8e4f1b60754de47a3d8f854ece044c",
+      "bytes": 80796
     },
     "docs/rof2/roadmap/spells/magician.md": {
-      "sha256": "0f66154775fc803b0fbb1a963a934790479cd66c727e42e80ef4ac17c3561f78",
-      "bytes": 70919
+      "sha256": "66e68fb51342bdaf43ae8e9cc10d5f702bf2027476c33dc3585438e3f7993595",
+      "bytes": 71043
     },
     "docs/rof2/roadmap/spells/monk.md": {
       "sha256": "80245eeb3ba83ecc7f69efbd9ce0099875a75be3c2770933c0d671d29642ff6f",
       "bytes": 24108
     },
     "docs/rof2/roadmap/spells/necromancer.md": {
-      "sha256": "89b3aa6e7faf799fdae1eedca7da85c63bf224c91a8460d96de23b535a4f84e9",
-      "bytes": 74305
+      "sha256": "44046560f82eeb0a32e9dd136d3989f4ccb124688ffba34488b36e6f3e795556",
+      "bytes": 74429
     },
     "docs/rof2/roadmap/spells/paladin.md": {
-      "sha256": "c1db538d0c8b67a2b985164c0ffb486d63ac99c1c4f639c76cc9625b2953a03b",
-      "bytes": 61055
+      "sha256": "161d841f3d2c0583feb2eab659aa7353028256f841940f8b84969676f5bc37d0",
+      "bytes": 61117
     },
     "docs/rof2/roadmap/spells/ranger.md": {
       "sha256": "ef8a72c5e0488ea6707869a6e6665b77fbb1b407352d4378c4a1a50e168ce4c7",
@@ -76,32 +78,32 @@
       "bytes": 32266
     },
     "docs/rof2/roadmap/spells/routes.md": {
-      "sha256": "164eea71ef64a16a6b19016bde428cd37a34914be6d9b8abff7a65534d798bc1",
-      "bytes": 90722
+      "sha256": "8078b40a3071a16554e059884972ac67d38169585b0d6b918b1120b4610bf6f3",
+      "bytes": 92674
     },
     "docs/rof2/roadmap/spells/shadow-knight.md": {
       "sha256": "7cd1b8ac35c392b93fcd3cc42101791dd34e936163eccb849f17562c9adecff8",
       "bytes": 50826
     },
     "docs/rof2/roadmap/spells/shaman.md": {
-      "sha256": "9e9877d2abac33cea48216abe2cb4fa893c3381402f5ea06114ac8b16b0b3061",
-      "bytes": 62408
+      "sha256": "030efdc41ba010d635e009204ff4949a2310c616dd12d3f17096c3d5ad20e01f",
+      "bytes": 62532
     },
     "docs/rof2/roadmap/spells/warrior.md": {
-      "sha256": "c6f43623464c8b88b8edbe624ed2b8a45c8aad81294c6564feb240c4b3dfae4f",
-      "bytes": 20481
+      "sha256": "5e2ab2113d228932da5b29da42e6da80666a2354a52c62c34579689f76740796",
+      "bytes": 20543
     },
     "docs/rof2/roadmap/spells/wizard.md": {
-      "sha256": "c49c10503cdaef8c4ea9bb1130199bb3f78d069286bb37c3eecb8dba823be71b",
-      "bytes": 66441
+      "sha256": "82adea67c797b0d7e08225f4cf10909903105d86a803e7cbbbdff20c434d7681",
+      "bytes": 66565
     },
     "docs/rof2/roadmap/spells.html": {
-      "sha256": "7b89928271d501f60303255178dda88bb7f209c2056aa0646a4a61d5fb5e8bff",
-      "bytes": 744219
+      "sha256": "a212f5608bbc79b156b3526ceac530e4ecb6e4a5e8d57d62b6e9bdda81295de0",
+      "bytes": 747200
     },
     "docs/rof2/roadmap/spells.json": {
-      "sha256": "f3917a27da87090c72702405dce38174c6c92c3c5810ff52b1db38f2e0682aa0",
-      "bytes": 453852
+      "sha256": "88185e2249e52cf035b44fb161752b942c049d015967cceec13922e7a4ae6afd",
+      "bytes": 456683
     },
     "docs/rof2/roadmap/tradeskills/README.md": {
       "sha256": "f9f5669a44e7f4d44e4b4d77f423ef6971d59c525a439ba49e15e2be294d454e",
@@ -260,8 +262,8 @@
       "bytes": 275863
     },
     "docs/rof2/roadmap/quests/README.md": {
-      "sha256": "287e457d6c89f7e1bfa4c1e45c0c44095a86b75a27f43dedd3f5af3ff9a249cb",
-      "bytes": 6803
+      "sha256": "06f7bfc7c816fa4a1a74320e676164466ff9a73e7ca384247286c09b842c7d6b",
+      "bytes": 9031
     },
     "docs/rof2/roadmap/quests/arthicrex.md": {
       "sha256": "5bd8c663687c6c8f2951217be2c1a205229ef7055992af7b427b0179600e201b",
@@ -320,8 +322,8 @@
       "bytes": 1114
     },
     "docs/rof2/roadmap/quests/evidence.md": {
-      "sha256": "47575ba3b7732667db472cad603d3d38e7e58c04fb8bbacb0c5f962b47811b34",
-      "bytes": 5034
+      "sha256": "0d02ee5a01aa651e99b5d61b56899b34be4adec61cea958fc42f6d8d8b4b5ab3",
+      "bytes": 6746
     },
     "docs/rof2/roadmap/quests/feerrott-the-dream.md": {
       "sha256": "4708f4573df70064d9cee0446bb4bf82678492e2405dcca0ebabd66a6f2fa418",
@@ -416,12 +418,32 @@
       "bytes": 22177
     },
     "docs/rof2/roadmap/quests.html": {
-      "sha256": "5e4bd22d148be9955eb0f933d7fce76f561cb0ffa5d90859388c41d683de2bc3",
-      "bytes": 761981
+      "sha256": "cd1937ceeb97af019a57fb4900348858431b364716dc5fccd272c5cac483d11f",
+      "bytes": 829873
     },
     "docs/rof2/roadmap/quests.json": {
-      "sha256": "ef45bbacf2ee66d37a94f87be38f79d9e0d11c21ca92e04592235d8cf2f1efe3",
-      "bytes": 503282
+      "sha256": "cee2f66f4369897ca2bac95f595f1becb4cb7d42da773b467700cf81fb5045ec",
+      "bytes": 559819
+    },
+    "docs/rof2/roadmap/quests/field-of-bone.md": {
+      "sha256": "cd1a88a444cf78bf13ecac9d9d407b2af5320c3994a1450f08961ae590f21668",
+      "bytes": 726
+    },
+    "docs/rof2/roadmap/quests/field-of-scale.md": {
+      "sha256": "b4a0a987cdb56a550aaf0cd32e96a32c09f2c43649103ab39085e29b7fb8d09b",
+      "bytes": 36562
+    },
+    "docs/rof2/roadmap/quests/kaesora-hatchery.md": {
+      "sha256": "a479b6e0136df5b411c2720744eb55621e0aacbd750021306c108c8dfe370f7f",
+      "bytes": 5588
+    },
+    "docs/rof2/roadmap/quests/kaesora-library.md": {
+      "sha256": "75ed8939bd13580d3c0dec2fe57207ffff43b140b8495627372aad0a7b56ee62",
+      "bytes": 3320
+    },
+    "docs/rof2/roadmap/quests/kurn-s-tower-seeds-of-destruction.md": {
+      "sha256": "4d1eb6bf4248d356a65dcebcafce250fa02400c29a9c308defb1138ec8ac612c",
+      "bytes": 5928
     }
   },
   "aa_counts": {
@@ -444,18 +466,71 @@
     }
   },
   "quest_counts": {
-    "all_records": 354,
-    "named_task_routes": 337,
+    "all_records": 373,
+    "named_task_routes": 356,
     "descriptive_script_routes": 5,
     "held_appendix_entries": 12,
-    "unique_task_ids_including_held": 349,
-    "native_completed_sod_tasks": 16,
+    "unique_task_ids_including_held": 368,
+    "native_completed_sod_tasks": 35,
     "cross_owner_duplicate_keys": 0,
-    "zone_appearances": 441
+    "zone_appearances": 466,
+    "field_of_scale_native_accepted_tasks": 19,
+    "field_of_scale_consumer_qa": "Developer access retained, GM mode off; not ordinary-status-0 positive consumer certification."
   },
   "quest_achievement_evidence_tiers": {
     "retained_public_overlay_and_package_evidence": 172,
     "exact_saved_connector_receipt": 108,
     "saved_published_coherent_source_summary": 11
+  },
+  "field_of_scale": {
+    "native_accepted_task_ids": [
+      920197,
+      920198,
+      920199,
+      920200,
+      920201,
+      920202,
+      920203,
+      920204,
+      920205,
+      920206,
+      920207,
+      920208,
+      920209,
+      920210,
+      920211,
+      920212,
+      920213,
+      920214,
+      920215
+    ],
+    "existing_D_stock_spell_ids": [
+      18093,
+      18120,
+      18157,
+      18270,
+      18339,
+      18440,
+      18494,
+      18531,
+      18657,
+      18684,
+      18991,
+      19047,
+      19059,
+      19436,
+      19504,
+      19555,
+      19614,
+      19688
+    ],
+    "earned_void_D_incremental": 18,
+    "earned_void_B_D_cumulative": 40,
+    "existing_void_stock_ids": 77,
+    "existing_unique_spell_ids": 5327,
+    "existing_class_memberships": 5629,
+    "new_spell_definition_claims": 0,
+    "consumer_QA": "Final positive consumer QA retained developer-level access with GM mode off; it is not ordinary-status-0 positive access certification. One existing Wizard scroll purchase/learn and one Human Healer Journeyman IV offer/hire passed; this does not certify all spells/classes/roles.",
+    "later_E_G": "HELD_UNCHANGED"
   }
 }

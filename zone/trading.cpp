@@ -1,3 +1,5 @@
+#include "original_trade_transform_hooks.h"
+#include "sod_food_delivery.h"
 #include "fire_run_terminal_scene.h"
 #include "kithicor_poison_trade.h"
 /*	EQEmu: EQEmulator
@@ -326,6 +328,7 @@ void Client::ResetTrade() {
 }
 
 void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, std::list<void*>* event_details) {
+	if(OriginalTradeTransforms::Pending(*this))return;
 	if (!tradingWith) {
 		return;
 	}
@@ -524,6 +527,8 @@ void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, st
 	}
 	else if(tradingWith->IsNPC()) {
 		if(KithicorPoisonTrade::RejectUnissued(*this,*tradingWith->CastToNPC()))return;
+		if(OriginalTradeFood::RejectUnissued(*this,*tradingWith->CastToNPC()))return;
+		if(OriginalTradeTransforms::ClaimsOffer(*this,*tradingWith->CastToNPC()))return;
 		if(FireRunActionSource::NativeRunTerminalSource::RejectUnissuedFinishTrade(*this,*tradingWith->CastToNPC()))return;
 		if (Housing::GuildPortalRuntime::HandIn(*this, tradingWith)) return;
 

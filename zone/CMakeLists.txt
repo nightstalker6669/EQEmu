@@ -1,4 +1,7 @@
 set(zone_sources
+	sod_message_admission.cpp
+	sod_food_delivery.cpp
+	sod_original_transform.cpp
 	housing_recipe301.cpp
 	fungal_native_inventory_custody.cpp
 	client_spirit_shroud.cpp

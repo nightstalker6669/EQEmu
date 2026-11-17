@@ -111,12 +111,26 @@ inline Evidence ReadEnabledGroupSlices(Database& db, Database& content, uint32_t
 		evidence.available = true;
 		evidence.group[static_cast<unsigned>(Theme::Kithicor)] = complete;
 	}
+ if (RuleB(SodProgression,EnableFieldOfScaleSlice)) {
+  std::vector<uint32_t> ids;
+  for(const auto& t:FieldOfScaleGroupTasks)ids.push_back(t.id);
+  const auto history=ReadCommittedTasks(db,content,character,ids);
+  if(!history.available)return Evidence{};
+  Credit complete=Credit::Complete;
+  for(const auto& t:FieldOfScaleGroupTasks) {
+   const auto title=history.titles.find(t.id);const auto credit=history.completion.find(t.id);
+   if(title==history.titles.end() || title->second!=t.title || credit==history.completion.end())return Evidence{};
+   if(credit->second!=Credit::Complete)complete=Credit::Incomplete;
+  }
+  evidence.available=true;
+  evidence.group[static_cast<unsigned>(Theme::FieldOfScale)]=complete;
+ }
 	return evidence;
 }
 
 inline bool AnyGroupSliceEnabled()
 {
-	return RuleB(SodProgression, EnableOceangreenSlice) || RuleB(SodProgression, EnableKithicorSlice);
+	return RuleB(SodProgression, EnableOceangreenSlice) || RuleB(SodProgression, EnableKithicorSlice) || RuleB(SodProgression,EnableFieldOfScaleSlice);
 }
 
 // A base Blackburrow visit is allowed during Summary Execution, then forever
@@ -133,6 +147,25 @@ inline bool BlackburrowAccess(Database& db, Database& content, uint32_t characte
 	if (!active.Success() || active.RowCount()!=1) return false;
 	const auto found = SharedTaskAdmission::Number(active.begin()[0]);
 	return found && *found==1;
+}
+
+// Drake's hidden curse objective can be earned in the ORIGINAL public Library
+// before the two visible deliveries. Preserve it under the actual native shared
+// occurrence, never a private progression flag or an invented dynamic zone.
+inline bool ActivePublicFieldRun(Database& db, Database& content, uint32_t character, uint64_t occurrence, uint32_t task)
+{
+ if((task!=920197 && task!=920209 && task!=920210 && !(task>=920201 && task<=920203)) || !character || !occurrence ||
+  !RuleB(SodProgression,EnableFieldOfScaleSlice) || !MayStartOrJoinTask(content,task,true))return false;
+ auto q=db.QueryDatabase(fmt::format(
+  "SELECT COUNT(*) FROM shared_tasks st JOIN shared_task_members sm "
+  "ON sm.shared_task_id=st.id AND sm.character_id={} WHERE st.id={} AND st.task_id={} "
+  "AND st.completion_time IS NULL AND (st.expire_time IS NULL OR st.expire_time>NOW())",
+  character,occurrence,task));
+ return q.Success() && q.RowCount()==1 && SharedTaskAdmission::Number(q.begin()[0])==std::optional<uint64_t>(1);
+}
+inline bool ActiveDrakeRun(Database& db, Database& content, uint32_t character, uint64_t occurrence)
+{
+ return ActivePublicFieldRun(db,content,character,occurrence,920197);
 }
 
 inline uint32_t OceangreenMissionZone(uint32_t task)
@@ -187,6 +220,23 @@ inline bool MissionEntry(Database& db, Database& content, uint32_t character,
 		const auto z=SharedTaskAdmission::Number(row[0]), v=SharedTaskAdmission::Number(row[1]), type=SharedTaskAdmission::Number(row[2]);
 		return z && *z==destination && v && *v==static_cast<uint32_t>(version) && type && *type==1;
 	}
+ if(IsFieldOfScaleTask(static_cast<uint32_t>(*task))) {
+  if(!RuleB(SodProgression,EnableFieldOfScaleSlice) || FieldOfScaleMissionZone(static_cast<uint32_t>(*task))!=destination)return false;
+  uint32_t expected_template=0;int expected_version=0;
+  switch(*task) {
+  case 920211: expected_template=920211;expected_version=1;break;
+  case 920212: expected_template=920212;expected_version=1;break;
+  case 920213: expected_template=920213;expected_version=1;break;
+  case 920214: expected_template=920214;expected_version=2;break;
+  case 920215: expected_template=920215;expected_version=2;break;
+  default:return false;
+  }
+  if(version!=expected_version)return false;
+  auto q=content.QueryDatabase(fmt::format("SELECT t.type,t.dz_template_id,p.zone_id,p.zone_version FROM tasks t JOIN dynamic_zone_templates p ON p.id=t.dz_template_id WHERE t.id={}",*task));
+  if(!q.Success() || q.RowCount()!=1)return false;
+  auto row=q.begin();auto type=SharedTaskAdmission::Number(row[0]),templ=SharedTaskAdmission::Number(row[1]),z=SharedTaskAdmission::Number(row[2]),v=SharedTaskAdmission::Number(row[3]);
+  return type && *type==1 && templ && *templ==expected_template && z && *z==destination && v && *v==static_cast<uint32_t>(version);
+ }
 	if (!RuleB(SodProgression, EnableOceangreenSlice) || OceangreenMissionZone(static_cast<uint32_t>(*task))!=destination) return false;
 	auto mapping = content.QueryDatabase(fmt::format(
 		"SELECT t.type,t.dz_template_id,p.zone_id,p.zone_version FROM tasks t "

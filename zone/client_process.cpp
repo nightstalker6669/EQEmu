@@ -1,3 +1,4 @@
+#include "original_trade_transform_hooks.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -58,6 +59,7 @@ extern EntityList entity_list;
 
 bool Client::Process() {
  if (!ProcessSpiritShroudNativeTransition()) return false;
+ if((Connected()||IsLD())&&OriginalTradeTransforms::Pending(*this))OriginalTradeTransforms::PollPending(*this);
 	bool ret = true;
 
 	if (Connected() || IsLD()) {

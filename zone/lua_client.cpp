@@ -1,3 +1,4 @@
+#include "common/sod_original_transform_native.h"
 #include "common/sod_content_bindings.h"
 #include "common/kithicor_mission.h"
 #include "zone/doors.h"
@@ -22,6 +23,7 @@
 #ifdef LUA_EQEMU
 
 #include "lua_client.h"
+#include "sod_fieldofscale_crystal_source.h"
 #include "sod_actor_grounding.h"
 #include <cmath>
 #include <limits>
@@ -1630,8 +1632,93 @@ bool Lua_Client::SodKithicorPoison(Lua_NPC giver) {
  return ack.Success() && ack.RowsAffected()==1;
 }
 
+bool Lua_Client::SodFieldOfScalePublicRun(uint32 task) {
+ Lua_Safe_Call_Bool();
+ if(!zone || zone->GetInstanceID() || zone->GetInstanceVersion() ||
+  (zone->GetZoneID()!=452 && !(task==920197 && zone->GetZoneID()==453)) || !self->IsTaskActive(task) ||
+  self->GetSharedTaskId()<=0)return false;
+ const auto* state=self->GetTaskState();
+ return state && state->GetActiveSharedTask().task_id==task &&
+  SodProgression::ActivePublicFieldRun(database,content_db,self->CharacterID(),self->GetSharedTaskId(),task);
+}
+
+Lua_NPC Lua_Client::SodFieldOfScaleEye() {
+ Lua_Safe_Call_Class(Lua_NPC);
+ if(!RuleB(SodProgression,EnableFieldOfScaleSlice) || SodSceneState(920215)!=1)return Lua_NPC();
+ auto* eye=entity_list.GetNPCByID(self->GetControlledMobId());
+ return eye && eye->GetHP()>0 && eye->GetSwarmOwner()==self->GetID() ? Lua_NPC(eye) : Lua_NPC();
+}
+
+Lua_NPC Lua_Client::SodFieldOfScaleCrystalTarget() {
+ Lua_Safe_Call_Class(Lua_NPC);
+ if(!RuleB(SodProgression,EnableFieldOfScaleSlice) || SodSceneState(920213)!=1)return Lua_NPC();
+ const auto target=SodFieldOfScaleCrystalSource::Frame::ClaimTarget(*self);
+ auto* npc=target?entity_list.GetNPCByID(target):nullptr;
+ return npc && npc->GetHP()>0 ? Lua_NPC(npc) : Lua_NPC();
+}
+
+bool Lua_Client::SodFieldOfScaleEnterMission(uint32 task,uint32 door_db,uint32 door_id) {
+ Lua_Safe_Call_Bool();
+ if(!RuleB(SodProgression,EnableFieldOfScaleSlice)||!zone||zone->GetZoneID()!=452||zone->GetInstanceID()||zone->GetInstanceVersion())return false;
+ uint32 destination=0;int version=1;
+ if(door_db==18774&&door_id==1)destination=455;
+ else if(door_db==18817&&door_id==44)destination=453;
+ else if((door_db==18805&&door_id==36)||(door_db==18806&&door_id==37))destination=454;
+ else return false;
+ if(task) {
+  if(!self->IsTaskActive(task)||self->GetSharedTaskId()<=0)return false;
+  if(task==920211||task==920214){if(destination!=455)return false;version=task==920214?2:1;}
+  else if(task==920213){if(destination!=453)return false;}
+  else if(task==920212||task==920215){if(destination!=454)return false;version=task==920215?2:1;}
+  else return false;
+ }
+ auto* physical=entity_list.FindDoor(door_id);if(!physical||physical->GetDoorDBID()!=door_db)return false;
+ const auto& point=physical->GetPosition();const float dx=self->GetX()-point.x,dy=self->GetY()-point.y,dz=self->GetZ()-point.z;
+ if(!std::isfinite(dx)||!std::isfinite(dy)||!std::isfinite(dz)||dx*dx+dy*dy+dz*dz>2500.0f)return false;
+ if(!task) {
+  // Original public dungeons are also required by Drake Scourge/Supplies.
+  // Use these same restored physical clicks, never a task dialogue teleport.
+  if(!self->CanEnterSodProgressionZone(destination,0,0))return false;
+  if(destination==455)self->MovePC(uint32(455),25.0f,-318.0f,4.0f,127.0f,0,ZoneSolicited);
+  else if(destination==453)self->MovePC(uint32(453),-20.0f,-147.625f,4.0f,384.0f,0,ZoneSolicited);
+  else self->MovePC(uint32(454),33.3125f,0.375f,4.0f,378.0f,0,ZoneSolicited);
+  return true;
+ }
+ const auto instance=GetSharedTaskInstanceID(task,destination,version);if(!instance)return false;
+ if(!SodProgression::MissionEntry(database,content_db,self->CharacterID(),self->GetSharedTaskId(),destination,version,instance,false))return false;
+ // Completed/repeated missions can leave older DZs in the same zone/version.
+ // Move only into this exact canonical active run, never the first matching DZ.
+ for(auto* owned:self->GetDynamicZones(destination,version))if(owned&&owned->GetInstanceID()==instance){owned->MovePCInto(self);return true;}
+ return false;
+}
+
+uint32 Lua_Client::SodFieldOfScalePublicExpires(uint32 task) {
+ Lua_Safe_Call_Int();
+ if(task!=920209 || !SodFieldOfScalePublicRun(task))return 0;
+ auto q=database.QueryDatabase(fmt::format("SELECT UNIX_TIMESTAMP(expire_time) FROM shared_tasks WHERE id={} AND task_id=920209 AND completion_time IS NULL AND expire_time>NOW()",self->GetSharedTaskId()));
+ if(!q.Success() || q.RowCount()!=1)return 0;
+ auto value=SharedTaskAdmission::Number(q.begin()[0]);return value&&*value<=UINT32_MAX?uint32(*value):0;
+}
+
 int Lua_Client::SodSceneState(uint32 task) {
  Lua_Safe_Call_Int();
+ if(task==920209) {
+  if(!SodFieldOfScalePublicRun(task))return -1;
+  auto q=database.QueryDatabase(fmt::format("SELECT state FROM sod_task_scene_runs WHERE shared_task_id={} AND task_id=920209 AND instance_id=0 AND model_version=2",self->GetSharedTaskId()));
+  if(!q.Success()||q.RowCount()>1)return -1;if(!q.RowCount())return 0;
+  auto value=SharedTaskAdmission::Number(q.begin()[0]);return value&&*value<=3?int(*value):-1;
+ }
+ if(task==920197) {
+  if(!zone || zone->GetInstanceID() || zone->GetInstanceVersion()!=0 ||
+   (zone->GetZoneID()!=452 && zone->GetZoneID()!=453) || !self->IsTaskActive(task) ||
+   self->GetSharedTaskId()<=0 || !SodProgression::ActiveDrakeRun(database,content_db,self->CharacterID(),self->GetSharedTaskId()))return -1;
+  auto q=database.QueryDatabase(fmt::format("SELECT state FROM sod_task_scene_runs WHERE shared_task_id={} AND task_id=920197 AND instance_id=0 AND model_version=2",self->GetSharedTaskId()));
+  if(!q.Success() || q.RowCount()>1)return -1;
+  if(!q.RowCount())return 0;
+  const auto state=SharedTaskAdmission::Number(q.begin()[0]);
+  return state && (*state==0 || *state==2) ? static_cast<int>(*state) : -1;
+ }
+
  if(SodProgression::IsKithicorSharedTask(task)) {
   if(!zone || !self->CanEnterZone() || !zone->GetInstanceID() ||
    GetSharedTaskInstanceID(task,zone->GetZoneID(),zone->GetInstanceVersion())!=zone->GetInstanceID())return -1;
@@ -1650,6 +1737,44 @@ int Lua_Client::SodSceneState(uint32 task) {
 }
 bool Lua_Client::SodRestoreSceneVictory(uint32 task) {
  Lua_Safe_Call_Bool();
+ if(task==920197) {
+  if(SodSceneState(task)!=2)return false;
+  try{if(SodOriginalTransform::RunPending(database,self->GetSharedTaskId()))return false;}catch(...){return false;}
+  auto* state=self->GetTaskState();
+  if(!state || state->GetActiveSharedTask().task_id!=task)return false;
+  // A genuine early death receipt remains hidden until ordinary native step
+  // progression makes this objective active. No skull/item/delivery is given.
+  if(self->IsTaskActivityActive(task,2) && state->GetActiveSharedTask().activity[2].done_count==0)
+   self->UpdateTaskActivity(task,2,1);
+  return true;
+ }
+
+ if(task>=920211 && task<=920215) {
+  if(!RuleB(SodProgression,EnableFieldOfScaleSlice))return false;
+  const int scene=SodSceneState(task);
+  if(scene!=2 && scene!=4 && scene!=5)return false;
+  auto* state=self->GetTaskState();
+  if(!state || state->GetActiveSharedTask().task_id!=task)return false;
+  const auto& active=state->GetActiveSharedTask();
+  const auto repair=[&](int activity,int goal) {
+   if(self->IsTaskActivityActive(task,activity)) {
+    const int current=active.activity[activity].done_count;
+    if(current>=0 && current<goal)self->UpdateTaskActivity(task,activity,goal-current);
+   }
+  };
+  // Only actual encounter stage receipts are projected. Never fabricate a
+  // Dragonbane Enchantment/shield, a loot step, final delivery or NPC hail.
+  if(task==920211) {
+   if(scene==4 || scene==2)repair(1,1); // four real guards defeated
+   if(scene==2)repair(2,1); // actual bound Thessila death receipt
+  } else if(task==920212 && scene==2)repair(2,1); // actual final defender
+  else if(task==920213) {
+   repair(1,1); // actual Akromid target cast proof, state4+
+   if(scene==5 || scene==2)repair(2,3); // two deaths + third surrender
+  }
+  // Phalanx uses ordinary actual native Kill15; Shield ordinary loot/deliver.
+  return true;
+ }
  if(SodProgression::IsKithicorSharedTask(task)) {
   const auto scene=SodSceneState(task);
   if(scene<0 || scene==3)return false;
@@ -1702,6 +1827,33 @@ bool Lua_Client::SodRestoreSceneVictory(uint32 task) {
 
 bool Lua_Client::SodSceneTransition(uint32 task,int expected,int next) {
  Lua_Safe_Call_Bool();
+ if(task==920209) {
+  if(!((expected==0&&next==1)||(expected==1&&(next==2||next==3)))||SodSceneState(task)!=expected)return false;
+  if(expected==0) {
+   auto ready=database.QueryDatabase(fmt::format("SELECT done_count FROM shared_task_activity_state WHERE shared_task_id={} AND activity_id=2",self->GetSharedTaskId()));
+   if(!ready.Success()||ready.RowCount()!=1||SharedTaskAdmission::Number(ready.begin()[0])!=std::optional<uint64_t>(1))return false;
+   auto init=database.QueryDatabase(fmt::format("INSERT INTO sod_task_scene_runs(shared_task_id,task_id,instance_id,model_version,state,started_at,seed,updated_at) VALUES({},920209,0,2,0,0,SHA2(CONCAT({},':lost:2'),256),UNIX_TIMESTAMP()) ON DUPLICATE KEY UPDATE shared_task_id=shared_task_id",self->GetSharedTaskId(),self->GetSharedTaskId()));
+   if(!init.Success())return false;
+  }
+  auto q=database.QueryDatabase(fmt::format("UPDATE sod_task_scene_runs SET state={},started_at=IF(started_at=0,UNIX_TIMESTAMP(),started_at),updated_at=UNIX_TIMESTAMP() WHERE shared_task_id={} AND task_id=920209 AND instance_id=0 AND model_version=2 AND state={}",next,self->GetSharedTaskId(),expected));
+  return q.Success()&&q.RowsAffected()==1;
+ }
+
+ if(task==920197) {
+  // Called by the original NPC killed-merit callback after the bound selection
+  // policy confirms this credited death. No selection probability is invented.
+  if(!zone || zone->GetZoneID()!=453 || expected!=0 || next!=2 || SodSceneState(task)!=0)return false;
+  auto init=database.QueryDatabase(fmt::format(
+   "INSERT INTO sod_task_scene_runs (shared_task_id,task_id,instance_id,model_version,state,started_at,seed,updated_at) "
+   "VALUES ({},920197,0,2,0,0,SHA2(CONCAT({},':drake:2'),256),UNIX_TIMESTAMP()) "
+   "ON DUPLICATE KEY UPDATE shared_task_id=shared_task_id",self->GetSharedTaskId(),self->GetSharedTaskId()));
+  if(!init.Success())return false;
+  auto q=database.QueryDatabase(fmt::format(
+   "UPDATE sod_task_scene_runs SET state=2,started_at=UNIX_TIMESTAMP(),updated_at=UNIX_TIMESTAMP() "
+   "WHERE shared_task_id={} AND task_id=920197 AND instance_id=0 AND model_version=2 AND state=0",self->GetSharedTaskId()));
+  return q.Success() && q.RowsAffected()==1;
+ }
+
  if(SodProgression::IsKithicorSharedTask(task)) {
   if(!((expected==0 && next==1) || (expected==1 && (next==2 || next==3))) || SodSceneState(task)!=expected)return false;
   const auto* phase=KithicorMission::Find(task,zone->GetZoneID(),zone->GetInstanceVersion());
@@ -1712,7 +1864,10 @@ bool Lua_Client::SodSceneTransition(uint32 task,int expected,int next) {
  if(expected<0||expected>6||next<1||next>6||next==expected||SodSceneState(task)!=expected)return false;
  // Allowed mission lifecycle edges only. Failed/success receipts never reset.
  const bool hiran=task==920178||task==920179;
- if(!(expected==0&&next==1) && !(expected==1&&(next==2||next==3||(!hiran&&next==4))) &&
+ const bool fos_edge=(task==920211 && expected==4 && (next==2 || next==3)) ||
+  (task==920213 && expected==4 && (next==5 || next==3)) ||
+  (task==920213 && expected==5 && (next==2 || next==3));
+ if(!fos_edge && !(expected==0&&next==1) && !(expected==1&&(next==2||next==3||(!hiran&&next==4))) &&
   !(task==920180&&expected==4&&(next==5||next==3)) &&
   !(task==920180&&expected==5&&(next==6||next==3)) &&
   !(task==920180&&expected==6&&next==2))return false;
@@ -4557,6 +4712,11 @@ luabind::scope lua_register_client() {
 	.def("SodKithicorBook", &Lua_Client::SodKithicorBook)
 	.def("SodKithicorBurn", &Lua_Client::SodKithicorBurn)
 	.def("SodKithicorPoison", &Lua_Client::SodKithicorPoison)
+	.def("SodFieldOfScalePublicRun", &Lua_Client::SodFieldOfScalePublicRun)
+	.def("SodFieldOfScalePublicExpires", &Lua_Client::SodFieldOfScalePublicExpires)
+	.def("SodFieldOfScaleEnterMission", &Lua_Client::SodFieldOfScaleEnterMission)
+	.def("SodFieldOfScaleEye", &Lua_Client::SodFieldOfScaleEye)
+	.def("SodFieldOfScaleCrystalTarget", &Lua_Client::SodFieldOfScaleCrystalTarget)
 	.def("SodSceneState", &Lua_Client::SodSceneState)
 	.def("SodRestoreSceneVictory", &Lua_Client::SodRestoreSceneVictory)
 	.def("SodSceneTransition", &Lua_Client::SodSceneTransition)

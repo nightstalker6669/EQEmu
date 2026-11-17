@@ -9,6 +9,15 @@ namespace SodProgression {
 // membership reload. Both World and Zone consult fresh content definitions.
 inline bool MayStartOrJoinTask(Database& content, uint32_t task, bool shared_only = false)
 {
+ if (IsFieldOfScaleTask(task)) {
+  if (!RuleB(SodProgression,EnableFieldOfScaleSlice) || !RuleB(TaskSystem,RecordCompletedTasks)) return false;
+  const bool shared=IsFieldOfScaleSharedTask(task);
+  if(shared_only && !shared)return false;
+  auto q=content.QueryDatabase(fmt::format("SELECT enabled,type FROM tasks WHERE id={}",task));
+  if(!q.Success() || q.RowCount()!=1)return false;
+  auto row=q.begin();auto enabled=SharedTaskAdmission::Number(row[0]),type=SharedTaskAdmission::Number(row[1]);
+  return enabled && *enabled==1 && type && *type==(shared?1u:2u);
+ }
 	if (IsKithicorTask(task)) {
 		if (!RuleB(SodProgression, EnableKithicorSlice) || !RuleB(TaskSystem, RecordCompletedTasks)) return false;
 		const bool shared = IsKithicorSharedTask(task);

@@ -73,7 +73,7 @@ Native hiring and management with four roles and progression through level 100.
 - **Combat & upkeep:** Role-aware assistance, healer behavior, coin upkeep and Bayle Mark fallback.
 - **Ownership & progression:** Configurable multiple owned contracts with one active; earned Journeyman II acquisition in the accepted Oceangreen slice.
 
-**Remaining / qualified scope:** Some scaling is reconstructed. Marketplace slot/rename commerce, later mercenary AAs and player-equipped mercenary gear are not implemented. Earned J3 progression has local native acceptance for one ordinary level-100 healer hire; its matched source, database and server download are published. See Kithicor in Quests & zones.
+**Remaining / qualified scope:** Some scaling is reconstructed. Marketplace slot/rename commerce, later mercenary AAs and player-equipped mercenary gear are not implemented. Earned J3 progression has local native acceptance for one ordinary level-100 healer hire; its matched source, database and server download are published. See Kithicor in Quests & zones. Field of Scale adds recorded Journeyman IV Human Healer offer/one-hire acceptance; final consumer QA retained developer access with GM mode off, not ordinary-status-0 positive certification. Other race/role coverage is not inferred.
 
 [Source and scope notes](extensions/rof2/mercenaries/)
 
@@ -119,7 +119,7 @@ Published restorations affect 5,327 existing player-spell IDs across 5,629 class
 - **Class and level catalogue:** All indexed names and ranks, sorted by retained native learning level, with links to the source-qualified routes.
 - **Acquisition and scrolls:** Merchant stock, faction/language gates, original exchanges and restored scroll items; a scroll-only restoration does not establish a working route.
 - **Support content:** Summoned items and optional estimated pet/aura support, separated from ordinary baseline spell definitions.
-- **Earned Void access:** 77 indexed stock spells are distinct from 8 earned B spells plus 14 new C entries, 22 cumulative. Later D–G ordinary access is not claimed.
+- **Earned Void access:** 77 existing stock IDs remain distinct from earned B8 + C14 + D18 =40 cumulative. D access and one175-Chronobine purchase/learn passed with developer-access QA qualifications; E–G ordinary progression remains held.
 
 **Remaining / qualified scope:** Source publication is separate from activation and native proof. Categories overlap and are not additive; shared-class display rows are not new spell IDs. Two House of Thule exchange routes remain on hold. Optional support is estimated, unchanged baseline spells and NPC/helper references are excluded, and class levels are retained metadata rather than a new historical audit.
 
@@ -224,7 +224,7 @@ Published restorations affect 5,327 existing player-spell IDs across 5,629 class
 
 [Browse the alphabetical quest-route catalogue](docs/rof2/roadmap/quests/README.md) · [Portable searchable catalogue](docs/rof2/roadmap/quests.html)
 
-**337 documented named task routes, five descriptive scripted exchange routes and twelve held/source-only appendix entries.** These counts distinguish source work, accepted tasks and held content; they are not 354 completed or newly added quests. Multi-zone crosslinks do not increase global totals. The Achievements subset retains its 108 exact saved receipt / eleven coherent-source summary / 172 older-overlay unresolved-receipt tiers. Existing zone-package scope and native limitations below remain unchanged.
+**356 documented named task routes, five descriptive scripted exchange routes and twelve held/source-only appendix entries.** These counts distinguish source work, accepted tasks and held content; they are not 373 completed or newly added quests. Multi-zone crosslinks do not increase global totals. The Achievements subset retains its 108 exact saved receipt / eleven coherent-source summary / 172 older-overlay unresolved-receipt tiers. Existing zone-package scope and native limitations below remain unchanged.
 
 
 ### The Serpent’s Spine / Hero’s Journey
@@ -413,6 +413,22 @@ Matched source, database and r25 server downloads are published. Recorded native
 **Remaining / qualified scope:** Native acceptance used the matched local Linux cohort and r8 physical escort revision. The r11 escort-homing fix has focused mock and exact staging evidence only, pending a future fresh load; a full r11 escort walk and every guard route are not proved. Earlier 615/616 guard behavior causes and the peer NPC ready path remain unproved. The owned AA exit and main NPC ready path passed. Numeric reconstruction is user-approved, not exact historical parity. Windows native gameplay is not established by CI. Oceangreen geometry limits continue to apply.
 
 [Source and scope notes](https://github.com/nightstalker6669/EQEmu/blob/5a9d8a0b3c8bfc7a2c5728cc9c006d640e2d33d6/docs/rof2/KITHICOR.md)
+
+</details>
+
+<details>
+<summary>Field of Scale → Void D / J4 — Native accepted · QA qualified</summary>
+
+Nineteen authored tasks completed and their recipient rewards paid. The five ordered group missions earn Void D and Journeyman IV eligibility; source publication and matching server-package availability are separate.
+
+- **Nineteen stable tasks:** Shared and personal routes, including three distinct Sarnak Recovery note branches, with native completion and original recipient rewards.
+- **Earned Void D:** 18 existing D stock IDs at175Chronobines; B8 + C14 + D18 =40 cumulative of77 indexed stock IDs. One item119438 purchase and existing spell19688 learn passed.
+- **Journeyman IV:** One Human Healer TierIV offer and hire passed while existing owned contracts/player-earned state were retained. This is not an all-role/race mercenary acceptance claim.
+- **Original progression:** Requester-side history and the five-mission sequence, authored owned entrances, native entry credit and once-only archival/reward delivery retain their documented scope.
+
+**Remaining / qualified scope:** Final positive consumer QA retained developer-level access with GM mode off; it is not ordinary-status-0 positive access certification. One existing Wizard scroll purchase/learn and one Human Healer Journeyman IV offer/hire passed; this does not certify all spells/classes/roles. QA used maximum-level geared characters, a test weapon for routine kills and approved position assistance. Real spell cycles established the 60/30/20-percent mechanics; no forced HP/race/cast/RNG/task counters or completion-history edits established acceptance. Assisted movement does not prove full ordinary travel, collision or path coverage. Food used four natural carcasses and sixteen seeded QA ingredients. Some Sarnak actors/note sources were approved NPC-type fixtures with real loot RNG and actual combat; Burynai note provenance was natural, while the final Kurn note used a post-cache-refresh fixture. These are not wholly natural drop/respawn proofs. Required item definitions must be present in the deployed item cache before ordinary loot testing. Approved local reward floors/caps, population-decay policy, XP/faction bases, NPC balance, bounds and placement geometry are reconstructions, not authenticated original Live values or coordinates. Existing Oceangreen geometry, Kithicor r8/r11 and other held qualifications remain unchanged.
+
+[Accepted Field of Scale guide](docs/rof2/FIELD-OF-SCALE.md) · [Quest list by zone](docs/rof2/roadmap/quests/field-of-scale.md)
 
 </details>
 
