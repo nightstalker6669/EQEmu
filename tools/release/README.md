@@ -12,6 +12,22 @@ Each platform downloads that same-run named artifact into `build/release-input-c
 
 `publish_release.py` binds both platform artifacts to the current run/attempt/commit and identical database inputs. It stages a unique versioned draft, uploads all files, verifies remote asset sizes/SHA256 digests, and publishes with `make_latest` only after the complete set is verified. Failure before publication preserves the previous good Latest. Old releases are retained. The release job is serialized; source-head and recorded run-number guards also prevent a stale finishing run from promoting over newer source/Latest. A superseded build may leave an unpublished draft. A failed attempt is not retried blindly; diagnose the concrete error, then use a new source commit or an explicitly chosen Actions rerun. Each attempt gets its own tag.
 
+## Write the release changelog
+
+The release owner adds or replaces `tools/release/RELEASE-NOTES.md` in the same release batch as the changes it describes. Use the exact current server Latest tag on the first line, followed by a blank line and the reviewed Markdown:
+
+```markdown
+<!-- previous-release: CURRENT_LATEST_TAG -->
+
+## Changes
+
+- Describe what this build added, fixed, or changed in plain language.
+```
+
+Summarize only changes since that tagged release. Keep build output, test evidence, hashes, installation steps, and unchanged features in the workflow, guides, manifests, and other release assets. Review the text against the changes before sending the batch to `develop`.
+
+The publisher requires a nonempty changelog for the current Latest tag before creating a draft. Missing, empty, and stale notes preserve the previous Latest and fail publication with an actionable error. If Latest changes during staging, the publisher stops promotion. The publisher adds the invisible CI run marker used for ordering and copies the reviewed Markdown into the public body. For a correction to an existing body, verify the exact release ID and preserve its run marker, tag, assets, and Latest status.
+
 Stable URLs are `/releases/latest/download/EQEmu-RoF2-Linux-x86_64.zip` and `/releases/latest/download/EQEmu-RoF2-Windows-x64.zip`. Each platform has `.zip.sha256`, `.manifest.json` and `.INSTALL.md` companions; `RELEASE-INPUTS.json` and `SHA256SUMS` cover the complete release. Exact source and pinned submodules remain available at the recorded repository commit. Full SQL is new-empty-database only; native gameplay acceptance and unresolved reconstruction limitations remain separate from CI success.
 
 Local validation covers syntax/structure and focused input-contract checks. Actual two-platform CI and automatic release are the end-to-end validation; do not claim release success until the Latest readback and both jobs succeed.

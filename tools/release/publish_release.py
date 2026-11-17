@@ -25,20 +25,35 @@ def api(endpoint, method='GET', data=None):
     return json.loads(result.stdout) if result.stdout.strip() else None
 
 
-def latest_run_number(repo):
+def latest_release(repo):
     result = subprocess.run(['gh', 'api', 'repos/' + repo + '/releases/latest'], text=True, capture_output=True)
     if result.returncode:
         if '404' in result.stderr:
-            return -1
+            return {}
         raise RuntimeError('Could not establish existing Latest; no promotion attempted')
-    release = json.loads(result.stdout)
-    marker = re.search(r'<!-- eqemu-ci-run: (\d+) -->', release.get('body') or '')
-    return int(marker.group(1)) if marker else -1
+    return json.loads(result.stdout)
 
 
-def still_current(repo, sha, number):
+def still_current(repo, sha, number, previous_tag=None):
     head = api('repos/' + repo + '/git/ref/heads/develop')['object']['sha']
-    return head == sha and latest_run_number(repo) <= number
+    if head != sha:
+        return False
+    latest = latest_release(repo)
+    marker = re.search(r'<!-- eqemu-ci-run: (\d+) -->', latest.get('body') or '')
+    if marker and int(marker.group(1)) > number:
+        return False
+    return previous_tag is None or latest.get('tag_name', 'none') == previous_tag
+
+
+def release_notes(path, previous_tag, number):
+    if not path.is_file():
+        raise ValueError(f'Missing build-specific changelog: {path}')
+    header, separator, body = path.read_text(encoding='utf-8').partition('\n\n')
+    if header != f'<!-- previous-release: {previous_tag} -->':
+        raise ValueError(f'Changelog must name current Latest {previous_tag}: {path}')
+    if not separator or not body.strip() or '<!-- eqemu-ci-run:' in body:
+        raise ValueError(f'Changelog must contain a readable change list: {path}')
+    return f'<!-- eqemu-ci-run: {number} -->\n\n' + body.rstrip('\n')
 
 
 def publish(args):
@@ -74,31 +89,21 @@ def publish(args):
             raise ValueError('Artifact sidecar differs')
     if {p.name for p in directory.iterdir() if p.is_file()} != expected:
         raise ValueError('Incomplete or unexpected release artifact set')
+    previous_tag = latest_release(repo).get('tag_name', 'none')
+    notes = release_notes(args.notes, previous_tag, number)
     shutil_inputs = directory / 'RELEASE-INPUTS.json'
     shutil_inputs.write_bytes(args.inputs.read_bytes())
     sums = ''.join(digest(directory / name) + '  ' + name + '\n' for name in sorted(expected | {'RELEASE-INPUTS.json'}))
     (directory / 'SHA256SUMS').write_text(sums, encoding='utf-8')
     tag = 'rof2-ci-r' + str(number) + '-a' + str(attempt) + '-' + sha[:12]
-    notes = directory.parent / 'release-notes.md'
-    notes.write_text('''<!-- eqemu-ci-run: {number} -->
-# Matched Linux x86-64 and Windows x64 runtime release
-
-Source commit: [{sha}](https://github.com/{repo}/commit/{sha}). Both platform builds, existing tests and runtime packaging succeeded in [this workflow](https://github.com/{repo}/actions/runs/{run}).
-
-Stable Latest downloads: [Linux](https://github.com/{repo}/releases/latest/download/EQEmu-RoF2-Linux-x86_64.zip) · [Windows](https://github.com/{repo}/releases/latest/download/EQEmu-RoF2-Windows-x64.zip).
-
-Database source `{db}`; immutable input `{dbtag}`. Both ZIPs include identical full SQL `{sql}` and 331 portable Housing JSON files. **NEW EMPTY DATABASE ONLY:** full SQL replaces tables; no player-preserving upgrade. Original authenticated RoF2 resources/maps and each platform's documented OS/Perl ABI prerequisites remain external.
-
-Read the platform install guide, CONTENT-LIMITS.md and per-platform manifest. 32 LOCAL scalars/two Dwarf quantity choices and source-UNCONFIRMED stew qualifications remain; three open recipe limits stay unsupported. No client archives, player data, private config, source/build/cache/debug bulk are in these runtime ZIPs. Source and pinned submodules are available at this exact commit; dependency notices accompany runtime files. No serving runtime or SQL deployment is performed by publishing.
-'''.format(number=number, sha=sha, repo=repo, run=os.environ['GITHUB_RUN_ID'], db=inputs['database']['source_commit'], dbtag=inputs['database']['release_tag'], sql=inputs['database']['required_members_sha256']['full.sql']), encoding='utf-8')
-    if not still_current(repo, sha, number):
+    if not still_current(repo, sha, number, previous_tag):
         print('::notice::Source advanced before staging; Latest remains untouched')
         return
     # A failed upload/readback leaves only an unpublished draft; no existing release is edited/deleted.
     created = api('repos/' + repo + '/releases', 'POST', {
         'tag_name': tag, 'target_commitish': sha, 'draft': True,
         'name': 'RoF2 CI runtime r' + str(number) + ' (' + sha[:12] + ')',
-        'body': notes.read_text(encoding='utf-8')})
+        'body': notes})
     if not created['draft'] or created['tag_name'] != tag or created['target_commitish'] != sha:
         raise RuntimeError('Created draft source/tag differs; no promotion attempted')
     release_id = created['id']
@@ -114,7 +119,7 @@ Read the platform install guide, CONTENT-LIMITS.md and per-platform manifest. 32
         item = assets[path.name]
         if item['state'] != 'uploaded' or item['size'] != path.stat().st_size or item.get('digest') != 'sha256:' + digest(path):
             raise RuntimeError('Remote asset checksum/state differs; draft remains unpublished')
-    if not still_current(repo, sha, number):
+    if not still_current(repo, sha, number, previous_tag):
         print('::notice::Newer source/Latest detected; complete draft left unpublished')
         return
     api('repos/' + repo + '/releases/' + str(release['id']), 'PATCH', {'draft': False, 'make_latest': 'true'})
@@ -128,4 +133,5 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--assets', type=Path, required=True)
     parser.add_argument('--inputs', type=Path, default=Path('tools/release/release-inputs.json'))
+    parser.add_argument('--notes', type=Path, default=Path('tools/release/RELEASE-NOTES.md'))
     publish(parser.parse_args())
