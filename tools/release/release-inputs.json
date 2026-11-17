@@ -6,11 +6,11 @@
       "For an existing volume select the matching guarded upgrade using UPGRADE-CONTRACT.json."
     ],
     "asset": {
-      "bytes": 34645208,
-      "name": "PEQ-RoF2-full-2026-11-17-rathe.zip",
-      "sha256": "f64815dbcdd4a2bfbc5fd9efc2610ec1b9832039ad76bf341d22c7e6777e7d13",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-17-rathe/PEQ-RoF2-full-2026-11-17-rathe.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-17-rathe/PEQ-RoF2-full-2026-11-17-rathe.zip"
+      "bytes": 36348395,
+      "name": "PEQ-RoF2-full-2026-11-17-rathe-r2.zip",
+      "sha256": "ec96fc0cfce13032198b6b9eb60c7ef82ea75e7f4375fcb683f600ba9a564634",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-17-rathe-r2/PEQ-RoF2-full-2026-11-17-rathe-r2.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-17-rathe-r2/PEQ-RoF2-full-2026-11-17-rathe-r2.zip"
     },
     "base_database_release_tag": "peq-rof2-2026-11-17-field-of-scale",
     "cohort_source_binding": {
@@ -817,7 +817,7 @@
       "CANONICAL-SEED-COMPOSITION.json",
       "migrations/rathe/UPGRADE-CONTRACT.json"
     ],
-    "release_tag": "peq-rof2-2026-11-17-rathe",
+    "release_tag": "peq-rof2-2026-11-17-rathe-r2",
     "required_code_boundary": {
       "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
@@ -888,7 +888,7 @@
     "source_repository": "nightstalker6669/EQEmu",
     "verification_basis": "Published seed bytes and CAS preimages checked offline, applied receipts and native receipts reused, archive CRC and all member SHA256 verified."
   },
-  "database_contract_sha256": "9bf28298f5bab30dd5ce6db256d4913bb35c9c8a2d437901cbf298b93b4f767c",
+  "database_contract_sha256": "da7cc09814cfca59b683d684273be42ae9eacb4e075f31f3f6e25d33567e006e",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [
