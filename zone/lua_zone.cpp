@@ -564,7 +564,7 @@ int Lua_Zone::KithicorEscortDeath(std::string identity, Lua_NPC actor) {
 
 bool Lua_Zone::FailSodScene(std::string identity) {
  Lua_Safe_Call_Bool();
- if((!RuleB(SodProgression,EnableOceangreenSlice)&&!RuleB(SodProgression,EnableKithicorSlice)&&!RuleB(SodProgression,EnableFieldOfScaleSlice))||!self->GetInstanceID()||!TaskManager::Instance())return false;
+ if((!RuleB(SodProgression,EnableOceangreenSlice)&&!RuleB(SodProgression,EnableKithicorSlice)&&!RuleB(SodProgression,EnableFieldOfScaleSlice)&&!RuleB(SodProgression,EnableRatheSlice))||!self->GetInstanceID()||!TaskManager::Instance())return false;
  auto run=SharedTaskAdmission::Number(identity.c_str());if(!run||!*run)return false;
  auto* dz=self->GetDynamicZone();if(!dz||dz->GetType()!=DynamicZoneType::Mission)return false;
  auto mapped=database.QueryDatabase(fmt::format("SELECT st.task_id FROM shared_tasks st JOIN shared_task_dynamic_zones sd ON sd.shared_task_id=st.id JOIN dynamic_zones dz ON dz.id=sd.dynamic_zone_id WHERE st.id={} AND dz.id={} AND dz.instance_id={}",*run,dz->GetID(),self->GetInstanceID()));

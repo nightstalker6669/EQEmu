@@ -381,6 +381,8 @@ public:
 	bool IsTaskCompleted(int task_id);
 	int GetSodTaskCompletionState(int task_id);
 	int GetSodVoidZone();
+	bool SodRatheEnterMission(Lua_NPC npc);
+	std::string SodRatheThrallRun();
 	bool SodHiranTravel(Lua_NPC npc, bool return_to_keep);
 	bool SodChiefKey(Lua_NPC giver);
 	std::string SodActorGrounding(Lua_NPC actor);

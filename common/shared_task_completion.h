@@ -154,7 +154,7 @@ inline std::optional<int64_t> Archive(
 		return std::nullopt;
 	}
 
-    if (task.task_id >= 920211 && task.task_id <= 920215) {
+    if (SodProgression::IsTerminalSceneMission(task.task_id)) {
         // Final native goals are already archived and verified above. Commit
         // the terminal encounter receipt with completion, before any Zone
         // death callback can mistake a completed member for a missing one.

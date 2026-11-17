@@ -7524,7 +7524,7 @@ int Client::GrantSodFaction(uint32 pending,uint64 entry,uint32 faction,uint32 am
  if(amount!=expected)return 0;
  FactionMods mods;if(!content_db.GetFactionData(&mods,GetClass(),GetFactionRace(),GetDeity(),faction))return 0;
  m_sod_faction_pending=pending;m_sod_faction_entry=entry;m_sod_faction_id=faction;m_sod_faction_committed=false;
- SetFactionLevel2(CharacterID(),faction,GetBaseClass(),GetBaseRace(),GetDeity(),static_cast<int32>(amount),0);
+ SetFactionLevel2(CharacterID(),faction,GetBaseClass(),GetBaseRace(),GetDeity(),SodFactionReward::NativeDelta(static_cast<uint32>(*task),faction,amount),0);
  const bool committed=m_sod_faction_committed;
  m_sod_faction_pending=0;m_sod_faction_entry=0;m_sod_faction_id=0;m_sod_faction_committed=false;
  return committed?1:(m_inventory_session_rejected?-1:0);

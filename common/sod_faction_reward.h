@@ -8,6 +8,19 @@ namespace SodFactionReward {
 // native faction modifiers, caps and atomic receipt persistence stay intact.
 constexpr std::uint32_t ExpectedBase(std::uint32_t task, std::uint32_t faction)
 {
+    // Finite Rathe LOCAL base reconstruction; native modifiers/caps apply.
+    if (SodProgression::IsRatheTask(task)) {
+        switch (task) {
+        case 920216: return faction == 1225 ? 15u : ((faction == 1211 || faction == 1212) ? 25u : 0u);
+        case 920217: return faction == 1225 ? 15u : ((faction == 1211 || faction == 1212) ? 25u : 0u);
+        case 920218: return faction == 1225 ? 15u : ((faction == 1211 || faction == 1212) ? 25u : 0u);
+        case 920219: return faction == 1225 ? 20u : ((faction == 1211 || faction == 1212) ? 100u : 0u);
+        case 920220: return faction == 1225 ? 25u : ((faction == 1211 || faction == 1212) ? 25u : 0u);
+        case 920221: return faction == 1225 ? 25u : ((faction == 1211 || faction == 1212) ? 25u : 0u);
+        case 920222: return faction == 1225 ? 35u : ((faction == 1211 || faction == 1212) ? 25u : 0u);
+        default: return 0u;
+        }
+    }
     if (SodProgression::IsFieldOfScaleTask(task)) {
         if (faction != 1224) return 0u;
         switch (task) {
@@ -29,5 +42,15 @@ constexpr std::uint32_t ExpectedBase(std::uint32_t task, std::uint32_t faction)
     return faction == 1222 ? (sergeant ? 10u : 30u) :
         ((sergeant || hiran) && faction == 1200 ? (sergeant ? 10u : 30u) :
         ((sergeant || hiran) && (faction == 1199 || faction == 1221) ? (sergeant ? 1u : 3u) : 0u));
+}
+}
+
+namespace SodFactionReward {
+// Reward rows keep the positive magnitude required by the existing delivery
+// interface. Only the exact owned Rathe/Slavers tuple reverses its native hit;
+// no caller-supplied signed input, new reward type or schema is introduced.
+constexpr std::int32_t NativeDelta(std::uint32_t task, std::uint32_t faction, std::uint32_t magnitude) {
+ const auto delta = static_cast<std::int32_t>(magnitude);
+ return SodProgression::IsRatheTask(task) && faction == 1212 ? -delta : delta;
 }
 }

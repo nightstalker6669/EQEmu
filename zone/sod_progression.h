@@ -125,12 +125,27 @@ inline Evidence ReadEnabledGroupSlices(Database& db, Database& content, uint32_t
   evidence.available=true;
   evidence.group[static_cast<unsigned>(Theme::FieldOfScale)]=complete;
  }
-	return evidence;
+ if (RuleB(SodProgression, EnableRatheSlice)) {
+  std::vector<uint32_t> ids;
+  for (const auto& task : RatheTasks) ids.push_back(task.id);
+  const auto history = ReadCommittedTasks(db, content, character, ids);
+  if (!history.available) return Evidence{};
+  Credit complete = Credit::Complete;
+  for (const auto& task : RatheTasks) {
+   const auto title = history.titles.find(task.id);
+   const auto credit = history.completion.find(task.id);
+   if (title == history.titles.end() || title->second != task.title || credit == history.completion.end()) return Evidence{};
+   if (credit->second != Credit::Complete) complete = Credit::Incomplete;
+  }
+  evidence.available = true;
+  evidence.group[static_cast<unsigned>(Theme::Rathe)] = complete;
+ }
+ return evidence;
 }
 
 inline bool AnyGroupSliceEnabled()
 {
-	return RuleB(SodProgression, EnableOceangreenSlice) || RuleB(SodProgression, EnableKithicorSlice) || RuleB(SodProgression,EnableFieldOfScaleSlice);
+	return RuleB(SodProgression, EnableOceangreenSlice) || RuleB(SodProgression, EnableKithicorSlice) || RuleB(SodProgression,EnableFieldOfScaleSlice) || RuleB(SodProgression, EnableRatheSlice);
 }
 
 // A base Blackburrow visit is allowed during Summary Execution, then forever
@@ -220,6 +235,15 @@ inline bool MissionEntry(Database& db, Database& content, uint32_t character,
 		const auto z=SharedTaskAdmission::Number(row[0]), v=SharedTaskAdmission::Number(row[1]), type=SharedTaskAdmission::Number(row[2]);
 		return z && *z==destination && v && *v==static_cast<uint32_t>(version) && type && *type==1;
 	}
+ if (IsRatheTask(static_cast<uint32_t>(*task))) {
+  if (!RuleB(SodProgression, EnableRatheSlice) || *task != 920222 || destination != 476 || version != 1) return false;
+  auto q = content.QueryDatabase("SELECT t.type,t.dz_template_id,p.zone_id,p.zone_version FROM tasks t JOIN dynamic_zone_templates p ON p.id=t.dz_template_id WHERE t.id=920222");
+  if (!q.Success() || q.RowCount() != 1) return false;
+  auto row = q.begin();
+  const auto type = SharedTaskAdmission::Number(row[0]), templ = SharedTaskAdmission::Number(row[1]);
+  const auto z = SharedTaskAdmission::Number(row[2]), v = SharedTaskAdmission::Number(row[3]);
+  return type && *type == 1 && templ && *templ == 920222 && z && *z == 476 && v && *v == 1;
+ }
  if(IsFieldOfScaleTask(static_cast<uint32_t>(*task))) {
   if(!RuleB(SodProgression,EnableFieldOfScaleSlice) || FieldOfScaleMissionZone(static_cast<uint32_t>(*task))!=destination)return false;
   uint32_t expected_template=0;int expected_version=0;

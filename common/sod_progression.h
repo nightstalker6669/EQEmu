@@ -43,7 +43,7 @@ constexpr Credit Korafax(const Evidence& evidence)
 // This is the highest positively proved stage, not a claim that unbound paths
 // are incomplete. The Oceangreen and Kithicor group paths are bound;
 // Field of Scale is bound by its five group missions when enabled;
-// Rathe, raid aggregation and F/G remain explicitly unknown.
+// Rathe is bound by all seven original tasks when enabled; raid aggregation and F/G remain unknown.
 constexpr VoidStage ProvenVoidStage(const Evidence& evidence)
 {
 	unsigned count = 0;
@@ -154,6 +154,26 @@ constexpr uint32_t FieldOfScaleMissionZone(uint32_t id) {
  }
 }
 
+// Database-owned Rathe namespace reservation001. These are server-local
+// identities, not claims about original Live task/template identifiers.
+inline constexpr std::array<TaskBinding, 7> RatheTasks{{
+	{920216, "Retinue of the Frog-God"},
+	{920217, "Find Your Allies"},
+	{920218, "Whom Frogs Destroy"},
+	{920219, "The Wrath of Korascian"},
+	{920220, "Disrupt the Siege"},
+	{920221, "Champions No More"},
+	{920222, "Murdunk's Last Stand"},
+}};
+constexpr bool IsRatheTask(uint32_t task) {
+ for (const auto& bound : RatheTasks) if (bound.id == task) return true;
+ return false;
+}
+constexpr bool IsRatheSharedTask(uint32_t task) { return task == 920222; }
+constexpr bool IsTerminalSceneMission(uint32_t task) {
+ return (task >= 920211 && task <= 920215) || IsRatheSharedTask(task);
+}
+
 // Exact current source/door and source/zone-point mappings for default
 // returns only. Explicit A, bind, GM summon and internal Void paths are not
 // default return contexts. No client-supplied zone ID alone establishes one.
@@ -174,7 +194,7 @@ constexpr bool IsDefaultVoidReturnPoint(uint32_t source, uint32_t point)
 constexpr bool IsReservedOceangreenTask(uint32_t task) { return (task >= 920175 && task <= 920187) || task == 920190; }
 constexpr bool IsOceangreenRequest(uint32_t task) { return task >= 920175 && task <= 920190; }
 
-constexpr bool IsSodRequest(uint32_t task) { return IsOceangreenRequest(task) || IsKithicorTask(task) || IsFieldOfScaleTask(task); }
-constexpr bool IsBoundTask(uint32_t task) { return IsReservedOceangreenTask(task) || IsKithicorTask(task) || IsFieldOfScaleTask(task); }
+constexpr bool IsSodRequest(uint32_t task) { return IsOceangreenRequest(task) || IsKithicorTask(task) || IsFieldOfScaleTask(task) || IsRatheTask(task); }
+constexpr bool IsBoundTask(uint32_t task) { return IsReservedOceangreenTask(task) || IsKithicorTask(task) || IsFieldOfScaleTask(task) || IsRatheTask(task); }
 
 } // namespace SodProgression

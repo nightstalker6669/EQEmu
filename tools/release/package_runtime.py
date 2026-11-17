@@ -320,13 +320,13 @@ def package(args):
         # New qualifications must come from this checkout, not the older content seed.
         merc_docs = stage / 'common/mercenary'
         merc_docs.mkdir(parents=True)
-        for name in ('LEVEL100.md', 'RESOURCE-UPDATES.md', 'README.md', 'SOD-OCEANGREEN.md'):
+        for name in ('LEVEL100.md', 'RESOURCE-UPDATES.md', 'README.md', 'SOD-OCEANGREEN.md', 'RATHE-J5.md'):
             shutil.copy2(repo / 'common/mercenary' / name, merc_docs / name)
         progression_docs = stage / 'docs/rof2'
         progression_docs.mkdir(parents=True)
         shutil.copy2(repo / 'docs/rof2/OCEANGREEN.md', progression_docs / 'OCEANGREEN.md')
         shutil.copy2(repo / 'docs/rof2/KITHICOR.md', progression_docs / 'KITHICOR.md')
-        for name in ('FIELD-OF-SCALE.md', 'FIELD-OF-SCALE.json'):
+        for name in ('FIELD-OF-SCALE.md', 'FIELD-OF-SCALE.json', 'RATHE.md'):
             shutil.copy2(repo / 'docs/rof2' / name, progression_docs / name)
         limits = stage / 'CONTENT-LIMITS.md'
         with limits.open('a', encoding='utf-8') as output:
@@ -361,6 +361,10 @@ def package(args):
                          'Use the matching sanitized database pin and definition-only additive upgrade; '
                          'full SQL is for a new empty database only. Regenerate the target item cache '
                          'from the matched item definitions before ordinary loot acceptance.\n')
+            output.write('\n## Rathe progression\n\n'
+                         'Eight Rathe quest files extend the managed release overlay to 60. '
+                         'See [the Rathe guide](docs/rof2/RATHE.md) for scope and limitations '
+                         'and [the Journeyman V guide](common/mercenary/RATHE-J5.md) for eligibility.\n')
         native = stage / 'server/bin'
         native.mkdir(parents=True)
         hashes, binaries = {}, []

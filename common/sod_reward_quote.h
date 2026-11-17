@@ -46,10 +46,18 @@ inline Bounds Range(uint32_t task) {
  case 920213:return {5,22};
  case 920214:return {5,25};
  case 920215:return {5,15};
+ // Rathe finite LOCAL reconstruction; approved by coordinator finite review; activate only with complete batch.
+ case 920216:return {5,20};
+ case 920217:return {10,40};
+ case 920218:return {5,20};
+ case 920219:return {7,30};
+ case 920220:return {11,45};
+ case 920221:return {11,45};
+ case 920222:return {15,180};
  default:return {0,0};
  }
 }
-inline bool Shared(uint32_t task) { return task==920178||task==920179||task==920180||task==920183||task==920192||task==920193||SodProgression::IsFieldOfScaleSharedTask(task); }
+inline bool Shared(uint32_t task) { return task==920178||task==920179||task==920180||task==920183||task==920192||task==920193||SodProgression::IsFieldOfScaleSharedTask(task)||SodProgression::IsRatheSharedTask(task); }
 inline uint32_t Amount(Bounds b,uint64_t count) {
  // Saturate before arithmetic; values beyond this already reach every floor.
  return std::max(b.floor,static_cast<uint32_t>(uint64_t(b.maximum)*8/(8+std::min<uint64_t>(count,UINT32_MAX))));

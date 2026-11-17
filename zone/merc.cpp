@@ -5079,17 +5079,18 @@ void Client::FilterSodMercenaryOffers(std::list<MercData>& offers)
 	const bool oceangreen = RuleB(SodProgression, EnableOceangreenSlice);
 	const bool kithicor = RuleB(SodProgression, EnableKithicorSlice);
 	const bool field_of_scale = RuleB(SodProgression, EnableFieldOfScaleSlice);
-	if (!oceangreen && !kithicor && !field_of_scale) return;
+	const bool rathe = RuleB(SodProgression, EnableRatheSlice);
+	if (!oceangreen && !kithicor && !field_of_scale && !rathe) return;
 
 	// Offer and authoritative hire both use this filter. Each theme unlocks
-	// its own tier; J4 does not grant J2/J3 and owned contracts are untouched.
-	std::array<int, 3> tier_state{{-2, -2, -2}};
-	offers.remove_if([this, oceangreen, kithicor, field_of_scale, &tier_state](const MercData& offer) {
+	// its own tier; higher tiers do not grant lower themes, and owned contracts are untouched.
+	std::array<int, 4> tier_state{{-2, -2, -2, -2}};
+	offers.remove_if([this, oceangreen, kithicor, field_of_scale, rathe, &tier_state](const MercData& offer) {
 		const auto definition = zone->GetMercTemplate(offer.MercTemplateID);
 		if (!definition || definition->ProficiencyID != 2) return false;
 		const auto tier = definition->TierID;
 		if (!((tier == 2 && oceangreen) || (tier == 3 && kithicor) ||
-			(tier == 4 && field_of_scale))) return false;
+			(tier == 4 && field_of_scale) || (tier == 5 && rathe))) return false;
 		auto& state = tier_state[tier - 2];
 		if (state == -2) state = GetSodJourneymanTierState(tier);
 		return state != 1;

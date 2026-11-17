@@ -91,6 +91,12 @@ bool Client::CanEnterSodProgressionZone(uint32 destination, int version, uint32 
 	if (SodProgression::IsVoidZone(destination)) {
 		return destination <= SodProgression::VoidZone(SodProgression::ProvenVoidStage(evidence));
 	}
+ if (RuleB(SodProgression, EnableRatheSlice)) {
+  if (destination >= 475 && destination <= 477) return true;
+  // This batch binds the all-GROUP path only. Mixed group/raid evidence is
+  // sufficient for Void E, never for Korafax admission. No F/G credit here.
+  if (destination == 470) return SodProgression::All(evidence.group) == SodProgression::Credit::Complete;
+ }
 	if (RuleB(SodProgression,EnableFieldOfScaleSlice) && destination>=452 && destination<=455) return true;
 	if (RuleB(SodProgression, EnableKithicorSlice) && (destination==456 || destination==457)) return true;
 	return RuleB(SodProgression, EnableOceangreenSlice) &&
@@ -100,6 +106,37 @@ bool Client::CanEnterSodProgressionZone(uint32 destination, int version, uint32 
 bool Client::CanRequestSodTask(uint32 task_id, uint32 npc_type_id)
 {
 	using SodProgression::Credit;
+ if (SodProgression::IsRatheTask(task_id)) {
+  if (!RuleB(SodProgression, EnableRatheSlice) || !zone || zone->GetZoneID() != 476 ||
+      zone->GetInstanceID() || zone->GetInstanceVersion() ||
+      !SodProgression::MayStartOrJoinTask(content_db, task_id)) return false;
+  uint32 giver = 0;
+  std::vector<uint32> prerequisites;
+  switch (task_id) {
+  case 920216: giver = 476122; break;
+  case 920217: giver = 476115; break;
+  case 920218: giver = 476115; prerequisites = {920217}; break;
+  case 920219: giver = 476115; prerequisites = {920218}; break;
+  // Direct Jan2009 requester report permits these after Find Your Allies.
+  // Coordinator accepted this contemporaneous interpretation for this batch.
+  case 920220: case 920221: giver = 476110; prerequisites = {920217}; break;
+  case 920222: giver = 476110; prerequisites = {920220,920221}; break;
+  default: return false;
+  }
+  if (npc_type_id != giver || !entity_list.GetNPCByNPCTypeID(giver)) return false;
+  if (prerequisites.empty()) return true;
+  const auto history = SodProgression::ReadCommittedTasks(database, content_db, CharacterID(), prerequisites);
+  if (!history.available) return false;
+  for (const auto id : prerequisites) {
+   const auto title = history.titles.find(id), title_end = history.titles.end();
+   const auto credit = history.completion.find(id);
+   if (credit == history.completion.end() || credit->second != Credit::Complete || title == title_end) return false;
+   bool matched = false;
+   for (const auto& task : SodProgression::RatheTasks) if (task.id == id) matched = title->second == task.title;
+   if (!matched) return false;
+  }
+  return true;
+ }
  if(SodProgression::IsFieldOfScaleTask(task_id)) {
   if(!RuleB(SodProgression,EnableFieldOfScaleSlice) || !zone || zone->GetZoneID()!=452 || zone->GetInstanceID()!=0 || zone->GetInstanceVersion()!=0 || !SodProgression::MayStartOrJoinTask(content_db,task_id))return false;
   bool giver_ok=false;std::vector<uint32_t> prerequisites;

@@ -2192,7 +2192,7 @@ void ClientTaskState::SendRewardSelection(Client *client, uint32_t task_id)
 	}
 }
 
-// Recover only already-earned FoS group entitlements. The immutable World
+// Recover only already-earned FoS and Rathe group entitlements. The immutable World
 // archive and original per-member occurrence replace neither membership nor
 // task/goal state; the existing pending selection and per-entry writer deliver.
 static void RestoreArchivedFieldOfScaleSelections(Client& client)
@@ -2204,14 +2204,14 @@ static void RestoreArchivedFieldOfScaleSelections(Client& client)
         "JOIN completed_shared_tasks st ON st.id=h.shared_task_id AND st.task_id=h.task_id "
         "JOIN completed_shared_task_members m ON m.shared_task_id=st.id AND m.character_id=h.character_id "
         "LEFT JOIN character_task_reward_selections r ON r.character_id=h.character_id AND r.source_instance_id=h.occurrence_id "
-        "WHERE h.character_id={} AND h.task_id BETWEEN 920211 AND 920215 "
+        "WHERE h.character_id={} AND (h.task_id BETWEEN 920211 AND 920215 OR h.task_id=920222) "
         "AND st.is_locked=1 AND st.completion_time IS NOT NULL AND st.completion_time>=st.accepted_time "
         "AND r.pending_reward_id IS NULL ORDER BY h.shared_task_id LIMIT 100", client.CharacterID()));
     if (!earned.Success()) return;
     for (auto row : earned) {
         const auto task_id=SharedTaskAdmission::Number(row[0]), run=SharedTaskAdmission::Number(row[1]),
             occurrence=SharedTaskAdmission::Number(row[2]), accepted=SharedTaskAdmission::Number(row[3]);
-        if (!task_id || *task_id<920211 || *task_id>920215 || !run || !*run ||
+        if (!task_id || *task_id>UINT32_MAX || !SodProgression::IsTerminalSceneMission(static_cast<uint32>(*task_id)) || !run || !*run ||
             !occurrence || !*occurrence || !accepted || !*accepted || *accepted>UINT32_MAX) continue;
         const auto* task=TaskManager::Instance()->GetTaskData(static_cast<int>(*task_id));
         const auto* rewards=TaskManager::Instance()->GetTaskRewardSet(static_cast<uint32_t>(*task_id));

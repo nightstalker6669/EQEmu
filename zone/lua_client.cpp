@@ -1737,6 +1737,19 @@ int Lua_Client::SodSceneState(uint32 task) {
 }
 bool Lua_Client::SodRestoreSceneVictory(uint32 task) {
  Lua_Safe_Call_Bool();
+ if (SodProgression::IsRatheSharedTask(task)) {
+  if (!RuleB(SodProgression, EnableRatheSlice) || SodSceneState(task) != 2) return false;
+  const auto* state = self->GetTaskState();
+  if (!state || state->GetActiveSharedTask().task_id != task) return false;
+  const auto& active = state->GetActiveSharedTask();
+  // A durable successful encounter can project its actual terminal kill
+  // receipt after the normal World progress acknowledgement. No loot/hail.
+  if (self->IsTaskActivityActive(task,1)) {
+   const int done = active.activity[1].done_count;
+   if (done >= 0 && done < 35) self->UpdateTaskActivity(task,1,35-done);
+  }
+  return true;
+ }
  if(task==920197) {
   if(SodSceneState(task)!=2)return false;
   try{if(SodOriginalTransform::RunPending(database,self->GetSharedTaskId()))return false;}catch(...){return false;}
@@ -1863,6 +1876,8 @@ bool Lua_Client::SodSceneTransition(uint32 task,int expected,int next) {
  }
  if(expected<0||expected>6||next<1||next>6||next==expected||SodSceneState(task)!=expected)return false;
  // Allowed mission lifecycle edges only. Failed/success receipts never reset.
+ if (SodProgression::IsRatheSharedTask(task) &&
+     !((expected == 0 && next == 1) || (expected == 1 && (next == 2 || next == 3)))) return false;
  const bool hiran=task==920178||task==920179;
  const bool fos_edge=(task==920211 && expected==4 && (next==2 || next==3)) ||
   (task==920213 && expected==4 && (next==5 || next==3)) ||
@@ -1899,6 +1914,46 @@ int Lua_Client::SodSceneDraw(uint32 task,uint32 index,uint32 range) {
 
  auto r=database.QueryDatabase(fmt::format("SELECT MOD(CONV(SUBSTRING(SHA2(CONCAT(seed,':',{}),256),1,8),16,10),{}) FROM sod_task_scene_runs WHERE shared_task_id={} AND task_id={} AND instance_id={} AND state=1",index,range,self->GetSharedTaskId(),task,zone->GetInstanceID()));
  if(!r.Success()||r.RowCount()!=1)return -1;auto n=SharedTaskAdmission::Number(r.begin()[0]);return n&&*n<range?static_cast<int>(*n):-1;
+}
+
+std::string Lua_Client::SodRatheThrallRun() {
+ Lua_Safe_Call_String();
+ if (!RuleB(SodProgression, EnableRatheSlice) || !zone || zone->GetZoneID() != 476 ||
+     zone->GetInstanceID() || zone->GetInstanceVersion() || !self->IsTaskActivityActive(920218,0)) return {};
+ auto* state = self->GetTaskState();
+ if (!state) return {};
+ int slot = -1;
+ for (int i=0;i<MAXACTIVEQUESTS;++i) {
+  if (state->GetActiveTaskID(i)==920218) { if (slot>=0) return {}; slot=i; }
+ }
+ if (slot<0) return {};
+ const auto accepted = state->GetTaskStartTime(TaskType::Quest,slot);
+ if (accepted<=0) return {};
+ // Read the existing native personal occurrence allocator; a re-request can
+ // never inherit an old departing NPC's rescue. No new receipt/table/flag.
+ auto q = database.QueryDatabase(fmt::format(
+  "SELECT occurrence_id FROM character_task_reward_instances WHERE character_id={} AND task_id=920218 AND accepted_time={}",
+  self->CharacterID(),accepted));
+ if (!q.Success() || q.RowCount()!=1) return {};
+ const auto id=SharedTaskAdmission::Number(q.begin()[0]);
+ return id && *id ? std::to_string(*id) : std::string{};
+}
+
+bool Lua_Client::SodRatheEnterMission(Lua_NPC npc) {
+ Lua_Safe_Call_Bool();
+ NPC* giver = npc;
+ if (!RuleB(SodProgression, EnableRatheSlice) || !giver || !zone ||
+     zone->GetZoneID() != 476 || zone->GetInstanceID() || zone->GetInstanceVersion() ||
+     giver->GetNPCTypeID() != 476110 || entity_list.GetNPCByID(giver->GetID()) != giver ||
+     !std::isfinite(giver->CalculateDistance(self)) || giver->CalculateDistance(self) > MAX_TASK_SELECT_DISTANCE ||
+     !self->IsTaskActive(920222)) return false;
+ const auto instance = GetSharedTaskInstanceID(920222, 476, 1);
+ if (!instance || !SodProgression::MissionEntry(database, content_db, self->CharacterID(),
+     self->GetSharedTaskId(), 476, 1, instance, false)) return false;
+ for (auto* owned : self->GetDynamicZones(476, 1)) {
+  if (owned && owned->GetInstanceID() == instance) { owned->MovePCInto(self); return true; }
+ }
+ return false;
 }
 
 // Original Koel hail entry and post-defense Billik keep return. The exact
@@ -4705,6 +4760,8 @@ luabind::scope lua_register_client() {
 
 	.def("GetSodTaskCompletionState", &Lua_Client::GetSodTaskCompletionState)
 	.def("GetSodVoidZone", &Lua_Client::GetSodVoidZone)
+	.def("SodRatheEnterMission", &Lua_Client::SodRatheEnterMission)
+	.def("SodRatheThrallRun", &Lua_Client::SodRatheThrallRun)
 	.def("SodHiranTravel", &Lua_Client::SodHiranTravel)
 	.def("SodChiefKey", &Lua_Client::SodChiefKey)
 	.def("SodActorGrounding", &Lua_Client::SodActorGrounding)
