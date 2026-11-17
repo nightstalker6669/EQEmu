@@ -23,6 +23,8 @@ Explore the [restoration roadmap](ROADMAP.md) for system features, quest and zon
 | **Mercenaries through level 100** | Tank, healer, melee, and caster roles; hiring, upkeep, stances, suspension, revival, and extended level 86–100 stats and spell progression. Group resource updates also reflect changing mana. Some scaling values are documented reconstructions. [Details](extensions/rof2/mercenaries/) |
 | **Oceangreen progression** | Ten accepted personal/shared tasks, once-only shared rewards, earned Void B access and ordinary Journeyman II acquisition. Upper-ward physical blocking remains limited; encounter values are documented local reconstruction. [Scope and upgrade guide](docs/rof2/OCEANGREEN.md) |
 | **Kithicor, Void C and Journeyman III** | Six accepted progression tasks and shared mission rewards, earned original Void C access, spell-vendor acquisition and an ordinary Journeyman III healer hire. Physical escorts passed on the accepted native cohort; a later guard fix has focused validation only. [Scope and upgrade guide](docs/rof2/KITHICOR.md) |
+| **Field of Scale, Void D and Journeyman IV** | Nineteen accepted tasks, earned Void D spell acquisition and a Journeyman IV healer hire on the reviewed RoF2 cohort. [Scope and upgrade guide](docs/rof2/FIELD-OF-SCALE.md) |
+| **Rathe, Void E and Journeyman V** | Seven accepted Rathe tasks, earned Void E spell purchase and learning, Korafax access and a Journeyman V hire. The accepted runs used development assistance. [Scope and upgrade guide](docs/rof2/RATHE.md) |
 | **Spirit Shrouds** | Native selection and previews, transformation and character restoration, earned-item retrieval, and shroud abilities. The enabled catalogue covers eight starting forms at levels 5–70; later branches remain incomplete. [Details](extensions/rof2/spirit-shrouds/) |
 | **Achievements and quest rewards** | Achievement tracking, persistent progress, completion notifications, and reward selection, alongside restored portions of Hero’s Journey and Rain of Fear quest content. Coverage includes work in Crescent Reach, Blightfire Moors, Stone Hive, and Shard’s Landing. [Details](extensions/rof2/achievements/) |
 | **Spells and their acquisition routes** | Missing scrolls and vendor stock, faction and language requirements, and original rune, fragment, mote, cantrip, and periapt exchanges. The work covers multiple expansions through RoF; remaining access and quest gaps are tracked separately. [Details](extensions/rof2/spells/) |
@@ -41,7 +43,7 @@ Further Seeds of Destruction themes, spell acquisition gaps, AA coverage, achiev
 
 ## EverForge Docker stack
 
-EverForge0.3.0 runs the published RoF2 server with our source-built Spire and PEQ forks, real World administration, SSH/SFTP, FTPS, phpMyAdmin and complete private backup/restore. See [the full installation and upgrade guide](docs/rof2/EVERFORGE.md) and [ports/network access](docs/rof2/everforge/PORTS.md). Required authorized original EQGs/maps are supplied separately; they are not distributed in the image.
+EverForge 0.3.0 runs the published RoF2 server with Spire and PEQ Editor built from our pinned forks, real World administration, SSH/SFTP, FTPS, phpMyAdmin and complete private backup/restore. See [the full installation and upgrade guide](docs/rof2/EVERFORGE.md) and [ports/network access](docs/rof2/everforge/PORTS.md). Required authorized original EQGs/maps are supplied separately; they are not distributed in the image.
 
 ```sh
 mkdir everforge
@@ -51,11 +53,11 @@ cd everforge
 python3 configure.py
 ```
 
-Continue with the full guide for resources, utility installation, initialization and credentials. Existing installations retain their database/data volumes and private environment. Utilities use the reviewed fork commits recorded in the setup; ordinary restart does not reinstall upstream software or reseed an existing DB. [Docker Hub](https://hub.docker.com/r/nightsta69/everforge-rof2) · [validation](docs/rof2/everforge/VERIFICATION.md).
+Build verified Rathe r2 with both utility forks on Linux amd64 Docker Compose. A fresh empty-database installation and an upgrade from Field of Scale r26 both passed, including World and Zone startup, authenticated Spire controls and a read-only PEQ Editor check. Continue with the full guide for resources, utility installation, initialization and credentials. Existing installations retain their database/data volumes and private environment. Utilities use the reviewed fork commits recorded in the setup; ordinary restart does not reinstall upstream software or reseed an existing DB. [Docker Hub](https://hub.docker.com/r/nightsta69/everforge-rof2) · [validation](docs/rof2/everforge/VERIFICATION.md).
 
 ## Getting the pack
 
-Start with the [server releases](https://github.com/nightstalker6669/EQEmu/releases/latest). Choose the package for the computer running your server, then follow its included installation instructions and matching database reference.
+The current matched release is **Rathe r2**. Choose the Linux x86-64 or Windows x64 archive from the [Rathe server release](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r28-a1-c0e1f6ea2276) and follow the [installation guide](docs/rof2/INSTALL.md). Both archives include the 60 managed quest files and the matching sanitized PEQ database input. See the [Rathe r2 database release](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-17-rathe-r2) for the standalone database package and checksum.
 
 The [companion database repository](https://github.com/nightstalker6669/EQEmu-Database) provides database provenance, additions, and downloadable snapshots. Use the database version specified by your server package. A full database snapshot is for a **fresh installation**; it must not be imported over an existing player database. Existing servers need the appropriate migrations.
 

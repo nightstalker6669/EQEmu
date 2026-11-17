@@ -1,8 +1,40 @@
-> **Current matched progression release:** install the native server, all thirty-three pinned quests and database inputs together. Read the [Kithicor/Void C/J3 scope and upgrade guide](KITHICOR.md) and the retained [Oceangreen qualifications](OCEANGREEN.md). Full SQL is fresh-empty-only; existing player databases use the matched reviewed additive migrations. Historical installation details below remain as provenance.
+# Install the RoF2 Restoration Pack
 
-> **Combined release source:** see [the 2026-11-06 release guide](RELEASE-2026-11-06.md). Branch layout and build statements below retain historical provenance.
+The current matched release is **Rathe r2**, built from [`c0e1f6ea`](https://github.com/nightstalker6669/EQEmu/commit/c0e1f6ea2276740ac45442215454a0a9923e4573) with all 60 managed quest files and the [Rathe r2 PEQ database package](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-17-rathe-r2). Use the server, quest and database files from the same release. See the [Rathe guide](RATHE.md) for native gameplay coverage and [EverForge](EVERFORGE.md) for Docker setup with the Spire and PEQ Editor forks.
 
-# Install `rof2-integration`
+## Native Windows and Linux packages
+
+Download the ZIP and its SHA-256 sidecar from the [Rathe server release](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r28-a1-c0e1f6ea2276). Verify the ZIP hash before extracting it and follow its included platform-specific `INSTALL.md` for the exact runtime dependency inventory.
+
+| Host | ZIP | Launcher from `server/` |
+| --- | --- | --- |
+| Linux x86-64 | `EQEmu-RoF2-Linux-x86_64.zip` | `./run-server.sh` |
+| Windows x64 | `EQEmu-RoF2-Windows-x64.zip` | `run-server.cmd` in an interactive console |
+
+Use Python 3.9 or newer and a MariaDB 10.11 client. The Linux package was built on Ubuntu 26.04.1 LTS with glibc 2.43 and Perl 5.40.1. Match the ABI and system libraries listed in the package. Windows requires the VC++ 2015–2022 or newer x64 Redistributable, full Strawberry Perl x64 matching Perl 5.42.0 on PATH and the `py -3` launcher.
+
+### Fresh installation
+
+1. Create a new empty latin1 MariaDB 10.11 database. Import the bundled `database/full.sql` with the MariaDB client. This dump replaces tables and is for an empty database only.
+2. In `server/`, copy `eqemu_config.json.example` and `login.json.example` to `eqemu_config.json` and `login.json`. Set your own database credentials, addresses and world key. Keep those files private.
+3. Supply authorized original RoF2 client resources and corresponding maps. Follow the archive's geometry installer instructions and install the maps under `server/maps/`.
+4. From `server/`, run `bin/shared_memory` on Linux or `bin\shared_memory.exe` on Windows to generate the target's shared data. If your database name differs from `peq`, set `EQEMU_DATABASE_NAME` to match. Start the platform launcher from the same directory.
+
+### Upgrade an existing installation
+
+Back up the player database, server files, quest overrides and private configuration. Stop every writer. Follow the [Rathe upgrade contract](https://github.com/nightstalker6669/EQEmu-Database/blob/507facf847cb110528126a932e013035ca584bf7/migrations/rathe/UPGRADE-CONTRACT.json) for the exact migration and your supported preimage. The normal path from the published Field of Scale database uses the guarded `APPLY.sql`. A prior Rathe step-0 database has its own correction, and managed EverForge installations have a separate guarded marker transition. Use the contract for their prerequisites and order.
+
+After the verified upgrade, deploy the matched binaries and quest content together, preserving private configuration and deliberate custom quest changes. On EverForge, Spire's release action preserves the quest tree. Add the eight matched Rathe quest files separately and keep the 52 existing managed quest files, as described in the [EverForge guide](EVERFORGE.md#rathe-r2-server-and-database). Regenerate the target shared data before starting the new cohort. Retain the matched rollback backup.
+
+## Verification for Rathe r2
+
+Windows x64 and Linux x86-64 built, passed CI tests and published from [run 44185577984](https://github.com/nightstalker6669/EQEmu/actions/runs/44185577984). Build verified live fresh installation and the managed Field of Scale r26 upgrade on EverForge 0.3.0 with Linux amd64 Docker Compose. See the [EverForge verification scope](EVERFORGE.md#validation-and-scope).
+
+## Historical source installation
+
+The following instructions document the earlier `rof2-integration` source workflow. See the [2026-11-06 combined release guide](RELEASE-2026-11-06.md) for its source provenance. Use the release steps above for the Rathe packages.
+
+### Install `rof2-integration`
 
 This checkout already contains the native source integration. **Do not run `apply_overlay.py` or `git apply` again.** Keep backups of the database, quests, binaries and active opcode configuration together before installing. No running server was modified by publishing this branch.
 
@@ -12,7 +44,7 @@ cd EQEmu
 git submodule update --init --recursive
 ```
 
-## Current upstream foundation
+### Current upstream foundation
 
 All feature branches now start directly from upstream `develop` commit **`c9c8747ac949deddb140d196d241fa4e777500c7`**, with no master merge in their new history. `master` remains the separate stable upstream branch. See [the branch map](BRANCHES.md), [clean comparisons and clone updates](COMPARE.md), and [exact provenance](integration.json).
 
@@ -20,11 +52,11 @@ Before applying feature migrations to an older database, build the matching curr
 
 Current upstream uses vcpkg, CMake 3.20+, and a C++20 compiler. Initialize submodules before configuring. For native Windows, use the current upstream Visual Studio/vcpkg toolchain; for Akk-stack, use a build container with those dependencies and the correct mounts. System libraries alone are not a substitute for the current dependency manifest. The integrated installer keeps upstream precompiled headers enabled, matching the supported source build.
 
-## Shared core is already included
+### Shared core is already included
 
 This branch inherits [rof2-shared-core](https://github.com/nightstalker6669/EQEmu/tree/rof2-shared-core). Its canonical implementations are in `common/shared_core`; legacy housing headers are forwarding adapters. No second core overlay is needed. The housing installer applies the same existing session DDL through its original migration identity, preserving durable table names/history. Do not create a second renamed lease store or replay schema by numerical sorting.
 
-## 1. Install housing infrastructure and content
+### 1. Install housing infrastructure and content
 
 Housing is a required implementation dependency for this branch's inventory/session guards. A PEQ fork is unnecessary: use an existing supported PEQ/MariaDB database plus the included migrations. Read the [complete housing prerequisites](../../extensions/rof2/housing/docs/INSTALL.md), including same-database requirements, matching original RoF2 resources and stopped writers.
 
@@ -43,7 +75,7 @@ Repeat with `--apply` and a fresh backup directory after stopping world and ever
 
 The housing driver uses the explicit [`installer-migrations.json`](../../extensions/rof2/housing/installer-migrations.json) order, not filename sorting. It installs the complete housing production schema, priced neighborhood, geometry, item/capacity profiles, NPC services, quests and reviewed trophy content. Public images remain linked to the pinned original release.
 
-## 2. Install companion schemas and quests
+### 2. Install companion schemas and quests
 
 Run the following groups **in this order**. Use your normal protected MariaDB credentials and stop on the first SQL error. Back up and review existing custom schema/content before applying.
 
@@ -51,7 +83,7 @@ Run the following groups **in this order**. Use your normal protected MariaDB cr
 - **Mercenaries:** provision the normal mercenary catalogue first; do not replay the destructive upstream bootstrap over owned contracts. Apply `utils/sql/mercenary/001_owned_roster.sql`, `003_passive_upkeep.sql`, `004_zone_permissions.sql`, `005_complete_journeyman_ranks.sql`, `006_level86_100_content.sql`, then review/apply `002_enable_rof2.sql` for the actual ruleset and database layout. Read [level-100 content qualification and release/cache requirements](../../common/mercenary/LEVEL100.md) before upgrading the high-level catalogue. The [content and activation guide](../../extensions/rof2/mercenaries/docs/INSTALL.md#content-schema-and-activation) explains catalogue prerequisites and price rules.
 - **Spirit Shrouds:** apply exactly `001_storage.sql`, `003_parity_storage.sql`, `004_live_imp_wizard.sql`, `005_experience_settlement.sql`, `006_starter_inventory.sql`, `007_rof2_enumerable_aa.sql`, `008_starter_identity.sql`, `009_live_captured_catalog.sql`, `011_live_lower_level_forms.sql`, `012_live_paid_monster_rank_chains.sql`, `013_remaining_monster_aa.sql`, `014_death_resurrection_accounting.sql`, `015_system_interactions.sql` from `utils/sql/shroud/`. Omitted numbers are intentionally not migration inputs. Follow [activation and recovery requirements](../../extensions/rof2/spirit-shrouds/docs/INSTALL.md#offline-migration-and-deployment); keep native transitions at their default false for first acceptance. Preserve escrow/snapshots and drain existing sessions normally.
 
-## Install achievements and all reviewed quest content
+### Install achievements and all reviewed quest content
 
 The nine published achievement engine patches are already integrated. **Do not run their source patch commands.** The current updater registers `utils/sql/git/2026_07_28_achievement_content.sql` and `2026_07_28_achievement_state.sql`; inspect updater history rather than blindly replaying them. Apply the required follow-up `utils/sql/git/2026_10_27_achievement_reward_classes.sql` before starting the new binaries.
 
@@ -59,13 +91,13 @@ Then install every reviewed content package from the [achievement release instal
 
 The released content does not claim every achievement through Rain of Fear is playable. Its disabled/unverified definitions stay disabled; this upstream update does not invent missing objectives or rewards. All five feature packages and their known limits are included in the combined branch.
 
-## 3. Start the matched installation
+### 3. Start the matched installation
 
 Only after all required schema/content/quest groups succeed, start the server through its normal service manager. All world and zone processes must use the newly built cohort, cache and mapping. Check startup and perform representative native acceptance for each enabled feature. Preserve the installation receipt and matched rollback backup; publication itself does not deploy a server. A separate controlled 2026-10-30 migration passed a full Linux combined build/link, matched deployment, data-preservation checks and representative RoF2 gameplay. This does not establish full cross-feature or native Windows acceptance; see the scoped migration entry in the integration manifest. Original source-rebase validation remains separately recorded.
 
 The guarded personal housing marker orientation correction is available at `utils/sql/housing/2026_10_22_housing_brimming_personal_marker_orientation.sql`. Inspect its preconditions and back up affected rows before deliberate application; it is not a new mandatory migration for already corrected databases.
 
-## References
+### References
 
 | Feature | Published input | Detailed prerequisites / policy |
 | --- | --- | --- |
@@ -78,26 +110,26 @@ The guarded personal housing marker orientation correction is available at `util
 [Opcodes and structures](PROTOCOL.md) · [Integration manifest](integration.json) · [Original upstream README](UPSTREAM-README.md)
 
 
-## Verification
+### Verification
 
 See [integration.json](integration.json) for original rebase validation and the separate completed runtime migration. The latter preserved all 437 tables and checked original values in affected tables; it is not a blanket native acceptance claim. No live server or database change is performed by source publication.
 
 Steppes adds two required schema migrations and a complete guarded content installer. Follow the [Steppes engine section](../../extensions/rof2/achievements/ENGINE.md#steppes-shared-task-and-scene-integration) and [content guide](../../extensions/rof2/achievements/content/steppes/README.md). Back up and stop writers; deploy the matching rebuilt engine before players reconnect.
 
-## Short Sharp Sting content upgrade
+### Short Sharp Sting content upgrade
 
 After the existing Stone Hive foundation, install the complete [Short Sharp Sting package](../../extensions/rof2/achievements/content/short-sharp-sting/README.md). Use its guarded installer for all five SQL phases and all quest callbacks together. Rebuild and deploy this branch’s matching engine first; the journal requires the recovered RoF2 container decoder. The package includes Linux, native Windows and Akk-stack directions and targeted backups. Windows execution remains unverified.
 
-## Vergalid Mines content upgrade
+### Vergalid Mines content upgrade
 
 Install the complete [Vergalid package](../../extensions/rof2/achievements/content/vergalid/README.md), including all four SQL phases, actor/acquisition dependencies and preserving quest callbacks. Its one installer supports Linux, native Windows and Akk-stack workflows with private database command configuration and full backups. Native Windows execution remains unverified. Use this branch's matching engine, including the restricted original shard item-cast event support; no additional wire opcode is introduced. All 17 routes and four parent reward paths passed native checks and fresh-login persistence on the matching combined runtime. Consult the package coverage report for reconstruction and multiplayer limits.
 
 
-## Carried collection and progression-dependent task rewards
+### Carried collection and progression-dependent task rewards
 
 The shared core supplies native carried-inventory Collect objectives and per-occurrence task reward choices gated by distinct quest completions. Use its matching core or feature binary and updater migrations **9333 (state)**, **9334 (content)** and **9335 (average-level content policy)**. These task capabilities do not require the achievement engine. Keep state/content database routing intact. Existing static rewards retain their existing policy. See [the progression guide](../../extensions/rof2/achievements/protocol/task-reward-progression.md) for definitions, delivery safeguards and validation scope. The extension reuses the documented RoF2 reward opcodes and structures; it adds no mapping or wire layout. This engine release does not activate the staged Buried Sea quest package.
 
-## Shared reward dependency
+### Shared reward dependency
 
 This source inherits generic task rewards and occurrence ownership from `rof2-shared-core` commit `17d63f7d512711e911787e630f4533ee14a1e785`. Follow [shared reward schema compatibility](SHARED-REWARDS.md). Published migration9331-9334 identities and supplemental SQL names remain unchanged. Achievement progress/providers/content remain feature-owned.
 
