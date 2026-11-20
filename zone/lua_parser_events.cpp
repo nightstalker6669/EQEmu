@@ -17,6 +17,7 @@
 */
 #ifdef LUA_EQEMU
 
+#include "dodh_cocoon_open_receipt.h"
 #include "lua_parser_events.h"
 
 #include "zone/lua_client.h"
@@ -3098,6 +3099,11 @@ void handle_zone_death(
 		luabind::adl::object l_npc_o = luabind::adl::object(L, l_npc);
 		l_npc_o.push(L);
 		lua_setfield(L, -2, "killed");
+
+        const auto *target = std::any_cast<NPC*>(extra_pointers->at(1));
+        const auto *opener = std::any_cast<Mob*>(extra_pointers->at(2));
+        lua_pushboolean(L, DodhCocoonOpen::ScopedOpen::Matches(target, opener));
+        lua_setfield(L, -2, "dodh_cocoon_open");
 	}
 }
 

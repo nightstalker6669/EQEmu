@@ -1873,6 +1873,8 @@ bool Client::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::Skill
 		);
 	}
 
+	if (TryFallShroudDeath()) return true;
+
 	int exploss = 0;
 	LogCombat("Fatal blow dealt by [{}] with [{}] damage, spell [{}], skill [{}]", killer_mob ? killer_mob->GetName() : "Unknown", damage, spell, attack_skill);
 

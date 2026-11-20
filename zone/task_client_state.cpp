@@ -961,6 +961,10 @@ const TaskInformation* ClientTaskState::GetTaskData(const ClientTaskInformation&
 bool ClientTaskState::CanUpdate(Client* client, const TaskUpdateFilter& filter, int task_id,
 	const ActivityInformation& activity, const ClientActivityInformation& client_activity) const
 {
+	if (task_id == 920243 && filter.type == TaskActivityType::SpeakWith && client->IsSpiritShrouded()) {
+		return false;
+	}
+
 	if (activity.goal_method == METHODQUEST && activity.goal_method != filter.method)
 	{
 		return false;
@@ -1575,6 +1579,9 @@ int ClientTaskState::IncrementDoneCount(
 		client->IsTaskCompleted(static_cast<int>(achievement_task_id))
 	) {
 		client->UpdateAchievementForTask(achievement_task_id);
+		if (achievement_task_id == 920243 && client->GetSharedTaskId() > 0) {
+			client->RequestFallShroudXpRefresh(static_cast<uint64_t>(client->GetSharedTaskId()));
+		}
 	}
 
 	// After all original task/achievement uses; the direct UpdateTaskActivity caller only returns.
@@ -4453,6 +4460,21 @@ bool ClientTaskState::CanAcceptNewTask(Client* client, int task_id, int npc_enti
 
 	if (SodProgression::IsSodRequest(task_id) &&
 		(!giver->IsNPC() || !client->CanRequestSodTask(task_id, giver->GetNPCTypeID()))) return false;
+
+	if (task_id >= 920236 && task_id <= 920245) {
+		const bool kelliad = task_id <= 920240;
+		auto* npc = giver->IsNPC() ? giver->CastToNPC() : nullptr;
+		if (!npc || npc->GetDepop() || npc->GetHP() <= 0 || zone->GetInstanceID() != 0 ||
+			zone->GetInstanceVersion() != 0 || zone->GetZoneID() != (kelliad ? 358 : 362) ||
+			npc->GetNPCTypeID() != (kelliad ? 358020u : 362092u) ||
+			npc->GetSpawnPointID() != (kelliad ? 101765u : 102581u)) {
+			return false;
+		}
+		if (task_id == 920236 &&
+			client->GetModCharacterFactionLevel(1055) < RuleI(Faction, ApprehensivelyFactionMinimum)) {
+			return false;
+		}
+	}
 
 	auto dist = giver->CalculateDistance(client->GetX(), client->GetY(), client->GetZ());
 	if (dist > MAX_TASK_SELECT_DISTANCE)

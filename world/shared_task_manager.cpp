@@ -113,6 +113,45 @@ void SendFireMissionResult(Database& db,SharedTask& actual,uint32_t requester,ui
  }
  SendFireSharedResponse(requester,giver,accepted,t);
 }
+// Brovil's prerequisites apply to creating a mission. Joining a native
+// shared task keeps the ordinary join checks for that mission.
+bool MeetsBrovilPrerequisites(Database& db, uint32_t task_id, const SharedTaskRequest& request)
+{
+    switch (task_id) {
+    case 920228: {
+        if (request.group_type != SharedTaskRequestGroupType::Group) {
+            return false;
+        }
+        const auto receipt = db.QueryDatabase(fmt::format(
+            "SELECT character_id FROM kithicor_poison_custody "
+            "WHERE character_id IN ({}) AND recipe_kind = 4 AND recipe_context = X'444f44480103' "
+            "AND shared_task_id = 0 AND phase = 0 AND chest = 0 AND instance_id = 0 "
+            "AND npc_type_id = 365275 AND npc_spawn_id = 103414 "
+            "AND physical = 1 AND settled = 1 AND abort_only = 0 "
+            "GROUP BY character_id HAVING COUNT(*) = 1 LIMIT 1",
+            Strings::Join(request.character_ids, ",")));
+        return receipt.Success() && receipt.RowCount() == 1;
+    }
+    case 920230:
+    case 920232:
+    case 920234: {
+        const unsigned required = (task_id - 920228) / 2;
+        auto archive = db.QueryDatabase(fmt::format(
+            "SELECT COUNT(DISTINCT st.task_id) FROM completed_shared_tasks st "
+            "JOIN completed_shared_task_members m ON m.shared_task_id = st.id "
+            "WHERE m.character_id = {} AND st.completion_time IS NOT NULL "
+            "AND st.task_id IN (920228, 920230, 920232) AND st.task_id < {}",
+            request.leader_id, task_id));
+        if (!archive.Success() || archive.RowCount() != 1) {
+            return false;
+        }
+        const auto completed = SharedTaskAdmission::Number(archive.begin()[0]);
+        return completed && *completed == required;
+    }
+    default:
+        return true;
+    }
+}
 } // namespace
 
 void SharedTaskManager::AttemptSharedTaskCreation(
@@ -1683,6 +1722,47 @@ bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskR
 	if (task.id == 0 || task.type != TASK_TYPE_SHARED || !request.leader_id ||
 		request.members.empty() || request.character_ids.size() != request.members.size()) {
 		return false;
+	}
+
+	if (!MeetsBrovilPrerequisites(*m_database, task.id, request)) {
+		ClientList::Instance()->SendCharacterMessage(
+			request.leader_id, Chat::Red, "This group or requester does not meet Brovil's mission prerequisites.");
+		return false;
+	}
+
+	if (task.id >= 920236 && task.id <= 920245 &&
+		request.group_type != SharedTaskRequestGroupType::Group) {
+		ClientList::Instance()->SendCharacterMessage(
+			request.leader_id, Chat::Red, "This Darkhollow mission requires a group.");
+		return false;
+	}
+
+	if (task.id > 920241 && task.id <= 920245) {
+		auto archive = m_database->QueryDatabase(fmt::format(
+			"SELECT COUNT(DISTINCT st.task_id) FROM completed_shared_tasks st "
+			"JOIN completed_shared_task_members m ON m.shared_task_id=st.id "
+			"WHERE m.character_id={} AND st.completion_time IS NOT NULL "
+			"AND st.task_id>=920241 AND st.task_id<{}",
+			request.leader_id, task.id));
+		const auto completed = archive.Success() && archive.RowCount() == 1
+			? SharedTaskAdmission::Number(archive.begin()[0])
+			: std::nullopt;
+		if (!completed || *completed != task.id - 920241) {
+			ClientList::Instance()->SendCharacterMessage(
+				request.leader_id, Chat::Red, "You must complete Jarzarrad's earlier missions before requesting this one.");
+			return false;
+		}
+	}
+
+	// Flights is a public encounter. World serializes creation before handling another request.
+	if (task.id == 920244) {
+		auto active = m_database->QueryDatabase(
+			"SELECT COUNT(*) FROM shared_tasks WHERE task_id=920244 AND completion_time IS NULL "
+			"AND (expire_time IS NULL OR expire_time>NOW())");
+		if (!active.Success() || active.RowCount() != 1 ||
+			SharedTaskAdmission::Number(active.begin()[0]) != std::optional<uint64_t>(0)) {
+			return false;
+		}
 	}
 
 	const auto policy = SharedTaskAdmission::ReadPolicy(*m_content_database, task.id, task.min_level, task.max_level);

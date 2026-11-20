@@ -23,6 +23,10 @@
 #ifdef LUA_EQEMU
 
 #include "lua_client.h"
+#include "lua_corpse.h"
+#include "lua_npc.h"
+
+#include <charconv>
 #include "sod_fieldofscale_crystal_source.h"
 #include "sod_actor_grounding.h"
 #include <cmath>
@@ -2133,6 +2137,48 @@ bool Lua_Client::CompleteSharedTaskAchievement(uint32 achievement_id)
 		shared_task_id,
 		achievement_id
 	);
+}
+
+namespace {
+
+uint64_t FallOccurrence(const std::string& occurrence)
+{
+    uint64_t value = 0;
+    const auto end = occurrence.data() + occurrence.size();
+    const auto parsed = std::from_chars(occurrence.data(), end, value);
+    return parsed.ec == std::errc{} && parsed.ptr == end ? value : 0;
+}
+
+} // namespace
+
+bool Lua_Client::HasFallOfIllsalinProfile(std::string occurrence, uint32 instance)
+{
+    Lua_Safe_Call_Bool();
+    const auto run = FallOccurrence(occurrence);
+    return run && instance && self->HasFallOfIllsalinProfile(run, instance);
+}
+
+bool Lua_Client::EnterFallOfIllsalin(Lua_NPC npc)
+{
+    Lua_Safe_Call_Bool();
+    auto* actor = static_cast<NPC*>(npc);
+    return actor && self->EnterFallOfIllsalin(*actor);
+}
+
+bool Lua_Client::RegisterFallOfIllsalinCommanderCorpse(std::string occurrence, uint32 instance, Lua_Corpse corpse)
+{
+    Lua_Safe_Call_Bool();
+    const auto run = FallOccurrence(occurrence);
+    auto* body = static_cast<Corpse*>(corpse);
+    return run && instance && body && self->RegisterFallOfIllsalinCommanderCorpse(run, instance, *body);
+}
+
+bool Lua_Client::ExitFallOfIllsalin(std::string occurrence, uint32 instance, Lua_NPC npc)
+{
+    Lua_Safe_Call_Bool();
+    const auto run = FallOccurrence(occurrence);
+    auto* actor = static_cast<NPC*>(npc);
+    return run && instance && actor && self->ExitFallOfIllsalin(run, instance, *actor);
 }
 
 std::string Lua_Client::GetSharedTaskIdentity() {
@@ -4793,6 +4839,10 @@ luabind::scope lua_register_client() {
 	.def("LeaveGroup", (void(Lua_Client::*)(void))&Lua_Client::LeaveGroup)
 	.def("LoadPEQZoneFlags", (void(Lua_Client::*)(void))&Lua_Client::LoadPEQZoneFlags)
 	.def("LoadZoneFlags", (void(Lua_Client::*)(void))&Lua_Client::LoadZoneFlags)
+	.def("HasFallOfIllsalinProfile", &Lua_Client::HasFallOfIllsalinProfile)
+	.def("EnterFallOfIllsalin", &Lua_Client::EnterFallOfIllsalin)
+	.def("RegisterFallOfIllsalinCommanderCorpse", &Lua_Client::RegisterFallOfIllsalinCommanderCorpse)
+	.def("ExitFallOfIllsalin", &Lua_Client::ExitFallOfIllsalin)
 	.def("GetSharedTaskIdentity", &Lua_Client::GetSharedTaskIdentity)
 	.def("GetSharedTaskInstanceID", &Lua_Client::GetSharedTaskInstanceID)
 	.def("LockSharedTask", &Lua_Client::LockSharedTask)

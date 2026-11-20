@@ -316,6 +316,13 @@ def package(args):
         stage.mkdir()
         seed_content(seed, inputs['runtime_content'], stage)
         quest_overlay(repo, inputs['quest_overlay'], stage)
+        opcode = inputs.get('opcode_runtime_overlay')
+        if opcode:
+            source = repo / 'utils/patches/patch_RoF2.conf'
+            destination = 'server/assets/patches/patch_RoF2.conf'
+            if opcode['source'] != 'utils/patches/patch_RoF2.conf' or opcode['destination'] != destination or digest(source) != opcode['sha256']:
+                raise ValueError('Pinned RoF2 opcode map differs')
+            shutil.copy2(source, stage / destination)
         database_content(database, db, stage)
         # New qualifications must come from this checkout, not the older content seed.
         merc_docs = stage / 'common/mercenary'
@@ -328,6 +335,8 @@ def package(args):
         shutil.copy2(repo / 'docs/rof2/KITHICOR.md', progression_docs / 'KITHICOR.md')
         for name in ('FIELD-OF-SCALE.md', 'FIELD-OF-SCALE.json', 'RATHE.md'):
             shutil.copy2(repo / 'docs/rof2' / name, progression_docs / name)
+        if opcode:
+            shutil.copy2(repo / 'docs/rof2/DARKHOLLOW-NORMAL.md', progression_docs / 'DARKHOLLOW-NORMAL.md')
         limits = stage / 'CONTENT-LIMITS.md'
         with limits.open('a', encoding='utf-8') as output:
             output.write('\n## Mercenary level 86–100 content\n\n'
@@ -413,6 +422,8 @@ def package(args):
                    'release_inputs_sha256': digest(repo / 'tools/release/release-inputs.json'),
                    'submodules': capture(['git', '-C', str(repo), 'submodule', 'status', '--recursive']),
                    'fresh_empty_database_only': True}
+        if opcode:
+            version['rof2_opcode_sha256'] = opcode['sha256']
         write_json(stage / 'RELEASE.json', version)
         readme = (repo / 'tools/release/templates/INSTALL.md').read_text(encoding='utf-8')
         readme = readme.replace('@PLATFORM@', platform_id).replace('@COMMIT@', sha)

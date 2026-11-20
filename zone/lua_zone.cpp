@@ -583,6 +583,25 @@ bool Lua_Zone::FailSodScene(std::string identity) {
  TaskManager::Instance()->EndSharedTask(dz->GetID(),true);return true;
 }
 
+bool Lua_Zone::RequestDodhDesertingEnd(std::string identity, uint32 dz_id)
+{
+ Lua_Safe_Call_Bool();
+ if (!dz_id || self->GetZoneID() != 350 || self->GetInstanceVersion() != 1 ||
+     !self->GetInstanceID() || !TaskManager::Instance()) return false;
+ const auto run = SharedTaskAdmission::Number(identity.c_str());
+ const auto* dz = self->GetDynamicZone();
+ if (!run || !*run || !dz || dz->GetID() != dz_id || dz->GetType() != DynamicZoneType::Mission ||
+     dz->GetInstanceID() != self->GetInstanceID()) return false;
+ auto exact = database.QueryDatabase(fmt::format(
+     "SELECT st.id FROM shared_tasks st JOIN shared_task_dynamic_zones sd ON sd.shared_task_id=st.id "
+     "JOIN dynamic_zones dz ON dz.id=sd.dynamic_zone_id JOIN instance_list i ON i.id=dz.instance_id "
+     "WHERE st.id={} AND st.task_id=920224 AND st.completion_time IS NULL "
+     "AND dz.id={} AND i.id={} AND i.zone=350 AND i.version=1", *run, dz_id, self->GetInstanceID()));
+ if (!exact.Success() || exact.RowCount() != 1) return false;
+ TaskManager::Instance()->EndSharedTask(dz_id, true);
+ return true; // Request sent. Observe the exact World outcome separately.
+}
+
 uint32 Lua_Zone::GetZoneID()
 {
 	Lua_Safe_Call_Int();
@@ -1056,6 +1075,7 @@ luabind::scope lua_register_zone() {
 	.def("GetZoneID", &Lua_Zone::GetZoneID)
 	.def("KithicorEscortDeath", &Lua_Zone::KithicorEscortDeath)
 	.def("FailSodScene", &Lua_Zone::FailSodScene)
+	.def("RequestDodhDesertingEnd", &Lua_Zone::RequestDodhDesertingEnd)
 	.def("GetZoneType", &Lua_Zone::GetZoneType)
 	.def("GetUnderworld", &Lua_Zone::GetUnderworld)
 	.def("GetUnderworldTeleportIndex", &Lua_Zone::GetUnderworldTeleportIndex)

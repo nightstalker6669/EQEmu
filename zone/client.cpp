@@ -3,6 +3,8 @@
 #include "common/sod_reward_quote.h"
 #include "common/sod_faction_reward.h"
 #include "fungal_item_operation_source.h"
+#include "dodh_spell_hail.h"
+#include "dodh_cocoon_open_receipt.h"
 #include <ctime>
 #include "fire_run_terminal_scene.h"
 #include "fire_run_terminal_custody.h"
@@ -1779,6 +1781,9 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 			DistanceNoZ(m_Position, t->GetPosition()) <= RuleI(Range, Say)
 		) {
 			const bool is_engaged = t->IsEngaged();
+			if (!is_engaged && t->IsNPC() && DodhSpellHail::OnTargetedSay(*this, *t->CastToNPC(), message)) {
+				break;
+			}
 
 			if (is_engaged) {
 				parse->EventBotMercNPC(EVENT_AGGRO_SAY, t, this, [&]() { return message; }, language);
@@ -3199,6 +3204,7 @@ uint64 Client::GetAllMoney() {
 }
 
 bool Client::CheckIncreaseSkill(EQ::skills::SkillType skillid, Mob *against_who, int chancemodi) {
+	if (IsFallShrouded()) return false;
 	if (IsDead() || IsUnconscious()) {
 		return false;
 	}
@@ -5851,6 +5857,13 @@ void Client::HandleLDoNOpen(NPC *target)
 					AddEXP(ExpSource::LDoNChest, target->GetLevel()*target->GetLevel()*2625/10, GetLevelCon(target->GetLevel()));
 				}
 			}
+            const bool dodh_cocoon = zone && zone->GetInstanceID() != 0 &&
+                ((zone->GetZoneID() == 355 && zone->GetInstanceVersion() == 2 &&
+                    target->GetNPCTypeID() == 355097) ||
+                 (zone->GetZoneID() == 356 && zone->GetInstanceVersion() == 1 &&
+                    target->GetNPCTypeID() == 356901)) &&
+                !target->GetEntityVariable("rof2_dodh_scene_actor").empty();
+            const DodhCocoonOpen::ScopedOpen opened(dodh_cocoon ? target : nullptr, this);
 			target->Death(this, 0, SPELL_UNKNOWN, EQ::skills::SkillHandtoHand);
 		}
 	}

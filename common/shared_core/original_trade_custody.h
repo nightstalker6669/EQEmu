@@ -11,6 +11,7 @@
 #include "weighted_delivery_recovery.h"
 #include "original_transform_native.h"
 #include "original_message_admission_native.h"
+#include "dodh_exchange.h"
 #include <optional>
 // Single original NPC trade physical journal/recovery. Legacy table name and
 // KPC2 snapshot/return codec are retained; no second custody engine.
@@ -217,8 +218,10 @@ inline void AbortReturns(Database& db,uint32_t character,const ReturnPlan& plan,
   }
   return false;
  };
- auto engines=Q(db,kind==3?"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','character_currency','kithicor_poison_custody','sod_original_delivery_decisions','housing_inventory_sessions')":kind==1?"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','character_currency','kithicor_poison_custody','kithicor_mission_actions','housing_inventory_sessions')":"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','character_currency','kithicor_poison_custody','sod_weighted_delivery_actions','housing_inventory_sessions')");
- if(engines.RowCount()!=1||N(engines.begin()[0])!=5)throw std::runtime_error("Kithicor abort foundation differs");
+ const bool exchange = DodhExchange::IsKind(kind);
+ auto engines=Q(db,exchange?
+  "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','character_currency','kithicor_poison_custody','housing_inventory_sessions')":kind==3?"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','character_currency','kithicor_poison_custody','sod_original_delivery_decisions','housing_inventory_sessions')":kind==1?"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','character_currency','kithicor_poison_custody','kithicor_mission_actions','housing_inventory_sessions')":"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','character_currency','kithicor_poison_custody','sod_weighted_delivery_actions','housing_inventory_sessions')");
+ if(engines.RowCount()!=1||N(engines.begin()[0])!=(exchange?4:5))throw std::runtime_error("Kithicor abort foundation differs");
  auto before=InventoryRepository::GetLoadSnapshot(db,character,true);if(!before.success)throw std::runtime_error("Kithicor abort inventory unavailable");
  std::map<uint32_t,RawRow> original,expected;
  for(const auto& entry:before.rows){auto row=Raw(entry);original.emplace(row.values.slot_id,row);if(!ReturnSlot(row.values.slot_id))expected.emplace(row.values.slot_id,std::move(row));}
@@ -268,28 +271,51 @@ inline void ReconcilePhysicalUnderTransaction(Database& db,const EQEmu::SharedCo
  if(!Installed(db))return;
  const bool generalized=Generalized(db);
  LockLease(db,lease); // Same actor-first order as live writer and World decision.
- auto rows=Q(db,"SELECT request_key,HEX(preimage),HEX(postimage),physical,HEX(return_plan),"+std::string(generalized?"recipe_kind,HEX(recipe_context),abort_only":"1,NULL,0")+" FROM kithicor_poison_custody WHERE character_id="+std::to_string(lease.actor.character_id)+" AND settled=0 FOR UPDATE");
+ auto rows=Q(db,"SELECT request_key,HEX(preimage),HEX(postimage),physical,HEX(return_plan),"+std::string(generalized?"recipe_kind,HEX(recipe_context),abort_only":"1,NULL,0")+",shared_task_id,npc_type_id,npc_spawn_id,npc_entity_id FROM kithicor_poison_custody WHERE character_id="+std::to_string(lease.actor.character_id)+" AND settled=0 FOR UPDATE");
  if(!rows.RowCount())return;
  if(rows.RowCount()!=1)throw std::runtime_error("Kithicor multiple pending custody outcomes");
  auto row=rows.begin();if(!row[0]||!row[1])throw std::runtime_error("Kithicor custody evidence absent");
  const std::string key=row[0];const auto physical=N(row[3]);
  const auto kind=N(row[5]);
  const auto abort_only=N(row[7]);
- if(abort_only>1||((kind==2||kind==3)&&((physical==3)!=(abort_only==1))))throw std::runtime_error("Food immutable abort provenance differs");
- if((kind!=1&&kind!=2&&kind!=3)||(kind==1&&(lease.owner.zone_id!=457||!lease.owner.instance_id||row[6]))||((kind==2||kind==3)&&(!generalized||!row[6]||lease.owner.zone_id!=452||lease.owner.instance_id)))throw std::runtime_error("Original trade recipe/lease domain differs");
+ const bool exchange = DodhExchange::IsKind(kind);
+ bool guard = false;
+ bool opener = false;
+ if (exchange) {
+  if (!generalized || !row[6]) throw std::runtime_error("Darkhollow journal context missing");
+  const auto context = ContextBytes(row[6]);
+  if (const auto id = DodhExchange::DecodeGuard(context)) {
+   guard = true;
+   const auto actor_type = N(row[9]), spawn = N(row[10]);
+   if (lease.owner.zone_id != DodhExchange::DesertingZone || !lease.owner.instance_id ||
+       id->run != N(row[8]) || id->entity != N(row[11]) ||
+       actor_type > UINT32_MAX || spawn > UINT32_MAX || !DodhExchange::GuardActor(actor_type, spawn)) {
+    throw std::runtime_error("Darkhollow guard context differs");
+   }
+  } else {
+   opener = context == DodhExchange::OpenerContext;
+   if ((!opener && context != DodhExchange::JournalContext) ||
+       lease.owner.zone_id != DodhExchange::Zone || lease.owner.instance_id || N(row[8]) ||
+       (opener && (N(row[9]) != DodhExchange::OpenerNpc || N(row[10]) != DodhExchange::OpenerSpawn || !N(row[11])))) {
+    throw std::runtime_error("Darkhollow public hand-in journal context differs");
+   }
+  }
+ }
+ if(abort_only>1||((kind==2||kind==3||exchange)&&((physical==3)!=(abort_only==1))))throw std::runtime_error("Food immutable abort provenance differs");
+ if((kind!=1&&kind!=2&&kind!=3&&!exchange)||(kind==1&&(lease.owner.zone_id!=457||!lease.owner.instance_id||row[6]))||((kind==2||kind==3)&&(!generalized||!row[6]||lease.owner.zone_id!=452||lease.owner.instance_id)))throw std::runtime_error("Original trade recipe/lease domain differs");
  std::optional<OriginalTradeTransform::Context> transform;
  std::optional<OriginalTradeTransform::Decision> decision;
  if(kind==3){transform=OriginalTradeTransform::Decode(ContextBytes(row[6]));if(transform->character!=lease.actor.character_id||transform->account!=lease.actor.account_id)throw std::runtime_error("Transform recovery actor differs");}
- auto bound=Q(db,"SELECT request_key FROM kithicor_poison_custody WHERE request_key='"+db.Escape(key)+"' AND "+LeaseWhere(lease)+(kind==1?" AND phase=0 AND chest BETWEEN 1 AND 6":" AND shared_task_id="+std::to_string(kind==3&&transform->shared?transform->occurrence:0)+" AND phase=0 AND chest=0")+" FOR UPDATE");
- if(bound.RowCount()!=1||(physical!=0&&physical!=1&&physical!=3))throw std::runtime_error("Original trade old session evidence differs");
+ auto bound=Q(db,"SELECT request_key FROM kithicor_poison_custody WHERE request_key='"+db.Escape(key)+"' AND "+LeaseWhere(lease)+(kind==1?" AND phase=0 AND chest BETWEEN 1 AND 6":" AND shared_task_id="+std::to_string(guard?N(row[8]):kind==3&&transform->shared?transform->occurrence:0)+" AND phase=0 AND chest=0")+(exchange&&!guard&&!opener?" AND npc_type_id="+std::to_string(DodhExchange::Giver)+" AND npc_spawn_id="+std::to_string(DodhExchange::Spawn):std::string{})+" FOR UPDATE");
+ if(bound.RowCount()!=1||(physical!=0&&physical!=1&&physical!=3&&!(exchange&&!guard&&physical==2)))throw std::runtime_error("Original trade old session evidence differs");
  if(kind==1) {
   auto action=Q(db,"SELECT a.status FROM kithicor_mission_actions a JOIN kithicor_poison_custody j ON j.shared_task_id=a.shared_task_id AND j.phase=a.phase AND j.chest=a.action_id AND j.character_id=a.character_id WHERE j.request_key='"+db.Escape(key)+"' AND a.item_id=38504 FOR UPDATE");
   if(physical!=3&&(action.RowCount()!=1||N(action.begin()[0])>1||(!physical&&N(action.begin()[0])!=0)))throw std::runtime_error("Kithicor owned action reservation changed");
  } else if(kind==2) {
   WeightedDeliveryRecovery::ValidatePhysicalOutcome(db,lease,key,physical,row[6]);
- } else if(physical==1) {
+ } else if(kind==3&&physical==1) {
   if(!OriginalTransformNative::ValidateCommitted(db,key,*transform))throw std::runtime_error("Transform committed native receipt differs");
- } else if(physical==0&&transform->shared) {
+ } else if(kind==3&&physical==0&&transform->shared) {
   if(OriginalTradeTransform::Admission(*transform))OriginalMessageAdmissionNative::FinalizeUnsubmittedOnOwnerDeath(db,key,*transform);
   decision=OriginalTransformNative::ReadDecision(db,key,*transform);
   if(decision->state!=OriginalTradeTransform::DecisionState::Known||!OriginalTradeTransform::Valid(*transform,*decision))throw std::runtime_error("Original shared delivery decision is still unknown");

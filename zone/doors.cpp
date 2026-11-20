@@ -26,6 +26,8 @@
 #include "common/strings.h"
 #include "zone/client.h"
 #include "zone/entity.h"
+#include "zone/dynamic_zone.h"
+#include "zone/task_client_state.h"
 #include "zone/guild_mgr.h"
 #include "zone/mob.h"
 #include "zone/string_ids.h"
@@ -158,9 +160,26 @@ bool Doors::Process()
 	return true;
 }
 
-void Doors::HandleClick(Client *sender, uint8 trigger)
+void Doors::HandleClick(Client *sender, uint8 trigger, bool direct_client_click)
 {
  if(!FireRunActionSource::NativeRunDoorSource::AuthorizeActualHandle(sender,*this,trigger))return;
+	const bool preemptive_pit_gate = m_database_id == 40100 && m_door_id == 2 && m_open_type == 22 &&
+		zone->GetZoneID() == 350 && zone->GetInstanceVersion() == 3 && zone->GetInstanceID();
+	if (preemptive_pit_gate) {
+		const auto* state = sender ? sender->GetTaskState() : nullptr;
+		auto* dz = zone->GetDynamicZone();
+		if (!direct_client_click || trigger || !state || state->GetActiveSharedTask().task_id != 920241 ||
+			sender->GetSharedTaskId() <= 0 || !dz || dz->GetType() != DynamicZoneType::Mission ||
+			dz->GetInstanceID() != zone->GetInstanceID() || dz->IsExpired() ||
+			!dz->HasMember(sender->CharacterID()) || !dz->HasDatabaseMember(sender->CharacterID())) {
+			return;
+		}
+		if (sender->GetTaskActivityDoneCountFromTaskID(920241, 1) < 1 ||
+			sender->GetTaskActivityDoneCountFromTaskID(920241, 2) < 1) {
+			sender->Message(Chat::LightBlue, "Recover the Carved Nargil Triangle and defeat the Guardian of the Pit first.");
+			return;
+		}
+	}
 	Log(Logs::Detail, Logs::Doors,
 		"%s clicked door %s (dbid %d, eqid %d) at %s",
 		sender->GetName(),
@@ -247,6 +266,7 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 	uint8  disable_add_to_key_ring = GetNoKeyring();
 	bool   player_has_key          = false;
 	uint32 player_key              = 0;
+	bool native_key_authorized     = false;
 
 	const EQ::ItemInstance *lock_pick_item = sender->GetInv().GetItem(EQ::invslot::slotCursor);
 
@@ -396,6 +416,7 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 			if (required_key_item &&
 				(required_key_item == player_key)) {
 
+				native_key_authorized = true;
 				if (!disable_add_to_key_ring) {
 					sender->KeyRingAdd(player_key);
 				}
@@ -472,6 +493,7 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 			 * Search for key on keyring
 			 */
 			if (sender->KeyRingCheck(required_key_item)) {
+				native_key_authorized = true;
 				player_key = required_key_item;
 				sender->Message(Chat::LightBlue, "You got it open!"); // more debug spam
 				if (!IsDoorOpen() || (m_open_type == 58)) {
@@ -489,8 +511,9 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 		}
 	}
 
+	const bool was_open = IsDoorOpen();
 	entity_list.QueueClients(sender, outapp, false);
-	if (!IsDoorOpen() || (m_open_type == 58)) {
+	if (!was_open || (m_open_type == 58)) {
 		if (!m_disable_timer) {
 			m_close_timer.Start();
 		}
@@ -503,6 +526,29 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 		m_close_timer.Disable();
 		if (!m_disable_timer) {
 			SetOpenState(false);
+		}
+	}
+
+	if (preemptive_pit_gate && native_key_authorized && required_key_item == 86025 && !was_open &&
+		IsDoorOpen() && move_door_packet->action == (m_invert_state == 0 ? OPEN_DOOR : OPEN_INVDOOR) &&
+		sender->IsTaskActivityActive(920241, 3)) {
+		sender->UpdateTaskActivity(920241, 3, 1);
+	}
+
+	// This is an instance-local observation. Lua still checks the exact
+	// committed task, dynamic-zone mapping and source membership before use.
+	if (direct_client_click && !trigger && native_key_authorized && !was_open && IsDoorOpen() &&
+		move_door_packet->action == (m_invert_state == 0 ? OPEN_DOOR : OPEN_INVDOOR) &&
+		m_database_id == 40096 && m_door_id == 2 && m_open_type == 22 && required_key_item == 86025 &&
+		zone->GetZoneID() == 350 && zone->GetInstanceVersion() == 1 && zone->GetInstanceID()) {
+		const auto* state = sender->GetTaskState();
+		const auto run = sender->GetSharedTaskId();
+		const auto* dz = zone->GetDynamicZone();
+		if (state && state->GetActiveSharedTask().task_id == 920224 && run > 0 && dz &&
+			dz->GetType() == DynamicZoneType::Mission && dz->GetInstanceID() == zone->GetInstanceID() &&
+			!dz->IsExpired() && dz->HasMember(sender->CharacterID())) {
+			zone->SetVariable("dodh_triangle_keyed_open",
+				fmt::format("{}:{}:{}", run, dz->GetID(), sender->CharacterID()));
 		}
 	}
 
@@ -587,6 +633,12 @@ void Doors::HandleClick(Client *sender, uint8 trigger)
 					m_destination.z,
 					m_destination.w
 				);
+			}
+			else if (m_open_type == 58 && destination_zone == 351 && m_destination_instance_id == 0 &&
+				zone->GetZoneID() == 354 && zone->GetInstanceID() == 0 &&
+				zone->GetInstanceVersion() == 0 && GetDoorDBID() == 16232 && GetDoorID() == 4 &&
+				required_key_item == 88005 && player_key == required_key_item) {
+				sender->EnterDreadspireFromHiveWeb(m_destination);
 			}
 			else {
 				sender->MovePC(

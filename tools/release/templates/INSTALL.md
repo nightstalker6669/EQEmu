@@ -2,6 +2,8 @@
 
 Built from commit `@COMMIT@`. This package contains platform-native server binaries and helpers, matching quest/opcode content, a full sanitized database export, and 331 portable Housing JSON files. Read `CONTENT-LIMITS.md` and `database/README.md` before installation. Packaging/build success does not establish fresh native gameplay acceptance on this platform.
 
+For Darkhollow Fall, see [the client append and tuning guide](docs/rof2/DARKHOLLOW-NORMAL.md).
+
 ## Requirements
 
 Use Python 3.9 or newer, the MariaDB client on PATH, and a **new empty latin1 MariaDB 10.11 database**. The bundled full dump replaces tables: never import it over a server containing player data. Accounts, characters and private operational data are not supplied. Configure your own login accounts/server registration after installation using normal administration tools.

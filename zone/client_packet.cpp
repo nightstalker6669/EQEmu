@@ -1,6 +1,7 @@
 #include "sod_message_admission.h"
 #include "original_message_admission.h"
 #include "original_trade_transform_hooks.h"
+#include "dodh_exchange.h"
 #include "sod_food_delivery.h"
 #include "kithicor_poison_trade.h"
 #include "fungal_item_operation_source.h"
@@ -84,6 +85,10 @@
 #include <cstdio>
 #include <iomanip>
 #include <iostream>
+#include "../common/rof2_monster_task_selector.h"
+#include "../common/shroud/aa_preview.h"
+#include "../common/shroud/wire.h"
+
 #include <numbers>
 #include <set>
 
@@ -99,11 +104,16 @@ std::map<uint32, ClientPacketProc> ConnectingOpcodes;
 //Use a static array for connected, for speed
 ClientPacketProc ConnectedOpcodes[_maxEmuOpcode];
 
+#include "fall_selector.inc"
+
 void MapOpcodes()
 {
 	ConnectingOpcodes.clear();
 	memset(ConnectedOpcodes, 0, sizeof(ConnectedOpcodes));
 
+    ConnectedOpcodes[OP_FallMonsterCatalogue] = &Client::Handle_OP_FallMonsterSelect;
+    ConnectedOpcodes[OP_FallMonsterDetails] = &Client::Handle_OP_FallMonsterSelect;
+    ConnectedOpcodes[OP_FallMonsterSelectRole] = &Client::Handle_OP_FallMonsterSelect;
  ConnectedOpcodes[OP_SpiritShroudComplete]=&Client::Handle_OP_SpiritShroudComplete;
  ConnectedOpcodes[OP_SpiritShroudRequest]=&Client::Handle_OP_SpiritShroudRequest;
  ConnectedOpcodes[OP_SpiritShroudSelect]=&Client::Handle_OP_SpiritShroudSelect;
@@ -531,6 +541,20 @@ int Client::HandlePacket(const EQApplicationPacket *app)
  // A committed profile exchange leaves this old Client read-only until the
  // same-zone transfer deletes it; only that transfer handshake may proceed.
  if(m_spirit_shroud_transition && !(opcode==OP_SpiritShroudComplete && m_spirit_shroud_native_pending) && opcode!=OP_ZoneChange && opcode!=OP_AckPacket && opcode!=OP_DeleteSpawn) return true;
+ if(IsFallShrouded()) {
+  switch(opcode) {
+   case OP_MoveCoin: case OP_TradeRequest: case OP_TradeRequestAck: case OP_TradeAcceptClick:
+   case OP_ShopRequest: case OP_ShopPlayerBuy: case OP_ShopPlayerSell:
+   case OP_AdventureMerchantRequest: case OP_AdventureMerchantPurchase: case OP_AdventureMerchantSell:
+   case OP_MercenaryHire: case OP_MercenarySwitch: case OP_MercenarySuspendRequest:
+   case OP_MercenaryDismiss: case OP_MercenaryCommand:
+   case OP_ApplyPoison: case OP_AugmentItem: case OP_ItemVerifyRequest: case OP_TradeSkillCombine:
+   case OP_ShopSendParcel: case OP_ShopRetrieveParcel:
+   case OP_AchievementReward: case OP_RewardSelection: case OP_VetClaimRequest: case OP_RezzAnswer:
+    return true;
+   default: break;
+  }
+ }
  if(IsSpiritShrouded() && (opcode==OP_Trader || opcode==OP_BazaarSearch || opcode==OP_AltCurrencyMerchantRequest)) return true;
  if(IsSpiritShrouded() && opcode==OP_BankerChange && !SpiritShroudHasPersonalBank())return true;
  if(IsSpiritShrouded() && opcode==OP_MoveCoin){
@@ -1218,6 +1242,7 @@ void Client::Handle_Connect_OP_ClientReady(const EQApplicationPacket *app)
 	if (!Spawned())
 		SendZoneInPackets();
 	CompleteConnect();
+	SendFallOfIllsalinCatalogue();
 	// RoF2 can clamp the alternate profile during initialization after sending
 	// ClientReady. Republish on a bounded number of ordinary HP timer ticks.
 	m_spirit_shroud_resource_refreshes = IsSpiritShrouded() ? 3 : 0;
@@ -1474,9 +1499,15 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 		client->Disconnect();
 	}
 
-	uint32 pplen = 0;
-	EQApplicationPacket* outapp = nullptr;
-	bool loaditems = 0;
+ if (!PrepareFallShroudLogin()) {
+  m_spirit_shroud_transition = true;
+  RejectInventorySessionAdmission();
+  Disconnect();
+  return;
+ }
+ uint32 pplen = 0;
+ EQApplicationPacket* outapp = nullptr;
+ bool loaditems = 0;
 	std::string query;
 
 	uint32 cid = CharacterID();
@@ -4302,7 +4333,12 @@ void Client::Handle_OP_Barter(const EQApplicationPacket *app)
 	}
 
 	case Barter_WelcomeMessageUpdate: {
+		if (app->size < sizeof(BuyerWelcomeMessageUpdate_Struct)) {
+			break;
+		}
+
 		auto bwmu = (BuyerWelcomeMessageUpdate_Struct *) app->pBuffer;
+		bwmu->welcome_message[sizeof(bwmu->welcome_message) - 1] = '\0';
 		SetBuyerWelcomeMessage(bwmu->welcome_message);
 		break;
 	}
@@ -5256,7 +5292,7 @@ void Client::Handle_OP_ClickDoor(const EQApplicationPacket *app)
 		}
 
 		if (quest_return == 0) {
-			currentdoor->HandleClick(this, 0);
+			currentdoor->HandleClick(this, 0, true);
 		}
 	}
 	else {
@@ -16282,6 +16318,7 @@ void Client::Handle_OP_TradeAcceptClick(const EQApplicationPacket *app)
 	if(with&&with->IsNPC()&&KithicorPoisonTrade::OriginalAccept(*this,*with->CastToNPC()))return;
 	if(with&&with->IsNPC()&&OriginalTradeFood::OriginalAccept(*this,*with->CastToNPC()))return;
 	if(with&&with->IsNPC()&&OriginalTradeTransforms::OriginalAccept(*this,*with->CastToNPC()))return;
+	if(with&&with->IsNPC()&&DodhOriginalExchange::OriginalAccept(*this,*with->CastToNPC()))return;
 	if(with&&with->IsNPC()&&FungalItemSource::NativeEvents::OriginalTrade(*this,*with->CastToNPC()))return;
 	if(with&&with->IsNPC()&&FireRunActionSource::NativeRunTerminalSource::HandleOriginalAccept(*this,*with->CastToNPC()))return;
 	trade->state = TradeAccepted;

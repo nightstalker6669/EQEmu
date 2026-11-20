@@ -1716,6 +1716,22 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 		}
 
 
+		// The disabled Fall draft keeps shard custody as a durable run receipt;
+		// no physical inventory grant or ordinary loot credit is issued.
+		if (c->IsFallShrouded() || !GetEntityVariable("fall_shroud_commander").empty()) {
+			const auto drop = item_data ? FallShardDropIndex(item_data) : 0;
+			if (drop && inst->GetID() == 64048 && c->TakeFallShroudShard(*this, inst->GetID(), drop)) {
+				fall_shard_drops.erase(item_data);
+				RemoveItem(item_data);
+				c->Message(Chat::Loot, "Your Shard of Wisdom has been recorded for this mission.");
+			} else {
+				lootitem->auto_loot = -1;
+			}
+			c->QueuePacket(app);
+			safe_delete(inst);
+			return;
+		}
+
 		// Genuine current-run material seal before the SAME original native grant.
 		if(!fire_material_loot.PrepareActualItem(*inst,lootitem->slot_id)) {
 			lootitem->auto_loot=-1;c->QueuePacket(app);safe_delete(inst);return;
@@ -1851,6 +1867,35 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 	}
 
 	safe_delete(inst);
+}
+
+bool Corpse::PrepareFallShardDrops()
+{
+ if (!IsNPCCorpse()) return false;
+ if (!fall_shard_drops.empty()) return true;
+ const bool has_shards = std::any_of(m_item_list.begin(), m_item_list.end(), [](const auto* item) {
+  return item && item->item_id == 64048;
+ });
+ if (!has_shards) {
+  for (uint16_t i = 0; i < 6; ++i) AddItem(64048, 1);
+ }
+ uint16_t index = 1;
+ for (auto* item : m_item_list) {
+  if (item && item->item_id == 64048) {
+   if (index > 6) {
+    fall_shard_drops.clear();
+    return false;
+   }
+   fall_shard_drops.emplace(item, index++);
+  }
+ }
+ return !fall_shard_drops.empty();
+}
+
+uint16_t Corpse::FallShardDropIndex(const LootItem* item) const
+{
+ const auto it = fall_shard_drops.find(item);
+ return it == fall_shard_drops.end() ? 0 : it->second;
 }
 
 void Corpse::EndLoot(Client *c, const EQApplicationPacket *app)

@@ -69,7 +69,7 @@ public:
 	void CreateDatabaseEntry();
 	void ForceClose(Mob *sender, bool alt_mode = false);
 	void ForceOpen(Mob *sender, bool alt_mode = false);
-	void HandleClick(Client *sender, uint8 trigger);
+	void HandleClick(Client *sender, uint8 trigger, bool direct_client_click = false);
 	void Open(Mob *sender, bool alt_mode = false);
 	void SetDisableTimer(bool flag);
 	void SetDoorName(const char *name);

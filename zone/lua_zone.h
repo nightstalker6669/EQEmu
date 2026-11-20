@@ -129,6 +129,7 @@ public:
 	uint32 GetZoneID();
 	int KithicorEscortDeath(std::string identity, Lua_NPC actor);
 	bool FailSodScene(std::string identity);
+	bool RequestDodhDesertingEnd(std::string identity, uint32 dz_id);
 	uint8 GetZoneType();
 	float GetUnderworld();
 	int GetUnderworldTeleportIndex();

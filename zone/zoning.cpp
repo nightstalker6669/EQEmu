@@ -269,6 +269,8 @@ bool Client::CanRequestSodTask(uint32 task_id, uint32 npc_type_id)
 }
 
 void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
+	const bool dreadspire_hive_web = m_dreadspire_hive_web_pending;
+	m_dreadspire_hive_web_pending = false;
 	if (RuleB(Bots, Enabled)) {
 		Bot::ProcessClientZoneChange(this);
 	}
@@ -628,6 +630,18 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 
 
 	auto zoning_message = ZoningMessage::ZoneSuccess;
+	// Ordinary entry to public Dreadspire must come from the keyed Hive web.
+	// Preserve staff access and the separate versioned instance path.
+	const bool entering_public_dreadspire = target_zone_id == 351 && target_instance_id == 0 &&
+		target_instance_version == 0 && (zone->GetZoneID() != 351 || zone->GetInstanceID() != 0);
+	const bool used_keyed_hive_web = dreadspire_hive_web && zone_mode == ZoneSolicited &&
+		zonesummon_id == 351 && zone->GetZoneID() == 354 &&
+		zone->GetInstanceID() == 0 && zone->GetInstanceVersion() == 0;
+	if (entering_public_dreadspire && !used_keyed_hive_web &&
+		Admin() < AccountStatus::QuestTroupe && zone_mode != GMSummon && zone_mode != GMHiddenSummon) {
+		zoning_message = ZoningMessage::ZoneNoExperience;
+	}
+
 	// Ordinary scripted ignore_restrictions is not progression proof. Native
 	// GM-directed summons retain their administrative override for any target.
 	if (SodProgression::AnyGroupSliceEnabled() && !GetGM() &&
@@ -1000,8 +1014,14 @@ void Client::MoveZoneInstanceRaid(uint16 instance_id, const glm::vec4 &location)
 	}
 }
 
-void Client::ProcessMovePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions, ZoneMode zm)
+void Client::EnterDreadspireFromHiveWeb(const glm::vec4 &destination)
 {
+	ProcessMovePC(351, 0, destination.x, destination.y, destination.z, destination.w, 0, ZoneSolicited, true);
+}
+
+void Client::ProcessMovePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions, ZoneMode zm, bool dreadspire_hive_web)
+{
+	m_dreadspire_hive_web_pending = false;
 	// From what I have read, dragged corpses should stay with the player for Intra-zone summons etc, but we can
 	// implement that later.
 	ClearDraggedCorpses();
@@ -1055,7 +1075,7 @@ void Client::ProcessMovePC(uint32 zoneID, uint32 instance_id, float x, float y, 
 			ZonePC(zoneID, instance_id, x, y, z, heading, ignorerestrictions, zm);
 			break;
 		case ZoneSolicited:
-			ZonePC(zoneID, instance_id, x, y, z, heading, ignorerestrictions, zm);
+			ZonePC(zoneID, instance_id, x, y, z, heading, ignorerestrictions, zm, dreadspire_hive_web);
 			break;
 		case SummonPC:
 			MessageString(Chat::Yellow, PLAYER_SUMMONED);
@@ -1071,7 +1091,8 @@ void Client::ProcessMovePC(uint32 zoneID, uint32 instance_id, float x, float y, 
 	}
 }
 
-void Client::ZonePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions, ZoneMode zm) {
+void Client::ZonePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions, ZoneMode zm, bool dreadspire_hive_web) {
+	m_dreadspire_hive_web_pending = false;
 	bool ReadyToZone = true;
 	int iZoneNameLength = 0;
 	const char*	pShortZoneName = nullptr;
@@ -1273,6 +1294,8 @@ void Client::ZonePC(uint32 zoneID, uint32 instance_id, float x, float y, float z
 		}
 
 		zone_mode = zm;
+		m_dreadspire_hive_web_pending = dreadspire_hive_web &&
+			zm == ZoneSolicited && zoneID == 351 && instance_id == 0;
 		if (zm == ZoneToBindPoint) {
 			auto outapp = new EQApplicationPacket(OP_ZonePlayerToBind,
 							      sizeof(ZonePlayerToBind_Struct) + iZoneNameLength);

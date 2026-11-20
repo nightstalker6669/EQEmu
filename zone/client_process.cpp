@@ -59,6 +59,7 @@ extern EntityList entity_list;
 
 bool Client::Process() {
  if (!ProcessSpiritShroudNativeTransition()) return false;
+ if ((Connected() || IsLD()) && !ProcessFallShroud()) return false;
  if((Connected()||IsLD())&&OriginalTradeTransforms::Pending(*this))OriginalTradeTransforms::PollPending(*this);
 	bool ret = true;
 

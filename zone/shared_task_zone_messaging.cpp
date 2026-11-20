@@ -22,6 +22,7 @@
 
 #include "common/servertalk.h"
 #include "common/shared_tasks.h"
+#include "common/shared_task_admission.h"
 #include "zone/client.h"
 #include "fire_shared_successor_native.h"
 #include "common/fire_shared_activity_origin.h"
@@ -32,6 +33,7 @@
 #include "zone/zonedb.h"
 #include "task_shared_reward_identity.h"
 
+#include <map>
 #include <memory>
 #include <vector>
 
@@ -165,6 +167,44 @@ void SharedSuccessorNative::ReadyOrHeld(Client& c,const ServerSharedTaskRequest_
 }
 } // namespace FirePersonalOccurrenceSource
 
+namespace {
+
+std::map<uint32_t, uint32_t> ReadFallRosterTemplates(Client& client)
+{
+    const auto* state = client.GetTaskState();
+    const auto run = client.GetSharedTaskId();
+    if (client.ClientVersion() != EQ::versions::ClientVersion::RoF2 || run <= 0 ||
+        !state || state->GetActiveSharedTask().task_id != 920243) {
+        return {};
+    }
+
+    auto choices = database.QueryDatabase(fmt::format(
+        "SELECT member.character_id, role.template_id "
+        "FROM shared_tasks st "
+        "JOIN shared_task_members recipient ON recipient.shared_task_id=st.id AND recipient.character_id={} "
+        "JOIN shared_task_members member ON member.shared_task_id=st.id "
+        "JOIN fall_shroud_choices choice ON choice.run_id=st.id AND choice.character_id=member.character_id "
+        "JOIN fall_shroud_roles role ON role.template_id=choice.template_id "
+        "WHERE st.id={} AND st.task_id=920243 AND st.completion_time IS NULL "
+        "AND (st.expire_time IS NULL OR st.expire_time>NOW())",
+        client.CharacterID(), run));
+    if (!choices.Success() || choices.RowCount() > 6) {
+        return {};
+    }
+    std::map<uint32_t, uint32_t> roster;
+    for (auto row : choices) {
+        const auto character = SharedTaskAdmission::Number(row[0]);
+        const auto role = SharedTaskAdmission::Number(row[1]);
+        if (!character || !*character || *character > UINT32_MAX || !role || !*role || *role > INT32_MAX ||
+            !roster.emplace(static_cast<uint32_t>(*character), static_cast<uint32_t>(*role)).second) {
+            return {};
+        }
+    }
+    return roster;
+}
+
+} // namespace
+
 void SharedTaskZoneMessaging::HandleWorldMessage(ServerPacket *pack)
 {
 	switch (pack->opcode) {
@@ -193,6 +233,9 @@ void SharedTaskZoneMessaging::HandleWorldMessage(ServerPacket *pack)
 					);
 				c->LoadClientTaskState();
 				c->m_requesting_shared_task = false;
+				if (p->requested_task_id == 920243) {
+					c->SendFallOfIllsalinCatalogue();
+				}
 				if(kind==FireSharedCorrelation::Kind::Fire)
 					FirePersonalOccurrenceSource::SharedSuccessorNative::AfterReload(*c);
 			}
@@ -278,9 +321,11 @@ void SharedTaskZoneMessaging::HandleWorldMessage(ServerPacket *pack)
 				buf.WriteInt32(0);
 				buf.WriteInt32((int32) members.size());
 
+				const auto fall_templates = ReadFallRosterTemplates(*c);
 				for (auto &m : members) {
 					buf.WriteString(m.character_name);
-					buf.WriteInt32(0); // monster mission
+					const auto chosen = fall_templates.find(m.character_id);
+					buf.WriteInt32(chosen == fall_templates.end() ? 0 : static_cast<int32>(chosen->second));
 					buf.WriteInt8(m.is_leader ? 1 : 0);
 				}
 

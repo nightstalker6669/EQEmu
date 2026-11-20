@@ -304,6 +304,17 @@ public:
 
  const SpiritShroud::Template* SpiritShroudDefinition() const { return m_spirit_shroud_definition.get(); }
  bool LoadSpiritShroudState();
+ // Fall provider. These methods accept server run/actor identities, never wire IDs.
+ bool IsFallShrouded() const { return IsSpiritShrouded() && m_fall_shrouded; }
+ std::vector<std::shared_ptr<const SpiritShroud::Template>> FallShroudProfiles(uint64_t run);
+ bool SelectFallShroudRole(uint64_t run, uint32_t template_id);
+ std::optional<uint32_t> FallShroudSelectedTemplate(uint64_t run);
+ bool HasFallOfIllsalinProfile(uint64_t occurrence, uint32_t instance);
+ bool EnterFallOfIllsalin(NPC& stillpool);
+ bool RegisterFallOfIllsalinCommanderCorpse(uint64_t occurrence, uint32_t instance, Corpse& corpse);
+ bool ExitFallOfIllsalin(uint64_t occurrence, uint32_t instance, NPC& draygun);
+ void RequestFallShroudXpRefresh(uint64_t run);
+ bool TakeFallShroudShard(Corpse& corpse, uint32_t item_id, uint16_t drop_index);
  bool LoadSpiritShroudRestoredShortBuffs();
  std::unique_ptr<SpiritShroudDestination> PrepareSpiritShroudDestination(ZoneDatabase& transaction_db);
  bool InstallSpiritShroudDestination(SpiritShroudDestination& destination);
@@ -335,6 +346,8 @@ public:
    bool already_calculated = false, uint64_t aa_amount = 0);
  void CalculateSpiritShroudExperience(uint64_t amount, uint8 conlevel, uint32_t percent_to_aa,
    uint64_t earned_aa, uint64_t& normal, uint64_t& aa, uint64_t& progression);
+ void SendFallOfIllsalinCatalogue();
+ void Handle_OP_FallMonsterSelect(const EQApplicationPacket* packet);
  void Handle_OP_SpiritShroudRequest(const EQApplicationPacket*);
  void Handle_OP_SpiritShroudSelect(const EQApplicationPacket*);
  void Handle_OP_SpiritShroudCancel(const EQApplicationPacket*);
@@ -886,6 +899,7 @@ public:
 	void SetStartZone(uint32 zoneid, float x = 0.0f, float y =0.0f, float z = 0.0f, float heading = 0.0f);
 	uint32 GetStartZone(void);
 	void MovePC(const char* zonename, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited);
+	void EnterDreadspireFromHiveWeb(const glm::vec4 &destination);
 	void MovePC(uint32 zoneID, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited);
 	void MovePC(float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited);
 	void MovePC(uint32 zoneID, uint32 instanceID, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited);
@@ -2278,6 +2292,15 @@ private:
  uint64_t m_spirit_shroud_session_id = 0, m_spirit_shroud_revision = 0;
  bool m_spirit_shroud_personal_bank = false;
  std::shared_ptr<const SpiritShroud::Template> m_spirit_shroud_definition;
+ bool m_fall_shrouded = false;
+ uint64_t m_fall_shroud_next_check = 0;
+ uint64_t m_fall_shroud_refresh_run = 0;
+ uint64_t m_fall_shroud_refresh_deadline = 0;
+ bool PrepareFallShroudLogin();
+ bool ProcessFallShroud();
+ bool RestoreFallShroud(uint64_t run, bool success);
+ bool TryFallShroudDeath();
+ void ChangeSpiritShroudImpl(uint32_t id, uint64_t fall_run, bool* fall_entry_queued);
  uint8_t m_spirit_shroud_resource_refreshes = 0;
 	std::shared_ptr<Housing::InventorySessions::ZoneReservation> m_inventory_session_reservation;
 	std::unique_ptr<Housing::InventoryBridge::Bridge> m_housing_inventory_bridge;
@@ -2413,13 +2436,14 @@ private:
 	void SendZoneCancel(ZoneChange_Struct *zc);
 	void SendZoneError(ZoneChange_Struct *zc, int8 err);
 	void DoZoneSuccess(ZoneChange_Struct *zc, uint16 zone_id, uint32 instance_id, float dest_x, float dest_y, float dest_z, float dest_h, int8 ignore_r);
-	void ZonePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions, ZoneMode zm);
-	void ProcessMovePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited);
+	void ZonePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions, ZoneMode zm, bool dreadspire_hive_web = false);
+	void ProcessMovePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited, bool dreadspire_hive_web = false);
 
 	void SendTopLevelInventory();
 
 	glm::vec4 m_ZoneSummonLocation;
 	uint16 zonesummon_id;
+	bool m_dreadspire_hive_web_pending = false;
 	uint8 zonesummon_ignorerestrictions;
 	ZoneMode zone_mode;
 

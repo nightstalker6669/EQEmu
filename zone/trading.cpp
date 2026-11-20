@@ -1,4 +1,5 @@
 #include "original_trade_transform_hooks.h"
+#include "dodh_exchange.h"
 #include "sod_food_delivery.h"
 #include "fire_run_terminal_scene.h"
 #include "kithicor_poison_trade.h"
@@ -529,6 +530,9 @@ void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, st
 		if(KithicorPoisonTrade::RejectUnissued(*this,*tradingWith->CastToNPC()))return;
 		if(OriginalTradeFood::RejectUnissued(*this,*tradingWith->CastToNPC()))return;
 		if(OriginalTradeTransforms::ClaimsOffer(*this,*tradingWith->CastToNPC()))return;
+		if(DodhOriginalExchange::ClaimsOffer(*this,*tradingWith->CastToNPC()) ||
+			DodhOriginalExchange::ClaimsGuardOffer(*this,*tradingWith->CastToNPC()) ||
+			DodhOriginalExchange::ClaimsOpenerOffer(*this,*tradingWith->CastToNPC()))return;
 		if(FireRunActionSource::NativeRunTerminalSource::RejectUnissuedFinishTrade(*this,*tradingWith->CastToNPC()))return;
 		if (Housing::GuildPortalRuntime::HandIn(*this, tradingWith)) return;
 
@@ -1786,7 +1790,7 @@ static void UpdateTraderCustomerPriceChanged(
 void Client::SendBuyerResults(BarterSearchRequest_Struct& bsr)
 {
 	if (ClientVersion() >= EQ::versions::ClientVersion::RoF) {
-		std::string search_string(bsr.search_string);
+		std::string search_string(bsr.search_string, strnlen(bsr.search_string, sizeof(bsr.search_string)));
 		BuyerLineSearch_Struct results{};
 
 		SetBarterTime();
@@ -3155,7 +3159,7 @@ void Client::SendBuyerGreeting(uint32 buyer_id)
 		Message(Chat::White, "Welcome!");
 		return;
 	}
-	Message(Chat::White, buyer.front().welcome_message.c_str());
+	Message(Chat::White, "%s", buyer.front().welcome_message.c_str());
 }
 
 void Client::SendSellerBrowsing(const std::string &browser)

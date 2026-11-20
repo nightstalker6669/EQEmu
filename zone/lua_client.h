@@ -22,6 +22,8 @@
 #include "zone/lua_mob.h"
 
 class Client;
+class Lua_Corpse;
+class Lua_NPC;
 class Lua_Expedition;
 class Lua_Group;
 class Lua_Raid;
@@ -573,6 +575,10 @@ public:
 	std::string GetAutoLoginCharacterName();
 	bool SetAutoLoginCharacterName();
 	bool SetAutoLoginCharacterName(std::string character_name);
+	bool HasFallOfIllsalinProfile(std::string occurrence, uint32 instance);
+	bool EnterFallOfIllsalin(Lua_NPC npc);
+	bool RegisterFallOfIllsalinCommanderCorpse(std::string occurrence, uint32 instance, Lua_Corpse corpse);
+	bool ExitFallOfIllsalin(std::string occurrence, uint32 instance, Lua_NPC npc);
 	void DescribeSpecialAbilities(Lua_NPC n);
 	void ResetLeadershipAA();
 	uint8 GetSkillTrainLevel(int skill_id);

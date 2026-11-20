@@ -24,6 +24,7 @@
 #include "common/repositories/character_corpses_repository.h"
 #include "zone/client.h"
 #include "zone/mob.h"
+#include <map>
 
 class EQApplicationPacket;
 class Group;
@@ -130,6 +131,8 @@ public:
 	inline char *GetOwnerName() { return corpse_name; }
 	bool IsEmpty() const;
 	bool IsCorpse() const { return true; }
+ bool PrepareFallShardDrops();
+ uint16_t FallShardDropIndex(const LootItem* item) const;
 	bool IsPlayerCorpse() const { return m_is_player_corpse; }
 	bool IsNPCCorpse() const { return !m_is_player_corpse; }
 	bool IsBecomeNPCCorpse() const { return m_become_npc; }
@@ -291,6 +294,7 @@ private:
 	uint32                   m_consented_raid_id  = 0;
 	uint32                   m_consented_guild_id = 0;
 	LootItems                m_item_list;
+ std::map<const LootItem*, uint16_t> fall_shard_drops;
 	uint32                   m_copper;
 	uint32                   m_silver;
 	uint32                   m_gold;

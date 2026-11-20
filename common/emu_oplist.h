@@ -741,6 +741,10 @@ N(OP_GuildTrophyModify),
 N(OP_GuildTrophyOptIn),
 
 // Matching May 10 2013 RoF2 Spirit Shroud protocol.
+N(OP_FallMonsterCatalogue),
+N(OP_FallMonsterDetails),
+N(OP_FallMonsterSelectRole),
+N(OP_FallMonsterSelectionResult),
 N(OP_SpiritShroudSelection),
 N(OP_SpiritShroudRequest),
 N(OP_SpiritShroudDetails),
