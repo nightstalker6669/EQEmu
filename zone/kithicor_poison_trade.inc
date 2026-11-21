@@ -9,6 +9,8 @@
 #include "original_trade_transform_hooks.h"
 #include "original_message_admission.h"
 #include "dodh_exchange.h"
+#include "common/shared_core/por_chime_exchange.h"
+
 #include "dodh_mission_custody.h"
 #include "dodh_longshadow_source.h"
 #include "common/shared_core/dodh_longshadow_sources.h"
@@ -39,6 +41,23 @@
 #include "dodh_bellfast_hive.inc"
 #include "dodh_bellfast_korlach.inc"
 #include "dodh_bellfast_neran.inc"
+namespace PorChime = EQEmu::SharedCore::PorChimeExchange;
+
+static const PorChime::Route* OfferedPorChime(Client& client, NPC& npc)
+{
+    if (!zone || zone->GetInstanceVersion() != 0) return nullptr;
+    const auto offers = OriginalTradeOffer::Capture(client);
+    for (const auto& route : PorChime::Routes) {
+        if (!PorChime::Matches(route, zone->GetZoneID(), zone->GetInstanceID(),
+                              npc.GetNPCTypeID(), npc.GetSpawnPointID())) continue;
+        if (std::any_of(offers.begin(), offers.end(), [&route](const auto& offer) {
+            return offer.present && offer.item_id == route.input;
+        })) return &route;
+    }
+    return nullptr;
+}
+
+
 namespace KithicorPoisonTrade {
 namespace {
 using namespace KithicorPoisonCustody;
@@ -611,7 +630,7 @@ public:
 
 #include "dodh_rakban_combine.inc"
 
- enum class DodhTrade { None, Exchange, DesertingGuard, NotebookOpener, Monocle, PublicRoute, Longshadow };
+ enum class DodhTrade { None, Exchange, DesertingGuard, NotebookOpener, Monocle, PublicRoute, Longshadow, Chime };
 
  static bool Execute(Client& c,NPC& npc,unsigned chest,OriginalTradeWriter::SemanticRecipe* semantic=nullptr,bool transform=false,Continuation* resume=nullptr,DodhTrade dodh_trade=DodhTrade::None,
                      const EQEmu::SharedCore::DodhExchange::PublicRoute* route=nullptr) noexcept {
@@ -628,7 +647,9 @@ public:
   namespace Exchange = EQEmu::SharedCore::DodhExchange;
   const bool dodh = dodh_trade != DodhTrade::None;
   const bool dodh_monocle = dodh_trade == DodhTrade::Monocle;
-  const bool dodh_exchange = dodh_trade == DodhTrade::Exchange || dodh_monocle;
+  const auto* por_chime = dodh_trade == DodhTrade::Chime ? OfferedPorChime(c,npc) : nullptr;
+  if (dodh_trade == DodhTrade::Chime && !por_chime) return true;
+  const bool dodh_exchange = dodh_trade == DodhTrade::Exchange || dodh_monocle || por_chime;
   const bool dodh_guard = dodh_trade == DodhTrade::DesertingGuard;
   const bool dodh_opener = dodh_trade == DodhTrade::NotebookOpener;
   const bool dodh_route = dodh_trade == DodhTrade::PublicRoute && route;
@@ -724,6 +745,7 @@ public:
          : dodh_opener ? DodhOriginalExchange::ClaimsOpenerOffer(c, npc)
          : dodh_monocle ? DodhOriginalExchange::ClaimsMonocleOffer(c, npc)
          : dodh_route ? same_route() && DodhOriginalExchange::ClaimsPublicRoute(c,npc)
+         : por_chime ? OfferedPorChime(c, npc) == por_chime
          : dodh_longshadow ? MatchingLongshadowOffer(c, npc) == longshadow
          : DodhOriginalExchange::ClaimsOffer(c, npc);
      if (c.IsSpiritShrouded() || !claimed || !c.trade || c.trade->With() != &npc ||
@@ -803,10 +825,15 @@ public:
    else if(semantic)debit=food_snapshot->plan.debit;
    std::unique_ptr<EQ::ItemInstance> exchange_output;
    if (dodh_exchange) {
-    recipe_context = dodh_monocle ? Exchange::MonocleContext : Exchange::JournalContext;
-    const auto output_item = dodh_monocle ? Exchange::Monocle : Exchange::Output;
-    const bool planned = dodh_monocle ? Exchange::PlanParts(Exchange::MonocleParts, offers, debit)
-                                      : Exchange::Plan(offers, debit);
+    recipe_context = por_chime ? PorChime::Encode(*por_chime)
+       : dodh_monocle ? Exchange::MonocleContext : Exchange::JournalContext;
+    const auto output_item = por_chime ? por_chime->output : dodh_monocle ? Exchange::Monocle : Exchange::Output;
+    // The real prerequisite and exact items restrict each exchange. The original
+    // trade journal atomically debits the offered unit and saves its successor.
+    const bool planned = por_chime
+        ? c.IsTaskCompleted(por_chime->prerequisite) && Recipe::FirstUnit(offers, por_chime->input, debit)
+        : dodh_monocle ? Exchange::PlanParts(Exchange::MonocleParts, offers, debit)
+                       : Exchange::Plan(offers, debit);
     if (planned) {
      exchange_output.reset(database.CreateItem(output_item));
      if (!exchange_output || exchange_output->GetID() != output_item ||
@@ -888,6 +915,7 @@ public:
    if ((dodh_exchange || opener_repeat || dodh_route) && !selected) {
     for (const auto& offer : offers) {
      const bool claimed_item = opener_repeat ? offer.item_id == Exchange::Notebook
+         : por_chime ? offer.item_id == por_chime->input
          : dodh_monocle ? Exchange::IsMonoclePart(offer.item_id)
          : dodh_route ? (route_food && offer.present && database.GetItem(offer.item_id) &&
                            database.GetItem(offer.item_id)->ItemType == EQ::item::ItemTypeFood) ||
@@ -1035,6 +1063,8 @@ public:
    } // Existing continuation resumes inside its already-open strict read tx.
    LockLease(db,*lease);canonical();
    if (dodh_guard) lock_guard_run();
+   if (por_chime && output_guid && !c.IsTaskCompleted(por_chime->prerequisite))
+    throw std::runtime_error("Prophecy of Ro chime prerequisite changed");
    if (route_accept) lock_route();
    if (longshadow_debit) {
     const auto context = BindLongshadow(db, c, npc, *longshadow);
@@ -1143,6 +1173,8 @@ public:
     c.Message(Chat::Yellow, "You have already turned in a notebook. Your offer was returned.");
    } else if (dodh_exchange && !output_guid) {
     c.Message(Chat::Yellow, "The exchange could not be completed. Your offer was returned.");
+   } else if (por_chime && output_guid) {
+    c.Message(Chat::Yellow, "The chime has been transformed.");
    }
    c.trade->Reset();c.QueuePacket(finish.get());if(cursor_packet)c.QueuePacket(cursor_packet.get());c.SendMoneyUpdate();c.RecalcWeight();
    if (dodh_route && route->group == 5 && route->code == 1 && !route_accept && c.GetSharedTaskId() <= 0 &&
@@ -1334,9 +1366,17 @@ bool ClaimsLongshadowOffer(Client& client, NPC& npc)
     return KithicorPoisonTrade::MatchingLongshadowOffer(client, npc) != nullptr;
 }
 
+bool ClaimsPorChimeOffer(Client& client, NPC& npc)
+{
+    return OfferedPorChime(client,npc) != nullptr;
+}
+
 bool OriginalAccept(Client& client, NPC& npc)
 {
     using Mode = KithicorPoisonTrade::Writer::DodhTrade;
+    if (ClaimsPorChimeOffer(client, npc)) {
+        return KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::Chime);
+    }
     if (ClaimsLongshadowOffer(client, npc)) {
         return KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::Longshadow);
     }

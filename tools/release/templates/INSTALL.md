@@ -2,6 +2,8 @@
 
 Built from commit `@COMMIT@`. This package contains platform-native server binaries and helpers, matching quest/opcode content, a full sanitized database export, and 331 portable Housing JSON files. Read `CONTENT-LIMITS.md` and `database/README.md` before installation. Packaging/build success does not establish fresh native gameplay acceptance on this platform.
 
+For the current PoR batch, see the [group progression scope and native acceptance limits](https://github.com/nightstalker6669/EQEmu/blob/@COMMIT@/docs/rof2/roadmap/PROPHECY-OF-RO.md). The bundled database supports a fresh empty installation. The older content and upgrade sections below refer to their own releases.
+
 For Darkhollow Fall, see [the client append and tuning guide](docs/rof2/DARKHOLLOW-NORMAL.md).
 
 ## Requirements

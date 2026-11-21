@@ -11,4 +11,5 @@ bool OriginalAccept(Client&, NPC&);
 bool ClaimsGuardOffer(Client&, NPC&);
 bool ClaimsOpenerOffer(Client&, NPC&);
 bool ClaimsLongshadowOffer(Client&, NPC&);
+bool ClaimsPorChimeOffer(Client&, NPC&);
 }

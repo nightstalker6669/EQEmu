@@ -12,6 +12,7 @@
 #include "original_transform_native.h"
 #include "original_message_admission_native.h"
 #include "dodh_exchange.h"
+#include "por_chime_exchange.h"
 #include "dodh_longshadow_journal.h"
 #include <optional>
 // Single original NPC trade physical journal/recovery. Legacy table name and
@@ -284,6 +285,7 @@ inline void ReconcilePhysicalUnderTransaction(Database& db,const EQEmu::SharedCo
  bool opener = false;
  bool monocle = false;
  const DodhExchange::PublicRoute* public_route = nullptr;
+ const PorChimeExchange::Route* por_chime = nullptr;
  std::optional<DodhLongshadowCustody::JournalRecord> longshadow;
  if (exchange) {
   if (!generalized || !row[6]) throw std::runtime_error("Darkhollow journal context missing");
@@ -295,6 +297,10 @@ inline void ReconcilePhysicalUnderTransaction(Database& db,const EQEmu::SharedCo
        (public_route->group != 5 && N(row[8])) ||
        (public_route->group == 5 && physical == 1 && !N(row[8])))
     throw std::runtime_error("Darkhollow public route journal differs");
+  } else if ((por_chime = PorChimeExchange::Decode(context))) {
+   if (N(row[8]) || N(row[12]) || !N(row[11]) ||
+       !PorChimeExchange::Matches(*por_chime, lease.owner.zone_id, lease.owner.instance_id, N(row[9]), N(row[10])))
+    throw std::runtime_error("Prophecy of Ro chime custody scope differs");
   } else if (const auto id = DodhExchange::DecodeGuard(context)) {
    guard = true;
    const auto actor_type = N(row[9]), spawn = N(row[10]);
@@ -351,7 +357,7 @@ inline void ReconcilePhysicalUnderTransaction(Database& db,const EQEmu::SharedCo
  std::optional<OriginalTradeTransform::Context> transform;
  std::optional<OriginalTradeTransform::Decision> decision;
  if(kind==3){transform=OriginalTradeTransform::Decode(ContextBytes(row[6]));if(transform->character!=lease.actor.character_id||transform->account!=lease.actor.account_id)throw std::runtime_error("Transform recovery actor differs");}
- auto bound=Q(db,"SELECT request_key FROM kithicor_poison_custody WHERE request_key='"+db.Escape(key)+"' AND "+LeaseWhere(lease)+(kind==1?" AND phase=0 AND chest BETWEEN 1 AND 6":" AND shared_task_id="+std::to_string(guard||public_route||longshadow?N(row[8]):kind==3&&transform->shared?transform->occurrence:0)+" AND phase=0 AND chest=0")+(exchange&&!guard&&!opener&&!public_route&&!longshadow?" AND npc_type_id="+std::to_string(DodhExchange::Giver)+" AND npc_spawn_id="+std::to_string(DodhExchange::Spawn):std::string{})+" FOR UPDATE");
+ auto bound=Q(db,"SELECT request_key FROM kithicor_poison_custody WHERE request_key='"+db.Escape(key)+"' AND "+LeaseWhere(lease)+(kind==1?" AND phase=0 AND chest BETWEEN 1 AND 6":" AND shared_task_id="+std::to_string(guard||public_route||longshadow?N(row[8]):kind==3&&transform->shared?transform->occurrence:0)+" AND phase=0 AND chest=0")+(exchange&&!guard&&!opener&&!public_route&&!longshadow&&!por_chime?" AND npc_type_id="+std::to_string(DodhExchange::Giver)+" AND npc_spawn_id="+std::to_string(DodhExchange::Spawn):std::string{})+" FOR UPDATE");
  if(bound.RowCount()!=1||(physical!=0&&physical!=1&&physical!=3&&!(exchange&&!guard&&physical==2)))throw std::runtime_error("Original trade old session evidence differs");
  if (monocle && physical == 1) {
   const auto preserved = Q(db, fmt::format("SELECT id FROM keyring WHERE char_id={} AND item_id={} FOR UPDATE",

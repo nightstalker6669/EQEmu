@@ -1,17 +1,17 @@
 # Install the RoF2 Restoration Pack
 
-The current matched release is **Rathe r2**, built from [`c0e1f6ea`](https://github.com/nightstalker6669/EQEmu/commit/c0e1f6ea2276740ac45442215454a0a9923e4573) with all 60 managed quest files and the [Rathe r2 PEQ database package](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-17-rathe-r2). Use the server, quest and database files from the same release. See the [Rathe guide](RATHE.md) for native gameplay coverage and [EverForge](EVERFORGE.md) for Docker setup with the Spire and PEQ Editor forks.
+For **Prophecy of Ro group progression through Theater of Blood**, use the matched server, quests and sanitized PEQ database input from the same release. See the [PoR scope and native acceptance limits](roadmap/PROPHECY-OF-RO.md). This batch supports fresh empty databases only.
 
 ## Native Windows and Linux packages
 
-Download the ZIP and its SHA-256 sidecar from the [Rathe server release](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r28-a1-c0e1f6ea2276). Verify the ZIP hash before extracting it and follow its included platform-specific `INSTALL.md` for the exact runtime dependency inventory.
+Choose the PoR release and download your platform ZIP and SHA-256 sidecar from the [server releases](https://github.com/nightstalker6669/EQEmu/releases). Verify the ZIP hash before extracting it and use its included platform `INSTALL.md` for the exact runtime dependencies. If you need a standalone database ZIP, select the matching Theater of Blood package from the [PEQ database releases](https://github.com/nightstalker6669/EQEmu-Database/releases).
 
 | Host | ZIP | Launcher from `server/` |
 | --- | --- | --- |
 | Linux x86-64 | `EQEmu-RoF2-Linux-x86_64.zip` | `./run-server.sh` |
 | Windows x64 | `EQEmu-RoF2-Windows-x64.zip` | `run-server.cmd` in an interactive console |
 
-Use Python 3.9 or newer and a MariaDB 10.11 client. The Linux package was built on Ubuntu 26.04.1 LTS with glibc 2.43 and Perl 5.40.1. Match the ABI and system libraries listed in the package. Windows requires the VC++ 2015–2022 or newer x64 Redistributable, full Strawberry Perl x64 matching Perl 5.42.0 on PATH and the `py -3` launcher.
+Use Python 3.9 or newer and a MariaDB 10.11 client. Match the Linux ABI and system libraries to the package's dependency inventory. Windows requires the VC++ 2015–2022 or newer x64 Redistributable, the matching full Strawberry Perl x64 distribution on PATH and the `py -3` launcher.
 
 ### Fresh installation
 
@@ -20,7 +20,13 @@ Use Python 3.9 or newer and a MariaDB 10.11 client. The Linux package was built 
 3. Supply authorized original RoF2 client resources and corresponding maps. Follow the archive's geometry installer instructions and install the maps under `server/maps/`.
 4. From `server/`, run `bin/shared_memory` on Linux or `bin\shared_memory.exe` on Windows to generate the target's shared data. If your database name differs from `peq`, set `EQEMU_DATABASE_NAME` to match. Start the platform launcher from the same directory.
 
-### Upgrade an existing installation
+### Existing installations
+
+Keep existing player databases and private configuration with their matched releases. This PoR batch has no supported in-place migration. The bundled SQL and the standalone PoR database ZIP are fresh-install inputs.
+
+## Historical Rathe r2 upgrade
+
+The following instructions apply to the [Rathe r2 server release](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r28-a1-c0e1f6ea2276) and its [matched PEQ release](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-17-rathe-r2). See the [Rathe scope](RATHE.md) and [historical EverForge setup](EVERFORGE.md).
 
 Back up the player database, server files, quest overrides and private configuration. Stop every writer. Follow the [Rathe upgrade contract](https://github.com/nightstalker6669/EQEmu-Database/blob/507facf847cb110528126a932e013035ca584bf7/migrations/rathe/UPGRADE-CONTRACT.json) for the exact migration and your supported preimage. The normal path from the published Field of Scale database uses the guarded `APPLY.sql`. A prior Rathe step-0 database has its own correction, and managed EverForge installations have a separate guarded marker transition. Use the contract for their prerequisites and order.
 

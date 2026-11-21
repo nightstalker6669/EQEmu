@@ -1,9 +1,8 @@
-<!-- previous-release: rof2-ci-r29-a1-b4c9fe347423 -->
+## Prophecy of Ro group progression through Theater of Blood
 
-## Depths of Darkhollow Progression
-
-- Restored the Formal Dinner Invitation route into Dreadspire Keep and Master Vule’s statue-and-lever encounter.
-- Restored the five Normal Longshadow missions and their earned Rakban achievement credit.
-- Restored Curse of Blood progression through the five Blood raids, the Monocle of Blood questline, and both Demi-Plane tiers through Mayong Mistmoore.
-- Restored the four Bellfast and four Widdlethorpe missions, including Neran’s escort and bridge crossing.
-- Added the earned fragment claims and Ancient Werewolf Skull combine for The Depths of Darkhollow achievement.
+- Restored Ao’s three Skylance missions, their class spell rewards, and the Tarnished Chime. Added floor-side return triggers, made Prototype Egg selection persist across quest reloads, and fixed the Laboratory egg exchange to use the player’s cursor.
+- Restored the Saga Skins and Maelin armor routes, Become the Vessel, Samples of Corruption, and the Tak’Valnakor missions through the enchanted chime. Intermediate chime exchanges use recoverable inventory delivery.
+- Restored Sverag trophy requests and class spell rewards, including the Bolvirk Skald’s skull request. Added controller-specific offers and Bolvirk kill credit for Become the Vessel.
+- Restored The Chalice of Life and its class aura rewards, along with Scribe Luritem’s five spell purchases through his material hand-in.
+- Restored the earned Twisted Harmonic Chime and Harmonic Dissonance. Public Theater of Blood admission is configured for level 68.
+- Preserved corpse loot time after quest vials and tablets are added. Updated modern North and South Ro access for eligible quest parties and modern North Ro destinations for eligible Ro Portal and Translocate: Ro recipients.

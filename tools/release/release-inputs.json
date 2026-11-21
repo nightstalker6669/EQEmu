@@ -1,25 +1,37 @@
 {
   "database": {
     "CI_consumption": [
-      "Check the release archive, its complete checksum inventory and the matched source and quest postimages.",
-      "Install the pinned RoF2 opcode asset from the matched checkout over the runtime seed copy.",
-      "Use full.sql only for a fresh empty volume. Use the documented ordered upgrade for an existing volume.",
-      "Rebuild items and spells before the first boot with the new database. Use the matching client append records."
+      "Verify the complete archive checksums and the matched canonical quests/ content.",
+      "Import full.sql into a fresh empty database with the matching runtime."
     ],
     "asset": {
-      "bytes": 36863473,
-      "name": "PEQ-RoF2-full-2026-11-21-darkhollow-progression.zip",
-      "sha256": "c7f518ce95406222189b532ef0bf5cd0c4659e00f17d552c1fc3dc3bd796664a",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-21-darkhollow-progression/PEQ-RoF2-full-2026-11-21-darkhollow-progression.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-21-darkhollow-progression/PEQ-RoF2-full-2026-11-21-darkhollow-progression.zip"
+      "bytes": 36969877,
+      "name": "PEQ-RoF2-full-2026-11-21-por-group-theater.zip",
+      "sha256": "7b314a300e2793335c99b9d7639f5c8763beecd2773e140b0c9bbce39fc5115d",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-21-por-group-theater/PEQ-RoF2-full-2026-11-21-por-group-theater.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-21-por-group-theater/PEQ-RoF2-full-2026-11-21-por-group-theater.zip"
     },
-    "base_database_release_tag": "peq-rof2-2026-11-20-darkhollow-normal",
+    "base_database_release_tag": "peq-rof2-2026-11-21-darkhollow-progression",
     "cohort_source_binding": {
-      "preserved_prior_binding": {
-        "asset_sha256": "c633b37b102d7f49f57bd794b3de29b38d74e19aded0bdf97b629a4468ce43e2",
-        "source_manifest_sha256": "3a9ac3d878bb68da8ec5d0577da8724f1119ba6e6124bb0f7af3c2cd8bf834f1"
-      },
+      "preserved_prior_binding": "75a37d7cb622456c3bdf18cf6017e96044c353baa1970f47439b95339b306665",
+      "quest_root": "quests",
       "required_quest_files": [
+        {
+          "path": "arcstone/v0/369004.lua",
+          "sha256": "95b5a9b7b3059c8e93327d2a408687c07eb9e6750088e941dd9403f24a68b711"
+        },
+        {
+          "path": "arcstone/v0/369011.lua",
+          "sha256": "6371055b3be491e8722a154c9e631251f8859c41a2184baffd45fb45aad56c6f"
+        },
+        {
+          "path": "arcstone/v0/369083.lua",
+          "sha256": "a4650ad33399c9527e4fd3c47c61b41bd5ea8506a40ac9b63db4e0478308dca5"
+        },
+        {
+          "path": "arcstone/v0/player.lua",
+          "sha256": "3e344de136fe0799a7091efc61e216cf1f3d5b3b30cc43a04b00fad55294ed2c"
+        },
         {
           "path": "corathus/v0/365268.lua",
           "sha256": "37529bca1c2df20b421b43426e8fe6998a0e8813f50523a308159ab9b2f8b3b7"
@@ -43,6 +55,14 @@
         {
           "path": "corathusa/v2/zone.lua",
           "sha256": "66dcebe55ea330b10e887e2e6ae3b5f48362b5569da0d8db775611c43a845863"
+        },
+        {
+          "path": "devastation/v0/372000.lua",
+          "sha256": "e1284e4e3017bb133ced03d95a3d201398612c4f53bc661ac72d3e5b67808735"
+        },
+        {
+          "path": "devastation/v0/player.lua",
+          "sha256": "a4ba1922f3f3cbc4f65bed41575f8e8be191c5cb2c61103c830e579a65a7c412"
         },
         {
           "path": "drachnidhive/v4/player.lua",
@@ -287,6 +307,14 @@
         {
           "path": "global/encounters/rof2_sod_rathe.lua",
           "sha256": "0eabe7dd1978d243a300b38100ac556a5c7c21132dc7532adeaf4d745fb1df69"
+        },
+        {
+          "path": "global/spells/1373.lua",
+          "sha256": "8ae1ad59174fa2aeaafd68ec402a5995509eba9b377319d2effe91c714dc3015"
+        },
+        {
+          "path": "global/spells/567.lua",
+          "sha256": "c7812f75c9b12422b481c41cfb11e5a1eb7cf3e62aacde3d80701db8130389dc"
         },
         {
           "path": "illsalin/v0/player.lua",
@@ -601,6 +629,34 @@
           "sha256": "dcac3fe241dc796431e406974fa0c38218d58a379252fa73c46da796ec754fc5"
         },
         {
+          "path": "lua_modules/rof2_por_maelin.lua",
+          "sha256": "4d0eb90ab9c43ebe6a35e76f93d6092c22727e1688d1f50577f5aa091a935860"
+        },
+        {
+          "path": "lua_modules/rof2_por_progression.lua",
+          "sha256": "84903dd2443649cb43eba20a82b89c3b9e36c25d7e61b6aedf56dc6e49304fe8"
+        },
+        {
+          "path": "lua_modules/rof2_por_razorthorn.lua",
+          "sha256": "b71be2214bbf3dcff88820efc1714f679333d81101dbf3b469f72db2ff3f0f0e"
+        },
+        {
+          "path": "lua_modules/rof2_por_scene_state.lua",
+          "sha256": "7d8593181314f852fd219a0b2176a6581b3fe5b8b12999cf3c7c62baa3cb7052"
+        },
+        {
+          "path": "lua_modules/rof2_por_skylance.lua",
+          "sha256": "32f75efe0b7e135b84489a2e78fde3b7f20b722d4cee18739dca17c3722256b1"
+        },
+        {
+          "path": "lua_modules/rof2_por_sverag_trophies.lua",
+          "sha256": "4209cdd417b7b4fe13c8575404e34c269669bd3bc6fd0b10e34c6124348dc655"
+        },
+        {
+          "path": "lua_modules/rof2_por_takish.lua",
+          "sha256": "cf5c035781f997d429442f10f35c85d03549d4c34b6f45cbf5bcdd12cf58c685"
+        },
+        {
           "path": "lua_modules/rof2_sod_fieldofscale.lua",
           "sha256": "6ba248707e01d92af911c177a09aa2b668c2022bd17b5edddc4f059a7b993fee"
         },
@@ -675,6 +731,18 @@
         {
           "path": "nektulos/v1/25414.lua",
           "sha256": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d"
+        },
+        {
+          "path": "northro/player.lua",
+          "sha256": "bb476f493282d64486a9ca7b9c7b4f4004fed6f6077f523a9924180091f9e659"
+        },
+        {
+          "path": "northro/v0/392045.lua",
+          "sha256": "223091471f14a4d2baab9d8c727b88e814a1a55ee9f96a2c5df08a40d2047e1f"
+        },
+        {
+          "path": "northro/v0/392088.lua",
+          "sha256": "bf3976570f4ce380ec2c63675bc46aa91b06717e575ba0a59f5d0f22a5a4849c"
         },
         {
           "path": "oceangreenhills/#Bracka_Darkpaw.lua",
@@ -813,6 +881,34 @@
           "sha256": "38e9f399ea67446eab7c62c92951a801c6fef86da42e4ddf8bbcb517dd04fa75"
         },
         {
+          "path": "poknowledge/Grand_Librarian_Maelin.lua",
+          "sha256": "653ed5bebf2db85ee1d5907ef2a87d604f841eed60dc28a98bb57b5f46532ae1"
+        },
+        {
+          "path": "rage/v0/372099.lua",
+          "sha256": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7"
+        },
+        {
+          "path": "rage/v0/374001.lua",
+          "sha256": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7"
+        },
+        {
+          "path": "rage/v0/player.lua",
+          "sha256": "2d374c28df4809f827a64b1ce6b0dd61aa753d71ecbd542db292989f8e3b747c"
+        },
+        {
+          "path": "rage/v0/zone.lua",
+          "sha256": "49857af3e6daae87e3997c3858a6667c0831f96ecbf9f66a259d9e69dfbda63a"
+        },
+        {
+          "path": "ragea/v10/player.lua",
+          "sha256": "56484b459a3addd5da48d8ad79bf0f3e7f18ba20fc30ff11199dcadeee1a006a"
+        },
+        {
+          "path": "ragea/v10/zone.lua",
+          "sha256": "8ec5eb69d28be6351b8f792a08f6727a6ddb873a55851f670cfa8c1d2496737d"
+        },
+        {
           "path": "shadowspine/v1/364015.lua",
           "sha256": "302ed8e76bf3b491db9a10ff2b1ce3bc836cfcce098373a08fd882038070fbda"
         },
@@ -839,6 +935,90 @@
         {
           "path": "shadowspine/v1/zone.lua",
           "sha256": "64090b9a661820e811f5b88165e9db83d809cc11831cf9c3150cf42d3ae9ca9c"
+        },
+        {
+          "path": "skylance/v10/371002.lua",
+          "sha256": "6ced78c68c2083795245b0d56c034700b03653525873d2650ff2feb8ce2cb231"
+        },
+        {
+          "path": "skylance/v10/371025.lua",
+          "sha256": "01c3c95a5ad8ddd627df67474b9d498e2d1e7581e0cb1906e3557e276333554c"
+        },
+        {
+          "path": "skylance/v10/371036.lua",
+          "sha256": "4edac0903e7baf9b745c8f22a7e06e7cc8829cb9067de640e515bb4a01ca304c"
+        },
+        {
+          "path": "skylance/v10/371037.lua",
+          "sha256": "66d09ebed7a05d823dac8077a1775cd269ccc153a09e497ad6bf09ee8f71e5c2"
+        },
+        {
+          "path": "skylance/v10/371049.lua",
+          "sha256": "66b72d44d2da3f49fcdb2c7fe5988f4ae2ebbfa7b1a39a44f6e4ab448e1b852f"
+        },
+        {
+          "path": "skylance/v10/player.lua",
+          "sha256": "dd055751c01f72075bfe8c25071fd3171a464ff7fe141404b98b5331212145ba"
+        },
+        {
+          "path": "skylance/v11/371002.lua",
+          "sha256": "618a89e54d19b9254fe53103255cf58dcd3120e55c754459e653e44f4eed13b9"
+        },
+        {
+          "path": "skylance/v11/player.lua",
+          "sha256": "a30b44311fab8e440e4b3afdbb4261b53ab39a2d8ae7f7827bb2a8df5e8d10ea"
+        },
+        {
+          "path": "skylance/v11/zone.lua",
+          "sha256": "e1a021f233ae64cc10c205d35527cfd1c8f84b35a3f5630c828a5dbd7c1c53dd"
+        },
+        {
+          "path": "skylance/v12/371002.lua",
+          "sha256": "368a96f9c02c4e9ddd9ef8c4ad436c874bb245ea821dab5213666b49466b2222"
+        },
+        {
+          "path": "skylance/v12/player.lua",
+          "sha256": "ad1af362030b15409c50fa124d7dd170fc1c2af60b7f2a281acbacea111df209"
+        },
+        {
+          "path": "southro/player.lua",
+          "sha256": "333ed4c0f7cc61a6d9d94950f9813d4551458827e1a6628d079f4d4d3e63b043"
+        },
+        {
+          "path": "takishruins/v0/376056.lua",
+          "sha256": "e3f0b4be9e99fd20225b2250566beb091eae04f2c9e0a50d5ec503036539ea4c"
+        },
+        {
+          "path": "takishruins/v0/376081.lua",
+          "sha256": "8d7c3f4ab7dbe176d38addfcf9379dcf7ef8336a43830c2091a2200ac121c7dd"
+        },
+        {
+          "path": "takishruins/v0/player.lua",
+          "sha256": "5da7b27e3017d6f49c735b87f42f6acc4e8cd9e1b4160e4d223b326dfa450444"
+        },
+        {
+          "path": "takishruins/v10/376961.lua",
+          "sha256": "4aceb6722d430c3216b422a206c62cbd6e336153435406bce34017a8ad908eb9"
+        },
+        {
+          "path": "takishruins/v10/player.lua",
+          "sha256": "906a552529972ecb282d44fa800e487b79eff249135b2580255340629da3acce"
+        },
+        {
+          "path": "takishruins/v11/376964.lua",
+          "sha256": "2a7010ff1b2e5b4169134be31f9ebc6eb5eb91afdd1478027f517924b6982c61"
+        },
+        {
+          "path": "takishruins/v11/player.lua",
+          "sha256": "ab3adc964a1533fc17aff479f2b671c536a855c868439a9059ed3e55636813cc"
+        },
+        {
+          "path": "takishruinsa/v10/player.lua",
+          "sha256": "471392c5ee2ce74c058c29982953655f2e7e3553d9c54cc738981fc1c87d5bb4"
+        },
+        {
+          "path": "takishruinsa/v10/zone.lua",
+          "sha256": "0c41c7a7acf163e6132b74d652feab84134fd3997f61bebb9e5d74aeb6f77ba9"
         },
         {
           "path": "westkorlach/v0/358020.lua",
@@ -1053,7 +1233,7 @@
           "sha256": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
         }
       ],
-      "required_quest_files_aggregate_count": 258,
+      "required_quest_files_aggregate_count": 304,
       "required_source_files": [
         {
           "bytes": 1959,
@@ -1168,12 +1348,20 @@
           "sha256": "03e85a62d14c8f4e4b15a89525f4059e621f17a2d7156288e01fc3bc15db6293"
         },
         {
-          "bytes": 35432,
-          "git_blob": "a5cf3a497eb4168dadd2fa8573aa4881f53e5cd5",
+          "bytes": 35834,
+          "git_blob": "86acc84540f482eb1eceb66c2cda6a4e62e13210",
           "kind": "native_source",
           "mode": "100644",
           "path": "common/shared_core/original_trade_custody.h",
-          "sha256": "be836d917fcbbb6cb3406ebc24ee278bcd026f2a559551801f18f4996dbdbf9c"
+          "sha256": "41185708ed2bbd98f9b290c49c79605001f157e71018b56b9ac376e4530fb028"
+        },
+        {
+          "bytes": 1193,
+          "git_blob": "4134c0505ae85d17cec6a1b7a30713899c34519f",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "common/shared_core/por_chime_exchange.h",
+          "sha256": "51cbb6561307cb4c2259d22aca84ee008d6e9b753fb915da3dc9c92b9a140fbc"
         },
         {
           "bytes": 2814,
@@ -1206,6 +1394,38 @@
           "mode": "100644",
           "path": "common/shareddb.cpp",
           "sha256": "ace8c38564a1c361c8e48596ac76255bc657ae25ed9c4c5e4c510cc4570a00d4"
+        },
+        {
+          "bytes": 870,
+          "git_blob": "f83772eb09c18d7509bc04059d588800fa1b1be9",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/arcstone/v0/369004.lua",
+          "sha256": "95b5a9b7b3059c8e93327d2a408687c07eb9e6750088e941dd9403f24a68b711"
+        },
+        {
+          "bytes": 1291,
+          "git_blob": "5c4586945f0b2e66b835cc11bc0b08427e834648",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/arcstone/v0/369011.lua",
+          "sha256": "6371055b3be491e8722a154c9e631251f8859c41a2184baffd45fb45aad56c6f"
+        },
+        {
+          "bytes": 1672,
+          "git_blob": "de17ae0af151412e8141a180ba0330af73c277e0",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/arcstone/v0/369083.lua",
+          "sha256": "a4650ad33399c9527e4fd3c47c61b41bd5ea8506a40ac9b63db4e0478308dca5"
+        },
+        {
+          "bytes": 311,
+          "git_blob": "e557f50b5cfe0881624315ad54b2149ce47ba4c9",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/arcstone/v0/player.lua",
+          "sha256": "3e344de136fe0799a7091efc61e216cf1f3d5b3b30cc43a04b00fad55294ed2c"
         },
         {
           "bytes": 100,
@@ -1254,6 +1474,22 @@
           "mode": "100644",
           "path": "quests/corathusa/v2/zone.lua",
           "sha256": "66dcebe55ea330b10e887e2e6ae3b5f48362b5569da0d8db775611c43a845863"
+        },
+        {
+          "bytes": 965,
+          "git_blob": "0c8f6937d7cca2d119ea98e9ea2d7e98650c3974",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/devastation/v0/372000.lua",
+          "sha256": "e1284e4e3017bb133ced03d95a3d201398612c4f53bc661ac72d3e5b67808735"
+        },
+        {
+          "bytes": 140,
+          "git_blob": "56c4fec5d484af71879c4aeed3c23c951e3c44d5",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/devastation/v0/player.lua",
+          "sha256": "a4ba1922f3f3cbc4f65bed41575f8e8be191c5cb2c61103c830e579a65a7c412"
         },
         {
           "bytes": 114,
@@ -1702,6 +1938,22 @@
           "mode": "100644",
           "path": "quests/eastkorlacha/v2/zone.lua",
           "sha256": "762b8da1456bbf5608383a3a3f72fc0426402f9cd8ab165a4ea8d4f068a7c462"
+        },
+        {
+          "bytes": 444,
+          "git_blob": "b16c2f84689c78eb83f56ca81f329473f9c4c7cf",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/global/spells/1373.lua",
+          "sha256": "8ae1ad59174fa2aeaafd68ec402a5995509eba9b377319d2effe91c714dc3015"
+        },
+        {
+          "bytes": 465,
+          "git_blob": "b4ea01c47421e9fd17b6ffb0b1dc6c33f1f269b0",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/global/spells/567.lua",
+          "sha256": "c7812f75c9b12422b481c41cfb11e5a1eb7cf3e62aacde3d80701db8130389dc"
         },
         {
           "bytes": 114,
@@ -2296,6 +2548,62 @@
           "sha256": "dcac3fe241dc796431e406974fa0c38218d58a379252fa73c46da796ec754fc5"
         },
         {
+          "bytes": 4970,
+          "git_blob": "d0598dbd4d7dbb05cf65b90a6e98f74f59cd2324",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_por_maelin.lua",
+          "sha256": "4d0eb90ab9c43ebe6a35e76f93d6092c22727e1688d1f50577f5aa091a935860"
+        },
+        {
+          "bytes": 2267,
+          "git_blob": "77ae43935a4b998734dfab2cd1d2cf9a670710f4",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_por_progression.lua",
+          "sha256": "84903dd2443649cb43eba20a82b89c3b9e36c25d7e61b6aedf56dc6e49304fe8"
+        },
+        {
+          "bytes": 2056,
+          "git_blob": "9bde2eb4d572a9f1ec8d6a7d313469c28e8e5bf0",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_por_razorthorn.lua",
+          "sha256": "b71be2214bbf3dcff88820efc1714f679333d81101dbf3b469f72db2ff3f0f0e"
+        },
+        {
+          "bytes": 3781,
+          "git_blob": "89c336620085530ae2a52750708b88ddb7058c0f",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_por_scene_state.lua",
+          "sha256": "7d8593181314f852fd219a0b2176a6581b3fe5b8b12999cf3c7c62baa3cb7052"
+        },
+        {
+          "bytes": 10672,
+          "git_blob": "1b13c0616582fcf35121951ca0c5c8b53e8bd655",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_por_skylance.lua",
+          "sha256": "32f75efe0b7e135b84489a2e78fde3b7f20b722d4cee18739dca17c3722256b1"
+        },
+        {
+          "bytes": 2607,
+          "git_blob": "6fbb74efab6f7ee2f803cdac6fe518fc12a7ec43",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_por_sverag_trophies.lua",
+          "sha256": "4209cdd417b7b4fe13c8575404e34c269669bd3bc6fd0b10e34c6124348dc655"
+        },
+        {
+          "bytes": 3219,
+          "git_blob": "4c29066e259f6397322dbf6f4655dfe49a4c8098",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_por_takish.lua",
+          "sha256": "cf5c035781f997d429442f10f35c85d03549d4c34b6f45cbf5bcdd12cf58c685"
+        },
+        {
           "bytes": 105,
           "git_blob": "7042fa33e8bb5e5e1077b6e02570de095c9269d3",
           "kind": "quest_lua",
@@ -2310,6 +2618,86 @@
           "mode": "100644",
           "path": "quests/nektulos/v1/25414.lua",
           "sha256": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d"
+        },
+        {
+          "bytes": 279,
+          "git_blob": "34a4dc625ddcd4252394c1abfa0d7b7349d0e366",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/northro/player.lua",
+          "sha256": "bb476f493282d64486a9ca7b9c7b4f4004fed6f6077f523a9924180091f9e659"
+        },
+        {
+          "bytes": 628,
+          "git_blob": "f1da60a11857027b08aa562ccf91db2219a7483d",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/northro/v0/392045.lua",
+          "sha256": "223091471f14a4d2baab9d8c727b88e814a1a55ee9f96a2c5df08a40d2047e1f"
+        },
+        {
+          "bytes": 959,
+          "git_blob": "1fe857cc64f7e6a0fa5d1d912ecd8151d70b8e21",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/northro/v0/392088.lua",
+          "sha256": "bf3976570f4ce380ec2c63675bc46aa91b06717e575ba0a59f5d0f22a5a4849c"
+        },
+        {
+          "bytes": 7446,
+          "git_blob": "b46a7c9ced8ff2220962f0d65cb04eb642f81391",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/poknowledge/Grand_Librarian_Maelin.lua",
+          "sha256": "653ed5bebf2db85ee1d5907ef2a87d604f841eed60dc28a98bb57b5f46532ae1"
+        },
+        {
+          "bytes": 142,
+          "git_blob": "7c62e97810cb870c28db91cbe764bfadae0157c9",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/rage/v0/372099.lua",
+          "sha256": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7"
+        },
+        {
+          "bytes": 142,
+          "git_blob": "7c62e97810cb870c28db91cbe764bfadae0157c9",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/rage/v0/374001.lua",
+          "sha256": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7"
+        },
+        {
+          "bytes": 523,
+          "git_blob": "6ea4f9e7c5311145788d197f6d264e001119e0cb",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/rage/v0/player.lua",
+          "sha256": "2d374c28df4809f827a64b1ce6b0dd61aa753d71ecbd542db292989f8e3b747c"
+        },
+        {
+          "bytes": 188,
+          "git_blob": "45e762ed69cf188388990b6ef51169008b73654c",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/rage/v0/zone.lua",
+          "sha256": "49857af3e6daae87e3997c3858a6667c0831f96ecbf9f66a259d9e69dfbda63a"
+        },
+        {
+          "bytes": 457,
+          "git_blob": "de1a7ee76da4f142ce9990a91c8674730f595378",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/ragea/v10/player.lua",
+          "sha256": "56484b459a3addd5da48d8ad79bf0f3e7f18ba20fc30ff11199dcadeee1a006a"
+        },
+        {
+          "bytes": 97,
+          "git_blob": "82272919140949d197ff135e0861b3102db617c3",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/ragea/v10/zone.lua",
+          "sha256": "8ec5eb69d28be6351b8f792a08f6727a6ddb873a55851f670cfa8c1d2496737d"
         },
         {
           "bytes": 110,
@@ -2366,6 +2754,174 @@
           "mode": "100644",
           "path": "quests/shadowspine/v1/zone.lua",
           "sha256": "64090b9a661820e811f5b88165e9db83d809cc11831cf9c3150cf42d3ae9ca9c"
+        },
+        {
+          "bytes": 85,
+          "git_blob": "02cbfc2b061997af15fc6d45cd4060f264eba3b0",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v10/371002.lua",
+          "sha256": "6ced78c68c2083795245b0d56c034700b03653525873d2650ff2feb8ce2cb231"
+        },
+        {
+          "bytes": 148,
+          "git_blob": "3a23b6a5e6a611137b10100000acb4ad389eaa0c",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v10/371025.lua",
+          "sha256": "01c3c95a5ad8ddd627df67474b9d498e2d1e7581e0cb1906e3557e276333554c"
+        },
+        {
+          "bytes": 78,
+          "git_blob": "c62769c0580e085af27acfd456ce32c8af0ed47f",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v10/371036.lua",
+          "sha256": "4edac0903e7baf9b745c8f22a7e06e7cc8829cb9067de640e515bb4a01ca304c"
+        },
+        {
+          "bytes": 84,
+          "git_blob": "4b96246ca8e21bc31332ffcf3c4ed0f3fe9df09f",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v10/371037.lua",
+          "sha256": "66d09ebed7a05d823dac8077a1775cd269ccc153a09e497ad6bf09ee8f71e5c2"
+        },
+        {
+          "bytes": 148,
+          "git_blob": "913187ad7af3b631932e39ca1811eeab73142d71",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v10/371049.lua",
+          "sha256": "66b72d44d2da3f49fcdb2c7fe5988f4ae2ebbfa7b1a39a44f6e4ab448e1b852f"
+        },
+        {
+          "bytes": 259,
+          "git_blob": "1656cbeea8e581ae0e75214f8ef40e7ac1bc9762",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v10/player.lua",
+          "sha256": "dd055751c01f72075bfe8c25071fd3171a464ff7fe141404b98b5331212145ba"
+        },
+        {
+          "bytes": 85,
+          "git_blob": "ce2ddc00aab7659ac14771eb8f4a4db8640b3625",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v11/371002.lua",
+          "sha256": "618a89e54d19b9254fe53103255cf58dcd3120e55c754459e653e44f4eed13b9"
+        },
+        {
+          "bytes": 374,
+          "git_blob": "315128a0e9ed0defdb6e8ce09b8820eb4a9c6b52",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v11/player.lua",
+          "sha256": "a30b44311fab8e440e4b3afdbb4261b53ab39a2d8ae7f7827bb2a8df5e8d10ea"
+        },
+        {
+          "bytes": 89,
+          "git_blob": "3b00c66555b1ab8f5c6d44218f9a01ba2a86871c",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v11/zone.lua",
+          "sha256": "e1a021f233ae64cc10c205d35527cfd1c8f84b35a3f5630c828a5dbd7c1c53dd"
+        },
+        {
+          "bytes": 85,
+          "git_blob": "80b54dac52aec281f6e55b0a8ef0945a4f5364ce",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v12/371002.lua",
+          "sha256": "368a96f9c02c4e9ddd9ef8c4ad436c874bb245ea821dab5213666b49466b2222"
+        },
+        {
+          "bytes": 374,
+          "git_blob": "72923624ce05122eba9bcc42dd628e1c6d7cd59d",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/skylance/v12/player.lua",
+          "sha256": "ad1af362030b15409c50fa124d7dd170fc1c2af60b7f2a281acbacea111df209"
+        },
+        {
+          "bytes": 281,
+          "git_blob": "d9a9871209a3306d5223a64dccd52c9eb7a11dbe",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/southro/player.lua",
+          "sha256": "333ed4c0f7cc61a6d9d94950f9813d4551458827e1a6628d079f4d4d3e63b043"
+        },
+        {
+          "bytes": 410,
+          "git_blob": "602a4d3e099f78e54fe3afe10b8fdaf4e0061899",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/takishruins/v0/376056.lua",
+          "sha256": "e3f0b4be9e99fd20225b2250566beb091eae04f2c9e0a50d5ec503036539ea4c"
+        },
+        {
+          "bytes": 198,
+          "git_blob": "e3b82868e54de61e1903fd8268aff0182186fb0f",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/takishruins/v0/376081.lua",
+          "sha256": "8d7c3f4ab7dbe176d38addfcf9379dcf7ef8336a43830c2091a2200ac121c7dd"
+        },
+        {
+          "bytes": 107,
+          "git_blob": "45d7de9ae163badd0db7e0ff897e33c888e97ee2",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/takishruins/v0/player.lua",
+          "sha256": "5da7b27e3017d6f49c735b87f42f6acc4e8cd9e1b4160e4d223b326dfa450444"
+        },
+        {
+          "bytes": 531,
+          "git_blob": "7b1991101d0342cd3907b915a0ff74cebc993475",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/takishruins/v10/376961.lua",
+          "sha256": "4aceb6722d430c3216b422a206c62cbd6e336153435406bce34017a8ad908eb9"
+        },
+        {
+          "bytes": 268,
+          "git_blob": "67ef9dcebeec3d46a7878d01d358905de25b54e9",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/takishruins/v10/player.lua",
+          "sha256": "906a552529972ecb282d44fa800e487b79eff249135b2580255340629da3acce"
+        },
+        {
+          "bytes": 433,
+          "git_blob": "636694b190ed436fc3d7aea5a06b1346066fd023",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/takishruins/v11/376964.lua",
+          "sha256": "2a7010ff1b2e5b4169134be31f9ebc6eb5eb91afdd1478027f517924b6982c61"
+        },
+        {
+          "bytes": 172,
+          "git_blob": "9685d6ddab594bcbc3776727d63d5b3b1cbc731b",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/takishruins/v11/player.lua",
+          "sha256": "ab3adc964a1533fc17aff479f2b671c536a855c868439a9059ed3e55636813cc"
+        },
+        {
+          "bytes": 172,
+          "git_blob": "1be2ef0b4124c9394896e667eb59c91686e6f401",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/takishruinsa/v10/player.lua",
+          "sha256": "471392c5ee2ce74c058c29982953655f2e7e3553d9c54cc738981fc1c87d5bb4"
+        },
+        {
+          "bytes": 93,
+          "git_blob": "fd1a577407668df903c4737fdccb605522bccc0f",
+          "kind": "quest_lua",
+          "mode": "100644",
+          "path": "quests/takishruinsa/v10/zone.lua",
+          "sha256": "0c41c7a7acf163e6132b74d652feab84134fd3997f61bebb9e5d74aeb6f77ba9"
         },
         {
           "bytes": 112,
@@ -2792,854 +3348,6 @@
           "sha256": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
         },
         {
-          "bytes": 193,
-          "git_blob": "f35b4e060f125e1df71647be63ff193a5dcbe85d",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/corathus/v0/365284.lua",
-          "sha256": "d27458332c3ac9c3155fa99a7fa8da556c42c9ae42ad54fc8c38b7173a85a25c"
-        },
-        {
-          "bytes": 734,
-          "git_blob": "fb546d2f29d37f0afa41094f1b5091ccd062dfcc",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/corathus/v0/365286.lua",
-          "sha256": "73ad3b7dfdcb00bc9e834a2e549774bceb4f08bc1f02f532de0b8cbb14b210df"
-        },
-        {
-          "bytes": 310,
-          "git_blob": "8aad27197ffb7d577d7163063e64f9b9e245cf3e",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/drachnidhive/v5/354311.lua",
-          "sha256": "8f09968891b8b5688f63324e08b90a94e5020c91e4a80b4d2e01494c79b01bcc"
-        },
-        {
-          "bytes": 155,
-          "git_blob": "8449ec64cd1fdb7e36603042df77d049a14f9215",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/drachnidhivec/v1/357014.lua",
-          "sha256": "51d3bb8e9c5edb13b339fcad3ecef1fbc88c80d22e321fe2f0660e5473f2d819"
-        },
-        {
-          "bytes": 171,
-          "git_blob": "f3e94fbc2ce6a2772f05a2a54fe23744d278502e",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/drachnidhivec/v1/357015.lua",
-          "sha256": "b22799f1cf3e06cb5257bff4fbdfc2fccf5390041a5d8531ba4aeaa60f8d4525"
-        },
-        {
-          "bytes": 171,
-          "git_blob": "f3e94fbc2ce6a2772f05a2a54fe23744d278502e",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/drachnidhivec/v1/357016.lua",
-          "sha256": "b22799f1cf3e06cb5257bff4fbdfc2fccf5390041a5d8531ba4aeaa60f8d4525"
-        },
-        {
-          "bytes": 107,
-          "git_blob": "ea99f1e8e29c7317487cfedfaf7ec2cf9839d2ce",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/drachnidhivec/v1/player.lua",
-          "sha256": "e399da9803753601f5ab072465e9530375766fe59fc2ce8b59dfcf67a8d947b7"
-        },
-        {
-          "bytes": 107,
-          "git_blob": "4e76a60e33359a8bb04c71bbfd23da12c59c57f1",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/drachnidhivec/v1/zone.lua",
-          "sha256": "740dc2fe6f585d4a987222113d4f644b11ec4d87695ef9d68610125fa614e897"
-        },
-        {
-          "bytes": 100,
-          "git_blob": "825f583a5ccf4018f5d1cd4dcf7fd9eea1df78b7",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351012.lua",
-          "sha256": "a977b569916beba2c671199d8d9370f9f3435e43c9c711bace126b9ae1f28b14"
-        },
-        {
-          "bytes": 4891,
-          "git_blob": "7d4a220f09be48a92c54e05d6c409281c6f72ab3",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351015.lua",
-          "sha256": "7b7ff5ce9aba483fe69dc4aed7e6a13282f003640d36e9b5f7c6249570eae6bd"
-        },
-        {
-          "bytes": 3429,
-          "git_blob": "ad4555e3276257579bf923a4acf63c855da7778e",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351030.lua",
-          "sha256": "fcbe6af02d52d48c66a82bd1032d5bbdc30754e646ac8acae8243c1ea0b9f09d"
-        },
-        {
-          "bytes": 298,
-          "git_blob": "e60fdd354c4e8f2410086c99b93dc00aaafc3953",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351033.lua",
-          "sha256": "777b1bccf4fff0a833dc0732766a5a9a504b144506b289686dbea743a9b0d378"
-        },
-        {
-          "bytes": 182,
-          "git_blob": "e81a93f11f37a2e62994d44c1dd2a9effc38d7a0",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351034.lua",
-          "sha256": "d8253847bdad16fc594316873007eb048d803ae5148558f7ccaebc8531c25619"
-        },
-        {
-          "bytes": 3092,
-          "git_blob": "206d2cacdd8e5ee5c4e0a2c301ab49d56e982345",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351072.lua",
-          "sha256": "2dc5a68531bc579f9dcb62ce2ab85c5d2a3f334240b6c3bc2b32186d0e7e212b"
-        },
-        {
-          "bytes": 568,
-          "git_blob": "40e29e4fa0e2420c9341233616520950e31b5e23",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351087.lua",
-          "sha256": "cd341bbe1b4b6e70458ff8168359b8a0ee40b881a623d3daa19ddd3af704e457"
-        },
-        {
-          "bytes": 107,
-          "git_blob": "16c002c4ad8a174437ec439184098cb23f87b7b4",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351096.lua",
-          "sha256": "0b9ca62ca9426528a32253442a6712e3443d1c084a5172796f247e159016e520"
-        },
-        {
-          "bytes": 3717,
-          "git_blob": "3ba77002ec41e03b4a9b7cbe48418ecccd809e44",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351107.lua",
-          "sha256": "7c2900d75850e7b4d74f6f9cfca689fa1a40605dbbd091b8839ea44b088a5197"
-        },
-        {
-          "bytes": 327,
-          "git_blob": "ffe522eda9703f1f739a89fb84366a3a7c9bd32f",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/351108.lua",
-          "sha256": "af30b3de72c67373328faceb11afa9fdcafd44fdf79b1384691de73afb07db5d"
-        },
-        {
-          "bytes": 158,
-          "git_blob": "b684f7d82bfa5dd0643c8a2f01b11cb7ca27fe12",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/encounters/rof2_dodh_public_key_events.lua",
-          "sha256": "706e961af42e3354358a036f36b39caa21689615b9d200bae3162fcc3877df0a"
-        },
-        {
-          "bytes": 631,
-          "git_blob": "1b59113d19dc948612292c14e2528f0d51f95677",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/player.lua",
-          "sha256": "345fac4c88240441f63abf0b12feee0e04ecd5001b40b93a30b033976a09f04c"
-        },
-        {
-          "bytes": 229,
-          "git_blob": "ce1cd107f4d2d23be6ca0b2ec843a3d84e1a7ff3",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v0/zone.lua",
-          "sha256": "7f80bf8af6145eccbdb70ed4de7c5f3efd0111a4c4bb98cf53af0b173cc3967b"
-        },
-        {
-          "bytes": 283,
-          "git_blob": "99a1a22501840594ce2f6724133f5b6a2052b919",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v1/351174.lua",
-          "sha256": "3ee40b55630f40dc7dc32fc2951328b0b329580464b67e9b5f3e87a542819c6b"
-        },
-        {
-          "bytes": 283,
-          "git_blob": "99a1a22501840594ce2f6724133f5b6a2052b919",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v1/351175.lua",
-          "sha256": "3ee40b55630f40dc7dc32fc2951328b0b329580464b67e9b5f3e87a542819c6b"
-        },
-        {
-          "bytes": 283,
-          "git_blob": "99a1a22501840594ce2f6724133f5b6a2052b919",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v1/351176.lua",
-          "sha256": "3ee40b55630f40dc7dc32fc2951328b0b329580464b67e9b5f3e87a542819c6b"
-        },
-        {
-          "bytes": 1479,
-          "git_blob": "3e36ec515217dbbf33d843930b5e70794cb5dc16",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v1/encounters/rof2_dodh_demi_raid.lua",
-          "sha256": "e5f5585dde7751452d3d1263b1b8dcf46f86232433318c0a14e2f2aba939fc21"
-        },
-        {
-          "bytes": 404,
-          "git_blob": "526f8f106b452eea2960b788243a2eca20f357fc",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v1/player.lua",
-          "sha256": "5a06d9742bc3429e9c649425707efea9e0218421b74fdb546b4af7828cfbedcb"
-        },
-        {
-          "bytes": 219,
-          "git_blob": "c08a56df3707242f4bbe2e8132bece5287b92960",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/dreadspire/v1/zone.lua",
-          "sha256": "65de1801d8b795cb0f587309758f8496ca2c7eeab0cb42289f553097a9131e74"
-        },
-        {
-          "bytes": 102,
-          "git_blob": "92694f98a16a14a03f90ab4a402434c9afe54bb8",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/eastkorlach/v0/362037.lua",
-          "sha256": "29c2a4841f9ea2583d3250e32227d3a10d35dae5b3da1a81123bd4707d1f1891"
-        },
-        {
-          "bytes": 332,
-          "git_blob": "2fbb513abf15c4f6bb3f56f8ef2bcf53d675ee6b",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/eastkorlach/v0/362108.lua",
-          "sha256": "a2e46eb4a580d73ba4e9927451373a50a94196fd601b461b72240585c9cd31f5"
-        },
-        {
-          "bytes": 332,
-          "git_blob": "95fabf4ec6185809ea6c3a9f5c82e2e6e69cbd3d",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/eastkorlach/v1/362313.lua",
-          "sha256": "a642cad0a419134affd2ec00145babf111dac14b0647e3e9424aa0fa8d7ef26a"
-        },
-        {
-          "bytes": 103,
-          "git_blob": "0ae031eefbacd591d77d3031f3336ceb1294260b",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/eastkorlach/v1/zone.lua",
-          "sha256": "c96a59e8d4aa6994044873be8cd2f06701c4e511400264c615b4181038f08dad"
-        },
-        {
-          "bytes": 157,
-          "git_blob": "4c742ff11034911f11c540bef967e477e2024a29",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/eastkorlacha/v2/363049.lua",
-          "sha256": "5e6c7831f0ab2f0d86ac40b9829616e66aa6af5f29544c92b86df762ec6c51e5"
-        },
-        {
-          "bytes": 173,
-          "git_blob": "0e3b98005fc7485e3dd5b7c3335132a2c43a131e",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/eastkorlacha/v2/363050.lua",
-          "sha256": "4b3759da5d5b454d3fbfb8499b163ae5487f8eec5692a7a3913879363f7f77e8"
-        },
-        {
-          "bytes": 108,
-          "git_blob": "1607f4687b9be4b1a340c9db88ccd3d62049c0e7",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/eastkorlacha/v2/player.lua",
-          "sha256": "20f008db092999361bf76153c2be5b5af7df69e6544933401f2663684307739a"
-        },
-        {
-          "bytes": 108,
-          "git_blob": "650aeb241a4f81c5709d4a25c903d53f34ba3114",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/eastkorlacha/v2/zone.lua",
-          "sha256": "762b8da1456bbf5608383a3a3f72fc0426402f9cd8ab165a4ea8d4f068a7c462"
-        },
-        {
-          "bytes": 167,
-          "git_blob": "1a8e7c35fd2f4a3bceabc090fde3d2a4ad1f77be",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/illsalinb/v1/349030.lua",
-          "sha256": "9f76bfbf0c0d4b7fd5566b1557b3e86c543ffdd8c74416de192cfb061d11fb7e"
-        },
-        {
-          "bytes": 256,
-          "git_blob": "6a63430aedd9039705b075249fe01536b035899e",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/illsalinb/v1/349031.lua",
-          "sha256": "f5ea96819a81624cea2af586fb18759f2a8891bd645a155918deb77c2a290b7c"
-        },
-        {
-          "bytes": 96,
-          "git_blob": "6b5dc19d71c47b9a96838d54217923cb06253c42",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/illsalinb/v1/player.lua",
-          "sha256": "1cf60f868c3f3461c4b50f7f859cab5ffa9a282c502981a8c0a7b7e2bd1921ce"
-        },
-        {
-          "bytes": 96,
-          "git_blob": "0b039699f4895086bd4ef688c8acc5427ae52003",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/illsalinb/v1/zone.lua",
-          "sha256": "02f22ead447a03012de10ed83dee91f0aab8d6c429c62eaf07bf252fd65ab4bd"
-        },
-        {
-          "bytes": 155,
-          "git_blob": "89b2821e76f0af13c80382e79ef822cd4d0cbfd6",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/illsalinc/v2/350041.lua",
-          "sha256": "f333f8bccc44a7d86ac7301319189d7d4b8bcbff205b3117edc626ea220fdb38"
-        },
-        {
-          "bytes": 171,
-          "git_blob": "b78ccda8ddfa1b001b3d4da939d5a4807c0cdae1",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/illsalinc/v2/350051.lua",
-          "sha256": "05944012da62c8cc74117cf58c04be335e1337646d4f1a1134081737540b4de8"
-        },
-        {
-          "bytes": 107,
-          "git_blob": "6a313c3ab1c6ef544a558ead8964cc555900cd50",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/illsalinc/v2/player.lua",
-          "sha256": "c9af295e98a23fc0e291acbfd227f51ac43f05440d78e60b687f1d43c28f2438"
-        },
-        {
-          "bytes": 107,
-          "git_blob": "71e5d8f12d8ee5886bcb3cef7f61c028b158939c",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/illsalinc/v2/zone.lua",
-          "sha256": "fdd9b1a98f96dbaacc7c0f19cc41e27d3d3484dc2ad52249d98de82ecc3f4a63"
-        },
-        {
-          "bytes": 2135,
-          "git_blob": "3b268fea82d04b937719bcf6efc1f13f8953d0f9",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_blood_definitions.lua",
-          "sha256": "f459e0c8d4e64945a4fae03c2059636fe4b20c6560cd5cf8f6557a3b0d86ab60"
-        },
-        {
-          "bytes": 20535,
-          "git_blob": "d2760a52804c10fff307625a584ad58e1f988c9e",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_blood_mechanics.lua",
-          "sha256": "8eeb1416f3bddfe4c079733aab4f094d2e471ac25332ead442f11fcedd07b01e"
-        },
-        {
-          "bytes": 7198,
-          "git_blob": "81708cb2037ed1212f1b4c5e5bca816f03882ba1",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_blood_raids.lua",
-          "sha256": "2f0f5120aae37ce6f6f72cafd12d5a4d12492b00d2956b801bca0a2b3acc8507"
-        },
-        {
-          "bytes": 9403,
-          "git_blob": "82d1454f1f688f594ff577c067cce38f2ffa3d75",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_council.lua",
-          "sha256": "542344aa81e9131422b27a47fe12c804bd839c5ef7a3903833925b6d887da4a1"
-        },
-        {
-          "bytes": 4846,
-          "git_blob": "b38e7895946792873cc679c1503d9e5e4793d170",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_admission.lua",
-          "sha256": "2e9fdfe6071c5cca13f5b17ba4f5594a52f411c49f87b044f7e61fbda4dd2062"
-        },
-        {
-          "bytes": 3275,
-          "git_blob": "271636316fa4b1b57d085f58bbbb6c34f0fa40f5",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_chest.lua",
-          "sha256": "d909120b1d5071c2b3e4eeaaf8c3df5e3cb81362c183b9bc5a7714998607d206"
-        },
-        {
-          "bytes": 8139,
-          "git_blob": "3afe43530a1caffc7a54f0d3903208562e95d901",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_controller.lua",
-          "sha256": "211ee8082d0d5cab4b59b3d59daaef92691b3d7d5b6a5a6624b100655a1b6429"
-        },
-        {
-          "bytes": 457,
-          "git_blob": "c191f23bba583379b3180ca1f4eb6f1327d6b012",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_instance_routes.lua",
-          "sha256": "0ef2dcd1270640dc5e65acb909148c3be9198852a6fa894bdf424c558b151523"
-        },
-        {
-          "bytes": 3386,
-          "git_blob": "118b71b8e4a1af3c046f26f921fe4f399a08e633",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_layout.lua",
-          "sha256": "bdddfacb24cd59cf2b8bcf631d5051834e4e43d9186a89fe8469b62ca3287e27"
-        },
-        {
-          "bytes": 9166,
-          "git_blob": "2d24c7b76eb931730edcd6933abe4c96c9b4de5c",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_mayong.lua",
-          "sha256": "39581cc3d46c551f447d646b7bd6e3b2a194a42f0638d704fc5fac19dab61cfd"
-        },
-        {
-          "bytes": 1450,
-          "git_blob": "cedd602c6dd4086597c4f9f64d57e5ac77691cac",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_rewards.lua",
-          "sha256": "a7875cd115fd3d4ff2539b9d1869cecfc741eaed7141c0d70b1226dfc51139f7"
-        },
-        {
-          "bytes": 1757,
-          "git_blob": "2b841c1724194ee521e3b5e3b795b20a717253e9",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_spirits.lua",
-          "sha256": "964699a1fe736974accd38c72b00c659176464dd5619be030e2c361d51bc17fc"
-        },
-        {
-          "bytes": 11536,
-          "git_blob": "5a3c5a204ec395b1fd65853d3490ebda5b815a40",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_tier_one.lua",
-          "sha256": "0e728d0f9e462d04289bf1b44b8e55c25b286c6247ef403a34acc5dab722c70b"
-        },
-        {
-          "bytes": 24503,
-          "git_blob": "fa11e58139196c2db065d05103f549c850037d81",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_demi_tier_two.lua",
-          "sha256": "0ed65a5eaa9f5e486fb2a12c0ea9d9b26bed2d640138af835d9db11a36917944"
-        },
-        {
-          "bytes": 551,
-          "git_blob": "91b182062f7d3496b27e22e1d5c5e2bab75fe4d4",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_dreadspire_keys.lua",
-          "sha256": "177c736a8632dea1fe253b1c570b7e612de64fbfa008bca55be5aa8102e99c3d"
-        },
-        {
-          "bytes": 4371,
-          "git_blob": "ea567db74182e0e8fa2a0582b24bda83739830d5",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_poisonmaster.lua",
-          "sha256": "87dc7a3aa90353ec813eeec6e15c9390cb562730c5655e1e5eb8849bfa4b2f04"
-        },
-        {
-          "bytes": 477,
-          "git_blob": "58233d9a3b2e0494846eaf44b7bfae784e764e75",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_poisonmaster_bindings.lua",
-          "sha256": "def5df99caa60b35419ffd98436c72d23333468d45bf40b10bd2d80fc637f8b3"
-        },
-        {
-          "bytes": 2548,
-          "git_blob": "8ceb961c92449ff5bd098ab711b9406cd36a28b0",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_prellius.lua",
-          "sha256": "53579bce27b1f1e4e519556c6c190e0e0387d506ac281eb7c458e7f012f208f6"
-        },
-        {
-          "bytes": 183,
-          "git_blob": "3176248174a8c90a15d86623011b596f0b7f0e9a",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_prellius_binding.lua",
-          "sha256": "4c8d45e7eb5d95b24b32a8682ce1c76c087ddc3de594b025192b490e65626177"
-        },
-        {
-          "bytes": 3281,
-          "git_blob": "bfc6f5f307a06c3c9386291edc45e05179c0cb6d",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_public_blockers.lua",
-          "sha256": "ceb88c6eb21f7cc1e9b72f6729047830e797a2c1f510dc27caa7bda7db26549e"
-        },
-        {
-          "bytes": 231,
-          "git_blob": "316ea88e4b2fb8ebc4fb91c07e1d84fa2b11ee01",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_public_key_bindings.lua",
-          "sha256": "eeebd12736cd5e36e731c63bd86fcda1fd1b894703aec9d54fc1ac2d1b900788"
-        },
-        {
-          "bytes": 13747,
-          "git_blob": "9d8707252e9dfbcb1bc49cba4bbcc6a4a69566c6",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_public_key_tasks.lua",
-          "sha256": "8c6edfe9e914a20bec65f8c985d3ba43e6b0fc7d6b7ce1e2fea78d3a5f8468dc"
-        },
-        {
-          "bytes": 383,
-          "git_blob": "641418efb5c9086e12b8c644930e1621fcfbdb47",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_raid_ids.lua",
-          "sha256": "83fdc4f7324301506cf72afa743ef09513687c6d1a8ba3719ee4314ee6cee0e0"
-        },
-        {
-          "bytes": 869,
-          "git_blob": "d3daf2169faba0f11725dbb5e3f794de862c1294",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_raid_npc_bindings.lua",
-          "sha256": "b84ec83d458ee3f05b5b19482619049ddc1734dc79cb9be18595f65db09cac39"
-        },
-        {
-          "bytes": 3124,
-          "git_blob": "d5e654a442e60b3a5be16d4ee81ed6587ac65e2a",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_raid_progress.lua",
-          "sha256": "94d62087abd87d1e87022054280a8bb4e2409d837b073f3d635a7d16c1eff074"
-        },
-        {
-          "bytes": 3886,
-          "git_blob": "68d2a3826a472b8f5bc327dccbbac62b669ae01d",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_raid_runtime.lua",
-          "sha256": "87d383236a80e5b789d6ad00d65e4a4af1c07bc04472d1634796eeb4355a87f2"
-        },
-        {
-          "bytes": 6529,
-          "git_blob": "b150342091ff1011dd572a991e6ff658f4c5a8b8",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_sisters.lua",
-          "sha256": "ed8fcab0efd8cff1093575b450a96b9c675a9dab8e7d2b731daf40f56116dd75"
-        },
-        {
-          "bytes": 8888,
-          "git_blob": "5c8ebf9a1dae6d63b24dff2475e5564656255cd2",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_trailing.lua",
-          "sha256": "a0d7d4ee2906214568ec5a152b50ab14e9b0e7f79e33ed7957ff74486597f945"
-        },
-        {
-          "bytes": 8037,
-          "git_blob": "cc5c1fff7c0c3f905ed31b86b3c3b915bcd6bd89",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_vule.lua",
-          "sha256": "a06b6fee9f491a6b3f15ddae9b3e7ed4c4dd6f7ddf2db22ac1ea891b1e661755"
-        },
-        {
-          "bytes": 3341,
-          "git_blob": "6080d31a9cfeb8a24b6f7724ad0baca8739fdc2c",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_widdlethorpe_routes.lua",
-          "sha256": "ed8fea190bbd4a694d45546421d31757f8e9e427225c62d91cd0e28c77285d4f"
-        },
-        {
-          "bytes": 11242,
-          "git_blob": "0bfff09514f510f7bf5019f96a3d7103d87183d1",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/lua_modules/rof2_dodh_widdlethorpe_scene.lua",
-          "sha256": "eea4c6507ae0c5000520e84bb93ae9556b0135fdc71cb815cf33d9988547bef7"
-        },
-        {
-          "bytes": 105,
-          "git_blob": "7042fa33e8bb5e5e1077b6e02570de095c9269d3",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/nektulos/v0/25920.lua",
-          "sha256": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d"
-        },
-        {
-          "bytes": 105,
-          "git_blob": "7042fa33e8bb5e5e1077b6e02570de095c9269d3",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/nektulos/v1/25414.lua",
-          "sha256": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d"
-        },
-        {
-          "bytes": 151,
-          "git_blob": "f8cb0cad1cb2396ea237e651c2b4d6c82f6a2d27",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlach/v0/358051.lua",
-          "sha256": "745276da038894ec8fe31b3b5c945f083e3652507dab48cbee6819e25b99d6ef"
-        },
-        {
-          "bytes": 103,
-          "git_blob": "61b0d2acf9c83e1e740bf6227abd75993b10c718",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlach/v0/358058.lua",
-          "sha256": "d804a69d18ecb3e1601a98a6922261b8a71246e8f876bf45522168d410f6b293"
-        },
-        {
-          "bytes": 100,
-          "git_blob": "01a57d86543616a5ec00026d24cb1f72414c290c",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlach/v0/358059.lua",
-          "sha256": "a79b94d6bccf7106b7599950e43a18d1379f325779858dd61e126799280dd104"
-        },
-        {
-          "bytes": 610,
-          "git_blob": "6659242c27e94fe2c7df31c2c83c3fdd20ffd462",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlach/v0/358123.lua",
-          "sha256": "1e64c9669ed6ce03368f022593e66cf9eafd1d68df07bdc0ea200a1ccbab4952"
-        },
-        {
-          "bytes": 110,
-          "git_blob": "849e7498c828969b14527ff872a81e3322532102",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlach/v0/encounters/rof2_dodh_widdlethorpe_entrance.lua",
-          "sha256": "b0556f1e01b195c1631de381201b83d893e2887722bfc7ec1b8e7b451b9b88be"
-        },
-        {
-          "bytes": 279,
-          "git_blob": "252f2978b84b0d97c8c96c336729cdca7508a7c6",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlach/v0/player.lua",
-          "sha256": "ac1485d7668d525d38f8381c15d5881820338c1b83a4d248c2827913c3694c4f"
-        },
-        {
-          "bytes": 151,
-          "git_blob": "1fe53976fcebbc64dc459311b78c0e317d9ce601",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlacha/v3/359031.lua",
-          "sha256": "ac44f9a83bb3f769b9a5d942a8efe78b386b9c406d007dd8380282538a76d0cd"
-        },
-        {
-          "bytes": 167,
-          "git_blob": "1cfc1700bdff1f13056e86023ae7833239f5c9b9",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlacha/v3/359037.lua",
-          "sha256": "205f8bd5f0f86a4e94e34f980e69500c1c9f19b75927f8eff20f1d049d72395d"
-        },
-        {
-          "bytes": 167,
-          "git_blob": "1cfc1700bdff1f13056e86023ae7833239f5c9b9",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlacha/v3/359038.lua",
-          "sha256": "205f8bd5f0f86a4e94e34f980e69500c1c9f19b75927f8eff20f1d049d72395d"
-        },
-        {
-          "bytes": 167,
-          "git_blob": "1cfc1700bdff1f13056e86023ae7833239f5c9b9",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlacha/v3/359039.lua",
-          "sha256": "205f8bd5f0f86a4e94e34f980e69500c1c9f19b75927f8eff20f1d049d72395d"
-        },
-        {
-          "bytes": 105,
-          "git_blob": "d177cf8df725fe7d3a8ede0989e1c80d14c09711",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlacha/v3/player.lua",
-          "sha256": "51b8e2d5fc9c74601c666bbe33c10f76c5e4dbd9b3b3fc1d55907a90135ce56d"
-        },
-        {
-          "bytes": 105,
-          "git_blob": "b5c433863baf5da2fb63fc92de633132cb40a9d9",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlacha/v3/zone.lua",
-          "sha256": "6cf86ec7f49a2f1901a0ff8706d11949d2a24bfce2959350444ec9238f53ee90"
-        },
-        {
-          "bytes": 97,
-          "git_blob": "1a6071cf6b851c897b335c2f0372df8084c513f3",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v1/361031.lua",
-          "sha256": "037a61715af745e6692ca04e7e7a90a793d58b114bbab210e2554f2249cedc2f"
-        },
-        {
-          "bytes": 190,
-          "git_blob": "21d4703d966f0fec1cc1b7b0a18199f2b5e03303",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v1/encounters/rof2_dodh_widdlethorpe_scene.lua",
-          "sha256": "5c0f6faf470bc156e3851a42f35d12f0ac394431a67a95d4544342aaa5a51abb"
-        },
-        {
-          "bytes": 149,
-          "git_blob": "c3a193e2b42197934188431a3f016421ce5e643f",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v1/player.lua",
-          "sha256": "2884413f1b2c56c75dc9aa3fc9c3a51eb64f908685b747a06ad607821d3c5755"
-        },
-        {
-          "bytes": 155,
-          "git_blob": "b726fd6345e5e18a27a85750f3bc1e2a6b06b699",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v1/zone.lua",
-          "sha256": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
-        },
-        {
-          "bytes": 190,
-          "git_blob": "21d4703d966f0fec1cc1b7b0a18199f2b5e03303",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v4/encounters/rof2_dodh_widdlethorpe_scene.lua",
-          "sha256": "5c0f6faf470bc156e3851a42f35d12f0ac394431a67a95d4544342aaa5a51abb"
-        },
-        {
-          "bytes": 149,
-          "git_blob": "c3a193e2b42197934188431a3f016421ce5e643f",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v4/player.lua",
-          "sha256": "2884413f1b2c56c75dc9aa3fc9c3a51eb64f908685b747a06ad607821d3c5755"
-        },
-        {
-          "bytes": 155,
-          "git_blob": "b726fd6345e5e18a27a85750f3bc1e2a6b06b699",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v4/zone.lua",
-          "sha256": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
-        },
-        {
-          "bytes": 158,
-          "git_blob": "7eed81d44246052017b2e0a33bc854d34cfb8f06",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v5/361086.lua",
-          "sha256": "15e2e8b747e52fa09687faa9f132e6fce28bdac100460c29ac7b4aa52db47cc4"
-        },
-        {
-          "bytes": 97,
-          "git_blob": "1a6071cf6b851c897b335c2f0372df8084c513f3",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v5/361087.lua",
-          "sha256": "037a61715af745e6692ca04e7e7a90a793d58b114bbab210e2554f2249cedc2f"
-        },
-        {
-          "bytes": 190,
-          "git_blob": "21d4703d966f0fec1cc1b7b0a18199f2b5e03303",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v5/encounters/rof2_dodh_widdlethorpe_scene.lua",
-          "sha256": "5c0f6faf470bc156e3851a42f35d12f0ac394431a67a95d4544342aaa5a51abb"
-        },
-        {
-          "bytes": 149,
-          "git_blob": "c3a193e2b42197934188431a3f016421ce5e643f",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v5/player.lua",
-          "sha256": "2884413f1b2c56c75dc9aa3fc9c3a51eb64f908685b747a06ad607821d3c5755"
-        },
-        {
-          "bytes": 155,
-          "git_blob": "b726fd6345e5e18a27a85750f3bc1e2a6b06b699",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v5/zone.lua",
-          "sha256": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
-        },
-        {
-          "bytes": 155,
-          "git_blob": "c02bbba0bb4b15d967d13f176977d5df7ce1172e",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v6/361116.lua",
-          "sha256": "ad5bdefaf2f3cbb6606bbb1d731aea5d0b260671e34d4c3bdd3bdb6f5f21d62f"
-        },
-        {
-          "bytes": 97,
-          "git_blob": "1a6071cf6b851c897b335c2f0372df8084c513f3",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v6/361117.lua",
-          "sha256": "037a61715af745e6692ca04e7e7a90a793d58b114bbab210e2554f2249cedc2f"
-        },
-        {
-          "bytes": 97,
-          "git_blob": "1a6071cf6b851c897b335c2f0372df8084c513f3",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v6/361118.lua",
-          "sha256": "037a61715af745e6692ca04e7e7a90a793d58b114bbab210e2554f2249cedc2f"
-        },
-        {
-          "bytes": 190,
-          "git_blob": "21d4703d966f0fec1cc1b7b0a18199f2b5e03303",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v6/encounters/rof2_dodh_widdlethorpe_scene.lua",
-          "sha256": "5c0f6faf470bc156e3851a42f35d12f0ac394431a67a95d4544342aaa5a51abb"
-        },
-        {
-          "bytes": 149,
-          "git_blob": "c3a193e2b42197934188431a3f016421ce5e643f",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v6/player.lua",
-          "sha256": "2884413f1b2c56c75dc9aa3fc9c3a51eb64f908685b747a06ad607821d3c5755"
-        },
-        {
-          "bytes": 155,
-          "git_blob": "b726fd6345e5e18a27a85750f3bc1e2a6b06b699",
-          "kind": "quest_overlay",
-          "mode": "100644",
-          "path": "tools/release/quest-overlays/oceangreen/westkorlachc/v6/zone.lua",
-          "sha256": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
-        },
-        {
           "bytes": 22673,
           "git_blob": "0e2f76e13b1469546fc76958417618d6449f95e5",
           "kind": "opcode_asset",
@@ -3792,12 +3500,12 @@
           "sha256": "f4d2d15fee8f87317ec79ae531b23e1577a749c795b4ea10c12d7e9d14848d55"
         },
         {
-          "bytes": 343,
-          "git_blob": "0045c9e61add353424ce651de10bd7af05020849",
+          "bytes": 384,
+          "git_blob": "af69b7379e0c5f9cd85b0f0654a86340860df295",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/dodh_exchange.h",
-          "sha256": "ae699bcb7bcbcdc054f23c05629808c8abf4ec3e3413a74e7d39edadfeff177c"
+          "sha256": "f7a3450bb89de3bc1f9f899af00f8daef64db553e7a971e5d0b2b86434701596"
         },
         {
           "bytes": 7355,
@@ -3928,12 +3636,12 @@
           "sha256": "bb337b9bdb9a73bae8d097529bf73f7a96124d16300e108a8fbe373900f970b3"
         },
         {
-          "bytes": 103582,
-          "git_blob": "09f52f08210796dc5a8f5b65b2227f9879aa869e",
+          "bytes": 105491,
+          "git_blob": "b9b446ed073397c3f8b63ff17f4c95e08d337ca9",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/kithicor_poison_trade.inc",
-          "sha256": "5a0e9a06b219933eab91515ce1ecb8322e4ea28ec67c05a2b5eb2702b6398cfc"
+          "sha256": "3a42861f8fb58f11605c0d1ac067764cd2f46a76b044bd87c05e01fdaa1c1362"
         },
         {
           "bytes": 192593,
@@ -3992,6 +3700,14 @@
           "sha256": "136a03fe95feee44530e86770209ccdda456b486ae47740d72b4ab407d3f3254"
         },
         {
+          "bytes": 1517,
+          "git_blob": "827683ea1cf70655544a35edbb5dd90bbc39af94",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/por_group_admission.h",
+          "sha256": "b5bf5add3734f538caa52afd0db858565ef906cac2f1ae0b1d85e7b75e7b97a9"
+        },
+        {
           "bytes": 18621,
           "git_blob": "584b362a5f91c896090ece7c0fe74d6d0c98964c",
           "kind": "native_source",
@@ -4016,12 +3732,12 @@
           "sha256": "1a3b6b28456954142aefcb63bab132662e9bfc3e1e08b63f1aaf4d59ba3e08a9"
         },
         {
-          "bytes": 153237,
-          "git_blob": "03012d26e06ea12ab7e66e7aee141ed18b37a98c",
+          "bytes": 153650,
+          "git_blob": "bf62abca1546f10145436be23c40a05fe999af37",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/task_client_state.cpp",
-          "sha256": "6a78606594afe887e647b81307db029bfec077f0f9dfb30d2c656874e4487ee9"
+          "sha256": "28e205ecdb16c8257db681c3d445a11ca4c30baabb1d67a7469e6f52868fa81c"
         },
         {
           "bytes": 75301,
@@ -4040,12 +3756,12 @@
           "sha256": "9db955761d5e48cb1d35d812bc35e105fae1d7a52a3a41ef3ea9a60b94e72300"
         },
         {
-          "bytes": 122326,
-          "git_blob": "e6c7e339ebffb2415e7612c22a77c32ce627f4e1",
+          "bytes": 122409,
+          "git_blob": "cb807b9298469b66f7708111db6324b113a3e9af",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/trading.cpp",
-          "sha256": "546da570448aec463a20af75e7b79d926c3b62b2c95461bd3a97bc9f7e5010ad"
+          "sha256": "72e879171acc1a122260c42e1da832e23d83ab5fa82dd0f734036b663c6439ed"
         },
         {
           "bytes": 92746,
@@ -4072,96 +3788,20 @@
           "sha256": "a350784df366bc03211fe16771e9c8380d312f29488304c84833718deb7f5ff1"
         }
       ],
-      "source_manifest_sha256": "75a37d7cb622456c3bdf18cf6017e96044c353baa1970f47439b95339b306665"
+      "source_manifest_sha256": "cbb446ca6eb3d3bdae3aaa55b5bed5d4c5c4c8c6b5321d314f007d662094c90f"
     },
     "database_repository": "nightstalker6669/EQEmu-Database",
-    "database_source_capture_commit": "25b26fb5d16405bc5613d10cfc36dc34be330b85",
+    "database_source_capture_commit": "2493a57a813dfb844c39df5648032494ccdd8e1a",
     "existing_volume_upgrade": {
-      "append_only_client_inputs": [
-        {
-          "file": "client-data/rof2/spells_us.append.txt",
-          "records": 3,
-          "sha256": "428a6b92ba8887c8d117746c2f9bc192a6429b7fd2c6c46438005442b351b7d6"
-        },
-        {
-          "file": "client-data/rof2/dbstr_us.append.txt",
-          "records": 15,
-          "sha256": "71f93726675b66a45496e61f42994a691ab6663a326f92497627d37f6f42dfec"
-        }
-      ],
-      "backup_required": true,
-      "baseline": {
-        "asset_sha256": "c633b37b102d7f49f57bd794b3de29b38d74e19aded0bdf97b629a4468ce43e2",
-        "database_commit": "25b26fb5d16405bc5613d10cfc36dc34be330b85",
-        "full_sql_sha256": "dce7e0630c0bb99b0619fbc000df00e32112f3a31e5e7b9bae5310a8cd3ddc93",
-        "source_release_commit": "b4c9fe3474235edf0d41d2dc24ac540cde7ba2dd",
-        "tag": "peq-rof2-2026-11-20-darkhollow-normal"
-      },
-      "database_repository": "nightstalker6669/EQEmu-Database",
-      "execution": "Run each stage with a DELIMITER-aware MariaDB client in the selected database. DDL commits independently. The content transaction rolls back on error. Stop on preimage or readback failures.",
-      "format": "darkhollow-progression-player-preserving-upgrade-v1",
-      "fresh_install_sql_replaces_tables": true,
-      "mariadb": "10.11",
-      "migration_order": [
-        {
-          "path": "migrations/darkhollow-progression/00-VERIFY-R29-PREIMAGE.sql",
-          "sha256": "28f0e2e40f46c7d34a3d7df31c8a440b080b4d3fe084d020b01ab047bc510a25"
-        },
-        {
-          "path": "migrations/darkhollow-progression/10-ADD-PROGRESSION-SCHEMA.sql",
-          "sha256": "88717e87aa08cc7176581868ac986ebbd265e0fe33ecdf783b814e51236bc63c"
-        },
-        {
-          "path": "migrations/darkhollow-progression/20-APPLY-PROGRESSION.sql",
-          "sha256": "0ddc43ff4cf78c9284a81c3d98ebb7d29036a43f3a17eb359b944a84a9e1736b"
-        },
-        {
-          "path": "migrations/darkhollow-progression/30-VERIFY-PROGRESSION.sql",
-          "sha256": "2b689f3ce7470cbee1b89115525efafc06e91d0a12d426306fcd0c18bcde0408"
-        }
-      ],
-      "player_state": "No inserts, updates, deletes or resets to account, character, inventory, archive or claim data. Existing Frustrated Functionary journals must be completed before its four objective definitions change.",
-      "release_tag": "peq-rof2-2026-11-21-darkhollow-progression",
-      "runtime_cache_rebuild": {
-        "arguments": [
-          "items",
-          "spells"
-        ],
-        "cache_files": [
-          "shared/items",
-          "shared/spells"
-        ],
-        "command": [
-          "shared_memory",
-          "items",
-          "spells"
-        ],
-        "item_ids": [
-          900100,
-          900101,
-          900102,
-          900103,
-          900104,
-          900105
-        ],
-        "post_boot_mapping_verification": true,
-        "spell_ids": [
-          42700,
-          42701,
-          42702
-        ],
-        "stopped_runtime_required": true
-      },
-      "source_binding_sha256": "75a37d7cb622456c3bdf18cf6017e96044c353baa1970f47439b95339b306665",
-      "stopped_writers_required": true
+      "supported": false
     },
     "format": "eqemu-darkhollow-normal-database-release-v1",
     "fresh_install": {
       "MariaDB": "10.11",
       "assembled_with": "10.11.19",
-      "base_tables": 490,
+      "base_tables": 491,
       "bots_version": 0,
-      "composition": "Published sanitized Darkhollow Normal full.sql plus the exact verified progression schema and catalog transaction.",
+      "composition": "Published sanitized Darkhollow progression plus five sealed PoR SQL stages.",
       "custom_version": 0,
       "empty_private_player_and_operation_tables_preserved": true,
       "full_dump_replaces_tables": true,
@@ -4170,62 +3810,71 @@
       "merc_stats": 4000,
       "new_empty_database_only": true,
       "player_preserving_upgrade": false,
-      "recipe_entries": 261400,
-      "recipes": 34488,
-      "rows": 3053870,
+      "recipe_entries": 261415,
+      "recipes": 34490,
       "schema_version": 9338,
       "views": 1
     },
     "future_update_policy": "A futurematchedDBversion requires a separately validatedwholecohort sanitizedrelease and explicitcommitted source/tag/assetdigest pin; never silently mutableLatest/latestDB, partialrank/itemexports, or old945-only pin for newcohort. ActualCIfailure corrections gather allvisible errors in one batch.",
-    "live_application_status": "No production upgrade execution",
+    "matched_server_integration_parent": "aaf68ac899e7c1c5ce6a33c8df7e299b79bbc60a",
     "native_acceptance_scope": {
-      "accepted_native_persistence_sha256": "362523c54991b856e6d2dbdaa097b98a0debf3c7313c40aaa026671b6008c48f",
-      "accepted_native_terminal_sha256": "48218e67b9b5fafc6dd30ffc9d591e89495c6fa941338f60cbde8b6733f4d540",
-      "blood_raid_victories": 5,
-      "demiplane_core_encounter_locks_per_tester": 9,
-      "previously_published_darkhollow_normal": "peq-rof2-2026-11-20-darkhollow-normal",
-      "progression_task_ids": [
-        920251,
-        920252,
-        920253,
-        920254,
-        920255,
-        920270,
-        920271,
-        920272,
-        920273,
-        920275,
-        920276,
-        920277,
-        920278,
-        920279,
-        920280,
-        920281,
-        920282,
-        920283,
-        920284
-      ],
-      "rakban": {
-        "achievement_id": 500990060,
-        "native_claims": 6,
-        "persisted_after_public_zone_heartbeat": true,
-        "recipe_id": 30752007,
-        "required_mission_archives": 22,
-        "skull_id": 85571
+      "catalog": {
+        "activities": 100,
+        "dz_templates": 7,
+        "enabled_tasks": 23,
+        "rewards": 201,
+        "scene_starting_rows": 0
       },
-      "status": "NATIVE_DEVELOPMENT_ACCEPTANCE_VERIFIED",
-      "verification_scope": "Directed development play with test assistance. The package contains production settings and static definitions."
+      "controller": {
+        "historical_automatic_controller_rotation": "unverified",
+        "initial": "Bolvirk"
+      },
+      "known_limits": [
+        "Native completion used scoped development positioning and combat assistance. The group included an elevated-status tester and invulnerability was enabled on two profiles.",
+        "The physical Root of Ro ascent from C1 onward and the switch 1 exit were unverified. The Root test used a local asset replacement with no recoverable preimage hash.",
+        "The unassisted approach to Kelshar, a landed Curse of Salir, and the patched Library v10 exit were unverified.",
+        "Independent level 67 denial and level 68 admission using ordinary probe characters were unverified. Automatic level-based Harmonic Dissonance delivery was unverified.",
+        "Sverag starts under Bolvirk control. Historical automatic controller takeover and rotation remain unverified."
+      ],
+      "matched_quest_delta_sha256": "299261ee54179b3190785b18090c2b53a6a78c0fa531b5add331b51c1e89f8e5",
+      "native_terminal_receipt_sha256": "9fb39c5e2b0284110610d7dcd67b84667ba628998cdd6c4aa2c7f3eb7c244dc6",
+      "sql_lineage_sha256": "2fd9a68ae9be4bb3302822c5b2a44ddfa83f0ae1c6114bfb153aa0a3d663135f",
+      "status": "NATIVE_CORE_ACCEPTED_WITH_DOCUMENTED_LIMITS",
+      "theater": {
+        "admission_minimum_level": 68,
+        "automatic_level_based_aa_delivery": "unverified",
+        "earned_aa_id": 574,
+        "earned_chime_id": 84163
+      },
+      "witnessed": {
+        "completed_group_members_each": 3,
+        "message_reward_samples": [
+          77998,
+          78010
+        ],
+        "public_theater_distinct_entry_paths": [
+          "earned item 84163",
+          "earned AA 574"
+        ],
+        "public_theater_zone_id": 380,
+        "takish_hiz_core_tasks": [
+          920307,
+          920308,
+          920309
+        ],
+        "theater_port_spell_id": 8771
+      }
     },
-    "native_gameplay_acceptance": "Directed native development acceptance for matched progression",
+    "native_gameplay_acceptance": "Native core accepted with documented assistance and verification limits",
     "payload_inventory": {
       "all_member_sha256_file": "SHA256SUMS",
-      "full_sql_bytes": 304121871,
+      "full_sql_bytes": 304211568,
       "housing_json_member_count": 331,
       "housing_json_prefix": "housing-runtime-content/",
       "housing_profile_bindings": "housing-runtime-content/PROFILE-BINDINGS.json",
       "housing_profile_bindings_sha256": "4d6c3533a882ce79ef790caa08a781a1994d56ac3d9c58a8459bb9e1ac9b73b2",
       "identical_SQL_and_Housing_bytes_required": true,
-      "payload_member_count": 440
+      "payload_member_count": 451
     },
     "preserved_mercenary_cohort_source_binding": {
       "SQL_sha256": "6ad8f950c178e9c1d84658387c521dc33695572fd8926c30a711aff44e50790f",
@@ -4241,7 +3890,7 @@
       "CHANGELOG.md",
       "SOURCE-MANIFEST.json"
     ],
-    "release_tag": "peq-rof2-2026-11-21-darkhollow-progression",
+    "release_tag": "peq-rof2-2026-11-21-por-group-theater",
     "required_code_boundary": {
       "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
@@ -4257,6 +3906,12 @@
       "BASE-DARKHOLLOW-NORMAL-SOURCE-MANIFEST.json": "3a9ac3d878bb68da8ec5d0577da8724f1119ba6e6124bb0f7af3c2cd8bf834f1",
       "BASE-DARKHOLLOW-NORMAL-TABLE-INVENTORY.json": "0b820e5a48bb1ac6fd49f4b15d4c87e4a6f5926f1a99a4d59d1dad9a239896b8",
       "BASE-DARKHOLLOW-NORMAL-VALIDATION.json": "b9857767c490d4826d49f9b5d5ccf4470fd54726e572f629b1eaab97814abb8c",
+      "BASE-DARKHOLLOW-PROGRESSION-CANONICAL-SEED-COMPOSITION.json": "8853d5a618ceab822c3bdef9356480388d3bdea5ec6ba678116878da00a188a2",
+      "BASE-DARKHOLLOW-PROGRESSION-CHANGELOG.md": "bfef70cb747414a79c08f9a21dd2bd9cb9aa801ea43f947c452d375c71dcd896",
+      "BASE-DARKHOLLOW-PROGRESSION-NATIVE-QUALIFICATIONS.json": "b50978a5e84a001478796cf91d5e52672a517c5345be3dca9bf2a05926169265",
+      "BASE-DARKHOLLOW-PROGRESSION-README.md": "62028ad35d5b6f2c4d1ef9a9057623d80967c2e7500e426caf63fa3dc0713e95",
+      "BASE-DARKHOLLOW-PROGRESSION-SOURCE-CONTENT-BINDING.json": "c540f1cbf52b45df419f6237e4df52c69e03113c872603a0cf4b249ace523a04",
+      "BASE-DARKHOLLOW-PROGRESSION-SOURCE-MANIFEST.json": "75a37d7cb622456c3bdf18cf6017e96044c353baa1970f47439b95339b306665",
       "BASE-DARKHOLLOW69-CANONICAL-SEED-COMPOSITION.json": "bc7e8dc0ef85b8ac63e1de65fb6c6b421c2fb296d7829f36f8467ab2b25fa7c9",
       "BASE-DARKHOLLOW69-CHANGELOG.md": "775f2766c104cb706569c4bf4bf39d1f60168ab93597caf97b51c427664f53fb",
       "BASE-DARKHOLLOW69-NATIVE-QUALIFICATIONS.json": "5b06be14f2ad0b4dfa561357bb3f39adcd7ea4b3aaffacb2ea3d40c6b8b6c36c",
@@ -4288,22 +3943,22 @@
       "BASE-RATHE-R2-TABLE-INVENTORY.json": "e6fe3fa78ad7b16e8c9d5f9b73d3d24552e9cfff663578b45e665aa5d5e991fe",
       "BASE-RATHE-R2-VALIDATION.json": "bdfee356c214b7682c027df998adad2d21fca5f212f63477eb550675a0f3b2a2",
       "BASE-README.md": "9d661df4676661cd6f3d791679e371622c4eb382d78cfd62e55186846d3b8172",
-      "CANONICAL-SEED-COMPOSITION.json": "8853d5a618ceab822c3bdef9356480388d3bdea5ec6ba678116878da00a188a2",
-      "CHANGELOG.md": "bfef70cb747414a79c08f9a21dd2bd9cb9aa801ea43f947c452d375c71dcd896",
+      "CANONICAL-SEED-COMPOSITION.json": "0ca029d17af74265acbaca12c3b917ac68dbc313b0534a610b518560a1b1be7e",
+      "CHANGELOG.md": "000ea16d53e4a6337d486e914742a53e1bf6d7916ba32e37fac154dcff6b0f6d",
       "COMPLETED-RECIPE-UPDATES.json": "fdf459a6bef7e90351d3db5c983e30920205876a990aa144b5779a4c242d25e0",
       "KITHICOR-STATIC-CONTENT.json": "5b043982b23b74f4f857724b6baf1ff0611bb88ce348f32f15f3f6230462ffc5",
       "MERCENARY86-100-CONTENT.json": "27a9d180e6a66320ae9877cd763341f6579d0a1a8a66ac6fc23c26fb9dc15c16",
-      "NATIVE-QUALIFICATIONS.json": "b50978a5e84a001478796cf91d5e52672a517c5345be3dca9bf2a05926169265",
-      "README.md": "62028ad35d5b6f2c4d1ef9a9057623d80967c2e7500e426caf63fa3dc0713e95",
+      "NATIVE-QUALIFICATIONS.json": "b8da815ecb4accafa1cb27fac1d74b28fa993aed4619ec189243c2a6690b2579",
+      "README.md": "3d91e8cc161d7627bac1c84a8dbdb738f28bd2c8db4e85b00f31bf152f33ed1d",
       "SOD-OCEANGREEN-CONTENT.json": "5a5757e1c4631af375b87b6c69794d9e72ebc8cc91c832144d8359bb2b5454c2",
-      "SOURCE-CONTENT-BINDING.json": "c540f1cbf52b45df419f6237e4df52c69e03113c872603a0cf4b249ace523a04",
-      "SOURCE-MANIFEST.json": "75a37d7cb622456c3bdf18cf6017e96044c353baa1970f47439b95339b306665",
+      "SOURCE-CONTENT-BINDING.json": "f9acd6d88ffb27c93006e044312afc9c8b259db27c32f125b220725f07441873",
+      "SOURCE-MANIFEST.json": "cbb446ca6eb3d3bdae3aaa55b5bed5d4c5c4c8c6b5321d314f007d662094c90f",
       "TABLE-INVENTORY.json": "4b6bf5895d88556b7ce4ecb2bf44a55deef3b766782c5c93304ff688204ec36e",
       "VALIDATION.json": "f9da8bf1f8bc7ab959ca0bee13e9b4aaa47a530b3f6a46e5e429d85b3d522ff2",
       "VICTUAL-CLASS-FEATURE-DELTA.json": "1220253988a07ff5ef833759b947c33b4bcc56cad20195f94366cd510df7ffaf",
       "client-data/rof2/dbstr_us.append.txt": "71f93726675b66a45496e61f42994a691ab6663a326f92497627d37f6f42dfec",
       "client-data/rof2/spells_us.append.txt": "428a6b92ba8887c8d117746c2f9bc192a6429b7fd2c6c46438005442b351b7d6",
-      "full.sql": "8938736333f254a2a401613a5b25e5451ae93e0a6fe7849be3d471ddc7ac6d89",
+      "full.sql": "18f4eeee28a423fa8773d14af82ec853f6b281a207cb9c4d0f50fe986752bde5",
       "migrations/darkhollow-normal68-70/02-ALIGN-SHROUD-ESCROW.sql": "5c47bbf12e6cc50976694c5c74fa508359d737c661676fdded19913036494526",
       "migrations/darkhollow-normal68-70/03-VERIFY-SHROUD-ESCROW.sql": "0fbdcac1cc500a1fd9dcc0fe08414ca5d300623951bc0ae00e282bb1085e12f6",
       "migrations/darkhollow-normal68-70/10-LEVEL68-70-CLAIM-SCHEMA.sql": "972fdeb85e17f62aa65509d140294c9000a659338e3f819377d6bbe6a86a2231",
@@ -4351,6 +4006,11 @@
       "migrations/oceangreen/001_oceangreen_required.sql": "a4276f2534775de8c2c9fe605dca006ed2c3e72b2a8c795d184f4bd83cb3311f",
       "migrations/oceangreen/002_everforge_accept_seed.sql": "52bc75af280a484e410bd6a694417ef28a3922ea3abcfb3733b6ba4f20d7e641",
       "migrations/oceangreen/UPGRADE-CONTRACT.json": "a6b704028995992ee1ad07b453ca7a270a66037219d473eaec173e8050024f06",
+      "migrations/por-group-theater/00-owned-scene-schema.sql": "365ac474427110d1a6fb1704d45526b257e5c093371320366842d4d6512dbb2c",
+      "migrations/por-group-theater/10-stage-por-catalog.sql": "5e442e12e768b97ee856ad817fe8ac64cedbd3fb1485cf276ba24e07d6d96305",
+      "migrations/por-group-theater/20-enable-por-catalog.sql": "10eb2c1041e9235ba54a7cdefb40eed346b27feb2765ac3c2903ead16522fc30",
+      "migrations/por-group-theater/30-stage-sverag-controllers.sql": "d7b970ea92cf4d8df89bf2c0f37595be10eee6ac16f037b531841b7bd1e3b495",
+      "migrations/por-group-theater/40-enable-skull-route.sql": "ccc880a106fec9c903024044c56cdbc3678b17f5fb7444d640b7bb4a4bb3b281",
       "migrations/rathe/002_disrupt_parallel_prior_rathe_only.sql": "80f9b930f7af0c28e9131f6b792a2aa7e5860e0ca44fac44f99fa289b9377554",
       "migrations/rathe/003_everforge_accept_seed.sql": "06ff71df9df187f755b7d6f8c24e7916ffcbe0ecb10acd1859b164ebbc5aefee",
       "migrations/rathe/APPLY.sql": "5c3dac2109dfa0146e7ad85508370a5b4d3d8151eb358ef4eab5f13de6d0cd35",
@@ -4416,35 +4076,16 @@
         }
       }
     },
-    "source_commit": "b4c9fe3474235edf0d41d2dc24ac540cde7ba2dd",
-    "source_commit_role": "Exact required source and overlay postimages. CI pins the final build checkout independently.",
+    "source_commit": "8e073222a61b05bf14eacb0921e0de751c343a6a",
+    "source_commit_role": "Exact public PEQ database release commit. The server integration parent and final CI checkout are pinned separately.",
     "source_repository": "nightstalker6669/EQEmu",
-    "upgrade_asset": {
-      "bytes": 118441,
-      "name": "PEQ-RoF2-upgrade-2026-11-21-darkhollow-normal-to-progression.zip",
-      "sha256": "a5aa013600081aade0e8baa087c2f448484a07c5dcaa6fb08f89c2d369f7562a",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-21-darkhollow-progression/PEQ-RoF2-upgrade-2026-11-21-darkhollow-normal-to-progression.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-21-darkhollow-progression/PEQ-RoF2-upgrade-2026-11-21-darkhollow-normal-to-progression.zip"
-    },
     "verification_basis": {
-      "assembly": "Published sanitized base plus byte-exact isolated-tested stages",
-      "deleted_legacy_static_rows": 2,
-      "fresh_import_validation": "Verified exact published base import and exact appended stage execution on isolated MariaDB 10.11.19.",
-      "inserted_static_rows": 243,
-      "new_tables": 18,
-      "portable_stages_passed": [
-        "00-VERIFY-R29-PREIMAGE.sql",
-        "10-ADD-PROGRESSION-SCHEMA.sql",
-        "20-APPLY-PROGRESSION.sql",
-        "30-VERIFY-PROGRESSION.sql"
-      ],
-      "private_player_seed_rows": 0,
-      "serving_writes": 0,
-      "standalone_hard_notebook_920229": 0,
-      "status": "PASS"
+      "full_sql_sha256": "18f4eeee28a423fa8773d14af82ec853f6b281a207cb9c4d0f50fe986752bde5",
+      "receipt_sha256": "e2a7f871eaad90e52687284e7af35da88dd0afd46cbdcce240c16f0408560e79",
+      "status": "Prior isolated import reused for the byte-identical SQL member"
     }
   },
-  "database_contract_sha256": "32cca2822f8236bb2c59e1eecd7092b07aac41cfeaea767cd5b0d7781a1f09b5",
+  "database_contract_sha256": "8bd671696f988eca916cef187be8806370a0a46fb264f95f33e600af7dd8cb42",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [
@@ -4463,12 +4104,18 @@
   },
   "quest_overlay": {
     "files": {
+      "arcstone/v0/369004.lua": "95b5a9b7b3059c8e93327d2a408687c07eb9e6750088e941dd9403f24a68b711",
+      "arcstone/v0/369011.lua": "6371055b3be491e8722a154c9e631251f8859c41a2184baffd45fb45aad56c6f",
+      "arcstone/v0/369083.lua": "a4650ad33399c9527e4fd3c47c61b41bd5ea8506a40ac9b63db4e0478308dca5",
+      "arcstone/v0/player.lua": "3e344de136fe0799a7091efc61e216cf1f3d5b3b30cc43a04b00fad55294ed2c",
       "corathus/v0/365268.lua": "37529bca1c2df20b421b43426e8fe6998a0e8813f50523a308159ab9b2f8b3b7",
       "corathus/v0/365274.lua": "37529bca1c2df20b421b43426e8fe6998a0e8813f50523a308159ab9b2f8b3b7",
       "corathus/v0/365284.lua": "d27458332c3ac9c3155fa99a7fa8da556c42c9ae42ad54fc8c38b7173a85a25c",
       "corathus/v0/365286.lua": "73ad3b7dfdcb00bc9e834a2e549774bceb4f08bc1f02f532de0b8cbb14b210df",
       "corathusa/v2/player.lua": "7fca433a279e96065e823218628e01d35ec31d0af44391d08e561a4b609ee498",
       "corathusa/v2/zone.lua": "66dcebe55ea330b10e887e2e6ae3b5f48362b5569da0d8db775611c43a845863",
+      "devastation/v0/372000.lua": "e1284e4e3017bb133ced03d95a3d201398612c4f53bc661ac72d3e5b67808735",
+      "devastation/v0/player.lua": "a4ba1922f3f3cbc4f65bed41575f8e8be191c5cb2c61103c830e579a65a7c412",
       "drachnidhive/v4/player.lua": "b5d67693960534c9a4d5b8de152167abfc057f70377f5f9f3cecdea01d77251b",
       "drachnidhive/v4/zone.lua": "2fbfee2953b9166fde80cca836fa6eab84c9247680f48ed8dc2814bf532ded5c",
       "drachnidhive/v5/354311.lua": "8f09968891b8b5688f63324e08b90a94e5020c91e4a80b4d2e01494c79b01bcc",
@@ -4530,6 +4177,8 @@
       "global/encounters/rof2_sod_kithicor.lua": "d4744d40fa020053ef200295fa9a413e9edc13da90db8b978feb278d88223711",
       "global/encounters/rof2_sod_oceangreen.lua": "af4e3941ec862dc100a91ba2bbdeebc2516cc7ee0cf203c5387718d3a94261c5",
       "global/encounters/rof2_sod_rathe.lua": "0eabe7dd1978d243a300b38100ac556a5c7c21132dc7532adeaf4d745fb1df69",
+      "global/spells/1373.lua": "8ae1ad59174fa2aeaafd68ec402a5995509eba9b377319d2effe91c714dc3015",
+      "global/spells/567.lua": "c7812f75c9b12422b481c41cfb11e5a1eb7cf3e62aacde3d80701db8130389dc",
       "illsalin/v0/player.lua": "7b663a8b0a1a7b89e3a00e09666e20bbd4eec1af5700f228471c360b15f35193",
       "illsalina/v1/348005.lua": "1d541b3dfc5c70acae50dd297b3930578657051f19edf0cc23f843ceb3841ef6",
       "illsalina/v1/348900.lua": "00006e4a39cb5f7aeb4bc3cce0a16cc810c94fdae4661d87ead896a5d71a7170",
@@ -4608,6 +4257,13 @@
       "lua_modules/rof2_dodh_xill_boss.lua": "1b588684acf861fefec795bab19df3912dd44d0adc80fda231f45e1050997f83",
       "lua_modules/rof2_dodh_xill_loot.lua": "95b367932ebb3065a64582c09474df98b8f1088680ff04501072a64bcf20c9ff",
       "lua_modules/rof2_dodh_xill_loot_data.lua": "dcac3fe241dc796431e406974fa0c38218d58a379252fa73c46da796ec754fc5",
+      "lua_modules/rof2_por_maelin.lua": "4d0eb90ab9c43ebe6a35e76f93d6092c22727e1688d1f50577f5aa091a935860",
+      "lua_modules/rof2_por_progression.lua": "84903dd2443649cb43eba20a82b89c3b9e36c25d7e61b6aedf56dc6e49304fe8",
+      "lua_modules/rof2_por_razorthorn.lua": "b71be2214bbf3dcff88820efc1714f679333d81101dbf3b469f72db2ff3f0f0e",
+      "lua_modules/rof2_por_scene_state.lua": "7d8593181314f852fd219a0b2176a6581b3fe5b8b12999cf3c7c62baa3cb7052",
+      "lua_modules/rof2_por_skylance.lua": "32f75efe0b7e135b84489a2e78fde3b7f20b722d4cee18739dca17c3722256b1",
+      "lua_modules/rof2_por_sverag_trophies.lua": "4209cdd417b7b4fe13c8575404e34c269669bd3bc6fd0b10e34c6124348dc655",
+      "lua_modules/rof2_por_takish.lua": "cf5c035781f997d429442f10f35c85d03549d4c34b6f45cbf5bcdd12cf58c685",
       "lua_modules/rof2_sod_fieldofscale.lua": "6ba248707e01d92af911c177a09aa2b668c2022bd17b5edddc4f059a7b993fee",
       "lua_modules/rof2_sod_fieldofscale_data.lua": "6dc9c782b24b94bfd0b245505dfea21e117933ac5f3964aa778f4700656fb8bb",
       "lua_modules/rof2_sod_fieldofscale_policy.lua": "2c655d39b3b0308518f926dad513f0a920787874001749501c8260664edef8a3",
@@ -4627,6 +4283,9 @@
       "lua_modules/rof2_sod_ward_door.lua": "9ff2e6ba2b739d878455df633c8abd70da3a0251f74fd7222f1191c06b447aa4",
       "nektulos/v0/25920.lua": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d",
       "nektulos/v1/25414.lua": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d",
+      "northro/player.lua": "bb476f493282d64486a9ca7b9c7b4f4004fed6f6077f523a9924180091f9e659",
+      "northro/v0/392045.lua": "223091471f14a4d2baab9d8c727b88e814a1a55ee9f96a2c5df08a40d2047e1f",
+      "northro/v0/392088.lua": "bf3976570f4ce380ec2c63675bc46aa91b06717e575ba0a59f5d0f22a5a4849c",
       "oceangreenhills/#Bracka_Darkpaw.lua": "71bfc4b83569d4f6e40b4a62b285e808512b9b23f2ac0bd4b9f11cdfc3986f6e",
       "oceangreenhills/#Captain_Hiran_Tillin.lua": "099b75bb7076f246dc4bab3546ed0eed4a5ccf04eb427ee6ef4ce9dd87e4a1f1",
       "oceangreenhills/#Elder_Mystic_Foppye.lua": "0a1606da6e6ea07f9680d4feea6f7d64e5466034df56b2ade61e4481c7d723ff",
@@ -4661,6 +4320,13 @@
       "oldkithicor/player.lua": "31db36893d3d60eb61f69198cdc48b7b90169ebdc861fef2b48b7dad765f06c3",
       "oldkithicor/v0/spells/8140.lua": "2721a724135455b103ee859b4691ca130efe48a2a70bab4c7b98a1b7e0cda31e",
       "oldkurn/player.lua": "38e9f399ea67446eab7c62c92951a801c6fef86da42e4ddf8bbcb517dd04fa75",
+      "poknowledge/Grand_Librarian_Maelin.lua": "653ed5bebf2db85ee1d5907ef2a87d604f841eed60dc28a98bb57b5f46532ae1",
+      "rage/v0/372099.lua": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7",
+      "rage/v0/374001.lua": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7",
+      "rage/v0/player.lua": "2d374c28df4809f827a64b1ce6b0dd61aa753d71ecbd542db292989f8e3b747c",
+      "rage/v0/zone.lua": "49857af3e6daae87e3997c3858a6667c0831f96ecbf9f66a259d9e69dfbda63a",
+      "ragea/v10/player.lua": "56484b459a3addd5da48d8ad79bf0f3e7f18ba20fc30ff11199dcadeee1a006a",
+      "ragea/v10/zone.lua": "8ec5eb69d28be6351b8f792a08f6727a6ddb873a55851f670cfa8c1d2496737d",
       "shadowspine/v1/364015.lua": "302ed8e76bf3b491db9a10ff2b1ce3bc836cfcce098373a08fd882038070fbda",
       "shadowspine/v1/364016.lua": "302ed8e76bf3b491db9a10ff2b1ce3bc836cfcce098373a08fd882038070fbda",
       "shadowspine/v1/364022.lua": "302ed8e76bf3b491db9a10ff2b1ce3bc836cfcce098373a08fd882038070fbda",
@@ -4668,6 +4334,27 @@
       "shadowspine/v1/364901.lua": "b3f00bf56188215cde593bb8518f3f0566534357d68df0fee96dd8e65be776c7",
       "shadowspine/v1/player.lua": "83dfe056e46eb2abf99887a2383da4af31bcb15a88ef81f5e9cbefc4802b0944",
       "shadowspine/v1/zone.lua": "64090b9a661820e811f5b88165e9db83d809cc11831cf9c3150cf42d3ae9ca9c",
+      "skylance/v10/371002.lua": "6ced78c68c2083795245b0d56c034700b03653525873d2650ff2feb8ce2cb231",
+      "skylance/v10/371025.lua": "01c3c95a5ad8ddd627df67474b9d498e2d1e7581e0cb1906e3557e276333554c",
+      "skylance/v10/371036.lua": "4edac0903e7baf9b745c8f22a7e06e7cc8829cb9067de640e515bb4a01ca304c",
+      "skylance/v10/371037.lua": "66d09ebed7a05d823dac8077a1775cd269ccc153a09e497ad6bf09ee8f71e5c2",
+      "skylance/v10/371049.lua": "66b72d44d2da3f49fcdb2c7fe5988f4ae2ebbfa7b1a39a44f6e4ab448e1b852f",
+      "skylance/v10/player.lua": "dd055751c01f72075bfe8c25071fd3171a464ff7fe141404b98b5331212145ba",
+      "skylance/v11/371002.lua": "618a89e54d19b9254fe53103255cf58dcd3120e55c754459e653e44f4eed13b9",
+      "skylance/v11/player.lua": "a30b44311fab8e440e4b3afdbb4261b53ab39a2d8ae7f7827bb2a8df5e8d10ea",
+      "skylance/v11/zone.lua": "e1a021f233ae64cc10c205d35527cfd1c8f84b35a3f5630c828a5dbd7c1c53dd",
+      "skylance/v12/371002.lua": "368a96f9c02c4e9ddd9ef8c4ad436c874bb245ea821dab5213666b49466b2222",
+      "skylance/v12/player.lua": "ad1af362030b15409c50fa124d7dd170fc1c2af60b7f2a281acbacea111df209",
+      "southro/player.lua": "333ed4c0f7cc61a6d9d94950f9813d4551458827e1a6628d079f4d4d3e63b043",
+      "takishruins/v0/376056.lua": "e3f0b4be9e99fd20225b2250566beb091eae04f2c9e0a50d5ec503036539ea4c",
+      "takishruins/v0/376081.lua": "8d7c3f4ab7dbe176d38addfcf9379dcf7ef8336a43830c2091a2200ac121c7dd",
+      "takishruins/v0/player.lua": "5da7b27e3017d6f49c735b87f42f6acc4e8cd9e1b4160e4d223b326dfa450444",
+      "takishruins/v10/376961.lua": "4aceb6722d430c3216b422a206c62cbd6e336153435406bce34017a8ad908eb9",
+      "takishruins/v10/player.lua": "906a552529972ecb282d44fa800e487b79eff249135b2580255340629da3acce",
+      "takishruins/v11/376964.lua": "2a7010ff1b2e5b4169134be31f9ebc6eb5eb91afdd1478027f517924b6982c61",
+      "takishruins/v11/player.lua": "ab3adc964a1533fc17aff479f2b671c536a855c868439a9059ed3e55636813cc",
+      "takishruinsa/v10/player.lua": "471392c5ee2ce74c058c29982953655f2e7e3553d9c54cc738981fc1c87d5bb4",
+      "takishruinsa/v10/zone.lua": "0c41c7a7acf163e6132b74d652feab84134fd3997f61bebb9e5d74aeb6f77ba9",
       "westkorlach/v0/358020.lua": "a46c81258bf82c6642b3af7bcb60aa979e45db1a66406ea724fd3fcf086ed2f0",
       "westkorlach/v0/358031.lua": "1de6930dca0faa519c85fe0684a04cfaf690ad982c22c7f2bf017e2778afc951",
       "westkorlach/v0/358051.lua": "745276da038894ec8fe31b3b5c945f083e3652507dab48cbee6819e25b99d6ef",

@@ -57,9 +57,9 @@ Build verified Rathe r2 with both utility forks on Linux amd64 Docker Compose. A
 
 ## Getting the pack
 
-The current matched release is **Rathe r2**. Choose the Linux x86-64 or Windows x64 archive from the [Rathe server release](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r28-a1-c0e1f6ea2276) and follow the [installation guide](docs/rof2/INSTALL.md). Both archives include the 60 managed quest files and the matching sanitized PEQ database input. See the [Rathe r2 database release](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-17-rathe-r2) for the standalone database package and checksum.
+For **Prophecy of Ro group progression through Theater of Blood**, choose the matching Linux x86-64 or Windows x64 package from the [server releases](https://github.com/nightstalker6669/EQEmu/releases) and follow the [installation guide](docs/rof2/INSTALL.md). Both packages use the same 304 pinned quest scripts and sanitized PEQ database input. The [standalone database release](https://github.com/nightstalker6669/EQEmu-Database/releases) and [native acceptance limits](docs/rof2/roadmap/PROPHECY-OF-RO.md) cover the same batch.
 
-The [companion database repository](https://github.com/nightstalker6669/EQEmu-Database) provides database provenance, additions, and downloadable snapshots. Use the database version specified by your server package. A full database snapshot is for a **fresh installation**; it must not be imported over an existing player database. Existing servers need the appropriate migrations.
+This PoR release supports **fresh empty databases only**. Keep your existing player database intact and use your existing matched release for that installation. [Rathe r2 remains available](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r28-a1-c0e1f6ea2276).
 
 Development takes place on [`develop`](https://github.com/nightstalker6669/EQEmu/tree/develop). Release notes identify the source and content included in each downloadable package.
 

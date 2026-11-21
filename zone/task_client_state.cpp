@@ -60,6 +60,7 @@
 #include "fire_native_item_custody.h"
 #include "fire_shared_successor_native.h"
 #include "common/fire_shared_activity_origin.h"
+#include "por_group_admission.h"
 
 #include <cstdlib>
 #include <limits>
@@ -3841,6 +3842,9 @@ void ClientTaskState::AcceptNewTask(
 		auto* giver = entity_list.GetNPCByID(npc_entity_id);
 		if (!giver || !client->CanRequestSodTask(task_id, giver->GetNPCTypeID())) return;
 	}
+	// World-confirmed members need their own DZ membership, not the requester's prerequisite items.
+	if (!client->m_requesting_shared_task && !PorGroupAdmission::AllowsRequest(
+			*client, task_id, entity_list.GetNPCByID(npc_entity_id), zone)) return;
 	if (DodhLongshadowAdmission::Managed(task_id) && !client->m_requesting_shared_task) {
 		auto* giver = entity_list.GetNPCByID(npc_entity_id);
 		if (!zone || !giver || giver->GetDepop() || giver->GetHP() <= 0 ||
@@ -4503,6 +4507,9 @@ bool ClientTaskState::CanAcceptNewTask(Client* client, int task_id, int npc_enti
 
 	if (SodProgression::IsSodRequest(task_id) &&
 		(!giver->IsNPC() || !client->CanRequestSodTask(task_id, giver->GetNPCTypeID()))) return false;
+
+	if (!PorGroupAdmission::AllowsRequest(
+			*client, task_id, giver->IsNPC() ? giver->CastToNPC() : nullptr, zone)) return false;
 
 	if (task_id >= 920236 && task_id <= 920245) {
 		const bool kelliad = task_id <= 920240;

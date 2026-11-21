@@ -535,7 +535,8 @@ void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, st
 			DodhOriginalExchange::ClaimsPublicRoute(*this,*tradingWith->CastToNPC()) ||
 			DodhOriginalExchange::ClaimsGuardOffer(*this,*tradingWith->CastToNPC()) ||
 			DodhOriginalExchange::ClaimsOpenerOffer(*this,*tradingWith->CastToNPC()) ||
-		   DodhOriginalExchange::ClaimsLongshadowOffer(*this,*tradingWith->CastToNPC()))return;
+		   DodhOriginalExchange::ClaimsLongshadowOffer(*this,*tradingWith->CastToNPC()) ||
+		   DodhOriginalExchange::ClaimsPorChimeOffer(*this,*tradingWith->CastToNPC()))return;
 		if(FireRunActionSource::NativeRunTerminalSource::RejectUnissuedFinishTrade(*this,*tradingWith->CastToNPC()))return;
 		if (Housing::GuildPortalRuntime::HandIn(*this, tradingWith)) return;
 
