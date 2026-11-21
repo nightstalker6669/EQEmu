@@ -67,6 +67,8 @@ Development takes place on [`develop`](https://github.com/nightstalker6669/EQEmu
 
 The goal is to follow the original game where reliable evidence is available. When original values or mechanics cannot be recovered, local reconstruction choices are documented rather than presented as exact historical data. Working features, unfinished content, and items awaiting gameplay testing are kept distinct.
 
+Historical research and unfinished drafts are indexed in the [RoF2 research archive](docs/rof2/RESEARCH-ARCHIVE.md).
+
 This overview is updated with completed restoration batches. The release notes provide the dated record of what changed and which download contains it.
 
 ## Built on the community’s work

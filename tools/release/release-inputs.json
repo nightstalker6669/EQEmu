@@ -4722,7 +4722,7 @@
       "westkorlachc/v6/player.lua": "2884413f1b2c56c75dc9aa3fc9c3a51eb64f908685b747a06ad607821d3c5755",
       "westkorlachc/v6/zone.lua": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
     },
-    "root": "tools/release/quest-overlays/oceangreen"
+    "root": "quests"
   },
   "runtime_binaries": [
     "world",

@@ -188,22 +188,21 @@ def seed_content(path, pin, stage):
 
 
 def quest_overlay(repo, contract, stage):
-    root_name = PurePosixPath(contract['root'])
-    if root_name.is_absolute() or '..' in root_name.parts or '\\' in contract['root']:
-        raise ValueError('Unsafe quest overlay root')
-    root = repo / root_name
+    if contract['root'] != 'quests':
+        raise ValueError('Quest overlay must use the canonical quests directory')
+    root = repo / 'quests'
     files = contract['files']
     if root.is_symlink() or not root.is_dir() or not files:
         raise ValueError('Missing quest overlay')
-    inventory = {p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_file()}
-    if inventory != set(files):
-        raise ValueError('Quest overlay inventory differs from committed allowlist')
+    # The canonical tree can contain scripts that this runtime does not ship.
     for name, expected in sorted(files.items()):
         relative = PurePosixPath(name)
-        if relative.is_absolute() or '..' in relative.parts or '\\' in name or relative.suffix not in ('.lua', '.pl'):
+        if (relative.is_absolute() or '..' in relative.parts or '\\' in name or ':' in name
+                or relative.as_posix() != name or relative.suffix not in ('.lua', '.pl')):
             raise ValueError('Unsafe quest overlay path: ' + name)
         source = root / relative
-        if any(p.is_symlink() for p in (source, *source.parents)) or digest(source) != expected:
+        if (any(p.is_symlink() for p in (source, *source.parents))
+                or not source.is_file() or digest(source) != expected):
             raise ValueError('Quest overlay source differs: ' + name)
         target = stage / 'server/quests' / relative
         target.parent.mkdir(parents=True, exist_ok=True)

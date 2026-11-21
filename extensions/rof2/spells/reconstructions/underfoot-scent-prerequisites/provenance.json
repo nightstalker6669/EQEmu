@@ -1,9 +1,9 @@
 {
   "status": "SOURCE_PREPARED_NOT_APPLIED",
   "source_contracts": [
-    "extensions/rof2/spells/research/underfoot-scent/CONTRACT.md",
-    "extensions/rof2/spells/research/underfoot-scent/PREREQUISITES.md",
-    "extensions/rof2/spells/research/underfoot-scent/prerequisite-contract.json"
+    "https://github.com/nightstalker6669/EQEmu/blob/rof2-ci-r30-a1-b827c9ac3d68/extensions/rof2/spells/research/underfoot-scent/CONTRACT.md",
+    "https://github.com/nightstalker6669/EQEmu/blob/rof2-ci-r30-a1-b827c9ac3d68/extensions/rof2/spells/research/underfoot-scent/PREREQUISITES.md",
+    "https://github.com/nightstalker6669/EQEmu/blob/rof2-ci-r30-a1-b827c9ac3d68/extensions/rof2/spells/research/underfoot-scent/prerequisite-contract.json"
   ],
   "source_pin_for_mission_research": "f93ec72010582ba1682d1ed30480c6da28f0ca66",
   "reserved_tasks_and_sets": [
