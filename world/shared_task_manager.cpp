@@ -1,5 +1,8 @@
+#include "common/dodh_bellfast_admission.h"
+#include "common/dodh_longshadow_admission.h"
 #include "common/sod_message_admission.h"
 #include "sod_original_transform_world.h"
+#include "dodh_longshadow_outbox.h"
 #include "common/sod_shared_activity.h"
 #include "common/kithicor_mission.h"
 #include <map>
@@ -24,6 +27,10 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "shared_task_manager.h"
+
+#include "common/dodh_hard_variant.h"
+
+#include <set>
 #include "common/shared_task_admission.h"
 #include "common/shared_task_average.h"
 
@@ -117,8 +124,12 @@ void SendFireMissionResult(Database& db,SharedTask& actual,uint32_t requester,ui
 // shared task keeps the ordinary join checks for that mission.
 bool MeetsBrovilPrerequisites(Database& db, uint32_t task_id, const SharedTaskRequest& request)
 {
-    switch (task_id) {
+    const auto normal_task = DodhHardVariant::NormalTask(task_id);
+    switch (normal_task) {
     case 920228: {
+        if (task_id == 920229 && request.level_total < 68 * request.character_ids.size()) {
+            return false;
+        }
         if (request.group_type != SharedTaskRequestGroupType::Group) {
             return false;
         }
@@ -135,18 +146,29 @@ bool MeetsBrovilPrerequisites(Database& db, uint32_t task_id, const SharedTaskRe
     case 920230:
     case 920232:
     case 920234: {
-        const unsigned required = (task_id - 920228) / 2;
         auto archive = db.QueryDatabase(fmt::format(
-            "SELECT COUNT(DISTINCT st.task_id) FROM completed_shared_tasks st "
+            "SELECT DISTINCT st.task_id FROM completed_shared_tasks st "
             "JOIN completed_shared_task_members m ON m.shared_task_id = st.id "
             "WHERE m.character_id = {} AND st.completion_time IS NOT NULL "
-            "AND st.task_id IN (920228, 920230, 920232) AND st.task_id < {}",
-            request.leader_id, task_id));
-        if (!archive.Success() || archive.RowCount() != 1) {
+            "AND st.task_id BETWEEN 920228 AND 920233",
+            request.leader_id));
+        if (!archive.Success()) {
             return false;
         }
-        const auto completed = SharedTaskAdmission::Number(archive.begin()[0]);
-        return completed && *completed == required;
+        std::set<uint32_t> completed;
+        for (auto row : archive) {
+            const auto archived_task = SharedTaskAdmission::Number(row[0]);
+            if (!archived_task || *archived_task < 920228 || *archived_task > 920233) {
+                return false;
+            }
+            completed.insert(DodhHardVariant::NormalTask(static_cast<uint32_t>(*archived_task)));
+        }
+        for (uint32_t prior = 920228; prior < normal_task; prior += 2) {
+            if (!completed.count(prior)) {
+                return false;
+            }
+        }
+        return true;
     }
     default:
         return true;
@@ -214,6 +236,12 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 	// shared task validation
 	// todo: this should be online group/raid members only (avoid queries)
 	auto request = SharedTask::GetRequestCharacters(*m_database, requested_character_id);
+	if (DodhLongshadowAdmission::Managed(requested_task_id)) {
+		const auto* requester = ClientList::Instance()->FindCLEByCharacterID(requested_character_id);
+		if (!npc_type_id || requested_character_id != request.leader_id || !requester || !requester->Server() ||
+			requester->Server()->GetZoneID() != DodhLongshadowAdmission::Stoneroot ||
+			requester->Server()->GetInstanceID() != 0) return;
+	}
 	if (!CanRequestSharedTask(task.id, request, sod_origin)) {
 		LogTasksDetail("Shared task validation failed");
 		return;
@@ -728,6 +756,27 @@ void SharedTaskManager::SharedTaskActivityUpdate(
 )
 {
 	auto shared_task = FindSharedTaskByTaskIdAndCharacterId(task_id, source_character_id);
+ const bool longshadow_trade = DodhLongshadowOutbox::Policy::FindRoute(task_id, activity_id);
+ const bool longshadow_source = DodhLongshadowOutbox::Policy::FindSourceActivity(task_id, activity_id) ||
+     DodhLongshadowOutbox::Policy::DeathActivity(task_id, activity_id) ||
+     DodhLongshadowTravel::OwnsActivity(task_id, activity_id);
+ if (longshadow_trade || longshadow_source) {
+  if (!shared_task) return;
+  const DodhLongshadowOutbox::Pending record{
+      uint64_t(shared_task->GetDbSharedTask().id), task_id, activity_id, source_character_id};
+  if (!(longshadow_trade ? DodhLongshadowOutbox::Permits(*m_database, record)
+                         : DodhLongshadowOutbox::PermitsSource(*m_database, record))) return;
+  const auto& states = shared_task->m_shared_task_activity_state;
+  const auto active = Tasks::GetActiveElements(states, states, states.size());
+  // The native selector returns vector indices. Stored flags track completion
+  // in World but unfinished steps can still carry ActivityHidden.
+  const auto active_step = std::any_of(active.active.begin(), active.active.end(), [&](int index) {
+   const auto& state = states[index];
+   return state.activity_id == activity_id && state.max_done_count == 1;
+  });
+  if (!active_step) return;
+  done_count = 1;
+ }
  if(task_id==920197) {
   // Finite physical deliveries0/1 originate ONLY from the durable kind3
   // original accept outbox. Generic optimistic packets cannot spend inputs.
@@ -1724,40 +1773,87 @@ bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskR
 		return false;
 	}
 
+	if (DodhLongshadowAdmission::Managed(task.id) &&
+		(request.group_type != SharedTaskRequestGroupType::Group ||
+		 !DodhLongshadowAdmission::EarnedPrerequisites(*m_database, task.id, request.leader_id))) {
+		ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
+			"Dustspirit requires a group and the earlier completed Longshadow missions.");
+		return false;
+	}
+
+    if (DodhBellfastAdmission::Managed(task.id)) {
+        if (request.group_type != SharedTaskRequestGroupType::Group ||
+            request.members.size() < 3 || request.members.size() > 6 ||
+            !DodhBellfastAdmission::EarnedPrerequisites(*m_database, task.id, request.leader_id)) {
+            return false;
+        }
+        const auto eligible = SharedTaskAdmission::CheckAverage(
+            *m_database, DodhBellfastAdmission::MinimumAverageLevel, request.character_ids);
+        if (!eligible || !*eligible) {
+            return false;
+        }
+    }
+
 	if (!MeetsBrovilPrerequisites(*m_database, task.id, request)) {
 		ClientList::Instance()->SendCharacterMessage(
 			request.leader_id, Chat::Red, "This group or requester does not meet Brovil's mission prerequisites.");
 		return false;
 	}
 
-	if (task.id >= 920236 && task.id <= 920245 &&
+	if (task.id >= 920275 && task.id <= 920278) {
+		auto archive = m_database->QueryDatabase(fmt::format(
+			"SELECT COUNT(DISTINCT st.task_id) FROM completed_shared_tasks st "
+			"JOIN completed_shared_task_members m ON m.shared_task_id = st.id "
+			"WHERE m.character_id = {} AND st.completion_time IS NOT NULL "
+			"AND st.task_id >= 920275 AND st.task_id < {}", request.leader_id, task.id));
+		const auto completed = archive.Success() && archive.RowCount() == 1
+			? SharedTaskAdmission::Number(archive.begin()[0]) : std::nullopt;
+		if (request.group_type != SharedTaskRequestGroupType::Group ||
+			!completed || *completed != task.id - 920275) {
+			ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
+				"Widdlethorpe requires a group and the earlier completed missions.");
+			return false;
+		}
+	}
+
+	const auto dodh_normal = DodhHardVariant::NormalTask(task.id);
+	if (dodh_normal >= 920236 && dodh_normal <= 920245 &&
 		request.group_type != SharedTaskRequestGroupType::Group) {
 		ClientList::Instance()->SendCharacterMessage(
 			request.leader_id, Chat::Red, "This Darkhollow mission requires a group.");
 		return false;
 	}
 
-	if (task.id > 920241 && task.id <= 920245) {
+	if (dodh_normal > 920241 && dodh_normal <= 920245) {
 		auto archive = m_database->QueryDatabase(fmt::format(
-			"SELECT COUNT(DISTINCT st.task_id) FROM completed_shared_tasks st "
+			"SELECT DISTINCT st.task_id FROM completed_shared_tasks st "
 			"JOIN completed_shared_task_members m ON m.shared_task_id=st.id "
 			"WHERE m.character_id={} AND st.completion_time IS NOT NULL "
-			"AND st.task_id>=920241 AND st.task_id<{}",
-			request.leader_id, task.id));
-		const auto completed = archive.Success() && archive.RowCount() == 1
-			? SharedTaskAdmission::Number(archive.begin()[0])
-			: std::nullopt;
-		if (!completed || *completed != task.id - 920241) {
-			ClientList::Instance()->SendCharacterMessage(
-				request.leader_id, Chat::Red, "You must complete Jarzarrad's earlier missions before requesting this one.");
-			return false;
+			"AND st.task_id IN (920241,920242,920243,920244,920259,920260,920261)",
+			request.leader_id));
+		std::set<uint32_t> completed;
+		if (archive.Success()) {
+			for (auto row : archive) {
+				const auto id = SharedTaskAdmission::Number(row[0]);
+				if (id) {
+					completed.insert(DodhHardVariant::NormalTask(static_cast<uint32_t>(*id)));
+				}
+			}
+		}
+		for (uint32_t prior = 920241; prior < dodh_normal; ++prior) {
+			if (!completed.count(prior)) {
+				ClientList::Instance()->SendCharacterMessage(
+					request.leader_id, Chat::Red, "You must complete Jarzarrad's earlier missions before requesting this one.");
+				return false;
+			}
 		}
 	}
 
-	// Flights is a public encounter. World serializes creation before handling another request.
-	if (task.id == 920244) {
+	// Both Flights tiers use the same public Undershore encounter lane.
+	// World serializes creation before handling the next request.
+	if (dodh_normal == 920244) {
 		auto active = m_database->QueryDatabase(
-			"SELECT COUNT(*) FROM shared_tasks WHERE task_id=920244 AND completion_time IS NULL "
+			"SELECT COUNT(*) FROM shared_tasks WHERE task_id IN (920244,920261) AND completion_time IS NULL "
 			"AND (expire_time IS NULL OR expire_time>NOW())");
 		if (!active.Success() || active.RowCount() != 1 ||
 			SharedTaskAdmission::Number(active.begin()[0]) != std::optional<uint64_t>(0)) {
@@ -1818,7 +1914,7 @@ bool SharedTaskManager::CanRequestSharedTask(uint32_t task_id, const SharedTaskR
 
 
 	const auto average = SharedTaskAdmission::ReadAveragePolicy(
-		*m_content_database, task.id, task.min_level);
+		*m_content_database, task.id);
 	if (!average.valid) {
 		ClientList::Instance()->SendCharacterMessage(request.leader_id, Chat::Red,
 			"Unable to verify shared task average-level policy. Please try again later.");
@@ -2080,7 +2176,7 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 
 
 	const auto average = SharedTaskAdmission::ReadAveragePolicy(
-		*m_content_database, s->GetTaskData().id, s->GetTaskData().min_level);
+		*m_content_database, s->GetTaskData().id);
 	if (!average.valid) {
 		SendLeaderMessage(s, Chat::Red, "Unable to verify shared task average-level policy.");
 		return false;
@@ -2390,6 +2486,34 @@ void SharedTaskManager::Process()
 
 	ProcessOriginalTransforms();
  ProcessOriginalMessageAdmissions();
+    // Replay durable receipts for authored Longshadow and Bellfast missions.
+    // Keep replay outside the active-run loop because completion can archive.
+    const bool receipt_mission_active = std::any_of(m_shared_tasks.begin(), m_shared_tasks.end(), [](const auto& task) {
+        return DodhLongshadowTravel::Find(task.GetTaskData().id) != nullptr;
+    });
+    if (receipt_mission_active) {
+        const auto replay = [&](const auto& record, bool trade) {
+            if (trade && DodhLongshadowOutbox::MarkObserved(*m_database, record)) return;
+            auto* task = FindSharedTaskByTaskIdAndCharacterId(record.task, record.character);
+            if (!task || uint64_t(task->GetDbSharedTask().id) != record.run ||
+                !(trade ? DodhLongshadowOutbox::Permits(*m_database, record)
+                        : DodhLongshadowOutbox::PermitsSource(*m_database, record))) return;
+            const auto& states = task->m_shared_task_activity_state;
+            const auto state = std::find_if(states.begin(), states.end(), [&](const auto& a) {
+                return a.activity_id == record.activity;
+            });
+            if (state != states.end() && state->done_count == 1 &&
+                state->activity_state == ActivityState::ActivityCompleted &&
+                !HandleCompletedActivities(task)) {
+                SaveSharedTaskActivityState(record.run, states);
+            } else {
+                SharedTaskActivityUpdate(record.character, record.task, record.activity, 1, false);
+            }
+            if (trade) DodhLongshadowOutbox::MarkObserved(*m_database, record);
+        };
+        for (const auto& record : DodhLongshadowOutbox::ReadPending(*m_database)) replay(record, true);
+        for (const auto& record : DodhLongshadowOutbox::ReadPendingSources(*m_database)) replay(record, false);
+    }
 	std::vector<int64_t> delete_tasks;
 	for (auto& shared_task : m_shared_tasks)
 	{

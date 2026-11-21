@@ -4041,6 +4041,7 @@ struct Make_Pet_Struct { //Simple struct for getting pet info
 };
 
 struct GroundSpawn {
+	uint32      database_id   = 0; // Server-side content row.
 	float       max_x         = 0.0f;
 	float       max_y         = 0.0f;
 	float       min_x         = 0.0f;

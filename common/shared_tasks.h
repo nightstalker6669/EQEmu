@@ -101,6 +101,7 @@ struct SharedTaskMember {
 struct SharedTaskRequest {
 	uint32_t lowest_level;
 	uint32_t highest_level;
+	uint32_t level_total;
 	uint32_t leader_id;
 	SharedTaskRequestGroupType group_type;
 	std::vector<uint32_t> character_ids;

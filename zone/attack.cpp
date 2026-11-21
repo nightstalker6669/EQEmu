@@ -1,3 +1,5 @@
+#include "dodh_longshadow_source.h"
+#include "dodh_draygun_heal.h"
 #include "fire_run_terminal_scene.h"
 #include "death_experience.h"
 #include "fire_material_loot_source.h"
@@ -35,6 +37,7 @@
 #include "common/strings.h"
 #include "zone/bot.h"
 #include "zone/fastmath.h"
+#include "zone/dynamic_zone.h"
 #include "zone/lua_parser.h"
 #include "zone/mob.h"
 #include "zone/npc.h"
@@ -2543,6 +2546,18 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 		return false;
 	}
 
+	if (!DodhLongshadowScene::RecordDeath(*this, killer_mob) ||
+		!DodhLongshadowTravel::PrepareOrbDeath(*this, killer_mob) ||
+		!DodhLongshadowTravel::PrepareFinaleDeath(*this, killer_mob) ||
+		!DodhHardNotebookChest::PrepareDeath(*this, killer_mob) ||
+		!DodhLongshadowTravel::AllowCavernsDeath(*this, killer_mob) ||
+		!DodhLongshadowTravel::PrepareBellfastLoot(*this, killer_mob) ||
+		!DodhBellfastHive::PrepareDeath(*this, killer_mob) ||
+		!DodhBellfastKorlach::PrepareDeath(*this, killer_mob)) {
+		if (GetHP() <= 0) SetHP(1);
+		return false;
+	}
+
 	if (IsMultiQuestEnabled()) {
 		for (auto &i: m_hand_in.items) {
 			if (i.is_multiquest_item && i.item->GetItem()->NoDrop != 0) {
@@ -2895,6 +2910,7 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 	
 			entity_list.LimitRemoveNPC(this);
 	
+			DodhLongshadowSource::MarkNativeCorpse(*this, *corpse);
 			entity_list.AddCorpse(corpse, GetID());
 	
 			// The client sees NPC corpses as name's_corpse.  The server uses
@@ -3143,6 +3159,7 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 	fire_original_death.SealSuccess(*this, entity_id);
 	fire_mission_material_death.SealActualSuccess(*this, entity_id);
 	fire_terminal_death.SealActualSuccess(*this,entity_id);
+	DodhBellfastKorlach::RecordTrashDeath(*this, killer_mob);
 	return true;
 }
 
@@ -4359,6 +4376,10 @@ void Mob::CommonDamage(Mob* attacker, int64 &damage, const int32 spell_id, const
 			damage = 0;
 		}
 
+		if (IsNPC()) {
+			damage = DodhLongshadowScene::CapDamage(*CastToNPC(), attacker, damage);
+			damage = DodhLongshadowTravel::CapFinaleDamage(*CastToNPC(), attacker, damage);
+		}
 		SetHP(int64(GetHP() - damage));
 
 		if (HasDied()) {
@@ -4877,8 +4898,74 @@ void Mob::CommonDamage(Mob* attacker, int64 &damage, const int32 spell_id, const
 	}
 }
 
+bool DodhDraygunHeal::Allows(Mob& target, Mob* caster, std::int32_t spell_id)
+{
+	if (!caster || !target.IsNPC() || target.GetNPCTypeID() != 350051 ||
+		target.CastToNPC()->GetSpawnPointID() != 263273 || target.CastToNPC()->GetDepop() ||
+		target.GetHP() <= 0 || !zone || zone->GetZoneID() != 350 ||
+		zone->GetInstanceVersion() != 2 || !zone->GetInstanceID() || !IsValidSpell(spell_id) ||
+		!IsBeneficialSpell(spell_id)) {
+		return false;
+	}
+
+	const auto& spell = spells[spell_id];
+	if (spell.target_type != ST_Target || spell.buff_duration != 0) {
+		return false;
+	}
+	bool has_heal = false;
+	for (int index = 0; index < EFFECT_COUNT; ++index) {
+		if (IsBlankSpellEffect(spell_id, index)) {
+			continue;
+		}
+		switch (spell.effect_id[index]) {
+		case SpellEffect::CurrentHP:
+		case SpellEffect::CurrentHPOnce:
+		case SpellEffect::PercentalHeal:
+		case SpellEffect::CompleteHeal:
+			if (spell.base_value[index] > 0) {
+				has_heal = true;
+				break;
+			}
+			return false;
+		default:
+			return false;
+		}
+	}
+
+	auto* owner = caster->IsClient() ? caster : caster->GetOwner();
+	auto* expedition = zone->GetDynamicZone();
+	const auto window = target.GetEntityVariable("dodh_draygun:inverse");
+	if (!has_heal || !owner || !owner->IsClient() || !expedition || expedition->IsExpired() ||
+		expedition->GetType() != DynamicZoneType::Expedition ||
+		expedition->GetName() != "Blood Raid: Emperor Draygun" ||
+		expedition->GetInstanceID() != zone->GetInstanceID() || window.empty() ||
+		window != expedition->GetUUID() || !expedition->HasMember(owner->CastToClient()->CharacterID())) {
+		return false;
+	}
+
+	// The living image opens this window. The placed undead Emperor receives the spells.
+	const auto image_id = target.GetEntityVariable("dodh_draygun:living_image");
+	uint16 entity_id = 0;
+	const auto end = image_id.data() + image_id.size();
+	const auto parsed = std::from_chars(image_id.data(), end, entity_id);
+	if (parsed.ec != std::errc{} || parsed.ptr != end || !entity_id) {
+		return false;
+	}
+	auto* image = entity_list.GetNPCByID(entity_id);
+	return image && image->GetNPCTypeID() == 350921 && !image->GetSpawnPointID() &&
+		!image->GetDepop() && image->GetHP() > 0 &&
+		image->GetEntityVariable("dodh_draygun:inverse") == window;
+}
+
 void Mob::HealDamage(uint64 amount, Mob* caster, int32 spell_id)
 {
+	if (amount && DodhDraygunHeal::Allows(*this, caster, spell_id)) {
+		// A heal cannot finalize the event during the living phase.
+		const auto inverse = std::min(amount, static_cast<uint64>(GetHP() - 1));
+		SetHP(GetHP() - static_cast<int64>(inverse));
+		SendHPUpdate();
+		return;
+	}
 	if (IsNPC() && BoundDestructibles::IsRuins(CastToNPC())) {
 		return;
 	}

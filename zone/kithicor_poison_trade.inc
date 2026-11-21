@@ -1,13 +1,22 @@
 // Included once by trading.cpp. Original accept is the sole writer entrance.
 #include "inventory_session_owner.h"
+#include "dodh_rakban_combine.h"
+#include "common/evolving_items.h"
+#include "common/repositories/character_evolving_items_repository.h"
+#include "string_ids.h"
 #include "original_trade_offer.h"
 #include "sod_food_delivery.h"
 #include "original_trade_transform_hooks.h"
 #include "original_message_admission.h"
 #include "dodh_exchange.h"
+#include "dodh_mission_custody.h"
+#include "dodh_longshadow_source.h"
+#include "common/shared_core/dodh_longshadow_sources.h"
+#include "common/shared_core/dodh_longshadow_journal.h"
 #include "dynamic_zone.h"
 #include "dodh_spell_hail.h"
 #include "dodh_spell_reward.h"
+#include "dodh_rakban_claim.h"
 #include "../common/shared_task_admission.h"
 #include "task_client_state.h"
 #include "../common/kithicor_poison_custody.h"
@@ -24,6 +33,12 @@
 #include <cstring>
 #include <thread>
 #include <chrono>
+#include "dodh_longshadow_scene.inc"
+#include "dodh_longshadow_travel.inc"
+#include "dodh_hard_notebook_chest.inc"
+#include "dodh_bellfast_hive.inc"
+#include "dodh_bellfast_korlach.inc"
+#include "dodh_bellfast_neran.inc"
 namespace KithicorPoisonTrade {
 namespace {
 using namespace KithicorPoisonCustody;
@@ -40,6 +55,54 @@ unsigned Role(NPC& npc) {
  for(unsigned n=1;n<=6;++n){auto type=SodContent::Role(content_db,920193,"victual_"+std::to_string(n));if(!type)continue;if(*type==npc.GetNPCTypeID()){if(chest)return 7;chest=n;}}
  return chest;
 }
+namespace Longshadow = EQEmu::SharedCore::DodhLongshadowCustody;
+
+const Longshadow::Route* MatchingLongshadowOffer(Client& c, NPC& npc)
+{
+ if (!zone || c.GetSharedTaskId() <= 0 || !c.GetTaskState()) return nullptr;
+ const auto task = c.GetTaskState()->GetActiveSharedTask().task_id;
+ const auto offers = OriginalTradeOffer::Capture(c);
+ const Longshadow::Route* matched = nullptr;
+ for (const auto& route : Longshadow::NormalRoutes) {
+  if (route.task != task || route.zone != zone->GetZoneID() || route.version != zone->GetInstanceVersion() ||
+      route.npc != npc.GetNPCTypeID() || route.spawn != npc.GetSpawnPointID() ||
+      bool(zone->GetInstanceID()) != (route.zone != 358)) continue;
+  if (std::any_of(offers.begin(), offers.end(), [&](const auto& offer) {
+      return offer.present && offer.item_id == route.item;
+  })) {
+   if (c.IsTaskActivityActive(route.task, route.activity)) return &route;
+   if (!matched) matched = &route;
+  }
+ }
+ return matched;
+}
+
+std::optional<Longshadow::Context> BindLongshadow(
+ ZoneDatabase& db, Client& c, NPC& npc, const Longshadow::Route& route)
+{
+ if (MatchingLongshadowOffer(c, npc) != &route ||
+     !c.IsTaskActivityActive(route.task, route.activity)) return std::nullopt;
+ const auto placement = DodhMissionCustody::Placement(route.task);
+ if (!placement) return std::nullopt;
+ const auto run = uint64_t(c.GetSharedTaskId());
+ auto rows = Q(db, fmt::format(
+     "SELECT UNIX_TIMESTAMP(live.accepted_time),i.id FROM shared_tasks live "
+     "JOIN shared_task_members m ON m.shared_task_id=live.id AND m.character_id={} "
+     "JOIN shared_task_dynamic_zones link ON link.shared_task_id=live.id "
+     "JOIN dynamic_zones dz ON dz.id=link.dynamic_zone_id AND dz.type=4 "
+     "JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=dz.id AND dm.character_id=m.character_id "
+     "JOIN instance_list i ON i.id=dz.instance_id AND i.zone={} AND i.version={} "
+     "WHERE live.id={} AND live.task_id={} AND live.completion_time IS NULL "
+     "AND (live.expire_time IS NULL OR live.expire_time>NOW())",
+     c.CharacterID(), placement->zone, placement->version, run, route.task));
+ if (rows.RowCount() != 1) return std::nullopt;
+ const auto accepted = N(rows.begin()[0]), instance = N(rows.begin()[1]);
+ if (!accepted || accepted > UINT32_MAX || !instance || instance > UINT32_MAX) return std::nullopt;
+ return Longshadow::Context{run, uint32_t(accepted), c.CharacterID(), route.task,
+     route.activity, uint32_t(instance), route.zone, route.version, zone->GetInstanceID(),
+     npc.GetNPCTypeID(), npc.GetSpawnPointID(), true};
+}
+
 void Canonical(Database& db,Client& c,NPC& npc,uint64_t run,unsigned chest) {
  if(!run||!chest||chest>6||Role(npc)!=chest||!c.trade||c.trade->With()!=&npc||!npc.GetID()||entity_list.GetNPCByID(npc.GetID())!=&npc||npc.GetDepop()||!c.IsTaskActivityActive(920193,10))throw std::runtime_error("Kithicor original trade changed");
  auto r=Q(db,fmt::format(
@@ -221,17 +284,34 @@ public:
   }catch(...){return false;}
  }
 
- static bool ClaimDodhHailScroll(Client& c, DodhSpellReward::Route route) noexcept {
-  const auto* claim_table = DodhSpellReward::ClaimTable(route);
-  if (!claim_table) return false;
-  const auto route_id = static_cast<unsigned>(route);
+ enum class CursorResult { Refused, Issued, AlreadyIssued, InventoryReload };
+
+ static CursorResult ClaimDodhCursor(Client& c, std::optional<DodhSpellReward::Route> spell_route,
+     const Longshadow::SourceRoute* source_route = nullptr, const EQ::ItemInstance* native_loot = nullptr,
+     unsigned rakban_route = 0, const DodhLongshadowScene::Identity* scene = nullptr,
+     uint64_t notebook_run = 0, bool clicktok_hail = false) noexcept {
+  const bool chest = (scene && !source_route) || notebook_run;
+  if (clicktok_hail && (!source_route || source_route->source != Longshadow::Source::ClicktokGem ||
+      native_loot || chest)) return CursorResult::Refused;
+  const bool physical_source = native_loot || clicktok_hail;
+  if ((notebook_run && (source_route || scene)) ||
+      ((source_route || scene || notebook_run) && (spell_route || rakban_route)) ||
+      (!source_route && !scene && !notebook_run && spell_route.has_value() == (rakban_route != 0)) ||
+      ((scene || notebook_run) && !native_loot) ||
+      rakban_route > DodhRakbanClaim::kShroudClaim) return CursorResult::Refused;
+  const auto* claim_table = source_route ? "dodh_longshadow_item_sources"
+      : notebook_run ? "dodh_hard_notebook_chests"
+      : chest ? "dodh_longshadow_scene_effects"
+      : spell_route ? DodhSpellReward::ClaimTable(*spell_route) : "dodh_rakban_claims";
+  if (!claim_table) return CursorResult::Refused;
+  const auto route_id = spell_route ? static_cast<unsigned>(*spell_route) : rakban_route;
   auto& inv = c.GetInv();
   if (c.IsSpiritShrouded() || !FungalInventory::UnknownInventory::ProfileAllowed(&inv) || !c.trade ||
-      c.trade->state != TradeNone || c.trade->With()) return false;
+      c.trade->state != TradeNone || c.trade->With()) return CursorResult::Refused;
 
   auto ticket = c.InventorySessionReleaseTicket();
   auto lease = ticket ? ticket->SnapshotFor(c) : std::nullopt;
-  if (!lease || !c.HasInventorySessionReservation()) return false;
+  if (!lease || !c.HasInventorySessionReservation()) return CursorResult::Refused;
 
   std::unique_ptr<FungalInventory::UnknownInventory> hold;
   bool commit_unknown = false;
@@ -240,7 +320,7 @@ public:
    const auto* cfg = EQEmuConfig::get();
    if (!cfg || !db.Connect(cfg->DatabaseHost, cfg->DatabaseUsername, cfg->DatabasePassword,
        cfg->DatabaseDB, cfg->DatabasePort, "dodh-hail-exclusive") ||
-       !db.TransactionBeginStrict().Success()) return false;
+       !db.TransactionBeginStrict().Success()) return CursorResult::Refused;
    struct Rollback {
     ZoneDatabase& db;
     ~Rollback() { db.TransactionRollbackStrict(); }
@@ -252,53 +332,178 @@ public:
        "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' "
        "AND table_name IN ('inventory','character_currency','housing_inventory_sessions','housing_live_item_leases','{}')",
        claim_table));
-   if (engines.RowCount() != 1 || N(engines.begin()[0]) != 5) return false;
+   if (engines.RowCount() != 1 || N(engines.begin()[0]) != 5) return CursorResult::Refused;
    auto housing = Q(db, fmt::format(
        "SELECT account_id,pending_key FROM housing_live_item_leases WHERE character_id={} FOR UPDATE", who));
    if (housing.RowCount() > 1 || (housing.RowCount() &&
-       (N(housing.begin()[0]) != c.AccountID() || (housing.begin()[1] && *housing.begin()[1])))) return false;
-   if (KithicorPoisonCustody::Pending(db, who)) return false;
+       (N(housing.begin()[0]) != c.AccountID() || (housing.begin()[1] && *housing.begin()[1])))) return CursorResult::Refused;
+   if (KithicorPoisonCustody::Pending(db, who)) return CursorResult::Refused;
 
-   const auto receipt_sql = fmt::format(
-       "SELECT class_id,item_id,spell_id,item_serial FROM {} "
-       "WHERE character_id={} AND route_id={} FOR UPDATE", claim_table, who, route_id);
-   auto existing = Q(db, receipt_sql);
-   if (existing.RowCount()) return false;
+   std::optional<Longshadow::SourceReceipt> source;
+   std::string receipt_sql;
    const auto base_class = c.GetBaseClass();
-   const auto reward = DodhSpellReward::Resolve(route, base_class, [&](uint32_t task) {
-    if (route == DodhSpellReward::Route::Level69) {
-     return SharedTaskAdmission::CompletedMember(db, task, {who}) == who;
+   DodhSpellReward::ClassReward reward{};
+   std::string scene_scope;
+   if (scene) {
+    const auto actor = chest ? 363035u : 354920u;
+    const auto* route = DodhLongshadowScene::RouteForActor(actor);
+    if (!route || !DodhLongshadowScene::InScope(*route) || !DodhLongshadowScene::Member(c, *scene) ||
+        !Longshadow::SceneLoot(actor, native_loot->GetID()) ||
+        (!chest && source_route->source != Longshadow::Source::ShadowspinCorpse)) return CursorResult::Refused;
+    scene_scope = DodhLongshadowScene::ExactScope(*route, *scene);
+    auto terminal = Q(db, fmt::format(
+        "SELECT e.terminal FROM dodh_longshadow_scene_effects e{}WHERE {} AND {} "
+        "AND e.materialized=1 AND e.death_character_id IS NOT NULL AND e.loot_item_id={} FOR UPDATE",
+        DodhLongshadowScene::ScopeJoin, scene_scope, DodhLongshadowScene::MemberWhere(who), native_loot->GetID()));
+    if (terminal.RowCount() != 1) return CursorResult::Refused;
+    if (N(terminal.begin()[0]) == 1) return CursorResult::AlreadyIssued;
+   }
+   std::string notebook_scope;
+   if (notebook_run) {
+    namespace Notebook = DodhHardNotebookChest;
+    notebook_scope = Notebook::LootScope(c, notebook_run, native_loot->GetID());
+    if (notebook_scope.empty()) return CursorResult::Refused;
+    auto terminal = Q(db, fmt::format("SELECT c.loot_guid{}{}{} FOR UPDATE",
+        Notebook::LootJoin, Notebook::ArchiveJoin, notebook_scope));
+    if (terminal.RowCount() != 1) return CursorResult::Refused;
+    if (N(terminal.begin()[0])) return CursorResult::AlreadyIssued;
+    reward.item_id = native_loot->GetID();
+    receipt_sql = fmt::format("SELECT c.looted_by,c.item_id,0,c.loot_guid{}{}{} AND c.loot_guid IS NOT NULL FOR UPDATE",
+        Notebook::LootJoin, Notebook::ArchiveJoin, notebook_scope);
+   } else if (source_route) {
+    const auto placement = DodhMissionCustody::Placement(source_route->task);
+    const auto* kind = DodhMissionCustody::SourceKind(source_route->source);
+    if (!placement || !kind || c.GetSharedTaskId() <= 0 ||
+        !(source_route->origin == Longshadow::Origin::Acceptance ? c.IsTaskActive(source_route->task) :
+          c.IsTaskActivityActive(source_route->task, source_route->activity)) ||
+        !zone || (source_route->origin == Longshadow::Origin::Corpse ||
+                  source_route->origin == Longshadow::Origin::Ground) != physical_source)
+     return CursorResult::Refused;
+    const auto run = uint64_t(c.GetSharedTaskId());
+    auto context = Q(db, fmt::format(
+        "SELECT UNIX_TIMESTAMP(live.accepted_time),i.id FROM shared_tasks live "
+        "JOIN shared_task_members m ON m.shared_task_id=live.id AND m.character_id={} "
+        "JOIN shared_task_dynamic_zones sd ON sd.shared_task_id=live.id "
+        "JOIN dynamic_zones dz ON dz.id=sd.dynamic_zone_id AND dz.type=4 "
+        "JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=dz.id AND dm.character_id=m.character_id "
+        "JOIN instance_list i ON i.id=dz.instance_id AND i.zone={} AND i.version={} "
+        "WHERE live.id={} AND live.task_id={} AND live.completion_time IS NULL "
+        "AND (live.expire_time IS NULL OR live.expire_time>NOW()){} FOR UPDATE",
+        who, placement->zone, placement->version, run, source_route->task,
+        source_route->origin == Longshadow::Origin::Hail ? " AND m.is_leader=1" : ""));
+    if (context.RowCount() != 1) return CursorResult::Refused;
+    const auto accepted = N(context.begin()[0]), instance = N(context.begin()[1]);
+    if (!accepted || accepted > UINT32_MAX || !instance || instance > UINT32_MAX ||
+        bool(zone->GetInstanceID()) != physical_source ||
+        (physical_source && zone->GetInstanceID() != instance)) return CursorResult::Refused;
+
+    if (clicktok_hail) {
+     auto meat = Q(db, fmt::format(
+         "SELECT i.slot_id,i.guid FROM dodh_longshadow_item_sources s "
+         "JOIN inventory i ON i.character_id=s.character_id AND i.item_id=s.item_id "
+         "AND i.guid=COALESCE(s.inventory_guid,s.item_guid) "
+         "WHERE s.shared_task_id={} AND s.accepted_time={} AND s.character_id={} "
+         "AND s.task_id=920270 AND s.instance_id={} AND s.item_id=87014 "
+         "AND s.source_kind='bellfast_alpha_larva_meat' AND "
+         "(i.slot_id BETWEEN {} AND {} OR i.slot_id BETWEEN {} AND {} OR i.slot_id={}) FOR UPDATE",
+         run, accepted, who, instance, EQ::invslot::GENERAL_BEGIN, EQ::invslot::GENERAL_END,
+         EQ::invbag::GENERAL_BAGS_BEGIN, EQ::invbag::GENERAL_BAGS_END, EQ::invslot::slotCursor));
+     if (meat.RowCount() != 1) return CursorResult::Refused;
+     const auto* carried = inv.GetItem(static_cast<int16>(N(meat.begin()[0])));
+     if (!carried || carried->GetID() != 87014 || carried->GetSerialNumber() <= 0 ||
+         uint64_t(carried->GetSerialNumber()) != N(meat.begin()[1])) return CursorResult::Refused;
     }
-    const auto completed = Q(db, fmt::format(
-        "SELECT 1 FROM completed_shared_tasks occurrence "
-        "JOIN completed_shared_task_members member ON member.shared_task_id=occurrence.id "
-        "WHERE occurrence.task_id={} AND member.character_id={} "
-        "AND occurrence.completion_time IS NOT NULL LIMIT 1", task, who));
-    return completed.RowCount() == 1;
-   });
-   if (!reward.item_id || inv.CursorSize() >= EQ::invbag::CURSOR_BAG_COUNT) return false;
-   std::unique_ptr<EQ::ItemInstance> output(database.CreateItem(reward.item_id));
+    source = Longshadow::SourceReceipt{run, uint32_t(accepted), who, source_route->task,
+        uint32_t(instance), source_route->item, 0, source_route->source};
+    if (source_route->source == Longshadow::Source::ZlixtilGem &&
+        !DodhBellfastHive::LootWitness(db, c, uint32_t(accepted), uint32_t(instance)))
+     return CursorResult::Refused;
+    if (source_route->source == Longshadow::Source::TraitorChest) {
+     const auto opened = Q(db, fmt::format(
+         "SELECT 1 FROM dodh_longshadow_traitor_chests WHERE shared_task_id={} "
+         "AND accepted_time={} AND instance_id={} AND opened_by IS NOT NULL FOR UPDATE",
+         run, accepted, instance));
+     if (opened.RowCount() != 1) return CursorResult::Refused;
+    }
+    if (source_route->origin == Longshadow::Origin::Acceptance) {
+     auto event = Q(db, fmt::format(
+         "SELECT 1 FROM dodh_longshadow_note_events WHERE shared_task_id={} AND character_id={} "
+         "AND accepted_time={} FOR UPDATE", run, who, accepted));
+     if (event.RowCount() != 1) return CursorResult::Refused;
+    }
+    receipt_sql = fmt::format(
+        "SELECT character_id,item_id,accepted_time,COALESCE(inventory_guid,item_guid),task_id,instance_id "
+        "FROM dodh_longshadow_item_sources WHERE shared_task_id={} AND source_kind='{}' FOR UPDATE",
+        run, kind);
+    reward.item_id = source_route->item;
+   } else if (chest) {
+    reward.item_id = native_loot->GetID();
+    receipt_sql = fmt::format(
+        "SELECT loot_character_id,loot_item_id,0,loot_item_guid FROM dodh_longshadow_scene_effects "
+        "WHERE request_key='{}' AND terminal=1 FOR UPDATE", scene->key);
+   } else {
+    receipt_sql = fmt::format(
+        "SELECT class_id,item_id,spell_id,item_serial FROM {} "
+        "WHERE character_id={} AND route_id={} FOR UPDATE", claim_table, who, route_id);
+   }
+   auto existing = Q(db, receipt_sql);
+   if (existing.RowCount()) {
+    auto row = existing.begin();
+    if (source && existing.RowCount() == 1 && N(row[0]) &&
+        N(row[1]) == source->item && N(row[2]) == source->accepted_time && N(row[3]) &&
+        N(row[4]) == source->task && N(row[5]) == source->mission_instance)
+     return CursorResult::AlreadyIssued;
+    return CursorResult::Refused;
+   }
+   if (!source && !chest) {
+    const auto has_completion = [&](uint32_t task) {
+     if (spell_route && *spell_route == DodhSpellReward::Route::Level69) {
+      return SharedTaskAdmission::CompletedMember(db, task, {who}) == who;
+     }
+     const auto completed = Q(db, fmt::format(
+         "SELECT 1 FROM completed_shared_tasks occurrence "
+         "JOIN completed_shared_task_members member ON member.shared_task_id=occurrence.id "
+         "WHERE occurrence.task_id={} AND member.character_id={} "
+         "AND occurrence.completion_time IS NOT NULL AND {} LIMIT 1", task, who,
+         spell_route ? "1=1" : "UNIX_TIMESTAMP(occurrence.completion_time)>0"));
+     return completed.RowCount() == 1;
+    };
+    const auto already_claimed = [&](unsigned slot) {
+     const auto paid = Q(db, fmt::format(
+         "SELECT 1 FROM dodh_rakban_claims WHERE character_id={} AND route_id={} "
+         "AND item_id={} AND spell_id=0 AND item_serial>0 FOR UPDATE", who, slot, 85565 + slot));
+     return paid.RowCount() == 1;
+    };
+    reward = spell_route
+        ? DodhSpellReward::Resolve(*spell_route, base_class, has_completion)
+        : DodhSpellReward::ClassReward{
+            DodhRakbanClaim::Resolve(rakban_route, has_completion, already_claimed), 0};
+   }
+   if (!reward.item_id || inv.CursorSize() >= EQ::invbag::CURSOR_BAG_COUNT) return CursorResult::Refused;
+   std::unique_ptr<EQ::ItemInstance> output(native_loot ? native_loot->Clone() : database.CreateItem(reward.item_id));
    if (!output || output->GetID() != reward.item_id || output->GetSerialNumber() <= 0 ||
-       output->GetItem()->Scroll.Effect != reward.spell_id || c.CheckLoreConflict(output->GetItem())) return false;
+       (spell_route && output->GetItem()->Scroll.Effect != reward.spell_id) ||
+       ((source || chest) && (output->IsStackable() || output->IsClassBag())) ||
+       c.CheckLoreConflict(output->GetItem())) return CursorResult::Refused;
    if (output->IsStackable()) output->SetCharges(1);
 
    std::list<EQ::ItemInstance*> before;
    ItemInstQueue staged;
    for (auto it = inv.cursor_cbegin(); it != inv.cursor_cend(); ++it) {
     auto* item = *it;
-    if (!item || (item->IsClassBag() && !item->GetContents()->empty())) return false;
+    if (!item || (item->IsClassBag() && !item->GetContents()->empty())) return CursorResult::Refused;
     std::unique_ptr<EQ::ItemInstance> copy(item->Clone());
-    if (!copy) return false;
+    if (!copy) return CursorResult::Refused;
     before.push_back(item);
     staged.push(copy.get());
     copy.release();
    }
    ValidateTrees(db, c, before, false);
    auto raw = InventoryRepository::GetLoadSnapshot(db, who, true);
-   if (!raw.success) return false;
+   if (!raw.success) return CursorResult::Refused;
    const auto serial = output->GetSerialNumber();
    for (const auto& row : raw.rows) {
-    if (row.values.guid == uint64_t(serial)) return false;
+    if (row.values.guid == uint64_t(serial)) return CursorResult::Refused;
    }
 
    auto* scroll = output.get();
@@ -327,12 +532,34 @@ public:
 
    const auto pre = Snapshot(db, who);
    auto first = staged.cbegin(), last = staged.cend();
-   if (!db.SaveCursor(who, first, last)) return false;
+   if (!db.SaveCursor(who, first, last)) return CursorResult::Refused;
    ValidateTrees(db, c, std::list<EQ::ItemInstance*>(staged.cbegin(), staged.cend()), false);
-   const auto claim = Q(db, fmt::format(
-       "INSERT INTO {} (character_id,route_id,class_id,item_id,spell_id,item_serial) "
-       "VALUES ({},{},{},{},{},{})", claim_table, who, route_id, base_class, reward.item_id, reward.spell_id, serial));
-   if (claim.RowsAffected() != 1 || db.TransactionStrictFailed() || !ticket->HeldFor(c)) return false;
+   if (source) {
+    source->guid = serial;
+    if (!DodhMissionCustody::RecordSource(db, *source)) return CursorResult::Refused;
+   } else if (!chest) {
+    const auto claim = Q(db, fmt::format(
+        "INSERT INTO {} (character_id,route_id,class_id,item_id,spell_id,item_serial) "
+        "VALUES ({},{},{},{},{},{})", claim_table, who, route_id, base_class, reward.item_id, reward.spell_id, serial));
+    if (claim.RowsAffected() != 1) return CursorResult::Refused;
+   }
+   if (notebook_run) {
+    const auto claim = Q(db, fmt::format(
+        "UPDATE dodh_hard_notebook_chests c JOIN shared_tasks live ON live.id=c.shared_task_id{} "
+        "SET c.looted_by={},c.loot_guid={} {} AND c.loot_guid IS NULL",
+        DodhHardNotebookChest::ArchiveJoin, who, serial, notebook_scope));
+    if (claim.RowsAffected() != 1) return CursorResult::Refused;
+   }
+   if (scene) {
+    const auto claim = Q(db, fmt::format(
+        "UPDATE dodh_longshadow_scene_effects e{}SET e.terminal=1,e.loot_character_id={},e.loot_item_guid={} "
+        "WHERE {} AND {} AND e.materialized=1 AND e.terminal=0 "
+        "AND e.death_character_id IS NOT NULL AND e.loot_item_id={}",
+        DodhLongshadowScene::ScopeJoin, who, serial, scene_scope,
+        DodhLongshadowScene::MemberWhere(who), reward.item_id));
+    if (claim.RowsAffected() != 1) return CursorResult::Refused;
+   }
+   if (db.TransactionStrictFailed() || !ticket->HeldFor(c)) return CursorResult::Refused;
 
    const auto post = Snapshot(db, who);
    commit_unknown = true;
@@ -347,14 +574,15 @@ public:
     const auto actual = Snapshot(readback, who);
     if (!receipt.RowCount() && actual == pre) {
      commit_unknown = false;
-     return false;
+     return CursorResult::Refused;
     }
     if (receipt.RowCount() != 1 || actual != post || !ticket->HeldFor(c)) {
      throw std::runtime_error("Darkhollow claim outcome unknown");
     }
     auto row = receipt.begin();
-    if (N(row[0]) != base_class || N(row[1]) != reward.item_id ||
-        N(row[2]) != reward.spell_id || N(row[3]) != uint64_t(serial)) {
+    if (N(row[0]) != (source || chest ? uint64_t(who) : uint64_t(base_class)) || N(row[1]) != reward.item_id ||
+        N(row[2]) != (source ? source->accepted_time : reward.spell_id) || N(row[3]) != uint64_t(serial) ||
+        (source && (N(row[4]) != source->task || N(row[5]) != source->mission_instance))) {
      throw std::runtime_error("Darkhollow claim receipt differs");
     }
    }
@@ -362,20 +590,31 @@ public:
    inv.m_cursor.Swap(staged);
    if (cursor_packet) c.QueuePacket(cursor_packet.get());
    c.RecalcWeight();
-   return false;
+   return CursorResult::Issued;
   } catch (...) {
-   if (!commit_unknown) return false;
+   if (!commit_unknown) return CursorResult::Refused;
    hold->Attach();
    hold.release();
    c.RejectInventorySessionAdmission();
-   c.Kick("Darkhollow scroll claim requires inventory reload");
-   return true;
+   c.Kick("Darkhollow item claim requires inventory reload");
+   return CursorResult::InventoryReload;
   }
  }
 
- enum class DodhTrade { None, Exchange, DesertingGuard, NotebookOpener };
+ static bool ClaimDodhHailItem(Client& c, std::optional<DodhSpellReward::Route> spell_route,
+     unsigned rakban_route = 0, bool* delivered = nullptr) noexcept {
+  if (delivered) *delivered = false;
+  const auto result = ClaimDodhCursor(c, spell_route, nullptr, nullptr, rakban_route);
+  if (delivered) *delivered = result == CursorResult::Issued;
+  return result == CursorResult::InventoryReload;
+ }
 
- static bool Execute(Client& c,NPC& npc,unsigned chest,OriginalTradeWriter::SemanticRecipe* semantic=nullptr,bool transform=false,Continuation* resume=nullptr,DodhTrade dodh_trade=DodhTrade::None) noexcept {
+#include "dodh_rakban_combine.inc"
+
+ enum class DodhTrade { None, Exchange, DesertingGuard, NotebookOpener, Monocle, PublicRoute, Longshadow };
+
+ static bool Execute(Client& c,NPC& npc,unsigned chest,OriginalTradeWriter::SemanticRecipe* semantic=nullptr,bool transform=false,Continuation* resume=nullptr,DodhTrade dodh_trade=DodhTrade::None,
+                     const EQEmu::SharedCore::DodhExchange::PublicRoute* route=nullptr) noexcept {
   auto& inv=c.GetInv();bool transaction=false,persistence_attempted=resume!=nullptr,intent_known=resume!=nullptr;
   namespace X=EQEmu::SharedCore::OriginalTradeTransform;
   std::optional<X::Context> transform_context;
@@ -388,16 +627,66 @@ public:
   std::optional<Lease> retained_lease;std::string retained_key,retained_pre,retained_plan,abort_insert,recipe_context;
   namespace Exchange = EQEmu::SharedCore::DodhExchange;
   const bool dodh = dodh_trade != DodhTrade::None;
-  const bool dodh_exchange = dodh_trade == DodhTrade::Exchange;
+  const bool dodh_monocle = dodh_trade == DodhTrade::Monocle;
+  const bool dodh_exchange = dodh_trade == DodhTrade::Exchange || dodh_monocle;
   const bool dodh_guard = dodh_trade == DodhTrade::DesertingGuard;
   const bool dodh_opener = dodh_trade == DodhTrade::NotebookOpener;
+  const bool dodh_route = dodh_trade == DodhTrade::PublicRoute && route;
+  const bool dodh_longshadow = dodh_trade == DodhTrade::Longshadow;
   const unsigned kind = dodh ? Exchange::JournalKind : transform ? 3 : semantic ? 2 : 1;
   const bool kithicor = !dodh && !transform && !semantic;
   try {
    connection_owner=std::make_unique<ZoneDatabase>();auto& db=*connection_owner;
    const auto* cfg=EQEmuConfig::get();if(!cfg||!db.Connect(cfg->DatabaseHost,cfg->DatabaseUsername,cfg->DatabasePassword,cfg->DatabaseDB,cfg->DatabasePort,"kithicor-poison-exclusive"))return true;
-   uint64_t run = kithicor || dodh_guard ? uint64_t(c.GetSharedTaskId()) : 0;
+   uint64_t run = (kithicor || dodh_guard || dodh_longshadow) ? uint64_t(c.GetSharedTaskId()) : 0;
+   if (dodh_route && route->group == 5 && c.GetSharedTaskId() > 0 && c.GetTaskState() &&
+       c.GetTaskState()->GetActiveSharedTask().task_id == route->task &&
+       c.IsTaskActivityActive(route->task, route->final_activity)) {
+    run = static_cast<uint64_t>(c.GetSharedTaskId());
+   }
+   const auto accepted = dodh_route && route->group == 7 && c.IsTaskActive(route->task)
+       ? std::max(0, c.GetTaskStartTime(TaskType::Task, 0)) : 0;
+   const bool route_coin = dodh_route && route->group == 7 && route->code == 5;
+   const bool route_food = dodh_route && route->group == 7 && route->code <= 4;
+   const auto same_route = [&]() {
+    return zone && Exchange::PublicRouteScene(*route, zone->GetZoneID(), zone->GetInstanceVersion(),
+        zone->GetInstanceID(), npc.GetNPCTypeID(), npc.GetSpawnPointID());
+   };
+   const auto prior_route = [&]() {
+    const auto predicate = route->group == 5
+        ? fmt::format("shared_task_id={}", run)
+        : fmt::format("shared_task_id=0 AND character_id={} AND account_id={}", c.CharacterID(), c.AccountID());
+    const std::string location = Exchange::IsColdwindRoute(*route)
+        ? fmt::format("instance_id IN (0,{})", Exchange::ColdwindGlobalInstance)
+        : "instance_id=0";
+    return Q(db, fmt::format(
+        "SELECT request_key FROM kithicor_poison_custody WHERE {} AND recipe_kind=4 "
+        "AND recipe_context=x'{}' AND {} AND phase=0 AND chest=0 AND physical=1 AND abort_only=0 FOR UPDATE",
+        predicate, Hex(Exchange::RouteContext(*route, accepted)), location)).RowCount() != 0;
+   };
+   const auto lock_route = [&]() {
+    if (!same_route()) throw std::runtime_error("Darkhollow public trade actor changed");
+    if (route->group == 7 && (!accepted || c.GetTaskStartTime(TaskType::Task,0) != accepted ||
+        !c.IsTaskActivityActive(route->task, route->final_activity)))
+     throw std::runtime_error("Darkhollow functionary occurrence changed");
+    if (route->group == 5) {
+     const auto member = Q(db, fmt::format(
+         "SELECT st.id FROM shared_tasks st JOIN shared_task_members sm ON sm.shared_task_id=st.id "
+         "WHERE st.id={} AND st.task_id={} AND sm.character_id={} AND st.completion_time IS NULL "
+         "AND (st.expire_time IS NULL OR st.expire_time>NOW()) FOR UPDATE",
+         run, route->task, c.CharacterID()));
+     if (!run || member.RowCount() != 1 || !c.IsTaskActivityActive(route->task, route->final_activity))
+      throw std::runtime_error("Darkhollow public trade has no active owning shared task");
+    }
+    if (prior_route()) throw std::runtime_error("Darkhollow public trade is already recorded");
+   };
    uint32_t guard_dz = 0;
+   const auto* longshadow = dodh_longshadow ? MatchingLongshadowOffer(c, npc) : nullptr;
+   std::optional<DodhMissionCustody::LockedDebit> longshadow_debit;
+   if (dodh_longshadow && !longshadow) {
+    c.Message(Chat::Yellow, "This mission cannot accept that hand-in yet.");
+    return true;
+   }
    const auto guard_context = [&]() -> std::string {
     const auto* live_task = c.GetTaskState();
     auto* dz = zone->GetDynamicZone();
@@ -433,6 +722,9 @@ public:
     if (dodh) {
      const bool claimed = dodh_guard ? DodhOriginalExchange::ClaimsGuardOffer(c, npc)
          : dodh_opener ? DodhOriginalExchange::ClaimsOpenerOffer(c, npc)
+         : dodh_monocle ? DodhOriginalExchange::ClaimsMonocleOffer(c, npc)
+         : dodh_route ? same_route() && DodhOriginalExchange::ClaimsPublicRoute(c,npc)
+         : dodh_longshadow ? MatchingLongshadowOffer(c, npc) == longshadow
          : DodhOriginalExchange::ClaimsOffer(c, npc);
      if (c.IsSpiritShrouded() || !claimed || !c.trade || c.trade->With() != &npc ||
          !npc.GetID() || entity_list.GetNPCByID(npc.GetID()) != &npc || npc.GetDepop() || npc.GetHP() <= 0) {
@@ -511,10 +803,13 @@ public:
    else if(semantic)debit=food_snapshot->plan.debit;
    std::unique_ptr<EQ::ItemInstance> exchange_output;
    if (dodh_exchange) {
-    recipe_context = Exchange::JournalContext;
-    if (Exchange::Plan(offers, debit)) {
-     exchange_output.reset(database.CreateItem(Exchange::Output));
-     if (!exchange_output || exchange_output->GetID() != Exchange::Output ||
+    recipe_context = dodh_monocle ? Exchange::MonocleContext : Exchange::JournalContext;
+    const auto output_item = dodh_monocle ? Exchange::Monocle : Exchange::Output;
+    const bool planned = dodh_monocle ? Exchange::PlanParts(Exchange::MonocleParts, offers, debit)
+                                      : Exchange::Plan(offers, debit);
+    if (planned) {
+     exchange_output.reset(database.CreateItem(output_item));
+     if (!exchange_output || exchange_output->GetID() != output_item ||
          exchange_output->GetSerialNumber() <= 0 || c.CheckLoreConflict(exchange_output->GetItem())) {
       exchange_output.reset();
       debit = {};
@@ -522,6 +817,64 @@ public:
       exchange_output->SetCharges(1);
      }
     }
+   }
+   bool route_accept = false;
+   if (dodh_route) {
+    recipe_context = Exchange::RouteContext(*route, accepted ? accepted : 1);
+    bool planned = false;
+    if (route->group == 7 && !accepted) {
+     // Return relevant offers for a character without this active occurrence.
+    } else if (route_food) {
+     for (const auto& offer : offers) {
+      const auto* item = offer.present ? database.GetItem(offer.item_id) : nullptr;
+      if (item && item->ItemType == EQ::item::ItemTypeFood) {
+       planned = Recipe::FirstUnit(offers, offer.item_id, debit);
+       break;
+      }
+     }
+    } else if (route_coin) {
+     planned = c.trade->pp >= 240;
+    } else {
+     planned = Exchange::PlanRoute(*route, offers, debit);
+    }
+    if (planned && (route->group != 5 || run) &&
+        (route->group != 7 || c.IsTaskActivityActive(route->task, route->final_activity))) {
+     if (!db.TransactionBeginStrict().Success()) return true;
+     transaction = true;
+     LockLease(db, *lease);
+     if (!prior_route()) route_accept = true;
+     if (route_coin && route_accept) {
+      exchange_output.reset(database.CreateItem(88009));
+      if (!exchange_output || exchange_output->GetID() != 88009 || exchange_output->GetSerialNumber() <= 0 ||
+          c.CheckLoreConflict(exchange_output->GetItem())) {
+       exchange_output.reset();
+       route_accept = false;
+      }
+     }
+    }
+    if (!route_accept) debit = {};
+   }
+   if (dodh_longshadow) {
+    if (!db.TransactionBeginStrict().Success()) return true;
+    transaction = true;
+    LockLease(db, *lease);
+    const bool valid_chest_multiplier = longshadow->effect != Longshadow::Effect::OpenBloodeyeChest ||
+        RuleI(Zone, GlobalLootMultiplier) == 1;
+    if (!valid_chest_multiplier || (Longshadow::SceneActor(longshadow->effect) &&
+        !DodhMissionCustody::LockSceneFixture(db, *longshadow))) {
+     c.Message(Chat::Yellow, "This encounter is unavailable. Your items remain in the trade window.");
+     return true;
+    }
+    const auto context = BindLongshadow(db, c, npc, *longshadow);
+    if (context) longshadow_debit = DodhMissionCustody::LockTurnin(db, *longshadow, *context, offers);
+    if (!longshadow_debit) {
+     c.Message(Chat::Yellow, "This mission could not verify the offered item. Your items remain in the trade window.");
+     return true;
+    }
+    const auto& source = longshadow_debit->source;
+    recipe_context = Longshadow::EncodeJournal({source.occurrence, source.accepted_time, source.task,
+        longshadow->activity, source.mission_instance, uint32_t(source.guid)});
+    debit = longshadow_debit->debit;
    }
    if (dodh_guard && !Recipe::FirstUnit(offers, Exchange::Guard, debit)) return true;
    if (dodh_opener && !opener_repeat && !Recipe::FirstUnit(offers, Exchange::Notebook, debit)) return true;
@@ -532,16 +885,21 @@ public:
     selected_slot=offers[i].slot;selected=inv.GetItem(selected_slot);break;
    }
    if(transform){selected_slot=transform_context->offers[transform_context->primary].slot;selected=inv.GetItem(selected_slot);}
-   if ((dodh_exchange || opener_repeat) && !selected) {
+   if ((dodh_exchange || opener_repeat || dodh_route) && !selected) {
     for (const auto& offer : offers) {
-     if (offer.present && (opener_repeat ? offer.item_id == Exchange::Notebook : Exchange::IsPart(offer.item_id))) {
+     const bool claimed_item = opener_repeat ? offer.item_id == Exchange::Notebook
+         : dodh_monocle ? Exchange::IsMonoclePart(offer.item_id)
+         : dodh_route ? (route_food && offer.present && database.GetItem(offer.item_id) &&
+                           database.GetItem(offer.item_id)->ItemType == EQ::item::ItemTypeFood) ||
+                          Exchange::RoutePart(*route, offer.item_id) : Exchange::IsPart(offer.item_id);
+     if (offer.present && claimed_item) {
       selected_slot = offer.slot;
       selected = inv.GetItem(selected_slot);
       break;
      }
     }
    }
-   if(!selected)return true;
+   if(!selected && !route_coin)return true;
    // Complete new queue owns clones. All source maps remain untouched until
    // strict COMMIT is known; list nodes and packet allocations are preflighted.
    ItemInstQueue staged;std::list<EQ::ItemInstance*> before_queue;
@@ -580,7 +938,7 @@ public:
    PlayerProfile_Struct after_pp=c.GetPP();
    const auto original_currency=Currency(after_pp);for(unsigned n=0;n<12;++n)if(original_currency[n]>uint32_t(INT32_MAX))return true;
    const auto refund=[](auto& value,uint32_t amount){const auto next=int64_t(value)+amount;if(next<0||next>INT32_MAX)throw std::runtime_error("Kithicor coin refund exceeds native capacity");value=next;};
-   refund(after_pp.copper,c.trade->cp);refund(after_pp.silver,c.trade->sp);refund(after_pp.gold,c.trade->gp);refund(after_pp.platinum,c.trade->pp);
+   refund(after_pp.copper,c.trade->cp);refund(after_pp.silver,c.trade->sp);refund(after_pp.gold,c.trade->gp);refund(after_pp.platinum,c.trade->pp - (route_coin && route_accept ? 240u : 0u));
    if(!resume)hold=std::unique_ptr<FungalInventory::UnknownInventory>(new FungalInventory::UnknownInventory);
    auto* active_hold=resume?resume->hold:hold.get();
    active_hold->character_=c.CharacterID();active_hold->inventory_=&inv;
@@ -589,7 +947,7 @@ public:
    for(auto* p:before_queue)remember(remember,p);for(auto* p:staged)remember(remember,p);
    uint8_t nonce[16];if(!resume&&RAND_bytes(nonce,sizeof(nonce))!=1)return true;auto key=resume?resume->key:Hex(nonce,sizeof(nonce));if(transform&&!resume)for(auto& ch:key)if(ch>='A'&&ch<='F')ch=char(ch-'A'+'a');
    auto finish=std::make_unique<EQApplicationPacket>(OP_FinishTrade,0);
-   Ack ack{&c,&npc,selected,uint64_t(run),zone->GetInstanceID(),chest,key,selected_slot,selected->GetSerialNumber(),selected->GetCharges(),false};
+   Ack ack{&c,&npc,selected,uint64_t(run),zone->GetInstanceID(),chest,key,static_cast<int16_t>(selected ? selected_slot : 0), selected ? selected->GetSerialNumber() : 0, static_cast<int16_t>(selected ? selected->GetCharges() : 0),false};
    OriginalTradeWriter::Intent food_intent;
    if(semantic){food_intent.request_key=key;food_intent.snapshot=*food_snapshot;}
    std::vector<EQ::ItemInstance*> delivered{selected};
@@ -620,6 +978,7 @@ public:
         run, kind, Hex(std::string(Exchange::GuardPrefix))));
     if (prior.RowCount()) throw std::runtime_error("Darkhollow guard hand-in already accepted or pending");
    }
+   if (route_accept) lock_route();
    if(kithicor){auto occupied=Q(db,fmt::format("SELECT status FROM kithicor_mission_actions WHERE shared_task_id={} AND phase=0 AND action_id={} FOR UPDATE",run,chest));
     if(occupied.RowCount())throw std::runtime_error("Kithicor chest already reserved/poisoned");}
    const auto pre=Snapshot(db,c.CharacterID());
@@ -642,7 +1001,7 @@ public:
    if((semantic||dodh)&&!generalized)throw std::runtime_error("Original trade generalized journal absent");
    const auto insert_sql=[&](unsigned physical) {
     auto columns=std::string("request_key,character_id,account_id,inventory_epoch,inventory_token,process_key,client_key,instance_id,shared_task_id,phase,chest,npc_type_id,npc_entity_id,npc_spawn_id,source_slot,source_guid,source_charges,preimage,return_plan,postimage,physical,settled,settled_at,created_at");
-    auto values=fmt::format("'{}',{},{},{},x'{}',x'{}',x'{}',{},{},0,{},{},{},{},{},{},{},x'{}',x'{}',NULL,{},0,NULL,UNIX_TIMESTAMP()",key,c.CharacterID(),c.AccountID(),lease->epoch,Hex(lease->token.data(),lease->token.size()),Hex(lease->owner.process_key),Hex(lease->owner.client_key),zone->GetInstanceID(),run,chest,npc.GetNPCTypeID(),npc.GetID(),npc.GetSpawnPointID(),selected_slot,selected->GetSerialNumber(),selected->GetCharges()>=0?selected->GetCharges():32767,Hex(pre),Hex(abort_bytes),physical);
+    auto values=fmt::format("'{}',{},{},{},x'{}',x'{}',x'{}',{},{},0,{},{},{},{},{},{},{},x'{}',x'{}',NULL,{},0,NULL,UNIX_TIMESTAMP()",key,c.CharacterID(),c.AccountID(),lease->epoch,Hex(lease->token.data(),lease->token.size()),Hex(lease->owner.process_key),Hex(lease->owner.client_key),zone->GetInstanceID(),run,chest,npc.GetNPCTypeID(),npc.GetID(),npc.GetSpawnPointID(),selected ? selected_slot : 0,selected ? selected->GetSerialNumber() : 0,selected && selected->GetCharges()>=0 ? selected->GetCharges() : 32767,Hex(pre),Hex(abort_bytes),physical);
     if(generalized){columns+=",recipe_kind,recipe_context,abort_only";values+=","+std::to_string(kind)+","+(semantic||transform||dodh?"x'"+Hex(recipe_context)+"'":"NULL")+","+std::to_string(physical==3?1:0);}
     return "INSERT INTO kithicor_poison_custody("+columns+") VALUES("+values+")";
    };
@@ -676,6 +1035,20 @@ public:
    } // Existing continuation resumes inside its already-open strict read tx.
    LockLease(db,*lease);canonical();
    if (dodh_guard) lock_guard_run();
+   if (route_accept) lock_route();
+   if (longshadow_debit) {
+    const auto context = BindLongshadow(db, c, npc, *longshadow);
+    const auto locked = context ? DodhMissionCustody::LockTurnin(db, *longshadow, *context, offers)
+                                : std::nullopt;
+    if (!locked || locked->original_guid != longshadow_debit->original_guid ||
+        locked->source.guid != longshadow_debit->source.guid ||
+        locked->source.occurrence != longshadow_debit->source.occurrence ||
+        locked->source.accepted_time != longshadow_debit->source.accepted_time ||
+        locked->source.mission_instance != longshadow_debit->source.mission_instance ||
+        locked->debit.units != debit.units)
+     throw std::runtime_error("Longshadow original offer provenance changed");
+    longshadow_debit = locked;
+   }
    auto intent=Q(db,"SELECT request_key FROM kithicor_poison_custody WHERE request_key='"+key+"' AND physical=0 AND settled=0 AND "+LeaseWhere(*lease)+" FOR UPDATE");
    if(intent.RowCount()!=1||Snapshot(db,c.CharacterID())!=pre||!ticket->HeldFor(c))throw std::runtime_error("Kithicor intent physical preimage changed");
    if(!Recipe::Same(offers,OriginalTradeOffer::Capture(c)))throw std::runtime_error("Original offer changed before physical debit");
@@ -699,7 +1072,22 @@ public:
    // semantic hook can COMMIT independently; Session() below verifies ownership.
    if(transform&&!OriginalTransformNative::CommitSettlement(db,key,*transform_context,transform_decision))throw std::runtime_error("Original native output settlement refused");
    if(semantic&&!semantic->CommitDebitAndProgress(db,food_intent))throw std::runtime_error("Food physical/semantic CAS refused");
-   const unsigned physical_outcome = ((dodh_exchange && !output_guid) || opener_repeat) ? 2 : 1;
+   if (dodh_monocle && output_guid) {
+    // The old Hive key must survive consuming the device. Persist it with the
+    // same exclusive transaction and character lease as the physical exchange.
+    auto engine = Q(db, "SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='keyring'");
+    if (engine.RowCount() != 1 || !engine.begin()[0] || std::string_view(engine.begin()[0]) != "InnoDB")
+     throw std::runtime_error("Darkhollow public key table is not transactional");
+    const auto keyring = Q(db, fmt::format("SELECT id FROM keyring WHERE char_id={} AND item_id={} FOR UPDATE",
+                                         c.CharacterID(), Exchange::Output));
+    if (!keyring.RowCount() &&
+        Q(db, fmt::format("INSERT INTO keyring (char_id,item_id) VALUES ({},{})",
+                          c.CharacterID(), Exchange::Output)).RowsAffected() != 1)
+     throw std::runtime_error("Darkhollow public key preservation failed");
+   }
+   if (longshadow_debit && !DodhMissionCustody::RecordSettlement(db, *longshadow, *longshadow_debit, key))
+    throw std::runtime_error("Longshadow physical settlement receipt refused");
+   const unsigned physical_outcome = ((dodh_exchange && !output_guid) || opener_repeat || (dodh_route && !route_accept)) ? 2 : 1;
    auto outcome=Q(db,"UPDATE kithicor_poison_custody SET physical="+std::to_string(physical_outcome)+",postimage=x'"+Hex(post)+"' WHERE request_key='"+key+"' AND physical=0 AND settled=0 AND "+LeaseWhere(*lease));
    if(outcome.RowsAffected()!=1||db.TransactionStrictFailed())throw std::runtime_error("Kithicor physical outcome changed");
    Session(db,connection);if(!db.TransactionCommitStrict().Success())throw std::runtime_error("Kithicor physical commit unknown");transaction=false;
@@ -707,6 +1095,11 @@ public:
    inv.m_cursor.Swap(staged);std::array<std::unique_ptr<EQ::ItemInstance>,4> spent;
    for(int16_t s=EQ::invslot::TRADE_BEGIN;s<=EQ::invslot::TRADE_NPC_END;++s){auto at=inv.m_trade.find(s);if(at!=inv.m_trade.end()){spent[s-EQ::invslot::TRADE_BEGIN].reset(at->second);at->second=nullptr;}}
    c.GetPP()=after_pp;
+   if (dodh_monocle && output_guid && !c.KeyRingCheck(Exchange::Output)) {
+    c.KeyRingLoad();
+    if (!c.KeyRingCheck(Exchange::Output))
+     throw std::runtime_error("Darkhollow public key publication requires reload");
+   }
    auto settled=Q(db,"UPDATE kithicor_poison_custody SET settled=1,settled_at=UNIX_TIMESTAMP() WHERE request_key='"+key+"' AND physical="+std::to_string(physical_outcome)+" AND settled=0 AND "+LeaseWhere(*lease));
    if(settled.RowsAffected()!=1)throw std::runtime_error("Kithicor memory publication acknowledgment unavailable");
    // New one-use gameplay proof is issued ONLY after definite physical commit
@@ -734,12 +1127,29 @@ public:
     try{auto receipt=Q(db,fmt::format("SELECT status FROM kithicor_mission_actions WHERE shared_task_id={} AND phase=0 AND action_id={} AND character_id={} AND item_id=38504 AND status=1",run,chest,c.CharacterID()));gameplay_accepted=updated&&receipt.RowCount()==1;}catch(...){}
     if(!gameplay_accepted)c.Message(Chat::Yellow,"Your vial was used, but task progress could not be confirmed.");
    }
+   if (route_accept) {
+    if (route->group == 7 && c.IsTaskActivityActive(route->task, route->final_activity)) {
+     c.UpdateTaskActivity(route->task, route->final_activity, 1);
+    }
+    if (route->group == 5 && c.GetSharedTaskId() > 0 && static_cast<uint64_t>(c.GetSharedTaskId()) == run &&
+        c.IsTaskActivityActive(route->task, route->final_activity)) {
+     c.UpdateTaskActivity(route->task, route->final_activity, 1);
+    }
+    c.Message(Chat::Yellow, "Your offering has been accepted.");
+   } else if (dodh_route) {
+    c.Message(Chat::Yellow, "Your offering was returned.");
+   }
    if (opener_repeat) {
     c.Message(Chat::Yellow, "You have already turned in a notebook. Your offer was returned.");
    } else if (dodh_exchange && !output_guid) {
     c.Message(Chat::Yellow, "The exchange could not be completed. Your offer was returned.");
    }
    c.trade->Reset();c.QueuePacket(finish.get());if(cursor_packet)c.QueuePacket(cursor_packet.get());c.SendMoneyUpdate();c.RecalcWeight();
+   if (dodh_route && route->group == 5 && route->code == 1 && !route_accept && c.GetSharedTaskId() <= 0 &&
+       std::any_of(offers.begin(), offers.end(), [](const auto& item) { return item.present && item.item_id == 88006; }) &&
+       std::none_of(offers.begin(), offers.end(), [](const auto& item) { return item.present && item.item_id == 88007; })) {
+    c.TaskQuestSetSelector(&npc, {static_cast<int>(route->task)}, false);
+   }
    if(resume){auto* h=resume->hold;const auto epoch=resume->lease.epoch;h->ReleaseKnownContinuation();AfterCompleteDelete(c.CharacterID(),epoch);}
    return true;
   }catch(...) {
@@ -794,6 +1204,37 @@ void ResumeKnownDecision(Client& c,const std::string& key){KithicorPoisonTrade::
 void AfterCompleteDelete(uint32_t character,uint64_t epoch)noexcept{KithicorPoisonTrade::Writer::AfterCompleteDelete(character,epoch);}
 }
 
+namespace DodhRakbanCombine {
+std::optional<Offer> Capture(Client& client, int16_t slot, const EQ::ItemInstance& bag)
+{
+ if (slot < EQ::invslot::GENERAL_BEGIN || slot > EQ::invslot::GENERAL_END ||
+     !bag.IsClassBag() || bag.GetID() != Shroud || bag.GetSerialNumber() <= 0 ||
+     bag.GetContents()->size() != 5) return std::nullopt;
+ Offer result{client.CharacterID(), client.AccountID(), slot, bag.GetSerialNumber()};
+ for (const auto& [cell, fragment] : *bag.GetContents()) {
+  if (!fragment || cell >= bag.GetItem()->BagSlots || cell >= EQ::invbag::SLOT_COUNT ||
+      fragment->GetID() < 85566 || fragment->GetID() > 85570 ||
+      fragment->GetSerialNumber() <= 0 || fragment->GetSerialNumber() == result.shroud ||
+      fragment->IsClassBag() || fragment->IsEvolving() || !fragment->GetContents()->empty() ||
+      (fragment->IsStackable() && fragment->GetCharges() != 1)) return std::nullopt;
+  const auto augments = fragment->GetAugmentIDs();
+  if (std::any_of(augments.begin(), augments.end(), [](uint32_t id) { return id != 0; }))
+   return std::nullopt;
+  const auto i = fragment->GetID() - 85566;
+  if (result.fragments[i] || std::find(result.fragments.begin(), result.fragments.end(),
+      fragment->GetSerialNumber()) != result.fragments.end()) return std::nullopt;
+  result.cells[i] = cell;
+  result.fragments[i] = fragment->GetSerialNumber();
+ }
+ return result;
+}
+
+void Manual(Client& client, const Offer& offer, const DBTradeskillRecipe_Struct& recipe)
+{
+ KithicorPoisonTrade::Writer::CombineRakban(client, offer, recipe);
+}
+}
+
 namespace OriginalMessageAdmission {
 std::optional<PendingSelection> FindForNativeSelection(Client& c,uint32_t task,uint32_t giver){return KithicorPoisonTrade::Writer::FindAdmission(c,task,giver);}
 }
@@ -813,6 +1254,54 @@ bool ClaimsOffer(Client& client, NPC& npc)
     const auto offers = OriginalTradeOffer::Capture(client);
     return std::any_of(offers.begin(), offers.end(), [](const auto& offer) {
         return offer.present && Exchange::IsPart(offer.item_id);
+    });
+}
+
+const EQEmu::SharedCore::DodhExchange::PublicRoute* OfferedPublicRoute(Client& client, NPC& npc)
+{
+    namespace Exchange = EQEmu::SharedCore::DodhExchange;
+    if (!zone) return nullptr;
+    const auto offers = OriginalTradeOffer::Capture(client);
+    const auto* task_state = client.GetTaskState();
+    for (const auto& route : Exchange::PublicRoutes) {
+        if (!Exchange::RouteReady(route) ||
+            !Exchange::PublicRouteScene(route, zone->GetZoneID(), zone->GetInstanceVersion(),
+                zone->GetInstanceID(), npc.GetNPCTypeID(), npc.GetSpawnPointID())) continue;
+        if (route.group == 5 && (!task_state || client.GetSharedTaskId() <= 0 ||
+            task_state->GetActiveSharedTask().task_id != route.task ||
+            !client.IsTaskActivityActive(route.task, route.final_activity))) continue;
+        if (route.group == 7 && (route.task != 505745 || !client.IsTaskActive(route.task) ||
+            !client.IsTaskActivityActive(route.task, route.final_activity) ||
+            client.GetTaskStartTime(TaskType::Task, 0) <= 0)) continue;
+        const bool coin = route.group == 7 && route.code == 5 && client.trade && client.trade->pp >= 240;
+        const bool part = std::any_of(offers.begin(), offers.end(), [&](const auto& offer) {
+            if (!offer.present) return false;
+            if (Exchange::RoutePart(route, offer.item_id)) return true;
+            if (route.group != 7 || route.code > 4) return false;
+            const auto* item = database.GetItem(offer.item_id);
+            return item && item->ItemType == EQ::item::ItemTypeFood;
+        });
+        if (part || coin) return &route;
+    }
+    return nullptr;
+}
+
+bool ClaimsPublicRoute(Client& client, NPC& npc)
+{
+    return OfferedPublicRoute(client,npc) != nullptr;
+}
+
+bool ClaimsMonocleOffer(Client& client, NPC& npc)
+{
+    namespace Exchange = EQEmu::SharedCore::DodhExchange;
+    if (!zone || zone->GetZoneID() != Exchange::Zone || zone->GetInstanceVersion() ||
+        zone->GetInstanceID() || npc.GetNPCTypeID() != Exchange::Giver ||
+        npc.GetSpawnPointID() != Exchange::Spawn) {
+        return false;
+    }
+    const auto offers = OriginalTradeOffer::Capture(client);
+    return std::any_of(offers.begin(), offers.end(), [](const auto& offer) {
+        return offer.present && Exchange::IsMonoclePart(offer.item_id);
     });
 }
 
@@ -840,32 +1329,257 @@ bool ClaimsOpenerOffer(Client& client, NPC& npc)
     });
 }
 
+bool ClaimsLongshadowOffer(Client& client, NPC& npc)
+{
+    return KithicorPoisonTrade::MatchingLongshadowOffer(client, npc) != nullptr;
+}
+
 bool OriginalAccept(Client& client, NPC& npc)
 {
     using Mode = KithicorPoisonTrade::Writer::DodhTrade;
+    if (ClaimsLongshadowOffer(client, npc)) {
+        return KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::Longshadow);
+    }
     if (ClaimsOpenerOffer(client, npc)) {
         return KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::NotebookOpener);
     }
     if (ClaimsGuardOffer(client, npc)) {
         return KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::DesertingGuard);
     }
+    if (const auto* route = OfferedPublicRoute(client,npc)) {
+        return KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::PublicRoute, route);
+    }
+    if (ClaimsMonocleOffer(client, npc)) {
+        return KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::Monocle);
+    }
     return ClaimsOffer(client, npc) &&
         KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::Exchange);
 }
 }
 
+namespace DodhLongshadowSource {
+namespace P = EQEmu::SharedCore::DodhLongshadowCustody;
+constexpr const char* CorpseProof = "rof2_longshadow_corpse_source";
+constexpr const char* SceneRunProof = "rof2_dodh_longshadow_scene_run";
+
+bool Matches(const P::SourceRoute& route, const NPC& npc)
+{
+    return zone && zone->GetZoneID() == route.zone && zone->GetInstanceVersion() == route.version &&
+        npc.GetNPCTypeID() == route.npc && (!route.spawn || npc.GetSpawnPointID() == route.spawn);
+}
+
+void RetryPendingNote(Client& client)
+{
+    const auto& route = P::Sources[0];
+    if (!zone || zone->GetZoneID() != route.zone || zone->GetInstanceVersion() != route.version ||
+        zone->GetInstanceID() || client.GetSharedTaskId() <= 0 ||
+        !client.IsTaskActive(route.task)) return;
+    auto due = database.QueryDatabase(fmt::format(
+        "SELECT 1 FROM dodh_longshadow_note_events note "
+        "JOIN shared_tasks live ON live.id=note.shared_task_id AND live.task_id=920251 "
+        "AND UNIX_TIMESTAMP(live.accepted_time)=note.accepted_time "
+        "WHERE live.id={} AND note.character_id={} AND live.completion_time IS NULL "
+        "AND NOT EXISTS (SELECT 1 FROM dodh_longshadow_item_sources source "
+        "WHERE source.shared_task_id=live.id AND source.source_kind='dustspirit_note')",
+        client.GetSharedTaskId(), client.CharacterID()), false);
+    if (due.Success() && due.RowCount() == 1)
+        KithicorPoisonTrade::Writer::ClaimDodhCursor(client, std::nullopt, &route);
+}
+
+void Accepted(Client& client, NPC& npc, uint32_t task, uint32_t accepted_time)
+{
+    const auto& route = P::Sources[0];
+    if (task != route.task || !accepted_time || !Matches(route, npc) || zone->GetInstanceID()) return;
+    // World sends the real NPC context only to the requesting character,
+    // before its separate native dynamic-zone creation finishes.
+    auto reserved = database.QueryDatabase(fmt::format(
+        "INSERT INTO dodh_longshadow_note_events (shared_task_id,character_id,accepted_time) "
+        "SELECT live.id,m.character_id,UNIX_TIMESTAMP(live.accepted_time) FROM shared_tasks live "
+        "JOIN shared_task_members m ON m.shared_task_id=live.id AND m.character_id={} "
+        "WHERE live.task_id={} AND UNIX_TIMESTAMP(live.accepted_time)={} "
+        "AND live.completion_time IS NULL AND (live.expire_time IS NULL OR live.expire_time>NOW()) "
+        "ON DUPLICATE KEY UPDATE shared_task_id=dodh_longshadow_note_events.shared_task_id",
+        client.CharacterID(), task, accepted_time), false);
+    if (reserved.Success()) RetryPendingNote(client);
+}
+
+bool OnTargetedSay(Client& client, NPC& npc, const char* message)
+{
+    if (!message || !zone || npc.GetDepop() || npc.GetHP() <= 0 || client.GetTarget() != &npc) return false;
+    const auto lower = Strings::ToLower(message);
+    if (!Strings::BeginsWith(lower, "hail") ||
+        (lower.size() > 4 && lower[4] != ' ' && lower[4] != ',' && lower[4] != '!')) return false;
+    if (DodhLongshadowTravel::TakeWhiteclawTravel(client, npc)) return true;
+    if (DodhLongshadowTravel::ConfrontTraitor(client, npc)) return true;
+    if (DodhBellfastNeran::Hail(client, npc)) return true;
+    const auto* clicktok = P::FindSourceActivity(920270, 2);
+    if (clicktok && zone->GetInstanceID() && Matches(*clicktok, npc) &&
+        client.IsTaskActivityActive(clicktok->task, clicktok->activity)) {
+        // Both legitimate routes settle the same unique per-occurrence gem source.
+        KithicorPoisonTrade::Writer::ClaimDodhCursor(
+            client, std::nullopt, clicktok, nullptr, 0, nullptr, 0, true);
+        return true;
+    }
+    const auto& route = P::Sources[3];
+    if (!Matches(route, npc) || zone->GetInstanceID()) return false;
+    const bool returning = client.IsTaskActivityActive(route.task, 4);
+    if (!returning && !client.IsTaskActivityActive(route.task, route.activity)) return false;
+    if (returning) {
+        DodhLongshadowTravel::Record(client, *DodhLongshadowTravel::Find(route.task), 4);
+    } else {
+        KithicorPoisonTrade::Writer::ClaimDodhCursor(client, std::nullopt, &route);
+    }
+    return true;
+}
+
+void MarkNativeCorpse(NPC& npc, Corpse& corpse)
+{
+    if (!zone || !zone->GetInstanceID()) return;
+    if (DodhHardNotebookChest::IsActor(npc)) {
+        corpse.SetEntityVariable(DodhHardNotebookChest::Marker, npc.GetEntityVariable(DodhHardNotebookChest::Marker));
+        return;
+    }
+    DodhLongshadowScene::StampCorpse(npc, corpse);
+    for (const auto& route : P::Sources) {
+        if (route.origin != P::Origin::Corpse || !Matches(route, npc)) continue;
+        // Dynamic actors and the randomized chest require their author's
+        // exact run stamp. The retained static Poisonmaster has a fixed spawn.
+        const auto stamp = route.source == P::Source::PoisonmasterCorpse
+            ? npc.GetEntityVariable(DodhLongshadowTravel::OrbTerminal) : npc.GetEntityVariable(SceneRunProof);
+        if ((!route.spawn || route.source == P::Source::PoisonmasterCorpse) && stamp.empty()) return;
+        corpse.SetEntityVariable(CorpseProof, fmt::format("{}:{}", route.task, stamp));
+        return;
+    }
+}
+
+LootResult NativeBellfastGroundPickup(Client& client, const EQ::ItemInstance& item)
+{
+    const auto* route = P::FindSourceActivity(920270, 1);
+    if (!route || route->origin != P::Origin::Ground || !zone || !zone->GetInstanceID() ||
+        zone->GetZoneID() != route->zone || zone->GetInstanceVersion() != route->version ||
+        !client.IsTaskActivityActive(route->task, route->activity) || item.GetID() != route->item)
+        return LootResult::Refused;
+    using Cursor = KithicorPoisonTrade::Writer::CursorResult;
+    switch (KithicorPoisonTrade::Writer::ClaimDodhCursor(client, std::nullopt, route, &item)) {
+    case Cursor::Issued: return LootResult::Issued;
+    case Cursor::AlreadyIssued: return LootResult::AlreadyIssued;
+    case Cursor::InventoryReload: return LootResult::InventoryReload;
+    default: return LootResult::Refused;
+    }
+}
+
+LootResult NativeLoot(Client& client, Corpse& corpse, const EQ::ItemInstance& item)
+{
+    if (!zone || !zone->GetInstanceID() || !corpse.IsNPCCorpse()) return LootResult::Unrelated;
+    const auto actor = corpse.GetNPCTypeID();
+    const auto* scene_route = DodhLongshadowScene::RouteForActor(actor);
+    const auto scene = scene_route && DodhLongshadowScene::InScope(*scene_route)
+        ? DodhLongshadowScene::ReadIdentity(corpse) : std::nullopt;
+    const auto result = [](auto cursor) {
+        using Cursor = KithicorPoisonTrade::Writer::CursorResult;
+        switch (cursor) {
+        case Cursor::Issued: return LootResult::Issued;
+        case Cursor::AlreadyIssued: return LootResult::AlreadyIssued;
+        case Cursor::InventoryReload: return LootResult::InventoryReload;
+        default: return LootResult::Refused;
+        }
+    };
+    if (DodhHardNotebookChest::IsCorpse(corpse)) {
+        const auto run = DodhHardNotebookChest::MemberRun(client);
+        if (!run || corpse.GetEntityVariable(DodhHardNotebookChest::Marker) != std::to_string(run))
+            return LootResult::Refused;
+        return result(KithicorPoisonTrade::Writer::ClaimDodhCursor(
+            client, std::nullopt, nullptr, &item, 0, nullptr, run));
+    }
+    if (scene) {
+        if (!P::SceneLoot(actor, item.GetID()) || !DodhLongshadowScene::AllowLoot(client, corpse))
+            return LootResult::Refused;
+        if (actor == 363035)
+            return result(KithicorPoisonTrade::Writer::ClaimDodhCursor(
+                client, std::nullopt, nullptr, &item, 0, &*scene));
+    }
+    for (const auto& route : P::Sources) {
+        if (route.origin != P::Origin::Corpse || route.item != item.GetID() ||
+            route.npc != corpse.GetNPCTypeID() || route.zone != zone->GetZoneID() ||
+            route.version != zone->GetInstanceVersion()) continue;
+        if (client.GetSharedTaskId() <= 0 || !client.IsTaskActivityActive(route.task, route.activity) ||
+            corpse.GetEntityVariable(CorpseProof) !=
+                (route.spawn && route.source != P::Source::PoisonmasterCorpse ? fmt::format("{}:", route.task)
+                  : fmt::format("{}:{}", route.task, client.GetSharedTaskId())))
+            return LootResult::Refused;
+        return result(KithicorPoisonTrade::Writer::ClaimDodhCursor(
+            client, std::nullopt, &route, &item, 0, scene ? &*scene : nullptr));
+    }
+    return LootResult::Unrelated;
+}
+}
+
 namespace DodhSpellHail {
+namespace {
+void ReconcileRakbanMaster(Client& client)
+{
+    if (!client.IsTaskActive(DodhRakbanClaim::kMasterTask) || client.IsSpiritShrouded()) return;
+    auto result = database.QueryDatabase(fmt::format(
+        "SELECT route_id,item_id FROM dodh_rakban_claims "
+        "WHERE character_id={} AND spell_id=0 AND item_serial>0 ORDER BY route_id",
+        client.CharacterID()));
+    if (!result.Success()) return;
+    for (auto row : result) {
+        const auto slot = SharedTaskAdmission::Number(row[0]).value_or(0);
+        const auto item = SharedTaskAdmission::Number(row[1]).value_or(0);
+        if (!slot || slot > DodhRakbanClaim::kShroudClaim ||
+            item != (slot == DodhRakbanClaim::kShroudClaim ? 85575 : 85565 + slot)) continue;
+        const auto activity = static_cast<int>(slot - 1);
+        if (client.IsTaskActivityActive(DodhRakbanClaim::kMasterTask, activity)) {
+            client.UpdateTaskActivity(DodhRakbanClaim::kMasterTask, activity, 1);
+        }
+    }
+}
+}
+
 bool OnTargetedSay(Client& client, NPC& npc, const char* message) noexcept
 {
     if (!message || !zone || zone->GetZoneID() != 362 || zone->GetInstanceVersion() ||
-        zone->GetInstanceID() || npc.GetNPCTypeID() != 362107 || npc.GetSpawnPointID() != 102605 ||
-        npc.GetDepop() || npc.GetHP() <= 0 || client.GetTarget() != &npc) return false;
+        zone->GetInstanceID() || npc.GetDepop() || npc.GetHP() <= 0 ||
+        client.GetTarget() != &npc) return false;
+    const bool spell_brother = npc.GetNPCTypeID() == 362107 && npc.GetSpawnPointID() == 102605;
+    const bool fortune_teller = DodhRakbanClaim::kMasterEnabled && !client.IsSpiritShrouded() &&
+        npc.GetNPCTypeID() == DodhRakbanClaim::kFortuneTeller &&
+        npc.GetSpawnPointID() == DodhRakbanClaim::kFortuneTellerSpawn;
+    if (!spell_brother && !fortune_teller) return false;
     try {
         const auto lower = Strings::ToLower(message);
+        if (fortune_teller && lower == "begin the reconstruction") {
+            if (!client.IsTaskActive(DodhRakbanClaim::kMasterTask) &&
+                !client.IsTaskCompleted(DodhRakbanClaim::kMasterTask)) {
+                client.AssignTask(DodhRakbanClaim::kMasterTask, npc.GetID(), true);
+            }
+            return false;
+        }
         if (!Strings::BeginsWith(lower, "hail") ||
             (lower.size() > 4 && lower[4] != ' ' && lower[4] != ',' && lower[4] != '!')) return false;
-        for (const auto route : DodhSpellReward::kHailRoutes) {
-            if (KithicorPoisonTrade::Writer::ClaimDodhHailScroll(client, route)) return true;
+        if (spell_brother) {
+            for (const auto route : DodhSpellReward::kHailRoutes) {
+                if (KithicorPoisonTrade::Writer::ClaimDodhHailItem(client, route)) return true;
+            }
+        } else {
+            ReconcileRakbanMaster(client);
+            if (!client.IsTaskActive(DodhRakbanClaim::kMasterTask)) {
+                if (!client.IsTaskCompleted(DodhRakbanClaim::kMasterTask)) {
+                    client.Message(Chat::White, "Say 'begin the reconstruction' to accept the quest.");
+                }
+                return false;
+            }
+            for (unsigned slot = 1; slot <= DodhRakbanClaim::kShroudClaim; ++slot) {
+                bool delivered = false;
+                if (KithicorPoisonTrade::Writer::ClaimDodhHailItem(client, std::nullopt, slot, &delivered)) {
+                    return true;
+                }
+                if (delivered) {
+                    ReconcileRakbanMaster(client);
+                    break;
+                }
+            }
         }
         return false;
     } catch (...) {

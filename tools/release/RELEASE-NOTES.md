@@ -1,11 +1,9 @@
-<!-- previous-release: rof2-ci-r28-a1-c0e1f6ea2276 -->
+<!-- previous-release: rof2-ci-r29-a1-b4c9fe347423 -->
 
-## Depths of Darkhollow Normal Progression
+## Depths of Darkhollow Progression
 
-- Restored 17 Depths of Darkhollow quests on Normal difficulty.
-- Earn the Dreadspire entry device through the Hive questline and use it to enter Dreadspire Keep.
-- Earn level 68–70 Brother Hidden Path class spell or discipline rewards through the Kelliad, Brovil, and Jarzarrad questlines.
-- Brovil and Jarzarrad missions now advance their corresponding Skull of Den Lord Rakban achievement details.
-- Restored the shroud forms and Commander shard rewards in **The Fall of the Illsalin**. Form loadouts and XP rates are reconstructed. The tested shard payout is 5% of a level at full normal XP allocation or 90% of one AA point at full AA allocation, subject to caps.
-- Fixed group member lookups in Perl quests to return player characters.
-- Fixed how the server handles barter welcome messages and buy-line searches.
+- Restored the Formal Dinner Invitation route into Dreadspire Keep and Master Vule’s statue-and-lever encounter.
+- Restored the five Normal Longshadow missions and their earned Rakban achievement credit.
+- Restored Curse of Blood progression through the five Blood raids, the Monocle of Blood questline, and both Demi-Plane tiers through Mayong Mistmoore.
+- Restored the four Bellfast and four Widdlethorpe missions, including Neran’s escort and bridge crossing.
+- Added the earned fragment claims and Ancient Werewolf Skull combine for The Depths of Darkhollow achievement.

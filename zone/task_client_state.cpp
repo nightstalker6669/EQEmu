@@ -1,3 +1,8 @@
+#include "common/dodh_bellfast_admission.h"
+#include "common/dodh_longshadow_travel.h"
+#include "common/dodh_longshadow_admission.h"
+#include "dodh_longshadow_source.h"
+#include "common/shared_core/dodh_longshadow_sources.h"
 #include "sod_message_admission.h"
 #include "common/sod_shared_activity.h"
 #include "common/kithicor_mission.h"
@@ -1301,6 +1306,12 @@ bool ClientTaskState::UpdateTasksOnDeliver(Client* client, std::vector<EQ::ItemI
 		filter.item_id = item->GetID();
 
 		int count = item->IsStackable() ? item->GetCharges() : 1;
+		if (((m_active_shared_task.task_id == 920275 && item->GetID() == 85024) ||
+		     (m_active_shared_task.task_id == 920277 && item->GetID() >= 85026 && item->GetID() <= 85028)) &&
+		    (!zone->IsZone(358, 0) || zone->GetInstanceVersion() != 0 ||
+		     npc->GetNPCTypeID() != 358051 || npc->GetSpawnPointID() != 101854)) {
+			continue;
+		}
 		int updated_count = UpdateTasks(client, filter, count);
 		if (updated_count > 0)
 		{
@@ -1372,6 +1383,11 @@ int ClientTaskState::IncrementDoneCount(
 	// shared task shim
 	// intercept and pass to world first before processing normally
 	if (!client->m_shared_task_update && task_data->type == TaskType::Shared) {
+        // Only the World outbox submits these physically settled hand-ins.
+        if (EQEmu::SharedCore::DodhLongshadowCustody::FindRoute(info->task_id, activity_id) ||
+            EQEmu::SharedCore::DodhLongshadowCustody::FindSourceActivity(info->task_id, activity_id) ||
+            EQEmu::SharedCore::DodhLongshadowCustody::DeathActivity(info->task_id, activity_id) ||
+            DodhLongshadowTravel::OwnsActivity(info->task_id, activity_id)) return 0;
 
 		// Original door/owned helper providers submit their own real run-stamped native packet.
 		if(info->task_id==920170&&(activity_id==3||activity_id==7||activity_id==14||activity_id==16||activity_id==17||activity_id==18))return 0;
@@ -1886,6 +1902,12 @@ bool ClientTaskState::RewardTask(
 			if (item_id > 0) {
 				std::unique_ptr<EQ::ItemInstance> inst(database.CreateItem(item_id, charges));
 				if (inst && inst->GetItem()) {
+					if (ti->type == TaskType::Shared && client_task.task_id >= 920275 &&
+					    client_task.task_id <= 920278 &&
+					    (!(inst->GetItem()->Classes & GetPlayerClassBit(c->GetBaseClass())) ||
+					     c->CheckLoreConflict(inst->GetItem()))) {
+						continue;
+					}
 					c->CheckItemDiscoverability(item_id);
 					bool stacked = c->TryStacking(inst.get());
 					if (!stacked) {
@@ -3397,6 +3419,8 @@ void ClientTaskState::UpdateTasksOnCollect(Client *client)
 
 void ClientTaskState::TaskPeriodicChecks(Client *client)
 {
+    if (m_active_shared_task.task_id == 920251) DodhLongshadowSource::RetryPendingNote(*client);
+    DodhLongshadowTravel::RecordArrival(*client);
 	RetryCompletedSelectableRewards(client);
 
 	// shared task expiration is handled by world
@@ -3817,6 +3841,24 @@ void ClientTaskState::AcceptNewTask(
 		auto* giver = entity_list.GetNPCByID(npc_entity_id);
 		if (!giver || !client->CanRequestSodTask(task_id, giver->GetNPCTypeID())) return;
 	}
+	if (DodhLongshadowAdmission::Managed(task_id) && !client->m_requesting_shared_task) {
+		auto* giver = entity_list.GetNPCByID(npc_entity_id);
+		if (!zone || !giver || giver->GetDepop() || giver->GetHP() <= 0 ||
+			!DodhLongshadowAdmission::Requester(zone->GetZoneID(), zone->GetInstanceVersion(),
+				zone->GetInstanceID(), giver->GetNPCTypeID(), giver->GetSpawnPointID()) ||
+			!DodhLongshadowAdmission::EarnedPrerequisites(database, task_id, client->CharacterID())) return;
+	}
+
+    if (DodhBellfastAdmission::Managed(task_id) && !client->m_requesting_shared_task) {
+        auto* giver = entity_list.GetNPCByID(npc_entity_id);
+        if (!zone || !giver || giver->GetDepop() || giver->GetHP() <= 0 ||
+            client->IsSpiritShrouded() ||
+            !DodhBellfastAdmission::Requester(zone->GetZoneID(), zone->GetInstanceVersion(),
+                zone->GetInstanceID(), giver->GetNPCTypeID(), giver->GetSpawnPointID()) ||
+            !DodhBellfastAdmission::EarnedPrerequisites(database, task_id, client->CharacterID())) {
+            return;
+        }
+    }
 
 	// Shared occurrences are reserved only after world confirms actual
 	// membership; failed requests must not mutate a previous run's identity.
@@ -4135,6 +4177,7 @@ void ClientTaskState::AcceptNewTask(
 			RecordPlayerEventLogWithClient(client, PlayerEvent::TASK_ACCEPT, e);
 		}
 
+		if (acceptance_saved) DodhLongshadowSource::Accepted(*client, *npc, task_id, uint32_t(active_slot->accepted_time));
 		if (parse->HasQuestSub(npc->GetNPCTypeID(), EVENT_TASK_ACCEPTED)) {
 			parse->EventNPC(EVENT_TASK_ACCEPTED, npc, client, std::to_string(task_id), 0);
 		}

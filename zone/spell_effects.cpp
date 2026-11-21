@@ -315,7 +315,7 @@ bool Mob::SpellEffect(Mob* caster, int32 spell_id, float partial, int level_over
 					if(caster)
 						dmg = caster->GetActSpellHealing(spell_id, dmg, this);
 
-					HealDamage(dmg, caster);
+					HealDamage(dmg, caster, spell_id);
 				}
 
 #ifdef SPELL_EFFECT_SPAM
@@ -402,7 +402,7 @@ bool Mob::SpellEffect(Mob* caster, int32 spell_id, float partial, int level_over
 						if (caster && !IsEffectInSpell(spell_id, SpellEffect::TotalHP)) {
 							dmg = caster->GetActSpellHealing(spell_id, dmg, this);
 						}
-						HealDamage(dmg, caster);
+						HealDamage(dmg, caster, spell_id);
 					}
 				}
 				break;
@@ -438,7 +438,7 @@ bool Mob::SpellEffect(Mob* caster, int32 spell_id, float partial, int level_over
 				if (val < 0)
 					Damage(caster, -val, spell_id, spell.skill, false, buffslot, false);
 				else
-					HealDamage(val, caster);
+					HealDamage(val, caster, spell_id);
 
 				break;
 			}
@@ -453,7 +453,7 @@ bool Mob::SpellEffect(Mob* caster, int32 spell_id, float partial, int level_over
 					val = caster->GetActSpellHealing(spell_id, val, this);
 				}
 				if (val > 0) {
-					HealDamage(val, caster);
+					HealDamage(val, caster, spell_id);
 				}
 
 				break;

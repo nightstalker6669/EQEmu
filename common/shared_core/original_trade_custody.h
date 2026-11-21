@@ -12,6 +12,7 @@
 #include "original_transform_native.h"
 #include "original_message_admission_native.h"
 #include "dodh_exchange.h"
+#include "dodh_longshadow_journal.h"
 #include <optional>
 // Single original NPC trade physical journal/recovery. Legacy table name and
 // KPC2 snapshot/return codec are retained; no second custody engine.
@@ -271,7 +272,7 @@ inline void ReconcilePhysicalUnderTransaction(Database& db,const EQEmu::SharedCo
  if(!Installed(db))return;
  const bool generalized=Generalized(db);
  LockLease(db,lease); // Same actor-first order as live writer and World decision.
- auto rows=Q(db,"SELECT request_key,HEX(preimage),HEX(postimage),physical,HEX(return_plan),"+std::string(generalized?"recipe_kind,HEX(recipe_context),abort_only":"1,NULL,0")+",shared_task_id,npc_type_id,npc_spawn_id,npc_entity_id FROM kithicor_poison_custody WHERE character_id="+std::to_string(lease.actor.character_id)+" AND settled=0 FOR UPDATE");
+ auto rows=Q(db,"SELECT request_key,HEX(preimage),HEX(postimage),physical,HEX(return_plan),"+std::string(generalized?"recipe_kind,HEX(recipe_context),abort_only":"1,NULL,0")+",shared_task_id,npc_type_id,npc_spawn_id,npc_entity_id,instance_id FROM kithicor_poison_custody WHERE character_id="+std::to_string(lease.actor.character_id)+" AND settled=0 FOR UPDATE");
  if(!rows.RowCount())return;
  if(rows.RowCount()!=1)throw std::runtime_error("Kithicor multiple pending custody outcomes");
  auto row=rows.begin();if(!row[0]||!row[1])throw std::runtime_error("Kithicor custody evidence absent");
@@ -281,10 +282,20 @@ inline void ReconcilePhysicalUnderTransaction(Database& db,const EQEmu::SharedCo
  const bool exchange = DodhExchange::IsKind(kind);
  bool guard = false;
  bool opener = false;
+ bool monocle = false;
+ const DodhExchange::PublicRoute* public_route = nullptr;
+ std::optional<DodhLongshadowCustody::JournalRecord> longshadow;
  if (exchange) {
   if (!generalized || !row[6]) throw std::runtime_error("Darkhollow journal context missing");
   const auto context = ContextBytes(row[6]);
-  if (const auto id = DodhExchange::DecodeGuard(context)) {
+  if ((public_route = DodhExchange::DecodeRoute(context))) {
+   if (N(row[12]) != lease.owner.instance_id ||
+       !DodhExchange::PublicRouteActor(*public_route, lease.owner.zone_id, lease.owner.instance_id,
+           N(row[9]), N(row[10])) || !N(row[11]) ||
+       (public_route->group != 5 && N(row[8])) ||
+       (public_route->group == 5 && physical == 1 && !N(row[8])))
+    throw std::runtime_error("Darkhollow public route journal differs");
+  } else if (const auto id = DodhExchange::DecodeGuard(context)) {
    guard = true;
    const auto actor_type = N(row[9]), spawn = N(row[10]);
    if (lease.owner.zone_id != DodhExchange::DesertingZone || !lease.owner.instance_id ||
@@ -292,9 +303,43 @@ inline void ReconcilePhysicalUnderTransaction(Database& db,const EQEmu::SharedCo
        actor_type > UINT32_MAX || spawn > UINT32_MAX || !DodhExchange::GuardActor(actor_type, spawn)) {
     throw std::runtime_error("Darkhollow guard context differs");
    }
+  } else if ((longshadow = DodhLongshadowCustody::DecodeJournal(context))) {
+   const auto* route = DodhLongshadowCustody::FindRoute(longshadow->task, longshadow->activity);
+   if (!route || longshadow->occurrence != N(row[8]) || route->npc != N(row[9]) ||
+       route->spawn != N(row[10]) || !N(row[11]) || lease.owner.zone_id != route->zone ||
+       lease.owner.instance_id != (route->zone == 358 ? 0 : longshadow->instance) ||
+       (physical != 0 && physical != 1 && physical != 3)) {
+    throw std::runtime_error("Longshadow journal scope differs");
+   }
+   auto settlement = Q(db, fmt::format(
+       "SELECT t.request_key FROM dodh_longshadow_turnins t "
+       "JOIN dodh_longshadow_item_sources source ON source.item_guid=t.item_guid "
+       "AND source.character_id=t.character_id AND source.shared_task_id=t.shared_task_id AND source.task_id=t.task_id "
+       "WHERE t.request_key='{}' AND t.character_id={} AND t.shared_task_id={} AND t.task_id={} "
+       "AND t.activity_id={} AND t.item_guid={} AND source.accepted_time={} AND source.instance_id={} "
+       "AND source.item_id={} FOR UPDATE",
+       db.Escape(key), lease.actor.character_id, longshadow->occurrence, longshadow->task,
+       longshadow->activity, longshadow->guid, longshadow->accepted_time, longshadow->instance, route->item));
+   if (settlement.RowCount() != (physical == 1 ? 1 : 0))
+    throw std::runtime_error("Longshadow physical receipt differs");
+   if (const auto actor = DodhLongshadowCustody::SceneActor(route->effect)) {
+    auto scene = Q(db, fmt::format(
+        "SELECT shared_task_id,task_id,activity_id,source_item_guid,character_id,instance_id,actor_type "
+        "FROM dodh_longshadow_scene_effects WHERE request_key='{}' FOR UPDATE", db.Escape(key)));
+    if (scene.RowCount() != (physical == 1 ? 1 : 0))
+     throw std::runtime_error("Longshadow scene reservation differs");
+    if (physical == 1) {
+     auto s = scene.begin();
+     if (N(s[0]) != longshadow->occurrence || N(s[1]) != longshadow->task ||
+         N(s[2]) != longshadow->activity || N(s[3]) != longshadow->guid ||
+         N(s[4]) != lease.actor.character_id || N(s[5]) != longshadow->instance || N(s[6]) != actor)
+      throw std::runtime_error("Longshadow scene reservation scope differs");
+    }
+   }
   } else {
    opener = context == DodhExchange::OpenerContext;
-   if ((!opener && context != DodhExchange::JournalContext) ||
+   monocle = context == DodhExchange::MonocleContext;
+   if ((!opener && !monocle && context != DodhExchange::JournalContext) ||
        lease.owner.zone_id != DodhExchange::Zone || lease.owner.instance_id || N(row[8]) ||
        (opener && (N(row[9]) != DodhExchange::OpenerNpc || N(row[10]) != DodhExchange::OpenerSpawn || !N(row[11])))) {
     throw std::runtime_error("Darkhollow public hand-in journal context differs");
@@ -306,8 +351,13 @@ inline void ReconcilePhysicalUnderTransaction(Database& db,const EQEmu::SharedCo
  std::optional<OriginalTradeTransform::Context> transform;
  std::optional<OriginalTradeTransform::Decision> decision;
  if(kind==3){transform=OriginalTradeTransform::Decode(ContextBytes(row[6]));if(transform->character!=lease.actor.character_id||transform->account!=lease.actor.account_id)throw std::runtime_error("Transform recovery actor differs");}
- auto bound=Q(db,"SELECT request_key FROM kithicor_poison_custody WHERE request_key='"+db.Escape(key)+"' AND "+LeaseWhere(lease)+(kind==1?" AND phase=0 AND chest BETWEEN 1 AND 6":" AND shared_task_id="+std::to_string(guard?N(row[8]):kind==3&&transform->shared?transform->occurrence:0)+" AND phase=0 AND chest=0")+(exchange&&!guard&&!opener?" AND npc_type_id="+std::to_string(DodhExchange::Giver)+" AND npc_spawn_id="+std::to_string(DodhExchange::Spawn):std::string{})+" FOR UPDATE");
+ auto bound=Q(db,"SELECT request_key FROM kithicor_poison_custody WHERE request_key='"+db.Escape(key)+"' AND "+LeaseWhere(lease)+(kind==1?" AND phase=0 AND chest BETWEEN 1 AND 6":" AND shared_task_id="+std::to_string(guard||public_route||longshadow?N(row[8]):kind==3&&transform->shared?transform->occurrence:0)+" AND phase=0 AND chest=0")+(exchange&&!guard&&!opener&&!public_route&&!longshadow?" AND npc_type_id="+std::to_string(DodhExchange::Giver)+" AND npc_spawn_id="+std::to_string(DodhExchange::Spawn):std::string{})+" FOR UPDATE");
  if(bound.RowCount()!=1||(physical!=0&&physical!=1&&physical!=3&&!(exchange&&!guard&&physical==2)))throw std::runtime_error("Original trade old session evidence differs");
+ if (monocle && physical == 1) {
+  const auto preserved = Q(db, fmt::format("SELECT id FROM keyring WHERE char_id={} AND item_id={} FOR UPDATE",
+                                          lease.actor.character_id, DodhExchange::Output));
+  if (!preserved.RowCount()) throw std::runtime_error("Darkhollow settled Monocle has no preserved public key");
+ }
  if(kind==1) {
   auto action=Q(db,"SELECT a.status FROM kithicor_mission_actions a JOIN kithicor_poison_custody j ON j.shared_task_id=a.shared_task_id AND j.phase=a.phase AND j.chest=a.action_id AND j.character_id=a.character_id WHERE j.request_key='"+db.Escape(key)+"' AND a.item_id=38504 FOR UPDATE");
   if(physical!=3&&(action.RowCount()!=1||N(action.begin()[0])>1||(!physical&&N(action.begin()[0])!=0)))throw std::runtime_error("Kithicor owned action reservation changed");

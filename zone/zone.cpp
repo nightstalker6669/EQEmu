@@ -1,3 +1,4 @@
+#include "dodh_longshadow_source.h"
 #include "fungal_item_operation_source.h"
 #include "fire_run_terminal_scene.h"
 #include "fire_run_action_scene.h"
@@ -387,6 +388,7 @@ bool Zone::LoadGroundSpawns() {
 						g.spawn[slot_id].fix_z
 					);
 
+					object->SetGroundSpawnSource(g.spawn[slot_id].database_id);
 					entity_list.AddObject(object, false);
 
 					added++;
@@ -1584,6 +1586,7 @@ bool Zone::Process() {
 	spawn_conditions.Process();
 
 	if (spawn2_timer.Check()) {
+		DodhLongshadowScene::Replay();
 		LinkedListIterator<Spawn2 *> iterator(spawn2_list);
 
 		EQ::InventoryProfile::CleanDirty();

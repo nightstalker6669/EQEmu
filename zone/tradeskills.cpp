@@ -1,5 +1,6 @@
 #include "final_recipe312.h"
 #include "recharge_recipe8.h"
+#include "dodh_rakban_combine.h"
 #include "final_recipe302.h"
 #include "housing_recipe301.h"
 #include "trophy_certificate55.h"
@@ -598,6 +599,15 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
 		return;
 	}
 
+ const bool rakban = DodhRakbanCombine::Selected(spec.recipe_id);
+ const auto rakban_offer = rakban && DodhRakbanCombine::Enabled() && !worldcontainer
+     ? DodhRakbanCombine::Capture(*user, in_combine->container_slot, *container) : std::nullopt;
+ if (rakban && !rakban_offer) {
+  EQApplicationPacket denied(OP_TradeSkillCombine, 0);
+  user->QueuePacket(&denied);
+  return;
+ }
+
 	// Finite pre-2016 research path: actual actor and actual opened native kit.
 	if (ResearchTablet335::Selected(spec.recipe_id)) {
 		const auto* kit = !worldcontainer && container->IsType(EQ::item::ItemClassBag)
@@ -947,6 +957,11 @@ void Object::HandleCombine(Client* user, const NewCombine_Struct* in_combine, Ob
 	user->QueuePacket(outapp);
 	safe_delete(outapp);
 
+ if (rakban) {
+  DodhRakbanCombine::Manual(*user, *rakban_offer, spec);
+  return;
+ }
+
  std::unique_ptr<RechargeRecipe8::Proof> recharge_proof;
  if(RechargeRecipe8::Find(spec.recipe_id)) {
   recharge_proof=RechargeRecipe8::Custody::Manual(*user,spec,worldcontainer?worldo:nullptr,container,in_combine->container_slot);
@@ -1053,6 +1068,11 @@ void Object::HandleAutoCombine(Client* user, const RecipeAutoCombine_Struct* rac
 	outp->unknown1 = rac->unknown1;
 	outp->recipe_id = rac->recipe_id;
 	outp->reply_code = 0xFFFFFFF5;	//default fail.
+ if (DodhRakbanCombine::Selected(rac->recipe_id)) {
+  user->QueuePacket(outapp);
+  safe_delete(outapp);
+  return;
+ }
 
 
  if(auto* station=user->GetTradeskillObject();station&&station->IsHousingRecipe301()&&!HousingRecipe301::Selected(rac->recipe_id)){user->QueuePacket(outapp);safe_delete(outapp);return;}
@@ -1723,6 +1743,7 @@ bool Client::TradeskillExecute(DBTradeskillRecipe_Struct *spec) {
 		return false;
 	}
 
+ if (DodhRakbanCombine::Selected(spec->recipe_id)) return false;
  const bool recharge_selected=RechargeRecipe8::Find(spec->recipe_id)!=nullptr;
  if(recharge_selected&&!RechargeRecipe8::Custody::Claim(*this,*spec))return false;
  const bool trophy_selected=TrophyCertificate55::Find(spec->recipe_id)!=nullptr;

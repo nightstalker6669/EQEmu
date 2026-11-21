@@ -1,3 +1,4 @@
+#include "common/dodh_longshadow_admission.h"
 #include "common/sod_reward_quote.h"
 #include "fire_run_terminal_scene.h"
 /*	EQEmu: EQEmulator
@@ -37,6 +38,8 @@
 #include "common/repositories/tasksets_repository.h"
 #include "common/shared_tasks.h"
 #include "zone/client.h"
+#include "zone/npc.h"
+#include "zone/zone.h"
 #include "zone/dynamic_zone.h"
 #include "zone/reward_selection_catalog.h"
 #include "zone/string_ids.h"
@@ -1127,6 +1130,10 @@ void TaskManager::SharedTaskSelector(Client* client, Mob* mob, const std::vector
 			if (
 				SupportsTaskRewardMethod(client, task_data) &&
 				CanOfferSharedTask(tasks[i], request) &&
+				(!DodhLongshadowAdmission::Managed(tasks[i]) ||
+				 (mob && mob->IsNPC() && zone &&
+				  DodhLongshadowAdmission::Requester(zone->GetZoneID(), zone->GetInstanceVersion(),
+				      zone->GetInstanceID(), mob->GetNPCTypeID(), mob->CastToNPC()->GetSpawnPointID()))) &&
 				(!SodProgression::IsSodRequest(tasks[i]) || (mob && mob->IsNPC() && client->CanRequestSodTask(tasks[i], mob->GetNPCTypeID())))
 			)
 			{
@@ -1169,6 +1176,12 @@ bool TaskManager::CanOfferSharedTask(int task_id, const SharedTaskRequest& reque
 	if (task->type != TaskType::Shared)
 	{
 		LogTasksDetail("task [{}] is not a shared task type", task_id);
+		return false;
+	}
+
+	if (DodhLongshadowAdmission::Managed(task_id) &&
+		(request.group_type != SharedTaskRequestGroupType::Group ||
+		 !DodhLongshadowAdmission::EarnedPrerequisites(database, task_id, request.leader_id))) {
 		return false;
 	}
 

@@ -899,7 +899,6 @@ public:
 	void SetStartZone(uint32 zoneid, float x = 0.0f, float y =0.0f, float z = 0.0f, float heading = 0.0f);
 	uint32 GetStartZone(void);
 	void MovePC(const char* zonename, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited);
-	void EnterDreadspireFromHiveWeb(const glm::vec4 &destination);
 	void MovePC(uint32 zoneID, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited);
 	void MovePC(float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited);
 	void MovePC(uint32 zoneID, uint32 instanceID, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited);
@@ -2436,14 +2435,19 @@ private:
 	void SendZoneCancel(ZoneChange_Struct *zc);
 	void SendZoneError(ZoneChange_Struct *zc, int8 err);
 	void DoZoneSuccess(ZoneChange_Struct *zc, uint16 zone_id, uint32 instance_id, float dest_x, float dest_y, float dest_z, float dest_h, int8 ignore_r);
-	void ZonePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions, ZoneMode zm, bool dreadspire_hive_web = false);
-	void ProcessMovePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited, bool dreadspire_hive_web = false);
+	friend class Doors;
+
+	enum class DreadspireDoorAdmission : uint8 { None, HiveWeb, StonerootInvitation };
+	bool IsDreadspireDoorOrigin(DreadspireDoorAdmission admission) const;
+	void EnterDreadspireFromDoor(DreadspireDoorAdmission admission, const glm::vec4 &destination);
+	void ZonePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions, ZoneMode zm, DreadspireDoorAdmission admission = DreadspireDoorAdmission::None);
+	void ProcessMovePC(uint32 zoneID, uint32 instance_id, float x, float y, float z, float heading, uint8 ignorerestrictions = 0, ZoneMode zm = ZoneSolicited, DreadspireDoorAdmission admission = DreadspireDoorAdmission::None);
 
 	void SendTopLevelInventory();
 
 	glm::vec4 m_ZoneSummonLocation;
 	uint16 zonesummon_id;
-	bool m_dreadspire_hive_web_pending = false;
+	DreadspireDoorAdmission m_dreadspire_door_pending = DreadspireDoorAdmission::None;
 	uint8 zonesummon_ignorerestrictions;
 	ZoneMode zone_mode;
 

@@ -1,3 +1,4 @@
+#include "dodh_longshadow_source.h"
 #include "fire_run_action_scene.h"
 /*	EQEmu: EQEmulator
 
@@ -270,6 +271,13 @@ void Doors::HandleClick(Client *sender, uint8 trigger, bool direct_client_click)
 
 	const EQ::ItemInstance *lock_pick_item = sender->GetInv().GetItem(EQ::invslot::slotCursor);
 
+	// The Stoneroot statue uses carried inventory for first entry.
+	// Future clicks can use the character's existing invitation keyring entry.
+	const bool invitation_portal = m_database_id == 16519 && m_door_id == 26 &&
+		m_open_type == 58 && required_key_item == 88043 &&
+		zone->GetZoneID() == 358 && zone->GetInstanceVersion() == 0 && !zone->GetInstanceID();
+	const uint8 key_locations = invitation_portal ? (invWhereWorn | invWherePersonal | invWhereCursor) : 0xFF;
+
 	// If classic key on cursor rule, check for it, otherwise owning it ok.
 	if (RuleB(Doors, RequireKeyOnCursor)) {
 		if (lock_pick_item != nullptr &&
@@ -277,11 +285,13 @@ void Doors::HandleClick(Client *sender, uint8 trigger, bool direct_client_click)
 			player_has_key = true;
 		}
 	}
-	else if (sender->GetInv().HasItem(required_key_item, 1) != INVALID_INDEX) {
+	else if (sender->GetInv().HasItem(required_key_item, 1, key_locations) != INVALID_INDEX) {
 		player_has_key = true;
 	}
 
-	if (player_has_key) {
+	// A recorded invitation remains valid with another item on the cursor.
+	// The legacy lockpick branch otherwise takes precedence over keyring lookup.
+	if (player_has_key || (invitation_portal && sender->KeyRingCheck(required_key_item))) {
 		player_key = required_key_item;
 	}
 
@@ -588,6 +598,9 @@ void Doors::HandleClick(Client *sender, uint8 trigger, bool direct_client_click)
 		}
 	}
 
+	if (direct_client_click && !trigger && m_open_type == 58 && !required_key_item &&
+		!GetLockpick() && !GetGuildID() && DodhLongshadowTravel::UseDoor(*sender, *this)) return;
+
 	// teleport door
 	if (EQ::ValueWithin(m_open_type, 57, 58) && HasDestinationZone()) {
 		uint32 destination_zone = ZoneID(m_destination_zone_name);
@@ -634,11 +647,15 @@ void Doors::HandleClick(Client *sender, uint8 trigger, bool direct_client_click)
 					m_destination.w
 				);
 			}
+			else if (invitation_portal && destination_zone == 351 && m_destination_instance_id == 0 &&
+				direct_client_click && !trigger && native_key_authorized && player_key == required_key_item) {
+				sender->EnterDreadspireFromDoor(Client::DreadspireDoorAdmission::StonerootInvitation, m_destination);
+			}
 			else if (m_open_type == 58 && destination_zone == 351 && m_destination_instance_id == 0 &&
 				zone->GetZoneID() == 354 && zone->GetInstanceID() == 0 &&
 				zone->GetInstanceVersion() == 0 && GetDoorDBID() == 16232 && GetDoorID() == 4 &&
 				required_key_item == 88005 && player_key == required_key_item) {
-				sender->EnterDreadspireFromHiveWeb(m_destination);
+				sender->EnterDreadspireFromDoor(Client::DreadspireDoorAdmission::HiveWeb, m_destination);
 			}
 			else {
 				sender->MovePC(

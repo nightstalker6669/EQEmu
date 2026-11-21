@@ -6,6 +6,7 @@
 #include "common/rulesys.h"
 #include "zone/achievement_manager.h"
 #include "zone/client.h"
+#include "zone/dodh_rakban_claim.h"
 #include "zone/guild_mgr.h"
 #include "zone/zone.h"
 #include "zone/zonedb.h"
@@ -19,6 +20,7 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <tuple>
 #include <unordered_map>
@@ -26,6 +28,18 @@
 
 namespace
 {
+std::optional<bool> ReadRakbanCombineReceipt(uint32_t character_id)
+{
+    const auto receipt = database.QueryDatabase(fmt::format(
+        "SELECT 1 FROM dodh_rakban_combines "
+        "WHERE character_id={} AND recipe_id={} AND skull_serial>0 AND shroud_serial>0",
+        character_id, DodhRakbanClaim::kRecipe));
+    if (!receipt.Success()) {
+        return std::nullopt;
+    }
+    return receipt.RowCount() == 1;
+}
+
 
 uint32_t ParseUInt32(const char *value)
 {
@@ -1204,6 +1218,20 @@ bool ClientAchievementState::Reconcile()
 			) &&
 			succeeded;
 	}
+    if (DodhRakbanClaim::kRecipe && !m_client.IsSpiritShrouded()) {
+        const auto &criteria = AchievementManager::Instance().Criteria(EventType::TradeskillSuccess);
+        if (std::any_of(criteria.begin(), criteria.end(), [](const auto *criterion) {
+                return criterion->achievement_id == 500990060 && criterion->component_id == 59900600 &&
+                       criterion->target_id == DodhRakbanClaim::kRecipe;
+            })) {
+            const auto receipt = ReadRakbanCombineReceipt(m_client.CharacterID());
+            succeeded = receipt.has_value() && succeeded;
+            if (receipt.value_or(false)) {
+                succeeded = ProcessEvent(EventType::TradeskillSuccess, DodhRakbanClaim::kRecipe, 0, 1, false) &&
+                            succeeded;
+            }
+        }
+    }
 	if (!AchievementManager::Instance().Criteria(EventType::OwnItem).empty()) {
 		succeeded =
 			ProcessEvent(EventType::OwnItem, 0, 0, 0, false) &&
@@ -3544,6 +3572,10 @@ void Client::UpdateAchievementForTradeskill(uint32 recipe_id)
 	if (!m_achievement_state) {
 		return;
 	}
+    if (DodhRakbanClaim::kRecipe && recipe_id == DodhRakbanClaim::kRecipe &&
+        (IsSpiritShrouded() || !ReadRakbanCombineReceipt(CharacterID()).value_or(false))) {
+        return;
+    }
 	m_achievement_state->ProcessEvent(EQ::Achievements::EventType::TradeskillSuccess, recipe_id);
 }
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "common/dodh_hard_variant.h"
+
 #include <array>
 #include <cstddef>
 #include <cstdint>
@@ -101,7 +103,11 @@ ClassReward ResolveArc(
         return {};
     }
     for (const auto task_id : normal_tasks) {
-        if (!has_completion(task_id)) {
+        if (has_completion(task_id)) {
+            continue;
+        }
+        const auto hard_task = DodhHardVariant::HardTask(task_id);
+        if (!hard_task || !has_completion(hard_task)) {
             return {};
         }
     }

@@ -13,6 +13,10 @@ inline constexpr uint32_t Zone = 365;
 inline constexpr uint32_t Giver = 365284;
 inline constexpr uint32_t Spawn = 103431;
 inline constexpr uint32_t Output = 88005;
+inline constexpr uint32_t Lens = 88034;
+inline constexpr uint32_t Monocle = 88013;
+inline constexpr char MonocleContext[] = "DODH\x01\x04";
+inline constexpr std::array<uint32_t, 2> MonocleParts{Output, Lens};
 inline constexpr uint32_t OpenerNpc = 365275;
 inline constexpr uint32_t OpenerSpawn = 103414;
 inline constexpr uint32_t Notebook = 84040;
@@ -81,11 +85,14 @@ inline bool IsPart(uint32_t item)
     return std::find(Parts.begin(), Parts.end(), item) != Parts.end();
 }
 
-inline bool Plan(const OriginalTradeRecipe::Offers& offers, OriginalTradeRecipe::DebitPlan& debit)
+template<std::size_t Count>
+inline bool PlanParts(const std::array<uint32_t, Count>& parts, const OriginalTradeRecipe::Offers& offers,
+                      OriginalTradeRecipe::DebitPlan& debit)
 {
     debit = {};
     OriginalTradeRecipe::DebitPlan candidate;
-    for (const auto item : Parts) {
+    for (const auto item : parts) {
+        if (!item) continue;
         const auto found = std::find_if(offers.begin(), offers.end(), [item](const auto& offer) {
             return offer.present && offer.item_id == item;
         });
@@ -99,5 +106,115 @@ inline bool Plan(const OriginalTradeRecipe::Offers& offers, OriginalTradeRecipe:
     }
     debit = candidate;
     return true;
+}
+
+inline bool Plan(const OriginalTradeRecipe::Offers& offers, OriginalTradeRecipe::DebitPlan& debit)
+{
+    return PlanParts(Parts, offers, debit);
+}
+
+// Materialize these seven values from the single Database reservation.
+inline constexpr uint32_t LibraryTask = 920280;
+inline constexpr uint32_t EyesTask = 920281;
+inline constexpr uint32_t MemoriesTask = 920282;
+inline constexpr uint32_t MistyTask = 920283;
+inline constexpr uint32_t EyeBoundTask = 920284;
+inline constexpr uint32_t ColdwindNpc = 25920;
+inline constexpr uint32_t ColdwindSpawn = 304066072;
+inline constexpr uint32_t ColdwindGlobalNpc = 25414;
+inline constexpr uint32_t ColdwindGlobalSpawn = 97602;
+inline constexpr uint32_t ColdwindGlobalInstance = 1;
+
+struct PublicRoute {
+    uint8_t group;
+    uint8_t code;
+    uint32_t zone;
+    uint32_t npc;
+    uint32_t spawn;
+    uint32_t task;
+    uint8_t final_activity;
+    std::array<uint32_t, 3> items;
+};
+
+inline constexpr PublicRoute PublicRoutes[] = {
+    {5, 1, 365, Giver, Spawn, LibraryTask, 1, {88006, 88007, 0}},
+    {5, 2, 365, Giver, Spawn, EyesTask, 3, {88017, 88018, 88019}},
+    {5, 3, 351, 351108, 101696, MemoriesTask, 2, {88023, 0, 0}},
+    {5, 4, 25, ColdwindNpc, ColdwindSpawn, MistyTask, 4, {88022, 88020, 0}},
+    {5, 5, 25, ColdwindNpc, ColdwindSpawn, EyeBoundTask, 0, {88035, 88021, 0}},
+    {6, 1, 351, 351015, 101429, 0, 0, {52522, 0, 0}},
+    {6, 2, 351, 351030, 101475, 0, 0, {52523, 0, 0}},
+    {6, 3, 351, 351072, 101584, 0, 0, {52524, 0, 0}},
+    {6, 4, 351, 351087, 101623, 0, 0, {52525, 0, 0}},
+    {7, 1, 351, 351110, 101704, 505745, 1, {0, 0, 0}},
+    {7, 2, 351, 351111, 101706, 505745, 1, {0, 0, 0}},
+    {7, 3, 351, 351112, 101707, 505745, 1, {0, 0, 0}},
+    {7, 4, 351, 351113, 101708, 505745, 1, {0, 0, 0}},
+    {7, 5, 351, 351012, 101410, 505745, 2, {0, 0, 0}},
+    {7, 6, 351, 351107, 101695, 505745, 3, {88009, 0, 0}},
+};
+
+inline bool RouteReady(const PublicRoute& route)
+{
+    return route.npc && route.spawn && (route.group == 6 || route.task);
+}
+
+inline constexpr bool IsColdwindRoute(const PublicRoute& route)
+{
+    return route.group == 5 && (route.code == 4 || route.code == 5);
+}
+
+inline constexpr bool PublicRouteActor(const PublicRoute& route, uint32_t zone, uint32_t instance,
+    uint32_t npc, uint32_t spawn)
+{
+    if (zone != route.zone) return false;
+    if (instance == 0) return npc == route.npc && spawn == route.spawn;
+    return IsColdwindRoute(route) && instance == ColdwindGlobalInstance &&
+        npc == ColdwindGlobalNpc && spawn == ColdwindGlobalSpawn;
+}
+
+inline constexpr bool PublicRouteScene(const PublicRoute& route, uint32_t zone, uint32_t version,
+    uint32_t instance, uint32_t npc, uint32_t spawn)
+{
+    return version == (instance == 0 ? 0u : 1u) && PublicRouteActor(route, zone, instance, npc, spawn);
+}
+
+inline std::string RouteContext(const PublicRoute& route, uint32_t accepted = 0)
+{
+    std::string bytes("DODH\x01", 5);
+    bytes.push_back(char(route.group));
+    bytes.push_back(char(route.code));
+    if (route.group == 7 && accepted) bytes += std::to_string(accepted);
+    return bytes;
+}
+
+inline const PublicRoute* DecodeRoute(std::string_view bytes)
+{
+    for (const auto& route : PublicRoutes) {
+        if (!RouteReady(route)) continue;
+        const auto prefix = RouteContext(route);
+        if (route.group != 7 && prefix == bytes) return &route;
+        if (route.group == 7 && bytes.size() > prefix.size() && bytes.size() <= prefix.size() + 10 &&
+            bytes.substr(0, prefix.size()) == prefix &&
+            std::all_of(bytes.begin() + prefix.size(), bytes.end(), [](char c) { return c >= '0' && c <= '9'; }))
+            return &route;
+    }
+    return nullptr;
+}
+
+inline bool RoutePart(const PublicRoute& route, uint32_t item)
+{
+    return item && std::find(route.items.begin(), route.items.end(), item) != route.items.end();
+}
+
+inline bool PlanRoute(const PublicRoute& route, const OriginalTradeRecipe::Offers& offers,
+                      OriginalTradeRecipe::DebitPlan& debit)
+{
+    return PlanParts(route.items, offers, debit);
+}
+
+inline bool IsMonoclePart(uint32_t item)
+{
+    return item == Output || item == Lens;
 }
 }

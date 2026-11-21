@@ -1,3 +1,4 @@
+#include "dodh_longshadow_source.h"
 #include "sod_message_admission.h"
 #include "original_message_admission.h"
 #include "original_trade_transform_hooks.h"
@@ -37,6 +38,7 @@
 #include "housing_plot_marker.h"
 
 #include "client.h"
+#include "dodh_backflag_loot.h"
 #include "sod_fieldofscale_crystal_source.h"
 #include "fire_native_item_custody.h"
 
@@ -931,6 +933,9 @@ void Client::CompleteConnect()
 
 	TotalKarma = database.GetKarma(AccountID());
 	SendDisciplineTimers();
+
+	DodhBackflag::Reconcile(*this);
+	DodhLongshadowTravel::RecordArrival(*this);
 
 	if (parse->PlayerHasQuestSub(EVENT_ENTER_ZONE)) {
 		parse->EventPlayer(EVENT_ENTER_ZONE, this, "", 0);
@@ -5618,6 +5623,7 @@ void Client::Handle_OP_ClientUpdate(const EQApplicationPacket *app) {
 	/* Update internal server position from what the client has sent */
 	glm::vec4 prevPosition = m_Position;
 	m_Position = glm::vec4(cx, cy, cz, new_heading);
+	DodhBellfastNeran::ObserveMovement(*this, on_boat);
 	m_Delta = glm::vec4(ppu->delta_x, ppu->delta_y, ppu->delta_z, EQ10toFloat(ppu->delta_heading));
 	int32 prevAnimation = ppu->animation;
 	animation = ppu->animation;

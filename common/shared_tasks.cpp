@@ -117,6 +117,7 @@ SharedTaskRequest SharedTask::GetRequestCharacters(Database &db, uint32_t reques
 		}
 		request.lowest_level = std::min(request.lowest_level, static_cast<uint32_t>(*level));
 		request.highest_level = std::max(request.highest_level, static_cast<uint32_t>(*level));
+		request.level_total += static_cast<uint32_t>(*level);
 		request.character_ids.emplace_back(static_cast<uint32_t>(*id));
 		SharedTaskMember member{};
 		member.character_id = static_cast<uint32_t>(*id);

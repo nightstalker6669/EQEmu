@@ -1,4 +1,6 @@
+#include "dodh_longshadow_source.h"
 #include "zone/sod_orders_loot.h"
+#include "dodh_backflag_loot.h"
 #include "fire_run_terminal_scene.h"
 #include "fire_material_loot_source.h"
 /*	EQEmu: EQEmulator
@@ -1197,6 +1199,11 @@ void Corpse::MakeLootRequestPackets(Client *c, const EQApplicationPacket *app)
 	if (!c) {
 		return;
 	}
+    if (DodhLongshadowScene::ReplayOwned(*this) && !DodhLongshadowScene::AllowLoot(*c, *this)) {
+        if (IsBeingLootedBy(c)) ResetLooter();
+        SendEndLootErrorPacket(c);
+        return;
+    }
 	if(!FireRunActionSource::NativeRunTerminalSource::AuthorizeActualCorpse(*c,*this)){if(IsBeingLootedBy(c))ResetLooter();SendEndLootErrorPacket(c);return;}
 
 	// Added 12/08. Started compressing loot struct on live.
@@ -1478,6 +1485,11 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 	if (!c) {
 		return;
 	}
+    if (DodhLongshadowScene::ReplayOwned(*this) && !DodhLongshadowScene::AllowLoot(*c, *this)) {
+        if (IsBeingLootedBy(c)) ResetLooter();
+        SendEndLootErrorPacket(c);
+        return;
+    }
 	if(!FireRunActionSource::NativeRunTerminalSource::AuthorizeActualCorpse(*c,*this)){if(IsBeingLootedBy(c))ResetLooter();SendEndLootErrorPacket(c);return;}
 	FireRunActionSource::NativeRunLootSource fire_material_loot(*c,*this);
 
@@ -1732,6 +1744,29 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 			return;
 		}
 
+        const auto longshadow = (item_data &&
+            std::none_of(std::begin(bag_item_data), std::end(bag_item_data),
+                [](const LootItem* item) { return item != nullptr; }))
+            ? DodhLongshadowSource::NativeLoot(*c, *this, *inst) : DodhLongshadowSource::LootResult::Unrelated;
+        if (longshadow != DodhLongshadowSource::LootResult::Unrelated) {
+            const bool issued = longshadow == DodhLongshadowSource::LootResult::Issued;
+            const bool already_issued = longshadow == DodhLongshadowSource::LootResult::AlreadyIssued;
+            if (issued || already_issued) {
+                // The original one-per-run receipt is already durable.
+                // A stale NPC corpse slot may now be discarded exactly once.
+                RemoveItem(item_data->lootslot);
+                if (issued) {
+                    c->CheckItemDiscoverability(inst->GetID());
+                    c->UpdateAchievementForLoot(inst->GetID(), 1);
+                }
+            } else {
+                lootitem->auto_loot = -1;
+            }
+            if (longshadow != DodhLongshadowSource::LootResult::InventoryReload) c->QueuePacket(app);
+            safe_delete(inst);
+            return;
+        }
+
 		// Genuine current-run material seal before the SAME original native grant.
 		if(!fire_material_loot.PrepareActualItem(*inst,lootitem->slot_id)) {
 			lootitem->auto_loot=-1;c->QueuePacket(app);safe_delete(inst);return;
@@ -1767,6 +1802,7 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 		}
 
 		SodOrdersLoot::Scope sod_orders_native_loot(*c,*inst,*this);
+		DodhBackflag::Transfer backflag(*c, *inst, *this);
 		/* First add it to the looter - this will do the bag contents too */
 		if (lootitem->auto_loot > 0) {
 			if (!c->AutoPutLootInInventory(*inst, true, true, bag_item_data)) {
@@ -1775,6 +1811,20 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 		}
 		else {
 			c->PutLootInInventory(EQ::invslot::slotCursor, *inst, bag_item_data);
+		}
+
+		if (backflag.owned && !backflag.saved) {
+			SendEndLootErrorPacket(c);
+			ResetLooter();
+			delete inst;
+			if (backflag.placed) {
+				c->RejectInventorySessionAdmission();
+				c->Kick("Darkhollow backflag loot save requires inventory reload");
+			}
+			return;
+		}
+		if (backflag.saved) {
+			DodhBackflag::Record(*c);
 		}
 
 		/* Update any tasks that have an activity to loot this item */

@@ -66,6 +66,8 @@
 */
 
 #include "quest_item_target_permissions.h"
+#include "dodh_draygun_heal.h"
+#include "zone/dynamic_zone.h"
 #include "mob.h"
 #include "../common/shroud/ability_cast.h"
 
@@ -85,6 +87,7 @@
 #include "common/strings.h"
 #include "zone/bot.h"
 #include "zone/client.h"
+#include "dodh_longshadow_source.h"
 #include "fire_native_item_custody.h"
 #include "zone/client_version.h"
 #include "zone/fastmath.h"
@@ -4120,6 +4123,35 @@ bool Mob::SpellOnTargetWithBindingContext(
 		return false;
 	}
 
+	// The retained Coral click is a marker spell. Only its real item cast on
+	// the owned Learning the Power actor may invoke the native charm effect.
+	int64 learning_run = 0;
+	if (spell_id == 7306 && !isproc && IsClient() && spelltar->IsNPC() &&
+		spelltar->GetNPCTypeID() == 361065 && spelltar->CastToNPC()->GetSpawnPointID() == 260433 &&
+		zone && zone->GetZoneID() == 361 && zone->GetInstanceVersion() == 4 && zone->GetInstanceID()) {
+		auto* client = CastToClient();
+		auto* mission = zone->GetDynamicZone();
+		const auto run = client->GetSharedTaskId();
+		const auto* item = client->GetInv().GetItem(casting_spell_inventory_slot);
+		constexpr int32 charm_spell = 6144;
+		if (casting_spell_id != 7306 || casting_spell_slot != CastingSlot::Item ||
+			!item || item->GetID() != 85025 || !item->GetItem() || item->GetItem()->Click.Effect != 7306 ||
+			run <= 0 || !client->IsTaskActivityActive(920276, 2) ||
+			!mission || mission->GetType() != DynamicZoneType::Mission || mission->IsExpired() ||
+			mission->GetInstanceID() != zone->GetInstanceID() || !mission->HasMember(client->CharacterID()) ||
+			!mission->HasDatabaseMember(client->CharacterID()) ||
+			spelltar->GetEntityVariable("dodh_learning:ready") != std::to_string(run) ||
+			GetPet() || spelltar->GetOwnerID() || spelltar->GetHP() <= 0 || !IsValidSpell(charm_spell) ||
+			!CheckLosFN(spelltar) || !zone->watermap || zone->watermap->InLiquid(GetPosition()) ||
+			zone->watermap->InLiquid(spelltar->GetPosition())) {
+			MessageString(Chat::SpellFailure, SPELL_NO_HOLD);
+			return false;
+		}
+		learning_run = run;
+		spell_id = charm_spell;
+		use_resist_adjust = false;
+	}
+
 	if (
 		IsDetrimentalSpell(spell_id) &&
 		!IsAttackAllowed(spelltar, true) &&
@@ -4483,7 +4515,8 @@ bool Mob::SpellOnTargetWithBindingContext(
                 }();
 
 				if (
-					(!IsAllianceSpell(spell_id) && !IsBeneficialAllowed(spelltar) && !quest_item_target_allowed) ||
+					(!IsAllianceSpell(spell_id) && !IsBeneficialAllowed(spelltar) && !quest_item_target_allowed &&
+					 !DodhDraygunHeal::Allows(*spelltar, this, spell_id)) ||
 					(IsGroupOnlySpell(spell_id) &&
 						!(
 							(
@@ -4881,6 +4914,43 @@ bool Mob::SpellOnTargetWithBindingContext(
 		return false;
 	}
 
+	if (learning_run && spelltar->GetOwnerID() == GetID() && GetPet() == spelltar) {
+		spelltar->SetEntityVariable("dodh_learning:charm", std::to_string(learning_run));
+	}
+
+    // Issue a receipt only after the native spell landed. The active quest
+    // opens each exact scoped window under its expedition UUID.
+    if ((spell_id == 2880 || spell_id == 7600 || (spell_id >= 8225 && spell_id <= 8232)) &&
+        !isproc && casting_spell_id == spell_id && IsClient() && spelltar->IsNPC() &&
+        zone && zone->GetZoneID() == 351 && zone->GetInstanceVersion() == 1 && zone->GetInstanceID()) {
+        auto* expedition = zone->GetDynamicZone();
+        auto* client = CastToClient();
+        if (expedition && expedition->GetType() == DynamicZoneType::Expedition &&
+            expedition->GetName() == "Dreadspire Keep: Demi-Plane of Blood" && !expedition->IsExpired() &&
+            expedition->GetInstanceID() == zone->GetInstanceID() && expedition->HasMember(client->CharacterID())) {
+            const auto& uuid = expedition->GetUUID();
+            if (spell_id == 2880 && casting_spell_slot < CastingSlot::MaxGems &&
+                spelltar->GetHP() == spelltar->GetMaxHP() &&
+                spelltar->GetEntityVariable("dodh_demi:tris_curable") == uuid) {
+                spelltar->SetEntityVariable("dodh_demi:tris_cure_landed", uuid);
+            } else if (casting_spell_slot == CastingSlot::Item) {
+                const auto* item = client->GetInv().GetItem(casting_spell_inventory_slot);
+                if (item && item->GetItem() && item->GetItem()->Click.Effect == spell_id) {
+                    if (spell_id == 7600 && item->GetID() >= 52531 && item->GetID() <= 52533 &&
+                        spelltar->GetEntityVariable("dodh_demi:roley_window") == uuid) {
+                        spelltar->SetEntityVariable("dodh_demi:stake_landed", uuid);
+                    } else if (spell_id >= 8225 && spell_id <= 8232 &&
+                        item->GetID() == static_cast<uint32>(52534 + spell_id - 8225) &&
+                        casting_spell_inventory_slot <= EQ::invslot::EQUIPMENT_END &&
+                        spelltar->GetEntityVariable("dodh_demi:bane_window") == uuid &&
+                        spelltar->GetEntityVariable("dodh_demi:bane_landed").empty()) {
+                        spelltar->SetEntityVariable("dodh_demi:bane_landed", std::to_string(spell_id));
+                    }
+                }
+            }
+        }
+    }
+
 	//Check SpellEffect::Fc_Cast_Spell_On_Land SPA 481 on target, if hit by this spell and Conditions are Met then target will cast the specified spell.
 	if (spelltar) {
 		spelltar->CastSpellOnLand(this, spell_id);
@@ -4982,6 +5052,10 @@ bool Mob::SpellOnTargetWithBindingContext(
 	if ((IsEffectInSpell(spell_id, SpellEffect::TotalHP) || IsEffectInSpell(spell_id, SpellEffect::MaxHPChange)) && (IsEffectInSpell(spell_id, SpellEffect::CurrentHPOnce) || IsEffectInSpell(spell_id, SpellEffect::CurrentHP))) {
 		SendHPUpdate(true);
 	}
+
+	if (spell_id == 8403 && IsNPC() && spelltar->IsClient()) {
+        DodhBellfastNeran::ForceLanded(*CastToNPC(), *spelltar->CastToClient());
+    }
 
 	LogSpells("Cast of [{}] by [{}] on [{}] complete successfully", spell_id, GetName(), spelltar->GetName());
 

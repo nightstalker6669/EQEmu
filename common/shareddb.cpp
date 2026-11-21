@@ -47,11 +47,13 @@
 #include "common/repositories/sharedbank_repository.h"
 #include "common/repositories/starting_items_repository.h"
 #include "common/rulesys.h"
+#include "common/shared_core/dodh_longshadow_sources.h"
 #include "common/strings.h"
 #include "zone/client.h"
 
 #include "fmt/format.h"
 #include <algorithm>
+#include <map>
 
 SharedDatabase::SharedDatabase()
 : Database()
@@ -662,6 +664,60 @@ bool SharedDatabase::GetSharedBank(uint32 id, EQ::InventoryProfile *inv, bool is
 	return true;
 }
 // Overloaded: Retrieve character inventory based on character id (zone entry)
+namespace {
+
+bool FindLongshadowInventorySources(
+	SharedDatabase& db, uint32 character, const std::vector<InventoryRepository::Inventory>& rows,
+	std::map<uint64, uint64>& sources)
+{
+	namespace Longshadow = EQEmu::SharedCore::DodhLongshadowCustody;
+	if (std::none_of(rows.begin(), rows.end(), [](const auto& row) {
+		return row.guid > 0 && row.guid <= INT32_MAX &&
+			std::any_of(Longshadow::Sources.begin(), Longshadow::Sources.end(),
+				[&](const auto& source) { return source.item == row.item_id; });
+	})) return true;
+
+	const auto installed = db.QueryDatabase(std::string(
+		"SELECT 1 FROM information_schema.tables WHERE table_schema=DATABASE() "
+		"AND table_name='dodh_longshadow_item_sources' AND engine='InnoDB'"), false);
+	if (!installed.Success()) return false;
+	if (!installed.RowCount()) return true;
+
+	std::vector<std::string> routes;
+	for (const auto& source : Longshadow::Sources) {
+		routes.push_back(fmt::format("({},{},'{}')", source.task, source.item, Longshadow::SourceKind(source.source)));
+	}
+	auto matches = db.QueryDatabase(fmt::format(
+		"SELECT i.guid,i.slot_id,i.item_id,s.item_guid FROM inventory i "
+		"JOIN dodh_longshadow_item_sources s ON s.character_id=i.character_id "
+		"AND COALESCE(s.inventory_guid,s.item_guid)=i.guid AND s.item_id=i.item_id "
+		"JOIN shared_tasks t ON t.id=s.shared_task_id AND t.task_id=s.task_id "
+		"AND UNIX_TIMESTAMP(t.accepted_time)=s.accepted_time "
+		"JOIN shared_task_members m ON m.shared_task_id=t.id AND m.character_id=i.character_id "
+		"JOIN shared_task_dynamic_zones sd ON sd.shared_task_id=t.id "
+		"JOIN dynamic_zones dz ON dz.id=sd.dynamic_zone_id AND dz.instance_id=s.instance_id AND dz.type=4 "
+		"JOIN dynamic_zone_members dm ON dm.dynamic_zone_id=dz.id AND dm.character_id=i.character_id "
+		"LEFT JOIN dodh_longshadow_turnins turnin ON turnin.item_guid=s.item_guid "
+		"WHERE i.character_id={} AND i.guid BETWEEN 1 AND {} AND turnin.item_guid IS NULL "
+		"AND t.completion_time IS NULL AND (t.expire_time IS NULL OR t.expire_time>NOW()) "
+		"AND (s.task_id,s.item_id,s.source_kind) IN ({})",
+		character, INT32_MAX, Strings::Implode(",", routes)), false);
+	if (!matches.Success()) return false;
+	for (auto match = matches.begin(); match != matches.end(); ++match) {
+		const auto serial = Strings::ToUnsignedInt(match[0]);
+		const auto slot = Strings::ToUnsignedInt(match[1]);
+		const auto item = Strings::ToUnsignedInt(match[2]);
+		const auto same_serial = [&](const auto& row) { return row.guid == serial; };
+		const auto original = std::find_if(rows.begin(), rows.end(), same_serial);
+		if (original == rows.end() || original->slot_id != slot || original->item_id != item ||
+			std::count_if(rows.begin(), rows.end(), same_serial) != 1 ||
+			!sources.emplace(serial, Strings::ToUnsignedInt(match[3])).second) return false;
+	}
+	return true;
+}
+
+} // namespace
+
 //bool SharedDatabase::GetInventory(uint32 char_id, EQ::InventoryProfile *inv)
 bool SharedDatabase::GetInventory(Client *c, const std::function<bool()>& session_fence,
 	std::vector<Housing::HousePreload::Loaded>* loaded_witnesses)
@@ -677,7 +733,7 @@ bool SharedDatabase::GetInventory(Client *c, const std::function<bool()>& sessio
 	// Inventory ownership is also shared by mercenary payments when housing is
 	// disabled. Retain checked loading for an existing lease after a rule change.
 	const bool housing_load = RuleB(Housing, EnablePlayerHousing);
-	const bool checked_load = housing_load || bool(session_fence);
+	bool checked_load = housing_load || bool(session_fence);
 	const auto load_query_failures = QueryFailureGeneration();
 	auto load_shared_bank = [&]() {
 		if (checked_load && (!session_fence || !session_fence() ||
@@ -710,6 +766,22 @@ bool SharedDatabase::GetInventory(Client *c, const std::function<bool()>& sessio
 		if (checked_load) return load_shared_bank();
 		LogError("Error loading inventory for char_id {} from the database.", char_id);
 		return false;
+	}
+
+	std::map<uint64, uint64> longshadow_sources;
+	if (!FindLongshadowInventorySources(*this, char_id, results, longshadow_sources)) return false;
+	if (!checked_load && !longshadow_sources.empty()) {
+		if (!session_fence || !session_fence()) return false;
+		try {
+			load_snapshot = InventoryRepository::GetLoadSnapshot(*this, char_id);
+			if (!load_snapshot.success) return false;
+			results.clear();
+			for (const auto& row : load_snapshot.rows) results.push_back(row.values);
+			std::map<uint64, uint64> checked_sources;
+			if (!FindLongshadowInventorySources(*this, char_id, results, checked_sources) ||
+				checked_sources != longshadow_sources) return false;
+		} catch (...) { return false; }
+		checked_load = true;
 	}
 
 	for (auto const& row: results) {
@@ -923,7 +995,7 @@ bool SharedDatabase::GetInventory(Client *c, const std::function<bool()>& sessio
 						prepared_witnesses.push_back(std::move(witness.value));
 					}
 				}
-				if (InventoryRepository::UpdateLoadGuids(*this, char_id, load_snapshot, queue) !=
+				if (InventoryRepository::UpdateLoadGuids(*this, char_id, load_snapshot, queue, longshadow_sources) !=
 					InventoryRepository::GuidLoadResult::Applied) return false;
 			} catch (...) { return false; }
 		} else {

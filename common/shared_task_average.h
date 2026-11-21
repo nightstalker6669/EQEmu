@@ -11,8 +11,8 @@ struct AveragePolicy {
 };
 
 // No row/table preserves ordinary per-character admission. An enabled average
-// policy requires min_level=0, so the two different level models cannot mix.
-inline AveragePolicy ReadAveragePolicy(Database &db, uint32_t task_id, uint32_t min_level)
+// policy is checked independently of any individual task minimum.
+inline AveragePolicy ReadAveragePolicy(Database &db, uint32_t task_id)
 {
 	auto exists = db.QueryDatabase(
 		"SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() "
@@ -45,7 +45,7 @@ inline AveragePolicy ReadAveragePolicy(Database &db, uint32_t task_id, uint32_t 
 		return {true, 0};
 	}
 	const auto minimum = Number(row[0]);
-	if (!minimum || *minimum < 1 || *minimum > 255 || min_level != 0) {
+	if (!minimum || *minimum < 1 || *minimum > 255) {
 		return {};
 	}
 	return {true, static_cast<uint32_t>(*minimum)};

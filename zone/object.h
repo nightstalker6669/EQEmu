@@ -151,6 +151,7 @@ public:
 	~Object();
 	bool Process();
 	bool IsGroundSpawn() { return m_ground_spawn; }
+	void SetGroundSpawnSource(uint32 id) { m_ground_spawn_source = id; }
 	void SetQuestGroundSpawn() { m_quest_ground_spawn = true; }
 	// Event handlers
 	bool HandleClick(Client* sender, const ClickObject_Struct* click_object);
@@ -246,6 +247,7 @@ protected:
 	float  m_max_y;
 	float  m_min_x;
 	float  m_min_y;
+	uint32 m_ground_spawn_source = 0;
 	bool   m_ground_spawn;
 	bool   m_quest_ground_spawn = false;
 	bool   m_random_ground_z = false; // Recurring spawn uses the map-height sentinel.

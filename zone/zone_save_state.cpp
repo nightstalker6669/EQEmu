@@ -1,3 +1,4 @@
+#include "dodh_longshadow_source.h"
 #include "bound_destructible_ruins.h"
 /*	EQEmu: EQEmulator
 
@@ -801,6 +802,9 @@ void Zone::SaveZoneState()
 		// everything below here is dynamically spawned
 		bool ignore_npcs =
 				 Housing::ServiceNpcs::Managed(n.second) ||
+				 DodhLongshadowScene::ReplayOwned(*n.second) ||
+                 DodhLongshadowTravel::IsFinaleActor(*n.second) ||
+                 DodhHardNotebookChest::IsActor(*n.second) ||
 				 n.second->GetSpawnGroupId() > 0 ||
 				 n.second->GetNPCTypeID() < 100 ||
 				 n.second->GetNPCTypeID() == 500 || // Trap::CreateHiddenTrigger
@@ -825,7 +829,9 @@ void Zone::SaveZoneState()
 
 	// corpses
 	for (auto &n: entity_list.GetCorpseList()) {
-		if (!n.second->IsNPCCorpse()) {
+		if (!n.second->IsNPCCorpse() || DodhLongshadowScene::ReplayOwned(*n.second) ||
+            DodhLongshadowTravel::IsOrbCorpse(*n.second) || DodhLongshadowTravel::IsTraitorCorpse(*n.second) ||
+            DodhHardNotebookChest::IsCorpse(*n.second)) {
 			continue;
 		}
 

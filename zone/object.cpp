@@ -17,6 +17,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "object.h"
+#include "dodh_longshadow_source.h"
 
 #include "common/events/player_event_logs.h"
 #include "common/repositories/criteria/content_filter_criteria.h"
@@ -636,6 +637,22 @@ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 		return true;
 	}
 
+    if (m_ground_spawn && m_ground_spawn_source == 304067003) {
+        if (!sender || !click_object || !m_inst) return false;
+        const auto dx = sender->GetX() - GetX();
+        const auto dy = sender->GetY() - GetY();
+        const auto dz = sender->GetZ() - GetZ();
+        if (dx * dx + dy * dy + dz * dz > 400.0f) return false;
+        const auto result = DodhLongshadowSource::NativeBellfastGroundPickup(*sender, *m_inst);
+        if (result != DodhLongshadowSource::LootResult::Issued &&
+            result != DodhLongshadowSource::LootResult::AlreadyIssued) return false;
+        respawn_timer.Start();
+        EQApplicationPacket reply(OP_ClickObject, sizeof(ClickObject_Struct));
+        memcpy(reply.pBuffer, click_object, sizeof(ClickObject_Struct));
+        entity_list.QueueClients(nullptr, &reply, false);
+        return true;
+    }
+
 	if (m_ground_spawn) {//This is a Cool Groundspawn
 		respawn_timer.Start();
 	}
@@ -964,6 +981,7 @@ GroundSpawns* ZoneDatabase::LoadGroundSpawns(
 	uint32 slot_id = 0;
 
 	for (const auto& e : l) {
+		gs->spawn[slot_id].database_id   = e.id;
 		gs->spawn[slot_id].name          = e.name;
 		gs->spawn[slot_id].max_x         = e.max_x;
 		gs->spawn[slot_id].max_y         = e.max_y;

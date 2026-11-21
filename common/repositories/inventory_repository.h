@@ -26,6 +26,7 @@
 #include <algorithm>
 #include <charconv>
 #include <optional>
+#include <map>
 #include <set>
 
 class InventoryRepository: public BaseInventoryRepository {
@@ -137,7 +138,8 @@ public:
  // Caller must reject partial admission on failure, including uncertain COMMIT;
  // this operation never retries a write and is not an item custody transition.
  static GuidLoadResult UpdateLoadGuids(Database& db,uint32_t character,const LoadSnapshot& expected,
-  const std::vector<Inventory>& loaded) {
+  const std::vector<Inventory>& loaded,
+  const std::map<uint64_t, uint64_t>& longshadow_sources = {}) {
   if(!character||!expected.success)return GuidLoadResult::Conflict;
   std::set<uint32_t> slots;std::set<uint64_t> serials;
   for(const auto& v:loaded)if(v.character_id!=character||!v.guid||v.guid>INT32_MAX||!slots.insert(v.slot_id).second||!serials.insert(v.guid).second)return GuidLoadResult::Conflict;
@@ -157,6 +159,21 @@ public:
     if(found->fields[16]&&found->values.guid==v.guid)continue;
     auto changed=db.QueryDatabase("UPDATE inventory SET guid="+std::to_string(v.guid)+" WHERE character_id="+std::to_string(character)+" AND slot_id="+std::to_string(v.slot_id),false);
     if(!changed.Success()||changed.RowsAffected()!=1)return rollback(GuidLoadResult::DatabaseFailure);
+    const auto source = longshadow_sources.find(found->values.guid);
+    if (source != longshadow_sources.end()) {
+     // The checked inventory preimage is locked. Move the physical binding
+     // with that row and leave the original source/settlement key intact.
+     const auto rotated = db.QueryDatabase(fmt::format(
+      "UPDATE dodh_longshadow_item_sources s "
+      "JOIN shared_tasks t ON t.id=s.shared_task_id AND t.task_id=s.task_id "
+      "AND UNIX_TIMESTAMP(t.accepted_time)=s.accepted_time "
+      "LEFT JOIN dodh_longshadow_turnins spent ON spent.item_guid=s.item_guid "
+      "SET s.inventory_guid={} WHERE s.item_guid={} AND s.character_id={} AND s.item_id={} "
+      "AND COALESCE(s.inventory_guid,s.item_guid)={} AND spent.item_guid IS NULL "
+      "AND t.completion_time IS NULL AND (t.expire_time IS NULL OR t.expire_time>NOW())",
+      v.guid, source->second, character, v.item_id, found->values.guid), false);
+     if (!rotated.Success() || rotated.RowsAffected() != 1) return rollback(GuidLoadResult::Conflict);
+    }
    }
    committing=true;
    if(!db.QueryDatabase(std::string("COMMIT"),false).Success())return GuidLoadResult::CommitUncertain;

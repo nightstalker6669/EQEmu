@@ -1,3 +1,4 @@
+#include "dodh_longshadow_source.h"
 #include "zone/sod_progression.h"
 #include "common/sod_admission.h"
 #include "common/sod_reward_quote.h"
@@ -1781,6 +1782,7 @@ void Client::ChannelMessageReceived(uint8 chan_num, uint8 language, uint8 lang_s
 			DistanceNoZ(m_Position, t->GetPosition()) <= RuleI(Range, Say)
 		) {
 			const bool is_engaged = t->IsEngaged();
+			if (!is_engaged && t->IsNPC() && DodhLongshadowSource::OnTargetedSay(*this, *t->CastToNPC(), message)) break;
 			if (!is_engaged && t->IsNPC() && DodhSpellHail::OnTargetedSay(*this, *t->CastToNPC(), message)) {
 				break;
 			}
@@ -4853,7 +4855,9 @@ void Client::KeyRingLoad()
 	}
 
 	for (const auto& e : l) {
-		keyring.emplace_back(e.item_id);
+		if (!KeyRingCheck(e.item_id)) {
+			keyring.emplace_back(e.item_id);
+		}
 	}
 }
 
@@ -5792,6 +5796,51 @@ void Client::SendRespawnBinds()
 
 void Client::HandleLDoNOpen(NPC *target)
 {
+ const bool notebook_chest = target && DodhHardNotebookChest::IsActor(*target);
+ if (notebook_chest && !DodhHardNotebookChest::AllowOpen(*this, *target)) return;
+ const bool bellfast_hive = target && DodhBellfastHive::IsChest(*target);
+ if (bellfast_hive && !DodhBellfastHive::AllowOpen(*this, *target)) return;
+ const bool dodh_plea_chest = target && target->GetNPCTypeID() == 363035 &&
+     DodhLongshadowScene::ReplayOwned(*target);
+ const bool dodh_traitor_chest = target && DodhLongshadowTravel::IsTraitorChest(*target);
+ bool dodh_widdlethorpe_chest = false;
+ if (target && zone && zone->GetZoneID() == 361 && zone->GetInstanceID()) {
+     const auto version = zone->GetInstanceVersion();
+     const auto type = target->GetNPCTypeID();
+     const auto spawn = target->GetSpawnPointID();
+     if ((version == 6 && type == 361118 && spawn == 260590) ||
+         (version == 1 && type == 361031 && spawn == 260200) ||
+         (version == 4 && type == 361031 && spawn == 0 &&
+          target->GetEntityVariable("dodh_widdlethorpe:role") == "power_chest")) {
+         auto* mission = zone->GetDynamicZone();
+         const auto run = GetSharedTaskId();
+         const auto mark = std::to_string(zone->GetInstanceID()) + ":" + std::to_string(run);
+         const auto ready = version == 1
+             ? IsTaskActivityActive(920277, 4) || IsTaskActivityActive(920277, 5) || IsTaskActivityActive(920277, 6)
+             : IsTaskActivityActive(version == 6 ? 920275 : 920276, 4);
+         if (!ready || run <= 0 || !mission || mission->GetType() != DynamicZoneType::Mission ||
+             mission->IsExpired() || !mission->HasMember(CharacterID()) || !mission->HasDatabaseMember(CharacterID()) ||
+             (version == 4 ? target->GetEntityVariable("dodh_raid:occurrence")
+                           : target->GetEntityVariable("dodh_widdlethorpe:open")) != mark) {
+             return;
+         }
+         dodh_widdlethorpe_chest = true;
+     }
+ }
+ if (dodh_traitor_chest && !DodhLongshadowTravel::AllowTraitorOpen(*this, *target)) return;
+ if (dodh_plea_chest && !DodhLongshadowScene::AllowPleaOpen(*this, *target)) return;
+ bool dodh_demi_chest = false;
+ if (target && zone && zone->GetZoneID() == 351 && zone->GetInstanceVersion() == 1 &&
+     zone->GetInstanceID() && !target->GetEntityVariable("dodh_demi:locked_chest").empty()) {
+    auto* expedition = zone->GetDynamicZone();
+    if (!expedition || expedition->GetType() != DynamicZoneType::Expedition ||
+        expedition->GetName() != "Dreadspire Keep: Demi-Plane of Blood" || expedition->IsExpired() ||
+        expedition->GetInstanceID() != zone->GetInstanceID() || !expedition->HasMember(CharacterID()) ||
+        target->GetEntityVariable("dodh_demi:locked_chest") != expedition->GetUUID()) {
+        return;
+    }
+    dodh_demi_chest = true;
+ }
  if(target&&!FireRunActionSource::NativeRunTerminalSource::AuthorizeActualChestOpen(*this,*target))return;
 	if(target)
 	{
@@ -5841,6 +5890,7 @@ void Client::HandleLDoNOpen(NPC *target)
 		}
 		else
 		{
+			if (DodhBellfastNeran::Open(*this, *target)) return;
 			target->AddToHateList(this, 0, 500000, false, false, false);
 			if(target->GetLDoNTrapType() != 0)
 			{
@@ -5863,7 +5913,12 @@ void Client::HandleLDoNOpen(NPC *target)
                  (zone->GetZoneID() == 356 && zone->GetInstanceVersion() == 1 &&
                     target->GetNPCTypeID() == 356901)) &&
                 !target->GetEntityVariable("rof2_dodh_scene_actor").empty();
-            const DodhCocoonOpen::ScopedOpen opened(dodh_cocoon ? target : nullptr, this);
+            const DodhCocoonOpen::ScopedOpen opened(
+                (dodh_cocoon || dodh_plea_chest || dodh_traitor_chest || notebook_chest || dodh_widdlethorpe_chest || bellfast_hive)
+                    ? target : nullptr, this);
+            if (dodh_demi_chest) {
+                target->SetEntityVariable("dodh_demi:opened", std::to_string(CharacterID()));
+            }
 			target->Death(this, 0, SPELL_UNKNOWN, EQ::skills::SkillHandtoHand);
 		}
 	}
