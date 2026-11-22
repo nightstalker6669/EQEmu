@@ -38,9 +38,21 @@ These changes cover access to existing spells, tomes and effects. The acquisitio
 - In Root of Ro, the physical climb from C1 onward and the original switch 1 exit are open. QA used positioning assistance to reach the upper floor and development extraction to leave the instance. The unassisted approach to Kelshar in Message to the Past and a landed Curse of Salir in The Burning Prince remain unverified.
 - The corrected Library v10 return still needs a native replay. The attempt could not boot a fresh instance. The standalone level-67 denial and level-68 entry probes were deferred. Earned Theater arrival passed via both routes.
 
+## Earned Deathknell access in r32
+
+The matched r32 server and database releases cover the earned route through entry to an owned Tower of Deathknell instance. RoF2 QA earned the Relic components, completed Daosheen and Sullon, and exercised Sullon’s guardians, physical trapdoor and ward. The Suchun run exercised the destructible wall, five gateways, the boss and reanimated drakes. The release adds four owned expeditions with requester qualifications and per-member victory credit.
+
+Both Suchun payout paths passed in native QA. A carried Red shard converted to Black, and the early path delivered the Vial directly to the cursor and completed the Red-plus-Vial Shrine exchange. The tower run used Inspiration of Tuyen from Theater of Blood and retained the earned Fetters during Eodue’s hand-in. The earned flag and portal took the group into the owned tower.
+
+The focused Daosheen check saw four selectable spirits on reachable dry ledges at 89% boss health. An ordinary-status caster landed a damaging hit on the yellow spirit. Direct hits on the other colors and later waves remain unverified. The earlier Daosheen victory and the focused check are separate observations.
+
+QA used development equipment and assistance, and some arena geometry and combat values are local reconstructions. The other Inspiration sources, clean level-only entry boundaries, same-expedition early Vial replay prevention and direct post-fix Sullon cursor replacement lack equivalent native proof.
+
+[Server r32](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r32-a1-324c2e4787b3) · [Matching database](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-22-deathknell) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/7e0dab5457aaa3f0fdcf89caf69f4a997c22bfad/releases/peq-rof2-2026-11-22-deathknell/NATIVE-QUALIFICATIONS.json)
+
 ## Pending scope and historical limits
 
-- **Deathknell and its prerequisite raids** remain outside this group batch, along with the independent Tunare route, lower-tier Takish variants, Samples Hard tuning and optional chest and gear pools.
+- **Tower of Deathknell encounters and Harp String acquisition** remain pending. The independent Tunare route, lower-tier Takish variants, Samples Hard tuning and optional chest and gear pools are outside this coverage.
 - **Sverag automatic rotation** remains unverified. The static Bolvirk start and authored controller-specific alternatives are the scope of this candidate.
 - **Achievements** found no related criterion confirmed for the May 2013 cutoff. This draft carries zero achievement additions.
 - **Local reconstruction** applies to the Oubliette’s deterministic selection among 27 stock eggsacks, the Library add cadence, the Razorthorn first-spawn sample chance and shadow timing, selected encounter stats and fixed Message to the Past chest placements. Skylance’s floor-side return triggers use the stock lobby destinations. These routes retain their native QA qualifications.
