@@ -434,6 +434,8 @@ public:
 	);
 	bool CompleteSharedTaskAchievement(uint32 achievement_id);
 	std::string GetSharedTaskIdentity();
+	bool TransformDeathknellSullonShard();
+	bool TransformDeathknellSuchunShard();
 	uint16 GetSharedTaskInstanceID(uint32 task_id, uint32 zone_id, uint32 zone_version);
 	void LockSharedTask(bool lock);
 	void EndSharedTask();

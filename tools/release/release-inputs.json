@@ -5,15 +5,16 @@
       "Import full.sql into a fresh empty database with the matching runtime."
     ],
     "asset": {
-      "bytes": 36969877,
-      "name": "PEQ-RoF2-full-2026-11-21-por-group-theater.zip",
-      "sha256": "7b314a300e2793335c99b9d7639f5c8763beecd2773e140b0c9bbce39fc5115d",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-21-por-group-theater/PEQ-RoF2-full-2026-11-21-por-group-theater.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-21-por-group-theater/PEQ-RoF2-full-2026-11-21-por-group-theater.zip"
+      "bytes": 37101813,
+      "name": "PEQ-RoF2-full-2026-11-22-deathknell.zip",
+      "sha256": "8a250975028fcf99cc094b08900f07c1122674e1d651e39820728ef3bf8827d3",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-22-deathknell/PEQ-RoF2-full-2026-11-22-deathknell.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-22-deathknell/PEQ-RoF2-full-2026-11-22-deathknell.zip"
     },
-    "base_database_release_tag": "peq-rof2-2026-11-21-darkhollow-progression",
+    "base_database_release_tag": "peq-rof2-2026-11-21-por-group-theater",
     "cohort_source_binding": {
-      "preserved_prior_binding": "75a37d7cb622456c3bdf18cf6017e96044c353baa1970f47439b95339b306665",
+      "preserved_prior_binding": "f9acd6d88ffb27c93006e044312afc9c8b259db27c32f125b220725f07441873",
+      "quest_projection_sha256": "c881a30becf383cac3ba8fa076db9a77bd27338b64d4679b315d1aa08726dfe8",
       "quest_root": "quests",
       "required_quest_files": [
         {
@@ -25,12 +26,24 @@
           "sha256": "6371055b3be491e8722a154c9e631251f8859c41a2184baffd45fb45aad56c6f"
         },
         {
+          "path": "arcstone/v0/369067.lua",
+          "sha256": "7793325c8fcd92ad098ff66d7ccbf72bda173411862706204ec072aa4e12bfc7"
+        },
+        {
           "path": "arcstone/v0/369083.lua",
           "sha256": "a4650ad33399c9527e4fd3c47c61b41bd5ea8506a40ac9b63db4e0478308dca5"
         },
         {
+          "path": "arcstone/v0/369085.lua",
+          "sha256": "6bf863e741d1675bf58c3dca825817c7646435c5cdc07b2b6bec649511297899"
+        },
+        {
+          "path": "arcstone/v0/369097.lua",
+          "sha256": "c7b91841b0fb9c26ce4b063cbce3f34f50a204b19676f3af871a5670f191197f"
+        },
+        {
           "path": "arcstone/v0/player.lua",
-          "sha256": "3e344de136fe0799a7091efc61e216cf1f3d5b3b30cc43a04b00fad55294ed2c"
+          "sha256": "ab5835009a6a166c778c7f1643774002d50fff2206dee1710832f407f3c24404"
         },
         {
           "path": "corathus/v0/365268.lua",
@@ -57,12 +70,20 @@
           "sha256": "66dcebe55ea330b10e887e2e6ae3b5f48362b5569da0d8db775611c43a845863"
         },
         {
+          "path": "devastation/v0/371943.lua",
+          "sha256": "f3cf5df45d272d12844c7b41ef7b9c208c97989db9450b427403d8f55d9b34b4"
+        },
+        {
           "path": "devastation/v0/372000.lua",
-          "sha256": "e1284e4e3017bb133ced03d95a3d201398612c4f53bc661ac72d3e5b67808735"
+          "sha256": "e6f2d6417f29be3d002bd88ff3dc32122e8ace79319dd2168f272b97b1373592"
         },
         {
           "path": "devastation/v0/player.lua",
           "sha256": "a4ba1922f3f3cbc4f65bed41575f8e8be191c5cb2c61103c830e579a65a7c412"
+        },
+        {
+          "path": "devastation/v0/zone.lua",
+          "sha256": "b40154caec8c210a22f4ed0c8ea8ef07678747edea6c419ef001411285755e63"
         },
         {
           "path": "drachnidhive/v4/player.lua",
@@ -287,6 +308,10 @@
         {
           "path": "eastkorlacha/v2/zone.lua",
           "sha256": "762b8da1456bbf5608383a3a3f72fc0426402f9cd8ab165a4ea8d4f068a7c462"
+        },
+        {
+          "path": "freeportwest/v0/383166.lua",
+          "sha256": "40962f91bab3a0082f383bcd90c120026abfc12318123ad94a386b8c96ba44e4"
         },
         {
           "path": "global/encounters/rof2_sod_fieldofscale.lua",
@@ -629,8 +654,24 @@
           "sha256": "dcac3fe241dc796431e406974fa0c38218d58a379252fa73c46da796ec754fc5"
         },
         {
+          "path": "lua_modules/rof2_por_daosheen.lua",
+          "sha256": "daa0d76dd189ea720fe7f52d868004442d7ef0a4c0e7288f67b4c1e3f7be17a4"
+        },
+        {
+          "path": "lua_modules/rof2_por_deathknell.lua",
+          "sha256": "32d0c04a86f57a90c4bdba65a56a60fa85feee9a4a1afb231d3d1bcdd6b514e0"
+        },
+        {
+          "path": "lua_modules/rof2_por_deathknell_contacts.lua",
+          "sha256": "4b41c9699adbe99f0b307ee59683dd9c7b83e4ef68243871669248c8a3fad12b"
+        },
+        {
           "path": "lua_modules/rof2_por_maelin.lua",
           "sha256": "4d0eb90ab9c43ebe6a35e76f93d6092c22727e1688d1f50577f5aa091a935860"
+        },
+        {
+          "path": "lua_modules/rof2_por_porthio.lua",
+          "sha256": "a2e3569160ff021cbc5c5a67fec397fc4ba72d1f2d3dc2576089999abf8ade34"
         },
         {
           "path": "lua_modules/rof2_por_progression.lua",
@@ -649,12 +690,28 @@
           "sha256": "32f75efe0b7e135b84489a2e78fde3b7f20b722d4cee18739dca17c3722256b1"
         },
         {
+          "path": "lua_modules/rof2_por_suchun.lua",
+          "sha256": "c56606edcdbafed05f0ef8192ef6c32d9c052315d495287d48753b03b10e677d"
+        },
+        {
+          "path": "lua_modules/rof2_por_suchun_layout.lua",
+          "sha256": "5f00344f00f66830124314f1a78e6ba021279000cb46a160994e7b8e3a3ceb3e"
+        },
+        {
+          "path": "lua_modules/rof2_por_sullon.lua",
+          "sha256": "7c20b7e5557c2a62efe0b5b484659b76a745c9f57ad6d53fe6d5dc79c2295bb2"
+        },
+        {
           "path": "lua_modules/rof2_por_sverag_trophies.lua",
           "sha256": "4209cdd417b7b4fe13c8575404e34c269669bd3bc6fd0b10e34c6124348dc655"
         },
         {
           "path": "lua_modules/rof2_por_takish.lua",
           "sha256": "cf5c035781f997d429442f10f35c85d03549d4c34b6f45cbf5bcdd12cf58c685"
+        },
+        {
+          "path": "lua_modules/rof2_por_theater_muses.lua",
+          "sha256": "da75e149fad2d48cadd8d5e629abb4b70eefab226c5f168555f02680efc4c93a"
         },
         {
           "path": "lua_modules/rof2_sod_fieldofscale.lua",
@@ -738,7 +795,7 @@
         },
         {
           "path": "northro/v0/392045.lua",
-          "sha256": "223091471f14a4d2baab9d8c727b88e814a1a55ee9f96a2c5df08a40d2047e1f"
+          "sha256": "95641e14fcf80775ab3d25dd5c6554a3f9b5219dbb4b7ac58c7aca5367016e0e"
         },
         {
           "path": "northro/v0/392088.lua",
@@ -882,7 +939,11 @@
         },
         {
           "path": "poknowledge/Grand_Librarian_Maelin.lua",
-          "sha256": "653ed5bebf2db85ee1d5907ef2a87d604f841eed60dc28a98bb57b5f46532ae1"
+          "sha256": "b67798d52c6307770ce130ff299dcc2a9752a3c2a9b4f9ec2a98914c7fe6aeea"
+        },
+        {
+          "path": "rage/v0/371943.lua",
+          "sha256": "f3cf5df45d272d12844c7b41ef7b9c208c97989db9450b427403d8f55d9b34b4"
         },
         {
           "path": "rage/v0/372099.lua",
@@ -894,11 +955,11 @@
         },
         {
           "path": "rage/v0/player.lua",
-          "sha256": "2d374c28df4809f827a64b1ce6b0dd61aa753d71ecbd542db292989f8e3b747c"
+          "sha256": "33664fdf2909b5713c80367bd6d1373ab2eceb7a5feb2ac5d8a01bd697b436dc"
         },
         {
           "path": "rage/v0/zone.lua",
-          "sha256": "49857af3e6daae87e3997c3858a6667c0831f96ecbf9f66a259d9e69dfbda63a"
+          "sha256": "817431c8eb2bccb786d3f7e80c526b878ca5727a94d367c13fb095c1f594440f"
         },
         {
           "path": "ragea/v10/player.lua",
@@ -907,6 +968,34 @@
         {
           "path": "ragea/v10/zone.lua",
           "sha256": "8ec5eb69d28be6351b8f792a08f6727a6ddb873a55851f670cfa8c1d2496737d"
+        },
+        {
+          "path": "ragea/v20/375940.lua",
+          "sha256": "7ac457892a38c5c699e005c0400d131857c5e4281fc8a25237a5eb73a89b359f"
+        },
+        {
+          "path": "ragea/v20/375941.lua",
+          "sha256": "7ac457892a38c5c699e005c0400d131857c5e4281fc8a25237a5eb73a89b359f"
+        },
+        {
+          "path": "ragea/v20/375942.lua",
+          "sha256": "7ac457892a38c5c699e005c0400d131857c5e4281fc8a25237a5eb73a89b359f"
+        },
+        {
+          "path": "ragea/v20/player.lua",
+          "sha256": "4cad9f2bb97c43d4f5e632481e97869dcd56a8265c806692cfb3b31ccec2b7df"
+        },
+        {
+          "path": "ragea/v20/zone.lua",
+          "sha256": "361fe86a01d49684ef6b9a0941f32af5e1b7e5af77bcfaa3fd9d77e12fe011ac"
+        },
+        {
+          "path": "relic/v0/371941.lua",
+          "sha256": "aab483c870d2ab657fd8b010e9a307131c12ab7f708e7f7ecb6f59f9b37784b0"
+        },
+        {
+          "path": "relic/v0/371942.lua",
+          "sha256": "aab483c870d2ab657fd8b010e9a307131c12ab7f708e7f7ecb6f59f9b37784b0"
         },
         {
           "path": "shadowspine/v1/364015.lua",
@@ -981,6 +1070,22 @@
           "sha256": "ad1af362030b15409c50fa124d7dd170fc1c2af60b7f2a281acbacea111df209"
         },
         {
+          "path": "skylance/v20/371002.lua",
+          "sha256": "cd7a9358c739007f5ec9d68f97d7cfc931a70f3e96accecbaf3639046c9500d7"
+        },
+        {
+          "path": "skylance/v20/371944.lua",
+          "sha256": "6537134a21d8da311663232ce046a418cc70c4f3096babf2fa66ab009bf81728"
+        },
+        {
+          "path": "skylance/v20/player.lua",
+          "sha256": "70f9fc51d7723277ecdf96570c8886988a0c21429b4478ba697be046fccd25f3"
+        },
+        {
+          "path": "skylance/v20/zone.lua",
+          "sha256": "810f7ec47ece16be80c8e448815465d44c0e4167afc2707514280dd7f5248acd"
+        },
+        {
           "path": "southro/player.lua",
           "sha256": "333ed4c0f7cc61a6d9d94950f9813d4551458827e1a6628d079f4d4d3e63b043"
         },
@@ -994,7 +1099,7 @@
         },
         {
           "path": "takishruins/v0/player.lua",
-          "sha256": "5da7b27e3017d6f49c735b87f42f6acc4e8cd9e1b4160e4d223b326dfa450444"
+          "sha256": "4caef3d3e7e41f7bbfca7893269119f24c9ebc5259dc955a6992459f70b209c2"
         },
         {
           "path": "takishruins/v10/376961.lua",
@@ -1019,6 +1124,98 @@
         {
           "path": "takishruinsa/v10/zone.lua",
           "sha256": "0c41c7a7acf163e6132b74d652feab84134fd3997f61bebb9e5d74aeb6f77ba9"
+        },
+        {
+          "path": "takishruinsa/v20/212007.lua",
+          "sha256": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da"
+        },
+        {
+          "path": "takishruinsa/v20/212013.lua",
+          "sha256": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da"
+        },
+        {
+          "path": "takishruinsa/v20/212036.lua",
+          "sha256": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da"
+        },
+        {
+          "path": "takishruinsa/v20/212040.lua",
+          "sha256": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da"
+        },
+        {
+          "path": "takishruinsa/v20/377013.lua",
+          "sha256": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da"
+        },
+        {
+          "path": "takishruinsa/v20/377940.lua",
+          "sha256": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da"
+        },
+        {
+          "path": "takishruinsa/v20/377941.lua",
+          "sha256": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da"
+        },
+        {
+          "path": "takishruinsa/v20/377942.lua",
+          "sha256": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da"
+        },
+        {
+          "path": "takishruinsa/v20/377943.lua",
+          "sha256": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da"
+        },
+        {
+          "path": "takishruinsa/v20/377944.lua",
+          "sha256": "1cfed12041fe75eb468d80ecf15c31d081e71dcddda7688deba788712aca4b48"
+        },
+        {
+          "path": "takishruinsa/v20/377945.lua",
+          "sha256": "f4b71e8fc0c876eb0a067b843439f4a09ea4feec7bfd12124ff3b1cd1572128b"
+        },
+        {
+          "path": "takishruinsa/v20/player.lua",
+          "sha256": "7071abb586b0152cf327673f5e53c526a49c43097387712e2cb53ef701a009d2"
+        },
+        {
+          "path": "takishruinsa/v20/zone.lua",
+          "sha256": "9de5e0a60297b40d36bf668baf89cc69bc657e17b687c60662c2a073ddcea6e3"
+        },
+        {
+          "path": "theater/v0/380000.lua",
+          "sha256": "c2a2c30c2d8a69f047087beaca1412d8be182418d6c8b9defec8e37cb508c3da"
+        },
+        {
+          "path": "theater/v0/380018.lua",
+          "sha256": "052bb446f1fdb4559d7f6c38b297893e90e8b2896868758984a19e7306162ae9"
+        },
+        {
+          "path": "theater/v0/380038.lua",
+          "sha256": "052bb446f1fdb4559d7f6c38b297893e90e8b2896868758984a19e7306162ae9"
+        },
+        {
+          "path": "theater/v0/380040.lua",
+          "sha256": "052bb446f1fdb4559d7f6c38b297893e90e8b2896868758984a19e7306162ae9"
+        },
+        {
+          "path": "theater/v0/380046.lua",
+          "sha256": "052bb446f1fdb4559d7f6c38b297893e90e8b2896868758984a19e7306162ae9"
+        },
+        {
+          "path": "theater/v0/380052.lua",
+          "sha256": "d6a18aa83547ae79d9db8d4f333e6a7de13fe5ef4ead79ba7178b498e3601266"
+        },
+        {
+          "path": "theater/v0/380059.lua",
+          "sha256": "60f6ef56e8e957c3e9215b289c900b67230797c7dec1b3c94c49d7475c9d150b"
+        },
+        {
+          "path": "theater/v0/player.lua",
+          "sha256": "b27a3a02c7694913b41fd5c010a3bf6856a9449153508b45ed6ccb163a384670"
+        },
+        {
+          "path": "theater/v0/zone.lua",
+          "sha256": "e79aa93062423b1f5c3ef5829cdb002a5db6df7a13d43481ad92ee876d7e766a"
+        },
+        {
+          "path": "theatera/v20/player.lua",
+          "sha256": "777a3b2b931a5db97b1bba3dfe8264349b6352ac6f01074d2fef8c66dfd92fd8"
         },
         {
           "path": "westkorlach/v0/358020.lua",
@@ -1233,7 +1430,6 @@
           "sha256": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
         }
       ],
-      "required_quest_files_aggregate_count": 304,
       "required_source_files": [
         {
           "bytes": 1959,
@@ -1356,12 +1552,12 @@
           "sha256": "41185708ed2bbd98f9b290c49c79605001f157e71018b56b9ac376e4530fb028"
         },
         {
-          "bytes": 1193,
-          "git_blob": "4134c0505ae85d17cec6a1b7a30713899c34519f",
+          "bytes": 3075,
+          "git_blob": "0ca4453b0bf33f3e4a7e6d7c7346bf7ca220fd29",
           "kind": "native_source",
           "mode": "100644",
           "path": "common/shared_core/por_chime_exchange.h",
-          "sha256": "51cbb6561307cb4c2259d22aca84ee008d6e9b753fb915da3dc9c92b9a140fbc"
+          "sha256": "41f2e619286f350b9ab4adcfc307d9cc2ca9eeacd65f743269a80783bb36b145"
         },
         {
           "bytes": 2814,
@@ -1420,12 +1616,12 @@
           "sha256": "a4650ad33399c9527e4fd3c47c61b41bd5ea8506a40ac9b63db4e0478308dca5"
         },
         {
-          "bytes": 311,
-          "git_blob": "e557f50b5cfe0881624315ad54b2149ce47ba4c9",
+          "bytes": 584,
+          "git_blob": "2fb46e58e7e15fb2b1acc928d0f396d146d20e86",
           "kind": "quest_lua",
           "mode": "100644",
           "path": "quests/arcstone/v0/player.lua",
-          "sha256": "3e344de136fe0799a7091efc61e216cf1f3d5b3b30cc43a04b00fad55294ed2c"
+          "sha256": "ab5835009a6a166c778c7f1643774002d50fff2206dee1710832f407f3c24404"
         },
         {
           "bytes": 100,
@@ -1476,12 +1672,12 @@
           "sha256": "66dcebe55ea330b10e887e2e6ae3b5f48362b5569da0d8db775611c43a845863"
         },
         {
-          "bytes": 965,
-          "git_blob": "0c8f6937d7cca2d119ea98e9ea2d7e98650c3974",
+          "bytes": 1076,
+          "git_blob": "6969021b34ea63ef2f2cdf003f4a1356d95faf1c",
           "kind": "quest_lua",
           "mode": "100644",
           "path": "quests/devastation/v0/372000.lua",
-          "sha256": "e1284e4e3017bb133ced03d95a3d201398612c4f53bc661ac72d3e5b67808735"
+          "sha256": "e6f2d6417f29be3d002bd88ff3dc32122e8ace79319dd2168f272b97b1373592"
         },
         {
           "bytes": 140,
@@ -2628,12 +2824,12 @@
           "sha256": "bb476f493282d64486a9ca7b9c7b4f4004fed6f6077f523a9924180091f9e659"
         },
         {
-          "bytes": 628,
-          "git_blob": "f1da60a11857027b08aa562ccf91db2219a7483d",
+          "bytes": 739,
+          "git_blob": "01492b51915160e11e1d770b9ce39172c1634e64",
           "kind": "quest_lua",
           "mode": "100644",
           "path": "quests/northro/v0/392045.lua",
-          "sha256": "223091471f14a4d2baab9d8c727b88e814a1a55ee9f96a2c5df08a40d2047e1f"
+          "sha256": "95641e14fcf80775ab3d25dd5c6554a3f9b5219dbb4b7ac58c7aca5367016e0e"
         },
         {
           "bytes": 959,
@@ -2644,12 +2840,12 @@
           "sha256": "bf3976570f4ce380ec2c63675bc46aa91b06717e575ba0a59f5d0f22a5a4849c"
         },
         {
-          "bytes": 7446,
-          "git_blob": "b46a7c9ced8ff2220962f0d65cb04eb642f81391",
+          "bytes": 7563,
+          "git_blob": "2eb8bbfadede19a3473b8fdd0da0d96a873cdc3b",
           "kind": "quest_lua",
           "mode": "100644",
           "path": "quests/poknowledge/Grand_Librarian_Maelin.lua",
-          "sha256": "653ed5bebf2db85ee1d5907ef2a87d604f841eed60dc28a98bb57b5f46532ae1"
+          "sha256": "b67798d52c6307770ce130ff299dcc2a9752a3c2a9b4f9ec2a98914c7fe6aeea"
         },
         {
           "bytes": 142,
@@ -2668,20 +2864,20 @@
           "sha256": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7"
         },
         {
-          "bytes": 523,
-          "git_blob": "6ea4f9e7c5311145788d197f6d264e001119e0cb",
+          "bytes": 698,
+          "git_blob": "ae3d663759edf0483dfe79b2b3af00f1bc592032",
           "kind": "quest_lua",
           "mode": "100644",
           "path": "quests/rage/v0/player.lua",
-          "sha256": "2d374c28df4809f827a64b1ce6b0dd61aa753d71ecbd542db292989f8e3b747c"
+          "sha256": "33664fdf2909b5713c80367bd6d1373ab2eceb7a5feb2ac5d8a01bd697b436dc"
         },
         {
-          "bytes": 188,
-          "git_blob": "45e762ed69cf188388990b6ef51169008b73654c",
+          "bytes": 255,
+          "git_blob": "f0cc2f47a50fc3f0bc099355cc07253f6812ddab",
           "kind": "quest_lua",
           "mode": "100644",
           "path": "quests/rage/v0/zone.lua",
-          "sha256": "49857af3e6daae87e3997c3858a6667c0831f96ecbf9f66a259d9e69dfbda63a"
+          "sha256": "817431c8eb2bccb786d3f7e80c526b878ca5727a94d367c13fb095c1f594440f"
         },
         {
           "bytes": 457,
@@ -2868,12 +3064,12 @@
           "sha256": "8d7c3f4ab7dbe176d38addfcf9379dcf7ef8336a43830c2091a2200ac121c7dd"
         },
         {
-          "bytes": 107,
-          "git_blob": "45d7de9ae163badd0db7e0ff897e33c888e97ee2",
+          "bytes": 290,
+          "git_blob": "7ba3dabeb37006f5d1dc059cee7d21857662cbf2",
           "kind": "quest_lua",
           "mode": "100644",
           "path": "quests/takishruins/v0/player.lua",
-          "sha256": "5da7b27e3017d6f49c735b87f42f6acc4e8cd9e1b4160e4d223b326dfa450444"
+          "sha256": "4caef3d3e7e41f7bbfca7893269119f24c9ebc5259dc955a6992459f70b209c2"
         },
         {
           "bytes": 531,
@@ -3636,28 +3832,28 @@
           "sha256": "bb337b9bdb9a73bae8d097529bf73f7a96124d16300e108a8fbe373900f970b3"
         },
         {
-          "bytes": 105491,
-          "git_blob": "b9b446ed073397c3f8b63ff17f4c95e08d337ca9",
+          "bytes": 107190,
+          "git_blob": "7ace02b53d0cabb4c5cb856631832a8668f2a5e4",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/kithicor_poison_trade.inc",
-          "sha256": "3a42861f8fb58f11605c0d1ac067764cd2f46a76b044bd87c05e01fdaa1c1362"
+          "sha256": "73e66909288366c8aaa4ebc5804f7bf82bc302dd0942f2ad7b5277c60fb0e2e7"
         },
         {
-          "bytes": 192593,
-          "git_blob": "50091f1362262f8c666e23ce047814f6932a0280",
+          "bytes": 193129,
+          "git_blob": "7a6369d3f7dac67f80915797e55dd0614a734820",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/lua_client.cpp",
-          "sha256": "bafcad8726bd7a138859cc653cf2f90a0bf0ff25f768e7443d848be9ce0e7d3a"
+          "sha256": "a0e56398a708ac6be8d347b4a38105853e8b6275e41a83d24c0bf97cbccc9c2f"
         },
         {
-          "bytes": 32330,
-          "git_blob": "d61b8f4a6fcbfd1aaa755351e8ae18e3764a330f",
+          "bytes": 32410,
+          "git_blob": "01af4162cea03cedc9715e64623e07a8d65ac1f5",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/lua_client.h",
-          "sha256": "4b88cc942bee11286b36aca534d825e3cbba41e917198f607dd7e7a617c460c8"
+          "sha256": "22e0a7b47ae2925630c27ef478bbe85ea2cca9ab01a6705901d3ce2d15e0b66b"
         },
         {
           "bytes": 82741,
@@ -3698,6 +3894,22 @@
           "mode": "100644",
           "path": "zone/object.h",
           "sha256": "136a03fe95feee44530e86770209ccdda456b486ae47740d72b4ab407d3f3254"
+        },
+        {
+          "bytes": 308,
+          "git_blob": "0ca42c0f466beaf7cc8e9f05f99e42af929f5c4f",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/por_deathknell_custody.h",
+          "sha256": "3c20281bc9506487696d573baca45ab7bb7aa63c93de21329e8cff9af9c2cded"
+        },
+        {
+          "bytes": 15017,
+          "git_blob": "4dfb62ff0328780c45401f53855b69caa285d4cc",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/por_deathknell_shard.inc",
+          "sha256": "031d080a9a9e0be3933aa4b05d352a14bc8bd1df769607a7eee9b73e3b6bf973"
         },
         {
           "bytes": 1517,
@@ -3788,10 +4000,10 @@
           "sha256": "a350784df366bc03211fe16771e9c8380d312f29488304c84833718deb7f5ff1"
         }
       ],
-      "source_manifest_sha256": "cbb446ca6eb3d3bdae3aaa55b5bed5d4c5c4c8c6b5321d314f007d662094c90f"
+      "source_manifest_sha256": "ae5bf11e8f7877e166d8afad91f47f66c2b3677005ab19e95bc541cbb72f563c"
     },
     "database_repository": "nightstalker6669/EQEmu-Database",
-    "database_source_capture_commit": "2493a57a813dfb844c39df5648032494ccdd8e1a",
+    "database_source_capture_commit": "8e073222a61b05bf14eacb0921e0de751c343a6a",
     "existing_volume_upgrade": {
       "supported": false
     },
@@ -3799,9 +4011,9 @@
     "fresh_install": {
       "MariaDB": "10.11",
       "assembled_with": "10.11.19",
-      "base_tables": 491,
+      "base_tables": 492,
       "bots_version": 0,
-      "composition": "Published sanitized Darkhollow progression plus five sealed PoR SQL stages.",
+      "composition": "Published r31 sanitized database plus seven sealed Deathknell catalog inputs.",
       "custom_version": 0,
       "empty_private_player_and_operation_tables_preserved": true,
       "full_dump_replaces_tables": true,
@@ -3816,65 +4028,35 @@
       "views": 1
     },
     "future_update_policy": "A futurematchedDBversion requires a separately validatedwholecohort sanitizedrelease and explicitcommitted source/tag/assetdigest pin; never silently mutableLatest/latestDB, partialrank/itemexports, or old945-only pin for newcohort. ActualCIfailure corrections gather allvisible errors in one batch.",
-    "matched_server_integration_parent": "aaf68ac899e7c1c5ce6a33c8df7e299b79bbc60a",
+    "matched_server_integration_parent": "5ae547238d3c6f9f8504ea64ea8e0d12a068ecb9",
     "native_acceptance_scope": {
-      "catalog": {
-        "activities": 100,
-        "dz_templates": 7,
-        "enabled_tasks": 23,
-        "rewards": 201,
-        "scene_starting_rows": 0
-      },
-      "controller": {
-        "historical_automatic_controller_rotation": "unverified",
-        "initial": "Bolvirk"
-      },
-      "known_limits": [
-        "Native completion used scoped development positioning and combat assistance. The group included an elevated-status tester and invulnerability was enabled on two profiles.",
-        "The physical Root of Ro ascent from C1 onward and the switch 1 exit were unverified. The Root test used a local asset replacement with no recoverable preimage hash.",
-        "The unassisted approach to Kelshar, a landed Curse of Salir, and the patched Library v10 exit were unverified.",
-        "Independent level 67 denial and level 68 admission using ordinary probe characters were unverified. Automatic level-based Harmonic Dissonance delivery was unverified.",
-        "Sverag starts under Bolvirk control. Historical automatic controller takeover and rotation remain unverified."
+      "accepted_scope": [
+        "Earned Deathknell route through both Suchun payout paths and entry to the owned Tower of Deathknell.",
+        "Focused Daosheen first threshold. Four selectable spirits appeared on the dry ledges at 89% boss health. An ordinary-status caster landed a damaging hit on the yellow spirit. The focused check ended before another wave or victory."
       ],
-      "matched_quest_delta_sha256": "299261ee54179b3190785b18090c2b53a6a78c0fa531b5add331b51c1e89f8e5",
-      "native_terminal_receipt_sha256": "9fb39c5e2b0284110610d7dcd67b84667ba628998cdd6c4aa2c7f3eb7c244dc6",
-      "sql_lineage_sha256": "2fd9a68ae9be4bb3302822c5b2a44ddfa83f0ae1c6114bfb153aa0a3d663135f",
-      "status": "NATIVE_CORE_ACCEPTED_WITH_DOCUMENTED_LIMITS",
-      "theater": {
-        "admission_minimum_level": 68,
-        "automatic_level_based_aa_delivery": "unverified",
-        "earned_aa_id": 574,
-        "earned_chime_id": 84163
-      },
-      "witnessed": {
-        "completed_group_members_each": 3,
-        "message_reward_samples": [
-          77998,
-          78010
-        ],
-        "public_theater_distinct_entry_paths": [
-          "earned item 84163",
-          "earned AA 574"
-        ],
-        "public_theater_zone_id": 380,
-        "takish_hiz_core_tasks": [
-          920307,
-          920308,
-          920309
-        ],
-        "theater_port_spell_id": 8771
-      }
+      "core_receipt_sha256": "f24a9f23dd3644989ae34c2bc1352fb6912cec0ec68b761f14a5bb5d1fd40e2a",
+      "final_content_delta_sha256": "774bc6e27aa8d211bb0b0544987c9787cebf64f0f8befe56097248b0fa90021c",
+      "final_quest_projection_sha256": "c881a30becf383cac3ba8fa076db9a77bd27338b64d4679b315d1aa08726dfe8",
+      "focused_daosheen_receipt_sha256": "fe819d03cd17483974b5756f2749a2f15b1e55ffecb57720243a226383f6d327",
+      "known_limits": [
+        "Direct native hits on the other three spirit colors and later waves were outside the focused test.",
+        "One qualifying Inspiration source and the earned-flag tower path were exercised. Other Inspiration sources and the clean level-only entry boundaries lack equivalent native evidence.",
+        "Vial delivery to the cursor passed. Same-expedition early Vial replay prevention and a direct post-fix Sullon cursor replacement lacked equivalent native proof.",
+        "Development test assistance was used. Some arena geometry and historical combat values were reconstructed.",
+        "Internal Tower of Deathknell fights, Harp String acquisition, and Tunare are outside this release."
+      ],
+      "status": "NATIVE_ACCEPTED_WITH_DOCUMENTED_LIMITS"
     },
-    "native_gameplay_acceptance": "Native core accepted with documented assistance and verification limits",
+    "native_gameplay_acceptance": "Native core and focused Daosheen first wave accepted with documented limits",
     "payload_inventory": {
       "all_member_sha256_file": "SHA256SUMS",
-      "full_sql_bytes": 304211568,
+      "full_sql_bytes": 304306858,
       "housing_json_member_count": 331,
       "housing_json_prefix": "housing-runtime-content/",
       "housing_profile_bindings": "housing-runtime-content/PROFILE-BINDINGS.json",
       "housing_profile_bindings_sha256": "4d6c3533a882ce79ef790caa08a781a1994d56ac3d9c58a8459bb9e1ac9b73b2",
       "identical_SQL_and_Housing_bytes_required": true,
-      "payload_member_count": 451
+      "payload_member_count": 464
     },
     "preserved_mercenary_cohort_source_binding": {
       "SQL_sha256": "6ad8f950c178e9c1d84658387c521dc33695572fd8926c30a711aff44e50790f",
@@ -3890,9 +4072,9 @@
       "CHANGELOG.md",
       "SOURCE-MANIFEST.json"
     ],
-    "release_tag": "peq-rof2-2026-11-21-por-group-theater",
+    "release_tag": "peq-rof2-2026-11-22-deathknell",
     "required_code_boundary": {
-      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings.",
+      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
       "completed_mercenary_feature_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
       "external_operator_resources": "Authenticated original RoF2 archives/maps and matching server quests/opcodes; generate fresh target shared memory normally."
@@ -3935,6 +4117,12 @@
       "BASE-OCEANGREEN-README.md": "b6ca5f4e522748793531ab4416a7345a7254a1e06d9a184a3ea1e6a541482940",
       "BASE-OCEANGREEN-SOURCE-CONTENT-BINDING.json": "c767cc0f28cbf557a6731984769961189c51626a2225f40f60404b5d6790cb3d",
       "BASE-OCEANGREEN-VALIDATION.json": "8bac04e7fbc2115b6e321037c3f9ebbd050faf14c156073047762e08ddeb9339",
+      "BASE-POR-GROUP-THEATER-CANONICAL-SEED-COMPOSITION.json": "0ca029d17af74265acbaca12c3b917ac68dbc313b0534a610b518560a1b1be7e",
+      "BASE-POR-GROUP-THEATER-CHANGELOG.md": "000ea16d53e4a6337d486e914742a53e1bf6d7916ba32e37fac154dcff6b0f6d",
+      "BASE-POR-GROUP-THEATER-NATIVE-QUALIFICATIONS.json": "b8da815ecb4accafa1cb27fac1d74b28fa993aed4619ec189243c2a6690b2579",
+      "BASE-POR-GROUP-THEATER-README.md": "3d91e8cc161d7627bac1c84a8dbdb738f28bd2c8db4e85b00f31bf152f33ed1d",
+      "BASE-POR-GROUP-THEATER-SOURCE-CONTENT-BINDING.json": "f9acd6d88ffb27c93006e044312afc9c8b259db27c32f125b220725f07441873",
+      "BASE-POR-GROUP-THEATER-SOURCE-MANIFEST.json": "cbb446ca6eb3d3bdae3aaa55b5bed5d4c5c4c8c6b5321d314f007d662094c90f",
       "BASE-RATHE-R2-CANONICAL-SEED-COMPOSITION.json": "2a99ac7d73d2a0ab8b8968060aa93c5b8a36fc536b30ebbe3f597515bdbab257",
       "BASE-RATHE-R2-NATIVE-QUALIFICATIONS.json": "20608dd2d822055035b1689668af5984f4fc7fe2d9dced9387054be8c533b8ef",
       "BASE-RATHE-R2-README.md": "ca296832726f905da0bcf2f015d2e1a614ab9bb9fee872d13c54b35e653d0c6a",
@@ -3943,22 +4131,23 @@
       "BASE-RATHE-R2-TABLE-INVENTORY.json": "e6fe3fa78ad7b16e8c9d5f9b73d3d24552e9cfff663578b45e665aa5d5e991fe",
       "BASE-RATHE-R2-VALIDATION.json": "bdfee356c214b7682c027df998adad2d21fca5f212f63477eb550675a0f3b2a2",
       "BASE-README.md": "9d661df4676661cd6f3d791679e371622c4eb382d78cfd62e55186846d3b8172",
-      "CANONICAL-SEED-COMPOSITION.json": "0ca029d17af74265acbaca12c3b917ac68dbc313b0534a610b518560a1b1be7e",
-      "CHANGELOG.md": "000ea16d53e4a6337d486e914742a53e1bf6d7916ba32e37fac154dcff6b0f6d",
+      "CANONICAL-SEED-COMPOSITION.json": "09fada12b11276a3646620a222011f5b74bebe7b90bdbb15cdda8ac562180245",
+      "CHANGELOG.md": "a40e1b7b3015be2417d84703bff908230dce8cd633976617a78db529118c46e6",
       "COMPLETED-RECIPE-UPDATES.json": "fdf459a6bef7e90351d3db5c983e30920205876a990aa144b5779a4c242d25e0",
       "KITHICOR-STATIC-CONTENT.json": "5b043982b23b74f4f857724b6baf1ff0611bb88ce348f32f15f3f6230462ffc5",
       "MERCENARY86-100-CONTENT.json": "27a9d180e6a66320ae9877cd763341f6579d0a1a8a66ac6fc23c26fb9dc15c16",
-      "NATIVE-QUALIFICATIONS.json": "b8da815ecb4accafa1cb27fac1d74b28fa993aed4619ec189243c2a6690b2579",
-      "README.md": "3d91e8cc161d7627bac1c84a8dbdb738f28bd2c8db4e85b00f31bf152f33ed1d",
+      "NATIVE-QUALIFICATIONS.json": "b98f6daf2d623bfcca1929273587e77bdfd076161f0e201bab2079ea27780df5",
+      "README.md": "1830abbfb61aa1a6e332d7152e56020987fcae2f32504c423bff68166d977d59",
+      "SHA256SUMS": "36bfebd62cf91174933dc021c7a421f5069ce996dd694320ce0311ea390287e2",
       "SOD-OCEANGREEN-CONTENT.json": "5a5757e1c4631af375b87b6c69794d9e72ebc8cc91c832144d8359bb2b5454c2",
-      "SOURCE-CONTENT-BINDING.json": "f9acd6d88ffb27c93006e044312afc9c8b259db27c32f125b220725f07441873",
-      "SOURCE-MANIFEST.json": "cbb446ca6eb3d3bdae3aaa55b5bed5d4c5c4c8c6b5321d314f007d662094c90f",
+      "SOURCE-CONTENT-BINDING.json": "79687a675b8f2ffcff927b439c6c05076785612ccf49de88d0fb68988d004cfe",
+      "SOURCE-MANIFEST.json": "ae5bf11e8f7877e166d8afad91f47f66c2b3677005ab19e95bc541cbb72f563c",
       "TABLE-INVENTORY.json": "4b6bf5895d88556b7ce4ecb2bf44a55deef3b766782c5c93304ff688204ec36e",
       "VALIDATION.json": "f9da8bf1f8bc7ab959ca0bee13e9b4aaa47a530b3f6a46e5e429d85b3d522ff2",
       "VICTUAL-CLASS-FEATURE-DELTA.json": "1220253988a07ff5ef833759b947c33b4bcc56cad20195f94366cd510df7ffaf",
       "client-data/rof2/dbstr_us.append.txt": "71f93726675b66a45496e61f42994a691ab6663a326f92497627d37f6f42dfec",
       "client-data/rof2/spells_us.append.txt": "428a6b92ba8887c8d117746c2f9bc192a6429b7fd2c6c46438005442b351b7d6",
-      "full.sql": "18f4eeee28a423fa8773d14af82ec853f6b281a207cb9c4d0f50fe986752bde5",
+      "full.sql": "61e842d149779727a9d2621bbaf9151d4dd0fceefc737106512bbd9645b69884",
       "migrations/darkhollow-normal68-70/02-ALIGN-SHROUD-ESCROW.sql": "5c47bbf12e6cc50976694c5c74fa508359d737c661676fdded19913036494526",
       "migrations/darkhollow-normal68-70/03-VERIFY-SHROUD-ESCROW.sql": "0fbdcac1cc500a1fd9dcc0fe08414ca5d300623951bc0ae00e282bb1085e12f6",
       "migrations/darkhollow-normal68-70/10-LEVEL68-70-CLAIM-SCHEMA.sql": "972fdeb85e17f62aa65509d140294c9000a659338e3f819377d6bbe6a86a2231",
@@ -4006,6 +4195,13 @@
       "migrations/oceangreen/001_oceangreen_required.sql": "a4276f2534775de8c2c9fe605dca006ed2c3e72b2a8c795d184f4bd83cb3311f",
       "migrations/oceangreen/002_everforge_accept_seed.sql": "52bc75af280a484e410bd6a694417ef28a3922ea3abcfb3733b6ba4f20d7e641",
       "migrations/oceangreen/UPGRADE-CONTRACT.json": "a6b704028995992ee1ad07b453ca7a270a66037219d473eaec173e8050024f06",
+      "migrations/por-deathknell/00-DEATHKNELL-PROGRESSION-SCHEMA.sql": "85ec7539a11b596896b1a7e6f081249da09826281308c7210c9ca4a711c7b486",
+      "migrations/por-deathknell/10-requester-tasks.sql": "7e5681955a4ebeb8fb5d5e62623d798a7113403cd8af0418bd83e805f1ced089",
+      "migrations/por-deathknell/20-raid-instances.sql": "6a9d40dd127d6147f9125cbdec66d14ac1a1dca000e486c7420690d0b21cce1b",
+      "migrations/por-deathknell/30-progression-loot.sql": "3d9cc325e5c7dae6988160a35f89ce2aabff4b0301d9e499d43d38463023d2bb",
+      "migrations/por-deathknell/40-raid-actors.sql": "091a642be1a72fba7754c5d1d013b0ed2ee5bab49b341857f04c3c877e4d9960",
+      "migrations/por-deathknell/daosheen-crystal-spirit.sql": "ec4dcf1400ec678c3d9ac5f8c44c239476b82a6d7921606517030bbe46f9a811",
+      "migrations/por-deathknell/suchun-wall-targetability.sql": "9fb9ab719752d1d5e69b18b98af3bd0c401bd69397f780fed458598c8ba79d95",
       "migrations/por-group-theater/00-owned-scene-schema.sql": "365ac474427110d1a6fb1704d45526b257e5c093371320366842d4d6512dbb2c",
       "migrations/por-group-theater/10-stage-por-catalog.sql": "5e442e12e768b97ee856ad817fe8ac64cedbd3fb1485cf276ba24e07d6d96305",
       "migrations/por-group-theater/20-enable-por-catalog.sql": "10eb2c1041e9235ba54a7cdefb40eed346b27feb2765ac3c2903ead16522fc30",
@@ -4076,16 +4272,16 @@
         }
       }
     },
-    "source_commit": "8e073222a61b05bf14eacb0921e0de751c343a6a",
-    "source_commit_role": "Exact public PEQ database release commit. The server integration parent and final CI checkout are pinned separately.",
+    "source_commit": "7e0dab5457aaa3f0fdcf89caf69f4a997c22bfad",
+    "source_commit_role": "Exact public PEQ database release commit. The server integration parent and CI checkout are pinned separately.",
     "source_repository": "nightstalker6669/EQEmu",
     "verification_basis": {
-      "full_sql_sha256": "18f4eeee28a423fa8773d14af82ec853f6b281a207cb9c4d0f50fe986752bde5",
-      "receipt_sha256": "e2a7f871eaad90e52687284e7af35da88dd0afd46cbdcce240c16f0408560e79",
-      "status": "Prior isolated import reused for the byte-identical SQL member"
+      "full_sql_sha256": "61e842d149779727a9d2621bbaf9151d4dd0fceefc737106512bbd9645b69884",
+      "receipt_sha256": "c22ebda438647a60e93f4179f255aac1076394e22307e7b307380df55a2c11af",
+      "status": "Prior isolated composed import reused for byte-identical SQL."
     }
   },
-  "database_contract_sha256": "8bd671696f988eca916cef187be8806370a0a46fb264f95f33e600af7dd8cb42",
+  "database_contract_sha256": "33ad9f7f62a568ddd0e55c7f72cbb773c1863c2af754dbe19a4e80eaa3a47057",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [
@@ -4106,16 +4302,21 @@
     "files": {
       "arcstone/v0/369004.lua": "95b5a9b7b3059c8e93327d2a408687c07eb9e6750088e941dd9403f24a68b711",
       "arcstone/v0/369011.lua": "6371055b3be491e8722a154c9e631251f8859c41a2184baffd45fb45aad56c6f",
+      "arcstone/v0/369067.lua": "7793325c8fcd92ad098ff66d7ccbf72bda173411862706204ec072aa4e12bfc7",
       "arcstone/v0/369083.lua": "a4650ad33399c9527e4fd3c47c61b41bd5ea8506a40ac9b63db4e0478308dca5",
-      "arcstone/v0/player.lua": "3e344de136fe0799a7091efc61e216cf1f3d5b3b30cc43a04b00fad55294ed2c",
+      "arcstone/v0/369085.lua": "6bf863e741d1675bf58c3dca825817c7646435c5cdc07b2b6bec649511297899",
+      "arcstone/v0/369097.lua": "c7b91841b0fb9c26ce4b063cbce3f34f50a204b19676f3af871a5670f191197f",
+      "arcstone/v0/player.lua": "ab5835009a6a166c778c7f1643774002d50fff2206dee1710832f407f3c24404",
       "corathus/v0/365268.lua": "37529bca1c2df20b421b43426e8fe6998a0e8813f50523a308159ab9b2f8b3b7",
       "corathus/v0/365274.lua": "37529bca1c2df20b421b43426e8fe6998a0e8813f50523a308159ab9b2f8b3b7",
       "corathus/v0/365284.lua": "d27458332c3ac9c3155fa99a7fa8da556c42c9ae42ad54fc8c38b7173a85a25c",
       "corathus/v0/365286.lua": "73ad3b7dfdcb00bc9e834a2e549774bceb4f08bc1f02f532de0b8cbb14b210df",
       "corathusa/v2/player.lua": "7fca433a279e96065e823218628e01d35ec31d0af44391d08e561a4b609ee498",
       "corathusa/v2/zone.lua": "66dcebe55ea330b10e887e2e6ae3b5f48362b5569da0d8db775611c43a845863",
-      "devastation/v0/372000.lua": "e1284e4e3017bb133ced03d95a3d201398612c4f53bc661ac72d3e5b67808735",
+      "devastation/v0/371943.lua": "f3cf5df45d272d12844c7b41ef7b9c208c97989db9450b427403d8f55d9b34b4",
+      "devastation/v0/372000.lua": "e6f2d6417f29be3d002bd88ff3dc32122e8ace79319dd2168f272b97b1373592",
       "devastation/v0/player.lua": "a4ba1922f3f3cbc4f65bed41575f8e8be191c5cb2c61103c830e579a65a7c412",
+      "devastation/v0/zone.lua": "b40154caec8c210a22f4ed0c8ea8ef07678747edea6c419ef001411285755e63",
       "drachnidhive/v4/player.lua": "b5d67693960534c9a4d5b8de152167abfc057f70377f5f9f3cecdea01d77251b",
       "drachnidhive/v4/zone.lua": "2fbfee2953b9166fde80cca836fa6eab84c9247680f48ed8dc2814bf532ded5c",
       "drachnidhive/v5/354311.lua": "8f09968891b8b5688f63324e08b90a94e5020c91e4a80b4d2e01494c79b01bcc",
@@ -4172,6 +4373,7 @@
       "eastkorlacha/v2/363050.lua": "4b3759da5d5b454d3fbfb8499b163ae5487f8eec5692a7a3913879363f7f77e8",
       "eastkorlacha/v2/player.lua": "20f008db092999361bf76153c2be5b5af7df69e6544933401f2663684307739a",
       "eastkorlacha/v2/zone.lua": "762b8da1456bbf5608383a3a3f72fc0426402f9cd8ab165a4ea8d4f068a7c462",
+      "freeportwest/v0/383166.lua": "40962f91bab3a0082f383bcd90c120026abfc12318123ad94a386b8c96ba44e4",
       "global/encounters/rof2_sod_fieldofscale.lua": "9bfb4226765f040390c7af705b80218c35c3e82e2ac62679fb814c0e48c8962f",
       "global/encounters/rof2_sod_fieldofscale_public.lua": "0546dba471addde8545e2163cbff702a61a0609d3adb1f006a9b996ba5daa919",
       "global/encounters/rof2_sod_kithicor.lua": "d4744d40fa020053ef200295fa9a413e9edc13da90db8b978feb278d88223711",
@@ -4257,13 +4459,21 @@
       "lua_modules/rof2_dodh_xill_boss.lua": "1b588684acf861fefec795bab19df3912dd44d0adc80fda231f45e1050997f83",
       "lua_modules/rof2_dodh_xill_loot.lua": "95b367932ebb3065a64582c09474df98b8f1088680ff04501072a64bcf20c9ff",
       "lua_modules/rof2_dodh_xill_loot_data.lua": "dcac3fe241dc796431e406974fa0c38218d58a379252fa73c46da796ec754fc5",
+      "lua_modules/rof2_por_daosheen.lua": "daa0d76dd189ea720fe7f52d868004442d7ef0a4c0e7288f67b4c1e3f7be17a4",
+      "lua_modules/rof2_por_deathknell.lua": "32d0c04a86f57a90c4bdba65a56a60fa85feee9a4a1afb231d3d1bcdd6b514e0",
+      "lua_modules/rof2_por_deathknell_contacts.lua": "4b41c9699adbe99f0b307ee59683dd9c7b83e4ef68243871669248c8a3fad12b",
       "lua_modules/rof2_por_maelin.lua": "4d0eb90ab9c43ebe6a35e76f93d6092c22727e1688d1f50577f5aa091a935860",
+      "lua_modules/rof2_por_porthio.lua": "a2e3569160ff021cbc5c5a67fec397fc4ba72d1f2d3dc2576089999abf8ade34",
       "lua_modules/rof2_por_progression.lua": "84903dd2443649cb43eba20a82b89c3b9e36c25d7e61b6aedf56dc6e49304fe8",
       "lua_modules/rof2_por_razorthorn.lua": "b71be2214bbf3dcff88820efc1714f679333d81101dbf3b469f72db2ff3f0f0e",
       "lua_modules/rof2_por_scene_state.lua": "7d8593181314f852fd219a0b2176a6581b3fe5b8b12999cf3c7c62baa3cb7052",
       "lua_modules/rof2_por_skylance.lua": "32f75efe0b7e135b84489a2e78fde3b7f20b722d4cee18739dca17c3722256b1",
+      "lua_modules/rof2_por_suchun.lua": "c56606edcdbafed05f0ef8192ef6c32d9c052315d495287d48753b03b10e677d",
+      "lua_modules/rof2_por_suchun_layout.lua": "5f00344f00f66830124314f1a78e6ba021279000cb46a160994e7b8e3a3ceb3e",
+      "lua_modules/rof2_por_sullon.lua": "7c20b7e5557c2a62efe0b5b484659b76a745c9f57ad6d53fe6d5dc79c2295bb2",
       "lua_modules/rof2_por_sverag_trophies.lua": "4209cdd417b7b4fe13c8575404e34c269669bd3bc6fd0b10e34c6124348dc655",
       "lua_modules/rof2_por_takish.lua": "cf5c035781f997d429442f10f35c85d03549d4c34b6f45cbf5bcdd12cf58c685",
+      "lua_modules/rof2_por_theater_muses.lua": "da75e149fad2d48cadd8d5e629abb4b70eefab226c5f168555f02680efc4c93a",
       "lua_modules/rof2_sod_fieldofscale.lua": "6ba248707e01d92af911c177a09aa2b668c2022bd17b5edddc4f059a7b993fee",
       "lua_modules/rof2_sod_fieldofscale_data.lua": "6dc9c782b24b94bfd0b245505dfea21e117933ac5f3964aa778f4700656fb8bb",
       "lua_modules/rof2_sod_fieldofscale_policy.lua": "2c655d39b3b0308518f926dad513f0a920787874001749501c8260664edef8a3",
@@ -4284,7 +4494,7 @@
       "nektulos/v0/25920.lua": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d",
       "nektulos/v1/25414.lua": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d",
       "northro/player.lua": "bb476f493282d64486a9ca7b9c7b4f4004fed6f6077f523a9924180091f9e659",
-      "northro/v0/392045.lua": "223091471f14a4d2baab9d8c727b88e814a1a55ee9f96a2c5df08a40d2047e1f",
+      "northro/v0/392045.lua": "95641e14fcf80775ab3d25dd5c6554a3f9b5219dbb4b7ac58c7aca5367016e0e",
       "northro/v0/392088.lua": "bf3976570f4ce380ec2c63675bc46aa91b06717e575ba0a59f5d0f22a5a4849c",
       "oceangreenhills/#Bracka_Darkpaw.lua": "71bfc4b83569d4f6e40b4a62b285e808512b9b23f2ac0bd4b9f11cdfc3986f6e",
       "oceangreenhills/#Captain_Hiran_Tillin.lua": "099b75bb7076f246dc4bab3546ed0eed4a5ccf04eb427ee6ef4ce9dd87e4a1f1",
@@ -4320,13 +4530,21 @@
       "oldkithicor/player.lua": "31db36893d3d60eb61f69198cdc48b7b90169ebdc861fef2b48b7dad765f06c3",
       "oldkithicor/v0/spells/8140.lua": "2721a724135455b103ee859b4691ca130efe48a2a70bab4c7b98a1b7e0cda31e",
       "oldkurn/player.lua": "38e9f399ea67446eab7c62c92951a801c6fef86da42e4ddf8bbcb517dd04fa75",
-      "poknowledge/Grand_Librarian_Maelin.lua": "653ed5bebf2db85ee1d5907ef2a87d604f841eed60dc28a98bb57b5f46532ae1",
+      "poknowledge/Grand_Librarian_Maelin.lua": "b67798d52c6307770ce130ff299dcc2a9752a3c2a9b4f9ec2a98914c7fe6aeea",
+      "rage/v0/371943.lua": "f3cf5df45d272d12844c7b41ef7b9c208c97989db9450b427403d8f55d9b34b4",
       "rage/v0/372099.lua": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7",
       "rage/v0/374001.lua": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7",
-      "rage/v0/player.lua": "2d374c28df4809f827a64b1ce6b0dd61aa753d71ecbd542db292989f8e3b747c",
-      "rage/v0/zone.lua": "49857af3e6daae87e3997c3858a6667c0831f96ecbf9f66a259d9e69dfbda63a",
+      "rage/v0/player.lua": "33664fdf2909b5713c80367bd6d1373ab2eceb7a5feb2ac5d8a01bd697b436dc",
+      "rage/v0/zone.lua": "817431c8eb2bccb786d3f7e80c526b878ca5727a94d367c13fb095c1f594440f",
       "ragea/v10/player.lua": "56484b459a3addd5da48d8ad79bf0f3e7f18ba20fc30ff11199dcadeee1a006a",
       "ragea/v10/zone.lua": "8ec5eb69d28be6351b8f792a08f6727a6ddb873a55851f670cfa8c1d2496737d",
+      "ragea/v20/375940.lua": "7ac457892a38c5c699e005c0400d131857c5e4281fc8a25237a5eb73a89b359f",
+      "ragea/v20/375941.lua": "7ac457892a38c5c699e005c0400d131857c5e4281fc8a25237a5eb73a89b359f",
+      "ragea/v20/375942.lua": "7ac457892a38c5c699e005c0400d131857c5e4281fc8a25237a5eb73a89b359f",
+      "ragea/v20/player.lua": "4cad9f2bb97c43d4f5e632481e97869dcd56a8265c806692cfb3b31ccec2b7df",
+      "ragea/v20/zone.lua": "361fe86a01d49684ef6b9a0941f32af5e1b7e5af77bcfaa3fd9d77e12fe011ac",
+      "relic/v0/371941.lua": "aab483c870d2ab657fd8b010e9a307131c12ab7f708e7f7ecb6f59f9b37784b0",
+      "relic/v0/371942.lua": "aab483c870d2ab657fd8b010e9a307131c12ab7f708e7f7ecb6f59f9b37784b0",
       "shadowspine/v1/364015.lua": "302ed8e76bf3b491db9a10ff2b1ce3bc836cfcce098373a08fd882038070fbda",
       "shadowspine/v1/364016.lua": "302ed8e76bf3b491db9a10ff2b1ce3bc836cfcce098373a08fd882038070fbda",
       "shadowspine/v1/364022.lua": "302ed8e76bf3b491db9a10ff2b1ce3bc836cfcce098373a08fd882038070fbda",
@@ -4345,16 +4563,43 @@
       "skylance/v11/zone.lua": "e1a021f233ae64cc10c205d35527cfd1c8f84b35a3f5630c828a5dbd7c1c53dd",
       "skylance/v12/371002.lua": "368a96f9c02c4e9ddd9ef8c4ad436c874bb245ea821dab5213666b49466b2222",
       "skylance/v12/player.lua": "ad1af362030b15409c50fa124d7dd170fc1c2af60b7f2a281acbacea111df209",
+      "skylance/v20/371002.lua": "cd7a9358c739007f5ec9d68f97d7cfc931a70f3e96accecbaf3639046c9500d7",
+      "skylance/v20/371944.lua": "6537134a21d8da311663232ce046a418cc70c4f3096babf2fa66ab009bf81728",
+      "skylance/v20/player.lua": "70f9fc51d7723277ecdf96570c8886988a0c21429b4478ba697be046fccd25f3",
+      "skylance/v20/zone.lua": "810f7ec47ece16be80c8e448815465d44c0e4167afc2707514280dd7f5248acd",
       "southro/player.lua": "333ed4c0f7cc61a6d9d94950f9813d4551458827e1a6628d079f4d4d3e63b043",
       "takishruins/v0/376056.lua": "e3f0b4be9e99fd20225b2250566beb091eae04f2c9e0a50d5ec503036539ea4c",
       "takishruins/v0/376081.lua": "8d7c3f4ab7dbe176d38addfcf9379dcf7ef8336a43830c2091a2200ac121c7dd",
-      "takishruins/v0/player.lua": "5da7b27e3017d6f49c735b87f42f6acc4e8cd9e1b4160e4d223b326dfa450444",
+      "takishruins/v0/player.lua": "4caef3d3e7e41f7bbfca7893269119f24c9ebc5259dc955a6992459f70b209c2",
       "takishruins/v10/376961.lua": "4aceb6722d430c3216b422a206c62cbd6e336153435406bce34017a8ad908eb9",
       "takishruins/v10/player.lua": "906a552529972ecb282d44fa800e487b79eff249135b2580255340629da3acce",
       "takishruins/v11/376964.lua": "2a7010ff1b2e5b4169134be31f9ebc6eb5eb91afdd1478027f517924b6982c61",
       "takishruins/v11/player.lua": "ab3adc964a1533fc17aff479f2b671c536a855c868439a9059ed3e55636813cc",
       "takishruinsa/v10/player.lua": "471392c5ee2ce74c058c29982953655f2e7e3553d9c54cc738981fc1c87d5bb4",
       "takishruinsa/v10/zone.lua": "0c41c7a7acf163e6132b74d652feab84134fd3997f61bebb9e5d74aeb6f77ba9",
+      "takishruinsa/v20/212007.lua": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da",
+      "takishruinsa/v20/212013.lua": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da",
+      "takishruinsa/v20/212036.lua": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da",
+      "takishruinsa/v20/212040.lua": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da",
+      "takishruinsa/v20/377013.lua": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da",
+      "takishruinsa/v20/377940.lua": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da",
+      "takishruinsa/v20/377941.lua": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da",
+      "takishruinsa/v20/377942.lua": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da",
+      "takishruinsa/v20/377943.lua": "be285951e901080b1046e263c7ad3dddc456f68a75035bbe450cf4a4b77397da",
+      "takishruinsa/v20/377944.lua": "1cfed12041fe75eb468d80ecf15c31d081e71dcddda7688deba788712aca4b48",
+      "takishruinsa/v20/377945.lua": "f4b71e8fc0c876eb0a067b843439f4a09ea4feec7bfd12124ff3b1cd1572128b",
+      "takishruinsa/v20/player.lua": "7071abb586b0152cf327673f5e53c526a49c43097387712e2cb53ef701a009d2",
+      "takishruinsa/v20/zone.lua": "9de5e0a60297b40d36bf668baf89cc69bc657e17b687c60662c2a073ddcea6e3",
+      "theater/v0/380000.lua": "c2a2c30c2d8a69f047087beaca1412d8be182418d6c8b9defec8e37cb508c3da",
+      "theater/v0/380018.lua": "052bb446f1fdb4559d7f6c38b297893e90e8b2896868758984a19e7306162ae9",
+      "theater/v0/380038.lua": "052bb446f1fdb4559d7f6c38b297893e90e8b2896868758984a19e7306162ae9",
+      "theater/v0/380040.lua": "052bb446f1fdb4559d7f6c38b297893e90e8b2896868758984a19e7306162ae9",
+      "theater/v0/380046.lua": "052bb446f1fdb4559d7f6c38b297893e90e8b2896868758984a19e7306162ae9",
+      "theater/v0/380052.lua": "d6a18aa83547ae79d9db8d4f333e6a7de13fe5ef4ead79ba7178b498e3601266",
+      "theater/v0/380059.lua": "60f6ef56e8e957c3e9215b289c900b67230797c7dec1b3c94c49d7475c9d150b",
+      "theater/v0/player.lua": "b27a3a02c7694913b41fd5c010a3bf6856a9449153508b45ed6ccb163a384670",
+      "theater/v0/zone.lua": "e79aa93062423b1f5c3ef5829cdb002a5db6df7a13d43481ad92ee876d7e766a",
+      "theatera/v20/player.lua": "777a3b2b931a5db97b1bba3dfe8264349b6352ac6f01074d2fef8c66dfd92fd8",
       "westkorlach/v0/358020.lua": "a46c81258bf82c6642b3af7bcb60aa979e45db1a66406ea724fd3fcf086ed2f0",
       "westkorlach/v0/358031.lua": "1de6930dca0faa519c85fe0684a04cfaf690ad982c22c7f2bf017e2778afc951",
       "westkorlach/v0/358051.lua": "745276da038894ec8fe31b3b5c945f083e3652507dab48cbee6819e25b99d6ef",

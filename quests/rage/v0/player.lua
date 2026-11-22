@@ -1,3 +1,4 @@
+local deathknell = require("rof2_por_deathknell")
 local por = require("rof2_por_progression")
 local maelin = require("rof2_por_maelin")
 
@@ -11,6 +12,8 @@ function event_timer(e)
 end
 
 function event_click_door(e)
+    if e.door:GetDoorDBID()==16807 and e.door:GetDoorID()==2 and
+        deathknell.move(e.self, "sullon") then return 1 end
     if e.door:GetDoorDBID()==16807 and e.door:GetDoorID()==2 and
         por.enter(e.self,920306,375,10,354,63,3,0) then return 1 end
     return 0

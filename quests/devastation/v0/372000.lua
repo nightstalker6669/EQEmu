@@ -1,7 +1,9 @@
+local deathknell = require("rof2_por_deathknell_contacts")
 local por = require("rof2_por_progression")
 
 function event_say(e)
     if not por.public(e.self, 372, 372000, 103726) then return end
+    if deathknell.sullon_request(e) then return end
     local client, words = e.other, por.words(e)
     if words == "hail" or words == "i can find out" then
         if client:IsTaskCompleted(920305) and client:CountItem(88099) > 0 then

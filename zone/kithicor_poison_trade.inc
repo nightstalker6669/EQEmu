@@ -10,6 +10,7 @@
 #include "original_message_admission.h"
 #include "dodh_exchange.h"
 #include "common/shared_core/por_chime_exchange.h"
+#include "por_deathknell_custody.h"
 
 #include "dodh_mission_custody.h"
 #include "dodh_longshadow_source.h"
@@ -51,7 +52,7 @@ static const PorChime::Route* OfferedPorChime(Client& client, NPC& npc)
         if (!PorChime::Matches(route, zone->GetZoneID(), zone->GetInstanceID(),
                               npc.GetNPCTypeID(), npc.GetSpawnPointID())) continue;
         if (std::any_of(offers.begin(), offers.end(), [&route](const auto& offer) {
-            return offer.present && offer.item_id == route.input;
+            return offer.present && PorChime::IsInput(route, offer.item_id);
         })) return &route;
     }
     return nullptr;
@@ -63,6 +64,32 @@ namespace {
 using namespace KithicorPoisonCustody;
 using Row=EQEmu::SharedCore::InventoryRow;
 using Lease=EQEmu::SharedCore::InventorySessions::Lease;
+bool PorExchangeEarned(ZoneDatabase& db, Client& client, const PorChime::Route& route, bool lock)
+{
+    if (route.npc != PorChime::ShrineNpc) {
+        return client.IsTaskCompleted(route.prerequisite);
+    }
+    if (!client.IsTaskCompleted(920305)) return false;
+    try {
+        const auto who = client.CharacterID();
+        auto engine = Q(db,
+            "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() "
+            "AND table_name='por_deathknell_raid_credit' AND engine='InnoDB'");
+        if (engine.RowCount() != 1 || N(engine.begin()[0]) != 1) return false;
+        const bool earned = Q(db, fmt::format(
+            "SELECT dz_uuid FROM por_deathknell_raid_credit WHERE character_id={} "
+            "AND stage='daosheen' AND instance_id>0 AND CHAR_LENGTH(dz_uuid)=36 LIMIT 1{}",
+            who, lock ? " FOR UPDATE" : "")).RowCount() == 1;
+        return earned && Q(db, fmt::format(
+            "SELECT occurrence.id FROM completed_shared_tasks occurrence "
+            "JOIN completed_shared_task_members member ON member.shared_task_id=occurrence.id "
+            "WHERE occurrence.task_id=920305 AND occurrence.completion_time IS NOT NULL "
+            "AND member.character_id={} LIMIT 1{}", who, lock ? " FOR UPDATE" : "")).RowCount() == 1;
+    } catch (...) {
+        return false;
+    }
+}
+
 struct Ack {
  Client* client=nullptr;NPC* npc=nullptr;const EQ::ItemInstance* item=nullptr;
  uint64_t run=0;uint32_t instance=0,chest=0;std::string key;int16_t slot=-1;int32_t serial=0;int16_t charges=0;bool used=false;
@@ -629,6 +656,7 @@ public:
  }
 
 #include "dodh_rakban_combine.inc"
+#include "por_deathknell_shard.inc"
 
  enum class DodhTrade { None, Exchange, DesertingGuard, NotebookOpener, Monocle, PublicRoute, Longshadow, Chime };
 
@@ -831,7 +859,7 @@ public:
     // The real prerequisite and exact items restrict each exchange. The original
     // trade journal atomically debits the offered unit and saves its successor.
     const bool planned = por_chime
-        ? c.IsTaskCompleted(por_chime->prerequisite) && Recipe::FirstUnit(offers, por_chime->input, debit)
+        ? PorExchangeEarned(db, c, *por_chime, false) && PorChime::Plan(*por_chime, offers, debit)
         : dodh_monocle ? Exchange::PlanParts(Exchange::MonocleParts, offers, debit)
                        : Exchange::Plan(offers, debit);
     if (planned) {
@@ -915,7 +943,7 @@ public:
    if ((dodh_exchange || opener_repeat || dodh_route) && !selected) {
     for (const auto& offer : offers) {
      const bool claimed_item = opener_repeat ? offer.item_id == Exchange::Notebook
-         : por_chime ? offer.item_id == por_chime->input
+         : por_chime ? PorChime::IsInput(*por_chime, offer.item_id)
          : dodh_monocle ? Exchange::IsMonoclePart(offer.item_id)
          : dodh_route ? (route_food && offer.present && database.GetItem(offer.item_id) &&
                            database.GetItem(offer.item_id)->ItemType == EQ::item::ItemTypeFood) ||
@@ -1063,8 +1091,8 @@ public:
    } // Existing continuation resumes inside its already-open strict read tx.
    LockLease(db,*lease);canonical();
    if (dodh_guard) lock_guard_run();
-   if (por_chime && output_guid && !c.IsTaskCompleted(por_chime->prerequisite))
-    throw std::runtime_error("Prophecy of Ro chime prerequisite changed");
+   if (por_chime && output_guid && !PorExchangeEarned(db, c, *por_chime, true))
+    throw std::runtime_error("Prophecy of Ro exchange prerequisite changed");
    if (route_accept) lock_route();
    if (longshadow_debit) {
     const auto context = BindLongshadow(db, c, npc, *longshadow);
@@ -1174,7 +1202,8 @@ public:
    } else if (dodh_exchange && !output_guid) {
     c.Message(Chat::Yellow, "The exchange could not be completed. Your offer was returned.");
    } else if (por_chime && output_guid) {
-    c.Message(Chat::Yellow, "The chime has been transformed.");
+    c.Message(Chat::Yellow, por_chime->npc == PorChime::ShrineNpc ?
+        "The Shrine of Druzzil Ro accepts your offering." : "The chime has been transformed.");
    }
    c.trade->Reset();c.QueuePacket(finish.get());if(cursor_packet)c.QueuePacket(cursor_packet.get());c.SendMoneyUpdate();c.RecalcWeight();
    if (dodh_route && route->group == 5 && route->code == 1 && !route_accept && c.GetSharedTaskId() <= 0 &&
@@ -1215,6 +1244,11 @@ bool ConsumeAcknowledgment(Client& c,NPC& npc,const EQ::ItemInstance& item) {
   if(r.RowCount()!=1)return false;a->used=true;return true;
  }catch(...){return false;}
 }
+}
+
+bool PorDeathknellCustody::Transform(Client& client, Victory victory) noexcept
+{
+    return KithicorPoisonTrade::Writer::TransformDeathknellShard(client, victory);
 }
 
 namespace OriginalTradeFood {

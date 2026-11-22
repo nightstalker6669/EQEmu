@@ -1,4 +1,5 @@
 #include "common/sod_original_transform_native.h"
+#include "por_deathknell_custody.h"
 #include "common/sod_content_bindings.h"
 #include "common/kithicor_mission.h"
 #include "zone/doors.h"
@@ -2179,6 +2180,18 @@ bool Lua_Client::ExitFallOfIllsalin(std::string occurrence, uint32 instance, Lua
     const auto run = FallOccurrence(occurrence);
     auto* actor = static_cast<NPC*>(npc);
     return run && instance && actor && self->ExitFallOfIllsalin(run, instance, *actor);
+}
+
+bool Lua_Client::TransformDeathknellSullonShard()
+{
+	Lua_Safe_Call_Bool();
+	return PorDeathknellCustody::Transform(*self, PorDeathknellCustody::Victory::Sullon);
+}
+
+bool Lua_Client::TransformDeathknellSuchunShard()
+{
+	Lua_Safe_Call_Bool();
+	return PorDeathknellCustody::Transform(*self, PorDeathknellCustody::Victory::Suchun);
 }
 
 std::string Lua_Client::GetSharedTaskIdentity() {
@@ -4844,6 +4857,8 @@ luabind::scope lua_register_client() {
 	.def("RegisterFallOfIllsalinCommanderCorpse", &Lua_Client::RegisterFallOfIllsalinCommanderCorpse)
 	.def("ExitFallOfIllsalin", &Lua_Client::ExitFallOfIllsalin)
 	.def("GetSharedTaskIdentity", &Lua_Client::GetSharedTaskIdentity)
+	.def("TransformDeathknellSullonShard", &Lua_Client::TransformDeathknellSullonShard)
+	.def("TransformDeathknellSuchunShard", &Lua_Client::TransformDeathknellSuchunShard)
 	.def("GetSharedTaskInstanceID", &Lua_Client::GetSharedTaskInstanceID)
 	.def("LockSharedTask", &Lua_Client::LockSharedTask)
 	.def("MarkSingleCompassLoc", (void(Lua_Client::*)(float,float,float))&Lua_Client::MarkSingleCompassLoc)

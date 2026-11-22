@@ -1,9 +1,10 @@
+local deathknell = require("rof2_por_deathknell_contacts")
 local por_maelin = require("rof2_por_maelin")
 
 --poknowledge/Grand_Librarian_Maelin.lua NPCID 202125
 -- items: 84091, 84092, 84093, 84087, 52950, 55900, 20520
 function event_say(e)
-	if por_maelin.say(e) then return end
+	if deathknell.maelin_say(e) or por_maelin.say(e) then return end
 	local qglobals = eq.get_qglobals(e.other);
 	if(eq.is_task_active(500220)) then
 		if(e.message:findi("trick or treat")) then
@@ -43,7 +44,7 @@ function event_say(e)
 end
 
 function event_trade(e)
-	if por_maelin.trade(e) then
+	if deathknell.maelin_trade(e) or por_maelin.trade(e) then
 		e.self:ReturnHandinItems(e.other)
 		return
 	end
