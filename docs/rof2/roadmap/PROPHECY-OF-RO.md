@@ -50,9 +50,26 @@ QA used development equipment and assistance, and some arena geometry and combat
 
 [Server r32](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r32-a1-324c2e4787b3) · [Matching database](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-22-deathknell) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/7e0dab5457aaa3f0fdcf89caf69f4a997c22bfad/releases/peq-rof2-2026-11-22-deathknell/NATIVE-QUALIFICATIONS.json)
 
+## Tower of Deathknell raid progression in r33
+
+The paired r33 server and database releases cover the four Tower events and permanent Harp access. The RoF2 native run completed the four events in order in one owned expedition and looted all four event chests. All six members exited normally and retained their individual event lockouts.
+
+| Order | Event | Recorded scope |
+| ---: | --- | --- |
+| 1 | The Tolling of Dissonance Bells | The group completed the event. The run did not capture the specific Bells Enforcer spell and cure interaction. |
+| 2 | Vertigo | The group completed the event. The restored route includes earned trapdoor passage, and the run verified trap detection and disarm with stock RoF2 skills. |
+| 3 | Unwelcome Guests | Staff applied bounded, nonlethal damage through the linked-health guard before the group landed the terminal kills in game. |
+| 4 | The Mad Choir | All 30 strength reductions came from real equipped Divine Fetters casts during exposure windows, including a retry after a native resist. One holder used temporary item reuse assistance during QA. The final cast recorded the native 1,200-second recast. |
+
+A previously unflagged level-72 player looted a Twisted Harp String from the actual reward chest and gained the durable Deathknell flag. With the Harp String and no Fetters, the player independently requested a fresh expedition as raid leader and entered it in RoF2. All four prior event lockouts carried into that expedition. Earlier level-based member admission and requester denial were checked separately. The reconstructed raid-in flag-sharing ratio and rounding were exercised offline. Native entry evidence covers level-qualified and earned access, including the Harp route.
+
+Local reconstructions include bell timing and movement thresholds, later Vertigo quotas, selected NPC and trap placement or tuning, and Choir window and health values. The reconstructed one-click-per-40-second cadence, 30 required clicks in 45 minutes and 1,200-second reuse imply a minimum of 12 suitably staggered Fetters holders under ideal conditions. Resists and missed windows can raise that requirement. The temporary reuse assistance was confined to QA and removed.
+
+[Server r33](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r33-a1-b152c10b633f) · [Matching database](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-22-deathknell-tower) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/cb79181bec0a8b8c05c6d098998eb3a1d722dc36/releases/peq-rof2-2026-11-22-deathknell-tower/NATIVE-QUALIFICATIONS.json)
+
 ## Pending scope and historical limits
 
-- **Tower of Deathknell encounters and Harp String acquisition** remain pending. The independent Tunare route, lower-tier Takish variants, Samples Hard tuning and optional chest and gear pools are outside this coverage.
+- **Tunare** remains a separate route. Lower-tier Takish variants, Samples Hard tuning and optional chest and gear pools remain outside this coverage.
 - **Sverag automatic rotation** remains unverified. The static Bolvirk start and authored controller-specific alternatives are the scope of this candidate.
 - **Achievements** found no related criterion confirmed for the May 2013 cutoff. This draft carries zero achievement additions.
 - **Local reconstruction** applies to the Oubliette’s deterministic selection among 27 stock eggsacks, the Library add cadence, the Razorthorn first-spawn sample chance and shadow timing, selected encounter stats and fixed Message to the Past chest placements. Skylance’s floor-side return triggers use the stock lobby destinations. These routes retain their native QA qualifications.
