@@ -39,6 +39,8 @@
 
 #include "client.h"
 #include "dodh_backflag_loot.h"
+#include "por_deathknell_harp_loot.h"
+#include "por_deathknell_vertigo.h"
 #include "sod_fieldofscale_crystal_source.h"
 #include "fire_native_item_custody.h"
 
@@ -935,6 +937,7 @@ void Client::CompleteConnect()
 	SendDisciplineTimers();
 
 	DodhBackflag::Reconcile(*this);
+	PorDeathknellHarp::Reconcile(*this);
 	DodhLongshadowTravel::RecordArrival(*this);
 
 	if (parse->PlayerHasQuestSub(EVENT_ENTER_ZONE)) {
@@ -6485,6 +6488,13 @@ void Client::Handle_OP_DisarmTraps(const EQApplicationPacket *app)
 	Trap* trap = entity_list.FindNearbyTrap(this, 250, curdist, true);
 	if (trap && trap->detected)
 	{
+		if (PorDeathknellVertigo::IsReserved(*trap)) {
+			auto* target = trap->GetVertigoTarget();
+			if (!target || GetTarget() != target) {
+				Message(Chat::Skills, "Target the nearest revealed floor trap to disarm it.");
+				return;
+			}
+		}
 		float max_radius = (trap->radius * 2) * (trap->radius * 2); // radius is used to trigger trap, so disarm radius should be a bit bigger.
 		Log(Logs::General, Logs::Traps, "%s is attempting to disarm trap %d. Curdist is %0.2f maxdist is %0.2f", GetName(), trap->trap_id, curdist, max_radius);
 		if (curdist <= max_radius)
@@ -6495,6 +6505,7 @@ void Client::Handle_OP_DisarmTraps(const EQApplicationPacket *app)
 				success = SKILLUP_SUCCESS;
 				MessageString(Chat::Skills, DISARMED_TRAP);
 				trap->disarmed = true;
+				PorDeathknellVertigo::OnDisarm(*trap, *this);
 				Log(Logs::General, Logs::Traps, "Trap %d is disarmed.", trap->trap_id);
 				trap->UpdateTrap();
 			}
@@ -14750,6 +14761,7 @@ void Client::Handle_OP_SenseTraps(const EQApplicationPacket *app)
 			else
 				Message(Chat::Skills, "You sense a trap to the East.");
 			trap->detected = true;
+			trap->RevealVertigoTarget(*this);
 
 			float angle = CalculateHeadingToTarget(trap->m_Position.x, trap->m_Position.y);
 

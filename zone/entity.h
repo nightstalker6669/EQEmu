@@ -599,6 +599,7 @@ public:
 	void ScanCloseMobs(Mob *scanning_mob);
 
 	void GetTrapInfo(Client* c);
+	bool SetDeathknellVertigoTraps(bool armed);
 	bool IsTrapGroupSpawned(uint32 trap_id, uint8 group);
 	void UpdateAllTraps(bool respawn, bool repopnow = false);
 	void ClearTrapPointers();

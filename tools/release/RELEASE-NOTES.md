@@ -1,8 +1,9 @@
-<!-- previous-release: rof2-ci-r31-a1-5ae547238d3c -->
+<!-- previous-release: rof2-ci-r32-a1-324c2e4787b3 -->
 
-## Earned Deathknell entry
+## Deathknell Tower
 
-- Restore the earned Deathknell route through Relic, Daosheen, Sullon, Suchun, the Shrine exchanges, and Theater of Blood.
-- Add four owned raid expeditions with requester qualifications and per-member victory credit.
-- Restore the Sullon ward and both Suchun reward paths, including durable shard exchanges and early Vial delivery.
-- Place Daosheen’s crystal spirits on reachable ledges, restore Suchun’s destructible wall and gateway progression, and add the Theater Inspiration drops.
+- Restore the Tolling of Dissonance Bells, Vertigo, Unwelcome Guests, and the Mad Choir in owned Deathknell expeditions.
+- Add individual encounter lockouts and the four event chest reward pools.
+- Restore native passage through the earned upper and lower trapdoors, and make revealed Vertigo floor traps selectable for the stock RoF2 Disarm Traps skill.
+- Restore the Divine Fetters vulnerability windows and permanent Deathknell access from a looted Twisted Harp String.
+- Add Deathknell raid-in eligibility alongside permanent flags and level-based member admission.

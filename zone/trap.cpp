@@ -16,6 +16,14 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "trap.h"
+#include "por_deathknell_vertigo.h"
+
+#include <algorithm>
+#include <array>
+#include <chrono>
+
+#include "zone/dynamic_zone.h"
+#include "zone/zone.h"
 
 #include "common/repositories/criteria/content_filter_criteria.h"
 #include "common/repositories/traps_repository.h"
@@ -48,6 +56,148 @@ CREATE TABLE traps (
 
 
 */
+
+namespace PorDeathknellVertigo {
+namespace {
+constexpr uint32_t FirstTrap = 304088072;
+constexpr uint32_t LastTrap = 304088095;
+using Clock = std::chrono::steady_clock;
+
+DynamicZone* CurrentExpedition()
+{
+    if (!zone || zone->GetZoneID() != 381 || zone->GetInstanceVersion() != 20 ||
+        !zone->GetInstanceID()) {
+        return nullptr;
+    }
+    auto* expedition = zone->GetDynamicZone();
+    return expedition && expedition->GetType() == DynamicZoneType::Expedition &&
+        expedition->GetName() == "Deathknell" && expedition->IsCurrentZoneDz() &&
+        !expedition->IsExpired() ? expedition : nullptr;
+}
+
+struct Occurrence {
+    std::string uuid;
+    Counts counts;
+    Clock::time_point deadline;
+};
+
+Occurrence occurrence;
+
+bool Active(const DynamicZone& expedition)
+{
+    return occurrence.uuid == expedition.GetUUID() && occurrence.counts.phase != 0 &&
+        (occurrence.counts.phase != 2 || Clock::now() < occurrence.deadline);
+}
+}
+
+bool IsReserved(const Trap& trap)
+{
+    return trap.trap_id >= FirstTrap && trap.trap_id <= LastTrap;
+}
+
+bool CanInteract(const Trap& trap, Mob* actor)
+{
+    if (!IsReserved(trap)) {
+        return true;
+    }
+    auto* expedition = CurrentExpedition();
+    return expedition && Active(*expedition) && trap.chkarea_timer.Enabled() &&
+        actor && actor->IsClient() && expedition->HasMember(actor->CastToClient()->CharacterID()) &&
+        !actor->CastToClient()->GetGM();
+}
+
+void OnDisarm(Trap& trap, Client& client)
+{
+    // The stock native sense roll is the only writer of detected=true.
+    if (!IsReserved(trap) || !trap.detected || !CanInteract(trap, &client)) {
+        return;
+    }
+    trap.detected = false;
+    ++occurrence.counts.phase_count;
+    ++occurrence.counts.cumulative_count;
+}
+
+bool SetPhase(int phase)
+{
+    auto* expedition = CurrentExpedition();
+    if (!expedition || (phase != 0 && phase != 2 && phase != 3 && phase != 4)) {
+        return false;
+    }
+    if (occurrence.uuid != expedition->GetUUID()) {
+        Clear();
+        occurrence.uuid = expedition->GetUUID();
+    }
+    const auto current = occurrence.counts.phase;
+    if (phase == current) {
+        return true;
+    }
+    if (phase == 0) {
+        Clear();
+        return entity_list.SetDeathknellVertigoTraps(false);
+    }
+    if ((current == 0 && phase != 2) || (current != 0 && phase != current + 1) ||
+        (phase == 3 && occurrence.counts.phase_count < 20) ||
+        !entity_list.SetDeathknellVertigoTraps(true)) {
+        return false;
+    }
+    occurrence.counts.phase = phase;
+    occurrence.counts.phase_count = 0;
+    if (phase == 2) {
+        occurrence.deadline = Clock::now() + std::chrono::seconds(300);
+    }
+    return true;
+}
+
+std::optional<Counts> GetCounts()
+{
+    auto* expedition = CurrentExpedition();
+    if (!expedition) {
+        return std::nullopt;
+    }
+    return occurrence.uuid == expedition->GetUUID() ? occurrence.counts : Counts{};
+}
+
+void Clear()
+{
+    occurrence = {};
+}
+
+void ResetForQuestReload()
+{
+    if (occurrence.counts.phase != 0 && CurrentExpedition()) {
+        entity_list.SetDeathknellVertigoTraps(false);
+        Clear();
+    }
+}
+}
+
+bool EntityList::SetDeathknellVertigoTraps(bool armed)
+{
+    std::array<Trap*, PorDeathknellVertigo::LastTrap - PorDeathknellVertigo::FirstTrap + 1> exact{};
+    for (auto [id, trap] : trap_list) {
+        if (!PorDeathknellVertigo::IsReserved(*trap)) {
+            continue;
+        }
+        auto& slot = exact[trap->trap_id - PorDeathknellVertigo::FirstTrap];
+        if (slot || trap->group || trap->db_id != trap->trap_id) {
+            return false;
+        }
+        slot = trap;
+    }
+    if (std::ranges::find(exact, nullptr) != exact.end()) {
+        return false;
+    }
+    for (auto* trap : exact) {
+        trap->UpdateTrap(false);
+        trap->detected = false;
+        trap->disarmed = !armed;
+        if (armed) {
+            trap->CreateHiddenTrigger();
+            trap->chkarea_timer.Start();
+        }
+    }
+    return true;
+}
 
 Trap::Trap() :
 	Entity(),
@@ -89,6 +239,13 @@ Trap::~Trap()
 
 bool Trap::Process()
 {
+	if (vertigo_target_id_) {
+		auto* expedition = PorDeathknellVertigo::CurrentExpedition();
+		if (!expedition || !PorDeathknellVertigo::Active(*expedition)) {
+			RemoveVertigoTarget();
+		}
+	}
+
 	if (chkarea_timer.Enabled() && chkarea_timer.Check() && !reset_timer.Enabled())
 	{
 		Mob* m = entity_list.GetTrapTrigger(this);
@@ -269,7 +426,8 @@ Trap* EntityList::FindNearbyTrap(Mob* searcher, float max_dist, float &trap_curd
 
 	for (auto it = trap_list.begin(); it != trap_list.end(); ++it) {
 		cur = it->second;
-		if(cur->disarmed || (detected && !cur->detected) || cur->undetectable)
+		if(cur->disarmed || (detected && !cur->detected) || cur->undetectable ||
+			!PorDeathknellVertigo::CanInteract(*cur, searcher))
 			continue;
 
 		auto diff = glm::vec3(searcher->GetPosition()) - cur->m_Position;
@@ -302,6 +460,9 @@ Mob* EntityList::GetTrapTrigger(Trap* trap)
 	for (auto it = client_list.begin(); it != client_list.end(); ++it)
 	{
 		Client* cur = it->second;
+		if (!PorDeathknellVertigo::CanInteract(*trap, cur)) {
+			continue;
+		}
 
 		auto diff = glm::vec3(cur->GetPosition()) - trap->m_Position;
 		diff.z = std::abs(diff.z);
@@ -451,6 +612,9 @@ void EntityList::ClearTrapPointers()
 
 bool ZoneDatabase::LoadTraps(const std::string& zone_short_name, int16 instance_version)
 {
+	if (zone_short_name == "theatera" && instance_version == 20) {
+		PorDeathknellVertigo::Clear();
+	}
 	const auto& l = TrapsRepository::GetWhere(
 		*this,
 		fmt::format(
@@ -492,7 +656,12 @@ bool ZoneDatabase::LoadTraps(const std::string& zone_short_name, int16 instance_
 
 		entity_list.AddTrap(t);
 
-		t->CreateHiddenTrigger();
+		if (PorDeathknellVertigo::IsReserved(*t)) {
+			t->disarmed = true;
+			t->chkarea_timer.Disable();
+		} else {
+			t->CreateHiddenTrigger();
+		}
 	}
 
 	LogInfo(
@@ -531,6 +700,68 @@ void Trap::CreateHiddenTrigger()
 	entity_list.AddNPC(npca);
 
 	SetHiddenTrigger(npca);
+}
+
+NPC* Trap::GetVertigoTarget() const
+{
+	auto* target = vertigo_target_id_ ? entity_list.GetNPCByID(vertigo_target_id_) : nullptr;
+	return target && target->GetNPCTypeID() == 0 &&
+		target->GetEntityVariable("por_deathknell:vertigo_trap") == std::to_string(trap_id)
+		? target : nullptr;
+}
+
+void Trap::RevealVertigoTarget(Client& client)
+{
+	if (!PorDeathknellVertigo::IsReserved(*this) || !detected || disarmed ||
+		!PorDeathknellVertigo::CanInteract(*this, &client)) {
+		return;
+	}
+
+	if (!GetVertigoTarget()) {
+		// RoF2 only sends Disarm Traps if the selected spawn carries its treasure bit.
+		// Use only the appearance of the existing Tower chest donor.
+		const auto* appearance = content_db.LoadNPCTypesData(379014);
+		if (!appearance) {
+			LogTraps("Vertigo trap [{}] has no reveal appearance donor.", trap_id);
+			return;
+		}
+
+		auto* type = new NPCType{};
+		strn0cpy(type->name, "a_revealed_floor_trap", sizeof(type->name));
+		type->race = appearance->race;
+		type->bodytype = appearance->bodytype;
+		type->gender = appearance->gender;
+		type->texture = appearance->texture;
+		type->size = appearance->size;
+		type->class_ = Class::LDoNTreasure;
+		type->level = level;
+		type->current_hp = type->max_hp = 1;
+		type->show_name = true;
+		type->skip_global_loot = true;
+		type->skip_auto_scale = true;
+
+		auto* target = new NPC(type, nullptr, glm::vec4(m_Position, 0.0f), GravityBehavior::Flying);
+		target->GiveNPCTypeData(type);
+		target->SetEntityVariable("por_deathknell:vertigo_trap", std::to_string(trap_id));
+		target->SetInvul(true);
+		target->SetSpecialAbility(SpecialAbility::AggroImmunity, 1);
+		target->SetSpecialAbility(SpecialAbility::BeingAggroImmunity, 1);
+		target->SetSpecialAbility(SpecialAbility::HarmFromClientImmunity, 1);
+		target->SetSpecialAbility(SpecialAbility::OpenImmunity, 1);
+		entity_list.AddNPC(target, true, true);
+		vertigo_target_id_ = target->GetID();
+	}
+
+	client.Message(Chat::Skills, "Target the revealed floor trap to disarm it.");
+}
+
+void Trap::RemoveVertigoTarget()
+{
+	auto* target = GetVertigoTarget();
+	vertigo_target_id_ = 0;
+	if (target) {
+		target->Depop();
+	}
 }
 
 bool ZoneDatabase::SetTrapData(Trap* t, bool repop)
@@ -597,6 +828,7 @@ bool ZoneDatabase::SetTrapData(Trap* t, bool repop)
 
 void Trap::UpdateTrap(bool respawn, bool repopnow)
 {
+	RemoveVertigoTarget();
 	respawn_timer.Disable();
 	chkarea_timer.Disable();
 	reset_timer.Disable();
@@ -612,8 +844,14 @@ void Trap::UpdateTrap(bool respawn, bool repopnow)
 		trigger->trapid = 0;
 	}
 	charid = 0;
-	if (respawn)
-	{
+	if (PorDeathknellVertigo::IsReserved(*this)) {
+		detected = false;
+		auto* expedition = PorDeathknellVertigo::CurrentExpedition();
+		if (!expedition || !PorDeathknellVertigo::Active(*expedition) || repopnow) {
+			return;
+		}
+	}
+	if (respawn) {
 		content_db.SetTrapData(this, repopnow);
 	}
 }

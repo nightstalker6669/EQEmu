@@ -18,6 +18,7 @@
 #ifdef LUA_EQEMU
 
 #include "lua_parser.h"
+#include "por_deathknell_vertigo.h"
 
 #include "common/spdat.h"
 #include "zone/lua_bit.h"
@@ -1060,6 +1061,7 @@ void LuaParser::Init() {
 }
 
 void LuaParser::ReloadQuests() {
+	PorDeathknellVertigo::ResetForQuestReload();
 	loaded_.clear();
 	errors_.clear();
 	mods_.clear();

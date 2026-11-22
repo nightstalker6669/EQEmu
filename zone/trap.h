@@ -49,6 +49,8 @@ public:
 	void SetHiddenTrigger(NPC* n) { hiddenTrigger = n; }
 	void CreateHiddenTrigger();
 	void DestroyHiddenTrigger() { hiddenTrigger = nullptr; }
+	void RevealVertigoTarget(Client& client);
+	NPC* GetVertigoTarget() const;
 	void UpdateTrap(bool respawn = true, bool repopnow = false);
 	//Trap data, leave this unprotected
 	Timer	respawn_timer; //Respawn Time when Trap's been disarmed
@@ -79,4 +81,8 @@ public:
 	std::string message;
 protected:
 	NPC *hiddenTrigger;
+
+private:
+	void RemoveVertigoTarget();
+	uint16 vertigo_target_id_ = 0;
 };

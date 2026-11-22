@@ -1,6 +1,7 @@
 #include "dodh_longshadow_source.h"
 #include "zone/sod_orders_loot.h"
 #include "dodh_backflag_loot.h"
+#include "por_deathknell_harp_loot.h"
 #include "fire_run_terminal_scene.h"
 #include "fire_material_loot_source.h"
 /*	EQEmu: EQEmulator
@@ -154,6 +155,7 @@ Corpse::Corpse(
 	SetCash(npc->GetCopper(), npc->GetSilver(), npc->GetGold(), npc->GetPlatinum());
 
 	npctype_id = npc_type_id;
+	PorDeathknellHarp::Capture(*this, *npc);
 	FireRunActionSource::OriginalMissionMaterialDeath::CaptureActualCorpse(*this,*npc);
  FireRunActionSource::OriginalTerminalDeath::CaptureActualCorpse(*this,*npc);
 	SetPlayerKillItemID(0);
@@ -1767,6 +1769,14 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
             return;
         }
 
+        PorDeathknellHarp::Transfer harp(*c, *inst, *this);
+        if (harp.reserved && !harp.authorized) {
+            lootitem->auto_loot = -1;
+            c->QueuePacket(app);
+            safe_delete(inst);
+            return;
+        }
+
 		// Genuine current-run material seal before the SAME original native grant.
 		if(!fire_material_loot.PrepareActualItem(*inst,lootitem->slot_id)) {
 			lootitem->auto_loot=-1;c->QueuePacket(app);safe_delete(inst);return;
@@ -1823,6 +1833,17 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 			}
 			return;
 		}
+        if (harp.authorized && !harp.saved) {
+            SendEndLootErrorPacket(c);
+            ResetLooter();
+            safe_delete(inst);
+            if (harp.placed) {
+                c->RejectInventorySessionAdmission();
+                c->Kick("Deathknell harp loot save requires inventory reload");
+            }
+            return;
+        }
+
 		if (backflag.saved) {
 			DodhBackflag::Record(*c);
 		}
@@ -1869,6 +1890,16 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 		if (GetPlayerKillItem() != -1) {
 			SetPlayerKillItemID(0);
 		}
+
+        if (harp.saved && !harp.recorded) {
+            // The saved, recipient-tagged harp is the retry evidence. Its corpse slot
+            // is already consumed; reload before the recipient can move the item.
+            SendEndLootErrorPacket(c);
+            ResetLooter();
+            safe_delete(inst);
+            c->Kick("Deathknell harp flag save requires inventory reload");
+            return;
+        }
 
 		/* Send message with item link to groups and such */
 		EQ::SayLinkEngine linker;

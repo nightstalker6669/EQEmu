@@ -22,14 +22,34 @@ local function expedition(client, binding)
     end
 end
 
-local function theater_admission(client)
-    return client:HasZoneFlag(deathknell_zone) or client:GetLevel() >= 72
+local function theater_admission(client, dz)
+    if client:HasZoneFlag(deathknell_zone) or client:GetLevel() >= 72 then return true end
+    local raid = client:GetRaid()
+    if not raid.valid or dz:GetSecondsRemaining() <= 0 then return false end
+    -- Flag sharing applies only to the overlapping live raid and expedition roster.
+    local counts = read_one([[
+        SELECT COUNT(DISTINCT r.charid),
+               COUNT(DISTINCT f.charID),
+               COUNT(DISTINCT CASE WHEN r.charid=? THEN r.charid END)
+        FROM raid_members r
+        JOIN dynamic_zone_members m ON m.character_id=r.charid
+        JOIN dynamic_zones d ON d.id=m.dynamic_zone_id
+        JOIN instance_list i ON i.id=d.instance_id
+        LEFT JOIN zone_flags f ON f.charID=r.charid AND f.zoneID=381
+        WHERE r.raidid=? AND r.charid>0 AND d.id=? AND d.uuid=? AND i.id=?
+          AND i.zone=381 AND i.version=20
+          AND (i.never_expires=1 OR i.expire_at>UNIX_TIMESTAMP())
+    ]], {client:CharacterID(), raid:GetID(), dz:GetID(), dz:GetUUID(), dz:GetInstanceID()})
+    if not counts or tonumber(counts[3]) ~= 1 then return false end
+    local roster, flagged = tonumber(counts[1]), tonumber(counts[2])
+    return roster and flagged and roster >= 6 and 100 * flagged >= 85 * roster
 end
 
 function M.move(client, key)
     local binding = raids[key]
-    if not expedition(client, binding) then return false end
-    if key == "deathknell" and not theater_admission(client) then
+    local dz = expedition(client, binding)
+    if not dz then return false end
+    if key == "deathknell" and not theater_admission(client, dz) then
         client:Message(MT.Yellow, "You have not earned passage into Deathknell.")
         return true
     end
@@ -76,8 +96,8 @@ function M.request(client, key)
 end
 
 function M.arrival(client, key, origin)
-    if not runtime.scope(client, raids[key])
-        or (key == "deathknell" and not theater_admission(client)) then
+    local dz = runtime.scope(client, raids[key])
+    if not dz or (key == "deathknell" and not theater_admission(client, dz)) then
         client:MovePC(origin[1], origin[2], origin[3], origin[4], origin[5])
         return false
     end

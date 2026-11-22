@@ -17,6 +17,7 @@
 */
 #ifdef LUA_EQEMU
 
+#include "por_deathknell_vertigo.h"
 #include "lua_general.h"
 
 #include "common/classes.h"
@@ -878,6 +879,19 @@ uint16 lua_create_door(const char *model, float x, float y, float z, float h, ui
 
 uint16 lua_create_door(const char *model, float x, float y, float z, float h, uint8 open_type, uint16 size) {
 	return quest_manager.CreateDoor(model, x, y, z, h, open_type, size);
+}
+
+luabind::object lua_get_deathknell_vertigo_disarm_counts(lua_State* L)
+{
+    const auto counts = PorDeathknellVertigo::GetCounts();
+    if (!counts) {
+        return luabind::object();
+    }
+    auto result = luabind::newtable(L);
+    result["phase"] = counts->phase;
+    result["phase_count"] = counts->phase_count;
+    result["cumulative_count"] = counts->cumulative_count;
+    return result;
 }
 
 luabind::object lua_create_transient_click_object(
@@ -6332,6 +6346,8 @@ luabind::scope lua_register_general() {
 		luabind::def("do_augment_slots_match", &lua_do_augment_slots_match),
 		luabind::def("does_augment_fit", (int8(*)(Lua_ItemInst, uint32))&lua_does_augment_fit),
 		luabind::def("does_augment_fit_slot", (int8(*)(Lua_ItemInst, uint32, uint8))&lua_does_augment_fit_slot),
+		luabind::def("set_deathknell_vertigo_trap_phase", &PorDeathknellVertigo::SetPhase),
+		luabind::def("get_deathknell_vertigo_disarm_counts", &lua_get_deathknell_vertigo_disarm_counts),
 		luabind::def("get_recipe_component_item_ids", (luabind::object(*)(lua_State*,uint32))&lua_get_recipe_component_item_ids),
 		luabind::def("get_recipe_container_item_ids", (luabind::object(*)(lua_State*,uint32))&lua_get_recipe_container_item_ids),
 		luabind::def("get_recipe_fail_item_ids", (luabind::object(*)(lua_State*,uint32))&lua_get_recipe_fail_item_ids),
