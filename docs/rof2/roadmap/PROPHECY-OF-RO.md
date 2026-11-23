@@ -67,10 +67,31 @@ Local reconstructions include bell timing and movement thresholds, later Vertigo
 
 [Server r33](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r33-a1-b152c10b633f) · [Matching database](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-22-deathknell-tower) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/cb79181bec0a8b8c05c6d098998eb3a1d722dc36/releases/peq-rof2-2026-11-22-deathknell-tower/NATIVE-QUALIFICATIONS.json)
 
+## Tunare’s Shrine in r34
+
+The paired r34 releases restore the normal Tunare’s Shrine chain. Six characters completed all four stages in order in RoF2. The run exercised three owned versions of the Shrine and their normal entrances and exits.
+
+| Stage | Verified progression |
+| --- | --- |
+| Investigating the Elddar | Surveyed the upper Shrine, collected the five priest drops, and used the original Figurine Combine and hand-in. |
+| Questioning the Priest | Cleared Nalderin’s five platform fights and four transitions, then completed the Sealed Scroll exchange. |
+| The Key to Corruption | Collected all four named treant woods, completed Orgaf’s original hand-in and delayed betrayal fight, and earned the Carved Wooden Key. |
+| The Corruption of Ro | Opened the physical ramp with the earned key, verified keyring credit, cleared four Guardian waves of nine cores, looted one Guardian Chalice, and earned the 92-hour success lockout. |
+
+The character who looted the raw Chalice handed it to Shalowen and received one augmentation and the in-game achievement notification. After a same-client relog, the augmentation was still visible in game. Database readback confirmed the completed exchange, the achievement and all five components. The client observer could not retrieve the achievement definition after relog.
+
+A separate unflagged level-68 character used a stock Potion of the Swamp supplied for QA, crossed from Innothule through South Ro into Takish-Hiz, and used the restored ground switch to reach Shalowen in public Elddar. The character received her greeting without gaining Tak or Tunare progression. QA briefly disabled the character’s existing invulnerability for the potion cast and restored it afterward. This checks the forward route from Innothule. Other South Ro approaches and relogs outside that route remain unverified.
+
+The core run used test gear, temporary protection and positioning assistance between public quest contacts. It used native controls for requests, entry, fights, the keyed ramp, looting, combining and hand-ins. An existing Zorbig spawn had an old empty loot snapshot. Its next natural spawn used the restored loot table and dropped the missing wood.
+
+The normal route follows the archived 6–36-person account. Combat values, lap geometry, timing, add counts and Last Blood chance include local reconstruction. The four thresholds and successful clears were observed. Retail pacing and class balance, some failed-lap consequences and the historical 42-player report remain unverified. Hard mode and rare zone-wide drops are outside this batch.
+
+[Server r34](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r34-a1-d63799cc140c) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-22-tunare-shrine) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/4e47cfca719dd368c6ac9afc443f7f29beaa155f/releases/peq-rof2-2026-11-22-tunare-shrine/NATIVE-QUALIFICATIONS.json)
+
 ## Pending scope and historical limits
 
-- **Tunare** remains a separate route. Lower-tier Takish variants, Samples Hard tuning and optional chest and gear pools remain outside this coverage.
+- **Other group variants** remain outside this coverage, including lower-tier Takish variants, Samples Hard tuning and optional chest and gear pools.
 - **Sverag automatic rotation** remains unverified. The static Bolvirk start and authored controller-specific alternatives are the scope of this candidate.
-- **Achievements** found no related criterion confirmed for the May 2013 cutoff. This draft carries zero achievement additions.
+- **The Theater group batch** added zero achievement criteria. Its historical review found no related criterion confirmed for the May 2013 cutoff.
 - **Local reconstruction** applies to the Oubliette’s deterministic selection among 27 stock eggsacks, the Library add cadence, the Razorthorn first-spawn sample chance and shadow timing, selected encounter stats and fixed Message to the Past chest placements. Skylance’s floor-side return triggers use the stock lobby destinations. These routes retain their native QA qualifications.
 - **Installation** requires the matching server package and fresh empty PEQ database. See the [installation guide](../INSTALL.md) for download and setup instructions.
