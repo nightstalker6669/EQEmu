@@ -1,5 +1,6 @@
 #include "common/sod_original_transform_native.h"
 #include "por_deathknell_custody.h"
+#include "por_tunare_custody.h"
 #include "common/sod_content_bindings.h"
 #include "common/kithicor_mission.h"
 #include "zone/doors.h"
@@ -2124,6 +2125,12 @@ bool Lua_Client::AdvanceSharedTaskAchievementProgress(
 		component_id,
 		value
 	);
+}
+
+bool Lua_Client::ReconcileTunareGive()
+{
+    Lua_Safe_Call_Bool();
+    return TunareCustody::Reconcile(*self);
 }
 
 bool Lua_Client::CompleteSharedTaskAchievement(uint32 achievement_id)
@@ -4566,6 +4573,7 @@ luabind::scope lua_register_client() {
 	.def("ClearZoneFlag", (void(Lua_Client::*)(uint32))&Lua_Client::ClearZoneFlag)
 	.def("CompleteAchievement", (bool(Lua_Client::*)(uint32))&Lua_Client::CompleteAchievement)
 	.def("CompleteSharedTaskAchievement", &Lua_Client::CompleteSharedTaskAchievement)
+	.def("ReconcileTunareGive", &Lua_Client::ReconcileTunareGive)
 	.def("CompleteTask", (bool(Lua_Client::*)(int))&Lua_Client::CompleteTask)
 	.def("Connected", (bool(Lua_Client::*)(void))&Lua_Client::Connected)
 	.def("CountAugmentEquippedByID", (uint32(Lua_Client::*)(uint32))&Lua_Client::CountAugmentEquippedByID)

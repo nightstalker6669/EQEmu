@@ -2,6 +2,7 @@
 #include "zone/sod_orders_loot.h"
 #include "dodh_backflag_loot.h"
 #include "por_deathknell_harp_loot.h"
+#include "por_tunare_custody.h"
 #include "fire_run_terminal_scene.h"
 #include "fire_material_loot_source.h"
 /*	EQEmu: EQEmulator
@@ -156,6 +157,7 @@ Corpse::Corpse(
 
 	npctype_id = npc_type_id;
 	PorDeathknellHarp::Capture(*this, *npc);
+	TunareCustody::Capture(*this, *npc);
 	FireRunActionSource::OriginalMissionMaterialDeath::CaptureActualCorpse(*this,*npc);
  FireRunActionSource::OriginalTerminalDeath::CaptureActualCorpse(*this,*npc);
 	SetPlayerKillItemID(0);
@@ -1745,6 +1747,26 @@ void Corpse::LootCorpseItem(Client *c, const EQApplicationPacket *app)
 			safe_delete(inst);
 			return;
 		}
+
+        const auto tunare = item_data
+            ? TunareCustody::Loot(*c, *this, *inst, item_data->lootslot)
+            : TunareCustody::LootResult::Unrelated;
+        if (tunare != TunareCustody::LootResult::Unrelated) {
+            const bool issued = tunare == TunareCustody::LootResult::Issued;
+            if (issued || tunare == TunareCustody::LootResult::AlreadyIssued) {
+                RemoveItem(item_data->lootslot);
+                if (issued) {
+                    c->CheckItemDiscoverability(inst->GetID());
+                    c->UpdateAchievementForOwnItem(inst->GetID());
+                    c->UpdateAchievementForLoot(inst->GetID(), 1);
+                }
+            } else {
+                lootitem->auto_loot = -1;
+            }
+            if (tunare != TunareCustody::LootResult::InventoryReload) c->QueuePacket(app);
+            safe_delete(inst);
+            return;
+        }
 
         const auto longshadow = (item_data &&
             std::none_of(std::begin(bag_item_data), std::end(bag_item_data),

@@ -24,6 +24,7 @@
 #include "common/repositories/criteria/content_filter_criteria.h"
 #include "common/repositories/spawn2_repository.h"
 #include "zone/corpse.h"
+#include "common/shared_core/por_tunare_exchange.h"
 #include "zone/npc.h"
 #include "zone/zone.h"
 
@@ -217,6 +218,42 @@ inline std::map<std::string, std::string> GetVariablesDeserialized(const std::st
 	return deserialized_map;
 }
 
+namespace Tunare = EQEmu::SharedCore::PorTunare;
+
+inline const char* TunareCorpseKey(const Zone& zone, uint32_t npc_type)
+{
+    return Tunare::CorpseMarker(zone.GetZoneID(), zone.GetInstanceVersion(), zone.GetInstanceID(), npc_type);
+}
+
+inline std::string SaveTunareCorpseMarker(const Zone& zone, Corpse& corpse)
+{
+    const auto type = corpse.GetNPCTypeID();
+    const auto* key = TunareCorpseKey(zone, type);
+    if (!key) return {};
+    const auto value = corpse.GetEntityVariable(key);
+    if (!Tunare::CorpseMarkerValue(type, value)) return {};
+
+    std::stringstream stream;
+    {
+        cereal::JSONOutputArchiveSingleLine archive(stream);
+        archive(std::map<std::string, std::string>{{key, value}});
+    }
+    return stream.str();
+}
+
+inline void RestoreTunareCorpseMarker(const Zone& zone, uint16_t id,
+    const ZoneStateSpawnsRepository::ZoneStateSpawns& state)
+{
+    const auto* key = TunareCorpseKey(zone, state.npc_id);
+    if (!key) return;
+    const auto variables = GetVariablesDeserialized(state.entity_variables);
+    const auto tag = variables.find(key);
+    auto* corpse = entity_list.GetCorpseByID(id);
+    if (corpse && corpse->IsNPCCorpse() && corpse->GetNPCTypeID() == state.npc_id &&
+        tag != variables.end() && Tunare::CorpseMarkerValue(state.npc_id, tag->second))
+        corpse->SetEntityVariable(key, tag->second);
+}
+
 inline void LoadNPCEntityVariables(NPC *n, const std::string &entity_variables)
 {
 	if (!RuleB(Zone, StateSaveEntityVariables)) {
@@ -307,6 +344,9 @@ inline std::vector<uint32_t> GetLootdropIds(const std::vector<ZoneStateSpawnsRep
 
 inline void LoadNPCStatePreSpawn(Zone *zone, NPC *n, ZoneStateSpawnsRepository::ZoneStateSpawns &s)
 {
+    // These tags belong to the reconstructed corpse, not the temporary NPC
+    // used by the stock restoration death path.
+    if (s.is_corpse && TunareCorpseKey(*zone, s.npc_id)) return;
 	LoadNPCEntityVariables(n, s.entity_variables);
 }
 
@@ -345,7 +385,9 @@ inline void LoadNPCState(Zone *zone, NPC *n, ZoneStateSpawnsRepository::ZoneStat
 		auto decay_time = s.decay_in_seconds * 1000;
 		if (decay_time > 0) {
 			n->SetQueuedToCorpse();
+            const auto corpse_id = n->GetID();
 			entity_list.RestoreCorpse(n, decay_time);
+            RestoreTunareCorpseMarker(*zone, corpse_id, s);
 		}
 		else {
 			n->Depop();
@@ -662,6 +704,14 @@ bool Zone::LoadZoneState(
 			continue;
 		}
 
+        if (s.is_corpse && TunareCorpseKey(*zone, s.npc_id) &&
+            s.created_at > 0 && s.decay_in_seconds > 0) {
+            const auto remaining = s.created_at + s.decay_in_seconds - std::time(nullptr);
+            if (remaining <= 0) continue;
+            s.decay_in_seconds = static_cast<int32_t>(
+                std::min<int64_t>(s.decay_in_seconds, remaining));
+        }
+
 		auto npc_type = content_db.LoadNPCTypesData(s.npc_id);
 		if (!npc_type) {
 			LogZoneState("Failed to load NPC type data for npc_id [{}]", s.npc_id);
@@ -846,6 +896,7 @@ void Zone::SaveZoneState()
 		s.heading          = n.second->GetHeading();
 		s.created_at       = std::time(nullptr);
 		s.loot_data        = GetLootSerialized(n.second);
+		s.entity_variables = SaveTunareCorpseMarker(*this, *n.second);
 		s.decay_in_seconds = (int) (n.second->GetDecayTime() / 1000);
 
 		spawns.emplace_back(s);

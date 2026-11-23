@@ -433,6 +433,7 @@ public:
 		uint32 value
 	);
 	bool CompleteSharedTaskAchievement(uint32 achievement_id);
+	bool ReconcileTunareGive();
 	std::string GetSharedTaskIdentity();
 	bool TransformDeathknellSullonShard();
 	bool TransformDeathknellSuchunShard();

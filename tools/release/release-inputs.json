@@ -5,16 +5,16 @@
       "Import full.sql into a fresh empty database with the matching runtime."
     ],
     "asset": {
-      "bytes": 37209211,
-      "name": "PEQ-RoF2-full-2026-11-22-deathknell-tower.zip",
-      "sha256": "9a6669fdadb3c0f03b3de3d4445f4d4e8f324335308fe16998ded5c6f5e42e07",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-22-deathknell-tower/PEQ-RoF2-full-2026-11-22-deathknell-tower.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-22-deathknell-tower/PEQ-RoF2-full-2026-11-22-deathknell-tower.zip"
+      "bytes": 37330275,
+      "name": "PEQ-RoF2-full-2026-11-22-tunare-shrine.zip",
+      "sha256": "51e599653f2d5717c8d6f4014f616bd24e22d498b7af9078bc701fe55ed480f9",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-22-tunare-shrine/PEQ-RoF2-full-2026-11-22-tunare-shrine.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-22-tunare-shrine/PEQ-RoF2-full-2026-11-22-tunare-shrine.zip"
     },
-    "base_database_release_tag": "peq-rof2-2026-11-22-deathknell",
+    "base_database_release_tag": "peq-rof2-2026-11-22-deathknell-tower",
     "cohort_source_binding": {
-      "preserved_prior_binding": "79687a675b8f2ffcff927b439c6c05076785612ccf49de88d0fb68988d004cfe",
-      "quest_projection_sha256": "a29b51ef52120bb9ed5a392da2c69436e850ff005a59fdd8f92e9effb5057b55",
+      "preserved_prior_binding": "4bba161fd5b93da24b41683cadf1cf4e57cd72b33f44923c0c0439374809f683",
+      "quest_projection_sha256": "3b894ede32fc48311eccf805e878c596c69161942014b2d55f1ab9ee8da4dccd",
       "quest_root": "quests",
       "required_quest_files": [
         {
@@ -529,6 +529,230 @@
           "sha256": "762b8da1456bbf5608383a3a3f72fc0426402f9cd8ab165a4ea8d4f068a7c462"
         },
         {
+          "bytes": 94,
+          "git_blob": "8a34e43d33423182f58248edfcc8c15d1da288aa",
+          "mode": "100644",
+          "path": "elddar/v0/378059.lua",
+          "sha256": "2636bc59420f3f292d49d82e49170b020f40c41a2dfd2823197a476e07b26aa7"
+        },
+        {
+          "bytes": 165,
+          "git_blob": "1e2dfde775ec1049461c8e9eb181f5d846ec4605",
+          "mode": "100644",
+          "path": "elddar/v0/378089.lua",
+          "sha256": "bd46e89f618e6e7c04e440147946e1c2fb76d3854be35b560b5dfed01ab7b5e9"
+        },
+        {
+          "bytes": 165,
+          "git_blob": "1e2dfde775ec1049461c8e9eb181f5d846ec4605",
+          "mode": "100644",
+          "path": "elddar/v0/378147.lua",
+          "sha256": "bd46e89f618e6e7c04e440147946e1c2fb76d3854be35b560b5dfed01ab7b5e9"
+        },
+        {
+          "bytes": 259,
+          "git_blob": "f812c4b2ba39ab6933760bbe855f36d989ede4cd",
+          "mode": "100644",
+          "path": "elddar/v0/378168.lua",
+          "sha256": "5c2d67abaca9f59e6adbdf434dc76c824b7b8835533a98ea06037e477fd9648c"
+        },
+        {
+          "bytes": 165,
+          "git_blob": "1e2dfde775ec1049461c8e9eb181f5d846ec4605",
+          "mode": "100644",
+          "path": "elddar/v0/378206.lua",
+          "sha256": "bd46e89f618e6e7c04e440147946e1c2fb76d3854be35b560b5dfed01ab7b5e9"
+        },
+        {
+          "bytes": 165,
+          "git_blob": "1e2dfde775ec1049461c8e9eb181f5d846ec4605",
+          "mode": "100644",
+          "path": "elddar/v0/378208.lua",
+          "sha256": "bd46e89f618e6e7c04e440147946e1c2fb76d3854be35b560b5dfed01ab7b5e9"
+        },
+        {
+          "bytes": 325,
+          "git_blob": "aea97fb27061c7c678f8e66e3b9c2fee74f35106",
+          "mode": "100644",
+          "path": "elddar/v0/player.lua",
+          "sha256": "c7dd17da3c8f594608e1ad8a984c26c8530dafa634de3f6a463fd95818761f4d"
+        },
+        {
+          "bytes": 278,
+          "git_blob": "3c934063ea829ccbabb19457ef4f72d6f186641f",
+          "mode": "100644",
+          "path": "elddar/v0/zone.lua",
+          "sha256": "0b9c6877699bfb7983e46cd14189e6014f23376737f4232d7a1c50ce3fc1317b"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379000.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379001.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379002.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379003.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379004.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379005.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379006.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379007.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379008.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379009.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379010.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379011.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379012.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379013.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 115,
+          "git_blob": "f06f03af858f13fdd6ef7d1e3a290293b171acca",
+          "mode": "100644",
+          "path": "elddara/v20/379951.lua",
+          "sha256": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9"
+        },
+        {
+          "bytes": 197,
+          "git_blob": "28dc14cbcaee82989fe4c4968907b45749802542",
+          "mode": "100644",
+          "path": "elddara/v20/player.lua",
+          "sha256": "7631f11b0cda89246fe3b63ec9d9d10179470e348276633d58c6f2017b52c576"
+        },
+        {
+          "bytes": 201,
+          "git_blob": "899366cf6d9541ad23f0239a9628c3a4caefc11c",
+          "mode": "100644",
+          "path": "elddara/v20/zone.lua",
+          "sha256": "bac5d8b8f0e70fde7dc0c78a00396003dc3f66627f5f9b693027f349448d91f2"
+        },
+        {
+          "bytes": 283,
+          "git_blob": "bdcff92e8cbb633956d9e09f1955b0afa15ed038",
+          "mode": "100644",
+          "path": "elddara/v21/379940.lua",
+          "sha256": "ca5a979e718e058aeadf3fe4a563710a88b459ec4a4d49256977d173e1167c17"
+        },
+        {
+          "bytes": 197,
+          "git_blob": "28dc14cbcaee82989fe4c4968907b45749802542",
+          "mode": "100644",
+          "path": "elddara/v21/player.lua",
+          "sha256": "7631f11b0cda89246fe3b63ec9d9d10179470e348276633d58c6f2017b52c576"
+        },
+        {
+          "bytes": 201,
+          "git_blob": "899366cf6d9541ad23f0239a9628c3a4caefc11c",
+          "mode": "100644",
+          "path": "elddara/v21/zone.lua",
+          "sha256": "bac5d8b8f0e70fde7dc0c78a00396003dc3f66627f5f9b693027f349448d91f2"
+        },
+        {
+          "bytes": 142,
+          "git_blob": "5be3281b641a63f6ae468de5eafecab2a78fb275",
+          "mode": "100644",
+          "path": "elddara/v22/379941.lua",
+          "sha256": "518d69a7e2fce5f5007e4d72396660dd4a199bd0ab14fe4516af5a96002b4b61"
+        },
+        {
+          "bytes": 234,
+          "git_blob": "3e77dc770520d8d896288c95411fe4a4b36b3caa",
+          "mode": "100644",
+          "path": "elddara/v22/379942.lua",
+          "sha256": "bcf5358922cf8ec27c46ea9c2748bf6a93bf8e8191c4ba2dbb233d4596a86d49"
+        },
+        {
+          "bytes": 197,
+          "git_blob": "28dc14cbcaee82989fe4c4968907b45749802542",
+          "mode": "100644",
+          "path": "elddara/v22/player.lua",
+          "sha256": "7631f11b0cda89246fe3b63ec9d9d10179470e348276633d58c6f2017b52c576"
+        },
+        {
+          "bytes": 201,
+          "git_blob": "899366cf6d9541ad23f0239a9628c3a4caefc11c",
+          "mode": "100644",
+          "path": "elddara/v22/zone.lua",
+          "sha256": "bac5d8b8f0e70fde7dc0c78a00396003dc3f66627f5f9b693027f349448d91f2"
+        },
+        {
           "bytes": 104,
           "git_blob": "e3a14ffde0be3b26b61796b8df01d265c872507b",
           "mode": "100644",
@@ -751,6 +975,13 @@
           "mode": "100644",
           "path": "illsalinc/v3/zone.lua",
           "sha256": "9375e118cfa312687cf964d80cf908e1a3b3d58f1aeee3422de6644cfc3dfbf8"
+        },
+        {
+          "bytes": 548,
+          "git_blob": "75275bec5f6a112437454816bb4171668243cb74",
+          "mode": "100644",
+          "path": "innothuleb/v0/player.lua",
+          "sha256": "359d5a1fd63cc77467506efa4a76b9a9e899b6f9b0665e0d17ef3eac61d49edd"
         },
         {
           "bytes": 75,
@@ -1290,6 +1521,41 @@
           "mode": "100644",
           "path": "lua_modules/rof2_por_theater_muses.lua",
           "sha256": "da75e149fad2d48cadd8d5e629abb4b70eefab226c5f168555f02680efc4c93a"
+        },
+        {
+          "bytes": 8753,
+          "git_blob": "9b926eba0bfa68bbd3dbf05d3f588aaf09e84623",
+          "mode": "100644",
+          "path": "lua_modules/rof2_por_tunare_forest.lua",
+          "sha256": "36cfc4dbcc72fccba341cbc0459a1c0b8b00336639ddc0067427a603eddc738d"
+        },
+        {
+          "bytes": 1875,
+          "git_blob": "c74834ea4d63f7ef4cb13ed3bea998c353c49d6f",
+          "mode": "100644",
+          "path": "lua_modules/rof2_por_tunare_layout.lua",
+          "sha256": "2543e8086164fb57680bf8ca73598a2029b793a45f98676aff3fde20a9db0798"
+        },
+        {
+          "bytes": 5317,
+          "git_blob": "fef1c6a27b2380918b743d88e60bc5c9d9e38afa",
+          "mode": "100644",
+          "path": "lua_modules/rof2_por_tunare_public.lua",
+          "sha256": "016dd779ccbec5d88f05e9d413689d1ec712892b22e980d5f00a02508328b434"
+        },
+        {
+          "bytes": 3948,
+          "git_blob": "9412072c9d3be4ca86ecf286dc6332981c47305f",
+          "mode": "100644",
+          "path": "lua_modules/rof2_por_tunare_rewards.lua",
+          "sha256": "992d5c4dc11e95de73ef5a485fcae248475cceda15202f3a3092b839fc3a148b"
+        },
+        {
+          "bytes": 15660,
+          "git_blob": "0991a005402e8b6531f42890a3c8bf3e193c3241",
+          "mode": "100644",
+          "path": "lua_modules/rof2_por_tunare_shrine.lua",
+          "sha256": "d57007a992b22a69f30a9f8615bea41a689ab642d311a9f5f7bf7c5609ea1ef6"
         },
         {
           "bytes": 6765,
@@ -1943,11 +2209,11 @@
           "sha256": "810f7ec47ece16be80c8e448815465d44c0e4167afc2707514280dd7f5248acd"
         },
         {
-          "bytes": 281,
-          "git_blob": "d9a9871209a3306d5223a64dccd52c9eb7a11dbe",
+          "bytes": 791,
+          "git_blob": "9f4019612e73eaa9c04ba3261843e1aa94a10987",
           "mode": "100644",
           "path": "southro/player.lua",
-          "sha256": "333ed4c0f7cc61a6d9d94950f9813d4551458827e1a6628d079f4d4d3e63b043"
+          "sha256": "a718679a14d68e4e671fde16f05f140e0ea5bbf8f9380c26ac61367324d0ead7"
         },
         {
           "bytes": 410,
@@ -2757,12 +3023,12 @@
           "sha256": "03e85a62d14c8f4e4b15a89525f4059e621f17a2d7156288e01fc3bc15db6293"
         },
         {
-          "bytes": 35834,
-          "git_blob": "86acc84540f482eb1eceb66c2cda6a4e62e13210",
+          "bytes": 37259,
+          "git_blob": "8007bd089b1b5bc1fdddd215aa16e94fd3cd1e13",
           "kind": "native_source",
           "mode": "100644",
           "path": "common/shared_core/original_trade_custody.h",
-          "sha256": "41185708ed2bbd98f9b290c49c79605001f157e71018b56b9ac376e4530fb028"
+          "sha256": "ca09ecd199a9bd5cdb8d195e7f1add18bd38568fd22f86d1f8f150795e72e764"
         },
         {
           "bytes": 3075,
@@ -2771,6 +3037,14 @@
           "mode": "100644",
           "path": "common/shared_core/por_chime_exchange.h",
           "sha256": "41f2e619286f350b9ab4adcfc307d9cc2ca9eeacd65f743269a80783bb36b145"
+        },
+        {
+          "bytes": 3864,
+          "git_blob": "c40a1e230f8505090cfb9edd351f63e3ed426309",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "common/shared_core/por_tunare_exchange.h",
+          "sha256": "e167e3d45da232dd71ceea04b0ad729fd53828b2815ddb4f59ac5c878518444b"
         },
         {
           "bytes": 2814,
@@ -4253,12 +4527,12 @@
           "sha256": "ad1af362030b15409c50fa124d7dd170fc1c2af60b7f2a281acbacea111df209"
         },
         {
-          "bytes": 281,
-          "git_blob": "d9a9871209a3306d5223a64dccd52c9eb7a11dbe",
+          "bytes": 791,
+          "git_blob": "9f4019612e73eaa9c04ba3261843e1aa94a10987",
           "kind": "quest_lua",
           "mode": "100644",
           "path": "quests/southro/player.lua",
-          "sha256": "333ed4c0f7cc61a6d9d94950f9813d4551458827e1a6628d079f4d4d3e63b043"
+          "sha256": "a718679a14d68e4e671fde16f05f140e0ea5bbf8f9380c26ac61367324d0ead7"
         },
         {
           "bytes": 410,
@@ -4845,12 +5119,12 @@
           "sha256": "76a0f78f4427b4e4b83024ffc0e2d484c566d69e08a6b7f9f6fc9f0e165a3374"
         },
         {
-          "bytes": 73558,
-          "git_blob": "ab4dd9e5fd35f95e7447aafb4f1b2823d1628ca0",
+          "bytes": 74535,
+          "git_blob": "648116aae474a3afc2a0675a04b9a379d8c5a569",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/corpse.cpp",
-          "sha256": "491f732f14654b70fd6a425af61bc5547671189b61b896caf17ecc3f4c7757b5"
+          "sha256": "7bc084646ca550aa70b016c1062aa3231a088fe9306ad246071635974ff7a5cd"
         },
         {
           "bytes": 11006,
@@ -4909,12 +5183,12 @@
           "sha256": "f4d2d15fee8f87317ec79ae531b23e1577a749c795b4ea10c12d7e9d14848d55"
         },
         {
-          "bytes": 384,
-          "git_blob": "af69b7379e0c5f9cd85b0f0654a86340860df295",
+          "bytes": 423,
+          "git_blob": "1aefbe8cd393fbbb980341799870b884ee8156cd",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/dodh_exchange.h",
-          "sha256": "f7a3450bb89de3bc1f9f899af00f8daef64db553e7a971e5d0b2b86434701596"
+          "sha256": "bfe960df350f9d329ad7613713a273d407356a1ce6ba89bf09733651fe43c1a0"
         },
         {
           "bytes": 7355,
@@ -5053,28 +5327,28 @@
           "sha256": "c208af3c4eae12f7232cd4d6ff77e0bf46a2dcd9e99a8bfc973638efd2f0b3d5"
         },
         {
-          "bytes": 107190,
-          "git_blob": "7ace02b53d0cabb4c5cb856631832a8668f2a5e4",
+          "bytes": 116551,
+          "git_blob": "2688428d29ab30a35e6b090ec42c1245ddaac8f6",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/kithicor_poison_trade.inc",
-          "sha256": "73e66909288366c8aaa4ebc5804f7bf82bc302dd0942f2ad7b5277c60fb0e2e7"
+          "sha256": "fccb9cce9fe93aaf2e5d7c7e64ddb0fde8460efb051fdcd8e8eae7d1aff30a8f"
         },
         {
-          "bytes": 193129,
-          "git_blob": "7a6369d3f7dac67f80915797e55dd0614a734820",
+          "bytes": 193338,
+          "git_blob": "9aada8b385e613474efb712ad8c5091258682545",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/lua_client.cpp",
-          "sha256": "a0e56398a708ac6be8d347b4a38105853e8b6275e41a83d24c0bf97cbccc9c2f"
+          "sha256": "ccf76299a601978efab487d2794fac0cb6896c44207293bce895b0049b052c9e"
         },
         {
-          "bytes": 32410,
-          "git_blob": "01af4162cea03cedc9715e64623e07a8d65ac1f5",
+          "bytes": 32439,
+          "git_blob": "a2de2bc351a9457fae2eec2185227819dd02844c",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/lua_client.h",
-          "sha256": "22e0a7b47ae2925630c27ef478bbe85ea2cca9ab01a6705901d3ce2d15e0b66b"
+          "sha256": "d75ad84108ad939c8cf839c96eee135cb4964b6319a8770b04901a924775f53e"
         },
         {
           "bytes": 327116,
@@ -5173,6 +5447,22 @@
           "sha256": "b5bf5add3734f538caa52afd0db858565ef906cac2f1ae0b1d85e7b75e7b97a9"
         },
         {
+          "bytes": 394,
+          "git_blob": "77452a9a0f938e7cbc0b6b89c6eb4d1c96ec48f6",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/por_tunare_custody.h",
+          "sha256": "5e27fe59c5453ccc48e0c8778560c032b2c269e764a97f6dc67b4b3b463af383"
+        },
+        {
+          "bytes": 9800,
+          "git_blob": "983193bb983c99c89e702b8ad7c01e77171e1a3e",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/por_tunare_custody.inc",
+          "sha256": "3f25930ad55f097bfe15c1836a578075516944865f83254bbf4af3e5a84b0a48"
+        },
+        {
           "bytes": 18621,
           "git_blob": "584b362a5f91c896090ece7c0fe74d6d0c98964c",
           "kind": "native_source",
@@ -5221,12 +5511,12 @@
           "sha256": "9db955761d5e48cb1d35d812bc35e105fae1d7a52a3a41ef3ea9a60b94e72300"
         },
         {
-          "bytes": 122409,
-          "git_blob": "cb807b9298469b66f7708111db6324b113a3e9af",
+          "bytes": 122490,
+          "git_blob": "f4313575cd8100ff29b0ce37c7f847fe3542382a",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/trading.cpp",
-          "sha256": "72e879171acc1a122260c42e1da832e23d83ab5fa82dd0f734036b663c6439ed"
+          "sha256": "e75a0f8fd68615912f9402ed67ea8fde8399427bbead85a918c82b35dac42c65"
         },
         {
           "bytes": 22481,
@@ -5253,12 +5543,12 @@
           "sha256": "063e3dc278aeca39e60fb3bb5e76f20ac75f0c2841961a5f8255e913d14f1e3d"
         },
         {
-          "bytes": 23106,
-          "git_blob": "5c0c17a31f2ecb341990eb933ed7d65a091ac658",
+          "bytes": 25267,
+          "git_blob": "4223a22f614de95f998d962e2a46ba269a4bd80b",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/zone_save_state.cpp",
-          "sha256": "15a299e830a7b53f8717e7af62b286ac71ba0b21f44e8cdaeb1f820cb1eab1e0"
+          "sha256": "dad5ea7568a64b155c43904e4a736c670f3a2b8cfd00f46c5fb81feb3be62aa4"
         },
         {
           "bytes": 63642,
@@ -5269,10 +5559,10 @@
           "sha256": "a350784df366bc03211fe16771e9c8380d312f29488304c84833718deb7f5ff1"
         }
       ],
-      "source_manifest_sha256": "74a245ae6dd9921a77c03c55acb60988a024ecca6e5b58d19a6e9804550a75d4"
+      "source_manifest_sha256": "c8cc663450e141a87c9f0df286fd0f23e65b76478c10c05e7e1837bccf14d7ac"
     },
     "database_repository": "nightstalker6669/EQEmu-Database",
-    "database_source_capture_commit": "7e0dab5457aaa3f0fdcf89caf69f4a997c22bfad",
+    "database_source_capture_commit": "cb79181bec0a8b8c05c6d098998eb3a1d722dc36",
     "existing_volume_upgrade": {
       "supported": false
     },
@@ -5280,9 +5570,9 @@
     "fresh_install": {
       "MariaDB": "10.11",
       "assembled_with": "10.11.19",
-      "base_tables": 492,
+      "base_tables": 496,
       "bots_version": 0,
-      "composition": "Published r32 database followed by the single sealed static Tower catalog.",
+      "composition": "Published r33 database followed by four sealed Tunare catalog files.",
       "custom_version": 0,
       "empty_private_player_and_operation_tables_preserved": true,
       "full_dump_replaces_tables": true,
@@ -5297,35 +5587,34 @@
       "views": 1
     },
     "future_update_policy": "A futurematchedDBversion requires a separately validatedwholecohort sanitizedrelease and explicitcommitted source/tag/assetdigest pin; never silently mutableLatest/latestDB, partialrank/itemexports, or old945-only pin for newcohort. ActualCIfailure corrections gather allvisible errors in one batch.",
-    "matched_server_integration_parent": "029367f83b753f0d4a6895a37f00dc080cbbb919",
+    "matched_server_integration_parent": "bf6631d954ba82f5a30b4fc818e18a441cf041de",
     "native_acceptance_scope": {
       "accepted_scope": [
-        "All four owned Deathknell Tower encounters, four native reward chests and event lockouts.",
-        "Native Vertigo trap detection and disarm through the stock client skills.",
-        "Thirty resolved Divine Fetters casts, Ayonae’s 19% final health capacity, and the Choir terminal.",
-        "An actual looted Harp granted durable access and supported a later independent request and entry without Fetters."
+        "Six-character native Investigating, Questioning, Key, and Corruption of Ro tasks and successful archives.",
+        "Native five-stone portable combine, original Orgaf confrontation and key gate, Guardian four waves, raw Chalice custody and Shalowen exchange.",
+        "Exactly one augmentation and the achievement persisted after relog.",
+        "Clean public North Ro through South Ro and Takish ground switch to original Elddar Forest and Shalowen without Takish or Tunare progression."
       ],
-      "independent_harp_receipt_sha256": "8857b8b2f34ecc058003b26eb14ea694cfc91222f27689dc3f46fabe1af2b7ae",
       "known_limits": [
-        "Guests used scoped nonlethal damage assistance before native terminal attacks.",
-        "The one-holder Choir test used development-only Fetters cooldown assistance. The normal reuse requirement remains in the release.",
-        "A specific Bells Enforcer spell or cure was outside the observed native coverage.",
-        "The reconstructed raid-in flag-sharing threshold was exercised offline. Native entry evidence covers level-qualified and earned/Harp routes.",
-        "Some encounter timing, geometry, balance and historical raid-in parameters were reconstructed. Tunare is outside this release."
+        "Core test used approved development gear, protection and scoped public transit between contacts.",
+        "The clean route used one temporary test potion and a bounded invulnerability toggle, restored after the cast.",
+        "The achievement completed visibly; its definition was unavailable to the observer after relog.",
+        "Some encounter pacing, lap geometry, balance and loot odds are reconstructed. Hard mode, rare zone-wide drops, and the historical 42-player account are outside native coverage."
       ],
-      "native_receipt_sha256": "e030ea4c5c1d1e5c08104897f382ef7bd08c547481b0a6963776374442ffe2eb",
+      "native_clean_route_receipt_sha256": "72ca7bc01aeffaf3739751ec74bbaa5485453e595f6961cbf6a72e3d11ea4325",
+      "native_core_receipt_sha256": "368493f30dd160faca5b385c715c4c74823a1446c120b712551465478cc4bf94",
       "status": "NATIVE_ACCEPTED_WITH_DOCUMENTED_LIMITS"
     },
-    "native_gameplay_acceptance": "Native Tower chain accepted with documented limits",
+    "native_gameplay_acceptance": "Native Tunare core and clean public route accepted with documented limits",
     "payload_inventory": {
       "all_member_sha256_file": "SHA256SUMS",
-      "full_sql_bytes": 304320851,
+      "full_sql_bytes": 304399714,
       "housing_json_member_count": 331,
       "housing_json_prefix": "housing-runtime-content/",
       "housing_profile_bindings": "housing-runtime-content/PROFILE-BINDINGS.json",
       "housing_profile_bindings_sha256": "4d6c3533a882ce79ef790caa08a781a1994d56ac3d9c58a8459bb9e1ac9b73b2",
       "identical_SQL_and_Housing_bytes_required": true,
-      "payload_member_count": 471
+      "payload_member_count": 481
     },
     "preserved_mercenary_cohort_source_binding": {
       "SQL_sha256": "6ad8f950c178e9c1d84658387c521dc33695572fd8926c30a711aff44e50790f",
@@ -5341,9 +5630,9 @@
       "CHANGELOG.md",
       "SOURCE-MANIFEST.json"
     ],
-    "release_tag": "peq-rof2-2026-11-22-deathknell-tower",
+    "release_tag": "peq-rof2-2026-11-22-tunare-shrine",
     "required_code_boundary": {
-      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins.",
+      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
       "completed_mercenary_feature_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
       "external_operator_resources": "Authenticated original RoF2 archives/maps and matching server quests/opcodes; generate fresh target shared memory normally."
@@ -5376,6 +5665,12 @@
       "BASE-DEATHKNELL-README.md": "1830abbfb61aa1a6e332d7152e56020987fcae2f32504c423bff68166d977d59",
       "BASE-DEATHKNELL-SOURCE-CONTENT-BINDING.json": "79687a675b8f2ffcff927b439c6c05076785612ccf49de88d0fb68988d004cfe",
       "BASE-DEATHKNELL-SOURCE-MANIFEST.json": "ae5bf11e8f7877e166d8afad91f47f66c2b3677005ab19e95bc541cbb72f563c",
+      "BASE-DEATHKNELL-TOWER-CANONICAL-SEED-COMPOSITION.json": "a7d7215a10ecd60d4e41c8dcf5f98a2c40a124698149f6655217cacf57fe668f",
+      "BASE-DEATHKNELL-TOWER-CHANGELOG.md": "8692ea58570c6c09228621aabd2a480b2456ec158ec71d7435de4a788744bf60",
+      "BASE-DEATHKNELL-TOWER-NATIVE-QUALIFICATIONS.json": "bb4ba87450cabce86f32842b596332816fa2f67d0bf49718c14acb5e922faee2",
+      "BASE-DEATHKNELL-TOWER-README.md": "e7d3f31209f69135f84a28e04ae88d8f7639a0e670d6e562458eec86c618ea01",
+      "BASE-DEATHKNELL-TOWER-SOURCE-CONTENT-BINDING.json": "4bba161fd5b93da24b41683cadf1cf4e57cd72b33f44923c0c0439374809f683",
+      "BASE-DEATHKNELL-TOWER-SOURCE-MANIFEST.json": "74a245ae6dd9921a77c03c55acb60988a024ecca6e5b58d19a6e9804550a75d4",
       "BASE-FIELD-OF-SCALE-CANONICAL-SEED-COMPOSITION.json": "b72eb294f1b1600687caf2d97bb14d9530f06630080b627f0d638c57644fbc35",
       "BASE-FIELD-OF-SCALE-NATIVE-QUALIFICATIONS.json": "ef9ea22dcecd4d77896d7483818e33fdff4ce14fb7fe060b46f6b04b7a157923",
       "BASE-FIELD-OF-SCALE-README.md": "26765b19fdf4abe66b878aa7add7ce87a6f051c557f9affda894cf9b078ff1ea",
@@ -5406,23 +5701,23 @@
       "BASE-RATHE-R2-TABLE-INVENTORY.json": "e6fe3fa78ad7b16e8c9d5f9b73d3d24552e9cfff663578b45e665aa5d5e991fe",
       "BASE-RATHE-R2-VALIDATION.json": "bdfee356c214b7682c027df998adad2d21fca5f212f63477eb550675a0f3b2a2",
       "BASE-README.md": "9d661df4676661cd6f3d791679e371622c4eb382d78cfd62e55186846d3b8172",
-      "CANONICAL-SEED-COMPOSITION.json": "a7d7215a10ecd60d4e41c8dcf5f98a2c40a124698149f6655217cacf57fe668f",
-      "CHANGELOG.md": "8692ea58570c6c09228621aabd2a480b2456ec158ec71d7435de4a788744bf60",
+      "CANONICAL-SEED-COMPOSITION.json": "5de97d99a475cfca6daab3c7b26d04c05c0d0e6d84e8dae80fec12f895ee1452",
+      "CHANGELOG.md": "8093b1e22538a5b0799d95f6bca3327011ef0fc19c17438e5ab635f1e6e6a124",
       "COMPLETED-RECIPE-UPDATES.json": "fdf459a6bef7e90351d3db5c983e30920205876a990aa144b5779a4c242d25e0",
       "KITHICOR-STATIC-CONTENT.json": "5b043982b23b74f4f857724b6baf1ff0611bb88ce348f32f15f3f6230462ffc5",
       "MERCENARY86-100-CONTENT.json": "27a9d180e6a66320ae9877cd763341f6579d0a1a8a66ac6fc23c26fb9dc15c16",
-      "NATIVE-QUALIFICATIONS.json": "bb4ba87450cabce86f32842b596332816fa2f67d0bf49718c14acb5e922faee2",
-      "README.md": "e7d3f31209f69135f84a28e04ae88d8f7639a0e670d6e562458eec86c618ea01",
-      "SHA256SUMS": "b511bbf88dbd3b0ab84817f156549331d9d0543e7f187a5550af0276d66ec08e",
+      "NATIVE-QUALIFICATIONS.json": "65198111f67544a59f909e2bd5bd340dfdbf5257910b608c18d885336187f32e",
+      "README.md": "b56b90cd2e742e7e5601f74a57ab96269ac33627327118fac10ba84773a97e29",
+      "SHA256SUMS": "6fc8a4d6ff2d8b065b38cdfadc6acef10f8c46269df57701d50c173fda449f60",
       "SOD-OCEANGREEN-CONTENT.json": "5a5757e1c4631af375b87b6c69794d9e72ebc8cc91c832144d8359bb2b5454c2",
-      "SOURCE-CONTENT-BINDING.json": "4bba161fd5b93da24b41683cadf1cf4e57cd72b33f44923c0c0439374809f683",
-      "SOURCE-MANIFEST.json": "74a245ae6dd9921a77c03c55acb60988a024ecca6e5b58d19a6e9804550a75d4",
+      "SOURCE-CONTENT-BINDING.json": "ba556b929b77859f195d9e4e6a01512109b276c2d3809e8b6aba8acf7d413c4c",
+      "SOURCE-MANIFEST.json": "c8cc663450e141a87c9f0df286fd0f23e65b76478c10c05e7e1837bccf14d7ac",
       "TABLE-INVENTORY.json": "4b6bf5895d88556b7ce4ecb2bf44a55deef3b766782c5c93304ff688204ec36e",
       "VALIDATION.json": "f9da8bf1f8bc7ab959ca0bee13e9b4aaa47a530b3f6a46e5e429d85b3d522ff2",
       "VICTUAL-CLASS-FEATURE-DELTA.json": "1220253988a07ff5ef833759b947c33b4bcc56cad20195f94366cd510df7ffaf",
       "client-data/rof2/dbstr_us.append.txt": "71f93726675b66a45496e61f42994a691ab6663a326f92497627d37f6f42dfec",
       "client-data/rof2/spells_us.append.txt": "428a6b92ba8887c8d117746c2f9bc192a6429b7fd2c6c46438005442b351b7d6",
-      "full.sql": "8ea47bddaaea6e6afa4a808a751776cf1ea4ff00bb744f538490be68d6f04055",
+      "full.sql": "4ca380ec14989cdea0cb5019d8fa54b776d8abaf96b9706167ccfc239eec0545",
       "migrations/darkhollow-normal68-70/02-ALIGN-SHROUD-ESCROW.sql": "5c47bbf12e6cc50976694c5c74fa508359d737c661676fdded19913036494526",
       "migrations/darkhollow-normal68-70/03-VERIFY-SHROUD-ESCROW.sql": "0fbdcac1cc500a1fd9dcc0fe08414ca5d300623951bc0ae00e282bb1085e12f6",
       "migrations/darkhollow-normal68-70/10-LEVEL68-70-CLAIM-SCHEMA.sql": "972fdeb85e17f62aa65509d140294c9000a659338e3f819377d6bbe6a86a2231",
@@ -5483,6 +5778,10 @@
       "migrations/por-group-theater/20-enable-por-catalog.sql": "10eb2c1041e9235ba54a7cdefb40eed346b27feb2765ac3c2903ead16522fc30",
       "migrations/por-group-theater/30-stage-sverag-controllers.sql": "d7b970ea92cf4d8df89bf2c0f37595be10eee6ac16f037b531841b7bd1e3b495",
       "migrations/por-group-theater/40-enable-skull-route.sql": "ccc880a106fec9c903024044c56cdbc3678b17f5fb7444d640b7bb4a4bb3b281",
+      "migrations/por-tunare/00-TUNARE-CUSTODY.sql": "71fd7eec86e6e15362e7c23493a25935bed9312b9ed2b6284ad58d74916d67e0",
+      "migrations/por-tunare/10-TUNARE-TASKS.sql": "675f2173c7e30c3cea4b38d5b4eaa6e0dfc8e3c06adf16ce9102908b57d3c64b",
+      "migrations/por-tunare/20-TUNARE-CATALOG.sql": "988507b30cd4755211c337e46ba97380e8b4835d341d12af19bc07fac8d96367",
+      "migrations/por-tunare/30-TUNARE-TAKISH-GROUND-DOOR.sql": "ea084b4543d41bd414d0130a62d8383c54faf33dd24a669633fe80e30dd57881",
       "migrations/rathe/002_disrupt_parallel_prior_rathe_only.sql": "80f9b930f7af0c28e9131f6b792a2aa7e5860e0ca44fac44f99fa289b9377554",
       "migrations/rathe/003_everforge_accept_seed.sql": "06ff71df9df187f755b7d6f8c24e7916ffcbe0ecb10acd1859b164ebbc5aefee",
       "migrations/rathe/APPLY.sql": "5c3dac2109dfa0146e7ad85508370a5b4d3d8151eb358ef4eab5f13de6d0cd35",
@@ -5548,16 +5847,17 @@
         }
       }
     },
-    "source_commit": "cb79181bec0a8b8c05c6d098998eb3a1d722dc36",
+    "source_commit": "4e47cfca719dd368c6ac9afc443f7f29beaa155f",
     "source_commit_role": "Exact public PEQ database release commit. The server integration parent and CI checkout are pinned separately.",
     "source_repository": "nightstalker6669/EQEmu",
     "verification_basis": {
-      "full_sql_sha256": "8ea47bddaaea6e6afa4a808a751776cf1ea4ff00bb744f538490be68d6f04055",
-      "receipt_sha256": "02d27adc08048b965ec6ca10b96676b583b02bcfeba13c7c3cef8efd028919ad",
-      "status": "Reuses isolated r32 seed import and exact Tower SQL apply."
+      "full_sql_sha256": "4ca380ec14989cdea0cb5019d8fa54b776d8abaf96b9706167ccfc239eec0545",
+      "receipt_sha256": "3bc2b373f196befd3d83f49a25863ae4c41c2889d5c352f7c2f76206778352dc",
+      "status": "Reuses isolated r33 core apply and exact Takish door positive and rollback checks.",
+      "takish_door_receipt_sha256": "ed47ad036514ad995d013676bca0efc5c7b15a120a824a226fbff72ba12a0264"
     }
   },
-  "database_contract_sha256": "2af685a327316b1401be6c5652ffb35f0e82c3f2cc6b33760de38a35d77aac40",
+  "database_contract_sha256": "2eb7107199e6083770989c7dea328775515ae1d8495ea647037a9b4dcfa8fee7",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [
@@ -5649,6 +5949,38 @@
       "eastkorlacha/v2/363050.lua": "4b3759da5d5b454d3fbfb8499b163ae5487f8eec5692a7a3913879363f7f77e8",
       "eastkorlacha/v2/player.lua": "20f008db092999361bf76153c2be5b5af7df69e6544933401f2663684307739a",
       "eastkorlacha/v2/zone.lua": "762b8da1456bbf5608383a3a3f72fc0426402f9cd8ab165a4ea8d4f068a7c462",
+      "elddar/v0/378059.lua": "2636bc59420f3f292d49d82e49170b020f40c41a2dfd2823197a476e07b26aa7",
+      "elddar/v0/378089.lua": "bd46e89f618e6e7c04e440147946e1c2fb76d3854be35b560b5dfed01ab7b5e9",
+      "elddar/v0/378147.lua": "bd46e89f618e6e7c04e440147946e1c2fb76d3854be35b560b5dfed01ab7b5e9",
+      "elddar/v0/378168.lua": "5c2d67abaca9f59e6adbdf434dc76c824b7b8835533a98ea06037e477fd9648c",
+      "elddar/v0/378206.lua": "bd46e89f618e6e7c04e440147946e1c2fb76d3854be35b560b5dfed01ab7b5e9",
+      "elddar/v0/378208.lua": "bd46e89f618e6e7c04e440147946e1c2fb76d3854be35b560b5dfed01ab7b5e9",
+      "elddar/v0/player.lua": "c7dd17da3c8f594608e1ad8a984c26c8530dafa634de3f6a463fd95818761f4d",
+      "elddar/v0/zone.lua": "0b9c6877699bfb7983e46cd14189e6014f23376737f4232d7a1c50ce3fc1317b",
+      "elddara/v20/379000.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379001.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379002.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379003.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379004.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379005.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379006.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379007.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379008.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379009.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379010.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379011.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379012.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379013.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/379951.lua": "1c709eae00b46b1c830c214fd15d8d19d8a1378a1741b79e630895cc8585b1c9",
+      "elddara/v20/player.lua": "7631f11b0cda89246fe3b63ec9d9d10179470e348276633d58c6f2017b52c576",
+      "elddara/v20/zone.lua": "bac5d8b8f0e70fde7dc0c78a00396003dc3f66627f5f9b693027f349448d91f2",
+      "elddara/v21/379940.lua": "ca5a979e718e058aeadf3fe4a563710a88b459ec4a4d49256977d173e1167c17",
+      "elddara/v21/player.lua": "7631f11b0cda89246fe3b63ec9d9d10179470e348276633d58c6f2017b52c576",
+      "elddara/v21/zone.lua": "bac5d8b8f0e70fde7dc0c78a00396003dc3f66627f5f9b693027f349448d91f2",
+      "elddara/v22/379941.lua": "518d69a7e2fce5f5007e4d72396660dd4a199bd0ab14fe4516af5a96002b4b61",
+      "elddara/v22/379942.lua": "bcf5358922cf8ec27c46ea9c2748bf6a93bf8e8191c4ba2dbb233d4596a86d49",
+      "elddara/v22/player.lua": "7631f11b0cda89246fe3b63ec9d9d10179470e348276633d58c6f2017b52c576",
+      "elddara/v22/zone.lua": "bac5d8b8f0e70fde7dc0c78a00396003dc3f66627f5f9b693027f349448d91f2",
       "freeportwest/v0/383166.lua": "40962f91bab3a0082f383bcd90c120026abfc12318123ad94a386b8c96ba44e4",
       "global/encounters/rof2_sod_fieldofscale.lua": "9bfb4226765f040390c7af705b80218c35c3e82e2ac62679fb814c0e48c8962f",
       "global/encounters/rof2_sod_fieldofscale_public.lua": "0546dba471addde8545e2163cbff702a61a0609d3adb1f006a9b996ba5daa919",
@@ -5681,6 +6013,7 @@
       "illsalinc/v3/350072.lua": "d1d371569e9e63bcfb1040a21c0fca7162bbe33466bff2540ea4a5047d30cb68",
       "illsalinc/v3/player.lua": "a80ed41aae74725cb203f3018a15f825998d66d7e60b2c8802da16cc37a4776f",
       "illsalinc/v3/zone.lua": "9375e118cfa312687cf964d80cf908e1a3b3d58f1aeee3422de6644cfc3dfbf8",
+      "innothuleb/v0/player.lua": "359d5a1fd63cc77467506efa4a76b9a9e899b6f9b0665e0d17ef3eac61d49edd",
       "korascian/476110.lua": "4a0e56c5e0264ee665ac34e8228bb7524be66194492ab446141a536a42a95d5b",
       "korascian/476115.lua": "f8183909d76491c74b34dba345dd57926bd6446f401b8b421452c14239446af7",
       "korascian/476122.lua": "f1d48312c3d8d25bf88f3ae2be9674b91b8bdb835bd212391bb63b012034cc45",
@@ -5758,6 +6091,11 @@
       "lua_modules/rof2_por_sverag_trophies.lua": "4209cdd417b7b4fe13c8575404e34c269669bd3bc6fd0b10e34c6124348dc655",
       "lua_modules/rof2_por_takish.lua": "cf5c035781f997d429442f10f35c85d03549d4c34b6f45cbf5bcdd12cf58c685",
       "lua_modules/rof2_por_theater_muses.lua": "da75e149fad2d48cadd8d5e629abb4b70eefab226c5f168555f02680efc4c93a",
+      "lua_modules/rof2_por_tunare_forest.lua": "36cfc4dbcc72fccba341cbc0459a1c0b8b00336639ddc0067427a603eddc738d",
+      "lua_modules/rof2_por_tunare_layout.lua": "2543e8086164fb57680bf8ca73598a2029b793a45f98676aff3fde20a9db0798",
+      "lua_modules/rof2_por_tunare_public.lua": "016dd779ccbec5d88f05e9d413689d1ec712892b22e980d5f00a02508328b434",
+      "lua_modules/rof2_por_tunare_rewards.lua": "992d5c4dc11e95de73ef5a485fcae248475cceda15202f3a3092b839fc3a148b",
+      "lua_modules/rof2_por_tunare_shrine.lua": "d57007a992b22a69f30a9f8615bea41a689ab642d311a9f5f7bf7c5609ea1ef6",
       "lua_modules/rof2_sod_fieldofscale.lua": "6ba248707e01d92af911c177a09aa2b668c2022bd17b5edddc4f059a7b993fee",
       "lua_modules/rof2_sod_fieldofscale_data.lua": "6dc9c782b24b94bfd0b245505dfea21e117933ac5f3964aa778f4700656fb8bb",
       "lua_modules/rof2_sod_fieldofscale_policy.lua": "2c655d39b3b0308518f926dad513f0a920787874001749501c8260664edef8a3",
@@ -5851,7 +6189,7 @@
       "skylance/v20/371944.lua": "6537134a21d8da311663232ce046a418cc70c4f3096babf2fa66ab009bf81728",
       "skylance/v20/player.lua": "70f9fc51d7723277ecdf96570c8886988a0c21429b4478ba697be046fccd25f3",
       "skylance/v20/zone.lua": "810f7ec47ece16be80c8e448815465d44c0e4167afc2707514280dd7f5248acd",
-      "southro/player.lua": "333ed4c0f7cc61a6d9d94950f9813d4551458827e1a6628d079f4d4d3e63b043",
+      "southro/player.lua": "a718679a14d68e4e671fde16f05f140e0ea5bbf8f9380c26ac61367324d0ead7",
       "takishruins/v0/376056.lua": "e3f0b4be9e99fd20225b2250566beb091eae04f2c9e0a50d5ec503036539ea4c",
       "takishruins/v0/376081.lua": "8d7c3f4ab7dbe176d38addfcf9379dcf7ef8336a43830c2091a2200ac121c7dd",
       "takishruins/v0/player.lua": "4caef3d3e7e41f7bbfca7893269119f24c9ebc5259dc955a6992459f70b209c2",

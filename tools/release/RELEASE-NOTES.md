@@ -1,9 +1,10 @@
-<!-- previous-release: rof2-ci-r32-a1-324c2e4787b3 -->
+<!-- previous-release: rof2-ci-r33-a1-b152c10b633f -->
 
-## Deathknell Tower
+## Tunare’s Shrine
 
-- Restore the Tolling of Dissonance Bells, Vertigo, Unwelcome Guests, and the Mad Choir in owned Deathknell expeditions.
-- Add individual encounter lockouts and the four event chest reward pools.
-- Restore native passage through the earned upper and lower trapdoors, and make revealed Vertigo floor traps selectable for the stock RoF2 Disarm Traps skill.
-- Restore the Divine Fetters vulnerability windows and permanent Deathknell access from a looted Twisted Harp String.
-- Add Deathknell raid-in eligibility alongside permanent flags and level-based member admission.
+- Restored Investigating the Elddar, including the upper Shrine survey, five priest drops and the original Figurine Combine and hand-in.
+- Restored Questioning the Priest, including Nalderin’s five platform fights and the Sealed Scroll exchange.
+- Restored The Key to Corruption, including all four named treant drops, Orgaf’s betrayal and his Carved Wooden Key.
+- Restored The Corruption of Ro with the physical keyed ramp, Guardian waves, the success lockout and one native Guardian Chalice per raid.
+- Restored Shalowen’s final Chalice augmentation exchange and the matching achievement. The original exchange grants the augmentation once.
+- Restored the original approach to Elddar through Innothule, South Ro and Takish-Hiz without requiring prior Tak progression. The original ground switch now leads to Elddar.
