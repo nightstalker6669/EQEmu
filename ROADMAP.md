@@ -329,7 +329,7 @@ Restored quest routes with item reward paths.
 - **Quest routes:** 15 scoped routes and 56 objectives.
 - **Rewards:** Four parent-item reward paths and supporting quest state.
 
-**Remaining / qualified scope:** Numeric faction rewards and Mines raid-access work remain unfinished.
+**Remaining / qualified scope:** Numeric faction rewards remain unfinished. The restored Mines raid-access route is documented below.
 
 [Source and scope notes](extensions/rof2/achievements/content/sunderock/)
 
@@ -347,6 +347,25 @@ Quest objectives, restored actors and persistent key/object interactions.
 **Remaining / qualified scope:** Multiplayer and Windows gameplay acceptance retain package-specific limits.
 
 [Source and scope notes](extensions/rof2/achievements/content/vergalid/)
+
+</details>
+
+<details>
+<summary>Captain Zheren, Kellak and Vergalid’s End — Published in r36</summary>
+
+- **Captain Zheren and public access:** The requester earned all four original tasks and reported back to Zheren after the public Sunderock–Vergalid Mines round trip. The run used the original entrance and return switches and rode the physical lift in both directions. Sergeant Kazzar responded to the normal client Hail key for the lead-in to *Into the Leviathan’s Lair*.
+- **Kellak:** All six entered through the original switch. Kellak cast in combat, spawned three offspring at 45% health and died to a player attack. The raid recovered corpse loot and verified the archive and 36-hour replay timer for all six.
+- **Vergalid’s End:** The earned roster requested and entered through the original switch. A Rogue used stock Sense and Disarm on an old chest and a moving contraption. The raid completed Nurtha’s three machines, defeated her and earned corpse loot and an 84-hour lockout.
+- **Goru and the inner shrine:** The original Goru challenge started the waves. The raid killed 35 undead, observed Goru’s half-health reinforcement, defeated him and recovered corpse loot with a 60-hour lockout. After all six shrine protectors fell, the repaired original gate admitted the raid.
+- **Vergalid:** Six nearby members awakened him. Destroying an infused crystal cleared an active Breed of Corruption. The raid defeated Vergalid, verified all six completion records and the 84-hour lockout, and looted two gear items and one Glowing Obsidian Rune from the corrected chest.
+
+**Verification limits.** QA used fixture invulnerability, a test weapon for some attacks and scoped public travel staging. One witness temporarily dropped protection for the curse and cure. Kills, task progression and loot used normal game paths. The reverse shrine crossing, gate rejection, inherited and conflicting lockouts, and the revised exact-name Hail dialogue branches for Nurtha and Goru were checked offline. Goru’s original challenge ran in game. A second native raid and natural expiry of Dooming Exile or Breed of Corruption remain unobserved. The first Nurtha kill preceded the rune-roll fix. The corrected roll was witnessed natively in Vergalid’s chest.
+
+**Reconstruction.** Kellak allows six to 24 players at average level 75. Historical accounts also cite an 18-player requirement, and the timing of the change is unresolved. Vergalid’s End allows six to 54, with six in Sunderock for the request and six nearby for the awakening. Some NPC stats, appearance, timing, placement, the exile pit boundary and exact loot weights are reconstructed.
+
+The prior [Vergalid Mines group package](docs/rof2/roadmap/quests/vergalid-mines.md) has its own scope. Optional Zhubis and Jenray Direwind faction tasks, Ashengate wings and Frostcrypt remain future work.
+
+[Server r36](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r36-a1-baa1b78b1bb4) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-23-vergalid-raids-r2) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/77cc309c61b1c7d3299249813f29816d89a039c6/releases/peq-rof2-2026-11-23-vergalid-raids-r2/NATIVE-QUALIFICATIONS.json)
 
 </details>
 
