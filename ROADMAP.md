@@ -363,9 +363,25 @@ Quest objectives, restored actors and persistent key/object interactions.
 
 **Reconstruction.** Kellak allows six to 24 players at average level 75. Historical accounts also cite an 18-player requirement, and the timing of the change is unresolved. Vergalid’s End allows six to 54, with six in Sunderock for the request and six nearby for the awakening. Some NPC stats, appearance, timing, placement, the exile pit boundary and exact loot weights are reconstructed.
 
-The prior [Vergalid Mines group package](docs/rof2/roadmap/quests/vergalid-mines.md) has its own scope. Optional Zhubis and Jenray Direwind faction tasks, Ashengate wings and Frostcrypt remain future work.
+The prior [Vergalid Mines group package](docs/rof2/roadmap/quests/vergalid-mines.md) has its own scope. Ashengate North and Frostcrypt remain future work.
 
 [Server r36](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r36-a1-baa1b78b1bb4) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-23-vergalid-raids-r2) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/77cc309c61b1c7d3299249813f29816d89a039c6/releases/peq-rof2-2026-11-23-vergalid-raids-r2/NATIVE-QUALIFICATIONS.json)
+
+</details>
+
+<details>
+<summary>Ashengate East and West — Published in r37</summary>
+
+- **Direwind faction and Vergalid prerequisites:** RoF2 verified Zhubis’s Sabotage, Project Disarm and The Weakest Link, and Jenray’s Children of Flame, A Daring Rescue and Under Pressure. The original Incubator hatched and captured drakes, the four-item hand-in passed, and Jenray answered the normal Hail key. The personal Vergalid’s End quests The Pretender and Severing the Strings both completed.
+- **West:** All seven entered, including a level-70 attendee through six-of-seven raid-in. The raid defeated Ambersnout, the Attendants of Sothgar and Sothgar, earned event credits and lockouts, looted from all three events, and finished Ghosts from the Past.
+- **East:** All six defeated Ayna’Rym and both griffons, cleared Stitch’s timed Ambush through Krait, and defeated Stitch after the spider threshold. All six earned each event credit and lockout. Real loot came from Ayna’Rym’s corpse and both original chests. A Complex Diversion archived after three discoveries, ten Scarlet Legion kills and Stitch.
+- **Mark of Vergalid:** The level-70 witness earned Scholars of Solusek faction from Sothgar and looted a genuine one-charge Mark. Holding the Mark left five-of-six re-entry denied. The original in-game self-click spent the charge and granted durable Vergalid kill equivalence, admitting the witness to the same West instance. The witness had no Vergalid’s End completion before or after the click.
+
+**Verification limits.** QA used GM leveling to 74 for one attendance fixture, public travel staging, one scoped reset of prior Vergalid lockouts, fixture invulnerability and a test melee weapon. Invulnerability was briefly removed for the Mark click and restored before re-entry. Normal raid difficulty, optional loot outcomes, natural expiry of the 108-hour lockouts, and exhaustive reset and inherited-state paths remain untested.
+
+**Reconstruction.** Raid-in uses a rounded-up 85% of the assigned roster, including the later level-74 attendance allowance. The six-hour expedition lifetime, selected appearance and placement, reachable under-bridge egg and brood route, room boundaries, wave cadences, Ambersnout’s 12-add threshold, Sothgar’s 135-second pauses and optional loot chances include local reconstruction. Stitch grants +1500 faction through the stock hate list. The original faction amount, Attendant glow, reported chest trap difficulty and exact historical lava tick remain unresolved.
+
+[Server r37](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r37-a1-17edda9213f0) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-23-ashengate-east-west) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/bdd011614f83dffd41a2b529edb2f770773ea6d0/releases/peq-rof2-2026-11-23-ashengate-east-west/NATIVE-QUALIFICATIONS.json)
 
 </details>
 
