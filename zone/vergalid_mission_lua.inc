@@ -155,13 +155,15 @@ bool AwardEvent(Client& client, const std::string& event_name)
                     !lockout.IsExpired();
             })) {
             scope.dz->PublishVergalidLockout(DzLockout{scope.dz->GetUUID(), Name, event_name,
-                static_cast<time_t>(*expiry), static_cast<uint32_t>(*duration)});
+                *expiry, static_cast<uint32_t>(*duration)});
         }
         return true;
     }
 
+    const auto now = std::time(nullptr);
+    if (now <= 0) return false;
     DzLockout lockout{scope.dz->GetUUID(), Name, event_name,
-        std::time(nullptr) + event->seconds, event->seconds};
+        static_cast<uint64_t>(now) + event->seconds, event->seconds};
     DynamicZoneLockoutsRepository::InsertLockouts(database, scope.dz->GetID(), {lockout});
     CharacterExpeditionLockoutsRepository::InsertLockout(database, members, lockout);
     if (database.TransactionStrictFailed() || !readback() || Status(*scope.dz, *event) != "earned" ||
