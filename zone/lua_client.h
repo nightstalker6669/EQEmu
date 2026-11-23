@@ -434,6 +434,11 @@ public:
 	);
 	bool CompleteSharedTaskAchievement(uint32 achievement_id);
 	bool ReconcileTunareGive();
+    std::string GetVergalidMissionUUID(uint32 task);
+    std::string GetVergalidEventLockout(const std::string& event);
+    bool AddVergalidEventLockout(const std::string& event);
+    bool HasVergalidEventLoot(const std::string& event);
+    bool ReceiveVergalidDoomingExile(Lua_Mob caster);
 	std::string GetSharedTaskIdentity();
 	bool TransformDeathknellSullonShard();
 	bool TransformDeathknellSuchunShard();

@@ -1,1 +1,8 @@
-{}
+{
+  "lua_modules/achievement_quest_vergalid.lua": [
+    "1da5174cbe0da33ca486dc51c414af9bff908b4196b0f38dd428af11cdc11b2c"
+  ],
+  "lua_modules/vergalid_inner_access.lua": [
+    "6b5620e30aa2098c3b7aa0de6bcd31e70090931524de6aaa7e66ba7758be0af4"
+  ]
+}

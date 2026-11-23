@@ -1,6 +1,7 @@
 #include "common/sod_original_transform_native.h"
 #include "por_deathknell_custody.h"
 #include "por_tunare_custody.h"
+#include "vergalid_mission_lua.h"
 #include "common/sod_content_bindings.h"
 #include "common/kithicor_mission.h"
 #include "zone/doors.h"
@@ -2125,6 +2126,36 @@ bool Lua_Client::AdvanceSharedTaskAchievementProgress(
 		component_id,
 		value
 	);
+}
+
+std::string Lua_Client::GetVergalidMissionUUID(uint32 task)
+{
+    Lua_Safe_Call_String();
+    return VergalidMission::UUID(*self, task);
+}
+
+std::string Lua_Client::GetVergalidEventLockout(const std::string& event)
+{
+    Lua_Safe_Call_String();
+    return VergalidMission::EventStatus(*self, event);
+}
+
+bool Lua_Client::AddVergalidEventLockout(const std::string& event)
+{
+    Lua_Safe_Call_Bool();
+    return VergalidMission::AwardEvent(*self, event);
+}
+
+bool Lua_Client::HasVergalidEventLoot(const std::string& event)
+{
+    Lua_Safe_Call_Bool();
+    return VergalidMission::EventLoot(*self, event);
+}
+
+bool Lua_Client::ReceiveVergalidDoomingExile(Lua_Mob caster)
+{
+    Lua_Safe_Call_Bool();
+    return VergalidMission::ReceiveDoomingExile(*self, caster);
 }
 
 bool Lua_Client::ReconcileTunareGive()
@@ -4574,6 +4605,11 @@ luabind::scope lua_register_client() {
 	.def("CompleteAchievement", (bool(Lua_Client::*)(uint32))&Lua_Client::CompleteAchievement)
 	.def("CompleteSharedTaskAchievement", &Lua_Client::CompleteSharedTaskAchievement)
 	.def("ReconcileTunareGive", &Lua_Client::ReconcileTunareGive)
+    .def("GetVergalidMissionUUID", &Lua_Client::GetVergalidMissionUUID)
+    .def("GetVergalidEventLockout", &Lua_Client::GetVergalidEventLockout)
+    .def("AddVergalidEventLockout", &Lua_Client::AddVergalidEventLockout)
+    .def("HasVergalidEventLoot", &Lua_Client::HasVergalidEventLoot)
+    .def("ReceiveVergalidDoomingExile", &Lua_Client::ReceiveVergalidDoomingExile)
 	.def("CompleteTask", (bool(Lua_Client::*)(int))&Lua_Client::CompleteTask)
 	.def("Connected", (bool(Lua_Client::*)(void))&Lua_Client::Connected)
 	.def("CountAugmentEquippedByID", (uint32(Lua_Client::*)(uint32))&Lua_Client::CountAugmentEquippedByID)

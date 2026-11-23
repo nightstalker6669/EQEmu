@@ -21,6 +21,7 @@
 #include "common/database.h"
 #include "common/repositories/character_task_timers_repository.h"
 #include "common/shared_tasks.h"
+#include "common/dynamic_zone_lockout.h"
 #include "common/timer.h"
 
 #include <optional>
@@ -111,7 +112,8 @@ public:
 	void RemoveActiveInvitationByCharacterID(uint32_t character_id);
 
 	// dz
-	void CreateDynamicZone(SharedTask *s, DynamicZone &dz_request);
+	void CreateDynamicZone(SharedTask *s, DynamicZone &dz_request,
+		const std::vector<DzLockout>* vergalid_inherited = nullptr);
 	void EnsureKithicorPhase(SharedTask *s, const DynamicZone &request);
 
 	void PurgeAllSharedTasks();
@@ -168,7 +170,7 @@ protected:
 	bool HandleCompletedTask(SharedTask* s);
 	bool EnsureCompletionArchived(SharedTask *s);
 	void SendActivityUpdate(SharedTask *s, uint32_t activity_id, uint32_t done_count, bool ignore_quest_update);
-	void LoadDynamicZoneTemplate(SharedTask* s);
+	void LoadDynamicZoneTemplate(SharedTask* s, const std::vector<DzLockout>* vergalid_inherited = nullptr);
 	void SendSharedTaskMemberListToAllMembers(SharedTask *s);
 	void SendSharedTaskMemberAddedToAllMembers(SharedTask *s, const std::string &player_name);
 	void SendSharedTaskMemberRemovedToAllMembers(SharedTask *s, const std::string &player_name);

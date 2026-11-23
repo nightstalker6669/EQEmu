@@ -1,3 +1,4 @@
+#include "vergalid_mission_lua.h"
 #include "dodh_longshadow_source.h"
 #include "zone/sod_progression.h"
 #include "common/sod_admission.h"
@@ -5796,6 +5797,7 @@ void Client::SendRespawnBinds()
 
 void Client::HandleLDoNOpen(NPC *target)
 {
+ if (target && VergalidMission::ReservedHazard(*target)) return;
  const bool notebook_chest = target && DodhHardNotebookChest::IsActor(*target);
  if (notebook_chest && !DodhHardNotebookChest::AllowOpen(*this, *target)) return;
  const bool bellfast_hive = target && DodhBellfastHive::IsChest(*target);
@@ -5924,8 +5926,10 @@ void Client::HandleLDoNOpen(NPC *target)
 	}
 }
 
-void Client::HandleLDoNSenseTraps(NPC *target, uint16 skill, uint8 type)
+void Client::HandleLDoNSenseTraps(NPC *target, uint16 skill, uint8 type, bool vergalid_skill)
 {
+    if (target && VergalidMission::ReservedHazard(*target) &&
+        (!vergalid_skill || VergalidMission::HazardTarget(*this) != target)) return;
 	if(target && target->GetClass() == Class::LDoNTreasure)
 	{
 		if(target->IsLDoNTrapped())
@@ -5965,8 +5969,10 @@ void Client::HandleLDoNSenseTraps(NPC *target, uint16 skill, uint8 type)
 	}
 }
 
-void Client::HandleLDoNDisarm(NPC *target, uint16 skill, uint8 type)
+void Client::HandleLDoNDisarm(NPC *target, uint16 skill, uint8 type, bool vergalid_skill)
 {
+    const bool vergalid = target && VergalidMission::ReservedHazard(*target);
+    if (vergalid && (!vergalid_skill || VergalidMission::HazardTarget(*this) != target)) return;
 	if(target)
 	{
 		if(target->GetClass() == Class::LDoNTreasure)
@@ -5998,6 +6004,9 @@ void Client::HandleLDoNDisarm(NPC *target, uint16 skill, uint8 type)
 				target->SetLDoNTrapDetected(false);
 				target->SetLDoNTrapped(false);
 				target->SetLDoNTrapSpellID(0);
+                if (vergalid) {
+                    target->SetEntityVariable(VergalidMission::DisarmedBy, std::to_string(CharacterID()));
+                }
 				MessageString(Chat::Skills, LDON_HAVE_DISARMED, target->GetCleanName());
 				break;
 			case 0:
@@ -6017,6 +6026,7 @@ void Client::HandleLDoNDisarm(NPC *target, uint16 skill, uint8 type)
 
 void Client::HandleLDoNPickLock(NPC *target, uint16 skill, uint8 type)
 {
+    if (target && VergalidMission::ReservedHazard(*target)) return;
 	if(target)
 	{
 		if(target->GetClass() == Class::LDoNTreasure)

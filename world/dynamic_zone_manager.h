@@ -27,6 +27,7 @@
 extern class DynamicZoneManager dynamic_zone_manager;
 
 class DynamicZone;
+class DzLockout;
 struct DynamicZoneMember;
 class ServerPacket;
 
@@ -37,7 +38,8 @@ public:
 
 	void CacheAllFromDatabase();
 	void CacheNewDynamicZone(ServerPacket* pack);
-	DynamicZone* TryCreate(DynamicZone& dz_request, const std::vector<DynamicZoneMember>& members);
+	DynamicZone* TryCreate(DynamicZone& dz_request, const std::vector<DynamicZoneMember>& members,
+        const std::vector<DzLockout>* vergalid_inherited = nullptr, int64_t shared_task_id = 0);
 	void HandleZoneMessage(ServerPacket* pack);
 	void LoadTemplates();
 	void Process();

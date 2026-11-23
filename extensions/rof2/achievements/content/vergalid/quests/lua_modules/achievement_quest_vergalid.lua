@@ -54,6 +54,7 @@ function M.resume(e)
 end
 function M.timer(e)
  if e.timer~=D.timer then return false end
+ if eq.get_zone_id()==404 and eq.get_zone():GetInstanceVersion()~=0 then e.self:StopTimer(D.timer);return true end
  if not D.enabled then e.self:StopTimer(D.timer);return true end
  local c=e.self
  for id,t in pairs(D.tasks)do if t.enabled and active(c,id)then

@@ -10,7 +10,7 @@ local function has_key(c,r)
 end
 function M.cast(e)
  local r=D.inner_access
- if not D.enabled or not r or not r.enabled or eq.get_zone_id()~=404 then return 0 end
+ if not D.enabled or not r or not r.enabled or eq.get_zone_id()~=404 or eq.get_zone():GetInstanceVersion()~=0 then return 0 end
  if not e.spell or e.spell:ID()~=r.arid_spell or e.cast_item_id~=r.arid_item or
     not e.cast_item_charge_consumed or not inside(e.self,r.crystals)then return 0 end
  -- Successful native item cast/charge custody, never a GM spell command or
@@ -21,7 +21,7 @@ function M.cast(e)
 end
 function M.click(e)
  local r=D.inner_access
- if not D.enabled or not r or not r.enabled or eq.get_zone_id()~=404 or e.door:GetDoorID()~=r.door_id then return 0 end
+ if not D.enabled or not r or not r.enabled or eq.get_zone_id()~=404 or eq.get_zone():GetInstanceVersion()~=0 or e.door:GetDoorID()~=r.door_id then return 0 end
  if e.door:GetDoorName()~=r.door_model or e.self:CalculateDistance(e.door:GetX(),e.door:GetY(),e.door:GetZ())>r.click_range then return 1 end
  if not has_key(e.self,r)then e.self:Message(13,'You need the Flawless Indicolite Shard to use this passage.');return 1 end
  -- Move only this player through the statue, retaining the current instance.

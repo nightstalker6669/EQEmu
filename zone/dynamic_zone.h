@@ -81,6 +81,7 @@ public:
 	void SetSecondsRemaining(uint32_t seconds_remaining) override;
 
 	bool CanClientLootCorpse(Client* client, uint32_t npc_type_id, uint32_t entity_id);
+	void PublishVergalidLockout(const DzLockout& lockout);
 	bool IsCurrentZoneDz() const;
 	void MovePCInto(Client* client, bool world_verify = false) const;
 	void SendClientWindowUpdate(Client* client);

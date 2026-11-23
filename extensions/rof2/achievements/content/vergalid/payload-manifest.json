@@ -61,7 +61,7 @@
   },
   {
     "path": "provenance/previous-module-sha256.json",
-    "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356"
+    "sha256": "1e4602f44bfb6cece91d0e5a94136cfca7fbe1f2e52ff5c5d913ab08497bd81e"
   },
   {
     "path": "provenance/quest-decisions.json",
@@ -85,7 +85,7 @@
   },
   {
     "path": "quests/lua_modules/achievement_quest_vergalid.lua",
-    "sha256": "1da5174cbe0da33ca486dc51c414af9bff908b4196b0f38dd428af11cdc11b2c"
+    "sha256": "cc26261b3429eab341cef7e027e3beb145981d5a3952bc6ec31f6b07b8923726"
   },
   {
     "path": "quests/lua_modules/achievement_quest_vergalid_data.lua",
@@ -93,7 +93,7 @@
   },
   {
     "path": "quests/lua_modules/vergalid_inner_access.lua",
-    "sha256": "6b5620e30aa2098c3b7aa0de6bcd31e70090931524de6aaa7e66ba7758be0af4"
+    "sha256": "4a9159d7e8804ab33c424a9b761de51d4474c8a141b23c5b69a2bd59a372d81e"
   },
   {
     "path": "quests/lua_modules/vergalid_orb_guardians.lua",

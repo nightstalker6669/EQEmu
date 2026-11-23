@@ -1,10 +1,10 @@
-<!-- previous-release: rof2-ci-r33-a1-b152c10b633f -->
+<!-- previous-release: rof2-ci-r34-a1-d63799cc140c -->
 
-## Tunare’s Shrine
+## Vergalid Mines
 
-- Restored Investigating the Elddar, including the upper Shrine survey, five priest drops and the original Figurine Combine and hand-in.
-- Restored Questioning the Priest, including Nalderin’s five platform fights and the Sealed Scroll exchange.
-- Restored The Key to Corruption, including all four named treant drops, Orgaf’s betrayal and his Carved Wooden Key.
-- Restored The Corruption of Ro with the physical keyed ramp, Guardian waves, the success lockout and one native Guardian Chalice per raid.
-- Restored Shalowen’s final Chalice augmentation exchange and the matching achievement. The original exchange grants the augmentation once.
-- Restored the original approach to Elddar through Innothule, South Ro and Takish-Hiz without requiring prior Tak progression. The original ground switch now leads to Elddar.
+- Restored Sergeant Kazzar’s Into the Leviathan’s Lair after Captain Zheren’s four original tasks.
+- Restored Vergalid’s End, including Nurtha’s contraptions, Goru’s undead waves, the shrine protectors, Vergalid’s crystal cures, and the individual event lockouts and loot.
+- Reconnected the original public Sunderock and Vergalid Mines entrance switches and repaired the public mine lift.
+- Restored passage through the original inner shrine gate after the six protectors are defeated.
+- Fixed the normal Hail key for Sergeant Kazzar, Nurtha Frazzlesprocket, and Goru Uldrock.
+- Corrected the duplicate rune roll in Nurtha’s and Vergalid’s loot pools.

@@ -50,6 +50,7 @@
 #include "common/sod_task_activation.h"
 #include "world/clientlist.h"
 #include "world/dynamic_zone_manager.h"
+#include "vergalid_lockouts.h"
 #include "world/dynamic_zone.h"
 #include "world/shared_task_world_messaging.h"
 #include "world/zonelist.h"
@@ -251,6 +252,39 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 		LogTasksDetail("Request Members [{}]", m.character_name);
  	}
 
+    std::optional<std::vector<DzLockout>> vergalid_inherited;
+    if (requested_task_id == VergalidMission::End) {
+        const auto template_it = dynamic_zone_manager.GetTemplates().find(task.dz_template_id);
+        if (request.group_type != SharedTaskRequestGroupType::Raid ||
+            task.dz_template_id != VergalidMission::EndTemplate ||
+            template_it == dynamic_zone_manager.GetTemplates().end() ||
+            template_it->second.zone_id != VergalidMission::Zone || template_it->second.zone_version != 21 ||
+            template_it->second.name != VergalidMission::Name) return;
+        auto leader = m_database->QueryDatabase(fmt::format(
+            "SELECT raidid FROM raid_members WHERE charid={} AND israidleader=1 LIMIT 2", requested_character_id));
+        if (!leader.Success() || leader.RowCount() != 1) return;
+        const auto raid_id = SharedTaskAdmission::Number(leader.begin()[0]);
+        if (!raid_id || !*raid_id) return;
+        auto current = m_database->QueryDatabase(fmt::format(
+            "SELECT charid FROM raid_members WHERE raidid={} ORDER BY charid", *raid_id));
+        if (!current.Success()) return;
+        std::vector<uint32_t> ids;
+        for (auto row = current.begin(); row != current.end(); ++row) {
+            const auto id = SharedTaskAdmission::Number(row[0]);
+            if (!id || !*id || *id > UINT32_MAX) return;
+            ids.push_back(static_cast<uint32_t>(*id));
+        }
+        auto requested = request.character_ids;
+        std::sort(requested.begin(), requested.end());
+        if (ids != requested || std::adjacent_find(ids.begin(), ids.end()) != ids.end()) return;
+        vergalid_inherited = VergalidMission::Inherit(*m_database, requested_character_id, request.character_ids);
+        if (!vergalid_inherited) {
+            ClientList::Instance()->SendCharacterMessage(requested_character_id, Chat::Red,
+                "The raid's Vergalid event lockouts do not match the requester's.");
+            return;
+        }
+    }
+
 	// new shared task instance
 	auto new_shared_task = SharedTask{};
 	auto activities      = TaskActivitiesRepository::GetWhere(*m_content_database, fmt::format("taskid = {}", task.id));
@@ -416,7 +450,7 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 	// check if task should immediately lock
 	HandleCompletedActivities(&inserted);
 
-	LoadDynamicZoneTemplate(&inserted);
+	LoadDynamicZoneTemplate(&inserted, vergalid_inherited ? &*vergalid_inherited : nullptr);
 	if(fire_admission) SendFireMissionResult(*m_database,inserted,requested_character_id,
 		npc_type_id,shared_task_entity.accepted_time,*fire_admission);
 
@@ -1474,8 +1508,18 @@ void SharedTaskManager::RemoveActiveInvitationByCharacterID(uint32_t character_i
 	);
 }
 
-void SharedTaskManager::CreateDynamicZone(SharedTask *shared_task, DynamicZone &dz_request)
+void SharedTaskManager::CreateDynamicZone(SharedTask *shared_task, DynamicZone &dz_request,
+    const std::vector<DzLockout>* vergalid_inherited)
 {
+    const bool vergalid = shared_task && shared_task->GetTaskData().id == VergalidMission::End;
+    if (vergalid) {
+        if (!vergalid_inherited || !shared_task->dynamic_zone_ids.empty() ||
+            dz_request.GetZoneID() != VergalidMission::Zone || dz_request.GetZoneVersion() != 21 ||
+            dz_request.GetType() != DynamicZoneType::Mission || dz_request.GetName() != VergalidMission::Name)
+            return;
+    } else if (vergalid_inherited) {
+        return;
+    }
 	if (shared_task && SodProgression::IsKithicorSharedTask(shared_task->GetTaskData().id)) {
 		EnsureKithicorPhase(shared_task, dz_request);
 		return;
@@ -1488,13 +1532,14 @@ void SharedTaskManager::CreateDynamicZone(SharedTask *shared_task, DynamicZone &
 		}
 	}
 
-	auto new_dz = dynamic_zone_manager.TryCreate(dz_request, dz_members);
+    auto new_dz = dynamic_zone_manager.TryCreate(dz_request, dz_members,
+        vergalid_inherited, vergalid ? shared_task->GetDbSharedTask().id : 0);
 	if (new_dz) {
 		auto shared_task_dz = SharedTaskDynamicZonesRepository::NewEntity();
 		shared_task_dz.shared_task_id  = shared_task->GetDbSharedTask().id;
 		shared_task_dz.dynamic_zone_id = new_dz->GetID();
 
-		SharedTaskDynamicZonesRepository::InsertOne(*m_database, shared_task_dz);
+		if (!vergalid) SharedTaskDynamicZonesRepository::InsertOne(*m_database, shared_task_dz);
 
 		shared_task->dynamic_zone_ids.emplace_back(new_dz->GetID());
 	}
@@ -1613,7 +1658,7 @@ void SharedTaskManager::EnsureKithicorPhase(SharedTask* shared, const DynamicZon
 	actual->SendCreationToZones();
 }
 
-void SharedTaskManager::LoadDynamicZoneTemplate(SharedTask* s)
+void SharedTaskManager::LoadDynamicZoneTemplate(SharedTask* s, const std::vector<DzLockout>* vergalid_inherited)
 {
 	const auto& task = s->GetTaskData();
 	if (task.dz_template_id != 0)
@@ -1629,7 +1674,7 @@ void SharedTaskManager::LoadDynamicZoneTemplate(SharedTask* s)
 			{
 				dz.SetDuration(task.duration);
 			}
-			CreateDynamicZone(s, dz);
+			CreateDynamicZone(s, dz, vergalid_inherited);
 		}
 	}
 }
@@ -2056,6 +2101,17 @@ bool SharedTaskManager::CanAddPlayer(SharedTask *s, uint32_t character_id, std::
 			return false;
 		}
 	}
+
+    if (s->GetTaskData().id == VergalidMission::End) {
+        if (s->dynamic_zone_ids.size() != 1) return false;
+        auto* dz = DynamicZone::FindDynamicZoneByID(s->dynamic_zone_ids.front());
+        if (!dz || dz->GetType() != DynamicZoneType::Mission || dz->GetZoneID() != VergalidMission::Zone ||
+            dz->GetZoneVersion() != 21 || dz->GetName() != VergalidMission::Name || dz->IsExpired()) return false;
+        const auto locks = VergalidMission::ReadMemberLockouts(*m_database, {character_id});
+        if (!locks) return false;
+        const auto it = locks->find(character_id);
+        if (it != locks->end() && !VergalidMission::Compatible(dz->GetLockouts(), it->second, dz->GetUUID())) return false;
+    }
 
 	// this attempts to follow live validation order
 

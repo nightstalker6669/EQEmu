@@ -18,6 +18,9 @@
 #include "dynamic_zone_manager.h"
 
 #include "common/repositories/dynamic_zone_lockouts_repository.h"
+#include "common/repositories/shared_task_dynamic_zones_repository.h"
+#include "common/shared_core/vergalid_mission.h"
+#include "common/shared_task_admission.h"
 #include "common/rulesys.h"
 #include "world/cliententry.h"
 #include "world/clientlist.h"
@@ -55,8 +58,25 @@ void DynamicZoneManager::PurgeExpiredDynamicZones()
 	}
 }
 
-DynamicZone* DynamicZoneManager::TryCreate(DynamicZone& dz_request, const std::vector<DynamicZoneMember>& members)
+DynamicZone* DynamicZoneManager::TryCreate(DynamicZone& dz_request, const std::vector<DynamicZoneMember>& members,
+    const std::vector<DzLockout>* vergalid_inherited, int64_t shared_task_id)
 {
+    struct Rollback { bool active = false; ~Rollback() { if (active) database.TransactionRollbackStrict(); } } tx;
+    if (vergalid_inherited) {
+        if (shared_task_id <= 0 || dz_request.GetInstanceID() || dz_request.GetID() ||
+            dz_request.GetType() != DynamicZoneType::Mission || dz_request.GetZoneID() != VergalidMission::Zone ||
+            dz_request.GetZoneVersion() != 21 || dz_request.GetName() != VergalidMission::Name ||
+            !database.TransactionBeginStrict().Success()) return nullptr;
+        tx.active = true;
+        auto engines = database.QueryDatabase(
+            "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' "
+            "AND table_name IN ('instance_list','instance_list_player','dynamic_zones','dynamic_zone_members',"
+            "'dynamic_zone_lockouts','shared_task_dynamic_zones')");
+        if (!engines.Success() || engines.RowCount() != 1 ||
+            SharedTaskAdmission::Number(engines.begin()[0]) != 6) return nullptr;
+    } else if (shared_task_id) {
+        return nullptr;
+    }
 	// this creates a new dz instance and saves it to both db and cache
 	uint32_t dz_id = dz_request.Create();
 	if (dz_id == 0)
@@ -67,6 +87,21 @@ DynamicZone* DynamicZoneManager::TryCreate(DynamicZone& dz_request, const std::v
 
 	auto dz = std::make_unique<DynamicZone>(dz_request);
 	dz->SaveMembers(members);
+    if (vergalid_inherited) {
+        if (!dz->GetInstanceID() || members.empty() || dz->GetMemberCount() != members.size()) return nullptr;
+        for (const auto& lockout : *vergalid_inherited) {
+            if (!VergalidMission::FindEvent(lockout.Event()) || lockout.IsEvent("Vergalid") ||
+                lockout.UUID() == dz->GetUUID()) return nullptr;
+            if (!lockout.IsExpired()) dz->m_lockouts.push_back(lockout);
+        }
+        DynamicZoneLockoutsRepository::InsertLockouts(database, dz_id, dz->m_lockouts);
+        auto association = SharedTaskDynamicZonesRepository::NewEntity();
+        association.shared_task_id = shared_task_id;
+        association.dynamic_zone_id = dz_id;
+        if (SharedTaskDynamicZonesRepository::InsertOne(database, association).dynamic_zone_id != dz_id ||
+            database.TransactionStrictFailed() || !database.TransactionCommitStrict().Success()) return nullptr;
+        tx.active = false;
+    }
 	dz->CacheMemberStatuses();
 
 	LogDynamicZones("Created new dz [{}] for zone [{}]", dz_id, dz_request.GetZoneID());

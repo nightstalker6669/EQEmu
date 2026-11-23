@@ -1752,8 +1752,8 @@ public:
 	void CheckEmoteHail(NPC* n, const char* message);
 
 	void HandleLDoNOpen(NPC *target);
-	void HandleLDoNSenseTraps(NPC *target, uint16 skill, uint8 type);
-	void HandleLDoNDisarm(NPC *target, uint16 skill, uint8 type);
+	void HandleLDoNSenseTraps(NPC *target, uint16 skill, uint8 type, bool vergalid_skill = false);
+	void HandleLDoNDisarm(NPC *target, uint16 skill, uint8 type, bool vergalid_skill = false);
 	void HandleLDoNPickLock(NPC *target, uint16 skill, uint8 type);
 	int LDoNChest_SkillCheck(NPC *target, int skill);
 

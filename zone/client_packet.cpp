@@ -1,3 +1,4 @@
+#include "vergalid_mission_lua.h"
 #include "dodh_longshadow_source.h"
 #include "sod_message_admission.h"
 #include "original_message_admission.h"
@@ -6482,6 +6483,12 @@ void Client::Handle_OP_DisarmTraps(const EQApplicationPacket *app)
 		reuse = 1;
 
 	p_timers.Start(pTimerDisarmTraps, reuse - 1);
+
+    auto* selected = GetTarget();
+    if (selected && selected->IsNPC() && VergalidMission::ReservedHazard(*selected->CastToNPC())) {
+        HandleLDoNDisarm(selected->CastToNPC(), GetSkill(EQ::skills::SkillDisarmTraps), LDoNTypeMechanical, true);
+        return;
+    }
 
 	uint8 success = SKILLUP_FAILURE;
 	float curdist = 0;
@@ -14730,6 +14737,12 @@ void Client::Handle_OP_SenseTraps(const EQApplicationPacket *app)
 		reuse = 1;
 
 	p_timers.Start(pTimerSenseTraps, reuse - 1);
+
+    auto* selected = GetTarget();
+    if (selected && selected->IsNPC() && VergalidMission::ReservedHazard(*selected->CastToNPC())) {
+        HandleLDoNSenseTraps(selected->CastToNPC(), GetSkill(EQ::skills::SkillSenseTraps), LDoNTypeMechanical, true);
+        return;
+    }
 
 	float trap_curdist = 0;
 	Trap* trap = entity_list.FindNearbyTrap(this, 800, trap_curdist);

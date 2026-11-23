@@ -1540,6 +1540,12 @@ void DynamicZone::AddClientsLockout(const DzLockout& lockout)
 	}
 }
 
+void DynamicZone::PublishVergalidLockout(const DzLockout& lockout)
+{
+    HandleLockoutUpdate(lockout, false, false);
+    SendServerPacket(CreateLockoutPacket(lockout, false, false).get());
+}
+
 void DynamicZone::HandleLockoutUpdate(const DzLockout& lockout, bool remove, bool members_only)
 {
 	DynamicZoneBase::HandleLockoutUpdate(lockout, remove, members_only);
@@ -1673,3 +1679,5 @@ void DynamicZone::SendWorldMakeLeaderRequest(uint32_t char_id, const std::string
 	strn0cpy(buf->new_leader_name, leader_name.c_str(), sizeof(buf->new_leader_name));
 	worldserver.SendPacket(&pack);
 }
+
+#include "vergalid_mission_lua.inc"
