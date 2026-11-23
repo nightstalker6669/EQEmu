@@ -1,3 +1,4 @@
+#include "tss_ashengate.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -445,6 +446,15 @@ bool Mob::DoCastSpell(int32 spell_id, uint16 target_id, CastingSlot slot,
 	if (IsClient() && (slot == CastingSlot::Item || slot == CastingSlot::PotionBelt) &&
 		!FirePersonalOccurrenceSource::NativeItemCustody::Start(*CastToClient(),
 			static_cast<int16>(item_slot),spell_id,target_id)) {InterruptSpell();return false;}
+    if (IsClient() && slot == CastingSlot::Item && spell_id == TssAshengate::IncubatorSpell) {
+        auto& client = *CastToClient();
+        const auto* item = client.GetInv().GetItem(static_cast<int16_t>(item_slot));
+        if (item && item->GetID() == TssAshengate::Incubator &&
+            !TssAshengate::OriginalClickScope::BeginIncubator(client, static_cast<int16_t>(item_slot), target_id)) {
+            InterruptSpell();
+            return false;
+        }
+    }
 	casting_spell_id = spell_id;
 	casting_spell_slot = slot;
 	casting_spell_inventory_slot = item_slot;
@@ -1399,6 +1409,7 @@ void Mob::InterruptSpell(int32 spellid)
 // color not used right now
 void Mob::InterruptSpell(uint16 message, uint16 color, int32 spellid)
 {
+    if (IsClient()) TssAshengate::CancelIncubator(*CastToClient());
 	uint16 message_other;
 	bool bard_song_mode = false; //has the bard song gone to auto repeat mode
 
@@ -1497,6 +1508,7 @@ void Mob::InterruptSpell(uint16 message, uint16 color, int32 spellid)
 // There are a few cases where this is what live does :P
 void Mob::StopCasting()
 {
+    if (IsClient()) TssAshengate::CancelIncubator(*CastToClient());
 	if (casting_spell_id && IsNPC()) {
 		CastToNPC()->AI_Event_SpellCastFinished(false, static_cast<uint16>(casting_spell_slot));
 	}
@@ -1900,6 +1912,12 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 		*CastToClient(),static_cast<int16>(inventory_slot),spell_id,DeleteChargeFromSlot,fire_finish)) {
 		StopCasting();return;
 	}
+    const bool ashengate_mark = IsClient() && IsFromItem && spell_id == TssAshengate::MarkSpell;
+    if (ashengate_mark && (DeleteChargeFromSlot != static_cast<int16_t>(inventory_slot) ||
+        !TssAshengate::OriginalClickScope::Matches(*CastToClient(), DeleteChargeFromSlot))) {
+        StopCasting();
+        return;
+    }
 	// we're done casting, now try to apply the spell
 	const bool fire_spell_success=SpellFinished(spell_id, spell_target, slot, mana_used, inventory_slot, resist_adjust, false,-1, 0xFFFFFFFF, 0, true);
 	if(fire_finish.Selected() && !FirePersonalOccurrenceSource::NativeItemCustody::Finished(fire_finish,fire_spell_success))return;
@@ -1935,7 +1953,9 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 		return;
 	}
 	bool completed_cast_charge_consumed = false;
-	if (IsClient() && DeleteChargeFromSlot >= 0) {
+    if (ashengate_mark) {
+        if (!TssAshengate::ConsumeMark(*CastToClient(), DeleteChargeFromSlot)) return;
+    } else if (IsClient() && DeleteChargeFromSlot >= 0) {
 		const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
 		const uint32 before_id = before ? before->GetID() : 0;
 		const int16 before_charges = before ? before->GetCharges() : 0;
@@ -2034,6 +2054,9 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 	spellend_timer.Start(10, true);
 
 	LogSpells("Spell casting of [{}] is finished", spell_id);
+
+    if (IsClient() && completed_cast_item_id == TssAshengate::Incubator && spell_id == TssAshengate::IncubatorSpell)
+        TssAshengate::FinishIncubator(*CastToClient(), completed_cast_item_slot, target_id);
 
 }
 
@@ -2581,6 +2604,30 @@ bool Mob::DetermineSpellTargets(int32 spell_id, Mob *&spell_target, Mob *&ae_cen
 // only used from CastedSpellFinished, and procs
 // we can't interrupt in this, or anything called from this!
 // if you need to abort the casting, return false
+namespace {
+// Only the original single-target finish dispatch may offer an Incubator
+// landing. Take its permission before a quest callback can reenter dispatch.
+struct IncubatorLanding {
+    inline static thread_local IncubatorLanding* current = nullptr;
+    IncubatorLanding* previous = current;
+    Mob* caster;
+    Mob* target;
+    bool available;
+
+    IncubatorLanding(Mob* caster, Mob* target, bool allowed)
+        : caster(caster), target(target), available(allowed) { current = this; }
+    ~IncubatorLanding() { current = previous; }
+
+    static bool Take(Mob* caster, Mob* target, int32 spell, bool is_proc)
+    {
+        if (!current || !current->available || current->caster != caster || current->target != target ||
+            spell != TssAshengate::IncubatorSpell || is_proc) return false;
+        current->available = false;
+        return true;
+    }
+};
+}
+
 bool Mob::SpellFinished(int32 spell_id, Mob *spell_target, CastingSlot slot, int32 mana_used,
 						uint32 inventory_slot, int16 resist_adjust, bool isproc, int level_override,
 						uint32 timer, uint32 timer_duration, bool from_casted_spell, uint32 aa_id)
@@ -2788,17 +2835,24 @@ bool Mob::SpellFinished(int32 spell_id, Mob *spell_target, CastingSlot slot, int
 						return false;
 				}
 
-				else if (bool binding_restriction_failed = false;
-					!(binding_context
-						? SpellOnTargetWithBindingContext(spell_id, spell_target, 0, true, resist_adjust, false,
-							level_override, 0, false, binding_context, &binding_restriction_failed)
-						: SpellOnTarget(spell_id, spell_target, 0, true, resist_adjust, false, level_override))) {
-					// Detrimental non-buff failures normally continue. Propagate only a
-					// rejected contextual846 gate before native charge/completion events.
-					if (binding_restriction_failed) { return false; }
-					if(IsBuffSpell(spell_id) && IsBeneficialSpell(spell_id)) {
-						return false;
-					}
+				else {
+                    const bool original_incubator = from_casted_spell && IsClient() &&
+                        spell_id == TssAshengate::IncubatorSpell && casting_spell_id == spell_id &&
+                        slot == CastingSlot::Item && casting_spell_slot == slot &&
+                        EQ::ValueWithin(inventory_slot, EQ::invslot::EQUIPMENT_BEGIN, EQ::invslot::EQUIPMENT_END) &&
+                        inventory_slot == casting_spell_inventory_slot &&
+                        spell_target->GetID() == casting_spell_targetid && spell_target->IsNPC() &&
+                        spells[spell_id].target_type == ST_Target &&
+                        spells[spell_id].good_effect == BENEFICIAL_EFFECT;
+                    IncubatorLanding landing(this, spell_target, original_incubator);
+                    bool binding_restriction_failed = false;
+                    const bool applied = binding_context
+                        ? SpellOnTargetWithBindingContext(spell_id, spell_target, 0, true, resist_adjust, false,
+                            level_override, 0, false, binding_context, &binding_restriction_failed)
+                        : SpellOnTarget(spell_id, spell_target, 0, true, resist_adjust, false, level_override);
+                    // Keep stock failure handling for contextual binding and beneficial buffs.
+                    if (!applied && (binding_restriction_failed ||
+                        (IsBuffSpell(spell_id) && IsBeneficialSpell(spell_id)))) return false;
 				}
 			}
 
@@ -4106,6 +4160,7 @@ bool Mob::SpellOnTargetWithBindingContext(
 	bool disable_buff_overwrite, const XorbbBinding::ItemCastContext *binding_context,
 	bool *binding_restriction_failed)
 {
+    const bool native_incubator_landing = IncubatorLanding::Take(this, spelltar, spell_id, isproc);
 	auto spellOwner = GetOwnerOrSelf();
 
 	// well we can't cast a spell on target without a target
@@ -4462,6 +4517,12 @@ bool Mob::SpellOnTargetWithBindingContext(
                 // not general buffs. Keep all native cast/target checks and exempt only
                 // this beneficial-to-NPC permission decision for the exact quest context.
                 const bool quest_item_target_allowed = [&]() {
+                    if (native_incubator_landing) {
+                        return casting_spell_id == spell_id && casting_spell_slot == CastingSlot::Item &&
+                            casting_spell_targetid == spelltar->GetID() && spelltar->IsNPC() &&
+                            TssAshengate::AllowsIncubatorLanding(*pClient,
+                                static_cast<int16>(casting_spell_inventory_slot), *spelltar->CastToNPC());
+                    }
                     if ((spell_id != 33562 && spell_id != 33564 && spell_id != 9255 && spell_id != 9181) ||
                         isproc || casting_spell_id != spell_id ||
                         (casting_spell_slot != CastingSlot::Item && casting_spell_slot != CastingSlot::PotionBelt)) {
@@ -7444,6 +7505,12 @@ void Mob::DoBardCastingFromItemClick(bool is_casting_bard_song, uint32 cast_time
 				*CastToClient(),static_cast<int16>(item_slot),spell_id,DeleteChargeFromSlot,fire_finish))) {
 			CastToClient()->SendSpellBarEnable(spell_id);return;
 		}
+        const bool ashengate_mark = IsClient() && spell_id == TssAshengate::MarkSpell;
+        if (ashengate_mark && (DeleteChargeFromSlot != item_slot ||
+            !TssAshengate::OriginalClickScope::Matches(*CastToClient(), DeleteChargeFromSlot))) {
+            CastToClient()->SendSpellBarEnable(spell_id);
+            return;
+        }
 		const bool fire_native_cast_finished = SpellFinished(spell_id, entity_list.GetMob(target_id), CastingSlot::Item, 0, item_slot);
         if(fire_finish.Selected()) {
          if(!FirePersonalOccurrenceSource::NativeItemCustody::Finished(fire_finish,fire_native_cast_finished))return;
@@ -7454,8 +7521,10 @@ void Mob::DoBardCastingFromItemClick(bool is_casting_bard_song, uint32 cast_time
          return;
         }
 		if (fire_native_cast_finished) {
-			if (IsClient() && DeleteChargeFromSlot >= 0) {
-				const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
+            if (ashengate_mark) {
+                if (!TssAshengate::ConsumeMark(*CastToClient(), DeleteChargeFromSlot)) return;
+            } else if (IsClient() && DeleteChargeFromSlot >= 0) {
+                const auto before = CastToClient()->GetInv().GetItem(DeleteChargeFromSlot);
 				const uint32 before_id = before ? before->GetID() : 0;
 				const int16 before_charges = before ? before->GetCharges() : 0;
 				CastToClient()->DeleteItemInInventory(DeleteChargeFromSlot, 1, true);

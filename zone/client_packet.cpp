@@ -1,3 +1,4 @@
+#include "tss_ashengate.h"
 #include "vergalid_mission_lua.h"
 #include "dodh_longshadow_source.h"
 #include "sod_message_admission.h"
@@ -5015,6 +5016,11 @@ void Client::Handle_OP_CastSpell(const EQApplicationPacket *app)
 								castspell->inventoryslot,castspell->spell_id,castspell->target_id,fire_click)) {
 								SendSpellBarEnable(castspell->spell_id);return;
 							}
+							TssAshengate::OriginalClickScope ashengate_click(*this, castspell->inventoryslot, castspell->spell_id, castspell->target_id);
+							if (!ashengate_click.Allowed()) {
+							    SendSpellBarEnable(castspell->spell_id);
+							    return;
+							}
 							CastSpell(item->Click.Effect, castspell->target_id, slot, item->CastTime, 0, 0, castspell->inventoryslot);
 							}
 							else {
@@ -5050,6 +5056,11 @@ void Client::Handle_OP_CastSpell(const EQApplicationPacket *app)
 							if (!FirePersonalOccurrenceSource::NativeItemCustody::Launch(*this,
 								castspell->inventoryslot,castspell->spell_id,castspell->target_id,fire_click)) {
 								SendSpellBarEnable(castspell->spell_id);return;
+							}
+							TssAshengate::OriginalClickScope ashengate_click(*this, castspell->inventoryslot, castspell->spell_id, castspell->target_id);
+							if (!ashengate_click.Allowed()) {
+							    SendSpellBarEnable(castspell->spell_id);
+							    return;
 							}
 							CastSpell(item->Click.Effect, castspell->target_id, slot, item->CastTime, 0, 0, castspell->inventoryslot);
 						}
@@ -10301,6 +10312,11 @@ void Client::Handle_OP_ItemVerifyRequest(const EQApplicationPacket *app)
 							spell_id,target_id,fire_click)) {SendSpellBarEnable(spell_id);return;}
 						if (!IsCastWhileInvisibleSpell(item->Click.Effect)) {
 							CommonBreakInvisible(); // client can't do this for us :(
+						}
+						TssAshengate::OriginalClickScope ashengate_click(*this, slot_id, item->Click.Effect, target_id);
+						if (!ashengate_click.Allowed()) {
+						    SendSpellBarEnable(item->Click.Effect);
+						    return;
 						}
 						if (GetClass() == Class::Bard){
 							DoBardCastingFromItemClick(is_casting_bard_song, item->CastTime, item->Click.Effect, target_id, CastingSlot::Item, slot_id, item->RecastType, item->RecastDelay);

@@ -438,6 +438,10 @@ public:
     std::string GetVergalidEventLockout(const std::string& event);
     bool AddVergalidEventLockout(const std::string& event);
     bool HasVergalidEventLoot(const std::string& event);
+    bool HasAshengateFaction(uint32 version, bool kindly);
+    bool HasAshengateVergalidMark();
+    bool ReconcileAshengateGive();
+    bool CommitAshengateSabotage();
     bool ReceiveVergalidDoomingExile(Lua_Mob caster);
 	std::string GetSharedTaskIdentity();
 	bool TransformDeathknellSullonShard();

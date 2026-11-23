@@ -5,16 +5,16 @@
       "Import full.sql into a fresh empty database with the matching runtime."
     ],
     "asset": {
-      "bytes": 37424200,
-      "name": "PEQ-RoF2-full-2026-11-23-vergalid-raids-r2.zip",
-      "sha256": "01a54798b09baceb3113bec593cc78e239d0f3c9235336ea2435c8440ee2f750",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-23-vergalid-raids-r2/PEQ-RoF2-full-2026-11-23-vergalid-raids-r2.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-23-vergalid-raids-r2/PEQ-RoF2-full-2026-11-23-vergalid-raids-r2.zip"
+      "bytes": 37602981,
+      "name": "PEQ-RoF2-full-2026-11-23-ashengate-east-west.zip",
+      "sha256": "c6173065c6d1398eddb4949f93f1f44a2e4654121af1989451af1e7cbdf24257",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-23-ashengate-east-west/PEQ-RoF2-full-2026-11-23-ashengate-east-west.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-23-ashengate-east-west/PEQ-RoF2-full-2026-11-23-ashengate-east-west.zip"
     },
-    "base_database_release_tag": "peq-rof2-2026-11-22-tunare-shrine",
+    "base_database_release_tag": "peq-rof2-2026-11-23-vergalid-raids-r2",
     "cohort_source_binding": {
-      "preserved_prior_binding": "4a0ddbf63cc3b52d1c9deaac48bdea99d86c345ec4acc75154867f7f93375c81",
-      "quest_projection_sha256": "f0ec98160ff30d3a3297350d29435903882c04f1b5b7034f9cf2357827d03ca1",
+      "preserved_prior_binding": "5843bfb561555ee2906b79ec8a36575ddc1e345c5be6ed5f6d882ee256754f51",
+      "quest_projection_sha256": "b386cf598e7828ee73373aca55789f28635e08b2286ed8bd380be5fe7e261ef7",
       "quest_root": "quests",
       "required_quest_files": [
         {
@@ -65,6 +65,69 @@
           "mode": "100644",
           "path": "arcstone/v0/player.lua",
           "sha256": "ab5835009a6a166c778c7f1643774002d50fff2206dee1710832f407f3c24404"
+        },
+        {
+          "bytes": 202,
+          "git_blob": "ce8fce70d1e447fb3fc9018823686a20f32c96a7",
+          "mode": "100644",
+          "path": "ashengate/v0/406937.lua",
+          "sha256": "213e96aa963ba9cf754e5810c64a2d7a7fa8f9cf1621b99c4c0bdc15e0977f53"
+        },
+        {
+          "bytes": 209,
+          "git_blob": "e368ca5e0baff866752d0902ec966e26e6203b5e",
+          "mode": "100644",
+          "path": "ashengate/v0/player.lua",
+          "sha256": "0bca3bc9fe2f88d12e5f12b7def9be96f64722bc7f87d046c210da84aa810550"
+        },
+        {
+          "bytes": 102,
+          "git_blob": "f2e155b4ab9a421a3cdac24225036c1ce504353b",
+          "mode": "100644",
+          "path": "ashengate/v0/zone.lua",
+          "sha256": "7463fa880c66d731f1780d1f27c1f7bad43ec3c5e78655135cf08c1a430df973"
+        },
+        {
+          "bytes": 502,
+          "git_blob": "012b56f5f8e4e143bd38bb86346c199b2b270cc3",
+          "mode": "100644",
+          "path": "ashengate/v20/default.lua",
+          "sha256": "c848c3653f85ac8df700582ce1812e8b609f67009a8f96fd99549bbf5f54283b"
+        },
+        {
+          "bytes": 264,
+          "git_blob": "d5e3a4e053d3bae5a8a5733a8cdadc46683a3a57",
+          "mode": "100644",
+          "path": "ashengate/v20/player.lua",
+          "sha256": "600416d23708bd4d94fd15942d212ea13eb61f8edfcee0fb1eba4a906bb397a0"
+        },
+        {
+          "bytes": 158,
+          "git_blob": "b57fe677ef8c6258c427a39fa717213cf5f3e9a2",
+          "mode": "100644",
+          "path": "ashengate/v20/zone.lua",
+          "sha256": "14fcf9e6c2de371caa89d9f8f87d6bb816c16e63b70a6ec4cff5b0b561eb4907"
+        },
+        {
+          "bytes": 413,
+          "git_blob": "ac030271ab0c9f43a6cccc607551036aee414d31",
+          "mode": "100644",
+          "path": "ashengate/v21/default.lua",
+          "sha256": "c8cf02276089f431f6d15dd90dabf754889c9510d5ddad9548cbb8b933c94c9d"
+        },
+        {
+          "bytes": 264,
+          "git_blob": "b15ecb86e97a394ae2cc63cc40f27a8dffb5fbe6",
+          "mode": "100644",
+          "path": "ashengate/v21/player.lua",
+          "sha256": "10c8ba6e816d6437ce1218eb2f3085dc75bdd653a54c2ffb2709f73f67697e7a"
+        },
+        {
+          "bytes": 158,
+          "git_blob": "99396f0ec7f366cded3c732c1a858a6adee3bfc3",
+          "mode": "100644",
+          "path": "ashengate/v21/zone.lua",
+          "sha256": "e73772b7fce8a27380a8ffd3fa219067f70f1da4760876782407a9ebe67daad4"
         },
         {
           "bytes": 100,
@@ -135,6 +198,20 @@
           "mode": "100644",
           "path": "devastation/v0/zone.lua",
           "sha256": "b40154caec8c210a22f4ed0c8ea8ef07678747edea6c419ef001411285755e63"
+        },
+        {
+          "bytes": 172,
+          "git_blob": "098592d3765033afe0736f8aea53c841c0ab3846",
+          "mode": "100644",
+          "path": "direwind/405092.lua",
+          "sha256": "0e141f80b8c84cc474a29b712fb5609c2503bcea88d5bddbab1f163a97a72b16"
+        },
+        {
+          "bytes": 172,
+          "git_blob": "6c9461bd291adab5cdeef98d90eec28f17e4b170",
+          "mode": "100644",
+          "path": "direwind/405153.lua",
+          "sha256": "31a4e66d09d07010c41d3bf536fe338d8ee3b1e6b480227b9ce979574ac75451"
         },
         {
           "bytes": 114,
@@ -1684,6 +1761,41 @@
           "sha256": "9ff2e6ba2b739d878455df633c8abd70da3a0251f74fd7222f1191c06b447aa4"
         },
         {
+          "bytes": 8482,
+          "git_blob": "b52bc1d07cc9f5a89e5379af7d409fd86fd6ee0b",
+          "mode": "100644",
+          "path": "lua_modules/rof2_tss_ashengate_contacts.lua",
+          "sha256": "908a2c5d8e1b55d3df77981642c90f200ebffc490545a491e61e4c24c0352bc1"
+        },
+        {
+          "bytes": 15281,
+          "git_blob": "2acd3ff83157a1bfd1e497a68d3c98f00f66fa00",
+          "mode": "100644",
+          "path": "lua_modules/rof2_tss_ashengate_encounters.lua",
+          "sha256": "c03810cbd2b67886cecc09071a46556d1c2ec8b7d4a7cb9ac6cf7a0ce7b01919"
+        },
+        {
+          "bytes": 2545,
+          "git_blob": "74d97d39cbbbf4ac50f0c76e0f9a210b09998033",
+          "mode": "100644",
+          "path": "lua_modules/rof2_tss_ashengate_layout.lua",
+          "sha256": "7126d645befe69a063898dac792a0150cb1ef9b2c63529cf8802bfa88dfc622f"
+        },
+        {
+          "bytes": 4255,
+          "git_blob": "1d925032f8b39ec927003c325f1e3316adedb35d",
+          "mode": "100644",
+          "path": "lua_modules/rof2_tss_ashengate_public.lua",
+          "sha256": "d717b28ce5042ec496514d6c233a6e7ec4edecf9e2421234c8d15fec4d77a693"
+        },
+        {
+          "bytes": 11182,
+          "git_blob": "9f146006a75f314ea1c891101535968cbb3212d3",
+          "mode": "100644",
+          "path": "lua_modules/rof2_tss_ashengate_raids.lua",
+          "sha256": "99cdc742b06f9009eb91443214d56cb7cdd5a5fa5fe05f099726a1605e15ae02"
+        },
+        {
           "bytes": 3027,
           "git_blob": "2a5539099afb3913fa48733ffe8e1d5228b7e51b",
           "mode": "100644",
@@ -1705,11 +1817,11 @@
           "sha256": "400df8625898babf885fec48c94352e2716657ad34c80f06c4f35da20419791b"
         },
         {
-          "bytes": 19852,
-          "git_blob": "cc5be95095403fc60a423a478ff107376c8dc82d",
+          "bytes": 20545,
+          "git_blob": "15c2a9765b64f69bb221896439d61a59d16135af",
           "mode": "100644",
           "path": "lua_modules/rof2_tss_vergalid_end.lua",
-          "sha256": "a6f22f4132be7dd8e380bf4974b3d7a13c8b4a105d4e4f8461cb8c88820b9c64"
+          "sha256": "3072e5ff64a2882c0684c22b564cebbdd2c609daeb39e2e6ecaddc3a307720c7"
         },
         {
           "bytes": 2902,
@@ -3417,6 +3529,78 @@
           "sha256": "ab5835009a6a166c778c7f1643774002d50fff2206dee1710832f407f3c24404"
         },
         {
+          "bytes": 202,
+          "git_blob": "ce8fce70d1e447fb3fc9018823686a20f32c96a7",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/ashengate/v0/406937.lua",
+          "sha256": "213e96aa963ba9cf754e5810c64a2d7a7fa8f9cf1621b99c4c0bdc15e0977f53"
+        },
+        {
+          "bytes": 209,
+          "git_blob": "e368ca5e0baff866752d0902ec966e26e6203b5e",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/ashengate/v0/player.lua",
+          "sha256": "0bca3bc9fe2f88d12e5f12b7def9be96f64722bc7f87d046c210da84aa810550"
+        },
+        {
+          "bytes": 102,
+          "git_blob": "f2e155b4ab9a421a3cdac24225036c1ce504353b",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/ashengate/v0/zone.lua",
+          "sha256": "7463fa880c66d731f1780d1f27c1f7bad43ec3c5e78655135cf08c1a430df973"
+        },
+        {
+          "bytes": 502,
+          "git_blob": "012b56f5f8e4e143bd38bb86346c199b2b270cc3",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/ashengate/v20/default.lua",
+          "sha256": "c848c3653f85ac8df700582ce1812e8b609f67009a8f96fd99549bbf5f54283b"
+        },
+        {
+          "bytes": 264,
+          "git_blob": "d5e3a4e053d3bae5a8a5733a8cdadc46683a3a57",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/ashengate/v20/player.lua",
+          "sha256": "600416d23708bd4d94fd15942d212ea13eb61f8edfcee0fb1eba4a906bb397a0"
+        },
+        {
+          "bytes": 158,
+          "git_blob": "b57fe677ef8c6258c427a39fa717213cf5f3e9a2",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/ashengate/v20/zone.lua",
+          "sha256": "14fcf9e6c2de371caa89d9f8f87d6bb816c16e63b70a6ec4cff5b0b561eb4907"
+        },
+        {
+          "bytes": 413,
+          "git_blob": "ac030271ab0c9f43a6cccc607551036aee414d31",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/ashengate/v21/default.lua",
+          "sha256": "c8cf02276089f431f6d15dd90dabf754889c9510d5ddad9548cbb8b933c94c9d"
+        },
+        {
+          "bytes": 264,
+          "git_blob": "b15ecb86e97a394ae2cc63cc40f27a8dffb5fbe6",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/ashengate/v21/player.lua",
+          "sha256": "10c8ba6e816d6437ce1218eb2f3085dc75bdd653a54c2ffb2709f73f67697e7a"
+        },
+        {
+          "bytes": 158,
+          "git_blob": "99396f0ec7f366cded3c732c1a858a6adee3bfc3",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/ashengate/v21/zone.lua",
+          "sha256": "e73772b7fce8a27380a8ffd3fa219067f70f1da4760876782407a9ebe67daad4"
+        },
+        {
           "bytes": 100,
           "git_blob": "bd5f6a7345942b2c499a4537d33d914d9f612a9d",
           "kind": "quest_lua",
@@ -3479,6 +3663,22 @@
           "mode": "100644",
           "path": "quests/devastation/v0/player.lua",
           "sha256": "a4ba1922f3f3cbc4f65bed41575f8e8be191c5cb2c61103c830e579a65a7c412"
+        },
+        {
+          "bytes": 172,
+          "git_blob": "098592d3765033afe0736f8aea53c841c0ab3846",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/direwind/405092.lua",
+          "sha256": "0e141f80b8c84cc474a29b712fb5609c2503bcea88d5bddbab1f163a97a72b16"
+        },
+        {
+          "bytes": 172,
+          "git_blob": "6c9461bd291adab5cdeef98d90eec28f17e4b170",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/direwind/405153.lua",
+          "sha256": "31a4e66d09d07010c41d3bf536fe338d8ee3b1e6b480227b9ce979574ac75451"
         },
         {
           "bytes": 114,
@@ -4601,6 +4801,46 @@
           "sha256": "cf5c035781f997d429442f10f35c85d03549d4c34b6f45cbf5bcdd12cf58c685"
         },
         {
+          "bytes": 8482,
+          "git_blob": "b52bc1d07cc9f5a89e5379af7d409fd86fd6ee0b",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_tss_ashengate_contacts.lua",
+          "sha256": "908a2c5d8e1b55d3df77981642c90f200ebffc490545a491e61e4c24c0352bc1"
+        },
+        {
+          "bytes": 15281,
+          "git_blob": "2acd3ff83157a1bfd1e497a68d3c98f00f66fa00",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_tss_ashengate_encounters.lua",
+          "sha256": "c03810cbd2b67886cecc09071a46556d1c2ec8b7d4a7cb9ac6cf7a0ce7b01919"
+        },
+        {
+          "bytes": 2545,
+          "git_blob": "74d97d39cbbbf4ac50f0c76e0f9a210b09998033",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_tss_ashengate_layout.lua",
+          "sha256": "7126d645befe69a063898dac792a0150cb1ef9b2c63529cf8802bfa88dfc622f"
+        },
+        {
+          "bytes": 4255,
+          "git_blob": "1d925032f8b39ec927003c325f1e3316adedb35d",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_tss_ashengate_public.lua",
+          "sha256": "d717b28ce5042ec496514d6c233a6e7ec4edecf9e2421234c8d15fec4d77a693"
+        },
+        {
+          "bytes": 11182,
+          "git_blob": "9f146006a75f314ea1c891101535968cbb3212d3",
+          "kind": "quest_source",
+          "mode": "100644",
+          "path": "quests/lua_modules/rof2_tss_ashengate_raids.lua",
+          "sha256": "99cdc742b06f9009eb91443214d56cb7cdd5a5fa5fe05f099726a1605e15ae02"
+        },
+        {
           "bytes": 3027,
           "git_blob": "2a5539099afb3913fa48733ffe8e1d5228b7e51b",
           "kind": "quest_source",
@@ -4625,12 +4865,12 @@
           "sha256": "400df8625898babf885fec48c94352e2716657ad34c80f06c4f35da20419791b"
         },
         {
-          "bytes": 19852,
-          "git_blob": "cc5be95095403fc60a423a478ff107376c8dc82d",
+          "bytes": 20545,
+          "git_blob": "15c2a9765b64f69bb221896439d61a59d16135af",
           "kind": "quest_source",
           "mode": "100644",
           "path": "quests/lua_modules/rof2_tss_vergalid_end.lua",
-          "sha256": "a6f22f4132be7dd8e380bf4974b3d7a13c8b4a105d4e4f8461cb8c88820b9c64"
+          "sha256": "3072e5ff64a2882c0684c22b564cebbdd2c609daeb39e2e6ecaddc3a307720c7"
         },
         {
           "bytes": 2902,
@@ -5729,12 +5969,12 @@
           "sha256": "25905c5689f31b38a28d039abdaed9beb83bbe46ecf4024c9e1bd41db5c73ce8"
         },
         {
-          "bytes": 567609,
-          "git_blob": "dec86d0df143550585cdb98e692239e2f029f9f9",
+          "bytes": 568363,
+          "git_blob": "bc4e1faf23aeda78e0fb53efe7801e4d46e0ca9f",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client_packet.cpp",
-          "sha256": "9be20939aa46e777f7e4a1718eb994e8ebb5b8cdef1b8e0373611d4926a701b7"
+          "sha256": "6ed8b6f6a5d1da25a011a26d71e7045cfd197101b3ee8730e903611d82fbad44"
         },
         {
           "bytes": 73472,
@@ -5761,12 +6001,12 @@
           "sha256": "76a0f78f4427b4e4b83024ffc0e2d484c566d69e08a6b7f9f6fc9f0e165a3374"
         },
         {
-          "bytes": 74535,
-          "git_blob": "648116aae474a3afc2a0675a04b9a379d8c5a569",
+          "bytes": 75471,
+          "git_blob": "0582d62d93e53ca17eead9209eb549d82f18a5ab",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/corpse.cpp",
-          "sha256": "7bc084646ca550aa70b016c1062aa3231a088fe9306ad246071635974ff7a5cd"
+          "sha256": "fa0f590025a57a6f26c12a01a1030a93cd057d1d226aae9682677b1a0217a27f"
         },
         {
           "bytes": 11006,
@@ -5937,12 +6177,12 @@
           "sha256": "59c16d4f77465b9e5f3077596198469b7c238ca3f63395cde01c7b2067a9a8b4"
         },
         {
-          "bytes": 50166,
-          "git_blob": "29c3be1fdc023431a8c7a10cacdd8372ad5a8384",
+          "bytes": 50640,
+          "git_blob": "8191c6598835a5c1fa8e825d0a82f8b82f15a42d",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/dynamic_zone.cpp",
-          "sha256": "40821c3e843149e898e131a585fbb808cf5eb773ca1cbc4dfb61507ef038e1b2"
+          "sha256": "813d63d46f42200f3584c47cef447a99f27337c25c534673c6016c021317d210"
         },
         {
           "bytes": 7023,
@@ -5985,28 +6225,28 @@
           "sha256": "c208af3c4eae12f7232cd4d6ff77e0bf46a2dcd9e99a8bfc973638efd2f0b3d5"
         },
         {
-          "bytes": 116551,
-          "git_blob": "2688428d29ab30a35e6b090ec42c1245ddaac8f6",
+          "bytes": 134308,
+          "git_blob": "8a4b5ed02bcd7b6f4eced8987fbd970b47464a99",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/kithicor_poison_trade.inc",
-          "sha256": "fccb9cce9fe93aaf2e5d7c7e64ddb0fde8460efb051fdcd8e8eae7d1aff30a8f"
+          "sha256": "735182e81740adf317009309daf40ebe47394301c5826901cd70dcad52c82040"
         },
         {
-          "bytes": 194500,
-          "git_blob": "6c91e94253dd1c0401642f24e2276d79c03a5590",
+          "bytes": 195331,
+          "git_blob": "4293a6befa7e4803673a6036a3e947d8cc06ee81",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/lua_client.cpp",
-          "sha256": "1991cbdf456314ec1fdbd78b72a27bbed3d52868b963c4a401544a05ed32047b"
+          "sha256": "b7750440afe60e4119efef67d9ea647e8b64c987b32e4ce4f4a1159724b8421d"
         },
         {
-          "bytes": 32730,
-          "git_blob": "e11908f9b08a949304ba76bba7e8fdf6c5edc6d5",
+          "bytes": 32897,
+          "git_blob": "58d0bc97da2e41f5525245e39bbff6f34b244643",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/lua_client.h",
-          "sha256": "c0d542792dc1d24a64186589f87467828a80d3fe6f58776cef5fa32fae10fa7e"
+          "sha256": "36464c354f5b23fc7a195eee2ec89ba77f70d9660f19cca9c5174e93de780af1"
         },
         {
           "bytes": 327116,
@@ -6137,12 +6377,12 @@
           "sha256": "fb7ca4296f48ff253d40d4283c8e309f6aa66499f3d7b35047fd30b1ef068a87"
         },
         {
-          "bytes": 249390,
-          "git_blob": "0cdf1d774daea88fca3fc6b4702db3e4c1f4e135",
+          "bytes": 253478,
+          "git_blob": "bbfdf3502df1b0772a7e9d8f838661ca8bcad609",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/spells.cpp",
-          "sha256": "1a3b6b28456954142aefcb63bab132662e9bfc3e1e08b63f1aaf4d59ba3e08a9"
+          "sha256": "55c1072466589985b0d835c46f62009b024957f7ae85c80158f1b92df8089c84"
         },
         {
           "bytes": 153650,
@@ -6169,12 +6409,12 @@
           "sha256": "9db955761d5e48cb1d35d812bc35e105fae1d7a52a3a41ef3ea9a60b94e72300"
         },
         {
-          "bytes": 122490,
-          "git_blob": "f4313575cd8100ff29b0ce37c7f847fe3542382a",
+          "bytes": 122589,
+          "git_blob": "ecad9e4daaeb8461bf83e5363bc65e68910324fd",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/trading.cpp",
-          "sha256": "e75a0f8fd68615912f9402ed67ea8fde8399427bbead85a918c82b35dac42c65"
+          "sha256": "6aaa96b8ea1dbec14c089e0fded5fa162383675ae51042ec1cfc5706f74deca9"
         },
         {
           "bytes": 22481,
@@ -6191,6 +6431,46 @@
           "mode": "100644",
           "path": "zone/trap.h",
           "sha256": "c3fd87382da685b59ba1e178a10f319f4cc5602e8b6b95abf47802f877b11668"
+        },
+        {
+          "bytes": 9899,
+          "git_blob": "01e0baad57ea5df405abdf59b9690e367f9ecc0b",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/tss_ashengate.h",
+          "sha256": "c2f2c1e5d1b432458b101ef088ce38bf3673dd7503563f2cf854e8f27d714f25"
+        },
+        {
+          "bytes": 5110,
+          "git_blob": "edc7155624f67c30d00d66a42fd2ab94c3bd47cf",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/tss_ashengate_give.inc",
+          "sha256": "ade8ee43483ac60c9cf624ff6183fd61973a04c8b132bc4cdd53e2512cb32514"
+        },
+        {
+          "bytes": 3545,
+          "git_blob": "e2fc53ec810ea038bd17698f5b64ab52ac5f6520",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/tss_ashengate_loot.inc",
+          "sha256": "4eecd3797ef9b0ecafb7ccd0881b1b02304f2f6bc0d3c0dde1b3a902ca5aaa94"
+        },
+        {
+          "bytes": 9316,
+          "git_blob": "0b45fe498497a263fe2fb1b246c53bc3a802206d",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/tss_ashengate_mark_use.inc",
+          "sha256": "a6eec03cf884f547aec968f105685622e0a582e75a55b74d87bfde1eb2cb6e89"
+        },
+        {
+          "bytes": 4025,
+          "git_blob": "cf787d8f081451142ba494bc827065d327d3edcb",
+          "kind": "native_source",
+          "mode": "100644",
+          "path": "zone/tss_ashengate_public.inc",
+          "sha256": "9724f1a92a9ee298a57c8dda57eefa9af18be6f42e81fdb2c02acdac6340fe06"
         },
         {
           "bytes": 464,
@@ -6217,26 +6497,26 @@
           "sha256": "063e3dc278aeca39e60fb3bb5e76f20ac75f0c2841961a5f8255e913d14f1e3d"
         },
         {
-          "bytes": 25267,
-          "git_blob": "4223a22f614de95f998d962e2a46ba269a4bd80b",
+          "bytes": 29127,
+          "git_blob": "f13b97b2f68433667cafd11ddc515c87a6aee9bb",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/zone_save_state.cpp",
-          "sha256": "dad5ea7568a64b155c43904e4a736c670f3a2b8cfd00f46c5fb81feb3be62aa4"
+          "sha256": "39e864185c692449e1207fe3fcc8daed9e02b1e0b465f587389ce0e1cfd1e8d3"
         },
         {
-          "bytes": 63642,
-          "git_blob": "849ec86db5fdea47f8e72b7450de6cbab3e05143",
+          "bytes": 64225,
+          "git_blob": "85349d22b8d12a8023246bccf67d892105000f09",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/zoning.cpp",
-          "sha256": "a350784df366bc03211fe16771e9c8380d312f29488304c84833718deb7f5ff1"
+          "sha256": "dd4b74caed98ee943f97b810fbd5806b5fa78c7131bf16fa105ee297c146fde6"
         }
       ],
-      "source_manifest_sha256": "41bbe1aa648bc432a6f287fdb8171df78ac70684fd6c753f25b479f1d0d99b07"
+      "source_manifest_sha256": "fe23d6aa91a55d9eeb5adcebd71ba9062fbece4cc9ed00840b017cd4e4769b06"
     },
     "database_repository": "nightstalker6669/EQEmu-Database",
-    "database_source_capture_commit": "08e95464b1a4ae0775003a078ff3f068014441c3",
+    "database_source_capture_commit": "77cc309c61b1c7d3299249813f29816d89a039c6",
     "existing_volume_upgrade": {
       "supported": false
     },
@@ -6244,9 +6524,9 @@
     "fresh_install": {
       "MariaDB": "10.11",
       "assembled_with": "10.11.19",
-      "base_tables": 496,
+      "base_tables": 500,
       "bots_version": 0,
-      "composition": "Published r34 database followed by five sealed Vergalid migrations.",
+      "composition": "Published r36/r2 database followed by four sealed Ashengate migrations.",
       "custom_version": 0,
       "empty_private_player_and_operation_tables_preserved": true,
       "full_dump_replaces_tables": true,
@@ -6255,55 +6535,65 @@
       "merc_stats": 4000,
       "new_empty_database_only": true,
       "player_preserving_upgrade": false,
-      "recipe_entries": 261415,
-      "recipes": 34490,
+      "recipe_entries": 261423,
+      "recipes": 34492,
       "schema_version": 9338,
       "views": 1
     },
     "future_update_policy": "A futurematchedDBversion requires a separately validatedwholecohort sanitizedrelease and explicitcommitted source/tag/assetdigest pin; never silently mutableLatest/latestDB, partialrank/itemexports, or old945-only pin for newcohort. ActualCIfailure corrections gather allvisible errors in one batch.",
-    "matched_server_integration_parent": "ce15d0bfa7fb5a586abddb6e62cb47582d8f7124",
+    "matched_server_integration_parent": "a25e15839b1812304e257b3df6dcf3c54dc93de9",
     "native_acceptance_scope": {
-      "batch": "Captain Zheren, Kellak, and Vergalid’s End",
+      "batch": "The Serpent’s Spine – Ashengate East and West",
       "coverage_limits": [
-        "Inherited Nurtha and Goru lockouts and a conflicting prior final lockout were checked offline. A second native raid was not run.",
-        "The natural expiry consequences of Dooming Exile and Breed of Corruption were not observed. The native cure witness was Breed of Corruption.",
-        "The native repaired shrine gate witness covers the inbound crossing. The reverse crossing and rejection boundaries were covered in focused offline checks.",
-        "Scoped development assistance included existing fixture invulnerability, a test weapon for some real attacks, and public travel staging to keep the same occurrence and earned state. One witness temporarily ran without invulnerability for the actual curse and cure. Encounter kills, task progression, chest rolls and loot used the game’s normal paths.",
-        "The optional Zhubis and Jenray side tasks were deferred to their original Ashengate faction acquisition route."
+        "Development setup included native GM leveling to 74 for one attendance fixture, supported public travel staging, and one scoped reset of prior Vergalid lockouts. Combat used fixture invulnerability and the existing QA melee mallet. Invulnerability was briefly removed for the real Mark self-click and restored before re-entry. This run establishes progression and reward behavior with those aids. Normal raid difficulty remains unmeasured.",
+        "Real loot was sampled from all six event sources. Optional loot outcomes, natural expiry of the full 108-hour lockouts, and exhaustive expedition reset and inherited-state paths remain untested.",
+        "The original Attendant glow effect, reported chest trap difficulty, and exact historical lava tick remain unresolved. The native route verified the implemented order, thresholds and progression."
       ],
       "historical_reconstruction": [
-        "Kellak uses six to 24 players and average level 75. Historical task metadata and a recorded six-person route support it. Other contemporary accounts state 18 present, and the timing of that rule change is unresolved.",
-        "Vergalid’s End uses six to 54 players. Six must be present in Sunderock for the request, and six nearby in the lair to awaken Vergalid. NPC statistics, some encounter timings and spawn positions, some appearances, the exile pit boundary, and precise loot weights are reconstructed.",
-        "Nurtha and Vergalid each use one guaranteed rune plus one optional rune roll. The correction was verified against actual loot logic and isolated MariaDB. The first Nurtha kill preceded the fix, so the native corrected loot witness is Vergalid’s chest."
+        "Raid-in uses the rounded-up 85 percent rule against the assigned roster. Independently eligible characters include the later level-74 attendance allowance. The original arithmetic details were unavailable.",
+        "The six-hour expedition lifetime, some NPC appearances and placements, room boundaries, some wave cadences, the 12-add Ambersnout threshold, 135-second Sothgar pauses, and optional loot chances are reconstructed. The relocated egg and brood route use reachable under-bridge floor.",
+        "Stitch’s exact positive faction delta was unavailable. The configured value is +1500, with native faction awarded through the stock hate list."
       ],
       "native_evidence_sha256": {
-        "End full native acceptance": "a386cb7d46eebd51f50c9f4d5f1a4b442f476083be867f1ad80262633b72fa71",
-        "Kazzar standard Hail": "e1bf4670908415d8c90c690ecaef2bd40e0c9ee0f7af09aff1b58928b6f2b67c",
-        "Kellak replay and complete roster": "cb4023571317052cd123a1951eb0c3b58dcda50fcb12e673bcf075605b18f38b",
-        "Rune correction native worker readback": "ad1b03acb0c86909b0fa0357cdf12f0c7fa0882fc6273c325193584df79ff548",
-        "Same expedition gate fix and Hail mount": "438434b1840125c83de7f062eb6be948a4be13c8ac34e3c0dd798d34af6fe9d6"
+        "HISTORICAL-BINDINGS.md": "c7d21fe1384a3155aedde6b9589af9bd1dec5c67d30699996c1bcb10aa25437a",
+        "NATIVE-INTERFACE.md": "14da5c25511bc1e70ded8a85f48719a5b70a28f763a0a76b89b6f90ee68d633c",
+        "belltank_gm_level_74": "3b00fb2629af2e3bad1ac2167c9ba89be1b19778043823bf02323ec8fb8c9cd3",
+        "east_west_native_terminal": "90a1d244045a0ca8467239e4730452bc0ca639d6c32ee9c4f630fa90e1a08694",
+        "jenray_hail_mounted": "232ec44179cf9185dc909ce411f3495a61a536c69647256b8a9f5b5cc86dbc2c",
+        "jenray_hail_native": "3b7bf628e9010b257a47f7a419e98aca6e714709fcb3e1fac0b184377f8eb5d1",
+        "jenray_hail_offline": "794255eb983b720831b09b73834a9247b7dc2404d2f5477b1a366bd0d72e122b",
+        "vergalid_end_replay_and_both_side_tasks": "0f1c126764df16adbee0d9858d0a6b74fc351df87149b9163a611687fc65b09e",
+        "verified_faction_replay_preparation": "303c054a3765033dda7e05e6e5fa40cbb0de24b0e1accc672fdfd3b367b04c36",
+        "west_ambersnout": "d3981b51ead7877fa41218fcb83fd632b9c26c9765e529642828523844d5125c",
+        "west_attendants": "b1b8c5f5610e34f0d0eaa50f55a7e788fa8587a7603f73252b74b799d5e35e8a",
+        "west_ghosts_from_the_past": "058307ffb89709a43852b790a1d7a4e09eace8307ea6a956ebdc45df71f5a8a5",
+        "west_layout_offline": "461b19c1fbf69c65cee5d8165551faa1744a7ced8b3fe1376739a209a3352194",
+        "west_layout_serving": "a971803e6ad6cad0cac95c156d4cef6a8b08d3aa27825739edb89d5d18049df4",
+        "west_mark_proof": "c83f58d9b7ca7164582c9b3cab897ebe48030e224d2402c27257633f163c52a8",
+        "west_native_loot_4": "6e6d20784d05ae8d6dd99a4fae0c262a2a2a7f56261acdf3f15fd7383cdc68ed",
+        "west_native_loot_5": "417bd8dc555aba54b0c09726fd4223c0247fa7b4ff4d34fab78b2de871e48b9d",
+        "west_native_loot_6": "23db3c375d4c9a7515828e36b6c21e8ce7c4149abd1db324571fc5773bde1fcf",
+        "west_sothgar": "4ff49be396adaada60d53de2f02344f80ccf0871b873a0cddc02d52cd88c351d",
+        "west_unflagged_seventh_arrival": "efd4dde7fab2e1197f0fc0ed24d2a20e92c41fe9a25492e88a196595c4384a3c"
       },
       "native_verification": [
-        "The requester earned all four original Zheren tasks. The run used the original public entrance and return, both directions of the physical lift, and the final report to Zheren.",
-        "All six entered Kellak through the original switch. Kellak cast during combat, spawned three offspring at 45%, and died to an actual player attack. A real corpse item was recovered, and the archive and 36-hour replay timer were verified for all six.",
-        "The earned roster requested and entered Vergalid’s End at the original switch. The Rogue used normal Sense and Disarm to disarm an old chest and a moving contraption. Nurtha’s three machines, actual victory, corpse loot and 84-hour lockout were verified.",
-        "The original Goru challenge started the undead waves. The raid killed 35 undead, observed reinforcement at half health, defeated Goru, collected real corpse loot, and earned the 60-hour lockout.",
-        "All six shrine protectors were defeated. The original inner gate admitted the raid after its binding was corrected. Vergalid awakened for six nearby members. A real Breed of Corruption was cleared by destroying a real infused crystal while the curse was active.",
-        "Vergalid died to an actual attack. All six final completion rows and the 84-hour Vergalid lockout were verified. The native chest yielded two gear items and one Glowing Obsidian Rune after the corrected loot roll.",
-        "Native Hail with the normal client key was verified at Kazzar. The updated exact-name dialogue branch for Nurtha and Goru was exercised offline, with native Goru challenge verified in the live run."
+        "Both public faction cycles and both personal Vergalid’s End side tasks were completed in RoF2. The original Incubator hatched and captured drakes, the four-item hand-in passed, and Jenray’s normal Hail key was verified.",
+        "All seven entered Ashengate West, including a level-70 character through the six-of-seven raid-in allowance. The raid earned Ambersnout, Attendants of Sothgar and Sothgar credits and lockouts, recovered real loot, and finished Ghosts from the Past.",
+        "The level-70 witness earned Scholars of Solusek faction from Sothgar and looted a genuine one-charge Mark of Vergalid. Holding it left five-of-six re-entry denied. The native self-click spent the charge and awarded durable kill equivalence, which admitted the witness to the same West instance. The witness had no Vergalid’s End completion before or after.",
+        "All six entered East, defeated Ayna’Rym and both griffons, completed the timed Ambush through Krait, and defeated Stitch after the spider threshold. All six earned each event credit and lockout. A Complex Diversion archived after its three discoveries, ten Scarlet Legion kills and Stitch. Ayna’Rym’s corpse and both original East chests yielded genuine loot."
       ],
       "status": "NATIVE_ACCEPTED_WITH_DOCUMENTED_LIMITS"
     },
-    "native_gameplay_acceptance": "Captain Zheren, Kellak and Vergalid’s End accepted with documented limits.",
+    "native_gameplay_acceptance": "Ashengate East and West, faction arcs, side quests and Mark accepted with documented limits.",
     "payload_inventory": {
       "all_member_sha256_file": "SHA256SUMS",
-      "full_sql_bytes": 304502546,
+      "full_sql_bytes": 304684182,
       "housing_json_member_count": 331,
       "housing_json_prefix": "housing-runtime-content/",
       "housing_profile_bindings": "housing-runtime-content/PROFILE-BINDINGS.json",
       "housing_profile_bindings_sha256": "4d6c3533a882ce79ef790caa08a781a1994d56ac3d9c58a8459bb9e1ac9b73b2",
       "identical_SQL_and_Housing_bytes_required": true,
-      "payload_member_count": 492
+      "payload_member_count": 502
     },
     "preserved_mercenary_cohort_source_binding": {
       "SQL_sha256": "6ad8f950c178e9c1d84658387c521dc33695572fd8926c30a711aff44e50790f",
@@ -6314,15 +6604,15 @@
       "manifest_sha256": "78710b4716455c626cc62189cca8eacd252d2ce796adc018c0b4dd18657aace9",
       "source_base_commit": "c642eb178b8a0a9881812c2b3d3f188acb1217d8"
     },
-    "publication_parent_database_commit": "08e95464b1a4ae0775003a078ff3f068014441c3",
+    "publication_parent_database_commit": "77cc309c61b1c7d3299249813f29816d89a039c6",
     "qualification_documents": [
       "NATIVE-QUALIFICATIONS.json",
       "CHANGELOG.md",
       "SOURCE-MANIFEST.json"
     ],
-    "release_tag": "peq-rof2-2026-11-23-vergalid-raids-r2",
+    "release_tag": "peq-rof2-2026-11-23-ashengate-east-west",
     "required_code_boundary": {
-      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins.",
+      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins. Preserve the matched Ashengate native code and 467 canonical quest pins.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
       "completed_mercenary_feature_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
       "external_operator_resources": "Authenticated original RoF2 archives/maps and matching server quests/opcodes; generate fresh target shared memory normally."
@@ -6397,23 +6687,29 @@
       "BASE-TUNARE-SHRINE-README.md": "b56b90cd2e742e7e5601f74a57ab96269ac33627327118fac10ba84773a97e29",
       "BASE-TUNARE-SHRINE-SOURCE-CONTENT-BINDING.json": "ba556b929b77859f195d9e4e6a01512109b276c2d3809e8b6aba8acf7d413c4c",
       "BASE-TUNARE-SHRINE-SOURCE-MANIFEST.json": "c8cc663450e141a87c9f0df286fd0f23e65b76478c10c05e7e1837bccf14d7ac",
-      "CANONICAL-SEED-COMPOSITION.json": "f4f695a691d850e77d2c952e9db3471ee014edc18804e2a017d8fa342c28d30a",
-      "CHANGELOG.md": "0b21ec799fe95d96210c8489d344e6cdc80b241165707ae4273df668cbc9bd1f",
+      "BASE-VERGALID-R2-CANONICAL-SEED-COMPOSITION.json": "f4f695a691d850e77d2c952e9db3471ee014edc18804e2a017d8fa342c28d30a",
+      "BASE-VERGALID-R2-CHANGELOG.md": "0b21ec799fe95d96210c8489d344e6cdc80b241165707ae4273df668cbc9bd1f",
+      "BASE-VERGALID-R2-NATIVE-QUALIFICATIONS.json": "45e95719539ee6e658f4c19c3373d6f8b834b8d90a3dade6006e06c69ca40bf3",
+      "BASE-VERGALID-R2-README.md": "3be6fe0bc5c6ba6a4608a43ea830b52d050aae69f89386dd57996df7c46aa2f0",
+      "BASE-VERGALID-R2-SOURCE-CONTENT-BINDING.json": "5843bfb561555ee2906b79ec8a36575ddc1e345c5be6ed5f6d882ee256754f51",
+      "BASE-VERGALID-R2-SOURCE-MANIFEST.json": "41bbe1aa648bc432a6f287fdb8171df78ac70684fd6c753f25b479f1d0d99b07",
+      "CANONICAL-SEED-COMPOSITION.json": "ff6c9688faccd9fa10ace43e5fe2ca48bf72dd7620d9129fb9948c0e05f665ed",
+      "CHANGELOG.md": "2385fbac1ff94c2c31b3a43cc59a4d6327ab6afe2c452a9d963e8885861049c7",
       "COMPLETED-RECIPE-UPDATES.json": "fdf459a6bef7e90351d3db5c983e30920205876a990aa144b5779a4c242d25e0",
       "KITHICOR-STATIC-CONTENT.json": "5b043982b23b74f4f857724b6baf1ff0611bb88ce348f32f15f3f6230462ffc5",
       "MERCENARY86-100-CONTENT.json": "27a9d180e6a66320ae9877cd763341f6579d0a1a8a66ac6fc23c26fb9dc15c16",
-      "NATIVE-QUALIFICATIONS.json": "45e95719539ee6e658f4c19c3373d6f8b834b8d90a3dade6006e06c69ca40bf3",
-      "README.md": "3be6fe0bc5c6ba6a4608a43ea830b52d050aae69f89386dd57996df7c46aa2f0",
-      "SHA256SUMS": "628c6ab79fa693ccf513729e6d7b826858e3ea834e3775e532f798dd75b893f6",
+      "NATIVE-QUALIFICATIONS.json": "4b8f295ece9d98a915b86a0daa653c443d32f05707ee59892b9e285caf3cc47c",
+      "README.md": "f086665b0d4023c58d2364b4ecde075bde08b6533a9ccedfd8ff15b98d28c010",
+      "SHA256SUMS": "4d23155cd53701001d609d1e94052eea282b8732158dfa71c1eca60107f7d3f6",
       "SOD-OCEANGREEN-CONTENT.json": "5a5757e1c4631af375b87b6c69794d9e72ebc8cc91c832144d8359bb2b5454c2",
-      "SOURCE-CONTENT-BINDING.json": "5843bfb561555ee2906b79ec8a36575ddc1e345c5be6ed5f6d882ee256754f51",
-      "SOURCE-MANIFEST.json": "41bbe1aa648bc432a6f287fdb8171df78ac70684fd6c753f25b479f1d0d99b07",
+      "SOURCE-CONTENT-BINDING.json": "84e68ccbacb64cf87ff33fd5a69489aa371fa7ae56d4ee88b420827cfc556990",
+      "SOURCE-MANIFEST.json": "fe23d6aa91a55d9eeb5adcebd71ba9062fbece4cc9ed00840b017cd4e4769b06",
       "TABLE-INVENTORY.json": "4b6bf5895d88556b7ce4ecb2bf44a55deef3b766782c5c93304ff688204ec36e",
       "VALIDATION.json": "f9da8bf1f8bc7ab959ca0bee13e9b4aaa47a530b3f6a46e5e429d85b3d522ff2",
       "VICTUAL-CLASS-FEATURE-DELTA.json": "1220253988a07ff5ef833759b947c33b4bcc56cad20195f94366cd510df7ffaf",
       "client-data/rof2/dbstr_us.append.txt": "71f93726675b66a45496e61f42994a691ab6663a326f92497627d37f6f42dfec",
       "client-data/rof2/spells_us.append.txt": "428a6b92ba8887c8d117746c2f9bc192a6429b7fd2c6c46438005442b351b7d6",
-      "full.sql": "15b99b8e372245f3742c798a3759d1c6abd94aa2bb95fa95bf941d130cc9bd41",
+      "full.sql": "1e6b5aecb4fa63f92db61f48864db0742342ea73aab7975c786b6371e6083c5b",
       "migrations/darkhollow-normal68-70/02-ALIGN-SHROUD-ESCROW.sql": "5c47bbf12e6cc50976694c5c74fa508359d737c661676fdded19913036494526",
       "migrations/darkhollow-normal68-70/03-VERIFY-SHROUD-ESCROW.sql": "0fbdcac1cc500a1fd9dcc0fe08414ca5d300623951bc0ae00e282bb1085e12f6",
       "migrations/darkhollow-normal68-70/10-LEVEL68-70-CLAIM-SCHEMA.sql": "972fdeb85e17f62aa65509d140294c9000a659338e3f819377d6bbe6a86a2231",
@@ -6484,6 +6780,10 @@
       "migrations/rathe/RATHE-STATIC-CONTENT.json": "afc4b2a6bb98a02ef47e03cf56b6de12a312cbb99cba37ff6bc1b7d53e3bead6",
       "migrations/rathe/README.md": "ca296832726f905da0bcf2f015d2e1a614ab9bb9fee872d13c54b35e653d0c6a",
       "migrations/rathe/UPGRADE-CONTRACT.json": "e2f5502817d97f6d1fe668b5199256fc4d4383c688cef7b5f8af1601855ee746",
+      "migrations/tss-ashengate-wings/00-ASHENGATE-PROGRESSION-SCHEMA.sql": "642f29406bdf2cbd2dd98f327a877f12052f0ab09348ea5d00482cc1120c6629",
+      "migrations/tss-ashengate-wings/10-ASHENGATE-VERGALID-SIDE-TASKS.sql": "91409c0f070cdea6951f39c9ecbbb1be2c2293138fa8b348adfa6034de9264ba",
+      "migrations/tss-ashengate-wings/20-ASHENGATE-FACTION-TASKS.sql": "e6a8cb491f7e7a63d48bbe651c6c8955465769513fabd76b1de39814d6685226",
+      "migrations/tss-ashengate-wings/30-ASHENGATE-CATALOG.sql": "c6de5398fa62db311929daa24ecce6fdd054498e092cc1c144c87f1c34653aae",
       "migrations/tss-vergalid/10-VERGALID-RAID-TASKS.sql": "b25f1ff2c6a58191f8ade3d146c23c8b3e80f6dd22aed025561363e4ae3c32a4",
       "migrations/tss-vergalid/20-VERGALID-RAID-CATALOG.sql": "92229ef4037a35797f4700be6b001671e0f9bc3e0af318e654df1faebe2b4818",
       "migrations/tss-vergalid/30-VERGALID-PUBLIC-ENTRANCE.sql": "4b4c5f5d2f4c90506f09cfce2bd36dd93668ba2bd04230a19515dae8de160b97",
@@ -6548,21 +6848,18 @@
         }
       }
     },
-    "source_commit": "77cc309c61b1c7d3299249813f29816d89a039c6",
+    "source_commit": "bdd011614f83dffd41a2b529edb2f770773ea6d0",
     "source_commit_role": "Exact public PEQ database release commit. The server integration parent and CI checkout are pinned separately.",
     "source_repository": "nightstalker6669/EQEmu",
-    "supersedes_database_release": "peq-rof2-2026-11-23-vergalid-raids",
     "verification_basis": {
-      "full_sql_sha256": "15b99b8e372245f3742c798a3759d1c6abd94aa2bb95fa95bf941d130cc9bd41",
+      "full_sql_sha256": "1e6b5aecb4fa63f92db61f48864db0742342ea73aab7975c786b6371e6083c5b",
       "isolated_validation_sha256": [
-        "f4b26e86364140ee9cf7caadc0643f301aa785aed22844eff3af7d180c2071fa",
-        "013d39f943ea9baceaa3e70d8239abfe15b696e79f7347db9061042bf51c3c8a",
-        "2f7bb4c840a1c7c7b014f84610b0ae28e7a25d63e6de58f179e2145efd0fe0d7"
+        "d3932352c988b051616db65c4a70d9dca6be7e3583cbb9c5584797abfd8c9008"
       ],
-      "status": "Reuses exact isolated core, lift and rune checks."
+      "status": "Reuses the exact networkless r36 Ashengate SQL readback."
     }
   },
-  "database_contract_sha256": "ef231497da69da0f1f87203022d149beda321f9843d1c554ccdc10fc64d4c443",
+  "database_contract_sha256": "d0f171896180d26cace72f3bdc49b0de88a1e992b26e224ec745b3b341ff550a",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [
@@ -6588,6 +6885,15 @@
       "arcstone/v0/369085.lua": "6bf863e741d1675bf58c3dca825817c7646435c5cdc07b2b6bec649511297899",
       "arcstone/v0/369097.lua": "c7b91841b0fb9c26ce4b063cbce3f34f50a204b19676f3af871a5670f191197f",
       "arcstone/v0/player.lua": "ab5835009a6a166c778c7f1643774002d50fff2206dee1710832f407f3c24404",
+      "ashengate/v0/406937.lua": "213e96aa963ba9cf754e5810c64a2d7a7fa8f9cf1621b99c4c0bdc15e0977f53",
+      "ashengate/v0/player.lua": "0bca3bc9fe2f88d12e5f12b7def9be96f64722bc7f87d046c210da84aa810550",
+      "ashengate/v0/zone.lua": "7463fa880c66d731f1780d1f27c1f7bad43ec3c5e78655135cf08c1a430df973",
+      "ashengate/v20/default.lua": "c848c3653f85ac8df700582ce1812e8b609f67009a8f96fd99549bbf5f54283b",
+      "ashengate/v20/player.lua": "600416d23708bd4d94fd15942d212ea13eb61f8edfcee0fb1eba4a906bb397a0",
+      "ashengate/v20/zone.lua": "14fcf9e6c2de371caa89d9f8f87d6bb816c16e63b70a6ec4cff5b0b561eb4907",
+      "ashengate/v21/default.lua": "c8cf02276089f431f6d15dd90dabf754889c9510d5ddad9548cbb8b933c94c9d",
+      "ashengate/v21/player.lua": "10c8ba6e816d6437ce1218eb2f3085dc75bdd653a54c2ffb2709f73f67697e7a",
+      "ashengate/v21/zone.lua": "e73772b7fce8a27380a8ffd3fa219067f70f1da4760876782407a9ebe67daad4",
       "corathus/v0/365268.lua": "37529bca1c2df20b421b43426e8fe6998a0e8813f50523a308159ab9b2f8b3b7",
       "corathus/v0/365274.lua": "37529bca1c2df20b421b43426e8fe6998a0e8813f50523a308159ab9b2f8b3b7",
       "corathus/v0/365284.lua": "d27458332c3ac9c3155fa99a7fa8da556c42c9ae42ad54fc8c38b7173a85a25c",
@@ -6598,6 +6904,8 @@
       "devastation/v0/372000.lua": "e6f2d6417f29be3d002bd88ff3dc32122e8ace79319dd2168f272b97b1373592",
       "devastation/v0/player.lua": "a4ba1922f3f3cbc4f65bed41575f8e8be191c5cb2c61103c830e579a65a7c412",
       "devastation/v0/zone.lua": "b40154caec8c210a22f4ed0c8ea8ef07678747edea6c419ef001411285755e63",
+      "direwind/405092.lua": "0e141f80b8c84cc474a29b712fb5609c2503bcea88d5bddbab1f163a97a72b16",
+      "direwind/405153.lua": "31a4e66d09d07010c41d3bf536fe338d8ee3b1e6b480227b9ce979574ac75451",
       "drachnidhive/v4/player.lua": "b5d67693960534c9a4d5b8de152167abfc057f70377f5f9f3cecdea01d77251b",
       "drachnidhive/v4/zone.lua": "2fbfee2953b9166fde80cca836fa6eab84c9247680f48ed8dc2814bf532ded5c",
       "drachnidhive/v5/354311.lua": "8f09968891b8b5688f63324e08b90a94e5020c91e4a80b4d2e01494c79b01bcc",
@@ -6819,10 +7127,15 @@
       "lua_modules/rof2_sod_scene.lua": "fc4d10eae4e9a151a56b86a16f8b1e18bd72a2a7bc274c8ef1148caf564e5fc1",
       "lua_modules/rof2_sod_scene_bindings.lua": "318af80403153e589e548fbb18f52671ce1e3b83e1aa85ba1e509b216bfd1764",
       "lua_modules/rof2_sod_ward_door.lua": "9ff2e6ba2b739d878455df633c8abd70da3a0251f74fd7222f1191c06b447aa4",
+      "lua_modules/rof2_tss_ashengate_contacts.lua": "908a2c5d8e1b55d3df77981642c90f200ebffc490545a491e61e4c24c0352bc1",
+      "lua_modules/rof2_tss_ashengate_encounters.lua": "c03810cbd2b67886cecc09071a46556d1c2ec8b7d4a7cb9ac6cf7a0ce7b01919",
+      "lua_modules/rof2_tss_ashengate_layout.lua": "7126d645befe69a063898dac792a0150cb1ef9b2c63529cf8802bfa88dfc622f",
+      "lua_modules/rof2_tss_ashengate_public.lua": "d717b28ce5042ec496514d6c233a6e7ec4edecf9e2421234c8d15fec4d77a693",
+      "lua_modules/rof2_tss_ashengate_raids.lua": "99cdc742b06f9009eb91443214d56cb7cdd5a5fa5fe05f099726a1605e15ae02",
       "lua_modules/rof2_tss_kellak.lua": "134604b7c0c267fb2d8f60b5b370a93e5985adf8bd9e14732ad2f10e8e2d9b80",
       "lua_modules/rof2_tss_vergalid_access.lua": "c9f2f40c99d2faf8e4ab3acfc53cfb0af008ee67bdce8f45216005277a8b79c3",
       "lua_modules/rof2_tss_vergalid_doors.lua": "400df8625898babf885fec48c94352e2716657ad34c80f06c4f35da20419791b",
-      "lua_modules/rof2_tss_vergalid_end.lua": "a6f22f4132be7dd8e380bf4974b3d7a13c8b4a105d4e4f8461cb8c88820b9c64",
+      "lua_modules/rof2_tss_vergalid_end.lua": "3072e5ff64a2882c0684c22b564cebbdd2c609daeb39e2e6ecaddc3a307720c7",
       "lua_modules/rof2_tss_vergalid_layout.lua": "1622f5bb341898fb05fb7fece7856eebba699dd8f5f0b1c8d5173036f950109b",
       "lua_modules/rof2_tss_vergalid_raid.lua": "ab252b580981e98ef21b35d477d3f9303bb05caa787a8bcabe7e92d5a30d2a1d",
       "lua_modules/vergalid_inner_access.lua": "4a9159d7e8804ab33c424a9b761de51d4474c8a141b23c5b69a2bd59a372d81e",

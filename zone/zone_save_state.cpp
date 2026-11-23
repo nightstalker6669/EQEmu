@@ -25,6 +25,7 @@
 #include "common/repositories/spawn2_repository.h"
 #include "zone/corpse.h"
 #include "common/shared_core/por_tunare_exchange.h"
+#include "tss_ashengate.h"
 #include "zone/npc.h"
 #include "zone/zone.h"
 
@@ -50,12 +51,14 @@ inline bool IsZoneStateValid(std::vector<ZoneStateSpawnsRepository::ZoneStateSpa
 	);
 }
 
-inline void LoadLootStateData(Zone *zone, NPC *npc, const std::string &loot_data)
+inline void LoadLootStateData(Zone *zone, NPC *npc, const std::string &loot_data,
+    std::optional<uint32_t> restored_marks = std::nullopt)
 {
 	LootStateData l{};
 
 	// in the event that should never happen, we roll loot from the NPC's table
 	if (loot_data.empty()) {
+        if (restored_marks) return; // Never reroll a scoped saved reward corpse.
 		LogZoneState("No loot state data found for NPC [{}], re-rolling", npc->GetNPCTypeID());
 		npc->ClearLootItems();
 		npc->AddLootTable();
@@ -91,6 +94,10 @@ inline void LoadLootStateData(Zone *zone, NPC *npc, const std::string &loot_data
 	npc->AddLootCash(l.copper, l.silver, l.gold, l.platinum);
 
 	for (auto &e: l.entries) {
+        if (restored_marks && e.item_id == TssAshengate::Mark) {
+            if (*restored_marks == 0) continue;
+            --*restored_marks;
+        }
 		const auto *db_item = database.GetItem(e.item_id);
 		if (!db_item) {
 			continue;
@@ -254,6 +261,61 @@ inline void RestoreTunareCorpseMarker(const Zone& zone, uint16_t id,
         corpse->SetEntityVariable(key, tag->second);
 }
 
+inline const TssAshengate::Reward* AshengateCorpseReward(const Zone& zone, uint32_t npc)
+{
+    const auto* reward = TssAshengate::FindReward(npc);
+    return reward && zone.GetZoneID() == TssAshengate::ZoneID &&
+        zone.GetInstanceVersion() == reward->version && zone.GetInstanceID() ? reward : nullptr;
+}
+
+inline std::string SaveAshengateCorpseMarker(const Zone& zone, Corpse& corpse)
+{
+    const auto* reward = AshengateCorpseReward(zone, corpse.GetNPCTypeID());
+    const auto* wing = reward ? TssAshengate::FindWing(reward->version) : nullptr;
+    const auto* dz = wing ? TssAshengate::CurrentWing(*wing) : nullptr;
+    if (!dz) return {};
+    const auto value = corpse.GetEntityVariable(TssAshengate::MarkSource);
+    if (value != fmt::format("{}:{}", dz->GetUUID(), reward->event)) return {};
+
+    std::stringstream stream;
+    {
+        cereal::JSONOutputArchiveSingleLine archive(stream);
+        archive(std::map<std::string, std::string>{{TssAshengate::MarkSource, value}});
+    }
+    return stream.str();
+}
+
+struct RestoredAshengateMarks {
+    std::string marker;
+    uint32_t remaining = 0;
+};
+
+inline RestoredAshengateMarks RecoverAshengateMarkLimit(const Zone& zone,
+    const ZoneStateSpawnsRepository::ZoneStateSpawns& state, const TssAshengate::Reward& reward)
+{
+    const auto fields = GetVariablesDeserialized(state.entity_variables);
+    const auto marker = fields.find(TssAshengate::MarkSource);
+    if (marker == fields.end()) return {};
+    const auto* wing = TssAshengate::FindWing(reward.version);
+    auto scope = database.QueryDatabase(fmt::format(
+        "SELECT d.uuid,(SELECT COUNT(*) FROM tss_ashengate_mark_loot l "
+        "WHERE l.dz_uuid=d.uuid AND l.event_id={} AND l.instance_id=i.id) "
+        "FROM instance_list i JOIN dynamic_zones d ON d.instance_id=i.id "
+        "WHERE i.id={} AND i.zone=406 AND i.version={} AND i.expire_at>UNIX_TIMESTAMP() "
+        "AND d.type={} AND BINARY d.name='{}'", reward.event, zone.GetInstanceID(), reward.version,
+        static_cast<uint32_t>(DynamicZoneType::Expedition), wing->name));
+    if (!scope.Success()) {
+        // Preserve the saved items on a read failure, but the live grant still
+        // requires the owned occurrence, trusted marker and issuance lock.
+        return {marker->second, reward.mark_count};
+    }
+    if (scope.RowCount() != 1 || !scope.begin()[0] ||
+        marker->second != fmt::format("{}:{}", scope.begin()[0], reward.event)) return {};
+    const auto issued = SharedTaskAdmission::Number(scope.begin()[1]);
+    if (!issued || *issued > reward.mark_count) return {};
+    return {marker->second, static_cast<uint32_t>(reward.mark_count - *issued)};
+}
+
 inline void LoadNPCEntityVariables(NPC *n, const std::string &entity_variables)
 {
 	if (!RuleB(Zone, StateSaveEntityVariables)) {
@@ -346,7 +408,7 @@ inline void LoadNPCStatePreSpawn(Zone *zone, NPC *n, ZoneStateSpawnsRepository::
 {
     // These tags belong to the reconstructed corpse, not the temporary NPC
     // used by the stock restoration death path.
-    if (s.is_corpse && TunareCorpseKey(*zone, s.npc_id)) return;
+    if (s.is_corpse && (TunareCorpseKey(*zone, s.npc_id) || AshengateCorpseReward(*zone, s.npc_id))) return;
 	LoadNPCEntityVariables(n, s.entity_variables);
 }
 
@@ -376,8 +438,12 @@ inline void LoadNPCState(Zone *zone, NPC *n, ZoneStateSpawnsRepository::ZoneStat
 		n->AssignWaypoints(s.grid, s.current_waypoint);
 	}
 
+    const auto* ashengate_reward = s.is_corpse ? AshengateCorpseReward(*zone, s.npc_id) : nullptr;
+    const auto ashengate = ashengate_reward ? RecoverAshengateMarkLimit(*zone, s, *ashengate_reward)
+                                            : RestoredAshengateMarks{};
 	n->SetResumedFromZoneSuspend(false);
-	LoadLootStateData(zone, n, s.loot_data);
+	LoadLootStateData(zone, n, s.loot_data,
+        ashengate_reward ? std::optional<uint32_t>{ashengate.remaining} : std::nullopt);
 	n->SetResumedFromZoneSuspend(true);
 	LoadNPCBuffs(n, s.buffs);
 
@@ -388,6 +454,11 @@ inline void LoadNPCState(Zone *zone, NPC *n, ZoneStateSpawnsRepository::ZoneStat
             const auto corpse_id = n->GetID();
 			entity_list.RestoreCorpse(n, decay_time);
             RestoreTunareCorpseMarker(*zone, corpse_id, s);
+            if (!ashengate.marker.empty()) {
+                auto* corpse = entity_list.GetCorpseByID(corpse_id);
+                if (corpse && corpse->IsNPCCorpse() && corpse->GetNPCTypeID() == s.npc_id)
+                    corpse->SetEntityVariable(TssAshengate::MarkSource, ashengate.marker);
+            }
 		}
 		else {
 			n->Depop();
@@ -704,7 +775,7 @@ bool Zone::LoadZoneState(
 			continue;
 		}
 
-        if (s.is_corpse && TunareCorpseKey(*zone, s.npc_id) &&
+        if (s.is_corpse && (TunareCorpseKey(*zone, s.npc_id) || AshengateCorpseReward(*zone, s.npc_id)) &&
             s.created_at > 0 && s.decay_in_seconds > 0) {
             const auto remaining = s.created_at + s.decay_in_seconds - std::time(nullptr);
             if (remaining <= 0) continue;
@@ -897,6 +968,8 @@ void Zone::SaveZoneState()
 		s.created_at       = std::time(nullptr);
 		s.loot_data        = GetLootSerialized(n.second);
 		s.entity_variables = SaveTunareCorpseMarker(*this, *n.second);
+    if (s.entity_variables.empty())
+        s.entity_variables = SaveAshengateCorpseMarker(*this, *n.second);
 		s.decay_in_seconds = (int) (n.second->GetDecayTime() / 1000);
 
 		spawns.emplace_back(s);

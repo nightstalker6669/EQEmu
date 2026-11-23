@@ -1,10 +1,9 @@
-<!-- previous-release: rof2-ci-r34-a1-d63799cc140c -->
+<!-- previous-release: rof2-ci-r36-a1-baa1b78b1bb4 -->
 
-## Vergalid Mines
+# Ashengate East and West
 
-- Restored Sergeant Kazzar’s Into the Leviathan’s Lair after Captain Zheren’s four original tasks.
-- Restored Vergalid’s End, including Nurtha’s contraptions, Goru’s undead waves, the shrine protectors, Vergalid’s crystal cures, and the individual event lockouts and loot.
-- Reconnected the original public Sunderock and Vergalid Mines entrance switches and repaired the public mine lift.
-- Restored passage through the original inner shrine gate after the six protectors are defeated.
-- Fixed the normal Hail key for Sergeant Kazzar, Nurtha Frazzlesprocket, and Goru Uldrock.
-- Corrected the duplicate rune roll in Nurtha’s and Vergalid’s loot pools.
+- Restored Zhubis’s and Jenray’s six faction quests, with repeatable task sequences, original quest items, and native turn-ins.
+- Added The Pretender and Severing the Strings as personal quests earned during Vergalid’s End.
+- Restored the East and West expedition requests and entries. Attendance uses wing faction, Vergalid kill equivalence, the level 74 allowance, and temporary raid-in eligibility.
+- Added three encounters per wing, with individual event lockouts, encounter loot, and separate completion records for A Complex Diversion and Ghosts from the Past.
+- Added the Mark of Vergalid to the six original reward sources. Using the real item grants permanent Vergalid kill equivalence for Ashengate.

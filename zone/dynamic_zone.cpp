@@ -1,3 +1,4 @@
+#include "tss_ashengate.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -68,6 +69,12 @@ DynamicZone* DynamicZone::TryCreate(Client& client, DynamicZone& dzinfo, bool si
 		return nullptr;
 	}
 
+    const auto* wing = dzinfo.GetZoneID() == TssAshengate::ZoneID
+        ? TssAshengate::FindWing(dzinfo.GetZoneVersion()) : nullptr;
+    if (wing && dzinfo.GetName() == wing->name &&
+        (dzinfo.GetMinPlayers() != 6 || dzinfo.GetMaxPlayers() != 54 ||
+         !TssAshengate::CanRequest(client, *wing))) return nullptr;
+
 	// request parses leader, members list, and lockouts while validating
 	ExpeditionRequest request(dzinfo, client, silent);
 	if (!request.Validate())
@@ -76,6 +83,8 @@ DynamicZone* DynamicZone::TryCreate(Client& client, DynamicZone& dzinfo, bool si
 		return nullptr;
 	}
 
+    if (wing && dzinfo.GetName() == wing->name && request.GetLeaderID() != client.CharacterID())
+        return nullptr;
 	dzinfo.SetLeader({ request.GetLeaderID(), request.GetLeaderName(), DynamicZoneMemberStatus::Online });
 
 	// this creates a new dz instance and saves it to both db and cache

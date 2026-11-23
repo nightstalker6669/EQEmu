@@ -2,6 +2,7 @@
 #include "por_deathknell_custody.h"
 #include "por_tunare_custody.h"
 #include "vergalid_mission_lua.h"
+#include "tss_ashengate.h"
 #include "common/sod_content_bindings.h"
 #include "common/kithicor_mission.h"
 #include "zone/doors.h"
@@ -2156,6 +2157,30 @@ bool Lua_Client::ReceiveVergalidDoomingExile(Lua_Mob caster)
 {
     Lua_Safe_Call_Bool();
     return VergalidMission::ReceiveDoomingExile(*self, caster);
+}
+
+bool Lua_Client::HasAshengateFaction(uint32 version, bool kindly)
+{
+    Lua_Safe_Call_Bool();
+    return TssAshengate::HasFaction(*self, version, kindly);
+}
+
+bool Lua_Client::HasAshengateVergalidMark()
+{
+    Lua_Safe_Call_Bool();
+    return TssAshengate::HasMark(*self);
+}
+
+bool Lua_Client::ReconcileAshengateGive()
+{
+    Lua_Safe_Call_Bool();
+    return TssAshengate::ReconcileGive(*self);
+}
+
+bool Lua_Client::CommitAshengateSabotage()
+{
+    Lua_Safe_Call_Bool();
+    return TssAshengate::CommitSabotage(*self);
 }
 
 bool Lua_Client::ReconcileTunareGive()
@@ -4609,6 +4634,10 @@ luabind::scope lua_register_client() {
     .def("GetVergalidEventLockout", &Lua_Client::GetVergalidEventLockout)
     .def("AddVergalidEventLockout", &Lua_Client::AddVergalidEventLockout)
     .def("HasVergalidEventLoot", &Lua_Client::HasVergalidEventLoot)
+    .def("HasAshengateFaction", &Lua_Client::HasAshengateFaction)
+    .def("HasAshengateVergalidMark", &Lua_Client::HasAshengateVergalidMark)
+    .def("ReconcileAshengateGive", &Lua_Client::ReconcileAshengateGive)
+    .def("CommitAshengateSabotage", &Lua_Client::CommitAshengateSabotage)
     .def("ReceiveVergalidDoomingExile", &Lua_Client::ReceiveVergalidDoomingExile)
 	.def("CompleteTask", (bool(Lua_Client::*)(int))&Lua_Client::CompleteTask)
 	.def("Connected", (bool(Lua_Client::*)(void))&Lua_Client::Connected)

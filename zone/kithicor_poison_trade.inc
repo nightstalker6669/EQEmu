@@ -36,7 +36,9 @@
 #include <cstring>
 #include <thread>
 #include <chrono>
+#include <unordered_map>
 #include "por_tunare_custody.h"
+#include "tss_ashengate.h"
 #include "corpse.h"
 #include "dodh_longshadow_scene.inc"
 #include "dodh_longshadow_travel.inc"
@@ -93,6 +95,9 @@ bool PorExchangeEarned(ZoneDatabase& db, Client& client, const PorChime::Route& 
 }
 
 #include "por_tunare_custody.inc"
+#include "tss_ashengate_loot.inc"
+#include "tss_ashengate_give.inc"
+#include "tss_ashengate_public.inc"
 
 struct Ack {
  Client* client=nullptr;NPC* npc=nullptr;const EQ::ItemInstance* item=nullptr;
@@ -340,18 +345,26 @@ public:
      const Longshadow::SourceRoute* source_route = nullptr, const EQ::ItemInstance* native_loot = nullptr,
      unsigned rakban_route = 0, const DodhLongshadowScene::Identity* scene = nullptr,
      uint64_t notebook_run = 0, bool clicktok_hail = false,
-     const TunareGuardianLoot* tunare_loot = nullptr) noexcept {
+     const TunareGuardianLoot* tunare_loot = nullptr, Corpse* ashengate_corpse = nullptr, NPC* baby = nullptr,
+     const AshPublic::Capture* capture = nullptr) noexcept {
   const bool chest = (scene && !source_route) || notebook_run;
   if (clicktok_hail && (!source_route || source_route->source != Longshadow::Source::ClicktokGem ||
       native_loot || chest)) return CursorResult::Refused;
   const bool physical_source = native_loot || clicktok_hail;
   if ((notebook_run && (source_route || scene)) ||
       ((source_route || scene || notebook_run) && (spell_route || rakban_route)) ||
-      (!source_route && !scene && !notebook_run && !tunare_loot && spell_route.has_value() == (rakban_route != 0)) ||
+      (!source_route && !scene && !notebook_run && !tunare_loot && !ashengate_corpse && !capture && spell_route.has_value() == (rakban_route != 0)) ||
       ((scene || notebook_run) && !native_loot) ||
-      (tunare_loot && (!native_loot || source_route || scene || notebook_run || spell_route || rakban_route)) ||
+      ((tunare_loot || ashengate_corpse) &&
+       (!native_loot || source_route || scene || notebook_run || spell_route || rakban_route ||
+        (tunare_loot && ashengate_corpse))) ||
+      (bool(baby)!=bool(capture)) ||
+      (capture && (source_route || scene || notebook_run || tunare_loot || ashengate_corpse || native_loot ||
+                   spell_route || rakban_route)) ||
       rakban_route > DodhRakbanClaim::kShroudClaim) return CursorResult::Refused;
-  const auto* claim_table = tunare_loot ? "por_tunare_chalice_sources" : source_route ? "dodh_longshadow_item_sources"
+  const auto* claim_table = capture ? "tss_ashengate_public_actions"
+      : ashengate_corpse ? "tss_ashengate_mark_loot"
+      : tunare_loot ? "por_tunare_chalice_sources" : source_route ? "dodh_longshadow_item_sources"
       : notebook_run ? "dodh_hard_notebook_chests"
       : chest ? "dodh_longshadow_scene_effects"
       : spell_route ? DodhSpellReward::ClaimTable(*spell_route) : "dodh_rakban_claims";
@@ -413,7 +426,26 @@ public:
     if (N(terminal.begin()[0]) == 1) return CursorResult::AlreadyIssued;
    }
    std::string notebook_scope;
-   if (tunare_loot) {
+   AshengateMarkClaim mark;
+   if (capture) {
+    if (!AshPublic::ValidateBaby(db,c,*baby,*capture,true)) return CursorResult::Refused;
+    reward.item_id = AshPublic::Captured;
+    receipt_sql = fmt::format(
+        "SELECT character_id,87187,0,item_guid FROM tss_ashengate_public_actions "
+        "WHERE source_token='{}' AND activity_id=1 FOR UPDATE", capture->token);
+   } else if (ashengate_corpse) {
+    if (native_loot->GetID() != TssAshengate::Mark || native_loot->GetCharges() != 1 ||
+        !LockAshengateMarkSource(db, c, *ashengate_corpse, mark)) return CursorResult::Refused;
+    if (!mark.ordinal) return CursorResult::AlreadyIssued;
+    uint8_t nonce[32];
+    if (RAND_bytes(nonce, sizeof(nonce)) != 1) return CursorResult::Refused;
+    mark.token = Hex(nonce, sizeof(nonce));
+    reward.item_id = TssAshengate::Mark;
+    receipt_sql = fmt::format(
+        "SELECT character_id,87292,0,item_guid,source_token FROM tss_ashengate_mark_loot "
+        "WHERE dz_uuid='{}' AND event_id={} AND source_ordinal={} FOR UPDATE",
+        db.Escape(mark.uuid), mark.event, mark.ordinal);
+   } else if (tunare_loot) {
     tunare_run = LockTunareGuardian(db, c, *tunare_loot);
     if (!tunare_run || native_loot->GetID() != Tunare::Chalice) return CursorResult::Refused;
     uint8_t nonce[32];
@@ -513,6 +545,8 @@ public:
    auto existing = Q(db, receipt_sql);
    if (existing.RowCount()) {
     auto row = existing.begin();
+    if (capture) return existing.RowCount()==1 && N(row[0])==who && N(row[3]) ?
+        CursorResult::AlreadyIssued : CursorResult::Refused;
     if (tunare_loot) {
      auto* dz = CurrentTunareRaid();
      if (dz && existing.RowCount() == 1 && N(row[0]) && N(row[3]) && row[4] &&
@@ -527,7 +561,7 @@ public:
      return CursorResult::AlreadyIssued;
     return CursorResult::Refused;
    }
-   if (!source && !chest && !tunare_loot) {
+   if (!source && !chest && !tunare_loot && !ashengate_corpse && !capture) {
     const auto has_completion = [&](uint32_t task) {
      if (spell_route && *spell_route == DodhSpellReward::Route::Level69) {
       return SharedTaskAdmission::CompletedMember(db, task, {who}) == who;
@@ -555,10 +589,16 @@ public:
    std::unique_ptr<EQ::ItemInstance> output(native_loot ? native_loot->Clone() : database.CreateItem(reward.item_id));
    if (!output || output->GetID() != reward.item_id || output->GetSerialNumber() <= 0 ||
        (spell_route && output->GetItem()->Scroll.Effect != reward.spell_id) ||
-       ((source || chest || tunare_loot) && (output->IsStackable() || output->IsClassBag())) ||
+       ((source || chest || tunare_loot || ashengate_corpse || capture) && (output->IsStackable() || output->IsClassBag())) ||
        c.CheckLoreConflict(output->GetItem())) return CursorResult::Refused;
    if (output->IsStackable()) output->SetCharges(1);
-   if (tunare_loot) {
+   if (capture) {
+    if (AshPublic::ActionCount(db,c,AshPublic::Children,capture->accepted,1)>=4) return CursorResult::Refused;
+    output->SetCustomData(AshGive::CaptureOwner,std::to_string(who));
+   } else if (ashengate_corpse) {
+    output->SetCustomData(TssAshengate::MarkOwner, std::to_string(who));
+    output->SetCustomData(TssAshengate::MarkToken, mark.token);
+   } else if (tunare_loot) {
     output->SetCustomData(Tunare::OwnerTag, std::to_string(who));
     output->SetCustomData(Tunare::SourceTag, tunare_stamp);
    }
@@ -610,7 +650,19 @@ public:
    auto first = staged.cbegin(), last = staged.cend();
    if (!db.SaveCursor(who, first, last)) return CursorResult::Refused;
    ValidateTrees(db, c, std::list<EQ::ItemInstance*>(staged.cbegin(), staged.cend()), false);
-   if (tunare_loot) {
+   if (capture) {
+    const auto receipt=Q(db,fmt::format(
+        "INSERT INTO tss_ashengate_public_actions(source_token,activity_id,character_id,task_id,"
+        "accepted_time,placement_id,item_guid,recorded_at) VALUES ('{}',1,{},{},{},0,{},UNIX_TIMESTAMP())",
+        capture->token,who,AshPublic::Children,capture->accepted,serial));
+    if (receipt.RowsAffected()!=1) return CursorResult::Refused;
+   } else if (ashengate_corpse) {
+    const auto receipt = Q(db, fmt::format(
+        "INSERT INTO tss_ashengate_mark_loot(dz_uuid,event_id,source_ordinal,source_token,"
+        "character_id,instance_id,item_guid,issued_at) VALUES ('{}',{},{},'{}',{},{},{},UNIX_TIMESTAMP())",
+        db.Escape(mark.uuid), mark.event, mark.ordinal, mark.token, who, mark.instance, serial));
+    if (receipt.RowsAffected() != 1) return CursorResult::Refused;
+   } else if (tunare_loot) {
     auto* dz = CurrentTunareRaid();
     if (!dz || LockTunareGuardian(db, c, *tunare_loot) != tunare_run) return CursorResult::Refused;
     const auto receipt = Q(db, fmt::format(
@@ -666,10 +718,11 @@ public:
      throw std::runtime_error("Darkhollow claim outcome unknown");
     }
     auto row = receipt.begin();
-    if (N(row[0]) != (source || chest || tunare_loot ? uint64_t(who) : uint64_t(base_class)) || N(row[1]) != reward.item_id ||
+    if (N(row[0]) != (source || chest || tunare_loot || ashengate_corpse || capture ? uint64_t(who) : uint64_t(base_class)) || N(row[1]) != reward.item_id ||
         N(row[2]) != (source ? source->accepted_time : reward.spell_id) || N(row[3]) != uint64_t(serial) ||
         (source && (N(row[4]) != source->task || N(row[5]) != source->mission_instance)) ||
-        (tunare_loot && (!row[4] || row[4] != tunare_stamp))) {
+        (tunare_loot && (!row[4] || row[4] != tunare_stamp)) ||
+        (ashengate_corpse && (!row[4] || row[4] != mark.token))) {
      throw std::runtime_error("Darkhollow claim receipt differs");
     }
    }
@@ -698,8 +751,9 @@ public:
 
 #include "dodh_rakban_combine.inc"
 #include "por_deathknell_shard.inc"
+#include "tss_ashengate_mark_use.inc"
 
- enum class DodhTrade { None, Exchange, DesertingGuard, NotebookOpener, Monocle, PublicRoute, Longshadow, Chime, Tunare };
+ enum class DodhTrade { None, Exchange, DesertingGuard, NotebookOpener, Monocle, PublicRoute, Longshadow, Chime, Tunare, Ashengate };
 
  static bool Execute(Client& c,NPC& npc,unsigned chest,OriginalTradeWriter::SemanticRecipe* semantic=nullptr,bool transform=false,Continuation* resume=nullptr,DodhTrade dodh_trade=DodhTrade::None,
                      const EQEmu::SharedCore::DodhExchange::PublicRoute* route=nullptr) noexcept {
@@ -723,6 +777,8 @@ public:
   if (dodh_trade == DodhTrade::Tunare && !tunare) return true;
   std::string tunare_stamp;
   bool tunare_accept = false;
+  const bool ashengate_give = dodh_trade == DodhTrade::Ashengate;
+  AshGive::Plan ash_give;
   const bool dodh_guard = dodh_trade == DodhTrade::DesertingGuard;
   const bool dodh_opener = dodh_trade == DodhTrade::NotebookOpener;
   const bool dodh_route = dodh_trade == DodhTrade::PublicRoute && route;
@@ -821,6 +877,7 @@ public:
          : dodh_opener ? DodhOriginalExchange::ClaimsOpenerOffer(c, npc)
          : dodh_monocle ? DodhOriginalExchange::ClaimsMonocleOffer(c, npc)
          : dodh_route ? same_route() && DodhOriginalExchange::ClaimsPublicRoute(c,npc)
+         : ashengate_give ? AshGive::Contact(npc)
          : tunare ? OfferedTunare(c, npc) == tunare
          : por_chime ? OfferedPorChime(c, npc) == por_chime
          : dodh_longshadow ? MatchingLongshadowOffer(c, npc) == longshadow
@@ -941,6 +998,14 @@ public:
     }
     if (!tunare_accept) debit = {};
    }
+   if (ashengate_give) {
+    if (!db.TransactionBeginStrict().Success()) return true;
+    transaction = true;
+    LockLease(db,*lease);
+    ash_give = AshGive::PlanGive(db,c,npc,offers);
+    recipe_context = ash_give.Context();
+    debit = ash_give.debit;
+   }
    bool route_accept = false;
    if (dodh_route) {
     recipe_context = Exchange::RouteContext(*route, accepted ? accepted : 1);
@@ -1008,9 +1073,10 @@ public:
     selected_slot=offers[i].slot;selected=inv.GetItem(selected_slot);break;
    }
    if(transform){selected_slot=transform_context->offers[transform_context->primary].slot;selected=inv.GetItem(selected_slot);}
-   if ((dodh_exchange || opener_repeat || dodh_route || tunare) && !selected) {
+   if ((dodh_exchange || opener_repeat || dodh_route || tunare || ashengate_give) && !selected) {
     for (const auto& offer : offers) {
-     const bool claimed_item = opener_repeat ? offer.item_id == Exchange::Notebook
+     const bool claimed_item = ashengate_give ? AshGive::Input(offer.item_id)
+         : opener_repeat ? offer.item_id == Exchange::Notebook
          : tunare ? Tunare::Input(*tunare, offer.item_id)
          : por_chime ? PorChime::IsInput(*por_chime, offer.item_id)
          : dodh_monocle ? Exchange::IsMonoclePart(offer.item_id)
@@ -1106,6 +1172,11 @@ public:
    if (route_accept) lock_route();
    if (tunare_accept && !CheckTunareGive(db, c, npc, *tunare, run, offers, debit, tunare_stamp))
     throw std::runtime_error("Tunare Give evidence changed");
+   if (ashengate_give && ash_give.mask) {
+    const auto fresh = AshGive::PlanGive(db,c,npc,offers);
+    if (fresh.Context()!=recipe_context || fresh.debit.units!=debit.units)
+        throw std::runtime_error("Ashengate native Give evidence changed");
+   }
    if(kithicor){auto occupied=Q(db,fmt::format("SELECT status FROM kithicor_mission_actions WHERE shared_task_id={} AND phase=0 AND action_id={} FOR UPDATE",run,chest));
     if(occupied.RowCount())throw std::runtime_error("Kithicor chest already reserved/poisoned");}
    const auto pre=Snapshot(db,c.CharacterID());
@@ -1167,6 +1238,11 @@ public:
    if (route_accept) lock_route();
    if (tunare_accept && !CheckTunareGive(db, c, npc, *tunare, run, offers, debit, tunare_stamp))
     throw std::runtime_error("Tunare Give evidence changed");
+   if (ashengate_give && ash_give.mask) {
+    const auto fresh = AshGive::PlanGive(db,c,npc,offers);
+    if (fresh.Context()!=recipe_context || fresh.debit.units!=debit.units)
+        throw std::runtime_error("Ashengate native Give evidence changed");
+   }
    if (longshadow_debit) {
     const auto context = BindLongshadow(db, c, npc, *longshadow);
     const auto locked = context ? DodhMissionCustody::LockTurnin(db, *longshadow, *context, offers)
@@ -1219,7 +1295,7 @@ public:
    if (longshadow_debit && !DodhMissionCustody::RecordSettlement(db, *longshadow, *longshadow_debit, key))
     throw std::runtime_error("Longshadow physical settlement receipt refused");
    if (tunare_accept) CommitTunareGive(db, c, *tunare, run, tunare_stamp, key, output_guid);
-   const unsigned physical_outcome = ((dodh_exchange && !output_guid) || opener_repeat || (dodh_route && !route_accept) || (tunare && !tunare_accept)) ? 2 : 1;
+   const unsigned physical_outcome = ((dodh_exchange && !output_guid) || opener_repeat || (dodh_route && !route_accept) || (tunare && !tunare_accept) || (ashengate_give && !ash_give.mask)) ? 2 : 1;
    auto outcome=Q(db,"UPDATE kithicor_poison_custody SET physical="+std::to_string(physical_outcome)+",postimage=x'"+Hex(post)+"' WHERE request_key='"+key+"' AND physical=0 AND settled=0 AND "+LeaseWhere(*lease));
    if(outcome.RowsAffected()!=1||db.TransactionStrictFailed())throw std::runtime_error("Kithicor physical outcome changed");
    Session(db,connection);if(!db.TransactionCommitStrict().Success())throw std::runtime_error("Kithicor physical commit unknown");transaction=false;
@@ -1259,6 +1335,7 @@ public:
     try{auto receipt=Q(db,fmt::format("SELECT status FROM kithicor_mission_actions WHERE shared_task_id={} AND phase=0 AND action_id={} AND character_id={} AND item_id=38504 AND status=1",run,chest,c.CharacterID()));gameplay_accepted=updated&&receipt.RowCount()==1;}catch(...){}
     if(!gameplay_accepted)c.Message(Chat::Yellow,"Your vial was used, but task progress could not be confirmed.");
    }
+   if (ashengate_give && ash_give.mask) AshGive::Reconcile(c);
    if (tunare) {
     if (tunare_accept) {
      c.Message(Chat::Yellow, "Your offering has been accepted.");
@@ -1498,6 +1575,9 @@ bool ClaimsPorChimeOffer(Client& client, NPC& npc)
 bool OriginalAccept(Client& client, NPC& npc)
 {
     using Mode = KithicorPoisonTrade::Writer::DodhTrade;
+    if (TssAshengate::ClaimsGive(client, npc)) {
+        return KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::Ashengate);
+    }
     if (ClaimsTunareOffer(client, npc)) {
         return KithicorPoisonTrade::Writer::Execute(client, npc, 0, nullptr, false, nullptr, Mode::Tunare);
     }
@@ -1837,6 +1917,287 @@ bool Reconcile(Client& client)
         return client.GetAchievementProgress(achievement, required, component) == 1 || submitted;
     } catch (...) {
         return false;
+    }
+}
+}
+
+
+namespace TssAshengate {
+
+bool ClaimsGive(Client& client, NPC& npc)
+{
+    if (!KithicorPoisonTrade::AshGive::Contact(npc)) return false;
+    const auto offers=OriginalTradeOffer::Capture(client);
+    return std::ranges::any_of(offers,[](const auto& o) {
+        return o.present && KithicorPoisonTrade::AshGive::Input(o.item_id);
+    });
+}
+
+bool ReconcileGive(Client& client)
+{
+    try {
+        using namespace KithicorPoisonTrade;
+        AshPublic::Acknowledge(client,AshPublic::Children,0,4);
+        AshPublic::Acknowledge(client,AshPublic::Children,1,4);
+        return AshGive::Reconcile(client);
+    } catch (...) { return false; }
+}
+
+namespace {
+struct IncubatorCast {
+    Client* caster;
+    uint16_t caster_entity;
+    int16_t slot;
+    int32_t serial;
+    uint32_t target;
+    NPC* actor;
+    uint32_t placement;
+    uint64_t accepted;
+    std::chrono::steady_clock::time_point started;
+};
+std::unordered_map<uint32_t, IncubatorCast> incubator_casts;
+
+bool IncubatorItem(EQ::ItemInstance* item)
+{
+    return item && item->GetItem() && item->GetID()==Incubator && item->GetSerialNumber()>0 &&
+        item->GetItem()->Click.Effect==IncubatorSpell && item->GetItem()->CastTime==5000 &&
+        item->GetItem()->Click.Type==EQ::item::ItemEffectEquipClick && item->GetCharges()==-1;
+}
+
+bool IncubatorTarget(Client& caster, NPC& target, uint8_t activity)
+{
+    if (!KithicorPoisonTrade::AshPublic::Active(caster,920370,activity) ||
+        target.GetDepop() || target.GetHP()<=0 || !caster.CheckLosFN(&target)) return false;
+    const auto delta=target.GetPosition()-caster.GetPosition();
+    if (delta.x*delta.x+delta.y*delta.y+delta.z*delta.z>10000) return false;
+    return activity==0 ? KithicorPoisonTrade::AshPublic::Egg(target) : target.GetNPCTypeID()==Baby;
+}
+
+bool MarkItem(EQ::ItemInstance* item)
+{
+    return item && item->GetItem() && item->GetID() == Mark && item->IsClassCommon() &&
+        !item->IsStackable() && !item->IsEvolving() && !item->GetEvolveUniqueID() &&
+        item->GetItem()->Click.Effect == MarkSpell && item->GetItem()->CastTime == 0 &&
+        item->GetItem()->Click.Type == EQ::item::ItemEffectClick &&
+        item->GetItem()->MaxCharges == 1 && item->GetCharges() == 1 &&
+        item->GetSerialNumber() > 0 && item->GetContents()->empty() &&
+        std::ranges::none_of(item->GetAugmentIDs(), [](uint32_t id) { return id != 0; });
+}
+}
+
+OriginalClickScope::OriginalClickScope(Client& client, int16_t slot, uint32_t spell, uint32_t target)
+    : previous_(active_), client_(&client), slot_(slot), target_(target), spell_(spell)
+{
+    // Also mask any outer Mark ticket while ordinary nested dispatch runs.
+    active_ = this;
+    auto* item = client.GetInv().GetItem(slot);
+    if (spell==IncubatorSpell && IncubatorItem(item)) {
+        serial_=item->GetSerialNumber();
+        return;
+    }
+    if (spell != MarkSpell) return;
+    allowed_ = !client.IsSpiritShrouded() && (target == 0 || target == client.GetID()) &&
+        client.GetInv().SupportsClickCasting(slot) && MarkItem(item) &&
+        item->GetCustomData(MarkOwner) == std::to_string(client.CharacterID());
+    if (allowed_) serial_ = item->GetSerialNumber();
+    else client.Message(Chat::Red, "Only an earned Mark may be used on yourself.");
+}
+
+OriginalClickScope::~OriginalClickScope()
+{
+    active_ = previous_;
+}
+
+bool OriginalClickScope::Matches(Client& client, int16_t slot)
+{
+    auto* item = client.GetInv().GetItem(slot);
+    return active_ && active_->client_ == &client && active_->slot_ == slot && active_->serial_ > 0 &&
+        MarkItem(item) && item->GetSerialNumber() == active_->serial_;
+}
+
+bool OriginalClickScope::BeginIncubator(Client& client, int16_t slot, uint32_t target)
+{
+    using namespace KithicorPoisonTrade;
+    if (!active_ || active_->client_!=&client || active_->slot_!=slot ||
+        active_->spell_!=IncubatorSpell || active_->target_!=target ||
+        !EQ::ValueWithin(slot,EQ::invslot::EQUIPMENT_BEGIN,EQ::invslot::EQUIPMENT_END)) return false;
+    auto* item=client.GetInv().GetItem(slot);
+    if (!IncubatorItem(item) || item->GetSerialNumber()!=active_->serial_) return false;
+    auto* actor=entity_list.GetNPCByID(target);
+    if (!actor || client.GetTarget()!=actor) return false;
+    const uint8_t activity=actor->GetNPCTypeID()==Baby ? 1 : 0;
+    if (!IncubatorTarget(client,*actor,activity)) return false;
+    try {
+        const auto accepted=AshGive::Accepted(database,client,AshPublic::Children,false);
+        if (!accepted) return false;
+        incubator_casts.insert_or_assign(client.CharacterID(),IncubatorCast{
+            &client,client.GetID(),slot,item->GetSerialNumber(),target,actor,actor->GetSpawnPointID(),
+            accepted,std::chrono::steady_clock::now()});
+        return true;
+    } catch (...) { return false; }
+}
+
+void CancelIncubator(Client& client)
+{
+    incubator_casts.erase(client.CharacterID());
+}
+
+namespace {
+bool IncubatorCastStillMatches(const IncubatorCast& proof, Client& client, int16_t slot, NPC& actor)
+{
+    auto* item = client.GetInv().GetItem(slot);
+    if (proof.caster != &client || proof.caster_entity != client.GetID() || proof.slot != slot ||
+        proof.target != actor.GetID() || proof.actor != &actor ||
+        entity_list.GetNPCByID(proof.target) != &actor || actor.GetSpawnPointID() != proof.placement ||
+        !IncubatorItem(item) || item->GetSerialNumber() != proof.serial ||
+        std::chrono::steady_clock::now() - proof.started > std::chrono::seconds(12)) return false;
+
+    const uint8_t activity = actor.GetNPCTypeID() == Baby ? 1 : 0;
+    return IncubatorTarget(client, actor, activity) &&
+        KithicorPoisonTrade::AshGive::Accepted(database, client, KithicorPoisonTrade::AshPublic::Children, false)
+        == proof.accepted;
+}
+
+std::optional<KithicorPoisonTrade::AshPublic::Capture> IncubatorCapture(NPC& actor, uint64_t caster_accepted)
+{
+    const auto owner = SharedTaskAdmission::Number(actor.GetEntityVariable(BabyOwner).c_str());
+    const auto accepted = SharedTaskAdmission::Number(actor.GetEntityVariable(BabyOccurrence).c_str());
+    if (!owner || !*owner || *owner > UINT32_MAX || !accepted || !*accepted) return std::nullopt;
+    return KithicorPoisonTrade::AshPublic::Capture{actor.GetEntityVariable(BabyToken), caster_accepted,
+        static_cast<uint32_t>(*owner), *accepted};
+}
+}
+
+bool AllowsIncubatorLanding(Client& client, int16_t slot, NPC& actor)
+{
+    using namespace KithicorPoisonTrade;
+    const auto found = incubator_casts.find(client.CharacterID());
+    if (found == incubator_casts.end()) return false;
+    try {
+        if (!IncubatorCastStillMatches(found->second, client, slot, actor)) return false;
+        if (actor.GetNPCTypeID() != Baby) return true;
+        const auto capture = IncubatorCapture(actor, found->second.accepted);
+        return capture && AshPublic::ValidateBaby(database, client, actor, *capture, false);
+    } catch (...) {
+        return false;
+    }
+}
+
+void FinishIncubator(Client& client, int16_t slot, uint32_t target)
+{
+    using namespace KithicorPoisonTrade;
+    const auto found = incubator_casts.find(client.CharacterID());
+    if (found == incubator_casts.end()) return;
+    const auto proof = found->second;
+    incubator_casts.erase(found);
+    auto* actor = entity_list.GetNPCByID(target);
+    try {
+        if (!actor || !IncubatorCastStillMatches(proof, client, slot, *actor)) return;
+        if (actor->GetNPCTypeID() == Baby) {
+            const auto capture = IncubatorCapture(*actor, proof.accepted);
+            if (!capture) return;
+            const auto result=Writer::ClaimDodhCursor(client,std::nullopt,nullptr,nullptr,0,nullptr,0,
+                false,nullptr,nullptr,actor,&*capture);
+            if (result==Writer::CursorResult::Issued || result==Writer::CursorResult::AlreadyIssued) {
+                actor->Depop(false);
+                AshPublic::Acknowledge(client,AshPublic::Children,1,4);
+            }
+            return;
+        }
+
+        const auto* cfg=EQEmuConfig::get();
+        ZoneDatabase db;
+        if (!cfg || !db.Connect(cfg->DatabaseHost,cfg->DatabaseUsername,cfg->DatabasePassword,
+            cfg->DatabaseDB,cfg->DatabasePort,"tss-ashengate-hatch") || !db.TransactionBeginStrict().Success()) return;
+        struct Rollback { ZoneDatabase& db; ~Rollback(){ db.TransactionRollbackStrict(); } } rollback{db};
+        auto engines=Q(db,
+            "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() "
+            "AND engine='InnoDB' AND table_name IN ('character_tasks','tss_ashengate_public_actions')");
+        if (engines.RowCount()!=1 || N(engines.begin()[0])!=2 ||
+            AshGive::Accepted(db,client,AshPublic::Children,true)!=proof.accepted ||
+            AshPublic::ActionCount(db,client,AshPublic::Children,proof.accepted,0)>=4) return;
+        const auto token=AshPublic::Nonce();
+        if (token.empty() || !actor->GetEntityVariable(BabyToken).empty()) return;
+        auto* spawn=quest_manager.spawn2(Baby,0,0,actor->GetPosition());
+        if (!spawn || !spawn->IsNPC()) return;
+        auto* baby=spawn->CastToNPC();
+        struct NewBaby {
+            NPC* npc;
+            bool keep=false;
+            ~NewBaby(){if (!keep) npc->Depop(false);}
+        } spawned{baby};
+        baby->SetEntityVariable(BabyOwner,std::to_string(client.CharacterID()));
+        baby->SetEntityVariable(BabyOccurrence,std::to_string(proof.accepted));
+        baby->SetEntityVariable(BabyToken,token);
+        actor->SetEntityVariable(BabyToken,token);
+        actor->Depop(true); // Real placed egg returns on its configured spawn timer.
+        const auto where=fmt::format(
+            "source_token='{}' AND activity_id=0 AND character_id={} AND task_id={} AND accepted_time={} AND placement_id={}",
+            token,client.CharacterID(),AshPublic::Children,proof.accepted,proof.placement);
+        auto saved=Q(db,fmt::format(
+            "INSERT INTO tss_ashengate_public_actions(source_token,activity_id,character_id,task_id,"
+            "accepted_time,placement_id,item_guid,recorded_at) VALUES ('{}',0,{},{},{},{},NULL,UNIX_TIMESTAMP())",
+            token,client.CharacterID(),AshPublic::Children,proof.accepted,proof.placement));
+        if (saved.RowsAffected()!=1 || db.TransactionStrictFailed()) return;
+        if (!db.TransactionCommitStrict().Success()) {
+            auto result=database.QueryDatabase("SELECT 1 FROM tss_ashengate_public_actions WHERE "+where);
+            if (!result.Success() || result.RowCount()!=1) return;
+        }
+        spawned.keep=true;
+        AshPublic::Acknowledge(client,AshPublic::Children,0,4);
+    } catch (...) {
+        LogError("Ashengate public hatch or capture could not be settled");
+    }
+}
+
+bool ConsumeMark(Client& client, int16_t slot)
+{
+    if (!OriginalClickScope::Matches(client,slot)) return false;
+    return KithicorPoisonTrade::Writer::ConsumeAshengateMark(client,slot);
+}
+
+bool CommitSabotage(Client& client)
+{
+    using namespace KithicorPoisonTrade;
+    if (!AshPublic::SabotageSite(client)) return false;
+    try {
+        const auto accepted=AshGive::Accepted(database,client,AshPublic::Sabotage,false);
+        if (!accepted) return false;
+        if (!AshPublic::ActionCount(database,client,AshPublic::Sabotage,accepted,4)) {
+            const short slot=client.GetInv().HasItem(AshPublic::Explosives,1,invWherePersonal);
+            // The stock task permits the satchel in personal inventory; the
+            // debit never scans bank, shared bank, trade, or a cursor queue.
+            if (slot<0 || slot==EQ::invslot::slotCursor ||
+                !Writer::ConsumeAshengateSabotage(client,slot,accepted)) return false;
+        }
+        if (!client.SpellFinished(AshPublic::Detonation,&client)) return false;
+        AshPublic::Acknowledge(client,AshPublic::Sabotage,4,1);
+        return true;
+    } catch (...) { return false; }
+}
+
+void CaptureMarkCorpse(Corpse& corpse, NPC& source)
+{
+    const auto* reward = FindReward(source.GetNPCTypeID());
+    const auto* wing = reward ? FindWing(reward->version) : nullptr;
+    auto* dz = wing ? CurrentWing(*wing) : nullptr;
+    if (!dz) return;
+    const auto marker = fmt::format("{}:{}", dz->GetUUID(), reward->event);
+    if (source.GetEntityVariable(MarkSource) == marker) corpse.SetEntityVariable(MarkSource, marker);
+}
+
+LootResult LootMark(Client& client, Corpse& corpse, const EQ::ItemInstance& item)
+{
+    const auto* reward = FindReward(corpse.GetNPCTypeID());
+    if (item.GetID() != Mark || !corpse.IsNPCCorpse() || !zone || zone->GetZoneID() != ZoneID ||
+        !reward || zone->GetInstanceVersion() != reward->version) return LootResult::Unrelated;
+    using Writer = KithicorPoisonTrade::Writer;
+    switch (Writer::ClaimDodhCursor(client, std::nullopt, nullptr, &item,
+                                    0, nullptr, 0, false, nullptr, &corpse)) {
+    case Writer::CursorResult::Issued: return LootResult::Issued;
+    case Writer::CursorResult::AlreadyIssued: return LootResult::AlreadyIssued;
+    case Writer::CursorResult::InventoryReload: return LootResult::InventoryReload;
+    default: return LootResult::Refused;
     }
 }
 }

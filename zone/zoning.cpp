@@ -1,3 +1,4 @@
+#include "tss_ashengate.h"
 #include "zone/dynamic_zone.h"
 /*	EQEmu: EQEmulator
 
@@ -647,6 +648,13 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 		SodProgression::IsSodZone(target_zone_id) && !CanEnterSodProgressionZone(target_zone_id, target_instance_version, target_instance_id)) {
 		zoning_message = ZoningMessage::ZoneNoExperience;
 	}
+
+    if (target_zone_id == TssAshengate::ZoneID) {
+        const auto* wing = TssAshengate::FindWing(target_instance_version);
+        if (wing && !TssAshengate::CanEnter(*this, *wing, target_instance_id)) {
+            zoning_message = ZoningMessage::ZoneNoExperience;
+        }
+    }
 
 	// Check Minimum Status, Minimum Level, Maximum Level, and Zone Flag
 	if (
@@ -1770,6 +1778,11 @@ void Client::SetPEQZoneFlag(uint32 zone_id) {
 }
 
 bool Client::CanEnterZone(const std::string& zone_short_name, int16 instance_version) {
+    if (zone_short_name.empty() && zone && zone->GetZoneID() == TssAshengate::ZoneID) {
+        const auto* wing = TssAshengate::FindWing(zone->GetInstanceVersion());
+        if (wing && !TssAshengate::CanEnter(*this, *wing, zone->GetInstanceID())) return false;
+    }
+
 	//check some critial rules to see if this char needs to be booted from the zone
 	//only enforce rules here which are serious enough to warrant being kicked from
 	//the zone

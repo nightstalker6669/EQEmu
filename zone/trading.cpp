@@ -1,3 +1,4 @@
+#include "tss_ashengate.h"
 #include "original_trade_transform_hooks.h"
 #include "dodh_exchange.h"
 #include "sod_food_delivery.h"
@@ -537,7 +538,8 @@ void Client::FinishTrade(Mob* tradingWith, bool finalizer, void* event_entry, st
 			DodhOriginalExchange::ClaimsOpenerOffer(*this,*tradingWith->CastToNPC()) ||
 		   DodhOriginalExchange::ClaimsLongshadowOffer(*this,*tradingWith->CastToNPC()) ||
 		   DodhOriginalExchange::ClaimsPorChimeOffer(*this,*tradingWith->CastToNPC()) ||
-		   DodhOriginalExchange::ClaimsTunareOffer(*this,*tradingWith->CastToNPC()))return;
+		   DodhOriginalExchange::ClaimsTunareOffer(*this,*tradingWith->CastToNPC()) ||
+           TssAshengate::ClaimsGive(*this,*tradingWith->CastToNPC()))return;
 		if(FireRunActionSource::NativeRunTerminalSource::RejectUnissuedFinishTrade(*this,*tradingWith->CastToNPC()))return;
 		if (Housing::GuildPortalRuntime::HandIn(*this, tradingWith)) return;
 

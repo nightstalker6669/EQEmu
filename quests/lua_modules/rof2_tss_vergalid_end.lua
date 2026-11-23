@@ -7,6 +7,13 @@ local M = {}
 local binding, actors, spells = layout.ending, layout.actors, layout.spells
 local events = {"Nurtha Frazzlesprocket", "Goru Uldrock", "Vergalid"}
 local activities = {1, 2, 4}
+local pretender, strings = 920362, 920363
+local side_credit = {
+    {task = pretender, activity = 2},
+    {task = strings, activity = 1},
+    {task = strings, activity = 3},
+    {task = strings, activity = 2},
+}
 local clockworks = {actors.gnomework, actors.arachnid, actors.vermin}
 local waves = {actors.lost, actors.tormented, actors.angry, actors.ancient, actors.giant, actors.overlord, actors.wailing}
 local hazard_mark = "tss_vergalid:hazard"
@@ -244,6 +251,7 @@ function M.say(e)
     local words = route.words(e)
     local hail = words == "hail" or words == "hail, " .. npc:GetCleanName():lower()
     if encounter.event == 1 and encounter.phase == "waiting" and hail then
+        route.advance(client, pretender, 1)
         npc:Say("You are too late to take back the flame.")
     elseif encounter.event == 2 and encounter.phase == "waiting" then
         if hail then
@@ -285,6 +293,12 @@ local function finish_pending()
     if not client then return end
     if event == 3 and not M.reward_dragon() then return end
     if event ~= 4 and not reward(event, client) then return end
+    local side = side_credit[event]
+    for _, member in ipairs(members) do
+        if encounter.victory[member:CharacterID()] then
+            route.advance(member, side.task, side.activity)
+        end
+    end
     local activity = event == 4 and 3 or activities[event]
     if not raid.shared_step(members, binding, activity) then return end
     remove_attempt()
@@ -292,6 +306,9 @@ end
 
 local function victory()
     encounter.victory = {}
+    for _, member in ipairs(active_players(encounter.point, 220)) do
+        encounter.victory[member:CharacterID()] = true
+    end
     finish_pending()
 end
 
@@ -341,7 +358,10 @@ function M.death(e)
 end
 
 function M.arrive(e)
-    if raid.arrive(e, binding) then eq.set_timer(timer, 1000) end
+    if not raid.arrive(e, binding) then return end
+    route.advance(e.self, pretender, 0)
+    route.advance(e.self, strings, 0)
+    eq.set_timer(timer, 1000)
 end
 
 function M.tick(e)
