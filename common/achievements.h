@@ -39,7 +39,8 @@ enum class EventType : uint8_t {
 	AlternateAdvancement   = 10,
 	AchievementComplete    = 11,
 	NpcNameKill            = 12,
-	SkillCap               = 13
+	SkillCap               = 13,
+	CollectionItem         = 14
 };
 
 enum class ProgressMode : uint8_t {

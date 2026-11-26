@@ -309,6 +309,7 @@ bool AchievementManager::LoadSnapshot()
 		std::tuple<uint32_t, uint8_t, uint32_t, uint8_t, uint32_t, uint32_t>
 	> criterion_keys;
 
+	std::set<uint32_t> collection_items;
 	std::vector<AchievementCriteriaRepository::AchievementCriteria> criterion_rows;
 	if (!AchievementCriteriaRepository::GetAll(content_db, criterion_rows)) {
 		LogError("Failed to load achievement evaluation criteria");
@@ -334,7 +335,7 @@ bool AchievementManager::LoadSnapshot()
 		const auto target_value = row.target_value;
 		if (
 			component_type > 2 ||
-			event_type > static_cast<uint32_t>(EventType::SkillCap) ||
+			event_type > static_cast<uint32_t>(EventType::CollectionItem) ||
 			progress_mode > static_cast<uint32_t>(ProgressMode::Boolean) ||
 			behavior > static_cast<uint32_t>(CriterionBehavior::Blocker) ||
 			target_value < 0
@@ -540,6 +541,14 @@ bool AchievementManager::LoadSnapshot()
 				effective_progress_mode
 			}
 		);
+		if (effective_event_type == EventType::CollectionItem &&
+			(!target_id || target_value != 1 || component_type != 1 || effective_required_count != 1 ||
+			 effective_behavior != CriterionBehavior::Required || effective_progress_mode != ProgressMode::Set ||
+			 !inserted || !collection_items.insert(target_id).second)) {
+			LogError("Invalid or duplicate collection item criterion [{}]", row.id);
+			Clear();
+			return false;
+		}
 		if (
 			!inserted &&
 			(

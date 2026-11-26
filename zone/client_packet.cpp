@@ -10127,6 +10127,12 @@ void Client::Handle_OP_ItemVerifyRequest(const EQApplicationPacket *app)
 		return;
 	}
 
+	if (ClientVersion() == EQ::versions::ClientVersion::RoF2 &&
+		item->ItemType == EQ::item::ItemTypeCollectible) {
+		RegisterCollectionItem(slot_id, *inst);
+		return;
+	}
+
 	spell_id = item->Click.Effect;
 	bool is_casting_bard_song = false;
 

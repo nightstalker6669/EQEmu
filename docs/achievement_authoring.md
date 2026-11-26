@@ -419,6 +419,13 @@ entries remain protected by `character_achievement_rewards`.
 | `11` | Achievement complete | Prerequisite achievement ID; `0` matches any | `0` | `1` after durable completion. Replayed from achievement completion state. |
 | `12` | NPC name kill | Nonzero canonical-name FNV-1a hash | Zone ID; `0` matches any zone | `1` per credited kill. No historical replay. |
 | `13` | Skill cap | Exact skill ID | Required EQ class ID | `target_value` is the milestone level. The server queries `skill_caps` and emits that milestone value only when the character has reached both the level and the DB-backed cap. Reconciled. |
+| `14` | Collection registration | Exact collectible item ID | `0` | `1` after actual RoF2 item use and atomic inventory debit. |
+
+Collection registration requires one unique item marked as a collectible
+(`items.itemtype=66`) and one type-`1` component per criterion. Use Required
+behavior, Set progress, `target_value=1`, and `required_count=1`. RoF2 receives
+the native collectible flag and the miscellaneous item type. Picking up or
+looting the item does not register it. A duplicate use keeps the item.
 
 NPC-name hashes use lowercase ASCII letters, collapse spaces and underscores to
 one space, and discard digits, punctuation, and non-ASCII bytes. Hash collisions

@@ -6844,7 +6844,9 @@ namespace RoF2
 		ibs.Damage = item->Damage;
 		ibs.Color = item->Color;
 		ibs.Prestige = 0;
-		ibs.ItemType = item->ItemType;
+		// The May client stores the collectible marker in its metadata tail.
+		const bool is_collectible = item->ItemType == EQ::item::ItemTypeCollectible;
+		ibs.ItemType = is_collectible ? static_cast<uint8>(EQ::item::ItemTypeMisc) : item->ItemType;
 		ibs.Material = item->Material;
 		ibs.MaterialUnknown1 = 0;
 		ibs.EliteMaterial = item->EliteMaterial;
@@ -7106,23 +7108,27 @@ namespace RoF2
 		iqbs.unknown38 = 0;
 		iqbs.unknown39 = packet_type == ItemPacketInvalid ? 0 : 1;;
 
-		if (RuleB(Housing, EnablePlayerHousing)) {
+		const bool housing_enabled = RuleB(Housing, EnablePlayerHousing);
+		if (housing_enabled || is_collectible) {
 			static_assert(offsetof(RoF2::structs::ItemQuaternaryBodyStruct, Placeable) == 96,
 				"Native quaternary metadata begins at byte 96");
 			Housing::ItemWire::Metadata metadata;
-			metadata.placeable = item->Placeable;
-			metadata.ignore_collisions = item->HousingIgnoreCollisions != 0;
-			metadata.placement_type = item->HousingPlacementType;
-			metadata.disable_rotation = item->HousingDisableRotation != 0;
-			metadata.disable_free_placement = item->HousingDisableFreePlacement != 0;
-			metadata.definition_id = item->HousingDefinitionID;
-			metadata.scale_min = std::isfinite(item->HousingMinimumScale) ? item->HousingMinimumScale : 0;
-			metadata.scale_max = std::isfinite(item->HousingMaximumScale) ? item->HousingMaximumScale : 0;
-			metadata.upkeep_id = item->HousingUpkeepID;
-			metadata.max_per_estate = item->HousingMaxPerEstate;
-			Housing::NpcItemMetadata::ToWire(metadata, *item);
-			metadata.trophy_benefit_id = item->HousingTrophyBenefitID;
-			metadata.instance_placeable = packet_type != ItemPacketInvalid;
+			metadata.collectible = is_collectible;
+			if (housing_enabled) {
+				metadata.placeable = item->Placeable;
+				metadata.ignore_collisions = item->HousingIgnoreCollisions != 0;
+				metadata.placement_type = item->HousingPlacementType;
+				metadata.disable_rotation = item->HousingDisableRotation != 0;
+				metadata.disable_free_placement = item->HousingDisableFreePlacement != 0;
+				metadata.definition_id = item->HousingDefinitionID;
+				metadata.scale_min = std::isfinite(item->HousingMinimumScale) ? item->HousingMinimumScale : 0;
+				metadata.scale_max = std::isfinite(item->HousingMaximumScale) ? item->HousingMaximumScale : 0;
+				metadata.upkeep_id = item->HousingUpkeepID;
+				metadata.max_per_estate = item->HousingMaxPerEstate;
+				Housing::NpcItemMetadata::ToWire(metadata, *item);
+				metadata.trophy_benefit_id = item->HousingTrophyBenefitID;
+				metadata.instance_placeable = packet_type != ItemPacketInvalid;
+			}
 			auto tail = Housing::ItemWire::EncodeTail(metadata);
 			ob.write(reinterpret_cast<const char*>(&iqbs), 96);
 			ob.write(reinterpret_cast<const char*>(tail.data()), tail.size());

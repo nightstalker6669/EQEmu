@@ -3,6 +3,8 @@
 #include "common/achievement_state_updates.h"
 #include "common/eq_packet.h"
 #include "common/eqemu_logsys.h"
+#include "common/emu_versions.h"
+#include "common/fire_native_inventory_fence.h"
 #include "common/rulesys.h"
 #include "zone/achievement_manager.h"
 #include "zone/client.h"
@@ -3235,6 +3237,138 @@ void Client::ProcessPendingAchievementStateUpdates()
 bool Client::HasCompletedAchievement(uint32 achievement_id) const
 {
 	return m_achievement_state && m_achievement_state->HasCompleted(achievement_id);
+}
+
+void Client::RegisterCollectionItem(int32 slot, const EQ::ItemInstance &item)
+{
+	using namespace EQ::Achievements;
+	using FirePersonalOccurrenceSource::NativeInventoryFence;
+
+	if (!(m_pp.expansions & EQ::expansions::bitRoF)) {
+		MessageString(Chat::Loot, 4800);
+		return;
+	}
+	// A normal inventory move can leave an ownership refresh pending even
+	// after its save. The strict registration verifies the persisted slot;
+	// SetAchievementProgress will defer the UI update behind that refresh.
+	if (!RuleB(Achievements, EnableAchievements) || !m_achievement_state ||
+		m_achievement_state_load_pending || m_achievement_inventory_transaction_depth ||
+		!ClientDataLoaded() || !CharacterID() ||
+		m_inventory_session_rejected || IsSpiritShrouded() || IsDead() || IsZoning() ||
+		((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs)) && !HasInventorySessionReservation())) {
+		Message(Chat::Red, "You cannot register a collection item right now.");
+		return;
+	}
+
+	if (slot < 0 || slot > std::numeric_limits<int16_t>::max()) {
+		return;
+	}
+	const auto inventory_slot = static_cast<int16_t>(slot);
+	const auto serial = item.GetSerialNumber();
+	const auto charges = item.GetCharges();
+	if (!m_inv.SupportsClickCasting(inventory_slot) || !NativeInventoryFence::SlotAllowed(&m_inv, inventory_slot) ||
+		!item.IsType(EQ::item::ItemClassCommon) || !item.IsStackable() ||
+		item.GetEvolveUniqueID() || item.IsAttuned() || serial <= 0 || charges <= 0) {
+		return;
+	}
+
+	auto &manager = AchievementManager::Instance();
+	const auto &criteria = manager.Criteria(EventType::CollectionItem);
+	const auto criterion = std::find_if(criteria.begin(), criteria.end(), [&item](const auto *entry) {
+		return entry->target_id == item.GetID();
+	});
+	if (criterion == criteria.end()) {
+		return;
+	}
+	const auto &binding = **criterion;
+	const auto definition_index = manager.FindDefinitionIndex(binding.achievement_id);
+	const auto component_index = manager.FindComponentIndex(
+		binding.achievement_id, binding.component_type, binding.component_id
+	);
+	const auto status = m_achievement_state->GetStatus(binding.achievement_id);
+	if (!definition_index || !component_index || !status ||
+		(*status != Status::Open && *status != Status::Completed)) {
+		return;
+	}
+
+	const auto &definition = manager.Definitions()[*definition_index];
+	const auto &component = definition.components[binding.component_type][*component_index];
+	const auto item_id = item.GetID();
+	const std::string item_name = item.GetItem()->Name;
+	const auto actor = CharacterID();
+	const auto item_key = fmt::format(
+		"character_id={} AND slot_id={} AND item_id={} AND guid={} AND charges={}",
+		actor, inventory_slot, item_id, serial, charges
+	);
+	const auto progress_key = fmt::format(
+		"character_id={} AND achievement_id={} AND component_type={} AND component_id={}",
+		actor, binding.achievement_id, binding.component_type, binding.component_id
+	);
+	if (!database.TransactionBeginStrict().Success()) {
+		Message(Chat::Red, "The collection item could not be registered. Try again.");
+		return;
+	}
+	struct RollbackCollection {
+		~RollbackCollection() { database.TransactionRollbackStrict(); }
+	} rollback;
+
+	const auto saved_item = database.QueryDatabase(
+		"SELECT 1 FROM inventory WHERE " + item_key + " FOR UPDATE", false
+	);
+	auto saved_progress = database.QueryDatabase(
+		"SELECT current_count, completed FROM character_achievement_progress WHERE " + progress_key + " FOR UPDATE",
+		false
+	);
+	if (!saved_item.Success() || saved_item.RowCount() != 1 ||
+		!saved_progress.Success() || saved_progress.RowCount() > 1) {
+		Message(Chat::Red, "The collection item could not be registered. Try again.");
+		return;
+	}
+	if (*status == Status::Completed ||
+		(saved_progress.RowCount() == 1 &&
+		 (ParseUInt32(saved_progress.begin()[0]) || ParseUInt32(saved_progress.begin()[1])))) {
+		MessageString(Chat::Loot, 7689, item_name.c_str());
+		return;
+	}
+
+	// The native component row is also the durable one-time registration receipt.
+	// Inventory and credit must commit together before changing the live profile.
+	const auto debit = database.QueryDatabase(
+		charges == 1 ? "DELETE FROM inventory WHERE " + item_key :
+			"UPDATE inventory SET charges=charges-1 WHERE " + item_key,
+		false
+	);
+	const auto credit = database.QueryDatabase(fmt::format(
+		"INSERT INTO character_achievement_progress "
+		"(character_id, achievement_id, component_type, component_sequence, component_id, "
+		"current_count, completed, `version`, updated_at) "
+		"VALUES ({}, {}, {}, {}, {}, 1, 1, {}, UNIX_TIMESTAMP()) "
+		"ON DUPLICATE KEY UPDATE component_sequence=VALUES(component_sequence), "
+		"current_count=1, completed=1, `version`=VALUES(`version`), updated_at=VALUES(updated_at)",
+		actor, binding.achievement_id, binding.component_type, component.sequence,
+		binding.component_id, definition.version
+	), false);
+	if (!debit.Success() || debit.RowsAffected() != 1 || !credit.Success()) {
+		Message(Chat::Red, "The collection item could not be registered. Try again.");
+		return;
+	}
+	if (!database.TransactionCommitStrict().Success()) {
+		// A lost commit response is ambiguous. Suppress this profile's saves;
+		// normal re-entry will read the committed inventory and component together.
+		m_inventory_session_rejected = true;
+		Kick("Collection registration commit could not be confirmed");
+		return;
+	}
+
+	DeleteItemInInventory(inventory_slot, 1, true, false);
+	UpdateAchievementForOwnItem(item_id);
+	if (!SetAchievementProgress(binding.achievement_id, binding.component_type, binding.component_id, 1)) {
+		QueueAchievementStateUpdate({
+			DeferredAchievementStateUpdateType::SetProgress,
+			binding.achievement_id, binding.component_type, binding.component_id, 1, false
+		});
+	}
+	MessageString(Chat::Loot, 537, item_name.c_str());
 }
 
 int Client::GetAchievementStatus(uint32 achievement_id) const

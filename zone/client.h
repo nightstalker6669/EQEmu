@@ -2657,6 +2657,7 @@ private:
 		uint32 value4 = 0;
 		bool flag = false;
 	};
+	void RegisterCollectionItem(int32 slot, const EQ::ItemInstance &item);
 	bool ShouldDeferAchievementStateUpdate() const;
 	void QueueAchievementStateUpdate(const DeferredAchievementStateUpdate &update);
 	bool ReplaceAchievementState(bool send_initial, bool allow_disabled);
