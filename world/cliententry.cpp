@@ -219,6 +219,7 @@ void ClientListEntry::Update(ZoneServer *iZS, ServerClientList_Struct *scl, CLE_
 	m_lfg                  = scl->LFG;
 	m_gm                   = scl->gm;
 	m_client_version       = scl->ClientVersion;
+	m_offline_bazaar_trader = scl->offline_bazaar_trader;
 
 	// Fields from the LFG Window
 	if ((scl->LFGFromLevel != 0) && (scl->LFGToLevel != 0)) {
@@ -277,6 +278,7 @@ void ClientListEntry::ClearVars(bool iAll)
 	m_lfg            = 0;
 	m_gm             = 0;
 	m_client_version = 0;
+	m_offline_bazaar_trader = false;
 	for (auto &elem: m_tell_queue) {
 		safe_delete_array(elem);
 	}

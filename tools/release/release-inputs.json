@@ -5,17 +5,159 @@
       "Import full.sql into a fresh empty database with the matching runtime."
     ],
     "asset": {
-      "bytes": 37602981,
-      "name": "PEQ-RoF2-full-2026-11-23-ashengate-east-west.zip",
-      "sha256": "c6173065c6d1398eddb4949f93f1f44a2e4654121af1989451af1e7cbdf24257",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-23-ashengate-east-west/PEQ-RoF2-full-2026-11-23-ashengate-east-west.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-23-ashengate-east-west/PEQ-RoF2-full-2026-11-23-ashengate-east-west.zip"
+      "bytes": 37605741,
+      "name": "PEQ-RoF2-full-2026-11-25-offline-bazaar.zip",
+      "sha256": "ce601df23511ad80667ca2807c64b93094e3d77a66dd3916464b1eb1e98cb841",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-25-offline-bazaar/PEQ-RoF2-full-2026-11-25-offline-bazaar.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-25-offline-bazaar/PEQ-RoF2-full-2026-11-25-offline-bazaar.zip"
     },
-    "base_database_release_tag": "peq-rof2-2026-11-23-vergalid-raids-r2",
+    "base_database_release_tag": "peq-rof2-2026-11-23-ashengate-east-west",
     "cohort_source_binding": {
-      "preserved_prior_binding": "5843bfb561555ee2906b79ec8a36575ddc1e345c5be6ed5f6d882ee256754f51",
+      "preserved_prior_binding": "84e68ccbacb64cf87ff33fd5a69489aa371fa7ae56d4ee88b420827cfc556990",
       "quest_projection_sha256": "b386cf598e7828ee73373aca55789f28635e08b2286ed8bd380be5fe7e261ef7",
       "quest_root": "quests",
+      "release_native_source_files": [
+        {
+          "bytes": 17582,
+          "git_blob": "dbf25c79b4a8a9a5451d2963bd426fa9684dcfac",
+          "mode": "100644",
+          "path": "common/emu_oplist.h",
+          "sha256": "8600911ae70cfd81424dc112f247e5f747775173c3c79fac182b57a224e7682f"
+        },
+        {
+          "bytes": 11006,
+          "git_blob": "c027ec0361c25456a018a15dbbe278d0a308dcbe",
+          "mode": "100644",
+          "path": "common/repositories/trader_repository.h",
+          "sha256": "b88d62aacc89587c350de56babfbe9a3d06c8437cd0d66dba686121ff43df2e0"
+        },
+        {
+          "bytes": 131550,
+          "git_blob": "590f48f5c0b104e80889691d2e83402e685cac08",
+          "mode": "100644",
+          "path": "common/ruletypes.h",
+          "sha256": "bec76b4f96f05fa0cc7c3ca63750be0eb2ce54363b492b819c441eb8e2da144f"
+        },
+        {
+          "bytes": 46856,
+          "git_blob": "6540e8e5a5d1b2bea1d9a92ab07365418733559e",
+          "mode": "100644",
+          "path": "common/servertalk.h",
+          "sha256": "a3496222604e635fe4ce817710ffc41e5d764bfc7e3695d48bc9ede496461c8d"
+        },
+        {
+          "bytes": 22703,
+          "git_blob": "d97601a451db43114284e328d3b03e5836af575d",
+          "mode": "100644",
+          "path": "utils/patches/patch_RoF2.conf",
+          "sha256": "80f1e15dd34847230f40d71a8dc2d34a3b40dcef434099cfdafea6ef77b29fe4"
+        },
+        {
+          "bytes": 86439,
+          "git_blob": "e569dfef0839db39eb5e76032bbf97496ee81099",
+          "mode": "100644",
+          "path": "world/client.cpp",
+          "sha256": "79a93753a9f56b05044c99b954c1c9a9e23f5e5b269aec8f24e1d0edae82b552"
+        },
+        {
+          "bytes": 5349,
+          "git_blob": "aac43cff555e4f78797f70d6c4a4317a79f55622",
+          "mode": "100644",
+          "path": "world/client.h",
+          "sha256": "f63ea8f3bc5ee58ee597f4f55febd9f13f94f34628786a26dd15f34d05419976"
+        },
+        {
+          "bytes": 9877,
+          "git_blob": "abe8a77b3c98ff451886bc70344aca97b8c34b97",
+          "mode": "100644",
+          "path": "world/cliententry.cpp",
+          "sha256": "01f22daa94f927105d732e1c6be9363f7ffe6aeb583bb8704baa469c8b50c53a"
+        },
+        {
+          "bytes": 6198,
+          "git_blob": "e221d24dfc8148dc24529c8a3e21b7036b3f9605",
+          "mode": "100644",
+          "path": "world/cliententry.h",
+          "sha256": "a3b8ceb8b34813a1a5cdf68432f29f9a09c6809767c58ccdcbae9fc045d38698"
+        },
+        {
+          "bytes": 62233,
+          "git_blob": "055bedc4c190adc2106fa6cba57ba574878b60f7",
+          "mode": "100644",
+          "path": "world/clientlist.cpp",
+          "sha256": "caa63fd5deb5a0dea87ec6df3e7d75e5acdfa3277bdb77b7fe23c3f039387970"
+        },
+        {
+          "bytes": 5306,
+          "git_blob": "f84f032c205c3e5f96e63441e7eeb220716ebf5f",
+          "mode": "100644",
+          "path": "world/clientlist.h",
+          "sha256": "268106ef4555128ff7d26c9d6ed31cbcbfa372d90414cf26c385ff84b2777ca8"
+        },
+        {
+          "bytes": 18372,
+          "git_blob": "f04d4017c2fe18eb6cbb28f3df54cbf5a8eade3d",
+          "mode": "100644",
+          "path": "world/login_server.cpp",
+          "sha256": "910e3961b6bd86fd598a9f35f0414809dfb100fd8dd615687dc85bd0d7d29526"
+        },
+        {
+          "bytes": 509979,
+          "git_blob": "ba9ef6a26b2d3eb9457eeea90a49ffecd15c1b91",
+          "mode": "100644",
+          "path": "zone/client.cpp",
+          "sha256": "09f52f87c2def55033b751d9e01335b37bcd43f559d5f7fafd073a0197b6d3e0"
+        },
+        {
+          "bytes": 122394,
+          "git_blob": "07700e43266da6360c29ef4b580020915de7cf6b",
+          "mode": "100644",
+          "path": "zone/client.h",
+          "sha256": "d6a5cad06f454ee0ae2582e8f016c0622e3206b3ae061eb669efa109d3ae69eb"
+        },
+        {
+          "bytes": 570450,
+          "git_blob": "380cbc1411fdb08189e152aba5ed3420dd6a1c9d",
+          "mode": "100644",
+          "path": "zone/client_packet.cpp",
+          "sha256": "1c36d8672352c0eecdbfa21e704ade1e8dfd8d62e81e9b14404f5f6c642be42a"
+        },
+        {
+          "bytes": 25386,
+          "git_blob": "d4afd35d0abba2e81bb576cf207e0c1939e59e09",
+          "mode": "100644",
+          "path": "zone/client_packet.h",
+          "sha256": "8dd8d5d7765b17d7c4cbc90a8b703faac14e8f5e9b380f298152314b91215712"
+        },
+        {
+          "bytes": 73991,
+          "git_blob": "6dbe3827719031cdf76e0342e1fc4d5340590233",
+          "mode": "100644",
+          "path": "zone/client_process.cpp",
+          "sha256": "944af3d12b70d096eb99e29654f3d92cab3a7c6afb07c2efc96b082215347517"
+        },
+        {
+          "bytes": 150018,
+          "git_blob": "04b6849c9851b36c9a3f25432dbaa372ebe87617",
+          "mode": "100644",
+          "path": "zone/entity.cpp",
+          "sha256": "457435959ad9a022b45d0d4e7997e93bfacbfa5e248383709e129fb9fbe70d02"
+        },
+        {
+          "bytes": 124041,
+          "git_blob": "a252112cf4e6d57d7ca9a9ce7e0a2ded68fb6e83",
+          "mode": "100644",
+          "path": "zone/trading.cpp",
+          "sha256": "fe381cfde752ec480ba371c86f1121cba6365f79c5f8e49d383011da5adc38cb"
+        },
+        {
+          "bytes": 148190,
+          "git_blob": "c66ffc65b0bf15569796c84d6606951306f72181",
+          "mode": "100644",
+          "path": "zone/worldserver.cpp",
+          "sha256": "13155d0a9aa4c4c60ab7681acd94d9cfe044de95723eed6084371670cd1816f6"
+        }
+      ],
       "required_quest_files": [
         {
           "bytes": 870,
@@ -3321,12 +3463,12 @@
           "sha256": "03942fc15bfe31d7281664307e473787c167ece537d2e649d1dddce46a1ae5e7"
         },
         {
-          "bytes": 17555,
-          "git_blob": "a89f7aab731783cf20e38389e0ae351c14dc983c",
+          "bytes": 17582,
+          "git_blob": "dbf25c79b4a8a9a5451d2963bd426fa9684dcfac",
           "kind": "native_source",
           "mode": "100644",
           "path": "common/emu_oplist.h",
-          "sha256": "c274a297c11f16d8e1e96b7723afde1987e8b3247c76de558420a272246374ad"
+          "sha256": "8600911ae70cfd81424dc112f247e5f747775173c3c79fac182b57a224e7682f"
         },
         {
           "bytes": 178612,
@@ -5881,12 +6023,12 @@
           "sha256": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
         },
         {
-          "bytes": 22673,
-          "git_blob": "0e2f76e13b1469546fc76958417618d6449f95e5",
+          "bytes": 22703,
+          "git_blob": "d97601a451db43114284e328d3b03e5836af575d",
           "kind": "opcode_asset",
           "mode": "100644",
           "path": "utils/patches/patch_RoF2.conf",
-          "sha256": "32cec08d90da4bde6d4ae95b5e29ff65b9e75c0387d76a8e88b56c6ae9e2dbfc"
+          "sha256": "80f1e15dd34847230f40d71a8dc2d34a3b40dcef434099cfdafea6ef77b29fe4"
         },
         {
           "bytes": 16477,
@@ -5945,20 +6087,20 @@
           "sha256": "d5d53c6693196c9ee082a4e87a9be075ed60acc12da7c195da419aa50093db5a"
         },
         {
-          "bytes": 509758,
-          "git_blob": "15534c8ab217f84cc543f822761b84ecb3af76b4",
+          "bytes": 509979,
+          "git_blob": "ba9ef6a26b2d3eb9457eeea90a49ffecd15c1b91",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client.cpp",
-          "sha256": "797177c34c88b60efacd0637220d48d3fd4d1a7715c5449a5e6ed50e7bb28067"
+          "sha256": "09f52f87c2def55033b751d9e01335b37bcd43f559d5f7fafd073a0197b6d3e0"
         },
         {
-          "bytes": 122209,
-          "git_blob": "b480e5d467cda542582581c76ccb298beddec115",
+          "bytes": 122394,
+          "git_blob": "07700e43266da6360c29ef4b580020915de7cf6b",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "84a45d566e3b2a0248c21bf3ad77a756194448e474ce60102c283527690ac45f"
+          "sha256": "d6a5cad06f454ee0ae2582e8f016c0622e3206b3ae061eb669efa109d3ae69eb"
         },
         {
           "bytes": 105567,
@@ -5969,20 +6111,20 @@
           "sha256": "25905c5689f31b38a28d039abdaed9beb83bbe46ecf4024c9e1bd41db5c73ce8"
         },
         {
-          "bytes": 568363,
-          "git_blob": "bc4e1faf23aeda78e0fb53efe7801e4d46e0ca9f",
+          "bytes": 570450,
+          "git_blob": "380cbc1411fdb08189e152aba5ed3420dd6a1c9d",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client_packet.cpp",
-          "sha256": "6ed8b6f6a5d1da25a011a26d71e7045cfd197101b3ee8730e903611d82fbad44"
+          "sha256": "1c36d8672352c0eecdbfa21e704ade1e8dfd8d62e81e9b14404f5f6c642be42a"
         },
         {
-          "bytes": 73472,
-          "git_blob": "a12cd293ce04fd9da87c9e60e7cbed6bba39ab64",
+          "bytes": 73991,
+          "git_blob": "6dbe3827719031cdf76e0342e1fc4d5340590233",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client_process.cpp",
-          "sha256": "a3f61a0cfb23b87b72350d3ac092cea4209fe4ddadc5873aeb53b22c6b3b3ee7"
+          "sha256": "944af3d12b70d096eb99e29654f3d92cab3a7c6afb07c2efc96b082215347517"
         },
         {
           "bytes": 103979,
@@ -6409,12 +6551,12 @@
           "sha256": "9db955761d5e48cb1d35d812bc35e105fae1d7a52a3a41ef3ea9a60b94e72300"
         },
         {
-          "bytes": 122589,
-          "git_blob": "ecad9e4daaeb8461bf83e5363bc65e68910324fd",
+          "bytes": 124041,
+          "git_blob": "a252112cf4e6d57d7ca9a9ce7e0a2ded68fb6e83",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/trading.cpp",
-          "sha256": "6aaa96b8ea1dbec14c089e0fded5fa162383675ae51042ec1cfc5706f74deca9"
+          "sha256": "fe381cfde752ec480ba371c86f1121cba6365f79c5f8e49d383011da5adc38cb"
         },
         {
           "bytes": 22481,
@@ -6513,10 +6655,10 @@
           "sha256": "dd4b74caed98ee943f97b810fbd5806b5fa78c7131bf16fa105ee297c146fde6"
         }
       ],
-      "source_manifest_sha256": "fe23d6aa91a55d9eeb5adcebd71ba9062fbece4cc9ed00840b017cd4e4769b06"
+      "source_manifest_sha256": "88f713de2bff5335c5996e80514b2904a964b1b1c22a664ca0d17c2f65fe5ca6"
     },
     "database_repository": "nightstalker6669/EQEmu-Database",
-    "database_source_capture_commit": "77cc309c61b1c7d3299249813f29816d89a039c6",
+    "database_source_capture_commit": "bdd011614f83dffd41a2b529edb2f770773ea6d0",
     "existing_volume_upgrade": {
       "supported": false
     },
@@ -6541,50 +6683,26 @@
       "views": 1
     },
     "future_update_policy": "A futurematchedDBversion requires a separately validatedwholecohort sanitizedrelease and explicitcommitted source/tag/assetdigest pin; never silently mutableLatest/latestDB, partialrank/itemexports, or old945-only pin for newcohort. ActualCIfailure corrections gather allvisible errors in one batch.",
-    "matched_server_integration_parent": "a25e15839b1812304e257b3df6dcf3c54dc93de9",
+    "matched_server_integration_parent": "e68024589de4a430d516296460af65b4dd71e992",
     "native_acceptance_scope": {
-      "batch": "The Serpent’s Spine – Ashengate East and West",
-      "coverage_limits": [
-        "Development setup included native GM leveling to 74 for one attendance fixture, supported public travel staging, and one scoped reset of prior Vergalid lockouts. Combat used fixture invulnerability and the existing QA melee mallet. Invulnerability was briefly removed for the real Mark self-click and restored before re-entry. This run establishes progression and reward behavior with those aids. Normal raid difficulty remains unmeasured.",
-        "Real loot was sampled from all six event sources. Optional loot outcomes, natural expiry of the full 108-hour lockouts, and exhaustive expedition reset and inherited-state paths remain untested.",
-        "The original Attendant glow effect, reported chest trap difficulty, and exact historical lava tick remain unresolved. The native route verified the implemented order, thresholds and progression."
+      "feature": "RoF2 Offline Bazaar Trader",
+      "fixture_setup": [
+        "The server rule was enabled on the existing development server. A GM moved the ordinary test characters between the bank and the Bazaar stall. Trader controls, the counter sale, and re-entry used the native RoF2 client.",
+        "The seller’s Character Select view rendered black locally. The same owned client window received the stock Enter World input, and the authenticated World transition and arrival in game verified re-entry."
       ],
-      "historical_reconstruction": [
-        "Raid-in uses the rounded-up 85 percent rule against the assigned roster. Independently eligible characters include the later level-74 attendance allowance. The original arithmetic details were unavailable.",
-        "The six-hour expedition lifetime, some NPC appearances and placements, room boundaries, some wave cadences, the 12-add Ambersnout threshold, 135-second Sothgar pauses, and optional loot chances are reconstructed. The relocated egg and brood route use reachable under-bridge floor.",
-        "Stitch’s exact positive faction delta was unavailable. The configured value is +1500, with native faction awarded through the stock hate list."
+      "native_acceptance": [
+        "The original RoF2 Offline Mode and confirmation controls detached the seller. Both listings remained active after that client returned to Character Select.",
+        "A second ordinary RoF2 client in the same Bazaar instance bought one Bat Wing at the seller’s counter for 1 platinum. Inventory and balances showed one item transferred, a 1 platinum buyer debit and a matching seller credit.",
+        "One Enter World input on the same seller client reclaimed the detached trader and entered the same Bazaar instance. The seller kept the proceeds and unsold Tiny Dagger, and the old listing cleared.",
+        "Ordinary camp with one active listing cleared that listing. Both actors retained item custody and all test clients closed normally."
       ],
-      "native_evidence_sha256": {
-        "HISTORICAL-BINDINGS.md": "c7d21fe1384a3155aedde6b9589af9bd1dec5c67d30699996c1bcb10aa25437a",
-        "NATIVE-INTERFACE.md": "14da5c25511bc1e70ded8a85f48719a5b70a28f763a0a76b89b6f90ee68d633c",
-        "belltank_gm_level_74": "3b00fb2629af2e3bad1ac2167c9ba89be1b19778043823bf02323ec8fb8c9cd3",
-        "east_west_native_terminal": "90a1d244045a0ca8467239e4730452bc0ca639d6c32ee9c4f630fa90e1a08694",
-        "jenray_hail_mounted": "232ec44179cf9185dc909ce411f3495a61a536c69647256b8a9f5b5cc86dbc2c",
-        "jenray_hail_native": "3b7bf628e9010b257a47f7a419e98aca6e714709fcb3e1fac0b184377f8eb5d1",
-        "jenray_hail_offline": "794255eb983b720831b09b73834a9247b7dc2404d2f5477b1a366bd0d72e122b",
-        "vergalid_end_replay_and_both_side_tasks": "0f1c126764df16adbee0d9858d0a6b74fc351df87149b9163a611687fc65b09e",
-        "verified_faction_replay_preparation": "303c054a3765033dda7e05e6e5fa40cbb0de24b0e1accc672fdfd3b367b04c36",
-        "west_ambersnout": "d3981b51ead7877fa41218fcb83fd632b9c26c9765e529642828523844d5125c",
-        "west_attendants": "b1b8c5f5610e34f0d0eaa50f55a7e788fa8587a7603f73252b74b799d5e35e8a",
-        "west_ghosts_from_the_past": "058307ffb89709a43852b790a1d7a4e09eace8307ea6a956ebdc45df71f5a8a5",
-        "west_layout_offline": "461b19c1fbf69c65cee5d8165551faa1744a7ced8b3fe1376739a209a3352194",
-        "west_layout_serving": "a971803e6ad6cad0cac95c156d4cef6a8b08d3aa27825739edb89d5d18049df4",
-        "west_mark_proof": "c83f58d9b7ca7164582c9b3cab897ebe48030e224d2402c27257633f163c52a8",
-        "west_native_loot_4": "6e6d20784d05ae8d6dd99a4fae0c262a2a2a7f56261acdf3f15fd7383cdc68ed",
-        "west_native_loot_5": "417bd8dc555aba54b0c09726fd4223c0247fa7b4ff4d34fab78b2de871e48b9d",
-        "west_native_loot_6": "23db3c375d4c9a7515828e36b6c21e8ce7c4149abd1db324571fc5773bde1fcf",
-        "west_sothgar": "4ff49be396adaada60d53de2f02344f80ccf0871b873a0cddc02d52cd88c351d",
-        "west_unflagged_seventh_arrival": "efd4dde7fab2e1197f0fc0ed24d2a20e92c41fe9a25492e88a196595c4384a3c"
-      },
-      "native_verification": [
-        "Both public faction cycles and both personal Vergalid’s End side tasks were completed in RoF2. The original Incubator hatched and captured drakes, the four-item hand-in passed, and Jenray’s normal Hail key was verified.",
-        "All seven entered Ashengate West, including a level-70 character through the six-of-seven raid-in allowance. The raid earned Ambersnout, Attendants of Sothgar and Sothgar credits and lockouts, recovered real loot, and finished Ghosts from the Past.",
-        "The level-70 witness earned Scholars of Solusek faction from Sothgar and looted a genuine one-charge Mark of Vergalid. Holding it left five-of-six re-entry denied. The native self-click spent the charge and awarded durable kill equivalence, which admitted the witness to the same West instance. The witness had no Vergalid’s End completion before or after.",
-        "All six entered East, defeated Ayna’Rym and both griffons, completed the timed Ambush through Krait, and defeated Stitch after the spider threshold. All six earned each event credit and lockout. A Complex Diversion archived after its three discoveries, ten Scarlet Legion kills and Stitch. Ayna’Rym’s corpse and both original East chests yielded genuine loot."
+      "scope_and_limits": [
+        "Bazaar:EnableOfflineTraders defaults to false. RoF2 Trader sessions opened while the rule is enabled use counter checkout. Their parcel path rejects the purchase before charging the buyer.",
+        "Offline listings live with the running Bazaar worker and clear on restart. The stock in-person sale is not crash-atomic. Native acceptance covered one same-instance purchase and same-client reclaim. Sold-out retirement, a separate desktop login, native parcel rejection and crash recovery were not exercised."
       ],
       "status": "NATIVE_ACCEPTED_WITH_DOCUMENTED_LIMITS"
     },
-    "native_gameplay_acceptance": "Ashengate East and West, faction arcs, side quests and Mark accepted with documented limits.",
+    "native_gameplay_acceptance": "RoF2 counter sale, Character Select listing retention, seller reclaim, and active Trader camp observed.",
     "payload_inventory": {
       "all_member_sha256_file": "SHA256SUMS",
       "full_sql_bytes": 304684182,
@@ -6604,15 +6722,15 @@
       "manifest_sha256": "78710b4716455c626cc62189cca8eacd252d2ce796adc018c0b4dd18657aace9",
       "source_base_commit": "c642eb178b8a0a9881812c2b3d3f188acb1217d8"
     },
-    "publication_parent_database_commit": "77cc309c61b1c7d3299249813f29816d89a039c6",
+    "publication_parent_database_commit": "bdd011614f83dffd41a2b529edb2f770773ea6d0",
     "qualification_documents": [
       "NATIVE-QUALIFICATIONS.json",
       "CHANGELOG.md",
       "SOURCE-MANIFEST.json"
     ],
-    "release_tag": "peq-rof2-2026-11-23-ashengate-east-west",
+    "release_tag": "peq-rof2-2026-11-25-offline-bazaar",
     "required_code_boundary": {
-      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins. Preserve the matched Ashengate native code and 467 canonical quest pins.",
+      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins. Preserve the matched Ashengate native code and 467 canonical quest pins. Preserve the matched Offline Bazaar native source and RoF2 opcode binding.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
       "completed_mercenary_feature_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
       "external_operator_resources": "Authenticated original RoF2 archives/maps and matching server quests/opcodes; generate fresh target shared memory normally."
@@ -6693,17 +6811,17 @@
       "BASE-VERGALID-R2-README.md": "3be6fe0bc5c6ba6a4608a43ea830b52d050aae69f89386dd57996df7c46aa2f0",
       "BASE-VERGALID-R2-SOURCE-CONTENT-BINDING.json": "5843bfb561555ee2906b79ec8a36575ddc1e345c5be6ed5f6d882ee256754f51",
       "BASE-VERGALID-R2-SOURCE-MANIFEST.json": "41bbe1aa648bc432a6f287fdb8171df78ac70684fd6c753f25b479f1d0d99b07",
-      "CANONICAL-SEED-COMPOSITION.json": "ff6c9688faccd9fa10ace43e5fe2ca48bf72dd7620d9129fb9948c0e05f665ed",
-      "CHANGELOG.md": "2385fbac1ff94c2c31b3a43cc59a4d6327ab6afe2c452a9d963e8885861049c7",
+      "CANONICAL-SEED-COMPOSITION.json": "9e97363d92404ccc6398dade123f44d602671acc4a96d496769643b9ad417dae",
+      "CHANGELOG.md": "74bb06a1846846d8e9183269634d1e5abbf1ccf67345a78ebb4ff1c26479e2f0",
       "COMPLETED-RECIPE-UPDATES.json": "fdf459a6bef7e90351d3db5c983e30920205876a990aa144b5779a4c242d25e0",
       "KITHICOR-STATIC-CONTENT.json": "5b043982b23b74f4f857724b6baf1ff0611bb88ce348f32f15f3f6230462ffc5",
       "MERCENARY86-100-CONTENT.json": "27a9d180e6a66320ae9877cd763341f6579d0a1a8a66ac6fc23c26fb9dc15c16",
-      "NATIVE-QUALIFICATIONS.json": "4b8f295ece9d98a915b86a0daa653c443d32f05707ee59892b9e285caf3cc47c",
-      "README.md": "f086665b0d4023c58d2364b4ecde075bde08b6533a9ccedfd8ff15b98d28c010",
-      "SHA256SUMS": "4d23155cd53701001d609d1e94052eea282b8732158dfa71c1eca60107f7d3f6",
+      "NATIVE-QUALIFICATIONS.json": "f7e546bf2b4fab12442c223f160da7fa4e49ab9e30da7433bee2f489514e94f8",
+      "README.md": "ff08a1d96d4277cc334baee76f37c85c5910470ebf9785139d52378bda40a9d8",
+      "SHA256SUMS": "eb0f5001882ec36d4b39ba4aae72e787d9ba2537f462adf573514d58214aaf01",
       "SOD-OCEANGREEN-CONTENT.json": "5a5757e1c4631af375b87b6c69794d9e72ebc8cc91c832144d8359bb2b5454c2",
-      "SOURCE-CONTENT-BINDING.json": "84e68ccbacb64cf87ff33fd5a69489aa371fa7ae56d4ee88b420827cfc556990",
-      "SOURCE-MANIFEST.json": "fe23d6aa91a55d9eeb5adcebd71ba9062fbece4cc9ed00840b017cd4e4769b06",
+      "SOURCE-CONTENT-BINDING.json": "d33079c1e0e2dd3b61f9ad26dd4edfe121082120317fffe9d96e642f48016a05",
+      "SOURCE-MANIFEST.json": "88f713de2bff5335c5996e80514b2904a964b1b1c22a664ca0d17c2f65fe5ca6",
       "TABLE-INVENTORY.json": "4b6bf5895d88556b7ce4ecb2bf44a55deef3b766782c5c93304ff688204ec36e",
       "VALIDATION.json": "f9da8bf1f8bc7ab959ca0bee13e9b4aaa47a530b3f6a46e5e429d85b3d522ff2",
       "VICTUAL-CLASS-FEATURE-DELTA.json": "1220253988a07ff5ef833759b947c33b4bcc56cad20195f94366cd510df7ffaf",
@@ -6848,7 +6966,7 @@
         }
       }
     },
-    "source_commit": "bdd011614f83dffd41a2b529edb2f770773ea6d0",
+    "source_commit": "ceb6b28a137fd2c8d3641e5437acad5c2db0b105",
     "source_commit_role": "Exact public PEQ database release commit. The server integration parent and CI checkout are pinned separately.",
     "source_repository": "nightstalker6669/EQEmu",
     "verification_basis": {
@@ -6856,10 +6974,10 @@
       "isolated_validation_sha256": [
         "d3932352c988b051616db65c4a70d9dca6be7e3583cbb9c5584797abfd8c9008"
       ],
-      "status": "Reuses the exact networkless r36 Ashengate SQL readback."
+      "status": "Reuses the published Ashengate SQL and isolated import validation. Database and Housing payload hashes match the parent."
     }
   },
-  "database_contract_sha256": "d0f171896180d26cace72f3bdc49b0de88a1e992b26e224ec745b3b341ff550a",
+  "database_contract_sha256": "af7176cfe49c1ffdabb1a7219b764b5a47db990f203e96df743ffd415fdf657f",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [
@@ -6873,7 +6991,7 @@
   ],
   "opcode_runtime_overlay": {
     "destination": "server/assets/patches/patch_RoF2.conf",
-    "sha256": "32cec08d90da4bde6d4ae95b5e29ff65b9e75c0387d76a8e88b56c6ae9e2dbfc",
+    "sha256": "80f1e15dd34847230f40d71a8dc2d34a3b40dcef434099cfdafea6ef77b29fe4",
     "source": "utils/patches/patch_RoF2.conf"
   },
   "quest_overlay": {

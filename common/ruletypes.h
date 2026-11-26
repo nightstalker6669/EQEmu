@@ -966,6 +966,7 @@ RULE_BOOL(Merchant, AllowCorpse, false, "Setting whether dealers leave a corpse 
 RULE_CATEGORY_END()
 
 RULE_CATEGORY(Bazaar)
+RULE_BOOL(Bazaar, EnableOfflineTraders, false, "Allow RoF2 traders to continue selling after an explicit Offline Mode request.")
 RULE_BOOL(Bazaar, AuditTrail, false, "Setting whether a path to the trader should be displayed in the bazaar")
 RULE_INT(Bazaar, MaxSearchResults, 50, "Maximum number of search results in Bazaar")
 RULE_BOOL(Bazaar, EnableWarpToTrader, true, "Setting whether teleport to the selected trader should be active")

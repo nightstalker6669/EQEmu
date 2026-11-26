@@ -2665,6 +2665,32 @@ void EntityList::FilteredMessageClose(
 	}
 }
 
+static void DeleteMobAndReleaseInventory(Mob *&mob)
+{
+	auto *client = mob->IsClient() ? mob->CastToClient() : nullptr;
+	const auto inventory_ticket = client ? client->InventorySessionReleaseTicket() : nullptr;
+	ServerClientList_Struct departure{};
+	if (client && client->IsOfflineBazaarTrader()) {
+		departure.remove = 2;
+		departure.wid = client->GetWID();
+		departure.charid = client->CharacterID();
+		departure.AccountID = client->AccountID();
+		departure.offline_bazaar_trader = true;
+	}
+
+	safe_delete(mob);
+	if (inventory_ticket) {
+		inventory_ticket->ReleaseAfterCompleteDelete();
+	}
+
+	// An authenticated Enter World may resume only after the full writer teardown.
+	if (departure.wid && worldserver.Connected()) {
+		ServerPacket packet(ServerOP_ClientList, sizeof(departure));
+		memcpy(packet.pBuffer, &departure, sizeof(departure));
+		worldserver.SendPacket(&packet);
+	}
+}
+
 void EntityList::RemoveAllMobs()
 {
 	auto it = mob_list.begin();
@@ -2673,9 +2699,7 @@ void EntityList::RemoveAllMobs()
 			++it;
 			continue;
 		}
-		auto inventory_ticket = it->second->IsClient() ? it->second->CastToClient()->InventorySessionReleaseTicket() : nullptr;
-		safe_delete(it->second);
-		if (inventory_ticket) inventory_ticket->ReleaseAfterCompleteDelete();
+		DeleteMobAndReleaseInventory(it->second);
 		free_ids.push(it->first);
 		it = mob_list.erase(it);
 	}
@@ -2823,9 +2847,7 @@ bool EntityList::RemoveMob(uint16 delete_id)
 		else if (client_list.count(delete_id)) {
 			entity_list.RemoveClient(delete_id);
 		}
-		auto inventory_ticket = it->second->IsClient() ? it->second->CastToClient()->InventorySessionReleaseTicket() : nullptr;
-		safe_delete(it->second);
-		if (inventory_ticket) inventory_ticket->ReleaseAfterCompleteDelete();
+		DeleteMobAndReleaseInventory(it->second);
 		if (!corpse_list.count(delete_id)) {
 			free_ids.push(it->first);
 		}

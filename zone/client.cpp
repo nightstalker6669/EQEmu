@@ -894,7 +894,9 @@ Client::~Client() {
 	if(isgrouped && !bZoning && is_zone_loaded)
 		LeaveGroup();
 
-	UpdateWho(2);
+	if (!IsOfflineBazaarTrader()) {
+		UpdateWho(2);
+	}
 
 	if(IsHoveringForRespawn())
 	{
@@ -1310,6 +1312,10 @@ bool Client::SendAllPackets() {
 }
 
 void Client::QueuePacket(const EQApplicationPacket* app, bool ack_req, CLIENT_CONN_STATUS required_state, eqFilterType filter) {
+	if (IsOfflineBazaarTrader()) {
+		return;
+	}
+
 	if (filter != FilterNone && GetFilter(filter) == FilterHide) {
 		return;
 	}
@@ -1335,6 +1341,13 @@ void Client::QueuePacket(const EQApplicationPacket* app, bool ack_req, CLIENT_CO
 }
 
 void Client::FastQueuePacket(EQApplicationPacket** app, bool ack_req, CLIENT_CONN_STATUS required_state) {
+	if (IsOfflineBazaarTrader()) {
+		if (app) {
+			safe_delete(*app);
+		}
+		return;
+	}
+
 	// if the program doesnt care about the status or if the status isnt what we requested
 	if (required_state != CLIENT_CONNECTINGALL && client_state != required_state) {
 		// todo: save packets for later use
@@ -2293,6 +2306,7 @@ void Client::UpdateWho(uint8 remove)
 	auto pack = new ServerPacket(ServerOP_ClientList, sizeof(ServerClientList_Struct));
 	auto *s   = (ServerClientList_Struct *) pack->pBuffer;
 	s->remove = remove;
+	s->offline_bazaar_trader = IsOfflineBazaarTrader();
 	s->wid    = GetWID();
 	s->IP     = GetIP();
 	s->charid = CharacterID();

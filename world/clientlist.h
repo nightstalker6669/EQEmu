@@ -72,6 +72,8 @@ public:
 	ClientListEntry* CheckAuth(uint32 loginserver_account_id, const char* key);
 	ClientListEntry* FindCharacter(const char* name);
 	ClientListEntry* FindCLEByAccountID(uint32 iAccID);
+	ClientListEntry* FindOfflineBazaarTrader(uint32 account_id);
+	bool ReclaimOfflineBazaarTrader(uint32 account_id);
 	ClientListEntry* FindCLEByCharacterID(uint32 iCharID);
 	void	GetCLEIP(uint32 in_ip);
 	void	DisconnectByIP(uint32 in_ip);
@@ -79,7 +81,7 @@ public:
 	void	CLEKeepAlive(uint32 numupdates, uint32* wid);
 	void	CLEAdd(uint32 login_server_id, const char* login_server_name, const char* login_name, const char* login_key, int16 world_admin = AccountStatus::Player, uint32 ip_address = 0, uint8 is_local=0);
 	void	UpdateClientGuild(uint32 char_id, uint32 guild_id);
-	bool    IsAccountInGame(uint32 iLSID);
+	bool    IsAccountInGame(uint32 login_server_id, uint32 account_id);
 
 	int GetClientCount();
 	void GetClients(const char *zone_name, std::vector<ClientListEntry *> &into);

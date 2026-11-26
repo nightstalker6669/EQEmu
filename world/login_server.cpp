@@ -122,7 +122,7 @@ void LoginServer::ProcessUsertoWorldReqLeg(uint16_t opcode, EQ::Net::Packet &p)
 	}
 
 	if (RuleB(World, EnforceCharacterLimitAtLogin)) {
-		if (ClientList::Instance()->IsAccountInGame(utwr->lsaccountid)) {
+		if (ClientList::Instance()->IsAccountInGame(utwr->lsaccountid, id)) {
 			LogDebug("User already online account_id [{0}]", utwr->lsaccountid);
 			utwrs->response = UserToWorldStatusAlreadyOnline;
 			SendPacket(&outpack);
@@ -203,7 +203,7 @@ void LoginServer::ProcessUsertoWorldReq(uint16_t opcode, EQ::Net::Packet &p)
 	}
 
 	if (RuleB(World, EnforceCharacterLimitAtLogin)) {
-		if (ClientList::Instance()->IsAccountInGame(utwr->lsaccountid)) {
+		if (ClientList::Instance()->IsAccountInGame(utwr->lsaccountid, id)) {
 			LogDebug("User already online account_id [{0}]", utwr->lsaccountid);
 			utwrs->response = UserToWorldStatusAlreadyOnline;
 			SendPacket(&outpack);

@@ -85,6 +85,7 @@ private:
 	uint32	zone_id;
 	uint32	instance_id;
 	bool	is_player_zoning;
+	bool offline_bazaar_character_select = false;
 	Timer	autobootup_timeout;
 	uint32	zone_waiting_for_bootup;
 	bool	enter_world_triggered;
@@ -93,10 +94,11 @@ private:
 	uint32 inventory_wait_character = 0;
 	uint32 inventory_wait_account = 0;
 	bool inventory_wait_route = false;
+	bool inventory_wait_offline_trader = false;
 	bool inventory_wait_try_bootup = true;
 	uint32 inventory_wait_poll_ms = 250;
 	std::chrono::steady_clock::time_point inventory_wait_next_poll{};
-	void WaitForInventoryRelease(uint32 character, const EQApplicationPacket* packet, bool try_bootup);
+	void WaitForInventoryRelease(uint32 character, const EQApplicationPacket* packet, bool try_bootup, bool offline_trader = false);
 	void PollInventoryRelease();
 
 	bool StartInTutorial;

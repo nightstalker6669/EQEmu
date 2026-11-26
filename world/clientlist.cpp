@@ -254,6 +254,39 @@ ClientListEntry* ClientList::FindCharacter(const char* name) {
 	return nullptr;
 }
 
+ClientListEntry* ClientList::FindOfflineBazaarTrader(uint32 account_id)
+{
+	if (!account_id) {
+		return nullptr;
+	}
+
+	LinkedListIterator<ClientListEntry *> iterator(clientlist);
+	for (iterator.Reset(); iterator.MoreElements(); iterator.Advance()) {
+		auto *entry = iterator.GetData();
+		if (entry->AccountID() == account_id && entry->IsOfflineBazaarTrader() && entry->Server()) {
+			return entry;
+		}
+	}
+
+	return nullptr;
+}
+
+bool ClientList::ReclaimOfflineBazaarTrader(uint32 account_id)
+{
+	auto *entry = FindOfflineBazaarTrader(account_id);
+	if (!entry) {
+		return false;
+	}
+
+	ServerPacket packet(ServerOP_ReclaimOfflineBazaarTrader, sizeof(ReclaimOfflineBazaarTrader_Struct));
+	auto *request = reinterpret_cast<ReclaimOfflineBazaarTrader_Struct *>(packet.pBuffer);
+	request->account_id = account_id;
+	request->character_id = entry->CharID();
+	request->world_id = entry->GetID();
+	entry->Server()->SendPacket(&packet);
+	return true;
+}
+
 ClientListEntry* ClientList::FindCLEByAccountID(uint32 iAccID) {
 	LinkedListIterator<ClientListEntry*> iterator(clientlist);
 
@@ -427,6 +460,10 @@ void ClientList::ClientUpdate(ZoneServer *zoneserver, ServerClientList_Struct *s
 		if (iterator.GetData()->GetID() == scl->wid) {
 			cle = iterator.GetData();
 			if (scl->remove == 2) {
+				if (scl->offline_bazaar_trader &&
+					(!cle->IsOfflineBazaarTrader() || cle->AccountID() != scl->AccountID || cle->CharID() != scl->charid)) {
+					return;
+				}
 				cle->LeavingZone(zoneserver, CLE_Status::Offline);
 			}
 			else if (scl->remove == 1) {
@@ -439,6 +476,9 @@ void ClientList::ClientUpdate(ZoneServer *zoneserver, ServerClientList_Struct *s
 			return;
 		}
 		iterator.Advance();
+	}
+	if (scl->remove == 2 && scl->offline_bazaar_trader) {
+		return;
 	}
 	if (scl->remove == 2) {
 		cle = new ClientListEntry(GetNextCLEID(), zoneserver, scl, CLE_Status::Online);
@@ -1399,11 +1439,13 @@ void ClientList::UpdateClientGuild(uint32 char_id, uint32 guild_id) {
 	}
 }
 
-bool ClientList::IsAccountInGame(uint32 iLSID) {
+bool ClientList::IsAccountInGame(uint32 login_server_id, uint32 account_id) {
 	LinkedListIterator<ClientListEntry*> iterator(clientlist);
 	iterator.Reset();
 	while (iterator.MoreElements()) {
-		if (iterator.GetData()->LSID() == iLSID && iterator.GetData()->Online() == CLE_Status::InZone) {
+		const auto *entry = iterator.GetData();
+		if (entry->LSID() == login_server_id && entry->GetOnline() == CLE_Status::InZone &&
+			!(entry->AccountID() == account_id && entry->IsOfflineBazaarTrader())) {
 			return true;
 		}
 		iterator.Advance();

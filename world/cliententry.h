@@ -119,6 +119,7 @@ public:
 	inline bool GetLFGMatchFilter() const { return m_lfg_match_filter; }
 	inline const char *GetLFGComments() const { return m_lfg_comments; }
 	inline uint8 GetClientVersion() { return m_client_version; }
+	bool IsOfflineBazaarTrader() const { return m_offline_bazaar_trader; }
 
 	inline bool TellQueueFull() const { return m_tell_queue.size() >= RuleI(World, TellQueueSize); }
 	inline bool TellQueueEmpty() const { return m_tell_queue.empty(); }
@@ -166,6 +167,7 @@ private:
 	bool   m_lfg{};
 	uint8  m_gm{};
 	uint8  m_client_version{};
+	bool m_offline_bazaar_trader = false;
 	uint8  m_lfg_from_level{};
 	uint8  m_lfg_to_level{};
 	bool   m_lfg_match_filter{};

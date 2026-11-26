@@ -296,6 +296,7 @@
 #define ServerOP_QSSendQuery 0x5000
 #define ServerOP_FellowshipChat 0x5126
 #define ServerOP_FellowshipChatDeliver 0x5127
+#define ServerOP_ReclaimOfflineBazaarTrader 0x5128
 #define ServerOP_FellowshipRefresh 0x5125 // authenticated world/zone invalidation; zero payload
 #define ServerOP_HousingUpkeepRefresh 0x5124 // new internal world/zone invalidation; zero payload
 #define ServerOP_HousingTrophyRefresh 0x5120 // new internal world/zone invalidation; zero payload
@@ -552,6 +553,12 @@ struct ServerVoiceMacro_Struct {
 	uint32	MacroNumber;
 };
 
+struct ReclaimOfflineBazaarTrader_Struct {
+	uint32 account_id;
+	uint32 character_id;
+	uint32 world_id;
+};
+
 struct ServerClientList_Struct {
 	uint8	remove;
 	uint32	wid;
@@ -580,6 +587,7 @@ struct ServerClientList_Struct {
 	uint8	LFGToLevel;
 	bool	LFGMatchFilter;
 	char	LFGComments[64];
+	bool offline_bazaar_trader;
 };
 
 struct ServerClientListKeepAlive_Struct {

@@ -58,6 +58,27 @@ extern WorldServer worldserver;
 extern EntityList entity_list;
 
 bool Client::Process() {
+	if (IsOfflineBazaarTrader()) {
+		if (client_state == CLIENT_CONNECTED && IsTrader() && RuleB(Bazaar, EnableOfflineTraders) &&
+			worldserver.Connected()) {
+			return true;
+		}
+
+		if (m_offline_bazaar_close_retry.Enabled() && !m_offline_bazaar_close_retry.Check(false)) {
+			return true;
+		}
+		m_offline_bazaar_close_retry.Start(1000);
+
+		if (IsTrader()) {
+			TraderEndTrader();
+		}
+		if (!Save(2)) {
+			return true;
+		}
+		OnDisconnect(true);
+		return false;
+	}
+
  if (!ProcessSpiritShroudNativeTransition()) return false;
  if ((Connected() || IsLD()) && !ProcessFallShroud()) return false;
  if((Connected()||IsLD())&&OriginalTradeTransforms::Pending(*this))OriginalTradeTransforms::PollPending(*this);
@@ -636,6 +657,9 @@ bool Client::Process() {
 		while (app = eqs->PopPacket()) {
 			HandlePacket(app);
 			safe_delete(app);
+			if (IsOfflineBazaarTrader()) {
+				return true;
+			}
 		}
 	}
 

@@ -368,6 +368,7 @@
 	void Handle_OP_TrackUnknown(const EQApplicationPacket *app);
 	void Handle_OP_TradeAcceptClick(const EQApplicationPacket *app);
 	void Handle_OP_TradeBusy(const EQApplicationPacket *app);
+	void Handle_OP_OfflineBazaarTrader(const EQApplicationPacket *app);
 	void Handle_OP_Trader(const EQApplicationPacket *app);
 	void Handle_OP_TraderBuy(const EQApplicationPacket *app);
 	void Handle_OP_TradeRequest(const EQApplicationPacket *app);

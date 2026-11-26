@@ -850,6 +850,10 @@ void Client::TraderStartTrader(const EQApplicationPacket *app)
 	bool                                  trade_items_valid = true;
 	std::vector<TraderRepository::Trader> trader_items{};
 
+	// Fence off remote parcel requests from the start of an offline-capable Trader session.
+	m_bazaar_counter_only = ClientVersion() == EQ::versions::ClientVersion::RoF2 &&
+		GetZoneID() == Zones::BAZAAR && RuleB(Bazaar, EnableOfflineTraders);
+
 	//Check inventory for no-trade items
 	for (auto i = 0; i < max_items; i++) {
 		if (inv->items[i] == 0 || inv->serial_number[i] == 0) {
@@ -900,6 +904,7 @@ void Client::TraderStartTrader(const EQApplicationPacket *app)
 			trader_item.item_sn               = in->serial_number[i];
 			trader_item.slot_id               = i;
 			trader_item.listing_date          = time(nullptr);
+			trader_item.active_transaction    = m_bazaar_counter_only ? TraderRepository::CounterOnly : TraderRepository::Online;
 			if (inst->IsAugmented()) {
 				auto augs              = inst->GetAugmentIDs();
 				trader_item.aug_slot_1 = augs.at(0);
@@ -1403,6 +1408,15 @@ void Client::BuyTraderItem(TraderBuy_Struct *tbs, Client *Trader, const EQApplic
 		return;
 	}
 
+	const auto listing = TraderRepository::GetItemBySerialNumber(
+		database, buy_item->GetSerialNumber(), Trader->CharacterID()
+	);
+	const bool counter_only = Trader->m_bazaar_counter_only;
+	if (!listing.id || listing.active_transaction != (counter_only ? TraderRepository::CounterOnly : TraderRepository::Online)) {
+		TradeRequestFailed(app);
+		return;
+	}
+
 	LogTrading(
 		"Name: <green>[{}] IsStackable: <green>[{}] Requested Quantity: <green>[{}] Charges on Item <green>[{}]",
 		buy_item->GetItem()->Name,
@@ -1475,7 +1489,13 @@ void Client::BuyTraderItem(TraderBuy_Struct *tbs, Client *Trader, const EQApplic
 		outtbs->price = total_cost;
 	}
 
+	if ((counter_only && listing.item_cost != tbs->price) || !TraderRepository::ClaimSale(database, listing, counter_only)) {
+		TradeRequestFailed(app);
+		return;
+	}
+
 	if (!TakeMoneyFromPP(total_cost)) {
+		TraderRepository::ReleaseSale(database, listing.id, counter_only);
         RecordPlayerEventLog(
             PlayerEvent::POSSIBLE_HACK,
             PlayerEvent::PossibleHackEvent{
@@ -1579,6 +1599,7 @@ void Client::BuyTraderItem(TraderBuy_Struct *tbs, Client *Trader, const EQApplic
 	}
 
 	Trader->FindAndNukeTraderItem(tbs->item_id, outtbs->quantity, this, 0);
+	TraderRepository::ReleaseSale(database, listing.id, counter_only);
 
 	if (item_id > 0 && Trader->ClientVersion() >= EQ::versions::ClientVersion::RoF) {
 		// Convert Serial Number back to ItemID for RoF+
@@ -2624,6 +2645,7 @@ void Client::TraderPriceUpdate(const EQApplicationPacket *app)
 				trader_item.item_id               = newgis->items[i];
 				trader_item.item_sn               = newgis->serial_number[i];
 				trader_item.listing_date          = time(nullptr);
+				trader_item.active_transaction    = m_bazaar_counter_only ? TraderRepository::CounterOnly : TraderRepository::Online;
 				if (item_detail->IsAugmented()) {
 					auto augs              = item_detail->GetAugmentIDs();
 					trader_item.aug_slot_1 = augs.at(0);
@@ -2911,6 +2933,15 @@ void Client::BuyTraderItemOutsideBazaar(TraderBuy_Struct *tbs, const EQApplicati
 		return;
 	}
 
+	if (trader_item.active_transaction == TraderRepository::CounterOnly ||
+		trader_item.active_transaction == TraderRepository::CounterSalePending) {
+		Message(Chat::Yellow, "Visit this trader in the Bazaar to buy this item in person.");
+		in->method = BazaarByParcel;
+		in->sub_action = Failed;
+		TradeRequestFailed(app);
+		return;
+	}
+
 	if (trader_item.active_transaction) {
 		LogTrading("Attempt to purchase an item outside of the Bazaar trader_id <red>[{}] item serial_number "
 				   "<red>[{}] The item is already within an active transaction.",
@@ -2923,7 +2954,12 @@ void Client::BuyTraderItemOutsideBazaar(TraderBuy_Struct *tbs, const EQApplicati
 		return;
 	}
 
-	TraderRepository::UpdateActiveTransaction(database, trader_item.id, true);
+	if (!TraderRepository::ClaimSale(database, trader_item)) {
+		in->method = BazaarByParcel;
+		in->sub_action = DataOutDated;
+		TradeRequestFailed(app);
+		return;
+	}
 
 	std::unique_ptr<EQ::ItemInstance> buy_item(
 		database.CreateItem(
@@ -2945,7 +2981,7 @@ void Client::BuyTraderItemOutsideBazaar(TraderBuy_Struct *tbs, const EQApplicati
 		);
 		in->method     = BazaarByParcel;
 		in->sub_action = Failed;
-		TraderRepository::UpdateActiveTransaction(database, trader_item.id, false);
+		TraderRepository::ReleaseSale(database, trader_item.id);
 		TradeRequestFailed(app);
 		return;
 	}
@@ -2960,7 +2996,7 @@ void Client::BuyTraderItemOutsideBazaar(TraderBuy_Struct *tbs, const EQApplicati
 		);
 		in->method     = BazaarByParcel;
 		in->sub_action = TooManyParcels;
-		TraderRepository::UpdateActiveTransaction(database, trader_item.id, false);
+		TraderRepository::ReleaseSale(database, trader_item.id);
 		TradeRequestFailed(app);
 		return;
 	}
@@ -2988,7 +3024,7 @@ void Client::BuyTraderItemOutsideBazaar(TraderBuy_Struct *tbs, const EQApplicati
 				charges, buy_item->GetItem()->Name);
 			in->method     = BazaarByParcel;
 			in->sub_action = Failed;
-			TraderRepository::UpdateActiveTransaction(database, trader_item.id, false);
+			TraderRepository::ReleaseSale(database, trader_item.id);
 			TradeRequestFailed(app);
 			return;
 		}
@@ -3011,7 +3047,7 @@ void Client::BuyTraderItemOutsideBazaar(TraderBuy_Struct *tbs, const EQApplicati
 			"That would exceed the single transaction limit of %u platinum.",
 			MAX_TRANSACTION_VALUE / 1000
 		);
-		TraderRepository::UpdateActiveTransaction(database, trader_item.id, false);
+		TraderRepository::ReleaseSale(database, trader_item.id);
 		TradeRequestFailed(app);
 		return;
 	}
@@ -3030,7 +3066,7 @@ void Client::BuyTraderItemOutsideBazaar(TraderBuy_Struct *tbs, const EQApplicati
 		);
 		in->method     = BazaarByParcel;
 		in->sub_action = InsufficientFunds;
-		TraderRepository::UpdateActiveTransaction(database, trader_item.id, false);
+		TraderRepository::ReleaseSale(database, trader_item.id);
 		TradeRequestFailed(app);
 		return;
 	}
@@ -3087,7 +3123,7 @@ void Client::BuyTraderItemOutsideBazaar(TraderBuy_Struct *tbs, const EQApplicati
 		Message(Chat::Yellow, "Unable to save parcel to the database. Please contact an administrator.");
 		in->method     = BazaarByParcel;
 		in->sub_action = Failed;
-		TraderRepository::UpdateActiveTransaction(database, trader_item.id, false);
+		TraderRepository::ReleaseSale(database, trader_item.id);
 		TradeRequestFailed(app);
 		return;
 	}

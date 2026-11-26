@@ -798,6 +798,18 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 		}
 		break;
 	}
+	case ServerOP_ReclaimOfflineBazaarTrader: {
+		if (pack->size != sizeof(ReclaimOfflineBazaarTrader_Struct)) {
+			break;
+		}
+		const auto *request = reinterpret_cast<const ReclaimOfflineBazaarTrader_Struct *>(pack->pBuffer);
+		auto *seller = entity_list.GetClientByCharID(request->character_id);
+		if (seller && seller->IsOfflineBazaarTrader() && seller->AccountID() == request->account_id &&
+			seller->GetWID() == request->world_id) {
+			seller->Kick("Offline Bazaar trader reclaimed by account login");
+		}
+		break;
+	}
 	case ServerOP_KickPlayer: {
 		ServerKickPlayer_Struct* skp = (ServerKickPlayer_Struct*)pack->pBuffer;
 		Client* client;
@@ -3893,7 +3905,7 @@ void WorldServer::HandleMessage(uint16 opcode, const EQ::Net::Packet &p)
 				data->price = in->trader_buy_struct.price * in->trader_buy_struct.quantity;
 			}
 
-			TraderRepository::UpdateActiveTransaction(database, in->id, false);
+			TraderRepository::ReleaseSale(database, in->id);
 
 			auto item = trader_pc->FindTraderItemBySerialNumber(item_sn);
 

@@ -246,17 +246,30 @@ public:
 		return trader_item.at(0);
 	}
 
-	static int UpdateActiveTransaction(Database &db, uint32 id, bool status)
+	static constexpr uint8_t Online = 0;
+	static constexpr uint8_t SalePending = 1;
+	static constexpr uint8_t CounterOnly = 2;
+	static constexpr uint8_t CounterSalePending = 3;
+
+	static bool ClaimSale(Database &db, const Trader &listing, bool counter_only = false)
 	{
-		auto e = FindOne(db, id);
-		if (!e.id) {
-			return 0;
-		}
+		auto result = db.QueryDatabase(fmt::format(
+			"UPDATE trader SET active_transaction = {} WHERE id = {} AND char_id = {} "
+			"AND item_cost = {} AND item_charges = {} AND active_transaction = {}",
+			counter_only ? CounterSalePending : SalePending,
+			listing.id, listing.char_id, listing.item_cost, listing.item_charges,
+			counter_only ? CounterOnly : Online
+		));
+		return result.Success() && result.RowsAffected() == 1;
+	}
 
-		e.active_transaction = status == true ? 1 : 0;
-		e.listing_date       = time(nullptr);
-
-		return UpdateOne(db, e);
+	static void ReleaseSale(Database &db, uint32_t id, bool counter_only = false)
+	{
+		db.QueryDatabase(fmt::format(
+			"UPDATE trader SET active_transaction = {}, listing_date = NOW() "
+			"WHERE id = {} AND active_transaction = {}",
+			counter_only ? CounterOnly : Online, id, counter_only ? CounterSalePending : SalePending
+		));
 	}
 
 	static int DeleteMany(Database &db, const std::vector<Trader> &entries)

@@ -131,7 +131,7 @@ Client::Client(EQStreamInterface* ieqs)
 Client::~Client() {
 	ClearDataBucketsCache();
 
-	if (RunLoops && cle && zone_id == 0)
+	if (RunLoops && cle && zone_id == 0 && !offline_bazaar_character_select && !cle->IsOfflineBazaarTrader())
 		cle->SetOnline(CLE_Status::Offline);
 
 	numclients--;
@@ -231,7 +231,7 @@ void Client::SendExpansionInfo() {
 }
 
 void Client::SendCharInfo() {
-	if (cle) {
+	if (cle && !offline_bazaar_character_select && !cle->IsOfflineBazaarTrader()) {
 		cle->SetOnline(CLE_Status::CharSelect);
 	}
 
@@ -473,10 +473,17 @@ bool Client::HandleSendLoginInfoPacket(const EQApplicationPacket *app)
 	LogClientLogin("Checking authentication id [{}]", id);
 
 	if ((cle = ClientList::Instance()->CheckAuth(id, password))) {
+		// RoF2 returns to Character Select after detaching its Bazaar transport.
+		// This connection can share the seller's World entry and must leave it intact.
+		offline_bazaar_character_select = cle->IsOfflineBazaarTrader();
+		if (offline_bazaar_character_select && is_player_zoning) {
+			return false;
+		}
+
 		LoadDataBucketsCache();
 
 		LogClientLogin("Checking authentication id [{}] passed", id);
-		if (!is_player_zoning) {
+		if (!is_player_zoning && !offline_bazaar_character_select) {
 			// Track who is in and who is out of the game
 			std::string in_out;
 
@@ -497,13 +504,16 @@ bool Client::HandleSendLoginInfoPacket(const EQApplicationPacket *app)
 
 			LogInfo("Account ({}) Logging ({}) to character select :: LSID [{}] ", cle->AccountName(), in_out, cle->LSID());
 		}
-		else {
+		else if (is_player_zoning) {
 			cle->SetOnline();
+		}
+		else {
+			LogClientLogin("Account [{}] reached character select with offline Bazaar trader [{}] retained", cle->AccountID(), cle->CharID());
 		}
 
 		const WorldConfig *Config=WorldConfig::get();
 
-		if(Config->UpdateStats) {
+		if (Config->UpdateStats && !offline_bazaar_character_select) {
 			auto pack = new ServerPacket;
 			pack->opcode = ServerOP_LSPlayerJoinWorld;
 			pack->size = sizeof(ServerLSPlayerJoinWorld_Struct);
@@ -558,7 +568,9 @@ bool Client::HandleSendLoginInfoPacket(const EQApplicationPacket *app)
 			}
 		}
 
-		cle->SetIP(GetIP());
+		if (!offline_bazaar_character_select) {
+			cle->SetIP(GetIP());
+		}
 		return true;
 	}
 	else {
@@ -798,13 +810,6 @@ bool Client::HandleEnterWorldPacket(const EQApplicationPacket *app) {
 		return true;
 	}
 
-	if (
-		RuleB(World, EnableIPExemptions) ||
-		RuleI(World, MaxClientsPerIP) > 0
-	) {
-		ClientList::Instance()->GetCLEIP(GetIP()); //Check current CLE Entry IPs against incoming connection
-	}
-
 	auto ew = (EnterWorld_Struct *) app->pBuffer;
 	strn0cpy(char_name, ew->name, sizeof(char_name));
 
@@ -846,6 +851,33 @@ bool Client::HandleEnterWorldPacket(const EQApplicationPacket *app) {
 		);
 		eqs->Close();
 		return true;
+	}
+
+	auto *client_list = ClientList::Instance();
+	if (!seen_character_select && client_list->FindOfflineBazaarTrader(account_id)) {
+		return false;
+	}
+	if (seen_character_select && client_list->ReclaimOfflineBazaarTrader(account_id)) {
+		WaitForInventoryRelease(e.id, app, true, true);
+		return true;
+	}
+	if (offline_bazaar_character_select) {
+		if (cle->Online() >= CLE_Status::Zoning) {
+			return false;
+		}
+		offline_bazaar_character_select = false;
+		cle->SetOnline(CLE_Status::CharSelect);
+		cle->SetIP(GetIP());
+	}
+
+	if (
+		RuleB(World, EnableIPExemptions) ||
+		RuleI(World, MaxClientsPerIP) > 0
+	) {
+		ClientList::Instance()->GetCLEIP(GetIP()); //Check current CLE Entry IPs against incoming connection
+	}
+	if (!cle) {
+		return false;
 	}
 
 	// Persisted active/pending custody leases survive CLE expiry/world restart.
@@ -1096,6 +1128,14 @@ bool Client::HandleDeleteCharacterPacket(const EQApplicationPacket *app) {
 
 	uint32 char_acct_id = database.GetAccountIDByChar((char*)app->pBuffer);
 	if(char_acct_id == GetAccountID()) {
+		const auto *seller = ClientList::Instance()->FindOfflineBazaarTrader(char_acct_id);
+		if (seller) {
+			const auto target_id = database.GetCharacterID((const char *)app->pBuffer);
+			if (!target_id || target_id == seller->CharID()) {
+				SendCharInfo();
+				return true;
+			}
+		}
 		LogInfo("Delete character: [{}]", (const char*)app->pBuffer);
 		if (!database.DeleteCharacter((char *)app->pBuffer)) {
 			LogWarning("Character deletion was refused; retained character list will be sent");
@@ -1203,7 +1243,9 @@ bool Client::HandlePacket(const EQApplicationPacket *app) {
 		{
 			// I don't see this getting executed on logout
 			eqs->Close();
-			cle->SetOnline(CLE_Status::Offline); //allows this player to log in again without an ip restriction.
+			if (!offline_bazaar_character_select && !cle->IsOfflineBazaarTrader()) {
+				cle->SetOnline(CLE_Status::Offline); // Allows login again without an IP restriction.
+			}
 			return false;
 		}
 		case OP_ZoneChange:
@@ -1267,7 +1309,7 @@ bool Client::Process() {
 	}
 
 	if (!eqs->CheckState(ESTABLISHED)) {
-		if(WorldConfig::get()->UpdateStats){
+		if (WorldConfig::get()->UpdateStats && !offline_bazaar_character_select) {
 			auto pack = new ServerPacket;
 			pack->opcode = ServerOP_LSPlayerLeftWorld;
 			pack->size = sizeof(ServerLSPlayerLeftWorld_Struct);
@@ -1289,12 +1331,12 @@ bool Client::Process() {
 	return ret;
 }
 
-void Client::WaitForInventoryRelease(uint32 character, const EQApplicationPacket* packet, bool try_bootup)
+void Client::WaitForInventoryRelease(uint32 character, const EQApplicationPacket* packet, bool try_bootup, bool offline_trader)
 {
 	if (inventory_wait_character) {
 		return;
 	}
-	if (!GetLSID()) {
+	if (!offline_trader && !GetLSID()) {
 		// DropClient addresses the login identity; zero cannot safely identify an
 		// old actor. Keep its durable reservation untouched and reject admission.
 		TellClientZoneUnavailable();
@@ -1306,12 +1348,15 @@ void Client::WaitForInventoryRelease(uint32 character, const EQApplicationPacket
 	inventory_wait_character = character;
 	inventory_wait_account = GetAccountID();
 	inventory_wait_route = !packet;
+	inventory_wait_offline_trader = offline_trader;
 	inventory_wait_try_bootup = try_bootup;
 	inventory_wait_poll_ms = 250;
 	inventory_wait_next_poll = std::chrono::steady_clock::now() + std::chrono::milliseconds(inventory_wait_poll_ms);
 	autobootup_timeout.Disable();
-	ZSList::Instance()->DropClient(GetLSID(), nullptr);
-	LogInfo("Character [{}] waiting for durable inventory writer teardown", character);
+	if (!offline_trader) {
+		ZSList::Instance()->DropClient(GetLSID(), nullptr);
+	}
+	LogInfo("Character [{}] waiting for {} teardown", character, offline_trader ? "offline Bazaar trader" : "durable inventory writer");
 }
 
 void Client::PollInventoryRelease()
@@ -1327,7 +1372,7 @@ void Client::PollInventoryRelease()
 	if (actor.state == Housing::HandoffActorState::Unavailable) {
 		return; // Query failure is not proof of teardown or actor revocation.
 	}
-	if (!RuleB(Housing, EnablePlayerHousing)) {
+	if (!inventory_wait_offline_trader && !RuleB(Housing, EnablePlayerHousing)) {
 		inventory_wait_packet.reset();
 		inventory_wait_character = 0;
 		TellClientZoneUnavailable(); // Never bypass a queued writer by toggling rules.
@@ -1337,6 +1382,9 @@ void Client::PollInventoryRelease()
 		inventory_wait_packet.reset();
 		inventory_wait_character = 0;
 		eqs->Close();
+		return;
+	}
+	if (inventory_wait_offline_trader && ClientList::Instance()->FindOfflineBazaarTrader(inventory_wait_account)) {
 		return;
 	}
 	const auto admission = Housing::CheckInventoryAdmission(database, inventory_wait_character,
@@ -1351,6 +1399,7 @@ void Client::PollInventoryRelease()
 	inventory_wait_character = 0;
 	inventory_wait_account = 0;
 	inventory_wait_route = false;
+	inventory_wait_offline_trader = false;
 	if (route) {
 		strn0cpy(char_name, actor.name.c_str(), sizeof(char_name));
 		EnterWorld(try_bootup);

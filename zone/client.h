@@ -1277,6 +1277,7 @@ public:
 	bool IsBankSlot(uint32 slot);
 
 	bool IsTrader() const { return trader; }
+	bool IsOfflineBazaarTrader() const { return m_offline_bazaar_trader; }
 	void SetTrader(bool status) { trader = status; }
 	uint16 GetTraderID() { return trader_id; }
 	void SetTraderID(uint16 id) { trader_id = id; }
@@ -2355,6 +2356,9 @@ private:
 	uint16 controlled_mob_id;
 	uint16 TrackingID;
 	bool   trader;
+	bool m_bazaar_counter_only = false;
+	bool m_offline_bazaar_trader = false;
+	Timer m_offline_bazaar_close_retry;
 	uint16 trader_id;
 	uint16 customer_id;
 	uint32 account_creation;

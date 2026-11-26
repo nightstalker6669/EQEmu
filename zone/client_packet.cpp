@@ -40,6 +40,7 @@
 #include "housing_plot_marker.h"
 
 #include "client.h"
+#include "common/repositories/trader_repository.h"
 #include "dodh_backflag_loot.h"
 #include "por_deathknell_harp_loot.h"
 #include "por_deathknell_vertigo.h"
@@ -480,6 +481,7 @@ void MapOpcodes()
 	ConnectedOpcodes[OP_TrackUnknown] = &Client::Handle_OP_TrackUnknown;
 	ConnectedOpcodes[OP_TradeAcceptClick] = &Client::Handle_OP_TradeAcceptClick;
 	ConnectedOpcodes[OP_TradeBusy] = &Client::Handle_OP_TradeBusy;
+	ConnectedOpcodes[OP_OfflineBazaarTrader] = &Client::Handle_OP_OfflineBazaarTrader;
 	ConnectedOpcodes[OP_Trader] = &Client::Handle_OP_Trader;
 	ConnectedOpcodes[OP_TraderBuy] = &Client::Handle_OP_TraderBuy;
 	ConnectedOpcodes[OP_TradeRequest] = &Client::Handle_OP_TradeRequest;
@@ -1474,6 +1476,14 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 			client->Save();
 			client->Kick("Failed auth check");
 		}
+		return;
+	}
+
+	if (client && client->IsOfflineBazaarTrader() && client->AccountID() == AccountID() &&
+		client->CharacterID() == CharacterID()) {
+		client->Kick("Offline Bazaar trader reclaimed by character entry");
+		RejectInventorySessionAdmission();
+		Disconnect();
 		return;
 	}
 
@@ -16457,6 +16467,60 @@ void Client::Handle_OP_TradeBusy(const EQApplicationPacket *app)
 		tradee->CastToClient()->QueuePacket(app);
 	}
 	return;
+}
+
+void Client::Handle_OP_OfflineBazaarTrader(const EQApplicationPacket *app)
+{
+	if (ClientVersion() != EQ::versions::ClientVersion::RoF2 || app->size != 0) {
+		return;
+	}
+
+	if (!RuleB(Bazaar, EnableOfflineTraders) || GetZoneID() != Zones::BAZAAR ||
+		!IsTrader() || IsBuyer() || !worldserver.Connected()) {
+		Message(Chat::Yellow, "Offline Mode is available only while trading in the Bazaar.");
+		return;
+	}
+
+	if (IsSpiritShrouded() || dead || bZoning || IsCasting() || IsEngaged() ||
+		GetInv().GetItem(EQ::invslot::slotCursor) || trade->state != TradeNone ||
+		OriginalTradeTransforms::Pending(*this) || GetEngagedWithParcelMerchant()) {
+		Message(Chat::Yellow, "Finish your current activity before entering Offline Mode.");
+		return;
+	}
+
+	if (!Save(2)) {
+		Message(Chat::Yellow, "Your character could not be saved. Offline Mode was not started.");
+		return;
+	}
+	if (!m_bazaar_counter_only || TraderRepository::GetWhere(
+		database, fmt::format("char_id = {} AND active_transaction = {}", CharacterID(), TraderRepository::CounterOnly)
+	).empty()) {
+		Message(Chat::Yellow, "Start a Trader session with in-person sales before entering Offline Mode.");
+		return;
+	}
+
+	LeaveGroup();
+	if (auto *raid = GetRaid()) {
+		raid->MemberZoned(this);
+	}
+	if (auto *merc = GetMerc()) {
+		merc->Save();
+		merc->Depop();
+	}
+	if (IsLFP()) {
+		worldserver.StopLFP(CharacterID());
+	}
+	ClearAllProximities();
+
+	SendLogoutPackets();
+	auto *reply = new EQApplicationPacket(OP_LogoutReply);
+	FastQueuePacket(&reply);
+
+	// Keep the authoritative seller and inventory in this zone. An unannounced
+	// disconnect takes the stock teardown path.
+	m_offline_bazaar_trader = true;
+	UpdateWho();
+	eqs->Close();
 }
 
 void Client::Handle_OP_Trader(const EQApplicationPacket *app)

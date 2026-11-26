@@ -1,9 +1,7 @@
-<!-- previous-release: rof2-ci-r36-a1-baa1b78b1bb4 -->
+<!-- previous-release: rof2-ci-r37-a1-17edda9213f0 -->
 
-# Ashengate East and West
+# RoF2 Offline Bazaar Trader
 
-- Restored Zhubis’s and Jenray’s six faction quests, with repeatable task sequences, original quest items, and native turn-ins.
-- Added The Pretender and Severing the Strings as personal quests earned during Vergalid’s End.
-- Restored the East and West expedition requests and entries. Attendance uses wing faction, Vergalid kill equivalence, the level 74 allowance, and temporary raid-in eligibility.
-- Added three encounters per wing, with individual event lockouts, encounter loot, and separate completion records for A Complex Diversion and Ghosts from the Past.
-- Added the Mark of Vergalid to the six original reward sources. Using the real item grants permanent Vergalid kill equivalence for Ashengate.
+- Add the native RoF2 Offline Mode action for Bazaar traders, gated by `Bazaar:EnableOfflineTraders` and disabled by default.
+- Keep the seller and listings active when the client returns to Character Select. An authenticated Enter World request retires the offline seller and waits for its final save and inventory release before admission.
+- Use in-person checkout for RoF2 Trader sessions opened while the rule is enabled. Reserve each listing for one buyer during checkout and reject parcel requests for those listings before charging the buyer.
