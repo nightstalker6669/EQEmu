@@ -220,6 +220,19 @@ Published restorations affect 5,327 existing player-spell IDs across 5,629 class
 
 </details>
 
+<details>
+<summary>RoF2 Offline Bazaar Trader — Published in r38</summary>
+
+- **Opt-in:** `Bazaar:EnableOfflineTraders` defaults to `false`. RoF2 Trader sessions opened with the rule enabled use in-person counter checkout. Parcel purchases are rejected before charging the buyer.
+- **Native verification:** Both listings stayed active after the seller used Offline Mode and returned to Character Select. A second ordinary RoF2 client in the same Bazaar instance bought one item at the counter for 1 platinum. The item and coin transfers matched. The seller used Enter World on the same client to reclaim the trader in the same instance, kept the proceeds and unsold item, and cleared the old listing. Ordinary camp cleared an active listing in a separate check.
+- **Limits:** Offline listings clear on Bazaar worker restart. Counter sales lack crash-atomic settlement. Sold-out retirement, separate desktop login, native parcel rejection and crash recovery remain unverified. QA used GM positioning for setup and native RoF2 controls for the transaction and re-entry.
+
+The paired database release changes metadata only. The published SQL and all 467 quest pins are unchanged.
+
+[Server r38](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r38-a2-e855ae6eda17) · [Matching database release](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-25-offline-bazaar) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/ceb6b28a137fd2c8d3641e5437acad5c2db0b105/releases/peq-rof2-2026-11-25-offline-bazaar/NATIVE-QUALIFICATIONS.json)
+
+</details>
+
 ## Quests & zones
 
 [Browse the alphabetical quest-route catalogue](docs/rof2/roadmap/quests/README.md) · [Portable searchable catalogue](docs/rof2/roadmap/quests.html)
