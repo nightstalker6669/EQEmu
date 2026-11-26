@@ -499,6 +499,22 @@ Partisan progression and portal prerequisites.
 </details>
 
 <details>
+<summary>Shard’s Landing native Collections — Published in r39</summary>
+
+The May 2013 RoF2 Collections engine registers items through ordinary inventory right-click and displays progress in the native Achievements window. This release supplies two Shard’s Landing sets using 16 existing items.
+
+- **Fear in Pieces:** All eight yellow ground pickups registered. Completion awarded exactly 16,610,406 normal XP once. A duplicate stayed in inventory without repeat credit, and the eight components, completion and award persisted through a normal relog. Duplicate use after relog also preserved the item.
+- **Alaran in Chains:** The set draws from four established lower-arena NPC types. QA looted a Glass Flask from a native arena corpse, used it and saw 1/8 in Achievements. Full set completion remains unverified.
+- **Verification limits:** QA used GM positioning and existing fixture invulnerability. The ordinary Runed Circlet began casting without updating collection progress. Invulnerability blocked the self-buff from landing. Registration rollback was verified in isolated MariaDB. Native crash recovery remains untested.
+- **Reconstruction:** The level-95 XP calculation, individual ground placements, 300-second ground respawn and 20% arena drop roll across eight equally weighted items are reconstructed.
+
+The paired release retains all 467 quest pins and the existing RoF2 opcode overlay.
+
+[Server r39](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r39-a1-26c2c4ad98db) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-26-collections) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/7605e294ba0127e27ef166f0429de1684d1e8c82/releases/peq-rof2-2026-11-26-collections/NATIVE-QUALIFICATIONS.json)
+
+</details>
+
+<details>
 <summary>Valley of King Xorbb — Source package · acceptance pending</summary>
 
 An inactive source package containing partisan and mercenary quest components.
