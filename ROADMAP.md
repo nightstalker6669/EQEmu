@@ -515,6 +515,21 @@ The paired release retains all 467 quest pins and the existing RoF2 opcode overl
 </details>
 
 <details>
+<summary>May 2013 RoF2 Collections and playable-zone access — Published in r40</summary>
+
+- **Released catalogue:** 389 collectible sources, 45 sets, 15 meta-achievements and 69 reward bindings across 11 public zones. July Heart of Fear definitions are outside the May client scope.
+- **Native progression:** QA registered 386 items, completed 43 sets and 10 metas, and observed 61 once-only reward deliveries. Coverage includes all ground collectibles, both April public round trips, the Chelsith aqueduct crossings, corpse loot in all 11 donor families, both rare Dark Secrets items and ordinary right-click registration. Duplicate items were retained and native stacking conserved quantities. All nine Stalking Fear items were earned with the Collector’s Edition entitlement, and the completed set and single reward persisted after the entitlement was removed and the character relogged.
+- **Catalogue and isolated progression checks:** The remaining three items (77467, 77469 and 81438) share donor tables with items observed in native play. Isolated SQL readback and deterministic progression checks covered their seven dependent set or meta completions and eight reward bindings. Those items, completions and awards remain outside native coverage.
+- **Playable-zone access:** The fresh-install database removes staff-status requirements from 64 approved playable zone records. Native access was witnessed in Valley of King Xorbb, The Breeding Grounds, Evantil, the Vile Oak, Grelleth’s Palace and Chapterhouse of the Fallen. Broader access was verified by catalogue and live cache readback. The release database restores Theater of Blood’s public minimum to level 68, matching the prior route.
+- **QA and reconstruction:** Protected fixtures and GM positioning assisted QA. Repeat fights used a QA mallet only after ordinary combat, corpse and item evidence for that donor family. Unassisted difficulty and exact kill times remain unverified. Exact placements, rotation, combat profiles, drop tuning and fixed XP tiers include reconstruction. Dark Secrets has no additional reward binding because its exact reward remains unconfirmed.
+
+All 467 quest pins and the RoF2 opcode overlay are carried forward.
+
+[Server r40](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r40-a1-92ace7b7829d) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-26-may-collections) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/bb9dffedef2afcc9fffa937a58dd87d376591e97/releases/peq-rof2-2026-11-26-may-collections/NATIVE-QUALIFICATIONS.json)
+
+</details>
+
+<details>
 <summary>Valley of King Xorbb — Source package · acceptance pending</summary>
 
 An inactive source package containing partisan and mercenary quest components.
