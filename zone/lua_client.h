@@ -60,6 +60,8 @@ public:
 	bool IsLD();
 	void WorldKick();
 	void SendToGuildHall();
+	bool CanAlignBasicGuildBannerPortal(Lua_Mob merchant);
+	bool OfferBasicGuildBannerPortal(Lua_Mob porter);
 	void SendToInstance(std::string instance_type, std::string zone_short_name, uint32 instance_version, float x, float y, float z, float heading, std::string instance_identifier, uint32 duration);
 	int GetAnon();
 	void SetAnon(uint8 anon_flag);

@@ -1,6 +1,7 @@
 #include "housing_guild_portal.h"
 #include "housing_inventory_bridge.h"
 #include "client.h"
+#include "guild_banner_portal.h"
 #include "mob.h"
 #include "zone.h"
 #include "../common/eqemu_config.h"
@@ -17,6 +18,7 @@ Validator validate;
 struct State {
  uint32_t character=0,account=0,zone=0,instance=0;
  uint64_t last_pad=0;
+ uint64_t banner_revision=0;
  std::optional<GuildPortal::Confirmation> pending;
  std::chrono::steady_clock::time_point next{};
 };
@@ -44,11 +46,13 @@ bool HandIn(Client& c,Mob* merchant)noexcept{
   if(!source||!c.trade||c.trade->cp||c.trade->sp||c.trade->gp||c.trade->pp){c.Message(Chat::Red,"Hand the assistant one supported teleportation crystal. Coins are not accepted.");return_items();return true;}
   int16_t slot=-1;EQ::ItemInstance* stone=nullptr;for(int16_t i=EQ::invslot::TRADE_BEGIN;i<=EQ::invslot::TRADE_NPC_END;++i){auto* item=c.GetInv().GetItem(i);if(!item)continue;if(stone||!GuildPortal::Purchasable(item->GetID())){c.Message(Chat::Red,"Only one supported crystal type may be handed in at a time.");return_items();return true;}slot=i;stone=item;}
   auto* bridge=c.GetHousingInventoryBridge();if(!bridge||!stone){return_items();return true;}
+  const bool banner_stone=stone->GetID()==GuildBanner::TravelStone;
+  if(banner_stone&&!GuildBanner::PortalDestination(c,source->scope.guild)){c.Message(Chat::Red,"The current guild banner cannot be teleported to.");return_items();return true;}
   auto aligned=bridge->AlignGuildPortal(*source,uint32_t(slot),stone->GetSerialNumber(),validate);
   // ResetTrade is the ordinary unconsumed-item/coin return path. The bridge has
   // already removed exactly one stone from memory and DB atomically.
   return_items();if(!aligned){c.Message(Chat::Red,"The portal could not be aligned. Your remaining items were returned.");return true;}
-  Forget(c);const auto* d=GuildPortal::Lookup(aligned.value.stone);c.Message(Chat::Yellow,"The teleport stone is now aligned to %s for one day.",d?d->name:"the selected destination");return true;
+  Forget(c);const auto* d=GuildPortal::Lookup(aligned.value.stone);c.Message(Chat::Yellow,"The teleport stone is now aligned to %s for one day.",banner_stone?"your guild banner":(d?d->name:"the selected destination"));return true;
  }catch(...){if(!returning){try{return_items();}catch(...){}}c.Message(Chat::Red,"The portal could not be aligned. Your items were returned.");return true;}
 }
 void Process(Client& c)noexcept{
@@ -61,13 +65,23 @@ void Process(Client& c)noexcept{
   // reruns source, entry, pose, owning hall, alignment revision and distance.
   std::optional<GuildPortal::Confirmation> offer;
   GuildPortal::Query(*db,"START TRANSACTION");try{if(!validate(*db,c,*pad))throw std::invalid_argument("Portal offer source changed");auto alignment=GuildPortal::Read(*db,pad->scope,true);if(alignment)offer=GuildPortal::Offer(*alignment,pad->scope,c.CharacterID(),pad->binding.custody_id,Position(c),Position(*pad),GuildPortal::DatabaseNow(*db));GuildPortal::Query(*db,"COMMIT");}catch(...){db->QueryDatabase(std::string("ROLLBACK"),false);throw;}if(!offer)return;
-  state.pending=*offer;state.last_pad=pad->binding.custody_id;const auto* d=GuildPortal::Lookup(offer->stone);std::string text="Do you wish to travel to ";text+=d->name;text+="?";c.SendFullPopup("Guild Hall Portal",text.c_str(),offer->stone,offer->stone,1,uint32_t(GuildPortal::ConfirmationSeconds),"Yes","No",0);
+  const bool banner_stone=offer->stone==GuildBanner::TravelStone;
+  state.last_pad=pad->binding.custody_id;
+  state.banner_revision=0;
+  if(banner_stone){
+   const auto target=GuildBanner::PortalDestination(c,pad->scope.guild);
+   if(!target){c.Message(Chat::Red,"The current guild banner cannot be teleported to.");return;}
+   state.banner_revision=target->revision;
+  }
+  state.pending=*offer;const auto* d=GuildPortal::Lookup(offer->stone);
+  std::string text="Do you wish to travel to ";text+=banner_stone?"your guild banner":d->name;text+="?";
+  c.SendFullPopup("Guild Hall Portal",text.c_str(),offer->stone,offer->stone,1,uint32_t(GuildPortal::ConfirmationSeconds),"Yes","No",0);
  }catch(...){auto it=states.find(&c);if(it!=states.end()){it->second.pending.reset();it->second.last_pad=0;it->second.next=std::chrono::steady_clock::now()+std::chrono::seconds(1);}}
 }
 bool HandlePopup(Client& c,const EQApplicationPacket* app)noexcept{
  try{
   if(!app||app->size!=sizeof(PopupResponse_Struct))return false;const auto* response=reinterpret_cast<const PopupResponse_Struct*>(app->pBuffer);if(!GuildPortal::Lookup(response->popupid)&&response->popupid!=88737&&response->popupid!=76008)return false;
-  auto it=states.find(&c);std::optional<GuildPortal::Confirmation> pending;if(it!=states.end()){pending=it->second.pending;it->second.pending.reset();}
+  auto it=states.find(&c);uint64_t banner_revision=0;std::optional<GuildPortal::Confirmation> pending;if(it!=states.end()){pending=it->second.pending;it->second.pending.reset();banner_revision=it->second.banner_revision;it->second.banner_revision=0;}
   if(!Ready(c))return bool(pending);auto db=Connection();auto current=GuildPortal::Current(*db,zone->GetZoneID(),zone->GetInstanceID(),false);
   // In housing halls, never delegate these legacy stone IDs to the basic hall
   // popup quest: an arbitrary popup ID must not bypass the placed pad contract.
@@ -75,9 +89,12 @@ bool HandlePopup(Client& c,const EQApplicationPacket* app)noexcept{
   // Both IDs point here so No clears this one-shot state without teleporting.
   if(!current)return bool(pending)||(c.GetEntityVariable("housing_verified_interior")==std::to_string(zone->GetInstanceID()));if(response->unknown0000!=0||!pending||!resolve||!validate)return true;
   std::optional<Source> pad;for(const auto& candidate:resolve(c,true))if(Shape(candidate,true)&&candidate.binding.custody_id==pending->pad_custody&&GuildPortal::Same(candidate.scope,pending->scope)){if(pad)return true;pad=candidate;}if(!pad)return true;
-  bool tx=false;const GuildPortal::Destination* destination=nullptr;
-  try{GuildPortal::Query(*db,"START TRANSACTION");tx=true;if(!validate(*db,c,*pad))throw std::invalid_argument("Portal pad changed");auto alignment=GuildPortal::Read(*db,pad->scope,true);if(!alignment)throw std::invalid_argument("Portal alignment missing");destination=GuildPortal::Confirm(*pending,*alignment,pad->scope,c.CharacterID(),pad->binding.custody_id,Position(c),Position(*pad),response->popupid,GuildPortal::DatabaseNow(*db));if(!destination)throw std::invalid_argument("Portal confirmation stale");GuildPortal::Query(*db,"COMMIT");tx=false;}catch(...){if(tx)db->QueryDatabase(std::string("ROLLBACK"),false);return true;}
-  Forget(c);c.MovePC(destination->zone,destination->x,destination->y,destination->z,0);return true;
+  bool tx=false;
+  try{GuildPortal::Query(*db,"START TRANSACTION");tx=true;if(!validate(*db,c,*pad))throw std::invalid_argument("Portal pad changed");auto alignment=GuildPortal::Read(*db,pad->scope,true);if(!alignment||!GuildPortal::ConfirmAlignment(*pending,*alignment,pad->scope,c.CharacterID(),pad->binding.custody_id,Position(c),Position(*pad),response->popupid,GuildPortal::DatabaseNow(*db)))throw std::invalid_argument("Portal confirmation stale");GuildPortal::Query(*db,"COMMIT");tx=false;}catch(...){if(tx)db->QueryDatabase(std::string("ROLLBACK"),false);return true;}
+  Forget(c);
+  if(pending->stone==GuildBanner::TravelStone){GuildBanner::TravelFromPortal(c,pad->scope.guild,banner_revision);return true;}
+  if(const auto* destination=GuildPortal::Lookup(pending->stone))c.MovePC(destination->zone,destination->x,destination->y,destination->z,0);
+  return true;
  }catch(...){Forget(c);return zone&&zone->GetInstanceID()&&c.GetEntityVariable("housing_verified_interior")==std::to_string(zone->GetInstanceID());}
 }
 }

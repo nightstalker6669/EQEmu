@@ -24,6 +24,7 @@ const char *OpcodeNames[_maxEmuOpcode+1] = {
 #define N(x) #x
 	#include "emu_oplist.h"
 	#include "mail_oplist.h"
+	#include "guild_banner_oplist.h"
 #undef N
 
 	""

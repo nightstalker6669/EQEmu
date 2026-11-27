@@ -19,6 +19,7 @@
 #include "mercenary_scaling.h"
 
 #include "fellowship_campsite_bonuses.h"
+#include "guild_banner_visual.h"
 
 #include "../common/housing/admission_guard.h"
 
@@ -3227,6 +3228,7 @@ void ZoneDatabase::SaveBuffs(Client *client)
 		// Campsite support buffs are renewable location leases, not saved buffs.
 		// Ordinary Faerune/DMF from another caster retain normal persistence.
 		if (IsFellowshipCampsiteAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
+		if (IsGuildBannerAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
 		if (!IsValidSpell(buffs[slot_id].spellid)) {
 			continue;
 		}
@@ -3238,6 +3240,7 @@ void ZoneDatabase::SaveBuffs(Client *client)
 
 	for (int slot_id = 0; slot_id < max_buff_slots; slot_id++) {
 		if (IsFellowshipCampsiteAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
+		if (IsGuildBannerAuraBuff(buffs[slot_id].spellid, buffs[slot_id].caster_name, sizeof(buffs[slot_id].caster_name))) continue;
 		if (!IsValidSpell(buffs[slot_id].spellid)) {
 			continue;
 		}
@@ -3293,6 +3296,7 @@ void ZoneDatabase::LoadBuffs(Client *client)
 	for (const auto& e : l) {
 		// Discard a legacy saved campsite lease before caster-name normalization.
 		if (IsFellowshipCampsiteAuraBuff(e.spell_id, e.caster_name.data(), e.caster_name.size())) continue;
+		if (IsGuildBannerAuraBuff(e.spell_id, e.caster_name.data(), e.caster_name.size())) continue;
 		if (e.slot_id >= max_buff_slots) {
 			continue;
 		}

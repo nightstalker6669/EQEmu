@@ -1,9 +1,8 @@
-<!-- previous-release: rof2-ci-r39-a1-26c2c4ad98db -->
+<!-- previous-release: rof2-ci-r40-a1-92ace7b7829d -->
 
-# May 2013 RoF2 Collections
+## Guild Banners
 
-- Complete the May 2013 Collections catalog with 389 items, 45 sets, and 15 completion achievements across 11 public zones. Bind achievement progress to native ground pickups and corpse loot, with rewards for the qualifying set and completion achievements.
-- Add rotating ground collectible pools with their own spawn capacity. A successful pickup saves the item to the character’s cursor and starts the site’s respawn timer.
-- Bind all nine red Stalking Fear collectibles to the Rain of Fear Collector’s Edition account entitlement.
-- Restore the public collection routes through The Grey and Vex Thal into Chelsith Reborn and the Plane of Shadow. Add the Chelsith aqueduct crossings, collectible sites, and scoped corpse donors for the April sets and Dark Secrets.
-- Remove staff-status requirements from 64 verified playable zone records in the fresh database. Set Theater of Blood’s public minimum level to 68 to match the existing restored route.
+- Restores native May 2013 RoF2 Guild Management Banner controls for public Buried Sea and Loping Plains. Authorized officers can plant or remove a Standard. Planting requires 12 nearby living guild members by default.
+- Adds the guild banner destination to the Guild Hall portal through the original Splinter from a Guild Standard. Travel requires a current banner, current guild membership, pad confirmation, and normal destination admission. The basic hall and placed-hall portal paths both use the same destination validation.
+- Uses the original kit, dye, and spell data for 556 upgraded Standard choices with verified recipe and effect bindings. The planting transaction consumes the selected kit and dye together. Nearby guildmates get the matching native spell.
+- Keeps normal Guild Lobby and static Guild Hall portal routing. The database change adds one guild-owned deployment table.

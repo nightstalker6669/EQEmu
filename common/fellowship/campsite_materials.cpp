@@ -1,5 +1,6 @@
 #include "campsite_materials.h"
 #include "../database.h"
+#include "../guild_banner_catalogue.h"
 #include "../housing/inventory_row_db.h"
 #include "../housing/coin_pending_guard.h"
 #include "../housing/house_inventory_transition.h"
@@ -10,13 +11,11 @@ auto Q(Database& db,const std::string& sql) { if(db.GetStatus()!=DBcore::Connect
 uint64_t N(const char* s) { if(!s)throw std::runtime_error("Campsite missing row field");return std::stoull(s); }
 std::string Hex(const uint8_t* data,size_t size) {const char* digits="0123456789ABCDEF";std::string out;for(size_t i=0;i<size;++i){out+=digits[data[i]>>4];out+=digits[data[i]&15];}return out;}
 std::string Hex(const std::string& s){return Hex(reinterpret_cast<const uint8_t*>(s.data()),s.size());}
-}
-bool ConsumeMaterialsUnderTransaction(Database& db,uint32_t id,const Housing::InventorySessions::Lease& lease,const std::array<Housing::LiveItems::InventoryRow,2>& expected) {
+bool ConsumeExactMaterials(Database& db,const std::array<uint32_t,2>& recipe,const char* owning_table,const Housing::InventorySessions::Lease& lease,const std::array<Housing::LiveItems::InventoryRow,2>& expected) {
  try {
-  const auto* definition=Lookup(id);
-  if(!definition || !definition->implemented || !definition->kit_item_id || !definition->lumber_item_id || !lease.active || !lease.actor.character_id || !lease.actor.account_id || !lease.epoch || lease.owner.process_key.empty() || lease.owner.client_key.empty())return false;
+  if(!recipe[0] || !recipe[1] || !lease.active || !lease.actor.character_id || !lease.actor.account_id || !lease.epoch || lease.owner.process_key.empty() || lease.owner.client_key.empty())return false;
   auto tx=Q(db,"SELECT @@in_transaction");if(tx.RowCount()!=1 || N(tx.begin()[0])!=1)return false;
-  auto engines=Q(db,"SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','housing_inventory_sessions','fellowships')");if(engines.RowCount()!=1 || N(engines.begin()[0])!=3)return false;
+  auto engines=Q(db,std::string("SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=DATABASE() AND engine='InnoDB' AND table_name IN ('inventory','housing_inventory_sessions','")+owning_table+"')");if(engines.RowCount()!=1 || N(engines.begin()[0])!=3)return false;
   const auto actor=std::to_string(lease.actor.character_id);
   auto character=Q(db,"SELECT id FROM character_data WHERE id="+actor+" AND account_id="+std::to_string(lease.actor.account_id)+" AND deleted_at IS NULL FOR UPDATE");if(character.RowCount()!=1)return false;
   auto session=Q(db,"SELECT account_id,epoch,HEX(token),HEX(process_key),HEX(client_key),zone_id,instance_id,active FROM housing_inventory_sessions WHERE character_id="+actor+" FOR UPDATE");
@@ -26,13 +25,12 @@ bool ConsumeMaterialsUnderTransaction(Database& db,uint32_t id,const Housing::In
   if(pending.RowCount()>1 || (pending.RowCount() && (N(pending.begin()[0])!=lease.actor.account_id || (pending.begin()[1] && *pending.begin()[1]))))return false;
   if(Housing::CoinPending::Inspect(db,lease.actor.character_id,true)!=Housing::CoinPending::State::Clear)return false;
   if(Housing::HouseInventory::InspectPending(db,lease.actor.character_id,true)!=Housing::HouseInventory::PendingState::Clear)return false;
-  const auto recipe=RequiredMaterials(*definition);
   if(expected[0].values.slot_id==expected[1].values.slot_id)return false;
   // Validate every component before changing either one, including exact raw
   // identity/null/custom/GUID fields; never infer identity from item ID alone.
   for(size_t i=0;i<expected.size();++i) {
    const auto& e=expected[i];const auto& v=e.values;
-   if(v.character_id!=lease.actor.character_id || v.item_id!=recipe[i].item_id || !v.charges || (e.null_fields&(Housing::LiveItems::NullCharges|Housing::LiveItems::NullItemId)) || !e.children.empty() || !e.evolving_payload.empty() || v.augment_one || v.augment_two || v.augment_three || v.augment_four || v.augment_five || v.augment_six)return false;
+   if(v.character_id!=lease.actor.character_id || v.item_id!=recipe[i] || !v.charges || (e.null_fields&(Housing::LiveItems::NullCharges|Housing::LiveItems::NullItemId)) || !e.children.empty() || !e.evolving_payload.empty() || v.augment_one || v.augment_two || v.augment_three || v.augment_four || v.augment_five || v.augment_six)return false;
    auto rows=Q(db,"SELECT "+std::string(Housing::InventoryRowDB::Columns)+" FROM inventory WHERE character_id="+actor+" AND slot_id="+std::to_string(v.slot_id)+" FOR UPDATE");
    if(rows.RowCount()!=1 || Housing::CustodyCodec::Encode(Housing::InventoryRowDB::Decode(rows.begin()))!=Housing::CustodyCodec::Encode(e))return false;
    auto item=Q(db,"SELECT itemtype,itemclass,stackable,charmfileid,evoitem FROM items WHERE id="+std::to_string(v.item_id)+" FOR UPDATE");
@@ -47,4 +45,21 @@ bool ConsumeMaterialsUnderTransaction(Database& db,uint32_t id,const Housing::In
   return true;
  }catch(...){throw;}
 }
+}
+bool ConsumeMaterialsUnderTransaction(Database& db,uint32_t id,const Housing::InventorySessions::Lease& lease,const std::array<Housing::LiveItems::InventoryRow,2>& expected) {
+ const auto* definition=Lookup(id);
+ if(!definition || !definition->implemented || !definition->kit_item_id || !definition->lumber_item_id)return false;
+ const auto recipe=RequiredMaterials(*definition);
+ return ConsumeExactMaterials(db,{recipe[0].item_id,recipe[1].item_id},"fellowships",lease,expected);
+}
 } }
+
+bool GuildBanner::ConsumeMaterialsUnderTransaction(
+ Database& db, uint32_t id, const Housing::InventorySessions::Lease& lease,
+ const std::array<Housing::LiveItems::InventoryRow, 2>& expected)
+{
+ const auto* definition=FindDefinition(id);
+ if(!definition || !definition->material_item || !definition->dye_item)return false;
+ return Fellowship::Campsites::ConsumeExactMaterials(
+  db,{definition->material_item,definition->dye_item},"guild_banners",lease,expected);
+}

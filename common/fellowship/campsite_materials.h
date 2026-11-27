@@ -12,4 +12,11 @@ bool ConsumeMaterialsUnderTransaction(Database& database, uint32_t campsite_id,
  const Housing::InventorySessions::Lease& lease,
  const std::array<Housing::LiveItems::InventoryRow, 2>& expected);
 } }
+
+namespace GuildBanner {
+bool ConsumeMaterialsUnderTransaction(
+ Database& database, uint32_t banner_id,
+ const Housing::InventorySessions::Lease& lease,
+ const std::array<Housing::LiveItems::InventoryRow, 2>& expected);
+}
 #endif

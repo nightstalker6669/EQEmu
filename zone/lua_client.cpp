@@ -1,6 +1,7 @@
 #include "common/sod_original_transform_native.h"
 #include "por_deathknell_custody.h"
 #include "por_tunare_custody.h"
+#include "guild_banner_portal.h"
 #include "vergalid_mission_lua.h"
 #include "tss_ashengate.h"
 #include "common/sod_content_bindings.h"
@@ -161,6 +162,16 @@ void Lua_Client::SetPVP(bool v) {
 void Lua_Client::SendToGuildHall() {
 	Lua_Safe_Call_Void();
 	self->SendToGuildHall();
+}
+
+bool Lua_Client::CanAlignBasicGuildBannerPortal(Lua_Mob merchant) {
+	Lua_Safe_Call_Bool();
+	return GuildBanner::CanAlignBasicPortal(*self, merchant);
+}
+
+bool Lua_Client::OfferBasicGuildBannerPortal(Lua_Mob porter) {
+	Lua_Safe_Call_Bool();
+	return GuildBanner::OfferBasicPortal(*self, porter);
 }
 
 bool Lua_Client::GetPVP() {
@@ -5040,6 +5051,8 @@ luabind::scope lua_register_client() {
 	.def("SendPEQZoneFlagInfo", (void(Lua_Client::*)(Lua_Client))&Lua_Client::SendPEQZoneFlagInfo)
 	.def("SendSound", (void(Lua_Client::*)(void))&Lua_Client::SendSound)
 	.def("SendToGuildHall", (void(Lua_Client::*)(void))&Lua_Client::SendToGuildHall)
+	.def("CanAlignBasicGuildBannerPortal", &Lua_Client::CanAlignBasicGuildBannerPortal)
+	.def("OfferBasicGuildBannerPortal", &Lua_Client::OfferBasicGuildBannerPortal)
 	.def("SendToInstance", (void(Lua_Client::*)(std::string,std::string,uint32,float,float,float,float,std::string,uint32))&Lua_Client::SendToInstance)
 	.def("SendPayload", (void(Lua_Client::*)(int))&Lua_Client::SendPayload)
 	.def("SendPayload", (void(Lua_Client::*)(int,std::string))&Lua_Client::SendPayload)

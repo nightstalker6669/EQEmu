@@ -52,12 +52,12 @@ bool MerchantCatalog(const Binding&b,const NPCType&source){
  auto catalog=zone->merchanttable.find(source.merchanttype);if(catalog==zone->merchanttable.end()||catalog->second.empty())return false;
  // The basic script has no valid destination for these two stones. Do not
  // advertise them in the managed assistant shop while leaving basic halls alone.
- if(b.service==Service::TeleportMerchant)catalog->second.remove_if([](const auto& row){return row.item==88737||row.item==76008;});
+ if(b.service==Service::TeleportMerchant)catalog->second.remove_if([](const auto& row){return row.item==76008;});
  if(!zone->tmpmerchanttable.count(b.npc_type_id)){
   auto rows=database.QueryDatabase("SELECT slot,charges,itemid FROM merchantlist_temp WHERE npcid="+std::to_string(b.npc_type_id)+" AND zone_id="+std::to_string(b.zone_id)+" AND instance_id="+std::to_string(b.instance_id)+" ORDER BY slot",false);
   if(!rows.Success()||rows.RowCount()>1000)return false;std::list<TempMerchantList> restored;std::set<uint32_t> slots;
   for(auto row=rows.begin();row!=rows.end();++row){if(!row[0]||!row[1]||!row[2])return false;TempMerchantList item{};item.npcid=b.npc_type_id;item.slot=std::stoul(row[0]);item.origslot=item.slot;item.charges=std::stoul(row[1]);item.item=std::stoul(row[2]);if(!item.slot||!item.item||!slots.insert(item.slot).second)return false;restored.push_back(item);}
-  if(b.service==Service::TeleportMerchant)restored.remove_if([](const auto& row){return row.item==88737||row.item==76008;});
+  if(b.service==Service::TeleportMerchant)restored.remove_if([](const auto& row){return row.item==76008;});
   zone->tmpmerchanttable.emplace(b.npc_type_id,std::move(restored));
  }
  return true;

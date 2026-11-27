@@ -1,5 +1,6 @@
 #ifndef EQEMU_HOUSING_GUILD_PORTAL_SERVICE_H
 #define EQEMU_HOUSING_GUILD_PORTAL_SERVICE_H
+#include "../guild_banner_catalogue.h"
 #include <array>
 #include <cstdint>
 #include <cmath>
@@ -37,16 +38,14 @@ inline constexpr uint64_t AlignmentSeconds=86400;
 inline constexpr uint64_t ConfirmationSeconds=30;
 inline constexpr float ActivationRadius=10.0f;
 inline const Destination* Lookup(uint32_t stone){for(const auto& d:Destinations)if(d.stone==stone)return &d;return nullptr;}
-// Legacy guild-banner stone88737 has an explicit unimplemented 1,1,1,1
-// placeholder. Do not charge for it or route players to that placeholder.
-//76008 likewise has a hand-in branch but no destination in the basic quests.
-inline bool Purchasable(uint32_t stone){return Lookup(stone)!=nullptr;}
+// The banner stone has a live guild destination, separate from this static table.
+inline bool Purchasable(uint32_t stone){return Lookup(stone)!=nullptr||stone==GuildBanner::TravelStone;}
 struct Scope {uint64_t house=0;uint32_t estate=0,guild=0,zone=0,instance=0;};
 inline bool Valid(const Scope& s){return s.house&&s.estate&&s.guild&&s.zone&&s.instance&&s.instance<=32000;}
 inline bool Same(const Scope& a,const Scope& b){return a.house==b.house&&a.estate==b.estate&&a.guild==b.guild&&a.zone==b.zone&&a.instance==b.instance;}
 inline std::string Key(const Scope& s){if(!Valid(s))return {};return "housing-guild-portal:"+std::to_string(s.house)+":"+std::to_string(s.estate)+":"+std::to_string(s.guild)+":"+std::to_string(s.zone)+":"+std::to_string(s.instance);}
 struct Alignment {Scope scope;uint32_t stone=0;uint64_t expires=0,revision=0;};
-inline bool Active(const Alignment& a,const Scope& current,uint64_t now){return Valid(current)&&Same(a.scope,current)&&Lookup(a.stone)&&a.revision&&now<a.expires;}
+inline bool Active(const Alignment& a,const Scope& current,uint64_t now){return Valid(current)&&Same(a.scope,current)&&Purchasable(a.stone)&&a.revision&&now<a.expires;}
 struct Point {float x=0,y=0,z=0;};
 inline bool Near(const Point& a,const Point& b){if(!std::isfinite(a.x)||!std::isfinite(a.y)||!std::isfinite(a.z)||!std::isfinite(b.x)||!std::isfinite(b.y)||!std::isfinite(b.z))return false;const double x=double(a.x)-b.x,y=double(a.y)-b.y,z=double(a.z)-b.z;return x*x+y*y+z*z<=double(ActivationRadius)*ActivationRadius;}
 // Per-client pending response. Never accept an arbitrary popup ID as authority:
@@ -56,9 +55,11 @@ inline std::optional<Confirmation> Offer(const Alignment& a,const Scope& current
  if(!character||!pad||!Active(a,current,now)||!Near(client,position)||now>UINT64_MAX-ConfirmationSeconds)return {};
  return Confirmation{current,character,a.stone,pad,a.revision,now+ConfirmationSeconds};
 }
+inline bool ConfirmAlignment(const Confirmation& p,const Alignment& a,const Scope& current,uint32_t character,uint64_t pad,const Point& client,const Point& position,uint32_t response,uint64_t now){
+ return character&&pad&&p.character==character&&p.pad_custody==pad&&Same(p.scope,current)&&p.stone==response&&p.alignment_revision==a.revision&&p.stone==a.stone&&now<p.expires&&Active(a,current,now)&&Near(client,position);
+}
 inline const Destination* Confirm(const Confirmation& p,const Alignment& a,const Scope& current,uint32_t character,uint64_t pad,const Point& client,const Point& position,uint32_t response,uint64_t now){
- if(!character||!pad||p.character!=character||p.pad_custody!=pad||!Same(p.scope,current)||p.stone!=response||p.alignment_revision!=a.revision||p.stone!=a.stone||now>=p.expires||!Active(a,current,now)||!Near(client,position))return nullptr;
- return Lookup(p.stone);
+ return ConfirmAlignment(p,a,current,character,pad,client,position,response,now)?Lookup(p.stone):nullptr;
 }
 }
 #endif

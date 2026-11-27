@@ -18,6 +18,9 @@
 	/* Connecting OpCode Handlers */
 	void Handle_OP_FellowshipAction(const EQApplicationPacket *app);
 	void Handle_OP_FellowshipCampRequest(const EQApplicationPacket *app);
+	void Handle_OP_GuildBannerListRequest(const EQApplicationPacket *app);
+	void Handle_OP_GuildBannerPlant(const EQApplicationPacket *app);
+	void Handle_OP_GuildBannerRemove(const EQApplicationPacket *app);
 	void Handle_OP_RealEstateNeighborhood(const EQApplicationPacket *app);
 	void Handle_OP_RealEstateTrophyOpen(const EQApplicationPacket *app);
 	void Handle_OP_RealEstateTrophy(const EQApplicationPacket *app);

@@ -21,7 +21,7 @@ inline bool SameCurrent(Database& db,const Scope& s,bool lock=true){if(!Valid(s)
 inline std::optional<Alignment> Read(Database& db,const Scope& s,bool lock=false){
  if(!SameCurrent(db,s,lock))return {};
  auto rows=Query(db,"SELECT estate_id,guild_id,zone_id,instance_id,stone_item_id,expires_epoch,revision FROM housing_guild_portal_alignments WHERE house_id="+std::to_string(s.house)+(lock?" FOR UPDATE":""));
- if(!rows.RowCount())return {};if(rows.RowCount()!=1)throw std::invalid_argument("Ambiguous guild portal alignment");auto r=rows.begin();Alignment a{{s.house,Number32(r[0]),Number32(r[1]),Number32(r[2]),Number32(r[3])},Number32(r[4]),Number(r[5]),Number(r[6])};if(!a.revision||!a.expires||!Lookup(a.stone))throw std::invalid_argument("Invalid persisted guild portal destination");if(!Same(a.scope,s))return {};return a;
+ if(!rows.RowCount())return {};if(rows.RowCount()!=1)throw std::invalid_argument("Ambiguous guild portal alignment");auto r=rows.begin();Alignment a{{s.house,Number32(r[0]),Number32(r[1]),Number32(r[2]),Number32(r[3])},Number32(r[4]),Number(r[5]),Number(r[6])};if(!a.revision||!a.expires||!Purchasable(a.stone))throw std::invalid_argument("Invalid persisted guild portal destination");if(!Same(a.scope,s))return {};return a;
 }
 // Caller MUST own the same InnoDB transaction used to durably remove exactly
 // one paid stone from a verified hand-in. No money is taken here; stones use

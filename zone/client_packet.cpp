@@ -36,6 +36,7 @@
 #include "housing_service_tribute.h"
 #include "housing_service_bank.h"
 #include "housing_guild_portal.h"
+#include "guild_banner_portal.h"
 #include "../common/housing/guild_portal_db.h"
 #include "housing_plot_marker.h"
 
@@ -171,6 +172,9 @@ void MapOpcodes()
 	ConnectedOpcodes[OP_RealEstateNeighborhood] = &Client::Handle_OP_RealEstateNeighborhood;
 	ConnectedOpcodes[OP_FellowshipAction] = &Client::Handle_OP_FellowshipAction;
 	ConnectedOpcodes[OP_FellowshipCampRequest] = &Client::Handle_OP_FellowshipCampRequest;
+	ConnectedOpcodes[OP_GuildBannerListRequest] = &Client::Handle_OP_GuildBannerListRequest;
+	ConnectedOpcodes[OP_GuildBannerPlant] = &Client::Handle_OP_GuildBannerPlant;
+	ConnectedOpcodes[OP_GuildBannerRemove] = &Client::Handle_OP_GuildBannerRemove;
 	ConnectedOpcodes[OP_GuildTrophyToggle]=&Client::Handle_OP_GuildTrophyToggle;
     ConnectedOpcodes[OP_GuildTrophySave]=&Client::Handle_OP_GuildTrophySave;
     ConnectedOpcodes[OP_GuildTrophyModify]=&Client::Handle_OP_GuildTrophyModify;
@@ -5648,6 +5652,7 @@ void Client::Handle_OP_ClientUpdate(const EQApplicationPacket *app) {
 	/* Update internal server position from what the client has sent */
 	glm::vec4 prevPosition = m_Position;
 	m_Position = glm::vec4(cx, cy, cz, new_heading);
+	GuildBanner::ProcessBasicPortalEntry(*this);
 	DodhBellfastNeran::ObserveMovement(*this, on_boat);
 	m_Delta = glm::vec4(ppu->delta_x, ppu->delta_y, ppu->delta_z, EQ10toFloat(ppu->delta_heading));
 	int32 prevAnimation = ppu->animation;
@@ -13015,6 +13020,7 @@ void Client::Handle_OP_PickZone(const EQApplicationPacket *app)
 void Client::Handle_OP_PopupResponse(const EQApplicationPacket *app)
 {
 	if (Housing::GuildPortalRuntime::HandlePopup(*this, app)) return;
+	if (GuildBanner::HandleBasicPopup(*this, app)) return;
 
 	if (app->size != sizeof(PopupResponse_Struct)) {
 		LogDebug("Size mismatch in OP_PopupResponse expected [{}] got [{}]", sizeof(PopupResponse_Struct), app->size);

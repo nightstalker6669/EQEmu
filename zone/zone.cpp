@@ -20,6 +20,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "fellowship_campfire.h"
+#include "guild_banner_visual.h"
 
 #include "housing_guild_portal.h"
 #include "housing_service_npcs.h"
@@ -1123,6 +1124,7 @@ Zone::~Zone() {
 	FungalItemSource::NativeEvents::Discard();
 	FirePersonalOccurrenceSource::OriginalGotonurSayQueue::Discard();
 	ClearFellowshipCampfires();
+	ClearGuildBanners();
  Housing::Pets::Clear();
  Housing::ServiceAuthority::Clear();
 	LogInfo("Zone destructor called for zone [{}]", short_name);
@@ -1583,6 +1585,7 @@ uint32 Zone::CountAuth() {
 
 bool Zone::Process() {
 	ProcessFellowshipCampfires();
+	ProcessGuildBanners();
     Housing::Pets::Process();
 	spawn_conditions.Process();
 

@@ -11,6 +11,10 @@ set(zone_sources
 	fellowship_campsite_bonuses.cpp
 	fellowship_campsite_materials.cpp
 	client_fellowship.cpp
+	guild_banner_store.cpp
+	client_guild_banner.cpp
+	guild_banner_visual.cpp
+	guild_banner_portal.cpp
 	client_fellowship_vitality.cpp
 	fellowship_chat.cpp
 	client_housing_anchor.cpp
