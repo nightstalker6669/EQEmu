@@ -64,6 +64,20 @@ Small-group social features, camps and shared experience.
 </details>
 
 <details>
+<summary>RoF2 Guild Banners — Published in r41</summary>
+
+- **Planting:** The native Banner tab offered Standard of Honor and eligible upgrades. In Buried Sea, one nearby guild member was denied and two could plant under the temporary QA rule. An ordinary member’s Plant control was disabled. The production rule rejects 11 and accepts 12 nearby members within 150 units in deterministic checks. QA removed the temporary override and verified the restored value of 12 after worker refresh.
+- **Travel:** An ordinary guild member entered the basic Guild Hall through the Guild Lobby’s stock left entrance, used a real Splinter at the merchant and confirmed geode travel to the existing Buried Sea banner. A subsequent static portal alignment and confirmation reached North Karana. Public Loping Plains planting and placed Guild Hall travel are implemented and source-checked. Native witnesses covered Buried Sea and the basic hall.
+- **Upgrade and removal:** The leader removed Standard of Honor and planted Simple Standard of Celerity. The Banner tab countdown, consumption of one kit and one dye, and the one-hour upgrade deadline were verified. Native spell 7613 raised observed haste from 145 to 148. The buff and haste increase faded outside the radius, returned on re-entry and faded after native banner removal.
+- **Catalogue and limits:** Recipe and spell bindings were verified for 556 upgrade choices. Celerity was the native effect witness. Forty discipline-grade bindings with uncertain formula levels are excluded. The 100-unit aura radius and rolling base lifetime are reconstructed. Full-hour and natural expiry, cross-guild attempts, stale popup acceptance and the historical timed planting ritual remain unverified. QA used a temporary guild, GM travel staging and a brief invulnerability toggle for the beneficial spell test.
+
+The paired database adds one initially empty guild deployment table in the fresh-install image. The release includes 470 quest pins and RoF2 opcode overlay `f198b36c`.
+
+[Server r41](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r41-a1-3223c9fb6892) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-27-guild-banners) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/16bc41554e132ac3fe4c77b361ba19cdf3d9e3ab/releases/peq-rof2-2026-11-27-guild-banners/NATIVE-QUALIFICATIONS.json)
+
+</details>
+
+<details>
 <summary>Mercenaries — Published scope</summary>
 
 Native hiring and management with four roles and progression through level 100.
