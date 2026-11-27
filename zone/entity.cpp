@@ -1501,7 +1501,10 @@ void EntityList::SendZoneObjects(Client *client)
 {
 	auto it = object_list.begin();
 	while (it != object_list.end()) {
-  if(it->second->IsHousingRecipe301()){++it;continue;}
+		if (it->second->IsHousingRecipe301() || it->second->IsCollectibleGroundSpawnRespawning()) {
+			++it;
+			continue;
+		}
 		auto app = new EQApplicationPacket;
 		it->second->CreateSpawnPacket(app);
 		client->FastQueuePacket(&app);

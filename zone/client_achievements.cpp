@@ -1946,7 +1946,7 @@ bool ClientAchievementState::EvaluateDefinition(
 		}
 	}
 	bool hidden = false;
-	bool locked = false;
+	bool locked = definition.achievement_id == 2090755 && !m_client.HasRainOfFearCollectorEdition();
 	for (const auto &[component_key, behavior] : component_behaviors) {
 		const auto component_index = manager.FindComponentIndex(
 			definition.achievement_id,
@@ -3239,6 +3239,19 @@ bool Client::HasCompletedAchievement(uint32 achievement_id) const
 	return m_achievement_state && m_achievement_state->HasCompleted(achievement_id);
 }
 
+bool Client::HasRainOfFearCollectorEdition() const
+{
+	const auto flag = accountflags.find("RainOfFearCollectorEdition");
+	return (m_pp.expansions & EQ::expansions::bitRoF) &&
+		flag != accountflags.end() && flag->second == "1";
+}
+
+bool Client::CanCollectItem(uint32 item_id) const
+{
+	// The nine Stalking Fear items belong to the Collector's Edition.
+	return !EQ::ValueWithin(item_id, 77518, 77526) || HasRainOfFearCollectorEdition();
+}
+
 void Client::RegisterCollectionItem(int32 slot, const EQ::ItemInstance &item)
 {
 	using namespace EQ::Achievements;
@@ -3246,6 +3259,10 @@ void Client::RegisterCollectionItem(int32 slot, const EQ::ItemInstance &item)
 
 	if (!(m_pp.expansions & EQ::expansions::bitRoF)) {
 		MessageString(Chat::Loot, 4800);
+		return;
+	}
+	if (!CanCollectItem(item.GetID())) {
+		Message(Chat::Red, "This collection requires the Rain of Fear Collector's Edition.");
 		return;
 	}
 	// A normal inventory move can leave an ownership refresh pending even

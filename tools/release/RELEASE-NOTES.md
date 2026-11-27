@@ -1,7 +1,9 @@
-<!-- previous-release: rof2-ci-r38-a2-e855ae6eda17 -->
+<!-- previous-release: rof2-ci-r39-a1-26c2c4ad98db -->
 
 # May 2013 RoF2 Collections
 
-- Enable native collectible right-clicks for two Shard’s Landing sets. Register each item once per character, commit the item debit and progress together, and preserve extra copies.
-- Restore eight ground pickups for Fear in Pieces and eight arena drops for Alaran in Chains using the existing items and achievement definitions.
-- Show collection progress in the native Achievements window and award normal experience when a character completes either set.
+- Complete the May 2013 Collections catalog with 389 items, 45 sets, and 15 completion achievements across 11 public zones. Bind achievement progress to native ground pickups and corpse loot, with rewards for the qualifying set and completion achievements.
+- Add rotating ground collectible pools with their own spawn capacity. A successful pickup saves the item to the character’s cursor and starts the site’s respawn timer.
+- Bind all nine red Stalking Fear collectibles to the Rain of Fear Collector’s Edition account entitlement.
+- Restore the public collection routes through The Grey and Vex Thal into Chelsith Reborn and the Plane of Shadow. Add the Chelsith aqueduct crossings, collectible sites, and scoped corpse donors for the April sets and Dark Secrets.
+- Remove staff-status requirements from 64 verified playable zone records in the fresh database. Set Theater of Blood’s public minimum level to 68 to match the existing restored route.

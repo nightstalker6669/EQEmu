@@ -5,13 +5,13 @@
       "Import full.sql into a fresh empty database with the matching runtime."
     ],
     "asset": {
-      "bytes": 37611704,
-      "name": "PEQ-RoF2-full-2026-11-26-collections.zip",
-      "sha256": "d6411995bfe674305517f6d4ffbcf35842ad5677ab7812932981926767d7e601",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-26-collections/PEQ-RoF2-full-2026-11-26-collections.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-26-collections/PEQ-RoF2-full-2026-11-26-collections.zip"
+      "bytes": 37739118,
+      "name": "PEQ-RoF2-full-2026-11-26-may-collections.zip",
+      "sha256": "95e351b8b41605e45c87db71b31badee72a90c5136bc444df7a4bd388ddae2fe",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-26-may-collections/PEQ-RoF2-full-2026-11-26-may-collections.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-26-may-collections/PEQ-RoF2-full-2026-11-26-may-collections.zip"
     },
-    "base_database_release_tag": "peq-rof2-2026-11-25-offline-bazaar",
+    "base_database_release_tag": "peq-rof2-2026-11-26-collections",
     "cohort_source_binding": {
       "collections_native_source_files": [
         {
@@ -43,18 +43,18 @@
           "sha256": "5b8354d99e2129b7d017d757ebe85d4a55a0172ccb6ac4b7b26b6117a34ee01a"
         },
         {
-          "bytes": 122466,
-          "git_blob": "7afe37deabf2f54524f9e10d790bcaa4b8c12d8c",
+          "bytes": 122708,
+          "git_blob": "b454cdbc0dd95f853ebaf641c354491b3fb8683f",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "77ae9357ef43ad3f30e727f16af8a211590729ca085d2d2fcaa86bc36511d720"
+          "sha256": "9c37d1a5a8dd1640cdd8886c91de617de34d6e04f1f1339bc947d69faf75a42b"
         },
         {
-          "bytes": 111421,
-          "git_blob": "c442052849005e959746d83c6c620025d50707a7",
+          "bytes": 112074,
+          "git_blob": "a7c2f1564fcce738f374b86a8dbfcea94ffc2884",
           "mode": "100644",
           "path": "zone/client_achievements.cpp",
-          "sha256": "441af899bff21ec8f84615a1a9a8a1ad02217d7809fa9bf913e1015ceb36bd4e"
+          "sha256": "90e3a808998ee2faab8ce9e06c0744afa82aecfdf746349c09b5aaab704f4447"
         },
         {
           "bytes": 570620,
@@ -64,7 +64,65 @@
           "sha256": "e91bcb9c20ebfdc9efa51a745113aee424e7d3b11dbc3dd907f4726c8f0aa010"
         }
       ],
-      "preserved_prior_binding": "d33079c1e0e2dd3b61f9ad26dd4edfe121082120317fffe9d96e642f48016a05",
+      "may_collections_native_source_files": [
+        {
+          "bytes": 122708,
+          "git_blob": "b454cdbc0dd95f853ebaf641c354491b3fb8683f",
+          "mode": "100644",
+          "path": "zone/client.h",
+          "sha256": "9c37d1a5a8dd1640cdd8886c91de617de34d6e04f1f1339bc947d69faf75a42b"
+        },
+        {
+          "bytes": 112074,
+          "git_blob": "a7c2f1564fcce738f374b86a8dbfcea94ffc2884",
+          "mode": "100644",
+          "path": "zone/client_achievements.cpp",
+          "sha256": "90e3a808998ee2faab8ce9e06c0744afa82aecfdf746349c09b5aaab704f4447"
+        },
+        {
+          "bytes": 150083,
+          "git_blob": "c42fce8864a6ce57bd2df49cac1b15902a3a045a",
+          "mode": "100644",
+          "path": "zone/entity.cpp",
+          "sha256": "68fe6cfb0b68c8043db2185c182062bb706c0e93ffa22c6a069228aa57d6f317"
+        },
+        {
+          "bytes": 166971,
+          "git_blob": "0d167a8e1f359c436f69422b751da83cbe14b647",
+          "mode": "100644",
+          "path": "zone/inventory.cpp",
+          "sha256": "47217907ac3c3c573764d97c18a9ce3743e7cd719e99c7e30660a01eccafc75d"
+        },
+        {
+          "bytes": 36635,
+          "git_blob": "050530b2473c51e33c2492d4a0f0336ee0244cdd",
+          "mode": "100644",
+          "path": "zone/object.cpp",
+          "sha256": "827602a4f5fdb18a7e6e30dbdb3c485941956bfddc670bb2ff06a172e419ec2d"
+        },
+        {
+          "bytes": 14666,
+          "git_blob": "016d9b7c6235125c260e67e993c428e7896e6e3f",
+          "mode": "100644",
+          "path": "zone/object.h",
+          "sha256": "072ce9ac4ebaa67ec9827d0ef9880bfde786779acaca38d17d77b2e37e81d77b"
+        },
+        {
+          "bytes": 92772,
+          "git_blob": "855e7ac3ac94438553783b855a70c32ef073fe75",
+          "mode": "100644",
+          "path": "zone/zone.cpp",
+          "sha256": "0e107d0fb5846851e62de287c764f789ff3435d8e09f09a223e0e72fe9fe2573"
+        },
+        {
+          "bytes": 25659,
+          "git_blob": "0fcf9db132d9d2750178486739631b791b8dd036",
+          "mode": "100644",
+          "path": "zone/zonedb.h",
+          "sha256": "7697aacbcd08416be5ea2c25a012fc4d236cef27d02305cc7fc9e34224b0fa0d"
+        }
+      ],
+      "preserved_prior_binding": "2de3f95071206f7ecc73751d0d581dedf12009ec021860954682ca5ea3a78904",
       "quest_projection_sha256": "b386cf598e7828ee73373aca55789f28635e08b2286ed8bd380be5fe7e261ef7",
       "quest_root": "quests",
       "release_native_source_files": [
@@ -188,18 +246,18 @@
           "sha256": "09f52f87c2def55033b751d9e01335b37bcd43f559d5f7fafd073a0197b6d3e0"
         },
         {
-          "bytes": 122466,
-          "git_blob": "7afe37deabf2f54524f9e10d790bcaa4b8c12d8c",
+          "bytes": 122708,
+          "git_blob": "b454cdbc0dd95f853ebaf641c354491b3fb8683f",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "77ae9357ef43ad3f30e727f16af8a211590729ca085d2d2fcaa86bc36511d720"
+          "sha256": "9c37d1a5a8dd1640cdd8886c91de617de34d6e04f1f1339bc947d69faf75a42b"
         },
         {
-          "bytes": 111421,
-          "git_blob": "c442052849005e959746d83c6c620025d50707a7",
+          "bytes": 112074,
+          "git_blob": "a7c2f1564fcce738f374b86a8dbfcea94ffc2884",
           "mode": "100644",
           "path": "zone/client_achievements.cpp",
-          "sha256": "441af899bff21ec8f84615a1a9a8a1ad02217d7809fa9bf913e1015ceb36bd4e"
+          "sha256": "90e3a808998ee2faab8ce9e06c0744afa82aecfdf746349c09b5aaab704f4447"
         },
         {
           "bytes": 570620,
@@ -223,11 +281,32 @@
           "sha256": "944af3d12b70d096eb99e29654f3d92cab3a7c6afb07c2efc96b082215347517"
         },
         {
-          "bytes": 150018,
-          "git_blob": "04b6849c9851b36c9a3f25432dbaa372ebe87617",
+          "bytes": 150083,
+          "git_blob": "c42fce8864a6ce57bd2df49cac1b15902a3a045a",
           "mode": "100644",
           "path": "zone/entity.cpp",
-          "sha256": "457435959ad9a022b45d0d4e7997e93bfacbfa5e248383709e129fb9fbe70d02"
+          "sha256": "68fe6cfb0b68c8043db2185c182062bb706c0e93ffa22c6a069228aa57d6f317"
+        },
+        {
+          "bytes": 166971,
+          "git_blob": "0d167a8e1f359c436f69422b751da83cbe14b647",
+          "mode": "100644",
+          "path": "zone/inventory.cpp",
+          "sha256": "47217907ac3c3c573764d97c18a9ce3743e7cd719e99c7e30660a01eccafc75d"
+        },
+        {
+          "bytes": 36635,
+          "git_blob": "050530b2473c51e33c2492d4a0f0336ee0244cdd",
+          "mode": "100644",
+          "path": "zone/object.cpp",
+          "sha256": "827602a4f5fdb18a7e6e30dbdb3c485941956bfddc670bb2ff06a172e419ec2d"
+        },
+        {
+          "bytes": 14666,
+          "git_blob": "016d9b7c6235125c260e67e993c428e7896e6e3f",
+          "mode": "100644",
+          "path": "zone/object.h",
+          "sha256": "072ce9ac4ebaa67ec9827d0ef9880bfde786779acaca38d17d77b2e37e81d77b"
         },
         {
           "bytes": 124041,
@@ -242,6 +321,20 @@
           "mode": "100644",
           "path": "zone/worldserver.cpp",
           "sha256": "13155d0a9aa4c4c60ab7681acd94d9cfe044de95723eed6084371670cd1816f6"
+        },
+        {
+          "bytes": 92772,
+          "git_blob": "855e7ac3ac94438553783b855a70c32ef073fe75",
+          "mode": "100644",
+          "path": "zone/zone.cpp",
+          "sha256": "0e107d0fb5846851e62de287c764f789ff3435d8e09f09a223e0e72fe9fe2573"
+        },
+        {
+          "bytes": 25659,
+          "git_blob": "0fcf9db132d9d2750178486739631b791b8dd036",
+          "mode": "100644",
+          "path": "zone/zonedb.h",
+          "sha256": "7697aacbcd08416be5ea2c25a012fc4d236cef27d02305cc7fc9e34224b0fa0d"
         }
       ],
       "required_quest_files": [
@@ -6181,20 +6274,20 @@
           "sha256": "09f52f87c2def55033b751d9e01335b37bcd43f559d5f7fafd073a0197b6d3e0"
         },
         {
-          "bytes": 122466,
-          "git_blob": "7afe37deabf2f54524f9e10d790bcaa4b8c12d8c",
+          "bytes": 122708,
+          "git_blob": "b454cdbc0dd95f853ebaf641c354491b3fb8683f",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "77ae9357ef43ad3f30e727f16af8a211590729ca085d2d2fcaa86bc36511d720"
+          "sha256": "9c37d1a5a8dd1640cdd8886c91de617de34d6e04f1f1339bc947d69faf75a42b"
         },
         {
-          "bytes": 111421,
-          "git_blob": "c442052849005e959746d83c6c620025d50707a7",
+          "bytes": 112074,
+          "git_blob": "a7c2f1564fcce738f374b86a8dbfcea94ffc2884",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client_achievements.cpp",
-          "sha256": "441af899bff21ec8f84615a1a9a8a1ad02217d7809fa9bf913e1015ceb36bd4e"
+          "sha256": "90e3a808998ee2faab8ce9e06c0744afa82aecfdf746349c09b5aaab704f4447"
         },
         {
           "bytes": 570620,
@@ -6445,12 +6538,12 @@
           "sha256": "f8183ad9c82b8a75b418cfe7427632de740890a470c43ed3bfa0eca24d86234f"
         },
         {
-          "bytes": 165219,
-          "git_blob": "9291ff2a6119ce5f33dd877b8eb5f68bd9ee846d",
+          "bytes": 166971,
+          "git_blob": "0d167a8e1f359c436f69422b751da83cbe14b647",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/inventory.cpp",
-          "sha256": "c208af3c4eae12f7232cd4d6ff77e0bf46a2dcd9e99a8bfc973638efd2f0b3d5"
+          "sha256": "47217907ac3c3c573764d97c18a9ce3743e7cd719e99c7e30660a01eccafc75d"
         },
         {
           "bytes": 134308,
@@ -6517,20 +6610,20 @@
           "sha256": "54452c74e46884dbf39f3847e049ba654e5e930427ecd9e0b2ac1617f6845eab"
         },
         {
-          "bytes": 33571,
-          "git_blob": "a1be898a165930357d80c902ecbceb578345a9ef",
+          "bytes": 36635,
+          "git_blob": "050530b2473c51e33c2492d4a0f0336ee0244cdd",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/object.cpp",
-          "sha256": "7e07452ba567371f60fefe2d7a42bfbf39fe69c8790f269b26a9368da54e017c"
+          "sha256": "827602a4f5fdb18a7e6e30dbdb3c485941956bfddc670bb2ff06a172e419ec2d"
         },
         {
-          "bytes": 14273,
-          "git_blob": "b1016d54a6385dbcb325c8bd8f0cdb66caf331f3",
+          "bytes": 14666,
+          "git_blob": "016d9b7c6235125c260e67e993c428e7896e6e3f",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/object.h",
-          "sha256": "136a03fe95feee44530e86770209ccdda456b486ae47740d72b4ab407d3f3254"
+          "sha256": "072ce9ac4ebaa67ec9827d0ef9880bfde786779acaca38d17d77b2e37e81d77b"
         },
         {
           "bytes": 308,
@@ -6717,12 +6810,12 @@
           "sha256": "21f195ea596823c9a99367276f2dde0eb8074b949bd55c2fb06a40ba3fcdc483"
         },
         {
-          "bytes": 92746,
-          "git_blob": "a4ad5ca6e71d99ba807216ce72c7745ae9edd518",
+          "bytes": 92772,
+          "git_blob": "855e7ac3ac94438553783b855a70c32ef073fe75",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/zone.cpp",
-          "sha256": "063e3dc278aeca39e60fb3bb5e76f20ac75f0c2841961a5f8255e913d14f1e3d"
+          "sha256": "0e107d0fb5846851e62de287c764f789ff3435d8e09f09a223e0e72fe9fe2573"
         },
         {
           "bytes": 29127,
@@ -6741,10 +6834,10 @@
           "sha256": "dd4b74caed98ee943f97b810fbd5806b5fa78c7131bf16fa105ee297c146fde6"
         }
       ],
-      "source_manifest_sha256": "5539fdbbd80ca7bf032c3aa786489c803864340c4bf886cb7f6ffb1c86bd5ad3"
+      "source_manifest_sha256": "2e35da5d44b239c5f639375ba27b1c8ae925a9ccd67eed22bbb7ce45fe05cfc3"
     },
     "database_repository": "nightstalker6669/EQEmu-Database",
-    "database_source_capture_commit": "ceb6b28a137fd2c8d3641e5437acad5c2db0b105",
+    "database_source_capture_commit": "7605e294ba0127e27ef166f0429de1684d1e8c82",
     "existing_volume_upgrade": {
       "supported": false
     },
@@ -6752,9 +6845,9 @@
     "fresh_install": {
       "MariaDB": "10.11",
       "assembled_with": "10.11.19",
-      "base_tables": 500,
+      "base_tables": 501,
       "bots_version": 0,
-      "composition": "Published r38 Offline Bazaar database followed by the two sealed Collections catalog migrations.",
+      "composition": "Published r39 Collections database followed by the twelve sealed May Collections and access migrations.",
       "custom_version": 0,
       "empty_private_player_and_operation_tables_preserved": true,
       "full_dump_replaces_tables": true,
@@ -6769,72 +6862,155 @@
       "views": 1
     },
     "future_update_policy": "A futurematchedDBversion requires a separately validatedwholecohort sanitizedrelease and explicitcommitted source/tag/assetdigest pin; never silently mutableLatest/latestDB, partialrank/itemexports, or old945-only pin for newcohort. ActualCIfailure corrections gather allvisible errors in one batch.",
-    "matched_server_integration_parent": "a9bcfec2f79da4c63f96cf461f8b00b5db7106aa",
+    "matched_server_integration_parent": "e156cb578264ca7132b65fe7bfb060b348a7ba9c",
     "native_acceptance_scope": {
-      "client": "May 2013 RoF2",
-      "historical_scope": [
-        "The original Rain of Fear announcement confirms ground and drop acquisition and approximately 20 percent intended-level XP for each completed set.",
-        "The level-95 tier is reconstructed. The reward rounds 20 percent of EQEmu’s default 95-to-96 XP span of 83,052,032 to 16,610,406 normal XP.",
-        "Individual ground assignments, 300-second respawn and the 20 percent arena roll over eight equal items are reconstructed. Retained ordinary yellow actor data and collision-supported map locations guide the ground pickups."
+      "client_scope": "May 2013 RoF2. The July Heart of Fear definitions are outside this release.",
+      "native_evidence": {
+        "acquisition": "All ground collectibles, both original April public round trips and the Chelsith aqueduct crossings, normal corpses in all eleven donor families, both rare Dark Secrets items, and normal right-click registration.",
+        "collector_edition": "Stalking Fear requires the respective account entitlement. The same red occurrence denied an unentitled observer and yielded the real item to the entitled fixture after ordinary login. All nine items were earned through gameplay.",
+        "completed_meta_achievements": 10,
+        "completed_sets": 43,
+        "fixture_assistance": "The test used protected fixtures, approved GM positioning, and an already-owned QA mallet on repeat fights only after first ordinary combat, corpse and collectible evidence for the same donor family. Native combat evidence covers the acquisition path. Exact kill times and unassisted difficulty were outside that evidence.",
+        "once_only_reward_deliveries": 61,
+        "registered_items": 386,
+        "retention": "Duplicate items were retained and native stacking conserved quantities. The earned Stalking Fear set and its single reward persisted across relog after the temporary Collector’s Edition entitlement was removed."
+      },
+      "reconstruction_limits": [
+        "Era and retained client evidence identify the supported zone and acquisition areas. Exact per-item ground placement, rotating order and cadence, combat profiles and percentage/weight tuning use documented reconstruction where evidence only supports an area or a donor family.",
+        "The normal XP values are fixed reconstructions using approximately twenty percent of the applicable level band. The earlier tier uses 16,610,406 XP and the later tier uses 18,414,643 XP. The April and Collector’s Edition level-100 selections are reconstructed.",
+        "Historical evidence supports the shipped verified gear and the Fearchaser suffix bindings. Dark Secrets completion has no bound extra reward because exact reward evidence was unavailable."
       ],
-      "native_acceptance": [
-        "Picked up the eight ground items and registered them by ordinary inventory right-click. The native Achievements window showed Fear in Pieces complete, and the server granted exactly 16,610,406 normal XP once.",
-        "A genuine extra item remained in inventory on duplicate use. Normal relog preserved all eight components, one completion and one XP award. Using the duplicate again preserved the copy and awarded no repeat credit.",
-        "Killed a native arena enemy, looted Glass Flask from its actual corpse, registered it by the same right-click and saw Alaran in Chains at one of eight in the native Achievements window.",
-        "The Runed Circlet used the normal ItemVerify and cast-start path with no achievement update."
-      ],
-      "references": [
-        "https://www.everquest.com/news/imported-eq-enus-524411"
-      ],
-      "released_content": [
-        {
-          "item_ids": [
-            77389,
-            77390,
-            77391,
-            77392,
-            77393,
-            77394,
-            77395,
-            77396
-          ],
-          "native_achievement_id": 2040752,
-          "set": "Fear in Pieces",
-          "source": "Eight yellow ground pickups in Shard’s Landing"
+      "shipped_catalog": {
+        "collectibles": 389,
+        "completion_achievements": 15,
+        "public_zones": 11,
+        "reward_bindings": 69,
+        "sets": 45
+      },
+      "verified_from_catalog_and_source": {
+        "completion_dependencies": [
+          {
+            "id": 2020753,
+            "name": "Gelatinous Geometry"
+          },
+          {
+            "id": 2076360,
+            "name": "Dark Secrets"
+          },
+          {
+            "id": 2076400,
+            "name": "The Tilted Balance"
+          },
+          {
+            "id": 2076440,
+            "name": "Corrupted Guardians"
+          },
+          {
+            "id": 2080753,
+            "name": "Eye Won!"
+          },
+          {
+            "id": 2090752,
+            "name": "Nothing Left to Fear"
+          },
+          {
+            "id": 2090754,
+            "name": "Cleaning Up Cazic"
+          }
+        ],
+        "remaining_item_ids": {
+          "77467": {
+            "bound_actor_placements": 14,
+            "level_range": [
+              97,
+              102
+            ],
+            "loot_drop": 304099452,
+            "loot_table": 304098981,
+            "outer_percent": 20,
+            "weight": 11.1111,
+            "witnessed_items": [
+              77465,
+              77466,
+              77468,
+              77470,
+              77471,
+              77472,
+              77473
+            ],
+            "zone": 753,
+            "zone_version": 0
+          },
+          "77469": {
+            "bound_actor_placements": 14,
+            "level_range": [
+              97,
+              102
+            ],
+            "loot_drop": 304099452,
+            "loot_table": 304098981,
+            "outer_percent": 20,
+            "weight": 11.1111,
+            "witnessed_items": [
+              77465,
+              77466,
+              77468,
+              77470,
+              77471,
+              77472,
+              77473
+            ],
+            "zone": 753,
+            "zone_version": 0
+          },
+          "81438": {
+            "bound_actor_placements": 8,
+            "level_range": [
+              100,
+              101
+            ],
+            "loot_drop": 304099474,
+            "loot_table": 304098992,
+            "outer_percent": 20,
+            "weight": 12.5,
+            "witnessed_items": [
+              81432,
+              81433,
+              81434,
+              81435,
+              81436,
+              81437,
+              81439
+            ],
+            "zone": 764,
+            "zone_version": 0
+          }
         },
-        {
-          "item_ids": [
-            77424,
-            77425,
-            77426,
-            77427,
-            77428,
-            77429,
-            77430,
-            77431
-          ],
-          "native_achievement_id": 2060752,
-          "set": "Alaran in Chains",
-          "source": "Creature drops from four established lower-arena NPC types in Shard’s Landing"
-        }
-      ],
-      "status": "NATIVE_ACCEPTED_WITH_DOCUMENTED_LIMITS",
-      "test_limits": [
-        "QA used GM positioning and the fixture’s existing invulnerability. Invulnerability stopped the Runed Circlet self-buff after the normal cast began.",
-        "Alaran in Chains was witnessed through its first arena item and component. Full arena-set completion was not exercised.",
-        "Isolated MariaDB verified that rolling back registration restores both the stack count and progress and that duplicate use leaves both unchanged. Native crash recovery was not exercised."
-      ]
+        "scope": "Three exact collectible rows use the same native-witnessed donor tables as collected items in their sets. Isolated SQL readback and deterministic closure verify their dependent completions and eight reward bindings in configuration. These three items, seven completions and eight awards were outside native acceptance coverage."
+      },
+      "zone_access": {
+        "catalog_and_cache_scope": "The broader playable-zone continuation was verified by exact catalog and live typed cache readback. A separate successful live crossing through the broader continuation was outside the completed test.",
+        "fresh_database_staff_removals": 64,
+        "native_witnesses": [
+          "Valley of King Xorbb",
+          "The Breeding Grounds",
+          "Evantil, the Vile Oak",
+          "Grelleth’s Palace",
+          "Chapterhouse of the Fallen"
+        ],
+        "theater_of_blood": "Public minimum level 68, matching the prior restored route."
+      }
     },
-    "native_gameplay_acceptance": "Fear in Pieces completed with one XP award, duplicate retained and confirmed on relog, and one Alaran in Chains arena drop registered.",
+    "native_gameplay_acceptance": "Native RoF2 verified 386 of 389 items, 43 of 45 sets, 10 of 15 completion achievements, and 61 once-only grants. The remaining routes and dependent outcomes were verified in configuration and isolated evidence.",
     "payload_inventory": {
       "all_member_sha256_file": "SHA256SUMS",
-      "full_sql_bytes": 304693963,
+      "full_sql_bytes": 305215625,
       "housing_json_member_count": 331,
       "housing_json_prefix": "housing-runtime-content/",
       "housing_profile_bindings": "housing-runtime-content/PROFILE-BINDINGS.json",
       "housing_profile_bindings_sha256": "4d6c3533a882ce79ef790caa08a781a1994d56ac3d9c58a8459bb9e1ac9b73b2",
       "identical_SQL_and_Housing_bytes_required": true,
-      "payload_member_count": 504
+      "payload_member_count": 516
     },
     "preserved_mercenary_cohort_source_binding": {
       "SQL_sha256": "6ad8f950c178e9c1d84658387c521dc33695572fd8926c30a711aff44e50790f",
@@ -6845,15 +7021,15 @@
       "manifest_sha256": "78710b4716455c626cc62189cca8eacd252d2ce796adc018c0b4dd18657aace9",
       "source_base_commit": "c642eb178b8a0a9881812c2b3d3f188acb1217d8"
     },
-    "publication_parent_database_commit": "ceb6b28a137fd2c8d3641e5437acad5c2db0b105",
+    "publication_parent_database_commit": "7605e294ba0127e27ef166f0429de1684d1e8c82",
     "qualification_documents": [
       "NATIVE-QUALIFICATIONS.json",
       "CHANGELOG.md",
       "SOURCE-MANIFEST.json"
     ],
-    "release_tag": "peq-rof2-2026-11-26-collections",
+    "release_tag": "peq-rof2-2026-11-26-may-collections",
     "required_code_boundary": {
-      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins. Preserve the matched Ashengate native code and 467 canonical quest pins. Preserve the matched Offline Bazaar native source and RoF2 opcode binding. Preserve native RoF2 Collections registration and item serialization.",
+      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins. Preserve the matched Ashengate native code and 467 canonical quest pins. Preserve the matched Offline Bazaar native source and RoF2 opcode binding. Preserve native RoF2 Collections registration and item serialization. Preserve the matched May Collections pool, entitlement, and native registration bindings.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
       "completed_mercenary_feature_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
       "external_operator_resources": "Authenticated original RoF2 archives/maps and matching server quests/opcodes; generate fresh target shared memory normally."
@@ -6934,23 +7110,23 @@
       "BASE-VERGALID-R2-README.md": "3be6fe0bc5c6ba6a4608a43ea830b52d050aae69f89386dd57996df7c46aa2f0",
       "BASE-VERGALID-R2-SOURCE-CONTENT-BINDING.json": "5843bfb561555ee2906b79ec8a36575ddc1e345c5be6ed5f6d882ee256754f51",
       "BASE-VERGALID-R2-SOURCE-MANIFEST.json": "41bbe1aa648bc432a6f287fdb8171df78ac70684fd6c753f25b479f1d0d99b07",
-      "CANONICAL-SEED-COMPOSITION.json": "6ac209fb1a23bac959a99bacd31ecfea18936880039717a2c19eec48499df8ca",
-      "CHANGELOG.md": "462a26cb3a9fd86a9934b55f306d874afebed1d9f26908dd55169e1aeb9d8422",
+      "CANONICAL-SEED-COMPOSITION.json": "28fe2fb4e4fa972069c1abad914030e56a5da48d9cb093d1d46aa4681ec9173b",
+      "CHANGELOG.md": "90c99d64ac7aa637445606cd45c2e42805b4b4f3b22b5b219771ba14ab8fc35a",
       "COMPLETED-RECIPE-UPDATES.json": "fdf459a6bef7e90351d3db5c983e30920205876a990aa144b5779a4c242d25e0",
       "KITHICOR-STATIC-CONTENT.json": "5b043982b23b74f4f857724b6baf1ff0611bb88ce348f32f15f3f6230462ffc5",
       "MERCENARY86-100-CONTENT.json": "27a9d180e6a66320ae9877cd763341f6579d0a1a8a66ac6fc23c26fb9dc15c16",
-      "NATIVE-QUALIFICATIONS.json": "40e6c620cb249738b3185f7f322151f718e2c6111f4046882f95e02e8e6e270a",
-      "README.md": "73a7eea596dda678e55b6a086ae65f2eb92fa59a8ddb2543184dadb8ebdf41e2",
-      "SHA256SUMS": "0430912093bd8170dc2fa25a5b3e242cfddc48d15d920bae54386d5fcee7a1fe",
+      "NATIVE-QUALIFICATIONS.json": "f20dc77d50d0c9edfde7ac9bce3fdd8f9e9298bb667cd514b73d30939b771ba9",
+      "README.md": "efb037d540b2d49e5f03c2b8bb8a3625724d64b090fca95dd87f67ad0d790974",
+      "SHA256SUMS": "d47b0a2cba2f7eedd85008baa5afb6d31b49410739c58bd1f441e26732d735d7",
       "SOD-OCEANGREEN-CONTENT.json": "5a5757e1c4631af375b87b6c69794d9e72ebc8cc91c832144d8359bb2b5454c2",
-      "SOURCE-CONTENT-BINDING.json": "2de3f95071206f7ecc73751d0d581dedf12009ec021860954682ca5ea3a78904",
-      "SOURCE-MANIFEST.json": "5539fdbbd80ca7bf032c3aa786489c803864340c4bf886cb7f6ffb1c86bd5ad3",
+      "SOURCE-CONTENT-BINDING.json": "858b7e8f596e355e413f0101a4f18b6aeedd7165647a3d3de6ba19b02915072e",
+      "SOURCE-MANIFEST.json": "2e35da5d44b239c5f639375ba27b1c8ae925a9ccd67eed22bbb7ce45fe05cfc3",
       "TABLE-INVENTORY.json": "4b6bf5895d88556b7ce4ecb2bf44a55deef3b766782c5c93304ff688204ec36e",
       "VALIDATION.json": "f9da8bf1f8bc7ab959ca0bee13e9b4aaa47a530b3f6a46e5e429d85b3d522ff2",
       "VICTUAL-CLASS-FEATURE-DELTA.json": "1220253988a07ff5ef833759b947c33b4bcc56cad20195f94366cd510df7ffaf",
       "client-data/rof2/dbstr_us.append.txt": "71f93726675b66a45496e61f42994a691ab6663a326f92497627d37f6f42dfec",
       "client-data/rof2/spells_us.append.txt": "428a6b92ba8887c8d117746c2f9bc192a6429b7fd2c6c46438005442b351b7d6",
-      "full.sql": "eb8a81eeaec08b75f44a91e7df1b42b5fc12bd2dce5fc67b04fbae06d2c55ac7",
+      "full.sql": "9ff99cc554238f817737b0a4f463bbc38391b4d8e32c8d0245d6d832e6c1daf5",
       "migrations/darkhollow-normal68-70/02-ALIGN-SHROUD-ESCROW.sql": "5c47bbf12e6cc50976694c5c74fa508359d737c661676fdded19913036494526",
       "migrations/darkhollow-normal68-70/03-VERIFY-SHROUD-ESCROW.sql": "0fbdcac1cc500a1fd9dcc0fe08414ca5d300623951bc0ae00e282bb1085e12f6",
       "migrations/darkhollow-normal68-70/10-LEVEL68-70-CLAIM-SCHEMA.sql": "972fdeb85e17f62aa65509d140294c9000a659338e3f819377d6bbe6a86a2231",
@@ -7023,6 +7199,18 @@
       "migrations/rathe/UPGRADE-CONTRACT.json": "e2f5502817d97f6d1fe668b5199256fc4d4383c688cef7b5f8af1601855ee746",
       "migrations/rof2-collections/00-ROF2-COLLECTIONS-CATALOG-AND-ARENA.sql": "1b05eb77b345b42e17b1eebc5904de2a757793175ab5aab406b99dc5eb0b9c47",
       "migrations/rof2-collections/10-ROF2-COLLECTIONS-GROUND.sql": "52b518fb93fd5589ea4d85459da63ffecba335ddd156bca537a39206d7af7cf3",
+      "migrations/rof2-may-collections/00-MAY-COLLECTIONS-GROUND-POOL-SCHEMA.sql": "96926dad959d38400f5121c77bc3520465873d39f4b501bb75750268ff5e3ea1",
+      "migrations/rof2-may-collections/10-MAY-COLLECTIONS-SHARDSLANDING.sql": "fb017cd9a2f90bfa7482a473a0caed5cb0c21a31f4eecbab1a4542987235a60a",
+      "migrations/rof2-may-collections/20-MAY-COLLECTIONS-ADDITIONAL-PROVEN-GROUND.sql": "c9898334bd1127d43c3d3210bdee8bb2c751423d544f101ba7a892f9e2bd41bb",
+      "migrations/rof2-may-collections/30-MAY-COLLECTIONS-PROGRESSION-AND-REWARDS.sql": "4c633540a0bdde0c000d29bcce175b6fe3b0fc71836befd8388de6bbb90ce0be",
+      "migrations/rof2-may-collections/40-MAY-COLLECTIONS-APRIL-PUBLIC-ACCESS.sql": "77c76fd022acb2dc3a729d80c8edd0395c3cf842fcab91a3df3596c9cf5c0aa8",
+      "migrations/rof2-may-collections/45-MAY-COLLECTIONS-REMAINING-GROUND.sql": "58899aa5efed854be3dba68d5b05b60baf11a78795590ea6809b0acc9191a21d",
+      "migrations/rof2-may-collections/50-MAY-COLLECTIONS-COLLECTORS-GROUND.sql": "62e3957c04d6f242beaf524c49bcc794c8829ef6067f3e0f38e41b4bec35ecf3",
+      "migrations/rof2-may-collections/60-MAY-COLLECTIONS-LIVING-ACQUISITION.sql": "39a055a5ceed0afe34c8ad6f05b69dbca4a944b34df3be24671f36de292e4e29",
+      "migrations/rof2-may-collections/70-MAY-COLLECTIONS-ENABLE.sql": "d0f70563388b44025cf7c0857e3d6384d8bd2d652301e59dfad15491f7474c58",
+      "migrations/rof2-may-collections/80-MAY-COLLECTIONS-PUBLIC-ZONE-ACCESS.sql": "6388935fac31effa625ef1e61e2e25f86fb7d5c55a3b6a58fe1789524622c3d8",
+      "migrations/rof2-may-collections/90-MAY-PUBLIC-ZONE-ACCESS-CONTINUATION.sql": "8d04db60da92dff5619c622c1fe021120bcf830f9669fd93f40767d47d5c404d",
+      "migrations/rof2-may-collections/95-MAY-PUBLIC-THEATER-ADMISSION.sql": "670fe10e1a83a94d46c0d377a7d443e722f5eb983fc408232cafd1f0aa66a39f",
       "migrations/tss-ashengate-wings/00-ASHENGATE-PROGRESSION-SCHEMA.sql": "642f29406bdf2cbd2dd98f327a877f12052f0ab09348ea5d00482cc1120c6629",
       "migrations/tss-ashengate-wings/10-ASHENGATE-VERGALID-SIDE-TASKS.sql": "91409c0f070cdea6951f39c9ecbbb1be2c2293138fa8b348adfa6034de9264ba",
       "migrations/tss-ashengate-wings/20-ASHENGATE-FACTION-TASKS.sql": "e6a8cb491f7e7a63d48bbe651c6c8955465769513fabd76b1de39814d6685226",
@@ -7091,19 +7279,20 @@
         }
       }
     },
-    "source_commit": "7605e294ba0127e27ef166f0429de1684d1e8c82",
+    "source_commit": "bb9dffedef2afcc9fffa937a58dd87d376591e97",
     "source_commit_role": "Exact public PEQ database release commit. The server integration parent and CI checkout are pinned separately.",
     "source_repository": "nightstalker6669/EQEmu",
     "verification_basis": {
-      "base_full_sql_sha256": "1e6b5aecb4fa63f92db61f48864db0742342ea73aab7975c786b6371e6083c5b",
-      "full_sql_sha256": "eb8a81eeaec08b75f44a91e7df1b42b5fc12bd2dce5fc67b04fbae06d2c55ac7",
+      "base_full_sql_sha256": "eb8a81eeaec08b75f44a91e7df1b42b5fc12bd2dce5fc67b04fbae06d2c55ac7",
+      "full_sql_sha256": "9ff99cc554238f817737b0a4f463bbc38391b4d8e32c8d0245d6d832e6c1daf5",
       "isolated_validation_sha256": [
-        "370868f595b5512ef5564862b7b70c60f7ad2372ada04d63d902dcb54418d53e"
+        "c6b671a9442aea80440b731d015cb402520aa4a103b75118349b44f8c5dc20f8",
+        "8ff221fd9b29376b7582ced20b61bd5555274af5cc7f113b5aff3587d244c7d5"
       ],
-      "status": "Reuses the exact isolated r38 seed and both committed development migrations."
+      "status": "Reuses sealed published r39, exact isolated core and access validation and accepted native limits."
     }
   },
-  "database_contract_sha256": "45f9fef4bc12181ec26badc24c9502151c9fb18ddb52307c1a35dacb59124916",
+  "database_contract_sha256": "54635cb0aa1d24732fde46cbe53052dae965c9a059ad4b4c5394cd0ee4e274d7",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [

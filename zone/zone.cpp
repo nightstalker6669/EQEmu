@@ -353,42 +353,43 @@ bool Zone::IsSpecialBindLocation(const glm::vec4& location)
 
 //this also just loads into entity_list, not really into zone
 bool Zone::LoadGroundSpawns() {
-	GroundSpawns g{};
-
-	content_db.LoadGroundSpawns(zoneid, GetInstanceVersion(), &g);
+	auto spawns = content_db.LoadGroundSpawns(zoneid, GetInstanceVersion(), GetInstanceID());
 
 	uint32 added = 0;
 
-	for (uint16 slot_id = 0; slot_id < GroundSpawns::kMaxSpawns; slot_id++) {
-		if (EQ::ValueWithin(g.spawn[slot_id].item_id, 1, (SAYLINK_ITEM_ID - 1))) {
-			auto inst = database.CreateItem(g.spawn[slot_id].item_id);
+	for (auto &[spawn, pool] : spawns) {
+		random.Shuffle(pool.begin(), pool.end());
+		const auto item_id = pool.empty() ? spawn.item_id : pool.front();
+		if (EQ::ValueWithin(item_id, 1, (SAYLINK_ITEM_ID - 1))) {
+			auto inst = database.CreateItem(item_id, pool.empty() ? 0 : 1);
 
-			const uint32 max_allowed = g.spawn[slot_id].max_allowed;
+			const uint32 max_allowed = spawn.max_allowed;
 
 			if (inst) {
 				// Fresh ground-spawn clickies must have their defined charges.
 				// CreateItem defaults to zero; that otherwise produces unusable
 				// quest scrolls such as Touch of the Six. Dropped items retain
 				// their existing charges through the separate Object path.
-				if (inst->GetItem()->MaxCharges > 0) {
+				if (pool.empty() && inst->GetItem()->MaxCharges > 0) {
 					inst->SetCharges(inst->GetItem()->MaxCharges);
 				}
 
 				for (uint32 i = 0; i < max_allowed; i++) {
 					auto object = new Object(
 						inst,
-						g.spawn[slot_id].name,
-						g.spawn[slot_id].max_x,
-						g.spawn[slot_id].min_x,
-						g.spawn[slot_id].max_y,
-						g.spawn[slot_id].min_y,
-						g.spawn[slot_id].max_z,
-						g.spawn[slot_id].heading,
-						g.spawn[slot_id].respawn_timer,
-						g.spawn[slot_id].fix_z
+						spawn.name,
+						spawn.max_x,
+						spawn.min_x,
+						spawn.max_y,
+						spawn.min_y,
+						spawn.max_z,
+						spawn.heading,
+						spawn.respawn_timer,
+						spawn.fix_z
 					);
 
-					object->SetGroundSpawnSource(g.spawn[slot_id].database_id);
+					object->SetGroundSpawnSource(spawn.database_id);
+					object->SetGroundSpawnCollectiblePool(std::move(pool));
 					entity_list.AddObject(object, false);
 
 					added++;

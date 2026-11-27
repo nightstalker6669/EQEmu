@@ -1245,6 +1245,8 @@ public:
 	bool PutItemInInventoryWithStacking(EQ::ItemInstance* inst);
 	bool FindNumberOfFreeInventorySlotsWithSizeCheck(std::vector<BuyerLineTradeItems_Struct> items);
 	bool PushItemOnCursor(const EQ::ItemInstance& inst, bool client_update = false);
+	enum class CollectionPickupResult { Refused, Placed, Unconfirmed };
+	CollectionPickupResult PutGroundCollectibleOnCursor(const EQ::ItemInstance &item);
 	void SendCursorBuffer();
 	void DeleteItemInInventory(int16 slot_id, int16 quantity = 0, bool client_update = false, bool update_db = true);
 	uint32 CountItem(uint32 item_id);
@@ -2042,6 +2044,8 @@ public:
 	void ClearAccountFlag(const std::string& flag);
 	void SetAccountFlag(const std::string& flag, const std::string& value);
 	std::string GetAccountFlag(const std::string& flag);
+	bool HasRainOfFearCollectorEdition() const;
+	bool CanCollectItem(uint32 item_id) const;
 	std::vector<std::string> GetAccountFlags();
 	void SetGMStatus(int new_status);
 	void Consume(const EQ::ItemData *item, uint8 type, int16 slot, bool auto_consume);

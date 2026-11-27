@@ -35,6 +35,9 @@
 #include "zone/worldserver.h"
 #include "zone/zonedb.h"
 
+#include <list>
+#include <memory>
+
 extern WorldServer worldserver;
 extern QueryServ  *QServ;
 
@@ -1080,6 +1083,48 @@ void Client::DeleteItemInInventory(int16 slot_id, int16 quantity, bool client_up
 			safe_delete(outapp);
 		}
 	}
+}
+
+Client::CollectionPickupResult Client::PutGroundCollectibleOnCursor(const EQ::ItemInstance &item)
+{
+	using FirePersonalOccurrenceSource::NativeInventoryFence;
+
+	if (!CharacterID() || !ClientDataLoaded() || m_inventory_session_rejected ||
+		IsDead() || IsZoning() || IsSpiritShrouded() ||
+		!trade || trade->state != TradeNone || trade->With() ||
+		!item.IsStackable() || item.GetCharges() != 1 || item.GetEvolveUniqueID() ||
+		!NativeInventoryFence::ItemAllowed(&item) ||
+		!NativeInventoryFence::SlotAllowed(&m_inv, EQ::invslot::slotCursor) ||
+		((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs)) && !HasInventorySessionReservation()) ||
+		m_inv.CursorSize() >= EQ::invbag::CURSOR_BAG_COUNT) {
+		return CollectionPickupResult::Refused;
+	}
+
+	std::unique_ptr<EQ::ItemInstance> incoming(item.Clone());
+	std::list<EQ::ItemInstance *> staged(m_inv.cursor_cbegin(), m_inv.cursor_cend());
+	staged.push_back(incoming.get());
+	if (!database.TransactionBeginStrict().Success()) {
+		return CollectionPickupResult::Refused;
+	}
+	struct RollbackPickup {
+		~RollbackPickup() { database.TransactionRollbackStrict(); }
+	} rollback;
+
+	auto first = staged.cbegin();
+	auto last = staged.cend();
+	if (!database.SaveCursor(CharacterID(), first, last)) {
+		return CollectionPickupResult::Refused;
+	}
+	if (!database.TransactionCommitStrict().Success() ||
+		m_inv.PushCursor(*incoming) != EQ::invslot::slotCursor) {
+		// Retire the occurrence, then reload the potentially committed cursor.
+		m_inventory_session_rejected = true;
+		Kick("Collection pickup commit could not be confirmed");
+		return CollectionPickupResult::Unconfirmed;
+	}
+
+	UpdateAchievementForOwnItem(item.GetID());
+	return CollectionPickupResult::Placed;
 }
 
 bool Client::PushItemOnCursor(const EQ::ItemInstance& inst, bool client_update)

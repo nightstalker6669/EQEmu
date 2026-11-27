@@ -32,6 +32,9 @@
 #include "zone/worldserver.h"
 #include "zone/zonedb.h"
 
+#include <algorithm>
+#include <unordered_map>
+
 
 const char DEFAULT_OBJECT_NAME[] = "IT63_ACTORDEF";
 const char DEFAULT_OBJECT_NAME_SUFFIX[] = "_ACTORDEF";
@@ -583,6 +586,15 @@ void Object::RandomSpawn(bool send_packet) {
 		return;
 	}
 
+	if (send_packet && !m_ground_spawn_collectible_items.empty()) {
+		const auto next = (m_ground_spawn_collectible_index + 1) % m_ground_spawn_collectible_items.size();
+		if (auto *item = database.CreateItem(m_ground_spawn_collectible_items[next], 1)) {
+			delete m_inst;
+			m_inst = item;
+			m_ground_spawn_collectible_index = next;
+		}
+	}
+
 	m_data.x = zone->random.Real(m_min_x, m_max_x);
 	m_data.y = zone->random.Real(m_min_y, m_max_y);
 
@@ -653,8 +665,18 @@ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
         return true;
     }
 
-	if (m_ground_spawn) {//This is a Cool Groundspawn
-		respawn_timer.Start();
+	const bool collectible_pool = !m_ground_spawn_collectible_items.empty();
+	if (m_ground_spawn) {
+		if (collectible_pool && (!sender || !click_object || IsCollectibleGroundSpawnRespawning())) {
+			return false;
+		}
+		if (sender && m_inst && !sender->CanCollectItem(m_inst->GetID())) {
+			sender->Message(Chat::Red, "This collection requires the Rain of Fear Collector's Edition.");
+			return false;
+		}
+		if (!collectible_pool) {
+			respawn_timer.Start();
+		}
 	}
 
 	if (m_type == ObjectTypes::Temporary) {
@@ -666,6 +688,10 @@ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 			// the client updates itself and takes care of sending "duplicate lore item" messages
 			auto item = m_inst->GetItem();
 			if (sender->CheckLoreConflict(item)) {
+				if (collectible_pool) {
+					sender->Message(Chat::Yellow, "Duplicate lore item detected");
+					return false;
+				}
 				duplicate_lore = true;
 
 				const int16 lore_item_slot = sender->GetInv().HasItem(item->ID, 0, invWhereBank);
@@ -753,10 +779,23 @@ bool Object::HandleClick(Client* sender, const ClickObject_Struct* click_object)
 			// Transfer item to client
 			const uint32 pickup_item_id = m_inst->GetID();
 			const int pickup_count = m_inst->IsStackable() ? std::max<int>(1, m_inst->GetCharges()) : 1;
-			const bool pickup_placed = sender->PutItemInInventory(EQ::invslot::slotCursor, *m_inst, false);
-			sender->SendItemPacket(EQ::invslot::slotCursor, m_inst, ItemPacketTrade);
-
-			sender->CheckItemDiscoverability(m_inst->GetID());
+			bool pickup_placed;
+			bool pickup_unconfirmed = false;
+			if (collectible_pool) {
+				const auto result = sender->PutGroundCollectibleOnCursor(*m_inst);
+				if (result == Client::CollectionPickupResult::Refused) {
+					return false;
+				}
+				pickup_placed = result == Client::CollectionPickupResult::Placed;
+				pickup_unconfirmed = !pickup_placed;
+				respawn_timer.Start();
+			} else {
+				pickup_placed = sender->PutItemInInventory(EQ::invslot::slotCursor, *m_inst, false);
+			}
+			if (!pickup_unconfirmed) {
+				sender->SendItemPacket(EQ::invslot::slotCursor, m_inst, ItemPacketTrade);
+				sender->CheckItemDiscoverability(pickup_item_id);
+			}
 
 			if (cursor_delete) {    // delete the item if it's a duplicate lore. We have to do this because the client expects the item packet
 				sender->DeleteItemInInventory(EQ::invslot::slotCursor, 1, true);
@@ -957,47 +996,84 @@ void ZoneDatabase::UpdateObject(
 	}
 }
 
-GroundSpawns* ZoneDatabase::LoadGroundSpawns(
-	uint32 zone_id,
-	int16 instance_version,
-	GroundSpawns* gs
-)
+std::vector<ZoneGroundSpawn> ZoneDatabase::LoadGroundSpawns(uint32 zone_id, int16 instance_version, uint32 instance_id)
 {
-	const auto& l = GroundSpawnsRepository::GetWhere(
+	// May RoF collections get their own capacity. Preserve the stock limit
+	// for other content, including other versions of these zones.
+	const bool load_collections = instance_id == 0 && instance_version == 0 &&
+		(EQ::ValueWithin(zone_id, Zones::SHARDSLANDING, Zones::CHAPTERHOUSE) ||
+			zone_id == 763 || zone_id == 764);
+	const auto rows = GroundSpawnsRepository::GetWhere(
 		*this,
 		fmt::format(
-			"`zoneid` = {} AND (`version` = {} OR `version` = -1) {} LIMIT {}",
+			"`zoneid` = {} AND (`version` = {} OR `version` = -1) {} {}",
 			zone_id,
 			instance_version,
 			ContentFilterCriteria::apply(),
-			GroundSpawns::kMaxSpawns
+			load_collections ? "ORDER BY id" : fmt::format("LIMIT {}", GroundSpawns::kMaxSpawns)
 		)
 	);
 
-	if (l.empty()) {
-		return gs;
+	std::unordered_map<uint32, std::vector<uint32>> collection_pools;
+	if (load_collections) {
+		auto result = QueryDatabase(fmt::format(
+			"SELECT p.ground_spawn_id, p.item_id FROM ground_spawn_collectibles p "
+			"JOIN ground_spawns g ON g.id = p.ground_spawn_id "
+			"WHERE g.zoneid = {} AND (g.version = {} OR g.version = -1) "
+			"ORDER BY p.ground_spawn_id, p.item_id",
+			zone_id, instance_version
+		));
+		if (result.Success()) {
+			for (auto row : result) {
+				collection_pools[Strings::ToUnsignedInt(row[0])].push_back(Strings::ToUnsignedInt(row[1]));
+			}
+		} else {
+			LogError("Could not load collectible ground pools for zone [{}]", zone_id);
+		}
 	}
 
-	uint32 slot_id = 0;
-
-	for (const auto& e : l) {
-		gs->spawn[slot_id].database_id   = e.id;
-		gs->spawn[slot_id].name          = e.name;
-		gs->spawn[slot_id].max_x         = e.max_x;
-		gs->spawn[slot_id].max_y         = e.max_y;
-		gs->spawn[slot_id].max_z         = e.max_z;
-		gs->spawn[slot_id].min_x         = e.min_x;
-		gs->spawn[slot_id].min_y         = e.min_y;
-		gs->spawn[slot_id].heading       = e.heading;
-		gs->spawn[slot_id].item_id       = e.item;
-		gs->spawn[slot_id].max_allowed   = e.max_allowed;
-		gs->spawn[slot_id].respawn_timer = e.respawn_timer;
-		gs->spawn[slot_id].fix_z         = e.fix_z;
-
-		slot_id++;
+	uint32 stock_count = 0;
+	std::vector<ZoneGroundSpawn> spawns;
+	spawns.reserve(rows.size());
+	for (const auto &row : rows) {
+		const auto *item = load_collections ? database.GetItem(row.item) : nullptr;
+		if (!item || item->ItemType != EQ::item::ItemTypeCollectible) {
+			if (stock_count >= GroundSpawns::kMaxSpawns) {
+				continue;
+			}
+			++stock_count;
+		}
+		std::vector<uint32> pool;
+		if (const auto entry = collection_pools.find(row.id); entry != collection_pools.end()) {
+			pool = std::move(entry->second);
+			const bool all_collectible = std::all_of(pool.begin(), pool.end(), [](uint32 item_id) {
+				const auto *member = database.GetItem(item_id);
+				return member && member->ItemType == EQ::item::ItemTypeCollectible;
+			});
+			if (row.max_allowed != 1 || !std::binary_search(pool.begin(), pool.end(), row.item) ||
+				!all_collectible) {
+				LogError("Invalid collectible pool on ground spawn [{}]", row.id);
+				continue;
+			}
+		}
+		GroundSpawn placement{
+			.database_id = row.id,
+			.max_x = row.max_x,
+			.max_y = row.max_y,
+			.min_x = row.min_x,
+			.min_y = row.min_y,
+			.max_z = row.max_z,
+			.heading = row.heading,
+			.name = row.name,
+			.item_id = row.item,
+			.max_allowed = row.max_allowed,
+			.respawn_timer = row.respawn_timer,
+			.fix_z = row.fix_z != 0,
+		};
+		spawns.push_back({std::move(placement), std::move(pool)});
 	}
 
-	return gs;
+	return spawns;
 }
 
 void ZoneDatabase::DeleteObject(uint32 object_id)

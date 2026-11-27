@@ -27,6 +27,9 @@ namespace TrophyCertificate55 {class Custody;}
 #include "common/types.h"
 #include "zone/entity.h"
 
+#include <utility>
+#include <vector>
+
 class Client;
 class EQApplicationPacket;
 
@@ -151,7 +154,12 @@ public:
 	~Object();
 	bool Process();
 	bool IsGroundSpawn() { return m_ground_spawn; }
+	bool IsCollectibleGroundSpawnRespawning() const
+	{
+		return !m_ground_spawn_collectible_items.empty() && respawn_timer.Enabled();
+	}
 	void SetGroundSpawnSource(uint32 id) { m_ground_spawn_source = id; }
+	void SetGroundSpawnCollectiblePool(std::vector<uint32> items) { m_ground_spawn_collectible_items = std::move(items); }
 	void SetQuestGroundSpawn() { m_quest_ground_spawn = true; }
 	// Event handlers
 	bool HandleClick(Client* sender, const ClickObject_Struct* click_object);
@@ -248,6 +256,8 @@ protected:
 	float  m_min_x;
 	float  m_min_y;
 	uint32 m_ground_spawn_source = 0;
+	std::vector<uint32> m_ground_spawn_collectible_items;
+	size_t m_ground_spawn_collectible_index = 0;
 	bool   m_ground_spawn;
 	bool   m_quest_ground_spawn = false;
 	bool   m_random_ground_z = false; // Recurring spawn uses the map-height sentinel.

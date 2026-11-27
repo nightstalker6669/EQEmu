@@ -33,6 +33,12 @@
 #include "mercenary_transaction.h"
 
 #include <unordered_set>
+#include <vector>
+
+struct ZoneGroundSpawn {
+	GroundSpawn placement;
+	std::vector<uint32> collectible_items;
+};
 
 class Client;
 class Corpse;
@@ -404,7 +410,7 @@ public:
 	uint32	AddObject(uint32 type, uint32 icon, const Object_Struct& object, const EQ::ItemInstance* inst);
 	void	UpdateObject(uint32 object_id, uint32 type, uint32 icon, const Object_Struct& object, const EQ::ItemInstance* inst);
 	void	DeleteObject(uint32 object_id);
-	GroundSpawns*	LoadGroundSpawns(uint32 zone_id, int16 instance_version, GroundSpawns* gs);
+	std::vector<ZoneGroundSpawn> LoadGroundSpawns(uint32 zone_id, int16 instance_version, uint32 instance_id);
 
 	/* Traders  */
 	void	SaveTraderItem(uint32 char_id,uint32 itemid,uint32 uniqueid, int32 charges,uint32 itemcost,uint8 slot);
