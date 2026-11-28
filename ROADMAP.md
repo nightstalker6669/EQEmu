@@ -495,6 +495,23 @@ Nineteen authored tasks completed and their recipient rewards paid. The five ord
 
 </details>
 
+### House of Thule / Hunter and Slayer
+
+<details>
+<summary>House of Thule progression, Hunter and Slayer — Published in r42</summary>
+
+- **House of Thule progression:** RoF2 QA completed 47/47 tasks: 34 personal quests, three shared quests and ten group missions. Six opening missions earned Tier 3 access and four Tier 3 missions earned Tier 4 access. Both earned achievements and ordinary public admission persisted after relog. The opening shared mission request rejected a player before the prerequisites were met. QA verified native hand-ins, mission chest opening and representative gear loot.
+- **Earned public access:** The six destinations were House of Thule, Upper Floors, Al’Kabor’s Nightmare, Miragul’s Nightmare, Fear Itself, Morell’s Castle and Sanctum Somnium. The same repaired Lower Floors gate denied entry without the earned achievement and admitted a player who had earned it. Al’Kabor’s four existing island contacts offer project-authored travel after Tier 3 access.
+- **Authored content:** May-era evidence supports the titles, prerequisite order, group sizes and access requirements. Thirty new public quests and ten group missions use project-authored dialogue, objectives, encounters and layouts. Six prerequisite drafts and An Expedition Gone Awry reuse project-owned work. Coin, faction, Dream Motes and item identities use sourced values where available. Experience rewards with unknown amounts were omitted.
+- **Hunter:** Offline checks covered all 562 exact targets for 33 zone achievements across 35 zone IDs, including 554 catalogued placements and eight script-bound targets. Native credit was verified for Cragbeak and Rotticus, and a Cragbeak placeholder kill awarded no credit. Sarith and Rubak Oseka public doors worked both ways. The Pillars statue phase was consistent across clients and updated from Shadow to Nature. Neither of two bounded kills spawned a Peacekeeper. All four phases, spawn conditions and credit bindings were checked offline.
+- **Slayer and rewards:** Offline checks covered 142 achievements, 807 race criteria, 157 distinct components, and the exact bindings for 14 bags and six title sets across Hunter and Slayer. Five native skunk kills completed It Stinks! and earned active Banestrike rank 1. A mastered target accepted it, an unmastered race was rejected, and the AA persisted after relog. Hastened ranks and higher thresholds were checked offline. Higher-count bag delivery, title selection, the spirit visual and numeric damage were outside the native evidence.
+
+QA used approved travel staging, protection and a QA weapon for incidental combat. Task credit, kills, chest claims and final gate crossings used the native game path. Some rare placements, combat values, loot odds and damage breakpoints are reconstructed, including the Pillars six-hour in-game phase and 10% eligible kill roll.
+
+[Server r42](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r42-a1-0f4fa26d4df6) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-27-hot-hunter-slayer) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/616737e8ff113f8b1cb48dd69898d4e63333dbb1/releases/peq-rof2-2026-11-27-hot-hunter-slayer/NATIVE-QUALIFICATIONS.json)
+
+</details>
+
 ### Rain of Fear
 
 <details>
