@@ -317,6 +317,10 @@ Bazaar::GetSearchResults(
 		r.count                   = 1;
 		r.trader_id               = t.trader.char_id;
 		r.serial_number           = t.trader.item_sn;
+		if (t.trader.active_transaction == TraderRepository::OfflineParcel) {
+			r.offline_parcel_listing_id = t.trader.id;
+			r.item_id = t.trader.item_id;
+		}
 		r.cost                    = t.trader.item_cost;
 		r.slot_id                 = t.trader.slot_id;
 		r.charges                 = t.trader.item_charges;

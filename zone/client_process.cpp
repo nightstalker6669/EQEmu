@@ -1,3 +1,4 @@
+#include "bazaar_offline_parcel.h"
 #include "original_trade_transform_hooks.h"
 /*	EQEmu: EQEmulator
 
@@ -68,6 +69,11 @@ bool Client::Process() {
 			return true;
 		}
 		m_offline_bazaar_close_retry.Start(1000);
+
+		if (m_offline_bazaar_parcel_custody &&
+			!OfflineBazaar::SetParcelAvailability(database, CharacterID(), false)) {
+			return true;
+		}
 
 		if (IsTrader()) {
 			TraderEndTrader();

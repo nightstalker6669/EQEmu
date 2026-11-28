@@ -1170,7 +1170,10 @@ bool Client::Save(uint8 iCommitNow, bool update_achievements) {
 	}
 
 	/* Save Character Currency */
-	database.SaveCharacterCurrency(CharacterID(), &m_pp);
+	// Parcel-capable offline sellers are credited directly in the database.
+	if (!m_offline_bazaar_parcel_custody) {
+		database.SaveCharacterCurrency(CharacterID(), &m_pp);
+	}
 
 	// save character binds
 	// this may not need to be called in Save() but it's here for now

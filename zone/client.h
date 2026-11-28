@@ -470,6 +470,7 @@ public:
 	void ReturnTraderReq(const EQApplicationPacket* app,int16 traderitemcharges, uint32 itemid = 0);
 	void TradeRequestFailed(const EQApplicationPacket* app);
 	void BuyTraderItem(TraderBuy_Struct* tbs, Client* trader, const EQApplicationPacket* app);
+	void BuyOfflineBazaarParcel(uint32 token, const EQApplicationPacket *app);
 	void BuyTraderItemOutsideBazaar(TraderBuy_Struct* tbs, const EQApplicationPacket* app);
 	void FinishTrade(
 		Mob *with,
@@ -587,7 +588,7 @@ public:
 	};
 
 	/* New PP Save Functions */
-	bool SaveCurrency(){ return !m_spirit_shroud_transition && !m_mercenary_persistence_failed && !m_inventory_session_rejected && database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
+	bool SaveCurrency(){ return !m_spirit_shroud_transition && !m_mercenary_persistence_failed && !m_inventory_session_rejected && (!m_offline_bazaar_parcel_custody || m_offline_bazaar_counter_wallet) && database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
 	bool SaveAA();
 	bool CanBanestrikeTarget(Mob *target) const;
 	bool FinishBanestrike(Mob *target);
@@ -2367,6 +2368,8 @@ private:
 	bool   trader;
 	bool m_bazaar_counter_only = false;
 	bool m_offline_bazaar_trader = false;
+	bool m_offline_bazaar_parcel_custody = false;
+	bool m_offline_bazaar_counter_wallet = false;
 	Timer m_offline_bazaar_close_retry;
 	uint16 trader_id;
 	uint16 customer_id;

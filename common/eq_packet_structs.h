@@ -6503,6 +6503,9 @@ struct BazaarSearchResultsFromDB_Struct {
 	std::string serial_number_RoF;
 	std::string trader_name;
 
+	// Server-only listing identity. Never serialized into a client packet.
+	uint64 offline_parcel_listing_id = 0;
+
 	template<class Archive>
 	void serialize(Archive &archive)
 	{

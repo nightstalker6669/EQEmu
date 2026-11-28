@@ -1,3 +1,4 @@
+#include "bazaar_offline_parcel.h"
 #include "tss_ashengate.h"
 #include "vergalid_mission_lua.h"
 #include "dodh_longshadow_source.h"
@@ -16524,6 +16525,16 @@ void Client::Handle_OP_OfflineBazaarTrader(const EQApplicationPacket *app)
 	}
 	ClearAllProximities();
 
+	if (RuleB(Parcel, EnableParcelMerchants) && RuleB(Bazaar, EnableParcelDelivery) &&
+		OfflineBazaar::HasTransactionalStorage(database) && SaveCurrency()) {
+		// A lost acknowledgement may still have activated the listings.
+		// Disable stale offline profile currency saves before the write.
+		m_offline_bazaar_parcel_custody = true;
+		if (!OfflineBazaar::Activate(database, CharacterID())) {
+			LogTrading("Offline Bazaar parcel activation could not be confirmed for [{}]", CharacterID());
+		}
+	}
+
 	SendLogoutPackets();
 	auto *reply = new EQApplicationPacket(OP_LogoutReply);
 	FastQueuePacket(&reply);
@@ -16592,7 +16603,20 @@ void Client::Handle_OP_TraderBuy(const EQApplicationPacket *app)
 	//
 	// Client has elected to buy an item from a Trader
 	//
+	if (app->size != sizeof(TraderBuy_Struct)) {
+		return;
+	}
+
 	auto in     = (TraderBuy_Struct *) app->pBuffer;
+
+	if (ClientVersion() == EQ::versions::ClientVersion::RoF2 &&
+		strnlen(in->serial_number, sizeof(in->serial_number)) < sizeof(in->serial_number)) {
+		const auto quote = Strings::ToUnsignedBigInt(in->serial_number);
+		if (quote >= OfflineBazaar::FirstQuote && quote <= UINT32_MAX) {
+			BuyOfflineBazaarParcel(static_cast<uint32>(quote), app);
+			return;
+		}
+	}
 
 	if (RuleB(Bazaar, UseAlternateBazaarSearch) && in->trader_id >= TraderRepository::TRADER_CONVERT_ID) {
 		auto trader = TraderRepository::GetTraderByInstanceAndSerialnumber(

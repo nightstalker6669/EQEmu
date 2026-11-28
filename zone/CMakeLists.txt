@@ -145,6 +145,7 @@ set(zone_sources
 	recharge_recipe8.cpp
 	tradeskills.cpp
 	trading.cpp
+	bazaar_offline_parcel.cpp
 	trap.cpp
 	tribute.cpp
 	tune.cpp

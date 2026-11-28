@@ -250,6 +250,7 @@ public:
 	static constexpr uint8_t SalePending = 1;
 	static constexpr uint8_t CounterOnly = 2;
 	static constexpr uint8_t CounterSalePending = 3;
+	static constexpr uint8_t OfflineParcel = 4;
 
 	static bool ClaimSale(Database &db, const Trader &listing, bool counter_only = false)
 	{
@@ -326,7 +327,10 @@ public:
 		std::vector<BazaarTraderSearch_Struct> all_entries{};
 
 		auto query = fmt::format(
-			"SELECT trader.*, c.`name` FROM `trader` INNER JOIN character_data AS c ON trader.char_id = c.id "
+			"SELECT trader.id,trader.char_id,trader.item_id,trader.aug_slot_1,trader.aug_slot_2,trader.aug_slot_3,"
+			"trader.aug_slot_4,trader.aug_slot_5,trader.aug_slot_6,trader.item_sn,trader.item_charges,trader.item_cost,"
+			"trader.slot_id,trader.char_entity_id,trader.char_zone_id,trader.char_zone_instance_id,"
+			"trader.active_transaction,c.name FROM `trader` INNER JOIN character_data AS c ON trader.char_id = c.id "
 			"WHERE {} ORDER BY trader.char_id ASC",
 			search_criteria_trader
 		);
