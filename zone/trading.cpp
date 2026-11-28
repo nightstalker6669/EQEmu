@@ -25,6 +25,8 @@
 
 #include "client.h"
 #include "bazaar_offline_parcel.h"
+#include "bazaar_offline_stall.h"
+#include "../common/bazaar_offline_stall.h"
 
 #include "common/bazaar.h"
 #include "common/eq_packet_structs.h"
@@ -1026,7 +1028,7 @@ void Client::SendSingleTraderItem(uint32 char_id, int serial_number)
 	}
 }
 
-void Client::BulkSendTraderInventory(uint32 char_id)
+void Client::BulkSendTraderInventory(uint32 char_id, bool durable_counter)
 {
 	const EQ::ItemData *item;
 
@@ -1067,6 +1069,15 @@ void Client::BulkSendTraderInventory(uint32 char_id)
 					inst->SetMerchantSlot(trader_items.at(i).item_sn);
 				}
 
+				if (durable_counter) {
+					const auto &listing = trader_items.at(i);
+					const auto token = OfflineBazaar::Quote(database, listing.id, listing.item_cost, listing.item_charges);
+					if (!token) {
+						continue;
+					}
+					inst->SetMerchantSlot(listing.item_sn);
+					inst->SetBazaarQuote(token);
+				}
 				inst->SetPrice(trader_items.at(i).item_cost);
 				SendItemPacket(EQ::invslot::slotCursor, inst.get(), ItemPacketMerchant);
 //				safe_delete(inst);
@@ -2997,6 +3008,147 @@ std::string Client::DetermineMoneyString(uint64 cp)
 	}
 
 	return fmt::format("{}", money);
+}
+
+bool Client::RegisterPersistentBazaarStall()
+{
+	if (OfflineBazaarStall::CheckStorage(database) != OfflineBazaarStall::Storage::Ready) {
+		return false;
+	}
+	const auto listings = TraderRepository::GetWhere(database, fmt::format("char_id={}", CharacterID()));
+	std::map<uint32_t, OfflineBazaarStall::ItemLocation> slots;
+	for (const auto &listing : listings) {
+		const auto slot = FindTraderItem(listing.item_sn, 1);
+		const auto parent = EQ::InventoryProfile::CalcSlotId(slot);
+		const auto *item = GetInv().GetItem(slot);
+		const auto *bag = GetInv().GetItem(parent);
+		if (!slot || !item || !bag || bag->GetSerialNumber() <= 0 ||
+			!CanParcelOfflineItem(item->GetItem()) || !slots.emplace(listing.item_sn, OfflineBazaarStall::ItemLocation{
+				slot, static_cast<uint32>(parent), static_cast<uint32>(bag->GetSerialNumber()), item->GetItem()->Color
+			}).second) {
+			return false;
+		}
+	}
+	if (!SaveCurrency()) {
+		return false;
+	}
+	return OfflineBazaarStall::Register(database, {
+		CharacterID(), AccountID(), GetInstanceID(), {}, {},
+		{GetX(), GetY(), GetZ(), GetHeading()}, zone->GetInstanceVersion()
+	}, GetID(), slots).has_value();
+}
+
+void Client::BuyOfflineBazaarCounter(uint32 token, const EQApplicationPacket *app)
+{
+	auto *request = reinterpret_cast<TraderBuy_Struct *>(app->pBuffer);
+	const auto entity = GetTraderID();
+	const auto seller = BazaarStalls::CounterSeller(*this, entity);
+	if (!seller || seller == CharacterID() || (request->trader_id != entity && request->trader_id != seller) ||
+		IsSpiritShrouded() || m_inventory_session_rejected || dead || bZoning ||
+		trade->state != TradeNone || OriginalTradeTransforms::Pending(*this)) {
+		request->sub_action = Failed;
+		TradeRequestFailed(app);
+		return;
+	}
+
+	auto rows = database.QueryDatabase(fmt::format(
+		"SELECT serial,item_id,buyer_id FROM bazaar_offline_parcel_quotes "
+		"WHERE token={} AND seller_id={} AND instance_id={}",
+		token, seller, GetInstanceID()
+	), false);
+	if (!rows.Success() || rows.RowCount() != 1) {
+		request->sub_action = DataOutDated;
+		TradeRequestFailed(app);
+		return;
+	}
+	auto quote = rows.begin();
+	const auto item_id = Strings::ToUnsignedInt(quote[1]);
+	const auto serial = Strings::ToUnsignedInt(quote[0]);
+	const auto *item = database.GetItem(item_id);
+	std::unique_ptr<EQ::ItemInstance> prepared;
+	int16 slot = -1;
+	if (!Strings::ToUnsignedInt(quote[2]) && CanParcelOfflineItem(item) && request->quantity > 0 &&
+		request->quantity <= INT16_MAX) {
+		const auto listing = TraderRepository::GetItemBySerialNumber(database, serial, seller);
+		if (listing.id && listing.item_id == item_id && listing.item_charges <= INT16_MAX) {
+			prepared.reset(database.CreateItem(item_id, item->Stackable ? request->quantity : listing.item_charges,
+				listing.aug_slot_1, listing.aug_slot_2, listing.aug_slot_3, listing.aug_slot_4, listing.aug_slot_5,
+				listing.aug_slot_6));
+		}
+		if (prepared && !CheckLoreConflict(item)) {
+			bool lore = false;
+			for (uint8 i = EQ::invaug::SOCKET_BEGIN; i <= EQ::invaug::SOCKET_END; ++i) {
+				if (auto *augment = prepared->GetAugment(i)) {
+					lore = lore || CheckLoreConflict(augment->GetItem());
+				}
+			}
+			if (!lore) {
+				slot = GetInv().FindFreeSlot(false, false, item->Size, item->ItemType == EQ::item::ItemTypeArrow);
+			}
+		}
+		if (slot < 0 || !prepared || prepared->GetSerialNumber() <= 0) {
+			request->sub_action = Failed;
+			TradeRequestFailed(app);
+			return;
+		}
+	}
+	const auto result = OfflineBazaar::Settle(database, {
+		.token = token,
+		.buyer = CharacterID(),
+		.buyer_zone = GetZoneID(),
+		.buyer_instance = static_cast<uint32>(GetInstanceID()),
+		.wire_trader = seller,
+		.item = item_id,
+		.price = request->price,
+		.quantity = request->quantity,
+		.stackable = item && item->Stackable,
+		.parcelable = CanParcelOfflineItem(item),
+		.catalog_color = item ? item->Color : 0,
+		.carried = {m_pp.copper, m_pp.silver, m_pp.gold, m_pp.platinum},
+		.fee_rate = 0,
+		.mailbox_limit = 0,
+		.counter = OfflineBazaar::CounterDestination{
+			slot > 0 ? static_cast<uint32>(slot) : 0,
+			prepared ? static_cast<uint32>(prepared->GetSerialNumber()) : 0
+		}
+	});
+
+	using OfflineBazaar::Status;
+	if (result.status == Status::Committed) {
+		if (!prepared || GetInv().GetItem(slot) || GetInv().PutItem(slot, *prepared) != slot) {
+			RejectInventorySessionAdmission();
+			Kick("Committed Bazaar counter item requires native inventory reload");
+			return;
+		}
+		m_pp.copper = result.carried.copper;
+		m_pp.silver = result.carried.silver;
+		m_pp.gold = result.carried.gold;
+		m_pp.platinum = result.carried.platinum;
+		RecalcWeight();
+		SendItemPacket(slot, GetInv().GetItem(slot), ItemPacketTrade);
+		UpdateAchievementForOwnItem(result.item);
+	}
+	if (result.status == Status::Committed || result.status == Status::Replay) {
+		ReturnTraderReq(app, static_cast<int16>(result.quantity), result.item);
+		SendMoneyUpdate();
+		if (result.status == Status::Committed) {
+			EQApplicationPacket remove(OP_TraderDelItem, sizeof(TraderDelItem_Struct));
+			auto *entry = reinterpret_cast<TraderDelItem_Struct *>(remove.pBuffer);
+			entry->trader_id = GetID();
+			entry->item_id = token;
+			QueuePacket(&remove);
+			BulkSendTraderInventory(seller, true);
+		}
+		return;
+	}
+	if (result.status == Status::CommitUnknown) {
+		Message(Chat::Yellow, "The Bazaar purchase result is uncertain. Reconnect and check your inventory.");
+		RejectInventorySessionAdmission();
+		Kick("Offline Bazaar counter commit could not be confirmed");
+		return;
+	}
+	request->sub_action = result.status == Status::Funds ? InsufficientFunds : DataOutDated;
+	TradeRequestFailed(app);
 }
 
 void Client::BuyOfflineBazaarParcel(uint32 token, const EQApplicationPacket *app)

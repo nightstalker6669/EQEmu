@@ -146,6 +146,7 @@ set(zone_sources
 	tradeskills.cpp
 	trading.cpp
 	bazaar_offline_parcel.cpp
+	bazaar_offline_stall.cpp
 	trap.cpp
 	tribute.cpp
 	tune.cpp

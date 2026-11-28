@@ -5,13 +5,13 @@
       "Import full.sql into a fresh empty database with the matching runtime."
     ],
     "asset": {
-      "bytes": 38163408,
-      "name": "PEQ-RoF2-full-2026-11-28-offline-bazaar-parcels.zip",
-      "sha256": "af88780b3bb20a8fe2b0033d16f3ea49ea854eddb2612828e3b67ace5c3b2102",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-28-offline-bazaar-parcels/PEQ-RoF2-full-2026-11-28-offline-bazaar-parcels.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-28-offline-bazaar-parcels/PEQ-RoF2-full-2026-11-28-offline-bazaar-parcels.zip"
+      "bytes": 38168376,
+      "name": "PEQ-RoF2-full-2026-11-28-offline-bazaar-stall-persistence.zip",
+      "sha256": "cbddc1da2a1152a7cc9e5ca68c8362c10545a77de4ae0c9131c70de861270804",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-28-offline-bazaar-stall-persistence/PEQ-RoF2-full-2026-11-28-offline-bazaar-stall-persistence.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-28-offline-bazaar-stall-persistence/PEQ-RoF2-full-2026-11-28-offline-bazaar-stall-persistence.zip"
     },
-    "base_database_release_tag": "peq-rof2-2026-11-27-hot-hunter-slayer",
+    "base_database_release_tag": "peq-rof2-2026-11-28-offline-bazaar-parcels",
     "cohort_source_binding": {
       "collections_native_source_files": [
         {
@@ -22,11 +22,11 @@
           "sha256": "270ff6a4e05057a12fa27184eb7ee3cead8478584811677f078203ecf9f65e7c"
         },
         {
-          "bytes": 238146,
-          "git_blob": "62bb227351244ca8d9033d3c06526fc5d45d991d",
+          "bytes": 238409,
+          "git_blob": "513811b713949edd4d576881bd6eecd7632e132d",
           "mode": "100644",
           "path": "common/patches/rof2.cpp",
-          "sha256": "16131281d800e61ad5b93a03b247a9c7905cd2acc79a94c224f5a02f627560cc"
+          "sha256": "5f83a72eefaa07c08fa23e2d704dca752370304a7ace6c5fc48aab51c8ab54e2"
         },
         {
           "bytes": 49545,
@@ -43,11 +43,11 @@
           "sha256": "c56ec2319ed8e1a67cff8d3fa37a769d58a9e7032f1f0df7e00b0ce2271f9fd8"
         },
         {
-          "bytes": 123266,
-          "git_blob": "ac6c32282827210d65261494a0242937668a8657",
+          "bytes": 123530,
+          "git_blob": "07f5dc0757acc2ca32149fc8cadd9fc0f71bc1bf",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "35b7b673f36dc8344675427e821f08c6e385145392ddb44c4876c8af3d0b144b"
+          "sha256": "29453fc940b25d14746b16aa0214d00313c96928a12e6b15a97251d85704f707"
         },
         {
           "bytes": 115394,
@@ -57,11 +57,11 @@
           "sha256": "fafca300e343ae26eb6bf8ef536f20156b294a950143fdffc6a6d506b4100dfb"
         },
         {
-          "bytes": 571957,
-          "git_blob": "76b8ecc0c78809aea911be94420a492c3cd5aa64",
+          "bytes": 572612,
+          "git_blob": "6857bd44efe12e2f8f66f958e711fa009841260c",
           "mode": "100644",
           "path": "zone/client_packet.cpp",
-          "sha256": "00400d6588295b378fde2f86ac16bcd1a3a6c92dbc75b43fd7749236c182c25d"
+          "sha256": "720aa0e684498c8936a1be484621784b36a6b71b37e81519317d29ed1a149f5f"
         }
       ],
       "guild_banners_native_source_files": [
@@ -150,11 +150,11 @@
           "sha256": "02cdf549d84862fe6e6169f25c20b05d60e9cd668f2c06e27f2025f7c13ec373"
         },
         {
-          "bytes": 19889,
-          "git_blob": "01ee6e39f915a083fdf9abfb14cb77558242d076",
+          "bytes": 19915,
+          "git_blob": "8515b25fa27455b584a11f03035e91019fcb8310",
           "mode": "100644",
           "path": "zone/CMakeLists.txt",
-          "sha256": "6e32c4215dc7e21de56268014423094c41aa8bfebafd7f6f55516625b9f246db"
+          "sha256": "5f34dad6e596ef97cabba1c180321e61769ee6a50f0f4178737bbaeea5bb5264"
         },
         {
           "bytes": 11502,
@@ -164,11 +164,11 @@
           "sha256": "6c95224581e134ed153c4044b22864918133dfb7606aff9d2e671338dbb01fe5"
         },
         {
-          "bytes": 571957,
-          "git_blob": "76b8ecc0c78809aea911be94420a492c3cd5aa64",
+          "bytes": 572612,
+          "git_blob": "6857bd44efe12e2f8f66f958e711fa009841260c",
           "mode": "100644",
           "path": "zone/client_packet.cpp",
-          "sha256": "00400d6588295b378fde2f86ac16bcd1a3a6c92dbc75b43fd7749236c182c25d"
+          "sha256": "720aa0e684498c8936a1be484621784b36a6b71b37e81519317d29ed1a149f5f"
         },
         {
           "bytes": 25591,
@@ -248,11 +248,11 @@
           "sha256": "148c04a66be6fa490b41aa92eb2a98124b0ba646496c03fc55d85c4d6a5d5573"
         },
         {
-          "bytes": 92851,
-          "git_blob": "349b9188cdc04c4ac0a8b1c2fceedc250862cf87",
+          "bytes": 92945,
+          "git_blob": "aa58c56147886002aa33065e98f6de8fa06c2c83",
           "mode": "100644",
           "path": "zone/zone.cpp",
-          "sha256": "ec9e3c11bd0091f724f71e0fd8a38a1cbe57a92472b72184b71696dbd9594cf1"
+          "sha256": "b85ade47947e23f4667a534df7ef198dcae8e33fc8c91b689b7fa693d70aa353"
         },
         {
           "bytes": 136069,
@@ -334,18 +334,18 @@
           "sha256": "0f341be8199f4bb1a1ea0d2eee802f6d9c90f2b85bd5393b7de72932504a7c9e"
         },
         {
-          "bytes": 511264,
-          "git_blob": "019aa18eab1caa4138ee496b19a956176711bf72",
+          "bytes": 511296,
+          "git_blob": "bc7c51a8c5a143bd735134fed8bbbff2e7959a8f",
           "mode": "100644",
           "path": "zone/client.cpp",
-          "sha256": "f97506a1448cee3d550dcf1a6d727d0012f2ece8d263de879b27abde1e9b7ea0"
+          "sha256": "9412e090c0b677b8e27a7500e0bcd7daf9e28b974f56e42e655600d977406807"
         },
         {
-          "bytes": 123266,
-          "git_blob": "ac6c32282827210d65261494a0242937668a8657",
+          "bytes": 123530,
+          "git_blob": "07f5dc0757acc2ca32149fc8cadd9fc0f71bc1bf",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "35b7b673f36dc8344675427e821f08c6e385145392ddb44c4876c8af3d0b144b"
+          "sha256": "29453fc940b25d14746b16aa0214d00313c96928a12e6b15a97251d85704f707"
         },
         {
           "bytes": 115394,
@@ -362,11 +362,11 @@
           "sha256": "1ab0bef7fa3a6ac01926a67d2844974ad2d3517c93842795f07fb21b0339f190"
         },
         {
-          "bytes": 153003,
-          "git_blob": "c8eb4d9d084402af3bed674556d5ffb121f4504a",
+          "bytes": 153268,
+          "git_blob": "0ba52b63ba7e0466039f54ca86562da9ba917e52",
           "mode": "100644",
           "path": "zone/entity.cpp",
-          "sha256": "137634120fba8be9679a1ee1b8c9872d9a80e7fd9b633368b6f9d25888fcbd52"
+          "sha256": "47e085f0d1c4120094e2699e9d883be8190cd800518f5553099fd60c3dbf2ed1"
         },
         {
           "bytes": 26665,
@@ -462,11 +462,11 @@
       ],
       "may_collections_native_source_files": [
         {
-          "bytes": 123266,
-          "git_blob": "ac6c32282827210d65261494a0242937668a8657",
+          "bytes": 123530,
+          "git_blob": "07f5dc0757acc2ca32149fc8cadd9fc0f71bc1bf",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "35b7b673f36dc8344675427e821f08c6e385145392ddb44c4876c8af3d0b144b"
+          "sha256": "29453fc940b25d14746b16aa0214d00313c96928a12e6b15a97251d85704f707"
         },
         {
           "bytes": 115394,
@@ -476,11 +476,11 @@
           "sha256": "fafca300e343ae26eb6bf8ef536f20156b294a950143fdffc6a6d506b4100dfb"
         },
         {
-          "bytes": 153003,
-          "git_blob": "c8eb4d9d084402af3bed674556d5ffb121f4504a",
+          "bytes": 153268,
+          "git_blob": "0ba52b63ba7e0466039f54ca86562da9ba917e52",
           "mode": "100644",
           "path": "zone/entity.cpp",
-          "sha256": "137634120fba8be9679a1ee1b8c9872d9a80e7fd9b633368b6f9d25888fcbd52"
+          "sha256": "47e085f0d1c4120094e2699e9d883be8190cd800518f5553099fd60c3dbf2ed1"
         },
         {
           "bytes": 171763,
@@ -504,11 +504,11 @@
           "sha256": "072ce9ac4ebaa67ec9827d0ef9880bfde786779acaca38d17d77b2e37e81d77b"
         },
         {
-          "bytes": 92851,
-          "git_blob": "349b9188cdc04c4ac0a8b1c2fceedc250862cf87",
+          "bytes": 92945,
+          "git_blob": "aa58c56147886002aa33065e98f6de8fa06c2c83",
           "mode": "100644",
           "path": "zone/zone.cpp",
-          "sha256": "ec9e3c11bd0091f724f71e0fd8a38a1cbe57a92472b72184b71696dbd9594cf1"
+          "sha256": "b85ade47947e23f4667a534df7ef198dcae8e33fc8c91b689b7fa693d70aa353"
         },
         {
           "bytes": 25659,
@@ -520,11 +520,11 @@
       ],
       "offline_bazaar_parcel_native_source_files": [
         {
-          "bytes": 16151,
-          "git_blob": "cf3c12a0c57b8c401405bba7a660cd0e81610960",
+          "bytes": 16218,
+          "git_blob": "717369cd98c5a7e6cf302dd5129fd73e2831a952",
           "mode": "100644",
           "path": "common/bazaar.cpp",
-          "sha256": "fa61465ab026d6c0ede23705942ef49feca88d89cb8b02c077aa21eb0171e55c"
+          "sha256": "90694bc58ceb85ea635f7fcc7daa673ef8b0fbc8a45b2f3cdbdd63c3b475d47f"
         },
         {
           "bytes": 178725,
@@ -534,11 +534,11 @@
           "sha256": "b6afef9fe5fd606077e1eb0f201cc74b5dbfb23daee5bda2047467a22a8596b9"
         },
         {
-          "bytes": 11369,
-          "git_blob": "7919483633f9d62e2326b78f2c9271dd657b8303",
+          "bytes": 11516,
+          "git_blob": "f2547d4fdf3dd44f89121784aee35e07a5bd79c3",
           "mode": "100644",
           "path": "common/repositories/trader_repository.h",
-          "sha256": "54958a8fd5fe254a01e6a06b43fc391b8e494dc647fad9ee31dad0c5215b2f11"
+          "sha256": "c2081a8a3c1f1ce883b718035956a1127b16a031f5da94679c195e5fb37b481a"
         },
         {
           "bytes": 837,
@@ -548,66 +548,250 @@
           "sha256": "b330b22ed6971346f120d205fd93b4a3f67e5eb5a0ffc6cd5c85aa9a3f2a754a"
         },
         {
-          "bytes": 19889,
-          "git_blob": "01ee6e39f915a083fdf9abfb14cb77558242d076",
+          "bytes": 19915,
+          "git_blob": "8515b25fa27455b584a11f03035e91019fcb8310",
           "mode": "100644",
           "path": "zone/CMakeLists.txt",
-          "sha256": "6e32c4215dc7e21de56268014423094c41aa8bfebafd7f6f55516625b9f246db"
+          "sha256": "5f34dad6e596ef97cabba1c180321e61769ee6a50f0f4178737bbaeea5bb5264"
         },
         {
-          "bytes": 14024,
-          "git_blob": "3a01c3034d14d748e0d03e37b13888d0cf3accab",
+          "bytes": 16748,
+          "git_blob": "40dae226e84d33f327483b9c1448c68799591d39",
           "mode": "100644",
           "path": "zone/bazaar_offline_parcel.cpp",
-          "sha256": "06802b2dbd2f80a965dee6f7b877ffd23d64b48bbf9b130968c8fee52c5e17d9"
+          "sha256": "7fc8a918028644ed1189274a84136c09e436ce51caf22248dee4607633986ec7"
         },
         {
-          "bytes": 1288,
-          "git_blob": "bf4063a1bfe9073881763c19beb8a455293f2458",
+          "bytes": 1398,
+          "git_blob": "165291099ee2751cb8ae581b0fd86859a64262ae",
           "mode": "100644",
           "path": "zone/bazaar_offline_parcel.h",
-          "sha256": "2ba0ac9131b264cd35513d24114822a0eeeac1045fff6bb83fe49ce2a967b448"
+          "sha256": "01135799f1b86a7d8b05dce27b4e6bbf691332b0fe9ab8d3e44313c7116fa127"
         },
         {
-          "bytes": 511264,
-          "git_blob": "019aa18eab1caa4138ee496b19a956176711bf72",
+          "bytes": 511296,
+          "git_blob": "bc7c51a8c5a143bd735134fed8bbbff2e7959a8f",
           "mode": "100644",
           "path": "zone/client.cpp",
-          "sha256": "f97506a1448cee3d550dcf1a6d727d0012f2ece8d263de879b27abde1e9b7ea0"
+          "sha256": "9412e090c0b677b8e27a7500e0bcd7daf9e28b974f56e42e655600d977406807"
         },
         {
-          "bytes": 123266,
-          "git_blob": "ac6c32282827210d65261494a0242937668a8657",
+          "bytes": 123530,
+          "git_blob": "07f5dc0757acc2ca32149fc8cadd9fc0f71bc1bf",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "35b7b673f36dc8344675427e821f08c6e385145392ddb44c4876c8af3d0b144b"
+          "sha256": "29453fc940b25d14746b16aa0214d00313c96928a12e6b15a97251d85704f707"
         },
         {
-          "bytes": 571957,
-          "git_blob": "76b8ecc0c78809aea911be94420a492c3cd5aa64",
+          "bytes": 572612,
+          "git_blob": "6857bd44efe12e2f8f66f958e711fa009841260c",
           "mode": "100644",
           "path": "zone/client_packet.cpp",
-          "sha256": "00400d6588295b378fde2f86ac16bcd1a3a6c92dbc75b43fd7749236c182c25d"
+          "sha256": "720aa0e684498c8936a1be484621784b36a6b71b37e81519317d29ed1a149f5f"
         },
         {
-          "bytes": 74164,
-          "git_blob": "bb83b013a4d1c599d11ed115251fec756ed85361",
+          "bytes": 74436,
+          "git_blob": "eb20bd5ef78d8d142b605a1eb513376e9d00660a",
           "mode": "100644",
           "path": "zone/client_process.cpp",
-          "sha256": "287a93fb2f72c9510380cdb756b8ec97694cb0a4fc969c34a4517e0f96f0d1e1"
+          "sha256": "dcac03682f0e7058493780b0e9a91d72570c8c396352102e5bcfe6603cd6da4e"
         },
         {
-          "bytes": 129642,
-          "git_blob": "2029af8cc08ee0fffe1dd81c3af116489087ea87",
+          "bytes": 135636,
+          "git_blob": "bd62aed8f8af69e98d2d1ceeb7d6d077e8c0e092",
           "mode": "100644",
           "path": "zone/trading.cpp",
-          "sha256": "ca511d3786ecf94256fc8e1add8ef1e769d88b0f540a05be177bb5d3ed3b1562"
+          "sha256": "dd774dd5398fa1920968bf7734b0b3aa777876ce3076a0a8a3ad79255b70a8a1"
         }
       ],
-      "preserved_prior_binding": "d3e19d02d60038fab6373ea799aa84f94a2ef04deec1e583eaad30d13373016d",
+      "offline_bazaar_stall_native_source_files": [
+        {
+          "bytes": 32799,
+          "git_blob": "e58d34dbb9aa7ca5df5f8adf82503632e8bd0f07",
+          "mode": "100644",
+          "path": "common/CMakeLists.txt",
+          "sha256": "d3e33b164dea62cc063204e8da917dc684745a10267d55fddbca8b9e1aabdc47"
+        },
+        {
+          "bytes": 16218,
+          "git_blob": "717369cd98c5a7e6cf302dd5129fd73e2831a952",
+          "mode": "100644",
+          "path": "common/bazaar.cpp",
+          "sha256": "90694bc58ceb85ea635f7fcc7daa673ef8b0fbc8a45b2f3cdbdd63c3b475d47f"
+        },
+        {
+          "bytes": 12381,
+          "git_blob": "3fe81f4660f70969c00154e9de475be9e2c11f54",
+          "mode": "100644",
+          "path": "common/bazaar_offline_stall.cpp",
+          "sha256": "552fe2b0995a3a70aa446e57af5f3c5801906d6c3fbf6e6e668d4dc4ac3d1d98"
+        },
+        {
+          "bytes": 1157,
+          "git_blob": "c476ae7983d45ed4ed503bd0c1bf8e83ece04bb7",
+          "mode": "100644",
+          "path": "common/bazaar_offline_stall.h",
+          "sha256": "6a21f9664c091a22ea390fc0d4b0b7615eea6353cefeacd5b486ba8dc39b9631"
+        },
+        {
+          "bytes": 23118,
+          "git_blob": "fcea7673705fd79b6d67286d1f73d694a488a441",
+          "mode": "100644",
+          "path": "common/item_instance.h",
+          "sha256": "16d8f67b5034d0df89737527503d694c2ca2a07bff86c50babc4db7a274795ba"
+        },
+        {
+          "bytes": 238409,
+          "git_blob": "513811b713949edd4d576881bd6eecd7632e132d",
+          "mode": "100644",
+          "path": "common/patches/rof2.cpp",
+          "sha256": "5f83a72eefaa07c08fa23e2d704dca752370304a7ace6c5fc48aab51c8ab54e2"
+        },
+        {
+          "bytes": 11516,
+          "git_blob": "f2547d4fdf3dd44f89121784aee35e07a5bd79c3",
+          "mode": "100644",
+          "path": "common/repositories/trader_repository.h",
+          "sha256": "c2081a8a3c1f1ce883b718035956a1127b16a031f5da94679c195e5fb37b481a"
+        },
+        {
+          "bytes": 1027,
+          "git_blob": "cdcd9230ae73c11fc017e8ef61dcf689b5228dd1",
+          "mode": "100644",
+          "path": "utils/sql/bazaar/002_offline_trader_restart.sql",
+          "sha256": "84ba2b96fe0878056039bf3a1e08b79ad9bd5a887c77582c2024064e47414843"
+        },
+        {
+          "bytes": 86629,
+          "git_blob": "acc4801c2ed453bf39b566abe4a8568877fc58ee",
+          "mode": "100644",
+          "path": "world/client.cpp",
+          "sha256": "dd5558cf4b130d5d052906fb2c088dd2d7b58ebeba03f6976018037e18849e5f"
+        },
+        {
+          "bytes": 21037,
+          "git_blob": "c7232235e0da798bb6ab9c266e830515aa545c65",
+          "mode": "100644",
+          "path": "world/world_boot.cpp",
+          "sha256": "c3d93dd56613b429305d62173b1bf2fb39b5282d60d8ec9ac9d0fe2b4c5f0cf5"
+        },
+        {
+          "bytes": 26146,
+          "git_blob": "4ec0fd0538d31401d5aee234a3afff6cc38da0f2",
+          "mode": "100644",
+          "path": "world/zonelist.cpp",
+          "sha256": "0c2e377280298f51071895c2dc92225edf8ceefbefb29ab4384fb476fe0567fe"
+        },
+        {
+          "bytes": 4207,
+          "git_blob": "9b7f9fd696432f56b6e6c90c553075a9094ab9fc",
+          "mode": "100644",
+          "path": "world/zonelist.h",
+          "sha256": "7cb10c0637be7304cb45b4de790a8a8972ded3b816762a2cf67ee5a2a4dcb20c"
+        },
+        {
+          "bytes": 60552,
+          "git_blob": "2208542aa93c56e1d5f2355be10e48b64b0e0827",
+          "mode": "100644",
+          "path": "world/zoneserver.cpp",
+          "sha256": "564d46477361c426f5f6be2ef164831857e0755c16918c48e5a700ec0696acbf"
+        },
+        {
+          "bytes": 19915,
+          "git_blob": "8515b25fa27455b584a11f03035e91019fcb8310",
+          "mode": "100644",
+          "path": "zone/CMakeLists.txt",
+          "sha256": "5f34dad6e596ef97cabba1c180321e61769ee6a50f0f4178737bbaeea5bb5264"
+        },
+        {
+          "bytes": 16748,
+          "git_blob": "40dae226e84d33f327483b9c1448c68799591d39",
+          "mode": "100644",
+          "path": "zone/bazaar_offline_parcel.cpp",
+          "sha256": "7fc8a918028644ed1189274a84136c09e436ce51caf22248dee4607633986ec7"
+        },
+        {
+          "bytes": 1398,
+          "git_blob": "165291099ee2751cb8ae581b0fd86859a64262ae",
+          "mode": "100644",
+          "path": "zone/bazaar_offline_parcel.h",
+          "sha256": "01135799f1b86a7d8b05dce27b4e6bbf691332b0fe9ab8d3e44313c7116fa127"
+        },
+        {
+          "bytes": 5590,
+          "git_blob": "9af713d863b87ea599c75b9e61c77e37e67aabb8",
+          "mode": "100644",
+          "path": "zone/bazaar_offline_stall.cpp",
+          "sha256": "4e21aa2b40eacb4b43705a65897bdf552e3cc0f389add2eeee9c799beebe4fed"
+        },
+        {
+          "bytes": 299,
+          "git_blob": "2e76ba797e2e07b43a25f53861211316ddc0295f",
+          "mode": "100644",
+          "path": "zone/bazaar_offline_stall.h",
+          "sha256": "b9ddb72ea81c85f5e401d1b8476566cda12f196bffd76c26841e5fa082330b47"
+        },
+        {
+          "bytes": 511296,
+          "git_blob": "bc7c51a8c5a143bd735134fed8bbbff2e7959a8f",
+          "mode": "100644",
+          "path": "zone/client.cpp",
+          "sha256": "9412e090c0b677b8e27a7500e0bcd7daf9e28b974f56e42e655600d977406807"
+        },
+        {
+          "bytes": 123530,
+          "git_blob": "07f5dc0757acc2ca32149fc8cadd9fc0f71bc1bf",
+          "mode": "100644",
+          "path": "zone/client.h",
+          "sha256": "29453fc940b25d14746b16aa0214d00313c96928a12e6b15a97251d85704f707"
+        },
+        {
+          "bytes": 572612,
+          "git_blob": "6857bd44efe12e2f8f66f958e711fa009841260c",
+          "mode": "100644",
+          "path": "zone/client_packet.cpp",
+          "sha256": "720aa0e684498c8936a1be484621784b36a6b71b37e81519317d29ed1a149f5f"
+        },
+        {
+          "bytes": 74436,
+          "git_blob": "eb20bd5ef78d8d142b605a1eb513376e9d00660a",
+          "mode": "100644",
+          "path": "zone/client_process.cpp",
+          "sha256": "dcac03682f0e7058493780b0e9a91d72570c8c396352102e5bcfe6603cd6da4e"
+        },
+        {
+          "bytes": 153268,
+          "git_blob": "0ba52b63ba7e0466039f54ca86562da9ba917e52",
+          "mode": "100644",
+          "path": "zone/entity.cpp",
+          "sha256": "47e085f0d1c4120094e2699e9d883be8190cd800518f5553099fd60c3dbf2ed1"
+        },
+        {
+          "bytes": 135636,
+          "git_blob": "bd62aed8f8af69e98d2d1ceeb7d6d077e8c0e092",
+          "mode": "100644",
+          "path": "zone/trading.cpp",
+          "sha256": "dd774dd5398fa1920968bf7734b0b3aa777876ce3076a0a8a3ad79255b70a8a1"
+        },
+        {
+          "bytes": 92945,
+          "git_blob": "aa58c56147886002aa33065e98f6de8fa06c2c83",
+          "mode": "100644",
+          "path": "zone/zone.cpp",
+          "sha256": "b85ade47947e23f4667a534df7ef198dcae8e33fc8c91b689b7fa693d70aa353"
+        }
+      ],
+      "preserved_prior_binding": "9534d67bd9f0764c974adc1a1070f23a4fb25e836a87375a269c135109451012",
       "quest_projection_sha256": "233957594362b61b127b549383574b404d1c85f0e206f7a3641c7745eb9e43b8",
       "quest_root": "quests",
       "release_native_source_files": [
+        {
+          "bytes": 32799,
+          "git_blob": "e58d34dbb9aa7ca5df5f8adf82503632e8bd0f07",
+          "mode": "100644",
+          "path": "common/CMakeLists.txt",
+          "sha256": "d3e33b164dea62cc063204e8da917dc684745a10267d55fddbca8b9e1aabdc47"
+        },
         {
           "bytes": 8641,
           "git_blob": "5f6f1c8a5f2fcc628261f6b8786511589fef313c",
@@ -616,11 +800,25 @@
           "sha256": "270ff6a4e05057a12fa27184eb7ee3cead8478584811677f078203ecf9f65e7c"
         },
         {
-          "bytes": 16151,
-          "git_blob": "cf3c12a0c57b8c401405bba7a660cd0e81610960",
+          "bytes": 16218,
+          "git_blob": "717369cd98c5a7e6cf302dd5129fd73e2831a952",
           "mode": "100644",
           "path": "common/bazaar.cpp",
-          "sha256": "fa61465ab026d6c0ede23705942ef49feca88d89cb8b02c077aa21eb0171e55c"
+          "sha256": "90694bc58ceb85ea635f7fcc7daa673ef8b0fbc8a45b2f3cdbdd63c3b475d47f"
+        },
+        {
+          "bytes": 12381,
+          "git_blob": "3fe81f4660f70969c00154e9de475be9e2c11f54",
+          "mode": "100644",
+          "path": "common/bazaar_offline_stall.cpp",
+          "sha256": "552fe2b0995a3a70aa446e57af5f3c5801906d6c3fbf6e6e668d4dc4ac3d1d98"
+        },
+        {
+          "bytes": 1157,
+          "git_blob": "c476ae7983d45ed4ed503bd0c1bf8e83ece04bb7",
+          "mode": "100644",
+          "path": "common/bazaar_offline_stall.h",
+          "sha256": "6a21f9664c091a22ea390fc0d4b0b7615eea6353cefeacd5b486ba8dc39b9631"
         },
         {
           "bytes": 991,
@@ -714,18 +912,25 @@
           "sha256": "f3788e030f17b4d928b2873ab6ecc1382aba425810079615f4c2991884ccc8ca"
         },
         {
-          "bytes": 238146,
-          "git_blob": "62bb227351244ca8d9033d3c06526fc5d45d991d",
+          "bytes": 23118,
+          "git_blob": "fcea7673705fd79b6d67286d1f73d694a488a441",
           "mode": "100644",
-          "path": "common/patches/rof2.cpp",
-          "sha256": "16131281d800e61ad5b93a03b247a9c7905cd2acc79a94c224f5a02f627560cc"
+          "path": "common/item_instance.h",
+          "sha256": "16d8f67b5034d0df89737527503d694c2ca2a07bff86c50babc4db7a274795ba"
         },
         {
-          "bytes": 11369,
-          "git_blob": "7919483633f9d62e2326b78f2c9271dd657b8303",
+          "bytes": 238409,
+          "git_blob": "513811b713949edd4d576881bd6eecd7632e132d",
+          "mode": "100644",
+          "path": "common/patches/rof2.cpp",
+          "sha256": "5f83a72eefaa07c08fa23e2d704dca752370304a7ace6c5fc48aab51c8ab54e2"
+        },
+        {
+          "bytes": 11516,
+          "git_blob": "f2547d4fdf3dd44f89121784aee35e07a5bd79c3",
           "mode": "100644",
           "path": "common/repositories/trader_repository.h",
-          "sha256": "54958a8fd5fe254a01e6a06b43fc391b8e494dc647fad9ee31dad0c5215b2f11"
+          "sha256": "c2081a8a3c1f1ce883b718035956a1127b16a031f5da94679c195e5fb37b481a"
         },
         {
           "bytes": 131673,
@@ -763,11 +968,18 @@
           "sha256": "b330b22ed6971346f120d205fd93b4a3f67e5eb5a0ffc6cd5c85aa9a3f2a754a"
         },
         {
-          "bytes": 86439,
-          "git_blob": "e569dfef0839db39eb5e76032bbf97496ee81099",
+          "bytes": 1027,
+          "git_blob": "cdcd9230ae73c11fc017e8ef61dcf689b5228dd1",
+          "mode": "100644",
+          "path": "utils/sql/bazaar/002_offline_trader_restart.sql",
+          "sha256": "84ba2b96fe0878056039bf3a1e08b79ad9bd5a887c77582c2024064e47414843"
+        },
+        {
+          "bytes": 86629,
+          "git_blob": "acc4801c2ed453bf39b566abe4a8568877fc58ee",
           "mode": "100644",
           "path": "world/client.cpp",
-          "sha256": "79a93753a9f56b05044c99b954c1c9a9e23f5e5b269aec8f24e1d0edae82b552"
+          "sha256": "dd5558cf4b130d5d052906fb2c088dd2d7b58ebeba03f6976018037e18849e5f"
         },
         {
           "bytes": 5349,
@@ -819,11 +1031,39 @@
           "sha256": "11803ef1abb869ce989d5a549f1e82df6594a61b5136e1f8d226f5f15bf18e2f"
         },
         {
-          "bytes": 19889,
-          "git_blob": "01ee6e39f915a083fdf9abfb14cb77558242d076",
+          "bytes": 21037,
+          "git_blob": "c7232235e0da798bb6ab9c266e830515aa545c65",
+          "mode": "100644",
+          "path": "world/world_boot.cpp",
+          "sha256": "c3d93dd56613b429305d62173b1bf2fb39b5282d60d8ec9ac9d0fe2b4c5f0cf5"
+        },
+        {
+          "bytes": 26146,
+          "git_blob": "4ec0fd0538d31401d5aee234a3afff6cc38da0f2",
+          "mode": "100644",
+          "path": "world/zonelist.cpp",
+          "sha256": "0c2e377280298f51071895c2dc92225edf8ceefbefb29ab4384fb476fe0567fe"
+        },
+        {
+          "bytes": 4207,
+          "git_blob": "9b7f9fd696432f56b6e6c90c553075a9094ab9fc",
+          "mode": "100644",
+          "path": "world/zonelist.h",
+          "sha256": "7cb10c0637be7304cb45b4de790a8a8972ded3b816762a2cf67ee5a2a4dcb20c"
+        },
+        {
+          "bytes": 60552,
+          "git_blob": "2208542aa93c56e1d5f2355be10e48b64b0e0827",
+          "mode": "100644",
+          "path": "world/zoneserver.cpp",
+          "sha256": "564d46477361c426f5f6be2ef164831857e0755c16918c48e5a700ec0696acbf"
+        },
+        {
+          "bytes": 19915,
+          "git_blob": "8515b25fa27455b584a11f03035e91019fcb8310",
           "mode": "100644",
           "path": "zone/CMakeLists.txt",
-          "sha256": "6e32c4215dc7e21de56268014423094c41aa8bfebafd7f6f55516625b9f246db"
+          "sha256": "5f34dad6e596ef97cabba1c180321e61769ee6a50f0f4178737bbaeea5bb5264"
         },
         {
           "bytes": 69077,
@@ -854,32 +1094,46 @@
           "sha256": "0f341be8199f4bb1a1ea0d2eee802f6d9c90f2b85bd5393b7de72932504a7c9e"
         },
         {
-          "bytes": 14024,
-          "git_blob": "3a01c3034d14d748e0d03e37b13888d0cf3accab",
+          "bytes": 16748,
+          "git_blob": "40dae226e84d33f327483b9c1448c68799591d39",
           "mode": "100644",
           "path": "zone/bazaar_offline_parcel.cpp",
-          "sha256": "06802b2dbd2f80a965dee6f7b877ffd23d64b48bbf9b130968c8fee52c5e17d9"
+          "sha256": "7fc8a918028644ed1189274a84136c09e436ce51caf22248dee4607633986ec7"
         },
         {
-          "bytes": 1288,
-          "git_blob": "bf4063a1bfe9073881763c19beb8a455293f2458",
+          "bytes": 1398,
+          "git_blob": "165291099ee2751cb8ae581b0fd86859a64262ae",
           "mode": "100644",
           "path": "zone/bazaar_offline_parcel.h",
-          "sha256": "2ba0ac9131b264cd35513d24114822a0eeeac1045fff6bb83fe49ce2a967b448"
+          "sha256": "01135799f1b86a7d8b05dce27b4e6bbf691332b0fe9ab8d3e44313c7116fa127"
         },
         {
-          "bytes": 511264,
-          "git_blob": "019aa18eab1caa4138ee496b19a956176711bf72",
+          "bytes": 5590,
+          "git_blob": "9af713d863b87ea599c75b9e61c77e37e67aabb8",
+          "mode": "100644",
+          "path": "zone/bazaar_offline_stall.cpp",
+          "sha256": "4e21aa2b40eacb4b43705a65897bdf552e3cc0f389add2eeee9c799beebe4fed"
+        },
+        {
+          "bytes": 299,
+          "git_blob": "2e76ba797e2e07b43a25f53861211316ddc0295f",
+          "mode": "100644",
+          "path": "zone/bazaar_offline_stall.h",
+          "sha256": "b9ddb72ea81c85f5e401d1b8476566cda12f196bffd76c26841e5fa082330b47"
+        },
+        {
+          "bytes": 511296,
+          "git_blob": "bc7c51a8c5a143bd735134fed8bbbff2e7959a8f",
           "mode": "100644",
           "path": "zone/client.cpp",
-          "sha256": "f97506a1448cee3d550dcf1a6d727d0012f2ece8d263de879b27abde1e9b7ea0"
+          "sha256": "9412e090c0b677b8e27a7500e0bcd7daf9e28b974f56e42e655600d977406807"
         },
         {
-          "bytes": 123266,
-          "git_blob": "ac6c32282827210d65261494a0242937668a8657",
+          "bytes": 123530,
+          "git_blob": "07f5dc0757acc2ca32149fc8cadd9fc0f71bc1bf",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "35b7b673f36dc8344675427e821f08c6e385145392ddb44c4876c8af3d0b144b"
+          "sha256": "29453fc940b25d14746b16aa0214d00313c96928a12e6b15a97251d85704f707"
         },
         {
           "bytes": 115394,
@@ -903,11 +1157,11 @@
           "sha256": "6c95224581e134ed153c4044b22864918133dfb7606aff9d2e671338dbb01fe5"
         },
         {
-          "bytes": 571957,
-          "git_blob": "76b8ecc0c78809aea911be94420a492c3cd5aa64",
+          "bytes": 572612,
+          "git_blob": "6857bd44efe12e2f8f66f958e711fa009841260c",
           "mode": "100644",
           "path": "zone/client_packet.cpp",
-          "sha256": "00400d6588295b378fde2f86ac16bcd1a3a6c92dbc75b43fd7749236c182c25d"
+          "sha256": "720aa0e684498c8936a1be484621784b36a6b71b37e81519317d29ed1a149f5f"
         },
         {
           "bytes": 25591,
@@ -917,18 +1171,18 @@
           "sha256": "4c3e2ccb192dee03555cb06de8d7294de87684be2fb068c5fec0b450f44b205b"
         },
         {
-          "bytes": 74164,
-          "git_blob": "bb83b013a4d1c599d11ed115251fec756ed85361",
+          "bytes": 74436,
+          "git_blob": "eb20bd5ef78d8d142b605a1eb513376e9d00660a",
           "mode": "100644",
           "path": "zone/client_process.cpp",
-          "sha256": "287a93fb2f72c9510380cdb756b8ec97694cb0a4fc969c34a4517e0f96f0d1e1"
+          "sha256": "dcac03682f0e7058493780b0e9a91d72570c8c396352102e5bcfe6603cd6da4e"
         },
         {
-          "bytes": 153003,
-          "git_blob": "c8eb4d9d084402af3bed674556d5ffb121f4504a",
+          "bytes": 153268,
+          "git_blob": "0ba52b63ba7e0466039f54ca86562da9ba917e52",
           "mode": "100644",
           "path": "zone/entity.cpp",
-          "sha256": "137634120fba8be9679a1ee1b8c9872d9a80e7fd9b633368b6f9d25888fcbd52"
+          "sha256": "47e085f0d1c4120094e2699e9d883be8190cd800518f5553099fd60c3dbf2ed1"
         },
         {
           "bytes": 26665,
@@ -1085,11 +1339,11 @@
           "sha256": "fc5068936f8b5a2aef1e91a501ec7a9f57a1117b1711d0691ccaee5be1d98660"
         },
         {
-          "bytes": 129642,
-          "git_blob": "2029af8cc08ee0fffe1dd81c3af116489087ea87",
+          "bytes": 135636,
+          "git_blob": "bd62aed8f8af69e98d2d1ceeb7d6d077e8c0e092",
           "mode": "100644",
           "path": "zone/trading.cpp",
-          "sha256": "ca511d3786ecf94256fc8e1add8ef1e769d88b0f540a05be177bb5d3ed3b1562"
+          "sha256": "dd774dd5398fa1920968bf7734b0b3aa777876ce3076a0a8a3ad79255b70a8a1"
         },
         {
           "bytes": 148190,
@@ -1099,11 +1353,11 @@
           "sha256": "13155d0a9aa4c4c60ab7681acd94d9cfe044de95723eed6084371670cd1816f6"
         },
         {
-          "bytes": 92851,
-          "git_blob": "349b9188cdc04c4ac0a8b1c2fceedc250862cf87",
+          "bytes": 92945,
+          "git_blob": "aa58c56147886002aa33065e98f6de8fa06c2c83",
           "mode": "100644",
           "path": "zone/zone.cpp",
-          "sha256": "ec9e3c11bd0091f724f71e0fd8a38a1cbe57a92472b72184b71696dbd9594cf1"
+          "sha256": "b85ade47947e23f4667a534df7ef198dcae8e33fc8c91b689b7fa693d70aa353"
         },
         {
           "bytes": 136069,
@@ -7476,20 +7730,20 @@
           "sha256": "0f341be8199f4bb1a1ea0d2eee802f6d9c90f2b85bd5393b7de72932504a7c9e"
         },
         {
-          "bytes": 511264,
-          "git_blob": "019aa18eab1caa4138ee496b19a956176711bf72",
+          "bytes": 511296,
+          "git_blob": "bc7c51a8c5a143bd735134fed8bbbff2e7959a8f",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client.cpp",
-          "sha256": "f97506a1448cee3d550dcf1a6d727d0012f2ece8d263de879b27abde1e9b7ea0"
+          "sha256": "9412e090c0b677b8e27a7500e0bcd7daf9e28b974f56e42e655600d977406807"
         },
         {
-          "bytes": 123266,
-          "git_blob": "ac6c32282827210d65261494a0242937668a8657",
+          "bytes": 123530,
+          "git_blob": "07f5dc0757acc2ca32149fc8cadd9fc0f71bc1bf",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "35b7b673f36dc8344675427e821f08c6e385145392ddb44c4876c8af3d0b144b"
+          "sha256": "29453fc940b25d14746b16aa0214d00313c96928a12e6b15a97251d85704f707"
         },
         {
           "bytes": 115394,
@@ -7500,20 +7754,20 @@
           "sha256": "fafca300e343ae26eb6bf8ef536f20156b294a950143fdffc6a6d506b4100dfb"
         },
         {
-          "bytes": 571957,
-          "git_blob": "76b8ecc0c78809aea911be94420a492c3cd5aa64",
+          "bytes": 572612,
+          "git_blob": "6857bd44efe12e2f8f66f958e711fa009841260c",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client_packet.cpp",
-          "sha256": "00400d6588295b378fde2f86ac16bcd1a3a6c92dbc75b43fd7749236c182c25d"
+          "sha256": "720aa0e684498c8936a1be484621784b36a6b71b37e81519317d29ed1a149f5f"
         },
         {
-          "bytes": 74164,
-          "git_blob": "bb83b013a4d1c599d11ed115251fec756ed85361",
+          "bytes": 74436,
+          "git_blob": "eb20bd5ef78d8d142b605a1eb513376e9d00660a",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client_process.cpp",
-          "sha256": "287a93fb2f72c9510380cdb756b8ec97694cb0a4fc969c34a4517e0f96f0d1e1"
+          "sha256": "dcac03682f0e7058493780b0e9a91d72570c8c396352102e5bcfe6603cd6da4e"
         },
         {
           "bytes": 103979,
@@ -7940,12 +8194,12 @@
           "sha256": "9db955761d5e48cb1d35d812bc35e105fae1d7a52a3a41ef3ea9a60b94e72300"
         },
         {
-          "bytes": 129642,
-          "git_blob": "2029af8cc08ee0fffe1dd81c3af116489087ea87",
+          "bytes": 135636,
+          "git_blob": "bd62aed8f8af69e98d2d1ceeb7d6d077e8c0e092",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/trading.cpp",
-          "sha256": "ca511d3786ecf94256fc8e1add8ef1e769d88b0f540a05be177bb5d3ed3b1562"
+          "sha256": "dd774dd5398fa1920968bf7734b0b3aa777876ce3076a0a8a3ad79255b70a8a1"
         },
         {
           "bytes": 22481,
@@ -8020,12 +8274,12 @@
           "sha256": "21f195ea596823c9a99367276f2dde0eb8074b949bd55c2fb06a40ba3fcdc483"
         },
         {
-          "bytes": 92851,
-          "git_blob": "349b9188cdc04c4ac0a8b1c2fceedc250862cf87",
+          "bytes": 92945,
+          "git_blob": "aa58c56147886002aa33065e98f6de8fa06c2c83",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/zone.cpp",
-          "sha256": "ec9e3c11bd0091f724f71e0fd8a38a1cbe57a92472b72184b71696dbd9594cf1"
+          "sha256": "b85ade47947e23f4667a534df7ef198dcae8e33fc8c91b689b7fa693d70aa353"
         },
         {
           "bytes": 29127,
@@ -8044,10 +8298,10 @@
           "sha256": "e305076a4d4a571c32c41e9ad1deb9d1081032d6d0484fe5de5da229a5190165"
         }
       ],
-      "source_manifest_sha256": "16625bca432f58b142f6cdca61487612cee732b0b1601d8f4b4f0aca2acc618b"
+      "source_manifest_sha256": "72bd15b158d736403c257d67a8d8384ebc06de4a7cee8644d84fb3c27990b8ab"
     },
     "database_repository": "nightstalker6669/EQEmu-Database",
-    "database_source_capture_commit": "616737e8ff113f8b1cb48dd69898d4e63333dbb1",
+    "database_source_capture_commit": "dece3611b2d82025204d33567fd9f92219e4f60d",
     "existing_volume_upgrade": {
       "supported": false
     },
@@ -8055,9 +8309,9 @@
     "fresh_install": {
       "MariaDB": "10.11",
       "assembled_with": "10.11.19",
-      "base_tables": 503,
+      "base_tables": 504,
       "bots_version": 0,
-      "composition": "Published r42 seed followed by one offline Bazaar parcel schema migration.",
+      "composition": "Published r43 seed followed by one offline Bazaar stall persistence schema migration.",
       "custom_version": 0,
       "empty_private_player_and_operation_tables_preserved": true,
       "full_dump_replaces_tables": true,
@@ -8072,38 +8326,39 @@
       "views": 1
     },
     "future_update_policy": "A futurematchedDBversion requires a separately validatedwholecohort sanitizedrelease and explicitcommitted source/tag/assetdigest pin; never silently mutableLatest/latestDB, partialrank/itemexports, or old945-only pin for newcohort. ActualCIfailure corrections gather allvisible errors in one batch.",
-    "matched_server_integration_parent": "65fcda1d527d8169d1a034472eee6629312e98a2",
+    "matched_server_integration_parent": "f668f7b8fa72b53b730c81e5e13e6ceba89490b1",
     "native_acceptance_scope": {
-      "client": "May 10, 2013 RoF2",
-      "feature": "Cross-zone parcel purchases from offline RoF2 Bazaar traders",
+      "client_evidence": "Ordinary game UI established sales, parcel collection and reclaim. Approved staging shortened portions of travel. Windows runtime packaging is not a Windows native gameplay witness.",
+      "configuration": "The existing Offline Mode opt-in applies. Cross-zone parcel purchases use the existing parcel rules. Fresh-empty release data contains the schema only.",
       "isolated": [
-        "Forced late write failure and precommit connection loss rolled back both wallets, item stock, parcel and receipt.",
-        "Two concurrent buyers of the same quote yielded one completed sale. Full mailbox, wrong price, unsupported dyed item and oversized quantity checks conserved state. The original receipt survived simulated trader ID reuse."
+        "Exact production persistence and settlement code ran against isolated MariaDB using the migrated r43 schema. Concurrent recovery created one authorized stall, and a pending pre-restart quote was stale after recovery. A completed quote remained idempotently replayable with its original delivery mode.",
+        "A database connection was terminated before commit. Separate late receipt and occupied destination errors also rolled back the direct item, both balances and stock. A fresh retry recorded one delivery. Competing counter and parcel checkouts for the last stock produced one winner. Counter checkout racing ordinary seller reclaim preserved exactly one coherent outcome. Neither sold nor withdrawn stock returned.",
+        "A changed satchel and an instance recreated with the same numeric ID and timing fields were rejected. The exact migration was independently applied to the complete published r43 seed."
+      ],
+      "limits": [
+        "Native restart coverage used a supervised whole-game stop/start with MariaDB kept online. An independently replaced live Zone worker and abrupt whole-game loss were not native witnesses. The interruption, replay, stale token and contention checks above ran in isolated MariaDB.",
+        "The restored RoF2 stall uses a server-owned, player-shaped actor at the saved pose. It is a generic appearance rather than a recreation of the seller's equipment or appearance. One native counter confirmation showed the actor's numeric spawn-name suffix.",
+        "Restart recovery applies to verified eligible satchel stock on the public Bazaar or a matching permanent global Bazaar shard. Unsupported item properties and unresolved custody do not restore as eligible listings. Legacy online and ordinary counter paths retain their prior scope."
       ],
       "native": [
-        "A seller entered Offline Mode via the native Trader controls and left listings active at Character Select.",
-        "An ordinary buyer in Plane of Knowledge found the offline Bazaar listing and bought three from a five-item stack using the native Parcel option. Exactly one three-item parcel was created, with the purchase price and fee debited once, the seller credited once and the two remaining items conserved.",
-        "A parcel merchant delivered the exact stack. An ordinary Bazaar counter purchase passed and the seller reclaimed proceeds and remaining inventory through Enter World.",
-        "On the final Zone binary, a fresh native one-of-two purchase charged exactly one platinum plus two gold. The immediate displayed and saved buyer balances matched. The buyer claimed the item through the parcel merchant."
+        "An ordinary seller entered native Offline Mode with four Bat Wings in the Trader's Satchel. A separate buyer completed a real remote parcel purchase. The buyer paid 1,200 copper including a 200-copper delivery fee, the seller earned 1,000 copper, and three wings remained.",
+        "The same dev game stopped and started normally while the seller's retail client stayed logged out. MariaDB stayed up. World and all 12 Zone workers had new process IDs. Independent database readback conserved the exact three unsold wings, balances, parcel and committed receipt.",
+        "An ordinary buyer entered the Bazaar through Nexus and booted the original permanent Bazaar shard. The restored stall appeared at its saved location and its native Browse window showed all three wings at the original price. In-person checkout delivered one wing directly to native inventory, charged 1,000 copper, credited the seller once, reduced the stock to two and created no parcel.",
+        "A second ordinary buyer searched from another zone, bought one wing for 1,200 copper including the 200-copper fee, and claimed it from a native parcel merchant. The seller stayed logged out through both purchases. The earlier parcel and receipt remained intact.",
+        "The seller reclaimed through ordinary Enter World once. The seller retained the one unsold wing and earned proceeds. All scoped native fixtures camped, the restored stall and its listings were cleared, and historical sale records remained."
       ],
-      "same_dev_server_replay": "A private guarded production settlement invocation replayed the exact first completed native purchase after the parcel had been claimed. The original result returned with no writes and the buyer, seller, stock, receipt and parcel state unchanged. The retail client refreshed the search result after checkout, so the retry evidence is server-side on dev.",
-      "scope": [
-        "Production uses the existing three gates for offline traders, Bazaar parcel delivery and parcel merchants. Ordinary counter and online checkout remain available under their existing conditions.",
-        "The parcel checkout supports items representable by the existing parcel format. Items with unsupported instance state, such as custom dyes, containers, evolving items or unlimited charges, retain the ordinary counter path where eligible.",
-        "The checkout receipt survives claim. Unsold offline listings still clear on Bazaar worker restart. Legacy counter crash atomicity and interrupted merchant pickup remain outside this verification.",
-        "QA used approved travel staging. Search, purchase, parcel retrieval, counter sale and reclaim used ordinary native actions."
-      ]
+      "scope": "May 10, 2013 RoF2 offline Bazaar Trader stalls and counter/parcel sales after restart"
     },
-    "native_gameplay_acceptance": "Native RoF2 verified offline parcel checkout, pickup and seller reclaim, plus ordinary and in-person controls. NATIVE-QUALIFICATIONS.json records the separate guarded settlement replay and isolated coverage.",
+    "native_gameplay_acceptance": "Native RoF2 verified same-game restart persistence, restored counter and remote parcel checkout, parcel pickup and seller reclaim. NATIVE-QUALIFICATIONS.json records isolated replay scope and native limits.",
     "payload_inventory": {
       "all_member_sha256_file": "SHA256SUMS",
-      "full_sql_bytes": 309323084,
+      "full_sql_bytes": 309324112,
       "housing_json_member_count": 331,
       "housing_json_prefix": "housing-runtime-content/",
       "housing_profile_bindings": "housing-runtime-content/PROFILE-BINDINGS.json",
       "housing_profile_bindings_sha256": "4d6c3533a882ce79ef790caa08a781a1994d56ac3d9c58a8459bb9e1ac9b73b2",
       "identical_SQL_and_Housing_bytes_required": true,
-      "payload_member_count": 552
+      "payload_member_count": 553
     },
     "preserved_mercenary_cohort_source_binding": {
       "SQL_sha256": "6ad8f950c178e9c1d84658387c521dc33695572fd8926c30a711aff44e50790f",
@@ -8114,15 +8369,15 @@
       "manifest_sha256": "78710b4716455c626cc62189cca8eacd252d2ce796adc018c0b4dd18657aace9",
       "source_base_commit": "c642eb178b8a0a9881812c2b3d3f188acb1217d8"
     },
-    "publication_parent_database_commit": "616737e8ff113f8b1cb48dd69898d4e63333dbb1",
+    "publication_parent_database_commit": "dece3611b2d82025204d33567fd9f92219e4f60d",
     "qualification_documents": [
       "NATIVE-QUALIFICATIONS.json",
       "CHANGELOG.md",
       "SOURCE-MANIFEST.json"
     ],
-    "release_tag": "peq-rof2-2026-11-28-offline-bazaar-parcels",
+    "release_tag": "peq-rof2-2026-11-28-offline-bazaar-stall-persistence",
     "required_code_boundary": {
-      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins. Preserve the matched Ashengate native code and 467 canonical quest pins. Preserve the matched Offline Bazaar native source and RoF2 opcode binding. Preserve native RoF2 Collections registration and item serialization. Preserve the matched May Collections pool, entitlement, and native registration bindings. Preserve matched Guild Banners persistence, May RoF2 opcode mapping, and the 470 canonical quest pins. Preserve matched May House of Thule earned admission, Hunter and Slayer runtime, Banestrike data, 527 canonical quest overlays, and the effective RoF2 opcode map. Preserve matched offline Bazaar parcel checkout, its listing generation and durable quote receipts.",
+      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins. Preserve the matched Ashengate native code and 467 canonical quest pins. Preserve the matched Offline Bazaar native source and RoF2 opcode binding. Preserve native RoF2 Collections registration and item serialization. Preserve the matched May Collections pool, entitlement, and native registration bindings. Preserve matched Guild Banners persistence, May RoF2 opcode mapping, and the 470 canonical quest pins. Preserve matched May House of Thule earned admission, Hunter and Slayer runtime, Banestrike data, 527 canonical quest overlays, and the effective RoF2 opcode map. Preserve matched offline Bazaar parcel checkout, its listing generation and durable quote receipts. Preserve matched offline Bazaar stall persistence, instance epochs, local delivery and durable receipts.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
       "completed_mercenary_feature_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
       "external_operator_resources": "Authenticated original RoF2 archives/maps and matching server quests/opcodes; generate fresh target shared memory normally."
@@ -8203,24 +8458,25 @@
       "BASE-VERGALID-R2-README.md": "3be6fe0bc5c6ba6a4608a43ea830b52d050aae69f89386dd57996df7c46aa2f0",
       "BASE-VERGALID-R2-SOURCE-CONTENT-BINDING.json": "5843bfb561555ee2906b79ec8a36575ddc1e345c5be6ed5f6d882ee256754f51",
       "BASE-VERGALID-R2-SOURCE-MANIFEST.json": "41bbe1aa648bc432a6f287fdb8171df78ac70684fd6c753f25b479f1d0d99b07",
-      "CANONICAL-SEED-COMPOSITION.json": "226d454db3c4d34d5e916b60eaf9b759636f4f353b2d1900a1704f9c3c0e7b6d",
-      "CHANGELOG.md": "2641c62c9af192b71fe4f55bbaead6d02eb7042c7f34f93abe07c632fd62fa48",
+      "CANONICAL-SEED-COMPOSITION.json": "e15a81d6bae03c03bc3a4645e775e5d950a9c91077b4141a5badbeb3342eaff0",
+      "CHANGELOG.md": "1fde73bc2efd818d998f50e91a3ef48906cdbf147140fd1899cfe8739b4ecda0",
       "COMPLETED-RECIPE-UPDATES.json": "fdf459a6bef7e90351d3db5c983e30920205876a990aa144b5779a4c242d25e0",
       "KITHICOR-STATIC-CONTENT.json": "5b043982b23b74f4f857724b6baf1ff0611bb88ce348f32f15f3f6230462ffc5",
       "MERCENARY86-100-CONTENT.json": "27a9d180e6a66320ae9877cd763341f6579d0a1a8a66ac6fc23c26fb9dc15c16",
-      "NATIVE-QUALIFICATIONS.json": "0a453eecc23d1fc7e7bd7f28174be774e01b59a2828c4f47947ca8ea138b8051",
-      "README.md": "b062c091565eb5c67fc66e6dc5dd9e84469d447141223fe8a3956803fbd16d54",
-      "SHA256SUMS": "3fbf66ca2559df716610f496c56ea42b9ef5aa8eaf7623fefffec41f7bac08ed",
+      "NATIVE-QUALIFICATIONS.json": "5ab5cb9d71f632cce5cd8d565dad550fed7dda3b94f8b0da8231418d06e98d2e",
+      "README.md": "720911888814ca347ad9e45195e7ddc12caf71ea1e61f3beaa109817fc16a8c4",
+      "SHA256SUMS": "1832ecf6189be905b7fe3b87289880100089f4ef1caae69c4e49a282c4a29f82",
       "SOD-OCEANGREEN-CONTENT.json": "5a5757e1c4631af375b87b6c69794d9e72ebc8cc91c832144d8359bb2b5454c2",
-      "SOURCE-CONTENT-BINDING.json": "9534d67bd9f0764c974adc1a1070f23a4fb25e836a87375a269c135109451012",
-      "SOURCE-MANIFEST.json": "16625bca432f58b142f6cdca61487612cee732b0b1601d8f4b4f0aca2acc618b",
+      "SOURCE-CONTENT-BINDING.json": "4c15412452bef3b918dfd78dcf6514ebca8af1cd8a1ae32fc1cf278020abc6d5",
+      "SOURCE-MANIFEST.json": "72bd15b158d736403c257d67a8d8384ebc06de4a7cee8644d84fb3c27990b8ab",
       "TABLE-INVENTORY.json": "4b6bf5895d88556b7ce4ecb2bf44a55deef3b766782c5c93304ff688204ec36e",
       "VALIDATION.json": "f9da8bf1f8bc7ab959ca0bee13e9b4aaa47a530b3f6a46e5e429d85b3d522ff2",
       "VICTUAL-CLASS-FEATURE-DELTA.json": "1220253988a07ff5ef833759b947c33b4bcc56cad20195f94366cd510df7ffaf",
       "client-data/rof2/dbstr_us.append.txt": "71f93726675b66a45496e61f42994a691ab6663a326f92497627d37f6f42dfec",
       "client-data/rof2/spells_us.append.txt": "428a6b92ba8887c8d117746c2f9bc192a6429b7fd2c6c46438005442b351b7d6",
-      "full.sql": "5705b0246d1f8fce9601b8d0eddae734419c7dcf2ca5638aed73e16a91638cb2",
+      "full.sql": "ceb002684d7a1d7028ea334fa713c804b7723f1c85582398e1efe90ae23821a9",
       "migrations/001_offline_parcel_checkout.sql": "b330b22ed6971346f120d205fd93b4a3f67e5eb5a0ffc6cd5c85aa9a3f2a754a",
+      "migrations/002_offline_trader_restart.sql": "84ba2b96fe0878056039bf3a1e08b79ad9bd5a887c77582c2024064e47414843",
       "migrations/10-MAY-SLAYER-CORE-ENABLE.sql": "09c1c0fd5a81e718d3d206e19d5d245de12ba777e22ffaa3bbb10a268d20c657",
       "migrations/100-MAY-GRELLETH-HUNTER.sql": "68a11507ac72164806d6537b2bff584677012cccaf3b33eeac9146ebeef1eae2",
       "migrations/110-MAY-HOT-NOVICE-HUNTER.sql": "3bfa7beeb7e03516732a516774fe0f8fbf528bb53c4e1e85b74b4e05faccefa7",
@@ -8408,18 +8664,18 @@
         }
       }
     },
-    "source_commit": "dece3611b2d82025204d33567fd9f92219e4f60d",
+    "source_commit": "2665e997bf02a6e57767cec0c3df2564e3c9d242",
     "source_commit_role": "Exact public PEQ database release commit. The server integration parent and CI checkout are pinned separately.",
     "source_repository": "nightstalker6669/EQEmu",
     "verification_basis": {
-      "base_full_sql_sha256": "15c16598f3ce6f867d8dc7608aa3368fd3bab0800a0674d2b35aaea13aa6c26b",
-      "full_sql_sha256": "5705b0246d1f8fce9601b8d0eddae734419c7dcf2ca5638aed73e16a91638cb2",
+      "base_full_sql_sha256": "5705b0246d1f8fce9601b8d0eddae734419c7dcf2ca5638aed73e16a91638cb2",
+      "full_sql_sha256": "ceb002684d7a1d7028ea334fa713c804b7723f1c85582398e1efe90ae23821a9",
       "migration_member_count": 1,
-      "public_qualification_sha256": "0a453eecc23d1fc7e7bd7f28174be774e01b59a2828c4f47947ca8ea138b8051",
-      "status": "Exact published r42 seed, isolated DDL proof, matched dev readback, and qualified native acceptance."
+      "public_qualification_sha256": "5ab5cb9d71f632cce5cd8d565dad550fed7dda3b94f8b0da8231418d06e98d2e",
+      "status": "Exact published r43 seed, isolated DDL proof, matched dev readback, and qualified native acceptance."
     }
   },
-  "database_contract_sha256": "38fc8a2725592edcb20dc5108da56cfe17ae9d45f7b8b37b7760b6145a44c631",
+  "database_contract_sha256": "6a545120a25c6a44886fd0960922257294445b7a4bb6509d24d531dd6077db56",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [

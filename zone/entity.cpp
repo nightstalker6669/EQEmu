@@ -23,6 +23,7 @@
 #include "housing_service_npcs.h"
 
 #include "entity.h"
+#include "../common/bazaar_offline_stall.h"
 
 #include "common/data_verification.h"
 #include "common/features.h"
@@ -6367,12 +6368,13 @@ void EntityList::RestoreCorpse(NPC *npc, uint32_t decay_time)
 void EntityList::CheckToClearTraderAndBuyerTables()
 {
 	if (zone->GetZoneID() == Zones::BAZAAR) {
-		TraderRepository::DeleteWhere(
-			database,
-			fmt::format(
-				"`char_zone_id` = {} AND `char_zone_instance_id` = {}", zone->GetZoneID(), zone->GetInstanceID()
-			)
-		);
+		const auto storage = OfflineBazaarStall::CheckStorage(database);
+		if (storage != OfflineBazaarStall::Storage::Unavailable) {
+			TraderRepository::DeleteWhere(database, fmt::format(
+				"`char_zone_id` = {} AND `char_zone_instance_id` = {}{}",
+				zone->GetZoneID(), zone->GetInstanceID(),
+				storage == OfflineBazaarStall::Storage::Ready ? " AND offline_inventory_slot IS NULL" : ""));
+		}
 		BuyerRepository::DeleteBuyers(database, zone->GetZoneID(), zone->GetInstanceID());
 
 		LogTradingDetail(

@@ -20,6 +20,7 @@
 #include "../common/housing/inventory_handoff_auth.h"
 
 #include "client.h"
+#include "../common/bazaar_offline_stall.h"
 
 #include "common/classes.h"
 #include "common/content/world_content_service.h"
@@ -861,6 +862,10 @@ bool Client::HandleEnterWorldPacket(const EQApplicationPacket *app) {
 		WaitForInventoryRelease(e.id, app, true, true);
 		return true;
 	}
+	if (!OfflineBazaarStall::Withdraw(database, account_id)) {
+		TellClientZoneUnavailable();
+		return true;
+	}
 	if (offline_bazaar_character_select) {
 		if (cle->Online() >= CLE_Status::Zoning) {
 			return false;
@@ -1128,13 +1133,11 @@ bool Client::HandleDeleteCharacterPacket(const EQApplicationPacket *app) {
 
 	uint32 char_acct_id = database.GetAccountIDByChar((char*)app->pBuffer);
 	if(char_acct_id == GetAccountID()) {
+		const auto target_id = database.GetCharacterID((const char *)app->pBuffer);
 		const auto *seller = ClientList::Instance()->FindOfflineBazaarTrader(char_acct_id);
-		if (seller) {
-			const auto target_id = database.GetCharacterID((const char *)app->pBuffer);
-			if (!target_id || target_id == seller->CharID()) {
-				SendCharInfo();
-				return true;
-			}
+		if ((seller && target_id == seller->CharID()) || !OfflineBazaarStall::MayDeleteCharacter(database, target_id)) {
+			SendCharInfo();
+			return true;
 		}
 		LogInfo("Delete character: [{}]", (const char*)app->pBuffer);
 		if (!database.DeleteCharacter((char *)app->pBuffer)) {

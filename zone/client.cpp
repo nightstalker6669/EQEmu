@@ -860,7 +860,7 @@ Client::~Client() {
 	if (merc)
 		merc->Depop();
 
-	if(IsTrader()) {
+	if (IsTrader() && !HasPersistentBazaarStall()) {
 		TraderEndTrader();
 	}
 

@@ -26,6 +26,7 @@
 #include <deque>
 #include <memory>
 #include <mutex>
+#include <set>
 #include <vector>
 
 class WorldTCPConnection;
@@ -62,6 +63,8 @@ public:
 
 	uint16 GetAvailableZonePort();
 	uint32 TriggerBootup(uint32 iZoneID, uint32 iInstanceID = 0);
+	void DeferBazaarPark(uint32 instance) { m_pending_bazaar_parks.insert(instance); }
+	bool RetryBazaarPark(uint32 instance);
 
 	void Add(ZoneServer *zoneserver);
 	void GetZoneIDList(std::vector<uint32> &zones);
@@ -109,6 +112,7 @@ private:
 	uint16	pLockedZones[MaxLockedZones];
 	uint32 CurGroupID;
 	std::deque<uint16> m_ports_free;
+	std::set<uint32> m_pending_bazaar_parks;
 	std::unique_ptr<EQ::Timer> m_tick;
 	std::unique_ptr<EQ::Timer> m_keepalive;
 

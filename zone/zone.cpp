@@ -21,6 +21,7 @@
 */
 #include "fellowship_campfire.h"
 #include "guild_banner_visual.h"
+#include "bazaar_offline_stall.h"
 
 #include "housing_guild_portal.h"
 #include "housing_service_npcs.h"
@@ -889,6 +890,7 @@ void Zone::Shutdown(bool quiet)
 	}
 
 	DataBucket::DeleteCachedBuckets(DataBucketLoadType::Zone, zone->GetZoneID(), zone->GetInstanceID());
+	BazaarStalls::Clear(*this);
 	// save and kick all clients
 	for (auto c : entity_list.GetClientList()) {
 		c.second->Save();
@@ -1586,6 +1588,7 @@ uint32 Zone::CountAuth() {
 bool Zone::Process() {
 	ProcessFellowshipCampfires();
 	ProcessGuildBanners();
+	BazaarStalls::Process(*this);
     Housing::Pets::Process();
 	spawn_conditions.Process();
 

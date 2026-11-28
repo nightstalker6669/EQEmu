@@ -470,7 +470,10 @@ public:
 	void ReturnTraderReq(const EQApplicationPacket* app,int16 traderitemcharges, uint32 itemid = 0);
 	void TradeRequestFailed(const EQApplicationPacket* app);
 	void BuyTraderItem(TraderBuy_Struct* tbs, Client* trader, const EQApplicationPacket* app);
+	bool RegisterPersistentBazaarStall();
+	bool HasPersistentBazaarStall() const { return m_persistent_bazaar_stall; }
 	void BuyOfflineBazaarParcel(uint32 token, const EQApplicationPacket *app);
+	void BuyOfflineBazaarCounter(uint32 token, const EQApplicationPacket *app);
 	void BuyTraderItemOutsideBazaar(TraderBuy_Struct* tbs, const EQApplicationPacket* app);
 	void FinishTrade(
 		Mob *with,
@@ -688,7 +691,7 @@ public:
 	void DisableAreaRegens();
 
 	void ServerFilter(SetServerFilter_Struct* filter);
-	void BulkSendTraderInventory(uint32 char_id);
+	void BulkSendTraderInventory(uint32 char_id, bool durable_counter = false);
 	void SendSingleTraderItem(uint32 char_id, int serial_number);
 	void BulkSendMerchantInventory(int merchant_id, int npcid);
 	bool MeetsMerchantLanguageRequirement(const MerchantList &entry) const;
@@ -2368,6 +2371,7 @@ private:
 	bool   trader;
 	bool m_bazaar_counter_only = false;
 	bool m_offline_bazaar_trader = false;
+	bool m_persistent_bazaar_stall = false;
 	bool m_offline_bazaar_parcel_custody = false;
 	bool m_offline_bazaar_counter_wallet = false;
 	Timer m_offline_bazaar_close_retry;

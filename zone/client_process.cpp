@@ -70,6 +70,16 @@ bool Client::Process() {
 		}
 		m_offline_bazaar_close_retry.Start(1000);
 
+		if (HasPersistentBazaarStall()) {
+			// World owns account reclaim and invalidates the durable stall before
+			// admitting a seller. The existing session owns its final profile save.
+			if (!Save(2)) {
+				return true;
+			}
+			OnDisconnect(true);
+			return false;
+		}
+
 		if (m_offline_bazaar_parcel_custody &&
 			!OfflineBazaar::SetParcelAvailability(database, CharacterID(), false)) {
 			return true;

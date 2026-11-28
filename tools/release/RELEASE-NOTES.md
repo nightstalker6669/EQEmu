@@ -1,7 +1,7 @@
-<!-- previous-release: rof2-ci-r42-a1-0f4fa26d4df6 -->
+<!-- previous-release: rof2-ci-r43-a1-107bfcc6c593 -->
 
-## Offline Bazaar parcel checkout
+## Offline Bazaar stall recovery
 
-- Adds native cross-zone Bazaar parcel purchases from offline RoF2 traders when offline trading, Bazaar parcel delivery and parcel merchants are enabled.
-- Settles the buyer debit, seller proceeds, listing and inventory changes, and parcel in one durable transaction. A retry of the same completed quote returns its original outcome.
-- Keeps in-person counter sales available and synchronizes the displayed buyer balance after the native parcel purchase reply.
+- Restores eligible RoF2 Offline Mode stalls, their remaining stock and their saved locations when the Bazaar loads after a server restart. A restored stall supports native browsing, counter purchases and cross-zone parcel purchases while the seller remains logged out.
+- Settles a recovered counter purchase in one transaction with the buyer's item and debit, seller proceeds, remaining stock and an idempotent receipt. Counter and parcel purchases compete for the same listing stock.
+- Binds a stall to the saved Trader Satchel and the exact Bazaar instance. Sold, withdrawn and unverified stock cannot be recreated from inventory. Ordinary Enter World reclaims the remaining seller stock and proceeds.

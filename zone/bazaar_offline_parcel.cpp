@@ -236,12 +236,14 @@ Outcome Settle(Database &db, const Purchase &request)
 		const auto listing_id = Strings::ToUnsignedBigInt(binding.begin()[0]);
 		auto listing = Query(db, fmt::format(
 			"SELECT char_id,item_sn,item_id,item_cost,item_charges,active_transaction,"
-			"aug_slot_1,aug_slot_2,aug_slot_3,aug_slot_4,aug_slot_5,aug_slot_6,HEX(offline_parcel_generation),char_zone_id,char_zone_instance_id FROM trader WHERE id={} FOR UPDATE",
+			"aug_slot_1,aug_slot_2,aug_slot_3,aug_slot_4,aug_slot_5,aug_slot_6,HEX(offline_parcel_generation),"
+			"char_zone_id,char_zone_instance_id,offline_inventory_slot,offline_satchel_slot,offline_satchel_guid "
+			"FROM trader WHERE id={} FOR UPDATE",
 			listing_id
 		));
 		auto quotes = Query(db, fmt::format(
 			"SELECT seller_id,serial,instance_id,item_id,unit_price,stock,buyer_id,requested_quantity,"
-			"sold_quantity,HEX(generation) FROM bazaar_offline_parcel_quotes WHERE token={} FOR UPDATE", request.token
+			"sold_quantity,HEX(generation),delivery_slot,delivery_serial FROM bazaar_offline_parcel_quotes WHERE token={} FOR UPDATE", request.token
 		));
 		if (quotes.RowCount() != 1) {
 			return {Status::Stale};
@@ -259,9 +261,11 @@ Outcome Settle(Database &db, const Purchase &request)
 			return {Status::Stale};
 		}
 		if (buyer) {
-			return buyer == request.buyer && request.quantity == Strings::ToUnsignedInt(quote[7])
-				? Outcome{Status::Replay, item, Strings::ToUnsignedInt(quote[8])}
-				: Outcome{Status::Stale};
+			if (buyer != request.buyer || request.quantity != Strings::ToUnsignedInt(quote[7]) ||
+				request.counter.has_value() != (quote[10] != nullptr)) {
+				return {Status::Stale};
+			}
+			return {Status::Replay, item, Strings::ToUnsignedInt(quote[8])};
 		}
 		if (listing.RowCount() != 1) {
 			return {Status::Stale};
@@ -272,7 +276,10 @@ Outcome Settle(Database &db, const Purchase &request)
 			Strings::ToInt(sale[4]) != stock || Strings::ToUnsignedInt(sale[5]) != OfflineParcel ||
 			!sale[12] || !quote[9] || std::string_view(sale[12]) != quote[9] || !request.parcelable ||
 			Strings::ToUnsignedInt(sale[13]) != Zones::BAZAAR || Strings::ToUnsignedInt(sale[14]) != instance ||
-			(request.buyer_zone == Zones::BAZAAR && request.buyer_instance == instance)) {
+			(request.counter.has_value() !=
+				(request.buyer_zone == Zones::BAZAAR && request.buyer_instance == instance)) ||
+			(request.counter && (!sale[15] || !request.counter->slot || !request.counter->serial ||
+				request.counter->serial > INT32_MAX || request.fee_rate != 0))) {
 			return {Status::Stale};
 		}
 		if ((request.stackable && (stock <= 0 || request.quantity > static_cast<uint32_t>(stock))) ||
@@ -296,6 +303,28 @@ Outcome Settle(Database &db, const Purchase &request)
 		}
 		auto inventory = items.begin();
 		const auto slot = Strings::ToUnsignedInt(inventory[0]);
+		if (sale[15]) {
+			if (Strings::ToUnsignedInt(sale[15]) != slot || !sale[16] || !sale[17]) {
+				return {Status::Stale};
+			}
+			auto authority = Query(db, fmt::format(
+				"SELECT 1 FROM bazaar_offline_stalls s LEFT JOIN instance_list i ON i.id=s.instance_id "
+				"AND i.zone={} AND i.version=s.instance_version AND i.is_global=1 AND i.never_expires=1 "
+				"AND i.offline_bazaar_epoch=s.instance_epoch WHERE s.character_id={} AND s.instance_id={} "
+				"AND s.phase IN (1,3) AND (s.instance_id=0 OR i.id IS NOT NULL) LOCK IN SHARE MODE",
+				Zones::BAZAAR, seller, instance
+			));
+			if (authority.RowCount() != 1) {
+				return {Status::Stale};
+			}
+			auto satchel = Query(db, fmt::format(
+				"SELECT slot_id FROM inventory WHERE character_id={} AND slot_id={} AND guid={} FOR UPDATE",
+				seller, Strings::ToUnsignedInt(sale[16]), Strings::ToUnsignedInt(sale[17])
+			));
+			if (satchel.RowCount() != 1) {
+				return {Status::Stale};
+			}
+		}
 		const auto charges = static_cast<int16_t>(Strings::ToUnsignedInt(inventory[1]));
 		// Native inventory uses 32767 for unlimited/negative charges.
 		if (charges < 0 || charges == INT16_MAX || (charges ? charges : 1) != stock) {
@@ -322,32 +351,58 @@ Outcome Settle(Database &db, const Purchase &request)
 		if (!buyer_after || !seller_after) {
 			return {Status::Funds};
 		}
-		const auto parcel_slot = FreeMailboxSlot(db, request.buyer, request.mailbox_limit);
-		if (!parcel_slot) {
-			return {Status::MailboxFull};
-		}
-		auto names = Query(db, fmt::format("SELECT name FROM character_data WHERE id={}", seller));
-		if (names.RowCount() != 1 || !names.begin()[0]) {
-			return {Status::Stale};
-		}
+		uint32_t parcel_slot = 0;
+		uint32_t parcel_id = 0;
+		if (request.counter) {
+			// The native caller preflights a free slot and creates a separate item
+			// instance. The primary key guards the durable slot at insertion.
+			auto serials = Query(db, fmt::format(
+				"SELECT slot_id FROM inventory WHERE character_id={} AND guid={} FOR UPDATE",
+				request.buyer, request.counter->serial
+			));
+			if (serials.RowCount()) {
+				return {Status::Stale};
+			}
+			RequireOne(Query(db, fmt::format(
+				"INSERT INTO inventory (character_id,slot_id,item_id,charges,color,augment_one,augment_two,"
+				"augment_three,augment_four,augment_five,augment_six,instnodrop,custom_data,ornament_icon,"
+				"ornament_idfile,ornament_hero_model,guid) "
+				"SELECT {},{},item_id,{},color,augment_one,augment_two,augment_three,augment_four,"
+				"augment_five,augment_six,instnodrop,custom_data,ornament_icon,ornament_idfile,ornament_hero_model,{} "
+				"FROM inventory WHERE character_id={} AND slot_id={} AND guid={}",
+				request.buyer, request.counter->slot, request.stackable ? request.quantity : charges,
+				request.counter->serial, seller, slot, serial
+			)));
+		} else {
+			parcel_slot = FreeMailboxSlot(db, request.buyer, request.mailbox_limit);
+			if (!parcel_slot) {
+				return {Status::MailboxFull};
+			}
+			auto names = Query(db, fmt::format("SELECT name FROM character_data WHERE id={}", seller));
+			if (names.RowCount() != 1 || !names.begin()[0]) {
+				return {Status::Stale};
+			}
 
-		CharacterParcelsRepository::CharacterParcels parcel{};
-		parcel.char_id = request.buyer;
-		parcel.item_id = item;
-		parcel.aug_slot_1 = Strings::ToUnsignedInt(sale[6]);
-		parcel.aug_slot_2 = Strings::ToUnsignedInt(sale[7]);
-		parcel.aug_slot_3 = Strings::ToUnsignedInt(sale[8]);
-		parcel.aug_slot_4 = Strings::ToUnsignedInt(sale[9]);
-		parcel.aug_slot_5 = Strings::ToUnsignedInt(sale[10]);
-		parcel.aug_slot_6 = Strings::ToUnsignedInt(sale[11]);
-		parcel.slot_id = parcel_slot;
-		parcel.quantity = request.stackable ? request.quantity : std::max<int16_t>(charges, 1);
-		parcel.from_name = names.begin()[0];
-		parcel.note = "Delivered from a Bazaar Purchase";
-		parcel.sent_date = time(nullptr);
-		const auto saved = CharacterParcelsRepository::InsertOne(db, parcel);
-		if (!saved.id) {
-			return {Status::Failed};
+			CharacterParcelsRepository::CharacterParcels parcel{};
+			parcel.char_id = request.buyer;
+			parcel.item_id = item;
+			parcel.aug_slot_1 = Strings::ToUnsignedInt(sale[6]);
+			parcel.aug_slot_2 = Strings::ToUnsignedInt(sale[7]);
+			parcel.aug_slot_3 = Strings::ToUnsignedInt(sale[8]);
+			parcel.aug_slot_4 = Strings::ToUnsignedInt(sale[9]);
+			parcel.aug_slot_5 = Strings::ToUnsignedInt(sale[10]);
+			parcel.aug_slot_6 = Strings::ToUnsignedInt(sale[11]);
+			parcel.slot_id = parcel_slot;
+			parcel.quantity = request.stackable ? request.quantity : std::max<int16_t>(charges, 1);
+			parcel.from_name = names.begin()[0];
+			parcel.note = "Delivered from a Bazaar Purchase";
+			parcel.sent_date = time(nullptr);
+			const auto saved = CharacterParcelsRepository::InsertOne(db, parcel);
+			if (!saved.id) {
+				return {Status::Failed};
+			}
+
+			parcel_id = saved.id;
 		}
 
 		WriteWallet(db, request.buyer, buyer_after.value.after);
@@ -362,14 +417,16 @@ Outcome Settle(Database &db, const Purchase &request)
 			RequireOne(Query(db, fmt::format("DELETE FROM trader WHERE id={}", listing_id)));
 		}
 		RequireOne(Query(db, fmt::format(
-			"UPDATE bazaar_offline_parcel_quotes SET buyer_id={},requested_quantity={},sold_quantity={},parcel_id={},fee={} "
-			"WHERE token={} AND buyer_id=0",
-			request.buyer, request.quantity, request.quantity, saved.id, static_cast<uint64_t>(fee), request.token
+			"UPDATE bazaar_offline_parcel_quotes SET buyer_id={},requested_quantity={},sold_quantity={},parcel_id={},fee={},"
+			"delivery_slot={},delivery_serial={} WHERE token={} AND buyer_id=0",
+			request.buyer, request.quantity, request.quantity, parcel_id, static_cast<uint64_t>(fee),
+			request.counter ? std::to_string(request.counter->slot) : "NULL",
+			request.counter ? request.counter->serial : 0, request.token
 		)));
 		if (!transaction.Commit()) {
 			return {Status::CommitUnknown};
 		}
-		return {Status::Committed, item, request.quantity, parcel_slot, static_cast<uint64_t>(fee), buyer_after.value.after};
+		return {Status::Committed, item, request.quantity, request.counter ? request.counter->slot : parcel_slot, static_cast<uint64_t>(fee), buyer_after.value.after};
 	} catch (const DatabaseFailure &) {
 		return {Status::Failed};
 	}

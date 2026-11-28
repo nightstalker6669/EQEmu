@@ -175,6 +175,8 @@ namespace EQ
 
 		uint32 GetMerchantSlot() const			{ return m_merchantslot; }
 		void SetMerchantSlot(uint32 slot)		{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_merchantslot = slot; }
+		uint32 GetBazaarQuote() const { return m_bazaar_quote; }
+		void SetBazaarQuote(uint32 quote) { m_bazaar_quote = quote; }
 
 		int32 GetMerchantCount() const			{ return m_merchantcount; }
 		void SetMerchantCount(int32 count)		{ if(!FirePersonalOccurrenceSource::NativeInventoryFence::ItemAllowed(this))return;  m_merchantcount = count; }
@@ -408,6 +410,7 @@ namespace EQ
 		uint32           m_price{0};                // Bazaar /trader price
 		uint32           m_color{0};
 		uint32           m_merchantslot{0};
+		uint32           m_bazaar_quote{0};
 		int16            m_currentslot{0};
 		bool             m_attuned{false};
 		int32            m_merchantcount{1};//number avaliable on the merchant, -1=unlimited

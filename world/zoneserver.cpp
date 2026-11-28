@@ -22,6 +22,7 @@
 #include "../common/housing/upkeep_refresh_wire.h"
 
 #include "zoneserver.h"
+#include "../common/bazaar_offline_stall.h"
 
 #include "common/content/world_content_service.h"
 #include "common/events/player_event_logs.h"
@@ -104,6 +105,15 @@ ZoneServer::~ZoneServer() {
 
 bool ZoneServer::SetZone(uint32 in_zone_id, uint32 in_instance_id, bool in_is_static_zone) {
 	is_booting_up = false;
+
+	if (GetZoneID() == Zones::BAZAAR &&
+		(in_zone_id != Zones::BAZAAR || in_instance_id != GetInstanceID())) {
+		CheckToClearTraderAndBuyerTables();
+	}
+	if (in_zone_id == Zones::BAZAAR && !ZSList::Instance()->RetryBazaarPark(in_instance_id)) {
+		LogError("Cannot accept Bazaar instance [{}] before durable stall fencing", in_instance_id);
+		return false;
+	}
 
 	std::string zone_short_name = ZoneName(in_zone_id, true);
 	std::string zone_long_name = ZoneLongName(in_zone_id, true);
@@ -1947,11 +1957,15 @@ void ZoneServer::IncomingClient(Client* client) {
 void ZoneServer::CheckToClearTraderAndBuyerTables()
 {
 	if (GetZoneID() == Zones::BAZAAR) {
-		TraderRepository::DeleteWhere(
-			database,
-			fmt::format("`char_zone_id` = {} AND `char_zone_instance_id` = {}", GetZoneID(), GetInstanceID()
-			)
-		);
+		const auto storage = OfflineBazaarStall::CheckStorage(database);
+		if (storage == OfflineBazaarStall::Storage::Legacy) {
+			TraderRepository::DeleteWhere(database, fmt::format(
+				"`char_zone_id` = {} AND `char_zone_instance_id` = {}", GetZoneID(), GetInstanceID()));
+		} else if (storage != OfflineBazaarStall::Storage::Ready ||
+			!OfflineBazaarStall::Park(database, GetInstanceID())) {
+			ZSList::Instance()->DeferBazaarPark(GetInstanceID());
+			LogError("Unable to fence Bazaar instance [{}] after worker loss", GetInstanceID());
+		}
 		BuyerRepository::DeleteBuyers(database, GetZoneID(), GetInstanceID());
 
 		LogTradingDetail(

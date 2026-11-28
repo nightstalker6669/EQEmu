@@ -79,10 +79,11 @@ public:
 				"SELECT DISTINCT(t.char_id), t.char_zone_id, t.char_zone_instance_id, t.char_entity_id, c.name "
 				"FROM trader AS t "
 				"JOIN character_data AS c ON t.char_id = c.id "
-				"WHERE t.char_zone_instance_id = {} "
+				"WHERE t.char_zone_instance_id = {} AND t.active_transaction <> {} "
 				"ORDER BY t.char_zone_instance_id ASC "
 				"LIMIT {}",
 				char_zone_instance_id,
+				OfflineParked,
 				max_results)
 			);
 		}
@@ -91,8 +92,9 @@ public:
 				"SELECT DISTINCT(t.char_id), t.char_zone_id, t.char_zone_instance_id, t.char_entity_id, c.name "
 				"FROM trader AS t "
 				"JOIN character_data AS c ON t.char_id = c.id "
-				"ORDER BY t.char_zone_instance_id ASC "
+				"WHERE t.active_transaction <> {} ORDER BY t.char_zone_instance_id ASC "
 				"LIMIT {}",
+				OfflineParked,
 				max_results)
 			);
 		}
@@ -251,6 +253,7 @@ public:
 	static constexpr uint8_t CounterOnly = 2;
 	static constexpr uint8_t CounterSalePending = 3;
 	static constexpr uint8_t OfflineParcel = 4;
+	static constexpr uint8_t OfflineParked = 5;
 
 	static bool ClaimSale(Database &db, const Trader &listing, bool counter_only = false)
 	{

@@ -6653,8 +6653,12 @@ namespace RoF2
 
 		RoF2::structs::ItemSerializationHeader hdr;
 
-		//sprintf(hdr.unknown000, "06e0002Y1W00");
-		strn0cpy(hdr.unknown000, fmt::format("{:016}\0", inst->GetSerialNumber()).c_str(),sizeof(hdr.unknown000));
+		// Durable Bazaar offers carry the unsigned quote in the merchant view
+		// only. The real inventory item retains its positive native serial.
+		const auto offer = inst->GetBazaarQuote();
+		const auto serial = packet_type == ItemPacketMerchant && offer >= (1U << 31)
+			? static_cast<int64>(offer) : inst->GetSerialNumber();
+		strn0cpy(hdr.unknown000, fmt::format("{:016}", serial).c_str(), sizeof(hdr.unknown000));
 
 		hdr.stacksize = 1;
 

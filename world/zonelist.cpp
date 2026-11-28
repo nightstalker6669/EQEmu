@@ -21,6 +21,8 @@
 #include "common/event_sub.h"
 #include "common/events/player_event_logs.h"
 #include "common/json/json.h"
+#include "common/bazaar_offline_stall.h"
+#include "common/eq_constants.h"
 #include "common/misc_functions.h"
 #include "common/patches/patches.h"
 #include "common/random.h"
@@ -717,7 +719,22 @@ uint16 ZSList::GetAvailableZonePort()
 	return first;
 }
 
+bool ZSList::RetryBazaarPark(uint32 instance)
+{
+	if (!m_pending_bazaar_parks.contains(instance)) {
+		return true;
+	}
+	if (!OfflineBazaarStall::Park(database, instance)) {
+		return false;
+	}
+	m_pending_bazaar_parks.erase(instance);
+	return true;
+}
+
 uint32 ZSList::TriggerBootup(uint32 iZoneID, uint32 iInstanceID) {
+	if (iZoneID == Zones::BAZAAR && !RetryBazaarPark(iInstanceID)) {
+		return 0;
+	}
 	if (iInstanceID > 0)
 	{
 		auto iterator = zone_server_list.begin();

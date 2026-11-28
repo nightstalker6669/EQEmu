@@ -42,6 +42,7 @@
 #include "housing_plot_marker.h"
 
 #include "client.h"
+#include "bazaar_offline_stall.h"
 #include "common/repositories/trader_repository.h"
 #include "dodh_backflag_loot.h"
 #include "por_deathknell_harp_loot.h"
@@ -2045,6 +2046,7 @@ void Client::Handle_Connect_OP_ZoneEntry(const EQApplicationPacket *app)
 
 	/* Zone Spawns Packet */
 	entity_list.SendZoneSpawnsBulk(this);
+	BazaarStalls::Send(*this);
 	entity_list.SendZoneCorpsesBulk(this);
 	entity_list.SendZonePVPUpdates(this);	//hack until spawn struct is fixed.
 
@@ -16525,7 +16527,10 @@ void Client::Handle_OP_OfflineBazaarTrader(const EQApplicationPacket *app)
 	}
 	ClearAllProximities();
 
-	if (RuleB(Parcel, EnableParcelMerchants) && RuleB(Bazaar, EnableParcelDelivery) &&
+	if (RegisterPersistentBazaarStall()) {
+		m_persistent_bazaar_stall = true;
+		m_offline_bazaar_parcel_custody = true;
+	} else if (RuleB(Parcel, EnableParcelMerchants) && RuleB(Bazaar, EnableParcelDelivery) &&
 		OfflineBazaar::HasTransactionalStorage(database) && SaveCurrency()) {
 		// A lost acknowledgement may still have activated the listings.
 		// Disable stale offline profile currency saves before the write.
@@ -16613,7 +16618,11 @@ void Client::Handle_OP_TraderBuy(const EQApplicationPacket *app)
 		strnlen(in->serial_number, sizeof(in->serial_number)) < sizeof(in->serial_number)) {
 		const auto quote = Strings::ToUnsignedBigInt(in->serial_number);
 		if (quote >= OfflineBazaar::FirstQuote && quote <= UINT32_MAX) {
-			BuyOfflineBazaarParcel(static_cast<uint32>(quote), app);
+			if (in->method == BazaarByVendor) {
+				BuyOfflineBazaarCounter(static_cast<uint32>(quote), app);
+			} else {
+				BuyOfflineBazaarParcel(static_cast<uint32>(quote), app);
+			}
 			return;
 		}
 	}
@@ -16641,7 +16650,7 @@ void Client::Handle_OP_TraderBuy(const EQApplicationPacket *app)
 
 	switch (in->method) {
 		case BazaarByVendor: {
-			if (trader) {
+			if (trader && !trader->HasPersistentBazaarStall()) {
 				LogTrading("Buy item directly from vendor id <green>[{}] item_id <green>[{}] quantity <green>[{}] "
 						   "serial_number <green>[{}]",
 						   in->trader_id,
@@ -16790,6 +16799,9 @@ void Client::Handle_OP_TradeRequestAck(const EQApplicationPacket *app)
 
 void Client::Handle_OP_TraderShop(const EQApplicationPacket *app)
 {
+	if (app->size != sizeof(TraderClick_Struct)) {
+		return;
+	}
 	auto in = (TraderClick_Struct *) app->pBuffer;
 	LogTrading("Handle_OP_TraderShop: TraderClick_Struct TraderID [{}], Code [{}], Unknown008 [{}], Approval [{}]",
 			   in->TraderID,
@@ -16806,8 +16818,11 @@ void Client::Handle_OP_TraderShop(const EQApplicationPacket *app)
 			);
 			auto data          = (TraderClick_Struct *) outapp->pBuffer;
 			auto trader_client = entity_list.GetClientByID(in->TraderID);
+			const auto durable_seller = BazaarStalls::CounterSeller(*this, in->TraderID);
 
-			if (trader_client) {
+			if (durable_seller) {
+				data->Approval = durable_seller != CharacterID();
+			} else if (trader_client) {
 				data->Approval = trader_client->WithCustomer(GetID());
 				LogTrading("Client::Handle_OP_TraderShop: Shop Request ([{}]) to ([{}]) with Approval: [{}]",
 						   GetCleanName(),
@@ -16828,13 +16843,16 @@ void Client::Handle_OP_TraderShop(const EQApplicationPacket *app)
 			QueuePacket(outapp.get());
 
 			if (data->Approval) {
-				BulkSendTraderInventory(trader_client->CharacterID());
-				trader_client->Trader_CustomerBrowsing(this);
+				if (durable_seller) {
+					BulkSendTraderInventory(durable_seller, true);
+				} else {
+					BulkSendTraderInventory(trader_client->CharacterID());
+					trader_client->Trader_CustomerBrowsing(this);
+				}
 				SetTraderID(in->TraderID);
 				LogTrading("Client::Handle_OP_TraderShop: Trader Inventory Sent to [{}] from [{}]",
-						   GetID(),
-						   in->TraderID
-				);
+					GetID(), in->TraderID);
+
 			}
 			else {
 				MessageString(Chat::Yellow, TRADER_BUSY);

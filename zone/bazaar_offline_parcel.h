@@ -19,6 +19,11 @@ bool SetParcelAvailability(Database &db, uint32_t seller, bool available);
 std::optional<Coins> ReadWallet(Database &db, uint32_t character_id);
 uint32_t Quote(Database &db, uint64_t listing_id, uint32_t price, int32_t stock);
 
+struct CounterDestination {
+	uint32_t slot;
+	uint32_t serial;
+};
+
 struct Purchase {
 	uint32_t token;
 	uint32_t buyer;
@@ -34,6 +39,7 @@ struct Purchase {
 	Coins carried;
 	double fee_rate;
 	int32_t mailbox_limit;
+	std::optional<CounterDestination> counter;
 };
 
 enum class Status { Stale, Failed, Funds, MailboxFull, Committed, Replay, CommitUnknown };

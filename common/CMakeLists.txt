@@ -38,6 +38,7 @@ set(common_sources
 	shared_core/inventory_snapshot.cpp
 	base_packet.cpp
 	bazaar.cpp
+	bazaar_offline_stall.cpp
 	bodytypes.cpp
 	classes.cpp
 	cli/eqemu_command_handler.cpp
@@ -622,6 +623,7 @@ set(common_headers
 	achievements.h
 	base_packet.h
 	bazaar.h
+	bazaar_offline_stall.h
 	bodytypes.h
 	classes.h
 	cli/argh.h

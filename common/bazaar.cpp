@@ -173,7 +173,7 @@ Bazaar::GetSearchResults(
 	};
 
 	bool        convert = false;
-	std::string search_criteria_trader("TRUE");
+	auto search_criteria_trader = fmt::format("trader.active_transaction <> {}", TraderRepository::OfflineParked);
 	std::string field_criteria_items("FALSE");
 	std::string where_criteria_items(" TRUE ");
 

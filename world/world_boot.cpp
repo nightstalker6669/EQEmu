@@ -16,6 +16,7 @@
 	along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 #include "world_boot.h"
+#include "../common/bazaar_offline_stall.h"
 
 #include "common/content/world_content_service.h"
 #include "common/database/database_update.h"
@@ -307,7 +308,14 @@ bool WorldBoot::DatabaseLoadRoutines(int argc, char **argv)
 	database.ClearInvSnapshots();
 	LogInfo("Loading items");
 	LogInfo("Clearing trader table details");
-	database.ClearTraderDetails();
+	const auto bazaar_storage = OfflineBazaarStall::CheckStorage(database);
+	if (bazaar_storage == OfflineBazaarStall::Storage::Legacy) {
+		database.ClearTraderDetails();
+	} else if (bazaar_storage != OfflineBazaarStall::Storage::Ready ||
+		!OfflineBazaarStall::Park(database, std::nullopt)) {
+		LogError("Unable to fence durable Bazaar stalls during World startup");
+		return 1;
+	}
 	database.ClearBuyerDetails();
 	LogInfo("Clearing buyer table details");
 
