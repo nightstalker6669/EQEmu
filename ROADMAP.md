@@ -259,6 +259,20 @@ The paired database release changes metadata only. The published SQL and all 467
 
 </details>
 
+<details>
+<summary>RoF2 Offline Bazaar stall recovery — Published in r45</summary>
+
+In r43, unsold offline listings cleared when the Bazaar worker restarted. This update adds recovery for eligible stalls.
+
+- **Restart recovery:** The Offline Mode opt-in now restores eligible Trader’s Satchel stock at the saved stall location in the public Bazaar or a matching permanent global Bazaar shard. Native QA supervised a full stop and start of the same development game with MariaDB online. World and all 12 Zone workers had new process IDs, and the seller stayed logged out. Three unsold Bat Wings, both balances, the earlier parcel and its sale receipt survived.
+- **Native sales and reclaim:** An ordinary buyer entered through Nexus, browsed the restored stall at its original price and bought one wing at the counter. The item went directly to inventory, the seller was credited once, stock dropped to two and checkout created no parcel. A second buyer bought another wing from a different zone and collected it through a native parcel merchant. The seller stayed offline for both sales, then used ordinary Enter World to reclaim one unsold wing and the proceeds. Cleanup cleared the stall and listings and retained historical sale records.
+- **Settlement and custody:** Recovered counter checkout commits the delivered item, buyer debit, seller credit, stock and receipt together. Isolated MariaDB checks covered concurrent recovery, stale pending quotes, completed-sale replay, rollback on interruption and late errors, competition for the last item and a sale racing seller reclaim. Stock already sold or withdrawn did not return. Recovery rejected a changed satchel and an unrelated instance with reused identifiers.
+- **Limits:** The restored stall uses a generic player-shaped actor at the saved location. One counter confirmation displayed its numeric suffix. Unsupported item properties and unresolved custody are ineligible. Native evidence covers a supervised full restart. Abrupt whole-game loss and individual live Zone replacement remain unverified natively. Existing parcel rules and legacy checkout scope carry forward. The fresh-empty database ships the schema without saved stalls.
+
+[Server r45](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r45-a1-cda5550927b4) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-28-offline-bazaar-stall-persistence-r2) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/3bd28cd695d6f26eb87005df12312f25e124ebdb/releases/peq-rof2-2026-11-28-offline-bazaar-stall-persistence-r2/NATIVE-QUALIFICATIONS.json)
+
+</details>
+
 ## Quests & zones
 
 [Browse the alphabetical quest-route catalogue](docs/rof2/roadmap/quests/README.md) · [Portable searchable catalogue](docs/rof2/roadmap/quests.html)
