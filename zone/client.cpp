@@ -4,6 +4,7 @@
 #include "common/sod_admission.h"
 #include "common/sod_reward_quote.h"
 #include "common/sod_faction_reward.h"
+#include "common/hot_group_missions.h"
 #include "fungal_item_operation_source.h"
 #include "dodh_spell_hail.h"
 #include "dodh_cocoon_open_receipt.h"
@@ -110,6 +111,7 @@
 #include "zone/bot_command.h"
 #include "zone/cheat_manager.h"
 #include "zone/client_achievements.h"
+#include "zone/slayer_banestrike.h"
 #include "zone/client_version.h"
 #include "zone/command.h"
 #include "zone/dialogue_window.h"
@@ -1082,6 +1084,12 @@ bool Client::SaveAA()
 			}
 
 			aa_points_spent += r->total_cost;
+
+			// A pending earned-AA readback owns these rows. A generic save
+			// must not replace a committed upgrade with a stale cached rank.
+			if (m_slayer_aa_write_pending & SlayerBanestrike::WriteBit(a->first_rank_id)) {
+				continue;
+			}
 
 			e.id       = character_id;
 			e.aa_id    = a->first_rank_id;
@@ -5811,6 +5819,20 @@ void Client::SendRespawnBinds()
 
 void Client::HandleLDoNOpen(NPC *target)
 {
+	const auto *hot_chest = target ? HouseOfThuleGroup::FindChest(target->GetNPCTypeID()) : nullptr;
+	if (hot_chest) {
+		auto *dz = zone ? zone->GetDynamicZone() : nullptr;
+		const auto run = GetSharedTaskId();
+		if (target->GetSpawnPointID() != hot_chest->spawn ||
+			!zone || !dz || !zone->GetInstanceID() || !zone->IsZone(hot_chest->zone, dz->GetInstanceID()) ||
+			zone->GetInstanceVersion() != HouseOfThuleGroup::InstanceVersion || run <= 0 ||
+			dz->GetType() != DynamicZoneType::Mission || dz->IsExpired() ||
+			!dz->HasMember(CharacterID()) || !dz->HasDatabaseMember(CharacterID()) ||
+			!IsTaskActivityActive(hot_chest->task, hot_chest->activity) ||
+			target->GetEntityVariable("hot_group_mission") != std::to_string(run)) {
+			return;
+		}
+	}
  if (target && VergalidMission::ReservedHazard(*target)) return;
  const bool notebook_chest = target && DodhHardNotebookChest::IsActor(*target);
  if (notebook_chest && !DodhHardNotebookChest::AllowOpen(*this, *target)) return;
@@ -5930,12 +5952,14 @@ void Client::HandleLDoNOpen(NPC *target)
                     target->GetNPCTypeID() == 356901)) &&
                 !target->GetEntityVariable("rof2_dodh_scene_actor").empty();
             const DodhCocoonOpen::ScopedOpen opened(
-                (dodh_cocoon || dodh_plea_chest || dodh_traitor_chest || notebook_chest || dodh_widdlethorpe_chest || bellfast_hive)
+                (dodh_cocoon || dodh_plea_chest || dodh_traitor_chest || notebook_chest || dodh_widdlethorpe_chest || bellfast_hive || hot_chest)
                     ? target : nullptr, this);
             if (dodh_demi_chest) {
                 target->SetEntityVariable("dodh_demi:opened", std::to_string(CharacterID()));
             }
-			target->Death(this, 0, SPELL_UNKNOWN, EQ::skills::SkillHandtoHand);
+			if (target->Death(this, 0, SPELL_UNKNOWN, EQ::skills::SkillHandtoHand) && hot_chest) {
+				UpdateTaskActivity(hot_chest->task, hot_chest->activity, 1);
+			}
 		}
 	}
 }

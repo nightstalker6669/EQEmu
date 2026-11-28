@@ -1,5 +1,6 @@
 #include "common/dodh_bellfast_admission.h"
 #include "common/dodh_longshadow_admission.h"
+#include "common/hot_group_missions.h"
 #include "common/sod_message_admission.h"
 #include "sod_original_transform_world.h"
 #include "dodh_longshadow_outbox.h"
@@ -237,6 +238,37 @@ void SharedTaskManager::AttemptSharedTaskCreation(
 	// shared task validation
 	// todo: this should be online group/raid members only (avoid queries)
 	auto request = SharedTask::GetRequestCharacters(*m_database, requested_character_id);
+	if (const auto *prerequisite = HouseOfThuleGroup::FindAuthoredPrerequisite(requested_task_id)) {
+		const auto *requester = ClientList::Instance()->FindCLEByCharacterID(requested_character_id);
+		if (!HouseOfThuleGroup::IsSharedPrerequisite(requested_task_id) ||
+			task.id != requested_task_id || task.type != TASK_TYPE_SHARED || task.dz_template_id != 0 ||
+			!npc_type_id || requested_character_id != request.leader_id ||
+			request.group_type == SharedTaskRequestGroupType::Raid ||
+			(request.group_type == SharedTaskRequestGroupType::Group &&
+			 !HouseOfThuleGroup::IsPublicGroupLeader(*m_database, requested_character_id)) ||
+			!requester || !requester->Server() || requester->Server()->GetZoneID() != prerequisite->zone ||
+			requester->Server()->GetInstanceID() != 0 ||
+			!HouseOfThuleGroup::HasEarnedTasks(*m_database, requested_character_id, prerequisite->required)) {
+			return;
+		}
+	}
+	if (const auto *mission = HouseOfThuleGroup::Find(requested_task_id)) {
+		const auto &templates = dynamic_zone_manager.GetTemplates();
+		const auto mission_template = templates.find(mission->dz_template);
+		const auto *requester = ClientList::Instance()->FindCLEByCharacterID(requested_character_id);
+		if (task.id != requested_task_id || task.type != TASK_TYPE_SHARED ||
+			task.dz_template_id != mission->dz_template || mission_template == templates.end() ||
+			mission_template->second.zone_id != mission->destination_zone ||
+			mission_template->second.zone_version != HouseOfThuleGroup::InstanceVersion ||
+			!npc_type_id || requested_character_id != request.leader_id || !requester ||
+			!requester->Server() || requester->Server()->GetZoneID() != mission->requester_zone ||
+			requester->Server()->GetInstanceID() != 0 ||
+			request.group_type != SharedTaskRequestGroupType::Group ||
+			!HouseOfThuleGroup::IsPublicGroupLeader(*m_database, requested_character_id) ||
+			!HouseOfThuleGroup::HasEarnedRequest(*m_database, *mission, requested_character_id)) {
+			return;
+		}
+	}
 	if (DodhLongshadowAdmission::Managed(requested_task_id)) {
 		const auto* requester = ClientList::Instance()->FindCLEByCharacterID(requested_character_id);
 		if (!npc_type_id || requested_character_id != request.leader_id || !requester || !requester->Server() ||

@@ -1,4 +1,5 @@
 #include "common/dodh_longshadow_admission.h"
+#include "common/hot_group_missions.h"
 #include "common/sod_reward_quote.h"
 #include "fire_run_terminal_scene.h"
 /*	EQEmu: EQEmulator
@@ -1183,6 +1184,12 @@ bool TaskManager::CanOfferSharedTask(int task_id, const SharedTaskRequest& reque
 		(request.group_type != SharedTaskRequestGroupType::Group ||
 		 !DodhLongshadowAdmission::EarnedPrerequisites(database, task_id, request.leader_id))) {
 		return false;
+	}
+	if (const auto *mission = HouseOfThuleGroup::Find(task_id)) {
+		if (request.group_type != SharedTaskRequestGroupType::Group ||
+			!HouseOfThuleGroup::HasEarnedRequest(database, *mission, request.leader_id)) {
+			return false;
+		}
 	}
 
 	if (task->min_level > 0 && request.lowest_level < task->min_level)

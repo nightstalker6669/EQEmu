@@ -10,6 +10,7 @@
 #include "zone/client.h"
 #include "zone/dodh_rakban_claim.h"
 #include "zone/guild_mgr.h"
+#include "zone/slayer_banestrike.h"
 #include "zone/zone.h"
 #include "zone/zonedb.h"
 
@@ -30,6 +31,15 @@
 
 namespace
 {
+const EQ::Achievements::Category *FindSlayerCategory(uint32_t id)
+{
+	const auto &categories = AchievementManager::Instance().Categories();
+	const auto category = std::find_if(categories.begin(), categories.end(), [id](const auto &entry) {
+		return entry.parent_category_id == SlayerBanestrike::SlayerCategory && entry.category_id == id;
+	});
+	return category == categories.end() ? nullptr : &*category;
+}
+
 std::optional<bool> ReadRakbanCombineReceipt(uint32_t character_id)
 {
     const auto receipt = database.QueryDatabase(fmt::format(
@@ -1388,6 +1398,67 @@ bool ClientAchievementState::HasCompleted(uint32_t achievement_id) const
 	return status && *status == EQ::Achievements::Status::Completed;
 }
 
+bool ClientAchievementState::HasBanestrikeRace(uint32_t race) const
+{
+	using namespace EQ::Achievements;
+	const auto *skill = FindSlayerCategory(SlayerBanestrike::SkillCategory);
+	if (!m_loaded || !race || !skill || !RuleB(Achievements, EnableAchievements)) {
+		return false;
+	}
+
+	const auto &manager = AchievementManager::Instance();
+	for (const auto &association : skill->associations) {
+		if (!HasCompleted(association.achievement_id)) {
+			continue;
+		}
+		const auto &criteria = manager.CriteriaForAchievement(association.achievement_id);
+		if (std::any_of(criteria.begin(), criteria.end(), [race](const auto *criterion) {
+			return criterion->event_type == EventType::NpcRaceKill &&
+				criterion->behavior == CriterionBehavior::Required &&
+				criterion->target_id == race;
+		})) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void ClientAchievementState::ReconcileSlayerAA()
+{
+	using namespace SlayerBanestrike;
+	const auto *skill = FindSlayerCategory(SkillCategory);
+	const bool earned = skill && std::any_of(skill->associations.begin(), skill->associations.end(),
+		[this](const auto &association) { return HasCompleted(association.achievement_id); });
+	if (!earned) {
+		m_reconcile_slayer_aa = false;
+		return;
+	}
+
+	if (!m_client.PersistEarnedSlayerAA(Ability, 1)) {
+		return;
+	}
+
+	// A disabled or missing member must never shorten an original tier.
+	const auto complete_category = [this](const EQ::Achievements::Category *category, size_t expected) {
+		return category && category->associations.size() == expected &&
+			std::all_of(category->associations.begin(), category->associations.end(),
+				[this](const auto &association) { return HasCompleted(association.achievement_id); });
+	};
+	const uint32_t hastened =
+		complete_category(FindSlayerCategory(ConquestCategory), 15) +
+		complete_category(FindSlayerCategory(SpecialCategory), 29) +
+		complete_category(skill, 98);
+	m_reconcile_slayer_aa = hastened && !m_client.PersistEarnedSlayerAA(HastenedAbility, hastened);
+}
+
+bool Client::CanBanestrikeTarget(Mob *target) const
+{
+	return !IsSpiritShrouded() && GetAA(SlayerBanestrike::Ability) && target &&
+		target->IsNPC() && target->GetHP() > 0 && target->IsTargetable() &&
+		!target->IsRaidTarget() && !target->HasOwner() && !target->CastToNPC()->GetSwarmOwner() &&
+		m_achievement_state && m_achievement_state->HasBanestrikeRace(target->GetBaseRace());
+}
+
 std::optional<EQ::Achievements::Status> ClientAchievementState::GetStatus(
 	uint32_t achievement_id
 ) const
@@ -1498,8 +1569,8 @@ bool ClientAchievementState::ProcessEvent(
 
 	auto &manager = AchievementManager::Instance();
 	const auto &event_criteria =
-		event_type == EventType::NpcNameKill
-			? manager.NpcNameKillCriteria(target_id)
+		event_type == EventType::NpcNameKill || event_type == EventType::NpcIdentityKill
+			? manager.IndexedNpcKillCriteria(event_type, target_id)
 			: manager.Criteria(event_type);
 	if (event_criteria.empty()) {
 		return true;
@@ -2088,6 +2159,10 @@ bool ClientAchievementState::Complete(uint32_t achievement_id, bool send_packets
 		QueueRewards(achievement_id);
 	}
 
+	if (achievement_id >= 11000004 && achievement_id <= 11000179) {
+		m_reconcile_slayer_aa = true;
+	}
+
 	ProcessEvent(EventType::AchievementComplete, achievement_id, 0, 1, send_packets);
 	m_completion_stack.erase(achievement_id);
 	if (send_packets) {
@@ -2267,6 +2342,10 @@ void ClientAchievementState::ProcessPendingRewards()
 		m_pending_rewards.clear();
 		m_pending_reward_ids.clear();
 		return;
+	}
+
+	if (m_reconcile_slayer_aa && !m_client.IsSpiritShrouded() && m_slayer_aa_retry_timer.Check()) {
+		ReconcileSlayerAA();
 	}
 
 	// Rewards can complete more achievements. Drain a bounded number from
@@ -3541,7 +3620,8 @@ void Client::ReplayDeferredAchievementStateUpdates()
 				update.value1,
 				update.value2,
 				update.value3,
-				update.value4
+				update.value4,
+				update.npc_layout
 			);
 			break;
 		case DeferredAchievementStateUpdateType::Level:
@@ -3585,7 +3665,8 @@ void Client::UpdateAchievementForKill(
 	uint32 npc_type_id,
 	uint32 race_id,
 	uint32 npc_name_identity,
-	uint32 zone_id
+	uint32 zone_id,
+	uint32 npc_layout
 )
 {
 	if (ShouldDeferAchievementStateUpdate()) {
@@ -3594,7 +3675,9 @@ void Client::UpdateAchievementForKill(
 			npc_type_id,
 			race_id,
 			npc_name_identity,
-			zone_id
+			zone_id,
+			false,
+			npc_layout
 		});
 		return;
 	}
@@ -3603,6 +3686,13 @@ void Client::UpdateAchievementForKill(
 	}
 	m_achievement_state->ProcessEvent(EQ::Achievements::EventType::NpcKill, npc_type_id);
 	m_achievement_state->ProcessEvent(EQ::Achievements::EventType::NpcRaceKill, race_id);
+	if (npc_type_id && npc_layout) {
+		m_achievement_state->ProcessEvent(
+			EQ::Achievements::EventType::NpcIdentityKill,
+			npc_type_id,
+			npc_layout
+		);
+	}
 	if (npc_name_identity) {
 		m_achievement_state->ProcessEvent(
 			EQ::Achievements::EventType::NpcNameKill,

@@ -50,8 +50,9 @@ public:
 	) const;
 
 	const std::vector<const AchievementCriterion *> &Criteria(EQ::Achievements::EventType event_type) const;
-	const std::vector<const AchievementCriterion *> &NpcNameKillCriteria(
-		uint32_t name_identity
+	const std::vector<const AchievementCriterion *> &IndexedNpcKillCriteria(
+		EQ::Achievements::EventType event_type,
+		uint32_t target_id
 	) const;
 	const std::vector<const AchievementCriterion *> &CriteriaForAchievement(uint32_t achievement_id) const;
 	// Rows not assigned to a selectable reward set are granted automatically.
@@ -77,8 +78,8 @@ private:
 
 	std::unordered_map<uint32_t, size_t> m_definition_indices;
 	std::unordered_map<uint8_t, std::vector<const AchievementCriterion *>> m_criteria_by_event;
-	std::unordered_map<uint32_t, std::vector<const AchievementCriterion *>>
-		m_npc_name_kill_criteria;
+	std::unordered_map<uint64_t, std::vector<const AchievementCriterion *>>
+		m_indexed_npc_kill_criteria;
 	std::unordered_map<uint32_t, std::vector<const AchievementCriterion *>> m_criteria_by_achievement;
 	std::unordered_map<uint32_t, std::vector<RewardSelectionReward>> m_rewards;
 	std::unordered_map<uint32_t, RewardSelectionSet> m_reward_sets;

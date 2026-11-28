@@ -449,6 +449,8 @@ public:
 	bool TransformDeathknellSullonShard();
 	bool TransformDeathknellSuchunShard();
 	uint16 GetSharedTaskInstanceID(uint32 task_id, uint32 zone_id, uint32 zone_version);
+	bool EnterHouseOfThuleGroupMission(uint32 task_id, uint32 requester_entity_id);
+	bool CanRequestHouseOfThulePrerequisite(uint32 task_id, uint32 requester_entity_id);
 	void LockSharedTask(bool lock);
 	void EndSharedTask();
 	void EndSharedTask(bool send_fail);

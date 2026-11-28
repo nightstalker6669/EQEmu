@@ -589,6 +589,9 @@ public:
 	/* New PP Save Functions */
 	bool SaveCurrency(){ return !m_spirit_shroud_transition && !m_mercenary_persistence_failed && !m_inventory_session_rejected && database.SaveCharacterCurrency(this->CharacterID(), &m_pp); }
 	bool SaveAA();
+	bool CanBanestrikeTarget(Mob *target) const;
+	bool FinishBanestrike(Mob *target);
+	bool PersistEarnedSlayerAA(uint32 ability, uint32 count);
 	void RemoveExpendedAA(int aa_id);
 
 	inline bool ClientDataLoaded() const { return client_data_loaded; }
@@ -1840,6 +1843,7 @@ public:
 	void ProcessAchievementRewards();
 	void NotifyAchievementStateUpdatePending();
 	bool HasCompletedAchievement(uint32 achievement_id) const;
+	bool FinishRupkerrClick(int16 slot, uint32 item_id, int32 spell_id, int32 item_serial);
 	int GetAchievementStatus(uint32 achievement_id) const;
 	int64 GetAchievementProgress(
 		uint32 achievement_id,
@@ -1861,7 +1865,8 @@ public:
 		uint32 npc_type_id,
 		uint32 race_id,
 		uint32 npc_name_identity,
-		uint32 zone_id
+		uint32 zone_id,
+		uint32 npc_layout
 	);
 	void UpdateAchievementForLevel(uint32 level);
 	void UpdateAchievementForTask(uint32 task_id);
@@ -2641,6 +2646,7 @@ private:
 	std::vector<uint32_t> m_completed_shared_tasks;
 	std::unique_ptr<ClientRewardSelection> m_reward_selection;
 	std::unique_ptr<ClientAchievementState> m_achievement_state;
+	uint8 m_slayer_aa_write_pending = 0;
 	enum class DeferredAchievementStateUpdateType : uint8 {
 		Kill,
 		Level,
@@ -2660,6 +2666,7 @@ private:
 		uint32 value3 = 0;
 		uint32 value4 = 0;
 		bool flag = false;
+		uint32 npc_layout = 0;
 	};
 	void RegisterCollectionItem(int32 slot, const EQ::ItemInstance &item);
 	bool ShouldDeferAchievementStateUpdate() const;

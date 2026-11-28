@@ -96,6 +96,8 @@
 #include "zone/mob_movement_manager.h"
 #include "zone/queryserv.h"
 #include "zone/quest_parser_collection.h"
+#include "zone/slayer_banestrike.h"
+#include "zone/hot_rupkerr_click.h"
 #include "zone/string_ids.h"
 #include "zone/water_map.h"
 #include "zone/worldserver.h"
@@ -1905,6 +1907,8 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 			? item->GetID() : 0;
 	const int32 completed_cast_item_slot = completed_cast_item_id
 		? static_cast<int32>(inventory_slot) : -1;
+	const bool rupkerr_click = HouseOfThuleGroup::IsRupkerrClick(completed_cast_item_id, spell_id);
+	const int32 rupkerr_item_serial = rupkerr_click ? item->GetSerialNumber() : 0;
 
 	const uint32 sod_completed_stone_serial=completed_cast_item_id==88304&&item?item->GetSerialNumber():0;
 	FirePersonalOccurrenceSource::NativeItemCustody::FinishTicket fire_finish;
@@ -1928,6 +1932,17 @@ void Mob::CastedSpellFinished(int32 spell_id, uint32 target_id, CastingSlot slot
 		// if there are issues I guess we can do something else, but this should work
 		StopCasting();
 		return;
+	}
+
+	if (rupkerr_click) {
+		if (DeleteChargeFromSlot != completed_cast_item_slot ||
+			!CastToClient()->FinishRupkerrClick(
+				DeleteChargeFromSlot, completed_cast_item_id, spell_id, rupkerr_item_serial
+			)) {
+			StopCasting();
+			return;
+		}
+		DeleteChargeFromSlot = -1;
 	}
 
 	if(IsClient()&&completed_cast_item_id==88304&&spell_id==7651&&sod_completed_stone_serial)
@@ -2682,6 +2697,18 @@ bool Mob::SpellFinished(int32 spell_id, Mob *spell_target, CastingSlot slot, int
 		return(false);
 	}
 
+	const bool banestrike = spell_id == SlayerBanestrike::Launcher;
+	if (banestrike) {
+		const bool original_cast = casting_spell_id == spell_id && casting_spell_slot == slot &&
+			spell_target && casting_spell_targetid == spell_target->GetID();
+		const auto native_aa = from_casted_spell ? (original_cast ? casting_spell_aa_id : 0) : aa_id;
+		if (isproc || !IsClient() || slot != CastingSlot::AltAbility ||
+			native_aa != SlayerBanestrike::Ability || CastAction != SingleTarget ||
+			!CastToClient()->CanBanestrikeTarget(spell_target)) {
+			return false;
+		}
+	}
+
 	const auto *binding_context = from_casted_spell && !isproc && spell_id == 37147 &&
 		casting_spell_id == spell_id && casting_spell_slot == slot &&
 		casting_spell_inventory_slot == inventory_slot &&
@@ -2829,6 +2856,10 @@ bool Mob::SpellFinished(int32 spell_id, Mob *spell_target, CastingSlot slot, int
 			}
 			if (isproc) {
 				SpellOnTarget(spell_id, spell_target, 0, true, resist_adjust, true, level_override);
+			} else if (banestrike) {
+				if (!CastToClient()->FinishBanestrike(spell_target)) {
+					return false;
+				}
 			} else {
 				if (spells[spell_id].target_type == ST_TargetOptional){
 					if (!TrySpellProjectile(spell_target, spell_id))
@@ -7497,6 +7528,8 @@ void Mob::DoBardCastingFromItemClick(bool is_casting_bard_song, uint32 cast_time
 		const auto completed_item = IsClient() ? CastToClient()->GetInv().GetItem(item_slot) : nullptr;
 		const uint32 completed_item_id = completed_item && completed_item->GetItem()->Click.Effect == spell_id
 			? completed_item->GetID() : 0;
+		const bool rupkerr_click = HouseOfThuleGroup::IsRupkerrClick(completed_item_id, spell_id);
+		const int32 rupkerr_item_serial = rupkerr_click ? completed_item->GetSerialNumber() : 0;
 		bool completed_charge_consumed = false;
 		FirePersonalOccurrenceSource::NativeItemCustody::FinishTicket fire_finish;
 		if(IsClient() && (!FirePersonalOccurrenceSource::NativeItemCustody::Start(
@@ -7520,6 +7553,15 @@ void Mob::DoBardCastingFromItemClick(bool is_casting_bard_song, uint32 cast_time
          }else CastToClient()->SendSpellBarEnable(spell_id);
          return;
         }
+		if (rupkerr_click) {
+			if (fire_native_cast_finished && DeleteChargeFromSlot == static_cast<int16>(item_slot)) {
+				CastToClient()->FinishRupkerrClick(
+					DeleteChargeFromSlot, completed_item_id, spell_id, rupkerr_item_serial
+				);
+			}
+			CastToClient()->SendSpellBarEnable(spell_id);
+			return;
+		}
 		if (fire_native_cast_finished) {
             if (ashengate_mark) {
                 if (!TssAshengate::ConsumeMark(*CastToClient(), DeleteChargeFromSlot)) return;

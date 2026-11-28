@@ -47,6 +47,7 @@
 #include "zone/entity.h"
 #include "zone/npc_scale_manager.h"
 #include "zone/quest_parser_collection.h"
+#include "zone/slayer_banestrike.h"
 #include "zone/spawn2.h"
 #include "zone/string_ids.h"
 #include "zone/water_map.h"
@@ -2219,9 +2220,13 @@ void NPC::PetOnSpawn(NewSpawn_Struct* ns)
 			no_target_hotkey = false;
 		}
 
-		SetTempPet(true); //Simple mob flag for checking if temp pet
-		swarm_owner->SetTempPetsActive(true); //Necessary fail safe flag set if mob ever had a swarm pet to ensure they are removed.
-		swarm_owner->SetTempPetCount(swarm_owner->GetTempPetCount() + 1);
+		// Sending another viewer the same Banestrike spirit does not create
+		// another temporary pet. Its expiry releases one ownership count.
+		if (GetNPCTypeID() != SlayerBanestrike::SpiritNpcType || !IsTempPet()) {
+			SetTempPet(true);
+			swarm_owner->SetTempPetsActive(true);
+			swarm_owner->SetTempPetCount(swarm_owner->GetTempPetCount() + 1);
+		}
 
 		//Not recommended if using above (However, this will work better on older clients).
 		if (RuleB(Pets, UnTargetableSwarmPet)) {

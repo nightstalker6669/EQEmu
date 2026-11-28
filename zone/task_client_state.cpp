@@ -1,6 +1,7 @@
 #include "common/dodh_bellfast_admission.h"
 #include "common/dodh_longshadow_travel.h"
 #include "common/dodh_longshadow_admission.h"
+#include "common/hot_group_missions.h"
 #include "dodh_longshadow_source.h"
 #include "common/shared_core/dodh_longshadow_sources.h"
 #include "sod_message_admission.h"
@@ -62,6 +63,7 @@
 #include "common/fire_shared_activity_origin.h"
 #include "por_group_admission.h"
 
+#include <cmath>
 #include <cstdlib>
 #include <limits>
 
@@ -3845,6 +3847,36 @@ void ClientTaskState::AcceptNewTask(
 	// World-confirmed members need their own DZ membership, not the requester's prerequisite items.
 	if (!client->m_requesting_shared_task && !PorGroupAdmission::AllowsRequest(
 			*client, task_id, entity_list.GetNPCByID(npc_entity_id), zone)) return;
+	if (!client->m_requesting_shared_task) {
+		if (const auto *prerequisite = HouseOfThuleGroup::FindAuthoredPrerequisite(task_id)) {
+			auto *giver = entity_list.GetNPCByID(npc_entity_id);
+			const auto expected_type = HouseOfThuleGroup::IsSharedPrerequisite(task_id)
+				? TaskType::Shared : TaskType::Quest;
+			if (task->type != expected_type || !zone || !giver || giver->GetDepop() || giver->GetHP() <= 0 ||
+				!HouseOfThuleGroup::IsPrerequisiteRequester(*prerequisite, zone->GetZoneID(),
+					zone->GetInstanceVersion(), zone->GetInstanceID(), giver->GetNPCTypeID(), giver->GetSpawnPointID()) ||
+				!HouseOfThuleGroup::HasEarnedTasks(database, client->CharacterID(), prerequisite->required)) {
+				return;
+			}
+			const auto distance = giver->CalculateDistance(client);
+			if (!std::isfinite(distance) || distance > MAX_TASK_SELECT_DISTANCE) {
+				return;
+			}
+		}
+		if (const auto *mission = HouseOfThuleGroup::Find(task_id)) {
+			auto* giver = entity_list.GetNPCByID(npc_entity_id);
+			if (!zone || !giver || giver->GetDepop() || giver->GetHP() <= 0 ||
+				!HouseOfThuleGroup::IsRequester(*mission, zone->GetZoneID(), zone->GetInstanceVersion(),
+					zone->GetInstanceID(), giver->GetNPCTypeID(), giver->GetSpawnPointID()) ||
+				!HouseOfThuleGroup::HasEarnedRequest(database, *mission, client->CharacterID())) {
+				return;
+			}
+			const auto distance = giver->CalculateDistance(client);
+			if (!std::isfinite(distance) || distance > MAX_TASK_SELECT_DISTANCE) {
+				return;
+			}
+		}
+	}
 	if (DodhLongshadowAdmission::Managed(task_id) && !client->m_requesting_shared_task) {
 		auto* giver = entity_list.GetNPCByID(npc_entity_id);
 		if (!zone || !giver || giver->GetDepop() || giver->GetHP() <= 0 ||

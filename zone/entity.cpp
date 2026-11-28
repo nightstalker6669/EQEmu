@@ -27,6 +27,7 @@
 #include "common/data_verification.h"
 #include "common/features.h"
 #include "common/guilds.h"
+#include "common/patches/rof2_structs.h"
 #include "zone/achievement_manager.h"
 #include "zone/bot.h"
 #include "zone/dialogue_window.h"
@@ -50,6 +51,7 @@
 #include <array>
 #include <cmath>
 #include <memory>
+#include <cstddef>
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>
@@ -422,6 +424,8 @@ void EntityList::DoorProcess()
 		door_timer.Disable();
 		return;
 	}
+
+	UpdatePillarsHunterPhase();
 
 	auto it = door_list.begin();
 	while (it != door_list.end()) {
@@ -958,10 +962,83 @@ Object *EntityList::FindNearbyObject(float x, float y, float z, float radius)
 	return nullptr;
 }
 
+int EntityList::UpdatePillarsHunterPhase()
+{
+	if (!zone || zone->GetZoneID() != Zones::PILLARSALRA ||
+		zone->GetInstanceVersion() != 0 || zone->GetInstanceID() != 0) {
+		return -1;
+	}
+
+	auto *statue = GetDoorsByDBID(35525);
+	if (!statue || statue->GetDoorID() != 6 || statue->GetOpenType() != 156 ||
+		GetDoorsByDoorID(6) != statue || !statue->GetInvertState() ||
+		std::strcmp(statue->GetDoorName(), "OBJ_ROCKSPIN_TOMB") != 0 ||
+		statue->GetX() != 0.0f || statue->GetY() != 0.0f ||
+		std::abs(statue->GetZ() - 639.248f) > 0.01f || statue->HasDestinationZone()) {
+		return -1;
+	}
+
+	TimeOfDay_Struct clock{};
+	if (!zone->zone_time.GetCurrentEQTimeOfDay(&clock) || clock.hour < 1 || clock.hour > 24) {
+		return -1;
+	}
+
+	// Six EverQuest hours per tower, in the order Nature, Arcane, Light, Shadow.
+	// Both the death gate and the display use this same phase.
+	constexpr glm::vec2 towers[] = {
+		{757.772f, -437.5f}, {-759.248f, 436.648f},
+		{427.5f, 757.772f}, {-437.5f, -757.772f}
+	};
+	const int phase = (clock.hour - 1) / 6;
+	const auto &tower = towers[phase];
+	const float heading = CalculateHeadingAngleBetweenPositions(0.0f, 0.0f, tower.x, tower.y);
+	if (statue->m_position.w == heading) {
+		return phase;
+	}
+	statue->m_position.w = heading;
+
+	// RoF2's single-switch message removes or adds the addressed switch.
+	// Replacing the spinning prop resets its active heading as well as its default.
+	using SwitchUpdate = RoF2::structs::Door_Struct;
+	static_assert(sizeof(SwitchUpdate) == 100);
+	static_assert(offsetof(SwitchUpdate, doorId) == 60);
+	static_assert(offsetof(SwitchUpdate, unknown0083) == 83);
+	EQApplicationPacket remove(OP_UpdateSingleDoor, sizeof(SwitchUpdate));
+	reinterpret_cast<SwitchUpdate *>(remove.pBuffer)->doorId = statue->GetDoorID();
+
+	EQApplicationPacket add(OP_UpdateSingleDoor, sizeof(SwitchUpdate));
+	auto &entry = *reinterpret_cast<SwitchUpdate *>(add.pBuffer);
+	std::memcpy(entry.name, statue->GetDoorName(), sizeof(entry.name));
+	entry.xPos = statue->GetX();
+	entry.yPos = statue->GetY();
+	entry.zPos = statue->GetZ();
+	entry.heading = heading;
+	entry.incline = statue->GetIncline();
+	entry.size = statue->GetSize();
+	entry.doorId = statue->GetDoorID();
+	entry.opentype = statue->GetOpenType();
+	entry.invert_state = statue->GetInvertState();
+	entry.state_at_spawn = entry.invert_state ? !statue->IsDoorOpen() : statue->IsDoorOpen();
+	entry.door_param = statue->GetDoorParam();
+	entry.unknown0081 = 1;
+	entry.unknown0083 = 1;
+
+	for (const auto &[id, client] : client_list) {
+		if (client->ClientVersion() == EQ::versions::ClientVersion::RoF2 &&
+			(statue->GetClientVersionMask() & client->ClientVersionBit())) {
+			client->QueuePacket(&remove, true, Client::CLIENT_CONNECTED);
+			client->QueuePacket(&add, true, Client::CLIENT_CONNECTED);
+		}
+	}
+	return phase;
+}
+
 bool EntityList::MakeDoorSpawnPacket(EQApplicationPacket *app, Client *client)
 {
 	if (door_list.empty())
 		return false;
+
+	UpdatePillarsHunterPhase();
 
 	uint32 mask_test = client->ClientVersionBit();
 	int count = 0;

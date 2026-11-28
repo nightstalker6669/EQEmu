@@ -25,6 +25,7 @@ const char *OpcodeNames[_maxEmuOpcode+1] = {
 	#include "emu_oplist.h"
 	#include "mail_oplist.h"
 	#include "guild_banner_oplist.h"
+	N(OP_UpdateSingleDoor),
 #undef N
 
 	""

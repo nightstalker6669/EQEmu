@@ -32,6 +32,7 @@ public:
 	) const;
 	bool NeedsOwnershipReconciliation() const;
 	bool PassCastRestriction(uint32_t restriction_id) const;
+	bool HasBanestrikeRace(uint32_t race) const;
 
 	bool ProcessEvent(
 		EQ::Achievements::EventType event_type,
@@ -91,6 +92,7 @@ private:
 	bool PersistProgress(size_t definition_index, uint8_t component_type, size_t component_index);
 	bool PersistCompletion(size_t definition_index, uint32_t completed_at);
 	void QueueRewards(uint32_t achievement_id);
+	void ReconcileSlayerAA();
 	void QueueCompletionNotification(uint32_t achievement_id);
 	RewardGrantResult GrantRewardBatch(
 		uint32_t achievement_id,
@@ -116,5 +118,7 @@ private:
 	std::unordered_set<uint32_t> m_pending_notification_ids;
 	Timer m_notification_timer;
 	std::deque<uint32_t> m_pending_rewards;
+	bool m_reconcile_slayer_aa = true;
+	Timer m_slayer_aa_retry_timer{1000};
 	std::unordered_set<uint32_t> m_pending_reward_ids;
 };

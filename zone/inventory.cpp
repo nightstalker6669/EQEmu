@@ -3,6 +3,9 @@
 #include "por_deathknell_harp_loot.h"
 #include "fire_material_loot_source.h"
 #include "fire_native_item_custody.h"
+#include "hot_rupkerr_click.h"
+#include "common/housing/inventory_projection.h"
+#include "common/housing/inventory_row_db.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -37,6 +40,8 @@
 
 #include <list>
 #include <memory>
+#include <cmath>
+#include <vector>
 
 extern WorldServer worldserver;
 extern QueryServ  *QServ;
@@ -1125,6 +1130,131 @@ Client::CollectionPickupResult Client::PutGroundCollectibleOnCursor(const EQ::It
 
 	UpdateAchievementForOwnItem(item.GetID());
 	return CollectionPickupResult::Placed;
+}
+
+bool Client::FinishRupkerrClick(int16 slot, uint32 item_id, int32 spell_id, int32 item_serial)
+{
+	using FirePersonalOccurrenceSource::NativeInventoryFence;
+	const bool journal = item_id == 49187;
+	const uint32 task_id = journal ? 920400 : 920401;
+	const uint32 activity_id = journal ? 1 : 8;
+	const auto personal_slot = [](int16 id) {
+		return EQ::ValueWithin(id, EQ::invslot::GENERAL_BEGIN, EQ::invslot::GENERAL_END) ||
+			EQ::ValueWithin(id, EQ::invbag::GENERAL_BAGS_BEGIN, EQ::invbag::GENERAL_BAGS_END);
+	};
+	auto *click = m_inv.GetItem(slot);
+	if (!HouseOfThuleGroup::IsRupkerrClick(item_id, spell_id) || !zone ||
+		!zone->IsZone(700, 0) || zone->GetInstanceVersion() != 0 || !personal_slot(slot) ||
+		!click || !item_serial || click->GetSerialNumber() != item_serial ||
+		click->GetID() != item_id || click->GetCharges() != 1 ||
+		!IsTaskActivityActive(task_id, activity_id) || IsSpiritShrouded() ||
+		!NativeInventoryFence::ItemAllowed(click) || !NativeInventoryFence::SlotAllowed(&m_inv, slot) ||
+		!trade || trade->state != TradeNone || trade->With() ||
+		((RuleB(Housing, EnablePlayerHousing) || RuleB(Mercs, AllowMercs)) && !HasInventorySessionReservation())) {
+		return false;
+	}
+
+	// The source gives /loc Y,X,Z at the waterfall. Accept the standing/wet
+	// space at that location, without accepting the distant same-river basins.
+	if (!journal && !(std::abs(GetX() - 2140.0f) <= 24.0f &&
+		std::abs(GetY() - 1560.0f) <= 24.0f && std::abs(GetZ() + 18.0f) <= 18.0f)) {
+		return false;
+	}
+
+	struct Write {
+		int16 slot;
+		EQ::ItemInstance *before;
+		uint8 consume;
+		std::unique_ptr<EQ::ItemInstance> after;
+	};
+	std::vector<Write> changes;
+	std::unique_ptr<EQ::ItemInstance> restored;
+	if (journal) {
+		restored.reset(database.CreateItem(49189, 0));
+		if (!restored || CheckLoreConflict(restored->GetItem())) {
+			return false;
+		}
+	}
+	changes.push_back({slot, click, 1, std::move(restored)});
+
+	if (journal) {
+		uint8 remaining = 4;
+		const auto take_pages = [&](int16 first, int16 last) {
+			for (int16 id = first; id <= last && remaining; ++id) {
+				auto *pages = m_inv.GetItem(id);
+				if (!pages || pages->GetID() != 49188 || !pages->IsStackable() ||
+					pages->GetCharges() <= 0 || !NativeInventoryFence::ItemAllowed(pages) ||
+					!NativeInventoryFence::SlotAllowed(&m_inv, id)) {
+					continue;
+				}
+				const auto use = static_cast<uint8>(std::min<int>(pages->GetCharges(), remaining));
+				std::unique_ptr<EQ::ItemInstance> after;
+				if (pages->GetCharges() > use) {
+					after.reset(pages->Clone());
+					after->SetCharges(pages->GetCharges() - use);
+				}
+				changes.push_back({id, pages, use, std::move(after)});
+				remaining -= use;
+			}
+		};
+		take_pages(EQ::invslot::GENERAL_BEGIN, EQ::invslot::GENERAL_END);
+		take_pages(EQ::invbag::GENERAL_BAGS_BEGIN, EQ::invbag::GENERAL_BAGS_END);
+		if (remaining) {
+			return false;
+		}
+	}
+
+	if (!database.TransactionBeginStrict().Success()) {
+		return false;
+	}
+	struct Rollback {
+		~Rollback() { database.TransactionRollbackStrict(); }
+	} rollback;
+
+	for (const auto &write : changes) {
+		auto stored = database.QueryDatabase(fmt::format(
+			"SELECT {} FROM inventory WHERE character_id={} AND slot_id={} FOR UPDATE",
+			Housing::InventoryRowDB::Columns, CharacterID(), write.slot
+		), false);
+		if (!stored.Success() || stored.RowCount() != 1 ||
+			!Housing::InventoryProjection::Matches(
+				Housing::InventoryRowDB::Decode(stored.begin()), *write.before
+			) || !database.SaveInventory(CharacterID(), write.after.get(), write.slot)) {
+			return false;
+		}
+	}
+	auto recorded = database.QueryDatabase(fmt::format(
+		"UPDATE character_activities SET donecount=1, completed=1 "
+		"WHERE charid={} AND taskid={} AND activityid={} AND donecount=0 AND completed=0",
+		CharacterID(), task_id, activity_id
+	), false);
+	if (!recorded.Success() || recorded.RowsAffected() != 1) {
+		return false;
+	}
+	if (!database.TransactionCommitStrict().Success()) {
+		RejectInventorySessionAdmission();
+		Kick("Rupkerr item use requires authoritative inventory reload");
+		return false;
+	}
+
+	for (const auto &write : changes) {
+		DeleteItemInInventory(write.slot, write.consume, true, false);
+		if (write.slot == slot && journal) {
+			if (m_inv.PutItem(slot, *write.after) != slot) {
+				RejectInventorySessionAdmission();
+				Kick("Rupkerr journal requires authoritative inventory reload");
+				return false;
+			}
+			SendItemPacket(slot, write.after.get(), ItemPacketTrade);
+		}
+	}
+	UpdateAchievementForOwnItem(item_id);
+	if (journal) {
+		UpdateAchievementForOwnItem(49188);
+		UpdateAchievementForOwnItem(49189);
+	}
+	UpdateTaskActivity(task_id, activity_id, 1);
+	return true;
 }
 
 bool Client::PushItemOnCursor(const EQ::ItemInstance& inst, bool client_update)

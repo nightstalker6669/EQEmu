@@ -31,6 +31,7 @@
 #include "zone/bot.h"
 #include "zone/lua_parser.h"
 #include "zone/quest_parser_collection.h"
+#include "zone/slayer_banestrike.h"
 #include "zone/string_ids.h"
 #include "zone/worldserver.h"
 
@@ -2322,7 +2323,9 @@ bool Mob::SpellEffect(Mob* caster, int32 spell_id, float partial, int level_over
 
 			case SpellEffect::TemporaryPets: //Dook- swarms and wards:
 			{
-				if (!caster)
+				// Banestrike is dispatched only after the native AA and earned-target
+				// checks in SpellFinished.
+				if (!caster || spell_id == SlayerBanestrike::Launcher)
 					break;
 				// this makes necro epic 1.5/2.0 proc work properly
 				if((spell_id != 6882) && (spell_id != 6884)) // Chaotic Jester/Steadfast Servant

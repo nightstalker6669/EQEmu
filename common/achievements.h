@@ -40,8 +40,16 @@ enum class EventType : uint8_t {
 	AchievementComplete    = 11,
 	NpcNameKill            = 12,
 	SkillCap               = 13,
-	CollectionItem         = 14
+	CollectionItem         = 14,
+	NpcIdentityKill        = 15
 };
+
+// The exact NPC kill event carries the database zone and layout version,
+// independent of display name and the transient instance allocation.
+inline constexpr uint32_t NpcKillLayout(uint32_t zone_id, uint16_t version)
+{
+	return zone_id > 0 && zone_id <= 0xFFFFu ? (zone_id << 16) | version : 0;
+}
 
 enum class ProgressMode : uint8_t {
 	Increment = 0,

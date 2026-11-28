@@ -37,7 +37,7 @@ void AchievementManager::Clear()
 	m_definition_packet = SerializeBuffer{};
 	m_definition_indices.clear();
 	m_criteria_by_event.clear();
-	m_npc_name_kill_criteria.clear();
+	m_indexed_npc_kill_criteria.clear();
 	m_criteria_by_achievement.clear();
 	m_rewards.clear();
 	m_reward_sets.clear();
@@ -93,7 +93,7 @@ void AchievementManager::Swap(AchievementManager &other)
 	swap(m_definition_packet, other.m_definition_packet);
 	swap(m_definition_indices, other.m_definition_indices);
 	swap(m_criteria_by_event, other.m_criteria_by_event);
-	swap(m_npc_name_kill_criteria, other.m_npc_name_kill_criteria);
+	swap(m_indexed_npc_kill_criteria, other.m_indexed_npc_kill_criteria);
 	swap(m_criteria_by_achievement, other.m_criteria_by_achievement);
 	swap(m_rewards, other.m_rewards);
 	swap(m_reward_sets, other.m_reward_sets);
@@ -335,7 +335,7 @@ bool AchievementManager::LoadSnapshot()
 		const auto target_value = row.target_value;
 		if (
 			component_type > 2 ||
-			event_type > static_cast<uint32_t>(EventType::CollectionItem) ||
+			event_type > static_cast<uint32_t>(EventType::NpcIdentityKill) ||
 			progress_mode > static_cast<uint32_t>(ProgressMode::Boolean) ||
 			behavior > static_cast<uint32_t>(CriterionBehavior::Blocker) ||
 			target_value < 0
@@ -352,6 +352,7 @@ bool AchievementManager::LoadSnapshot()
 		if (
 			target_id2 &&
 			effective_event_type != EventType::NpcNameKill &&
+			effective_event_type != EventType::NpcIdentityKill &&
 			effective_event_type != EventType::OwnItem &&
 			effective_event_type != EventType::SkillCap
 		) {
@@ -368,6 +369,13 @@ bool AchievementManager::LoadSnapshot()
 				"Achievement criterion [{}] has no usable NPC-name identity hash",
 				row.id
 			);
+			Clear();
+			return false;
+		}
+		if (effective_event_type == EventType::NpcIdentityKill &&
+			(!target_id || !(target_id2 >> 16) || target_value ||
+			 row.required_count != 1 || effective_progress_mode != ProgressMode::Boolean)) {
+			LogError("Achievement criterion [{}] has invalid exact NPC kill identity", row.id);
 			Clear();
 			return false;
 		}
@@ -590,10 +598,12 @@ bool AchievementManager::LoadSnapshot()
 	for (const auto &criterion : m_criteria) {
 		m_criteria_by_event[static_cast<uint8_t>(criterion.event_type)].push_back(&criterion);
 		if (
-			criterion.event_type == EventType::NpcNameKill &&
-			criterion.target_id
+			criterion.event_type == EventType::NpcNameKill ||
+			criterion.event_type == EventType::NpcIdentityKill
 		) {
-			m_npc_name_kill_criteria[criterion.target_id].push_back(&criterion);
+			const auto key = (uint64_t{criterion.target_id} << 8) |
+				static_cast<uint8_t>(criterion.event_type);
+			m_indexed_npc_kill_criteria[key].push_back(&criterion);
 		}
 		m_criteria_by_achievement[criterion.achievement_id].push_back(&criterion);
 	}
@@ -781,13 +791,15 @@ const std::vector<const AchievementCriterion *> &AchievementManager::Criteria(
 	return criteria != m_criteria_by_event.end() ? criteria->second : empty;
 }
 
-const std::vector<const AchievementCriterion *> &AchievementManager::NpcNameKillCriteria(
-	uint32_t name_identity
+const std::vector<const AchievementCriterion *> &AchievementManager::IndexedNpcKillCriteria(
+	EQ::Achievements::EventType event_type,
+	uint32_t target_id
 ) const
 {
 	static const std::vector<const AchievementCriterion *> empty;
-	const auto criteria = m_npc_name_kill_criteria.find(name_identity);
-	return criteria != m_npc_name_kill_criteria.end() ? criteria->second : empty;
+	const auto key = (uint64_t{target_id} << 8) | static_cast<uint8_t>(event_type);
+	const auto criteria = m_indexed_npc_kill_criteria.find(key);
+	return criteria != m_indexed_npc_kill_criteria.end() ? criteria->second : empty;
 }
 
 const std::vector<const AchievementCriterion *> &AchievementManager::CriteriaForAchievement(

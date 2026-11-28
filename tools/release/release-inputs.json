@@ -5,21 +5,21 @@
       "Import full.sql into a fresh empty database with the matching runtime."
     ],
     "asset": {
-      "bytes": 37743626,
-      "name": "PEQ-RoF2-full-2026-11-27-guild-banners.zip",
-      "sha256": "557e9b4830faf4c4c61b9fc5a6ba4e7ad10826ab0e043be51b0a65ef1a946971",
-      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-27-guild-banners/PEQ-RoF2-full-2026-11-27-guild-banners.zip.sha256",
-      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-27-guild-banners/PEQ-RoF2-full-2026-11-27-guild-banners.zip"
+      "bytes": 38164731,
+      "name": "PEQ-RoF2-full-2026-11-27-hot-hunter-slayer.zip",
+      "sha256": "0332a5d62de7df9531d3d8341db8f7463b50bf3dbd23345f8ba7375e2a303c46",
+      "sha256_sidecar_url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-27-hot-hunter-slayer/PEQ-RoF2-full-2026-11-27-hot-hunter-slayer.zip.sha256",
+      "url": "https://github.com/nightstalker6669/EQEmu-Database/releases/download/peq-rof2-2026-11-27-hot-hunter-slayer/PEQ-RoF2-full-2026-11-27-hot-hunter-slayer.zip"
     },
-    "base_database_release_tag": "peq-rof2-2026-11-26-may-collections",
+    "base_database_release_tag": "peq-rof2-2026-11-27-guild-banners",
     "cohort_source_binding": {
       "collections_native_source_files": [
         {
-          "bytes": 8311,
-          "git_blob": "eb6a3e5c779de06c7bdbc1e5ae97edded5d91f3e",
+          "bytes": 8641,
+          "git_blob": "5f6f1c8a5f2fcc628261f6b8786511589fef313c",
           "mode": "100644",
           "path": "common/achievements.h",
-          "sha256": "11bbcc279f3a6894d7fcfa2e2671320c3bb91b1c026167a857d5ae79c06fd6bd"
+          "sha256": "270ff6a4e05057a12fa27184eb7ee3cead8478584811677f078203ecf9f65e7c"
         },
         {
           "bytes": 238146,
@@ -36,25 +36,25 @@
           "sha256": "3dba3682931da72b75a6044ea3a70d954f1b9e75e213313c3e3dc84f25f6b9ed"
         },
         {
-          "bytes": 25756,
-          "git_blob": "3ddd845efab0964cb332c24b712108a674f45956",
+          "bytes": 26386,
+          "git_blob": "1964fefa9ddf7228079c4117a65126fb66298606",
           "mode": "100644",
           "path": "zone/achievement_manager.cpp",
-          "sha256": "5b8354d99e2129b7d017d757ebe85d4a55a0172ccb6ac4b7b26b6117a34ee01a"
+          "sha256": "c56ec2319ed8e1a67cff8d3fa37a769d58a9e7032f1f0df7e00b0ce2271f9fd8"
         },
         {
-          "bytes": 122708,
-          "git_blob": "b454cdbc0dd95f853ebaf641c354491b3fb8683f",
+          "bytes": 123023,
+          "git_blob": "a17e0db59c739d28ce2e934dfefedd3e3069d4e9",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "9c37d1a5a8dd1640cdd8886c91de617de34d6e04f1f1339bc947d69faf75a42b"
+          "sha256": "5fe45af6e10532c664df4fe6e5ad385f1e482dda879d022aeb77f79a1cdbb048"
         },
         {
-          "bytes": 112074,
-          "git_blob": "a7c2f1564fcce738f374b86a8dbfcea94ffc2884",
+          "bytes": 115394,
+          "git_blob": "f31e54435ddc7f902564732eee6b262196ae4ba6",
           "mode": "100644",
           "path": "zone/client_achievements.cpp",
-          "sha256": "90e3a808998ee2faab8ce9e06c0744afa82aecfdf746349c09b5aaab704f4447"
+          "sha256": "fafca300e343ae26eb6bf8ef536f20156b294a950143fdffc6a6d506b4100dfb"
         },
         {
           "bytes": 571003,
@@ -66,18 +66,18 @@
       ],
       "guild_banners_native_source_files": [
         {
-          "bytes": 966,
-          "git_blob": "2da6a9361a75aebec5fdc61cc563554f4c680698",
+          "bytes": 991,
+          "git_blob": "f73e94b6f62c4a386f8d2600396bc16ef79b892c",
           "mode": "100644",
           "path": "common/emu_opcodes.cpp",
-          "sha256": "e24c393960be9eda62a86d6f84747a0a12820c4dda0b2b898ecf100694e1a118"
+          "sha256": "43d162a5a43f74ac455180cbbaa8171b782a0b5c9be88f2d0d5508fcb451f279"
         },
         {
-          "bytes": 1428,
-          "git_blob": "fd90533b945ba08818b83eb683d6cd59289be0f7",
+          "bytes": 1453,
+          "git_blob": "2f9176aabad9b995297caf770cdd846300ecb183",
           "mode": "100644",
           "path": "common/emu_opcodes.h",
-          "sha256": "fda6979c1ded8b6ca059e14734650bbd6ee1844a3f2b608f63da5cbfad92a63d"
+          "sha256": "c519e3f36d141cd9a81adc78f8814314369fc6480ae418c10a8555bbb3e3b401"
         },
         {
           "bytes": 6097,
@@ -143,11 +143,11 @@
           "sha256": "5c2bb0bd2a61ceea7f8e14f663cdf522d64f0300af987e4ecb8441e047773677"
         },
         {
-          "bytes": 22845,
-          "git_blob": "08ad53effa9d519b1dc582231f74fe318696da35",
+          "bytes": 22872,
+          "git_blob": "ec182bf002c0b8d91440af95ee69b71cc7e2ebfb",
           "mode": "100644",
           "path": "utils/patches/patch_RoF2.conf",
-          "sha256": "f198b36ca5494c788d12cb1e4c896bfe16d153f804ffbcf54b992a45edf1af79"
+          "sha256": "02cdf549d84862fe6e6169f25c20b05d60e9cd668f2c06e27f2025f7c13ec373"
         },
         {
           "bytes": 19862,
@@ -234,18 +234,18 @@
           "sha256": "abc2c6da87658fdf65fee677075924d183bfd35098b306384f28d0f2d563b574"
         },
         {
-          "bytes": 195824,
-          "git_blob": "0671d386b4c897390fe8205d6a9799d56a250e78",
+          "bytes": 198175,
+          "git_blob": "5bd996690e55afa2e291fd29f016c96267084176",
           "mode": "100644",
           "path": "zone/lua_client.cpp",
-          "sha256": "12383bba5cf89fbd031547ed7ded5f59682ed922dce1628ac109205186264d0c"
+          "sha256": "d8e13f418f7948498f46a7cabd9259037dbd3670377dd44d19de2f33fe0c53d8"
         },
         {
-          "bytes": 33004,
-          "git_blob": "0d79252a0a180fc4ab4511dc951b9c1d95257eb9",
+          "bytes": 33171,
+          "git_blob": "fe1c400f6714c3719ad15c8906f5ec53591447a7",
           "mode": "100644",
           "path": "zone/lua_client.h",
-          "sha256": "9d7508c97307764120dcea4f64553f2cb8eb1d9ee97d0cba62240bfdb95f3816"
+          "sha256": "148c04a66be6fa490b41aa92eb2a98124b0ba646496c03fc55d85c4d6a5d5573"
         },
         {
           "bytes": 92851,
@@ -262,34 +262,232 @@
           "sha256": "3ad31de407e25dfd1db932b9e3975eab2fb4e44c7e6c1865c15f2ffb59cbd3a6"
         }
       ],
-      "may_collections_native_source_files": [
+      "hot_hunter_slayer_native_source_files": [
         {
-          "bytes": 122708,
-          "git_blob": "b454cdbc0dd95f853ebaf641c354491b3fb8683f",
+          "bytes": 8641,
+          "git_blob": "5f6f1c8a5f2fcc628261f6b8786511589fef313c",
+          "mode": "100644",
+          "path": "common/achievements.h",
+          "sha256": "270ff6a4e05057a12fa27184eb7ee3cead8478584811677f078203ecf9f65e7c"
+        },
+        {
+          "bytes": 991,
+          "git_blob": "f73e94b6f62c4a386f8d2600396bc16ef79b892c",
+          "mode": "100644",
+          "path": "common/emu_opcodes.cpp",
+          "sha256": "43d162a5a43f74ac455180cbbaa8171b782a0b5c9be88f2d0d5508fcb451f279"
+        },
+        {
+          "bytes": 1453,
+          "git_blob": "2f9176aabad9b995297caf770cdd846300ecb183",
+          "mode": "100644",
+          "path": "common/emu_opcodes.h",
+          "sha256": "c519e3f36d141cd9a81adc78f8814314369fc6480ae418c10a8555bbb3e3b401"
+        },
+        {
+          "bytes": 8169,
+          "git_blob": "3d53ed5dc5d1e0952117e77b9930894551de3c8c",
+          "mode": "100644",
+          "path": "common/hot_group_missions.h",
+          "sha256": "ba97a2621449780663c4dd31079038562466766b7100d4289b8ed1b22516b3bc"
+        },
+        {
+          "bytes": 22872,
+          "git_blob": "ec182bf002c0b8d91440af95ee69b71cc7e2ebfb",
+          "mode": "100644",
+          "path": "utils/patches/patch_RoF2.conf",
+          "sha256": "02cdf549d84862fe6e6169f25c20b05d60e9cd668f2c06e27f2025f7c13ec373"
+        },
+        {
+          "bytes": 101947,
+          "git_blob": "001c96cf25abce75ea237dca50842c171ac5c13f",
+          "mode": "100644",
+          "path": "world/shared_task_manager.cpp",
+          "sha256": "11803ef1abb869ce989d5a549f1e82df6594a61b5136e1f8d226f5f15bf18e2f"
+        },
+        {
+          "bytes": 69077,
+          "git_blob": "bab1a9bef28d441e2b1e269d5b468e59e13b3a46",
+          "mode": "100644",
+          "path": "zone/aa.cpp",
+          "sha256": "a5e05adef3f43cbab6538b220a2596513eba27f219bd487352ad6480f53592a7"
+        },
+        {
+          "bytes": 26386,
+          "git_blob": "1964fefa9ddf7228079c4117a65126fb66298606",
+          "mode": "100644",
+          "path": "zone/achievement_manager.cpp",
+          "sha256": "c56ec2319ed8e1a67cff8d3fa37a769d58a9e7032f1f0df7e00b0ce2271f9fd8"
+        },
+        {
+          "bytes": 3671,
+          "git_blob": "a8077ef3fefa74eb08e73b0aaf274cb739701779",
+          "mode": "100644",
+          "path": "zone/achievement_manager.h",
+          "sha256": "9c3539ed753a609249a16c4495d658dfb040c7244d5ecf5bbeb9a6e9d8c99ffa"
+        },
+        {
+          "bytes": 252087,
+          "git_blob": "dcecd90dac7831902902d49545c143d0eaefc432",
+          "mode": "100644",
+          "path": "zone/attack.cpp",
+          "sha256": "0f341be8199f4bb1a1ea0d2eee802f6d9c90f2b85bd5393b7de72932504a7c9e"
+        },
+        {
+          "bytes": 511145,
+          "git_blob": "14d59a49f7c1dfac6e9cbe734da4f0726fc808a1",
+          "mode": "100644",
+          "path": "zone/client.cpp",
+          "sha256": "575d8a89c74dcb3f67c57938dcc8f5843c76eabae6583d91bb0588baab4b3462"
+        },
+        {
+          "bytes": 123023,
+          "git_blob": "a17e0db59c739d28ce2e934dfefedd3e3069d4e9",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "9c37d1a5a8dd1640cdd8886c91de617de34d6e04f1f1339bc947d69faf75a42b"
+          "sha256": "5fe45af6e10532c664df4fe6e5ad385f1e482dda879d022aeb77f79a1cdbb048"
         },
         {
-          "bytes": 112074,
-          "git_blob": "a7c2f1564fcce738f374b86a8dbfcea94ffc2884",
+          "bytes": 115394,
+          "git_blob": "f31e54435ddc7f902564732eee6b262196ae4ba6",
           "mode": "100644",
           "path": "zone/client_achievements.cpp",
-          "sha256": "90e3a808998ee2faab8ce9e06c0744afa82aecfdf746349c09b5aaab704f4447"
+          "sha256": "fafca300e343ae26eb6bf8ef536f20156b294a950143fdffc6a6d506b4100dfb"
         },
         {
-          "bytes": 150083,
-          "git_blob": "c42fce8864a6ce57bd2df49cac1b15902a3a045a",
+          "bytes": 3789,
+          "git_blob": "cbbfedff08bf80ecad2027459553a2fce3562843",
+          "mode": "100644",
+          "path": "zone/client_achievements.h",
+          "sha256": "1ab0bef7fa3a6ac01926a67d2844974ad2d3517c93842795f07fb21b0339f190"
+        },
+        {
+          "bytes": 153003,
+          "git_blob": "c8eb4d9d084402af3bed674556d5ffb121f4504a",
           "mode": "100644",
           "path": "zone/entity.cpp",
-          "sha256": "68fe6cfb0b68c8043db2185c182062bb706c0e93ffa22c6a069228aa57d6f317"
+          "sha256": "137634120fba8be9679a1ee1b8c9872d9a80e7fd9b633368b6f9d25888fcbd52"
         },
         {
-          "bytes": 166971,
-          "git_blob": "0d167a8e1f359c436f69422b751da83cbe14b647",
+          "bytes": 26665,
+          "git_blob": "030b6ef240431bd7b3843855e630fedd39a649f9",
+          "mode": "100644",
+          "path": "zone/entity.h",
+          "sha256": "ae3d038d3ccb1b20978c7318b6a80d834f1fa9c896cd1d9281ab2dc6a7817737"
+        },
+        {
+          "bytes": 262,
+          "git_blob": "ead44bd642009db74a5e13378efdfaae0b0a90fd",
+          "mode": "100644",
+          "path": "zone/hot_rupkerr_click.h",
+          "sha256": "2a1e297f320ff65adb22b3cdbe6726cff01440728f66fb30ce0a9244d82c4af3"
+        },
+        {
+          "bytes": 171763,
+          "git_blob": "98b72419e721e189eddcb28b3dc49e0634d0add8",
           "mode": "100644",
           "path": "zone/inventory.cpp",
-          "sha256": "47217907ac3c3c573764d97c18a9ce3743e7cd719e99c7e30660a01eccafc75d"
+          "sha256": "53ec27d98122272c27274d93acd485a0465691d06b66dd8e5aa4170deb2136dd"
+        },
+        {
+          "bytes": 198175,
+          "git_blob": "5bd996690e55afa2e291fd29f016c96267084176",
+          "mode": "100644",
+          "path": "zone/lua_client.cpp",
+          "sha256": "d8e13f418f7948498f46a7cabd9259037dbd3670377dd44d19de2f33fe0c53d8"
+        },
+        {
+          "bytes": 33171,
+          "git_blob": "fe1c400f6714c3719ad15c8906f5ec53591447a7",
+          "mode": "100644",
+          "path": "zone/lua_client.h",
+          "sha256": "148c04a66be6fa490b41aa92eb2a98124b0ba646496c03fc55d85c4d6a5d5573"
+        },
+        {
+          "bytes": 327279,
+          "git_blob": "7019af75c6ee02a6c945619f491c2e6cb8069ad9",
+          "mode": "100644",
+          "path": "zone/lua_general.cpp",
+          "sha256": "549f6e7cf19e03dbabc4f03ea7a58ae03dde4b693de2a69e8532de8ef86b3e6b"
+        },
+        {
+          "bytes": 136687,
+          "git_blob": "909aeb0f3890ca695320b5b596ed6bf72c0011fa",
+          "mode": "100644",
+          "path": "zone/npc.cpp",
+          "sha256": "d2d326d672604feb4e84b48c0561172b6b32b0070e265afbd88048ad4fd1d678"
+        },
+        {
+          "bytes": 889,
+          "git_blob": "562e8f9e5d64bb0e75b17576549dc059a968e574",
+          "mode": "100644",
+          "path": "zone/slayer_banestrike.h",
+          "sha256": "7c7fc93c95377d07dddd9a9ed7e113bded1c9e2c336af8c6553c0f3ed2de47c3"
+        },
+        {
+          "bytes": 329923,
+          "git_blob": "9e410d4c70fb6780f538b961f2d145f8d8f0036e",
+          "mode": "100644",
+          "path": "zone/spell_effects.cpp",
+          "sha256": "0d809a5fa43004746a1a496226654b6b2aa58a7b84b369fe9d1f4c393cb64f56"
+        },
+        {
+          "bytes": 255167,
+          "git_blob": "3320dfbaf716957ee11b0954a13afab4ab17f81e",
+          "mode": "100644",
+          "path": "zone/spells.cpp",
+          "sha256": "e6275ce6f1c3281445ff95cd1a72955dbb5d2e3ac8a20e989ca96468ec0165bf"
+        },
+        {
+          "bytes": 155199,
+          "git_blob": "b709574defe1fbd8732030fc09c96a3403002e3b",
+          "mode": "100644",
+          "path": "zone/task_client_state.cpp",
+          "sha256": "d59f267817f8feecb48640a59f2b1be8b2d5429843a8164fcf67b6ede4bc744b"
+        },
+        {
+          "bytes": 75574,
+          "git_blob": "f9e62c99e0002704787d6e6ec0c579854519b7a8",
+          "mode": "100644",
+          "path": "zone/task_manager.cpp",
+          "sha256": "fc5068936f8b5a2aef1e91a501ec7a9f57a1117b1711d0691ccaee5be1d98660"
+        },
+        {
+          "bytes": 65576,
+          "git_blob": "bc55261a97269e14098906d38a6167da0d58717b",
+          "mode": "100644",
+          "path": "zone/zoning.cpp",
+          "sha256": "e305076a4d4a571c32c41e9ad1deb9d1081032d6d0484fe5de5da229a5190165"
+        }
+      ],
+      "may_collections_native_source_files": [
+        {
+          "bytes": 123023,
+          "git_blob": "a17e0db59c739d28ce2e934dfefedd3e3069d4e9",
+          "mode": "100644",
+          "path": "zone/client.h",
+          "sha256": "5fe45af6e10532c664df4fe6e5ad385f1e482dda879d022aeb77f79a1cdbb048"
+        },
+        {
+          "bytes": 115394,
+          "git_blob": "f31e54435ddc7f902564732eee6b262196ae4ba6",
+          "mode": "100644",
+          "path": "zone/client_achievements.cpp",
+          "sha256": "fafca300e343ae26eb6bf8ef536f20156b294a950143fdffc6a6d506b4100dfb"
+        },
+        {
+          "bytes": 153003,
+          "git_blob": "c8eb4d9d084402af3bed674556d5ffb121f4504a",
+          "mode": "100644",
+          "path": "zone/entity.cpp",
+          "sha256": "137634120fba8be9679a1ee1b8c9872d9a80e7fd9b633368b6f9d25888fcbd52"
+        },
+        {
+          "bytes": 171763,
+          "git_blob": "98b72419e721e189eddcb28b3dc49e0634d0add8",
+          "mode": "100644",
+          "path": "zone/inventory.cpp",
+          "sha256": "53ec27d98122272c27274d93acd485a0465691d06b66dd8e5aa4170deb2136dd"
         },
         {
           "bytes": 36635,
@@ -320,30 +518,30 @@
           "sha256": "7697aacbcd08416be5ea2c25a012fc4d236cef27d02305cc7fc9e34224b0fa0d"
         }
       ],
-      "preserved_prior_binding": "858b7e8f596e355e413f0101a4f18b6aeedd7165647a3d3de6ba19b02915072e",
-      "quest_projection_sha256": "0f7f974d9fae658286a568b982f34f60199ff23d74d5c7866509e6124909de01",
+      "preserved_prior_binding": "02c245b382292df7976d91cac3b246e841d6ff1548c19123d5d2fc5d2aa2c495",
+      "quest_projection_sha256": "233957594362b61b127b549383574b404d1c85f0e206f7a3641c7745eb9e43b8",
       "quest_root": "quests",
       "release_native_source_files": [
         {
-          "bytes": 8311,
-          "git_blob": "eb6a3e5c779de06c7bdbc1e5ae97edded5d91f3e",
+          "bytes": 8641,
+          "git_blob": "5f6f1c8a5f2fcc628261f6b8786511589fef313c",
           "mode": "100644",
           "path": "common/achievements.h",
-          "sha256": "11bbcc279f3a6894d7fcfa2e2671320c3bb91b1c026167a857d5ae79c06fd6bd"
+          "sha256": "270ff6a4e05057a12fa27184eb7ee3cead8478584811677f078203ecf9f65e7c"
         },
         {
-          "bytes": 966,
-          "git_blob": "2da6a9361a75aebec5fdc61cc563554f4c680698",
+          "bytes": 991,
+          "git_blob": "f73e94b6f62c4a386f8d2600396bc16ef79b892c",
           "mode": "100644",
           "path": "common/emu_opcodes.cpp",
-          "sha256": "e24c393960be9eda62a86d6f84747a0a12820c4dda0b2b898ecf100694e1a118"
+          "sha256": "43d162a5a43f74ac455180cbbaa8171b782a0b5c9be88f2d0d5508fcb451f279"
         },
         {
-          "bytes": 1428,
-          "git_blob": "fd90533b945ba08818b83eb683d6cd59289be0f7",
+          "bytes": 1453,
+          "git_blob": "2f9176aabad9b995297caf770cdd846300ecb183",
           "mode": "100644",
           "path": "common/emu_opcodes.h",
-          "sha256": "fda6979c1ded8b6ca059e14734650bbd6ee1844a3f2b608f63da5cbfad92a63d"
+          "sha256": "c519e3f36d141cd9a81adc78f8814314369fc6480ae418c10a8555bbb3e3b401"
         },
         {
           "bytes": 17582,
@@ -395,6 +593,13 @@
           "sha256": "12e9b13f8f76fcf39d8090bbce362015cd78ba82577a12acdf46292d91dbaf0c"
         },
         {
+          "bytes": 8169,
+          "git_blob": "3d53ed5dc5d1e0952117e77b9930894551de3c8c",
+          "mode": "100644",
+          "path": "common/hot_group_missions.h",
+          "sha256": "ba97a2621449780663c4dd31079038562466766b7100d4289b8ed1b22516b3bc"
+        },
+        {
           "bytes": 4863,
           "git_blob": "777e4180c8ded01abe1bd556e25c951dd4e101bf",
           "mode": "100644",
@@ -444,11 +649,11 @@
           "sha256": "3dba3682931da72b75a6044ea3a70d954f1b9e75e213313c3e3dc84f25f6b9ed"
         },
         {
-          "bytes": 22845,
-          "git_blob": "08ad53effa9d519b1dc582231f74fe318696da35",
+          "bytes": 22872,
+          "git_blob": "ec182bf002c0b8d91440af95ee69b71cc7e2ebfb",
           "mode": "100644",
           "path": "utils/patches/patch_RoF2.conf",
-          "sha256": "f198b36ca5494c788d12cb1e4c896bfe16d153f804ffbcf54b992a45edf1af79"
+          "sha256": "02cdf549d84862fe6e6169f25c20b05d60e9cd668f2c06e27f2025f7c13ec373"
         },
         {
           "bytes": 86439,
@@ -500,6 +705,13 @@
           "sha256": "910e3961b6bd86fd598a9f35f0414809dfb100fd8dd615687dc85bd0d7d29526"
         },
         {
+          "bytes": 101947,
+          "git_blob": "001c96cf25abce75ea237dca50842c171ac5c13f",
+          "mode": "100644",
+          "path": "world/shared_task_manager.cpp",
+          "sha256": "11803ef1abb869ce989d5a549f1e82df6594a61b5136e1f8d226f5f15bf18e2f"
+        },
+        {
           "bytes": 19862,
           "git_blob": "fd2f4548e262ad5349eed749080a12e50e4c8088",
           "mode": "100644",
@@ -507,32 +719,60 @@
           "sha256": "9817ca0f68fa3bf4b5128d6079b1bef8644e3460ddde44d299f3c4c869457db9"
         },
         {
-          "bytes": 25756,
-          "git_blob": "3ddd845efab0964cb332c24b712108a674f45956",
+          "bytes": 69077,
+          "git_blob": "bab1a9bef28d441e2b1e269d5b468e59e13b3a46",
+          "mode": "100644",
+          "path": "zone/aa.cpp",
+          "sha256": "a5e05adef3f43cbab6538b220a2596513eba27f219bd487352ad6480f53592a7"
+        },
+        {
+          "bytes": 26386,
+          "git_blob": "1964fefa9ddf7228079c4117a65126fb66298606",
           "mode": "100644",
           "path": "zone/achievement_manager.cpp",
-          "sha256": "5b8354d99e2129b7d017d757ebe85d4a55a0172ccb6ac4b7b26b6117a34ee01a"
+          "sha256": "c56ec2319ed8e1a67cff8d3fa37a769d58a9e7032f1f0df7e00b0ce2271f9fd8"
         },
         {
-          "bytes": 509979,
-          "git_blob": "ba9ef6a26b2d3eb9457eeea90a49ffecd15c1b91",
+          "bytes": 3671,
+          "git_blob": "a8077ef3fefa74eb08e73b0aaf274cb739701779",
+          "mode": "100644",
+          "path": "zone/achievement_manager.h",
+          "sha256": "9c3539ed753a609249a16c4495d658dfb040c7244d5ecf5bbeb9a6e9d8c99ffa"
+        },
+        {
+          "bytes": 252087,
+          "git_blob": "dcecd90dac7831902902d49545c143d0eaefc432",
+          "mode": "100644",
+          "path": "zone/attack.cpp",
+          "sha256": "0f341be8199f4bb1a1ea0d2eee802f6d9c90f2b85bd5393b7de72932504a7c9e"
+        },
+        {
+          "bytes": 511145,
+          "git_blob": "14d59a49f7c1dfac6e9cbe734da4f0726fc808a1",
           "mode": "100644",
           "path": "zone/client.cpp",
-          "sha256": "09f52f87c2def55033b751d9e01335b37bcd43f559d5f7fafd073a0197b6d3e0"
+          "sha256": "575d8a89c74dcb3f67c57938dcc8f5843c76eabae6583d91bb0588baab4b3462"
         },
         {
-          "bytes": 122708,
-          "git_blob": "b454cdbc0dd95f853ebaf641c354491b3fb8683f",
+          "bytes": 123023,
+          "git_blob": "a17e0db59c739d28ce2e934dfefedd3e3069d4e9",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "9c37d1a5a8dd1640cdd8886c91de617de34d6e04f1f1339bc947d69faf75a42b"
+          "sha256": "5fe45af6e10532c664df4fe6e5ad385f1e482dda879d022aeb77f79a1cdbb048"
         },
         {
-          "bytes": 112074,
-          "git_blob": "a7c2f1564fcce738f374b86a8dbfcea94ffc2884",
+          "bytes": 115394,
+          "git_blob": "f31e54435ddc7f902564732eee6b262196ae4ba6",
           "mode": "100644",
           "path": "zone/client_achievements.cpp",
-          "sha256": "90e3a808998ee2faab8ce9e06c0744afa82aecfdf746349c09b5aaab704f4447"
+          "sha256": "fafca300e343ae26eb6bf8ef536f20156b294a950143fdffc6a6d506b4100dfb"
+        },
+        {
+          "bytes": 3789,
+          "git_blob": "cbbfedff08bf80ecad2027459553a2fce3562843",
+          "mode": "100644",
+          "path": "zone/client_achievements.h",
+          "sha256": "1ab0bef7fa3a6ac01926a67d2844974ad2d3517c93842795f07fb21b0339f190"
         },
         {
           "bytes": 11502,
@@ -563,11 +803,18 @@
           "sha256": "944af3d12b70d096eb99e29654f3d92cab3a7c6afb07c2efc96b082215347517"
         },
         {
-          "bytes": 150083,
-          "git_blob": "c42fce8864a6ce57bd2df49cac1b15902a3a045a",
+          "bytes": 153003,
+          "git_blob": "c8eb4d9d084402af3bed674556d5ffb121f4504a",
           "mode": "100644",
           "path": "zone/entity.cpp",
-          "sha256": "68fe6cfb0b68c8043db2185c182062bb706c0e93ffa22c6a069228aa57d6f317"
+          "sha256": "137634120fba8be9679a1ee1b8c9872d9a80e7fd9b633368b6f9d25888fcbd52"
+        },
+        {
+          "bytes": 26665,
+          "git_blob": "030b6ef240431bd7b3843855e630fedd39a649f9",
+          "mode": "100644",
+          "path": "zone/entity.h",
+          "sha256": "ae3d038d3ccb1b20978c7318b6a80d834f1fa9c896cd1d9281ab2dc6a7817737"
         },
         {
           "bytes": 7524,
@@ -612,6 +859,13 @@
           "sha256": "6373747b11a2f74ef5719bd09c5f80c6929782a57dd1d31e45e5f6adfb672f4a"
         },
         {
+          "bytes": 262,
+          "git_blob": "ead44bd642009db74a5e13378efdfaae0b0a90fd",
+          "mode": "100644",
+          "path": "zone/hot_rupkerr_click.h",
+          "sha256": "2a1e297f320ff65adb22b3cdbe6726cff01440728f66fb30ce0a9244d82c4af3"
+        },
+        {
           "bytes": 10751,
           "git_blob": "ae245dd6664b4883f6242fb62f09578307858c44",
           "mode": "100644",
@@ -626,25 +880,39 @@
           "sha256": "abc2c6da87658fdf65fee677075924d183bfd35098b306384f28d0f2d563b574"
         },
         {
-          "bytes": 166971,
-          "git_blob": "0d167a8e1f359c436f69422b751da83cbe14b647",
+          "bytes": 171763,
+          "git_blob": "98b72419e721e189eddcb28b3dc49e0634d0add8",
           "mode": "100644",
           "path": "zone/inventory.cpp",
-          "sha256": "47217907ac3c3c573764d97c18a9ce3743e7cd719e99c7e30660a01eccafc75d"
+          "sha256": "53ec27d98122272c27274d93acd485a0465691d06b66dd8e5aa4170deb2136dd"
         },
         {
-          "bytes": 195824,
-          "git_blob": "0671d386b4c897390fe8205d6a9799d56a250e78",
+          "bytes": 198175,
+          "git_blob": "5bd996690e55afa2e291fd29f016c96267084176",
           "mode": "100644",
           "path": "zone/lua_client.cpp",
-          "sha256": "12383bba5cf89fbd031547ed7ded5f59682ed922dce1628ac109205186264d0c"
+          "sha256": "d8e13f418f7948498f46a7cabd9259037dbd3670377dd44d19de2f33fe0c53d8"
         },
         {
-          "bytes": 33004,
-          "git_blob": "0d79252a0a180fc4ab4511dc951b9c1d95257eb9",
+          "bytes": 33171,
+          "git_blob": "fe1c400f6714c3719ad15c8906f5ec53591447a7",
           "mode": "100644",
           "path": "zone/lua_client.h",
-          "sha256": "9d7508c97307764120dcea4f64553f2cb8eb1d9ee97d0cba62240bfdb95f3816"
+          "sha256": "148c04a66be6fa490b41aa92eb2a98124b0ba646496c03fc55d85c4d6a5d5573"
+        },
+        {
+          "bytes": 327279,
+          "git_blob": "7019af75c6ee02a6c945619f491c2e6cb8069ad9",
+          "mode": "100644",
+          "path": "zone/lua_general.cpp",
+          "sha256": "549f6e7cf19e03dbabc4f03ea7a58ae03dde4b693de2a69e8532de8ef86b3e6b"
+        },
+        {
+          "bytes": 136687,
+          "git_blob": "909aeb0f3890ca695320b5b596ed6bf72c0011fa",
+          "mode": "100644",
+          "path": "zone/npc.cpp",
+          "sha256": "d2d326d672604feb4e84b48c0561172b6b32b0070e265afbd88048ad4fd1d678"
         },
         {
           "bytes": 36635,
@@ -659,6 +927,41 @@
           "mode": "100644",
           "path": "zone/object.h",
           "sha256": "072ce9ac4ebaa67ec9827d0ef9880bfde786779acaca38d17d77b2e37e81d77b"
+        },
+        {
+          "bytes": 889,
+          "git_blob": "562e8f9e5d64bb0e75b17576549dc059a968e574",
+          "mode": "100644",
+          "path": "zone/slayer_banestrike.h",
+          "sha256": "7c7fc93c95377d07dddd9a9ed7e113bded1c9e2c336af8c6553c0f3ed2de47c3"
+        },
+        {
+          "bytes": 329923,
+          "git_blob": "9e410d4c70fb6780f538b961f2d145f8d8f0036e",
+          "mode": "100644",
+          "path": "zone/spell_effects.cpp",
+          "sha256": "0d809a5fa43004746a1a496226654b6b2aa58a7b84b369fe9d1f4c393cb64f56"
+        },
+        {
+          "bytes": 255167,
+          "git_blob": "3320dfbaf716957ee11b0954a13afab4ab17f81e",
+          "mode": "100644",
+          "path": "zone/spells.cpp",
+          "sha256": "e6275ce6f1c3281445ff95cd1a72955dbb5d2e3ac8a20e989ca96468ec0165bf"
+        },
+        {
+          "bytes": 155199,
+          "git_blob": "b709574defe1fbd8732030fc09c96a3403002e3b",
+          "mode": "100644",
+          "path": "zone/task_client_state.cpp",
+          "sha256": "d59f267817f8feecb48640a59f2b1be8b2d5429843a8164fcf67b6ede4bc744b"
+        },
+        {
+          "bytes": 75574,
+          "git_blob": "f9e62c99e0002704787d6e6ec0c579854519b7a8",
+          "mode": "100644",
+          "path": "zone/task_manager.cpp",
+          "sha256": "fc5068936f8b5a2aef1e91a501ec7a9f57a1117b1711d0691ccaee5be1d98660"
         },
         {
           "bytes": 124041,
@@ -694,9 +997,51 @@
           "mode": "100644",
           "path": "zone/zonedb.h",
           "sha256": "7697aacbcd08416be5ea2c25a012fc4d236cef27d02305cc7fc9e34224b0fa0d"
+        },
+        {
+          "bytes": 65576,
+          "git_blob": "bc55261a97269e14098906d38a6167da0d58717b",
+          "mode": "100644",
+          "path": "zone/zoning.cpp",
+          "sha256": "e305076a4d4a571c32c41e9ad1deb9d1081032d6d0484fe5de5da229a5190165"
         }
       ],
       "required_quest_files": [
+        {
+          "bytes": 202,
+          "git_blob": "5623c25714ec6e7bc7b3fa6b828472d602bb3714",
+          "mode": "100644",
+          "path": "alkabormare/v0/709002.lua",
+          "sha256": "2b25efe29cdbfddfdaa6b1ea8515def7b79773ef4803da076527128907c179ee"
+        },
+        {
+          "bytes": 202,
+          "git_blob": "5623c25714ec6e7bc7b3fa6b828472d602bb3714",
+          "mode": "100644",
+          "path": "alkabormare/v0/709036.lua",
+          "sha256": "2b25efe29cdbfddfdaa6b1ea8515def7b79773ef4803da076527128907c179ee"
+        },
+        {
+          "bytes": 202,
+          "git_blob": "5623c25714ec6e7bc7b3fa6b828472d602bb3714",
+          "mode": "100644",
+          "path": "alkabormare/v0/709076.lua",
+          "sha256": "2b25efe29cdbfddfdaa6b1ea8515def7b79773ef4803da076527128907c179ee"
+        },
+        {
+          "bytes": 97,
+          "git_blob": "c77224a49c11332d260ff4faf58b06fae2395406",
+          "mode": "100644",
+          "path": "alkabormare/v0/709089.lua",
+          "sha256": "c3b4801280f3d059a07760bf213e52d7f93d46e27f6ecc338b879855848d394c"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "alkabormare/v20/304102037.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
+        },
         {
           "bytes": 870,
           "git_blob": "f83772eb09c18d7509bc04059d588800fa1b1be9",
@@ -745,6 +1090,13 @@
           "mode": "100644",
           "path": "arcstone/v0/player.lua",
           "sha256": "ab5835009a6a166c778c7f1643774002d50fff2206dee1710832f407f3c24404"
+        },
+        {
+          "bytes": 1190,
+          "git_blob": "c068fb945ee549b1dce554dc5feebcc746c9ce02",
+          "mode": "100644",
+          "path": "arelis/725998.lua",
+          "sha256": "03f890891ff5a58140b1a5b75fdf6e64ca68a3cb6acd8a4e29f18aa6eef3fa48"
         },
         {
           "bytes": 202,
@@ -808,6 +1160,27 @@
           "mode": "100644",
           "path": "ashengate/v21/zone.lua",
           "sha256": "e73772b7fce8a27380a8ffd3fa219067f70f1da4760876782407a9ebe67daad4"
+        },
+        {
+          "bytes": 208,
+          "git_blob": "57992b15924e913a863d4ad3ef20501f274583d3",
+          "mode": "100644",
+          "path": "chelsithreborn/763960.lua",
+          "sha256": "c42f453ca9201eb5f56d4e96db9394151c74e8d0425289078220be826e35495b"
+        },
+        {
+          "bytes": 166,
+          "git_blob": "369c9dda2baed1cab13d7e2976d9856737e53f5b",
+          "mode": "100644",
+          "path": "chelsithreborn/763961.lua",
+          "sha256": "8dc32833f9df6e13c9bc80293f8d4ef37d73f3f9c8053e087c5420fd33e3298b"
+        },
+        {
+          "bytes": 166,
+          "git_blob": "369c9dda2baed1cab13d7e2976d9856737e53f5b",
+          "mode": "100644",
+          "path": "chelsithreborn/763962.lua",
+          "sha256": "8dc32833f9df6e13c9bc80293f8d4ef37d73f3f9c8053e087c5420fd33e3298b"
         },
         {
           "bytes": 100,
@@ -1510,6 +1883,55 @@
           "sha256": "bac5d8b8f0e70fde7dc0c78a00396003dc3f66627f5f9b693027f349448d91f2"
         },
         {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "fallen/v0/706010.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 204,
+          "git_blob": "d89d29abd4a91fbc98285dad39c6190e64bba979",
+          "mode": "100644",
+          "path": "fallen/v0/706047.lua",
+          "sha256": "9a0fa58f8c76dbb4132c131ae3d1a8b2d48f278d22c5ca0076ec67cf93f3f58e"
+        },
+        {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "fallen/v0/706048.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "fallen/v20/304102027.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
+        },
+        {
+          "bytes": 2009,
+          "git_blob": "95c0715dbca79c51bcd1da6f495ea221c4a6d73a",
+          "mode": "100644",
+          "path": "feerrott2/700075.lua",
+          "sha256": "be58d5b03633635c741253b05be6869cd2b87f552eec75544892d095fc257791"
+        },
+        {
+          "bytes": 281,
+          "git_blob": "a48a3b9ab40cbd7422a8b1e104efe52257ade54f",
+          "mode": "100644",
+          "path": "feerrott2/player.lua",
+          "sha256": "91265cf079dba1484333992ee9e787d55eee9d86e6aa4b7087af38d18a383785"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "feerrott2/v20/304101815.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
+        },
+        {
           "bytes": 104,
           "git_blob": "e3a14ffde0be3b26b61796b8df01d265c872507b",
           "mode": "100644",
@@ -1599,6 +2021,27 @@
           "mode": "100644",
           "path": "guildhall/player.lua",
           "sha256": "940674ec9fe8fcae9241fb297072abdd4413680071fce1a50da8f8d6c50bf24b"
+        },
+        {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "housegarden/v0/703038.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 99,
+          "git_blob": "32f7e311a9960b39d69b29adf4816a13ab02bcb0",
+          "mode": "100644",
+          "path": "housegarden/v0/703044.lua",
+          "sha256": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "housegarden/v20/304101932.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
         },
         {
           "bytes": 114,
@@ -1762,6 +2205,27 @@
           "sha256": "359d5a1fd63cc77467506efa4a76b9a9e899b6f9b0665e0d17ef3eac61d49edd"
         },
         {
+          "bytes": 204,
+          "git_blob": "a52718a0b6a7630e9c1b862fd7cc417f0a00476a",
+          "mode": "100644",
+          "path": "kaelshard/754960.lua",
+          "sha256": "b3d2fcabc21a480d3b0797e9abf1c96a4eff8fa9b8c2188e3422b4a5311848f7"
+        },
+        {
+          "bytes": 162,
+          "git_blob": "ff92ac4f42f8e41db312f19827463e88b9a9060b",
+          "mode": "100644",
+          "path": "kaelshard/754961.lua",
+          "sha256": "b74d3905bb384e4c607fa8b137c9e40dcdadc32550021fcb166535be0e844f54"
+        },
+        {
+          "bytes": 90,
+          "git_blob": "96990b4ff916e177821dc11fc83bbc5008526df5",
+          "mode": "100644",
+          "path": "kaelshard/754962.lua",
+          "sha256": "6fbc544929e66f611284a6641af9b4a743c1e7d213822ea4a65269bbe4fcc8b0"
+        },
+        {
           "bytes": 75,
           "git_blob": "28ec6f9133003a56f6c54172c58149aa2e570912",
           "mode": "100644",
@@ -1790,11 +2254,67 @@
           "sha256": "597781abbf00f534bb9df7e367eac27c5e1f779a63f4b28de133f5836b95e465"
         },
         {
+          "bytes": 2180,
+          "git_blob": "cf0ea1b9a597eade92fa82886ba8f97586d3abf7",
+          "mode": "100644",
+          "path": "lua_modules/achievement_native_delivery_handin.lua",
+          "sha256": "85eeb3d426a98e70dd923e9e2bf87ff344c0bf24ecc54ab6d6edc84e924f71a9"
+        },
+        {
           "bytes": 3916,
           "git_blob": "bdd4834fc0d498b7a0e9243e5d25d05bf2247ef2",
           "mode": "100644",
           "path": "lua_modules/achievement_quest_vergalid.lua",
           "sha256": "cc26261b3429eab341cef7e027e3beb145981d5a3952bc6ec31f6b07b8923726"
+        },
+        {
+          "bytes": 1693,
+          "git_blob": "6339c8caac9aea524916f1cdec9865ba2e841a0e",
+          "mode": "100644",
+          "path": "lua_modules/hot_alkabor_public_routes.lua",
+          "sha256": "1befc8e60c9ba84ca52a414a97000527c1bc5ede18389c28ce5fe41dfb228a25"
+        },
+        {
+          "bytes": 3106,
+          "git_blob": "07af3e23b3681d52ab679ee9734e1efb8f43cc48",
+          "mode": "100644",
+          "path": "lua_modules/hot_authored_field_missions.lua",
+          "sha256": "97d3a291eb9d5a20bff0a05a52b6d3bb72452bcd0a85af6691950db8ab82a65a"
+        },
+        {
+          "bytes": 1521,
+          "git_blob": "c21ddb7050e5ed9005b09b3f125b89f77a6c6936",
+          "mode": "100644",
+          "path": "lua_modules/hot_group_requester.lua",
+          "sha256": "f4f80746955a2b9bf5a9b438e01e420c0b40ba313b6b1ccfadc9177a417537f3"
+        },
+        {
+          "bytes": 3019,
+          "git_blob": "a029d167a3d687df420d40f0fce5805292c6a2a7",
+          "mode": "100644",
+          "path": "lua_modules/hot_public_prerequisites.lua",
+          "sha256": "dc57c7fb92a7ecacf9503404709323254ee238853617920152ccc5b6aacf27ce"
+        },
+        {
+          "bytes": 2274,
+          "git_blob": "4ae7ad7b48acb2961f366d4a8e8f5accda0ea873",
+          "mode": "100644",
+          "path": "lua_modules/may_hunter_chelsith_ring.lua",
+          "sha256": "f8c3a35866405e4b849daf7037b5a107475526ca9acc2e0d2de330afc78eae3a"
+        },
+        {
+          "bytes": 2224,
+          "git_blob": "8cdb54494ecfd75ae4776c79dd03a0c5ef0eb84d",
+          "mode": "100644",
+          "path": "lua_modules/may_hunter_kael_ring.lua",
+          "sha256": "01de59699b3983cd14ba54f98fa252c1820682ce263cbe50b993a625e541ad4f"
+        },
+        {
+          "bytes": 738,
+          "git_blob": "42f2b2db4f6692aea5aeecc3dd56b4a48c92081f",
+          "mode": "100644",
+          "path": "lua_modules/may_hunter_peacekeeper.lua",
+          "sha256": "b99f575af49bd7e626a492ddfb9513cb4fa221bd3f95fbfdeabe9295fd1e595d"
         },
         {
           "bytes": 3906,
@@ -2203,6 +2723,13 @@
           "sha256": "dcac3fe241dc796431e406974fa0c38218d58a379252fa73c46da796ec754fc5"
         },
         {
+          "bytes": 1215,
+          "git_blob": "fdb47d5f819703529b5136f0eeb727d9991950b5",
+          "mode": "100644",
+          "path": "lua_modules/rof2_hot_expedition.lua",
+          "sha256": "1bcd3963f00202f67b24b03a74de4b8b9fb968984b7fd3065f22599e828ce104"
+        },
+        {
           "bytes": 7161,
           "git_blob": "b6851801138deba1c16bfb154643c24365b3073d",
           "mode": "100644",
@@ -2546,6 +3073,48 @@
           "sha256": "4a9159d7e8804ab33c424a9b761de51d4474c8a141b23c5b69a2bd59a372d81e"
         },
         {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "miragulmare/v0/710017.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "miragulmare/v0/710035.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 204,
+          "git_blob": "d89d29abd4a91fbc98285dad39c6190e64bba979",
+          "mode": "100644",
+          "path": "miragulmare/v0/710047.lua",
+          "sha256": "9a0fa58f8c76dbb4132c131ae3d1a8b2d48f278d22c5ca0076ec67cf93f3f58e"
+        },
+        {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "miragulmare/v0/710068.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "miragulmare/v0/710071.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "miragulmare/v20/304102042.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
+        },
+        {
           "bytes": 105,
           "git_blob": "7042fa33e8bb5e5e1077b6e02570de095c9269d3",
           "mode": "100644",
@@ -2817,6 +3386,41 @@
           "mode": "100644",
           "path": "oldkurn/player.lua",
           "sha256": "38e9f399ea67446eab7c62c92951a801c6fef86da42e4ddf8bbcb517dd04fa75"
+        },
+        {
+          "bytes": 69,
+          "git_blob": "8bd256b7ce3ed259a911b3620c28c9009791c940",
+          "mode": "100644",
+          "path": "pillarsalra/v0/730974.lua",
+          "sha256": "cb74d63ad6156c8e1cd6a5d53365f70c652b88f18aa452391281a946c918d7db"
+        },
+        {
+          "bytes": 69,
+          "git_blob": "4db0a189eebc101f1ca3c4b310630c7db362450e",
+          "mode": "100644",
+          "path": "pillarsalra/v0/730975.lua",
+          "sha256": "6f5e5868e2e30f52ca17985387c2c5765de39a49501f306ab6fda7cf326fee9e"
+        },
+        {
+          "bytes": 69,
+          "git_blob": "a52ef5fef7dcb3d51ff58a50f63e7b1afbfb45a5",
+          "mode": "100644",
+          "path": "pillarsalra/v0/730976.lua",
+          "sha256": "f95ac4000da1115e88ae9cfe39fdbf82a0084bb9a05a9208adf72d1bdfa56b5b"
+        },
+        {
+          "bytes": 69,
+          "git_blob": "30e6d073daa022205b48b2bfc3e0af74556424e1",
+          "mode": "100644",
+          "path": "pillarsalra/v0/730977.lua",
+          "sha256": "9e28b8a87ee2a6f725f928ef2ef14f80dc73b7a1b6752cdc0ca22211044260bd"
+        },
+        {
+          "bytes": 1538,
+          "git_blob": "2d00d8b1430484b554016ae3655aebf32615d304",
+          "mode": "100644",
+          "path": "pillarsalra/v0/zone.lua",
+          "sha256": "b0ddd3bc753f1ab6b3e9902566bf34fd2e1ca1e679c5b635117d7b8f11e26de4"
         },
         {
           "bytes": 7563,
@@ -3421,6 +4025,90 @@
           "sha256": "aa16ce6e33dbc79f577b5b6ea8c482d84f04acb293151461fed4bfab36f4c0e7"
         },
         {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "thuledream/v0/711009.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "thuledream/v0/711012.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 99,
+          "git_blob": "32f7e311a9960b39d69b29adf4816a13ab02bcb0",
+          "mode": "100644",
+          "path": "thuledream/v0/711084.lua",
+          "sha256": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "thuledream/v20/304102047.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
+        },
+        {
+          "bytes": 941,
+          "git_blob": "3e1add817d3a8bf537ac5d804168691eb9f2f87e",
+          "mode": "100644",
+          "path": "thulehouse1/v0/701022.lua",
+          "sha256": "e19f7606ccb784f5f70b2eaabf90e2e4ff939b1180503569faf9de7510b87ce9"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "thulehouse1/v20/304101881.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
+        },
+        {
+          "bytes": 99,
+          "git_blob": "32f7e311a9960b39d69b29adf4816a13ab02bcb0",
+          "mode": "100644",
+          "path": "thulehouse2/v0/702000.lua",
+          "sha256": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889"
+        },
+        {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "thulehouse2/v0/702012.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 99,
+          "git_blob": "32f7e311a9960b39d69b29adf4816a13ab02bcb0",
+          "mode": "100644",
+          "path": "thulehouse2/v0/702051.lua",
+          "sha256": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "thulehouse2/v20/304102032.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
+        },
+        {
+          "bytes": 204,
+          "git_blob": "d89d29abd4a91fbc98285dad39c6190e64bba979",
+          "mode": "100644",
+          "path": "thulelibrary/v0/704000.lua",
+          "sha256": "9a0fa58f8c76dbb4132c131ae3d1a8b2d48f278d22c5ca0076ec67cf93f3f58e"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "thulelibrary/v20/304102022.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
+        },
+        {
           "bytes": 1369,
           "git_blob": "f4ec2a00100d4554db5a82bc8b8ecef9daa95671",
           "mode": "100644",
@@ -3615,6 +4303,27 @@
           "mode": "100644",
           "path": "vergalid/v21/zone.lua",
           "sha256": "b65d2156cb7f15c479c5c891f07bad873a2b5d9a68ee0a23fb2141ed260f04c1"
+        },
+        {
+          "bytes": 108,
+          "git_blob": "8cb27ed301ee7927c2a89642043091f14d149ec7",
+          "mode": "100644",
+          "path": "well/v0/705003.lua",
+          "sha256": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d"
+        },
+        {
+          "bytes": 99,
+          "git_blob": "32f7e311a9960b39d69b29adf4816a13ab02bcb0",
+          "mode": "100644",
+          "path": "well/v0/705004.lua",
+          "sha256": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889"
+        },
+        {
+          "bytes": 101,
+          "git_blob": "935f664fd8c926009bf6697dbb33d88b7edfab93",
+          "mode": "100644",
+          "path": "well/v20/304102017.lua",
+          "sha256": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503"
         },
         {
           "bytes": 112,
@@ -6582,12 +7291,12 @@
           "sha256": "aea833e637a9030ccd6ae8969b66704b0cae154e543694921a4a7973c384bfb0"
         },
         {
-          "bytes": 22845,
-          "git_blob": "08ad53effa9d519b1dc582231f74fe318696da35",
+          "bytes": 22872,
+          "git_blob": "ec182bf002c0b8d91440af95ee69b71cc7e2ebfb",
           "kind": "opcode_asset",
           "mode": "100644",
           "path": "utils/patches/patch_RoF2.conf",
-          "sha256": "f198b36ca5494c788d12cb1e4c896bfe16d153f804ffbcf54b992a45edf1af79"
+          "sha256": "02cdf549d84862fe6e6169f25c20b05d60e9cd668f2c06e27f2025f7c13ec373"
         },
         {
           "bytes": 16477,
@@ -6614,12 +7323,12 @@
           "sha256": "da3f5d1d94333733e5d4cc4abae15c513243a0bc8d376d13d642ea8d5a7be11f"
         },
         {
-          "bytes": 99924,
-          "git_blob": "8643ac8033b3a958e767daa1438a1ebe68fa39e1",
+          "bytes": 101947,
+          "git_blob": "001c96cf25abce75ea237dca50842c171ac5c13f",
           "kind": "native_source",
           "mode": "100644",
           "path": "world/shared_task_manager.cpp",
-          "sha256": "bd6f1828fab8adc7889655f0a4ddf718f18659b02192144d9f5fa86ac441597c"
+          "sha256": "11803ef1abb869ce989d5a549f1e82df6594a61b5136e1f8d226f5f15bf18e2f"
         },
         {
           "bytes": 7615,
@@ -6638,36 +7347,36 @@
           "sha256": "dfc4216e5770bf44e97b979f3daf4048c89e60b444b02d3c096de38bc7b3898c"
         },
         {
-          "bytes": 251340,
-          "git_blob": "572ac31d48f8ea37263b59deb8bb9183594d3b89",
+          "bytes": 252087,
+          "git_blob": "dcecd90dac7831902902d49545c143d0eaefc432",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/attack.cpp",
-          "sha256": "d5d53c6693196c9ee082a4e87a9be075ed60acc12da7c195da419aa50093db5a"
+          "sha256": "0f341be8199f4bb1a1ea0d2eee802f6d9c90f2b85bd5393b7de72932504a7c9e"
         },
         {
-          "bytes": 509979,
-          "git_blob": "ba9ef6a26b2d3eb9457eeea90a49ffecd15c1b91",
+          "bytes": 511145,
+          "git_blob": "14d59a49f7c1dfac6e9cbe734da4f0726fc808a1",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client.cpp",
-          "sha256": "09f52f87c2def55033b751d9e01335b37bcd43f559d5f7fafd073a0197b6d3e0"
+          "sha256": "575d8a89c74dcb3f67c57938dcc8f5843c76eabae6583d91bb0588baab4b3462"
         },
         {
-          "bytes": 122708,
-          "git_blob": "b454cdbc0dd95f853ebaf641c354491b3fb8683f",
+          "bytes": 123023,
+          "git_blob": "a17e0db59c739d28ce2e934dfefedd3e3069d4e9",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client.h",
-          "sha256": "9c37d1a5a8dd1640cdd8886c91de617de34d6e04f1f1339bc947d69faf75a42b"
+          "sha256": "5fe45af6e10532c664df4fe6e5ad385f1e482dda879d022aeb77f79a1cdbb048"
         },
         {
-          "bytes": 112074,
-          "git_blob": "a7c2f1564fcce738f374b86a8dbfcea94ffc2884",
+          "bytes": 115394,
+          "git_blob": "f31e54435ddc7f902564732eee6b262196ae4ba6",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/client_achievements.cpp",
-          "sha256": "90e3a808998ee2faab8ce9e06c0744afa82aecfdf746349c09b5aaab704f4447"
+          "sha256": "fafca300e343ae26eb6bf8ef536f20156b294a950143fdffc6a6d506b4100dfb"
         },
         {
           "bytes": 571003,
@@ -6894,12 +7603,12 @@
           "sha256": "e43b7b5411306614e715d11351c7811f1fb36a1c52cd0cd985db0a8e406b683d"
         },
         {
-          "bytes": 26632,
-          "git_blob": "c207a4967bd70f844232a7b240a02caba025ca6f",
+          "bytes": 26665,
+          "git_blob": "030b6ef240431bd7b3843855e630fedd39a649f9",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/entity.h",
-          "sha256": "431362864b31146eadc7d7c38cc5340e0ec97dc747c7b7a575e08bf7752bfca0"
+          "sha256": "ae3d038d3ccb1b20978c7318b6a80d834f1fa9c896cd1d9281ab2dc6a7817737"
         },
         {
           "bytes": 5841,
@@ -6918,12 +7627,12 @@
           "sha256": "f8183ad9c82b8a75b418cfe7427632de740890a470c43ed3bfa0eca24d86234f"
         },
         {
-          "bytes": 166971,
-          "git_blob": "0d167a8e1f359c436f69422b751da83cbe14b647",
+          "bytes": 171763,
+          "git_blob": "98b72419e721e189eddcb28b3dc49e0634d0add8",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/inventory.cpp",
-          "sha256": "47217907ac3c3c573764d97c18a9ce3743e7cd719e99c7e30660a01eccafc75d"
+          "sha256": "53ec27d98122272c27274d93acd485a0465691d06b66dd8e5aa4170deb2136dd"
         },
         {
           "bytes": 134308,
@@ -6934,28 +7643,28 @@
           "sha256": "735182e81740adf317009309daf40ebe47394301c5826901cd70dcad52c82040"
         },
         {
-          "bytes": 195824,
-          "git_blob": "0671d386b4c897390fe8205d6a9799d56a250e78",
+          "bytes": 198175,
+          "git_blob": "5bd996690e55afa2e291fd29f016c96267084176",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/lua_client.cpp",
-          "sha256": "12383bba5cf89fbd031547ed7ded5f59682ed922dce1628ac109205186264d0c"
+          "sha256": "d8e13f418f7948498f46a7cabd9259037dbd3670377dd44d19de2f33fe0c53d8"
         },
         {
-          "bytes": 33004,
-          "git_blob": "0d79252a0a180fc4ab4511dc951b9c1d95257eb9",
+          "bytes": 33171,
+          "git_blob": "fe1c400f6714c3719ad15c8906f5ec53591447a7",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/lua_client.h",
-          "sha256": "9d7508c97307764120dcea4f64553f2cb8eb1d9ee97d0cba62240bfdb95f3816"
+          "sha256": "148c04a66be6fa490b41aa92eb2a98124b0ba646496c03fc55d85c4d6a5d5573"
         },
         {
-          "bytes": 327116,
-          "git_blob": "bb45f0f46b1e0bfcfeba6270f1dfb3bcdbc84c9e",
+          "bytes": 327279,
+          "git_blob": "7019af75c6ee02a6c945619f491c2e6cb8069ad9",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/lua_general.cpp",
-          "sha256": "daae47c525099805bcec8ab60c72b3d21aa05b31618365eb12625c72ee2129c2"
+          "sha256": "549f6e7cf19e03dbabc4f03ea7a58ae03dde4b693de2a69e8532de8ef86b3e6b"
         },
         {
           "bytes": 67591,
@@ -7070,36 +7779,36 @@
           "sha256": "76a6a69f4ea86fbd379f7a5b7ec133b9d513e2479af535890c1897058194356e"
         },
         {
-          "bytes": 329738,
-          "git_blob": "79df8885d60c4d08507d6c6d6fecbffbabf7e4f3",
+          "bytes": 329923,
+          "git_blob": "9e410d4c70fb6780f538b961f2d145f8d8f0036e",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/spell_effects.cpp",
-          "sha256": "fb7ca4296f48ff253d40d4283c8e309f6aa66499f3d7b35047fd30b1ef068a87"
+          "sha256": "0d809a5fa43004746a1a496226654b6b2aa58a7b84b369fe9d1f4c393cb64f56"
         },
         {
-          "bytes": 253478,
-          "git_blob": "bbfdf3502df1b0772a7e9d8f838661ca8bcad609",
+          "bytes": 255167,
+          "git_blob": "3320dfbaf716957ee11b0954a13afab4ab17f81e",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/spells.cpp",
-          "sha256": "55c1072466589985b0d835c46f62009b024957f7ae85c80158f1b92df8089c84"
+          "sha256": "e6275ce6f1c3281445ff95cd1a72955dbb5d2e3ac8a20e989ca96468ec0165bf"
         },
         {
-          "bytes": 153650,
-          "git_blob": "bf62abca1546f10145436be23c40a05fe999af37",
+          "bytes": 155199,
+          "git_blob": "b709574defe1fbd8732030fc09c96a3403002e3b",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/task_client_state.cpp",
-          "sha256": "28e205ecdb16c8257db681c3d445a11ca4c30baabb1d67a7469e6f52868fa81c"
+          "sha256": "d59f267817f8feecb48640a59f2b1be8b2d5429843a8164fcf67b6ede4bc744b"
         },
         {
-          "bytes": 75301,
-          "git_blob": "6a01c234527d4e2854a7272e0498ca31c9c62b99",
+          "bytes": 75574,
+          "git_blob": "f9e62c99e0002704787d6e6ec0c579854519b7a8",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/task_manager.cpp",
-          "sha256": "e027f77e31bb49131dae5ec440f9c3326a052933f8f2511345720bd2ddf3e2dc"
+          "sha256": "fc5068936f8b5a2aef1e91a501ec7a9f57a1117b1711d0691ccaee5be1d98660"
         },
         {
           "bytes": 109279,
@@ -7206,18 +7915,18 @@
           "sha256": "39e864185c692449e1207fe3fcc8daed9e02b1e0b465f587389ce0e1cfd1e8d3"
         },
         {
-          "bytes": 64225,
-          "git_blob": "85349d22b8d12a8023246bccf67d892105000f09",
+          "bytes": 65576,
+          "git_blob": "bc55261a97269e14098906d38a6167da0d58717b",
           "kind": "native_source",
           "mode": "100644",
           "path": "zone/zoning.cpp",
-          "sha256": "dd4b74caed98ee943f97b810fbd5806b5fa78c7131bf16fa105ee297c146fde6"
+          "sha256": "e305076a4d4a571c32c41e9ad1deb9d1081032d6d0484fe5de5da229a5190165"
         }
       ],
-      "source_manifest_sha256": "26f4d6e55bf3db8a89d4852b03228636be48708ecc112fb6ded1e232a5a7fa69"
+      "source_manifest_sha256": "35045ddbbca2752a321589eb70642f3d9b39221d5b85e30b5f587f514772c4d7"
     },
     "database_repository": "nightstalker6669/EQEmu-Database",
-    "database_source_capture_commit": "bb9dffedef2afcc9fffa937a58dd87d376591e97",
+    "database_source_capture_commit": "16bc41554e132ac3fe4c77b361ba19cdf3d9e3ab",
     "existing_volume_upgrade": {
       "supported": false
     },
@@ -7227,7 +7936,7 @@
       "assembled_with": "10.11.19",
       "base_tables": 502,
       "bots_version": 0,
-      "composition": "Published r40 May Collections database followed by the sealed Guild Banners table DDL.",
+      "composition": "Published r41 Guild Banners seed followed by the 34 sealed House of Thule, Hunter, and Slayer migrations.",
       "custom_version": 0,
       "empty_private_player_and_operation_tables_preserved": true,
       "full_dump_replaces_tables": true,
@@ -7242,53 +7951,88 @@
       "views": 1
     },
     "future_update_policy": "A futurematchedDBversion requires a separately validatedwholecohort sanitizedrelease and explicitcommitted source/tag/assetdigest pin; never silently mutableLatest/latestDB, partialrank/itemexports, or old945-only pin for newcohort. ActualCIfailure corrections gather allvisible errors in one batch.",
-    "matched_server_integration_parent": "f9fbe58f88a1a35f7e1c36db3071d579c70c28f6",
+    "matched_server_integration_parent": "8237b36fb814706392ae08e0be41e8a5cbdc1f10",
     "native_acceptance_scope": {
-      "client": "May 2013 RoF2",
-      "deterministic_verification": [
-        "The same production count predicate rejects 11 and accepts 12. The same predicate rejects one and accepts two with the development override.",
-        "The exact May spell catalogue and the retained material and dye recipes verify the shipped choices. Celerity uses native spell 7613, caster level 1, and the stock formula."
-      ],
-      "development_cleanup": "The temporary minimum of two was removed. The ordinary Rules readback returned 12 in Buried Sea after all workers refreshed. The temporary guild, banner, portal alignment, basic hall instance and its test-only records were removed. The test characters completed normal camps with original protection restored.",
-      "feature": "Guild Banners",
-      "native_verification": [
-        "The real Banner tab offered Standard of Honor and eligible upgrades. With one nearby member the officer's plant was denied. With two it planted Standard of Honor. The ordinary member's Plant control was disabled.",
-        "An ordinary guild member used the stock Guild Lobby left entrance to the basic guild hall. The native merchant accepted the authentic Splinter, the geode presented the banner destination, and confirmation reached the existing Standard of Honor in Buried Sea.",
-        "The active Banner tab countdown rendered normally after the packet fix. The leader removed Standard of Honor and planted Simple Standard of Celerity using one purchased kit and one purchased dye. The consumed inventory rows and one-hour upgrade deadline were independently verified.",
-        "Native short-slot spell 7613 appeared on the nearby ordinary member. Observed haste was 145 without Celerity and 148 with it. Both the buff and the three-point difference disappeared outside the radius, returned on walking back, and disappeared after native removal.",
-        "A subsequent ordinary static Guild Hall alignment and confirmation reached North Karana."
-      ],
-      "production_scope": {
-        "minimum_nearby_guild_members": 12,
-        "planting_zones": [
-          "Buried Sea public v0",
-          "Loping Plains public v0"
+      "client": "EverQuest Rain of Fear 2, May 10, 2013",
+      "house_of_thule": {
+        "implementation": [
+          "The prerequisite and mission titles, dependency order, group sizes and earned access use May-era progression evidence.",
+          "The 30 newly authored public quests and ten group missions use original dialogue, objectives, encounters and layouts. Six prerequisite drafts and An Expedition Gone Awry reuse project-owned work.",
+          "The Al'Kabor island contacts provide locally authored travel. The Lower Floors gate uses the retained Upper Floors arrival coordinates.",
+          "Coin, faction, Dream Motes and item identities use sourced catalog values where supported. Unsourced experience amounts were omitted."
         ],
-        "portal_source_paths": [
-          "basic Guild Hall",
-          "placed Guild Hall"
+        "native_completed": {
+          "group_missions": 10,
+          "personal_quests": 34,
+          "shared_quests": 3,
+          "total": 47
+        },
+        "native_evidence": [
+          "Native task completion and exact archived shared-task objective counts.",
+          "Earned Tier 3 and Tier 4 group achievements and ordinary public admission after relog.",
+          "Native item restoration, quest hand-in, mission chest opening and representative gear loot.",
+          "The opening shared mission request was refused before its requirements were met.",
+          "The same repaired Lower Floors gate denied a player without the earned achievement and admitted a player who had earned it."
         ],
-        "quorum_radius": 150,
-        "verified_upgrade_catalogue_choices": 556
+        "ordinary_earned_public_destinations": [
+          "House of Thule, Upper Floors",
+          "Al'Kabor's Nightmare",
+          "Miragul's Nightmare",
+          "Fear Itself",
+          "Morell's Castle",
+          "Sanctum Somnium"
+        ]
       },
-      "reconstruction_and_limits": [
-        "The 100-unit aura radius and rolling base-standard lifetime are reconstructed. The upgrade has a fixed one-hour deadline and reverts to the base while that base remains active. The full hour and natural expiry were not observed in the client.",
-        "Buried Sea was the native deployment witness. Loping Plains and the placed Guild Hall path are implemented and source-checked. Native travel acceptance used the basic Guild Hall.",
-        "Cross-guild attempts, stale popup acceptance, and the timed retail planting ritual were not independently observed. The served path validates fresh guild membership, current revision and normal zone entry at confirmation.",
-        "The native Celerity witness does not exercise every catalogue row. Forty discipline-grade bindings with uncertain formula levels are excluded. Appearance editing and unsupported deployment zones remain outside this release."
-      ],
-      "test_setup": "An isolated temporary guild used two existing ordinary dev characters. An existing GM account staged the route and briefly lifted the recipient's existing invulnerability at a verified safe site to observe normal beneficial spell landing. The operator restored the original protection immediately afterward. Planting, removal, the material and portal transactions, travel confirmation, and aura exposure and fade used the real game paths."
+      "hunter": {
+        "implementation": "Some rare opportunities, placements, combat tuning and loot odds use local reconstruction. The Rubak return heading comes from the existing door orientation. Pillars uses a locally reconstructed six-hour EverQuest time phase per tower and a 10 percent eligible kill roll.",
+        "native_representative": [
+          "Cragbeak earned its exact component in Shard's Landing. The nearby ordinary placeholder earned no Hunter credit.",
+          "Rotticus earned its exact Upper Floors component after the HoT progression run.",
+          "An ordinary player used the public Sarith and Rubak Oseka doors in both directions.",
+          "An ordinary player and a later entrant saw the same Pillars statue phase. A connected client saw the statue update from Shadow to Nature."
+        ],
+        "offline_validated": {
+          "exact_script_bound_targets": 8,
+          "exact_targets": 562,
+          "phase_logic": "All four matching towers and all twelve mismatches, plus invalid source, duplicate and failed-roll cases.",
+          "positive_catalog_placements": 554,
+          "zone_achievements": 33,
+          "zone_ids": 35
+        },
+        "other_special_encounters": "Kael's Statue sequence, Chelsith's Blade sequence, Arelis's Krongar, the Plane of Shadow special camps and other roster variants retain exact offline catalog or script validation.",
+        "pillars_kills": "One real Arcane-tower kill during Shadow and one matched Shadow-tower kill produced no Peacekeeper in the bounded native pass. Exact spawn, eligible kill, uniqueness, wrong-tower rejection and achievement bindings were validated offline for all four phases."
+      },
+      "hunter_slayer_rewards": {
+        "offline_exact_reward_bindings": {
+          "bags": 14,
+          "title_sets": 6
+        },
+        "qualification": "The new bag and title bindings were checked against the isolated catalog and normal reward paths. Higher-count earned bag delivery and selection of the new titles were outside the native representative run."
+      },
+      "qa_setup": "Approved native QA fixtures used operator travel staging, protective setup and the existing QA melee weapon for incidental combat. Task completions, kill credit, chest claims and final public gate crossings used the native game path.",
+      "slayer": {
+        "implementation": "The active ability uses original May spell data and a local transient actor. Some damage-level breakpoints are reconstructed. Hastened Banestrike ranks and higher kill thresholds were checked offline. The native test did not capture the spirit rendering or the numerical damage display.",
+        "native_representative": [
+          "Five actual skunk kills completed It Stinks! and earned rank 1 of active Banestrike.",
+          "A mastered target took the ability and an unmastered race was rejected. Normal relog preserved the earned AA."
+        ],
+        "offline_validated": {
+          "achievements": 142,
+          "distinct_components": 157,
+          "race_criteria": 807
+        }
+      }
     },
-    "native_gameplay_acceptance": "May 2013 RoF2 verified basic Hall banner travel, planting and removal, the Celerity aura and fade, and an ordinary static portal. Additional scope and reconstruction limits are specified in NATIVE-QUALIFICATIONS.json.",
+    "native_gameplay_acceptance": "May 2013 RoF2 verified House of Thule group progression and earned public admission, representative Hunter and Slayer paths, active Banestrike, and the bounded Sarith/Rubak and Pillars checks. NATIVE-QUALIFICATIONS.json details coverage and limits.",
     "payload_inventory": {
       "all_member_sha256_file": "SHA256SUMS",
-      "full_sql_bytes": 305216582,
+      "full_sql_bytes": 309322246,
       "housing_json_member_count": 331,
       "housing_json_prefix": "housing-runtime-content/",
       "housing_profile_bindings": "housing-runtime-content/PROFILE-BINDINGS.json",
       "housing_profile_bindings_sha256": "4d6c3533a882ce79ef790caa08a781a1994d56ac3d9c58a8459bb9e1ac9b73b2",
       "identical_SQL_and_Housing_bytes_required": true,
-      "payload_member_count": 517
+      "payload_member_count": 551
     },
     "preserved_mercenary_cohort_source_binding": {
       "SQL_sha256": "6ad8f950c178e9c1d84658387c521dc33695572fd8926c30a711aff44e50790f",
@@ -7299,15 +8043,15 @@
       "manifest_sha256": "78710b4716455c626cc62189cca8eacd252d2ce796adc018c0b4dd18657aace9",
       "source_base_commit": "c642eb178b8a0a9881812c2b3d3f188acb1217d8"
     },
-    "publication_parent_database_commit": "bb9dffedef2afcc9fffa937a58dd87d376591e97",
+    "publication_parent_database_commit": "16bc41554e132ac3fe4c77b361ba19cdf3d9e3ab",
     "qualification_documents": [
       "NATIVE-QUALIFICATIONS.json",
       "CHANGELOG.md",
       "SOURCE-MANIFEST.json"
     ],
-    "release_tag": "peq-rof2-2026-11-27-guild-banners",
+    "release_tag": "peq-rof2-2026-11-27-hot-hunter-slayer",
     "required_code_boundary": {
-      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins. Preserve the matched Ashengate native code and 467 canonical quest pins. Preserve the matched Offline Bazaar native source and RoF2 opcode binding. Preserve native RoF2 Collections registration and item serialization. Preserve the matched May Collections pool, entitlement, and native registration bindings. Preserve matched Guild Banners persistence, May RoF2 opcode mapping, and the 470 canonical quest pins.",
+      "compatible_descendants_must_preserve": "Completed RRC310 property-preserving recharge and RRC312-r2 full32 actor contracts plus matching integrated housing/reward/schema/quest/opcode contracts. Build pins exact server revision separately. Accepted ten-task Oceangreen native postimages, measured interrupt writer fix,15 final quests and existing base character-selection fix4b must all remain matched. Kithicor final r11 exact37native/18quests,all publicclass1correction/4private-schemas/custody/deathEXP/faction fixes and qualified r8 native behavior/explicit r11 limits must remain matched. Field of Scale exact72native/19ownedquests, compiled85457627 cohort and all qualified native acceptance limits; physical27columns/recipe_outbox/immutable decisions/message selectors/item cache alias definitions must remain matched. Rathe World/Zone composition and eight quest paths, including earned Void E, native all-four-group Korafax gate and Journeyman V. Preserve the accepted Darkhollow native and quest bindings. Preserve the matched Deathknell compiled source and canonical 353 quest pins, including the accepted Daosheen ledge postimage. Preserve the native Tower, Vertigo and Harp code and 375 canonical Tower quest pins. Preserve the native Tunare custody code and matched canonical Tunare and public route quest pins. Preserve the matched Vergalid native code and 451 canonical quest pins. Preserve the matched Ashengate native code and 467 canonical quest pins. Preserve the matched Offline Bazaar native source and RoF2 opcode binding. Preserve native RoF2 Collections registration and item serialization. Preserve the matched May Collections pool, entitlement, and native registration bindings. Preserve matched Guild Banners persistence, May RoF2 opcode mapping, and the 470 canonical quest pins. Preserve matched May House of Thule earned admission, Hunter and Slayer runtime, Banestrike data, 527 canonical quest overlays, and the effective RoF2 opcode map.",
       "completed_actor_source_commit": "3ed26770e83e0881efadcfa93e382aff9fc626b9",
       "completed_mercenary_feature_commit": "5178edd73a4204f863b298fa9328e19205da5f56",
       "external_operator_resources": "Authenticated original RoF2 archives/maps and matching server quests/opcodes; generate fresh target shared memory normally."
@@ -7388,23 +8132,57 @@
       "BASE-VERGALID-R2-README.md": "3be6fe0bc5c6ba6a4608a43ea830b52d050aae69f89386dd57996df7c46aa2f0",
       "BASE-VERGALID-R2-SOURCE-CONTENT-BINDING.json": "5843bfb561555ee2906b79ec8a36575ddc1e345c5be6ed5f6d882ee256754f51",
       "BASE-VERGALID-R2-SOURCE-MANIFEST.json": "41bbe1aa648bc432a6f287fdb8171df78ac70684fd6c753f25b479f1d0d99b07",
-      "CANONICAL-SEED-COMPOSITION.json": "652a97c8cab030e15a5321da3912089a1731207abc61f3ff5c3bb63c94865714",
-      "CHANGELOG.md": "cf0b17c3434be0230e77c4449d2383e9e73f29cf8587bc58782c444699608b65",
+      "CANONICAL-SEED-COMPOSITION.json": "e06499708ff64613ecff4da01d3c48f9da940e7f7755932e6fd2a11c3a0832b4",
+      "CHANGELOG.md": "d3df6a98d4a782135fe970c0964d371eccf51ced75370b162a08e5a9e6f2a735",
       "COMPLETED-RECIPE-UPDATES.json": "fdf459a6bef7e90351d3db5c983e30920205876a990aa144b5779a4c242d25e0",
       "KITHICOR-STATIC-CONTENT.json": "5b043982b23b74f4f857724b6baf1ff0611bb88ce348f32f15f3f6230462ffc5",
       "MERCENARY86-100-CONTENT.json": "27a9d180e6a66320ae9877cd763341f6579d0a1a8a66ac6fc23c26fb9dc15c16",
-      "NATIVE-QUALIFICATIONS.json": "7a3ccf34942a4a42a5d211b56f1df9e2a7af9c1237ab68755386511c376f5a34",
-      "README.md": "30065f3c1293292bc3c915776e0ba3ba4babb538fe33941817cc4310817b5e37",
-      "SHA256SUMS": "e103a05f9d54447fe9cbd2807c09c61738f1df50e039af99898d17de16963f2e",
+      "NATIVE-QUALIFICATIONS.json": "55f7e62a789c5df40ce95135e15a0ce83ac22f35a906463fcea7daafed60dbae",
+      "README.md": "5f71b075d6c6e3fd5adbf652a308d54e441bc6e26551098df662b9f24d00b8a7",
+      "SHA256SUMS": "f3d72275b32b3d23d935105433334b1c44e41696cedf3a2c9a3f25ddcf481a3e",
       "SOD-OCEANGREEN-CONTENT.json": "5a5757e1c4631af375b87b6c69794d9e72ebc8cc91c832144d8359bb2b5454c2",
-      "SOURCE-CONTENT-BINDING.json": "02c245b382292df7976d91cac3b246e841d6ff1548c19123d5d2fc5d2aa2c495",
-      "SOURCE-MANIFEST.json": "26f4d6e55bf3db8a89d4852b03228636be48708ecc112fb6ded1e232a5a7fa69",
+      "SOURCE-CONTENT-BINDING.json": "d3e19d02d60038fab6373ea799aa84f94a2ef04deec1e583eaad30d13373016d",
+      "SOURCE-MANIFEST.json": "35045ddbbca2752a321589eb70642f3d9b39221d5b85e30b5f587f514772c4d7",
       "TABLE-INVENTORY.json": "4b6bf5895d88556b7ce4ecb2bf44a55deef3b766782c5c93304ff688204ec36e",
       "VALIDATION.json": "f9da8bf1f8bc7ab959ca0bee13e9b4aaa47a530b3f6a46e5e429d85b3d522ff2",
       "VICTUAL-CLASS-FEATURE-DELTA.json": "1220253988a07ff5ef833759b947c33b4bcc56cad20195f94366cd510df7ffaf",
       "client-data/rof2/dbstr_us.append.txt": "71f93726675b66a45496e61f42994a691ab6663a326f92497627d37f6f42dfec",
       "client-data/rof2/spells_us.append.txt": "428a6b92ba8887c8d117746c2f9bc192a6429b7fd2c6c46438005442b351b7d6",
-      "full.sql": "73d79abb715a6876f64b8ff0c436e90fcb0fcbba358d234331ff5fd991990128",
+      "full.sql": "15c16598f3ce6f867d8dc7608aa3368fd3bab0800a0674d2b35aaea13aa6c26b",
+      "migrations/10-MAY-SLAYER-CORE-ENABLE.sql": "09c1c0fd5a81e718d3d206e19d5d245de12ba777e22ffaa3bbb10a268d20c657",
+      "migrations/100-MAY-GRELLETH-HUNTER.sql": "68a11507ac72164806d6537b2bff584677012cccaf3b33eeac9146ebeef1eae2",
+      "migrations/110-MAY-HOT-NOVICE-HUNTER.sql": "3bfa7beeb7e03516732a516774fe0f8fbf528bb53c4e1e85b74b4e05faccefa7",
+      "migrations/120-MAY-HOT-ADEPT-HUNTER.sql": "057688323befd29276056b453663f8301ce3112fbdc7278983ff8a7b46ad25c6",
+      "migrations/130-MAY-KAEL-HUNTER-STATUE-RING.sql": "706f65b0fe0d88041e408b47a91b2ad812d25e89540ce4b3a3e7acf8fb2ba2bf",
+      "migrations/140-MAY-ARGATH-NOVICE-HUNTER.sql": "84bd6064ee6342302243a8640ba5e4b711e57c082d8dbf579d02b1f1c12ae804",
+      "migrations/150-MAY-ROF-ADEPT-HUNTER.sql": "aa35b4e0ae413c85b1ceac32014f608a8b6ed63a70214ad1a8114b6692917429",
+      "migrations/160-MAY-ROF-VETERAN-EXPERT-MASTER-HUNTER.sql": "c947d21ea1ebd574368a848b6f02b7269e373ad1e027a78fac51ba5e61334f9c",
+      "migrations/170-MAY-CHELSITH-BLADE-ENCOUNTER.sql": "3f3bf3b82e3367a29c1a9fa7ef7d15c27327ba34ed77a78c1f277b182e6673cb",
+      "migrations/180-MAY-PLANE-OF-SHADOW-FOUR-HUNTER-CAMPS.sql": "68b2f07d654558b30b3f31e5d98e3cedd76320b142341ff4fe2337b1f1934d17",
+      "migrations/190-MAY-APRIL-HUNTER-CLOSURE.sql": "b9cd7d7d488e8c8f0efcad99688edc9a51cdebe8d4b2cd6ffcf652c63c98ca20",
+      "migrations/200-MAY-VOA-WINDSONG-CITY-HUNTER.sql": "e377638f0de054d38a822dfafdb8cbe46d80b6ae9ffdc3072d47467c642dab57",
+      "migrations/210-MAY-VOA-VETERAN-HUNTER.sql": "1968897ffc902abf4d71ce80dda07f3872d300ecd508e83dca1bea5188fc9f57",
+      "migrations/220-MAY-VOA-ADEPT-HUNTER.sql": "96da96e76331466b175b957d4651454b70b1bfd1731b70c1b81af334f92fa9d1",
+      "migrations/230-MAY-VOA-SEPULCHER-HUNTER.sql": "3b188a275cf8293283a28eb121ec6633340b6ae80084cc3d2b148f392959b611",
+      "migrations/240-MAY-VOA-PILLARS-ORDINARY-HUNTER.sql": "5292d464319812df0ebeee264a952285674c844c68d0d63ba83c1b397e94b37f",
+      "migrations/250-MAY-VOA-PEACEKEEPERS-EXPERT-VEILSLAYER.sql": "7e0d08843712f77b36027bee90fb65d44c015885294aff1b67fd8d3cc4882c8d",
+      "migrations/260-MAY-VOA-PEACEKEEPER-LOOT.sql": "a5ef55196345aeb3b63d719a4b144b6045e3435398698951cacef7d761957f73",
+      "migrations/270-MAY-HOT-RUPKERR-PREREQUISITES-DRAFT.sql": "fdd7af3e66addcabf01f43ce82aa91c300819e833d857ccb4a4f047bff511037",
+      "migrations/30-MAY-BANESTRIKE-SPELLS.sql": "573545a61ce2046e7e44b5df135e578106cd2f2804de61c1fc34228b62739bdb",
+      "migrations/300-MAY-HOT-BREORO-PREREQUISITES.sql": "d3a08dd039aca2ceedd8c2421f50cb197f01469da103f5949b3b7cd4537fadb8",
+      "migrations/310-MAY-HOT-AUTHORED-PUBLIC-PREREQUISITES-POST-HUNTER.sql": "d45e5cc1f0525a3721130213e679124d3ab5f6ae7b424fbd5d93533ce38e4e86",
+      "migrations/320-MAY-HOT-ORIGINAL-MISSION-SCENES.sql": "c49a1f7f1836cedf68bd26ca92a55bcb100417e099a470027b67f8db4274acf0",
+      "migrations/325-MAY-HOT-ORIGINAL-MISSION-HOSTILITY.sql": "1fb2c140e1eeb5fcb3c1d9a4f91b474e6f1745bab7e2d0e683bc7ee741d41d20",
+      "migrations/330-MAY-HOT-EARNED-PUBLIC-ADMISSION.sql": "8173eceb4a177e114954c22e4016053589a695c57137a1c0aa3090957a371bb3",
+      "migrations/340-MAY-HOT-UPPER-HUNTER.sql": "f0488c3dee45f88cb7ca842b6558e2bb6a451fb100baf0e31ae5c387d72836fb",
+      "migrations/350-MAY-HOT-LOWER-TO-UPPER-PUBLIC-DOOR.sql": "d19052dee2bb4516219cce77bea8f1ffb5c28f5e5353fbaf12268be7b8831cc6",
+      "migrations/40-MAY-BANESTRIKE-SPIRIT.sql": "0bfbf31f869817cafc971fa5adc1ff00198956e069dee7b7cae67d05a62b0d70",
+      "migrations/50-MAY-HASTENED-BANESTRIKE-RANKS.sql": "f23456fffcdc352220fe9224382bf9a8327a9a0fcfad2bf736542592ea13936b",
+      "migrations/60-MAY-SHARDS-LANDING-HUNTER-AND-NOVICE.sql": "3e821ed79da340263d159efed644511a3a08800b5f811131e91eeecc7420ad55",
+      "migrations/70-MAY-SLAYER-TITLES.sql": "d44aeb7cab0a36748143b63acaf54a65deab17eb995061fb57cc7684757f6da7",
+      "migrations/80-MAY-SLAYER-RRRRIBIT-POISON-FROG.sql": "af1da6d18320d9fe914fbfc3230882fa3da176fa78a52ac66725073d80dd5046",
+      "migrations/85-MAY-SLAYER-AMBASSADOR.sql": "7d32804ee1c52763999086032bbe7d9f1a7061f3e53ee2d99de59c5f86003d8e",
+      "migrations/90-MAY-RUBAK-PUBLIC-ACCESS.sql": "b4a7499963d49e37e5ecfdbf12e73246fb49b16dc97a1f2cd5a44780c3afb46e",
       "migrations/darkhollow-normal68-70/02-ALIGN-SHROUD-ESCROW.sql": "5c47bbf12e6cc50976694c5c74fa508359d737c661676fdded19913036494526",
       "migrations/darkhollow-normal68-70/03-VERIFY-SHROUD-ESCROW.sql": "0fbdcac1cc500a1fd9dcc0fe08414ca5d300623951bc0ae00e282bb1085e12f6",
       "migrations/darkhollow-normal68-70/10-LEVEL68-70-CLAIM-SCHEMA.sql": "972fdeb85e17f62aa65509d140294c9000a659338e3f819377d6bbe6a86a2231",
@@ -7558,19 +8336,18 @@
         }
       }
     },
-    "source_commit": "16bc41554e132ac3fe4c77b361ba19cdf3d9e3ab",
+    "source_commit": "616737e8ff113f8b1cb48dd69898d4e63333dbb1",
     "source_commit_role": "Exact public PEQ database release commit. The server integration parent and CI checkout are pinned separately.",
     "source_repository": "nightstalker6669/EQEmu",
     "verification_basis": {
-      "base_full_sql_sha256": "9ff99cc554238f817737b0a4f463bbc38391b4d8e32c8d0245d6d832e6c1daf5",
-      "full_sql_sha256": "73d79abb715a6876f64b8ff0c436e90fcb0fcbba358d234331ff5fd991990128",
-      "isolated_validation_sha256": [
-        "f08a464080fc898303cd26a742342e32b92211705d0831a7c958a6ac567aeac9"
-      ],
-      "status": "Verified published r40 seed, isolated schema checks, and accepted native scope."
+      "base_full_sql_sha256": "73d79abb715a6876f64b8ff0c436e90fcb0fcbba358d234331ff5fd991990128",
+      "full_sql_sha256": "15c16598f3ce6f867d8dc7608aa3368fd3bab0800a0674d2b35aaea13aa6c26b",
+      "migration_member_count": 34,
+      "public_qualification_sha256": "55f7e62a789c5df40ce95135e15a0ce83ac22f35a906463fcea7daafed60dbae",
+      "status": "Exact published Guild Banners seed, isolated ordered migration proof, matched dev readback, and qualified native acceptance."
     }
   },
-  "database_contract_sha256": "f236aec2dfe5e21185cff0c08d3c1328ce56bdb98af43d5065e88c744f6ae41c",
+  "database_contract_sha256": "f877a55de771fe89c28612fb43731552e12e758c053853656a5e8117bbe6b3ca",
   "format": "eqemu-ci-runtime-release-inputs-v1",
   "future_updates": "Change these explicit committed source/asset/hash pins only after owner-reviewed sanitized releases/portable content are ready; never discover mutable Latest as an input.",
   "geometry_catalogs": [
@@ -7584,11 +8361,16 @@
   ],
   "opcode_runtime_overlay": {
     "destination": "server/assets/patches/patch_RoF2.conf",
-    "sha256": "f198b36ca5494c788d12cb1e4c896bfe16d153f804ffbcf54b992a45edf1af79",
+    "sha256": "02cdf549d84862fe6e6169f25c20b05d60e9cd668f2c06e27f2025f7c13ec373",
     "source": "utils/patches/patch_RoF2.conf"
   },
   "quest_overlay": {
     "files": {
+      "alkabormare/v0/709002.lua": "2b25efe29cdbfddfdaa6b1ea8515def7b79773ef4803da076527128907c179ee",
+      "alkabormare/v0/709036.lua": "2b25efe29cdbfddfdaa6b1ea8515def7b79773ef4803da076527128907c179ee",
+      "alkabormare/v0/709076.lua": "2b25efe29cdbfddfdaa6b1ea8515def7b79773ef4803da076527128907c179ee",
+      "alkabormare/v0/709089.lua": "c3b4801280f3d059a07760bf213e52d7f93d46e27f6ecc338b879855848d394c",
+      "alkabormare/v20/304102037.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
       "arcstone/v0/369004.lua": "95b5a9b7b3059c8e93327d2a408687c07eb9e6750088e941dd9403f24a68b711",
       "arcstone/v0/369011.lua": "6371055b3be491e8722a154c9e631251f8859c41a2184baffd45fb45aad56c6f",
       "arcstone/v0/369067.lua": "7793325c8fcd92ad098ff66d7ccbf72bda173411862706204ec072aa4e12bfc7",
@@ -7596,6 +8378,7 @@
       "arcstone/v0/369085.lua": "6bf863e741d1675bf58c3dca825817c7646435c5cdc07b2b6bec649511297899",
       "arcstone/v0/369097.lua": "c7b91841b0fb9c26ce4b063cbce3f34f50a204b19676f3af871a5670f191197f",
       "arcstone/v0/player.lua": "ab5835009a6a166c778c7f1643774002d50fff2206dee1710832f407f3c24404",
+      "arelis/725998.lua": "03f890891ff5a58140b1a5b75fdf6e64ca68a3cb6acd8a4e29f18aa6eef3fa48",
       "ashengate/v0/406937.lua": "213e96aa963ba9cf754e5810c64a2d7a7fa8f9cf1621b99c4c0bdc15e0977f53",
       "ashengate/v0/player.lua": "0bca3bc9fe2f88d12e5f12b7def9be96f64722bc7f87d046c210da84aa810550",
       "ashengate/v0/zone.lua": "7463fa880c66d731f1780d1f27c1f7bad43ec3c5e78655135cf08c1a430df973",
@@ -7605,6 +8388,9 @@
       "ashengate/v21/default.lua": "c8cf02276089f431f6d15dd90dabf754889c9510d5ddad9548cbb8b933c94c9d",
       "ashengate/v21/player.lua": "10c8ba6e816d6437ce1218eb2f3085dc75bdd653a54c2ffb2709f73f67697e7a",
       "ashengate/v21/zone.lua": "e73772b7fce8a27380a8ffd3fa219067f70f1da4760876782407a9ebe67daad4",
+      "chelsithreborn/763960.lua": "c42f453ca9201eb5f56d4e96db9394151c74e8d0425289078220be826e35495b",
+      "chelsithreborn/763961.lua": "8dc32833f9df6e13c9bc80293f8d4ef37d73f3f9c8053e087c5420fd33e3298b",
+      "chelsithreborn/763962.lua": "8dc32833f9df6e13c9bc80293f8d4ef37d73f3f9c8053e087c5420fd33e3298b",
       "corathus/v0/365268.lua": "37529bca1c2df20b421b43426e8fe6998a0e8813f50523a308159ab9b2f8b3b7",
       "corathus/v0/365274.lua": "37529bca1c2df20b421b43426e8fe6998a0e8813f50523a308159ab9b2f8b3b7",
       "corathus/v0/365284.lua": "d27458332c3ac9c3155fa99a7fa8da556c42c9ae42ad54fc8c38b7173a85a25c",
@@ -7705,6 +8491,13 @@
       "elddara/v22/379942.lua": "bcf5358922cf8ec27c46ea9c2748bf6a93bf8e8191c4ba2dbb233d4596a86d49",
       "elddara/v22/player.lua": "7631f11b0cda89246fe3b63ec9d9d10179470e348276633d58c6f2017b52c576",
       "elddara/v22/zone.lua": "bac5d8b8f0e70fde7dc0c78a00396003dc3f66627f5f9b693027f349448d91f2",
+      "fallen/v0/706010.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "fallen/v0/706047.lua": "9a0fa58f8c76dbb4132c131ae3d1a8b2d48f278d22c5ca0076ec67cf93f3f58e",
+      "fallen/v0/706048.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "fallen/v20/304102027.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
+      "feerrott2/700075.lua": "be58d5b03633635c741253b05be6869cd2b87f552eec75544892d095fc257791",
+      "feerrott2/player.lua": "91265cf079dba1484333992ee9e787d55eee9d86e6aa4b7087af38d18a383785",
+      "feerrott2/v20/304101815.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
       "freeportwest/v0/383166.lua": "40962f91bab3a0082f383bcd90c120026abfc12318123ad94a386b8c96ba44e4",
       "global/encounters/rof2_sod_fieldofscale.lua": "9bfb4226765f040390c7af705b80218c35c3e82e2ac62679fb814c0e48c8962f",
       "global/encounters/rof2_sod_fieldofscale_public.lua": "0546dba471addde8545e2163cbff702a61a0609d3adb1f006a9b996ba5daa919",
@@ -7718,6 +8511,9 @@
       "guildhall/#Porter.lua": "197cb3ba8211da233e542615af332b4476c2a2dd4d95cce4129da9ceb3898ef2",
       "guildhall/Zeflmin_Werlikanin.lua": "ee2336b08f932bdbfef448935eb6a97342451ba76ccf0da5764f4521298805dc",
       "guildhall/player.lua": "940674ec9fe8fcae9241fb297072abdd4413680071fce1a50da8f8d6c50bf24b",
+      "housegarden/v0/703038.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "housegarden/v0/703044.lua": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889",
+      "housegarden/v20/304101932.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
       "illsalin/v0/player.lua": "7b663a8b0a1a7b89e3a00e09666e20bbd4eec1af5700f228471c360b15f35193",
       "illsalina/v1/348005.lua": "1d541b3dfc5c70acae50dd297b3930578657051f19edf0cc23f843ceb3841ef6",
       "illsalina/v1/348900.lua": "00006e4a39cb5f7aeb4bc3cce0a16cc810c94fdae4661d87ead896a5d71a7170",
@@ -7741,11 +8537,22 @@
       "illsalinc/v3/player.lua": "a80ed41aae74725cb203f3018a15f825998d66d7e60b2c8802da16cc37a4776f",
       "illsalinc/v3/zone.lua": "9375e118cfa312687cf964d80cf908e1a3b3d58f1aeee3422de6644cfc3dfbf8",
       "innothuleb/v0/player.lua": "359d5a1fd63cc77467506efa4a76b9a9e899b6f9b0665e0d17ef3eac61d49edd",
+      "kaelshard/754960.lua": "b3d2fcabc21a480d3b0797e9abf1c96a4eff8fa9b8c2188e3422b4a5311848f7",
+      "kaelshard/754961.lua": "b74d3905bb384e4c607fa8b137c9e40dcdadc32550021fcb166535be0e844f54",
+      "kaelshard/754962.lua": "6fbc544929e66f611284a6641af9b4a743c1e7d213822ea4a65269bbe4fcc8b0",
       "korascian/476110.lua": "4a0e56c5e0264ee665ac34e8228bb7524be66194492ab446141a536a42a95d5b",
       "korascian/476115.lua": "f8183909d76491c74b34dba345dd57926bd6446f401b8b421452c14239446af7",
       "korascian/476122.lua": "f1d48312c3d8d25bf88f3ae2be9674b91b8bdb835bd212391bb63b012034cc45",
       "korascian/player.lua": "597781abbf00f534bb9df7e367eac27c5e1f779a63f4b28de133f5836b95e465",
+      "lua_modules/achievement_native_delivery_handin.lua": "85eeb3d426a98e70dd923e9e2bf87ff344c0bf24ecc54ab6d6edc84e924f71a9",
       "lua_modules/achievement_quest_vergalid.lua": "cc26261b3429eab341cef7e027e3beb145981d5a3952bc6ec31f6b07b8923726",
+      "lua_modules/hot_alkabor_public_routes.lua": "1befc8e60c9ba84ca52a414a97000527c1bc5ede18389c28ce5fe41dfb228a25",
+      "lua_modules/hot_authored_field_missions.lua": "97d3a291eb9d5a20bff0a05a52b6d3bb72452bcd0a85af6691950db8ab82a65a",
+      "lua_modules/hot_group_requester.lua": "f4f80746955a2b9bf5a9b438e01e420c0b40ba313b6b1ccfadc9177a417537f3",
+      "lua_modules/hot_public_prerequisites.lua": "dc57c7fb92a7ecacf9503404709323254ee238853617920152ccc5b6aacf27ce",
+      "lua_modules/may_hunter_chelsith_ring.lua": "f8c3a35866405e4b849daf7037b5a107475526ca9acc2e0d2de330afc78eae3a",
+      "lua_modules/may_hunter_kael_ring.lua": "01de59699b3983cd14ba54f98fa252c1820682ce263cbe50b993a625e541ad4f",
+      "lua_modules/may_hunter_peacekeeper.lua": "b99f575af49bd7e626a492ddfb9513cb4fa221bd3f95fbfdeabe9295fd1e595d",
       "lua_modules/rof2_deathknell_bells.lua": "8622e673eecf02dee02f5a2ca3acdcb22822367d029bc1e394918580dda28fc1",
       "lua_modules/rof2_deathknell_choir.lua": "dc6d0e5fa84428cc9005366aae89746b8b41ab6bf2d94634e6f5264e9d1bd5ba",
       "lua_modules/rof2_deathknell_guests.lua": "59fc61eb955b5ceedbd73913161272c1c82c055fe476ec3a213c407d7bca2c1b",
@@ -7804,6 +8611,7 @@
       "lua_modules/rof2_dodh_xill_boss.lua": "1b588684acf861fefec795bab19df3912dd44d0adc80fda231f45e1050997f83",
       "lua_modules/rof2_dodh_xill_loot.lua": "95b367932ebb3065a64582c09474df98b8f1088680ff04501072a64bcf20c9ff",
       "lua_modules/rof2_dodh_xill_loot_data.lua": "dcac3fe241dc796431e406974fa0c38218d58a379252fa73c46da796ec754fc5",
+      "lua_modules/rof2_hot_expedition.lua": "1bcd3963f00202f67b24b03a74de4b8b9fb968984b7fd3065f22599e828ce104",
       "lua_modules/rof2_por_daosheen.lua": "daa0d76dd189ea720fe7f52d868004442d7ef0a4c0e7288f67b4c1e3f7be17a4",
       "lua_modules/rof2_por_deathknell.lua": "23b98d98407aa627ef9a0980c3ce3bae82a40f1d384cf0947b4fb9bc82607b0f",
       "lua_modules/rof2_por_deathknell_contacts.lua": "4b41c9699adbe99f0b307ee59683dd9c7b83e4ef68243871669248c8a3fad12b",
@@ -7853,6 +8661,12 @@
       "lua_modules/rof2_tss_vergalid_layout.lua": "1622f5bb341898fb05fb7fece7856eebba699dd8f5f0b1c8d5173036f950109b",
       "lua_modules/rof2_tss_vergalid_raid.lua": "ab252b580981e98ef21b35d477d3f9303bb05caa787a8bcabe7e92d5a30d2a1d",
       "lua_modules/vergalid_inner_access.lua": "4a9159d7e8804ab33c424a9b761de51d4474c8a141b23c5b69a2bd59a372d81e",
+      "miragulmare/v0/710017.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "miragulmare/v0/710035.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "miragulmare/v0/710047.lua": "9a0fa58f8c76dbb4132c131ae3d1a8b2d48f278d22c5ca0076ec67cf93f3f58e",
+      "miragulmare/v0/710068.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "miragulmare/v0/710071.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "miragulmare/v20/304102042.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
       "nektulos/v0/25920.lua": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d",
       "nektulos/v1/25414.lua": "ea6a5651daa74bd47d3b0fd9617fa8ce4611fe9389b796c5f00d2d1a0b90fd3d",
       "northro/player.lua": "bb476f493282d64486a9ca7b9c7b4f4004fed6f6077f523a9924180091f9e659",
@@ -7892,6 +8706,11 @@
       "oldkithicor/player.lua": "31db36893d3d60eb61f69198cdc48b7b90169ebdc861fef2b48b7dad765f06c3",
       "oldkithicor/v0/spells/8140.lua": "2721a724135455b103ee859b4691ca130efe48a2a70bab4c7b98a1b7e0cda31e",
       "oldkurn/player.lua": "38e9f399ea67446eab7c62c92951a801c6fef86da42e4ddf8bbcb517dd04fa75",
+      "pillarsalra/v0/730974.lua": "cb74d63ad6156c8e1cd6a5d53365f70c652b88f18aa452391281a946c918d7db",
+      "pillarsalra/v0/730975.lua": "6f5e5868e2e30f52ca17985387c2c5765de39a49501f306ab6fda7cf326fee9e",
+      "pillarsalra/v0/730976.lua": "f95ac4000da1115e88ae9cfe39fdbf82a0084bb9a05a9208adf72d1bdfa56b5b",
+      "pillarsalra/v0/730977.lua": "9e28b8a87ee2a6f725f928ef2ef14f80dc73b7a1b6752cdc0ca22211044260bd",
+      "pillarsalra/v0/zone.lua": "b0ddd3bc753f1ab6b3e9902566bf34fd2e1ca1e679c5b635117d7b8f11e26de4",
       "poknowledge/Grand_Librarian_Maelin.lua": "b67798d52c6307770ce130ff299dcc2a9752a3c2a9b4f9ec2a98914c7fe6aeea",
       "rage/v0/371943.lua": "f3cf5df45d272d12844c7b41ef7b9c208c97989db9450b427403d8f55d9b34b4",
       "rage/v0/372099.lua": "d6366e88957d36b2a4eeec1667ae73534bc5a37b3d07c0305df7ebceae1d6ec7",
@@ -7978,6 +8797,18 @@
       "theatera/v20/381970.lua": "ae2b0b63e767448a235fb9f34adbf8c742a2b8c472255c96bf833aec3c69f72b",
       "theatera/v20/player.lua": "6e79e9d30697cdff305a1e4ec3f31625baeaefe821bf68a01bf269bfa93db6f2",
       "theatera/v20/zone.lua": "aa16ce6e33dbc79f577b5b6ea8c482d84f04acb293151461fed4bfab36f4c0e7",
+      "thuledream/v0/711009.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "thuledream/v0/711012.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "thuledream/v0/711084.lua": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889",
+      "thuledream/v20/304102047.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
+      "thulehouse1/v0/701022.lua": "e19f7606ccb784f5f70b2eaabf90e2e4ff939b1180503569faf9de7510b87ce9",
+      "thulehouse1/v20/304101881.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
+      "thulehouse2/v0/702000.lua": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889",
+      "thulehouse2/v0/702012.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "thulehouse2/v0/702051.lua": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889",
+      "thulehouse2/v20/304102032.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
+      "thulelibrary/v0/704000.lua": "9a0fa58f8c76dbb4132c131ae3d1a8b2d48f278d22c5ca0076ec67cf93f3f58e",
+      "thulelibrary/v20/304102022.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
       "vergalid/v0/player.lua": "c8e76d25511f19a4fbe3a8a3dce09c43ac201b397708f9b9d7ca053d4e33243d",
       "vergalid/v20/404940.lua": "0fc1587d1ba87f7655b078344a8567126937eb74a9429e8bfd59d748f228f955",
       "vergalid/v20/player.lua": "e88ae2b29f7aaf8b0bf8b1828a95ebacf1db2cfb430e6407ea5b3d1705cc1933",
@@ -8006,6 +8837,9 @@
       "vergalid/v21/spells/11424.lua": "b2322a3ef7873e9d7034312f01c726bf30cfd39f2390a3fcea700c43da645b52",
       "vergalid/v21/spells/11425.lua": "b2322a3ef7873e9d7034312f01c726bf30cfd39f2390a3fcea700c43da645b52",
       "vergalid/v21/zone.lua": "b65d2156cb7f15c479c5c891f07bad873a2b5d9a68ee0a23fb2141ed260f04c1",
+      "well/v0/705003.lua": "65bb2fd20f6933229f14942f66f3d5275233bcc087ee0832efb7a13e1ba5db6d",
+      "well/v0/705004.lua": "fd85f91522b86eb83c4a66e37a712957fb7cdcc5cdf7dc15da1a9be8dd05c889",
+      "well/v20/304102017.lua": "0c15e738d44eee150f70e72e43ddd0e5b725e1ce8a5b65620953976f3eaf2503",
       "westkorlach/v0/358020.lua": "a46c81258bf82c6642b3af7bcb60aa979e45db1a66406ea724fd3fcf086ed2f0",
       "westkorlach/v0/358031.lua": "1de6930dca0faa519c85fe0684a04cfaf690ad982c22c7f2bf017e2778afc951",
       "westkorlach/v0/358051.lua": "745276da038894ec8fe31b3b5c945f083e3652507dab48cbee6819e25b99d6ef",

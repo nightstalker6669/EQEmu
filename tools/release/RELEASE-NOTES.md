@@ -1,8 +1,10 @@
-<!-- previous-release: rof2-ci-r40-a1-92ace7b7829d -->
+<!-- previous-release: rof2-ci-r41-a1-3223c9fb6892 -->
 
-## Guild Banners
+## House of Thule, Hunter, and Slayer
 
-- Restores native May 2013 RoF2 Guild Management Banner controls for public Buried Sea and Loping Plains. Authorized officers can plant or remove a Standard. Planting requires 12 nearby living guild members by default.
-- Adds the guild banner destination to the Guild Hall portal through the original Splinter from a Guild Standard. Travel requires a current banner, current guild membership, pad confirmation, and normal destination admission. The basic hall and placed-hall portal paths both use the same destination validation.
-- Uses the original kit, dye, and spell data for 556 upgraded Standard choices with verified recipe and effect bindings. The planting transaction consumes the selected kit and dye together. Nearby guildmates get the matching native spell.
-- Keeps normal Guild Lobby and static Guild Hall portal routing. The database change adds one guild-owned deployment table.
+- Adds original House of Thule quests and group missions for the May 2013 RoF2 client. Complete the six opening missions to earn Tier 3 access, then the four Tier 3 missions to earn Tier 4 access.
+- Connects the Lower Floors gate to the Upper Floors using the earned Tier 3 access check.
+- Connects Al’Kabor’s public islands through the four existing island contacts. Travel requires earned Tier 3 access.
+- Adds exact Hunter kill credit for 562 objectives for 33 zone achievements spanning 35 zone IDs in House of Thule, Veil of Alaris and Rain of Fear. The catalog includes progression bags and earned titles.
+- Restores ordinary travel between Sarith and Rubak Oseka and adds the four-phase Pillars of Alra Peacekeeper encounters.
+- Enables 142 May-era Slayer achievements and their scoped rewards. The active Banestrike ability uses the original May spell data and mastered races, with three Hastened Banestrike ranks.

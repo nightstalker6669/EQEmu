@@ -39,6 +39,7 @@
 #include "zone/queryserv.h"
 #include "zone/quest_parser_collection.h"
 #include "zone/raids.h"
+#include "zone/slayer_banestrike.h"
 #include "zone/string_ids.h"
 #include "zone/titles.h"
 #include "zone/worldserver.h"
@@ -1235,6 +1236,85 @@ bool Client::GrantAlternateAdvancementAbility(int aa_id, int points, bool ignore
 	return ret;
 }
 
+bool Client::PersistEarnedSlayerAA(uint32 ability_id, uint32 count)
+{
+	const auto write_bit = SlayerBanestrike::WriteBit(ability_id);
+	if (!write_bit || !count || IsSpiritShrouded()) {
+		return false;
+	}
+	const auto [ability, desired] = zone->GetAlternateAdvancementAbilityAndRank(ability_id, count);
+	if (!ability || !desired || !ability->grant_only || ability->charges ||
+		ability->first_rank_id != ability_id || desired->total_cost ||
+		!CanUseAlternateAdvancementRank(desired)) {
+		return false;
+	}
+	if (GetAA(ability_id) >= count && !(m_slayer_aa_write_pending & write_bit)) {
+		return true;
+	}
+
+	m_slayer_aa_write_pending |= write_bit;
+	// Retrying this upsert is safe even if the previous commit was ambiguous.
+	if (!database.QueryDatabase(fmt::format(
+		"INSERT INTO character_alternate_abilities (id, aa_id, aa_value, charges) "
+		"VALUES ({}, {}, {}, 0) ON DUPLICATE KEY UPDATE aa_value=GREATEST(aa_value, VALUES(aa_value))",
+		CharacterID(), ability_id, count
+	)).Success()) {
+		return false;
+	}
+	auto persisted = database.QueryDatabase(fmt::format(
+		"SELECT aa_value, charges FROM character_alternate_abilities WHERE id={} AND aa_id={}",
+		CharacterID(), ability_id
+	));
+	if (!persisted.Success() || persisted.RowCount() != 1) {
+		return false;
+	}
+	auto row = persisted.begin();
+	const auto rank = Strings::ToUnsignedInt(row[0]);
+	const auto charges = Strings::ToUnsignedInt(row[1]);
+	if (rank < count || rank < GetAA(ability_id) || charges || !SetAA(ability_id, rank)) {
+		return false;
+	}
+	m_slayer_aa_write_pending &= ~write_bit;
+	SendAlternateAdvancementTable();
+	SendAlternateAdvancementPoints();
+	SendAlternateAdvancementStats();
+	return true;
+}
+
+bool Client::FinishBanestrike(Mob *target)
+{
+	using namespace SlayerBanestrike;
+	if (!CanBanestrikeTarget(target) || !IsAttackAllowed(target, true)) {
+		return false;
+	}
+
+	const auto effect = DamageSpell(GetLevel());
+	PetRecord record;
+	if (!IsValidSpell(effect) ||
+		!content_db.GetPoweredPetEntry(spells[Launcher].teleport_zone, 0, &record) ||
+		record.npc_type != SpiritNpcType || spells[Launcher].max_value[0] != 10) {
+		return false;
+	}
+	const auto *profile = content_db.LoadNPCTypesData(record.npc_type);
+	if (!profile || !profile->untargetable) {
+		return false;
+	}
+
+	auto *spirit = new NPC(profile, nullptr, GetPosition(), GravityBehavior::Water);
+	spirit->SetDisableMelee(true);
+	spirit->SetInvul(true);
+	const auto lifetime = spells[Launcher].max_value[0] * 1000;
+	auto *swarm = new SwarmPet;
+	swarm->owner_id = GetID();
+	swarm->target = target->GetID();
+	swarm->duration = new Timer(lifetime);
+	spirit->SetSwarmInfo(swarm);
+	spirit->StartSwarmTimer(lifetime);
+	entity_list.AddNPC(spirit, true, true);
+	spirit->SpellOnTarget(effect, target);
+	return true;
+}
+
 void Client::FinishAlternateAdvancementPurchase(AA::Rank *rank, bool ignore_cost, bool send_message_and_save) {
 	if (IsSpiritShrouded()) return;
 
@@ -1369,6 +1449,11 @@ void Client::ActivateAlternateAdvancementAbility(int rank_id, int target_id) {
 	// We don't have the AA
 	if (!GetAA(rank_id, &charges))
 		return;
+
+	if (rank->id == SlayerBanestrike::Ability && !CanBanestrikeTarget(entity_list.GetMob(target_id))) {
+		Message(Chat::SpellFailure, "Banestrike requires a non-raid creature of a race you have mastered.");
+		return;
+	}
  // GetAA resolves any rank ID to the owned ability. It does not establish
  // ownership of the requested rank, so reject forged higher Monster ranks.
  if (IsSpiritShrouded() &&

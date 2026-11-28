@@ -1,4 +1,5 @@
 #include "common/sod_original_transform_native.h"
+#include "common/hot_group_missions.h"
 #include "por_deathknell_custody.h"
 #include "por_tunare_custody.h"
 #include "guild_banner_portal.h"
@@ -51,6 +52,7 @@
 #include "zone/lua_npc.h"
 #include "zone/lua_packet.h"
 #include "zone/lua_raid.h"
+#include "zone/task_manager.h"
 #include "zone/titles.h"
 #include "common/repositories/shared_task_dynamic_zones_repository.h"
 
@@ -2314,6 +2316,56 @@ uint16 Lua_Client::GetSharedTaskInstanceID(uint32 task_id, uint32 zone_id, uint3
 		}
 	}
 	return instance_id;
+}
+
+bool Lua_Client::CanRequestHouseOfThulePrerequisite(uint32 task_id, uint32 requester_entity_id)
+{
+	Lua_Safe_Call_Bool();
+	const auto *prerequisite = HouseOfThuleGroup::FindAuthoredPrerequisite(task_id);
+	auto *giver = entity_list.GetNPCByID(requester_entity_id);
+	const auto *task = TaskManager::Instance()->GetTaskData(task_id);
+	const auto expected_type = HouseOfThuleGroup::IsSharedPrerequisite(task_id)
+		? TaskType::Shared : TaskType::Quest;
+	if (!prerequisite || !task || task->type != expected_type || !zone ||
+		!giver || giver->GetDepop() || giver->GetHP() <= 0 ||
+		self->IsTaskActive(task_id) || self->IsTaskCompleted(task_id) ||
+		!HouseOfThuleGroup::IsPrerequisiteRequester(*prerequisite, zone->GetZoneID(),
+			zone->GetInstanceVersion(), zone->GetInstanceID(), giver->GetNPCTypeID(), giver->GetSpawnPointID())) {
+		return false;
+	}
+	const auto distance = giver->CalculateDistance(self);
+	return std::isfinite(distance) && distance <= MAX_TASK_SELECT_DISTANCE &&
+		HouseOfThuleGroup::HasEarnedTasks(database, self->CharacterID(), prerequisite->required);
+}
+
+bool Lua_Client::EnterHouseOfThuleGroupMission(uint32 task_id, uint32 requester_entity_id)
+{
+	Lua_Safe_Call_Bool();
+	const auto *mission = HouseOfThuleGroup::Find(task_id);
+	auto *giver = entity_list.GetNPCByID(requester_entity_id);
+	if (!mission || !zone || !giver || giver->GetDepop() || giver->GetHP() <= 0 ||
+		!HouseOfThuleGroup::IsRequester(*mission, zone->GetZoneID(), zone->GetInstanceVersion(),
+			zone->GetInstanceID(), giver->GetNPCTypeID(), giver->GetSpawnPointID())) {
+		return false;
+	}
+	const auto distance = giver->CalculateDistance(self);
+	if (!std::isfinite(distance) || distance > MAX_TASK_SELECT_DISTANCE) {
+		return false;
+	}
+
+	const auto instance = GetSharedTaskInstanceID(
+		task_id, mission->destination_zone, HouseOfThuleGroup::InstanceVersion
+	);
+	if (!instance) {
+		return false;
+	}
+	for (auto *dz : self->GetDynamicZones(mission->destination_zone, HouseOfThuleGroup::InstanceVersion)) {
+		if (dz && dz->GetInstanceID() == instance) {
+			dz->MovePCInto(self, true);
+			return true;
+		}
+	}
+	return false;
 }
 
 void Lua_Client::LockSharedTask(bool lock) {
@@ -4944,6 +4996,8 @@ luabind::scope lua_register_client() {
 	.def("TransformDeathknellSullonShard", &Lua_Client::TransformDeathknellSullonShard)
 	.def("TransformDeathknellSuchunShard", &Lua_Client::TransformDeathknellSuchunShard)
 	.def("GetSharedTaskInstanceID", &Lua_Client::GetSharedTaskInstanceID)
+	.def("EnterHouseOfThuleGroupMission", &Lua_Client::EnterHouseOfThuleGroupMission)
+	.def("CanRequestHouseOfThulePrerequisite", &Lua_Client::CanRequestHouseOfThulePrerequisite)
 	.def("LockSharedTask", &Lua_Client::LockSharedTask)
 	.def("MarkSingleCompassLoc", (void(Lua_Client::*)(float,float,float))&Lua_Client::MarkSingleCompassLoc)
 	.def("MarkSingleCompassLoc", (void(Lua_Client::*)(float,float,float,int))&Lua_Client::MarkSingleCompassLoc)

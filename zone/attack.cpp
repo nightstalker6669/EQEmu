@@ -1,4 +1,6 @@
 #include "dodh_longshadow_source.h"
+#include "common/hot_group_missions.h"
+#include "dodh_cocoon_open_receipt.h"
 #include "dodh_draygun_heal.h"
 #include "fire_run_terminal_scene.h"
 #include "death_experience.h"
@@ -7,6 +9,7 @@
 #include "fire_gotonur_say_queue.h"
 #include "groups.h"
 #include "bound_destructible_ruins.h"
+#include "slayer_banestrike.h"
 /*	EQEmu: EQEmulator
 
 	Copyright (C) 2001-2026 EQEmu Development Team
@@ -2452,7 +2455,7 @@ bool NPC::Attack(Mob* other, int Hand, bool bRiposte, bool IsStrikethrough, bool
 }
 
 void NPC::Damage(Mob* other, int64 damage, int32 spell_id, EQ::skills::SkillType attack_skill, bool avoidable, int8 buffslot, bool iBuffTic, eSpecialAttacks special) {
-	if (BoundDestructibles::IsBlocked(this)) {
+	if (HouseOfThuleGroup::FindChest(GetNPCTypeID()) || BoundDestructibles::IsBlocked(this)) {
 		return;
 	}
 	if (spell_id == 0)
@@ -2493,6 +2496,10 @@ void NPC::Damage(Mob* other, int64 damage, int32 spell_id, EQ::skills::SkillType
 
 bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillType attack_skill, KilledByTypes killed_by, bool is_buff_tic)
 {
+	if (HouseOfThuleGroup::FindChest(GetNPCTypeID()) &&
+		!DodhCocoonOpen::ScopedOpen::Matches(this, killer_mob)) {
+		return false;
+	}
 	if(FireRunActionSource::NativeRunTerminalSource::RejectOrdinaryChestDeath(*this))return false;
 	FireRunActionSource::OriginalTerminalDeath fire_terminal_death(*this);
 	FireRunActionSource::OriginalMissionMaterialDeath fire_mission_material_death(*this);
@@ -3056,13 +3063,16 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 	if (give_exp_client && !IsCorpse()) {
 		const auto& v = give_exp_client->GetRaidOrGroupOrSelf(true);
 		const auto base_zone_id = zone ? zone->GetZoneID() : 0;
+		const auto npc_layout = zone ?
+			EQ::Achievements::NpcKillLayout(base_zone_id, zone->GetInstanceVersion()) : 0;
 		for (const auto& m : v) {
 			m->CastToClient()->RecordKilledNPCEvent(this);
 			m->CastToClient()->UpdateAchievementForKill(
 				GetNPCTypeID(),
 				GetBaseRace(),
 				achievement_npc_name_identity,
-				base_zone_id
+				base_zone_id,
+				npc_layout
 			);
 
 			if (parse->HasQuestSub(GetNPCTypeID(), EVENT_KILLED_MERIT)) {
@@ -3165,6 +3175,12 @@ bool NPC::Death(Mob* killer_mob, int64 damage, int32 spell, EQ::skills::SkillTyp
 
 void Mob::AddToHateList(Mob* other, int64 hate /*= 0*/, int64 damage /*= 0*/, bool iYellForHelp /*= true*/, bool bFrenzy /*= false*/, bool iBuffTic /*= false*/, int32 spell_id, bool pet_command)
 {
+	// A Banestrike spirit delivers one spell. The character earns its
+	// damage credit and takes its hate while the visual actor fades.
+	if (other && other->IsNPC() && other->IsTempPet() &&
+		other->GetNPCTypeID() == SlayerBanestrike::SpiritNpcType) {
+		other = entity_list.GetClientByID(other->CastToNPC()->GetSwarmOwner());
+	}
 	if (!other)
 		return;
 

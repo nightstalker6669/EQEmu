@@ -1393,6 +1393,10 @@ luabind::adl::object lua_get_zone_time(lua_State *L) {
 	return ret;
 }
 
+int lua_get_pillars_hunter_phase() {
+	return entity_list.UpdatePillarsHunterPhase();
+}
+
 void lua_add_area(int id, int type, float min_x, float max_x, float min_y, float max_y, float min_z, float max_z) {
 	entity_list.AddArea(id, type, min_x, max_x, min_y, max_y, min_z, max_z);
 }
@@ -6242,6 +6246,7 @@ luabind::scope lua_register_general() {
 		luabind::def("get_zone_instance_version", &lua_get_zone_instance_version),
 		luabind::def("get_zone_weather", &lua_get_zone_weather),
 		luabind::def("get_zone_time", &lua_get_zone_time),
+		luabind::def("get_pillars_hunter_phase", &lua_get_pillars_hunter_phase),
 		luabind::def("add_area", &lua_add_area),
 		luabind::def("remove_area", &lua_remove_area),
 		luabind::def("clear_areas", &lua_clear_areas),

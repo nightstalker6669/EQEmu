@@ -304,6 +304,7 @@ public:
 	Object *FindObject(uint32 object_id);
 	Object*	FindNearbyObject(float x, float y, float z, float radius);
 	bool	MakeDoorSpawnPacket(EQApplicationPacket* app, Client *client);
+	int	UpdatePillarsHunterPhase();
 	bool	MakeTrackPacket(Client* client);
 	void	SendTraders(Client* client);
 	void	AddClient(Client*);

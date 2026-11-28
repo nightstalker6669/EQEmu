@@ -40,6 +40,7 @@ typedef enum { //EQEmu internal opcodes list
 	#include "emu_oplist.h"
 	#include "mail_oplist.h"
 	#include "guild_banner_oplist.h"
+	N(OP_UpdateSingleDoor),
 #undef N
 
 	_maxEmuOpcode

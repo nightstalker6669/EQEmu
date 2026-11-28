@@ -39,6 +39,31 @@ extern QueryServ* QServ;
 extern WorldServer worldserver;
 extern Zone* zone;
 
+namespace {
+
+bool HasHouseOfThuleGroupAccess(const Client &client, const ZoneRepository::Zone &destination)
+{
+	constexpr uint32 lower_missions = 1800000; // It's Dangerous to Go Alone (Group)
+	constexpr uint32 upper_missions = 1800010; // Have Fun Storming the Castle (Group)
+
+	switch (destination.zoneidnumber) {
+	case Zones::THULEHOUSE2:
+	case Zones::ALKABORMARE:
+	case Zones::MIRAGULMARE:
+	case Zones::THULEDREAM:
+		return destination.flag_needed == "hot_group_tier3" &&
+			client.HasCompletedAchievement(lower_missions);
+	case Zones::MORELLCASTLE:
+	case Zones::SOMNIUM:
+		return destination.flag_needed == "hot_group_tier4" &&
+			client.HasCompletedAchievement(lower_missions) &&
+			client.HasCompletedAchievement(upper_missions);
+	default:
+		return true;
+	}
+}
+
+} // namespace
 
 int Client::GetSodTaskCompletionState(uint32 task_id)
 {
@@ -643,6 +668,12 @@ void Client::Handle_OP_ZoneChange(const EQApplicationPacket *app) {
 
 	// Ordinary scripted ignore_restrictions is not progression proof. Native
 	// GM-directed summons retain their administrative override for any target.
+	if (!GetGM() && zone_mode != GMSummon && zone_mode != GMHiddenSummon &&
+		target_instance_id == 0 && target_instance_version == 0 &&
+		!HasHouseOfThuleGroupAccess(*this, *zone_data)) {
+		zoning_message = ZoningMessage::ZoneNoExperience;
+	}
+
 	if (SodProgression::AnyGroupSliceEnabled() && !GetGM() &&
 		zone_mode != GMSummon && zone_mode != GMHiddenSummon &&
 		SodProgression::IsSodZone(target_zone_id) && !CanEnterSodProgressionZone(target_zone_id, target_instance_version, target_instance_id)) {
@@ -1791,12 +1822,20 @@ bool Client::CanEnterZone(const std::string& zone_short_name, int16 instance_ver
 		return true;
 	}
 
+	const auto requested_version = instance_version == -1 ? zone->GetInstanceVersion() : instance_version;
 	auto z = GetZoneVersionWithFallback(
 		zone_short_name.empty() ? ZoneID(zone->GetShortName()) : ZoneID(zone_short_name),
-		instance_version == -1 ? zone->GetInstanceVersion() : instance_version
+		requested_version
 	);
 
 	if (!z) {
+		return false;
+	}
+
+	// Check public access on ordinary preflight and on arrival or relog.
+	const bool public_zone = requested_version == 0 &&
+		(!zone_short_name.empty() || zone->GetInstanceID() == 0);
+	if (!GetGM() && public_zone && !HasHouseOfThuleGroupAccess(*this, *z)) {
 		return false;
 	}
 
