@@ -3012,7 +3012,12 @@ std::string Client::DetermineMoneyString(uint64 cp)
 
 bool Client::RegisterPersistentBazaarStall()
 {
-	if (OfflineBazaarStall::CheckStorage(database) != OfflineBazaarStall::Storage::Ready) {
+	if (!zone) {
+		return false;
+	}
+	const auto instance = GetInstanceID();
+	if (instance < 0 || instance > UINT16_MAX ||
+		OfflineBazaarStall::CheckStorage(database) != OfflineBazaarStall::Storage::Ready) {
 		return false;
 	}
 	const auto listings = TraderRepository::GetWhere(database, fmt::format("char_id={}", CharacterID()));
@@ -3033,7 +3038,7 @@ bool Client::RegisterPersistentBazaarStall()
 		return false;
 	}
 	return OfflineBazaarStall::Register(database, {
-		CharacterID(), AccountID(), GetInstanceID(), {}, {},
+		CharacterID(), AccountID(), static_cast<uint32_t>(instance), {}, {},
 		{GetX(), GetY(), GetZ(), GetHeading()}, zone->GetInstanceVersion()
 	}, GetID(), slots).has_value();
 }
