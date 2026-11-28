@@ -247,6 +247,18 @@ The paired database release changes metadata only. The published SQL and all 467
 
 </details>
 
+<details>
+<summary>RoF2 Offline Bazaar parcel checkout — Published in r43</summary>
+
+- **Cross-zone checkout:** Builds on r38’s counter-only offline trading. Parcel checkout requires the existing offline trader, Bazaar parcel delivery and parcel merchant settings. Ordinary counter and online checkout remain available under their existing conditions.
+- **Native verification:** The seller left listings active at Character Select. An ordinary buyer in Plane of Knowledge bought three of five items using the native Parcel option. One parcel held the three items, the buyer paid the price and fee once, the seller was credited once, and two items remained. The buyer collected the exact stack from a parcel merchant. An ordinary counter sale and seller reclaim through Enter World also passed. A separate one-of-two native purchase on the final Zone binary charged one platinum plus two gold. The displayed and saved balances matched, and the buyer collected the item.
+- **Replay and interruption checks:** Parcel settlement records the debit, seller credit, stock change, parcel and receipt in one transaction. A guarded server-side replay on the development server returned the original result after pickup without writing or changing balances, stock, receipt or parcel state. The native client refreshed the quote after checkout. Isolated checks verified rollback on a late write failure and precommit disconnect, one completed sale from concurrent buyers, and unchanged state for rejected transactions.
+- **Limits:** Parcel checkout serves items supported by the existing parcel format. Unsupported instance state such as custom dyes, containers, evolving items and unlimited charges stays on the counter path where eligible. Receipts survive claim, and unsold listings clear on Bazaar worker restart. Legacy counter crash atomicity and interrupted merchant pickup were outside verification. QA used approved travel staging and ordinary native controls for search, checkout, pickup and reclaim.
+
+[Server r43](https://github.com/nightstalker6669/EQEmu/releases/tag/rof2-ci-r43-a1-107bfcc6c593) · [Matching database for fresh empty installs](https://github.com/nightstalker6669/EQEmu-Database/releases/tag/peq-rof2-2026-11-28-offline-bazaar-parcels) · [Native qualifications](https://github.com/nightstalker6669/EQEmu-Database/blob/dece3611b2d82025204d33567fd9f92219e4f60d/releases/peq-rof2-2026-11-28-offline-bazaar-parcels/NATIVE-QUALIFICATIONS.json)
+
+</details>
+
 ## Quests & zones
 
 [Browse the alphabetical quest-route catalogue](docs/rof2/roadmap/quests/README.md) · [Portable searchable catalogue](docs/rof2/roadmap/quests.html)
